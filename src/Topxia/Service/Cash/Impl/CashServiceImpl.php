@@ -52,6 +52,37 @@ class CashServiceImpl extends BaseService implements CashService
         return $outFlow;
     }
 
+    public function inflowByCoin($inflow)
+    {
+        if(!ArrayToolkit::requireds($inflow, array(
+            'userId', 'amount', 'name', 'orderSn', 'category', 'note'
+        ))){
+            throw $this->createServiceException('参数缺失');
+        }
+
+        if(!is_numeric($inflow["amount"]) || $inflow["amount"] <= 0) {
+            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"]);
+
+        if($account["cash"] < $inflow["amount"]) {
+            throw $this->createServiceException('余额不足');
+        }
+
+        $inflow["cashType"] = "Coin";
+        $inflow["type"] = "inflow";
+        $inflow["sn"] = $this->makeSn();
+        $inflow["createdTime"] = time();
+        $inflow["cash"] = $account["cash"]+$inflow["amount"];
+
+        $inflow = $this->getFlowDao()->addFlow($inflow);
+
+        $this->getCashAccountService()->waveCashField($account["id"], $inflow["amount"]);
+
+        return $inflow;
+    }
+
     public function inFlowByRmb($inFlow)
     {
         if(!ArrayToolkit::requireds($inFlow, array(

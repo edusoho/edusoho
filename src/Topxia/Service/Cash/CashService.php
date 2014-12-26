@@ -14,4 +14,6 @@ interface CashService
     public function outFlowByRmb($outFlow);
 
     public function changeRmbToCoin($rmbFlow);
+
+    public function inflowByCoin($inflow);
 }
