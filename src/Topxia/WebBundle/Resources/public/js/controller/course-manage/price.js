@@ -25,9 +25,9 @@ define(function(require, exports, module) {
             var payRmb = parseFloat(price)/parseFloat(cash_rate);
             fixedPayRmb = parseFloat(payRmb.toFixed(2));
             if(fixedPayRmb<payRmb){
-                fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
+                fixedPayRmb = fixedPayRmb+0.01;
             }
-            $("input[name='price']").attr('value',fixedPayRmb);
+            $("input[name='price']").attr('value',fixedPayRmb.toFixed(2));
         });
 
         var validator = new Validator({

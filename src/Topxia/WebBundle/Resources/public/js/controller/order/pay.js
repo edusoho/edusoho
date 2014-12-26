@@ -47,17 +47,17 @@ define(function(require, exports, module) {
 				var payRmb = payAmount/cashRate;
 				fixedPayRmb = parseFloat(payRmb.toFixed(2));
 				if(fixedPayRmb<payRmb){
-					fixedPayRmb = parseFloat(fixedPayRmb)+0.01;
+					fixedPayRmb = fixedPayRmb+0.01;
 				}
-				$('[role="pay-rmb"]').text(fixedPayRmb);
-				$('input[name="shouldPayMoney"]').val(fixedPayRmb);
+				$('[role="pay-rmb"]').text(fixedPayRmb.toFixed(2));
+				$('input[name="shouldPayMoney"]').val(fixedPayRmb.toFixed(2));
 			} else {
 				fixedPayAmount = payAmount.toFixed(2);
 				if(fixedPayAmount<payAmount){
 					fixedPayAmount = parseFloat(fixedPayAmount)+0.01;
 				}
-				$('[role="pay-rmb"]').text(fixedPayAmount);
-				$('input[name="shouldPayMoney"]').val(fixedPayAmount);
+				$('[role="pay-rmb"]').text(fixedPayAmount.toFixed(2));
+				$('input[name="shouldPayMoney"]').val(fixedPayAmount.toFixed(2));
 			}
 		}
 
