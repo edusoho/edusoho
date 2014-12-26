@@ -68,7 +68,7 @@ class WebExtension extends \Twig_Extension
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
-            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
         );
@@ -654,7 +654,6 @@ class WebExtension extends \Twig_Extension
 
         return $purifier->purify($html);
     }
-
 
     public function getSetting($name, $default = null)
     {
