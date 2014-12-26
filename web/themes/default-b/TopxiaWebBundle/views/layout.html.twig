@@ -69,6 +69,10 @@
           <ul class="nav navbar-nav navbar-right">
             {% if app.user %}
               <li><a href="{{ path('my') }}"> 我的课程 </a></li>
+              <li><a href="{{path('my_coin')}}" style="line-height: 1;"  >
+                <img src="{{default_path('iconfont-qiandai.png')}}"/>
+              </a>
+              </li>              
               {% if setting('mobile.enabled') %}
                 <li><a href="{{ path('mobile') }}" class="mobile-badge-container">
                   <span class="glyphicon glyphicon-phone"></span>
