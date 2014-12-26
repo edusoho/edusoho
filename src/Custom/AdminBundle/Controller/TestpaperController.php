@@ -136,7 +136,7 @@ class TestpaperController extends BaseController
     public function buildItemsAction(Request $request)
     {
         $part = json_decode($request->query->get('part'), true);
-        $this->filtPart($part);
+        $part = $this->filtPart($part);
         $result = $this->getTestpaperService()->makeItemsByPart($part);
         return $this->createJsonResponse($result);
     }
@@ -224,7 +224,9 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
-        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'doing');
+
+        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'previewing');
+
         return $this->render('TopxiaWebBundle:Paper:paper-reviewing.html.twig', array(
             'paper' => $paper,
             'questionItemSet' => $questionItemSet,
@@ -232,6 +234,10 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function advancedManageAction(Request $request, $id)
+    {
+
+    }
     private function makeTestpaperTotal ($testpaper, $items)
     {
         $total = array();
@@ -364,6 +370,46 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function advancedItemsResetAction(Request $request, $id)
+    {
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if(empty($testpaper)){
+            throw $this->createNotFoundException('试卷不存在');
+        }
+
+        $category = $this->getCategoryByTarget($testpaper['target']);
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $fields['target'] = "category-{$category['id']}";
+            $fields['pattern'] = 'Part';
+            $fields['metas'] = array('parts' => json_decode($fields['parts'], true));
+            $fields['knowledgeIds'] = explode(',', $fields['knowledgeIds']);
+            $fields['tagIds'] = explode(',', $fields['tagIds']);
+            unset($fields['parts']);
+            $this->getTestpaperService()->resetAdvancedTestPaper($id, $fields);
+            return $this->redirect($this->generateUrl('admin_testpaper', array('categoryId' => $category['id'])));
+        }
+
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
+
+        return $this->render('CustomAdminBundle:Testpaper:advanced-items-reset.html.twig', array(
+            'category'    => $category,
+            'testpaper' => $testpaper,
+            'types' => $types,
+        ));
+    }
+
     public function itemPickerAction(Request $request, $id)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($id);
@@ -386,8 +432,10 @@ class TestpaperController extends BaseController
             $conditions['stem'] = $conditions['keyword'];
         }
 
-
+        $knowledgeSearchs = empty($conditions['knowledgeIds']) ? array() : $this->getKnowledgeService()->findKnowledgeByIds(explode(',',$conditions['knowledgeIds']));
+        $tagSearchs = empty($conditions['tagIds']) ? array() : $this->getTagService()->findTagsByIds(explode(',',$conditions['tagIds']));
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
+        $part = empty($conditions['part']) ? 0 : $conditions['part'];
 
         $paginator = new Paginator(
             $request,
@@ -406,7 +454,10 @@ class TestpaperController extends BaseController
             'category' => $category,
             'testpaper' => $testpaper,
             'questions' => $questions,
+            'knowledgeSearchs' => $knowledgeSearchs,
+            'tagSearchs' => $tagSearchs,
             'replace' => $replace,
+            'part' => $part,
             'paginator' => $paginator,
             'conditions' => $conditions,
         ));
@@ -421,6 +472,7 @@ class TestpaperController extends BaseController
         }
 
         $category = $this->getCategoryByTarget($testpaper['target']);
+        $part = $request->query->get('part');
 
         $question = $this->getQuestionService()->getQuestion($request->query->get('questionId'));
         if (empty($question)) {
@@ -436,6 +488,7 @@ class TestpaperController extends BaseController
         return $this->render('CustomAdminBundle:Testpaper:item-picked.html.twig', array(
             'category'    => $category,
             'testpaper' => $testpaper,
+            'part' => $part,
             'question' => $question,
             'subQuestions' => $subQuestions,
             'type' => $question['type']
@@ -454,6 +507,47 @@ class TestpaperController extends BaseController
             }
         }
         return $part;
+    }
+
+    public function advancedItemsAction(Request $request, $id)
+    {
+        $testpaper = $this->getTestpaperService()->getTestpaper($id);
+        if(empty($testpaper)){
+            throw $this->createNotFoundException('试卷不存在');
+        }
+
+        $category = $this->getCategoryByTarget($testpaper['target']);
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            if (empty($data['questionId']) or empty($data['scores'])) {
+                return $this->createMessageResponse('error', '试卷题目不能为空！');
+            }
+            if (count($data['questionId']) != count($data['scores'])) {
+                return $this->createMessageResponse('error', '试卷题目数据不正确');
+            }
+
+            $data['questionId'] = array_values($data['questionId']);
+            $data['scores'] = array_values($data['scores']);
+
+            $items = array();
+            foreach ($data['questionId'] as $index => $questionId) {
+                $items[] = array('questionId' => $questionId, 'score' => $data['scores'][$index]);
+            }
+
+            $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
+            $this->getTestpaperService()->updateAdvancedTestpaperMetas($testpaper['id']);
+            $this->setFlashMessage('success', '试卷题目保存成功！');
+            return $this->redirect($this->generateUrl('admin_testpaper',array( 'categoryId' => $category['id'])));
+        }
+
+        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'previewing');
+
+        return $this->render('CustomAdminBundle:Testpaper:advanced-items.html.twig', array(
+            'category' => $category,
+            'testpaper' => $paper,
+            'questionItemSet' => $questionItemSet,
+        ));
     }
 
     private function getCourseService()

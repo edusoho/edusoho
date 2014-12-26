@@ -208,6 +208,9 @@ class CourseController extends BaseController
 	 */
 	public function showAction(Request $request, $id)
 	{
+		if (empty($_COOKIE['user-key'])) {
+			setcookie('user-key',$this->getUuid(),time()+60*60*24*30,'/');
+		}
 
 		$course = $this->getCourseService()->getCourse($id);
 

@@ -1,0 +1,39 @@
+ <tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
+  <td>
+    <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
+    <input type="hidden" name="questionId[]" value="{{ question.id }}">
+  </td>
+  <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
+  <td>
+    {{question['stem']|plain_text(40) }}
+  </td>
+  <td>{{ dict_text('questionType',question.type ) }}</td>
+  <td>{{ dict_text('difficulty', question.difficulty)}}</td>
+  <td>
+    <input name="scores[]" class="notMoveHandle form-control input-sm"
+      {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %} value="{{ item.score|default(question.score)|score_text }}"  >
+  </td>
+
+  <td>
+      <div class="btn-group">
+      {% if question.parentId == 0 %}
+        <a href="#modal" data-toggle="modal" data-url="{{ path('admin_category_manage_question_preview', {categoryId:category.id,id:question.id}) }}" class="notMoveHandle btn btn-default btn-sm">预览</a>
+        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm item-delete-btn">删除</a>
+        <a href="javascript:" class="notMoveHandle btn btn-default btn-sm" data-role="pick-item" data-url="{{ path('admin_testpaper_item_picker', {id:testpaper.id, replace: question.id }) }}" >替换</a>
+      {% endif %}
+    </div>
+   {#  {% if question.parentId == 0 %}
+      <div class="btn-group">
+        <a data-toggle="modal" data-url="{{ path('admin_question_preview', {id:question.id}) }}" class="notMoveHandle btn btn-default btn-sm" href="#">预览</a>
+        <a class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">切换下拉</span>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="javascript:;" class="notMoveHandle" data-role="pick-item" data-url="{{ path('admin_testpaper_item_picker', {id:testpaper.id, replace: question.id }) }}">替换</a></li>
+          <li><a href="javascript:" class="notMoveHandle item-delete-btn">删除</a></li>
+        </ul>
+      </div>
+    {% endif %} #}
+  </td>
+</tr>

@@ -142,3 +142,7 @@ carts_show:
 carts_course_favorite:
     pattern: /carts/favourite
     defaults: { _controller: CustomWebBundle:Carts:favorite }
+
+carts_add:
+    pattern:  /carts/add
+    defaults: { _controller: CustomWebBundle:Carts:add }

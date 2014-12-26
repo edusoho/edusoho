@@ -4417,6 +4417,12 @@ a.homework-essay-textarea-pack-up{
     z-index: 999999;
 }
 
+.carts-add-num {
+	position:relative;
+	top:-22px;
+	left:30px;
+}
+
 .thread-list {
 
 }

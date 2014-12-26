@@ -51,7 +51,6 @@ admin_testpaper_preview:
     pattern: /testpaper/{id}/preview
     defaults: { _controller: CustomAdminBundle:Testpaper:preview }
 
-
 admin_testpaper_items:
     pattern: /testpaper/{id}/items
     defaults: { _controller: CustomAdminBundle:Testpaper:items }
@@ -59,6 +58,10 @@ admin_testpaper_items:
 admin_testpaper_items_reset:
     pattern: /testpaper/{id}/items_reset
     defaults: { _controller: CustomAdminBundle:Testpaper:itemsReset }
+
+admin_testpaper_advanced_items_reset:
+    pattern: /testpaper/{id}/advanced_items_reset
+    defaults: { _controller: CustomAdminBundle:Testpaper:advancedItemsReset }
 
 admin_testpaper_item_picker:
     pattern: /testpaper/{id}/item_picker
@@ -68,6 +71,6 @@ admin_testpaper_item_picked:
     pattern: /testpaper/{id}/item_picked
     defaults: { _controller: CustomAdminBundle:Testpaper:itemPicked }
 
-admin_question_preview:
-    pattern: /question/{id}/preview
-    defaults: { _controller: CustomAdminBundle:Testpaper:preview }
+admin_testpaper_advanced_items:
+    pattern: /testpaper/{id}/advanced-items
+    defaults: { _controller: CustomAdminBundle:Testpaper:advancedItems }

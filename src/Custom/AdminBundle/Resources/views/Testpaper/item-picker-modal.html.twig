@@ -7,8 +7,30 @@
 {% block title %}试卷{% if replaceFor %}替换{% else %}添加{% endif %}题目{% endblock %}
 
 {% block body %}
-
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser.css') }}" />
   <form id="testpaper-item-picker-form" class="form-inline well well-sm" action="{{ path('admin_testpaper_item_picker', {id:testpaper.id}) }}" novalidate>
+
+    <div class="form-group mrl" id="tags-search-group">
+      <label>标签：</label>
+        <a href="javascript:;" class="tag-search-trigger">
+          {% for tag in tagSearchs %}
+            {{tag.name}}
+          {% else %}
+            选择
+          {% endfor %}
+        </a>
+    </div>
+    <div class="form-group mrl" id="knowledges-search-group">
+      <label>知识点：</label>
+      <a href="javascript:;" class="knowledge-search-trigger">
+        {% for knowledge in knowledgeSearchs %}
+          {{knowledge.name}}
+        {% else %}
+          选择
+        {% endfor %}
+      </a>
+    </div>
 
     <div class="form-group">
       <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
@@ -17,11 +39,14 @@
     <input type="hidden" name="excludeIds" value="{{ conditions.excludeIds|join(',') }}">
     <input type="hidden" name="type" value="{{ conditions.type }}">
     <input type="hidden" name="replace" value="{{ replace }}">
-
+    <input type="hidden" name="tagIds" value="{{ app.request.query.get('tagIds') }}">
+    <input type="hidden" name="knowledgeIds" value="{{ app.request.query.get('knowledgeIds') }}">
+    
     <button class="btn btn-primary btn-sm">搜索</button>
 
   </form>
-
+    {% include 'CustomWebBundle:Tag:tagchooser-overlay.html.twig' with {id: 'tags-search', type: 'question'} %}
+    {% include 'CustomWebBundle:Tag:tagchooser-knowledge-overlay.html.twig' with {id: 'knowledges-search', categoryId: category.id} %}
   <table class="table table-condensed" id="testpaper-item-picker-table">
     <thead>
     <tr>

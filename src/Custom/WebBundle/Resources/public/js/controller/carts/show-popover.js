@@ -4,9 +4,14 @@ define(function(require, exports, module) {
     exports.run = function() {
         $('.carts-popover-list').on('click','.carts-item-delete',function(){
             $btn = $(this);
-            $.get($btn.data('url'),function(){
-                Notify.success('删除成功');
-                $btn.parents('li').remove();
+            $.get($btn.data('url'),function(result){
+                if(result.status == 'success') {
+                    $btn.parents('li').remove();
+                    var count = Number($('#float-carts #carts-badge').html());
+                    count == 1 && $('.btn-carts .btn').popover('hide');
+                    count > 0 && $('#float-carts #carts-badge').html(--count);
+                }
+         
             });
         });
     }

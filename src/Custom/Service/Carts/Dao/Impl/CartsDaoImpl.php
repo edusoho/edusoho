@@ -15,12 +15,18 @@ class CartsDaoImpl extends BaseDao implements CartsDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findCartsByUseId($userId)
+    public function findCartsByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table}  WHERE userId = ? ORDER BY createdTime DESC";
         return $this->getConnection()->fetchAll($sql,array($userId))? : array();
     }
-    
+
+    public function findCartsByUserKey($userKey)
+    {
+        $sql = "SELECT * FROM {$this->table}  WHERE userKey = ? ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchAll($sql,array($userKey))? : array();
+    }
+
     public function addCart(array $carts)
     {
         $affected = $this->getConnection()->insert($this->table, $carts);
@@ -48,7 +54,9 @@ class CartsDaoImpl extends BaseDao implements CartsDao
             ->select('*')
             ->from($this->table, $this->table)
             ->andWhere('userId = :userId')
+            ->andWhere('itemId = :itemId')
             ->andWhere('itemType = :itemType')
+            ->andWhere('userKey = :userKey')
             ->addOrderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
@@ -60,7 +68,8 @@ class CartsDaoImpl extends BaseDao implements CartsDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->select('COUNT(id)')
             ->from($this->table, $this->table)
-            ->andWhere('userId = :userId');
+            ->andWhere('userId = :userId')
+            ->andWhere('userKey = : userKey');
         return $builder->execute()->fetchColumn(0);
     }
 

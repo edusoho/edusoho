@@ -52,6 +52,7 @@ class WebExtension extends \Twig_Extension
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
+            'cartsCount' => new \Twig_Function_Method($this, 'getCartsCount') ,            
             'percent' => new \Twig_Function_Method($this, 'calculatePercent') ,
             'category_choices' => new \Twig_Function_Method($this, 'getCategoryChoices') ,
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
@@ -623,6 +624,12 @@ class WebExtension extends \Twig_Extension
         }
 
         return $result;
+    }
+
+    public function getCartsCount()
+    {
+        $count = ServiceKernel::instance()->createService('Custom:Carts.CartsService')->getCartsCount();
+        return $count;
     }
 
     public function calculatePercent($number, $total)

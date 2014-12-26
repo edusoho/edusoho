@@ -77,6 +77,29 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
+    public function resetAdvancedTestPaper($id, $fields)
+    {
+        $fields['score'] = 0;
+        $fields['itemCount'] = 0;
+        $parts = $fields['metas']['parts'];
+        foreach ($parts as $part) {
+            $fields['score'] += $part['score'] * $part['count'];
+            $fields['itemCount'] += $part['count'];
+        }
+        $fields = $this->filterTestpaperFields($fields, 'create');
+        $this->getTestpaperDao()->getConnection()->beginTransaction();
+        try{
+            $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
+            $testpaper = $this->buildTestpaperAdvanced($id, $fields);
+            $this->getTestpaperDao()->getConnection()->commit();
+        }catch(Exception $e) {
+            $this->getTestpaperDao()->getConnection()->rollBack();
+            $this->createServiceException($e->getMessage());
+        }
+        
+        return $testpaper;
+    }
+
     public function updateTestpaper($id, $fields)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($id);
@@ -85,6 +108,21 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         $fields = $this->filterTestpaperFields($fields, 'update');
         return $this->getTestpaperDao()->updateTestpaper($id, $fields);
+    }
+
+    public function updateAdvancedTestpaperMetas($id)
+    {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
+        if (empty($testpaper)) {
+            throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
+        }
+        foreach ($testpaper['metas']['parts'] as $key => $part) {
+            $items = $this->getTestpaperItemDao()->getItemsByTestIdAndPartId($id, $part['id']);
+            if (empty($items)) {
+                unset($testpaper['metas']['parts'][$key]);
+            }
+        }
+        return $this->getTestpaperDao()->updateTestpaper($id, array('metas' => $testpaper['metas']));
     }
 
     private function filterTestpaperPart($part)
@@ -259,7 +297,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $item['seq'] = $seq;
                     $seq += 1;
                 }
-                if(empty($item['parentId'])) {
+                if (empty($item['parentId'])) {
                     $new = $this->getTestpaperItemDao()->addItem($item);
                     $mapping[$new['questionId']] = $new['id'];
                     if($new['questionType'] != 'material') {
@@ -272,7 +310,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 }
             }
         }
-        $this->getTestpaperDao()->updateTestpaper($id, array('score' => $totalScore));
+        $this->getTestpaperDao()->updateTestpaper($id, array(
+            'metas' => $fields['metas'],
+            'itemCount' => $seq -1,
+            'score' => $totalScore
+        ));
     }
 
     public function canBuildTestpaper($builder, $options)
@@ -934,67 +976,46 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'parentId' => 0
         );
 
-        $searchQuestionsCount = $this->getQuestionService()->searchQuestionsCount($conditions);
-        $questions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $searchQuestionsCount);
-        $questions = $this->buildPartItems($part,$questions,$part);
+        $questions = $this->findPartQuestions($conditions, $part);
         $items = array();
         $index = 1;
         $excludeIds = array();
         $childrenQuestions = $this->getQuestionService()->findQuestionsByParentIds(ArrayToolkit::column($questions, 'id'));
         foreach ($questions as $question) {
             $items[] = array(
-                'questionId' => $question['questionId'],
+                'questionId' => $question['id'],
                 'seq' => $index,
-                'questionType' => $question['questionType'],
+                'questionType' => $part['type'],
                 'partId' => $part['id'],
-                'score' => $question['score'],
-                'missScore' => $question['missScore'],
-                'mistakeScore' => !empty($question['mistakeScore']) ? $question['mistakeScore'] : 0
+                'score' => $part['score'],
+                'missScore' => $part['missScore'],
+                'mistakeScore' => $part['mistakeScore'] 
             );
             $index += 1;
             foreach ($childrenQuestions as $child) {
-                if($child['parentId'] == $question['questionId']) {
+                if($child['parentId'] == $question['id']) {
                     $items[] = array(
                         'questionId' => $child['id'],
                         'seq' => $index,
-                        'questionType' => $child['questionType'],
+                        'questionType' => $part['type'],
                         'partId' => $part['id'],
-                        'parentId' => $question['questionId'],
-                        'score' => $child['score'],
-                        'missScore' => $child['missScore'],
-                        'mistakeScore' => !empty($child['mistakeScore']) ? $child['mistakeScore'] : 0
+                        'parentId' => $question['id'],
+                        'score' => $part['score'],
+                        'missScore' => $part['missScore'],
+                        'mistakeScore' => $part['mistakeScore'] 
                     );
                     $index += 1;
                     $excludeIds[] = $child['id'];
                 }
             }
-            $excludeIds[] = $question['questionId'];
+            $excludeIds[] = $question['id'];
         }
         return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
     }
 
-    private function buildPartItems($part,$questions,$options)
+    private function selectQuestionsWithDifficultlyPercentage($totalQuestions, $needCount, $percentages)
     {
-        shuffle($questions);
-        $typedQuestions = ArrayToolkit::group($questions, 'type');
-
-        $type = $options['type'];
-        $needCount = $options['count'];
-        $items = array();
-        $needCount = intval($needCount);
-
-        $difficultiedQuestions = ArrayToolkit::group($typedQuestions[$type], 'difficulty');
-
-        $selectedQuestions = $this->selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $options['percentages']);
-        $selectedQuestions = $this->fillQuestionsToNeedCount($selectedQuestions, $typedQuestions[$type], $needCount);
-
-        $itemsOfType = $this->convertQuestionsToItems($part, $selectedQuestions, $needCount, $options);
- 
-        return array_merge($items, $itemsOfType);
-    }
-
-    private function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
-    {
+        $difficultiedQuestions = ArrayToolkit::group($totalQuestions, 'difficulty');
         $selectedQuestions = array();
         foreach ($percentages as $difficulty => $percentage) {
             $subNeedCount = intval($needCount * $percentage / 100);
@@ -1065,6 +1086,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'missScore' => $missScore,
         );
     }
+    private function findPartQuestions($conditions, $part)
+    {
+        $total = $this->getQuestionService()->searchQuestionsCount($conditions);
+        $totalQuestions = $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
+        shuffle($totalQuestions);
+        $questions = $this->selectQuestionsWithDifficultlyPercentage($totalQuestions, $part['count'], $part['percentages']);
+        $questions = $this->fillQuestionsToNeedCount($questions, $totalQuestions, $part['count']);
+
+        return $questions;
+    }
+
     public function buildPaper($paperId, $status)
     {
         $paper = $this->getTestpaper($paperId);

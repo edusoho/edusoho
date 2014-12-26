@@ -1,0 +1,131 @@
+{% extends 'TopxiaAdminBundle:CategoryManage:layout.html.twig' %}
+
+{% block title %}重新生成试卷题目 - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser-2.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
+{% endblock %}
+
+{% set side_nav = 'testpaper' %}
+{% set script_controller = 'customadminbundle/controller/testpaper/testpaper-form-advanced' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col test-creator">
+  <div class="panel-heading clearfix">重新生成试卷题目</div>
+  
+  <div class="panel-body">
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('admin_testpaper',{categoryId:category.id}) }}">试卷管理</a></li>
+      <li class="active">重新生成试卷题目</li>
+    </ol>
+
+    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-build-items-url="{{ path('admin_testpaper_build_items') }}">
+     {{ web_macro.flash_messages() }}
+
+     <div class="hidden">{% include 'CustomAdminBundle:Testpaper:testpaper-form-base-fields.html.twig'%}</div>
+     {% include 'CustomAdminBundle:Testpaper:testpaper-form-build-fields-advanced.html.twig'%}
+
+     <div class="form-group">
+       <div class="col-md-8 col-md-offset-2 controls">
+         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+         <button id="testpaper-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" >生成试卷</button>
+         <a href="{{ path('admin_testpaper',{categoryId:category.id}) }}" class="btn btn-link  ">返回</a>
+       </div>
+     </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<div class="modal" id="testpaper-part-modal" tabindex="-1">
+  <div class="modal-dialog modal-lga">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <form class="form-horizontal testpaper-part-form" role="form">
+        <div class="modal-body">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">题目说明</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" name="description" rows=2></textarea>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">标签</label>
+                <div class="col-sm-9">
+                    {% include 'CustomWebBundle:Tag:tagchooser.html.twig' with {id: 'part-tag-chooser', type: 'question'} %}
+                </div>
+                <input type="hidden" name="tagIds">
+            </div>
+
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="testpaper-score-field">题目分值</label>
+              <div class="col-sm-4 controls">
+                <div class="input-group">
+                  <input id="testpaper-score-field" class="form-control" type="text" name="score">
+                  <div class="input-group-addon">分</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="testpaper-count-field">题目数量</label>
+              <div class="col-sm-4 controls">
+                <div class="input-group">
+                  <input id="testpaper-count-field" class="form-control" type="text" name="count" data-url="{{ path('ajax_questions_count', {categoryId:category.id}) }}">
+                  <div class="input-group-addon">题</div>
+                </div>
+              </div>
+              <div class="col-sm-3"><p class="form-control-static text-muted" id="testpaper-count-field-span">查询中...</p></div>
+            </div>
+
+            <div class="form-group mistakeScore-form-group">
+              <label class="col-sm-2 control-label">错选扣分</label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <div class="input-group-addon"><input type="checkbox"></div>
+                  <input class="form-control" type="text" name="mistakeScore" disabled>
+                  <div class="input-group-addon">分</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group missScore-form-group">
+              <label class="col-sm-2 control-label">漏选得分</label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <div class="input-group-addon"><input type="checkbox"></div>
+                  <input class="form-control" type="text" name="missScore" disabled>
+                  <div class="input-group-addon">分</div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" name="id">
+          <input type="hidden" name="name">
+          <input type="hidden" name="type">
+          <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary part-save-btn">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+ 
