@@ -858,25 +858,30 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 	        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
 	        	
         		$count  = $this->controller->getCourseService()->searchLearnCount(array("status"=>"learning"));
-        		$learnStatus = $this->controller->getCourseService()->searchLearns(
-        			array("status"=>"learning"),
+        		$learnStatusArray = $this->controller->getCourseService()->searchLearns(
+        			array("status"=>"learning", "userId"=>$user["id"]),
         			array("finishedTime","ASC"),0,$count
         			);
 
-        		$lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatus, 'lessonId'));
-        		$courses = array_map(function($course) use ($lessons){
-        			$courseId = $course["id"];
-        			if (isset($lessons[$courseId])) {
-        				$course["lastLessonTitle"] = $lessons[$courseId]["title"];
+        		$lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+
+        		$tempCourse = array();
+        		foreach ($courses as $key => $course) {
+        			$tempCourse[$course["id"]] = $course;
+        		}
+
+        		foreach ($lessons as $key => $lesson) {
+        			$courseId = $lesson["courseId"];
+        			if (isset($tempCourse[$courseId])) {
+        				$tempCourse[$courseId]["lastLessonTitle"] = $lesson["title"];
         			}
-        			return $course;
-        		}, $courses);
+        		}
 
         		$result = array(
 			"start"=>$start,
 			"limit"=>$limit,
 			"total"=>$total,
-			"data"=> $this->controller->filterCourses($courses)
+			"data"=> $this->controller->filterCourses(array_values($tempCourse))
 			);
 		return $result;
 	}
