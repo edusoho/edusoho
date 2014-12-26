@@ -7,6 +7,8 @@ define(function(require, exports, module) {
             $.get($btn.data('url'),function(){
                 Notify.success('删除成功');
                 $btn.parents('li').remove();
+                var count = Number($('#float-carts #carts-badge').html());
+                count > 0 && $('#float-carts #carts-badge').html(--count);
             });
         });
     }
