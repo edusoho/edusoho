@@ -288,7 +288,7 @@ class CourseController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
-			return $this->createJsonResponse(false);
+			throw $this->createAccessDeniedException();
 		}
 		$this->getCourseService()->favoriteCourse($id);
 		return $this->createJsonResponse(true);
@@ -298,7 +298,7 @@ class CourseController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
-			return $this->createJsonResponse(false);
+			throw $this->createAccessDeniedException();
 		}
 		$this->getCourseService()->unfavoriteCourse($id);
 		return $this->createJsonResponse(true);
@@ -346,7 +346,10 @@ class CourseController extends BaseController
 	{
 		$course=$this->getCourseService()->getCourse($id);
 		$tagIds = $course['tags'];
-        $articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds,6);
+		$articles=array();
+		if (!empty($tagIds)) {
+        	$articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds,6);
+		}
         return $this->render("TopxiaWebBundle:Course:course-relatedArticles.html.twig", array(
 			'articles'=>$articles
 		));

@@ -37,12 +37,10 @@ course_manage_price:
 course_favorite:
     pattern: /course/{id}/favorite
     defaults: { _controller: CustomWebBundle:Course:favorite }
-    methods: [POST]
 
 course_unfavorite:
     pattern: /course/{id}/unfavorite
     defaults: { _controller: CustomWebBundle:Course:unfavorite }
-    methods: [POST]
 
 
 
