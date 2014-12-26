@@ -113,20 +113,21 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         if(!empty($couponApp) && $fields["couponCode"]) {
             list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
-            	$fields["couponCode"], 
-            	$targetId, 
-            	$amount, 
-            	$priceType, 
-            	$cashRate
+                $fields["couponCode"], 
+                $targetId, 
+                $amount, 
+                $priceType, 
+                $cashRate
             );
             $amount = $afterCouponAmount;
+            var_dump($amount);
         }
 
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;
         }
 
-        $amount = ceil($amount*100)/100;
+        $amount = $this->roundUp($amount);
 
         return array(
         	$amount, 

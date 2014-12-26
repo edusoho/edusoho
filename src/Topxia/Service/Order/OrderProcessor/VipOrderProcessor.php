@@ -153,7 +153,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = $amount/$cashRate;
         }
 
-        $amount = ceil($amount*100)/100;
+        $amount = $this->roundUp($amount);
 
         return array(
         	$amount, 

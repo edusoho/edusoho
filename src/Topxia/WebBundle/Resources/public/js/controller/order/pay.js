@@ -56,9 +56,9 @@ define(function(require, exports, module) {
 				$('[role="pay-rmb"]').text(fixedPayRmb.toFixed(2));
 				$('input[name="shouldPayMoney"]').val(fixedPayRmb.toFixed(2));
 			} else {
-				fixedPayAmount = payAmount.toFixed(2);
+				fixedPayAmount = parseFloat(payAmount.toFixed(2));
 				if(fixedPayAmount<payAmount){
-					fixedPayAmount = parseFloat(fixedPayAmount)+0.01;
+					fixedPayAmount = fixedPayAmount+0.01;
 				}
 				$('[role="pay-rmb"]').text(fixedPayAmount.toFixed(2));
 				$('input[name="shouldPayMoney"]').val(fixedPayAmount.toFixed(2));
