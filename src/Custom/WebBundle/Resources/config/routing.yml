@@ -191,7 +191,9 @@ index_tag_page:
 ajax_page:
     pattern:  /index/tag/ajax/page/{page}
     defaults:  {_controller: CustomWebBundle:Tag:ajaxPage ,page:'' }
-
+vip:
+    pattern: /vip/
+    defaults: { _controller: CustomWebBundle:Vip:index }
 
 
 
