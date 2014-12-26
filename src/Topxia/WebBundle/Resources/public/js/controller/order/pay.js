@@ -66,7 +66,7 @@ define(function(require, exports, module) {
 
 			validator.removeItem('[name="payPassword"]');
 			
-			if(coin=="0" || isNaN(coin)){
+			if(parseFloat(coin) == 0 || isNaN(coin)){
 				$(this).val("0");
 				$('[role="cash-discount"]').text("0");
 				$(".pay-password").hide();
