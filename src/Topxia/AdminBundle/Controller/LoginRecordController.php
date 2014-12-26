@@ -13,7 +13,10 @@ class LoginRecordController extends BaseController
     	$conditions = $request->query->all();
 
         $conditions['action'] ='login_success';
-
+        if(isset($conditions['email'])){
+            $user=$this->getUserService()->getUserByEmail($conditions['email']) ;
+            $conditions['userId']=$user['id'];
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getLogService()->searchLogCount($conditions),
