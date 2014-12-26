@@ -619,7 +619,7 @@ class SettingsController extends BaseController
 			'weibo' => array(
 				'type' => '新浪微博帐号' , 'image' => '/assets/img/social/weibo.png' , 'state' => null),
 			'qq' => array(
-				'type' => 'QQ帐号' , 'image' => '/assets/img/social/qzone.png' , 'state' => null),
+				'type' => 'QQ帐号' , 'image' => '/assets/img/social/qq.png' , 'state' => null),
 			'renren' => array(
 				'type' => '人人网帐号' , 'image' => '/assets/img/social/renren.gif' , 'state' => null)
 		);
