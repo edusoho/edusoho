@@ -134,6 +134,18 @@ uploadfile_cloud_get_head_leader_hlskey:
     pattern: /uploadfile/get_head_leader_hlsKey
     defaults: { _controller: TopxiaWebBundle:UploadFile:getHeadLeaderHlsKey}
 
+hls_playlist:
+    pattern: /hls/{id}/playlist/{token}.m3u8
+    defaults: { _controller: TopxiaWebBundle:HLS:playlist}
+
+hls_stream:
+    pattern: /hls/{id}/stream/{level}/{token}.m3u8
+    defaults: { _controller: TopxiaWebBundle:HLS:stream}
+
+hls_clef:
+    pattern: /hls/{id}/clef/{token}
+    defaults: { _controller: TopxiaWebBundle:HLS:clef}
+
 kindeditor_upload:
     pattern:  /kindeditor/upload
     defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
