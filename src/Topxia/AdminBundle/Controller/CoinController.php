@@ -365,7 +365,7 @@ class CoinController extends BaseController
 
             $fields=$request->request->all();
 
-            $account=$this->getCashService()->getAccount($id);
+            $account=$this->getCashAccountService()->getAccount($id);
 
             if($account){
 
