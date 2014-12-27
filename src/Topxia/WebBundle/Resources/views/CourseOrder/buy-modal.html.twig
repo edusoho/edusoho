@@ -7,10 +7,13 @@
 
 {% block title %}{% if billable %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
+
   {% if billable and course.type=="live" %}
     <div class="alert alert-info">注意：请在30分钟内完成支付，否则订单将会过期失效</div>
   {% endif %}
-  <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('course_order_pay') }}">
+  <form id="course-buy-form" class="form-horizontal" method="post" 
+  action="{{ path('course_buy_modify_user_info') }}"
+  >
 
     <div class="form-group">
       <div class="col-md-3 control-label">课程名称</div>
@@ -31,92 +34,7 @@
     {% endif %}
 
     {% if billable %}
-      {% if payments %}
-
-        {% if setting('coupon.enabled') %}
-
-          <div class="form-group coupon-btn-group">
-            <div class="col-md-7 col-md-offset-3 controls">
-              <a href="javascript:;" id="show-coupon-input" data-status='hide'><span id="show-coupon" class="glyphicon glyphicon-plus"></span><span id="hide-coupon" class="glyphicon glyphicon-minus hide"></span>使用优惠码</a>
-            </div>
-          </div>
-
-        {% endif %}
-
-        <div class="form-group coupon-input-group hide">
-          <div class="col-md-7 col-md-offset-3 controls">
-            <div class="input-group">
-              <input type="text" class="form-control" name="coupon">
-              <span class="input-group-btn">
-                <button class="btn btn-default btn-use-coupon" data-url="{{ path('coupon_check', {type:'course', id:course.id}) }}" type="button">使用</button>
-              </span>
-            </div>
-            <div class="help-block coupon-error">温馨提示：点击【去支付】会生成订单，订单生成后，优惠码便不能再使用。</div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-3 control-label">选择支付方式</div>
-          <div class="col-md-9 controls">
-            {% for payment, options in payments %}
-        <input type="radio"  role="payTypeChoices" name="payTypeChoices" id="zhiFuBao" value="zhiFuBao" checked="checked"/>              
-   
-        <img src="{{ asset('assets/img/order/alipay.gif') }}" /></br></br>
-
-      {% if setting('coin.coin_enabled') and course.coinPrice|default(0) > 0 %}
-      <input type="radio" name="payTypeChoices" id="chargeCoin" 
-         value="chargeCoin"  role="payTypeChoices" > 使用虚拟币购买
-
-      <div class="form-group" id="chargeCoin" name="chargeCoin"  >
-      <div class="col-md-3 control-label">购买金额：</div>
-      <div class="col-md-9 controls">
-        <span class="control-text"><strong class="money" id="neededMoney">{{ course.coinPrice }}</strong>
-          <span class="text-muted" >{{setting('coin.coin_name')}}</span>
-        </span>
-      </div>
-      <div class="col-md-3 control-label">账户余额：</div>
-      <div class="col-md-9 controls"> 
-        <span class="control-text"><strong class="money" id="leftMoney">{{account.cash|default(0)}}</strong>
-          <span class="text-muted">{{setting('coin.coin_name')}}</span>
-        </span>
-        {% if account.cash <  course.coinPrice and setting('coin.coin_enabled') and setting('coin.charge_coin_enabled') %}
-            <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
-        {% endif %}
-        </div>
-        
-        </div>
-
-        <div class="col-md-12">
-            <strong class="danger"  id="notify" name="notify"  style="display:none">账户余额小于课程购买金额，请充值后购买！</strong>
-        </div>
-       {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-
-      <div id="screct" class="row form-group" style="display:none" >
-          <div class="col-md-3 control-label" >
-            <label for="password">登入密码</label>
-          </div>
-          <div class="col-md-5 controls"> 
-            <input id="password" type="" name="password" placeholder="使用登入密码支付" class="form-control" data-url="{{path('user_password_check')}}" autocomplete="off"/>
-          </div>
-       </div>
-
-        {% if payments.alipay.type|default(null) == 'dualfun' %}
-        <div class="row">
-          <div class="col-md-12">
-            <div class="alert alert-info">
-              <h4>付款提示</h4>
-              请在随后的支付宝支付页面中，选择“<strong>即时到账交易</strong>”，如下图所示。如果选择“担保交易”需要手动确认收货，会增加不必要的操作步骤。
-              <br>
-              <img src="{{ asset('bundles/topxiaweb/img/order/alipay_dualfun_example.png') }}">
-            </div>
-          </div>
-        </div>
-        {% endif %}
-
-      {% else %}
+      {% if not payments %}
         <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
       {% endif %}
     {% else %}
@@ -130,7 +48,7 @@
         </div>
       </div>
     {% endif %}
-    <input type="hidden" name="courseId" value="{{ course.id }}" />
+    <input type="hidden" name="targetId" value="{{ course.id }}" />
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 

@@ -1481,6 +1481,14 @@ order_create:
     defaults: { _controller: TopxiaWebBundle:Order:create }
     methods: [POST]
 
+course_buy:
+    pattern: /course/{id}/buy
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+
+course_buy_modify_user_info:
+    pattern: /course/buy/modify_user_info
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
+
 #占位
 vip:
     pattern: /vip/

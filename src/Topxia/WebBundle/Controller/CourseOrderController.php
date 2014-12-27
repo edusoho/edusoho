@@ -40,7 +40,7 @@ class CourseOrderController extends OrderController
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
 
-        $account=$this->getCashService()->getAccountByUserId($user['id'],true);
+        $account=$this->getCashAccountService()->getAccountByUserId($user['id'],true);
         
         if(empty($account)){
             $this->getCashService()->createAccount($user['id']);
@@ -81,14 +81,15 @@ class CourseOrderController extends OrderController
 
         $order = current($oldOrders);
 
-        if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
-             return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
-                'order' => $order,
-            ));
-        }
+        // if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
+        //      return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
+        //         'order' => $order,
+        //     ));
+        // }
 
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
+            'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'avatarAlert' => AvatarAlert::alertJoinCourse($user),
             'courseSetting' => $courseSetting,
@@ -99,6 +100,62 @@ class CourseOrderController extends OrderController
             'amount'=>$amount,
             'ChargeCoin'=> $ChargeCoin
         ));
+    }
+
+    public function modifyUserInfoAction(Request $request)
+    {
+
+        $formData = $request->request->all();
+
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+        }
+
+        $course = $this->getCourseService()->getCourse($formData['targetId']);
+        if (empty($course)) {
+            return $this->createMessageResponse('error', '课程不存在，不能购买。');
+        }
+
+        $userInfo = ArrayToolkit::parts($formData, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1','intField2','intField3','intField4','intField5',
+            'floatField1','floatField2','floatField3','floatField4','floatField5',
+            'dateField1','dateField2','dateField3','dateField4','dateField5',
+            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
+        ));
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        if($course['price'] == 0) {
+            $formData['amount'] = 0;
+            $formData['totalPrice'] = 0;
+            $coinSetting = $this->setting("coin");
+            $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
+            $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
+            $formData['coinAmount'] = 0;
+            $order = $this->getCourseOrderService()->createOrder($formData);
+
+            if ($order['status'] == 'paid') {
+                return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
+            }
+        }
+
+
+
+        return $this->redirect($this->generateUrl('order_show', array(
+            'targetId' => $formData['targetId'],
+            'targetType' => 'course'
+        )));
+        
     }
 
     public function repayAction(Request $request)
@@ -256,6 +313,89 @@ class CourseOrderController extends OrderController
 
     }
 
+    private function getEnabledPayments()
+    {
+        $enableds = array();
+
+        $setting = $this->setting('payment', array());
+
+        if (empty($setting['enabled'])) {
+            return $enableds;
+        }
+
+        $payNames = array('alipay');
+        foreach ($payNames as $payName) {
+            if (!empty($setting[$payName . '_enabled'])) {
+                $enableds[$payName] = array(
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
+                );
+            }
+        }
+
+        return $enableds;
+    }
+
+    private function getRemainStudentNum($course)
+    {
+        $remainingStudentNum = $course['maxStudentNum'];
+
+        if ($course['type'] == 'live') {
+            if ($course['price'] <= 0) {
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
+            } else {
+                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'status' => 'created',
+                    'createdTimeGreaterThan' => strtotime("-30 minutes")
+                ));
+                $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
+            }
+        }
+
+        return $remainingStudentNum;
+    }
+
+    private function previewAsMember($as, $member, $course)
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user->id)) {
+            return null;
+        }
+
+
+        if (in_array($as, array('member', 'guest'))) {
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                $member = array(
+                    'id' => 0,
+                    'courseId' => $course['id'],
+                    'userId' => $user['id'],
+                    'levelId' => 0,
+                    'learnedNum' => 0,
+                    'isLearned' => 0,
+                    'seq' => 0,
+                    'isVisible' => 0,
+                    'role' => 'teacher',
+                    'locked' => 0,
+                    'createdTime' => time(),
+                    'deadline' => 0
+                );
+            }
+
+            if (empty($member) or $member['role'] != 'teacher') {
+                return $member;
+            }
+
+            if ($as == 'member') {
+                $member['role'] = 'student';
+            } else {
+                $member = null;
+            }
+        }
+
+        return $member;
+    }
+
     public function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -286,6 +426,11 @@ class CourseOrderController extends OrderController
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -294,5 +439,10 @@ class CourseOrderController extends OrderController
     protected function getCouponService()
     {
         return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 }
