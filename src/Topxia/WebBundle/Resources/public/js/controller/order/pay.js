@@ -43,6 +43,7 @@ define(function(require, exports, module) {
 			if(accountCash == "" || isNaN(accountCash) || parseInt(accountCash) == 0) {
 				return;
 			}
+			accountCash = parseFloat(accountCash);
 			coinNum = parseFloat(coinNum);
 			if(accountCash>coinNum) {
 				coinNum = coinNum.toFixed(2);

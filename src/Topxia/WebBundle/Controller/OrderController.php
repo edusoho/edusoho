@@ -85,6 +85,8 @@ class OrderController extends BaseController
 
             $order = $processor->createOrder($orderFileds, $fields);
 
+            $this->setFlashMessage('success', '订单已经创建成功，请去支付!');
+
             return $this->redirect($this->generateUrl('pay_center_show', array(
                 'id' => $order['id']
             )));
