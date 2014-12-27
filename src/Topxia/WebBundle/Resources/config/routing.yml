@@ -1448,7 +1448,7 @@ user_password_check:
     defaults: { _controller: TopxiaWebBundle:User:checkPassword }
 
 pay_center_show:
-    path:   /pay/center/show
+    path:   /pay/center
     defaults: { _controller: TopxiaWebBundle:PayCenter:show }
 
 pay_center_pay:
