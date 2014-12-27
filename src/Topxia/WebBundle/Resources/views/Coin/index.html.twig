@@ -14,7 +14,9 @@
     我的{{setting('coin.coin_name')}}
   </div> #}
   <div class="panel-heading" style="font-weight:normal;">
-    账户余额:<br>
+    账户余额:
+    <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
+    <br>
     <div class="row">
         <div class="col-md-offset-2" style="font-weight:400;">
          
@@ -22,13 +24,12 @@
           <img class="coin-picture" src="{{setting('coin.coin_picture') }}" alt="虚拟币图片" width="50px">
         {% endif %}
 
-
           <strong style="font-size:28px;">{{account.cash|default(0)}}</strong>
             {{setting('coin.coin_name')}}
              {% if setting('coin.coin_enabled') %}
-            {% if setting('coin.charge_coin_enabled') %}
-            <a href="{{path('my_coin_buy')}}" class="mll btn btn-default" {# style="color: #428bca;" #}>充 值</a>
-            {% endif %}
+              {% if setting('coin.charge_coin_enabled') %}
+                <a href="{{path('my_coin_buy')}}" class="mll btn btn-default" {# style="color: #428bca;" #}>充 值</a>
+              {% endif %}
               {% if is_plugin_installed('MoneyCard') %}
                 <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>学习卡</a>
               {% endif %}
