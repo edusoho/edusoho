@@ -159,7 +159,7 @@ class MoneyCardServiceImpl extends BaseService
             ),
             array('cardStatus' => 'invalid')
         );
-        $this->updateBatch($batch['id'], array('batchStatus'=>'invalid'));
+        $batch = $this->updateBatch($batch['id'], array('batchStatus'=>'invalid'));
         $this->getLogService()->info('money_card_batch', 'lock', "作废了批次为{$batch['id']}的充值卡");
 
         return $batch;
@@ -179,7 +179,7 @@ class MoneyCardServiceImpl extends BaseService
             ),
             array('cardStatus' => 'normal')
         );
-        $this->updateBatch($batch['id'], array('batchStatus'=>'normal'));
+        $batch = $this->updateBatch($batch['id'], array('batchStatus'=>'normal'));
         $this->getLogService()->info('money_card_batch', 'unlock', "启用了批次为{$batch['id']}的充值卡");
 
         return $batch;
