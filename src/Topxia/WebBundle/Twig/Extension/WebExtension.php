@@ -68,9 +68,21 @@ class WebExtension extends \Twig_Extension
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
-            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
+            'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
         );
+    }
+
+    public function getUserNickNameById($userId)
+    {
+        $user = $this->getUserById($userId);
+        return $user['nickname'];
+    }
+    
+    private function getUserById($userId)
+    {
+        return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)
@@ -642,7 +654,6 @@ class WebExtension extends \Twig_Extension
 
         return $purifier->purify($html);
     }
-
 
     public function getSetting($name, $default = null)
     {

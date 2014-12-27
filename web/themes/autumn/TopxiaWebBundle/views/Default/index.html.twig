@@ -48,7 +48,9 @@
                     <div class="course-about">{{ course.about|plain_text(60) }}</div>
 
                     <div class="course-metas">
-                      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+
+                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+
                       <span class="teachers">
                          主讲：
                         {% for teacher in course.teachers %}
@@ -104,7 +106,9 @@
                     <div class="course-about">{{ course.about|plain_text(60) }}</div>
                     
                     <div class="course-metas">
-                      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+
+                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+
                       <span class="teachers">
                          主讲：
                         {% for teacher in course.teachers %}
@@ -165,7 +169,9 @@
                       </div>
 
                       <div class="course-metas">
-                        <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+
+                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+
                         <span class="teachers">
                            主讲：
                           {% for teacher in course.teachers %}
@@ -303,7 +309,11 @@
                             <p>{{ level.description|plain_text(40) }}</p>
                           </div>
                           <div class="vip-price col-sm-3 col-md-3">
-                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                                <h4>¥&nbsp;{{ level.monthCoinPrice }}{{setting('coin.coin_name')}}</h4>
+                               {% else %}
+                                <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% endif %}
                             <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                           </div>
                         </div>

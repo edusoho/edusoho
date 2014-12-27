@@ -15,13 +15,15 @@ class CoinController extends BaseController
         $postedParams = $request->request->all();
 
         $coinSettingsPosted = $this->getSettingService()->get('coin',array());
-
+// var_dump($coinSettingsPosted);
         $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
+          'price_type'=>'RMB',
           'coin_name' => '虚拟币',
-          'cash_rate' => 10,
-          'coin_consume_range_and_present' => array(array(0,0))
+          'coin_content' => '',
+          'coin_picture' => '',
+          'cash_rate' => 1,
         );
         $coinSettingsPosted = array_merge($default, $coinSettingsPosted);
       
@@ -29,13 +31,27 @@ class CoinController extends BaseController
         $coinSettingsPosted = null;
 
         $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
+        $coinSettingsPosted['price_type'] = $request->request->get("price_type");
         $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
+        $coinSettingsPosted['coin_content'] = $request->request->get("coin_content");
+        $coinSettingsPosted['coin_picture'] = $request->request->get("coin_picture");
+        $coinSettingsPosted['cash_rate'] = $request->request->get("cash_rate");
+        if (isset($coinSettingsPosted['cash_rate']) && !is_numeric($coinSettingsPosted['cash_rate'])){
+          $this->setFlashMessage('danger', '错误，虚拟币汇率设置填入的必须为数字！');
+          return $this->settingsRenderedPage($coinSettingsSaved);
+        }
+        
         $this->getSettingService()->set('coin', $coinSettingsPosted);
         $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
         $this->setFlashMessage('success', '虚拟币设置已保存！');      
         }
 
         return $this->settingsRenderedPage($coinSettingsPosted);
+    }
+
+    public function pictureAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:Coin:picture-modal.html.twig');
     }
 
     public function  recordsAction(Request $request){
@@ -156,20 +172,20 @@ class CoinController extends BaseController
 
             $user=$this->getUserService()->getUserByNickname($fields['nickname']);
 
-            $account=$this->getCashService()->getAccountByUserId($user["id"]);
+            $account=$this->getCashAccountService()->getAccountByUserId($user["id"]);
 
             if(empty($account)){
-                $account=$this->getCashService()->createAccount($user["id"]);
+                $account=$this->getCashAccountService()->createAccount($user["id"]);
             }
 
             if($fields['type']=="add"){
 
-                $this->getCashService()->waveCashField($account["id"],$fields['amount']);
+                $this->getCashAccountService()->waveCashField($account["id"],$fields['amount']);
                 $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
             }else{
 
-                $this->getCashService()->waveDownCashField($account["id"],$fields['amount']);
+                $this->getCashAccountService()->waveDownCashField($account["id"],$fields['amount']);
                 $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
             }
   
@@ -199,11 +215,11 @@ class CoinController extends BaseController
 
     //     $paginator = new Paginator(
     //         $this->get('request'),
-    //         $this->getCashService()->searchAccountCount($conditions),
+    //         $this->getCashAccountService()->searchAccountCount($conditions),
     //         20
     //       );
 
-    //     $cashes=$this->getCashService()->searchAccount(
+    //     $cashes=$this->getCashAccountService()->searchAccount(
     //         $conditions,
     //         array(),
     //         $paginator->getOffsetCount(),
@@ -234,13 +250,13 @@ class CoinController extends BaseController
 
                 if($fields['type']=="add"){
 
-                $this->getCashService()->waveCashField($id,$fields['amount']);
+                $this->getCashAccountService()->waveCashField($id,$fields['amount']);
 
                 $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
                 }else{
 
-                    $this->getCashService()->waveDownCashField($id,$fields['amount']);
+                    $this->getCashAccountService()->waveDownCashField($id,$fields['amount']);
                     $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
                 }
@@ -358,6 +374,10 @@ class CoinController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService(){
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService(){

@@ -5,9 +5,103 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\Payment\Payment;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderController extends BaseController
 {
+    public function createAction(Request $request) 
+    {   
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $targetType = $request->query->get('targetType');
+        $targetId = $request->query->get('targetId');
+
+        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip")) ) {
+            return $this->createMessageResponse('error', '参数不正确');
+        }
+        
+        $processor = OrderProcessorFactory::create($targetType);
+
+        $fields = $request->query->all();
+        $orderInfo = $processor->getOrderInfo($targetId, $fields);
+
+        return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
+
+    }
+
+    public function payAction(Request $request)
+    {
+        $fields = $request->request->all();
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
+        }
+
+        if(!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
+            return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
+        }
+        
+        $targetType = $fields["targetType"];
+        $targetId = $fields["targetId"];
+
+        $priceType = "RMB";
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnabled = array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"];
+        if($coinEnabled && array_key_exists("price_type", $coinSetting)) {
+            $priceType = $coinSetting["price_type"];
+        }
+        $cashRate = 1;
+        if($coinEnabled && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
+
+        $processor = OrderProcessorFactory::create($targetType);
+
+        try {
+            
+            list($amount, $totalPrice, $couponResult, $couponDiscount) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+            
+            //价格比较
+            if($amount != $fields["shouldPayMoney"]) {
+                return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+            }
+
+            $orderFileds = array(
+                'priceType' => $priceType,
+                'totalPrice' => $totalPrice,
+                'amount' => $amount,
+                'coinRate' => $cashRate,
+                'coinAmount' => empty($fields["coinPayAmount"])?0:$fields["coinPayAmount"],
+                'userId' => $user["id"],
+                'payment' => 'alipay',
+                'targetId' => $targetId,
+                'coupon' => empty($couponResult) ? null : $fields["couponCode"],
+                'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
+            );
+
+            if(array_key_exists("orderId", $fields)){
+                $order = $this->getOrderService()->getOrder($request->request->get('orderId'));
+
+                if (empty($order)) {
+                    return $this->createMessageResponse('error', '订单不存在!');
+                }
+                $order = $processor->updateOrder($order["id"], $orderFileds, $fields);
+            } else {
+                $order = $processor->createOrder($orderFileds, $fields);
+            }
+
+            return $this->redirect($this->generateUrl('pay_center_show', array(
+                'id' => $order['id']
+            )));
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', $e->getMessage());
+        }
+
+    }
 
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
@@ -129,6 +223,16 @@ class OrderController extends BaseController
         return $options;
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');   
+    }
+
+    protected function getCashService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
@@ -137,6 +241,16 @@ class OrderController extends BaseController
     protected function getCouponService()
     {
         return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
     protected function getCourseService()

@@ -55,33 +55,7 @@
 			<h1 class="title">{{ course.title }}</h1>
 			<div class="subtitle">{{ course.subtitle }}</div>
 			<div class="stats">
-				<p>
-					价　格：
-					{% if course.price > 0 %}
-						{% if free_limit_type(course) == 'free_now' %}
-							<span class="money-num">0.00</span>
-							<span class="money-text">元</span>
-							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
-							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-						{% else %}
-							<span class="money-num">{{ course.price }}</span>
-							<span class="money-text">元</span>
-							&nbsp;&nbsp;&nbsp;
-						 {% if setting('coin.coin_enabled') %}
-						 {% if course.coinPrice > 0 %}
-						 <span class="coin-price" >
-							<span >{{ course.coinPrice }}</span>
-							<span  > {{setting('coin.coin_name')}}</span>
-						</span>
-						{% endif %}  
-						{% endif %}  
-
-						{% endif %}  
-					{% else %}
-						<span class="money-num" style="font-size:16px;">免费</span>
-					{% endif %}
-				</p>
-								
+				{% include 'TopxiaWebBundle:Course:course-index-price.html.twig' with {'course':course} %}
 				<p>
 					评　价：
 					<span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
@@ -114,7 +88,7 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
-						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="{{ path('order_create', {targetId:course.id, targetType:'course'}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
@@ -184,7 +158,7 @@
 					</li>
 					<li class="pull-right" style="display:none;" >
 					<div>
-						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('order_create', {targetId:course.id, targetType:'course'}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 					</div>
 					</li>
 				</ul>

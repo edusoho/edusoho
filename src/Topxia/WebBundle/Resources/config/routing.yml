@@ -220,10 +220,6 @@ course_become_use_member:
     defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
     methods: [POST]
 
-course_buy:
-    pattern:  /course/{id}/buy
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
-
 course_rebuy:
     pattern:  /course/{courseId}/course_rebuy
     defaults: { _controller: TopxiaWebBundle:Course:rebuy }
@@ -236,15 +232,13 @@ order_result_notice:
     pattern: /order/result/notice
     defaults: { _controller: TopxiaWebBundle:Order:resultNotice }
 
-course_order_pay:
-    pattern:  /course/order/pay
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
-    methods: [POST]
+course_order_buy:
+    pattern:  /course/{id}/order/buy
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
 
 course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
-    methods: [POST]
 
 course_order_pay_return:
     pattern:  /course/order/pay/{name}/return
@@ -878,6 +872,30 @@ settings_avatar_fetch_partner:
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
 
+settings_security: 
+    pattern:  /settings/security 
+    defaults: { _controller: TopxiaWebBundle:Settings:security }
+
+settings_pay_password: 
+    pattern:  /settings/pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
+
+settings_reset_pay_password:
+    pattern:  /settings/reset_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
+
+settings_find_pay_password:
+    pattern:  /settings/find_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
+
+settings_update_pay_password:
+    pattern:  /settings/update_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions }
+
+settings_security_questions:
+    pattern:  /settings/security_questions
+    defaults: { _controller: TopxiaWebBundle:Settings:securityQuestions }
+
 setting_nickname:
     pattern: /settings/nickname
     defaults: { _controller: TopxiaWebBundle:Settings:nickname }
@@ -1041,6 +1059,10 @@ my_order_cancel:
     pattern: /my/order/{id}/cancel
     defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
     methods: [POST]
+
+web_user_order_detail:
+    pattern: /order/{id}/detail
+    defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
 
 my_order_cancel_refund:
     pattern: /my/order/{id}/cancel_refund
@@ -1399,7 +1421,9 @@ group_thread_delete_attach:
     defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
     methods: [POST]
 
-
+my_bill:
+    pattern: /my/bill
+    defaults: { _controller: TopxiaWebBundle:Coin:cashBill }
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
@@ -1415,11 +1439,47 @@ coin_order_pay_notify:
 coin_change:
     path:     /coin/change
     defaults: { _controller: TopxiaWebBundle:Coin:change }
+coin_show:
+    path:     /coin/show
+    defaults: { _controller: TopxiaWebBundle:Coin:show }
 
 user_password_check:
     path:   /user/password/check
     defaults: { _controller: TopxiaWebBundle:User:checkPassword }
 
+pay_center_show:
+    path:   /pay/center/show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:show }
+
+pay_center_pay:
+    path:   /pay/center/pay
+    defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
+    methods: [POST]
+
+pay_return:
+    pattern:  /pay/center/pay/{name}/return
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }
+
+pay_notify:
+    pattern:  /pay/center/pay/{name}/notify
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payNotify }
+
+pay_success_show:
+    pattern:  /pay/center/success/show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:showTarget }
+
+pay_password_check:
+    pattern:  /pay/password/check
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
+
+order_create:
+    pattern:  /order/create
+    defaults: { _controller: TopxiaWebBundle:Order:create }
+
+order_pay:
+    pattern:  /order/pay
+    defaults: { _controller: TopxiaWebBundle:Order:pay }
+    methods: [POST]
 
 #占位
 vip:

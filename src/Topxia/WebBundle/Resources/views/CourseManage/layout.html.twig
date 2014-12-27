@@ -30,7 +30,9 @@
           <div class="list-group-panel">
             <div class="list-group-heading">课程设置</div>
             <div class="list-group">
+            {% if setting('course.coursesPrice') == 0 %}
               <a class="list-group-item {% if side_nav == 'price' %}active{% endif %}" href="{{ path('course_manage_price', {id:course.id}) }}">价格设置</a>
+              {% endif %}
               <a class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}" href="{{ path('course_manage_teachers', {id:course.id}) }}">教师设置</a>
               <a class="list-group-item {% if side_nav == 'students' %}active{% endif %}" href="{{ path('course_manage_students', {id:course.id}) }}">学员管理</a>
             </div>

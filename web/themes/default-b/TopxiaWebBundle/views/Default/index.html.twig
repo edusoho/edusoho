@@ -178,7 +178,11 @@
                               <p>{{ level.description|plain_text(40) }}</p>
                             </div>
                             <div class="vip-price col-sm-3 col-md-3">
-                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                                  <h4>¥&nbsp;{{ level.monthCoinPrice }}{{setting('coin.coin_name')}}</h4>
+                               {% else %}
+                                  <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% endif %}
                               <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                             </div>
                           </div>
@@ -402,14 +406,19 @@
             {% endif %}
 
             <span class="metas clearfix">
+
+            {% if setting('course.coursesPrice') == 0 %}
               <span class="price-col">
-                <span class="meta-label">价格</span>
-                {% if course.price > 0 %}
-                  <span class="price-num">{{ course.price }}元</span>
-                {% else %}
-                  <span class="price-num">免费</span>
-                {% endif %}
+              <span class="meta-label">价格</span>
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                <span class="price-num" style="display:block">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                </span>
+              {% else %}
+                <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
+                </span>
+              {% endif %}
               </span>
+            {% endif %}
 
               {% if course.showStudentNumType == 'opened' %}
               <span class="student-col">

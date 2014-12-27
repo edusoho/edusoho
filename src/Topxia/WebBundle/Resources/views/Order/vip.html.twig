@@ -1,0 +1,14 @@
+
+<input type="hidden" name="buyType" value="{{buyType}}"/>
+<input type="hidden" name="duration" value="{{duration}}"/>
+<input type="hidden" name="unitType" value="{{unitType}}"/>
+
+<ul class="course-wide-list">
+	{% include "VipBundle:Vip:vip-level.html.twig" with { showBuyButton: false } %}
+</ul>
+<br>
+<div class="row">
+    <h4 class="buy-vip-num">
+	X {{duration}} {% if unitType == "month" %}个月{% elseif unitType == "year" %}年{% endif %}
+	</h4>
+</div>

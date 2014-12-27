@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
+{% block title %}
+设置图片
+{% endblock %}
+
+{% block body %}
+<div id="system-picture">
+	<form>
+	    <input type="hidden" name="uploadPicture">
+	    <div class="row" id="pictureContent"></div>
+	</form>
+	<span class="help-block">建议图片尺寸480×240,文件大小<=200KB</span>
+	<form id="picture-upload-form" action="{{ path('file_upload', {group:'default'}) }}" method="post" enctype="multipart/form-data">
+	  <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;" accept="image/gif,image/jpeg,image/png" id="picture-upload-input">
+	  <button class="btn btn-default btn-sm">上传图片</button>
+	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+</div>
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" id="upload-picture-btn">确定</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('coin/picture')</script>
+{% endblock %}
+  

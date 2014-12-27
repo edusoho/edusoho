@@ -14,6 +14,7 @@
   <form class="form-horizontal" method="post" id="coin-settings-form">
     <fieldset>
       <legend>虚拟币设置</legend>
+
     	<div class="form-group">
       	<div class="col-md-3 control-label">
         	<label>网校虚拟币</label>
@@ -23,6 +24,16 @@
         	<div class="help-block">开启后网校支付将通过虚拟币支付</div>
       	</div>
     	</div>  	
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>网校价格显示</label>
+        </div>
+        <div class="controls col-md-4 radios">
+          {{ radios('price_type', {'RMB':'RMB', 'Coin':'虚拟币'},coin_settings_posted.price_type) }} 
+        </div>
+      </div>    
+
       <div class="form-group">
     		<div class="col-md-3 control-label">
     			<label for="coin_name">虚拟币名称</label>
@@ -31,6 +42,39 @@
     			<input type="text" id="coin_name" name="coin_name" class="form-control" value="{{coin_settings_posted.coin_name}}">
     		</div>
       </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+            <label for="cash_rate">虚拟币汇率设置</label>
+        </div>
+        <div class="controls col-md-4">
+          <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coin_settings_posted.cash_rate %}value="{{coin_settings_posted.cash_rate}}" {% else %} value="1" {% endif %}>
+          <div class="help-block">在此设置1元RMB可换取的虚拟币数量</div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="coin_picture">虚拟币图片</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="hidden" name="coin_picture" id="coin_picture" value="{{setting('coin.coin_picture') }}">
+          <p>
+            <img id="picture-show" name="coin_picture"  src="{{setting('coin.coin_picture') }}" class="img-responsive" style="display:block;">
+          </p>
+          <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_coin_picture') }}" data-toggle="modal" data-target="#modal">设置图片</a>
+        </div>
+    </div>
+
+        <div class="form-group">
+              <div class="col-md-3 control-label">
+                <label for="coin_content">虚拟币说明</label>
+              </div>
+          <div class="controls col-md-8">
+            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
+          </div>
+        </div> 
+
     </fieldset>
 
 
@@ -38,7 +82,7 @@
 
     <div class="row form-group">
     	<div class="controls col-md-offset-3 col-md-8">
-    		<button type="submit" class="btn btn-primary">提交更新</button>
+    		<button type="submit" class="btn btn-primary" >提交更新</button>
     	</div>
     </div>
   </form>

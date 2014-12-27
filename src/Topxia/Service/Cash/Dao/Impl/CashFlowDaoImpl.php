@@ -36,6 +36,13 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();
     }
+    
+    public function analysisAmount($conditions)
+    {
+        $builder = $this->createFlowQueryBuilder($conditions)
+            ->select('sum(amount)');
+        return $builder->execute()->fetchColumn(0);
+    }
 
     public function searchFlowsCount($conditions)
     {
@@ -67,11 +74,14 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->from($this->table, 'cash_flow')
             ->andWhere('userId = :userId')
             ->andWhere('type = :type')
+            ->andWhere('cashType = :cashType')
             ->andWhere('status = :status')
             ->andWhere('category = :category')
             ->andWhere('sn = :sn')
             ->andWhere('name = :name')
-            ->andWhere('orderSn = :orderSn');
+            ->andWhere('orderSn = :orderSn')
+            ->andWhere('createdTime >= :startTime') 
+            ->andWhere('createdTime < :endTime');
     }
 
 }
