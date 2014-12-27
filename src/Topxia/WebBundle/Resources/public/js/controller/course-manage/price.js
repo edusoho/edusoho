@@ -19,7 +19,11 @@ define(function(require, exports, module) {
             var element = $(this);
             var cash_rate= element.data("cashrate");
             var price = element.val();
-            $("input[name='coinPrice']").attr('value',roundUp(parseFloat(price)*parseFloat(cash_rate)));
+            if (price == "") {
+                $("input[name='coinPrice']").attr('value',"0.00");
+            }else{
+                $("input[name='coinPrice']").attr('value',roundUp(parseFloat(price)*parseFloat(cash_rate)));
+            }
         });
 
         $("input[name='coinPrice']").on('input',function(){
@@ -27,7 +31,11 @@ define(function(require, exports, module) {
             var cash_rate= element.data("cashrate");
             var price = element.val();
             var payRmb = parseFloat(price)/parseFloat(cash_rate);
-            $("input[name='price']").attr('value',roundUp(payRmb));
+            if(price == ""){
+                $("input[name='price']").attr('value',"0.00");
+            }else{
+                $("input[name='price']").attr('value',roundUp(payRmb));
+            }
         });
 
         var validator = new Validator({
