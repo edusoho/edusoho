@@ -203,7 +203,7 @@ class CourseManageController extends BaseController
                $fields['price'] = NumberToolkit::roundUp(floatval($coinPrice)/floatval($cashRate)); 
             }
 
-            if($coinPrice == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
+            if($coinPrice == NULL && !empty($coinSetting['coin_enabled']) && !empty($coinSetting['price_type']) && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
                 $fields['coinPrice'] = NumberToolkit::roundUp(floatval($price)*floatval($cashRate));
             }
 
@@ -225,7 +225,7 @@ class CourseManageController extends BaseController
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
             'ChargeCoin'=> $ChargeCoin,
-            'cashRate'=>$cashRate
+            'cashRate'=> empty($cashRate)? 1 : $cashRate
         ));
     }
 
