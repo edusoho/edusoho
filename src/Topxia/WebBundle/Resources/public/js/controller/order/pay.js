@@ -40,6 +40,9 @@ define(function(require, exports, module) {
 
 		function afterCoinPay(totalPrice, coinNum){
 			var accountCash = $('[role="accountCash"]').text();
+			if(accountCash == "" || isNaN(accountCash) || parseInt(accountCash) == 0) {
+				return;
+			}
 			coinNum = parseFloat(coinNum);
 			if(accountCash>coinNum) {
 				coinNum = coinNum.toFixed(2);

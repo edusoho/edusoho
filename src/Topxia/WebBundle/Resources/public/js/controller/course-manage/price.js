@@ -77,14 +77,14 @@ define(function(require, exports, module) {
                     var turePrice=roundUp(payRmb);
                     if(price!=turePrice){
                         Notify.danger('操作失败');
-                        return;
+                        return false;
                     }
                 }
                 if(coinPriceDisabled == "disabled"){
                     var turePrice=roundUp(parseFloat(price)*parseFloat(cash_rate));
                     if(coinPrice!=turePrice){
                         Notify.danger('操作失败');
-                        return;
+                        return false;
                     }
                 }
 
@@ -92,7 +92,7 @@ define(function(require, exports, module) {
                     Notify.success('课程价格已经修改成功');
                 }).error(function(){
                     Notify.danger('操作失败');
-                });;
+                });
             }
         });
 
