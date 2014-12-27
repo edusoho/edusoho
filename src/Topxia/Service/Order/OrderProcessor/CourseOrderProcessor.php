@@ -127,6 +127,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = $amount/$cashRate;
         }
 
+        if($amount<0){
+            $amount = 0;
+        }
+
         $amount = NumberToolkit::roundUp($amount);
 
         return array(

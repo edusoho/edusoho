@@ -116,7 +116,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
 
             // 免费课程，就直接将订单置为已购买
-            if (intval($order['amount']*100) == 0) {
+            if (intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon'])) {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
                     'sn' => $order['sn'],
                     'status' => 'success', 

@@ -83,16 +83,7 @@ class OrderController extends BaseController
                 'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
             );
 
-            if(array_key_exists("orderId", $fields)){
-                $order = $this->getOrderService()->getOrder($request->request->get('orderId'));
-
-                if (empty($order)) {
-                    return $this->createMessageResponse('error', '订单不存在!');
-                }
-                $order = $processor->updateOrder($order["id"], $orderFileds, $fields);
-            } else {
-                $order = $processor->createOrder($orderFileds, $fields);
-            }
+            $order = $processor->createOrder($orderFileds, $fields);
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
                 'id' => $order['id']
