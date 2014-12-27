@@ -39,6 +39,16 @@ class RegisterController extends BaseController
 
             $registration['createdIp'] = $request->getClientIp();
 
+            if(isset($authSettings['register_protective'])){
+
+                $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+
+                if(!$status){
+
+                    return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+                }
+            }
+
             $user = $this->getAuthService()->register($registration);
 
             $this->authenticateUser($user);
@@ -82,6 +92,44 @@ class RegisterController extends BaseController
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
         ));
+    }
+
+    private function protectiveRule($type,$ip)
+    {
+        switch ($type) {
+            case 'middle':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 30 ){
+                    
+                    return false;
+                }
+                return true;
+                break;
+            case 'high':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 10 ){
+                    
+                    return false;
+                }
+                $registerCount=$this->getUserService()->searchUserCount(array(
+                    'startTime'=>time()-3600,
+                    'createdIp'=>$ip,));
+                if($registerCount >= 1 ){
+                    
+                    return false;
+                }
+                return true;
+                break;
+            default:
+                return true;
+                break;
+        }
     }
 
     public function userTermsAction(Request $request)
