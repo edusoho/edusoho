@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
+    var EditorFactory = require('common/kindeditor-factory');
 	require('common/validator-rules').inject(Validator);
 	exports.run = function() {
 		var $form = $('#column-form');
@@ -51,6 +52,11 @@ define(function(require, exports, module) {
             required: true,
             rule: 'integer'
         });
+        var editor = EditorFactory.create('#category-description-field','simple_noimage');
+        validator.on('formValidate', function(elemetn, event) {
+            editor.sync();
+        });
+
         
 
         $modal.find('.delete-column').on('click', function() {

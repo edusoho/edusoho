@@ -6,7 +6,7 @@
   <td>{{ column.code }}</td>
   <td>{{ column.weight }}</td>
   <td><span class="bg-{{column.classIndex}}"></span></td>
-  <td>{{column.description|default("")}}</td>
+ {#  <td><p>{{column.description|raw}}</p></td> #}
   <td>{{ column.createdTime|date('Y-m-d H:i') }}</td>
   <td>
       <div class="btn-group">

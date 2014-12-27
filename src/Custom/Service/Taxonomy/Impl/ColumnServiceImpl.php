@@ -84,6 +84,8 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         $column['middleTagIds']='|-1|-1|-1|';
         $column['highTagIds']='|-1|-1|-1|';
 
+        $column['description'] = $this->purifyHtml($column['description']);
+
         $column = $this->getColumnDao()->addColumn($column);
 
         $this->getLogService()->info('column', 'create', "添加专栏{$column['name']}(#{$column['id']})");
@@ -104,7 +106,7 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         $fields['lowTagIds'] = array_filter($fields['lowTagIds']);
         $fields['middleTagIds'] = array_filter($fields['middleTagIds']);
         $fields['highTagIds'] = array_filter($fields['highTagIds']);
-
+        $fields['description'] = $this->purifyHtml($fields['description']);
         $this->getLogService()->info('column', 'update', "编辑专栏{$fields['name']}(#{$id})");
 
         return $this->getColumnDao()->updateColumn($id, ColumnSerialize::serialize($fields));
