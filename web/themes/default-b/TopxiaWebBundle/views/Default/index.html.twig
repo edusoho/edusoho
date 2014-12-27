@@ -398,7 +398,11 @@
             {% endif %}
 
             <span class="metas clearfix">
-
+{# {% if course.coinPrice|length > 10 %}  #}
+{{dump((course.coinPrice|length) - 1)}}
+{{dump(setting('coin.coin_name')|length)}}
+{{dump(((course.coinPrice|length) - 1)+ (setting('coin.coin_name')|length))}}
+{# {% endif %} #}
             {% if setting('course.coursesPrice') == 0 %}
               <span class="price-col">
               <span class="meta-label">价格</span>
