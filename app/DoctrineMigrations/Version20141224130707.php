@@ -18,7 +18,7 @@ class Version20141224130707 extends AbstractMigration
         INSERT INTO `block` (`userId`, `title`, `mode`, `content`, `code`, `createdTime`, `updateTime`) 
         VALUES ('1', '我的账户Banner', 'html', 
         '<br>\n<div class=\"col-md-12\">\n  
-        <a href=\"/admin/block\"><img src=\"/assets/img/placeholder/banner-wallet.png\" /></a>
+        <a href=\"#\"><img src=\"/assets/img/placeholder/banner-wallet.png\" /></a>
         <br>\n<br>\n</div>', 'bill_banner','{$time}','{$time}');
         ");
 
