@@ -79,6 +79,10 @@
                 {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
                 </a>
                 </li>
+              <li><a href="{{path('my_coin')}}" style="line-height: 1;height:54px;"  >
+                <img src="{{default_path('iconfont-qiandai.png')}}"/>
+              </a>
+              </li>
               <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
               <li class="dropdown hidden-lt-ie8">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>

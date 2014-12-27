@@ -34,7 +34,7 @@
             </ul>
           </div>
 
-          <div class="list-group-panel">
+{#           <div class="list-group-panel">
 
                
             <div class="list-group-heading">订单</div>
@@ -56,14 +56,14 @@
                      >账户中心{# 我的现金账单 #}</a>                
 
                 {#虚拟币#}
-              {#   {% if setting('coin.coin_enabled') %}
+{#                 {% if setting('coin.coin_enabled') %}
                       <a class="list-group-item 
                         {% if side_nav == 'my-coin' %} active {% endif %} " 
                         href="{{path('my_coin')}}">我的{{setting('coin.coin_name')}}</a>
-                {% endif %} #}
+                {% endif %}
               
             </ul>
-          </div>
+          </div> #} 
 
             
           </div><!-- /list-group-block -->
