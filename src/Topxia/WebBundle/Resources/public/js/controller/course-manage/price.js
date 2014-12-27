@@ -8,8 +8,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     function roundUp(amount){
-            return Math.ceil(amount*100)/100;
-    }
+            return (amount*100/100).toFixed(2);
+        }
 
     exports.run = function() {
     
