@@ -133,7 +133,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'amount' => $order["amount"],
             'name' => '入账',
             'orderSn' => $order['sn'],
-            'category' => 'outflow',
+            'category' => 'inflow',
             'note' => ''
 		);
 
@@ -144,16 +144,20 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'amount' => $order["amount"],
             'name' => '出账',
             'orderSn' => $order['sn'],
-            'category' => 'inflow',
+            'category' => 'outflow',
             'note' => '',
             'parentSn' => $rmbInFlow['sn']
 		);
 
 		$coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
+		$totalPrice = $order["totalPrice"];
+		if ($order["priceType"] == "RMB"){
+			$totalPrice = $totalPrice*$order['coinRate'];
+		}
 		$outFlow = array(
 			'userId' => $userId,
-            'amount' => $order["totalPrice"],
+            'amount' => $totalPrice,
             'name' => $order['title'],
             'orderSn' => $order['sn'],
             'category' => 'outflow',
