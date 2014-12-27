@@ -124,6 +124,10 @@ class CashServiceImpl extends BaseService implements CashService
         $inFlow["createdTime"] = time();
 
         $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"]);
+        if(empty($account)){
+                $account =$this->getCashAccountService()->createAccount($inFlow["userId"]);
+        }
+
         $inFlow["cash"] = $account["cash"]+$inFlow["amount"];
 
         $inFlow = $this->getFlowDao()->addFlow($inFlow);
