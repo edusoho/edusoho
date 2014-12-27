@@ -107,17 +107,16 @@
                     
                     <div class="mll">  
                       {% if setting('course.coursesPrice') == 0 %}
-                      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                        <span style="display:inline;color: #f78a4b;
-                  font-weight: bold;">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                        </span>
-                      {% else %}
-                        <span style="display:inline;color: #f78a4b;
-                  font-weight: bold;">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                        </span>
+                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                          </span>
+                        {% else %}
+                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
+                          </span>
                       {% endif %}
                     {% endif %}
                   </div>
+                  
                     <div class="course-metas">
 
                       <span class="teachers">
