@@ -124,6 +124,10 @@ class MoneyCardServiceImpl extends BaseService
         if (empty($moneyCard)) {
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
+        $batch = $this->getBatch($moneyCard['batchId']);
+        if ($batch['batchStatus'] == 'invalid'){
+            throw $this->createServiceException('批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！');
+        }
         if ($moneyCard['cardStatus'] == 'invalid' && $moneyCard['rechargeUserId'] == 0) {
             $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
 
@@ -159,7 +163,7 @@ class MoneyCardServiceImpl extends BaseService
             ),
             array('cardStatus' => 'invalid')
         );
-
+        $batch = $this->updateBatch($batch['id'], array('batchStatus'=>'invalid'));
         $this->getLogService()->info('money_card_batch', 'lock', "作废了批次为{$batch['id']}的充值卡");
 
         return $batch;
@@ -179,7 +183,7 @@ class MoneyCardServiceImpl extends BaseService
             ),
             array('cardStatus' => 'normal')
         );
-
+        $batch = $this->updateBatch($batch['id'], array('batchStatus'=>'normal'));
         $this->getLogService()->info('money_card_batch', 'unlock', "启用了批次为{$batch['id']}的充值卡");
 
         return $batch;
