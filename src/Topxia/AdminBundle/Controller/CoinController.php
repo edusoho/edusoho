@@ -366,6 +366,76 @@ class CoinController extends BaseController
         ));
     }
 
+    public function cashBillAction(Request $request)
+    {
+        if($request->get('nickname')){
+
+            $user=$this->getUserService()->getUserByNickname($request->get('nickname'));
+       
+            if($user){
+
+                $conditions['userId']=$user['id'];
+            }else{
+
+                $conditions['userId']=-1;
+            }
+        }
+
+        $conditions['cashType'] = 'RMB';
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+
+
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getCashService()->searchFlowsCount($conditions),
+            20
+        );
+
+        $cashes = $this->getCashService()->searchFlows(
+            $conditions,
+            array('ID','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
+        $userIds=ArrayToolkit::column($cashes,"userId");
+        $users=$this->getUserService()->findUsersByIds($userIds);
+
+        $conditions['type']  = 'inflow';      
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+
+        $conditions['type']  = 'outflow'; 
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+
+        return $this->render('TopxiaAdminBundle:Coin:cash-bill.html.twig',array(
+            'cashes' => $cashes,
+            'paginator' => $paginator,
+            'users'=>$users,
+            'amountInflow' => $amountInflow?:0,
+            'amountOutflow' => $amountOutflow?:0            
+          
+        ));   
+    }
+
     protected function getSettingService(){
 
       return $this->getServiceKernel()->createService('System.SettingService');
