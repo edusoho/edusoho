@@ -34,7 +34,6 @@ define(function(require, exports, module) {
 				couponTotalPrice = parseFloat(couponTotalPrice);
 			}
 			totalPrice = totalPrice-couponTotalPrice;
-
 			return totalPrice;
 		}
 
@@ -58,7 +57,8 @@ define(function(require, exports, module) {
 				accountCash = accountCash.toFixed(2);
 				if(cashRateElement.data("coursePriceShowType") == "RMB"){
 					var cashDiscount = accountCash/cashRate;
-					$('[role="cash-discount"]').text(cashDiscount.toFixed(2));
+					cashDiscount = parseInt(cashDiscount*100)/100;
+					$('[role="cash-discount"]').text(cashDiscount);
 				}else{
 					$('[role="cash-discount"]').text(accountCash);
 				}
