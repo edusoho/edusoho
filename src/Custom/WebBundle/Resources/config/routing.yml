@@ -22,6 +22,10 @@ course_lessonBlock:
     pattern:  /course/{id}/lessonBlock
     defaults: { _controller: CustomWebBundle:Course:lessonBlock }
 
+course_studentBlock:
+    pattern:  /course/{id}/studentsBlock
+    defaults: { _controller: CustomWebBundle:Course:studentBlock }
+
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: CustomWebBundle:CourseManage:base }

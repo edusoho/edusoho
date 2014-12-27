@@ -85,8 +85,11 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
                 continue;
             }
 
-            $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
-            $selectedQuestions = array_merge($selectedQuestions, $questions);
+            if (!empty($difficultiedQuestions[$difficulty])) {
+                $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
+                $selectedQuestions = array_merge($selectedQuestions, $questions);
+            }
+
         }
 
         return $selectedQuestions;
