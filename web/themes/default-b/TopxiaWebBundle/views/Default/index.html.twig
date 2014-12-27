@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block content %}
+
   <div class="es-row-wrap container-gap">
 
     {% if blocks.home_top_banner %}
@@ -404,13 +405,13 @@
 {{dump(((course.coinPrice|length) - 1)+ (setting('coin.coin_name')|length))}}
 {# {% endif %} #}
             {% if setting('course.coursesPrice') == 0 %}
-              <span class="price-col">
-              <span class="meta-label">价格</span>
+              <span style="text-align:left;">
+     
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                <span class="price-num" style="display:block">{% if ((course.coinPrice|length) - 1)+ (setting('coin.coin_name')|length) > 10 %}{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                <span class="price-num mbm" style="display:block">价格：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
                 </span>
               {% else %}
-                <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
+                <span class="price-num">价格：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
                 </span>
               {% endif %}
               </span>
@@ -423,7 +424,7 @@
               </span>
               {% endif %}
 
-              <span class="review-col">
+              <span class="review-col pull-left" style="text-align:left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
                   <span class="review-rating">
