@@ -149,8 +149,6 @@ class CourseOrderController extends OrderController
             }
         }
 
-
-
         return $this->redirect($this->generateUrl('order_show', array(
             'targetId' => $formData['targetId'],
             'targetType' => 'course'

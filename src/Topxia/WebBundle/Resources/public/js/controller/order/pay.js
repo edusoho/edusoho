@@ -22,7 +22,7 @@ define(function(require, exports, module) {
         });
 
 		function roundUp(amount){
-			return Math.ceil(amount*100)/100;
+			return (amount*100/100).toFixed(2);
 		}
 
 		function afterCouponPay(){
