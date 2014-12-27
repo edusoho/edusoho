@@ -26,8 +26,16 @@
     <div class="form-group">
       <div class="col-md-3 control-label">价格</div>
       <div class="col-md-9 controls money-text">
-      	<span class="control-text"><strong class="money">{{ course.price }}</strong>
+      	<span class="control-text">
+
+          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+          <strong class="money">{{ course.coinPrice }}</strong>
+          <span class="text-muted">{{setting('coin.coin_name')}}</span>
+          {% else %}
+          <strong class="money">{{ course.price }}</strong>
       		<span class="text-muted">元</span>
+          {% endif %}
+
       	</span>
       </div>
     </div>
