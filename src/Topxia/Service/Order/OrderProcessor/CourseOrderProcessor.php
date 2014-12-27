@@ -142,11 +142,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->getCourseOrderService()->createOrder($orderInfo);
 	}
 
-	public function updateOrder($orderId, $orderInfo, $fields) 
-	{
-		return $this->getCourseOrderService()->updateOrder($orderId, $orderInfo);
-	}
-
 	private function afterCouponPay($couponCode, $targetId, $amount, $priceType, $cashRate)
 	{
 		$couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "course", $targetId, $amount);

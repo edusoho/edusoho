@@ -1472,13 +1472,13 @@ pay_password_check:
     pattern:  /pay/password/check
     defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
 
+order_show:
+    pattern:  /order/show
+    defaults: { _controller: TopxiaWebBundle:Order:show }
+
 order_create:
     pattern:  /order/create
     defaults: { _controller: TopxiaWebBundle:Order:create }
-
-order_pay:
-    pattern:  /order/pay
-    defaults: { _controller: TopxiaWebBundle:Order:pay }
     methods: [POST]
 
 #占位

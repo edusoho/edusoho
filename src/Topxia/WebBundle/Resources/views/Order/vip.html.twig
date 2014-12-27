@@ -1,7 +1,8 @@
 
 <input type="hidden" name="buyType" value="{{buyType}}"/>
-<input type="hidden" name="duration" value="{{duration}}"/>
-<input type="hidden" name="unitType" value="{{unitType}}"/>
+<input type="hidden" name="duration" value="{{duration|default('')}}"/>
+<input type="hidden" name="unitType" value="{{unitType|default('')}}"/>
+<input type="hidden" name="type" value="{{type|default('')}}"/>
 
 <ul class="course-wide-list">
 	{% include "VipBundle:Vip:vip-level.html.twig" with { showBuyButton: false } %}
@@ -9,6 +10,10 @@
 <br>
 <div class="row">
     <h4 class="buy-vip-num">
+    {% if type|default(true) %}
+    会员升级为：{{level.name}}
+    {% else %}
 	X {{duration}} {% if unitType == "month" %}个月{% elseif unitType == "year" %}年{% endif %}
+	{% endif %}
 	</h4>
 </div>

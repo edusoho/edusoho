@@ -11,5 +11,4 @@ interface OrderProcessor
 
 	public function createOrder($orderInfo, $fields);
 
-	public function updateOrder($orderId, $orderInfo, $fields);
 }

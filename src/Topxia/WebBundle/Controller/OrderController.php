@@ -9,7 +9,7 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderController extends BaseController
 {
-    public function createAction(Request $request) 
+    public function showAction(Request $request) 
     {   
         $currentUser = $this->getCurrentUser();
 
@@ -33,7 +33,7 @@ class OrderController extends BaseController
 
     }
 
-    public function payAction(Request $request)
+    public function createAction(Request $request)
     {
         $fields = $request->request->all();
         $user = $this->getCurrentUser();

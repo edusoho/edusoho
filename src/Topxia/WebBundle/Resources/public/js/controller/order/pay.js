@@ -12,11 +12,11 @@ define(function(require, exports, module) {
 		var validator = new Validator({
             element: '#order-create-form',
             triggerType: 'change',
+            //autoSubmit: false,
             onFormValidated: function(error){
                 if (error) {
                     return false;
                 }
-				
                 $('#order-create-btn').button('submiting').addClass('disabled');
             }
         });

@@ -11,7 +11,7 @@
       <div class="panel panel-default panel-page">
         <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body">
-          <form id="order-create-form" method="post" action="{{path('order_pay')}}" 
+          <form id="order-create-form" method="post" action="{{path('order_create')}}" 
           >
           	{% if order|default(null) %}
             <input type="hidden" name="orderId" value="{{order.id}}"/>
