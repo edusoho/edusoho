@@ -196,7 +196,7 @@ class CourseManageController extends BaseController
             $fields = $request->request->all();
             $price = $request->request->get('price');
             $coinPrice = $request->request->get('coinPrice');
-            if($price == NULL && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
+            if($price == NULL && !empty($coinSetting['coin_enabled']) && !empty($coinSetting['price_type']) && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
                $fields['price'] = NumberToolkit::roundUp(floatval($coinPrice)/floatval($cashRate)); 
             }
 

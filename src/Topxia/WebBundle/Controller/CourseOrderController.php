@@ -43,7 +43,7 @@ class CourseOrderController extends OrderController
         $account=$this->getCashAccountService()->getAccountByUserId($user['id'],true);
         
         if(empty($account)){
-            $this->getCashService()->createAccount($user['id']);
+            $this->getCashAccountService()->createAccount($user['id']);
         }
 
         if(isset($account['cash']))
