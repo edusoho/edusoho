@@ -58,11 +58,11 @@
           <label for="coin_picture">虚拟币图片</label>
         </div>
         <div class="col-md-7 controls">
-          <input type="hidden" name="coin_picture" id="coin_picture" value="{{setting('coin.coin_picture') }}">
-          <p>
-            <img id="picture-show" name="coin_picture"  src="{{setting('coin.coin_picture') }}" class="img-responsive" style="display:block;">
-          </p>
-          <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_coin_picture') }}" data-toggle="modal" data-target="#modal">设置图片</a>
+          <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
+          <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
+          <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
+          <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过50*50,文件大小< 200KB。</p>
+          <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
         </div>
     </div>
 

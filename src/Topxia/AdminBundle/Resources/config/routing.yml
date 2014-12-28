@@ -1032,6 +1032,12 @@ admin_uploadfile_head_leader_params:
 admin_coin_picture:
     pattern: /coin/picture
     defaults: { _controller: TopxiaAdminBundle:Coin:picture }
+    methods: [POST]
+
+admin_coin_picture_remove:
+    pattern: /coin/picture/remove
+    defaults: { _controller: TopxiaAdminBundle:Coin:pictureRemove }
+    methods: [POST]
 
 admin_coin_settings:
     path:     /coin/settings
