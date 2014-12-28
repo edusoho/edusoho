@@ -165,8 +165,13 @@ class CourseController extends BaseController
 		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
 
 		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
-		if($freeLesson)$freeLesson=$freeLesson[0];
+		if($freeLesson){
+				$freeLesson=$freeLesson[0];
+		}
+
 		
+		// var_dump($nextLearnLesson);
+		// exit();
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -316,14 +321,6 @@ class CourseController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-
-
-
-
-
-
-
-
 	public function headerAction(Request $request,$id)
 	{
 		$course=$this->getCourseService()->getCourse($id);
@@ -344,13 +341,18 @@ class CourseController extends BaseController
 				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
 			}
 		}
+
+		$nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
+		// var_dump($nextLearnLesson);
+		// exit();
 		return $this->render("TopxiaWebBundle:Course:course-header.html.twig", array(
 			'course' => $course,
 			'tags' => $tags,
 			'member' => $member,
 			'hasFavorited' => $hasFavorited,
 			'courseMemberLevel' => $courseMemberLevel,
-			'checkMemberLevelResult' => $checkMemberLevelResult
+			'checkMemberLevelResult' => $checkMemberLevelResult,
+			'nextLearnLesson' => $nextLearnLesson
 		));
 	}
 
