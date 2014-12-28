@@ -708,11 +708,11 @@ class CoinController extends BaseController
         $vipApp = $this->getAppService()->findInstallApp("vip");
         if($priceType=="RMB") {
             $this->getCourseService()->updatePrice($cashRate);
-            if(!empty($vipApp))
+            if(!empty($vipApp) && version_compare($vipApp["version"], "1.0.8", ">"))
                 $this->getLevelService()->updatePrice($cashRate);
-        } else if($priceType=="Coin") {
+        } else if($priceType=="Coin" ) {
             $this->getCourseService()->updateCoinPrice($cashRate);
-            if(!empty($vipApp))
+            if(!empty($vipApp) && version_compare($vipApp["version"], "1.0.8", ">"))
                 $this->getLevelService()->updateCoinPrice($cashRate);
         }
     }
