@@ -41,16 +41,33 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: '#price-form',
             failSilently: true,
-            triggerType: 'change',
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return false;
-                }
-                $form = $('#price-form');
+            triggerType: 'change'
+        });
 
+        if($('#freeStartTime').length > 0){
 
-                if($('#freeStartTime').length > 0){
+            $("#freeStartTime").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                language: 'zh-CN',
+                todayBtn: true,
+                autoclose: true,
+                startDate: new Date(),
+                todayHighlight: true,
+                forceParse: false
+            });
+
+            $("#freeEndTime").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                language: 'zh-CN',
+                todayBtn: true,
+                autoclose: true,
+                startDate: new Date(),
+                todayHighlight: true,
+                forceParse: false
+            }); 
+
+            Validator.addRule('start_end_time_check',
+                function(a) {
                     var startTime = $('#freeStartTime').val();
                     startTime = startTime.replace(/-/g,"/");
                     startTime = Date.parse(startTime)/1000;
@@ -60,92 +77,43 @@ define(function(require, exports, module) {
                     var nowTime = Date.parse(new Date())/1000;
 
                     if(startTime > endTime){
-                        Notify.danger('请输入一个小于结束时间的开始时间');
-                        $('#freeStartTime').focus();
                         return false;
+                    } else {
+                        return true;
                     }
-                }   
+                },"开始时间必须小于结束时间"); 
 
-                var price = $("input[name='price']").val();
-                var coinPrice = $("input[name='coinPrice']").val();
-                var cash_rate = $form.data("cashrate");
-                var priceDisabled = $form.find('[name=price]').attr("disabled");
-                var coinPriceDisabled = $form.find('[name=coinPrice]').attr("disabled");
-
-                if(priceDisabled == "disabled"){
-                    var payRmb = parseFloat(coinPrice)/parseFloat(cash_rate);
-                    var turePrice=roundUp(payRmb);
-                    if(price!=turePrice){
-                        Notify.danger('操作失败');
-                        return false;
+            Validator.addRule('time_check',
+                function(a) {
+                    var thisTime = $(a.element.selector).val();
+                    thisTime = thisTime.replace(/-/g,"/");
+                    if (!Date.parse(thisTime)) {
+                    return false;
+                    }else{
+                    return true;
                     }
-                }
-                if(coinPriceDisabled == "disabled"){
-                    var turePrice=roundUp(parseFloat(price)*parseFloat(cash_rate));
-                    if(coinPrice!=turePrice){
-                        Notify.danger('操作失败');
-                        return false;
-                    }
-                }
+                },"请输入一个正确的时间");
 
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    Notify.success('课程价格已经修改成功');
-                }).error(function(){
-                    Notify.danger('操作失败');
-                });
-            }
+            validator.addItem({
+                element: '[name="freeStartTime"]',
+                rule: 'time_check start_end_time_check'
+            });
+
+            validator.addItem({
+                element: '[name="freeEndTime"]',
+                rule: 'time_check start_end_time_check'
+            });
+        }  
+
+        validator.addItem({
+            element: '[name="price"]',
+            rule: 'currency'
         });
 
-    $("#freeStartTime").datetimepicker({
-        format: 'yyyy-mm-dd hh:ii',
-        language: 'zh-CN',
-        todayBtn: true,
-        autoclose: true,
-        startDate: new Date(),
-        todayHighlight: true,
-        forceParse: false
-    });
-
-    $("#freeEndTime").datetimepicker({
-        format: 'yyyy-mm-dd hh:ii',
-        language: 'zh-CN',
-        todayBtn: true,
-        autoclose: true,
-        startDate: new Date(),
-        todayHighlight: true,
-        forceParse: false
-    });    
-
-    Validator.addRule('time_check',
-        function(a) {
-            var thisTime = $(a.element.selector).val();
-            thisTime = thisTime.replace(/-/g,"/");
-            if (!Date.parse(thisTime)) {
-            return false;
-            }else{
-            return true;
-            }
-        },"请输入一个正确的时间");    
-
-    validator.addItem({
-        element: '[name="price"]',
-        rule: 'currency'
-    });
-
-    validator.addItem({
-    element: '[name="coinPrice"]',
-    rule: 'currency'
-    });
-
-    validator.addItem({
-        element: '[name="freeStartTime"]',
-        rule: 'time_check'
-    });
-
-    validator.addItem({
-        element: '[name="freeEndTime"]',
-        rule: 'time_check'
-    });
+        validator.addItem({
+            element: '[name="coinPrice"]',
+            rule: 'currency'
+        });
 
     };
 
