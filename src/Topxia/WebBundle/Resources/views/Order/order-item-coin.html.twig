@@ -29,7 +29,8 @@
     <div class="pay-password">
       {% if not hasPayPassword %}
       <div>
-        为了保障账户资金安全，暂时不可用，请先<a href="{{path('settings_pay_password')}}" class="btn-link">设置支付密码</a>。
+        <span class="text-danger">为了保障账户资金安全，请先</span>
+        <a href="{{path('settings_pay_password')}}" class="btn-link">设置支付密码</a>
       </div>
       {% else %}
       <div role="password-input" style="display:none">
