@@ -61,7 +61,7 @@
           <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
           <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
           <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
-          <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过50*50,文件大小< 200KB。</p>
+          <p class="help-block">建议图片不超过50*50，文件大小小于200k</p>
           <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
         </div>
     </div>
@@ -72,6 +72,8 @@
               </div>
           <div class="controls col-md-8">
             <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
+            <p class="help-block">虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
+            </p>
           </div>
         </div> 
 
