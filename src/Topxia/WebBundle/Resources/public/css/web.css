@@ -4458,7 +4458,7 @@ a.homework-essay-textarea-pack-up{
 	margin-bottom: 20px;
 }
 
-.vip-item h3, p {
+.vip-item h3, .vip-item p {
 	color: #555;
 }
 
@@ -4689,7 +4689,7 @@ a.homework-essay-textarea-pack-up{
 	font-size: 16px;
 	line-height: 58px;
 	border: 1px solid #21a557; 
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 }
 
 .pay-center .uncheck .icon {
