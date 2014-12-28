@@ -83,7 +83,7 @@ define(function(require, exports, module) {
 					coinNum = totalPrice;
 				}
 				var coinNumPay = $('[role="coinNum"]').val();
-				if(coinNumPay){
+				if(coinNumPay && $('[name="payPassword"]').length>0){
 					if(coinNum <= coinNumPay) {
 						afterCoinPay(totalPrice, coinNum);
 					} else {
