@@ -16,10 +16,20 @@ class CoinController extends BaseController
 {
     public function indexAction(Request $request)
     {   
-        $user=$this->getCurrentUser();
-        $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        }
+
+        $coinEnabled = $this->setting("coin.coin_enabled");
+        if(empty($coinEnabled) || $coinEnabled == 0) {
+            return $this->createMessageResponse('error', '网校虚拟币未开启！');
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($user->id,true);
+
+        $ChargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
         
         if(empty($account)){
             $this->getCashAccountService()->createAccount($user->id);
