@@ -21,7 +21,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         
         $totalPrice = 0;
 
-        if(!array_key_exists("coin_enabled", $coinSetting) 
+        if(!isset($coinSetting["coin_enabled"]) 
             || !$coinSetting["coin_enabled"]) {
         	$totalPrice = $course["price"];
         	return array(
