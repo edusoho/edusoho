@@ -35,8 +35,7 @@ class CoinController extends BaseController
             $this->getCashAccountService()->createAccount($user->id);
         }
         
-        $fields = $request->query->all();
-
+        $fields = $request->query->all();      
         $conditions = array();
 
         if(!empty($fields)){
