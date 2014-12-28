@@ -230,10 +230,22 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchColumn($sql);
     }
 
-        public function analysisCourseSumByTime($endTime)
+    public function analysisCourseSumByTime($endTime)
     {
          $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
          return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function updatePrice($cashRate)
+    {
+        $sql="UPDATE `{$this->getTablename()}` SET price = coinPrice/? ;";
+        $this->getConnection()->executeUpdate($sql, array($cashRate));
+    }
+
+    public function updateCoinPrice($cashRate)
+    {
+        $sql="UPDATE `{$this->getTablename()}` SET coinPrice = price*? ;";
+        $this->getConnection()->executeUpdate($sql, array($cashRate));
     }
 
     private function getTablename()

@@ -16,9 +16,8 @@ class CoinController extends BaseController
     {
         $postedParams = $request->request->all();
 
-        $coinSettingsPosted = $this->getSettingService()->get('coin',array());
+        $coinSettingsSaved = $this->getSettingService()->get('coin',array());
 
-        $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
           'price_type'=>'RMB',
@@ -27,15 +26,15 @@ class CoinController extends BaseController
           'coin_picture' => '',
           'cash_rate' => 1,
         );
-        $coinSettingsPosted = array_merge($default, $coinSettingsPosted);
-      
+        $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
+
         if ($request->getMethod() == 'POST') {
-            $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
-            $coinSettingsPosted['price_type'] = $request->request->get("price_type");
-            $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
-            $coinSettingsPosted['coin_content'] = $request->request->get("coin_content");
-            $coinSettingsPosted['coin_picture'] = $request->request->get("coin_picture");
-            $coinSettingsPosted['cash_rate'] = $request->request->get("cash_rate");
+            $fields = $request->request->all();
+            $coinSettingsPosted = ArrayToolkit::parts($fields, array(
+                'cash_rate', 'coin_enabled', 
+                'price_type', 'coin_name', 
+                'coin_content', 'coin_picture'
+            ));
             if (isset($coinSettingsPosted['cash_rate']) && !is_numeric($coinSettingsPosted['cash_rate'])){
               $this->setFlashMessage('danger', '错误，虚拟币汇率设置填入的必须为数字！');
               return $this->settingsRenderedPage($coinSettingsSaved);
@@ -43,10 +42,21 @@ class CoinController extends BaseController
             
             $this->getSettingService()->set('coin', $coinSettingsPosted);
             $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
-            $this->setFlashMessage('success', '虚拟币设置已保存！');      
+            $this->setFlashMessage('success', '虚拟币设置已保存！');
+
+            if( $coinSettingsPosted["coin_enabled"] == 1
+                && !($coinSettingsSaved["coin_enabled"] == $coinSettingsPosted["coin_enabled"]
+                && $coinSettingsSaved["cash_rate"] == $coinSettingsPosted["cash_rate"]
+                && $coinSettingsSaved["price_type"] == $coinSettingsPosted["price_type"])
+                ) {
+                $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
+            }
+
+            return $this->settingsRenderedPage($coinSettingsPosted);
+
         }
 
-        return $this->settingsRenderedPage($coinSettingsPosted);
+        return $this->settingsRenderedPage($coinSettingsSaved);
     }
 
     public function pictureAction(Request $request)
@@ -693,6 +703,20 @@ class CoinController extends BaseController
         return $condition;
     }
 
+    private function processPrice($priceType, $cashRate)
+    {
+        $vipApp = $this->getAppService()->findInstallApp("vip");
+        if($priceType=="RMB") {
+            $this->getCourseService()->updatePrice($cashRate);
+            if(!empty($vipApp))
+                $this->getLevelService()->updatePrice($cashRate);
+        } else if($priceType=="Coin") {
+            $this->getCourseService()->updateCoinPrice($cashRate);
+            if(!empty($vipApp))
+                $this->getLevelService()->updateCoinPrice($cashRate);
+        }
+    }
+
     private function filterCondition($conditions)
     {
         if  (isset($conditions['keywordType'])) {
@@ -738,6 +762,21 @@ class CoinController extends BaseController
     protected function getSettingService(){
 
       return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
     protected function getCashService(){
