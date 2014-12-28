@@ -4,7 +4,45 @@
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
       <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
     </a>
+
     <div class="course-body">
+     
+     <div style="float:right;" class="text-muted mrm mls">
+         {% if setting('course.coursesPrice') == 0 %}
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
+                  <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
+                {% endif %}
+              {% else %}
+                {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
+                  <span class="free-money-text"><del>{{ course.price }}</del></span>
+                {% endif %}
+              {% endif %}
+
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                  <span class="course-price" style="display:inline">
+                    {% if course.coinPrice > 0 %}
+                      {% if free_limit_type(course) == 'free_now' %}
+                        0.00 元
+                      {% else %}
+                       价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
+                      {% endif %}  
+                    {% else %}免费{% endif %}
+                  </span>
+              {% else %}
+                <span class="course-price">
+                  {% if course.price > 0 %}
+                    {% if free_limit_type(course) == 'free_now' %}
+                      0.00 元
+                    {% else %}
+                     价格： {{ course.price }}元
+                    {% endif %}  
+                  {% else %}免费{% endif %}
+                </span>
+            {% endif %}
+          {% endif %}
+        </div>
+
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
       {% if course.serializeMode=='serialize' %}
         <span class="label label-success ">更新中</span>
@@ -42,45 +80,12 @@
             <span class="teacher-title ellipsis">{{ teacher.title }}</span>
           </div>
         {% endif %}
+
         <div class="course-metas">
           <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
           <span class="divider"></span>
           {% if course.showStudentNumType == 'opened' %}
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
-          {% endif %}
-
-          {% if setting('course.coursesPrice') == 0 %}
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
-                  <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
-                {% endif %}
-              {% else %}
-                {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
-                  <span class="free-money-text"><del>{{ course.price }}</del></span>
-                {% endif %}
-              {% endif %}
-
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                  <span class="course-price" style="display:inline">
-                    {% if course.coinPrice > 0 %}
-                      {% if free_limit_type(course) == 'free_now' %}
-                        0.00 元
-                      {% else %}
-                       价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                      {% endif %}  
-                    {% else %}免费{% endif %}
-                  </span>
-              {% else %}
-                <span class="course-price">
-                  {% if course.price > 0 %}
-                    {% if free_limit_type(course) == 'free_now' %}
-                      0.00 元
-                    {% else %}
-                     价格： {{ course.price }}元
-                    {% endif %}  
-                  {% else %}免费{% endif %}
-                </span>
-            {% endif %}
           {% endif %}
 
           <div class="countdown-list">

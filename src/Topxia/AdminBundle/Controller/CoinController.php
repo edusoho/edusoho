@@ -54,7 +54,7 @@ class CoinController extends BaseController
     {
         $file = $request->files->get('coin_picture');
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException('图片格式不正确，请上传png, gif, jpg格式的图片文件！');
         }
 
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
@@ -67,7 +67,7 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $this->getLogService()->info('system', 'update_settings', "更新虚拟币LOGO", array('coin_picture' => $coin['coin_picture']));
+        $this->getLogService()->info('system', 'update_settings', "更新虚拟币图片", array('coin_picture' => $coin['coin_picture']));
 
         $response = array(
             'path' => $coin['coin_picture'],
@@ -86,7 +86,7 @@ class CoinController extends BaseController
 
         $this->getSettingService()->set('coin', $setting);
 
-        $this->getLogService()->info('system', 'update_settings', "移除虚拟币LOGO");
+        $this->getLogService()->info('system', 'update_settings', "移除虚拟币图片");
 
         return $this->createJsonResponse(true);
     }

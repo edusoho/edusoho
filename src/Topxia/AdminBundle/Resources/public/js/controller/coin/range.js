@@ -25,14 +25,14 @@ exports.run = function() {
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传虚拟币LOGO失败，请重试！')
+                Notify.danger('上传虚拟币图片失败，请重试！')
             },
             success: function(response) {
                 response = $.parseJSON(response);
                 $("#coin-picture-container").html('<img src="' + response.url + '">');
                 $form.find('[name=coin_picture]').val(response.path);
                 $("#coin-picture-remove").show();
-                Notify.success('上传虚拟币LOGO成功！');
+                Notify.success('上传虚拟币图片成功！');
             }
         });
 
@@ -43,9 +43,9 @@ exports.run = function() {
                 $("#coin-picture-container").html('');
                 $form.find('[name=coin_picture]').val('');
                 $btn.hide();
-                Notify.success('删除虚拟币LOGO成功！');
+                Notify.success('删除虚拟币图片成功！');
             }).error(function(){
-                Notify.danger('删除虚拟币LOGO失败！');
+                Notify.danger('删除虚拟币图片失败！');
             });
         });
 

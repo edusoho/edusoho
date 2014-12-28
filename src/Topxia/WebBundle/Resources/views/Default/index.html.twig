@@ -283,6 +283,17 @@
         <img class="course-picture" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
+          <div style="float:right;" class="text-muted mrm mls">
+            {% if setting('course.coursesPrice') == 0 %}
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                <span class="course-price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                </span>
+              {% else %}
+                <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
+                </span>
+              {% endif %}
+            {% endif %}
+            </div>
         <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
         {% if course.serializeMode=='serialize' %}
           <span class="label label-success ">更新中</span>
@@ -312,6 +323,7 @@
         {% endif %}
 
         <div class="course-footer clearfix">
+
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
@@ -326,17 +338,6 @@
             {% if course.showStudentNumType == 'opened' %}
             <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
             {% endif %}
-
-            {% if setting('course.coursesPrice') == 0 %}
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                <span class="course-price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                </span>
-              {% else %}
-                <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
-                </span>
-              {% endif %}
-            {% endif %}
-
           </div>
         </div>
       </div>
