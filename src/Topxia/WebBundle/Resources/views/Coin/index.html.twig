@@ -96,11 +96,11 @@
 
             <td>
               <span class="text-sm">
-                {% if cash.category == "recharge" %}
+                {% if cash.cashType == "RMB" %}
                 支付宝支付
-                {% elseif cash.category == "outflow" %}
+                {% elseif cash.cashType == "Coin" and cash.category == "inflow" %}
                 学习卡充值
-                {% elseif cash.category == "exchange" %}
+                {% else %}
                 余额支付
                 {% endif %}
               </span>
