@@ -3,7 +3,7 @@
     <i class="order-item-title-icon">
       <img 
       {% if setting("coin.coin_picture") %}
-      src="{{setting("coin.coin_picture")}}"
+      src="{{asset(setting("coin.coin_picture"))}}"
       {% else %}
       src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" 
       {% endif %}
