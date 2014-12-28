@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\Response;
  
 class CoinController extends BaseController
 {
@@ -15,7 +17,6 @@ class CoinController extends BaseController
         $postedParams = $request->request->all();
 
         $coinSettingsPosted = $this->getSettingService()->get('coin',array());
-// var_dump($coinSettingsPosted);
         $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
@@ -51,8 +52,46 @@ class CoinController extends BaseController
 
     public function pictureAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Coin:picture-modal.html.twig');
+        $file = $request->files->get('coin_picture');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
+        $file = $file->move($directory, $filename);
+        $coin = $this->getSettingService()->get('coin',array());
+
+        $coin['coin_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$filename}";
+        $coin['coin_picture'] = ltrim($coin['coin_picture'], '/');
+
+        $this->getSettingService()->set('coin', $coin);
+
+        $this->getLogService()->info('system', 'update_settings', "更新虚拟币LOGO", array('coin_picture' => $coin['coin_picture']));
+
+        $response = array(
+            'path' => $coin['coin_picture'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture']),
+        );
+
+        return new Response(json_encode($response));
+
     }
+
+
+    public function pictureRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("coin");
+        $setting['coin_picture'] = '';
+
+        $this->getSettingService()->set('coin', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除虚拟币LOGO");
+
+        return $this->createJsonResponse(true);
+    }
+
 
     public function  recordsAction(Request $request){
         $fields = $request->query->all();
