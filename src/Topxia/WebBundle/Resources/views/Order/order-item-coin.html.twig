@@ -18,13 +18,14 @@
     </div>
   </div>
   <div class="order-item-detail">
-    {% if hasPayPassword %}
+    
     <div class="coin-detail">
-      账户余额：<span role="accountCash">{{account.cash|default(0)}}</span>，
+      账户余额：<span role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}
+      {% if hasPayPassword %}，
       本次使用
       <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">{{setting("coin.coin_name")}}
+      {% endif %}
     </div>
-    {% endif %}
     <div class="pay-password">
       {% if not hasPayPassword %}
       <div>
