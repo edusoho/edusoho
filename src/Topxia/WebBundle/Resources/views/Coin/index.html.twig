@@ -100,8 +100,8 @@
                 支付宝支付
                 {% elseif cash.cashType == "Coin" and cash.category == "inflow" %}
                 余额支付
-                {% else %}
-                余额支付
+                {% elseif cash.cashType == "Coin" and cash.category == "change" %}
+                支付宝支付
                 {% endif %}
               </span>
             </td>
