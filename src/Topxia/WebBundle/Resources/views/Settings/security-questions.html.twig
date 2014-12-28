@@ -6,7 +6,13 @@
 
 {% block main %} 
  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}<a href="{{ path('settings_security') }}">安全设置</a> / <a>设置安全问题</a> (<a class="text-danger">安全问题一经设置,不可再次修改</a> ){% endblock %}
+    {% block heading %}
+      <ul class="breadcrumb">
+        <li><a href="{{ path('settings_security') }}">安全设置</a></li>
+        <li class="active">重置支付密码 <span class="text-danger">安全问题一经设置,不可再次修改</span></li>
+      </ul> 
+      {# <a href="{{ path('settings_security') }}">安全设置</a> / <a>设置安全问题</a> (<a class="text-danger">安全问题一经设置,不可再次修改</a> ) #}
+    {% endblock %}
     {% block body %}
 
     {{ web_macro.flash_messages() }} 
