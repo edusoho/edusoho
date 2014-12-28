@@ -15,7 +15,9 @@
   </div> #}
   <div class="panel-heading" style="font-weight:normal;">
     账户余额:
-    <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
+    {% if setting('coin.coin_content') %}
+      <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
+    {% endif %}
     <br>
     <div class="row">
         <div class="col-md-offset-2" style="font-weight:400;">
@@ -28,10 +30,10 @@
             {{setting('coin.coin_name')}}
              {% if setting('coin.coin_enabled') %}
               {% if setting('coin.charge_coin_enabled') %}
-                <a href="{{path('my_coin_buy')}}" class="mll btn btn-default" {# style="color: #428bca;" #}>充 值</a>
+                <a href="{{path('my_coin_buy')}}" class="mll btn btn-default" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
               {% endif %}
               {% if is_plugin_installed('MoneyCard') %}
-                <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>学习卡</a>
+                <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>使用学习卡</a>
               {% endif %}
             {% endif %}
         </div>
