@@ -62,7 +62,6 @@ class CoinController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file = $file->move($directory, $filename);
         $coin = $this->getSettingService()->get('coin',array());
-
         $coin['coin_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$filename}";
         $coin['coin_picture'] = ltrim($coin['coin_picture'], '/');
 
