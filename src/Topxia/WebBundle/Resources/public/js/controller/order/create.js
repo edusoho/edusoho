@@ -169,13 +169,15 @@ define(function(require, exports, module) {
 				} else if(data.useable == "yes"){
 					$('[role="code-notify"]').css("color","green").text("优惠码可用");
 					if(cashRateElement.data("coursePriceShowType") == "RMB") {
-						$('[role="coupon-price"]').find(".price_r_num").text(data.decreaseAmount);
+						var couponPrice = parseFloat(data.decreaseAmount).toFixed(2);
+						$('[role="coupon-price"]').find(".price_r_num").text(couponPrice);
 					} else {
 						var coinPrice = data.decreaseAmount*cashRate;
 						var totalPrice = parseFloat($('[role="total-price"]').text());
 						if(totalPrice < coinPrice){
 							coinPrice = totalPrice;
 						}
+						coinPrice = parseFloat(coinPrice).toFixed(2);
 						$('[role="coupon-price"]').find(".price_r_num").text(coinPrice);
 					}
 				}
