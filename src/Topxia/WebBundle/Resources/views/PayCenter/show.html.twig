@@ -4,19 +4,24 @@
 
 
 {% block content %}
+
 <div class="container order-pay pay-center">
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
       <div class="panel panel-default panel-page">
         <div class="panel-heading">
+          {% if setting("payment.enabled")|default(true) and setting("payment.alipay_enabled")|default(true) %}
           {{ web_macro.flash_messages() }}
+          {% endif %}
           <h4>{{order.title}} 
             <span style="color:#999;font-size:12px">订单号：{{order.sn}}</span>
           </h4>
         </div>
         <hr/>
         <div class="panel-body">
-          
+          {% if not (setting("payment.enabled")|default(true) and setting("payment.alipay_enabled")|default(true)) %}
+          <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法完成支付。')|raw }}</div>
+          {% else %}
           <form method="post" action="{{path('pay_center_pay')}}">
             <input type="hidden" name="orderId" value="{{order.id}}"/>
             
@@ -66,6 +71,7 @@
               </div>
             </div>
           </form>
+          {% endif %}
         </div>
       </div>
     </div>
