@@ -2,7 +2,7 @@
 
 {% block title %} 订单确认 - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'order/pay' %}
+{% set script_controller = 'order/create' %}
 
 {% block content %}
 <div class="container order-pay">
@@ -60,12 +60,10 @@
               <div class="total-price">
                 应付金额：
                 {% if priceType|default('RMB') == "Coin" %}
-                  2.00 {{setting("coin.coin_name")}} * 汇率(1.00) = <span role="pay-rmb" class="pay-rmb"></span> 元
+                  <span role="pay-coin">0</span> {{setting("coin.coin_name")}} * 汇率({{cashRate|default(1)}}) = <span role="pay-rmb" class="pay-rmb"></span> 元
                 {% else %}
                   <span role="pay-rmb" class="pay-rmb"></span> 元
                 {% endif %}
-
-
               </div>
               
             </div>
