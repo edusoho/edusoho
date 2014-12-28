@@ -47,7 +47,7 @@
       <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">消费记录</a></li>
     </ul>
 
-   {% if not(app.request.query.get('type') == "inflow" or app.request.query.get('type') == "outflow")  %} 
+  {#  {% if not(app.request.query.get('type') == "inflow" or app.request.query.get('type') == "outflow")  %} #} 
     <br>
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
         <div class="form-group"> 
@@ -58,12 +58,17 @@
         </div> 
 
        {# <button class="btn btn-primary">搜索</button>#}
-       <div class="control-label pull-right" style="padding-top: 8px;">
-        收入：<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+        <div class="control-label pull-right" style="padding-top: 8px;">
+           {% if app.request.query.get('type') != "outflow"  %}
+            收入：<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+           {% endif %}
+           {% if app.request.query.get('type') != "inflow"  %}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+           {% endif %}
         </div>
       </form>
-   {% endif %}
+  {#  {% endif %} #}
 
     <br>
     <div class="table-responsive">
@@ -98,8 +103,10 @@
               <span class="text-sm">
                 {% if cash.category == "recharge" %}
                 支付宝
-                {% elseif cash.category == "outflow" %}
+                {% elseif cash.category == "exchange" %}
                 余额支付
+                {% elseif cash.category == "moneyCardRecharge" %}
+                学习卡
                 {% endif %}
               </span>
             </td>
