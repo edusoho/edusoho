@@ -13,7 +13,7 @@ class Version20141223221407 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-    	$this->addSql("ALTER TABLE `cash_flow` ADD `cash` FLOAT(10,2) NULL AFTER `cashType`;");
+    	$this->addSql("ALTER TABLE `cash_flow` ADD `cash` FLOAT(10,2) NOT NULL DEFAULT '0' AFTER `cashType`;");
     	$this->addSql("ALTER TABLE `cash_flow` ADD `parentSn` bigint(20) NULL AFTER `cashType`;");
     }
 
