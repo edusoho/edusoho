@@ -38,16 +38,20 @@ class CourseSearchController extends BaseController
 		     	$prices = explode("_", $price);
 		     	$options['minPrice']=$prices[0];
 		     	$options['maxPrice']=$prices[1];
+		     	unset($options['price']);
 		     }
 		     elseif($price=='10--'){
 		     	$options['maxPrice']=10;
+		     	unset($options['price']);
 		     }
 		     elseif($price=='100++'){
 		     	$options['minPrice']=100;
+		     	unset($options['price']);
 		     }
-		     unset($options['price']);
+		    
 		   
 		}
+	
 		$total=$this->getCustomCourseSearcheService()->searchCourseCount($options);
 		$paginator = new Paginator(
 			$this->get('request')

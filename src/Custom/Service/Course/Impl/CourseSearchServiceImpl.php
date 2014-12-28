@@ -23,7 +23,7 @@ class CourseSearchServiceImpl extends BaseService implements CourseSearchService
 
 	private function _prepareCourseConditions($conditions)
 	{
-		$conditions = array_filter($conditions);
+		// $conditions = array_filter($conditions);
 		if(empty($conditions['status'])){
 			$conditions['status'] = 'published';
 		}
