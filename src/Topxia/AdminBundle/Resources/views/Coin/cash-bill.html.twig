@@ -5,10 +5,13 @@
 {% set menu = 'coin-bill' %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
 
-  {# <div class="panel-heading">我的现金消费账单</div> #}
-    <div class="panel-body">
+  <div class="page-header">
+      
+      <h1>用户消费账单</h1>
+
+  </div>
+
       
     <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
       <div class="form-group">
@@ -79,7 +82,6 @@
       </table>
     </div>
  {{ web_macro.paginator(paginator) }}
-  </div>
-</div>
+
 
 {% endblock %}

@@ -63,6 +63,8 @@ class CoinController extends BaseController
           $conditions =$this->filterCondition($fields);
         };
 
+        $conditions['cashType']="Coin";
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCashService()->searchFlowsCount($conditions),
@@ -103,8 +105,8 @@ class CoinController extends BaseController
             $inflow=$this->getCashService()->analysisAmount($conditions);   
         }
 
-        $in=$this->getCashService()->analysisAmount(array('type'=>'inflow'));
-        $out=$this->getCashService()->analysisAmount(array('type'=>'outflow'));
+        $in=$this->getCashService()->analysisAmount(array('type'=>'inflow','cashType'=>'Coin'));
+        $out=$this->getCashService()->analysisAmount(array('type'=>'outflow','cashType'=>'Coin'));
         $amounts=$in-$out;
 
         $userIds =  ArrayToolkit::column($cashes, 'userId');
@@ -196,6 +198,8 @@ class CoinController extends BaseController
         $filter =$this->convertFiltersToCondition($condition);
 
         $conditions['startTime']=$filter['time'];
+        $conditions['cashType']="Coin";
+        $conditions['userId']=$userId;
 
         $paginator = new Paginator(
             $this->get('request'),

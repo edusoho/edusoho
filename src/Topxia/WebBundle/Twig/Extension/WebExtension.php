@@ -83,6 +83,7 @@ class WebExtension extends \Twig_Extension
         $condition=array(
             'userId'=>$userId,
             'type'=>"outflow",
+            'cashType'=>'Coin',
             'startTime'=>$time,
             );
 
@@ -95,6 +96,7 @@ class WebExtension extends \Twig_Extension
         $condition=array(
             'userId'=>$userId,
             'type'=>"inflow",
+            'cashType'=>'Coin',
             'startTime'=>$time,
             );
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
