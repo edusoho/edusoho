@@ -3,14 +3,26 @@
 {# {% set script_controller = 'my/orders' %} #}
 
 {% set menu = 'coin-bill' %}
-
+{% set submenu = 'coin-bill' %}
 {% block main %}
 
-  <div class="page-header">
-      
-      <h1>用户消费账单</h1>
 
-  </div>
+  <ul class="nav nav-tabs mbl">
+    <li class="{% if submenu == 'coin-bill' %}active{% endif %}">
+        <a href="{{ url('admin_bill') }}">用户消费账单
+        </a>
+    </li>
+
+    <li class="{% if submenu == 'records' %}active{% endif %}">
+        <a href="{{ url('admin_coin_records') }}">虚拟币账单
+        </a>
+    </li>    
+  </ul>
+
+
+
+
+  {# <div class="page-header"><h1>用户消费账单</h1></div> #}
 
       
     <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

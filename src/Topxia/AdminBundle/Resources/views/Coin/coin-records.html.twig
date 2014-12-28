@@ -2,14 +2,27 @@
 
 {% block title %}虚拟币设置 - {{ parent() }}{% endblock %}
 
-{% set menu = 'coin' %}
+{# {% set menu = 'coin' %} #}
+{% set menu = 'coin-bill' %}
+  
 {% set submenu = 'records' %}
 
  
 {% block main %}
-    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
+    {# {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %} #}
+  <ul class="nav nav-tabs mbl">
+    <li class="{% if submenu == 'coin-bill' %}active{% endif %}">
+        <a href="{{ url('admin_bill') }}">用户消费账单
+        </a>
+    </li>
 
-    <div class="page-header"><h1>虚拟币账单</h1></div>
+    <li class="{% if submenu == 'records' %}active{% endif %}">
+        <a href="{{ url('admin_coin_records') }}">虚拟币账单
+        </a>
+    </li>    
+  </ul>    
+
+    {# <div class="page-header"><h1>虚拟币账单</h1></div> #}
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
