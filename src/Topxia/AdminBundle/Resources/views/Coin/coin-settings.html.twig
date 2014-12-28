@@ -58,7 +58,7 @@
           <label for="coin_picture">虚拟币图片</label>
         </div>
         <div class="col-md-7 controls">
-          <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{setting('coin.coin_picture') }}">{% endif %}</div>
+          <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
           <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
           <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
           <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过50*50,文件大小< 200KB。</p>
