@@ -27,8 +27,6 @@ class CourseOrderController extends OrderController
 
         $previewAs = $request->query->get('previewAs');
 
-        $payTypeChoices = $request->query->get('payTypeChoices');
-        
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($previewAs, $member, $course);
 
@@ -37,9 +35,6 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
         
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
-
         $account=$this->getCashAccountService()->getAccountByUserId($user['id'],true);
         
         if(empty($account)){
@@ -70,23 +65,6 @@ class CourseOrderController extends OrderController
             ));
         }
 
-        $oldOrders = $this->getOrderService()->searchOrders(array(
-                'targetType' => 'course',
-                'targetId' => $course['id'],
-                'userId' => $user['id'],
-                'status' => 'created',
-                'createdTimeGreaterThan' => strtotime('-40 hours'),
-            ), array('createdTime', 'DESC'), 0, 1
-        );
-
-        $order = current($oldOrders);
-
-        // if($course['price'] > 0 && $order && ($course['price'] == ($order['amount'] + $order['couponDiscount'])) ) {
-        //      return $this->render('TopxiaWebBundle:CourseOrder:repay.html.twig', array(
-        //         'order' => $order,
-        //     ));
-        // }
-
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
@@ -95,10 +73,8 @@ class CourseOrderController extends OrderController
             'courseSetting' => $courseSetting,
             'member' => $member,
             'userFields'=>$userFields,
-            'payTypeChoices'=>$payTypeChoices,
             'account'=>$account,
             'amount'=>$amount,
-            'ChargeCoin'=> $ChargeCoin
         ));
     }
 
