@@ -4458,7 +4458,7 @@ a.homework-essay-textarea-pack-up{
 	margin-bottom: 20px;
 }
 
-.vip-item h3, p {
+.vip-item h3, .vip-item p {
 	color: #555;
 }
 
@@ -4577,7 +4577,6 @@ a.homework-essay-textarea-pack-up{
 
 .order-item .price_r {
 	float: right; 
-	margin-right: 33px; 
 	margin-top: 4px; 
 	line-height: 19px;
 	position: relative;
@@ -4631,13 +4630,13 @@ a.homework-essay-textarea-pack-up{
 .order-item .total-price {
 	float: right;
 	text-align: right;
-	margin-right: 18px;
 	margin-bottom: 30px;
-	border: 1px solid #ff7e00;
-	background-color: #fff8ed;
-	padding-right: 20px ;
-	width: 250px;
-	border-radius: 3px;
+}
+
+.order-item .total-price .pay-rmb {
+	color: #f60;
+	font-size: 24px;
+	font-weight: bold;
 }
 
 .coin-detail input {
@@ -4690,7 +4689,7 @@ a.homework-essay-textarea-pack-up{
 	font-size: 16px;
 	line-height: 58px;
 	border: 1px solid #21a557; 
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 }
 
 .pay-center .uncheck .icon {

@@ -1,30 +1,31 @@
-<div class="row order-item">
+<div class="order-item clearfix">
   <div class="order-item-title">
     <i class="order-item-title-icon">
       <img 
       {% if setting("coin.coin_picture") %}
-      src="{{setting("coin.coin_picture")}}"
+      src="{{asset(setting("coin.coin_picture"))}}"
       {% else %}
       src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" 
       {% endif %}
       width="25px">
     </i>
-    <h4 class="title">{{setting("coin.coin_name")}}</h4>
-    <span>（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
+    <h4 class="title">{{ setting("coin.coin_name") }}</h4>
+    <span class="text-muted">（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
     <div class="price_r">
       <span class="price_r_mark">-</span>
-      <span class="pricehead">{% if priceType == "RMB" %}￥{% endif %}</span>
       <span class="price_r_num" role="cash-discount"></span>
+      <span>{% if priceType == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
     </div>
   </div>
   <div class="order-item-detail">
-    {% if hasPayPassword %}
+    
     <div class="coin-detail">
-      账户余额：<span role="accountCash">{{account.cash|default(0)}}</span>，
+      账户余额：<span role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}
+      {% if hasPayPassword %}，
       本次使用
       <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">{{setting("coin.coin_name")}}
+      {% endif %}
     </div>
-    {% endif %}
     <div class="pay-password">
       {% if not hasPayPassword %}
       <div>
@@ -34,7 +35,7 @@
       <div role="password-input" style="display:none">
         <label class="control-label" for="payPassword" style="display:none">支付密码</label>
         <div class="controls">
-          <input id="payPassword" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}"/>
+          <input id="payPassword" name="payPassword" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
         </div>
         <div>
           <a href="{{path('settings_find_pay_password')}}" class="btn-link">忘记密码？</a>

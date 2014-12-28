@@ -2,7 +2,7 @@
 
 {% block title %} 订单确认 - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'order/pay' %}
+{% set script_controller = 'order/create' %}
 
 {% block content %}
 <div class="container order-pay">
@@ -36,8 +36,16 @@
             {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
-            <div class="order-item row">
-            	<h4 class="price_r">应付{% if priceType|default('RMB') == "RMB" %}金额：￥{% elseif priceType|default('RMB') == "Coin" %}{{setting("coin.coin_name")}}：{% endif %}<span role="total-price">{{totalPrice}}</span></h4>
+            <div class="order-item clearfix">
+            	<p class="pull-right">
+                订单金额：
+                <span role="total-price">{{totalPrice}}</span>
+                {% if priceType|default('RMB') == "RMB" %}
+                  元
+                {% elseif priceType|default('RMB') == "Coin" %}
+                  {{setting("coin.coin_name")}}
+                {% endif %}
+              </p>
             </div>
             
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType%}
@@ -48,26 +56,20 @@
             	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
 
-            <div class="order-item row">
+            <div class="order-item clearfix">
               <div class="total-price">
+                应付金额：
                 {% if priceType|default('RMB') == "Coin" %}
-              	<h4>需支付{{setting("coin.coin_name")}}：<span role="pay-coin"></span></h4>
+                  <span role="pay-coin">0</span> {{setting("coin.coin_name")}} * 汇率({{cashRate|default(1)}}) = <span role="pay-rmb" class="pay-rmb"></span> 元
+                {% else %}
+                  <span role="pay-rmb" class="pay-rmb"></span> 元
                 {% endif %}
-
-                <h4>
-                  {% if priceType|default('RMB') == "Coin" %}
-                  折合人民币金额
-                  {% else %}
-                  支付金额
-                  {% endif %}
-                  ：￥<span role="pay-rmb"></span>
-                </h4>
               </div>
               
             </div>
 
             <div class="form-group pay">
-              <div class="col-md-offset-10 controls">
+              <div class="pull-right controls">
                 <button class="btn btn-fat btn-primary" id="order-create-btn" type="submit">提交订单</button>
               </div>
             </div>

@@ -11,6 +11,13 @@ define(function(require, exports, module) {
     require('jquery.form');
 
 exports.run = function() {
+    
+        $("#article-property-tips").popover({
+            html: true,
+            trigger: 'hover',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#article-property-tips-html").html()
+        });
 
         var $form = $("#coin-settings-form"),
         	$modal = $form.children('.coin_content');

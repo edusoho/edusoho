@@ -50,12 +50,12 @@ class OrderController extends BaseController
 
         $priceType = "RMB";
         $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnabled = array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"];
-        if($coinEnabled && array_key_exists("price_type", $coinSetting)) {
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        if($coinEnabled && isset($coinSetting["price_type"])) {
             $priceType = $coinSetting["price_type"];
         }
         $cashRate = 1;
-        if($coinEnabled && array_key_exists("cash_rate", $coinSetting)) {
+        if($coinEnabled && isset($coinSetting["cash_rate"])) {
             $cashRate = $coinSetting["cash_rate"];
         }
 
