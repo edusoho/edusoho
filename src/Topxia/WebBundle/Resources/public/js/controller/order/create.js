@@ -4,6 +4,8 @@ define(function(require, exports, module) {
 	require('common/validator-rules').inject(Validator);
 
 	exports.run = function() {
+		$("#payPassword").attr("type","password");
+
 		var cashRateElement = $('[role="cash-rate"]');
 		var cashRate = 1;
 		if($('[role="cash-rate"]').val() != "")
