@@ -83,13 +83,17 @@ define(function(require, exports, module) {
 					coinNum = totalPrice;
 				}
 				var coinNumPay = $('[role="coinNum"]').val();
-				if(coinNum<=coinNumPay) {
-					afterCoinPay(totalPrice, coinNum);
+				if(coinNumPay){
+					if(coinNum <= coinNumPay) {
+						afterCoinPay(totalPrice, coinNum);
+					} else {
+						afterCoinPay(totalPrice, coinNumPay);
+					}
+					var cashDiscount = $('[role="cash-discount"]').text();
+					totalPrice = totalPrice-cashDiscount;
 				} else {
-					afterCoinPay(totalPrice, coinNumPay);
+					$('[role="cash-discount"]').text("0.00");
 				}
-				var cashDiscount = $('[role="cash-discount"]').text();
-				totalPrice = totalPrice-cashDiscount;
 			}
 
 			totalPrice = totalPrice.toFixed(2);
