@@ -43,8 +43,7 @@
 
           <a type="button" class="btn btn-default btn-sm {% if condition.timeType == "all" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{timeType:"all",searchType:condition.searchType,keyword:condition.keyword})}}">全部历史</a>
 
-      </div>
-      <div class="mtl">
+      <span class="mll"></sapn>
       类型：
 
           <a type="button" class="btn btn-default btn-sm {% if condition.flowType != "out" and  condition.flowType != "in" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:"",timeType:condition.timeType,sort:condition.sort})}}">默认</a>
@@ -54,15 +53,14 @@
 
           <a type="button" class="btn btn-default btn-sm {% if condition.flowType == "in" %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:"in",timeType:condition.timeType,sort:condition.sort})}}">充值</a>
 
-      </div>
-      <div class="mtl">
-      排序：
+        <span class="mll"></sapn>
+        排序：
 
           <a type="button" class="btn btn-default btn-sm {% if condition.sort == "up"  %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"up"})}}">升序</a>
 
           <a type="button" class="btn btn-default btn-sm {% if condition.sort == "down"  %}btn-info{% endif %}" href="{{path('admin_coin_user_records',{flowType:condition.flowType,timeType:condition.timeType,sort:"down"})}}">降序</a>
 
-        </div>
+      </div>
     </div>
 
     <div class="table-responsive">
