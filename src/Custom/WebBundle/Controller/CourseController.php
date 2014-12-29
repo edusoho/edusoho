@@ -170,8 +170,6 @@ class CourseController extends BaseController
 		}
 
 		
-		// var_dump($nextLearnLesson);
-		// exit();
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -195,6 +193,8 @@ class CourseController extends BaseController
 
 	public function lessonBlockAction(Request $request, $id)
 	{
+		$isMember = $request->query->get('isMember');
+		$isMember = empty($isMember)?false:$isMember;
 		$course = $this->getCourseService()->getCourse($id);
 		$lessons=$this->getCourseService()->getCourseLessons($id);
 		$lessons=ArrayToolkit::group($lessons,'chapterId');
@@ -205,6 +205,7 @@ class CourseController extends BaseController
 			'chapters'=>$chapters,
 			'units'=>$units,
 			'lessons'=>$lessons,
+			'isMember' =>$isMember,
 			'course' => $course
 		));
 	}
@@ -221,85 +222,6 @@ class CourseController extends BaseController
 			'users'=>$users,
 		));
 	}
-
-	public function previewAction(Request $request,$id)
-	{
-		$course = $this->getCourseService()->getCourse($id);
-        $user = $this->getCurrentUser();
-		$lessons=$this->getCourseService()->getCourseLessons($id);
-		$lesson=array();
-		foreach ($lessons as $le) {
-			if ($le['type']=='video' && empty($lesson)) {
-				$lesson=$le;
-			}
-		}
-
-        if (empty($lesson)) {
-            throw $this->createNotFoundException();
-        }
-
-        if (!empty($course['status']) && $course['status'] == 'closed') {
-            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
-        }
-
-        if (empty($lesson['free'])) {
-            if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException();
-            }
-            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $id), array('preview' => true));
-        }else{
-            $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
-            if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-                throw $this->createAccessDeniedException();
-            }
-        }
-
-        if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                $factory = new CloudClientFactory();
-                $client = $factory->createClient();
-                $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-
-                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
-                    $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
-                    $headLeaderInfo = $this->getHeadLeaderInfo();
-                    $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
-                } else {
-                    $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-                }
-
-            }
-
-        } else if ($lesson['mediaSource'] == 'youku') {
-            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-            if ($matched) {
-                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-                $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
-            }
-        } else if ($lesson['mediaSource'] == 'tudou'){
-            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-            if ($matched) {
-                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                $lesson['mediaSource'] = 'iframe';
-            } else {
-                $lesson['mediaUri'] = $lesson['mediaUri'];
-            }
-        }
-        return $this->render('TopxiaWebBundle:Course:lesson-preview.html.twig', array(
-            'user' => $user,
-            'course' => $course,
-            'lesson' => $lesson,
-            'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
-        ));
-	}
-
-
-
-
 
 
 	public function favoriteAction(Request $request, $id)
