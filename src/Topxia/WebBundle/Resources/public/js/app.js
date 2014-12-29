@@ -134,6 +134,7 @@ define(function(require, exports, module) {
                 $('#consult-cart-content').html(html);
             });
             $element.find('.arrow').remove();
+            // $('.popover').css({marginLeft: '3px'});
         })
     }
 
