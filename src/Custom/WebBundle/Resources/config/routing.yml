@@ -6,10 +6,6 @@ course_show:
     pattern:  /course/{id}
     defaults: { _controller: CustomWebBundle:Course:show }
 
-course_preview:
-    pattern:  /course/{id}/preview
-    defaults: { _controller: CustomWebBundle:Course:preview }
-
 course_header:
     pattern:  /course/{id}/header
     defaults: { _controller: CustomWebBundle:Course:header }
@@ -48,6 +44,11 @@ course_unfavorite:
 
 
 
+
+
+course_lesson_preview:
+    pattern:  /course/{courseId}/lesson/{lessonId}/preview
+    defaults: { _controller: CustomWebBundle:CourseLesson:preview }
 
 
 
