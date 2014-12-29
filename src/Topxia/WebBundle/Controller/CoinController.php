@@ -330,7 +330,7 @@ class CoinController extends BaseController
         $payData = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
-            return $this->forward("TopxiaWebBundle:Coin:resultNotice");
+            return $this->forward("TopxiaWebBundle:Coin:retrun-notice.html.twig");
         }
 
         list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
