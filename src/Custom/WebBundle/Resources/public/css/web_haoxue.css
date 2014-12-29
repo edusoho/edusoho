@@ -81,6 +81,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 
 .course-popover {
 	float: left;
+	margin-right: 10px;
 }
 
 .course-popover img{
