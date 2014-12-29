@@ -45,22 +45,8 @@ class CoinController extends BaseController
             $this->setFlashMessage('success', '虚拟币设置已保存！');
 
             if($coinSettingsPosted["coin_enabled"] == 1
-                && !($coinSettingsSaved["coin_enabled"] == $coinSettingsPosted["coin_enabled"]
-                && $coinSettingsSaved["cash_rate"] == $coinSettingsPosted["cash_rate"])
-                ) {
-                if(!isset($coinSettingsSaved["price_type"])){
-                    $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
-                } else if(isset($coinSettingsSaved["price_type"]) 
-                    && $coinSettingsPosted["price_type"] != $coinSettingsSaved["price_type"]
-                ){
-                    $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
-                } else if(isset($coinSettingsSaved["price_type"])
-                    && $coinSettingsPosted["price_type"] == $coinSettingsSaved["price_type"] 
-                    && $coinSettingsPosted["cash_rate"] != $coinSettingsSaved["cash_rate"]
-                ){
-                    $priceType = $coinSettingsSaved["price_type"] == "RMB" ? "Coin":"RMB";
+                && $coinSettingsPosted["price_type"] == "Coin") {
                     $this->processPrice($priceType, $coinSettingsPosted["cash_rate"]);
-                }
             }
 
             return $this->settingsRenderedPage($coinSettingsPosted);
