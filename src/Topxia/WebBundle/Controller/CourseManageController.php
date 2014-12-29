@@ -194,15 +194,6 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $price = $request->request->get('price');
-            $coinPrice = $request->request->get('coinPrice');
-            if($price == NULL && !empty($coinSetting['coin_enabled']) && !empty($coinSetting['price_type']) && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
-               $fields['price'] = NumberToolkit::roundUp(floatval($coinPrice)/floatval($cashRate)); 
-            }
-
-            if($coinPrice == NULL && !empty($coinSetting['coin_enabled']) && !empty($coinSetting['price_type']) && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
-                $fields['coinPrice'] = NumberToolkit::roundUp(floatval($price)*floatval($cashRate));
-            }
 
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);

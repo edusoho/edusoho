@@ -30,7 +30,7 @@
       {% if not hasPayPassword %}
       <div>
         <span class="text-danger">为了保障账户资金安全，请先</span>
-        <a href="{{path('settings_pay_password')}}" class="btn-link">设置支付密码</a>
+        <a href="{{path('settings_pay_password')}}" target='_blank' class="btn-link">设置支付密码</a>
       </div>
       {% else %}
       <div role="password-input" style="display:none">
@@ -39,7 +39,7 @@
           <input id="payPassword" name="payPassword" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
         </div>
         <div>
-          <a href="{{path('settings_find_pay_password')}}" class="btn-link">忘记密码？</a>
+          <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
         </div>
       </div>
       {% endif %}
