@@ -121,3 +121,9 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .carts-text {
 	text-align: right;
 }
+
+.consult-cart-content {
+	width: 250px;
+	height: 50px;
+	padding-bottom: 10px;
+}

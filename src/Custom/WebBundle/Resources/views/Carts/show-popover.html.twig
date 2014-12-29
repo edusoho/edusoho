@@ -1,5 +1,5 @@
 {% if carts %}
-<div>
+<div class="carts-popover">
   <ul class="carts-popover-list">
     {% for cart in carts %}
     {% set course = courses[cart.itemId] %}
@@ -23,15 +23,15 @@
           教师：
           {% for id in course.teacherIds %}
             {% set user = users[id] %}
-            <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+            <a href="{{ path('user_show',  {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
           {% endfor %}
         {% endif  %}
       </div>
     </li>
     {% endfor %}
   </ul>
-</div>
   <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right" target="_blank">去购物车结算</a>
+</div>
 {% else %}
   <div class="popover-empty">您的购物车还是空的，赶紧行动吧！<a href="{{ path('homepage') }}" target="_blank">去首页看看</a></div>
 {% endif %}
