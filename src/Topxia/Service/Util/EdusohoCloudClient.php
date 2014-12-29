@@ -124,58 +124,6 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
-    public function generateHLSEncryptedListUrl($convertParams, $videos, $hlsKeyUrl, $headLeaders, $headLeaderHlsKeyUrl, $duration = 3600)
-    {
-
-        $types = array('sd', 'hd', 'shd');
-        $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
-
-        $bandwidths = array();
-
-        foreach ($convertParams['video'] as $index => $videoBandwidth) {
-            $type = $types[$index];
-            $bandwidths[$type] = (intval($videoBandwidth) + intval($convertParams['audio'][$index])) * 1024; 
-        }
-
-        $items = array();
-        foreach (array('sd', 'hd', 'shd') as $type) {
-            if (!isset($videos[$type])) {
-                continue;
-            }
-
-            $programe = array(
-                'name' => $names[$type],
-                'bandwidth' => $bandwidths[$type],
-                'key' => $videos[$type]['key']
-            );
-            
-            if(!empty($headLeaders) && array_key_exists($type, $headLeaders)){
-                $programe['headLeader'] = $headLeaders[$type];
-            }
-            $items[] = $programe;
-        }
-
-        $onceToken = $this->makeToken('hlslist.view', array('once' => false, 'duration' => 3600));
-
-        $args = array(
-            'items' => $items,
-            'hlsKeyUrl' => $hlsKeyUrl,
-            '_once' => $onceToken['token'],
-            'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl
-        );
-
-        $httpParams = array();
-        $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args'] = $this->urlsafeBase64Encode(json_encode($args));
-        $httpParams['encode'] = 'base64';
-        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
-
-        $url = $this->apiServer . '/api.m3u8?action=HLSEncryptedList';
-        $url = $url . '&' . http_build_query($httpParams);
-
-        return array('url' => $url);
-    }    
-
     public function generateHLSQualitiyListUrl($videos, $duration = 3600)
     {
         $url = $this->apiServer . '/api.m3u8?action=HLSQualitiyList';

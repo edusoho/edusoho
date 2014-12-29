@@ -15,6 +15,7 @@ class HLSController extends BaseController
     public function playlistAction(Request $request, $id, $token)
     {
         $line = $request->query->get('line', null);
+        $hideBeginning = $request->query->get('hideBeginning', false);
 
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
@@ -38,8 +39,21 @@ class HLSController extends BaseController
             }
 
             $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 1, 'duration' => 3600));
+            $params = array(
+                'id' => $file['id'],
+                'level' => $level,
+                'token' => $token['token'], 
+            );
 
-            $streams[$level] = $this->generateUrl('hls_stream', array('id' => $file['id'], 'level' => $level, 'token' => $token['token'], 'line' => $line), true);
+            if ($line) {
+                $params['line'] = $line;
+            }
+
+            if ($hideBeginning) {
+                $params['line'] = 1;
+            }
+
+            $streams[$level] = $this->generateUrl('hls_stream', $params, true);
         }
 
         $qualities = array(
@@ -65,7 +79,6 @@ class HLSController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
 
-
         if (empty($token)) {
             throw $this->createNotFoundException();
         }
@@ -89,9 +102,12 @@ class HLSController extends BaseController
         $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
-        $beginning = $this->getVideoBeginning($level);
-        if ($beginning['beginningKey']) {
-            $params = array_merge($params, $beginning);
+        $hideBeginning = $request->query->get('hideBeginning');
+        if (empty($hideBeginning)) {
+            $beginning = $this->getVideoBeginning($level);
+            if ($beginning['beginningKey']) {
+                $params = array_merge($params, $beginning);
+            }
         }
 
         $line = $request->query->get('line');

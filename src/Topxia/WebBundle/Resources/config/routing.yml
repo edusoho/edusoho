@@ -130,10 +130,6 @@ uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info/{type}
     defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
 
-uploadfile_cloud_get_head_leader_hlskey:
-    pattern: /uploadfile/get_head_leader_hlsKey
-    defaults: { _controller: TopxiaWebBundle:UploadFile:getHeadLeaderHlsKey}
-
 hls_playlist:
     pattern: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: TopxiaWebBundle:HLS:playlist}
@@ -345,10 +341,6 @@ course_lesson_learn_cancel:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/cancel
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
     methods: [POST]
-
-course_lesson_hlskeyurl:
-    pattern:  /course/{courseId}/lesson/{lessonId}/kan/{token}
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:hlskeyurl }
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list
