@@ -18,6 +18,11 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，不能支付。');
         }
 
+        $paymentSetting = $this->setting("payment");
+        if(!isset($paymentSetting["enabled"]) || $paymentSetting["enabled"] == 0) {
+            return $this->createMessageResponse('error', '支付中心未开启。');
+        }
+
 		$fields = $request->query->all();
 		$order = $this->getOrderService()->getOrder($fields["id"]);
 
