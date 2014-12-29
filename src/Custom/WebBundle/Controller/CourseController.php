@@ -197,7 +197,14 @@ class CourseController extends BaseController
 		$isMember = empty($isMember)?false:$isMember;
 		$course = $this->getCourseService()->getCourse($id);
 		$lessons=$this->getCourseService()->getCourseLessons($id);
-		$firstLesson=$lessons[0];
+		if ($this->isPluginInstalled('Homework')) {
+			$lessonIds = ArrayToolkit::column($lessons,'id');
+			$exercises = $this->getServiceKernel()->createService('Homework:Homework.ExerciseService')->findExercisesByLessonIds($lessonIds);
+			$exercises = ArrayToolkit::index($exercises,'lessonId');
+			$homeworks = $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+			$homeworks = ArrayToolkit::index($homeworks,'lessonId');
+		}
+		$firstLesson=empty($lessons[0])?array():$lessons[0];
 		$lessons=ArrayToolkit::group($lessons,'chapterId');
 		$chapters=$this->getCustomCourseService()->findCourseChaptersByType($id,'chapter');
 		$units=$this->getCustomCourseService()->findCourseChaptersByType($id,'unit');
@@ -208,6 +215,8 @@ class CourseController extends BaseController
 			'lessons'=>$lessons,
 			'isMember' =>$isMember,
 			'course' => $course,
+			'exercises' => empty($exercises) ? array() : $exercises,
+			'homeworks' => empty($homeworks) ? array() : $homeworks,
 			'firstLesson'=>$firstLesson
 		));
 	}
