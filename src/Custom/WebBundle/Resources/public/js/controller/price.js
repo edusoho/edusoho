@@ -11,8 +11,14 @@ define(function(require, exports, module) {
         $("#originalPrice").change(function(){
             var v  =  $("#originalPrice").val();
             if(v){
-
-                $("#price").val(v);
+                var dv = $("#discount").val();
+                if(dv){
+                    var p = v * ((dv*10)/100);
+                    $("#price").val( Math.round(p*100)/100);
+                }else{
+                    $("#price").val(v);
+                }
+                
             }
         });
        
@@ -111,6 +117,7 @@ Validator.addRule('discountCheck', /^(([+-]?[1-9]{1}\d*)|([+-]?[1-9]{1}))(\.(\d)
         rule: 'currency',
         required: true
     });
+
     validator.addItem({
         element: '[name="discount"]',
         rule: 'discountCheck'
@@ -125,6 +132,11 @@ Validator.addRule('discountCheck', /^(([+-]?[1-9]{1}\d*)|([+-]?[1-9]{1}))(\.(\d)
     validator.addItem({
         element: '[name="freeEndTime"]',
         rule: 'time_check'
+    });
+    validator.addItem({
+        element: '[name="price"]',
+        rule: 'currency',
+        required: true
     });
 
     };
