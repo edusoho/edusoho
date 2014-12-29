@@ -46,7 +46,7 @@ class CoinController extends BaseController
 
             if($coinSettingsPosted["coin_enabled"] == 1
                 && $coinSettingsPosted["price_type"] == "Coin") {
-                    $this->processPrice($priceType, $coinSettingsPosted["cash_rate"]);
+                    $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
             }
 
             return $this->settingsRenderedPage($coinSettingsPosted);
