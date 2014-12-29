@@ -23,26 +23,34 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 				return array(true, $processor->getRouter(), $order);
 			}
 
-			$this->proccessCashFlow($order);
+			$outFlow = $this->proccessCashFlow($order);
 
-			list($success, $router, $order) = $this->processOrder($payData);
+			if($outFlow) {
+				$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
+				list($success, $order) = $this->processOrder($payData, false);
+			} else {
+				$order = $this->getOrderService()->cancelOrder($order["id"], '余额不足扣款不成功');
+				$success = false;
+			}
 	        
             $connection->commit();
-            return array($success, $router, $order);
+            return array($success, $order);
 		} catch (\Exception $e) {
             $connection->rollback();
             throw $e;
         }
 
-        return array(false, '', array());
+        return array(false, array());
 
 	}
 
-	public function processOrder($payData)
-	{
+	public function processOrder($payData, $lock=true)
+	{	
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
-			$connection->beginTransaction();
+			if($lock){
+				$connection->beginTransaction();
+			}
 
 			list($success, $order) = $this->getOrderService()->payOrder($payData);
 
@@ -55,19 +63,21 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 			$processor = OrderProcessorFactory::create($order["targetType"]);
 
-			$router = '';
 	        if ($order['status'] == 'paid' and $processor) {
-	            $router = $processor->doPaySuccess($success, $order);
+	            $processor->doPaySuccess($success, $order);
 	        }
-
-	        $connection->commit();
-	        return array($success, $processor->getRouter(), $order);
+	        if($lock){
+	        	$connection->commit();
+	    	}
+	        return array($success, $order);
         }catch (\Exception $e) {
-            $connection->rollback();
+        	if($lock){
+            	$connection->rollback();
+        	}
             throw $e;
         }
         
-        return array(false, '', array());
+        return array(false, array());
 	}
 
 	private function proccessCashFlow($order) {
@@ -83,8 +93,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		} else {
 			$outFlow = $this->payByRmb($order);
 		}
-
-		$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
 
 		return $outFlow;
 	}

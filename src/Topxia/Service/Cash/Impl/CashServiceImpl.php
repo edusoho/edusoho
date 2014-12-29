@@ -33,10 +33,10 @@ class CashServiceImpl extends BaseService implements CashService
             throw $this->createServiceException('金额必须为数字，并且不能小于0');
         }
 
-        $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"]);
+        $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"], true);
 
         if($account["cash"] < $outFlow["amount"]) {
-            throw $this->createServiceException('余额不足');
+            return false;
         }
 
         $outFlow["cashType"] = "Coin";
@@ -160,9 +160,10 @@ class CashServiceImpl extends BaseService implements CashService
         $inFlow["sn"] = $this->makeSn();
         $inFlow["createdTime"] = time();
 
-        $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"]);
+        $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"], true);
         if(empty($account)){
-                $account =$this->getCashAccountService()->createAccount($inFlow["userId"]);
+            $account = $this->getCashAccountService()->createAccount($inFlow["userId"]);
+            $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"], true);
         }
 
         $inFlow["cash"] = $account["cash"]+$inFlow["amount"];

@@ -63,7 +63,10 @@ class PayCenterController extends BaseController
                 'paidTime' => time()
             );
             
-            list($success, $router, $order) = $this->getPayCenterService()->pay($payData);
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
+            $processor = OrderProcessorFactory::create($order["targetType"]);
+            $router = $processor->getRouter();
+
             $goto = $success && !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true):$this->generateUrl('homepage', array(), true);
             return $this->redirect($goto);
         }
@@ -96,6 +99,7 @@ class PayCenterController extends BaseController
 		if ($order['status'] == 'paid') {
             $processor = OrderProcessorFactory::create($order["targetType"]);
             $router = $processor->getRouter();
+
             return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
         } else {
 
@@ -123,9 +127,16 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:Order:resultNotice");
         }
 
-        list($success, $router, $order) = $this->getPayCenterService()->pay($payData);
+        list($success, $order) = $this->getPayCenterService()->pay($payData);
 
-        $goto = $success && !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        if(!$success) {
+            return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
+        }
+
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+        $router = $processor->getRouter();
+
+        $goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
 
         return $this->redirect($goto);
     }
@@ -137,8 +148,10 @@ class PayCenterController extends BaseController
 
         $payData = $response->getPayData();
 
-        list($success, $router, $order) = $this->getPayCenterService()->pay($payData);
-        
+        list($success, $order) = $this->getPayCenterService()->pay($payData);
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+        $router = $processor->getRouter();
+
         if($success){
             return new Response('success');
         } else {
@@ -152,7 +165,6 @@ class PayCenterController extends BaseController
         $order = $this->getOrderService()->getOrder($orderId);
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
-
         $router = $processor->getRouter();
 
         return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
