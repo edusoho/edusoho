@@ -3,28 +3,23 @@ namespace Topxia\Service\Cash;
 
 interface CashService
 {
-    public function createAccount($userId);
-
     public function searchFlows($conditions, $orderBy, $start, $limit);
 
     public function searchFlowsCount($conditions);
 
-    public function outflow($userId, $flow);
+    public function outFlowByCoin($outFlow);
 
-    public function inflow($userId, $flow);
+    public function inFlowByRmb($inFlow);
 
-    public function searchAccount($conditions, $orderBy, $start, $limit);
+    public function outFlowByRmb($outFlow);
 
-    public function searchAccountCount($conditions);
+    public function changeRmbToCoin($rmbFlow);
 
-    public function getAccount($id);
+    public function inflowByCoin($inflow);
 
-    public function getChangeByUserId($userId);
+    public function analysisAmount($conditions);
 
-    public function addChange($userId);
+    public function findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit);
 
-    public function changeCoin($amount,$account,$userId);
-
-    public function reward($amount,$name,$userId,$type=null);
-
+    public function findUserIdsByFlowsCount($type,$createdTime);
 }

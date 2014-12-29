@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\AdminBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\Response;
  
 class CoinController extends BaseController
 {
@@ -14,49 +16,112 @@ class CoinController extends BaseController
     {
         $postedParams = $request->request->all();
 
-        $coinSettingsPosted = $this->getSettingService()->get('coin',array());
+        $coinSettingsSaved = $this->getSettingService()->get('coin',array());
 
-        $coinSettingsSaved = $coinSettingsPosted;
         $default = array(
           'coin_enabled' => 0,
+          'price_type'=>'RMB',
           'coin_name' => '虚拟币',
-          'cash_rate' => 10,
-          'coin_consume_range_and_present' => array(array(0,0))
+          'coin_content' => '',
+          'coin_picture' => '',
+          'cash_rate' => 1,
         );
-        $coinSettingsPosted = array_merge($default, $coinSettingsPosted);
-      
-        if ($request->getMethod() == 'POST') {
-        $coinSettingsPosted = null;
+        $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
 
-        $coinSettingsPosted['coin_enabled'] = $request->request->get("coin_enabled");
-        $coinSettingsPosted['coin_name'] = $request->request->get("coin_name");
-        $this->getSettingService()->set('coin', $coinSettingsPosted);
-        $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
-        $this->setFlashMessage('success', '虚拟币设置已保存！');      
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $coinSettingsPosted = ArrayToolkit::parts($fields, array(
+                'cash_rate', 'coin_enabled', 
+                'price_type', 'coin_name', 
+                'coin_content', 'coin_picture'
+            ));
+            if (isset($coinSettingsPosted['cash_rate']) && !is_numeric($coinSettingsPosted['cash_rate'])){
+              $this->setFlashMessage('danger', '错误，虚拟币汇率设置填入的必须为数字！');
+              return $this->settingsRenderedPage($coinSettingsSaved);
+            }
+            
+            $this->getSettingService()->set('coin', $coinSettingsPosted);
+            $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
+            $this->setFlashMessage('success', '虚拟币设置已保存！');
+
+            if($coinSettingsPosted["coin_enabled"] == 1
+                && !($coinSettingsSaved["coin_enabled"] == $coinSettingsPosted["coin_enabled"]
+                && $coinSettingsSaved["cash_rate"] == $coinSettingsPosted["cash_rate"])
+                ) {
+                if(!isset($coinSettingsSaved["price_type"])){
+                    $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
+                } else if(isset($coinSettingsSaved["price_type"]) 
+                    && $coinSettingsPosted["price_type"] != $coinSettingsSaved["price_type"]
+                ){
+                    $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
+                } else if(isset($coinSettingsSaved["price_type"])
+                    && $coinSettingsPosted["price_type"] == $coinSettingsSaved["price_type"] 
+                    && $coinSettingsPosted["cash_rate"] != $coinSettingsSaved["cash_rate"]
+                ){
+                    $priceType = $coinSettingsSaved["price_type"] == "RMB" ? "Coin":"RMB";
+                    $this->processPrice($priceType, $coinSettingsPosted["cash_rate"]);
+                }
+            }
+
+            return $this->settingsRenderedPage($coinSettingsPosted);
+
         }
 
-        return $this->settingsRenderedPage($coinSettingsPosted);
+        return $this->settingsRenderedPage($coinSettingsSaved);
     }
+
+    public function pictureAction(Request $request)
+    {
+        $file = $request->files->get('coin_picture');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确，请上传png, gif, jpg格式的图片文件！');
+        }
+
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
+        $file = $file->move($directory, $filename);
+        $coin = $this->getSettingService()->get('coin',array());
+        $coin['coin_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$filename}";
+        $coin['coin_picture'] = ltrim($coin['coin_picture'], '/');
+
+        $this->getSettingService()->set('coin', $coin);
+
+        $this->getLogService()->info('system', 'update_settings', "更新虚拟币图片", array('coin_picture' => $coin['coin_picture']));
+
+        $response = array(
+            'path' => $coin['coin_picture'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture']),
+        );
+
+        return new Response(json_encode($response));
+
+    }
+
+
+    public function pictureRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("coin");
+        $setting['coin_picture'] = '';
+
+        $this->getSettingService()->set('coin', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除虚拟币图片");
+
+        return $this->createJsonResponse(true);
+    }
+
 
     public function  recordsAction(Request $request){
         $fields = $request->query->all();
-        $conditions=array();
+        $conditions=array(
+            'startTime'=>time()-7*24*3600);
+
         if(!empty($fields)){
-          $conditions =$fields;
+          $conditions =$this->filterCondition($fields);
         };
-        
-        if  (isset($conditions['keywordType'])) {
-          if ($conditions['keywordType'] == 'userName'){
-            $conditions['keywordType'] = 'userId';
-            $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
-            $conditions['keyword'] = $userFindbyNickName? $userFindbyNickName['id']:-1;
-          }
-        }
-        if (isset($conditions['keywordType'])) {
-          $conditions[$conditions['keywordType']] = $conditions['keyword'];
-          unset($conditions['keywordType']);
-          unset($conditions['keyword']);
-        }
+
+        $conditions['cashType']="Coin";
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -71,14 +136,150 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
           );
 
+        if(isset($conditions['type'])){
+
+            switch ($conditions['type']) {
+                case 'inflow':
+                    $inflow=$this->getCashService()->analysisAmount($conditions);
+                    $outflow=0;
+                    break;
+                case 'outflow':
+                    $outflow=$this->getCashService()->analysisAmount($conditions);
+                    $inflow=0;
+                    break;
+                default:
+                    $conditions['type']="outflow";
+                    $outflow=$this->getCashService()->analysisAmount($conditions);
+                    $conditions['type']="inflow";
+                    $inflow=$this->getCashService()->analysisAmount($conditions);
+                    break;
+            }
+
+        }else{
+
+            $conditions['type']="outflow";
+            $outflow=$this->getCashService()->analysisAmount($conditions);
+            $conditions['type']="inflow";
+            $inflow=$this->getCashService()->analysisAmount($conditions);   
+        }
+
+        $in=$this->getCashService()->analysisAmount(array('type'=>'inflow','cashType'=>'Coin'));
+        $out=$this->getCashService()->analysisAmount(array('type'=>'outflow','cashType'=>'Coin'));
+        $amounts=$in-$out;
+
         $userIds =  ArrayToolkit::column($cashes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         
         return $this->render('TopxiaAdminBundle:Coin:coin-records.html.twig',array(
             'users'=>$users,
             'cashes'=>$cashes,
+            'outflow'=>$outflow,
+            'inflow'=>$inflow,
+            'amounts'=>$amounts,
             'paginator'=>$paginator,
           ));
+    }
+
+    public function userRecordsAction(Request $request)
+    {   
+        $condition['time']=time()-7*3600*24;
+        $condition['type']="";
+        $condition['timeType']="oneWeek";
+        $condition['orderBY']="desc";
+        $condition['searchType']="";
+        $condition['keyword']="";
+        $condition['sort']="down";
+        $condition['flowType']="";
+
+        $fields = $request->query->all();
+
+        if(!empty($fields)){
+          $condition =$this->convertFiltersToCondition($fields);
+        };
+
+        if(isset($condition['userId'])){
+
+            if($condition['userId'] == 0 ){
+                $userIds=array();
+                $users=array();
+                $condition['userId']="null";
+                goto response;
+            } 
+            
+
+            $userIds=array($condition['userId']);
+            $user=$this->getUserService()->getUser($condition['userId']);
+            $users=array($condition['userId']=>$user);
+
+            response:
+            return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig',array(
+              'condition'=>$condition,
+              'userIds'=>$userIds,
+              'users'=>$users,
+            ));
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCashService()->findUserIdsByFlowsCount($condition['type'],$condition['time']),
+            20
+          );
+
+        $flows=$this->getCashService()->findUserIdsByFlows(
+            $condition['type'],$condition['time'],$condition['orderBY'],           
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+          );
+
+        $userIds=ArrayToolkit::column($flows,'userId');
+
+        $users=$this->getUserService()->findUsersByIds($userIds);
+        
+        return $this->render('TopxiaAdminBundle:Coin:coin-user-records.html.twig',array(
+          'paginator'=>$paginator,
+          'condition'=>$condition,
+          'userIds'=>$userIds,
+          'users'=>$users,
+          ));
+    }
+    
+    public function flowDetailAction(Request $request)
+    {   
+        $userId=$request->query->get("userId");
+        $timeType=$request->query->get("timeType");
+
+        if(empty($timeType)){
+            $timeType="oneWeek";
+        }
+
+        $condition['timeType']=$timeType;
+        $filter =$this->convertFiltersToCondition($condition);
+
+        $conditions['startTime']=$filter['time'];
+        $conditions['cashType']="Coin";
+        $conditions['userId']=$userId;
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCashService()->searchFlowsCount($conditions),
+            20
+          );
+
+        $cashes=$this->getCashService()->searchFlows(
+            $conditions,
+            array('createdTime','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+          );
+        
+        $user=$this->getUserService()->getUser($userId);
+
+        return $this->render('TopxiaAdminBundle:Coin:flow-deatil-modal.html.twig', array(
+            'user'=>$user,
+            'cashes'=>$cashes,
+            'paginator'=>$paginator,
+            'timeType'=>$timeType,
+        ));
     }
 
     public function  ordersAction(Request $request){
@@ -156,20 +357,20 @@ class CoinController extends BaseController
 
             $user=$this->getUserService()->getUserByNickname($fields['nickname']);
 
-            $account=$this->getCashService()->getAccountByUserId($user["id"]);
+            $account=$this->getCashAccountService()->getAccountByUserId($user["id"]);
 
             if(empty($account)){
-                $account=$this->getCashService()->createAccount($user["id"]);
+                $account=$this->getCashAccountService()->createAccount($user["id"]);
             }
 
             if($fields['type']=="add"){
 
-                $this->getCashService()->waveCashField($account["id"],$fields['amount']);
+                $this->getCashAccountService()->waveCashField($account["id"],$fields['amount']);
                 $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
             }else{
 
-                $this->getCashService()->waveDownCashField($account["id"],$fields['amount']);
+                $this->getCashAccountService()->waveDownCashField($account["id"],$fields['amount']);
                 $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
             }
   
@@ -199,11 +400,11 @@ class CoinController extends BaseController
 
     //     $paginator = new Paginator(
     //         $this->get('request'),
-    //         $this->getCashService()->searchAccountCount($conditions),
+    //         $this->getCashAccountService()->searchAccountCount($conditions),
     //         20
     //       );
 
-    //     $cashes=$this->getCashService()->searchAccount(
+    //     $cashes=$this->getCashAccountService()->searchAccount(
     //         $conditions,
     //         array(),
     //         $paginator->getOffsetCount(),
@@ -226,7 +427,7 @@ class CoinController extends BaseController
 
             $fields=$request->request->all();
 
-            $account=$this->getCashService()->getAccount($id);
+            $account=$this->getCashAccountService()->getAccount($id);
 
             if($account){
 
@@ -234,13 +435,13 @@ class CoinController extends BaseController
 
                 if($fields['type']=="add"){
 
-                $this->getCashService()->waveCashField($id,$fields['amount']);
+                $this->getCashAccountService()->waveCashField($id,$fields['amount']);
 
                 $this->getLogService()->info('cash', 'add_coin', "添加 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
                 }else{
 
-                    $this->getCashService()->waveDownCashField($id,$fields['amount']);
+                    $this->getCashAccountService()->waveDownCashField($id,$fields['amount']);
                     $this->getLogService()->info('cash', 'add_coin', "扣除 ".$user['nickname']." {$fields['amount']} 虚拟币", array());
 
                 }
@@ -350,14 +551,247 @@ class CoinController extends BaseController
         ));
     }
 
+    public function cashBillAction(Request $request)
+    {
+        if($request->get('nickname')){
+
+            $user=$this->getUserService()->getUserByNickname($request->get('nickname'));
+       
+            if($user){
+
+                $conditions['userId']=$user['id'];
+            }else{
+
+                $conditions['userId']=-1;
+            }
+        }
+
+        $conditions['cashType'] = 'RMB';
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+
+
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getCashService()->searchFlowsCount($conditions),
+            20
+        );
+
+        $cashes = $this->getCashService()->searchFlows(
+            $conditions,
+            array('ID','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
+        $userIds=ArrayToolkit::column($cashes,"userId");
+        $users=$this->getUserService()->findUsersByIds($userIds);
+
+        $conditions['type']  = 'inflow';      
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+
+        $conditions['type']  = 'outflow'; 
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+
+        return $this->render('TopxiaAdminBundle:Coin:cash-bill.html.twig',array(
+            'cashes' => $cashes,
+            'paginator' => $paginator,
+            'users'=>$users,
+            'amountInflow' => $amountInflow?:0,
+            'amountOutflow' => $amountOutflow?:0            
+          
+        ));   
+    }
+
+    private function convertFiltersToCondition($condition)
+    {   
+        $condition['time']=time()-7*3600*24;
+        $condition['type']="";
+        $condition['orderBY']="desc";
+        $keyword="";
+
+        if(isset($condition['searchType'])){
+
+            if(isset($condition['keyword'])){
+
+                $keyword=$condition['keyword'];
+            }
+
+            if($keyword !=""){
+                switch ($condition['searchType']) {
+                case 'nickname':
+                    $user=$this->getUserService()->getUserByNickname($keyword);
+                    $condition['userId']=$user ? $user['id'] : 0 ;
+                    break;
+                case 'email':
+                    $user=$this->getUserService()->getUserByEmail($keyword);
+                    $condition['userId']=$user ? $user['id'] : 0 ;
+                    break;                
+                default:
+                    break;
+                }
+            }
+
+        }else{
+            
+            $condition['searchType']="";
+            $condition['keyword']="";
+        }
+
+        if(isset($condition['timeType']))
+        {
+            switch ($condition['timeType']) {
+                case 'oneWeek':
+                    $condition['time']=time()-7*3600*24;
+                    break;
+                case 'oneMonth':
+                    $condition['time']=time()-30*3600*24;
+                    break;                
+                case 'threeMonths':
+                    $condition['time']=time()-90*3600*24;
+                    break;
+                case 'all':
+                    $condition['time']=0;
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            $condition['timeType']="oneWeek";
+        }
+
+        if(isset($condition['sort'])){
+
+            switch ($condition['sort']) {
+                case 'up':
+                    $condition['orderBY']="ASC";
+                    break;
+                case 'down':
+                    $condition['orderBY']="DESC";
+                    break;               
+                default:
+                    break;
+            }  
+        }else{
+            $condition['sort']="down";
+        }
+
+        if(isset($condition['flowType'])){
+
+            switch ($condition['flowType']) {
+                case 'in':
+                    $condition['type']="inflow";
+                    break;
+                case 'out':
+                    $condition['type']="outflow";
+                    break;            
+                default:
+                    break;
+            }  
+        }else{
+            $condition['flowType']="";
+        }
+
+
+        return $condition;
+    }
+
+    private function processPrice($priceType, $cashRate)
+    {
+        if($priceType=="RMB") {
+            $this->getCourseService()->updatePrice($cashRate);
+        } else if($priceType=="Coin" ) {
+            $this->getCourseService()->updateCoinPrice($cashRate);
+        }
+    }
+
+    private function filterCondition($conditions)
+    {
+        if  (isset($conditions['keywordType'])) {
+          if ($conditions['keywordType'] == 'userName'){
+            $conditions['keywordType'] = 'userId';
+            $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
+            $conditions['keyword'] = $userFindbyNickName? $userFindbyNickName['id']:-1;
+          }
+        }
+        if (isset($conditions['keywordType'])) {
+          $conditions[$conditions['keywordType']] = $conditions['keyword'];
+          unset($conditions['keywordType']);
+          unset($conditions['keyword']);
+        }
+
+        if(isset($conditions['createdTime'])){
+
+            switch ($conditions['createdTime']) {
+                case 'oneWeek':
+                    $conditions['startTime']=time()-7*24*3600;
+                    break;
+                case 'oneMonth':
+                    $conditions['startTime']=time()-30*24*3600;
+                    break;
+                case 'threeMonths':
+                    $conditions['startTime']=time()-90*24*3600;
+                    break;
+                case 'all':
+                    break;
+                default:
+                    break;
+            }
+            unset($conditions['createdTime']);
+
+        }else{
+
+            $conditions['startTime']=time()-7*24*3600;
+        }
+
+        return $conditions;
+    }
+
     protected function getSettingService(){
 
       return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService(){
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService(){
@@ -369,6 +803,8 @@ class CoinController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
+
+
 
 
 }

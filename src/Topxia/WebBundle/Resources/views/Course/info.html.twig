@@ -7,9 +7,13 @@
   {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'info'} %}
 
   <dl class="course-infos" style="width:100%">
+    {% if not course.about and not category and not course.tags and not course.goals and not course.audiences %}
+      <div class="empty">暂无课程信息</div>
+    {% endif %}
+    {% if course.about %}
     <dt>简介</dt>
     <dd >{{ course.about|raw }}</dd>
-
+    {% endif %}
     {% if category %}
     <dt>分类</dt>
     <dd>

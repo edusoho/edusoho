@@ -7,21 +7,67 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     var Notify = require('common/bootstrap-notify');
 
+    function roundUp(amount){
+            return (amount*100/100).toFixed(2);
+        }
+
     exports.run = function() {
     
         require('./header').run();
 
+        $("input[name='price']").on('input',function(){
+            var element = $(this);
+            var cash_rate= element.data("cashrate");
+            var price = element.val();
+            if (price == "") {
+                $("input[name='coinPrice']").attr('value',"0.00");
+            }else{
+                $("input[name='coinPrice']").attr('value',roundUp(parseFloat(price)*parseFloat(cash_rate)));
+            }
+        });
+
+        $("input[name='coinPrice']").on('input',function(){
+            var element = $(this);
+            var cash_rate= element.data("cashrate");
+            var price = element.val();
+            var payRmb = parseFloat(price)/parseFloat(cash_rate);
+            if(price == ""){
+                $("input[name='price']").attr('value',"0.00");
+            }else{
+                $("input[name='price']").attr('value',roundUp(payRmb));
+            }
+        });
+
         var validator = new Validator({
             element: '#price-form',
             failSilently: true,
-            triggerType: 'change',
-            autoSubmit: false,
-            onFormValidated: function(error, results, $form) {
-                if (error) {
-                    return false;
-                }
-                $form = $('#price-form');
-                if($('#freeStartTime').length > 0){
+            triggerType: 'change'
+        });
+
+        if($('#freeStartTime').length > 0){
+
+            $("#freeStartTime").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                language: 'zh-CN',
+                todayBtn: true,
+                autoclose: true,
+                startDate: new Date(),
+                todayHighlight: true,
+                forceParse: false
+            });
+
+            $("#freeEndTime").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                language: 'zh-CN',
+                todayBtn: true,
+                autoclose: true,
+                startDate: new Date(),
+                todayHighlight: true,
+                forceParse: false
+            }); 
+
+            Validator.addRule('start_end_time_check',
+                function(a) {
                     var startTime = $('#freeStartTime').val();
                     startTime = startTime.replace(/-/g,"/");
                     startTime = Date.parse(startTime)/1000;
@@ -31,70 +77,43 @@ define(function(require, exports, module) {
                     var nowTime = Date.parse(new Date())/1000;
 
                     if(startTime > endTime){
-                        Notify.danger('请输入一个小于结束时间的开始时间');
-                        $('#freeStartTime').focus();
                         return false;
+                    } else {
+                        return true;
                     }
-                }   
+                },"开始时间必须小于结束时间"); 
 
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    Notify.success('课程价格已经修改成功');
-                }).error(function(){
-                    Notify.danger('操作失败');
-                });;
-            }
+            Validator.addRule('time_check',
+                function(a) {
+                    var thisTime = $(a.element.selector).val();
+                    thisTime = thisTime.replace(/-/g,"/");
+                    if (!Date.parse(thisTime)) {
+                    return false;
+                    }else{
+                    return true;
+                    }
+                },"请输入一个正确的时间");
+
+            validator.addItem({
+                element: '[name="freeStartTime"]',
+                rule: 'time_check start_end_time_check'
+            });
+
+            validator.addItem({
+                element: '[name="freeEndTime"]',
+                rule: 'time_check start_end_time_check'
+            });
+        }  
+
+        validator.addItem({
+            element: '[name="price"]',
+            rule: 'currency'
         });
 
-    $("#freeStartTime").datetimepicker({
-        format: 'yyyy-mm-dd hh:ii',
-        language: 'zh-CN',
-        todayBtn: true,
-        autoclose: true,
-        startDate: new Date(),
-        todayHighlight: true,
-        forceParse: false
-    });
-
-    $("#freeEndTime").datetimepicker({
-        format: 'yyyy-mm-dd hh:ii',
-        language: 'zh-CN',
-        todayBtn: true,
-        autoclose: true,
-        startDate: new Date(),
-        todayHighlight: true,
-        forceParse: false
-    });    
-
-    Validator.addRule('time_check',
-        function(a) {
-            var thisTime = $(a.element.selector).val();
-            thisTime = thisTime.replace(/-/g,"/");
-            if (!Date.parse(thisTime)) {
-            return false;
-            }else{
-            return true;
-            }
-        },"请输入一个正确的时间");    
-
-    validator.addItem({
-        element: '[name="price"]',
-        rule: 'currency'
-    });
-
-    validator.addItem({
-    element: '[name="coinPrice"]',
-    rule: 'currency'
-    });
-
-    validator.addItem({
-        element: '[name="freeStartTime"]',
-        rule: 'time_check'
-    });
-
-    validator.addItem({
-        element: '[name="freeEndTime"]',
-        rule: 'time_check'
-    });
+        validator.addItem({
+            element: '[name="coinPrice"]',
+            rule: 'currency'
+        });
 
     };
 

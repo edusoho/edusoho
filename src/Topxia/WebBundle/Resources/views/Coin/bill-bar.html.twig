@@ -1,0 +1,25 @@
+      {% set blocks = data('Blocks',{'codes':['bill_banner'] }) %}
+      {% if blocks.bill_banner %}
+        {{ blocks.bill_banner|raw }}
+      {% endif %}
+
+      <div class="clearfix">
+      <div class="col-md-12">
+        <ul class="nav nav-tabs mbl">
+
+          {% if setting('coin.coin_enabled') %}
+          <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
+            <a href="{{ url('my_coin') }}" >我的{{setting('coin.coin_name')}}
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="{% if side_nav == 'my-bill' %}active{% endif %}">
+            <a href="{{ url('my_bill') }}">我的现金账单
+            </a>
+          </li>
+
+
+        </ul> 
+      </div>
+     </div>

@@ -1,256 +1,13 @@
 <?php
 namespace Topxia\Service\Cash\Impl;
 
-use TopXia\Service\Common\BaseService;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Cash\CashService;
-use TopXia\Common\ArrayToolkit;
-use TopXia\Service\Util\EasyValidator;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\EasyValidator;
 
 class CashServiceImpl extends BaseService implements CashService
 {
-    public function createAccount($userId)
-    {
-        $fields = array('userId' => $userId, 'cash' => 0);
-        return $this->getAccountDao()->addAccount($fields);
-    }
-
-    public function getAccountByUserId($userId)
-    {
-        return $this->getAccountDao()->getAccountByUserId($userId);
-    }
-
-    public function outflow($userId, $flow) 
-    {
-        $inflow=array(
-            'userId'=>$userId,
-            'sn'=>$this->makeSn(),
-            'type'=>'outflow',
-            'amount'=> $flow["amount"],
-            'name'=>$flow['name'],
-            'orderSn'=>$flow['sn'],
-            'category'=>$flow['category'],
-            'note'=>$flow['note'],
-            'createdTime'=>time(),
-        );
-
-        $inflow = $this->getFlowDao()->addFlow($inflow);
-    }
-
-    public function inflow($userId, $flow)
-    {   
-        $coinSetting=$this->getSettingService()->get('coin',array());
-
-        if(!is_numeric($flow['amount']))
-        {
-            throw $this->createServiceException('充值金额必须为整数!');
-            
-        }
-
-        if(empty($flow['name']) || empty($flow['sn'])|| empty($flow['category']))
-        {
-            throw $this->createServiceException('必要字段不能为空!');
-            
-        }
-
-        try {
-
-            $this->getAccountDao()->getConnection()->beginTransaction();
-
-            $account = $this->getAccountDao()->getAccountByUserId($userId, true);
-            if (empty($account)) {
-                throw $this->createServiceException("Account #{$userId} is not exist.");
-            }
-
-            if (intval($flow['amount']*100) <= 0) {
-                throw $this->createServiceException("Amount #{$flow['amount']} is error.");
-            }
-
-            $coin=$coinSetting['cash_rate']*$flow['amount'];
-            $inflow = array();
-            $inflow=array(
-                'userId'=>$userId,
-                'sn'=>$this->makeSn(),
-                'type'=>'inflow',
-                'amount'=>$coin,
-                'name'=>$flow['name'],
-                'orderSn'=>$flow['sn'],
-                'category'=>$flow['category'],
-                'note'=>$flow['note'],
-                'createdTime'=>time(),
-                );
-
-            $inflow = $this->getFlowDao()->addFlow($inflow);
-
-            $this->getAccountDao()->waveCashField($account['id'], $coin);
-
-            $this->getNotifiactionService()->notify($userId, 'default', "您已成功充值".$coin.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
-           
-            $this->getAccountDao()->getConnection()->commit();
-
-            return $inflow;
-        } catch (\Exception $e) {
-            $this->getAccountDao()->getConnection()->rollback();
-
-            throw $e;
-        }
-    }
-
-    public function waveCashField($id, $value)
-    {   
-        if(!is_numeric($value))
-        {
-            throw $this->createServiceException('充值金额必须为整数!');
-            
-        }
-        $coinSetting=$this->getSettingService()->get('coin',array());
-        $account=$this->getAccountDao()->getAccount($id);
-        $this->getNotifiactionService()->notify($account['userId'], 'default', "您已成功充值".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
-           
-        return $this->getAccountDao()->waveCashField($id, $value);
-    }
-
-    public function getAccount($id)
-    {
-        return $this->getAccountDao()->getAccount($id);
-    }
-
-    public function waveDownCashField($id, $value)
-    {   
-        if(!is_numeric($value))
-        {
-            throw $this->createServiceException('充值金额必须为整数!');
-            
-        }
-        
-        $coinSetting=$this->getSettingService()->get('coin',array());
-        $account=$this->getAccountDao()->getAccount($id);
-        $this->getNotifiactionService()->notify($account['userId'], 'default', "您被扣除".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
-        
-
-        return $this->getAccountDao()->waveDownCashField($id, $value);
-    }
-
-    public function reward($amount,$name,$userId,$type=null)
-    {   
-        $coinSetting=$this->getSettingService()->get('coin',array());
-
-        try {
-
-            $this->getAccountDao()->getConnection()->beginTransaction();
-
-            $account = $this->getAccountDao()->getAccountByUserId($userId, true);
-            
-            if(empty($account)){
-            $this->createAccount($userId);
-            }
-
-            $inflow = array();
-
-            if($type=="cut"){
-
-                $inflow=array(
-                'userId'=>$userId,
-                'sn'=>$this->makeSn(),
-                'type'=>'outflow',
-                'amount'=>$amount,
-                'name'=>$name,
-                'category'=>"exchange",
-                'orderSn'=>'R'.$this->makeSn(),
-                'createdTime'=>time(),
-                );
-
-                $inflow = $this->getFlowDao()->addFlow($inflow);
-
-                $this->getAccountDao()->waveDownCashField($account['id'], $amount);
-
-            }else{
-
-                $inflow=array(
-                'userId'=>$userId,
-                'sn'=>$this->makeSn(),
-                'type'=>'inflow',
-                'amount'=>$amount,
-                'name'=>$name,
-                'category'=>"exchange",
-                'orderSn'=>'R'.$this->makeSn(),
-                'createdTime'=>time(),
-                );
-
-                $inflow = $this->getFlowDao()->addFlow($inflow);
-
-                $this->getAccountDao()->waveCashField($account['id'], $amount);
-            }
-            
-            $this->getAccountDao()->getConnection()->commit();
-
-            return $inflow;
-        } catch (\Exception $e) {
-            $this->getAccountDao()->getConnection()->rollback();
-
-            throw $e;
-        }
-    }
-    
-    public function getChangeByUserId($userId)
-    {
-        return $this->getChangeDao()->getChangeByUserId($userId);
-    }
-
-    public function addChange($userId)
-    {
-        $fields=array(
-            'userId'=>$userId,
-            'amount'=>0,
-            );
-
-        return $this->getChangeDao()->addChange($fields);
-    }
-
-    public function changeCoin($amount,$coinAmount,$userId)
-    {   
-        $coinSetting=$this->getSettingService()->get('coin',array());
-
-        try {
-
-            $this->getAccountDao()->getConnection()->beginTransaction();
-
-            $account = $this->getAccountDao()->getAccountByUserId($userId, true);
-            if (empty($account)) {
-                throw $this->createServiceException("Account #{$userId} is not exist.");
-            }
-
-            $inflow = array();
-            $inflow=array(
-                'userId'=>$userId,
-                'sn'=>$this->makeSn(),
-                'type'=>'inflow',
-                'amount'=>$coinAmount,
-                'name'=>"兑换".$coinAmount.$coinSetting['coin_name'],
-                'category'=>"exchange",
-                'orderSn'=>'E'.$this->makeSn(),
-                'createdTime'=>time(),
-                );
-
-            $inflow = $this->getFlowDao()->addFlow($inflow);
-
-            $this->getAccountDao()->waveCashField($account['id'], $coinAmount);
-
-            $change=$this->getChangeDao()->getChangeByUserId($userId,true);
-            
-            $this->getChangeDao()->waveCashField($change['id'], $amount);
-
-            $this->getNotifiactionService()->notify($userId, 'default', "您已成功兑换".$coinAmount.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
-           
-            $this->getAccountDao()->getConnection()->commit();
-
-            return $inflow;
-        } catch (\Exception $e) {
-            $this->getAccountDao()->getConnection()->rollback();
-
-            throw $e;
-        }
-    }
-
     public function searchFlows($conditions, $orderBy, $start, $limit)
     {
         return $this->getFlowDao()->searchFlows($conditions, $orderBy, $start, $limit);
@@ -260,15 +17,161 @@ class CashServiceImpl extends BaseService implements CashService
     {
         return $this->getFlowDao()->searchFlowsCount($conditions);
     }
-    
-    public function searchAccount($conditions, $orderBy, $start, $limit)
+    public function analysisAmount($conditions)
     {
-        return $this->getAccountDao()->searchAccount($conditions, $orderBy, $start, $limit);
+        return $this->getFlowDao()->analysisAmount($conditions);
+    }
+    public function outFlowByCoin($outFlow)
+    {
+        if(!ArrayToolkit::requireds($outFlow, array(
+            'userId', 'amount', 'name', 'orderSn', 'category', 'note'
+        ))){
+            throw $this->createServiceException('参数缺失');
+        }
+
+        if(!is_numeric($outFlow["amount"]) || $outFlow["amount"] <= 0) {
+            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"]);
+
+        if($account["cash"] < $outFlow["amount"]) {
+            throw $this->createServiceException('余额不足');
+        }
+
+        $outFlow["cashType"] = "Coin";
+        $outFlow["type"] = "outflow";
+        $outFlow["sn"] = $this->makeSn();
+        $outFlow["createdTime"] = time();
+        $outFlow["cash"] = $account["cash"]-$outFlow["amount"];
+
+        $outFlow = $this->getFlowDao()->addFlow($outFlow);
+
+        $this->getCashAccountService()->waveDownCashField($account["id"], $outFlow["amount"]);
+
+        return $outFlow;
     }
 
-    public function searchAccountCount($conditions)
+    public function inflowByCoin($inflow)
     {
-        return $this->getAccountDao()->searchAccountCount($conditions);
+        if(!ArrayToolkit::requireds($inflow, array(
+            'userId', 'amount', 'name', 'orderSn', 'category', 'note'
+        ))){
+            throw $this->createServiceException('参数缺失');
+        }
+
+        if(!is_numeric($inflow["amount"]) || $inflow["amount"] <= 0) {
+            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"]);
+
+        $inflow["cashType"] = "Coin";
+        $inflow["type"] = "inflow";
+        $inflow["sn"] = $this->makeSn();
+        $inflow["createdTime"] = time();
+        $inflow["cash"] = $account["cash"]+$inflow["amount"];
+
+        $inflow = $this->getFlowDao()->addFlow($inflow);
+
+        $this->getCashAccountService()->waveCashField($account["id"], $inflow["amount"]);
+
+        return $inflow;
+    }
+
+    public function inFlowByRmb($inFlow)
+    {
+        if(!ArrayToolkit::requireds($inFlow, array(
+            'userId', 'amount', 'name', 'orderSn', 'category', 'note'
+        ))){
+            throw $this->createServiceException('参数缺失');
+        }
+
+        if(!is_numeric($inFlow["amount"]) || $inFlow["amount"] <= 0) {
+            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+        }
+
+        $inFlow["cashType"] = "RMB";
+        $inFlow["type"] = "inflow";
+        $inFlow["sn"] = $this->makeSn();
+        $inFlow["createdTime"] = time();
+
+        $inFlow = $this->getFlowDao()->addFlow($inFlow);
+        return $inFlow;
+
+    }
+
+    public function outFlowByRmb($outFlow)
+    {
+        if(!ArrayToolkit::requireds($outFlow, array(
+            'userId', 'amount', 'name', 'orderSn', 'category', 'note'
+        ))){
+            throw $this->createServiceException('参数缺失');
+        }
+
+        if(!is_numeric($outFlow["amount"]) || $outFlow["amount"] <= 0) {
+            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+        }
+
+        $outFlow["cashType"] = "RMB";
+        $outFlow["type"] = "outflow";
+        $outFlow["sn"] = $this->makeSn();
+        $outFlow["createdTime"] = time();
+
+        $outFlow = $this->getFlowDao()->addFlow($outFlow);
+        return $outFlow;
+    }
+
+    public function findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit)
+    {
+        return $this->getFlowDao()->findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit);
+    }
+
+    public function findUserIdsByFlowsCount($type,$createdTime)
+    {
+        return $this->getFlowDao()->findUserIdsByFlowsCount($type,$createdTime);
+    }
+
+    public function changeRmbToCoin($rmbFlow)
+    {
+        $outFlow = $this->outFlowByRmb($rmbFlow);
+
+        $coinSetting = $this->getSettingService()->get("coin");
+
+        $coinRate = 1;
+        if(!empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $coinRate = $coinSetting["cash_rate"];
+        }
+
+        $amount = $outFlow["amount"] * $coinRate;
+
+        $inFlow = array(
+            'userId' => $outFlow["userId"],
+            'amount' => $amount,
+            'name' => "充值",
+            'orderSn' => $outFlow['orderSn'],
+            'category' => 'change',
+            'note' => '',
+            'parentSn' => $outFlow['sn']
+        );
+
+        $inFlow["cashType"] = "Coin";
+        $inFlow["type"] = "inflow";
+        $inFlow["sn"] = $this->makeSn();
+        $inFlow["createdTime"] = time();
+
+        $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"]);
+        if(empty($account)){
+                $account =$this->getCashAccountService()->createAccount($inFlow["userId"]);
+        }
+
+        $inFlow["cash"] = $account["cash"]+$inFlow["amount"];
+
+        $inFlow = $this->getFlowDao()->addFlow($inFlow);
+
+        $this->getCashAccountService()->waveCashField($account["id"], $inFlow["amount"]);
+
+        return $inFlow;
     }
 
     private function makeSn()
@@ -286,19 +189,14 @@ class CashServiceImpl extends BaseService implements CashService
         return $this->createDao('Cash.CashFlowDao');
     }
 
-    protected function getAccountDao()
+    protected function getSettingService()
     {
-        return $this->createDao('Cash.CashAccountDao');
-    }
-
-    protected function getChangeDao()
-    {
-        return $this->createDao('Cash.CashChangeDao');
-    }
-
-    protected function getSettingService(){
-      
         return $this->createService('System.SettingService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->createService('Cash.CashAccountService');
     }
 
 }

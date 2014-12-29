@@ -12,8 +12,29 @@
 
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-settings-form">
+  
+
     <fieldset>
-      <legend>虚拟币设置</legend>
+      <legend>虚拟币设置
+
+      <style type="text/css">
+      .popover{
+        z-index: 9999;
+            }
+        </style>
+        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+         <div id="article-property-tips-html" style="display:none;">
+            <div style="width:250px;font-size:14px;">
+              <span style="color:blue;"> 说明：</span><br>
+              虚拟币是可以在网校内进行支付消费的虚拟货币<br>
+              <span style="color:blue;">推广建议：</span><br>
+              1、 建议网校使用虚拟币对网校内课程进行标价；<br>
+              2、 网校可鼓励学员充值，可提供用户忠诚度；<br>
+              3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
+            </div>
+        </div>
+      </legend>
+
     	<div class="form-group">
       	<div class="col-md-3 control-label">
         	<label>网校虚拟币</label>
@@ -23,6 +44,16 @@
         	<div class="help-block">开启后网校支付将通过虚拟币支付</div>
       	</div>
     	</div>  	
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>网校价格显示</label>
+        </div>
+        <div class="controls col-md-4 radios">
+          {{ radios('price_type', {'RMB':'RMB', 'Coin':'虚拟币'},coin_settings_posted.price_type) }} 
+        </div>
+      </div>    
+
       <div class="form-group">
     		<div class="col-md-3 control-label">
     			<label for="coin_name">虚拟币名称</label>
@@ -31,6 +62,46 @@
     			<input type="text" id="coin_name" name="coin_name" class="form-control" value="{{coin_settings_posted.coin_name}}">
     		</div>
       </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+            <label for="cash_rate">虚拟币汇率设置</label>
+        </div>
+        <div class="controls col-md-4">
+          <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coin_settings_posted.cash_rate %}value="{{coin_settings_posted.cash_rate}}" {% else %} value="1" {% endif %}>
+        </div>
+         <div class="controls  col-md-8 col-md-offset-3">
+            <div class="help-block">在此设置1元可换取的虚拟币数量，<span class="text text-danger">
+            建议汇率设置后不要进行改动
+            </span>
+            </div>
+          </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
+          <label for="coin_picture">虚拟币图片</label>
+        </div>
+        <div class="col-md-7 controls">
+          <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
+          <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
+          <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
+          <p class="help-block">建议图片不超过50*50，文件大小小于200k</p>
+          <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
+        </div>
+    </div>
+
+        <div class="form-group">
+              <div class="col-md-3 control-label">
+                <label for="coin_content">虚拟币说明</label>
+              </div>
+          <div class="controls col-md-8">
+            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
+            <p class="help-block">虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
+            </p>
+          </div>
+        </div> 
+
     </fieldset>
 
 
@@ -38,7 +109,7 @@
 
     <div class="row form-group">
     	<div class="controls col-md-offset-3 col-md-8">
-    		<button type="submit" class="btn btn-primary">提交更新</button>
+    		<button type="submit" class="btn btn-primary" >提交更新</button>
     	</div>
     </div>
   </form>

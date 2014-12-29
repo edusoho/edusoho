@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\LiveClientFactory;
@@ -169,9 +170,14 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
         
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
-        
+
+        $coinSetting=$this->getSettingService()->get('coin',array());
+        if(isset($coinSetting['cash_rate'])){
+            $cashRate=$coinSetting['cash_rate'];
+        }else{
+            $cashRate=1;
+        }
+
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
         if ($this->setting('vip.enabled')) {
@@ -188,6 +194,16 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+            $price = $request->request->get('price');
+            $coinPrice = $request->request->get('coinPrice');
+            if($price == NULL && !empty($coinSetting['coin_enabled']) && !empty($coinSetting['price_type']) && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] == 'Coin'){
+               $fields['price'] = NumberToolkit::roundUp(floatval($coinPrice)/floatval($cashRate)); 
+            }
+
+            if($coinPrice == NULL && !empty($coinSetting['coin_enabled']) && !empty($coinSetting['price_type']) && $coinSetting['coin_enabled'] ==1 && $coinSetting['price_type'] =='RMB'){
+                $fields['coinPrice'] = NumberToolkit::roundUp(floatval($price)*floatval($cashRate));
+            }
+
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
                 $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
@@ -205,7 +221,7 @@ class CourseManageController extends BaseController
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
-            'ChargeCoin'=> $ChargeCoin
+            'cashRate'=> empty($cashRate)? 1 : $cashRate
         ));
     }
 

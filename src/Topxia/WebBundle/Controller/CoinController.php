@@ -16,29 +16,55 @@ class CoinController extends BaseController
 {
     public function indexAction(Request $request)
     {   
-        $user=$this->getCurrentUser();
-        $account=$this->getCashService()->getAccountByUserId($user->id,true);
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        }
+
+        $coinEnabled = $this->setting("coin.coin_enabled");
+        if(empty($coinEnabled) || $coinEnabled == 0) {
+            return $this->createMessageResponse('error', '网校虚拟币未开启！');
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($user->id,true);
+
+        $ChargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
         
         if(empty($account)){
-        $this->getCashService()->createAccount($user->id);
+            $this->getCashAccountService()->createAccount($user->id);
         }
         
-        if(isset($account['cash']))
-            $account['cash']=intval($account['cash']);
-        
-        $fields = $request->query->all();
-
-        $conditions = array(
-            'type'=>'',
-        );
+        $fields = $request->query->all();      
+        $conditions = array();
 
         if(!empty($fields)){
-            $conditions =$fields;
+            $conditions = $fields;
         }
 
-        $conditions['userId']=$user->id;
+        $conditions['cashType'] = 'Coin';
+        $conditions['userId'] = $user->id;
+
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -47,36 +73,103 @@ class CoinController extends BaseController
         );
 
         $cashes=$this->getCashService()->searchFlows(
-                $conditions,
-                array('createdTime','DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-                );
+            $conditions,
+            array('ID','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        $conditions['type']  = 'inflow';      
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+
+        $conditions['type']  = 'outflow'; 
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+
+        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         
-
         return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,
           'cashes'=>$cashes,
           'paginator'=>$paginator,
-          'amount'=>$amount,
-          'ChargeCoin' => $ChargeCoin
-          ));
+          // 'amount'=>$amount,
+          'ChargeCoin' => $ChargeCoin,
+          'amountInflow' => $amountInflow?:0,
+          'amountOutflow' => $amountOutflow?:0
+        ));
     }
+
+    public function cashBillAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'userId' => $user['id'],
+        );
+
+        $conditions['cashType'] = 'RMB';
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+
+
+        switch ($request->get('lastHowManyMonths')) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getCashService()->searchFlowsCount($conditions),
+            20
+        );
+
+        $cashes = $this->getCashService()->searchFlows(
+            $conditions,
+            array('ID','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
+        $conditions['type']  = 'inflow';      
+        $amountInflow = $this->getCashService()->analysisAmount($conditions);
+
+        $conditions['type']  = 'outflow'; 
+        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
+
+        return $this->render('TopxiaWebBundle:Coin:cash_bill.html.twig',array(
+            'cashes' => $cashes,
+            'paginator' => $paginator,
+            'amountInflow' => $amountInflow?:0,
+            'amountOutflow' => $amountOutflow?:0            
+          
+        ));   
+    }
+
 
     public function changeAction(Request $request)
     {   
         $user=$this->getCurrentUser();
         $userId=$user->id;
 
-        $change=$this->getCashService()->getChangeByUserId($userId);
+        $change=$this->getCashAccountService()->getChangeByUserId($userId);
 
         if(empty($change)){
 
-            $change=$this->getCashService()->addChange($userId);
+            $change=$this->getCashAccountService()->addChange($userId);
         }
 
         $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
@@ -89,7 +182,7 @@ class CoinController extends BaseController
         if($request->getMethod()=="POST"){
 
             if($canChange>0)
-            $this->getCashService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
+            $this->getCashAccountService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
 
             return $this->redirect($this->generateUrl('my_coin'));
         }
@@ -100,6 +193,22 @@ class CoinController extends BaseController
             'canChange'=>$canChange,
             'canUseAmount'=>$canUseAmount,
             'data'=>$data,
+            ));
+    }
+
+    public function showAction(Request $request)
+    {
+        $coinSetting=$this->getSettingService()->get('coin',array());
+
+        if (isset($coinSetting['coin_content'])) {
+            $content=$coinSetting['coin_content'];
+        }else{
+             $content='';
+        }
+
+        return $this->render('TopxiaWebBundle:Coin:coin-content-show.html.twig', array(
+            'content'=>$content,
+            'coinSetting'=>$coinSetting
             ));
     }
 
@@ -221,7 +330,7 @@ class CoinController extends BaseController
         $payData = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
-            return $this->forward("TopxiaAdminBundle:Coin:return-notice");
+            return $this->forward("TopxiaWebBundle:Coin:resultNotice");
         }
 
         list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
@@ -234,6 +343,11 @@ class CoinController extends BaseController
         return $this->redirect($goto);
     }
 
+    public function resultNoticeAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Coin:retrun-notice.html.twig');
+    }
+    
     public function payNotifyAction(Request $request,$name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
@@ -311,6 +425,11 @@ class CoinController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getCashOrdersService(){

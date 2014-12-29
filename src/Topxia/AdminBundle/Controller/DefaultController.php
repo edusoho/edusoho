@@ -148,6 +148,24 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function userCoinsRecordsBlockAction(Request $request)
+    {   
+        $userIds=$this->getCashService()->findUserIdsByFlows(
+            "outflow","","DESC",           
+            0,
+            5
+          );
+
+        $userIds =  ArrayToolkit::column($userIds, 'userId');
+
+        $users=$this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('TopxiaAdminBundle:Default:user-coins-block.html.twig', array(
+            'userIds'=>$userIds,
+            'users'=>$users
+            ));
+    }
+
     public function operationAnalysisDashbordBlockAction(Request $request)
     {   
         $todayTimeStart=strtotime(date("Y-m-d",time()));
@@ -369,4 +387,8 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
+    protected function getCashService(){
+      
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
 }
