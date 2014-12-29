@@ -3,9 +3,8 @@
 <input type="hidden" name="duration" value="{{duration|default('')}}"/>
 <input type="hidden" name="unitType" value="{{unitType|default('')}}"/>
 <input type="hidden" name="type" value="{{type|default('')}}"/>
-
 <ul class="course-wide-list">
-	{% include "VipBundle:Vip:vip-level.html.twig" with { hiddenBuyButton: false } %}
+	{% include "VipBundle:Vip:vip-level.html.twig" with { buyButtonStatus: "hidden" } %}
 </ul>
 <br>
 <div class="row">
