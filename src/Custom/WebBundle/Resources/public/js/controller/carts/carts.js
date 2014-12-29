@@ -13,14 +13,14 @@ define(function(require,exports,module){
         events: {
             "click [data-role=delete-carts-btn]": "_OnClickDeleteItem",
             "click [data-role=batch-select]" : "_OnClickBatch",
-            "click [data-role=single-select]" : "_initTotalNum",
+            "click [data-role=single-select]" : "_initTotal",
             "click [data-role=batch-delete-btn]" : "_OnClickBatchDelete",
             "click [data-role=batch-favourite-btn]" : "_OnClickBatchFavourite",
             "click [data-role=single-favourite-btn]" : "_OnClickSingleFavourite"
         },
 
         setup: function() {
-            this._initTotalPrice();
+            this._initTotal();
             this.on('selectedItems',function(){
                 var $items = [];
                 var $cartsIds = [];
@@ -51,8 +51,7 @@ define(function(require,exports,module){
                 $($role).remove();
 
                 self._initCartsList();
-                self._initTotalNum();
-                self._initTotalPrice();
+                self._initTotal();
             }).error(function(){
                 Notify.danger("删除失败");
             });
@@ -64,7 +63,7 @@ define(function(require,exports,module){
             } else {
                $('[data-role=single-select]').prop('checked', false);
             }
-            this._initTotalNum();
+            this._initTotal();
         },
 
         _OnClickBatchDelete: function(e) {
@@ -91,8 +90,7 @@ define(function(require,exports,module){
                 });
 
                 self._initCartsList();
-                self._initTotalNum();
-                self._initTotalPrice();
+                self._initTotal();
             }).error(function(){
                     Notify.danger("删除失败");
             });
@@ -105,21 +103,21 @@ define(function(require,exports,module){
             }
         },
 
-        _initTotalPrice: function () {
-            var priceTotal = 0;
-
-            this.$('[data-role=price]').each(function(index,item){
-                priceTotal += Number($(item).text())
-            });
-
-            this.$('[data-role=total-price]').html(priceTotal.toFixed(2));
-        },
-
-        _initTotalNum: function () {
+        _initTotal: function () {
             this.trigger('selectedItems');
             var items = [];
             items = this.get('cartsIds');
-            this.$('[data-role=total-num]').html(items.length);
+            var self = this;
+            var priceTotal = 0;
+
+            if (typeof(items) != "undefined") {
+                $.each(items,function(index,itemId){
+                    $price = self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=price]').text();
+                    priceTotal += Number($price)
+                });
+                self.$('[data-role=total-price]').html(priceTotal.toFixed(2));
+                self.$('[data-role=total-num]').html(items.length);
+            }
         },
 
         _OnClickBatchFavourite: function (e) {
