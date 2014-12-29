@@ -189,8 +189,17 @@
                       </div>
 
                       <div class="course-metas">
-
-                    {% include 'TopxiaWebBundle:Default:autumn-course-index-price.html.twig' with {'course':course} %}
+                        <p>  
+                          {% if setting('course.coursesPrice') == 0 %}
+                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                              <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                              </span>
+                            {% else %}
+                              <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
+                              </span>
+                          {% endif %}
+                        {% endif %}
+                      </p>
 
                         <span class="teachers">
                            主讲：
