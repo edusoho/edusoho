@@ -14,7 +14,7 @@ class HLSController extends BaseController
 
     public function playlistAction(Request $request, $id, $token)
     {
-        $line = $request->query->get('line', '');
+        $line = $request->query->get('line', null);
 
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
@@ -65,6 +65,7 @@ class HLSController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
 
+
         if (empty($token)) {
             throw $this->createNotFoundException();
         }
@@ -82,19 +83,40 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params = array(
-            'key' => '',
-            'keyUrl' => '',
-            'headLeader'
+        $params = array();
+        $params['key'] = $file['metas2'][$level]['key'];
 
-        );
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
+        $beginning = $this->getVideoBeginning($level);
+        if ($beginning['beginningKey']) {
+            $params = array_merge($params, $beginning);
+        }
+
+        $line = $request->query->get('line');
+        if (!empty($line)) {
+            $params['line'] = $line;
+        }
+
+        $api = $this->createAPIClient();
+
+        $stream = $api->get('/hls/stream', $params);
+
+        if (empty($stream['stream'])) {
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+        }
+
+        return new Response($stream['stream'], 200, array(
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"',
+        ));
 
     }
 
     public function clefAction(Request $request, $id, $token)
     {
-        $token = $this->getTokenService()->verifyToken('m3u8clef', $token);
+        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
         if (empty($token)) {
             return new Response($fakeKey);
@@ -131,31 +153,34 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getHeadLeaderInfo()
+    private function getVideoBeginning($level)
     {
+        $beginning = array(
+            'beginningKey' => null,
+            'beginningKeyUrl' => null,
+        );
+
         $storage = $this->getSettingService()->get("storage");
-        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+        if(!empty($storage['video_header'])) {
 
-            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $headLeaderArray = json_decode($headLeader['metas2'],true);
-            $headLeaders = array();
-            foreach ($headLeaderArray as $key => $value) {
-                $headLeaders[$key] = $value['key'];
+            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $beginnings = json_decode($file['metas2'], true);
+            $levels = array($level);
+            $levels = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));
+
+            foreach ($levels as $level) {
+                if (empty($beginnings[$level])) {
+                    continue;
+                }
+
+                $beginning['beginningKey'] = $beginnings[$level]['key'];
+                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']));
+                break;
             }
-            $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-
-            return array(
-                'headLeaders' => $headLeaders,
-                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl,
-                'headLength' => $headLeader['length']
-            );
-        } else {
-            return array(
-                'headLeaders' => '',
-                'headLeaderHlsKeyUrl' => '',
-                'headLength' => 0
-            );
         }
+
+        return $beginning;
     }
 
     protected function createAPIClient()
