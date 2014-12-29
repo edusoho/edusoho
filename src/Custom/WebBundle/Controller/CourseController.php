@@ -204,7 +204,8 @@ class CourseController extends BaseController
 		return $this->render("TopxiaWebBundle:Course:course-lesson-list.html.twig", array(
 			'chapters'=>$chapters,
 			'units'=>$units,
-			'lessons'=>$lessons
+			'lessons'=>$lessons,
+			'course' => $course
 		));
 	}
 
