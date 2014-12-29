@@ -117,3 +117,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .btn-carts .glyphicon-shopping-cart {
 	font-size: 18px;
 }
+
+.carts-text {
+	text-align: right;
+}
