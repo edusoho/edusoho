@@ -13,10 +13,10 @@ define(function(require, exports, module) {
             }
         });
 
-        validator.addItem({
-            element: '[name="form[currentUserLoginPassword]"]',
-            required: true
-        });
+        // validator.addItem({
+        //     element: '[name="form[currentUserLoginPassword]"]',
+        //     required: true
+        // });
         
         validator.addItem({
             element: '[name="form[oldPayPassword]"]',
