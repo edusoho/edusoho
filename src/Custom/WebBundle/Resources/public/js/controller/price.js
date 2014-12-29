@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
+         require('/bundles/topxiaweb/js/controller/course-manage/header').run();
         $("#originalPrice").change(function(){
             var v  =  $("#originalPrice").val();
             if(v){
