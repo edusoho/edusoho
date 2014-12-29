@@ -93,14 +93,14 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 
 .popover-teachers {
 	font-size: 6px;
-	width: 120px;
-	overflow: hidden;
+	width : 120px;
+	word-wrap:break-word;
 	white-space: nowrap;
 }
 
 .popover-empty{
 	color: #999;
-	padding: 5px 20px;
+	padding:5px 20px;
 	text-align: center;
 }
 
