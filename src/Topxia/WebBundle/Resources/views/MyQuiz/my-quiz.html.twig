@@ -10,9 +10,11 @@
     		{% for myTestpaperResult in myTestpaperResults %}
     			{% set myTestpaper = myTestpapers[myTestpaperResult.testId]|default(null) %}
     			{% if myTestpaper %}
-    				{% set course = courses[myTestpaper.target|get_course_id] %}
+    				{% set course = courses[myTestpaper.target|get_course_id]|default('') %}
     			{% endif %}
-    				{% include 'TopxiaWebBundle:MyQuiz:my-quiz-tr.html.twig' %}
+          {% if course|default('') %}
+            {% include 'TopxiaWebBundle:MyQuiz:my-quiz-tr.html.twig' %}
+          {% endif %}
     		{% endfor %}
     	</tbody>
     </table>
