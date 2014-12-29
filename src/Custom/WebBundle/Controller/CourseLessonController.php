@@ -12,9 +12,9 @@ class CourseLessonController extends BaseController
 {
 	public function previewAction(Request $request,$courseId,$lessonId)
 	{
-		$course = $this->getCourseService()->getCourse($courseId);
-		if(empty($lessonId)){
-			$lessons=$this->getCourseService()->getCourseLessons($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
+		$lessons=$this->getCourseService()->getCourseLessons($courseId);
+        if(empty($lessonId)){
 			$lesson = empty($lessons[0]) ? array() : $lessons[0];
 			$isModal = false;
 		}else{
@@ -30,16 +30,18 @@ class CourseLessonController extends BaseController
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
         }
-
-        if ($isModal && empty($lesson['free'])) {
+        //如果不是第一个课时
+        if ($isModal){
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-        }else{
-            $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
-            if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-                throw $this->createAccessDeniedException();
+            if (empty($lesson['free'])) {
+                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+            }else{
+                $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
+                if (empty($allowAnonymousPreview) && !$user->isLogin()) {
+                    throw $this->createAccessDeniedException();
+                }
             }
         }
 

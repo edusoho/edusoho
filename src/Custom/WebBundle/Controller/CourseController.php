@@ -197,6 +197,7 @@ class CourseController extends BaseController
 		$isMember = empty($isMember)?false:$isMember;
 		$course = $this->getCourseService()->getCourse($id);
 		$lessons=$this->getCourseService()->getCourseLessons($id);
+		$firstLesson=$lessons[0];
 		$lessons=ArrayToolkit::group($lessons,'chapterId');
 		$chapters=$this->getCustomCourseService()->findCourseChaptersByType($id,'chapter');
 		$units=$this->getCustomCourseService()->findCourseChaptersByType($id,'unit');
@@ -206,7 +207,8 @@ class CourseController extends BaseController
 			'units'=>$units,
 			'lessons'=>$lessons,
 			'isMember' =>$isMember,
-			'course' => $course
+			'course' => $course,
+			'firstLesson'=>$firstLesson
 		));
 	}
 
@@ -266,8 +268,6 @@ class CourseController extends BaseController
 		}
 
 		$nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
-		// var_dump($nextLearnLesson);
-		// exit();
 		return $this->render("TopxiaWebBundle:Course:course-header.html.twig", array(
 			'course' => $course,
 			'tags' => $tags,
