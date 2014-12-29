@@ -205,7 +205,8 @@ class CourseController extends BaseController
 			'chapters'=>$chapters,
 			'units'=>$units,
 			'lessons'=>$lessons,
-			'isMember' =>$isMember
+			'isMember' =>$isMember,
+			'course' => $course
 		));
 	}
 
