@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}虚拟币订单 - {{ parent() }}{% endblock %}
+{% block title %}充值订单 - {{ parent() }}{% endblock %}
 
 {% set menu = 'coin' %}
 {% set submenu = 'orders' %}
@@ -9,7 +9,7 @@
 {% block main %}
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
 
-    <div class="page-header"><h1>订单记录</h1></div>
+    <div class="page-header"><h1>充值订单</h1></div>
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -32,11 +32,11 @@
         <tr>
           <th>名称</th>
           <th>状态</th>
-          <th>价格</th>
+          <th>价格<small class="text-muted">(元)</small></th>
           <th>购买者</th>
           <th>付款方式</th>
           <th>创建时间</th>
-          <th>查看</th>
+          {# <th>查看</th> #}
         </tr>
 
        {% for order in orders %}
@@ -65,9 +65,9 @@
           <td>
             {{order.createdTime|date('Y-m-d H:i:s')}}
           </td> 
-          <td>
+{#           <td>
             <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
-          </td>
+          </td> #}
        </tr>
        {% endfor %}
       </table>
