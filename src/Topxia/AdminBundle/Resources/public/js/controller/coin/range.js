@@ -32,12 +32,19 @@ exports.run = function() {
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传虚拟币图片失败，请重试！')
+                Notify.danger('图片格式或大小不正确，上传图片失败，请检查后重试！')
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#coin-picture-container").html('<img src="' + response.url + '">');
+                $("#coin-picture-largeSize").html('<img src="' + response.coin_picture_50_50 + '">');
+                $("#coin-picture-middleSize").html('<img src="' + response.coin_picture_30_30 + '">');
+                $("#coin-picture-smallSize").html('<img src="' + response.coin_picture_20_20 + '">');
+                $("#coin-picture-extraSmallSize").html('<img src="' + response.coin_picture_10_10 + '">');
                 $form.find('[name=coin_picture]').val(response.path);
+                $form.find('[name=coin_picture_50_50]').val(response.path_50_50);
+                $form.find('[name=coin_picture_30_30]').val(response.path_30_30);
+                $form.find('[name=coin_picture_20_20]').val(response.path_20_20);
+                $form.find('[name=coin_picture_10_10]').val(response.path_10_10);
                 $("#coin-picture-remove").show();
                 Notify.success('上传虚拟币图片成功！');
             }
@@ -47,8 +54,15 @@ exports.run = function() {
             if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
-                $("#coin-picture-container").html('');
+                $("#coin-picture-largeSize").html('');
+                $("#coin-picture-middleSize").html('');
+                $("#coin-picture-smallSize").html('');
+                $("#coin-picture-extraSmallSize").html('');
                 $form.find('[name=coin_picture]').val('');
+                $form.find('[name=coin_picture_50_50]').val('');
+                $form.find('[name=coin_picture_30_30]').val('');
+                $form.find('[name=coin_picture_20_20]').val('');
+                $form.find('[name=coin_picture_10_10]').val('');
                 $btn.hide();
                 Notify.success('删除虚拟币图片成功！');
             }).error(function(){

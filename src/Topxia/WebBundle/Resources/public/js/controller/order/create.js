@@ -4,13 +4,10 @@ define(function(require, exports, module) {
 	require('common/validator-rules').inject(Validator);
 
 	exports.run = function() {
-		$("#payPassword").attr("type","password");
-
 		var cashRateElement = $('[role="cash-rate"]');
 		var cashRate = 1;
 		if($('[role="cash-rate"]').val() != "")
 			cashRate = $('[role="cash-rate"]').val();
-
 		var validator = new Validator({
             element: '#order-create-form',
             triggerType: 'change',
@@ -41,7 +38,7 @@ define(function(require, exports, module) {
 
 		function afterCoinPay(totalPrice, coinNum){
 			var accountCash = $('[role="accountCash"]').text();
-			if(accountCash == "" || isNaN(accountCash) || parseInt(accountCash) == 0) {
+			if(accountCash == "" || isNaN(accountCash) || parseFloat(accountCash) == 0) {
 				return;
 			}
 			accountCash = parseFloat(accountCash);
