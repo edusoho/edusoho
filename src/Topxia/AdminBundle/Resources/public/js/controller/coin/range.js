@@ -32,11 +32,14 @@ exports.run = function() {
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传虚拟币图片失败，请重试！')
+                Notify.danger('图片格式或大小不正确，上传图片失败，请检查后重试！')
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#coin-picture-container").html('<img src="' + response.url + '">');
+                $("#coin-picture-largeSize").html('<img src="' + response.largeImageUrl + '">');
+                $("#coin-picture-middleSize").html('<img src="' + response.middleImageUrl + '">');
+                $("#coin-picture-smallSize").html('<img src="' + response.smallImageUrl + '">');
+                $("#coin-picture-extraSmallSize").html('<img src="' + response.extraSmallImageUrl + '">');
                 $form.find('[name=coin_picture]').val(response.path);
                 $("#coin-picture-remove").show();
                 Notify.success('上传虚拟币图片成功！');
@@ -47,7 +50,10 @@ exports.run = function() {
             if (!confirm('确认要删除吗？')) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
-                $("#coin-picture-container").html('');
+                $("#coin-picture-largeSize").html('');
+                $("#coin-picture-middleSize").html('');
+                $("#coin-picture-smallSize").html('');
+                $("#coin-picture-extraSmallSize").html('');
                 $form.find('[name=coin_picture]').val('');
                 $btn.hide();
                 Notify.success('删除虚拟币图片成功！');

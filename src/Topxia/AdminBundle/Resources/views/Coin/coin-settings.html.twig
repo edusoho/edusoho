@@ -83,10 +83,16 @@
           <label for="coin_picture">虚拟币图片</label>
         </div>
         <div class="col-md-7 controls">
-          <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
+        <div >
+          <div id="coin-picture-largeSize" style="display:inline;">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}" width="50px" height="50px">{% endif %}</div>
+          <div id="coin-picture-middleSize" style="display:none;">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}" width="30px" height="30px">{% endif %}</div>
+          <div id="coin-picture-smallSize" style="display:none;">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}" width="20px" height="20px">{% endif %}</div>
+          <div id="coin-picture-extraSmallSize" style="display:none;">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}" width="10px" height="10px">{% endif %}</div>
+        </div>
+
           <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
           <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
-          <p class="help-block">建议图片不超过50*50，文件大小小于200k</p>
+          <p class="help-block">请上传png, gif, jpg格式的图片文件，图片不能超过50*50，否则无法上传</p>
           <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
         </div>
     </div>

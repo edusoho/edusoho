@@ -9,6 +9,11 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Symfony\Component\HttpFoundation\Response;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+use Symfony\Component\Filesystem\Filesystem;
  
 class CoinController extends BaseController
 {
@@ -64,12 +69,62 @@ class CoinController extends BaseController
         }
 
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-        
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file = $file->move($directory, $filename);
+
+        $pictureFilePath = $directory.'/'.$filename;
+        $pathinfo = pathinfo($pictureFilePath);
+
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($pictureFilePath);
+
+        $largeImage = $rawImage->copy();
+        $largeImage->resize(new Box(50, 50));
+        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_50*50.{$pathinfo['extension']}";
+        $largeImageName = "{$pathinfo['filename']}_50*50.{$pathinfo['extension']}";
+        $largeImage->save($largeFilePath, array('quality' => 100));
+
+        $middleImage = $rawImage->copy();
+        $middleImage->resize(new Box(30, 30));
+        $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_30*30.{$pathinfo['extension']}";
+        $middleImageName = "{$pathinfo['filename']}_30*30.{$pathinfo['extension']}";
+        $middleImage->save($middleFilePath, array('quality' => 100));
+
+        $smallImage = $rawImage->copy();
+        $smallImage->resize(new Box(20, 20));
+        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_20*20.{$pathinfo['extension']}";
+        $smallImageName = "{$pathinfo['filename']}_20*20.{$pathinfo['extension']}";
+        $smallImage->save($smallFilePath, array('quality' => 100));
+
+        $extraSmallImage = $rawImage->copy();
+        $extraSmallImage->resize(new Box(10, 10));
+        $extraSmallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_10*10.{$pathinfo['extension']}";
+        $extraSmallImageName = "{$pathinfo['filename']}_10*10.{$pathinfo['extension']}";
+        $extraSmallImage->save($extraSmallFilePath, array('quality' => 100));
+
+            
+        $size = getimagesize($file);
+        $width = $size[0];
+        $height = $size[1];
+         if ($width > 50 || $height >50 ) {
+            throw $this->createAccessDeniedException('图片大小不正确，请上传不超过50*50的图片文件！');
+        }
+
         $coin = $this->getSettingService()->get('coin',array());
         $coin['coin_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$filename}";
         $coin['coin_picture'] = ltrim($coin['coin_picture'], '/');
+
+        $largeImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$largeImageName}";
+        $largeImageUrl = ltrim($largeImageUrl, '/');
+
+        $middleImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$middleImageName}";
+        $middleImageUrl = ltrim($middleImageUrl, '/');
+
+        $smallImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$smallImageName}";
+        $smallImageUrl = ltrim($smallImageUrl, '/');
+
+        $extraSmallImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$extraSmallImageName}";
+        $extraSmallImageUrl = ltrim($extraSmallImageUrl, '/');
 
         $this->getSettingService()->set('coin', $coin);
 
@@ -78,6 +133,10 @@ class CoinController extends BaseController
         $response = array(
             'path' => $coin['coin_picture'],
             'url' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture']),
+            'largeImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($largeImageUrl),
+            'middleImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($middleImageUrl),
+            'smallImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($smallImageUrl),
+            'extraSmallImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($extraSmallImageUrl),
         );
 
         return new Response(json_encode($response));
