@@ -1,28 +1,38 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
+        var $addCartsBtn = $('#add-carts-btn');
+        var isAdd = $addCartsBtn.data('isAdd');
+        if (isAdd == 1) {
+            $addCartsBtn.attr({"href":$addCartsBtn.data('url'),"target":'_blank'});
+        } else {
+            _onClickAddCarts();
+        }
 
-        $('#add-carts-btn').on('click',function(){
-           $.post($(this).data('url'),function(result){
+        function _onClickAddCarts ()
+        {
+           $('#add-carts-btn').on('click',function(){
+              $.post($(this).data('url'),function(result){
 
-            var $cartsBadge = $('#carts-badge');
-            var status = result.status;
-            var num = $cartsBadge.text();
-            var $addNum = $('[data-role=add-number]');
+               var $cartsBadge = $('#carts-badge');
+               var status = result.status;
+               var num = $cartsBadge.text();
+               var $addNum = $('[data-role=add-number]');
+               if (status == 'success') {
+                   num = Number(num);
+                   num += 1;
+                   $cartsBadge.html(num)
+               } else {
+                   $addNum.show();
+               }
 
-            if (status == 'success') {
-                num = Number(num);
-                num += 1;
-                $cartsBadge.html(num)
-            } else {
-                $addNum.show();
-            }
-
-            $addNum.html('+1');
-            $addNum.fadeOut(1800);
+               $addNum.html('+1');
+               $addNum.fadeOut(1800);
+               $addCartsBtn.text('已加入购物车');
+               $addCartsBtn.attr({"href":$addCartsBtn.data('cartsList'),"target":'_blank'});
+              });
            });
-        });
-
+        }
          require('./timeleft').run();
         $('#teacher-carousel').carousel({interval: 0});
         $('#teacher-carousel').on('slide.bs.carousel', function (e) {

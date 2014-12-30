@@ -69,7 +69,9 @@ class CartsDaoImpl extends BaseDao implements CartsDao
             ->select('COUNT(id)')
             ->from($this->table, $this->table)
             ->andWhere('userId = :userId')
-            ->andWhere('userKey = : userKey');
+            ->andWhere('itemId = :itemId')
+            ->andWhere('itemType = :itemType')
+            ->andWhere('userKey = :userKey');
         return $builder->execute()->fetchColumn(0);
     }
 
