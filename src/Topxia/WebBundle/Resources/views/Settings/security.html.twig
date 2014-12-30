@@ -9,7 +9,7 @@
     {% block body %}
 
     	<div class="row safety-setting">
-    		<div class="col-md-4 tar">
+    		<div class="col-md-2 tar">
     			<span class="esicon esicon-safety {% if progressScore > 90 %}text-success{% elseif progressScore > 60 %}text-warning{% else %}text-danger{% endif %}" style="font-size:32px"></span>
     		</div>
 			<div class="col-md-4">
@@ -31,7 +31,7 @@
 
 	    
 		<div class="row">
-			<div class="col-md-1 col-md-offset-1 
+			<div class="col-md-2 tar
 				{% if hasLoginPassword %} 
 					text-success
 				{% else %}
@@ -55,7 +55,7 @@
 
 	    
 		<div class="row">
-			<div class="col-md-1 col-md-offset-1 
+			<div class="col-md-2 tar
 				{% if hasPayPassword %} 
 					text-success
 				{% else %}
@@ -84,7 +84,7 @@
 
 	    
 		<div class="row">
-			<div class="col-md-1 col-md-offset-1 
+			<div class="col-md-2 tar
 				{% if hasFindPayPasswordQuestion %} 
 					text-success
 				{% else %}
