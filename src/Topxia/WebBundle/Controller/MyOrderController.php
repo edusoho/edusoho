@@ -24,6 +24,7 @@ class MyOrderController extends BaseController
 
     	$conditions = array(
     		'userId' => $user['id'],
+            'status' => $request->get('status')
 		);
 
         $conditions['startTime'] = 0; 
@@ -59,10 +60,15 @@ class MyOrderController extends BaseController
         	$paginator->getPerPageCount()
     	);
 
+
+        $waitToBePaidCountConditions = array('userId' => $user['id'],'status' => 'created');
+        $waitToBePaidCount = $this->getOrderService()->searchOrderCount($waitToBePaidCountConditions);
+        
         return $this->render('TopxiaWebBundle:MyOrder:index.html.twig',array(
         	'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
+            'waitToBePaidCount' => $waitToBePaidCount,
         ));   
     }
 
