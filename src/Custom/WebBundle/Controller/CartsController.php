@@ -97,13 +97,19 @@ class CartsController extends BaseController
 
         $ids = ArrayToolkit::column($carts,'itemId');
         $courses = $this->getCourseService()->findCoursesByIds($ids);
+
         $teacherIds = ArrayToolkit::column($courses,'teacherIds');
         $users = $this->getUsers($teacherIds);
+
+        $favoritedTotal = $this->getCourseService()->findUserFavoritedCourseCount($userId);
+        $favoritedCourses = $this->getCourseService()->findUserFavoritedCourses($userId,0,$favoritedTotal);
+        $favoritedCourses = ArrayToolkit::index($favoritedCourses,'id');
 
         return $this->render('CustomWebBundle:Carts:list.html.twig',array(
             'carts' => $carts,
             'courses' =>$courses,
             'users' => $users,
+            'favoritedCourses' => $favoritedCourses
         ));
     }
 

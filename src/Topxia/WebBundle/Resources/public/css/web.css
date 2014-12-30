@@ -4418,7 +4418,7 @@ a.homework-essay-textarea-pack-up{
 }
 
 .carts-add-num {
-	position:relative;
+	position:absolute;
 	top:-22px;
 	left:30px;
 }

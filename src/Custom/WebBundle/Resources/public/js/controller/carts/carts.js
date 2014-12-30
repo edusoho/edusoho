@@ -121,15 +121,19 @@ define(function(require,exports,module){
         },
 
         _OnClickBatchFavourite: function (e) {
-            if (!confirm('确定收藏选中课程吗？')) {
-                return ;
-            };
             var $btn = $(e.currentTarget);
             var ids = [];
-            this.trigger('selectedItems');
+            var items = [];
+            var self = this;
 
+            this.trigger('selectedItems');
+            items = this.get('cartsIds');
             ids = this.get('selectedItems');
+
             $.post($btn.data('url'),{ids:ids},function(result){
+                $.each(items,function(index,itemId){
+                    self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-favourite-btn]').attr('disabled',true);
+                });
                 Notify.success('收藏成功');
             }).error(function(result){
                 Notify.danger('已经收藏');
@@ -137,14 +141,13 @@ define(function(require,exports,module){
         },
 
         _OnClickSingleFavourite: function (e) {
-            if (!confirm('确定收藏此课程吗？')) {
-                return ;
-            };
+  
             $btn = $(e.currentTarget);
             var id = [];
             id.push($btn.data('itemId'));
             $.post($btn.data('url'),{ids:id},function(result){
                 Notify.success('收藏成功');
+                $btn.attr('disabled',true);
             }).error(function(result){
                 Notify.danger('已经收藏');
             });

@@ -24,6 +24,7 @@
       {% for cart in carts|default(null) %}
           {% if cart.itemType == 'course' %}
           {% set course = courses[cart.itemId] %}
+          {% set favouritedCourseId = favoritedCourses[cart.itemId].id|default(null) %}
               {% include 'CustomWebBundle:Carts:list-tr.html.twig' %}
           {% endif %}
       {% endfor %}
