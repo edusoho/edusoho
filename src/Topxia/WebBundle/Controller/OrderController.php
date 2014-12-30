@@ -11,7 +11,6 @@ class OrderController extends BaseController
 {
     public function showAction(Request $request) 
     {
-
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {

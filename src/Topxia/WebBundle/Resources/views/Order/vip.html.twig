@@ -4,7 +4,8 @@
 <input type="hidden" name="unitType" value="{{unitType|default('')}}"/>
 <input type="hidden" name="type" value="{{type|default('')}}"/>
 <ul class="course-wide-list">
-	{% include "VipBundle:Vip:vip-level.html.twig" with { buyButtonStatus: "hidden" } %}
+	{% set vipBuyType = setting("vip.buyType")|default(10) %}
+	{% include "VipBundle:Vip:vip-level.html.twig" with { buyButtonStatus: "hidden", buyType: vipBuyType } %}
 </ul>
 <br>
 <div class="row">
