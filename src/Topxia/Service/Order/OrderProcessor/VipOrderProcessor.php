@@ -91,6 +91,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             }
         }
 
+        $totalPrice = intval($totalPrice*100)/100;
+
         return array(
             'level' => empty($level) ? null : $level,
 			'unitType' => empty($unitType) ? null : $unitType,
