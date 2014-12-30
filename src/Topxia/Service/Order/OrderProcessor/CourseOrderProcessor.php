@@ -109,8 +109,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             	$fields['coinPayAmount'], 
             	$fields["payPassword"]
             );
-
-            $amount = $totalPrice - $payAmount;
+            $totalPrice = (float)$totalPrice;
+            $amount = ($totalPrice*100 - $payAmount*100)/100;
         } else {
             $amount = $totalPrice;
         }
@@ -137,7 +137,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = 0;
         }
         $amount = NumberToolkit::roundUp($amount);
-
         return array(
         	$amount, 
         	$totalPrice, 
