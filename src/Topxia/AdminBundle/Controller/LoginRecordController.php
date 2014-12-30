@@ -13,7 +13,7 @@ class LoginRecordController extends BaseController
     	$conditions = $request->query->all();
 
         $conditions['action'] ='login_success';
-        if(isset($conditions['email'])){
+        if(!empty($conditions['email'])){
             $user=$this->getUserService()->getUserByEmail($conditions['email']) ;
             $conditions['userId']=empty($user) ? -1 : $user['id'];
         }
