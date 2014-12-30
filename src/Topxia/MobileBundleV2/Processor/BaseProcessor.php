@@ -5,6 +5,8 @@ namespace Topxia\MobileBundleV2\Processor;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
+
+    static $apiVersionRange = "2.3.2";
     public $formData;
     public $controller;
     public $request;
@@ -209,12 +211,12 @@ class BaseProcessor {
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
-            'host' => $request->getSchemeAndHttpHost() ,
+            'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "2.3.0"
+                "max" => BaseProcessor::$apiVersionRange
             ) ,
         );
     }
