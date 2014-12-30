@@ -3293,6 +3293,8 @@ body {
 
 .userpage-header-info .about {
 	color: #777;
+	word-break: break-all;
+	word-wrap: break-word
 }
 
 .userpage-header-info .actions {
