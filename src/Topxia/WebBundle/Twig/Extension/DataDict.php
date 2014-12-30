@@ -231,6 +231,9 @@ class DataDict
             'orderSn'=>'订单号',
             'userName'=>'用户名',
         ),
+        'coinOrderType'=>array(
+            'userName'=>'用户名',
+        ),
 	);
 
 	public static function dict($type)

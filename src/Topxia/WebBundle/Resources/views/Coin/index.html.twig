@@ -36,10 +36,10 @@
         <div class="coin-block">
             <div class="coin-text">
               {% if setting('coin.coin_picture') %}
-                <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片"  >
+                <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="30px" >
               {% endif %}
               <strong>{{account.cash|default(0)}}</strong>
-              {# setting('coin.coin_name') #}
+              <!-- {{setting('coin.coin_name')}} -->
             </div>
 
 
