@@ -6,8 +6,10 @@ define(function(require, exports, module) {
 	exports.run = function() {
 		var cashRateElement = $('[role="cash-rate"]');
 		var cashRate = 1;
-		if($('[role="cash-rate"]').val() != "")
+		if($('[role="cash-rate"]').val() != ""){
 			cashRate = $('[role="cash-rate"]').val();
+			cashRate = parseInt(cashRate*100)/100;
+		}
 		var validator = new Validator({
             element: '#order-create-form',
             triggerType: 'change',
@@ -46,8 +48,9 @@ define(function(require, exports, module) {
 			if(accountCash>coinNum) {
 				coinNum = coinNum.toFixed(2);
 				if(cashRateElement.data("coursePriceShowType") == "RMB"){
-					var cashDiscount = coinNum/cashRate;
-					$('[role="cash-discount"]').text(cashDiscount.toFixed(2));
+					var cashDiscount = (coinNum*100)/(cashRate*100);
+					cashDiscount = parseInt(cashDiscount*100)/100;
+					$('[role="cash-discount"]').text(cashDiscount);
 				}else{
 					$('[role="cash-discount"]').text(coinNum);
 				}

@@ -34,7 +34,11 @@ class CashServiceImpl extends BaseService implements CashService
         }
 
         $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"], true);
-
+        if(empty($account)){
+            $account = $this->getCashAccountService()->createAccount($outFlow["userId"]);
+            $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"], true);
+        }
+        
         if($account["cash"] < $outFlow["amount"]) {
             return false;
         }
@@ -65,6 +69,10 @@ class CashServiceImpl extends BaseService implements CashService
         }
 
         $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"]);
+        if(empty($account)){
+            $account = $this->getCashAccountService()->createAccount($inflow["userId"]);
+            $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"], true);
+        }
 
         $inflow["cashType"] = "Coin";
         $inflow["type"] = "inflow";

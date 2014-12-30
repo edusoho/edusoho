@@ -2,6 +2,7 @@
 namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
+use Exception;
 
 class BaseProcessor {
 	protected function afterCoinPay($coinEnabled, $priceType, $cashRate, $coinPayAmount, $payPassword)
@@ -19,7 +20,6 @@ class BaseProcessor {
         } else if ($priceType == "Coin") {
             $coinPreferentialPrice = $coinPayAmount;
         }
-
         return $coinPreferentialPrice;
 	}
 

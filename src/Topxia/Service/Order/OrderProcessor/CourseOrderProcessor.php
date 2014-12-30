@@ -109,14 +109,16 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             	$fields['coinPayAmount'], 
             	$fields["payPassword"]
             );
-
-            $amount = $totalPrice - $payAmount;
+            $totalPrice = (float)$totalPrice;
+            $amount = ($totalPrice*100 - $payAmount*100)/100;
         } else {
             $amount = $totalPrice;
         }
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        if(!empty($couponApp) && $fields["couponCode"]) {
+        $couponSetting = $this->getSettingService()->get("coupon");
+
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
             list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
                 $fields["couponCode"], 
                 $targetId, 
@@ -130,13 +132,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;
         }
-
         if($amount<0){
             $amount = 0;
         }
-
         $amount = NumberToolkit::roundUp($amount);
-
         return array(
         	$amount, 
         	$totalPrice, 
