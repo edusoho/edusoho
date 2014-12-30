@@ -128,25 +128,25 @@ class CourseController extends BaseController
 		$this->getCourseService()->hitCourse($id);
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
-		// if ($member && empty($member['locked'])) {
-		// 	$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-		// 	//判断用户deadline到了，但是还是限免课程，将用户deadline延长
-		// 	if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
-		// 		$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
-		// 	}
+		if ($member && empty($member['locked'])) {
+			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
+			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
+			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
+				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
+			}
 
-		// 	return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
-		// 		'course' => $course,
-		// 		'type' => $course['type'],
-		// 		'member' => $member,
-		// 		'items' => $items,
-		// 		'learnStatuses' => $learnStatuses,
-		// 		'currentTime' => $currentTime,
-		// 		'weeks' => $weeks,
-		// 		'files' => ArrayToolkit::index($files,'id'),
-		// 		'ChargeCoin'=> $ChargeCoin
-		// 	));
-		// }
+			// return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
+			// 	'course' => $course,
+			// 	'type' => $course['type'],
+			// 	'member' => $member,
+			// 	'items' => $items,
+			// 	'learnStatuses' => $learnStatuses,
+			// 	'currentTime' => $currentTime,
+			// 	'weeks' => $weeks,
+			// 	'files' => ArrayToolkit::index($files,'id'),
+			// 	'ChargeCoin'=> $ChargeCoin
+			// ));
+		}
 		
 		$groupedItems = $this->groupCourseItems($items);
 		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
@@ -169,7 +169,6 @@ class CourseController extends BaseController
 				$freeLesson=$freeLesson[0];
 		}
 
-		
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -275,8 +274,16 @@ class CourseController extends BaseController
 				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
 			}
 		}
-
 		$nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
+
+		if(!empty($member)){
+			$isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
+			if ($member['levelId'] > 0) {
+				$vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+			} else {
+				$vipChecked = 'ok';
+			}
+		}
 		return $this->render("TopxiaWebBundle:Course:course-header.html.twig", array(
 			'course' => $course,
 			'tags' => $tags,
@@ -284,7 +291,9 @@ class CourseController extends BaseController
 			'hasFavorited' => $hasFavorited,
 			'courseMemberLevel' => $courseMemberLevel,
 			'checkMemberLevelResult' => $checkMemberLevelResult,
-			'nextLearnLesson' => $nextLearnLesson
+			'nextLearnLesson' => $nextLearnLesson,
+			'isNonExpired' => empty($isNonExpired)?null:$isNonExpired,
+			'vipChecked' => empty($vipChecked)?null:$vipChecked
 		));
 	}
 
