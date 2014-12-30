@@ -4531,6 +4531,10 @@ a.homework-essay-textarea-pack-up{
 	padding-top: 30px;
 }
 
+.order-item {
+	line-height: 30px;
+}
+
 .order-item .order-item-title {
 	padding-left: 20px;
 	height: 48px;
@@ -4613,6 +4617,72 @@ a.homework-essay-textarea-pack-up{
 	font-size: 14px;
 	margin-left: 15px;
 }
+
+.order-detail {
+	width: auto;
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+	min-height: 188px;
+	padding: 20px;
+}
+.order-price {
+	font-size: 24px;
+}
+
+.order-count {
+	padding: 20px 0 40px 0;
+}
+
+.order-item {
+	padding: 0 5px;
+}
+
+.order-panel {
+	padding: 20px 20px 40px 20px;
+}
+
+.course-text {
+	display: block;
+	font-size: 14px;
+	margin: 6px 0;
+}
+
+.coin-block {
+	padding: 40px 15px 25px 15px;
+	float: left;
+}
+
+.coin-text {
+	float: left;
+}
+
+.coin-text img {
+	margin: 0 10px 14px 0;
+	/*opacity: .5;*/
+}
+
+.coin-text strong {
+	font-size: 30px;
+	color: #ff5d42;
+}
+
+.coin-btn {
+	float: left;
+	margin: 4px 0 0 55px;
+}
+
+.table.order-table > tbody > tr > td,
+.table.order-table > tbody > tr > th {
+	padding:  10px;
+	line-height: 22px;
+}
+
+.money-text {
+	font-size: 22px;
+	margin-right: 6px;
+}
+
 
 .coupon-detail input {
 	height: 27px;
