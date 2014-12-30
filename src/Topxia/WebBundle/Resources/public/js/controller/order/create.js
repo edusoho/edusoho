@@ -105,7 +105,7 @@ define(function(require, exports, module) {
 				$('input[name="shouldPayMoney"]').val(totalPrice);
 			} else {
 				var payRmb = totalPrice/cashRate;
-				var shouldPayMoney = payRmb.toFixed(2);
+				var shouldPayMoney = parseFloat(payRmb.toFixed(2));
 				if(payRmb>shouldPayMoney) {
 					shouldPayMoney=shouldPayMoney+0.01;
 				}
