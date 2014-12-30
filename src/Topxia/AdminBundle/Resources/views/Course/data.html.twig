@@ -5,7 +5,8 @@
 {% set menu = 'course-data' %}
 
 {% block main %}
-    <div class="page-header">
+    <div class="page-header clearfix">
+    <h1 class="pull-left">数据管理</h1>
     </div>
     <form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">

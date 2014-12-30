@@ -7,9 +7,8 @@
 
  
 {% block main %}
+    <div class="page-header"><h1>虚拟币管理</h1></div>
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
-
-    <div class="page-header"><h1>充值订单</h1></div>
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -36,7 +35,7 @@
           <th>购买者</th>
           <th>付款方式</th>
           <th>创建时间</th>
-          <th>查看</th>
+          {# <th>查看</th> #}
         </tr>
 
        {% for order in orders %}
@@ -65,9 +64,9 @@
           <td>
             {{order.createdTime|date('Y-m-d H:i:s')}}
           </td> 
-          <td>
+{#           <td>
             <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
-          </td>
+          </td> #}
        </tr>
        {% endfor %}
       </table>
