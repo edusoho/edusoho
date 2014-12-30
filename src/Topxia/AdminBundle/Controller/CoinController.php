@@ -24,6 +24,8 @@ class CoinController extends BaseController
         $coinSettingsSaved = $this->getSettingService()->get('coin',array());
 
         $default = array(
+          'coin_enabled' => 0,
+          'cash_rate' => 1,
           'coin_name' => '虚拟币',
           'coin_content' => '',
           'coin_picture' => '',
@@ -38,7 +40,8 @@ class CoinController extends BaseController
             $fields = $request->request->all();
 
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
-                'coin_name', 
+                 'coin_enabled', 'cash_rate',
+                 'coin_name',
                 'coin_content', 'coin_picture',
                 'coin_picture_50_50','coin_picture_30_30',
                 'coin_picture_20_20','coin_picture_10_10'
