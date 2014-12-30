@@ -90,6 +90,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 
 .price-count{
 	color:red;
+	font-size: 12px;
 }
 
 .popover-teachers {
@@ -99,6 +100,9 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	white-space: nowrap;
 }
 
+.carts-text-delete {
+	font-size: 6px;
+}
 .popover-empty{
 	color: #999;
 	padding:5px 20px;
