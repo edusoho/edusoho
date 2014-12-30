@@ -26,7 +26,7 @@ use Symfony\Component\Filesystem\Filesystem;
     {
       $this->createDao('Cash.CashFlowDao')->getConnection()->beginTransaction();
       try{
-      $sql = "select * from orders where amount > 0 and id <= 50000 and status ='paid'";
+      $sql = "select * from orders where amount > 0 and id <= 30000 and status ='paid'";
       $orders = $this->getConnection()->fetchAll($sql, array());
 
       if(empty($orders) || count($orders)==0){

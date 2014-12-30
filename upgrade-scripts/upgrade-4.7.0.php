@@ -107,13 +107,13 @@ use Symfony\Component\Filesystem\Filesystem;
         $connection->exec("DROP INDEX orderSn ON cash_flow;");
       }
 
-      $this->getConnection()->beginTransaction();
+/*      $this->getConnection()->beginTransaction();
       try{
         $this->process();
         $this->getConnection()->commit();
       } catch(\Exception $e) {
         $this->getConnection()->rollback();
-      }
+      }*/
     }
 
     protected function process(){
