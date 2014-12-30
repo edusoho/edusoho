@@ -248,14 +248,6 @@ course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
 
-course_order_pay_return:
-    pattern:  /course/order/pay/{name}/return
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:payReturn }
-
-course_order_pay_notify:
-    pattern:  /course/order/pay/{name}/notify
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:payNotify }
-
 course_order_refund:
     pattern:  /course/{id}/order/refund
     defaults: { _controller: TopxiaWebBundle:CourseOrder:refund }
