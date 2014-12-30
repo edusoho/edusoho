@@ -185,7 +185,6 @@ use Symfony\Component\Filesystem\Filesystem;
         "); 
       }
 
-
       $this->getConnection()->beginTransaction();
       try{
         $this->process();
