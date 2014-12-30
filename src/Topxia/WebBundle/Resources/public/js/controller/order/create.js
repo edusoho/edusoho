@@ -105,9 +105,13 @@ define(function(require, exports, module) {
 				$('input[name="shouldPayMoney"]').val(totalPrice);
 			} else {
 				var payRmb = totalPrice/cashRate;
+				var shouldPayMoney = parseFloat(payRmb.toFixed(2));
+				if(payRmb>shouldPayMoney) {
+					shouldPayMoney=shouldPayMoney+0.01;
+				}
 				$('[role="pay-coin"]').text(totalPrice);
-				$('[role="pay-rmb"]').text(payRmb.toFixed(2));
-				$('input[name="shouldPayMoney"]').val(payRmb.toFixed(2));
+				$('[role="pay-rmb"]').text(shouldPayMoney);
+				$('input[name="shouldPayMoney"]').val(shouldPayMoney);
 			}
 		}
 
