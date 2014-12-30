@@ -14,6 +14,10 @@
         <div class="panel-body">
           <form id="order-create-form" method="post" action="{{path('order_create')}}" 
           >
+
+            <input style="display:none">{# Prevent autocompleting #}
+            <input type="password" style="display:none">{# Prevent autocompleting #}
+
           	{% if order|default(null) %}
             <input type="hidden" name="orderId" value="{{order.id}}"/>
             {% endif %}
