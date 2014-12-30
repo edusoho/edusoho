@@ -31,6 +31,7 @@
     {% endfor %}
   </ul>
   <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right" target="_blank" style="margin-bottom:5px">去购物车结算</a>
+  共<span class="price-count">{{ cartsCount() }}</span>件商品
 </div>
 {% else %}
   <div class="popover-empty">您的购物车还是空的，赶紧行动吧！<a href="{{ path('homepage') }}" target="_blank">去首页看看</a></div>
