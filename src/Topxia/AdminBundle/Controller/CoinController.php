@@ -9,6 +9,11 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Symfony\Component\HttpFoundation\Response;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+use Symfony\Component\Filesystem\Filesystem;
  
 class CoinController extends BaseController
 {
@@ -24,16 +29,23 @@ class CoinController extends BaseController
           'coin_name' => '虚拟币',
           'coin_content' => '',
           'coin_picture' => '',
+          'coin_picture_50_50' => '',
+          'coin_picture_30_30' => '',
+          'coin_picture_20_20' => '',
+          'coin_picture_10_10' => '',
           'cash_rate' => 1,
         );
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
                 'cash_rate', 'coin_enabled', 
                 'price_type', 'coin_name', 
-                'coin_content', 'coin_picture'
+                'coin_content', 'coin_picture',
+                'coin_picture_50_50','coin_picture_30_30',
+                'coin_picture_20_20','coin_picture_10_10'
             ));
             if (isset($coinSettingsPosted['cash_rate']) && !is_numeric($coinSettingsPosted['cash_rate'])){
               $this->setFlashMessage('danger', '错误，虚拟币汇率设置填入的必须为数字！');
@@ -54,6 +66,31 @@ class CoinController extends BaseController
         }
 
         return $this->settingsRenderedPage($coinSettingsSaved);
+    }
+    
+    private function savePicture(Request $request,$size)
+    {
+        $file = $request->files->get('coin_picture');
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
+
+        $pictureFilePath = $directory.'/'.$filename;
+        $pathinfo = pathinfo($pictureFilePath);
+
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($pictureFilePath);
+
+        $image = $rawImage->copy();
+        $image->resize(new Box($size, $size));
+        $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $imageName = "{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $image = $image->save($filePath, array('quality' => 100));
+
+        $coin = $this->getSettingService()->get('coin',array());
+        $name = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$imageName}";
+        $path = ltrim($name, '/');
+
+        return array($image,$path);
     }
 
     public function modelAction(Request $request)
@@ -152,12 +189,27 @@ class CoinController extends BaseController
         }
 
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-        
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file = $file->move($directory, $filename);
+
+        $size = getimagesize($file);
+        $width = $size[0];
+        $height = $size[1];
+         if ($width < 50 || $height < 50 || $width != $height) {
+            throw $this->createAccessDeniedException('图片大小不正确，请上传超过50*50的等比例图片！');
+        }
+
+        list($coin_picture_50_50,$url_50_50) = $this->savePicture($request,50);
+        list($coin_picture_30_30,$url_30_30)  = $this->savePicture($request,30);
+        list($coin_picture_20_20,$url_20_20)  = $this->savePicture($request,20);
+        list($coin_picture_10_10,$url_10_10)  = $this->savePicture($request,10);
+
         $coin = $this->getSettingService()->get('coin',array());
-        $coin['coin_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$filename}";
-        $coin['coin_picture'] = ltrim($coin['coin_picture'], '/');
+
+        $coin['coin_picture'] = $coin['coin_picture_50_50'] = $url_50_50;
+        $coin['coin_picture_30_30'] = $url_30_30;
+        $coin['coin_picture_20_20'] = $url_20_20;
+        $coin['coin_picture_10_10'] = $url_10_10;
 
         $this->getSettingService()->set('coin', $coin);
 
@@ -165,7 +217,15 @@ class CoinController extends BaseController
 
         $response = array(
             'path' => $coin['coin_picture'],
+            'path_50_50' => $coin['coin_picture_50_50'],
+            'path_30_30' => $coin['coin_picture_30_30'],
+            'path_20_20' => $coin['coin_picture_20_20'],
+            'path_10_10' => $coin['coin_picture_10_10'],
             'url' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture']),
+            'coin_picture_50_50' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_50_50']),
+            'coin_picture_30_30' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_30_30']),
+            'coin_picture_20_20' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_20_20']),
+            'coin_picture_10_10' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_10_10']),
         );
 
         return new Response(json_encode($response));

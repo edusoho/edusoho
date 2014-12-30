@@ -83,11 +83,24 @@
           <label for="coin_picture">虚拟币图片</label>
         </div>
         <div class="col-md-7 controls">
-          <div id="coin-picture-container">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
+        <div >
+
+          <div id="coin-picture-largeSize" style="display:inline;">{% if setting('coin.coin_picture') %}<img src="{{ asset(setting('coin.coin_picture')) }}">{% endif %}</div>
+          <div id="coin-picture-middleSize" style="display:none;">{% if setting('coin.coin_picture_30_30') %}<img src="{{ asset(setting('coin.coin_picture_30_30')) }}">{% endif %}</div>
+          <div id="coin-picture-smallSize" style="display:none;">{% if setting('coin.coin_picture_20_20') %}<img src="{{ asset(setting('coin.coin_picture_20_20')) }}">{% endif %}</div>
+          <div id="coin-picture-extraSmallSize" style="display:none;">{% if setting('coin.coin_picture_10_10') %}<img src="{{ asset(setting('coin.coin_picture_10_10')) }}">{% endif %}</div>
+        </div>
+
           <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
           <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
-          <p class="help-block">建议图片不超过50*50，文件大小小于200k</p>
+          <p class="help-block">
+          请上传png, gif, jpg格式的超过50*50的等比例图片，否则无法上传
+          </p>
           <input type="hidden" name="coin_picture" value="{{setting('coin.coin_picture') }}">
+          <input type="hidden" name="coin_picture_50_50" value="{{setting('coin.coin_picture_50_50') }}">
+          <input type="hidden" name="coin_picture_30_30" value="{{setting('coin.coin_picture_30_30') }}">
+          <input type="hidden" name="coin_picture_20_20" value="{{setting('coin.coin_picture_20_20') }}">
+          <input type="hidden" name="coin_picture_10_10" value="{{setting('coin.coin_picture_10_10') }}">
         </div>
     </div>
 
