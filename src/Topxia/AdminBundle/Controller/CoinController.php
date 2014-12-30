@@ -24,8 +24,6 @@ class CoinController extends BaseController
         $coinSettingsSaved = $this->getSettingService()->get('coin',array());
 
         $default = array(
-          'coin_enabled' => 0,
-          'price_type'=>'RMB',
           'coin_name' => '虚拟币',
           'coin_content' => '',
           'coin_picture' => '',
@@ -33,7 +31,6 @@ class CoinController extends BaseController
           'coin_picture_30_30' => '',
           'coin_picture_20_20' => '',
           'coin_picture_10_10' => '',
-          'cash_rate' => 1,
         );
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
 
@@ -41,25 +38,15 @@ class CoinController extends BaseController
             $fields = $request->request->all();
 
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
-                'cash_rate', 'coin_enabled', 
-                'price_type', 'coin_name', 
+                'coin_name', 
                 'coin_content', 'coin_picture',
                 'coin_picture_50_50','coin_picture_30_30',
                 'coin_picture_20_20','coin_picture_10_10'
             ));
-            if (isset($coinSettingsPosted['cash_rate']) && !is_numeric($coinSettingsPosted['cash_rate'])){
-              $this->setFlashMessage('danger', '错误，虚拟币汇率设置填入的必须为数字！');
-              return $this->settingsRenderedPage($coinSettingsSaved);
-            }
             
             $this->getSettingService()->set('coin', $coinSettingsPosted);
             $this->getLogService()->info('system', 'update_settings', "更新Coin虚拟币设置", $coinSettingsPosted);
             $this->setFlashMessage('success', '虚拟币设置已保存！');
-
-            if($coinSettingsPosted["coin_enabled"] == 1
-                && $coinSettingsPosted["price_type"] == "Coin") {
-                    $this->processPrice($coinSettingsPosted["price_type"], $coinSettingsPosted["cash_rate"]);
-            }
 
             return $this->settingsRenderedPage($coinSettingsPosted);
 
