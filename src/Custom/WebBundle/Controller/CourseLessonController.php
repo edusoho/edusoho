@@ -21,6 +21,7 @@ class CourseLessonController extends BaseController
         	$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 			$isModal = true;
 		}
+        $lessonId=$lesson['id'];
         $user = $this->getCurrentUser();
 
         if (empty($lesson)) {
