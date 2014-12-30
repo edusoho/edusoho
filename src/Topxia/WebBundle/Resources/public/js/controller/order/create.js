@@ -26,7 +26,7 @@ define(function(require, exports, module) {
 
 		function afterCouponPay(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
-			var couponTotalPrice = $('[role="coupon-price"]').find(".price_r_num").text();
+			var couponTotalPrice = $('[role="coupon-price"]').find("[role='price']").text();
 			if($.trim(couponTotalPrice) == "" || isNaN(couponTotalPrice)){
 				couponTotalPrice = 0;
 			} else {
@@ -151,7 +151,7 @@ define(function(require, exports, module) {
 			$('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
 			$('[role="code-notify"]').hide();
-			$('[role="coupon-price"]').find(".price_r_num").text(0);
+			$('[role="coupon-price"]').find("[role='price']").text(0);
 			$('[role="code-notify"]').text("");
 			$('[role="coupon-code"]').val("");
 			$(this).hide();
@@ -175,7 +175,7 @@ define(function(require, exports, module) {
 					$('[role="code-notify"]').css("color","green").text("优惠码可用");
 					if(cashRateElement.data("coursePriceShowType") == "RMB") {
 						var couponPrice = parseFloat(data.decreaseAmount).toFixed(2);
-						$('[role="coupon-price"]').find(".price_r_num").text(couponPrice);
+						$('[role="coupon-price"]').find("[role='price']").text(couponPrice);
 					} else {
 						var coinPrice = data.decreaseAmount*cashRate;
 						var totalPrice = parseFloat($('[role="total-price"]').text());
@@ -183,7 +183,7 @@ define(function(require, exports, module) {
 							coinPrice = totalPrice;
 						}
 						coinPrice = parseFloat(coinPrice).toFixed(2);
-						$('[role="coupon-price"]').find(".price_r_num").text(coinPrice);
+						$('[role="coupon-price"]').find("[role='price']").text(coinPrice);
 					}
 				}
 				conculatePrice();

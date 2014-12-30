@@ -7,12 +7,13 @@
 {% block main_body %}
   {#search form#}
   <ul class="nav nav-pills" role="tablist">
-    <li role="presentation"><a href="/my/coin?type=">全部订单</a></li>
-    <li role="presentation" class="active"><a href="/my/coin?type=inflow">待付款<span class="badge">6</span></a></li>
-    <li role="presentation"><a href="/my/coin?type=outflow">已付款</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">全部订单</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">待付款<span class="badge">{{waitToBePaidCount}}</span></a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">已付款</a></li>
   </ul>
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <input type="hidden" name="status" value="{{app.request.query.get('status')}}"> 
     <div class="form-group">
       <select class="form-control" name="lastHowManyMonths"  onchange="submit();" >
         {% set options = {'oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月','':'全部记录'} %}

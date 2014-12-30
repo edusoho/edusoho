@@ -104,7 +104,7 @@
               <div class="pull-right order-count">
                 订单金额：
                 {# <span role="total-price">{{totalPrice}}</span> #}
-                <span class="order-price">{{totalPrice}}</span>
+                <span role="total-price" class="order-price">{{totalPrice}}</span>
                 {% if priceType|default('RMB') == "RMB" %}
                   元
                 {% elseif priceType|default('RMB') == "Coin" %}
@@ -115,28 +115,7 @@
             </div>
             
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType%}
-            	{# {% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %} #}
-             <div class="order-item clearfix">
-                <div class="order-item-title">
-                  <i class="order-item-title-icon">
-                    <img src="/bundles/topxiaweb/img/order-pay/iconfont-coupon.png" width="25px">
-                  </i>
-                  <h4 class="title">优惠码</h4>
-                  <a id="coupon-code-btn" class="add-coun btn" href="javascript:;">输入优惠码</a>
-                  <a href="javascript:;" class="cancel" role="cancel-coupon" style="display: none;">取消使用</a>
-                  <div class="price_r" role="coupon-price">
-                      <span class="price_r_mark">-</span>
-                      <span class="order-price">0.00</span>
-                      <span>{% if priceType|default("RMB") == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
-                  </div>
-                </div>
-                <div class="coupon-detail" >
-                  <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-id="{{courses[0]['id']}}" data-amount="{{courses[0]['price']}}"/>  
-                  <span role="code-notify" class="code-notify"></span>
-                  <div role="no-use-coupon-code" style="display: block;">没有使用优惠码</div>
-                </div>
-              </div>
-
+            	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}
