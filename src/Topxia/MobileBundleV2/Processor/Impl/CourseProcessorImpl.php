@@ -81,7 +81,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($thread)) {
             return $this->createErrorResponse('not_thread', "问答不存在或已删除");
         }
-<<<<<<< HEAD
 
 		$content = $this->getParam("content", '');
 		$content = $this->uploadImage($content);
@@ -279,10 +278,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 	public function getCourseNotes()
 	{
-	    	$start = $this->getParam("start", 0);
-	    	$limit = $this->getParam("limit", 10);
-	    	$courseId = $this->getParam("courseId");
-=======
+    	$start = $this->getParam("start", 0);
+    	$limit = $this->getParam("limit", 10);
+    	$courseId = $this->getParam("courseId");
         
         $content = $this->getParam("content", '');
         $content = $this->uploadImage($content);
@@ -473,7 +471,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
             return $thread;
         }, $threads);
->>>>>>> ac50743f2ef070a48776ebe986d1a80d3a6a5f6b
 
         $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         
@@ -1045,7 +1042,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $conditions['sort'] = $sort;
         
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
-<<<<<<< HEAD
 		$result = array(
 			"start"=>$start,
 			"limit"=>$limit,
@@ -1096,17 +1092,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 			);
 		return $result;
 	}
-
-
-=======
-        $result  = array(
-            "start" => $start,
-            "limit" => $limit,
-            "total" => $total,
-            "data" => $this->controller->filterCourses($courses)
-        );
-        return $result;
-    }
     
     public function getLearnedCourse()
     {
@@ -1175,8 +1160,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
     
-    
->>>>>>> ac50743f2ef070a48776ebe986d1a80d3a6a5f6b
     public function getLearnStatus()
     {
         $courseId = $this->getParam("courseId");
