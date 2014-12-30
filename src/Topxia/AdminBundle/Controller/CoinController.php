@@ -36,10 +36,10 @@ class CoinController extends BaseController
           'cash_rate' => 1,
         );
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
-// var_dump($coinSettingsSaved);
+
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            var_dump($fields);
+
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
                 'cash_rate', 'coin_enabled', 
                 'price_type', 'coin_name', 
@@ -68,7 +68,7 @@ class CoinController extends BaseController
         return $this->settingsRenderedPage($coinSettingsSaved);
     }
     
-    public function savePicture(Request $request,$size)
+    private function savePicture(Request $request,$size)
     {
         $file = $request->files->get('coin_picture');
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
