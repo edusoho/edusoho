@@ -3,6 +3,10 @@
         <a href="{{ url('admin_coin_records') }}">虚拟币账单
         </a>
     </li> #}
+    <li class="{% if submenu == 'model' %}active{% endif %}">
+        <a href="{{ url('admin_coin_model') }}">模式设置
+        </a>
+    </li>   
     <li class="{% if submenu == 'settings' %}active{% endif %}">
         <a href="{{ url('admin_coin_settings') }}">虚拟币设置
         </a>

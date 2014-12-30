@@ -56,6 +56,94 @@ class CoinController extends BaseController
         return $this->settingsRenderedPage($coinSettingsSaved);
     }
 
+    public function modelAction(Request $request)
+    {   
+        $coinSettings = $this->getSettingService()->get('coin',array());
+
+        if($request->getMethod()=="POST"){
+
+            $set=$request->request->all();
+
+            if($set['cash_model']=="none"){
+
+                $coinSettings['cash_model']="none";
+                $coinSettings['cash_rate']=$set['cash_rate'];
+                $coinSettings['coin_enabled']=0;
+
+                $this->getSettingService()->set('coin', $coinSettings);
+                $this->setFlashMessage('success', '虚拟币模式已保存！');
+                goto response;
+
+            }
+
+            $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
+
+            return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
+            'set' => $set,
+            'courses'=>$courses
+            ));
+
+        }
+
+        if($request->query->get('set')){
+
+            $coinSettings=$request->query->get('set');
+        }
+
+        response:
+        return $this->render('TopxiaAdminBundle:Coin:coin-model.html.twig',array(
+            'coinSettings' => $coinSettings,
+        ));
+    }
+
+    public function modelSaveAction(Request $request)
+    {   
+        $coinSettings = $this->getSettingService()->get('coin',array());
+
+        if($request->getMethod()=="POST"){
+
+            $data=$request->request->all();
+
+            $coinSettings['coin_enabled']=1;
+            $coinSettings['cash_rate']=$data['cash_rate'];
+            
+            if($data['cash_model']=="deduction"){
+
+                $coinSettings['price_type']="RMB";
+                $coinSettings['cash_model']="deduction";
+                $this->updateCoursesPrice($data['course-rmb'],$data['cash_rate']);
+
+            }else{
+
+                $coinSettings['price_type']="Coin";
+                $coinSettings['cash_model']="currency";
+                $this->updateCoursesCashPrice($data["course-cash"]);
+            }
+
+            $this->getSettingService()->set('coin', $coinSettings);
+        }
+
+        $this->setFlashMessage('success', '虚拟币模式已保存！');
+        return $this->redirect($this->generateUrl('admin_coin_model', array(
+        )));
+    }
+
+    private function updateCoursesPrice($data,$rate)
+    {   
+        foreach ($data as $key => $value) {
+            
+            $this->getCourseService()->updateCourse($key,array('price'=>$value,'coinPrice'=>$value*$rate));
+        }
+    }
+
+    private function updateCoursesCashPrice($data)
+    {
+        foreach ($data as $key => $value) {
+           
+            $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
+        }
+    }
+
     public function pictureAction(Request $request)
     {
         $file = $request->files->get('coin_picture');
