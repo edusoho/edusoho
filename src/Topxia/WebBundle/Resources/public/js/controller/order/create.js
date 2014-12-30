@@ -58,7 +58,7 @@ define(function(require, exports, module) {
 			} else {
 				accountCash = accountCash.toFixed(2);
 				if(cashRateElement.data("coursePriceShowType") == "RMB"){
-					var cashDiscount = accountCash/cashRate;
+					var cashDiscount = (accountCash*100)/(cashRate*100);
 					cashDiscount = parseInt(cashDiscount*100)/100;
 					$('[role="cash-discount"]').text(cashDiscount);
 				}else{

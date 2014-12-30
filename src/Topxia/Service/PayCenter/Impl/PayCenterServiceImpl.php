@@ -23,16 +23,20 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 				return array(true, $order);
 			}
 
-			$outFlow = $this->proccessCashFlow($order);
+			if($order["status"] == "created"){
+				$outFlow = $this->proccessCashFlow($order);
 
-			if($outFlow) {
-				$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
-				list($success, $order) = $this->processOrder($payData, false);
-			} else {
-				$order = $this->getOrderService()->cancelOrder($order["id"], '余额不足扣款不成功');
+				if($outFlow) {
+					$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
+					list($success, $order) = $this->processOrder($payData, false);
+				} else {
+					$order = $this->getOrderService()->cancelOrder($order["id"], '余额不足扣款不成功');
+					$success = false;
+				}
+			}else{
 				$success = false;
 			}
-	        
+
             $connection->commit();
             return array($success, $order);
 		} catch (\Exception $e) {
