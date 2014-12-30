@@ -141,3 +141,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	height: 50px;
 	padding-bottom: 10px;
 }
+
+.course-list {
+	height: 250px;
+}
