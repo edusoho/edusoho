@@ -1137,7 +1137,27 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', "您尚未登录！");
         }
 
-        // $conditions =array()
-        // $thread = $this->controller->getThreadService()->searchThreadCountInCourseIds()
+        $conditions = array(
+            'userId' => $user['id']
+        );
+        //问答数量
+        $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
+
+        $conditions['type'] = 'discussion';
+        //话题数量
+        $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
+
+        $conditions['userId'] = $user['id'];
+        //笔记数量
+        $noteSum = $this->controller->getNoteService()->searchNoteCount($conditions);
+
+        //考试数量
+        $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
+
+        return array('thread' => $threadSum,
+        			'discussion' => $discussionSum,
+        			'note' => $noteSum,
+        			'testSum' => $testSum );
+
     }
 }
