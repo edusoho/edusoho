@@ -18,7 +18,11 @@
     {{ web_macro.flash_messages() }} 
 
   {%  if not hasSecurityQuestions  %}
-    <form id="settings-security-questions-form" class="form-horizontal" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}> 
+
+    <form id="settings-security-questions-form" class="form-horizontal" autocomplete="off" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}> 
+      
+      <input style="display:none">{# Prevent autocompleting #}
+      <input type="password" style="display:none">
 
       <div class="form-group row"> 
         <div  class="col-md-3 col-md-offset-1 control-label"><label for="question-1">安全问题1</label></div> 
@@ -31,7 +35,7 @@
       <div class="form-group row"> 
         <div  class="col-md-3 col-md-offset-1 control-label"><label for="answer-1">答案</label></div> 
         <div class=" col-md-4"> 
-          <input type="text" id="answer-1" name="answer-1" class="form-control" value="" placeholder="安全问题1答案"> 
+          <input type="text" id="answer-1" name="answer-1" class="form-control" autocomplete="off" value="" placeholder="安全问题1答案"> 
         </div> 
       </div> 
 
@@ -49,7 +53,7 @@
       <div class="form-group row"> 
         <div  class="col-md-3 col-md-offset-1 control-label"><label for="answer-2">答案</label></div> 
         <div class=" col-md-4"> 
-          <input type="text" id="answer-2" name="answer-2" class="form-control" value="" placeholder="安全问题2答案"> 
+          <input type="text" id="answer-2" name="answer-2" class="form-control" autocomplete="off"  value="" placeholder="安全问题2答案"> 
         </div> 
       </div> 
 
@@ -68,14 +72,14 @@
       <div class="form-group row"> 
         <div  class="col-md-3 col-md-offset-1 control-label"><label for="answer-3">答案</label></div> 
         <div class=" col-md-4"> 
-          <input type="text" id="answer-3" name="answer-3" class="form-control" value="" placeholder="安全问题3答案"> 
+          <input type="text" id="answer-3" name="answer-3" class="form-control" autocomplete="off" value="" placeholder="安全问题3答案"> 
         </div> 
       </div> 
 
       <div class="form-group row"> 
         <div  class="col-md-3 col-md-offset-1 control-label text-danger"><label for="userLoginPassword">您的登陆密码</label></div> 
         <div class=" col-md-4"> 
-          <input type="password" id="userLoginPassword" name="userLoginPassword" class="form-control" value=""> 
+          <input type="password" id="userLoginPassword" name="userLoginPassword" class="form-control" autocomplete="off" value=""> 
         </div> 
       </div> 
 
