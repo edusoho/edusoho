@@ -20,7 +20,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			if($order["status"] == "paid"){
 				$connection->rollback();
 				$processor = OrderProcessorFactory::create($order["targetType"]);
-				return array(true, $processor->getRouter(), $order);
+				return array(true, $order);
 			}
 
 			$outFlow = $this->proccessCashFlow($order);
