@@ -8,6 +8,7 @@
 {% set submenu = 'model' %}
 
 {% block main %}
+  <div class="page-header"><h1>虚拟币管理</h1></div>
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
 
   {{ web_macro.flash_messages() }}
@@ -15,9 +16,7 @@
   
 
     <fieldset>
-    <ul class="breadcrumb">
-      <li class="active">虚拟币模式设置</li>
-    </ul>
+
 
     <div class="form-group">
         <div class="col-md-3 control-label">
