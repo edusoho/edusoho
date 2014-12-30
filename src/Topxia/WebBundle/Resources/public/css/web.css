@@ -4409,14 +4409,6 @@ a.homework-essay-textarea-pack-up{
  * </在线客服>
  */
 
-.float-carts{
-    position: fixed;
-    right: 0;
-    top: 25%;
-    visibility: hidden;
-    z-index: 999999;
-}
-
 .carts-add-num {
 	position:absolute;
 	top:-22px;

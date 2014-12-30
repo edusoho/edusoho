@@ -1,13 +1,15 @@
-<div id="float-carts" class="float-carts" data-url={{ path('carts_show') }}>
-  <div class="btn-carts">
-    <span  class="carts-add-num"><font data-role="add-number"
-     class="glyphicon"></font></span>
-    <span class="btn btn-danger">
-      <span class="glyphicon glyphicon-shopping-cart"></span>
-      <span id="carts-badge">{{ cartsCount() }}</span>
-    </span>
+{% if (consultDisplay|default(false) or siteNav|default() == '/' ) %}
+  <div id="float-carts" class="float-carts" data-url={{ path('carts_show') }}>
+    <div class="btn-carts">
+      <span  class="carts-add-num"><font data-role="add-number"
+       class="glyphicon"></font></span>
+      <span class="btn btn-danger">
+        <span class="glyphicon glyphicon-shopping-cart"></span>
+        <span id="carts-badge">{{ cartsCount() }}</span>
+      </span>
+    </div>
   </div>
-</div>
+{% endif %}
 
 {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
 {% set consult = setting('consult') %}

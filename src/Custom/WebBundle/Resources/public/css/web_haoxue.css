@@ -67,6 +67,16 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	padding: 10px;
 }
 
+/*carts*/
+
+.float-carts{
+    position: fixed;
+    right: 0;
+    top: 25%;
+    visibility: hidden;
+    z-index: 999999;
+}
+
 .carts-popover-list .carts-item {
 	width: 250px;
 	height: 50px;
