@@ -1,5 +1,6 @@
 <div id="hot-sale-courses" class="course-list">
   <div id="carousel-hot-salt-course" class="carousel slide row" data-ride="carousel" data-interval="false">
+    {% if hotSaleCourses %}
     <div class="carousel-inner" role="listbox">
       {% set index = 0 %}
       {% set keys = hotSaleCourses|keys %}
@@ -19,10 +20,6 @@
             {% set index = index +1 %}
           {% endfor %}
         </div>
-      {% else %}
-        <div class="item active tac">
-          <div class="empty" style="margin-right: auto; margin-left: auto;"></div>
-        </div>
       {% endfor %}
     </div>
     <a class="left carousel-control col-md-1" href="#carousel-hot-salt-course" role="button" data-slide="prev">
@@ -34,10 +31,16 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
+  {% else %}
+  <div class="item active tac">
+    <div class="empty" style="margin-right: auto; margin-left: auto;"></div>
+  </div>
+  {% endif %}
 </div>
 
 <div id="favorited-courses" class="course-list hide">
   <div id="carousel-favorited-course" class="carousel slide row" data-ride="carousel" data-interval="false">
+    {% if favoritedCourses %}
     <div class="carousel-inner" role="listbox">
       {% set index = 0 %}
       {% set keys = favoritedCourses|keys %}
@@ -56,10 +59,6 @@
             {% set index = index +1 %}
           {% endfor %}
         </div>
-      {% else %}
-        <div class="item active tac">
-          <div class="empty" style="margin-right: auto; margin-left: auto;">暂无收藏的课程</div>
-        </div>
       {% endfor %}
     </div>
     <a class="left carousel-control col-md-1" href="#carousel-favorited-course" role="button" data-slide="prev">
@@ -71,4 +70,9 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
+  {% else %}
+  <div class="item active tac">
+    <div class="empty" style="margin-right: auto; margin-left: auto;">暂无收藏的课程</div>
+  </div>
+  {% endif %}
 </div>
