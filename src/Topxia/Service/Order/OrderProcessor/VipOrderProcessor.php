@@ -4,6 +4,7 @@ namespace Topxia\Service\Order\OrderProcessor;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
+use Exception;
 
 class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
