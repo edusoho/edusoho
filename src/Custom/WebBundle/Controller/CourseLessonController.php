@@ -88,6 +88,140 @@ class CourseLessonController extends BaseController
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
 	}
+    private function convertFiltersToConditions($course, $filters)
+    {
+        $conditions = array('courseId' => $course['id']);
+        switch ($filters['type']) {
+            case 'question':
+                $conditions['type'] = 'question';
+                break;
+            case 'elite':
+                $conditions['isElite'] = 1;
+                break;
+            default:
+                break;
+        }
+        return $conditions;
+    }
+    private function getThreadSearchFilters($request)
+    {
+        $filters = array();
+        $filters['type'] = $request->query->get('type');
+        if (!in_array($filters['type'], array('all', 'question', 'elite'))) {
+            $filters['type'] = 'all';
+        }
+        $filters['sort'] = $request->query->get('sort');
+
+        if (!in_array($filters['sort'], array('created', 'posted', 'createdNotStick', 'postedNotStick'))) {
+            $filters['sort'] = 'posted';
+        }
+        return $filters;
+    }
+
+    private function simplifyCousrse($course)
+    {
+        return array(
+            'id' => $course['id'],
+            'title' => $course['title'],
+            'picture' => $course['middlePicture'],
+            'type' => $course['type'],
+            'rating' => $course['rating'],
+            'about' => StringToolkit::plain($course['about'], 100),
+            'price' => $course['price'],
+        );
+    }
+
+    private function getHeadLeaderInfo()
+    {
+        $storage = $this->getSettingService()->get("storage");
+        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+
+            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $headLeaderArray = json_decode($headLeader['metas2'],true);
+            $headLeaders = array();
+            foreach ($headLeaderArray as $key => $value) {
+                $headLeaders[$key] = $value['key'];
+            }
+            $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
+
+            return array(
+                'headLeaders' => $headLeaders,
+                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl,
+                'headLength' => $headLeader['length']
+            );
+        } else {
+            return array(
+                'headLeaders' => '',
+                'headLeaderHlsKeyUrl' => '',
+                'headLength' => 0
+            );
+        }
+    }
+
+    
+    private function previewAsMember($as, $member, $course)
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user->id)) {
+            return null;
+        }
+
+
+        if (in_array($as, array('member', 'guest'))) {
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                $member = array(
+                    'id' => 0,
+                    'courseId' => $course['id'],
+                    'userId' => $user['id'],
+                    'levelId' => 0,
+                    'learnedNum' => 0,
+                    'isLearned' => 0,
+                    'seq' => 0,
+                    'isVisible' => 0,
+                    'role' => 'teacher',
+                    'locked' => 0,
+                    'createdTime' => time(),
+                    'deadline' => 0
+                );
+            }
+
+            if (empty($member) or $member['role'] != 'teacher') {
+                return $member;
+            }
+
+            if ($as == 'member') {
+                $member['role'] = 'student';
+            } else {
+                $member = null;
+            }
+        }
+
+        return $member;
+    }
+
+    private function groupCourseItems($items)
+    {
+        $grouped = array();
+
+        $list = array();
+        foreach ($items as $id => $item) {
+            if ($item['itemType'] == 'chapter') {
+                if (!empty($list)) {
+                    $grouped[] = array('type' => 'list', 'data' => $list);
+                    $list = array();
+                }
+                $grouped[] = array('type' => 'chapter', 'data' => $item);
+            } else {
+                $list[] = $item;
+            }
+        }
+
+        if (!empty($list)) {
+            $grouped[] = array('type' => 'list', 'data' => $list);
+        }
+
+        return $grouped;
+    }
 
 
 
