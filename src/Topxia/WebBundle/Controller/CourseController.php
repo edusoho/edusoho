@@ -212,6 +212,7 @@ class CourseController extends BaseController
 			setcookie('user-key',$this->getUuid(),time()+60*60*24*30,'/');
 		}
 
+
 		$course = $this->getCourseService()->getCourse($id);
 
         $defaultSetting = $this->getSettingService()->get('default', array());
@@ -253,6 +254,15 @@ class CourseController extends BaseController
 		$previewAs = $request->query->get('previewAs');
 
 		$user = $this->getCurrentUser();
+
+		$conditions = array(
+				'user-key'=>$_COOKIE['user-key'],
+				'itemId'=>$id,
+				'itemType'=>'course',
+				'userId' => $user->id
+		);
+
+		$isAddCarts = $this->isAddCarts($conditions);
 
 		$items = $this->getCourseService()->getCourseItems($course['id']);
 		$mediaMap = array();
@@ -329,8 +339,14 @@ class CourseController extends BaseController
 			'weeks' => $weeks,
 			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
+			'isAddCarts' => $isAddCarts
 		));
 
+	}
+
+	private function isAddCarts($conditions)
+	{
+		return $this->getCartsService()->searchCartsCount($conditions);
 	}
 
 	private function canShowCourse($course, $user)
@@ -765,6 +781,11 @@ class CourseController extends BaseController
 		return $this->createNamedFormBuilder('course')
 			->add('title', 'text')
 			->getForm();
+	}
+
+	protected function getCartsService()
+	{
+		return $this->getServiceKernel()->createService('Custom:Carts.CartsService');
 	}
 
 	protected function getUserService()
