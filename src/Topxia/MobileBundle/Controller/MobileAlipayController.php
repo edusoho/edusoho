@@ -28,9 +28,8 @@ class MobileAlipayController extends MobileController
 
         if($verify_result) {
             //验证成功
-            $controller = $this;
             try {
-                list($success, $order) = $this->getPayCenterService()->pay($payData);
+                $status = $this->doPayNotify($request, $name);
             }catch(\Exception $e) {
                 error_log($e->getMessage(), 0);
             }
