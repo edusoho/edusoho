@@ -9,7 +9,7 @@
     <div class="price_r" role="coupon-price">
         <span class="price_r_mark">-</span>
         <span class="price_r_num">0.00</span>
-        <span>{% if priceType == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
+        <span>{% if priceType|default("RMB") == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
     </div>
   </div>
   <div class="coupon-detail" >
