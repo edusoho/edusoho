@@ -92,8 +92,78 @@ class CourseLessonController extends BaseController
 
 
 
-	private function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    private function getCustomCourseSearcheService(){
+        return $this->getServiceKernel()->createService('Custom:Course.CourseSearchService');
+    }
+    private function getCustomCourseService(){
+        return $this->getServiceKernel()->createService('Custom:Course.CourseService');
+    }
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    private function getFavoriteDao ()
+    {
+        return $this->createDao('Course.FavoriteDao');
+    }
+    private function getStatusService()
+    {
+    return $this->createService('User.StatusService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getUploadFileService()
+    {
+    return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getReviewService()
+    {
+        return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+    private function getArticleService()
+    {
+        return $this->getServiceKernel()->createService('Article.ArticleService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
 }
