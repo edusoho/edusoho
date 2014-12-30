@@ -103,86 +103,8 @@ use Symfony\Component\Filesystem\Filesystem;
         $connection->exec("UPDATE vip_history SET `priceType`='RMB';");
       }
 
-      if($this->isTableExist('vip_level') && !$this->isFieldExist('vip_level', 'monthCoinPrice')){
-        $connection->exec("
-          ALTER TABLE `vip_level` ADD `monthCoinPrice` FLOAT(10,2) UNSIGNED NOT NULL DEFAULT '0.00' AFTER `yearPrice`;  
-        ");
-      }
-
-      if($this->isTableExist('vip_level') && !$this->isFieldExist('vip_level', 'yearCoinPrice')){
-        $connection->exec(" 
-        ALTER TABLE `vip_level` ADD `yearCoinPrice` FLOAT(10,2) UNSIGNED NOT NULL DEFAULT '0.00' AFTER `monthCoinPrice`;
-        ");
-      }
-
       if($this->isIndexExist('cash_flow', 'orderSn')){
         $connection->exec("DROP INDEX orderSn ON cash_flow;");
-      }
-
-      $connection->exec("CREATE TABLE IF NOT EXISTS `money_card` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `cardId` varchar(32) NOT NULL,
-          `password` varchar(32) NOT NULL,
-          `deadline` varchar(19) NOT NULL COMMENT '有效时间',
-          `rechargeTime` int(10) NOT NULL COMMENT '充值时间，0为未充值',
-          `cardStatus` enum('normal','invalid','recharged') NOT NULL,
-          `rechargeUserId` int(11) NOT NULL,
-          `batchId` int(11) NOT NULL,
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-
-      $connection->exec("CREATE TABLE IF NOT EXISTS `money_card_batch` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `cardPrefix` varchar(32) NOT NULL,
-          `cardLength` int(8) NOT NULL,
-          `number` int(11) NOT NULL,
-          `rechargedNumber` int(11) NOT NULL,
-          `deadline` varchar(19) CHARACTER SET latin1 NOT NULL,
-          `money` int(8) NOT NULL,
-          `userId` int(11) NOT NULL,
-          `createdTime` int(11) NOT NULL,
-          `note` varchar(128) NOT NULL,
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-      if(!$this->isFieldExist('money_card_batch', 'coin')){
-        $connection->exec("
-            ALTER TABLE `money_card_batch` 
-            ADD COLUMN `coin` int NOT NULL DEFAULT 0 AFTER `money`;
-        ");
-      }
-
-      if(!$this->isFieldExist('money_card_batch', 'batchName')){
-        $connection->exec("
-            ALTER TABLE `money_card_batch` 
-            ADD COLUMN `batchName` VARCHAR(15) NOT NULL DEFAULT '' AFTER `note`;
-        "); 
-      }
-
-      $connection->exec("
-        ALTER TABLE `money_card_batch` 
-          CHANGE COLUMN `cardLength` `cardLength` INT(8) NOT NULL DEFAULT 0 ,
-          CHANGE COLUMN `number` `number` INT(11) NOT NULL DEFAULT 0 ,
-          CHANGE COLUMN `rechargedNumber` `rechargedNumber` INT(11) NOT NULL DEFAULT 0 ,
-          CHANGE COLUMN `money` `money` INT(8) NOT NULL DEFAULT 0 ,
-          CHANGE COLUMN `userId` `userId` INT(11) NOT NULL DEFAULT 0 ,
-          CHANGE COLUMN `createdTime` `createdTime` INT(11) NOT NULL DEFAULT 0 ;
-      ");
-
-      $connection->exec("
-        ALTER TABLE `money_card` 
-          CHANGE COLUMN `rechargeTime` `rechargeTime` INT(10) NOT NULL DEFAULT 0 COMMENT '充值时间，0为未充值' ,
-          CHANGE COLUMN `cardStatus` `cardStatus` ENUM('normal','invalid','recharged') NOT NULL DEFAULT 'invalid' ,
-          CHANGE COLUMN `rechargeUserId` `rechargeUserId` INT(11) NOT NULL DEFAULT 0 ,
-          CHANGE COLUMN `batchId` `batchId` INT(11) NOT NULL DEFAULT 0 ;
-      ");
-
-      if(!$this->isFieldExist('money_card_batch', 'batchStatus')){
-        $connection->exec("
-            ALTER TABLE `money_card_batch` 
-            ADD COLUMN `batchStatus` ENUM('invalid','normal') NOT NULL DEFAULT 'normal' AFTER `batchName`;
-        "); 
       }
 
       $this->getConnection()->beginTransaction();
