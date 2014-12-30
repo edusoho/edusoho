@@ -31,6 +31,7 @@ class OrderController extends BaseController
 
         if($orderInfo["totalPrice"] == 0){
             $formData = array();
+            $formData['userId'] = $currentUser["id"];
             $formData["targetId"] = $fields["targetId"];
             $formData["targetType"] = $fields["targetType"];
             $formData['amount'] = 0;
