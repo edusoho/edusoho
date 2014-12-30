@@ -36,7 +36,7 @@
           <th>购买者</th>
           <th>付款方式</th>
           <th>创建时间</th>
-          <th>查看</th>
+          {# <th>查看</th> #}
         </tr>
 
        {% for order in orders %}
@@ -65,9 +65,9 @@
           <td>
             {{order.createdTime|date('Y-m-d H:i:s')}}
           </td> 
-          <td>
+{#           <td>
             <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
-          </td>
+          </td> #}
        </tr>
        {% endfor %}
       </table>
