@@ -195,15 +195,14 @@ use Symfony\Component\Filesystem\Filesystem;
       }
     }
 
-    
-
     protected function process(){
       $setting = $this->initSetting();
-      if(empty($setting) || $setting["value"]["maxCreatedTime"] == $setting["value"]["processedCreatedTime"]) {
+      $processInfo = $setting["value"];
+      if(empty($setting) || $processInfo["maxCreatedTime"] == $processInfo["processedCreatedTime"]) {
         return ;
       }
 
-      $order = $this->proccessOrderCashFlow($setting["value"]["maxCreatedTime"], $setting["value"]["processedCreatedTime"], 0,  30000);
+      $order = $this->proccessOrderCashFlow($processInfo["maxCreatedTime"], $processInfo["processedCreatedTime"], 0,  20000);
 
       $this->updateSetting($order, "orders");
 
@@ -214,11 +213,11 @@ use Symfony\Component\Filesystem\Filesystem;
       $result = $this->getSettingByName("orders");
 
       if(empty($result)){
-        $sql = "select * from orders where createdTime = (SELECT max(createdTime) FROM `orders`) LIMIT 1;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        if(!empty($result)) {
-          return $this->addSetting($result["id"], $result["createdTime"]);
-        } 
+    $sql = "select * from orders where createdTime = (SELECT max(createdTime) FROM `orders` where status='paid' and amount>0) LIMIT 1;";
+    $result = $this->getConnection()->fetchAssoc($sql);
+    if(!empty($result)) {
+      return $this->addSetting($result["id"], $result["createdTime"]);
+    } 
         return null;
       } else {
         $result["value"] = unserialize($result["value"]);
@@ -255,7 +254,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
     protected function proccessOrderCashFlow($createdTime, $processedCreatedTime, $start,  $count)
     {
-      $sql = "select * from (select * from orders where createdTime <= {$createdTime} and createdTime > {$processedCreatedTime} and status='paid' order by id) orders LIMIT {$start}, {$count};";
+      $sql = "select * from (select * from orders where createdTime <= {$createdTime} and createdTime > {$processedCreatedTime} and status='paid' and amount>0 order by id) orders LIMIT {$start}, {$count};";
       $orders = $this->getConnection()->fetchAll($sql, array());
 
       if(empty($orders) || count($orders)==0){
@@ -302,7 +301,7 @@ use Symfony\Component\Filesystem\Filesystem;
           "createdTime"=>$order["createdTime"],
           "parentSn" => $inflow["sn"]
         );
-        $this->getConnection()->insert('cash_flow', $cashFlow);
+        $cashFlow = $this->getConnection()->insert('cash_flow', $cashFlow);
 
         $fields = array("cashSn" => $cashFlow["sn"]);
         $this->getConnection()->update("orders", $fields, array('id' => $order["id"]));
@@ -314,9 +313,9 @@ use Symfony\Component\Filesystem\Filesystem;
     protected function updateSetting($order, $name)
     {
         $setting = $this->getSettingByName($name);
-        $setting["value"] = unserialize($setting["value"]);
+        $processInfo = unserialize($setting["value"]);
         $this->getConnection()->delete("setting", array('name' => "orders"));
-        $this->addSetting($setting["value"]["id"], $setting["value"]["maxCreatedTime"], $order["createdTime"]);
+        $this->addSetting($processInfo["id"], $processInfo["maxCreatedTime"], $order["createdTime"]);
     }
 
     protected function getSettingByName($name)
