@@ -3,7 +3,7 @@
     <div class="carousel-inner" role="listbox">
       {% set index = 0 %}
       {% set keys = hotSaleCourses|keys %}
-      {% for i in 0..((hotSaleCourses|length)//4) if hotSaleCourses|length > 0 %}
+      {% for i in 0..ceil((hotSaleCourses|length)/4)-1 if hotSaleCourses|length > 0 %}
         <div class="item row {% if i == 0 %} active {% endif %}">
           {% for j in 1..4 if keys[index] is defined %}
           {% set hotSaleCourse = hotSaleCourses[keys[index]] %}
