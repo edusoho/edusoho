@@ -151,7 +151,7 @@ define(function(require, exports, module) {
 			$('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
 			$('[role="code-notify"]').hide();
-			$('[role="coupon-price"]').find("[role='coupon-price']").text(0);
+			$('[role="coupon-price"]').find(".price_r_num").text(0);
 			$('[role="code-notify"]').text("");
 			$('[role="coupon-code"]').val("");
 			$(this).hide();
