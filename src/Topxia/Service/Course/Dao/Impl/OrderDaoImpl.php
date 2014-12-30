@@ -23,6 +23,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             $forUpdate = "FOR UPDATE";
         }
         $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1 {$forUpdate}";
+
         return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 

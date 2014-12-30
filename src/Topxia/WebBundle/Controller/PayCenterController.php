@@ -133,6 +133,8 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
         }
 
+        var_dump($order);exit();
+
         $processor = OrderProcessorFactory::create($order["targetType"]);
         $router = $processor->getRouter();
 
