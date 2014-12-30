@@ -118,11 +118,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.esicon-safety:before { content: "\e600"; }
 .esicon-share:before { content: "\e601"; }
 .esicon-setting:before { content: "\e603"; }
 .esicon-like:before { content: "\e605"; }
 .esicon-exit:before { content: "\e602"; }
 .esicon-user:before { content: "\e607"; }
+
 
 
 
