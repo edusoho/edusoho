@@ -21,7 +21,26 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 		}
 
 		$this->formData['courseId'] = $courseId;
-		$order = $this->controller->getCourseOrderService()->createOrder($this->formData);
+
+        $coinRate = $this->controller->setting("coin.cash_rate");
+        if(!isset($coinRate)) {
+            $coinRate = 1;
+        }
+
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+
+        $order = array();
+        $order["targetId"] = $courseId;
+        $order["targetType"] = "course";
+        $order["payment"] = "alipay";
+        $order['amount'] = $course["price"];
+        $order['priceType'] = "RMB";
+        $order['totalPrice'] = $course["price"];
+        $order['coinRate'] = $coinRate;
+        $order['coinAmount'] = 0;
+
+
+		$order = $this->controller->getCourseOrderService()->createOrder($order);
 
 		if ($order['status'] == 'paid') {
     		return array('status' => 'ok', 'paid' => true, "message"=>"", "payUrl"=>"");
@@ -65,4 +84,5 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $result;
 
     }
+
 }
