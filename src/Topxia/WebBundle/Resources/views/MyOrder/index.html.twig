@@ -6,6 +6,12 @@
 
 {% block main_body %}
   {#search form#}
+  <ul class="nav nav-pills" role="tablist">
+    <li role="presentation"><a href="/my/coin?type=">全部订单</a></li>
+    <li role="presentation" class="active"><a href="/my/coin?type=inflow">待付款<span class="badge">6</span></a></li>
+    <li role="presentation"><a href="/my/coin?type=outflow">已付款</a></li>
+  </ul>
+
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="lastHowManyMonths"  onchange="submit();" >

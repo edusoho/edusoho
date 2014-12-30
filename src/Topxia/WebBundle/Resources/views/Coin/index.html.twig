@@ -14,13 +14,17 @@
     我的{{setting('coin.coin_name')}}
   </div> #}
   <div class="panel-heading" style="font-weight:normal;">
-    账户余额:
+    {# 账户余额: #}
+    <span class="label label-default">账户余额</span>
     {% if setting('coin.coin_content') %}
       <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
     {% endif %}
     <br>
     <div class="row">
-        <div class="col-md-offset-2" style="font-weight:400;">
+
+
+      
+{#         <div class="col-md-offset-2" style="font-weight:400;">
          
        {% if setting('coin.coin_picture') %}
           <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="50px" >
@@ -28,13 +32,28 @@
 
           <strong style="font-size:28px;">{{account.cash|default(0)}}</strong>
             {{setting('coin.coin_name')}}
+ #}
+        <div class="coin-block">
+            <div class="coin-text">
+              {% if setting('coin.coin_picture') %}
+                <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="30px" >
+              {% endif %}
+              <strong>{{account.cash|default(0)}}</strong>
+              <!-- {{setting('coin.coin_name')}} -->
+            </div>
+
+
              {% if setting('coin.coin_enabled') %}
-              {% if setting('coin.charge_coin_enabled') %}
-                <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
-              {% endif %}
-              {% if is_plugin_installed('MoneyCard') %}
-                <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>使用学习卡</a>
-              {% endif %}
+                <div class="coin-btn">
+                  {% if setting('coin.charge_coin_enabled') %}
+                    {# <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-default"  style="color: #428bca;" > &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a> #}
+                    <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-primary" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
+
+                  {% endif %}
+                  {% if is_plugin_installed('MoneyCard') %}
+                    <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>使用学习卡</a>
+                  {% endif %}
+                </div>
             {% endif %}
         </div>
 
