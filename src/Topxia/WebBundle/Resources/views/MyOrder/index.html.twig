@@ -11,7 +11,7 @@
     <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">待付款<span class="badge">{{waitToBePaidCount}}</span></a></li>
     <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">已付款</a></li>
   </ul>
-
+  <br>
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <input type="hidden" name="status" value="{{app.request.query.get('status')}}"> 
     <div class="form-group">
