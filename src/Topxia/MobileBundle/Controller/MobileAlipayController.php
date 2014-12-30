@@ -26,11 +26,9 @@ class MobileAlipayController extends MobileController
         $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
 
-        $response = $this->createPaymentResponse($name, $request->query->all());
-        $payData = $response->getPayData();
-
         if($verify_result) {
             //验证成功
+            $controller = $this;
             try {
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
             }catch(\Exception $e) {
@@ -47,16 +45,13 @@ class MobileAlipayController extends MobileController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $response = $this->createPaymentResponse($name, $request->query->all());
-        $payData = $response->getPayData();
-
-        list($success, $order) = $this->getPayCenterService()->pay($payData);
+        $status = $this->doPayNotify($request, $name);
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
         return new Response($callback);
     }
 
     //支付校验
-    protected function doPayNotify(Request $request, $name, $successCallback = null)
+    protected function doPayNotify(Request $request, $name)
     {
         if ($request->getMethod() == "GET") {
             $requestParams = $request->query->all();
@@ -83,10 +78,7 @@ class MobileAlipayController extends MobileController
         $payData = $this->createPaymentResponse($requestParams);
         
         try {
-            list($success, $order) = $this->getOrderService()->payOrder($payData);
-            if ($order['status'] == 'paid' and $successCallback) {
-                $successCallback($success, $order);
-            }
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
 
             return "success";
         } catch (\Exception $e) {
@@ -161,65 +153,6 @@ class MobileAlipayController extends MobileController
         );
 
         return $options;
-    }
-
-    private function createPaymentResponse($name, $params)
-    {
-        $options = $this->getPaymentOptions($name);
-        $response = Payment::createResponse($name, $options);
-
-        return $response->setParams($params);
-    }
-
-    private function getPaymentOptions($payment)
-    {
-        $settings = $this->setting('payment');
-
-        if (empty($settings)) {
-            throw new \RuntimeException('支付参数尚未配置，请先配置。');
-        }
-
-        if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
-        }
-
-        if (empty($settings[$payment. '_enabled'])) {
-            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
-        }
-
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
-        }
-
-        $options = array(
-            'key' => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
-        );
-
-        return $options;
-    }
-
-    private function getEnabledPayments()
-    {
-        $enableds = array();
-
-        $setting = $this->setting('payment', array());
-
-        if (empty($setting['enabled'])) {
-            return $enableds;
-        }
-
-        $payNames = array('alipay');
-        foreach ($payNames as $payName) {
-            if (!empty($setting[$payName . '_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
-                );
-            }
-        }
-
-        return $enableds;
     }
 
     public function getLogService()
