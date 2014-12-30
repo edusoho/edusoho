@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}虚拟币订单 - {{ parent() }}{% endblock %}
+{% block title %}充值订单 - {{ parent() }}{% endblock %}
 
 {% set menu = 'coin' %}
 {% set submenu = 'orders' %}
@@ -9,7 +9,7 @@
 {% block main %}
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
 
-    <div class="page-header"><h1>订单记录</h1></div>
+    <div class="page-header"><h1>充值订单</h1></div>
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
