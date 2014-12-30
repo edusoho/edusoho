@@ -104,7 +104,7 @@
               <div class="pull-right order-count">
                 订单金额：
                 {# <span role="total-price">{{totalPrice}}</span> #}
-                <span class="order-price">{{totalPrice}}</span>
+                <span role="total-price" class="order-price">{{totalPrice}}</span>
                 {% if priceType|default('RMB') == "RMB" %}
                   元
                 {% elseif priceType|default('RMB') == "Coin" %}
