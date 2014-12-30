@@ -13,7 +13,7 @@
                   <img src="{{ default_path('coursePicture',hotSaleCourse.largePicture, '') }}" width=100%>
                 </a>
                 <h4><strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">{{ hotSaleCourse.price }}</span></strong></h4>
-                <h4 class="courseware-thumb-title">{{ hotSaleCourse.title|plain_text(25) }}</h4>
+                <h4 class="courseware-thumb-title">{{ hotSaleCourse.title|plain_text(13) }}</h4>
               </div>
             </div>
             {% set index = index +1 %}
@@ -41,7 +41,7 @@
     <div class="carousel-inner" role="listbox">
       {% set index = 0 %}
       {% set keys = favoritedCourses|keys %}
-      {% for i in 0..((favoritedCourses|length)//4) if favoritedCourses|length > 0 %}
+      {% for i in 0..ceil((favoritedCourses|length)/4)-1 if favoritedCourses|length > 0 %}
         <div class="item row {% if i == 0 %} active {% endif %}">
           {% for j in 1..4 if keys[index] is defined %}
           {% set favoritedCourse = favoritedCourses[keys[index]] %}
@@ -50,7 +50,7 @@
                 <a href="{{ path('course_show', {id:favoritedCourse.id}) }}" target="_blank">
                   <img src="{{ default_path('coursePicture',favoritedCourse.largePicture, '') }}" width=100%>
                 </a>
-                <h4 class="courseware-thumb-title">{{ favoritedCourse.title|plain_text(25) }}</h4>
+                <h4 class="courseware-thumb-title">{{ favoritedCourse.title|plain_text(13) }}</h4>
               </div>
             </div>
             {% set index = index +1 %}

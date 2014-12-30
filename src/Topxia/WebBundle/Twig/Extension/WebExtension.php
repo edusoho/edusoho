@@ -36,7 +36,7 @@ class WebExtension extends \Twig_Extension
             'score_text' => new \Twig_Filter_Method($this, 'scoreTextFilter'),
             'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
-            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter')
+            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
         );
     }
 
@@ -67,7 +67,13 @@ class WebExtension extends \Twig_Extension
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'ceil' => new \Twig_Function_Method($this, 'getCeil')   
         );
+    }
+
+    public function getCeil($number)
+    {
+        return ceil($number);
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)
