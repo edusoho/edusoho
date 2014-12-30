@@ -132,7 +132,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;
         }
-
         if($amount<0){
             $amount = 0;
         }

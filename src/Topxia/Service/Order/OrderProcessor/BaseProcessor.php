@@ -20,7 +20,6 @@ class BaseProcessor {
         } else if ($priceType == "Coin") {
             $coinPreferentialPrice = $coinPayAmount;
         }
-
         return $coinPreferentialPrice;
 	}
 
