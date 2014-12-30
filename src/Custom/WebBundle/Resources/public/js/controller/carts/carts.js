@@ -136,7 +136,7 @@ define(function(require,exports,module){
                 });
                 Notify.success('收藏成功');
             }).error(function(result){
-                Notify.danger('已经收藏');
+                // Notify.danger('已经收藏');
             });
         },
 
@@ -149,7 +149,7 @@ define(function(require,exports,module){
                 Notify.success('收藏成功');
                 $btn.attr('disabled',true);
             }).error(function(result){
-                Notify.danger('已经收藏');
+                // Notify.danger('已经收藏');
             });
         }
 
