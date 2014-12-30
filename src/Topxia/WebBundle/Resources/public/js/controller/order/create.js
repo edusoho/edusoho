@@ -47,7 +47,8 @@ define(function(require, exports, module) {
 				coinNum = coinNum.toFixed(2);
 				if(cashRateElement.data("coursePriceShowType") == "RMB"){
 					var cashDiscount = coinNum/cashRate;
-					$('[role="cash-discount"]').text(cashDiscount.toFixed(2));
+					cashDiscount = Math.floor(cashDiscount*100)/100;
+					$('[role="cash-discount"]').text(cashDiscount);
 				}else{
 					$('[role="cash-discount"]').text(coinNum);
 				}
