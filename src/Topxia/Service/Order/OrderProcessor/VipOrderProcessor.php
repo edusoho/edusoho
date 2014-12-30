@@ -43,7 +43,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         if($buyType == "upgrade") {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         }else{
-            if(ArrayToolkit::required($fields, array("unit", "duration"))) {
+            if(!ArrayToolkit::requireds($fields, array("unit", "duration"))) {
                 throw new Exception("参数不正确!");
             }
 
