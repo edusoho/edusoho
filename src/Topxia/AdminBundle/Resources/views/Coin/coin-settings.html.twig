@@ -55,7 +55,7 @@
           <div id="coin-picture-middleSize" style="display:none;">{% if setting('coin.coin_picture_30_30') %}<img src="{{ asset(setting('coin.coin_picture_30_30')) }}">{% endif %}</div>
           <div id="coin-picture-smallSize" style="display:none;">{% if setting('coin.coin_picture_20_20') %}<img src="{{ asset(setting('coin.coin_picture_20_20')) }}">{% endif %}</div>
           <div id="coin-picture-extraSmallSize" style="display:none;">{% if setting('coin.coin_picture_10_10') %}<img src="{{ asset(setting('coin.coin_picture_10_10')) }}">{% endif %}</div>
-        </div>
+        </div></br>
 
           <button class="btn btn-default btn-sm" id="coin-picture-upload" type="button" data-url="{{ path('admin_coin_picture') }}">上传</button>
           <button class="btn btn-default btn-sm" id="coin-picture-remove" type="button" data-url="{{ path('admin_coin_picture_remove') }}" {% if not setting('coin.coin_picture') %}style="display:none;"{% endif %}>删除</button>
