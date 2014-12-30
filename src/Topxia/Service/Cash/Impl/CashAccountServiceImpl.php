@@ -13,9 +13,9 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         return $this->getAccountDao()->addAccount($fields);
     }
 
-    public function getAccountByUserId($userId)
+    public function getAccountByUserId($userId, $lock = false)
     {
-        return $this->getAccountDao()->getAccountByUserId($userId);
+        return $this->getAccountDao()->getAccountByUserId($userId, $lock);
     }
 
     public function getAccount($id)

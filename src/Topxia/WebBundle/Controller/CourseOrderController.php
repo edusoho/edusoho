@@ -111,10 +111,15 @@ class CourseOrderController extends OrderController
         ));
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-        if($course['price'] == 0) {
+        $coinSetting = $this->setting("coin");
+
+        if((isset($coinSetting["coin_enabled"]) 
+        && $coinSetting["coin_enabled"]==1
+        && isset($coinSetting["price_type"])
+        && $coinSetting["price_type"]=="Coin"
+        && $course['coinPrice']) || $course['price'] == 0) {
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
-            $coinSetting = $this->setting("coin");
             $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
             $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
             $formData['coinAmount'] = 0;

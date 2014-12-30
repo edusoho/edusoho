@@ -204,7 +204,8 @@
 {% endblock %}
 
 {% block footer %}
-  {% if billable %}
+  {% set priceType = setting("coin.price_type") %}
+  {% if billable and ((priceType|default("RMB") == "RMB" and course.price > 0) or (priceType|default("RMB") == "Coin" and course.coinPrice > 0)) %}
     {% if payments %}
       {% if member %}
         <span class="text-muted">预览模式无法支付</span>

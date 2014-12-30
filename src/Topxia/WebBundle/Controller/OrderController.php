@@ -10,7 +10,8 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 class OrderController extends BaseController
 {
     public function showAction(Request $request) 
-    {   
+    {
+
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
@@ -28,6 +29,24 @@ class OrderController extends BaseController
 
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
+
+        if($orderInfo["totalPrice"] == 0){
+            $formData = array();
+            $formData["targetId"] = $fields["targetId"];
+            $formData["targetType"] = $fields["targetType"];
+            $formData['amount'] = 0;
+            $formData['totalPrice'] = 0;
+            $coinSetting = $this->setting("coin");
+            $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
+            $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
+            $formData['coinAmount'] = 0;
+            $formData['payment'] = 'alipay';
+            $order = $processor->createOrder($formData, $fields);
+
+            if ($order['status'] == 'paid') {
+                return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order['targetId'])));
+            }
+        }
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
 

@@ -96,7 +96,9 @@
 						{% else %}
 						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
 						{% endif %}
-						 >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						 >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
@@ -174,7 +176,9 @@
 						{% else %}
 						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
 						{% endif %}
-						>{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						>{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 					</div>
 					</li>
 				</ul>
