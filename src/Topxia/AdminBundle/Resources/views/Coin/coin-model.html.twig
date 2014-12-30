@@ -59,4 +59,27 @@
       </div>
     </div>
   </form>
+
+  <div class="alert alert-info deduction {% if coinSettings.cash_model|default('none') 
+  !="deduction" %}hidden{% endif %}">
+  <p><strong> 
+    1、抵扣模式：网校以人民币作为支付货币，并可以使用虚拟币进行金额抵扣(虚拟币类似于淘金币）
+    <br>
+    2、虚拟币模式一旦保存（模式和汇率），请勿随意改动
+    <br>
+    3、模式切换会使课程价格会根据汇率变动，如需修改请前往课程
+  </strong></p>
+  </div>
+
+  <div class="alert alert-info currency {% if coinSettings.cash_model|default('none') !="currency" %}hidden{% endif %}">
+  <p><strong> 
+    1、货币模式：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+    <br>
+    2、货币模式开启后，课程需要设置移动端价格（移动端暂不支持虚拟币支付）
+    <br>
+    3、虚拟币模式一旦保存（模式和汇率），请勿随意改动
+    <br>
+    4、模式切换会使课程价格会根据汇率变动，如需修改请前往课程
+  </strong></p>
+  </div>
 {% endblock %}

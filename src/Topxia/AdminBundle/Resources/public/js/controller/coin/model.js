@@ -36,6 +36,27 @@ define(function(require, exports, module) {
                 $('#save').removeClass('hidden');
             }
 
+            if($(this).data('modle')=="deduction"){
+
+                $('.deduction').removeClass('hidden');
+
+                $('.currency').addClass('hidden');
+            }
+
+            if($(this).data('modle')=="currency"){
+
+                $('.currency').removeClass('hidden');
+
+                $('.deduction').addClass('hidden');
+            }
+
+            if($(this).data('modle')=="none"){
+
+                $('.currency').addClass('hidden');
+
+                $('.deduction').addClass('hidden');
+            }
+
         });
 
         validator.addItem({

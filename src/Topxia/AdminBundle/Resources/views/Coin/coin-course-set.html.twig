@@ -26,7 +26,7 @@
         <span class="mll">汇率：<span style="color:red;" id="cash-rate" data-val="{{ set.cash_rate}}">1 比 {{ set.cash_rate}}</span></span>
         {% if set.cash_model =="deduction" %}{% else %}<a class="btn btn-info btn-sm pull-right set">按汇率批量设置价格</a>{% endif %}
     </div>
-
+    <div id="help-message" class="alert alert-danger mtl hidden" >请设置正确的价格</div>
     <div class="table-responsive mtl mll mrl">
       <table class="table">
         {% if set.cash_model =="deduction" %}
@@ -77,7 +77,7 @@
 
       <div class="controls col-md-offset-3 col-md-8">
         <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-primary">上一步</a>
-        <button type="submit" class="btn btn-primary" id="finish" >完成</button>
+        <button type="button" class="btn btn-primary" id="finish" >完成</button>
       </div>
     </div>
   </form>
