@@ -67,6 +67,7 @@
           <input type="hidden" name="coin_picture_30_30" value="{{setting('coin.coin_picture_30_30') }}">
           <input type="hidden" name="coin_picture_20_20" value="{{setting('coin.coin_picture_20_20') }}">
           <input type="hidden" name="coin_picture_10_10" value="{{setting('coin.coin_picture_10_10') }}">
+          <input type="hidden" name="cash_rate" {% if setting('coin.cash_rate') %} value="{{setting('coin.cash_rate') }}" {% else %} value="1" {% endif %}>
         </div>
     </div>
 

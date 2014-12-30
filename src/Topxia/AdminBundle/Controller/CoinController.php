@@ -40,8 +40,9 @@ class CoinController extends BaseController
             $fields = $request->request->all();
 
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
-                 'coin_enabled', 'cash_rate',
-                 'coin_name',
+                'coin_enabled',
+                'cash_rate',
+                'coin_name',
                 'coin_content', 'coin_picture',
                 'coin_picture_50_50','coin_picture_30_30',
                 'coin_picture_20_20','coin_picture_10_10'
