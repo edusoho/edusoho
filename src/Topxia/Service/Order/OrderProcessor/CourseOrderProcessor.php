@@ -15,8 +15,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 	public function getOrderInfo($targetId, $fields)
 	{
 		$course = $this->getCourseService()->getCourse($targetId);
-        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        if(empty($course)) {
+            throw new Exception("找不到要购买课程!");
+        }
 
+        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
         $coinSetting = $this->getSettingService()->get("coin");
         
         $totalPrice = 0;
