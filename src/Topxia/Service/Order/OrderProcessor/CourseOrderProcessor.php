@@ -116,7 +116,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        if(!empty($couponApp) && isset($fields["couponCode"])) {
+        $couponSetting = $this->getSettingService()->get("coupon");
+
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
             list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
                 $fields["couponCode"], 
                 $targetId, 
@@ -134,7 +136,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if($amount<0){
             $amount = 0;
         }
-
         $amount = NumberToolkit::roundUp($amount);
 
         return array(
