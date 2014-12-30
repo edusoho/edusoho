@@ -11,7 +11,7 @@
       <span class="pull-right carts-text">
         <div class="price-count">{{ course.price }}元</div>
         <div class="carts-item-delete" data-url="{{ path('carts_delete', {id:cart.id}) }}">
-          <a href="javascript:;">删除</a>
+          <a href="javascript:;" class="carts-text-delete">删除</a>
         </div>
       </span>
 
@@ -30,7 +30,7 @@
     </li>
     {% endfor %}
   </ul>
-  <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right" target="_blank">去购物车结算</a>
+  <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right" target="_blank" style="margin-bottom:5px">去购物车结算</a>
 </div>
 {% else %}
   <div class="popover-empty">您的购物车还是空的，赶紧行动吧！<a href="{{ path('homepage') }}" target="_blank">去首页看看</a></div>
