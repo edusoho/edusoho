@@ -29,16 +29,23 @@ class CoinController extends BaseController
           'coin_name' => '虚拟币',
           'coin_content' => '',
           'coin_picture' => '',
+          'coin_picture_50_50' => '',
+          'coin_picture_30_30' => '',
+          'coin_picture_20_20' => '',
+          'coin_picture_10_10' => '',
           'cash_rate' => 1,
         );
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
-
+// var_dump($coinSettingsSaved);
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+            var_dump($fields);
             $coinSettingsPosted = ArrayToolkit::parts($fields, array(
                 'cash_rate', 'coin_enabled', 
                 'price_type', 'coin_name', 
-                'coin_content', 'coin_picture'
+                'coin_content', 'coin_picture',
+                'coin_picture_50_50','coin_picture_30_30',
+                'coin_picture_20_20','coin_picture_10_10'
             ));
             if (isset($coinSettingsPosted['cash_rate']) && !is_numeric($coinSettingsPosted['cash_rate'])){
               $this->setFlashMessage('danger', '错误，虚拟币汇率设置填入的必须为数字！');
@@ -60,6 +67,31 @@ class CoinController extends BaseController
 
         return $this->settingsRenderedPage($coinSettingsSaved);
     }
+    
+    public function savePicture(Request $request,$size)
+    {
+        $file = $request->files->get('coin_picture');
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
+
+        $pictureFilePath = $directory.'/'.$filename;
+        $pathinfo = pathinfo($pictureFilePath);
+
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($pictureFilePath);
+
+        $image = $rawImage->copy();
+        $image->resize(new Box($size, $size));
+        $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $imageName = "{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $image = $image->save($filePath, array('quality' => 100));
+
+        $coin = $this->getSettingService()->get('coin',array());
+        $name = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$imageName}";
+        $path = ltrim($name, '/');
+
+        return array($image,$path);
+    }
 
     public function pictureAction(Request $request)
     {
@@ -72,59 +104,24 @@ class CoinController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/coin";
         $file = $file->move($directory, $filename);
 
-        $pictureFilePath = $directory.'/'.$filename;
-        $pathinfo = pathinfo($pictureFilePath);
-
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($pictureFilePath);
-
-        $largeImage = $rawImage->copy();
-        $largeImage->resize(new Box(50, 50));
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_50*50.{$pathinfo['extension']}";
-        $largeImageName = "{$pathinfo['filename']}_50*50.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 100));
-
-        $middleImage = $rawImage->copy();
-        $middleImage->resize(new Box(30, 30));
-        $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_30*30.{$pathinfo['extension']}";
-        $middleImageName = "{$pathinfo['filename']}_30*30.{$pathinfo['extension']}";
-        $middleImage->save($middleFilePath, array('quality' => 100));
-
-        $smallImage = $rawImage->copy();
-        $smallImage->resize(new Box(20, 20));
-        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_20*20.{$pathinfo['extension']}";
-        $smallImageName = "{$pathinfo['filename']}_20*20.{$pathinfo['extension']}";
-        $smallImage->save($smallFilePath, array('quality' => 100));
-
-        $extraSmallImage = $rawImage->copy();
-        $extraSmallImage->resize(new Box(10, 10));
-        $extraSmallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_10*10.{$pathinfo['extension']}";
-        $extraSmallImageName = "{$pathinfo['filename']}_10*10.{$pathinfo['extension']}";
-        $extraSmallImage->save($extraSmallFilePath, array('quality' => 100));
-
-            
         $size = getimagesize($file);
         $width = $size[0];
         $height = $size[1];
-         if ($width > 50 || $height >50 ) {
-            throw $this->createAccessDeniedException('图片大小不正确，请上传不超过50*50的图片文件！');
+         if ($width < 50 || $height < 50 || $width != $height) {
+            throw $this->createAccessDeniedException('图片大小不正确，请上传超过50*50的等比例图片！');
         }
 
+        list($coin_picture_50_50,$url_50_50) = $this->savePicture($request,50);
+        list($coin_picture_30_30,$url_30_30)  = $this->savePicture($request,30);
+        list($coin_picture_20_20,$url_20_20)  = $this->savePicture($request,20);
+        list($coin_picture_10_10,$url_10_10)  = $this->savePicture($request,10);
+
         $coin = $this->getSettingService()->get('coin',array());
-        $coin['coin_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$filename}";
-        $coin['coin_picture'] = ltrim($coin['coin_picture'], '/');
 
-        $largeImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$largeImageName}";
-        $largeImageUrl = ltrim($largeImageUrl, '/');
-
-        $middleImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$middleImageName}";
-        $middleImageUrl = ltrim($middleImageUrl, '/');
-
-        $smallImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$smallImageName}";
-        $smallImageUrl = ltrim($smallImageUrl, '/');
-
-        $extraSmallImageUrl = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$extraSmallImageName}";
-        $extraSmallImageUrl = ltrim($extraSmallImageUrl, '/');
+        $coin['coin_picture'] = $coin['coin_picture_50_50'] = $url_50_50;
+        $coin['coin_picture_30_30'] = $url_30_30;
+        $coin['coin_picture_20_20'] = $url_20_20;
+        $coin['coin_picture_10_10'] = $url_10_10;
 
         $this->getSettingService()->set('coin', $coin);
 
@@ -132,11 +129,15 @@ class CoinController extends BaseController
 
         $response = array(
             'path' => $coin['coin_picture'],
+            'path_50_50' => $coin['coin_picture_50_50'],
+            'path_30_30' => $coin['coin_picture_30_30'],
+            'path_20_20' => $coin['coin_picture_20_20'],
+            'path_10_10' => $coin['coin_picture_10_10'],
             'url' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture']),
-            'largeImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($largeImageUrl),
-            'middleImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($middleImageUrl),
-            'smallImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($smallImageUrl),
-            'extraSmallImageUrl' =>  $this->container->get('templating.helper.assets')->getUrl($extraSmallImageUrl),
+            'coin_picture_50_50' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_50_50']),
+            'coin_picture_30_30' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_30_30']),
+            'coin_picture_20_20' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_20_20']),
+            'coin_picture_10_10' =>  $this->container->get('templating.helper.assets')->getUrl($coin['coin_picture_10_10']),
         );
 
         return new Response(json_encode($response));
