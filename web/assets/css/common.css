@@ -1812,3 +1812,15 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .searchSelect {
   height: 46px;
 }
+
+.amount-num {
+  color: #434343;
+}
+
+.inflow-num {
+  color: #1bb974;
+}
+
+.outflow-num {
+  color: #ff7b0e;
+}

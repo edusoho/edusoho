@@ -39,14 +39,14 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-      {#<button class="btn btn-primary">搜索</button>#}
-       <div class="control-label pull-right" style="padding-top: 8px;">
-        收入：<span style="color:#1bb974;">{{ amountInflow }}</span>元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>元
-        </div>
+
     </form>
 
-        <br>
+    <p class="text-muted">
+      <span class="mrl">收入：<strong class="inflow-num">{{ amountInflow }}</strong> 元</span>
+      <span class="mrl">支出：<strong class="outflow-num">{{ amountOutflow }}</strong> 元</span>
+    </p>
+
     <div class="table-responsive">
       <table class="table table-striped">
         {% if cashes %}
