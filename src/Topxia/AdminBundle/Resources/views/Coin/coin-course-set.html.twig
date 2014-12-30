@@ -24,7 +24,7 @@
       <strong class="text-info">{% if set.cash_model =="deduction" %}用于抵扣{% else %}用于标价{% endif %}</strong>
       <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">汇率：</span>
       1元人民币兑换 <strong class="text-info">{{ set.cash_rate}}</strong> {{ setting('coin.coin_name') }}
-      {% if set.cash_model =="deduction" %}{% else %}<a class="btn btn-info btn-xs set mlm">按汇率批量设置价格</a>{% endif %}
+      {% if set.cash_model =="deduction" %}{% else %}<a class="btn btn-info btn-sm set mlm"><span class="glyphicon glyphicon-repeat"></span> 按汇率批量设置价格</a>{% endif %}
     </p>
 
 
@@ -53,20 +53,14 @@
                       <a href="{{path('course_show',{id:course.id})}}" target=blank >{{course.title}}</a>
                     </td>
                     <td>
-                        <div class="form-group">
-                        <div class="controls">
-                        <label for="rmb{{course.id}}" class="hidden">人民币价格</label>
+
                         {% if set.cash_model =="deduction" %}<input id="rmb{{course.id}}" type="text" class="form-control rmbPrice" style="width:40%;" value="{{course.price}}" name="course-rmb[{{course.id}}]" data-id="{{course.id}}"/>{% else %}<input type="hidden" class="rmb" value="{{course.price}}" data-id="{{course.id}}"/>{{course.price}}{% endif %}
-                        </div>
-                        </div>
+    
                       </td>
                     <td>
-                      <div class="form-group">
-                      <div class="controls">
-                      <label for="cash{{course.id}}" class="hidden">虚拟币价格</label>
+         
                       {% if set.cash_model =="deduction" %}<span id="cash{{course.id}}">{{course.price * set.cash_rate }}</sapn>{% else %}<input type="text" id="cash{{course.id}}" class="form-control cashPrice" style="width:40%;" value="" name="course-cash[{{course.id}}]"/>{% endif %}
-                      </div>
-                      </div>
+  
                     </td>
                 </tr>
             {% endfor %}

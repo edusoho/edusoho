@@ -54,6 +54,8 @@ define(function(require, exports, module) {
                 if(checkPrice()){
 
                     $('#coin-model-form').submit();
+                }else{
+                    $('#help-message').removeClass("hidden");
                 }
             }
 
@@ -62,10 +64,10 @@ define(function(require, exports, module) {
                 if(checkRmbPrice()){
 
                     $('#coin-model-form').submit();
+                }else{
+                    $('#help-message').removeClass("hidden");
                 }
-            }
-
-            $('#help-message').removeClass("hidden");
+            }     
 
         });
 

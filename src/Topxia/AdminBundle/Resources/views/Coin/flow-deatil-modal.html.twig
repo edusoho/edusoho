@@ -2,14 +2,15 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}{{user.nickname}}
-<span class="pull-right mrl">
-<span style="color:#1bb974;" class="mll">充值:{{userInCash(user.id,timeType)|default("0.00")}}</span>
-<span style="color:#ff7b0e;" class="mll">消费:{{userOutCash(user.id,timeType)|default("0.00")}}</span>
-<span style="color:#ff7b0e;" class="mll">账户余额:{{userAccount(user.id).cash}}</span>
-</span>
-{% endblock %}
+{% block title %}{{user.nickname}}的{{ setting('coin.coin_name') }}明细 {% endblock %}
 {% block body %}
+
+  <p>
+    <span>账户余额: <strong class="amount-num">{{userAccount(user.id).cash}}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">充值: <strong class="inflow-num">{{userInCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">消费: <strong class="outflow-num">{{userOutCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+  </p>
+
     <div class="table-responsive">
       <table class="table table-striped">
         {% if cashes|default(null) %}
