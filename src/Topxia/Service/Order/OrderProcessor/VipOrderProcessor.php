@@ -16,6 +16,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 	public function getOrderInfo($targetId, $fields)
 	{
         $user = $this->getUserService()->getCurrentUser();
+
+        $level = $this->getLevelService()->getLevel($fields['targetId']);
+        if(empty($level)) {
+            throw new Exception("找不到会员等级!");
+        }
+
         $member = $this->getVipService()->getMemberByUserId($user->id);
         if ($member) {
             if(array_key_exists("buyType", $fields) && $fields['buyType'] == "upgrade"){
@@ -24,10 +30,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
                 $buyType = "renew";
             }
         } else {
-        	$buyType = "new";
+            $buyType = "new";
         }
 
-        $level = $this->getLevelService()->getLevel($fields['targetId']);
 
         $levelPrice = array(
         	'month' => $level['monthPrice'],
@@ -37,6 +42,10 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         if($buyType == "upgrade") {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         }else{
+            if(ArrayToolkit::required($fields, array("unit", "duration"))) {
+                throw new Exception("参数不正确!");
+            }
+
             $unitType = $fields['unit'];
             $duration = $fields['duration'];
 
