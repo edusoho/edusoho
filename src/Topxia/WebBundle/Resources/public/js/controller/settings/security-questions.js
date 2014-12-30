@@ -1,3 +1,4 @@
+
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
@@ -31,7 +32,11 @@ define(function(require, exports, module) {
             rule: 'maxlength{max:20}'
         });
 
-
+        validator.addItem({
+            element: '[name="userLoginPassword"]',
+            required: true,
+            rule: ''
+        });
 
         $('option[value=parents]').css('display', 'none');
         $('option[value=teacher]').css('display', 'none');

@@ -27,6 +27,10 @@
       {% endif %}
     </div>
     <div class="pay-password">
+      
+      <input style="display:none">{# Prevent autocompleting #}
+      <input type="password" style="display:none">{# Prevent autocompleting #}
+
       {% if not hasPayPassword %}
       <div>
         <span class="text-danger">为了保障账户资金安全，请先</span>
@@ -36,7 +40,7 @@
       <div role="password-input" style="display:none">
         <label class="control-label" for="payPassword" style="display:none">支付密码</label>
         <div class="controls">
-          <input id="payPassword" name="payPassword" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
+          <input id="payPassword" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
         </div>
         <div>
           <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
