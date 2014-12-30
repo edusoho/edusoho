@@ -1078,3 +1078,11 @@ admin_coin_flow_detail:
     path:     /coin/flow/detail/
     defaults: { _controller: TopxiaAdminBundle:Coin:flowDetail }
 
+admin_coin_model:
+    path:     /coin/model
+    defaults: { _controller: TopxiaAdminBundle:Coin:model }
+
+admin_coin_model_save:
+    path:     /coin/model/save
+    defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }
+
