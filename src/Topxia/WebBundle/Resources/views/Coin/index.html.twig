@@ -30,7 +30,7 @@
             {{setting('coin.coin_name')}}
              {% if setting('coin.coin_enabled') %}
               {% if setting('coin.charge_coin_enabled') %}
-                <a href="{{path('my_coin_buy')}}" class="mll btn btn-default" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
+                <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
               {% endif %}
               {% if is_plugin_installed('MoneyCard') %}
                 <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>使用学习卡</a>
