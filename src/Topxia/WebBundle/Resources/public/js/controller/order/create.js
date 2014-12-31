@@ -100,7 +100,7 @@ define(function(require, exports, module) {
 		function shouldPay(totalPrice){
 			if(cashRateElement.data("coursePriceShowType") == "RMB") {
 				var shouldPayMoney = parseFloat(totalPrice.toFixed(2));
-				if(totalPrice>shouldPayMoney) {
+				if(Math.abs(totalPrice-shouldPayMoney)>0.01) {
 					shouldPayMoney=shouldPayMoney+0.01;
 				}
 				$('[role="pay-rmb"]').text(shouldPayMoney);
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
 			} else {
 				var payRmb = totalPrice/cashRate;
 				var shouldPayMoney = parseFloat(payRmb.toFixed(2));
-				if(payRmb>shouldPayMoney) {
+				if(Math.abs(payRmb-shouldPayMoney)>0.01) {
 					shouldPayMoney=shouldPayMoney+0.01;
 				}
 				$('[role="pay-coin"]').text(totalPrice);
