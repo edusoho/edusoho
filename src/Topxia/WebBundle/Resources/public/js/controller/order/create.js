@@ -193,6 +193,7 @@ define(function(require, exports, module) {
 			})
 		})
 
+ 		var totalPrice = parseFloat($('[role="total-price"]').text());
  		if($('[role="coinNum"]').length>0) {
  			var coinNum = $('[role="coinNum"]').val();
  			if(isNaN(coinNum) || coinNum<=0){
@@ -208,9 +209,8 @@ define(function(require, exports, module) {
 			}
  			var discount = Math.floor(coinNum/cashRate*100)/100;
  			$('[role="cash-discount"]').text(discount);
- 			var totalPrice = parseFloat($('[role="total-price"]').text());
  			totalPrice = totalPrice-discount;
- 			shouldPay(totalPrice);
  		}
+ 		shouldPay(totalPrice);
 	}
 });
