@@ -37,7 +37,7 @@
             <label for="cash_rate">虚拟币汇率设置</label>
         </div>
         <div class="controls col-md-4">
-          <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coinSettings.cash_rate|default(1) %}value="{{coinSettings.cash_rate}}" {% else %} value="1" {% endif %}>
+          <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coinSettings.cash_rate|default(1) %}value="{{coinSettings.cash_rate|default(1)}}" {% else %} value="1" {% endif %}>
         </div>
          <div class="controls  col-md-8 col-md-offset-3">
             <div class="help-block">在此设置1元可换取的虚拟币数量，<span class="text text-danger">
