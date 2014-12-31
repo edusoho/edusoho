@@ -150,3 +150,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+
+.carts-item .course-title {
+	font-size: 8px;
+}
