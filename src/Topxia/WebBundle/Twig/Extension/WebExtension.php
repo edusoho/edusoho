@@ -67,13 +67,20 @@ class WebExtension extends \Twig_Extension
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
-            'ceil' => new \Twig_Function_Method($this, 'getCeil')   
+            'ceil' => new \Twig_Function_Method($this, 'getCeil'),
+            'loopLimit'  => new \Twig_Function_Method($this, 'getLoopLimit'),
         );
     }
 
     public function getCeil($number)
     {
         return ceil($number);
+    }
+
+    public function getLoopLimit($loop,$count)
+    {
+        $loop = count($loop) <= $count ? $loop : array_slice($loop,0,$count-1);
+        return $loop;
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)

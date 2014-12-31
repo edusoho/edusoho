@@ -23,8 +23,6 @@ class CartsController extends BaseController
             $carts = $this->getCartsService()->findCartsByUserId($user['id']);
         }
 
-        $carts = count($carts) <= 5 ? $carts : array_slice($carts,0,4);
-
         $courses = array();
         $users = array();
 
@@ -36,10 +34,16 @@ class CartsController extends BaseController
             $users = $this->getUsers($teacherIds);
         }
 
+        $totalPrice = 0;
+        foreach ($courses as $course) {
+            $totalPrice +=  $course['price'];
+        }
+
         return $this->render('CustomWebBundle:Carts:show-popover.html.twig',array(
             'carts' => $carts,
             'courses' => $courses,
             'users' => $users,
+            'totalPrice' => $totalPrice
         ));
     }
 
