@@ -130,7 +130,7 @@ class PayCenterController extends BaseController
         list($success, $order) = $this->getPayCenterService()->pay($payData);
 
         if(!$success) {
-            return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
+            return $this->redirect("pay_error");
         }
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
@@ -139,6 +139,11 @@ class PayCenterController extends BaseController
         $goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
 
         return $this->redirect($goto);
+    }
+
+    public function payErrorAction(Request $request)
+    {
+        return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
     }
 
     public function payNotifyAction(Request $request, $name)
