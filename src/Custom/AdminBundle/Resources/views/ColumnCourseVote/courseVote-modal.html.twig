@@ -24,7 +24,7 @@
 <div class="form-group">
         <label class="col-md-4 control-label">是否显示课程对垒</label>
         <div class="col-md-6 controls radios">
-          {{ radios('isShow', { 'none':'关闭','active':'开启'}, isShow|default('none') ) }}
+          {{ radios('isShow', { none:'关闭',active:'开启'}, courseVotes.isShow)}}
           <div id="courseVotesIsShow" class="help-block">设置系统是否在专栏页面显示课程投票。</div>
         </div>
 </div>
