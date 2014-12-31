@@ -1158,5 +1158,5 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         			'discussion' => $discussionSum,
         			'note' => $noteSum,
         			'test' => $testSum );
-    }
+
 }
