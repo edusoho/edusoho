@@ -12,6 +12,7 @@ class CourseController extends BaseController
 {	
 	public function learnAction(Request $request, $id)
 	{
+	
 		$user = $this->getCurrentUser();
 
 		if (!$user->isLogin()) {
@@ -284,6 +285,9 @@ class CourseController extends BaseController
 				$vipChecked = 'ok';
 			}
 		}
+
+		$progress = $this->calculateUserLearnProgress($course, $member);
+
 		return $this->render("TopxiaWebBundle:Course:course-header.html.twig", array(
 			'course' => $course,
 			'tags' => $tags,
@@ -293,8 +297,23 @@ class CourseController extends BaseController
 			'checkMemberLevelResult' => $checkMemberLevelResult,
 			'nextLearnLesson' => $nextLearnLesson,
 			'isNonExpired' => empty($isNonExpired)?null:$isNonExpired,
-			'vipChecked' => empty($vipChecked)?null:$vipChecked
+			'vipChecked' => empty($vipChecked)?null:$vipChecked,
+			'progress' => $progress
 		));
+	}
+	private function calculateUserLearnProgress($course, $member)
+	{
+		if ($course['lessonNum'] == 0) {
+			return array('percent' => '0%', 'number' => 0, 'total' => 0);
+		}
+
+		$percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+		return array (
+			'percent' => $percent,
+			'number' => $member['learnedNum'],
+			'total' => $course['lessonNum']
+		);
 	}
 
 	public function relatedArticlesAction(Request $request,$id)

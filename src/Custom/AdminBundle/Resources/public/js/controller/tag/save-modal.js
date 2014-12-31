@@ -39,7 +39,7 @@ define(function(require, exports, module) {
             rule: 'remote'
         });
         validator.addItem({
-            element: '#tag-weight-field',
+            element: '#category-weight-field',
             required: true,
             rule: 'integer'
         });
