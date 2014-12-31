@@ -34,6 +34,25 @@ define(function(require, exports, module) {
 			return Math.round(Math.round(x*1000)-Math.round(y*1000))/1000;
 		}
 
+		function moneyFormatFloor(value) {
+	        // 转化成字符串
+	        value = value + '';　
+	        value = parseInt(Math.round(value * 1000));
+	        // 抹去最后１位
+	        value = parseInt(value/10) * 10 / 1000;
+	        return value.toFixed(2);
+	    }
+
+		function moneyFormatCeil(value) {
+	        value = value + '';
+	        value = parseFloat(value).toFixed(3);
+
+	        if (value.substr(-1) === '0') {
+	            return moneyFormatFloor(value);
+	        }
+	        return moneyFormatFloor(parseFloat(value) + 0.01);
+	    }
+
 		function afterCouponPay(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			var couponTotalPrice = $('[role="coupon-price"]').find("[role='price']").text();
@@ -52,7 +71,7 @@ define(function(require, exports, module) {
 			var coin = Math.round(accountCash*1000)>Math.round(coinNum*1000) ? coinNum : accountCash;
 
 			if(cashRateElement.data("coursePriceShowType") == "RMB"){
-				var cashDiscount = Math.round(divition(coin, cashRate)*100)/100;
+				var cashDiscount = Math.round(moneyFormatFloor(divition(coin, cashRate))*100)/100;
 				$('[role="cash-discount"]').text(cashDiscount);
 			}else{
 				$('[role="cash-discount"]').text(coin);
