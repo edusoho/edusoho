@@ -56,7 +56,13 @@ define(function(require, exports, module) {
 
 			if(cashRateElement.data("coursePriceShowType") == "RMB"){
 				var cashDiscount = (coin*100)/(cashRate*100);
-				cashDiscount = parseInt(cashDiscount*100)/100;
+				cashDiscount = parseFloat(cashDiscount*100)/100;
+				var fixtedCashDiscount = parseFloat(cashDiscount.toFixed(2));
+				if(Math.abs(cashDiscount-fixtedCashDiscount)>0.01) {
+					cashDiscount=cashDiscount+0.01;
+				} else {
+					cashDiscount = parseInt(cashDiscount*100)/100;
+				}
 				$('[role="cash-discount"]').text(cashDiscount);
 			}else{
 				$('[role="cash-discount"]').text(coin);
@@ -88,7 +94,7 @@ define(function(require, exports, module) {
 						afterCoinPay(coinNumPay);
 					}
 					var cashDiscount = $('[role="cash-discount"]').text();
-					totalPrice = totalPrice-parseInt(cashDiscount*100)/100;
+					totalPrice = totalPrice-cashDiscount;
 				} else {
 					$('[role="cash-discount"]').text("0.00");
 				}
