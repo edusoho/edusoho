@@ -10,8 +10,8 @@ class ColumnCourseVoteLogDaoImpl extends BaseDao implements ColumnCourseVoteLogD
     protected $table = 'column_course_vote_log';
        public function countVoteLogByUseIdAndColumnIdAndCourseVoteIdAndName($userId,$columnId,$courseVoteId,$courseName)
        {
-            $sql = "SELECT COUNT(*)  FROM {$this->table} WHERE specialColumnId=?  and columnCourseVoteId=? and voteCourseName=? and userId=?";
-             return $this->getConnection()->fetchColumn($sql,array($columnId,$courseVoteId,$courseName,$userId));
+            $sql = "SELECT COUNT(*)  FROM {$this->table} WHERE  columnCourseVoteId=? and userId=?";
+             return $this->getConnection()->fetchColumn($sql,array($courseVoteId,$userId));
         }
 
      public function getColumnCourseVoteLog($id)
