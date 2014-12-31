@@ -102,7 +102,22 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $totalPrice = (float)$totalPrice;
-        
+
+        //优惠码优惠价格
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        $couponSetting = $this->getSettingService()->get("coupon");
+
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
+            list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
+                $fields["couponCode"], 
+                $targetId, 
+                $totalPrice, 
+                $priceType, 
+                $cashRate
+            );
+            $totalPrice = $afterCouponAmount;
+        }
+
         //虚拟币优惠价格
         if(array_key_exists("coinPayAmount", $fields)) {
             $payAmount = $this->afterCoinPay(
@@ -116,20 +131,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         } else {
             $amount = $totalPrice;
         }
-        //优惠码优惠价格
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
-            list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
-                $fields["couponCode"], 
-                $targetId, 
-                $amount, 
-                $priceType, 
-                $cashRate
-            );
-            $amount = $afterCouponAmount;
-        }
 
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;

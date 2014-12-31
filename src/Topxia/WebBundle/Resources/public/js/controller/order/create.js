@@ -191,6 +191,17 @@ define(function(require, exports, module) {
 
  		if($('[role="coinNum"]').length>0) {
  			var coinNum = $('[role="coinNum"]').val();
+ 			if(isNaN(coinNum) || coinNum<=0){
+				$(this).val(0);
+				coinPriceZero();
+			} else {
+				$(".pay-password div[role='password-input']").show();
+				validator.addItem({
+					element: '[name="payPassword"]',
+					required: true,
+        			rule: 'remote'
+				});
+			}
  			var discount = Math.floor(coinNum/cashRate*100)/100;
  			$('[role="cash-discount"]').text(discount);
  			var totalPrice = parseFloat($('[role="total-price"]').text());
