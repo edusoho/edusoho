@@ -71,6 +71,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             }
         }
 
+        $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
         return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
@@ -100,16 +101,17 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception("实际价格不匹配，不能创建订单!");
         }
 
+        $totalPrice = (float)$totalPrice;
+        
         //虚拟币优惠价格
         if(array_key_exists("coinPayAmount", $fields)) {
             $payAmount = $this->afterCoinPay(
-            	$coinEnabled, 
-            	$priceType, 
-            	$cashRate, 
-            	$fields['coinPayAmount'], 
-            	$fields["payPassword"]
+                $coinEnabled, 
+                $priceType, 
+                $cashRate, 
+                $fields['coinPayAmount'], 
+                $fields["payPassword"]
             );
-            $totalPrice = (float)$totalPrice;
             $amount = ($totalPrice*100 - $payAmount*100)/100;
         } else {
             $amount = $totalPrice;
