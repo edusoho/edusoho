@@ -48,7 +48,11 @@ define(function(require, exports, module) {
 
 			var coin = accountCash>coinNum ? coinNum : accountCash;
 			var fixedCoin = coin.toFixed(2);
-			if(coin > fixedCoin) coin=parseFloat(fixedCoin)+0.01;
+			if(coin > fixedCoin) {
+				coin=parseFloat(fixedCoin)+0.01;
+			} else {
+				coin = fixedCoin;
+			}
 
 			if(cashRateElement.data("coursePriceShowType") == "RMB"){
 				var cashDiscount = (coin*100)/(cashRate*100);
