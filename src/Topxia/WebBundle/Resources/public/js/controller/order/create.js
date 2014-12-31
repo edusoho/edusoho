@@ -116,6 +116,7 @@ define(function(require, exports, module) {
 		$('[role="coinNum"]').blur(function(e){
 			var coinNum = $(this).val();
 			coinNum = Math.round(coinNum*100)/100;
+			$(this).val(coinNum);
 			if(isNaN(coinNum) || coinNum<=0){
 				$(this).val(0);
 				coinPriceZero();
@@ -128,7 +129,6 @@ define(function(require, exports, module) {
 				});
 			}
 			conculatePrice();
-			$(this).val(coinNum);
 		});
 
 		$("#coupon-code-btn").click(function(e){
