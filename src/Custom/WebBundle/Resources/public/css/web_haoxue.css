@@ -145,3 +145,8 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .course-list {
 	height: 250px;
 }
+
+.carts-popover-btn{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
