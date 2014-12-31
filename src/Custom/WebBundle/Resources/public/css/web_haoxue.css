@@ -154,3 +154,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .carts-item .course-title {
 	font-size: 8px;
 }
+
+.carts-popover-info {
+	font-size: 10px;
+}
