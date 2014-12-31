@@ -38,8 +38,7 @@ class CashServiceImpl extends BaseService implements CashService
             $account = $this->getCashAccountService()->createAccount($outFlow["userId"]);
             $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"], true);
         }
-        
-        if($account["cash"] < $outFlow["amount"]) {
+        if(abs($account["cash"]*100/100 - $outFlow["amount"])<0.01) {
             return false;
         }
 
