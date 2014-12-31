@@ -15,8 +15,8 @@
         </div>
       </span>
 
-      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-        <span class="apply-name">{{ course.title|plain_text(5) }}</span>
+      <a class="course-title" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+        <span>{{ course.title|plain_text(10) }}</span>
       </a>
       <div class="popover-teachers">
         {% if course.teacherIds|default(null) %}
@@ -31,7 +31,7 @@
     {% endfor %}
   </ul>
   <div class="pull-right">
-    <div>共 <span class="price-count"> {{ cartsCount() }} </span> 件商品,总计<span class="price-count">  ¥{{ totalPrice }} </span>元</div>
+    <div class="carts-popover-info">共 <strong><span class="text-danger"> {{ cartsCount() }} </span></strong> 件商品 &nbsp;&nbsp; 总计<strong><span class="text-danger">  ¥{{ totalPrice }} </span></strong>元</div>
     <a href="{{ path('carts_list') }}" class="btn btn-danger btn-xs pull-right carts-popover-btn" target="_blank">购物车结算</a>
   </div>
 </div>
