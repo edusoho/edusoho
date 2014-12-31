@@ -62,7 +62,6 @@ class PayCenterController extends BaseController
                 'amount' => $order['amount'], 
                 'paidTime' => time()
             );
-            
             list($success, $order) = $this->getPayCenterService()->pay($payData);
             $processor = OrderProcessorFactory::create($order["targetType"]);
             $router = $processor->getRouter();
@@ -170,7 +169,6 @@ class PayCenterController extends BaseController
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
         $router = $processor->getRouter();
-
         return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
     }
 
