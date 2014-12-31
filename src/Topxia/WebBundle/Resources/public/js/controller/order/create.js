@@ -46,7 +46,11 @@ define(function(require, exports, module) {
 			accountCash = parseFloat(accountCash);
 			coinNum = parseFloat(coinNum);
 			if(accountCash>coinNum) {
+				
+				var coin=coinNum;
 				coinNum = coinNum.toFixed(2);
+				if(coin > coinNum) coinNum=parseFloat(coinNum)+0.01;
+
 				if(cashRateElement.data("coursePriceShowType") == "RMB"){
 					var cashDiscount = (coinNum*100)/(cashRate*100);
 					cashDiscount = parseInt(cashDiscount*100)/100;
@@ -83,6 +87,7 @@ define(function(require, exports, module) {
 					coinNum = totalPrice;
 				}
 				var coinNumPay = $('[role="coinNum"]').val();
+
 				if(coinNumPay && $('[name="payPassword"]').length>0){
 					if(coinNum <= coinNumPay) {
 						afterCoinPay(totalPrice, coinNum);
@@ -195,6 +200,7 @@ define(function(require, exports, module) {
  		
  		if($('[role="coinNum"]').length>0) {
  			$('[role="coinNum"]').blur();
+
  		}else{
  			conculatePrice();
  		}
