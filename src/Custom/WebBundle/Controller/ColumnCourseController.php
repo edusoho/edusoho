@@ -10,9 +10,7 @@ use Topxia\Common\ArrayToolkit;
 class ColumnCourseController extends BaseController
 {
 
-    private function crateVote(){
-        return array("id"=>11,'specialColumnId'=>1,'courseAName'=>"iiiiii","courseBName"=>"bbbbb","voteCourseName"=>"iiiiii");
-    }
+
 
     public function indexAction(Request $request, $id){
         $column=$this->getColumnService()->getColumn($id);
