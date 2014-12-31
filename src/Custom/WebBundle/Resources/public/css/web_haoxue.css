@@ -142,11 +142,11 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	padding-bottom: 10px;
 }
 
-.course-list {
-	height: 250px;
-}
-
 .carts-popover-btn{
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+
+.favourited {
+	color: #E0DCDC;
 }

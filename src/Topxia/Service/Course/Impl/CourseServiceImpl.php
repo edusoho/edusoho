@@ -568,8 +568,38 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function favoriteCourses(array $courseIds)
 	{
 		foreach ($courseIds as $key => $courseId) {
-			$this->favoriteCourse($courseId);
+			$this->batchFavoriteCourse($courseId);
 		}
+
+		return true;
+	}
+
+	public function batchFavoriteCourse($courseId)
+	{
+		$user = $this->getCurrentUser();
+		if (empty($user['id'])) {
+			throw $this->createAccessDeniedException();
+		}
+
+		$course = $this->getCourse($courseId);
+		if($course['status']!='published'){
+			throw $this->createServiceException('不能收藏未发布课程');
+		}
+
+		if (empty($course)) {
+			throw $this->createServiceException("该课程不存在,收藏失败!");
+		}
+
+		$favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id']);
+		if($favorite){
+			return ;
+		}
+
+		$this->getFavoriteDao()->addFavorite(array(
+			'courseId'=>$course['id'],
+			'userId'=>$user['id'],
+			'createdTime'=>time()
+		));
 
 		return true;
 	}

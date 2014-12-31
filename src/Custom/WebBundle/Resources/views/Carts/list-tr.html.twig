@@ -25,7 +25,7 @@
         </a>
 
         <a href="javascript:;" class="btn btn-link" data-role="single-favourite-btn" title="收藏"  data-url="{{ path('carts_course_favorite') }}" data-item-id="{{ course.id }}" {% if favouritedCourseId %} disabled {% endif %}>
-            <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top"  ></span>
+            <span class="glyphicon glyphicon-bookmark {% if favouritedCourseId %}favourited{% endif %}"　data-toggle="tooltip" data-placement="top"  ></span>
         </a>
     </td>
 </tr>
