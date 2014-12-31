@@ -113,11 +113,12 @@ define(function(require, exports, module) {
 
 		function shouldPay(totalPrice){
 			totalPrice = Math.round(totalPrice*1000)/1000;
+			totalPrice = moneyFormatCeil(totalPrice);
 			if(cashRateElement.data("coursePriceShowType") == "RMB") {
 				$('[role="pay-rmb"]').text(totalPrice);
 				$('input[name="shouldPayMoney"]').val(totalPrice);
 			} else {
-				var payRmb = divition(totalPrice, cashRate);
+				var payRmb = moneyFormatCeil(divition(totalPrice, cashRate));
 				var shouldPayMoney = Math.round(payRmb*100)/100;
 				$('[role="pay-coin"]').text(totalPrice);
 				$('[role="pay-rmb"]').text(shouldPayMoney);
