@@ -187,8 +187,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return array(
         	$amount, 
         	$totalPrice, 
-        	empty($couponResult) ? null : $couponResult,
-        	empty($couponDiscount) ? null : $couponDiscount,
+        	null
         );
 
 	}

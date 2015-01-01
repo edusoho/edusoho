@@ -108,14 +108,15 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $couponSetting = $this->getSettingService()->get("coupon");
 
         if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
-            list($afterCouponAmount, $couponResult, $couponDiscount) = $this->afterCouponPay(
+            $couponResult = $this->afterCouponPay(
                 $fields["couponCode"], 
                 $targetId, 
                 $totalPrice, 
                 $priceType, 
                 $cashRate
             );
-            $totalPrice = $afterCouponAmount;
+            $totalPrice = $couponResult["afterAmount"];
+            $totalPrice = $couponResult["afterAmount"];
         }
 
         //虚拟币优惠价格
@@ -144,7 +145,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         	$amount, 
         	$totalPrice, 
         	empty($couponResult) ? null : $couponResult,
-        	empty($couponDiscount) ? null : $couponDiscount,
         );
 	}
 
@@ -156,15 +156,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 	private function afterCouponPay($couponCode, $targetId, $amount, $priceType, $cashRate)
 	{
 		$couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "course", $targetId, $amount);
-        $afterRmbAmount = $couponResult["afterAmount"];
-        if($priceType == "RMB") {
-            $amount = $amount - $couponResult["decreaseAmount"];
-            $couponDiscount = $couponResult["decreaseAmount"];
-        } else if ($priceType == "Coin") {
-            $amount = $amount - $couponResult["decreaseAmount"]*$cashRate;
-            $couponDiscount = $couponResult["decreaseAmount"]*$cashRate;
-        }
-        return array($amount, $couponResult, $couponDiscount);
+        return $couponResult;
 	}
 
 	public function doPaySuccess($success, $order) {

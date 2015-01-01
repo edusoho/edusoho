@@ -186,12 +186,7 @@ define(function(require, exports, module) {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
 					$('[role="code-notify"]').css("color","green").text("优惠码可用");
-					if(cashRateElement.data("coursePriceShowType") == "RMB") {
-						$('[role="coupon-price"]').find("[role='price']").text(data.decreaseAmount);
-					} else {
-						var coinPrice = multiple(data.decreaseAmount, cashRate);
-						$('[role="coupon-price"]').find("[role='price']").text(coinPrice);
-					}
+					$('[role="coupon-price"]').find("[role='price']").text(data.decreaseAmount);
 				}
 				conculatePrice();
 			})

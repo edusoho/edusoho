@@ -68,7 +68,7 @@ class OrderController extends BaseController
         $targetId = $fields["targetId"];
 
         $priceType = "RMB";
-        $coinSetting = $this->getSettingService()->get("coin");
+        $coinSetting = $this->setting("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
         if($coinEnabled && isset($coinSetting["price_type"])) {
             $priceType = $coinSetting["price_type"];
@@ -82,11 +82,12 @@ class OrderController extends BaseController
 
         try {
             
-            list($amount, $totalPrice, $couponResult, $couponDiscount) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
-            $amount = (float)$amount;
-            $shouldPayMoney = (float)$fields["shouldPayMoney"];
+            list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+            $amount = (string)((float)$amount);
+            $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
+
             //价格比较
-            if(abs($amount - $shouldPayMoney) > 0.01) {
+            if($amount != $shouldPayMoney) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
@@ -100,7 +101,7 @@ class OrderController extends BaseController
                 'payment' => 'alipay',
                 'targetId' => $targetId,
                 'coupon' => empty($couponResult) ? null : $fields["couponCode"],
-                'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
+                'couponDiscount' => empty($couponResult) ? null : $couponResult["decreaseAmount"],
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
@@ -136,9 +137,13 @@ class OrderController extends BaseController
 
             //判断coupon是否合法，是否存在跟是否过期跟是否可用于当前课程
             $course = $this->getCourseService()->getCourse($id);
-
-            $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $course['price']);
-            
+            $coinSetting = $this->setting("coin");
+            if(isset($coinSetting["coin_enabled"]) && isset($coinSetting["price_type"]) && $coinSetting["coin_enabled"]==1 && $coinSetting["price_type"]=="Coin"){
+                $price = $course['coinPrice'];
+            } else {
+                $price = $course['price'];
+            }
+            $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $price);
             return $this->createJsonResponse($couponInfo);
         }
     }
@@ -252,11 +257,6 @@ class OrderController extends BaseController
     protected function getCouponService()
     {
         return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getVipService()

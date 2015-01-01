@@ -58,10 +58,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			list($success, $order) = $this->getOrderService()->payOrder($payData);
 
 			if($order["coupon"]) {
-				$couponApp = $this->getAppService()->findInstallApp("Coupon");
-				if(!empty($couponApp)) {
-					$this->getCouponService()->useCoupon($order["coupon"], $order);
-				}
+				$this->useCoupon($order);
 			}
 
 			$processor = OrderProcessorFactory::create($order["targetType"]);
@@ -81,6 +78,13 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         }
         
         return array(false, array());
+	}
+
+	private function useCoupon($order){
+		$couponApp = $this->getAppService()->findInstallApp("Coupon");
+		if(!empty($couponApp)) {
+			$this->getCouponService()->useCoupon($order["coupon"], $order);
+		}
 	}
 
 	private function proccessCashFlow($order) {
