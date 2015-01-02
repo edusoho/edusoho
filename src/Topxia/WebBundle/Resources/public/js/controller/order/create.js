@@ -91,6 +91,7 @@ define(function(require, exports, module) {
 				var coinNum = 0;
 				if(cashRateElement.data("coursePriceShowType") == "RMB") {
 					coinNum = multiple(totalPrice, cashRate);
+					coinNum = moneyFormatCeil(coinNum);
 				} else {
 					coinNum = totalPrice;
 				}
@@ -136,7 +137,6 @@ define(function(require, exports, module) {
 		$('[role="coinNum"]').blur(function(e){
 			var coinNum = $(this).val();
 			coinNum = Math.round(coinNum*100)/100;
-			$(this).val(coinNum);
 			if(isNaN(coinNum) || coinNum<=0){
 				$(this).val(0);
 				coinPriceZero();
