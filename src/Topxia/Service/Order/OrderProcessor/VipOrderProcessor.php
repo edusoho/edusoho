@@ -172,14 +172,16 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             	$orderData['coinPayAmount'], 
             	$orderData["payPassword"]
             );
-
             $amount = $totalPrice - $payAmount;
         } else {
             $amount = $totalPrice;
         }
-
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;
+        }
+
+        if($amount<=0) {
+            $amount = 0;
         }
 
         $amount = NumberToolkit::roundUp($amount);
