@@ -22,6 +22,9 @@
            <td width="75%">
             {% if order.status == 'created' %} 未完成
             {% elseif order.status == 'paid' %} 已付款
+            {% elseif order.status == 'cancelled' %} 已关闭
+            {% elseif order.status == 'refunding' %} 申请退款
+            {% elseif order.status == 'refunded' %} 退款成功
             {% endif %}
            </td> 
       </tr>
@@ -38,7 +41,12 @@
       </tr>
       <tr> <th width="25%">订单价格</th> 
         <td width="75%">
-          <span class="money-text">{{ order.amount }}</span>元
+          <span class="money-text">{{ order.totalPrice }}</span>
+          {% if order.priceType == "RMB" %}
+          元
+          {% elseif order.priceType == "Coin" %}
+          {{setting("coin.coin_name")}}
+          {% endif %}
         </td>
       </tr>
       <tr> <th width="25%">优惠码</th> 
@@ -48,7 +56,24 @@
       </tr>
       <tr> <th width="25%">优惠金额</th> 
         <td width="75%">
-          <span class="money-text">{{ order.couponDiscount }}</span>元
+          <span class="money-text">{{ order.couponDiscount }}</span>
+          {% if order.priceType == "RMB" %}
+          元
+          {% elseif order.priceType == "Coin" %}
+          {{setting("coin.coin_name")}}
+          {% endif %}
+        </td>
+      </tr>
+      {% if setting("coin.coin_enabled")|default(0) == 1 %}
+      <tr> <th width="25%">虚拟币支付</th> 
+        <td width="75%">
+          <span class="money-text">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
+        </td>
+      </tr>
+      {% endif %}
+      <tr> <th width="25%">实际支付</th> 
+        <td width="75%">
+          <span class="money-text">{{ order.amount }}</span> 元
         </td>
       </tr>
       <tr> <th width="25%">是否为赠品</th> 
