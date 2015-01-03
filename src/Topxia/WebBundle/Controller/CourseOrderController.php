@@ -117,7 +117,7 @@ class CourseOrderController extends OrderController
         && $coinSetting["coin_enabled"]==1
         && isset($coinSetting["price_type"])
         && $coinSetting["price_type"]=="Coin"
-        && $course['coinPrice']) || $course['price'] == 0) {
+        && $course['coinPrice']==0) || $course['price'] == 0) {
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
             $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
