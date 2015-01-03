@@ -45,7 +45,7 @@
 {% block footer %}
     {% if lesson.status == 'published' %}
         {% if course.price=='0.00'  %}
-                <button id="buy-btn" type="button" class="btn btn-primary" 
+                <a id="buy-btn" type="button" class="btn btn-primary" 
                 {% if setting("course.buy_fill_userinfo")|default(false) %}
                 href="#modal" 
                 data-toggle="modal" 
@@ -57,9 +57,9 @@
                     {% if user.id %}免费加入学习
                     {% else %}登录后加入学习
                     {% endif %}
-                </button>
+                </a>
         {% else %}
-                <button id="buy-btn" type="button" class="btn btn-primary" 
+                <a id="buy-btn" type="button" class="btn btn-primary" 
                 {% if setting("course.buy_fill_userinfo")|default(false) %}
                 href="#modal" 
                 data-toggle="modal" 
@@ -71,7 +71,7 @@
                     {% if user.id %}觉得不错？点击购买此课程（{{ course.price }}元）
                     {% else %}登录后购买学习完整的课程
                     {% endif %}
-                </button>
+                </a>
         {% endif %}
     {% else %}
         <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
