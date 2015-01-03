@@ -104,14 +104,15 @@ define(function(require, exports, module) {
 				}
 				var coinNumPay = $('[role="coinNum"]').val();
 				if(coinNumPay && $('[name="payPassword"]').length>0){
-					if(coinNum <= coinNumPay) {
-						afterCoinPay(coinNum);
-					} else {
-						afterCoinPay(coinNumPay);
+					if(coinNum <= parseFloat(coinNumPay)){
+						coinNumPay = coinNum;
 					}
+					afterCoinPay(coinNumPay);
+					$('[role="coinNum"]').val(coinNumPay);
 					var cashDiscount = $('[role="cash-discount"]').text();
 					totalPrice = subtract(totalPrice, cashDiscount);
 				} else {
+					$('[role="coinNum"]').val(0);
 					$('[role="cash-discount"]').text("0.00");
 				}
 			}
