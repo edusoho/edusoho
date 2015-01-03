@@ -68,7 +68,7 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService($name);
     }
 
-    private function setCurrentUser($userId, $request)
+    public function setCurrentUser($userId, $request)
     {
         $user = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();

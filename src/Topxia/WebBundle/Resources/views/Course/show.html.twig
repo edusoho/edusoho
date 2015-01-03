@@ -66,11 +66,22 @@
 						{% else %}
 							<span class="money-num">{{ course.price }}</span>
 							<span class="money-text">元</span>
+							&nbsp;&nbsp;&nbsp;
+						 {% if setting('coin.coin_enabled') %}
+						 {% if course.coinPrice > 0 %}
+						 <span class="coin-price" >
+							<span >{{ course.coinPrice }}</span>
+							<span  > {{setting('coin.coin_name')}}</span>
+						</span>
+						{% endif %}  
+						{% endif %}  
+
 						{% endif %}  
 					{% else %}
 						<span class="money-num" style="font-size:16px;">免费</span>
 					{% endif %}
 				</p>
+								
 				<p>
 					评　价：
 					<span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>

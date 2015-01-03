@@ -42,7 +42,7 @@
             <a href="../coupon" class="btn btn-primary">管理</a>
           {% elseif app.code|lower == 'questionplus' %}
             <a href="../question/plumber/setting" class="btn btn-primary">管理</a>
-          {% elseif app.code|lower == 'homework' %}
+          {% elseif app.code|lower in ['homework', 'materiallib'] %}
           {% elseif app.code|lower != 'main' %}
             <a href="../{{ app.code|lower }}/index" class="btn btn-primary">管理</a>
           {% endif %}

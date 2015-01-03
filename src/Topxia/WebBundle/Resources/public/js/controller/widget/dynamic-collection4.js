@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var Handlebars = require('handlebars');
-
+    var Notify = require('common/bootstrap-notify');
     var DynamicCollection = Widget.extend({
         attrs: {
             onlyAddItemWithModel: false
@@ -55,6 +55,10 @@ define(function(require, exports, module) {
         },
 
         deleteItem: function(e) {
+            var beforeDeleteItem = this.get("beforeDeleteItem");          
+            if(beforeDeleteItem && !beforeDeleteItem()){
+                return;
+            }
             $(e.currentTarget).parents('[data-role=item]').remove();
             this._toggleList();
         },
@@ -66,7 +70,6 @@ define(function(require, exports, module) {
         _setupAttrsFromHtml: function() {
             var model = $.parseJSON(this.$('[data-role=model]').html());
             var itemTemplate = Handlebars.compile(this.$('[data-role=item-template]').html());
-
             this.set('model', model);
             this.set('itemTemplate', itemTemplate);
         },

@@ -1,0 +1,67 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{# {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %} #}
+{% block title %}我的账户 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-coin' %}
+
+{% block main %}
+{# <div class="panel panel-default panel-col"> #}
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    我的账户
+    {# 我的{{setting('coin.coin_name')}} #}
+  </div>
+  <div class="panel-heading" style="font-weight:normal;">
+    账户余额:<br>
+    <div class="row">
+        <div class="col-md-offset-2" style="font-weight:400;">
+          <strong style="font-size:28px;">{{account.cash|default(0)}}</strong>
+            {{setting('coin.coin_name')}}
+             {% if setting('coin.coin_enabled') %}
+            {% if setting('coin.charge_coin_enabled') %}
+            <a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>
+            {% endif %}
+            {% endif %}
+        </div>
+
+    </div>
+
+  </div>
+  <div class="panel-body">
+   <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>
+      <li role="presentation" {% if app.request.query.get('type') == "inflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'inflow'})}}">充值记录</a></li>
+      <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">消费记录</a></li>
+    </ul>
+
+    <br>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        {% if cashes %}
+        <tr>
+          <th>名称</th>
+          <th>流水号</th>
+          <th>成交时间</th>
+          <th>收支</th>
+        </tr>
+        {% for cash in cashes %}
+           <tr>
+            <td>{{cash.name}}<br>
+                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>
+            <td>{{cash.sn}}</td>
+            <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
+            <td>{% if cash.type =="outflow" %}-{% endif %}{{cash.amount|score_text}}</td>
+          </tr>
+        {% endfor %}
+        {% else %}
+        <div class="empty">暂无记录</div>
+        {% endif %}
+      </table>
+    </div>
+ {{ web_macro.paginator(paginator) }}
+
+  </div>
+</div>
+
+{% endblock %}

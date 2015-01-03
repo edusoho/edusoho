@@ -53,9 +53,22 @@ class BaseProcessor {
         return $this->controller->getContainer();
     }
 
+    protected function getAppService()
+    {
+        return $this->controller->getService('CloudPlatform.AppService');
+    }
+
     protected function getBlockService()
     {
         return $this->controller->getService('Content.BlockService');
+    }
+
+    protected function getUserService(){
+        return $this->controller->getService('User.UserService');
+    }
+
+    protected function getMessageService(){
+        return $this->controller->getService('User.MessageService');
     }
 
     protected function getCouponService()
@@ -86,6 +99,11 @@ class BaseProcessor {
     protected function getMobileDeviceService()
     {
         return $this->controller->getService('Util.MobileDeviceService');
+    }
+
+    protected function getArticleService()
+    {
+        return $this->controller->getService('Article.ArticleService');
     }
 
     protected function getOrderService()
@@ -186,7 +204,7 @@ class BaseProcessor {
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "2.1.0"
+                "max" => "2.3.0"
             ) ,
         );
     }

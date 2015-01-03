@@ -1,9 +1,15 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
-    var FileBrowser = require('../file/file-browser');
     var UploadPanel = require('edusoho.uploadpanel');
     var Notify = require('common/bootstrap-notify');
+    
+    if ($("div .file-browser-list-container").length > 0) {
+        var MaterialFileBrowser = require('../file/file-browser-material-lib');
+    }
+
+    var CourseFileBrowser = require('../file/file-browser');
+	
 
     var BaseChooser = Widget.extend({
         attrs: {
@@ -101,11 +107,21 @@ define(function(require, exports, module) {
         FileBrowser: function() {
             var self = this;
 
-            var browser = new FileBrowser({
-                element: this.$('[data-role=file-browser]')
+            if ($("div .file-browser-list-container").length > 0) {
+                    var materialBrowser = new MaterialFileBrowser({
+                        element: this.$('[data-role=file-browser]')
+                    }).show();
+
+                    materialBrowser.on('select', function(file) {
+                        self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                    });
+            }
+            
+            var courseBrowser = new CourseFileBrowser({
+                element: this.$('[data-role=course-file-browser]')
             }).show();
 
-            browser.on('select', function(file) {
+            courseBrowser.on('select', function(file) {
                 self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
             });
         },

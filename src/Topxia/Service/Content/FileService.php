@@ -151,4 +151,8 @@ interface FileService
 	 * @return [type]
 	 */
 	public function thumbnailFile(array $file, array $options);
+
+	public function getFile($id);
+
+	public function getFilesByIds($ids);
 }

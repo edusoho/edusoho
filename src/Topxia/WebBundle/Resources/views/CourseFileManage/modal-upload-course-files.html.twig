@@ -3,7 +3,10 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-  {% if targetType == 'courselesson' %} 上传课时文件 {% elseif targetType == 'coursematerial' %} 上传资料文件 {% endif %}
+  {% if targetType == 'courselesson' %} 上传课时文件 
+  {% elseif targetType == 'coursematerial' %} 上传资料文件 
+  {% elseif targetType == 'materiallib' %} 上传文件到教学资料库
+  {% endif %}
 {% endblock %}
 	
 {% block body %}

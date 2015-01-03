@@ -39,4 +39,9 @@ app/data/plugin_installed.php
 !/web/themes/default
 !/web/themes/default-b
 edusoho.komodoproject
+.project
+.settings
+composer.sublime-workspace
+web/assets/img/default/video.png
 .publish
+.buildpath

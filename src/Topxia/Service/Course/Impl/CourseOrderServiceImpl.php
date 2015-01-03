@@ -72,7 +72,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             $order['payment'] = $info['payment'];
-            $order['amount'] = $course['price'];
+            if($info['payment'] == 'alipay'){
+                $order['amount'] = $course['price'];
+            }else{
+                $order['amount'] = $course['coinPrice'];
+            }
             
             if($order['amount'] > 0){
                 //如果是限时打折，判断是否在限免期，如果是，则Amout为0
@@ -185,9 +189,66 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         }
     }
 
+    public function paymentByCoin($id) 
+    {
+        //直接扣余额
+        //加入课程
+        //修改订单状态
+        $connection = ServiceKernel::instance()->getConnection();
+        try {
+            $connection->beginTransaction();
+
+            $order = $this->getOrderService()->getOrder($id);
+            $cashAccount = $this->getCashService()->getAccountByUserId($order["userId"]);
+            if($cashAccount["cash"]<$order["amount"]){
+                throw $this->createServiceException('余额不足。');
+            }
+
+            $flow=array(
+                'amount'=>$order['amount'],
+                'sn'=>$order['sn'],
+                'name'=>$order['title'],
+                'note'=>'',
+                'category'=>'recharge',
+            );
+            $this->getCashService()->outflow($order['userId'],$flow);
+
+            $this->getCashService()->waveDownCashField($cashAccount["id"], $order["amount"]);
+
+            $user = $this->getCurrentUser();
+            $this->getLogService()->info('cash', 'cost_coin', $user['nickname']." 购买课程时消费 {$order['amount']} 虚拟币", array());
+
+            $payData = array(
+                'status' => 'success',
+                'amount' => $order['amount'],
+                'paidTime' => time(),
+                'sn'  => $order['sn']
+            );
+            list($success, $order) = $this->getOrderService()->payOrder($payData);
+            $this->doSuccessPayOrder($id);
+
+            $connection->commit();
+
+            return $order;
+        } catch (\Exception $e) {
+            $connection->rollBack();
+            throw $e;
+        }
+    }
+    
+    protected function getCashService()
+    {
+        return $this->createService('Cash.CashService');
+    }    
+
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
     protected function getCourseService()

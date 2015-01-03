@@ -85,6 +85,7 @@ class CourseLessonManageController extends BaseController
 	            $lessonId = $formData['lessonId'];
 	        } else {
 	            $lessonId = 0;
+	            $formData['lessonId'] = 0;
 	        }
 
 	        $content = $formData['content'];
@@ -258,7 +259,7 @@ class CourseLessonManageController extends BaseController
 		$lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
@@ -440,6 +441,10 @@ class CourseLessonManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    
+    private function getAppService(){
+		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
     
     private function getTestpaperService()

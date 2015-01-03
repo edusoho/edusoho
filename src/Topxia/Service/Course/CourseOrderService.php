@@ -34,4 +34,6 @@ interface CourseOrderService
      * 取消课程的退款订单
      */
 	public function cancelRefundOrder($id);
+
+    public function paymentByCoin($id);
 }

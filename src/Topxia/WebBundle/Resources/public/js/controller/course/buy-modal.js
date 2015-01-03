@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    require("jquery.bootstrap-datetimepicker");
+    var Notify = require('common/bootstrap-notify');
 
     var $modal = $('#course-buy-form').parents('.modal');
 
@@ -113,6 +115,32 @@ define(function(require, exports, module) {
                 $(this).data('status', 'hide');
             }
         });
+
+        $("input[role='payTypeChoices']").on('click', function(){
+
+            $("#password").prop("type","password");
+            
+            if($(this).val()=="chargeCoin") {
+                $("#screct").show();
+
+                validator.addItem({
+                    element: '[name="password"]',
+                    required: true,
+                    rule: 'remote'
+                });
+
+                if (parseFloat($("#leftMoney").html()) <  parseFloat($("#neededMoney").html())){
+                        $("#notify").show();
+                        $modal.find('[type=submit]').addClass('disabled');
+                 }
+            }else if($(this).val()=="zhiFuBao"){
+                validator.removeItem('[name="password"]');
+
+                $("#screct").hide();
+                $("#notify").hide();
+                $modal.find('[type=submit]').removeClass('disabled');
+            }
+        })
 
         $('.btn-use-coupon').on('click', function(){
 

@@ -35,7 +35,7 @@
 }
 
 </style>
-
+       
 <div class="panel panel-default panel-col">
   <div class="panel-heading">教师设置</div>
   <div class="panel-body">
@@ -46,7 +46,7 @@
       <div class="form-group" id="teachers-form-group">
         <div class="col-md-2 control-label"><label>已添加教师</label></div>
         <div class="col-md-8 controls">
-          <ul class="list-group teacher-list-group sortable-list" data-role="list" style="display:none;"></ul>
+          <ul class="list-group teacher-list-group sortable-list" id="teacher-list-group" data-role="list" style="display:none;"></ul>
           <div class="input-group">
             {% set url = path('course_manage_teachers_match', {id:course.id}) ~ '?q={{query}}' %}
             <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
@@ -54,20 +54,22 @@
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
             </span>
           </div>
-
+     
           <script type="text/plain" data-role="model">{{ teachers|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="item-template">
-            {% verbatim %}
+              {% verbatim %}
+
               <li class="list-group-item clearfix" data-role="item">
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                 <img src="{{ avatar }}" class="avatar-small">
                 <span class="nickname">{{ nickname }}</span>
                 <label class="visible-checkbox"><input type="checkbox" value="1" name="visible_{{ id }}" {{#if isVisible }}checked="checked"{{/if}}> 显示</label>
-                <input type="hidden" name="ids[]" value="{{ id }}">
-                <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
+                <input type="hidden" name="ids[]" value="{{ id }}">     
+                <button  class="close delete-btn" data-role="item-delete" type="button" title="删除" >&times; </button>
               </li>
             {% endverbatim %}
           </script>
+
         </div>  
       </div>
 

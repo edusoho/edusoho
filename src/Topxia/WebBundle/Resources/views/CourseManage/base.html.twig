@@ -123,13 +123,13 @@
 			  	<div class="help-block" style="display:none;"></div>
 			  </div>
 			</div>
-
+			{% if course.type == 'live'%}
 			<div class="form-group">
 			    <div class="col-md-offset-2 col-md-8 controls">
 		    		<a href="http://www.edusoho.com/files/liveplugin/live_desktop_{{liveProvider}}.rar" target="_blank">直播“桌面分享”插件下载</a>
 			    </div>
 			</div>
-		
+			{% endif %}
 		  <div class="form-group">
 		    <div class="col-md-offset-2 col-md-8 controls">
 		    	<button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>

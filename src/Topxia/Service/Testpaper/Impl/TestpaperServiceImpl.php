@@ -248,7 +248,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets(array($target));
     }
 
-
+    public function findAllTestpapersByTargets(array $ids)
+    {
+        $targets=array();
+        foreach ($ids as $id) {
+            $targets[]='course-'.$id;
+        }
+        return $this->getTestpaperDao()->findTestpaperByTargets($targets);
+    }
 
 
 
@@ -733,7 +740,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $existItems = $this->getTestpaperItems($testpaperId);
 
         $existItems = ArrayToolkit::index($existItems, 'questionId');
-
 
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         if (count($items) != count($questions)) {
