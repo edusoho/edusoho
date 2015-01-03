@@ -102,7 +102,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $totalPrice = (float)$totalPrice;
-        $amount = 0;
+        $amount = $totalPrice;
 
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
