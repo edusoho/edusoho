@@ -59,6 +59,9 @@ define(function(require, exports, module) {
 			if($.trim(couponTotalPrice) == "" || isNaN(couponTotalPrice)){
 				couponTotalPrice = 0;
 			}
+			if(totalPrice < couponTotalPrice){
+ 				couponTotalPrice = totalPrice;
+ 			}
 			totalPrice = subtract(totalPrice, couponTotalPrice);
 			return totalPrice;
 		}
@@ -71,7 +74,11 @@ define(function(require, exports, module) {
 			var coin = Math.round(accountCash*1000)>Math.round(coinNum*1000) ? coinNum : accountCash;
 
 			if(cashRateElement.data("coursePriceShowType") == "RMB"){
+				var totalPrice = parseFloat($('[role="total-price"]').text());
 				var cashDiscount = Math.round(moneyFormatFloor(divition(coin, cashRate))*100)/100;
+				if(totalPrice < cashDiscount){
+	 				cashDiscount = totalPrice;
+	 			}
 				$('[role="cash-discount"]').text(cashDiscount);
 			}else{
 				$('[role="cash-discount"]').text(coin);
@@ -209,6 +216,9 @@ define(function(require, exports, module) {
 			}
 			if(cashRateElement.data("coursePriceShowType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);
+	 			if(totalPrice<discount){
+	 				discount = totalPrice;
+	 			}
 	 			$('[role="cash-discount"]').text(moneyFormatFloor(discount));
 	 			totalPrice = subtract(totalPrice, discount);
  			} else {
