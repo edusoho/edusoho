@@ -102,6 +102,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $totalPrice = (float)$totalPrice;
+        $amount = 0;
 
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
@@ -115,8 +116,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $priceType, 
                 $cashRate
             );
-            $totalPrice = $couponResult["afterAmount"];
-            $totalPrice = $couponResult["afterAmount"];
+            $amount = $couponResult["afterAmount"];
+            $amount = $couponResult["afterAmount"];
         }
 
         //虚拟币优惠价格
@@ -128,9 +129,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $fields['coinPayAmount'], 
                 $fields["payPassword"]
             );
-            $amount = ($totalPrice*100 - $payAmount*100)/100;
-        } else {
-            $amount = $totalPrice;
+            $amount = ($amount*100 - $payAmount*100)/100;
         }
 
 
