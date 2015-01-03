@@ -209,7 +209,7 @@ define(function(require, exports, module) {
 			}
 			if(cashRateElement.data("coursePriceShowType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);
-	 			$('[role="cash-discount"]').text(discount.toFixed(2));
+	 			$('[role="cash-discount"]').text(moneyFormatFloor(discount));
 	 			totalPrice = subtract(totalPrice, discount);
  			} else {
  				$('[role="cash-discount"]').text(coinNum);

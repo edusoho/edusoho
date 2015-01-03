@@ -165,14 +165,14 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         if(array_key_exists("coinPayAmount", $orderData)) {
-            $payAmount = $this->afterCoinPay(
+            $amount = $this->afterCoinPay(
             	$coinEnabled, 
             	$priceType, 
             	$cashRate, 
+                $totalPrice,
             	$orderData['coinPayAmount'], 
             	$orderData["payPassword"]
             );
-            $amount = $totalPrice - $payAmount;
         } else {
             $amount = $totalPrice;
         }

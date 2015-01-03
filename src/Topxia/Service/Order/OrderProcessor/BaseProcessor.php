@@ -5,7 +5,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Exception;
 
 class BaseProcessor {
-	protected function afterCoinPay($coinEnabled, $priceType, $cashRate, $coinPayAmount, $payPassword)
+	protected function afterCoinPay($coinEnabled, $priceType, $cashRate, $amount, $coinPayAmount, $payPassword)
 	{
         if(!empty($coinPayAmount) && $coinPayAmount>0 && $coinEnabled) {
         	$user = $this->getAuthService()->getCurrentUser();
@@ -20,7 +20,8 @@ class BaseProcessor {
         } else if ($priceType == "Coin") {
             $coinPreferentialPrice = $coinPayAmount;
         }
-        return $coinPreferentialPrice;
+
+        return intval($amount*1000 - $coinPreferentialPrice*1000)/1000;
 	}
 
 	protected function getAuthService()

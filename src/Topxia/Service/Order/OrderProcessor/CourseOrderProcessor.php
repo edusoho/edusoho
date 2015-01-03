@@ -121,14 +121,14 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
         //虚拟币优惠价格
         if(array_key_exists("coinPayAmount", $fields)) {
-            $payAmount = $this->afterCoinPay(
+            $amount = $this->afterCoinPay(
                 $coinEnabled, 
                 $priceType, 
                 $cashRate, 
+                $amount,
                 $fields['coinPayAmount'], 
                 $fields["payPassword"]
             );
-            $amount = intval($amount*1000 - $payAmount*1000)/1000;
         }
 
         if ($priceType == "Coin") {
