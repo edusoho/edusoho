@@ -128,7 +128,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $fields['coinPayAmount'], 
                 $fields["payPassword"]
             );
-            $amount = ($amount*100 - $payAmount*100)/100;
+            $amount = intval($amount*100 - $payAmount*100)/100;
         }
 
 
