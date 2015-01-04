@@ -8,9 +8,9 @@
     <img class="img-responsive" src="{{ default_path('avatar',user.largeAvatar, 'large') }}">
     {% if user.id != app.user.id %}
       <div class="actions">
-        <button class="btn btn-primary btn-sm btn-block follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
-        <button class="btn btn-primary btn-sm btn-block unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-        <button class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}" id="message_to_teacher">发私信</button>
+        <button class="btn btn-primary btn-sm btn-block follow-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>{{'关注'|trans}}</button>
+        <button class="btn btn-primary btn-sm btn-block unfollow-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>{{'已关注'|trans}}</button>
+        <button class="btn btn-default btn-sm btn-block" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}" id="message_to_teacher">{{'发私信'|trans}}</button>
       </div>
     {% else %}
 
@@ -31,10 +31,10 @@
       
       {% if profile %}
         {% if profile.weibo %}
-          <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-weibo.png') }}"> 微博</a>
+          <a href="{{ profile.weibo }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-weibo.png') }}"> {{'微博'|trans}}</a>
         {% endif %}
         {% if profile.site %}
-          <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-site.png') }}"> 网站</a>
+          <a href="{{ profile.site }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-site.png') }}"> {{'网站'|trans}}</a>
         {% endif %}
       {% endif %}
     </p>

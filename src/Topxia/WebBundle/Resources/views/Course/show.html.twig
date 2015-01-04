@@ -18,8 +18,8 @@
 <div class="row">
   <div class="col-md-12">
     <div class="mtl alert alert-warning">
-      您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
-      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
+      {{'您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。'|trans}}
+      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">{{'取消退款，继续学习！'|trans}}</button>
     </div>
   </div>
 </div>
@@ -47,7 +47,7 @@
 				</button>
 				<ul class="dropdown-menu pull-right">
 					<li>
-						<a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
+						<a href="{{ path('course_manage', {id:course.id}) }}">{{'课程管理'|trans}}</a>
 					</li>
 				</ul>
 			</div>
@@ -56,16 +56,16 @@
 			<div class="subtitle">{{ course.subtitle }}</div>
 			<div class="stats">
 				<p>
-					价　格：
+					{{'价　格：'|trans}}
 					{% if course.price > 0 %}
 						{% if free_limit_type(course) == 'free_now' %}
 							<span class="money-num">0.00</span>
-							<span class="money-text">元</span>
-							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
+							<span class="money-text">{{'元'|trans}}</span>
+							<span class="text-muted">({{'原价：'|trans}}<del>{{ course.price }}</del> {{'元'|trans}})</span>
 							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
 						{% else %}
 							<span class="money-num">{{ course.price }}</span>
-							<span class="money-text">元</span>
+							<span class="money-text">{{'元'|trans}}</span>
 							&nbsp;&nbsp;&nbsp;
 						 {% if setting('coin.coin_enabled') %}
 						 {% if course.coinPrice > 0 %}
@@ -78,35 +78,35 @@
 
 						{% endif %}  
 					{% else %}
-						<span class="money-num" style="font-size:16px;">免费</span>
+						<span class="money-num" style="font-size:16px;">{{'免费'|trans}}</span>
 					{% endif %}
 				</p>
 								
 				<p>
-					评　价：
+					{{'评　价：'|trans}}
 					<span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
-					<span class="rating-num">{{ course.rating|number_format(1) }}分</span>
-					<a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}人评价)</a>
+					<span class="rating-num">{{ course.rating|number_format(1) }}{{'分'|trans}}</span>
+					<a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}{{'人评价'|trans}})</a>
 				</p>
 				{% if course.showStudentNumType == 'opened' %}
 				<p>
-					学员数：
+					{{'学员数：'|trans}}
 					<span class="member-num">{{ course.studentNum }}</span>
-					<span class="member-text">人</span>
+					<span class="member-text">{{'人'|trans}}</span>
 				</p>
 				{% endif %}
 				{% if not course.expiryDay == 0 %}
 				<p>
-					有效期：
+					{{'有效期：'|trans}}
 					<span class="member-num">{{ course.expiryDay }}</span>
-					<span class="member-text">天</span>
+					<span class="member-text">{{'天'|trans}}</span>
 				</p>
 				{% endif %}
 				<p>
 					{% if course.status=='closed' %}  
-						状　态： <span class="label label-danger ">已关闭</span>
+						{{'状　态：'|trans}} <span class="label label-danger ">{{'已关闭'|trans}}</span>
 					{% elseif course.status=='draft' %}
-						状　态： <span class="label label-warning ">未发布</span>
+						{{'状　态：'|trans}} <span class="label label-warning ">{{'未发布'|trans}}</span>
 					{% endif %}          
 				</p>
 			</div>
@@ -114,17 +114,17 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
-						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
-								<a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
+								<a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}{{'，免费学'|trans}}</a>  
 							{% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
-								<a href="{{ path('vip_buy') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
+								<a href="{{ path('vip_buy') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}{{'，免费学'|trans}}</a>  
 							{% elseif checkMemberLevelResult == 'level_low' %}
-								<a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>
+								<a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}{{'，免费学'|trans}}</a>
 							{% elseif checkMemberLevelResult == 'ok' %}
-								<a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn btn-warning mll become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
+								<a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn btn-warning mll become-use-member-btn">{{ courseMemberLevel.name }}{{'，免费学'|trans}}</a>
 							{% endif %}
 
 						{% endif %}
@@ -134,19 +134,19 @@
 				<div class="pull-right ">
 
 					<a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
-						免费体验
+						{{'免费体验'|trans}}
 					</a>
 					<a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
 						<i class="glyphicon glyphicon-bookmark"></i>
-						收藏课程
+						{{'收藏课程'|trans}}
 					</a>
 					<a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
 						<i class="glyphicon glyphicon-bookmark"></i>
-						已收藏
+						{{'已收藏'|trans}}
 					</a>
 					<a class="btn btn-link" href="#" style="display:none;">
 						<i class="glyphicon glyphicon-gift"></i>
-						赠送
+						{{'赠送'|trans}}
 					</a>
 
 				</div><div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
@@ -161,30 +161,30 @@
 			<div class="course-nav-tabs">
 				<ul class="nav mbl nav-pills" id="course-nav-tabs">
 					<li class="active">
-						<a href="#course-about-pane" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
+						<a href="#course-about-pane" class="btn-index" data-anchor="#course-about-pane">{{'课程介绍'|trans}}</a>
 					</li>
 					{% if course.goals %}
 						<li>
-							<a href="#course-goal-pane" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
+							<a href="#course-goal-pane" class="btn-index" data-anchor="#course-goal-pane">{{'课程目标'|trans}}</a>
 						</li>
 					{% endif %}
 					{% if course.audiences %}
 						<li>
-							<a href="#course-audience-pane" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
+							<a href="#course-audience-pane" class="btn-index" data-anchor="#course-audience-pane">{{'适合人群'|trans}}</a>
 						</li>
 					{% endif %}
 					<li>
-						<a href="#course-list-pane" class="btn-index" data-anchor="#course-list-pane">课程列表</a>
+						<a href="#course-list-pane" class="btn-index" data-anchor="#course-list-pane">{{'课程列表'|trans}}</a>
 					</li>
 					<li>
 						<a href="#course-review-pane" class="btn-index" data-anchor="#course-review-pane">
-							课程评价
+							{{'课程评价'|trans}}
 							<span class="badge">{{ course.ratingNum }}</span>
 						</a>
 					</li>
 					<li class="pull-right" style="display:none;" >
 					<div>
-						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
 					</div>
 					</li>
 				</ul>
@@ -193,18 +193,18 @@
 
 			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-about-pane'} %}
 				{% block heading %}
-					<h3 class="panel-title">课程介绍</h3>
+					<h3 class="panel-title">{{'课程介绍'|trans}}</h3>
 				{% endblock %}
 				{% block body %}
 
 					{% if course.about %}
 						{{ course.about|raw }}
 					{% else %}
-						<span class="text-muted">还没有课程介绍...</span>
+						<span class="text-muted">{{'还没有课程介绍'|trans}}...</span>
 					{% endif %}
 					{% if tags %}
 						<div class="mtm">
-						<span class="text-muted">标签：</span>{% for tag in tags %}
+						<span class="text-muted">{{'标签：'|trans}}</span>{% for tag in tags %}
 						<a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
 						{% endfor %}
 						</div>
@@ -216,7 +216,7 @@
 			{% if course.goals %}
 				{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-goal-pane'} %}
 					{% block heading %}
-						<h3 class="panel-title">课程目标</h3>
+						<h3 class="panel-title">{{'课程目标'|trans}}</h3>
 					{% endblock %}
 					{% block body %}
 						<ul class="media-list">
@@ -236,7 +236,7 @@
 			{% if course.audiences %}
 				{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-audience-pane'} %}
 					{% block heading %}
-						<h3 class="panel-title">适合人群</h3>
+						<h3 class="panel-title">{{'适合人群'|trans}}</h3>
 					{% endblock %}
 					{% block body %}
 						<ul class="media-list">
@@ -255,7 +255,7 @@
 
 			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-list-pane'} %}
 				{% block heading %}
-					<h3 class="panel-title">课时列表</h3>
+					<h3 class="panel-title">{{'课时列表'|trans}}</h3>
 				{% endblock %}
 				{% block body %}
 
@@ -268,11 +268,11 @@
 			{% if courseReviews %}
 			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-review-pane'} %}
 				{% block heading %}
-					<h3 class="panel-title">课程评价</h3>
+					<h3 class="panel-title">{{'课程评价'|trans}}</h3>
 				{% endblock %}
 				{% block body %}
 
-					<div id="course-review-pane-show" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">正在载入课程评价数据...</div>
+					<div id="course-review-pane-show" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">{{'正在载入课程评价数据'|trans}}...</div>
 
 				{% endblock %}
 			{% endembed %}

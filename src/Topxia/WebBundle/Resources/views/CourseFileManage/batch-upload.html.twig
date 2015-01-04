@@ -4,11 +4,11 @@
 
 {% block title %}
   {% if targetType == 'courselesson' %} 
-  		上传课时文件 
+  		{{'上传课时文件'|trans}} 
   {% elseif targetType == 'coursematerial' %} 
-  		上传资料文件
+  		{{'上传资料文件'|trans}}
   {% elseif targetType == 'materiallib' %}
-  		上传素材文件
+  		{{'上传素材文件'|trans}}
   {% endif %}
 {% endblock %}
   
@@ -40,13 +40,13 @@
       class="btn_addPic uploadBtn btn btn-default btn-lg">
       <span>
           <i class="glyphicon glyphicon-plus ">
-          添加待上传文件
+          {{'添加待上传文件'|trans}}
           </i>
       </span>
     </button>
     <button id="btn_upload" class="btn_addPic btn btn-default btn-lg">
       <span>
-          上传
+          {{'上传'|trans}}
       </span>
     </button>
     <input data-role='fileSelected' multiple="multiple" name="pic" class="filePrew" type="file" style="display:none"/>
@@ -56,9 +56,9 @@
     <table style="margin-top:20px;" class="table table-bordered table-striped table-condensed">
       <thead>
         <tr>
-          <td>文件名称</td>
-          <td width="15%">文件大小</td>
-          <td width="60%">进度</td>
+          <td>{{'文件名称'|trans}}</td>
+          <td width="15%">{{'文件大小'|trans}}</td>
+          <td width="60%">{{'进度'|trans}}</td>
         </tr>
       </thead>
       <tbody>
@@ -70,12 +70,12 @@
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}
-          <li>支持<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx</strong>格式的文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
-          <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
-          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+          {{'<li>支持<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx</strong>格式的文件上传，文件大小不能超过<strong>1 GB</strong>。</li>'|trans}}
+          {{'<li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>'|trans}}
+          {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans}}
         {% else %}
-          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-          <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
+          {{'<li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>'|trans}}
+          {{'<li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>'|trans}}
         {% endif %}
       </ul>
     </div>

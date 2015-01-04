@@ -3,9 +3,9 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-  {% if targetType == 'courselesson' %} 上传课时文件 
-  {% elseif targetType == 'coursematerial' %} 上传资料文件 
-  {% elseif targetType == 'materiallib' %} 上传文件到教学资料库
+  {% if targetType == 'courselesson' %} {{'上传课时文件'|trans}} 
+  {% elseif targetType == 'coursematerial' %} {{'上传资料文件'|trans}} 
+  {% elseif targetType == 'materiallib' %} {{'上传文件到教学资料库'|trans}}
   {% endif %}
 {% endblock %}
 	
@@ -44,11 +44,11 @@
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}
-          <li>支持<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx</strong>格式的文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
-          <li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+          {{'<li>支持<strong>mp3, mp4, avi, flv, wmv, mov, ppt, pptx</strong>格式的文件上传，文件大小不能超过<strong>1 GB</strong>。</li>'|trans}}
+          {{'<li>视频将上传到<strong>云服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>'|trans}}
         {% else %}
-          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-          <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
+          {{'<li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>'|trans}}
+          {{'<li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>'|trans}}
         {% endif %}
       </ul>
     </div>
@@ -56,22 +56,22 @@
     {% if storageSetting.upload_mode == 'cloud' %}
     <div class="quality-switcher">
       <div class="quality-switcher-bar">
-        视频转码类型<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+        {{'视频转码类型'|trans}}<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> {{'设置'|trans}}</a>
       </div>
       <div class="quality-switcher-control">
         <div class="video-quality radios">
-          画质：
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+          {{'画质：'|trans}}
+        {{ radios('video_quality', {'low':'{{'流畅'|trans}} <span class="text-muted">({{'适合PPT讲解'|trans}})</span>', 'normal':'{{'标准'|trans}} <span class="text-muted">({{'适合屏幕录制、摄像头拍摄'|trans}})</span>', 'high': '{{'精细'|trans}} <span class="text-muted">({{'适合动态电影'|trans}})</span>'}, storageSetting.video_quality|default('low')) }}
         </div>
 
         <div class="audio-quality radios">
-          音质：
-          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality|default('low')) }}
+          {{'音质：'|trans}}
+          {{ radios('video_audio_quality', {'low':'{{'流畅'|trans}}', 'normal':'{{'标准'|trans}}', 'high': '{{'高品'|trans}}'}, storageSetting.video_audio_quality|default('low')) }}
         </div>
 
         <div class="quality-actions">
-          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">确定</a>
-          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">取消</a>
+          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">{{'确定'|trans}}</a>
+          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">{{'取消'|trans}}</a>
         </div>
       </div>
     </div>
@@ -79,11 +79,11 @@
   {% elseif targetType == 'coursematerial' %}
     <div class="alert alert-info">
       <ul>
-        <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
+        {{'<li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>'|trans}}
         {% if storageSetting.upload_mode == 'cloud' %}
-          <li>文件将上传到<strong>云服务器</strong>。</li>
+          {{'<li>文件将上传到<strong>云服务器</strong>。</li>'|trans}}
         {% else %}
-          <li>文件将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>
+          {{'<li>文件将上传到<strong>网站服务器</strong>，如需使用云视频，请联系EduSoho官方购买。</li>'|trans}}
         {% endif %}
       </ul>
     </div>
@@ -94,5 +94,5 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
 {% endblock %}

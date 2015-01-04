@@ -12,21 +12,21 @@
 
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
           {% if course.status=='closed' %}  
-            <span class="label label-danger ">已关闭</span>
+            <span class="label label-danger ">{{'已关闭'|trans}}</span>
           {% elseif course.status=='draft' %}
-            <span class="label label-warning ">未发布</span>
+            <span class="label label-warning ">{{'未发布'|trans}}</span>
           {% elseif course.status=='published' %}
             {% if course.serializeMode=='serialize' %}
-              <span class="label label-success ">更新中</span>
+              <span class="label label-success ">{{'更新中'|trans}}</span>
             {% elseif course.serializeMode=='finished' %}
-              <span class="label label-warning ">已完结</span>
+              <span class="label label-warning ">{{'已完结'|trans}}</span>
             {% endif %}
           {% endif %}
         </h1>
 
         <div class="teachers">
           {% if course.teacherIds|default(null) %}
-            教师：
+            {{'教师：'|trans}}
             {% for id in course.teacherIds %}
               {% set user = users[id] %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
@@ -37,15 +37,15 @@
         <div class="toolbar hidden-xs hidden-lt-ie8">
           {% if not manage %}
           <div class="btn-group">
-            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="评价" data-placement="top" href="#modal">
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="{{'评价'|trans}}" data-placement="top" href="#modal">
               <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
 
             {% if course.showStudentNumType == 'opened' or member.role|default('student') == 'teacher' or isAdmin %}
-              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="{{'查看学员的学习进度, 还可以发私信进行联系'|trans}}!" data-placement="bottom"
               href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
             {% endif %}
 
-            <div class="btn-group" data-role="tooltip" title="分享到" data-placement="left" >
+            <div class="btn-group" data-role="tooltip" title="{{'分享到'|trans}}" data-placement="left" >
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <i class="esicon esicon-share"></i>
               </button>
@@ -54,20 +54,20 @@
                 <li><div class="share" data-bdText="{{courseShareContent}}"></div></li>
               </ul>
               <div id="course-social-share-params" 
-                data-title="课程 《{{ course.title }}》"
+                data-title="{{'课程'|trans}} 《{{ course.title }}》"
                 data-picture="{{ default_path('coursePicture',course.largePicture, 'large', true) }}"
                 data-url="{{ url('course_show', {id:course.id}) }}"
                 ></div>
             </div>
             {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
-                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="esicon esicon-exit"></i></a>
+                   <a class="btn btn-default btn-sm " title="{{'退出学习'|trans}}" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="esicon esicon-exit"></i></a>
                   {% else %}
-                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="esicon esicon-exit"></i></a>
+                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="{{'退出学习'|trans}}" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="esicon esicon-exit"></i></a>
                     {% endif %}
                 {% endif %}
             {% if canManage %}
-            <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+            <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="{{'课程管理'|trans}}"  >
             <i class="esicon esicon-setting"></i>
             </a>
             {% endif %}
@@ -77,21 +77,21 @@
 
             {% if course.status == 'published' %}
               <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('course_show', {id:course.id}) }}">返回课程主页</a>
+                <a class="btn btn-default btn-sm" href="{{ path('course_show', {id:course.id}) }}">{{'返回课程主页'|trans}}</a>
               </div>
             {% endif %}
 
             <div class="btn-group">
-              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <span class="caret"></span></button>
+              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'预览'|trans}} <span class="caret"></span></button>
               <ul class="dropdown-menu pull-right">
-                  <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank">作为 已购买用户</a></li>
-                  <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">作为 未购买用户</a></li>
+                  <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank">{{'作为 已购买用户'|trans}}</a></li>
+                  <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">{{'作为 未购买用户'|trans}}</a></li>
               </ul>
             </div>
 
             {% if course.status != 'published' %}
               <div class="btn-group">
-                <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_manage_publish', {id:course.id}) }}">发布课程</button>
+                <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_manage_publish', {id:course.id}) }}">{{'发布课程'|trans}}</button>
               </div>
             {% endif  %}
 
@@ -103,15 +103,15 @@
       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {% if vipChecked == 'not_member' %}
-          您已经不是会员，不能学习此课程！请重新开通会员，或购买课程！
+          {{'您已经不是会员，不能学习此课程！请重新开通会员，或购买课程！'|trans}}
         {% elseif vipChecked == 'member_expired' %}
-          您的会员已过期，不能学习此课程，请先续费。
+          {{'您的会员已过期，不能学习此课程，请先续费。'|trans}}
         {% elseif vipChecked == 'level_not_exist' %}
-          会员等级已删除，不能学习此课程。
+          {{'会员等级已删除，不能学习此课程。'|trans}}
         {% elseif vipChecked == 'level_low' %}
-          会员等级不够，不能学习此课程。
+          {{'会员等级不够，不能学习此课程。'|trans}}
         {% elseif vipChecked == 'vip_closed' %}
-          会员专区已关闭，您不能继续学课程。
+          {{'会员专区已关闭，您不能继续学课程。'|trans}}
         {% endif %}
 
       </div>
@@ -121,18 +121,18 @@
     {% if not isNonExpired %}
       {% if free_limit_type(course) == 'free_end' %}
         <div class="alert alert-danger alert-dismissable">
-          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
-          您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
+          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">{{'购买'|trans}}</a>
+          {{'您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。'|trans}}
         </div>
       {% else %}
        <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
+          {{'您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击'|trans}}
           <a class="btn btn-primary btn-sm "  href="{{path('course_rebuy',{courseId:course.id})}}">
           {% if course.price>0 %}
-          重新购买
+          {{'重新购买'|trans}}
           {% else %}
-          重新加入
+          {{'重新加入'|trans}}
           {% endif %}
           </a>
       </div>
