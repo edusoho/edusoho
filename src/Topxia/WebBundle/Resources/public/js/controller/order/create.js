@@ -220,7 +220,7 @@ define(function(require, exports, module) {
         			rule: 'remote'
 				});
 			}
-			if(cashRateElement.data("price") == "RMB") {
+			if(cashRateElement.data("priceType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);
 	 			if(totalPrice<discount){
 	 				discount = totalPrice;
