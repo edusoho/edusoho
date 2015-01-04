@@ -40,6 +40,18 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         	'year' => $level['yearPrice']
         );
 
+        $coinSetting = $this->getSettingService()->get("coin");
+
+        $cashRate = 1;
+        if(array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
+
+        $priceType = "RMB";
+        if(array_key_exists("price_type", $coinSetting)) {
+            $priceType = $coinSetting["price_type"];
+        }
+
         if($buyType == "upgrade") {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         }else{
@@ -50,10 +62,15 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $unitType = $fields['unit'];
             $duration = $fields['duration'];
 
-            $totalPrice = $levelPrice[$unitType] * $duration;
+            $unitPrice = $levelPrice[$unitType];
+            if ($priceType == "Coin") {
+                $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
+            }
+
+            $totalPrice = $unitPrice * $duration;
         }
 
-        $coinSetting = $this->getSettingService()->get("coin");
+        
 
         if(!array_key_exists("coin_enabled", $coinSetting) 
             || !$coinSetting["coin_enabled"]) {
@@ -69,17 +86,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         	);
         }
 
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
-
-        $priceType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $priceType = $coinSetting["price_type"];
-        }
-
-        
         $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
         $accountCash = $account["cash"];
 
@@ -87,7 +93,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $hasPayPassword = strlen($user['payPassword']) > 0;
         if ($priceType == "Coin") {
-            $totalPrice = $totalPrice * $cashRate;
             if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
                 $coinPayAmount = $accountCash;
             } else if($hasPayPassword) {
@@ -157,11 +162,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         if(array_key_exists("buyType", $orderData) && $orderData["buyType"]=="upgrade"){
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
         } else {
-            $totalPrice = $level[$orderData['unitType'] . 'Price'] * $orderData['duration'];
-        }
-
-        if ($priceType == "Coin") {
-            $totalPrice = $totalPrice * $cashRate;
+            $unitPrice = $level[$orderData['unitType'] . 'Price'];
+            if ($priceType == "Coin") {
+                $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
+            }
+            $totalPrice = $unitPrice * $orderData['duration'];
         }
 
         $totalPrice = intval($totalPrice*100)/100;

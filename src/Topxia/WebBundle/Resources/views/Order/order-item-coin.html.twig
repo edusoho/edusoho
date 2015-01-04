@@ -23,8 +23,10 @@
       账户余额：<span role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}
       {% if hasPayPassword %}，
       本次使用
-      <label class="control-label" for="coinPayAmount" style="display:none">支付密码</label>
-      <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">{{setting("coin.coin_name")}}
+
+      <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
+      <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
+      {{setting("coin.coin_name")}}
       {% endif %}
     </div>
     <div class="pay-password">
