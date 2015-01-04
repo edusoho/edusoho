@@ -36,6 +36,13 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();
     }
+    
+    public function analysisAmount($conditions)
+    {
+        $builder = $this->createFlowQueryBuilder($conditions)
+            ->select('sum(amount)');
+        return $builder->execute()->fetchColumn(0);
+    }
 
     public function searchFlowsCount($conditions)
     {
@@ -59,6 +66,20 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
         return $this->getFlow($id);
     }
 
+    public function findUserIdsByFlows($type,$createdTime, $orderBy, $start, $limit)
+    {
+        $sql="SELECT  userId,sum(amount) as amounts FROM `cash_flow` where ".($type ? "`type`=? and " : "" )." createdTime >= ? group by userId  order by amounts {$orderBy} limit {$start},{$limit} ";
+        
+        return $this->getConnection()->fetchAll($sql,$type ? array($type,$createdTime) : array($createdTime) ) ? : array() ;
+    }
+
+    public function findUserIdsByFlowsCount($type,$createdTime)
+    {
+        $sql="SELECT count( distinct userId)  FROM `cash_flow` where ".($type ? "`type`=? and " : "" )." createdTime >= ? ";
+      
+        return $this->getConnection()->fetchColumn($sql,$type ? array($type,$createdTime) : array($createdTime)) ? : 0 ;
+    }
+
     private function createFlowQueryBuilder($conditions)
     {
 
@@ -67,11 +88,14 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
             ->from($this->table, 'cash_flow')
             ->andWhere('userId = :userId')
             ->andWhere('type = :type')
+            ->andWhere('cashType = :cashType')
             ->andWhere('status = :status')
             ->andWhere('category = :category')
             ->andWhere('sn = :sn')
             ->andWhere('name = :name')
-            ->andWhere('orderSn = :orderSn');
+            ->andWhere('orderSn = :orderSn')
+            ->andWhere('createdTime >= :startTime') 
+            ->andWhere('createdTime < :endTime');
     }
 
 }

@@ -373,17 +373,29 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
 
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
-                            $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
                             if($headLeaderInfo){
-                                //var_dump($headLeaderInfo);exit();
-                                $headLeaderHlsKeyUrl = $this->controller->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-                                $headUrl = $client->generateHLSEncryptedListUrl($headLeaderInfo['convertParams'], $headLeaderInfo['metas2'], $headLeaderHlsKeyUrl, '', '', 3600);
-                                $lesson['headUrl'] = (isset($headUrl) and is_array($headUrl) and !empty($headUrl['url'])) ? $headUrl['url'] : '';
+                                $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $headLeaderInfo['id'], 'times' => 1, 'duration' => 3600));
+                                $lesson['headUrl'] = array(
+                                    'url' => $this->generateUrl('hls_playlist', array(
+                                        'id' => $headLeaderInfo['id'], 
+                                        'token' => $token['token'],
+                                        'line' => $this->request->get('line'),
+                                        'hideBeginning' => 1,
+                                    ), true)
+                                );
                             }
 
-                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, '', '', 3600);
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                            $url = array(
+                                'url' => $this->generateUrl('hls_playlist', array(
+                                    'id' => $file['id'], 
+                                    'token' => $token['token'],
+                                    'line' => $this->request->get('line'),
+                                    'hideBeginning' => 1,
+                                ), true)
+                            );
+
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }

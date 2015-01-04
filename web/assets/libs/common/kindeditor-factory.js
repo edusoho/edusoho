@@ -15,20 +15,32 @@ define(function(require, exports, module) {
 
                 $('#insert').on('click',function(){
 
-                    var amount= $('#amount').val();
+                    var type=$('input[name=type]:checked').val();
+                    
+                    var text=$('#text').val();
 
-                    amount=parseInt(amount);
+                    if(type=="reply"){
 
-                    if(amount > 0){
+                        var content="&nbsp;[hide=reply]"+text+"[/hide]"; 
+                        editor.insertHtml(content);    
+
+                    }else{
+
+                        var amount= $('#amount').val();
+
+                        amount=parseInt(amount);
+
+                        if(amount > 0){
+                               
+                            var content="&nbsp;[hide=coin"+amount+"]"+text+"[/hide]";
+                            editor.insertHtml(content);
+                        }
                         
-                        var text=$('#text').val();
-                       
-                        var content="&nbsp;[hide=coin"+amount+"]"+text+"[/hide]";
-
-                        editor.insertHtml(content);
                     }
+                    
                     $('#text').val('');
                     $('#amount').val('');
+                    $("#insert").unbind("click")
                     $('#myModal').modal('hide');
                     
                 });
