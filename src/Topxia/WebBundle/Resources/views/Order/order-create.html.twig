@@ -55,7 +55,7 @@
               </div>
             </div>
             
-            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType%}
+            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType and showCoupon|default(false) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
