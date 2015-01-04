@@ -38,7 +38,7 @@ use Symfony\Component\Filesystem\Filesystem;
         $processId = 0;
       }
 
-      $sql = "select * from orders where id>".$processId." and amount > 0 and status ='paid' ORDER BY id LIMIT 0,2000";
+      $sql = "select * from orders where id>".$processId." and payment<>'coin' and amount > 0 and status in ('paid','refunding','refunded') ORDER BY id LIMIT 0,2000";
       $orders = $this->getConnection()->fetchAll($sql, array());
 
       if(empty($orders) || count($orders)==0){

@@ -25,7 +25,7 @@ use Symfony\Component\Filesystem\Filesystem;
     private function proccess()
     {
 
-      $sql = "select * from orders where amount > 0 and status ='paid' ORDER BY id LIMIT 0,2000";
+      $sql = "select * from orders where amount > 0 and payment<>'coin' and status in ('paid','refunding','refunded') ORDER BY id LIMIT 0,2000";
       $orders = $this->getConnection()->fetchAll($sql, array());
 
       if(empty($orders) || count($orders)==0){
