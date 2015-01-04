@@ -5,6 +5,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 
@@ -55,6 +56,7 @@ class WebExtension extends \Twig_Extension
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
+            'set_price' => new \Twig_Function_Method($this, 'getSetPrice') ,
             'percent' => new \Twig_Function_Method($this, 'calculatePercent') ,
             'category_choices' => new \Twig_Function_Method($this, 'getCategoryChoices') ,
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
@@ -758,6 +760,11 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
         return intval($number / $total * 100) . '%';
+    }
+
+    public function getSetPrice($price)
+    {
+        return NumberToolkit::roundUp($price);
     }
 
     public function getCategoryChoices($groupName, $indent = '　')
