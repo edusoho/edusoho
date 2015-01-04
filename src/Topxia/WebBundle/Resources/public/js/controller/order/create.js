@@ -1,4 +1,6 @@
 define(function(require, exports, module) {
+
+	require('placeholder');
 	
 	var Validator = require('bootstrap.validator');
 	require('common/validator-rules').inject(Validator);
@@ -154,6 +156,7 @@ define(function(require, exports, module) {
 				validator.addItem({
 					element: '[name="payPassword"]',
 					required: true,
+					display: '支付密码',
         			rule: 'remote'
 				});
 			}
@@ -212,6 +215,7 @@ define(function(require, exports, module) {
 				validator.addItem({
 					element: '[name="payPassword"]',
 					required: true,
+					display: '支付密码',
         			rule: 'remote'
 				});
 			}

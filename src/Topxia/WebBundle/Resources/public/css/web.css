@@ -4736,8 +4736,7 @@ a.homework-essay-textarea-pack-up{
 }
 
 .order-item-detail .pay-password input {
-	margin-bottom: 5px;
-	border: 1px solid #b5b5b5;
+	width: 150px;
 }
 
 .pay-center .uncheck {
