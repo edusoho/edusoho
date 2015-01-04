@@ -60,9 +60,16 @@ class MyOrderController extends BaseController
         	$paginator->getPerPageCount()
     	);
 
-
         $waitToBePaidCountConditions = array('userId' => $user['id'],'status' => 'created');
         $waitToBePaidCount = $this->getOrderService()->searchOrderCount($waitToBePaidCountConditions);
+
+        foreach ($orders as $index => $expiredOrderToBeUpdated ){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 40*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+               $orders[$index]['status'] = 'cancelled'; 
+               $waitToBePaidCount -= 1;
+            }
+        }
         
         return $this->render('TopxiaWebBundle:MyOrder:index.html.twig',array(
         	'orders' => $orders,
