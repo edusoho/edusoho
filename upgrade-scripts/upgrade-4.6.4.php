@@ -24,7 +24,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
     private function proccess()
     {
-      $sql = "select * from orders where amount > 0 and id <= 30000 and status ='paid'";
+
+      $sql = "select * from orders where amount > 0 and status ='paid' ORDER BY id LIMIT 0,2000";
       $orders = $this->getConnection()->fetchAll($sql, array());
 
       if(empty($orders) || count($orders)==0){
@@ -82,11 +83,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
       if($order) {
         $setting = array(
-            'name'  => "orders",
+            'name'  => "__orders",
             'value' => serialize(array("processId"=>$order["id"]))
         );
 
-        $this->getConnection()->delete("setting", array('name' => "orders"));
+        $this->getConnection()->delete("setting", array('name' => "__orders"));
         $this->addSetting($setting);
       }
 
