@@ -226,6 +226,8 @@ define(function(require, exports, module) {
  				$('[role="cash-discount"]').text(moneyFormatFloor(coinNum));
  				totalPrice = subtract(totalPrice, coinNum);
  			}
+ 		} else {
+ 			$('[role="cash-discount"]').text("0.00");
  		}
  		shouldPay(totalPrice);
 	}
