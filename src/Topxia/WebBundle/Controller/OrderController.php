@@ -49,7 +49,7 @@ class OrderController extends BaseController
         }
 
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        if(isset($couponApp["version"]) && version_compare("1.0.4", $couponApp["version"],"<="))
+        if(isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"],"<="))
             $orderInfo["showCoupon"] = true;
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
