@@ -34,7 +34,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
     public function payOrder($payData)
     {
-        $success = false;
+        $success = true;
 
         try {
 

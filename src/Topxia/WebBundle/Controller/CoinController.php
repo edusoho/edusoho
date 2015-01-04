@@ -287,7 +287,7 @@ class CoinController extends BaseController
         $payRequestParams = array(
             'returnUrl' => $this->generateUrl('coin_order_pay_return',array('name'=>$order['payment']),true),
             'notifyUrl' => $this->generateUrl('coin_order_pay_notify',array('name'=>$order['payment']),true),
-            'showUrl' => $this->generateUrl('my_coin_buy',array(),true),
+            'showUrl' => $this->generateUrl('my_coin',array(),true),
         );
 
         return $this->forward('TopxiaWebBundle:Coin:submitPayRequest', array(
