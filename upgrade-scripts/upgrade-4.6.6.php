@@ -24,8 +24,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
     private function proccess()
     {
-      $this->createDao('Cash.CashFlowDao')->getConnection()->beginTransaction();
-      try{
       $sql = "select * from orders where amount > 0 and id >60000 and status ='paid'";
       $orders = $this->getConnection()->fetchAll($sql, array());
 
@@ -56,7 +54,9 @@ use Symfony\Component\Filesystem\Filesystem;
           'name' => '入账',
           "createdTime"=>$order["createdTime"],
         );
-        $inflow=$this->createDao('Cash.CashFlowDao')->addFlow($cashFlow);
+
+        
+        $inflow = $this->addFlow($cashFlow);
 
         $this->num++;
         $number = sprintf("%05d", $this->num);
@@ -73,20 +73,43 @@ use Symfony\Component\Filesystem\Filesystem;
           "createdTime"=>$order["createdTime"],
           "parentSn" => $inflow["sn"]
         );
-        $this->createDao('Cash.CashFlowDao')->addFlow($cashFlow);
+
+        $inflow = $this->addFlow($cashFlow);
 
         $fields = array("cashSn" => $cashFlow["sn"]);
-        $this->createDao('Order.OrderDao')->updateOrder($order["id"], $fields);
-
-        }
-
-        $this->createDao('Cash.CashFlowDao')->getConnection()->commit();
-
-      }catch(\Exception $e){
-
-            $this->createDao('Cash.CashFlowDao')->getConnection()->rollback();
-            throw $e;
+        $this->updateOrder($order["id"], $fields);
       }
+
+      if($order) {
+        $setting = array(
+            'name'  => "orders",
+            'value' => serialize(array("processId"=>$order["id"]))
+        );
+
+        $this->getConnection()->delete("setting", array('name' => "orders"));
+        $this->addSetting($setting);
+      }
+
+    }
+
+    private function addFlow($cashFlow){
+      $this->getConnection()->insert("cash_flow", $cashFlow);
+      $id = $this->getConnection()->lastInsertId();
+      $sql = "SELECT * FROM cash_flow WHERE id = ? LIMIT 1";
+      $inflow = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+      return $inflow;
+    }
+
+    private function addSetting($setting){
+      $this->getConnection()->insert("setting", $setting);
+      $id = $this->getConnection()->lastInsertId();
+      $sql = "SELECT * FROM setting WHERE id = ? LIMIT 1";
+      $setting = $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+      return $setting;
+    }
+
+    private function updateOrder($id, $fields){
+      $this->getConnection()->update("orders", $fields, array('id' => $id));
     }
     
  }
