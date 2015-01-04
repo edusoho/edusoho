@@ -21,7 +21,7 @@ class BaseProcessor {
             $coinPreferentialPrice = $coinPayAmount;
         }
 
-        return intval($amount*1000 - $coinPreferentialPrice*1000)/1000;
+        return round($amount*1000 - $coinPreferentialPrice*1000)/1000;
 	}
 
 	protected function getAuthService()
