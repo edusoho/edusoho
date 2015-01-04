@@ -7,25 +7,25 @@
       <a href="{{ path('course_show', {id:course.id}) }}" class="course-popover" target="_blank">
         <img src="{{ default_path('coursePicture',course.smallPicture, '') }}">
       </a>
-
       <span class="pull-right carts-text">
         <div class="price-count">{{ course.price }}元</div>
         <div class="carts-item-delete" data-url="{{ path('carts_delete', {id:cart.id}) }}">
           <a href="javascript:;" class="carts-text-delete">删除</a>
         </div>
       </span>
-
-      <a class="course-title" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-        <span>{{ course.title|plain_text(10) }}</span>
-      </a>
-      <div class="popover-teachers">
-        {% if course.teacherIds|default(null) %}
-          教师：
-          {% for id in course.teacherIds %}
-            {% set user = users[id] %}
-            <a href="{{ path('user_show',  {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
-          {% endfor %}
-        {% endif  %}
+      <div>
+        <a class="course-title" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+          <span>{{ course.title|plain_text(8) }}</span>
+        </a>
+        <div class="popover-teachers">
+          {% if course.teacherIds|default(null) %}
+            教师：
+            {% for id in course.teacherIds %}
+              {% set user = users[id] %}
+              <a href="{{ path('user_show',  {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+            {% endfor %}
+          {% endif  %}
+        </div>        
       </div>
     </li>
     {% endfor %}

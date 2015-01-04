@@ -78,20 +78,22 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 
 .carts-popover-list .carts-item {
-	width: 250px;
 	height: 50px;
 	border-bottom: 1px solid rgba(0,0,0,0.18);
 	margin-bottom: 5px;
 }
 
 .carts-popover-list {
-    padding-left: 0;
+    padding-left: 0px;
     list-style: none;
+    max-height:250px;
+    overflow-x: hidden;
+    overflow-y:auto; 
 }
 
 .course-popover {
 	float: left;
-	margin-right: 10px;
+	margin-right: 5px;
 }
 
 .course-popover img{
@@ -138,7 +140,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 
 .consult-cart-content {
 	width: 250px;
-	height: 50px;
+	height: 100px;
 	padding-bottom: 10px;
 }
 
@@ -156,5 +158,5 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 
 .carts-popover-info {
-	font-size: 10px;
+	font-size: 8px;
 }
