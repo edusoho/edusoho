@@ -106,7 +106,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             }
         }
 
-        $totalPrice = intval($totalPrice*100)/100;
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
         $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
 
         return array(
