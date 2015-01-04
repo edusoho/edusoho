@@ -990,7 +990,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $result = array(array('title' => '在学课程','data' => null),
+            	array('title' => '问答','data' => null),
+            	array('title' => '讨论','data' => null),
+            	array('title' => '笔记','data' => null),
+            	array('title' => '私信','data' => null));
         }
         
         $courseConditions = array(
@@ -1083,15 +1087,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $lastestNote = $createdTimeNote;
         }
+
         $lastestNote = reset($lastestNote);
-        $lastestNote['updatedTime'] == '0' ? $lastestNote['createdTime'] : $lastestNote['updatedTime'];
         $data = array(
             'content' => $lastestNote['content'],
             'id' => $lastestNote['id'],
             'courseId' => $lastestNote['courseId'],
-            'lessonId' => $lastestNote['lessonId'],
-            'time' => Date('c', $lastestNote['updatedTime'])
+            'lessonId' => $lastestNote['lessonId']
         );
+        if($lastestNote['updatedTime'] > $lastestNote['createdTime']){
+        	$data['time'] = Date('c', $lastestNote['updatedTime']);
+        }else{
+			$data['time'] = Date('c', $lastestNote['createdTime']);
+        }
         
         $result[3] = array(
             'title' => '笔记',
