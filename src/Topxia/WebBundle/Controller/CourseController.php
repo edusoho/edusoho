@@ -284,41 +284,17 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 
-        $materialLib = $this->getAppService()->findInstallApp('materialLib');
+        $homeworkPlugin = $this->getAppService()->findInstallApp('Homework');
 		$homeworkLessonIds =array();
 		$exercisesLessonIds =array();
-		$sameLessonIds =array();
-    	$diffLessonIdsBetweenHomeworkAndSame = array();
-    	$diffLessonIdsBetweenExerciseAndSame = array();
 
-		if($materialLib){
+		if($homeworkPlugin) {
             $lessons = $this->getCourseService()->getCourseLessons($course['id']);
             $lessonIds = ArrayToolkit::column($lessons, 'id');
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
             $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
             $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
-            $sameLessonIds=array_intersect($homeworkLessonIds,$exercisesLessonIds);
-            $homeworkLessonIdNum = count($homeworkLessonIds);
-            $exercisesLessonIdNum = count($exercisesLessonIds);
-            $sameLessonIdNum = count($sameLessonIds);
-
-            if($exercisesLessonIdNum > $sameLessonIdNum){
-            	foreach ($exercisesLessonIds as $key => $value) {
-            		if(!in_array($value,$sameLessonIds)){
-            			$diffLessonIdsBetweenHomeworkAndSame[]=$value;
-            		}
-            	}
-            }
-
-            if($homeworkLessonIdNum > $sameLessonIdNum){
-            	foreach ($homeworkLessonIds as $key => $value) {
-            		if(!in_array($value,$sameLessonIds)){
-            			$diffLessonIdsBetweenExerciseAndSame[]=$value;
-            		}
-            	}
-            }
-            $lessonIds=array_merge($sameLessonIds,$diffLessonIdsBetweenHomeworkAndSame,$diffLessonIdsBetweenExerciseAndSame);
 		}
 
 		if ($member && empty($member['locked'])) {
@@ -341,7 +317,8 @@ class CourseController extends BaseController
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
 				'ChargeCoin'=> $ChargeCoin,
-				'lessonIds'=>empty($lessonIds)?array():$lessonIds,
+				'homeworkLessonIds' => $homeworkLessonIds,
+				'exercisesLessonIds' => $exercisesLessonIds,
 			));
 		}
 		
