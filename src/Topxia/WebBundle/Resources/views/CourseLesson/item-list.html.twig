@@ -76,11 +76,9 @@
 						{% endif %}
 					{% endif %}
 
-				{% for lessonId in lessonIds %}
-					{% if item.id == lessonId  %}
-						<span class="glyphicon  glyphicon-list-alt" title="作业、练习"></span>
-					{% endif %}
-				{% endfor %}
+				    {% if (item.id in homeworkLessonIds) or (item.id in exercisesLessonIds) %}
+							<span class="glyphicon  glyphicon-list-alt" title="作业、练习"></span>
+				    {% endif %}
 
 				    {% if item.materialNum > 0 %}
 				      <span class="glyphicon  glyphicon-download" title="资料"></span>
