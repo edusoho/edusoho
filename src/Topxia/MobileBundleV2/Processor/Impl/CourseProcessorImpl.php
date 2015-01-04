@@ -532,6 +532,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "data" => $this->filterPosts($posts, $this->controller->filterUsers($users))
         );
     }
+
+    public function getOneThreadPost(){
+    	$courseId = $this->getParam("courseId", 0);
+        $postId = $this->getParam("postId", 0);
+    	$user =  $this->controller->getUserByToken($this->request);
+    	if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
+        $post = $this->controller->getThreadService()->getPost($courseId, $postId);
+        $post['createdTime'] = Date('c', $post['createdTime']);
+
+        return $post;
+    }
     
     public function getThread()
     {

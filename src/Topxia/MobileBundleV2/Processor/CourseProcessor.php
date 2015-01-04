@@ -129,4 +129,9 @@ interface CourseProcessor
 	*获取用户个人主页的问答、讨论、笔记、考试的总数
 	*/
 	public function getUserNum();
+
+	/**
+	*获取单条回复信息
+	*/
+	public function getOneThreadPost();
 }
