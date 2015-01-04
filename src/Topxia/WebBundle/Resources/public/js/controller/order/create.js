@@ -79,9 +79,9 @@ define(function(require, exports, module) {
 				if(totalPrice < cashDiscount){
 	 				cashDiscount = totalPrice;
 	 			}
-				$('[role="cash-discount"]').text(cashDiscount);
+				$('[role="cash-discount"]').text(moneyFormatFloor(cashDiscount));
 			}else{
-				$('[role="cash-discount"]').text(coin);
+				$('[role="cash-discount"]').text(moneyFormatFloor(coin));
 			}
 			$('[role="coinNum"]').val(coin);
 			
@@ -137,7 +137,7 @@ define(function(require, exports, module) {
 
 		function coinPriceZero(){
 			$('[role="coinNum"]').val(0);
-			$('[role="cash-discount"]').text("0");
+			$('[role="cash-discount"]').text("0.00");
 			$(".pay-password div[role='password-input']").hide();
 			validator.removeItem('[name="payPassword"]');
 		}
@@ -195,7 +195,7 @@ define(function(require, exports, module) {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
 					$('[role="code-notify"]').css("color","green").text("优惠码可用");
-					$('[role="coupon-price"]').find("[role='price']").text(data.decreaseAmount);
+					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 				}
 				conculatePrice();
 			})
@@ -203,11 +203,6 @@ define(function(require, exports, module) {
 
  		var totalPrice = parseFloat($('[role="total-price"]').text());
  		if($('[role="coinNum"]').length>0) {
- 		// 	validator.addItem({
-			// 	element: '[name="coinPayAmount"]',
-			// 	required: true,
-   //  			rule: 'float'
-			// });
  			var coinNum = $('[role="coinNum"]').val();
  			if(isNaN(coinNum) || coinNum<=0){
 				$(this).val("0.00");
@@ -228,7 +223,7 @@ define(function(require, exports, module) {
 	 			$('[role="cash-discount"]').text(moneyFormatFloor(discount));
 	 			totalPrice = subtract(totalPrice, discount);
  			} else {
- 				$('[role="cash-discount"]').text(coinNum);
+ 				$('[role="cash-discount"]').text(moneyFormatFloor(coinNum));
  				totalPrice = subtract(totalPrice, coinNum);
  			}
  		}
