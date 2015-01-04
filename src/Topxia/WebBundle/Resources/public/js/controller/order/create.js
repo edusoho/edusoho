@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 		var validator = new Validator({
             element: '#order-create-form',
             triggerType: 'change',
-            //autoSubmit: false,
+            autoSubmit: false,
             onFormValidated: function(error){
                 if (error) {
                     return false;
@@ -73,7 +73,7 @@ define(function(require, exports, module) {
 			}
 			var coin = Math.round(accountCash*1000)>Math.round(coinNum*1000) ? coinNum : accountCash;
 
-			if(cashRateElement.data("coursePriceShowType") == "RMB"){
+			if(cashRateElement.data("priceType") == "RMB"){
 				var totalPrice = parseFloat($('[role="total-price"]').text());
 				var cashDiscount = Math.round(moneyFormatFloor(divition(coin, cashRate))*100)/100;
 				if(totalPrice < cashDiscount){
@@ -92,11 +92,11 @@ define(function(require, exports, module) {
 			if(totalPrice <= 0){
 				totalPrice = 0;
 				coinPriceZero();
-				$('[role="pay-coin"]').text(0);
-				$('[role="pay-rmb"]').text(0);
+				$('[role="pay-coin"]').text("0.00");
+				$('[role="pay-rmb"]').text("0.00");
 			} else {
 				var coinNum = 0;
-				if(cashRateElement.data("coursePriceShowType") == "RMB") {
+				if(cashRateElement.data("priceType") == "RMB") {
 					coinNum = multiple(totalPrice, cashRate);
 					coinNum = moneyFormatCeil(coinNum);
 				} else {
@@ -122,8 +122,8 @@ define(function(require, exports, module) {
 
 		function shouldPay(totalPrice){
 			totalPrice = Math.round(totalPrice*1000)/1000;
-			totalPrice = moneyFormatCeil(totalPrice);
-			if(cashRateElement.data("coursePriceShowType") == "RMB") {
+			if(cashRateElement.data("priceType") == "RMB") {
+				totalPrice = moneyFormatCeil(totalPrice);
 				$('[role="pay-rmb"]').text(totalPrice);
 				$('input[name="shouldPayMoney"]').val(totalPrice);
 			} else {
@@ -215,7 +215,7 @@ define(function(require, exports, module) {
         			rule: 'remote'
 				});
 			}
-			if(cashRateElement.data("coursePriceShowType") == "RMB") {
+			if(cashRateElement.data("price") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);
 	 			if(totalPrice<discount){
 	 				discount = totalPrice;

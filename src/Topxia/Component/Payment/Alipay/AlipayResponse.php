@@ -57,8 +57,7 @@ class AlipayResponse extends Response
         if ($this->params['sign'] !== $sign) {
             return 'sign_error';
         }
-
-        if (!empty($this->params['notify_id'])) {
+        if(!empty($this->params['notify_id'])){
             $notifyResult = $this->getRequest('https://mapi.alipay.com/gateway.do', array(
                 'notify_id' => $this->params['notify_id'],
                 'service' => 'notify_verify',
@@ -69,7 +68,7 @@ class AlipayResponse extends Response
                 return 'notify_verify_error';
             }
         }
-
+        
         return false;
     }
 

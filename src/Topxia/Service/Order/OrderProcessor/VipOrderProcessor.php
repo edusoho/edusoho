@@ -164,6 +164,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $totalPrice * $cashRate;
         }
 
+        $totalPrice = intval($totalPrice*100)/100;
+
         if(array_key_exists("coinPayAmount", $orderData)) {
             $amount = $this->afterCoinPay(
             	$coinEnabled, 
