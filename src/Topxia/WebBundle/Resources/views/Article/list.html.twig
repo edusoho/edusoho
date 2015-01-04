@@ -26,7 +26,7 @@
           </div>
           {% if article.thumb %}
             <a class="hidden-xs pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-              <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="资讯缩略图">
+              <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="{{'资讯缩略图'|trans}}">
             </a>
           {% endif %}
           <div class="media-body">
@@ -37,7 +37,7 @@
       {% endfor %}
     </ul>
   {% else %}
-    <div class="empty tac text-muted mvl">还没有任何资讯</div>
+    <div class="empty tac text-muted mvl">{{'还没有任何资讯'|trans}}</div>
   {% endif %}
   {{ web_macro.paginator(paginator) }}
 

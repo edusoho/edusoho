@@ -13,22 +13,22 @@
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
       {% endfor %}
-      <li class="active">正文</li>
+      <li class="active">{{'正文'|trans}}</li>
   </ul>
 
   <h2 class="thread-title">{{article.title}}</h2>
      <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
-     <div class="published-time pull-right">{{ article.hits|default(0) }} 次浏览</div>
+     <div class="published-time pull-right">{{ article.hits|default(0) }} {{'次浏览'|trans}}</div>
      <p><br></p>
   <div class="thread-body">{{article.body |raw }}</div>
   {% if tags %}
-     标签:
+     {{'标签'|trans}}:
     {% for tag in tags %}
          <span class="label label-info">{{tag.name}}</span>
     {% endfor %}
   {% endif %}
   {% if article.source %}
-     <span class="pull-right">本文来源: &nbsp;
+     <span class="pull-right">{{'本文来源'|trans}}: &nbsp;
      {% if article.sourceUrl %}
        <a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a>
      {% else %}
@@ -39,15 +39,15 @@
   <p><br></p>
   <ul class="pager">
     {% if articlePrevious %}
-      <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; 上一篇</a></li>
+      <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; {{'上一篇'|trans}}</a></li>
     {% else %}
-      <li class="previous disabled"><a href="javascript:;">&larr; 上一篇</a></li>
+      <li class="previous disabled"><a href="javascript:;">&larr; {{'上一篇'|trans}}</a></li>
     {% endif %}
 
       {% if articleNext %}
-      <li class="next"><a href="{{ path('article_detail',{id:articleNext.id}) }}"> 下一篇 &rarr;</a></li>
+      <li class="next"><a href="{{ path('article_detail',{id:articleNext.id}) }}"> {{'下一篇'|trans}} &rarr;</a></li>
     {% else %}
-      <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
+      <li class="next disabled"><a href="javascript:;"> {{'下一篇'|trans}} &rarr;</a></li>
     {% endif %}
   </ul>
 <div class="share pull-right" data-bdText="{{articleShareContent|default('')}}"></div>
