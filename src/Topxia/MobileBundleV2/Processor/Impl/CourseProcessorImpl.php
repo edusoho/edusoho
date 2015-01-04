@@ -541,8 +541,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
         $post = $this->controller->getThreadService()->getPost($courseId, $postId);
-        $post['createdTime'] = Date('c', $post['createdTime']);
-
+        if($post == null){
+        	return $this->createErrorResponse('no_post', '没有找到指定回复!');
+        }else{
+        	$post['createdTime'] = Date('c', $post['createdTime']);
+        }
         return $post;
     }
     
