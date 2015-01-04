@@ -135,9 +135,7 @@ define(function(require,exports,module){
                     self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-favourite-btn]').attr('disabled',true);
                     self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-favourite-btn] > span').addClass('favourited');
                 });
-                Notify.success('收藏成功');
             }).error(function(result){
-                Notify.success('收藏成功');
             });
         },
 
@@ -147,7 +145,7 @@ define(function(require,exports,module){
             var id = [];
             id.push($btn.data('itemId'));
             $.post($btn.data('url'),{ids:id},function(result){
-                Notify.success('收藏成功');
+                // Notify.success('收藏成功');
                 $btn.attr('disabled',true);
                 $btn.find('.glyphicon-bookmark').addClass('favourited');
             }).error(function(result){
