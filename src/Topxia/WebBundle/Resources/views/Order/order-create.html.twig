@@ -39,7 +39,11 @@
               {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
-            <div class="order-item clearfix">
+            <div class="order-item clearfix" 
+            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType) or setting('coin.coin_enabled')) %}
+            style="display:none"
+            {% endif %}
+            >
               <div class="pull-right order-count">
                 订单金额：
                 <span role="total-price" class="order-price">{{totalPrice}}</span>
