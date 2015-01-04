@@ -9,17 +9,12 @@
 <div class="container order-pay">
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
-      {# <div class="panel panel-default panel-page"> #}
       <div class="panel panel-default">
         <div class="panel-heading"><h4>订单确认</h4></div>
-{#         <div class="panel-body">
-          <form id="order-create-form" method="post" action="{{path('order_create')}}" 
-          > #}
         <div class="panel-body order-panel">
           <form id="order-create-form" method="post" action="{{path('order_create')}}">
 
-            <input style="display:none">{# Prevent autocompleting #}
-            <input type="password" style="display:none">{# Prevent autocompleting #}
+            <input type="password" style="display:none">
 
           	{% if order|default(null) %}
             <input type="hidden" name="orderId" value="{{order.id}}"/>
@@ -37,80 +32,22 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
             {% if targetType == "course" and courses|default(null) %}
-            {# {% include 'TopxiaWebBundle:Course:courses-block-list.html.twig' with {courses:courses} %} #}
-            <div class="order-detail">
-              {% for course in courses %}
-              <div class="col-md-4">
-                <a href="{{ path('course_show', {id:course.id}) }}">
-                  <img class="img-responsive" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
-                </a>
-              </div>
-              <div class="col-md-8">
-                <h3><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                <span class="course-text">课时：{{ course.lessonNum }} 课时</span>
-                {% set teacher = users[course.teacherIds|first]|default(null) %}
-                {% if teacher %}
-                  <span class="course-text">
-                    <!-- <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar',teacher.smallAvatar, '') }}" class="teacher-avatar"></a> -->
-                    老师：<a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-                    <!-- <span class="teacher-title ellipsis">{{ teacher.title }}</span> -->
-                  </span>
-                {% endif %}
-                 <!-- {% if setting('course.coursesPrice') == 0 %}
-                    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                      {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
-                        <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
-                      {% endif %}
-                    {% else %}
-                      {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
-                        <span class="free-money-text"><del>{{ course.price }}</del></span>
-                      {% endif %}
-                    {% endif %}
-
-                    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                        <span class="course-price" style="display:inline">
-                          {% if course.coinPrice > 0 %}
-                            {% if free_limit_type(course) == 'free_now' %}
-                              0.00 元
-                            {% else %}
-                             价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}
-                            {% endif %}  
-                          {% else %}免费{% endif %}
-                        </span>
-                    {% else %}
-                      <span class="course-price">
-                        {% if course.price > 0 %}
-                          {% if free_limit_type(course) == 'free_now' %}
-                            0.00 元
-                          {% else %}
-                           价格：{{ course.price }}元
-                          {% endif %}  
-                        {% else %}免费{% endif %}
-                      </span>
-                  {% endif %}
-                {% endif %} -->
-            </div>
-              {% endfor %}
-            </div>
-
+              {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
             {% endif %}
 
             {% if targetType == "vip" %}
-            {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
+              {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
             <div class="order-item clearfix">
-            	{# <p class="pull-right order-count"> #}
               <div class="pull-right order-count">
                 订单金额：
-                {# <span role="total-price">{{totalPrice}}</span> #}
                 <span role="total-price" class="order-price">{{totalPrice}}</span>
                 {% if priceType|default('RMB') == "RMB" %}
                   元
                 {% elseif priceType|default('RMB') == "Coin" %}
                   {{setting("coin.coin_name")}}
                 {% endif %}
-              {# </p> #}
               </div>
             </div>
             
@@ -119,57 +56,7 @@
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}
-            	{# {% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %} #}
-             <div class="order-item clearfix">
-                <div class="order-item-title">
-                  <i class="order-item-title-icon">
-                    <img 
-                    {% if setting("coin.coin_picture") %}
-                    src="{{asset(setting("coin.coin_picture"))}}"
-                    {% else %}
-                    src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" 
-                    {% endif %}
-                    width="25px">
-                  </i>
-                  <h4 class="title">{{ setting("coin.coin_name") }}</h4>
-                  <span class="text-muted">（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
-                  <div class="price_r">
-                    <span class="price_r_mark">-</span>
-                    <span class="order-price" role="cash-discount"></span>
-                    <span>{% if priceType == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
-                  </div>
-                </div>
-                <div class="order-item-detail">
-                  
-                  <div class="coin-detail">
-                    账户余额：<span role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}
-                    {% if hasPayPassword %}，
-                    本次使用
-                    <input role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">{{setting("coin.coin_name")}}
-                    {% endif %}
-                  </div>
-                  <div class="pay-password">
-                    <input style="display:none">{# Prevent autocompleting #}
-                    <input type="password" style="display:none">{# Prevent autocompleting #}
-                    {% if not hasPayPassword %}
-                    <div>
-                      <span class="text-danger">为了保障账户资金安全，请先</span>
-                      <a href="{{path('settings_pay_password')}}" target='_blank' class="btn-link">设置支付密码</a>
-                    </div>
-                    {% else %}
-                    <div role="password-input" style="display:none">
-                      <label class="control-label" for="payPassword" style="display:none">支付密码</label>
-                      <div class="controls">
-                        <input id="payPassword" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
-                      </div>
-                      <div>
-                        <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
-                      </div>
-                    </div>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>              
+            	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
 
             <div class="order-item clearfix">

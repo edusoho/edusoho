@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 		var validator = new Validator({
             element: '#order-create-form',
             triggerType: 'change',
-            autoSubmit: false,
+            //autoSubmit: false,
             onFormValidated: function(error){
                 if (error) {
                     return false;
@@ -147,7 +147,7 @@ define(function(require, exports, module) {
 			coinNum = Math.round(coinNum*100)/100;
 			$(this).val(coinNum);
 			if(isNaN(coinNum) || coinNum<=0){
-				$(this).val(0);
+				$(this).val("0.00");
 				coinPriceZero();
 			} else {
 				$(".pay-password div[role='password-input']").show();
@@ -173,7 +173,7 @@ define(function(require, exports, module) {
 			$('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
 			$('[role="code-notify"]').hide();
-			$('[role="coupon-price"]').find("[role='price']").text(0);
+			$('[role="coupon-price"]').find("[role='price']").text("0.00");
 			$('[role="code-notify"]').text("");
 			$('[role="coupon-code"]').val("");
 			$(this).hide();
@@ -203,9 +203,14 @@ define(function(require, exports, module) {
 
  		var totalPrice = parseFloat($('[role="total-price"]').text());
  		if($('[role="coinNum"]').length>0) {
+ 		// 	validator.addItem({
+			// 	element: '[name="coinPayAmount"]',
+			// 	required: true,
+   //  			rule: 'float'
+			// });
  			var coinNum = $('[role="coinNum"]').val();
  			if(isNaN(coinNum) || coinNum<=0){
-				$(this).val(0);
+				$(this).val("0.00");
 				coinPriceZero();
 			} else {
 				$(".pay-password div[role='password-input']").show();
