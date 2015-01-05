@@ -81,18 +81,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($thread)) {
             return $this->createErrorResponse('not_thread', "问答不存在或已删除");
         }
-        
-        $content = $this->getParam("content", '');
-        $content = $this->uploadImage($content);
-        
-        $formData            = $this->formData;
-        $formData['content'] = $content;
-        unset($formData['imageCount']);
-        $post        = $this->controller->getThreadService()->createPost($formData);
-        $threadTitle = $thread['title'];
-        //PushService::sendMsg($thread['userId'],"1|$courseId|$threadTitle|$threadId");
-        return $post;
-    }
+
+		$content = $this->getParam("content", '');
+		$content = $this->uploadImage($content);
+
+		$formData = $this->formData;
+		$formData['content'] = $content;
+		unset($formData['imageCount']);
+		$post = $this->controller->getThreadService()->createPost($formData);
+		$threadTitle = $thread['title'];
+		//PushService::sendMsg($thread['userId'],"1|$courseId|$threadTitle|$threadId");
+		return $post;
+	}
     
     /*
      *更新回复
@@ -532,6 +532,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "data" => $this->filterPosts($posts, $this->controller->filterUsers($users))
         );
     }
+
+    public function getOneThreadPost(){
+    	$courseId = $this->getParam("courseId", 0);
+        $postId = $this->getParam("postId", 0);
+    	$user =  $this->controller->getUserByToken($this->request);
+    	if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
+        $post = $this->controller->getThreadService()->getPost($courseId, $postId);
+        if($post == null){
+        	return $this->createErrorResponse('no_post', '没有找到指定回复!');
+        }else{
+        	$post['createdTime'] = Date('c', $post['createdTime']);
+        }
+        return $post;
+    }
     
     public function getThread()
     {
@@ -842,14 +858,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $conditions['sort'] = $sort;
         
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
-        $result  = array(
-            "start" => $start,
-            "limit" => $limit,
-            "total" => $total,
-            "data" => $this->controller->filterCourses($courses)
-        );
-        return $result;
-    }
+		$result = array(
+			"start"=>$start,
+			"limit"=>$limit,
+			"total"=>$total,
+			"data"=>$this->controller->filterCourses($courses)
+			);
+		return $result;
+	}
     
     public function getLearnedCourse()
     {
@@ -917,7 +933,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
         return $result;
     }
-    
     
     public function getLearnStatus()
     {
@@ -991,7 +1006,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $result = array(array('title' => '在学课程','data' => null),
+            	array('title' => '问答','data' => null),
+            	array('title' => '讨论','data' => null),
+            	array('title' => '笔记','data' => null),
+            	array('title' => '私信','data' => null));
         }
         
         $courseConditions = array(
@@ -1084,15 +1103,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $lastestNote = $createdTimeNote;
         }
+
         $lastestNote = reset($lastestNote);
-        $lastestNote['updatedTime'] == '0' ? $lastestNote['createdTime'] : $lastestNote['updatedTime'];
         $data = array(
             'content' => $lastestNote['content'],
             'id' => $lastestNote['id'],
             'courseId' => $lastestNote['courseId'],
-            'lessonId' => $lastestNote['lessonId'],
-            'time' => Date('c', $lastestNote['updatedTime'])
+            'lessonId' => $lastestNote['lessonId']
         );
+        if($lastestNote['updatedTime'] > $lastestNote['createdTime']){
+        	$data['time'] = Date('c', $lastestNote['updatedTime']);
+        }else{
+			$data['time'] = Date('c', $lastestNote['createdTime']);
+        }
         
         $result[3] = array(
             'title' => '笔记',
@@ -1131,4 +1154,34 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         return $result;
     }
+
+    public function getUserNum(){
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $conditions = array(
+            'userId' => $user['id']
+        );
+        //问答数量
+        $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
+
+        $conditions['type'] = 'discussion';
+        //话题数量
+        $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
+
+        $conditions['userId'] = $user['id'];
+        //笔记数量
+        $noteSum = $this->controller->getNoteService()->searchNoteCount($conditions);
+
+        //考试数量
+        $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
+
+        return array('thread' => $threadSum,
+        			'discussion' => $discussionSum,
+        			'note' => $noteSum,
+        			'test' => $testSum );
+    }
+
 }
