@@ -1153,7 +1153,7 @@ CREATE TABLE `cash_flow` (
   `note` text COMMENT '备注',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tradeNo` (`sn`),
+  UNIQUE KEY `tradeNo` (`sn`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='帐目流水' AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `groups_thread_collect`;
