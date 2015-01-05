@@ -10,21 +10,13 @@ class TagController extends BaseController
 {
      public function indexAction (Request $request, $tagId)
     {
-        //获取前18个标签
-        $tags = $this->getCustomTagService()->findAllTags(0, 20);
-      if (empty($tags)) {
-            throw $this->createNotFoundException();
-        }
-
         if(empty($tagId)){
             $tagId=$tags[0]['id'];
         }
-         $tagDetail = $this->getTagService()->getTag($tagId);
-
+        $tagDetail = $this->getTagService()->getTag($tagId);
         if (empty($tagDetail)) {
             throw $this->createNotFoundException();
         }
-
 
         $conditions = array('tagId' => $tagId);
         $paginator = new Paginator(
@@ -33,17 +25,21 @@ class TagController extends BaseController
             , 10
         );
 
-         // $count = $this->
-           
-        // $paginator = new Paginator($this->get('request'), $count, 20);
+        $page = $request->query->get('page');
+        if( !$page ){$page = 1;}
+        // $start = ($page - 1) * 20;
+        // $tags = $this->getCustomTagService()->findAllTags($start, 20);
+        $temp = $this->getTags($page-1,20);
+
+         
 
         $courses = $this->getCustomCourseSearchService()->searchCourses($conditions,null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
       
         return $this->render('TopxiaWebBundle:Tag:tag-index.html.twig', array(
-            'tags' => $tags,
+            'tags' => $temp['tags'],
             'tagDetail' => $tagDetail,
             'courses' => $courses,
-            'page'=>1,
+            'page'=> $temp['nextPage'],
             'paginator'=>$paginator
         ));
 
@@ -80,9 +76,13 @@ class TagController extends BaseController
     private function getTags($page,$perPage){
         $perPageCount = $perPage;
         $total = $this->getTagService()->getAllTagCount();
-        $currentPage = $page;
+        $currentPage = $page+1;
         $maxPage = ceil($total / $perPageCount) ? : 1;
         $start=0;
+       
+        if($currentPage>$maxPage){
+            $currentPage = 1;
+        }
        
         //保证最后一页也有$perPage条记录
         if($currentPage==$maxPage){
@@ -93,16 +93,16 @@ class TagController extends BaseController
                  $start =0;
             }
            
-            $nextPage = 1;
+            // $nextPage = 1;
         }else{
             
              $start = ($currentPage - 1) * $perPageCount;
-             $nextPage = $currentPage +1;
+             // $nextPage = $currentPage +1;
         }
      
         $tags = $this->getCustomTagService()->findAllTags($start, $perPageCount);
         
-        return array("tags"=>$tags,"nextPage"=>$nextPage);
+        return array("tags"=>$tags,"nextPage"=>$currentPage);
         // return $tags;
     }
 
