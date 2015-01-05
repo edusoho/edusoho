@@ -132,3 +132,15 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .carts-popover-info {
   font-size: 8px;
 }
+#my-teaching-carousel .carousel-inner {
+  width: 80%;
+  margin: auto;
+}
+#my-teaching-carousel .carousel-control {
+  width: 10%;
+}
+#my-teaching-carousel .carousel-control span {
+  display: block;
+  margin: auto;
+  text-align: center;
+}

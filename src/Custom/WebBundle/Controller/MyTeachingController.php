@@ -19,4 +19,21 @@ class MyTeachingController extends BaseController
 		return $this->render('CustomWebBundle:MyTeaching:dashboard.html.twig', array(
 		));
 	}
+
+	public function myCoursesRatingAction(Request $request)
+	{
+		$user = $this->getCurrentUser();
+		$teachCoursesCount = $this->getCourseService()->findUserTeachCourseCount($user['id']);
+		$teachCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, $teachCoursesCount);
+		$teachCourses = ArrayToolkit::index($teachCourses, 'id');
+		return $this->render('CustomWebBundle:MyTeaching:my-courses-rating.html.twig', array(
+			'teachCourses' => $teachCourses,
+		));
+	}
+
+	protected function getCourseService()
+	{
+	    return $this->getServiceKernel()->createService('Course.CourseService');
+	}
+
 }
