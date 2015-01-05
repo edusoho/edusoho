@@ -165,18 +165,40 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 
 #my-teaching-carousel {
 	.title {
-
+		font-size: 12px;
+		.ellipsis;
+	}
+	.caption {
+		padding: 0;
+	}
+	.thumbnail {
+		height: 111px;
+		width: 119px;
 	}
 	.carousel-inner {
 		width: 80%;
 		margin: auto;
 	}
+	.course-rating {
+		border-top: 1px solid #ddd;
+		font-size: 10px;
+		a {
+			cursor: pointer;
+			color: #428bca;
+		}
+		span {
+			width: 80px;
+		}
+	}
 	.carousel-control {
+		display: block;
 		width: 10%;
 		span {
 			display: block;
-			margin: auto;
 			text-align: center;
+		}
+		.glyphicon-chevron-right {
+			margin-right: -15px;
 		}
 	}
 }

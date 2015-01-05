@@ -12,7 +12,12 @@
             <div class="thumbnail">
               <img src="{{ file_path(teachCourse.middlePicture, 'course-large.png') }}" alt="...">
               <div class="caption">
-                <h3 class="title" >{{ teachCourse.title }}</h3>
+                <span class="title" >{{ teachCourse.title }}</span>
+                <div class="course-rating">
+                  <span class="stars-{{ teachCourse.rating|round }}">
+                  </span>
+                  <a data-toggle="modal" data-target="#modal" data-url="{{ path('my_teaching_course_review_list', {id:teachCourse.id}) }}">详情</a>
+                </div>
               </div>
             </div>
           </div>
@@ -27,11 +32,11 @@
   </div>
 
   <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+  <a class="left carousel-control" href="#my-teaching-carousel" role="button" data-slide="prev">
     <span class="glyphicon glyphicon-chevron-left"></span>
     <span class="sr-only">Previous</span>
   </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+  <a class="right carousel-control" href="#my-teaching-carousel" role="button" data-slide="next">
     <span class="glyphicon glyphicon-chevron-right"></span>
     <span class="sr-only">Next</span>
   </a>

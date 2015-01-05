@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}课程评价{% endblock %}
+{% block body %}
+
+  <ul class="media-list">
+    {% for review in reviews %}
+      {% set user = users[review.userId] %}
+      <li class="media">
+        {{ web_macro.user_avatar(user, 'pull-left') }}
+        <div class="media-body">
+          <div class="media-heading">
+            {{ web_macro.user_link(user) }}
+            <span class="bullet">•</span>
+            <span class="text-muted">{{ review.createdTime|date('Y-m-d') }}</span>
+          </div>
+
+          <div class="media-content">
+            <div><span class="stars-{{ review.rating }}"></span></div>
+
+            {{ review.content }}
+
+          </div>
+        </div>
+      </li>
+    {% else %}
+    <li class="empty">暂无课程评价!</li>
+    {% endfor %}
+  </ul>
+
+  {% if paginator|default(null) %}
+    {{ web_macro.paginator(paginator) }}
+  {% endif  %}
+
+{% endblock %}
+
+{% block footer %}
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+{% endblock %}
