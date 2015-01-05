@@ -5,6 +5,8 @@ namespace Topxia\MobileBundleV2\Processor;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
+
+    static $apiVersionRange = "2.3.2";
     public $formData;
     public $controller;
     public $request;
@@ -53,9 +55,27 @@ class BaseProcessor {
         return $this->controller->getContainer();
     }
 
+    protected function getAppService()
+    {
+        return $this->controller->getService('CloudPlatform.AppService');
+    }
+
     protected function getBlockService()
     {
         return $this->controller->getService('Content.BlockService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->controller->getService('File.UploadFileService');
+    }
+
+    protected function getUserService(){
+        return $this->controller->getService('User.UserService');
+    }
+
+    protected function getMessageService(){
+        return $this->controller->getService('User.MessageService');
     }
 
     protected function getCouponService()
@@ -88,9 +108,19 @@ class BaseProcessor {
         return $this->controller->getService('Util.MobileDeviceService');
     }
 
+    protected function getArticleService()
+    {
+        return $this->controller->getService('Article.ArticleService');
+    }
+
     protected function getOrderService()
     {
         return $this->controller->getService('Order.OrderService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->controller->getService('Taxonomy.TagService');
     }
 
     protected function getFileService()
@@ -181,12 +211,12 @@ class BaseProcessor {
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
-            'host' => $request->getSchemeAndHttpHost() ,
+            'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "2.1.0"
+                "max" => BaseProcessor::$apiVersionRange
             ) ,
         );
     }
@@ -218,6 +248,14 @@ class BaseProcessor {
         curl_close($curl);
 
         return $response;
+    }
+
+    /**
+     *把\t\n转化成空字符串
+    */
+    public function filterSpace($content){
+        $pattern='[\\n\\t\\s]';
+        return preg_replace($pattern, '', $content);
     }
 }
 

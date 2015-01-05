@@ -68,7 +68,7 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService($name);
     }
 
-    private function setCurrentUser($userId, $request)
+    public function setCurrentUser($userId, $request)
     {
         $user = $this->getUserService()->getUser($userId);
         $currentUser = new CurrentUser();
@@ -277,6 +277,7 @@ class MobileBaseController extends BaseController
         }
         
         $container = $this->container;
+
         $controller = $this;
         return array_map(function($user) use ($container, $controller)
         {
@@ -291,6 +292,9 @@ class MobileBaseController extends BaseController
                 $vip = $controller->getVipService()->getMemberByUserId($user['id']);
                 $user["vip"] = $vip;
             }
+            $userProfile = $controller->getUserService()->getUserProfile($user['id']);
+            $user['signature'] = $userProfile['signature'];
+            $user['about'] = $userProfile['about'];
             
             unset($user['password']);
             unset($user['salt']);
