@@ -1,48 +1,40 @@
 /* subcourse manage */
 .sub-course-media .title {
-	margin-top: 20px;
-	font-size: 20px;
+  margin-top: 20px;
+  font-size: 20px;
 }
 .sub-course-media .course-pic {
-	width: 180px;
-	height: 80px;
+  width: 180px;
+  height: 80px;
 }
-
 .sub-course-media .course-pic-modal {
-	width: 120px;
-	height: 50px;
+  width: 120px;
+  height: 50px;
 }
-
 .sub-course-media .teacher-name {
-	display: block;
-	margin: 0;
-	max-width: 60%;
+  display: block;
+  margin: 0;
+  max-width: 60%;
 }
-
 .sub-course-media .delete-btn {
-	margin-top: -45px;
-	margin-right: 20px;
+  margin-top: -45px;
+  margin-right: 20px;
 }
-
 .sub-course-media .choose-btn {
-	margin-top: -40px;
+  margin-top: -40px;
 }
-
-.sub-course-media.sort-ul li>a {
-	padding: 15px 0 0 10px;
+.sub-course-media.sort-ul li > a {
+  padding: 15px 0 0 10px;
 }
 .sub-course-media .content {
-	margin-top: 15px;
+  margin-top: 15px;
 }
-
 .sub-course-media.sort-ul li {
-	cursor: pointer;
+  cursor: pointer;
 }
-
 .sub-course-media.sort-ul li:hover {
-	background-color: #eee;
+  background-color: #eee;
 }
-
 ul.sort-ul.sub-course-media li.placeholder {
   position: relative;
   margin-bottom: 10px 0;
@@ -52,111 +44,91 @@ ul.sort-ul.sub-course-media li.placeholder {
   border: 1px dashed #ccc;
   list-style: none;
 }
-
 ul.sort-ul.sub-course-media li.placeholder:before {
   position: absolute;
   /** Define arrowhead **/
 }
-
 /* execrcise */
 .execrcise-tips {
-	margin-bottom: 10px;
-	border: 2px solid #eee;
+  margin-bottom: 10px;
+  border: 2px solid #eee;
 }
 .execrcise-tips .row {
-	padding: 10px;
+  padding: 10px;
 }
-
 /*carts*/
-
-.float-carts{
-    position: fixed;
-    right: 0;
-    top: 25%;
-    visibility: hidden;
-    z-index: 999999;
+.float-carts {
+  position: fixed;
+  right: 0;
+  top: 25%;
+  visibility: hidden;
+  z-index: 999999;
 }
-
 .carts-popover-list .carts-item {
-	height: 50px;
-	border-bottom: 1px solid rgba(0,0,0,0.18);
-	margin-bottom: 5px;
+  height: 50px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  margin-bottom: 5px;
 }
-
 .carts-popover-list {
-    padding-left: 0px;
-    list-style: none;
-    max-height:250px;
-    overflow-x: hidden;
-    overflow-y:auto; 
+  padding-left: 0px;
+  list-style: none;
+  max-height: 250px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
-
 .course-popover {
-	float: left;
-	margin-right: 5px;
+  float: left;
+  margin-right: 5px;
 }
-
-.course-popover img{
-	width:80px;
+.course-popover img {
+  width: 80px;
 }
-
-.price-count{
-	color:red;
-	font-size: 12px;
+.price-count {
+  color: red;
+  font-size: 12px;
 }
-
 .popover-teachers {
-	font-size: 6px;
-	width : 120px;
-	word-wrap:break-word;
-	white-space: nowrap;
+  font-size: 6px;
+  width: 120px;
+  word-wrap: break-word;
+  white-space: nowrap;
 }
-
 .carts-text-delete {
-	font-size: 6px;
+  font-size: 6px;
 }
-.popover-empty{
-	color: #999;
-	padding:5px 20px;
-	text-align: center;
+.popover-empty {
+  color: #999;
+  padding: 5px 20px;
+  text-align: center;
 }
-
-.item-courses-show{
-	padding: 10px;
+.item-courses-show {
+  padding: 10px;
 }
-
 .carousel .carousel-control {
-	background-image: none;
-	background: none;
+  background-image: none;
+  background: none;
 }
-
 .btn-carts .glyphicon-shopping-cart {
-	font-size: 18px;
+  font-size: 18px;
 }
-
 .carts-text {
-	text-align: right;
+  text-align: right;
 }
-
 .consult-cart-content {
-	width: 250px;
-	height: 100px;
-	padding-bottom: 10px;
+  width: 250px;
+  height: 100px;
+  padding-bottom: 10px;
 }
-
-.carts-popover-btn{
-	margin-top: 5px;
-	margin-bottom: 5px;
+.carts-popover-btn {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-
 .favourited {
-	color: #E0DCDC;
+  color: #E0DCDC;
 }
-
 .carts-item .course-title {
-	font-size: 8px;
+  font-size: 8px;
 }
-
 .carts-popover-info {
-	font-size: 8px;
+  font-size: 8px;
 }
