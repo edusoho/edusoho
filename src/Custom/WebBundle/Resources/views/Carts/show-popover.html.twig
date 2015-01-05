@@ -1,7 +1,7 @@
 {% if carts %}
 <div class="carts-popover">
   <ul class="carts-popover-list">
-    {% for cart in loopLimit(carts,5) %}
+    {% for cart in carts %}
     {% set course = courses[cart.itemId] %}
     <li class="carts-item clearfix">
       <a href="{{ path('course_show', {id:course.id}) }}" class="course-popover" target="_blank">
