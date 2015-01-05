@@ -375,7 +375,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $headLeaderInfo = $this->getHeadLeaderInfo();
                             if($headLeaderInfo){
-                                $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $headLeaderInfo['id'], 'times' => 1, 'duration' => 3600));
+                                $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $headLeaderInfo['id'], 'times' => 2, 'duration' => 3600));
                                 $lesson['headUrl'] = array(
                                     'url' => $this->controller->generateUrl('hls_playlist', array(
                                         'id' => $headLeaderInfo['id'], 
@@ -386,7 +386,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                 );
                             }
 
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 2, 'duration' => 3600));
                             $url = array(
                                 'url' => $this->controller->generateUrl('hls_playlist', array(
                                     'id' => $file['id'], 
