@@ -15,7 +15,7 @@ class LectureNoteController extends BaseController
         $lessonId = $conditions['lessonId'];
         $type = empty($conditions['type'])? 'lectureNote':$conditions['type'];
         $style = empty($conditions['style'])? 'essayMaterial':$conditions['style'];
-// var_dump($conditions);exit();
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $category = $this->getCategoryService()->getCategory($course['subjectIds'][0]);
 

@@ -19,7 +19,6 @@ define(function(require, exports, module) {
                 lessonId: toolbar.get('lessonId')
             }, function(html) {
                 pane.element.html(html);
-                $('.lecture-note-pane').perfectScrollbar({wheelSpeed:50});
             });
 
         }

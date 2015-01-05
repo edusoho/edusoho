@@ -18,7 +18,7 @@
   {% for lessonMaterial in lessonMaterials %}
     <li>
       {% if lessonMaterial.essayId != 0  %}
-        <a class="btn-link" data-role="preview-item" data-url="{{ path('admin_essay_preview', {id:lessonMaterial.essayId}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom">
+        <a class="btn btn-link preview-courseware-btn" data-role="preview-item" data-url="{{ path('admin_essay_preview', {id:lessonMaterial.essayId}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom">
         {{ lessonMaterial.title}}</a>
       {% else %}
       <a class="btn btn-link preview-courseware-btn" data-url="{{ path('admin_article_material_preview',{categoryId:categoryId, id:lessonMaterial.essayMaterialId}) }}" data-toggle="modal" data-target="#modal" data-toggle="tooltip" data-placement="bottom" title="预览">{{ lessonMaterial.title}}</a>
