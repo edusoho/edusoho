@@ -4556,15 +4556,13 @@ a.homework-essay-textarea-pack-up{
 }
 
 .lecture-note-pane {
-	overflow-y: auto;
+/*	overflow-y: auto;*/
 	overflow-x:hidden;
+	height: 100%;
 }
 
 .lesson-lecture-note{
-	width:320px;
-	height:650px; 
 	margin:10px; 
-	word-break: break-all;
 	word-wrap: break-word;
 }
 
