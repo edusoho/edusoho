@@ -655,6 +655,7 @@ CREATE TABLE `orders` (
   `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '订单所属对象类型',
   `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单所属对象ID',
   `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单实付金额',
+  `totalPrice` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '订单总价',
   `isGift` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为赠送礼物',
   `giftTo` varchar(64) NOT NULL DEFAULT '' COMMENT '赠送给用户ID',
   `refundId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次退款操作记录的ID',
@@ -662,8 +663,12 @@ CREATE TABLE `orders` (
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
   `payment` enum('none','alipay','tenpay','coin') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
+  `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
+  `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',
   `bank` varchar(32) NOT NULL DEFAULT '' COMMENT '银行编号',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
+  `cashSn` BIGINT(20) NULL COMMENT '支付流水号',
   `note` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `data` text COMMENT '订单业务数据',
   `createdTime` int(10) unsigned NOT NULL COMMENT '订单创建时间',
@@ -934,6 +939,8 @@ CREATE TABLE `user` (
   `email` varchar(128) NOT NULL COMMENT '用户邮箱',
   `password` varchar(64) NOT NULL COMMENT '用户密码',
   `salt` varchar(32) NOT NULL COMMENT '密码SALT',
+  `payPassword` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码',
+  `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码Salt',
   `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '用户URI',
   `nickname` varchar(64) NOT NULL COMMENT '昵称',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
@@ -1137,6 +1144,9 @@ CREATE TABLE `cash_flow` (
   `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
   `type` enum('inflow','outflow') NOT NULL COMMENT '流水类型',
   `amount` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
+  `cashType` ENUM('RMB','Coin') NOT NULL DEFAULT 'Coin' COMMENT '账单类型',
+  `cash` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '账单生成后的余额',
+  `parentSn` bigint(20) NULL COMMENT '上一个账单的流水号',
   `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
   `orderSn` varchar(40) NOT NULL COMMENT '订单号',
   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '帐目类目',
@@ -1144,7 +1154,6 @@ CREATE TABLE `cash_flow` (
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tradeNo` (`sn`),
-  UNIQUE KEY `orderSn` (`orderSn`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='帐目流水' AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `groups_thread_collect`;
@@ -1192,3 +1201,14 @@ CREATE TABLE `upload_files_share` (
   `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `user_secure_question`;
+CREATE TABLE `user_secure_question` (
+`id` int(10) unsigned NOT NULL auto_increment ,
+`userId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '用户ID',
+`securityQuestionCode` varchar(64) NOT NULL DEFAULT '' COMMENT '问题的code',
+`securityAnswer` varchar(64) NOT NULL DEFAULT '' COMMENT '安全问题的答案',
+`securityAnswerSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '安全问题的答案Salt',
+`createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',       
+PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
