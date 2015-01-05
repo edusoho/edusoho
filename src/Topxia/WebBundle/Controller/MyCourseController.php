@@ -12,7 +12,7 @@ class MyCourseController extends BaseController
     public function indexAction (Request $request)
     {
         if ($this->getCurrentUser()->isTeacher()) {
-            return $this->redirect($this->generateUrl('my_teaching_courses')); 
+            return $this->redirect($this->generateUrl('my_teaching_dashboard')); 
         } else {
             return $this->redirect($this->generateUrl('my_courses_learning'));
         }
