@@ -49,7 +49,7 @@ define(function(require, exports, module) {
 	        value = value + '';
 	        value = parseFloat(value).toFixed(3);
 	        var length = value.length;
-	        if (value.substr(length-2, 1) === '0') {
+	        if (value.substr(length-1, 1) === '0') {
 	            return moneyFormatFloor(value);
 	        }
 	        return moneyFormatFloor(parseFloat(value) + 0.01);
