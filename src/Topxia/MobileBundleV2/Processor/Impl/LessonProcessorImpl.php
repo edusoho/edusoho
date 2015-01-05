@@ -377,7 +377,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             if($headLeaderInfo){
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $headLeaderInfo['id'], 'times' => 1, 'duration' => 3600));
                                 $lesson['headUrl'] = array(
-                                    'url' => $this->generateUrl('hls_playlist', array(
+                                    'url' => $this->controller->generateUrl('hls_playlist', array(
                                         'id' => $headLeaderInfo['id'], 
                                         'token' => $token['token'],
                                         'line' => $this->request->get('line'),
@@ -388,7 +388,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
                             $url = array(
-                                'url' => $this->generateUrl('hls_playlist', array(
+                                'url' => $this->controller->generateUrl('hls_playlist', array(
                                     'id' => $file['id'], 
                                     'token' => $token['token'],
                                     'line' => $this->request->get('line'),
