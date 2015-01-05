@@ -150,3 +150,7 @@ carts_add:
 my_teaching_dashboard:
     pattern: /my/teaching/dashboard
     defaults: { _controller: CustomWebBundle:MyTeaching:dashboard }
+
+my_teaching_course_review_list:
+    pattern:  /my/teaching/course/{id}/review/list
+    defaults: { _controller: CustomWebBundle:MyTeaching:reviewList }
