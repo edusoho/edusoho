@@ -1,0 +1,46 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}教师中心 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-dashboard' %}
+
+{% block main %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default teacher-income">
+				<div class="panel-body"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8">
+			<div class="panel panel-default my-courses-rating">
+				<div class="panel-heading">课程评价</div>
+				<div class="panel-body"></div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="panel panel-default my-may-like">
+				<div class="panel-heading">猜你喜欢</div>
+				<div class="panel-body"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default my-service">
+				<div class="panel-heading">我的服务</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-4">待回答的问答</div>
+						<div class="col-md-4">待批改的作业</div>
+						<div class="col-md-4">待批阅的考试</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

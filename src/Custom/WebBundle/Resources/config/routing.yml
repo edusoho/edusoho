@@ -146,3 +146,7 @@ carts_course_favorite:
 carts_add:
     pattern:  /carts/add
     defaults: { _controller: CustomWebBundle:Carts:add }
+
+my_teaching_dashboard:
+    pattern: /my/teaching/dashboard
+    defaults: { _controller: CustomWebBundle:MyTeaching:dashboard }
