@@ -25,7 +25,7 @@
     <tr>
       <td>{{ bill.date }}</td>
       <td>
-        {{ bill.space }}G
+        月末：{{ bill.space }}G <br> 月均： {{ bill.spaceAvg }}G
         <br><small class="text-muted">免费额度：{{ bill.spaceGift }}G</small>
       </td>
       <td>
@@ -46,5 +46,9 @@
       <tr><td colspan="20"><div class="empty">暂无账单记录</div></td></tr>
     {% endfor %}
   </table>
+
+  <div class="alert alert-info">
+    空间费用 = 月均空间使用量 * 空间单价
+  </div>
 
 {% endblock %}
