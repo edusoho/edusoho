@@ -1,4 +1,6 @@
 define(function(require, exports, module) {
+
+	require('placeholder');
 	
 	var Validator = require('bootstrap.validator');
 	require('common/validator-rules').inject(Validator);
@@ -46,8 +48,8 @@ define(function(require, exports, module) {
 		function moneyFormatCeil(value) {
 	        value = value + '';
 	        value = parseFloat(value).toFixed(3);
-
-	        if (value.substr(-1) === '0') {
+	        var length = value.length;
+	        if (value.substr(length-2, 1) === '0') {
 	            return moneyFormatFloor(value);
 	        }
 	        return moneyFormatFloor(parseFloat(value) + 0.01);
@@ -154,6 +156,7 @@ define(function(require, exports, module) {
 				validator.addItem({
 					element: '[name="payPassword"]',
 					required: true,
+					display: '支付密码',
         			rule: 'remote'
 				});
 			}
@@ -212,6 +215,7 @@ define(function(require, exports, module) {
 				validator.addItem({
 					element: '[name="payPassword"]',
 					required: true,
+					display: '支付密码',
         			rule: 'remote'
 				});
 			}
