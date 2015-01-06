@@ -211,7 +211,7 @@ class BaseProcessor {
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
-            'host' => $request->getSchemeAndHttpHost(),
+            'host' => $request->getSchemeAndHttpHost() .':' . $request->getPort(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
