@@ -7,7 +7,6 @@ define(function(require, exports, module) {
                 var html = '<p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p><p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p><p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p><p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p>';
                 $('p').fadeOut('slow', function(){
                     $('.my-may-like').find('.panel-body').html(html);
-                    $('p').fadeIn('slow');
                 });
             });
         });
