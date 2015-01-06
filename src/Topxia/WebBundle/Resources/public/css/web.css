@@ -29,7 +29,7 @@ a.link-muted {
 
 .modal-body {
 	word-wrap:break-word;
-	overflow: scroll;
+	overflow: hidden;
 }
 
 .modal-body img {
