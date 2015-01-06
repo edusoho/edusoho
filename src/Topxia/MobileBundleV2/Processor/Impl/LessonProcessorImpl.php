@@ -228,12 +228,42 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 			$learnStatuses = array();
 		}
 
-		$lessons = $this->filterLessons($lessons);
+                      $files = $this->getUploadFiles($courseId);
+		$lessons = $this->filterLessons($lessons, $files);
 		return array(
 			"lessons"=>array_values($lessons),
 			"learnStatuses"=>$learnStatuses
 			);
 	}
+
+            private function getUploadFiles($courseId)
+            {
+                $conditions = array(
+                    'targetType'=> "courselesson",
+                    'targetId'=>$courseId
+                );
+
+                $files = $this->getUploadFileService()->searchFiles(
+                    $conditions,
+                    'latestCreated',
+                    0,
+                    100
+                );
+
+                $uploadFiles = array();
+                foreach ($files as $key => $file) {
+                    $files[$key]['metas2'] = json_decode($file['metas2'],true) ? : array();
+                    $files[$key]['convertParams'] = json_decode($file['convertParams']) ? : array();
+
+                    unset($file["metas"]);
+                    unset($file["metas2"]);
+                    unset($file["hashId"]);
+                    unset($file["etag"]);
+                    $uploadFiles[$file["id"]] = $file;
+                }
+
+                return $uploadFiles;
+            }
 
 	public function getLesson()
 	{
@@ -401,6 +431,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
+
                         $lesson['mediaUri'] = (isset($url) and is_array($url) and !empty($url['url'])) ? $url['url'] : '';
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -444,6 +475,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         } else {
             $lesson['mediaUri'] = $mediaUri;
         }
+        
         return $lesson;
 	}
 
@@ -495,10 +527,14 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		return $render->getContent();
 	}
 
-	private function filterLessons($lessons)
+	private function filterLessons($lessons, $files)
 	{
-		return array_map(function($lesson) {
+		return array_map(function($lesson) use ($files) {
             		$lesson['content'] = "";
+                                 if (isset($lesson["mediaId"])) {
+                                    $lesson["uploadFile"] = isset($files[$lesson["mediaId"]]) ? $files[$lesson["mediaId"]] : null;
+                                 }
+                                 
             		return $lesson;
         		}, $lessons);
 	}
