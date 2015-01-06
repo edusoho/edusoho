@@ -432,7 +432,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
 
-                        $lesson['mediaUri'] = $url;
+                        $lesson['mediaUri'] = (isset($url) and is_array($url) and !empty($url['url'])) ? $url['url'] : '';
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];
