@@ -15,10 +15,10 @@
 			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 			    	  {% if userAnswer == '' %}
 			    	  。你未回答
-			    	  {% elseif userAnswer in answer %}
+			    	  {% elseif item.question.testResult.status == "right" %}
 			    	  。回答正确
 			    	  {% else %}
-			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。回答错误
+			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。回答错误 
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}

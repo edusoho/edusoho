@@ -186,7 +186,6 @@ class CourseStudentManageController extends BaseController
 		foreach ($fields as $key => $value) {
 			$str.=",".$value;
 		}
-
 		$str.="\r\n";
 
 		$students = array();

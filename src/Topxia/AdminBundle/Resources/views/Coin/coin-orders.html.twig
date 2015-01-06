@@ -1,0 +1,76 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}充值订单 - {{ parent() }}{% endblock %}
+
+{% set menu = 'coin' %}
+{% set submenu = 'orders' %}
+
+ 
+{% block main %}
+    <div class="page-header"><h1>虚拟币管理</h1></div>
+    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
+
+    <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="form-group">
+        <select class="form-control" name="keywordType">
+        {{ select_options(dict('coinOrderType'), app.request.query.get('keywordType'), '--选择类型--') }}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+    </form>
+
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <tr>
+          <th>名称</th>
+          <th>状态</th>
+          <th>价格<small class="text-muted">(元)</small></th>
+          <th>购买者</th>
+          <th>付款方式</th>
+          <th>创建时间</th>
+          {# <th>查看</th> #}
+        </tr>
+
+       {% for order in orders %}
+       <tr>
+          <td>{{order.title}}
+            <br>
+            <span class="text-muted text-sm">订单号：{{order.sn}}</span></td> 
+          <td>
+            {% if order.status == "created" %}<span class="text-muted">未付款</span>
+            {% elseif order.status == "paid" %}<span class="text-success">已付款</span>
+            {% else %}<span class="text-muted">已关闭</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="money-text">{{order.amount}}</span>
+          </td> 
+          <td>
+            <a target="_blank" href="{{ path('user_show', {id:order.userId}) }}">
+            {{users[order.userId].nickname}}</a>
+          </td>
+          <td>
+            支付宝
+            <br>
+            <span class="text-muted text-sm">{% if order.paidTime %}{{order.paidTime|date('Y-m-d H:i:s')}}{% else %}-{% endif %}</span>
+          </td>
+          <td>
+            {{order.createdTime|date('Y-m-d H:i:s')}}
+          </td> 
+{#           <td>
+            <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
+          </td> #}
+       </tr>
+       {% endfor %}
+      </table>
+    </div>
+ {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

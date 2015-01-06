@@ -2,42 +2,40 @@ define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    require("jquery.bootstrap-datetimepicker");
+    var Notify = require('common/bootstrap-notify');
+
+    var $modal = $('#course-buy-form').parents('.modal');
 
     exports.run = function() {
         var validator = new Validator({
             element: '#course-buy-form',
-            failSilently: true
-        });
-
-        if ($('#course-buy-form').find('input[name="mobile"]').length > 0){
-            validator.addItem({
-                element: '[name="mobile"]',
-                onFormValidated: function(error, results, $form) {
+            failSilently: true,
+            onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
-                $('#join-course-btn').button('submiting').addClass('disabled');
-                 },
-                required: true,
-                rule: 'phone'
-            });
-        }
+                $modal.find('[type=submit]').button('loading').addClass('disabled');
+            }
+        });
 
-        if ($('#course-buy-form').find('input[name="truename"]').length > 0){
-            validator.addItem({
-                element: '[name="truename"]',
-                required: true,
-                rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
-            });
-        }
+        validator.addItem({
+            element: '[name="mobile"]',
+            required: true,
+            rule: 'phone'
+        });
 
-        if ($('#course-buy-form').find('input[name="qq"]').length > 0){
-            validator.addItem({
-                element: '[name="qq"]',
-                required: true,
-                rule: 'qq'
-            });
-        }
+        validator.addItem({
+            element: '[name="truename"]',
+            required: true,
+            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
+        });
+
+        validator.addItem({
+            element: '[name="qq"]',
+            required: true,
+            rule: 'qq'
+        });
 
         validator.addItem({
             element: '[name="idcard"]',
@@ -117,6 +115,32 @@ define(function(require, exports, module) {
                 $(this).data('status', 'hide');
             }
         });
+
+        $("input[role='payTypeChoices']").on('click', function(){
+
+            $("#password").prop("type","password");
+            
+            if($(this).val()=="chargeCoin") {
+                $("#screct").show();
+
+                validator.addItem({
+                    element: '[name="password"]',
+                    required: true,
+                    rule: 'remote'
+                });
+
+                if (parseFloat($("#leftMoney").html()) <  parseFloat($("#neededMoney").html())){
+                        $("#notify").show();
+                        $modal.find('[type=submit]').addClass('disabled');
+                 }
+            }else if($(this).val()=="zhiFuBao"){
+                validator.removeItem('[name="password"]');
+
+                $("#screct").hide();
+                $("#notify").hide();
+                $modal.find('[type=submit]').removeClass('disabled');
+            }
+        })
 
         $('.btn-use-coupon').on('click', function(){
 

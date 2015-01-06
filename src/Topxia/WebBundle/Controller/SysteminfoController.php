@@ -15,6 +15,7 @@ class SysteminfoController extends BaseController
 
         $info = array(
             'version' => System::VERSION,
+            'name' => $this->setting('site.name', ''),
             'mobileApiVersion' => $version,
             'mobileApiUrl' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
         );

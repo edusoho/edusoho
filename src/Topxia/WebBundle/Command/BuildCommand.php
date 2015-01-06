@@ -133,7 +133,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mkdir("{$this->distDirectory}/doc");
 		// $this->filesystem->copy("{$this->rootDirectory}/doc/development/INSTALL.md", "{$this->distDirectory}/doc/INSTALL.md", true);
 		// $this->filesystem->copy("{$this->rootDirectory}/doc/apache_server_config.txt", "{$this->distDirectory}/doc/apache_server_config.txt", true);
-		$this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
+		// $this->filesystem->copy("{$this->rootDirectory}/doc/nginx_server_config.txt", "{$this->distDirectory}/doc/nginx_server_config.txt", true);
 	}
 
 	public function buildPluginsDirectory()
@@ -197,6 +197,7 @@ class BuildCommand extends BaseCommand
 			'doctrine/migrations/lib',
 			'doctrine/orm/lib',
 			'ezyang/htmlpurifier/library',
+			'gregwar/captcha',
 			'imagine/imagine/lib',
 			'jdorn/sql-formatter/lib',
 			'kriswallsmith/assetic/src',

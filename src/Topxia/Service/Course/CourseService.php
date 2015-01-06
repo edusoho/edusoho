@@ -21,6 +21,8 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+
+	public function findCoursesByLikeTitle($title);
 	
 	public function findMinStartTimeByCourseId($courseId);
 
@@ -31,6 +33,10 @@ interface CourseService
 	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
 
 	public function searchCourseCount($conditions);
+
+	public function findCoursesCountByLessThanCreatedTime($endTime);
+    	
+    	public function analysisCourseSumByTime($endTime);
 
 	public function findUserLearnCourses($userId, $start, $limit);
 
@@ -68,6 +74,8 @@ interface CourseService
 
 	public function analysisCourseDataByTime($startTime,$endTime);
 
+	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
+
 	/**
 	 * 删除课程
 	 */
@@ -86,7 +94,7 @@ interface CourseService
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
-	
+
 	public function getCourseLessons($courseId);
 
 	public function deleteCourseDrafts($courseId,$lessonId, $userId);
@@ -202,7 +210,11 @@ interface CourseService
 
 	public function searchMember($conditions, $start, $limit);
 
+	public function countMembersByStartTimeAndEndTime($startTime,$endTime);
+	
 	public function searchMemberCount($conditions);
+
+	public function findWillOverdueCourses();
 
 	public function getCourseMember($courseId, $userId);
 
@@ -326,5 +338,4 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
-
 }

@@ -42,4 +42,6 @@ interface ArticleService
 	public function unpublishArticle($id);
 
 	public function changeIndexPicture($filePath, $options);
+
+	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count);
 }

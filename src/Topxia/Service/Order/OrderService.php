@@ -6,15 +6,17 @@ interface OrderService
 {
     public function getOrder($id);
 
-    public function getOrderByTargetIdAndUserId($targetId,$userId);
-
-    public function cancelOrders($targetId,$userId);
-
-    public function getOrderBySn($sn);
+    public function getOrderBySn($sn, $lock=false);
 
     public function findOrdersByIds(array $ids);
 
     public function searchOrders($conditions, $sort = 'latest', $start, $limit);
+    
+    public function searchBill($conditions, $sort = 'latest', $start, $limit);
+
+    public function countUserBillNum($conditions);
+    
+    public function sumOrderAmounts($startTime,$endTime,array $courseId);
 
     public function searchOrderCount($conditions);
 
@@ -39,7 +41,7 @@ interface OrderService
     public function findUserRefunds($userId, $start, $limit);
 
     public function searchRefunds($conditions, $sort = 'latest', $start, $limit);
-
+    
     public function searchRefundCount($conditions);
 
     /**
@@ -69,4 +71,6 @@ interface OrderService
     public function analysisAmountDataByTime($startTime,$endTime);
 
     public function analysisCourseAmountDataByTime($startTime,$endTime);
+
+    public function updateOrderCashSn($id, $cashSn);
 }

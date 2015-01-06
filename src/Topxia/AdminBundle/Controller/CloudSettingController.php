@@ -27,7 +27,6 @@ class CloudSettingController extends BaseController
     public function keyAction(Request $request)
     {
         $settings = $this->getSettingService()->get('storage', array());
-
         if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
@@ -46,6 +45,9 @@ class CloudSettingController extends BaseController
                 $settings['cloud_key_applied'] = 1;
                 $this->getSettingService()->set('storage', $settings);
             }
+
+            $this->refreshCopyright($info);
+
         } else {
             $settings = $this->getSettingService()->get('storage', array());
             $settings['cloud_key_applied'] = 0;
@@ -133,14 +135,24 @@ class CloudSettingController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    private function createAPIClient()
+    public function keyCopyrightAction(Request $request)
     {
-        $settings = $this->getSettingService()->get('storage', array());
-        return new CloudAPI(array(
-            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
+
+        $api = $this->createAPIClient();
+        $info = $api->get('/me');
+
+        if (empty($info['copyright'])) {
+            throw $this->createAccessDeniedException('您无权操作!');
+        }
+
+        $name = $request->request->get('name');
+
+        $this->getSettingService()->set('copyright', array(
+            'owned' => 1,
+            'name' => $request->request->get('name', ''),
         ));
+
+        return $this->createJsonResponse(array('status' => 'ok'));
     }
 
     public function videoAction(Request $request)

@@ -38,17 +38,25 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
-         
+            
             $files[$key]['metas2'] = json_decode($file['metas2'],true) ? : array();
 
             $files[$key]['convertParams'] = json_decode($file['convertParams']) ? : array();
             
+            $useNum=$this->getCourseService()->searchLessonCount(array('mediaId'=>$file['id']));
+            
+            $manageFilesUseNum=$this->getMaterialService()->getMaterialCountByFileId($file['id']);
+
+            if($files[$key]['targetType'] == 'coursematerial'){
+                $files[$key]['useNum']=$manageFilesUseNum;
+            }else{
+                $files[$key]['useNum']=$useNum;
+            }    
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
-
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type' => $type,
             'course' => $course,
@@ -62,8 +70,9 @@ class CourseFileManageController extends BaseController
 
     public function showAction(Request $request, $id, $fileId)
     {
-
-        $course = $this->getCourseService()->tryManageCourse($id);
+        if($id != 0){
+	        $course = $this->getCourseService()->tryManageCourse($id);
+        }
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -73,7 +82,7 @@ class CourseFileManageController extends BaseController
 
         if ($file['targetType'] == 'courselesson') {
             return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
-        } else if ($file['targetType'] == 'coursematerial') {
+        } else if ($file['targetType'] == 'coursematerial' or $file['targetType'] == 'materiallib') {
             if ($file['storage'] == 'cloud') {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -88,7 +97,9 @@ class CourseFileManageController extends BaseController
 
     public function convertAction(Request $request, $id, $fileId)
     {
+    	if($id != 0){
         $course = $this->getCourseService()->tryManageCourse($id);
+    	}
 
         $file = $this->getUploadFileService()->getFile($fileId);
         if (empty($file)) {
@@ -110,36 +121,49 @@ class CourseFileManageController extends BaseController
 
     public function uploadCourseFilesAction(Request $request, $id, $targetType)
     {
+    	if(!empty($id)){
         $course = $this->getCourseService()->tryManageCourse($id);
+    	}else{
+    		$course = null;
+    	}
         $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
             'course' => $course,
             'storageSetting' => $storageSetting,
             'targetType' => $targetType,
-            'targetId'=>$course['id'],
+            'targetId'=>$id,
         ));
     }
 
     public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
     {
+    	if("materiallib" <> $targetType){
         $course = $this->getCourseService()->tryManageCourse($id);
+    	}else{
+    		$course = null;
+    	}
+        
         $storageSetting = $this->getSettingService()->get('storage', array());
         $fileExts = "";
+        
         if("courselesson" == $targetType){
             $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx";
         }
+        
         return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
             'course' => $course,
             'storageSetting' => $storageSetting,
             'targetType' => $targetType,
-            'targetId'=>$course['id'],
+            'targetId'=>$id,
             'fileExts'=>$fileExts
         ));
     }
-
+    
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+    	if(!empty($id)){
+            $course = $this->getCourseService()->tryManageCourse($id);
+    	}
 
         $ids = $request->request->get('ids', array());
 
@@ -162,6 +186,11 @@ class CourseFileManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
     private function createPrivateFileDownloadResponse(Request $request, $file)

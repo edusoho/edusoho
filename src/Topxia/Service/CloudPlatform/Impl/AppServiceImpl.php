@@ -471,6 +471,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->repairProblem($token);
     }
 
+    public function findInstallApp($code)
+    {
+        return $this->getAppDao()->getAppByCode($code);
+    }
+
     public function uninstallApp($code)
     {
         $app = $this->getAppDao()->getAppByCode($code);
@@ -697,6 +702,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->client;
     }
 
+    
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');

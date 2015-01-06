@@ -2,7 +2,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\RegisterType;
+use Gregwar\Captcha\CaptchaBuilder;
 
 class RegisterController extends BaseController
 {
@@ -19,8 +21,33 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
     
             $registration = $request->request->all();
-   
+
+            $authSettings = $this->getSettingService()->get('auth', array());
+
+            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){
+                
+                $captchaCodePostedByUser = strtolower($registration['captcha_num']);
+
+                $captchaCode = $request->getSession()->get('captcha_code');   
+              
+                if ($captchaCode != $captchaCodePostedByUser){ 
+                    $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
+                    throw new \RuntimeException('验证码错误。');
+                }
+                $request->getSession()->set('captcha_code',mt_rand(0,999999999));
+            }
+
             $registration['createdIp'] = $request->getClientIp();
+
+            if(isset($authSettings['register_protective'])){
+
+                $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+
+                if(!$status){
+
+                    return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+                }
+            }
 
             $user = $this->getAuthService()->register($registration);
 
@@ -65,6 +92,44 @@ class RegisterController extends BaseController
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
         ));
+    }
+
+    private function protectiveRule($type,$ip)
+    {
+        switch ($type) {
+            case 'middle':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 30 ){
+                    
+                    return false;
+                }
+                return true;
+                break;
+            case 'high':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 10 ){
+                    
+                    return false;
+                }
+                $registerCount=$this->getUserService()->searchUserCount(array(
+                    'startTime'=>time()-3600,
+                    'createdIp'=>$ip,));
+                if($registerCount >= 1 ){
+                    
+                    return false;
+                }
+                return true;
+                break;
+            default:
+                return true;
+                break;
+        }
     }
 
     public function userTermsAction(Request $request)
@@ -205,6 +270,18 @@ class RegisterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function captchaCheckAction(Request $request)
+    {
+        $captchaFilledByUser = strtolower($request->query->get('value'));       
+        if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
+            $response = array('success' => true, 'message' => '验证码正确');
+        } else {
+            $request->getSession()->set('captcha_code',mt_rand(0,999999999)); 
+            $response = array('success' => false, 'message' => '验证码错误');
+        }
+        return $this->createJsonResponse($response);
+    }
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
@@ -229,6 +306,25 @@ class RegisterController extends BaseController
     public function analysisAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Register:analysis.html.twig',array());
+    }
+
+    public function captchaAction(Request $request)
+    {
+        $imgBuilder = new CaptchaBuilder;
+        $imgBuilder->build($width = 150, $height = 32, $font = null);
+
+        $request->getSession()->set('captcha_code',strtolower($imgBuilder->getPhrase()));
+
+        ob_start();
+        $imgBuilder->output();
+        $str = ob_get_clean();
+        $imgBuilder = null;
+        
+        $headers = array(
+            'Content-type' => 'image/jpeg',
+            'Content-Disposition' => 'inline; filename="'."reg_captcha.jpg".'"');
+        
+        return new Response($str, 200, $headers);
     }
 
     protected function getSettingService()

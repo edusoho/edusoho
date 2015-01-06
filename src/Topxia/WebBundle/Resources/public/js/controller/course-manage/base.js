@@ -68,7 +68,6 @@ define(function(require, exports, module) {
             maximumSelectionSize: 20
         });
 
-
         var validator = new Validator({
             element: '#course-form',
             failSilently: true,
@@ -87,6 +86,11 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=expiryDay]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name=daysOfNotifyBeforeDeadline]',
             rule: 'integer'
         });
 
@@ -115,6 +119,17 @@ define(function(require, exports, module) {
 
             }
         });
+
+        $("input[name='deadlineNotify']").change(function(){
+            var element = $(this);
+            if(element.val()=='active') {
+                $("#courseDaysOfNotifyBeforeDeadline").show();
+                $("#deadlineNotifyBlock").hide();
+            } else {
+                $("#courseDaysOfNotifyBeforeDeadline").hide();
+                $("#deadlineNotifyBlock").show();
+            }
+        })
 
     };
 

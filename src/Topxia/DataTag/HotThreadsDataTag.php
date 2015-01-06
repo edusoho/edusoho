@@ -8,7 +8,11 @@ use Topxia\Common\ArrayToolkit;
 class HotThreadsDataTag extends BaseDataTag implements DataTag  
 {
     public function getData(array $arguments)
-    {
+    {   
+        $groupSetting=$this->getSettingService()->get('group', array());
+        $time=7*24*60*60;
+        if(isset($groupSetting['threadTime_range'])) $time=$groupSetting['threadTime_range']*24*60*60;
+     
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
                 'createdTime'=>time()-14*24*60*60,
@@ -60,6 +64,11 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
     private function getGroupService() 
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

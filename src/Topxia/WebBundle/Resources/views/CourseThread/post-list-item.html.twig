@@ -14,7 +14,7 @@
   </div>
   {% endif %}
 
-  <div class="thread-post-body media-body">
+  <div class="thread-post-body media-body" style="word-break:break-all;">
     <div class="media-heading">
       <a href="javascript:">{{ author.nickname }}</a>
       <span class="bullet">•</span>
@@ -23,6 +23,8 @@
 
     </div>
     <div class="thread-post-content">{{ post.content|raw }}</div>
-    
+    {% if app.user.id != author.id %}
+    <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >回复</a></div>
+    {% endif %}
   </div>
 </li>

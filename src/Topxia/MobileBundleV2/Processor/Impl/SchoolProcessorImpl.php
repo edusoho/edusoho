@@ -224,22 +224,39 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $banner = array();
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
-        $keys = array_keys($mobile);
-        for ($i=0; $i < count($keys); $i++) {
-            $result = stripos($keys[$i], 'banner');
-            if (is_numeric($result)) {
-                $bannerClick = $mobile[$keys[$i]];
-                $i = $i +1;
-                $bannerParams = $mobile[$keys[$i]];
-                $i = $i +1;
-                $bannerUrl = $mobile[$keys[$i]];
-                if (!empty($bannerUrl)) {   
+        for ($i=1; $i < 6; $i++) {
+            $bannerIndex = $mobile["banner" . $i];
+            if (!empty($bannerIndex)) { 
+                    $bannerClick = $mobile["bannerClick" . $i];
+                    $bannerParams = null;
+                    $action = "none";
+                    switch ($bannerClick) {
+                        case 0:
+                            $action = "none";
+                            $bannerParams = null;
+                            break;
+                        case 1:
+                            $action = "webview";
+                            if(array_key_exists("bannerUrl" . $i, $mobile)){
+                                $bannerParams = $mobile["bannerUrl" . $i];
+                            } else {
+                                $bannerParams = "";
+                            }
+                            break;
+                        case 2:
+                            $action = "course";
+                            if(array_key_exists("bannerJumpToCourseId" . $i, $mobile)){
+                                $bannerParams = $mobile["bannerJumpToCourseId" . $i];
+                            } else {
+                                $bannerParams = "";
+                            }
+                            break;
+                    }
                     $banner[] = array(
-                        "url"=>$baseUrl . '/' . $bannerUrl,
-                        "action"=>$bannerClick == 0 ? "none" : "webview",
+                        "url"=>$baseUrl . '/' . $bannerIndex,
+                        "action"=> $action,
                         "params"=>$bannerParams
                     );
-                }
             }
         }
         return $banner;

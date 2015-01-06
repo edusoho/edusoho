@@ -27,7 +27,7 @@ class CourseController extends BaseController
 		} else {
 			$category = array('id' => null);
 		}
-
+		
 
 		$sort = $request->query->get('sort', 'latest');
 		$conditions = array(
@@ -63,6 +63,7 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			
 
 		));
 	}
@@ -207,9 +208,19 @@ class CourseController extends BaseController
 	 * 如果用户未购买该课程，那么显示课程的营销界面。
 	 */
 	public function showAction(Request $request, $id)
-	{	
+	{
 
 		$course = $this->getCourseService()->getCourse($id);
+        $code = 'ChargeCoin';
+        $ChargeCoin = $this->getAppService()->findInstallApp($code);
+        
+        $courseSetting=$this->getSettingService()->get('course',array());
+        
+        if (isset($courseSetting['coursesPrice'])) {
+                $coursesPrice=$courseSetting['coursesPrice'];
+        }else{
+                $coursesPrice=0;
+        }
 
         $defaultSetting = $this->getSettingService()->get('default', array());
 
@@ -252,17 +263,49 @@ class CourseController extends BaseController
 		$user = $this->getCurrentUser();
 
 		$items = $this->getCourseService()->getCourseItems($course['id']);
+		$mediaMap = array();
+		foreach ($items as $item) {
+			if (empty($item['mediaId'])) {
+				continue;
+			}
+
+			if (empty($mediaMap[$item['mediaId']])) {
+				$mediaMap[$item['mediaId']] = array();
+			}
+			$mediaMap[$item['mediaId']][] = $item['id'];
+		}
+
+		$mediaIds = array_keys($mediaMap);
+		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
 		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
 		$this->getCourseService()->hitCourse($id);
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
+
+        $homeworkPlugin = $this->getAppService()->findInstallApp('Homework');
+		$homeworkLessonIds =array();
+		$exercisesLessonIds =array();
+
+		if($homeworkPlugin) {
+            $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+            $lessonIds = ArrayToolkit::column($lessons, 'id');
+            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+            $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
+            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
+            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+		}
+
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
 			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
 				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
+			}
+			if($coursesPrice ==1){
+				$course['price'] =0;
+				$course['coinPrice'] =0;
 			}
 			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 				'course' => $course,
@@ -271,7 +314,11 @@ class CourseController extends BaseController
 				'items' => $items,
 				'learnStatuses' => $learnStatuses,
 				'currentTime' => $currentTime,
-				'weeks' => $weeks
+				'weeks' => $weeks,
+				'files' => ArrayToolkit::index($files,'id'),
+				'ChargeCoin'=> $ChargeCoin,
+				'homeworkLessonIds' => $homeworkLessonIds,
+				'exercisesLessonIds' => $exercisesLessonIds,
 			));
 		}
 		
@@ -291,9 +338,18 @@ class CourseController extends BaseController
 
 		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
 
+		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
+		if($freeLesson)$freeLesson=$freeLesson[0];
+		
+		if($coursesPrice == 1){
+			$course['price'] =0;
+			$course['coinPrice'] =0;
+		}
+
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
+			'freeLesson'=>$freeLesson,
 			'courseMemberLevel' => $courseMemberLevel,
 			'checkMemberLevelResult' => $checkMemberLevelResult,
 			'groupedItems' => $groupedItems,
@@ -307,6 +363,7 @@ class CourseController extends BaseController
 			'weeks' => $weeks,
 			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
+			'ChargeCoin'=> $ChargeCoin
 		));
 
 	}
@@ -714,7 +771,7 @@ class CourseController extends BaseController
 			$userIds = array_merge($userIds, $course['teacherIds']);
 		}
 		$users = $this->getUserService()->findUsersByIds($userIds);
-
+		
 		return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
 			'courses' => $courses,
 			'users' => $users,
@@ -741,7 +798,7 @@ class CourseController extends BaseController
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
-	
+
 	private function createCourseForm()
 	{
 		return $this->createNamedFormBuilder('course')
@@ -789,6 +846,16 @@ class CourseController extends BaseController
 		return $this->getServiceKernel()->createService('Course.ReviewService');
 	}
 
+    	private function getHomeworkService()
+    	{
+        		return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    	} 
+
+    	private function getExerciseService()
+    	{
+        		return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    	}
+
 	private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -797,5 +864,15 @@ class CourseController extends BaseController
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getUploadFileService()
+    {
+	return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

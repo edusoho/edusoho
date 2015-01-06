@@ -174,7 +174,7 @@ ul,ol{
         <form name=alipayment action=alipayapi.php method=post target="_blank">
             <div id="body" style="clear:left">
                 <dl class="content">
-                    <dt>卖家支付宝帐户：</dt>
+                    <dt>卖家支付宝账户：</dt>
                   <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDseller_email" />

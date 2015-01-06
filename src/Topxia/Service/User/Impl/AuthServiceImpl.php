@@ -92,6 +92,22 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getUserService()->changePassword($userId, $newPassword);
     }
 
+    
+
+    public function changePayPassword($userId, $userLoginPassword, $newPayPassword)
+    {
+        if (!$this->checkPassword($userId, $userLoginPassword)){
+            throw new \InvalidArgumentException();
+        }
+        $this->getUserService()->changePayPassword($userId, $newPayPassword);
+    }
+    public function changePayPasswordWithoutLoginPassword($userId, $newPayPassword)
+    {
+        $this->getUserService()->changePayPassword($userId, $newPayPassword);
+    }    
+
+
+
     public function checkUsername($username)
     {   
         try {
@@ -146,6 +162,11 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
 
         return $this->getUserService()->verifyPassword($userId, $password);
+    }
+
+    public function checkPayPassword($userId, $payPassword)
+    {
+        return $this->getUserService()->verifyPayPassword($userId, $payPassword);
     }
 
     public function checkPartnerLoginById($userId, $password)

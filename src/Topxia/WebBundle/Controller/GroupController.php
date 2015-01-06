@@ -117,6 +117,21 @@ class GroupController extends BaseController
         $groupIds = ArrayToolkit::column($ownThreads, 'groupId');
         $threadsCount=$this->getThreadService()->searchThreadsCount(array('userId'=>$user['id']));
         $groupsAsOwnThreads=$this->getGroupService()->getGroupsByids($groupIds);
+        
+        $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        $collectThreadsIds=$this->getThreadService()->searchThreadCollects(array('userId'=>$user['id']),array('id',"DESC"), 0,10);
+        $collectThreads = array();
+        foreach ($collectThreadsIds as $collectThreadsId) {
+            $collectThreads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
+        }
+        $collectCount=$this->getThreadService()->searchThreadCollectCount(array('userId'=>$user['id']));
+        
+        $groupIdsAsCollectThreads = ArrayToolkit::column($collectThreads, 'groupId');
+        $groupsAsCollectThreads=$this->getGroupService()->getGroupsByids($groupIdsAsCollectThreads);
+
+        $userIds =  ArrayToolkit::column($collectThreads, 'lastPostMemberId');
+        $collectLastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
         $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
@@ -130,6 +145,7 @@ class GroupController extends BaseController
         }
 
         $postsCount=$this->getThreadService()->searchPostsThreadIdsCount(array('userId'=>$user['id']));
+            
 
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
@@ -143,6 +159,10 @@ class GroupController extends BaseController
             'threads'=>$threads,
             'threadsCount'=>$threadsCount,
             'postsCount'=>$postsCount,
+            'collectCount'=>$collectCount,
+            'groupsAsCollectThreads'=>$groupsAsCollectThreads,
+            'collectLastPostMembers'=>$collectLastPostMembers,
+            'collectThreads'=>$collectThreads,
             'postLastPostMembers'=>$postLastPostMembers,
             'groupsAsPostThreads'=>$groupsAsPostThreads,
             'lastPostMembers'=>$lastPostMembers,
@@ -269,6 +289,42 @@ class GroupController extends BaseController
             'groups'=>$groupsAsPostThreads,
             ));
 
+    }
+
+    public function collectingAction()
+    {
+        $user=$this->getCurrentUser();
+
+        $threads=array();
+        $paginator=new Paginator(
+            $this->get('request'),
+            $this->getThreadService()->searchThreadCollectCount(array('userId'=>$user['id'])),
+            12
+            );
+
+        $collectThreadsIds=$this->getThreadService()->searchThreadCollects(
+            array('userId'=>$user['id']),
+            array('id',"DESC"),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+            );
+
+        foreach ($collectThreadsIds as $collectThreadsId) {
+            $threads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
+        }
+        
+        $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
+        $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
+
+        $userIds =  ArrayToolkit::column($threads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        return $this->render("TopxiaWebBundle:Group:group-member-collect.html.twig",array(
+            'user'=>$user,
+            'paginator'=>$paginator,
+            'threads'=>$threads,
+            'lastPostMembers'=>$lastPostMembers,
+            'groups'=>$groupsAsPostThreads,
+            ));
     }
 
     public function groupIndexAction(Request $request,$id) 
@@ -664,10 +720,15 @@ class GroupController extends BaseController
     }
 
     public function hotThreadAction($textNum=15)
-    {
+    {   
+        $groupSetting=$this->getSettingService()->get('group', array());
+
+        $time=7*24*60*60;
+        if(isset($groupSetting['threadTime_range'])) $time=$groupSetting['threadTime_range']*24*60*60;
+        
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime'=>time()-14*24*60*60,
+                'createdTime'=>time()-$time,
                 'status'=>'open'
                 ),
             $this->filterSort('byPostNum'),0, 11
@@ -793,7 +854,8 @@ class GroupController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+            
+                throw $this->createNotFoundException('参数sort不正确。');
         }
         return $orderBys;
     }
@@ -801,7 +863,7 @@ class GroupController extends BaseController
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
-        if (!in_array($filters['type'], array('all','elite'))) {
+        if (!in_array($filters['type'], array('all','elite','reward'))) {
             $filters['type'] = 'all';
         }
         $filters['sort'] = $request->query->get('sort');
@@ -817,12 +879,20 @@ class GroupController extends BaseController
         return $filters;
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+    
     private function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('groupId' => $id,'num'=>10,'status'=>'open');
         switch ($filters['type']) {
             case 'elite':
                 $conditions['isElite'] = 1;
+                break;
+            case 'reward':
+                $conditions['type'] = 'reward';
                 break;
             default:
                 break;

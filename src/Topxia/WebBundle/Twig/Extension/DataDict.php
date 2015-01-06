@@ -9,6 +9,7 @@ class DataDict
 			'published' => '已发布',
 			'closed' => '已关闭'
 		),
+
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -45,8 +46,10 @@ class DataDict
 			'cancelled' => '已关闭',
 		),
 		'orderStatus:html' => array(
-			'created' => '<span class="text-muted">未付款</span>',
-			'paid' => '<span class="text-success">已付款</span>',
+			'created' => '<span class="label label-danger">未付款</span>',
+			// 'created' => '<span class="text-muted">未付款</span>',
+			'paid' => '<span class="label label-success">已付款</span>',
+			// 'paid' => '<span class="text-success">已付款</span>',
 			'refunding' => '<span class="text-warning">退款中</span>',
             'refunded' => '<span class="text-danger">已退款</span>',
 			'cancelled' => '<span class="text-muted">已关闭</span>',
@@ -180,6 +183,8 @@ class DataDict
 			'netVideoViewed' => '└─ 网络视频观看数',
 			'income' => '营收额',
 			'courseIncome' => '└─ 课程营收额',
+			'courseSum' => '课程总数',
+			'userSum' => '用户总数',
 			// 'exitLesson' => '退出学习数',
 		),
 
@@ -212,7 +217,23 @@ class DataDict
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
-
+    	'secureQuestion' => array(
+    		'parents' => '你的父母名字', 
+    		'teacher' => '你的老师名字', 
+    		'lover' => '你的爱人的名字', 
+    		'schoolName' => '你的母校名字', 
+    		'firstTeacher' => '你的启蒙老师', 
+    		'hobby' => '你的爱好', 
+    		'notSelected' => '不指定问题类型'
+    	),
+        'coinRecordType'=>array(
+            'sn'=>'流水号',
+            'orderSn'=>'订单号',
+            'userName'=>'用户名',
+        ),
+        'coinOrderType'=>array(
+            'userName'=>'用户名',
+        ),
 	);
 
 	public static function dict($type)

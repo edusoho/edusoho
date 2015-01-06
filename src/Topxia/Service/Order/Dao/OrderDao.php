@@ -7,10 +7,6 @@ interface OrderDao
 
     public function getOrder($id);
 
-    public function getOrderByTargetIdAndUserId($targetId,$userId);
-
-    public function updateOrderStatus($targetId,$userId,$status);
-
     public function getOrderBySn($sn);
 
     public function findOrdersByIds(array $ids);
@@ -20,6 +16,12 @@ interface OrderDao
     public function updateOrder($id, $fields);
 
     public function searchOrders($conditions, $orderBy, $start, $limit);
+
+    public function searchBill($conditions, $orderBy, $start, $limit);
+
+    public function countUserBillNum($conditions);
+
+    public function sumOrderAmounts($startTime,$endTime,array $courseId);
 
     public function searchOrderCount($conditions);
 

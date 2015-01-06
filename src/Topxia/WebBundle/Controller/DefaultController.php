@@ -13,6 +13,14 @@ class DefaultController extends BaseController
     public function indexAction ()
     {
         $conditions = array('status' => 'published', 'type' => 'normal');
+
+        $coinSetting=$this->getSettingService()->get('coin',array());
+        if(isset($coinSetting['cash_rate'])){
+            $cashRate=$coinSetting['cash_rate'];
+        }else{
+            $cashRate=1;
+        } 
+        
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -24,14 +32,15 @@ class DefaultController extends BaseController
         }
 
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
-
+        
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
             'recentLiveCourses' => $recentLiveCourses,
-            'consultDisplay' => true
+            'consultDisplay' => true,
+            'cashRate' => $cashRate,
         ));
     }
 
@@ -225,4 +234,8 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
 }

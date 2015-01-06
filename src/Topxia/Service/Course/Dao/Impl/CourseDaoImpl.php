@@ -14,6 +14,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getLessonByCourseIdAndNumber($courseId, $number)
+    {
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ? : null;
+    }
+
     public function getCoursesCount()
     {
         $sql = "SELECT COUNT(*) FROM {$this->getTablename()}";
@@ -28,6 +34,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findCoursesByLikeTitle($title)
+    {
+        if(empty($title)){
+            return array();
+        }
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE `title` LIKE ?; ";
+        return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
     }
 
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
@@ -121,7 +136,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
             unset($conditions['title']);
@@ -168,6 +182,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('freeStartTime > :freeStartTimeGreaterThan')
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
 
@@ -185,9 +200,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         if (isset($conditions['vipLevelIds'])) {
+
             $vipLevelIds = array();
             foreach ($conditions['vipLevelIds'] as $vipLevelId) {
-                if (ctype_digit((string)abs($vipLevelId))) {
+                if (ctype_digit((string)$vipLevelId)) {
                     $vipLevelIds[] = $vipLevelId;
                 }
             }
@@ -195,7 +211,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $vipLevelIds = join(',', $vipLevelIds);
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
-
         }
 
         return $builder;
@@ -206,6 +221,25 @@ class CourseDaoImpl extends BaseDao implements CourseDao
              $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function findCoursesCountByLessThanCreatedTime($endTime)
+    {
+        $sql="SELECT count(id) as count FROM `{$this->getTablename()}` WHERE `createdTime`<={$endTime} ";
+
+        return $this->getConnection()->fetchColumn($sql);
+    }
+
+    public function analysisCourseSumByTime($endTime)
+    {
+         $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
+         return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function updateCoinPrice($cashRate)
+    {
+        $sql="UPDATE `{$this->getTablename()}` SET coinPrice = price*? WHERE coinPrice=0 ;";
+        $this->getConnection()->executeUpdate($sql, array($cashRate));
     }
 
     private function getTablename()

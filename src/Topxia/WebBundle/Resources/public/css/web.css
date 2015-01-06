@@ -28,8 +28,8 @@ a.link-muted {
 }
 
 .modal-body {
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .modal-body img {
@@ -210,8 +210,8 @@ textarea {
 
 
 .dynamic-collection .list-group-item {
-	word-break: break-all;
-	word-wrap: break-word;	
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 
@@ -310,6 +310,26 @@ ul.sortable-list li.placeholder, ol.sortable-list li.placeholder {
 	background: #FCFFC0;
 	border: 1px dashed #ccc;
 	list-style: none;
+}
+
+tr.placeholder {
+  display: block;
+  background: red;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+tr.placeholder:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-left-color: red;
+    margin-top: -5px;
+    left: -5px;
+    border-right: none;
 }
 
 /**
@@ -533,6 +553,12 @@ body {
 	font-size: 22px;
 }
 
+.course-cover-heading .coin-price {
+	background:orange;
+	 font-size:15px;
+	 color:white;
+}
+
 .course-cover-heading .money-text {
 	color: #777;
 	font-size: 12px;
@@ -691,8 +717,8 @@ body {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 5px;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 
 }
 
@@ -709,8 +735,8 @@ body {
 
 .thread-body {
 	margin-bottom: 15px;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .thread-body img,.thread-post-content img{
@@ -742,6 +768,11 @@ body {
 
 .thread-post {
 	overflow: visible;
+}
+
+.show-user{
+	color:#BDB76B;;
+	font-size: 18px;
 }
 
 .thread-post-body {
@@ -776,6 +807,15 @@ body {
 }
 
 .thread-post:hover .thread-post-dropdown .dropdown-toggle {
+	visibility: visible;
+}
+.thread-post-action{
+	text-align: right;
+	font-size: 12px;
+	visibility: hidden;
+}
+
+.thread-post:hover .thread-post-action {
 	visibility: visible;
 }
 
@@ -964,21 +1004,21 @@ body {
 	font-size: 12px;
 }
 
-.material-pane {
+.homework-pane, .material-pane {
 	position: absolute;
 	top: 0;
 	bottom: 0;
 	width: 100%;
 	overflow: hidden;
 }
-.material-pane h5 {
+.homework-pane h5, .material-pane h5 {
 	font-weight: bold;
 	font-size: 13px;
 	color: #999;
 	margin: 10px;
 }
 
-.material-pane .lesson-about {
+.homework-pane .lesson-about, .material-pane .lesson-about {
 	color: #999;
 	font-size: 12px;
 	margin: 10px;
@@ -1789,8 +1829,8 @@ body {
 	max-width: 750px;
 	margin: 0 auto;
 	padding: 20px;
-	word-break: break-all;
-	word-wrap: break-word;	
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .lesson-dashboard .lesson-content-text-body img {
@@ -1890,6 +1930,13 @@ body {
 	right: 50px;
 }
 
+.lesson-list .item-actions a.dropdown-toggle:hover,
+.lesson-list .item-actions a.dropdown-toggle:focus,
+.lesson-list .item-actions .btn-link:hover,
+.lesson-list .item-actions .btn-link:hover {
+	text-decoration: none;
+}
+
 .lesson-list .item-chapter:hover .item-actions, .lesson-list .item-lesson:hover .item-actions  {
 	visibility: visible;
 }
@@ -1936,8 +1983,15 @@ body {
 	padding: 10px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
-	height: 200px;
-	overflow-y: scroll;
+	height: 210px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.file-browser-list-container {
+	height: 110px;
+	overflow-y: auto;
+	overflow-x: auto;
 }
 
 .file-browser-list {
@@ -2200,11 +2254,20 @@ body {
  */
 .money {
 	color: #f40;
+	font-size: 22px;
+}
+
+.danger{
+	color: #f40;
 }
 
 .shares-dropdown-menu > li > a {
 	padding-top: 5px;
 	padding-bottom: 5px;
+}
+
+.dropdown-menu > li > a {
+	padding: 3px 32px;
 }
 
 .shares-dropdown-menu {
@@ -2389,6 +2452,11 @@ body {
 	margin-bottom: 6px;
 }
 
+.notification-list .notification-body a{
+	color:#428bca;
+}
+
+
 .notification-list .notification-footer {
 	font-size: 12px;
 	color: #999;
@@ -2464,12 +2532,10 @@ body {
 }
 
 .notebook-note .notebook-note-body {
-	word-break: break-all;
 	display: block;
 }
 
 .notebook-note-collapsed .notebook-note-body {
-	word-break: break-all;
 	display: none;
 }
 
@@ -2954,6 +3020,10 @@ body {
 	color: #e57259;
 	font-size: 16px;
 }
+.course-coinPrice {
+	color: #e57259;
+	font-size: 16px;
+}
 
 .course-wide-list .divider {
 	width: 1px;
@@ -2989,8 +3059,8 @@ body {
 .latest-review-list .review-content {
 	font-size: 13px;
 	color: #999;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .latest-review-list .review-footer {
@@ -3224,6 +3294,8 @@ body {
 
 .userpage-header-info .about {
 	color: #777;
+	word-break: break-all;
+	word-wrap: break-word
 }
 
 .userpage-header-info .actions {
@@ -3535,6 +3607,27 @@ body {
 	float: right;
 }
 
+.homwork-status .label{
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-size: 100%;
+}
+
+.homework-student-answer .question-eassy-rightanswer{
+	margin-bottom: 5px
+}
+
+#teacher-say{
+	width: 450px;
+}
+
+.teacher-say-text{
+	margin-bottom: 5px;
+}
+.question-eassy-form-control{
+	margin-bottom: 18px;
+}
+
 .testpaper-status .label {
 	padding: 5px 25px;
 	border-radius: 3px;
@@ -3671,6 +3764,16 @@ body {
 	display: inline-block;
 }
 
+.question-score {
+	font-size:12px;
+	color:#aaa;
+	border:1px solid #ccc;
+	padding:0px 1px;
+	border-radius:5px;
+	background:#f6f6f6;
+	display: inline-block;
+}
+
 .testpaper-question-stem {
 	padding-bottom: 10px;
 	border-bottom: 1px dashed #ddd;
@@ -3719,6 +3822,14 @@ body {
 	color: #3c763d;
 }
 
+.question-text-success {
+	color: #0B900D;
+}
+
+.question-text-danger {
+	color: #EA1D19;
+}
+
 .testpaper-question-choice-inputs {
 	margin-left: 50px;
 	float: left;
@@ -3749,6 +3860,12 @@ body {
 	padding: 0;
 }
 
+.homework-question-fill ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
 .testpaper-question-determine-inputs {
 	margin-left: 50px;
 	float: left;
@@ -3773,6 +3890,10 @@ body {
 	float: left;
 }
 
+.homework-question-result {
+	margin-left: 5px;
+	float: left;
+}
 
 
 .testpaper-question-result-title {
@@ -3781,7 +3902,23 @@ body {
 
 }
 
+.homework-question-result-title {
+	margin-bottom: 5px;
+	color: #666;
+
+}
+
+.question-result-title {
+	margin-bottom: 5px;
+	color: #666;
+
+}
+
 .testpaper-question-result-suggested {
+	margin-bottom: 20px;
+}
+
+.homework-question-result-suggested {
 	margin-bottom: 20px;
 }
 
@@ -3980,6 +4117,169 @@ body {
 	min-height: 16.42857143px;
 }
 
+/**
+ * Question
+ */
+
+.question-set-item {
+	margin-bottom: 50px;
+	padding-top: 20px;
+	border-top: 1px solid #ccc;
+}
+
+.question-set-item-side {
+	float: left;
+	width: 40px;
+}
+
+.question-set-item-main {
+	margin-left: 50px;
+}
+
+.question-heading {
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #ddd;
+	margin-bottom: 10px;
+	overflow: hidden;
+	zoom: 1;
+}
+
+.question-choices {
+	list-style: none;
+	padding-left: 0;
+}
+
+.question-choices > li {
+	padding: 6px 6px;
+}
+
+.question-choices > li:hover {
+	background: #eee;
+	cursor: pointer;
+}
+
+.question-choices .choice-index {
+	color: #999;
+	margin-right: 20px;
+	float: left;
+}
+
+.homwork-choice-index {
+	margin-right: 20px;
+	float: left;
+}
+
+.question-choices-inputs {
+
+}
+
+.question-choices-inputs  label {
+	padding: 8px 20px 8px 30px;
+	display: inline-block;
+}
+
+.question-choices-inputs label:hover,
+.question-choices-inputs label.active {
+	background: #eee;
+}
+
+.question-fill-inputs input {
+	margin-bottom: 10px;
+}
+
+.question-set-item-side {
+	text-align: center;
+}
+
+.question-set-item-seq {
+	font-size: 20px;
+	color: #3a87ad;
+}
+
+.question-set-heading {
+	position: relative;
+}
+
+.question-set-type {
+	position: absolute;
+	top: 20px;
+	left: 8px;
+	background: #00E0FF;
+	color: #fff;
+	padding: 3px 15px;
+	font-weight: bold;
+	font-size: 16px;
+	border-radius: 3px;
+}
+
+.question-set-title {
+	margin-top: 5px;
+	margin-left: 80px;
+	margin-bottom: 10px;
+	font-size: 20px;
+}
+
+.question-set-description {
+	margin-left: 80px;
+	color: #999;
+}
+
+.question-set-card {
+    width:261px;
+}
+
+.question-set-card.affix {
+	top: 0!important;
+}
+
+.question-set-card  .question-index {
+	display: inline-block;
+	border: 1px solid #ccc;
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	border-bottom-width: 2px;
+	text-decoration: none;
+	color: #888;
+}
+
+.question-set-card  .question-index:hover {
+	background: #eee;
+}
+
+.question-set-card .question-index-active {
+	background: #eee;
+	border-color: #aaa;
+}
+
+
+.question-set-card .panel-heading {
+	line-height: 30px;
+}
+
+a.homework-essay-textarea-pack-up{
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+	color: #999999;
+}
+
+.homework-status {
+	margin-top: 20px;
+	float: right;
+}
+
+.homework-status .label {
+	padding: 5px 25px;
+	border-radius: 3px;
+	font-size: 100%;
+
+}
+
 .quality-switcher {
 
 }
@@ -4161,7 +4461,7 @@ body {
 	margin-bottom: 20px;
 }
 
-.vip-item h3, p {
+.vip-item h3, .vip-item p {
 	color: #555;
 }
 
@@ -4209,4 +4509,324 @@ body {
 
 .homepage .hot-group p {
 	margin-bottom: 10px;
+}
+.course-data a{
+	color:#2a6496;
+}
+
+.coursesTypeChoices {
+	margin:15px 0;
+}
+
+.coursesTypeChoices .sortedCourses  {
+	overflow:hidden;
+	text-align:left;
+}
+
+.coursesTypeChoices input{
+	margin:0 0 0px 45px;
+}
+
+.order-pay .order-item {
+	border-bottom: 1px solid #E5E5E5;
+	padding-top: 30px;
+}
+
+.order-item {
+	line-height: 30px;
+}
+
+.order-item .order-item-title {
+	padding-left: 20px;
+	height: 48px;
+}
+
+.order-item-title .order-item-title-icon {
+	background-repeat: no-repeat;
+	background-position: -4px -9px;
+	display: inline-block;
+	width: 29px;
+	height: 29px;
+	float: left;
+}
+
+.order-item-title .title {
+	font-size: 18px;
+	font-weight: normal;
+	margin-left: 20px;
+	float: left;
+	margin-top: 2px;
+	line-height: 1.2em;
+}
+
+.order-item-title .add-coun {
+	display: inline-block;
+	font-size: 14px;
+	padding-bottom: 5px;
+	background-color: #fff8ed;
+	border: 1px solid #ffb841;
+	color: #ff7e00;
+	padding: 5px 7px;
+	line-height: 15px;
+	border-radius: 3px;
+	margin-left: 10px;
+	float: left;
+}
+
+.order-item-title .cancel {
+	margin-left: 20px;
+	float: left;
+	margin-top: 6px;
+	text-decoration: none;
+	color: #1071b5;
+	cursor: pointer;
+}
+
+.order-item .price_r {
+	float: right; 
+	margin-top: 4px; 
+	line-height: 19px;
+	position: relative;
+}
+
+.order-item .price_txt {
+	margin-right: 11px; 
+	margin-top: 4px; 
+	line-height: 19px;
+}
+
+.order-item .price_r_mark {
+	font-size: 27px; 
+	float: left; 
+	margin-right: 5px; 
+	margin-top: -3px;
+}
+
+.order-item .price_r_num {
+	font-size: 19px; 
+	float: left;margin-top: -4px; 
+	line-height: 26px;
+}
+
+.order-item .pricehead {
+	float: left;
+	font-size: 15px;
+}
+
+.order-item .coupon-detail {
+	padding: 0px 56px 17px 56px;
+	font-size: 14px;
+	margin-left: 15px;
+}
+
+.order-detail {
+	width: auto;
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+	min-height: 188px;
+	padding: 20px;
+}
+.order-price {
+	font-size: 24px;
+}
+
+.order-count {
+	padding: 20px 0 40px 0;
+}
+
+.order-item {
+	padding: 0 5px;
+}
+
+.order-panel {
+	padding: 20px 20px 40px 20px;
+}
+
+.course-text {
+	display: block;
+	font-size: 14px;
+	margin: 6px 0;
+}
+
+.coin-block {
+	padding: 40px 15px 25px 15px;
+	float: left;
+}
+
+.coin-text {
+	float: left;
+}
+
+.coin-text img {
+	margin: 0 10px 14px 0;
+	/*opacity: .5;*/
+}
+
+.coin-text strong {
+	font-size: 30px;
+	color: #ff5d42;
+}
+
+.coin-btn {
+	float: left;
+	margin: 4px 0 0 55px;
+}
+
+.table.order-table > tbody > tr > td,
+.table.order-table > tbody > tr > th {
+	padding:  10px;
+	line-height: 22px;
+}
+
+.money-text {
+	
+}
+
+
+.coupon-detail input {
+	height: 27px;
+	line-height: 27px;
+	border: 1px solid #b5b5b5;
+	font-size: 14px;
+}
+
+.order-item .order-item-detail{
+	padding: 0px 56px 17px 56px;
+}
+.order-item .coin-detail {
+	margin-left: 15px;
+	font-size: 14px;
+}
+
+.order-item .total-price {
+	float: right;
+	text-align: right;
+	margin-bottom: 30px;
+}
+
+.order-item .total-price .pay-rmb {
+	color: #f60;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.coin-detail input {
+	height: 27px;
+	line-height: 27px;
+	border: 1px solid #b5b5b5;
+	font-size: 18px;
+	margin: 0 15px;
+	width: 64px;
+	text-align: center;
+}
+
+.coin-detail span {
+	color: #ff7e00;
+}
+
+.order-pay .pay {
+	margin-top: 20px
+}
+
+.order-item-detail .pay-password {
+	margin-left: 15px;
+	font-size: 12px;
+	padding-top: 10px;
+}
+
+.order-item-detail .pay-password input {
+	width: 150px;
+}
+
+.pay-center .uncheck {
+	cursor: pointer;
+	width: 150px;
+	height: 58px;
+	position: relative;
+	text-align:center;
+	font-size: 16px;
+	line-height: 58px;
+	border: 1px solid #cccccc; 
+	margin-bottom: 30px;
+}
+
+.pay-center .check {
+	cursor: pointer;
+	width: 150px;
+	height: 58px;
+	position: relative;
+	text-align:center;
+	font-size: 16px;
+	line-height: 58px;
+	border: 1px solid #21a557; 
+	margin-bottom: 10px;
+}
+
+.pay-center .uncheck .icon {
+	background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat ;
+    top: 0px;
+    right: 0px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -30px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.pay-center .check .icon {
+	background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat ;
+    top: 0px;
+    right: 0px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -4px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.pay-center .help {
+	float: left;
+    width: 400px;
+    height: 40px;
+    line-height: 19px;
+    padding-left: 30px;
+    background: url(/bundles/topxiaweb/img/order-pay/iconfont-caution-block.png) no-repeat;
+    font-size: 12px;
+    color: #666;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.pay-center .pay-amount {
+	font-size: 20px;
+}
+
+.pay-center .pay-amount span {
+	color: #ff6600;
+}
+
+.pay-center .pay-type-lable {
+	padding-bottom: 10px
+}
+
+.pay-center .pay-button {
+	float:left;
+	margin-top: 15px;
+}
+
+.order-pay .buy-vip-num {
+	float: right; 
+	margin-right: 15px; 
+	margin-top: 4px; 
+	line-height: 19px;
+	position: relative;
+}
+.nav .qiandai{
+	line-height: 1px;
+	height:54px;
+}
+.nav-course-buy-btn{
+	padding-bottom: 8px;
+    padding-top: 8px;
 }

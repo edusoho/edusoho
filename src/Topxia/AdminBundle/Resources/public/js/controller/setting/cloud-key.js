@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        var $form = $("#cloud-setting-form");
+
         var $info = $("#key-license-info")
         $.get($info.data('url'), function(html) {
             $("#loading-text").hide();
@@ -23,6 +25,18 @@ define(function(require, exports, module) {
             });
         });
 
+        $form.on('click', '.save-copyright-btn', function() {
+            var $this = $(this);
+            $this.button('loading');
+
+            var params = {name: $('#field-copyrightName').val()};
+            $.post($this.data('url'), params, function(){
+                window.location.reload();
+            });
+
+
+            return false;
+        });
 
     }
 

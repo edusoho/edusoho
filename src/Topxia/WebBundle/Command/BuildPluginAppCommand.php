@@ -39,6 +39,7 @@ class BuildPluginAppCommand extends BaseCommand
         $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
+        $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
     }
@@ -80,6 +81,13 @@ class BuildPluginAppCommand extends BaseCommand
         $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
 
         $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+    }
+
+    private function _copyMeta($pluginDir, $distDir)
+    {
+        $source = "{$pluginDir}/plugin.json";
+        $target = "{$distDir}/plugin.json";
+        $this->filesystem->copy($source, $target);
     }
 
     private function _zipPackage($distDir)

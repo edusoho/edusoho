@@ -7,6 +7,14 @@ use Topxia\Common\ArrayToolkit;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
+    public function findCategoriesByGroupIdAndParentId($groupId, $parentId)
+    {
+        if (empty($groupId) || empty($parentId)) {
+            return array();
+        }
+        return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($groupId, $parentId);
+    }
+
     public function getCategory($id)
     {
         if (empty($id)) {
@@ -52,6 +60,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createServiceException("分类Group #{$groupId}，不存在");
         }
         return $this->getCategoryDao()->findCategoriesByGroupId($group['id']);
+    }
+
+        public function findAllCategoriesByParentId($parentId)
+    {   
+        return $this->getCategoryDao()->findAllCategoriesByParentId($parentId);
     }
 
     public function findGroupRootCategories($groupCode)

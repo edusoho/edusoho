@@ -47,10 +47,16 @@ class CourseLessonController extends BaseController
                 $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lessonId, 'times' => 1, 'duration' => 3600));
-                    $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
-                    $headLeaderInfo = $this->getHeadLeaderInfo();
-                    $hls = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
+
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                    $hls = array(
+                        'url' => $this->generateUrl('hls_playlist', array(
+                            'id' => $file['id'], 
+                            'token' => $token['token'],
+                            'line' => $request->query->get('line')
+                        ), true)
+                    );
+
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
@@ -80,41 +86,6 @@ class CourseLessonController extends BaseController
             'lesson' => $lesson,
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
-    }
-
-    public function hlskeyurlAction(Request $request, $courseId, $lessonId, $token)
-    {
-        $token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
-        if (empty($token)) {
-            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-            return new Response($fakeKey);
-        }
-
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-
-        if (empty($lesson)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($token['data'] != $lesson['id']) {
-            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-            return new Response($fakeKey);
-        }
-
-        if (empty($lesson['mediaId'])) {
-            throw $this->createNotFoundException();
-        }
-
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if (empty($file['convertParams']['hlsKey'])) {
-            throw $this->createNotFoundException();
-        }
-
-        return new Response($file['convertParams']['hlsKey']);
     }
 
     public function showAction(Request $request, $courseId, $lessonId)
@@ -155,6 +126,15 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
 
+        $app = $this->getAppService()->findInstallApp('Homework');
+        if(!empty($app)){
+            $homework = $this->getHomeworkService()->getHomeworkByLessonId($lesson['id']);
+            $exercise = $this->getExerciseService()->getExerciseByLessonId($lesson['id']);
+            $json['homeworkOrExerciseNum'] = $homework['itemCount'] + $exercise['itemCount'];
+        }else{ 
+            $json['homeworkOrExerciseNum'] = 0;
+        }
+
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
         if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
             $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
@@ -185,11 +165,14 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
-                            $hlsKeyUrl = $this->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
-                            $headLeaderInfo = $this->getHeadLeaderInfo();
-                            $json['headLength'] = $headLeaderInfo['headLength'];
-                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, $headLeaderInfo['headLeaders'], $headLeaderInfo['headLeaderHlsKeyUrl'], 3600);
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                            $url = array(
+                                'url' => $this->generateUrl('hls_playlist', array(
+                                    'id' => $file['id'], 
+                                    'token' => $token['token'],
+                                    'line' => $request->query->get('line')
+                                ), true)
+                            );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
@@ -387,12 +370,13 @@ class CourseLessonController extends BaseController
 
             $factory = new CloudClientFactory();
             $client = $factory->createClient();
-
+            
             if ($isDownload) {
                 $client->download($client->getBucket(), $key, 3600, $file['filename']);
             } else {
                 $client->download($client->getBucket(), $key);
             }
+            
         }
 
         return $this->createLocalMediaResponse($request, $file, $isDownload);
@@ -413,9 +397,10 @@ class CourseLessonController extends BaseController
 
     public function learnFinishAction(Request $request, $courseId, $lessonId)
     {
+        $user = $this->getCurrentUser();
+
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-        $user = $this->getCurrentUser();
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
 
         $response = array(
@@ -432,50 +417,24 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function getHeadLeaderInfo()
-    {
-        $storage = $this->getSettingService()->get("storage");
-        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
-
-            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-            $headLeaderArray = json_decode($headLeader['metas2'],true);
-            $headLeaders = array();
-            foreach ($headLeaderArray as $key => $value) {
-                $headLeaders[$key] = $value['key'];
-            }
-            $headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-
-            return array(
-                'headLeaders' => $headLeaders,
-                'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl,
-                'headLength' => $headLeader['length']
-            );
-        } else {
-            return array(
-                'headLeaders' => '',
-                'headLeaderHlsKeyUrl' => '',
-                'headLength' => 0
-            );
-        }
-    }
-
     private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
-        $file['filename'] = urlencode($file['filename']);
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        if($isDownload) {
+            $file['filename'] = urlencode($file['filename']);
+            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+            } else {
+                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+            }
         }
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
-
         return $response;
     }
 
@@ -545,4 +504,21 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
+    //Homework plugins(contains Exercise)
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    } 
+
+    private function getExerciseService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
 }

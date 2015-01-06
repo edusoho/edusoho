@@ -1,0 +1,82 @@
+
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}虚拟币模式设置 - {{ parent() }}{% endblock %}
+
+{% set script_controller = "coin/save" %}
+{% set menu = 'coin' %}
+{% set submenu = 'model' %}
+
+{% block main %}
+  <div class="page-header"><h1>虚拟币管理</h1></div>
+  {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
+
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" method="post" id="coin-model-form" action="{{path('admin_coin_model_save')}}">
+  
+    <ul class="breadcrumb">
+      <li><a href="{{path('admin_coin_model')}}">使用方式设置</a></li>
+      <li class="active">课程价格设置</li>
+    </ul>
+
+    <p>
+      <span>使用方式：</span>
+      <strong class="text-info">{% if set.cash_model =="deduction" %}用于抵扣{% else %}用于标价{% endif %}</strong>
+      <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">汇率：</span>
+      1元人民币兑换 <strong class="text-info">{{ set.cash_rate}}</strong> {{ setting('coin.coin_name') }}
+      {% if set.cash_model =="deduction" %}{% else %}<a class="btn btn-info btn-sm set mlm"><span class="glyphicon glyphicon-repeat"></span> 按汇率批量设置价格</a>{% endif %}
+    </p>
+
+
+    <div id="help-message" class="alert alert-danger mtl hidden" >请设置正确的价格</div>
+    <div class="table-responsive">
+      <table class="table">
+        {% if set.cash_model =="deduction" %}
+        <tr>
+          <th>课程</th>
+          <th>人民币价格</th>
+          <th>{{ setting('coin.coin_name') }}抵扣全额</th>
+        </tr>
+        {% else %}
+        <tr>
+          <th width="60%">课程</th>
+          <th>人民币价格</th>
+          <th>{{ setting('coin.coin_name') }}价格</th>
+        </tr>
+        {% endif %}
+
+        {% if courses %}
+            {% for course in courses %}
+                <tr>
+                    <td>
+                      <img src="{{ default_path('coursePicture', course.smallPicture, '') }}" style="width:100px;"/>
+                      <a href="{{path('course_show',{id:course.id})}}" target=blank >{{course.title}}</a>
+                    </td>
+                    <td>
+
+                        {% if set.cash_model =="deduction" %}<input id="rmb{{course.id}}" type="text" class="form-control rmbPrice" style="width:40%;" value="{{course.price}}" name="course-rmb[{{course.id}}]" data-id="{{course.id}}"/>{% else %}<input type="hidden" class="rmb" value="{{course.price}}" data-id="{{course.id}}"/>{{course.price}}{% endif %}
+    
+                      </td>
+                    <td>
+         
+                      {% if set.cash_model =="deduction" %}<span id="cash{{course.id}}">{{course.price * set.cash_rate }}</sapn>{% else %}<input type="text" id="cash{{course.id}}" class="form-control cashPrice" style="width:40%;" value="" name="course-cash[{{course.id}}]"/>{% endif %}
+  
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+
+      </table>
+    </div>
+    <input type="hidden" name="cash_model" value="{{ set.cash_model }}">
+    <input type="hidden" name="cash_rate" value="{{ set.cash_rate }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-primary pull-right" id="finish" >完成</button>
+        <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-link pull-right">上一步</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}
