@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="avatar">
+      <img src="{{ file_path(user.mediumAvatar, 'avatar') }}" alt="..." class="img-circle">
+    </div>
+    <div class="brief">
+      <p class="nickname"><strong>{{ user.nickname }}</strong></p>
+      <p class="signature text-muted" data-toggle="tooltip" data-placement="top" data-title="{{ profile.signature }}">{{ profile.signature|default('您还没有签名哦!') }}</p>
+      <p class="flower">56 <span class="haoxue-iconfont icon-weiju"></span></p>
+      <p class="income"><span class="text-muted">收入(元): </span> <span class="money">￥3988.00 </span><a class="mlm" href="#">详情</a></p>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="account">
+      <div class="line">总收入: </span> <span class="money">￥3988.00 元</span></div>
+      <div>课件收入: </span> <span class="money">￥3988.00 元</span></div>
+      <div>通过分成收入: </span> <span class="money">￥3988.00 元</span></div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="account">
+      <div>总收入: </span> <span class="money">￥3988.00 元</span></div>
+      <div class="line">- 已结算: </span> <span class="money">￥3988.00 元</span></div>
+      <div>= 待结算: </span> <span class="money">￥3988.00 元</span></div>
+    </div>
+  </div>
+</div>

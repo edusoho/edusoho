@@ -163,6 +163,16 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	font-size: 8px;
 }
 
+.teacher-dashboard a {
+	color: #428bca;
+	&:hover,
+	&.active,
+	&:focus {
+	  color: #2a6496;
+	  text-decoration: underline;
+	}
+}
+
 #my-teaching-carousel {
 	.title {
 		font-size: 12px;
@@ -215,5 +225,50 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	}
 	.glyphicon {
 		cursor: pointer;
+	}
+}
+
+.teacher-income {
+	.money {
+		color: #F00;
+	}
+	.avatar {
+		width: 40%;
+		text-align: center;
+		float: left;
+	}
+	.brief {
+		float: left;
+		margin-top: 20px;
+		width: 60%;
+		p {
+			line-height: 1.0;
+		}
+		.nickname {
+			font-size: 16px;
+		}
+		.signature {
+			font-size: 12px;
+			.ellipsis;
+		}
+		.flower {
+			color: #F00;
+		}
+		.income {
+			font-size: 12px;
+		}
+	}
+	.account {
+		height: 120px;
+		text-align: center;
+		font-size: 12px;
+		border: 1px solid #DDD5D5;
+		div {
+			padding: 10px;
+		}
+		.line {
+			border-bottom: 1px solid #DDD5D5;
+		}
+
 	}
 }
