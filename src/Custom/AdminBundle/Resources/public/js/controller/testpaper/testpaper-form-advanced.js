@@ -6,7 +6,10 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     Validator.addRule('countcheck', function(options) {
         var $modal = $("#testpaper-part-modal");
-        return (parseInt($modal.find('#testpaper-count-field').val()) <= parseInt($modal.find('#testpaper-count-field-span').data('num'))) && parseInt($modal.find('#testpaper-count-field').val()) > 0;
+        var count = parseInt($modal.find('#testpaper-count-field').val());
+        var id = $modal.find('input[name=id]').val();
+        var remain = parseInt($modal.find('#testpaper-count-field-span').data('num'));
+        return (((count <= remain) || id ) && count > 0);
     }, '必须小于等于已有题目,并且大于0!');
     require('common/validator-rules').inject(Validator);
     require('jquery.sortable');
@@ -44,7 +47,6 @@ define(function(require, exports, module) {
             if (this.get('haveBaseFields') === true) {
                 this.initBaseFields();
             }
-
             var self = this;
             var $modal = $("#testpaper-part-modal");
             $modal.on('show.bs.modal', function(e) {
@@ -53,6 +55,14 @@ define(function(require, exports, module) {
                     var values = $trigger.parents('tr').data();
                     values = $.extend({}, self._defaults[values.type], values);
                     $modal.find('.part-save-btn').data('modal', 'update');
+                    $modal.find('textarea[name=description]').val(values.description);
+                    $modal.find('input[name=score]').val(values.score);
+                    $modal.find('input[name=count]').val(values.count);
+                    $modal.find('input[id=percentages-simple]').val(values['percentages[simple]']);
+                    $modal.find('input[id=percentages-easy]').val(values['percentages[easy]']);
+                    $modal.find('input[id=percentages-normal]').val(values['percentages[normal]']);
+                    $modal.find('input[id=percentages-difficulty]').val(values['percentages[difficulty]']);
+                    $modal.find('input[id=percentages-hard]').val(values['percentages[hard]']);
                 } else {
                     var values = self._defaults[$trigger.data('type')];
                     $modal.find('.part-save-btn').data('modal', 'create');
