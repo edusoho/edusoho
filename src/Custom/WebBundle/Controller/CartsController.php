@@ -174,6 +174,7 @@ class CartsController extends BaseController
             }
         }
         $ids = array_unique($ids);
+        $ids = array_values($ids);
 
         return $this->getUserService()->findUsersByIds($ids);
     }
