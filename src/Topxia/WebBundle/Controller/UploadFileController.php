@@ -50,7 +50,7 @@ class UploadFileController extends BaseController
         if(!empty($materialLibApp)){
             $conditions['currentUserId'] = $user['id'];
         }
-        
+       
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 1000);
         
         return $this->createFilesJsonResponse($files);
@@ -75,7 +75,8 @@ class UploadFileController extends BaseController
         }
         
         $params = $this->getUploadFileService()->makeUploadParams($params);
-
+  
+    
         return $this->createJsonResponse($params);
     }
 

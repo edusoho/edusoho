@@ -1949,11 +1949,13 @@ body {
 .lesson-form .for-audio-type,
 .lesson-form .for-text-type,
 .lesson-form .for-ppt-type, 
+.lesson-form .for-courseware-type, 
 .lesson-form .for-none-type {
 	display: none;
 }
 
 .lesson-form-video .for-video-type,
+.lesson-form-courseware .for-courseware-type, 
 .lesson-form-audio .for-audio-type,
 .lesson-form-text .for-text-type,
 .lesson-form-ppt .for-ppt-type {

@@ -104,10 +104,10 @@ class CourseLessonManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-						$parentId = $request->query->get('parentId');
-					if($request->getMethod() == 'POST') {
-						$lesson = $request->request->all();
-					   $lesson['courseId'] = $course['id'];
+		$parentId = $request->query->get('parentId');
+			if($request->getMethod() == 'POST') {
+				$lesson = $request->request->all();
+				$lesson['courseId'] = $course['id'];
 
 			if ($lesson['media']) {
 				$lesson['media'] = json_decode($lesson['media'], true);

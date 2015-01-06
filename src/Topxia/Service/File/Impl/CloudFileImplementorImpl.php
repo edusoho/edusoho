@@ -84,9 +84,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $convertor = $this->getConvertor($file['convertParams']['convertor']);
-
+        
         $file = $convertor->saveConvertResult($file, $result);
-
+        
         return_result:
         return $file;
     }
@@ -219,9 +219,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
         }
-                
+     
         $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
-
+ 
         $key = null;
         if (!empty($rawParams['key'])) {
             $key = $rawParams['key'];
@@ -244,7 +244,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $params['postParams']['key'] = $key;
         // $params['postParams']['x:convertKey'] = md5($params['postParams']['key']);
         $params['postParams']['x:convertParams'] = json_encode($rawUploadParams['convertParams']);
-
+       
         return $params;
     }
 
@@ -556,6 +556,23 @@ class AudioConvertor
         return array(
             'convertor' => self::NAME,
             'shd' => 'mp3',
+        );
+    }
+}
+
+class CoursewareConvertor
+{
+    const NAME = 'courseware';
+
+    public function saveConvertResult($file, $result)
+    {
+
+    }
+
+    public function getCovertParams($params)
+    {
+        return array(
+            'convertor' => self::NAME,
         );
     }
 }
