@@ -5,13 +5,15 @@ define(function(require, exports, module) {
         $('.glyphicon-refresh').on('click', function(){
             $.get($('.my-may-like').data('url'), function(){
                 var html = '<p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p><p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p><p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p><p class="pull-text"><a href="#">1.怎么录制高清的课程!</a></p>';
-                $('p').fadeOut('slow', function(){
+                $('.my-may-like').find('p').fadeOut('slow', function(){
                     $('.my-may-like').find('.panel-body').html(html);
                 });
             });
         });
 
-
+        $('.signature').tooltip({
+            title:$(this).data('title')
+        });
     };
 
 });
