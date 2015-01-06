@@ -5,7 +5,7 @@
     </div>
     <div class="brief">
       <p class="nickname"><strong>{{ user.nickname }}</strong></p>
-      <p class="signature text-muted" data-toggle="tooltip" data-placement="top" data-title="{{ profile.signature }}">{{ profile.signature }}</p>
+      <p class="signature text-muted" data-toggle="tooltip" data-placement="top" data-title="{{ profile.signature }}">{{ profile.signature|default('您还没有签名哦!') }}</p>
       <p class="flower">56 <span class="haoxue-iconfont icon-weiju"></span></p>
       <p class="income"><span class="text-muted">收入(元): </span> <span class="money">￥3988.00 </span><a class="mlm" href="#">详情</a></p>
     </div>
