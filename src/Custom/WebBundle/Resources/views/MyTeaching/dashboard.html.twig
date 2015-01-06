@@ -3,50 +3,58 @@
 {% block title %}教师中心 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-dashboard' %}
+{% set script_controller = 'customwebbundle/controller/myteaching/dashboard' %}
 
 {% block main %}
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-default teacher-income">
-				<div class="panel-body"></div>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default teacher-income">
+                <div class="panel-body">
+                    {{ render(controller('CustomWebBundle:MyTeaching:myInfo')) }}
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="row">
-		<div class="col-md-8">
-			<div class="panel panel-default my-courses-rating">
-				<div class="panel-heading">课程评价</div>
-				<div class="panel-body">
-					{{ render(controller('CustomWebBundle:MyTeaching:myCoursesRating')) }}
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
-			<div class="panel panel-default my-may-like">
-				<div class="panel-heading">
-					猜你喜欢
-					<a class="pull-right text-muted glyphicon glyphicon-refresh pull-right mlm"></a>
-					<span class="pull-right text-muted">换一批</span>
-				</div>
-				<div class="panel-body"></div>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default my-courses-rating">
+                <div class="panel-heading">课程评价</div>
+                <div class="panel-body">
+                    {{ render(controller('CustomWebBundle:MyTeaching:myCoursesRating')) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default my-may-like" data-url="##">
+                <div class="panel-heading">
+                    猜你喜欢
+                    <a class="pull-right text-muted glyphicon glyphicon-refresh pull-right mlm"></a>
+                    <span class="pull-right text-muted">换一批</span>
+                </div>
+                <div class="panel-body">
+                    <p class="pull-text"><a href="#">1.如何更好的授课!</a></p>
+                    <p class="pull-text"><a href="#">1.如何更好的授课!</a></p>
+                    <p class="pull-text"><a href="#">1.如何更好的授课!</a></p>
+                    <p class="pull-text"><a href="#">1.如何更好的授课!</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-default my-service">
-				<div class="panel-heading">我的服务</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-md-4">待回答的问答</div>
-						<div class="col-md-4">待批改的作业</div>
-						<div class="col-md-4">待批阅的考试</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default my-service">
+                <div class="panel-heading">我的服务</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">待回答的问答</div>
+                        <div class="col-md-4">待批改的作业</div>
+                        <div class="col-md-4">待批阅的考试</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 {% endblock %}

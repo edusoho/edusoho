@@ -61,6 +61,16 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    public function myInfoAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        return $this->render('CustomWebBundle:MyTeaching:my-information.html.twig', array(
+            'user' => $user,
+            'profile' => $profile,
+        ));
+    }   
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
