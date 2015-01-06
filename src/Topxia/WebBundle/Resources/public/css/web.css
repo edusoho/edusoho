@@ -4004,6 +4004,10 @@ body {
 	bottom: 0px;
 }
 
+.modal-body .slide-player {
+	position: relative;
+}
+
 .slide-player-body {
 	position: absolute;
 	text-align: center;
