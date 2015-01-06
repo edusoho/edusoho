@@ -98,13 +98,13 @@ class CartsController extends BaseController
             0,
             $this->getCartsService()->searchCartsCount($condition)
         );
-var_dump('111');
+
         $ids = ArrayToolkit::column($carts,'itemId');
         $courses = $this->getCourseService()->findCoursesByIds($ids);
-var_dump('222');
+
         $teacherIds = ArrayToolkit::column($courses,'teacherIds');
         $users = $this->getUsers($teacherIds);
-var_dump('333');exit();
+
         $favoritedTotal = $this->getCourseService()->findUserFavoritedCourseCount($userId);
         $favoritedCourses = $this->getCourseService()->findUserFavoritedCourses($userId,0,$favoritedTotal);
         $favoritedCourses = ArrayToolkit::index($favoritedCourses,'id');
