@@ -122,7 +122,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 .consult-cart-content {
   width: 250px;
-  height: 50px;
+  height: 100px;
   padding-bottom: 10px;
 }
 .carts-popover-btn {
@@ -151,6 +151,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 #my-teaching-carousel .thumbnail {
   height: 111px;
   width: 119px;
+  margin-bottom: 0;
 }
 #my-teaching-carousel .carousel-inner {
   width: 80%;
@@ -177,4 +178,19 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 #my-teaching-carousel .carousel-control .glyphicon-chevron-right {
   margin-right: -15px;
+}
+.panel-body .rating table tr td {
+  word-break: break-word;
+}
+.my-may-like {
+  height: 184px;
+}
+.my-may-like .pull-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.my-may-like .glyphicon {
+  cursor: pointer;
 }
