@@ -29,7 +29,7 @@
                  <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='audio/mp3' />
             </audio>
         {% elseif lesson.type == 'ppt' %}
-            <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
+            <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}" class="lesson-preview-ppt"></div>
 
         {% else %}
             <div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
