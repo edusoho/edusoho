@@ -23,6 +23,10 @@ class MyTeachingController extends BaseController
     public function myCoursesRatingAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
         $teachCoursesCount = $this->getCourseService()->findUserTeachCourseCount($user['id']);
         $teachCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, $teachCoursesCount);
         $teachCourses = ArrayToolkit::index($teachCourses, 'id');
@@ -64,6 +68,10 @@ class MyTeachingController extends BaseController
     public function myInfoAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
         $profile = $this->getUserService()->getUserProfile($user['id']);
         return $this->render('CustomWebBundle:MyTeaching:my-information.html.twig', array(
             'user' => $user,
@@ -71,13 +79,45 @@ class MyTeachingController extends BaseController
         ));
     }   
 
+    public function myServiceAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
+
+        $myTeachingCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, $myTeachingCourseCount, true);
+
+        $conditions = array(
+            'courseIds' => ArrayToolkit::column($myTeachingCourses, 'id'),
+            'type' => 'question');
+
+        $threads = $this->getThreadService()->searchThreadInCourseIds(
+            $conditions,
+            'createdNotStick',
+            0,
+            4
+        );
+
+        return $this->render('CustomWebBundle:MyTeaching:myService.html.twig', array(
+            'threads' => $threads,
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getReviewService()
+    protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
+    }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 }

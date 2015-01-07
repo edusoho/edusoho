@@ -147,103 +147,126 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   color: #2a6496;
   text-decoration: underline;
 }
-#my-teaching-carousel .title {
+/* teaching dashboard */
+.teacher-dashboard #my-teaching-carousel .title {
   font-size: 12px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-#my-teaching-carousel .caption {
+.teacher-dashboard #my-teaching-carousel .caption {
   padding: 0;
 }
-#my-teaching-carousel .thumbnail {
+.teacher-dashboard #my-teaching-carousel .thumbnail {
   height: 111px;
   width: 119px;
   margin-bottom: 0;
 }
-#my-teaching-carousel .carousel-inner {
+.teacher-dashboard #my-teaching-carousel .carousel-inner {
   width: 80%;
   margin: auto;
 }
-#my-teaching-carousel .course-rating {
+.teacher-dashboard #my-teaching-carousel .course-rating {
   border-top: 1px solid #ddd;
   font-size: 10px;
 }
-#my-teaching-carousel .course-rating a {
+.teacher-dashboard #my-teaching-carousel .course-rating a {
   cursor: pointer;
   color: #428bca;
 }
-#my-teaching-carousel .course-rating span {
+.teacher-dashboard #my-teaching-carousel .course-rating span {
   width: 80px;
 }
-#my-teaching-carousel .carousel-control {
+.teacher-dashboard #my-teaching-carousel .carousel-control {
   display: block;
   width: 10%;
 }
-#my-teaching-carousel .carousel-control span {
+.teacher-dashboard #my-teaching-carousel .carousel-control span {
   display: block;
   text-align: center;
 }
-#my-teaching-carousel .carousel-control .glyphicon-chevron-right {
+.teacher-dashboard #my-teaching-carousel .carousel-control .glyphicon-chevron-right {
   margin-right: -15px;
 }
-.panel-body .rating table tr td {
+.teacher-dashboard .panel-body .rating table tr td {
   word-break: break-word;
 }
-.my-may-like {
+.teacher-dashboard .my-may-like {
   height: 184px;
 }
-.my-may-like .pull-text {
+.teacher-dashboard .my-may-like .pull-text {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.my-may-like .glyphicon {
+.teacher-dashboard .my-may-like .glyphicon {
   cursor: pointer;
 }
-.teacher-income .money {
+.teacher-dashboard .teacher-income .money {
   color: #F00;
 }
-.teacher-income .avatar {
+.teacher-dashboard .teacher-income .avatar {
   width: 40%;
   text-align: center;
   float: left;
 }
-.teacher-income .brief {
+.teacher-dashboard .teacher-income .brief {
   float: left;
   margin-top: 20px;
   width: 60%;
 }
-.teacher-income .brief p {
+.teacher-dashboard .teacher-income .brief p {
   line-height: 1.0;
 }
-.teacher-income .brief .nickname {
+.teacher-dashboard .teacher-income .brief .nickname {
   font-size: 16px;
 }
-.teacher-income .brief .signature {
+.teacher-dashboard .teacher-income .brief .signature {
   font-size: 12px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.teacher-income .brief .flower {
+.teacher-dashboard .teacher-income .brief .flower {
   color: #F00;
 }
-.teacher-income .brief .income {
+.teacher-dashboard .teacher-income .brief .income {
   font-size: 12px;
 }
-.teacher-income .account {
+.teacher-dashboard .teacher-income .account {
   height: 120px;
   text-align: center;
   font-size: 12px;
   border: 1px solid #DDD5D5;
 }
-.teacher-income .account div {
+.teacher-dashboard .teacher-income .account div {
   padding: 10px;
 }
-.teacher-income .account .line {
+.teacher-dashboard .teacher-income .account .line {
   border-bottom: 1px solid #DDD5D5;
+}
+.teacher-dashboard .my-service .title {
+  text-align: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #DDD5D5;
+}
+.teacher-dashboard .my-service .tasks ul {
+  padding: 0;
+  margin: 0;
+}
+.teacher-dashboard .my-service .tasks li {
+  margin: 10px 0;
+  padding: 0 5px;
+  display: block;
+  font-size: 12px;
+  height: 36px;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
