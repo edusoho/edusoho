@@ -95,12 +95,14 @@ class MyTeachingController extends BaseController
         $threads = $this->waitingAnswerTheards($user['id'], $myTeachingCourses);
         $userIds =  array_merge(ArrayToolkit::column($homeWorkResults, 'userId'), ArrayToolkit::column($threads, 'userId'));
         $users = $this->getUserService()->findUsersByIds($userIds);
+        $testResults = $this->waitingCheckTests($courseIds);
         return $this->render('CustomWebBundle:MyTeaching:myService.html.twig', array(
             'myTeachingCourses' => $myTeachingCourses,
             'lessons' => $lessons,
             'threads' => $threads,
             'users' => $users,
             'homeWorkResults' => $homeWorkResults,
+            'testResults' => $testResults
         ));
     }
 
@@ -139,6 +141,11 @@ class MyTeachingController extends BaseController
         return $homeWorkResults;
     }
 
+    private function waitingCheckTests($courseIds)
+    {
+        $testResults = $this->getTestPaperSerice()->findTestpaperResultsByCourseIdsAndStatus($courseIds, 'reviewing', 0, PHP_INT_MAX);
+        return $testResults;
+    }
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -157,5 +164,10 @@ class MyTeachingController extends BaseController
     private function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    }
+
+    private function getTestPaperSerice()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 }

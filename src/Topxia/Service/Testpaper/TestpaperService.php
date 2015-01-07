@@ -35,6 +35,8 @@ interface TestpaperService
 
     public function canBuildTestpaper($builder, $options);
 
+    public function findTestpaperResultsByCourseIdsAndStatus($courseIds, $status, $start, $limit);
+
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 
     public function findTestpaperResultsCountByUserId ($id);
