@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}{% if question.id %}编辑{% else %}添加{% endif %}题目 - {{ parent() }}{% endblock %}
+{% block title %}{% if question.id %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{{'题目'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'question' %}
 {% set script_controller = 'quiz-question/create' %}
@@ -11,16 +11,16 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading clearfix">
-    题目管理
+    {{'题目管理'|trans}}
   </div>
   <div class="panel-body">
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('course_manage_question',{courseId:course.id}) }}">题目管理</a></li>
+      <li><a href="{{ path('course_manage_question',{courseId:course.id}) }}">{{'题目管理'|trans}}</a></li>
       {% if parentQuestion %}
         <li><a href="{{ path('course_manage_question',{courseId:course.id, parentId: parentQuestion.id}) }}">{{ dict_text('questionType', parentQuestion.type) }}</a></li>
       {% endif %}
-      <li class="active">{% if question.id %}编辑{% else %}添加{% endif %}题目</li>
+      <li class="active">{% if question.id %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{{'题目'|trans}}</li>
     </ol>
     
     <div id="question-creator-widget"
@@ -36,25 +36,25 @@
 
         {% if not parentQuestion %}
         <div class="form-group">
-          <div class="col-md-2 control-label"><label>从属</label></div>
+          <div class="col-md-2 control-label"><label>{{'从属'|trans}}</label></div>
           <div class="col-md-8 controls">
             <select class="form-control width-input width-input-large" name="target" data-role="target">
               {{ select_options(targetsChoices, question.target|default(null)) }}
             </select>
-            <div class="help-block">可以针对本课程或者某个课时出题</div>
+            <div class="help-block">{{'可以针对本课程或者某个课时出题'|trans}}</div>
           </div>
         </div>
         {% endif %}
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><label>难度</label></div>
+          <div class="col-md-2 control-label"><label>{{'难度'|trans}}</label></div>
           <div class="col-md-8 controls radios">
-            {{ radios('difficulty', {'simple':'简单', 'normal':'一般', 'difficulty':'困难'}, question.difficulty | default('normal')) }}
+            {{ radios('difficulty', {'simple':'{{'简单'|trans}}', 'normal':'{{'一般'|trans}}', 'difficulty':'{{'困难'|trans}}'}, question.difficulty | default('normal')) }}
           </div>          
         </div>
 
         <div class="form-group">
-          <div class="col-md-2 control-label"><label for="question-stem-field">{{ question_stem_label|default('题干') }}</label></div>
+          <div class="col-md-2 control-label"><label for="question-stem-field">{{ question_stem_label|default('{{'题干'|trans}}') }}</label></div>
           <div class="col-md-8 controls">
             <textarea class="form-control" id="question-stem-field" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
             {% set question_stem_help = question_stem_help|default('') %}
@@ -72,13 +72,13 @@
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls ">
-              <a data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; 显示/隐藏 高级选项 ...</a>
+              <a data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; {{'显示/隐藏 高级选项'|trans}} ...</a>
           </div>
         </div>
         
         <div id="advanced-collapse" class="advanced-collapse collapse">
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="question-analysis-field">解析</label></div>
+            <div class="col-md-2 control-label"><label for="question-analysis-field">{{'解析'|trans}}</label></div>
             <div class="col-md-8 controls">
                 <textarea class="form-control" id="question-analysis-field" name="analysis">{{ question.analysis|default('') }}</textarea>
             </div>
@@ -88,17 +88,17 @@
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
+            <div class="col-md-2 control-label"><label for="question-score-field">{{'分值'|trans}}</label></div>
             <div class="col-md-4 controls">
               <input class="form-control" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
             </div>
           </div>
 
           <!-- <div class="form-group">
-            <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
+            <div class="col-md-2 control-label"><label for="categoryId">{{'类别'|trans}}</label></div>
             <div class="col-md-8 controls">
                 <select class="form-control width-input width-input-large" name="categoryId" data-role="category">
-                  {{ select_options(categoryChoices, question.categoryId|default(0), '请选择类别') }}
+                  {{ select_options(categoryChoices, question.categoryId|default(0), '{{'请选择类别'|trans}}') }}
                 </select>
             </div>
           </div> -->
@@ -109,11 +109,11 @@
           <div class="col-md-8 col-md-offset-2 controls">
             {% block question_buttons %}
               {% if not question.id %}
-                <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue">保存并继续添加</button>
+                <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue">{{'保存并继续添加'|trans}}</button>
               {% endif %}
-              <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit">保存</button>
+              <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit">{{'保存'|trans}}</button>
             {% endblock %}
-            <a href="{{ path('course_manage_question', {courseId:course.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">返回</a>
+            <a href="{{ path('course_manage_question', {courseId:course.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">{{'返回'|trans}}</a>
           </div>
         </div>
 

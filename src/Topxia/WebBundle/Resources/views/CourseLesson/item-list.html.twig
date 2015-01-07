@@ -7,12 +7,12 @@
 		  {% if 'chapter' in id %}
 		    {% if item.type == 'unit' %}
 				  <li class="item chapter-item chapter-item-unit clearfix">
-				  	<span class="name">第 {{ item.number }} 节</span>
+				  	<span class="name">{{'第'|trans}} {{ item.number }} {{'节'|trans}}</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
 		    {% else %}
 				  <li class="item chapter-item clearfix">
-				  	<span class="name">第 {{ item.number }} 章</span>
+				  	<span class="name">{{'第'|trans}} {{ item.number }} {{'章'|trans}}</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
 		    {% endif %}
@@ -21,75 +21,75 @@
 		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix " data-id="{{ item.id }}" data-num="{{loop.index}}">
 		    	{% if item.status == 'published' %}	    	
 			    	{% if item.type == 'video' %}
-				    	<span class="type" title="视频时长{{ item.length|duration }}">
+				    	<span class="type" title="{{'视频时长'|trans}}{{ item.length|duration }}">
 				    		<span>{{ item.length|duration }}</span>
 				    		<span class="glyphicon glyphicon-play-circle"></span>
 				    	</span>
 				    {% elseif item.type == 'audio' %}
-				      <span class="type" title="音频时长{{ item.length|duration }}">
+				      <span class="type" title="{{'音频时长'|trans}}{{ item.length|duration }}">
 				    		<span>{{ item.length|duration }}</span>
 				    		<span class="glyphicon glyphicon-volume-up"></span>
 				      </span>
 				    {% elseif item.type == 'text' %}
-				      <span class="type">图文 <span class="glyphicon glyphicon-picture"></span></span>
+				      <span class="type">{{'图文'|trans}} <span class="glyphicon glyphicon-picture"></span></span>
 				    {% elseif item.type == 'testpaper' %}
-				      <span class="type">试卷 <span class="glyphicon glyphicon-check"></span></span>
+				      <span class="type">{{'试卷'|trans}} <span class="glyphicon glyphicon-check"></span></span>
 				    {% elseif item.type == 'ppt' %}
 				      <span class="type">PPT <span class="glyphicon glyphicon-picture"></span></span>
 				    {% elseif item.type == 'live' %}
 				       	{% if item.startTime > currentTime %}
-							<small class="type">{{ item.startTime|date('m月d日') }} 
+							<small class="type">{{ item.startTime|date('m{{'月'|trans}}d{{'日'|trans}}') }} 
 								{% for key,week in weeks %}
 									{% if key == item.startTime|date('w')  %}
-										星期{{ week }}
+										{{'星期'|trans}}{{ week }}
 									{% endif %}
 							    {% endfor %}
-								{{ item.startTime|date('H：i') }}
+								{{ item.startTime|date('H{{'：'|trans}}i') }}
 							</small>
 						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
-							<small class="type">正在直播中</small>
+							<small class="type">{{'正在直播中'|trans}}</small>
 						{% elseif item.endTime < currentTime %}
 
 							<small class="type" >
 					    		{% if item.replayStatus == 'generated' %}
-					    		<span class="type">回放</span>
+					    		<span class="type">{{'回放'|trans}}</span>
 					    		<span class="glyphicon 
 					    		glyphicon-play-circle"></span>
 					    		{% else %}
-					    		<span class="type">直播结束</span>
+					    		<span class="type">{{'直播结束'|trans}}</span>
 					    		{% endif %}
 					    	</small>
 							
 						{% endif %}
 				    {% endif %}
 			    {% else %}
-			      	<span class="status">未发布</span>
+			      	<span class="status">{{'未发布'|trans}}</span>
 			    {% endif %}
 
-		    	<span class="name ">课时{{ item.number }}</span>
+		    	<span class="name ">{{'课时'|trans}}{{ item.number }}</span>
 		    	<span class="pie ">&nbsp;</span>
 		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
 			    	{{ item.title }} 
 			    	{% if item.type != 'text' and item.type != 'live' and item.type != 'testpaper' %}
 			    		{% if item.mediaId != 0 and not (files[item.mediaId]|default(false)) and show|default(false) %}
-							<span class="label label-danger fileDeletedLesson" title="课时文件已删除" >无效课时</span>
+							<span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}" >{{'无效课时'|trans}}</span>
 						{% endif %}
 					{% endif %}
 
 				    {% if item.materialNum > 0 %}
-				      <span class="glyphicon  glyphicon-download" title="资料"></span>
+				      <span class="glyphicon  glyphicon-download" title="{{'资料'|trans}}"></span>
 				    {% endif %}
 
 				    {% if item.giveCredit > 0 %}
-				      <small class="text-muted">({{ item.giveCredit }}学分)</small>
+				      <small class="text-muted">({{ item.giveCredit }}{{'学分'|trans}})</small>
 				    {% endif %}
 
 				    {% if item.requireCredit > 0 %}
-				      <small class="text-muted">(需{{ item.requireCredit }}学分)</small>
+				      <small class="text-muted">({{'需'|trans}}{{ item.requireCredit }}{{'学分'|trans}})</small>
 				    {% endif %}
 
 		    	</a>
-		    	<button class="btn btn-success btn-mini action">开始学习</button>
+		    	<button class="btn btn-success btn-mini action">{{'开始学习'|trans}}</button>
 		    </li>
 		  {% endif  %}
 		{% endfor %}

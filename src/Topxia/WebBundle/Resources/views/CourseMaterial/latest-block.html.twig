@@ -1,6 +1,6 @@
 {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
   {% block heading %}
-  <h2>课程资料</h2>
+  <h2>{{'课程资料'|trans}}</h2>
   {% endblock %}
   {% block body %}
 
@@ -17,7 +17,7 @@
 	  {% endfor %}
 	  </ul>
   {% else %}
-    <div class="text-muted">此课程暂无资料</div>
+    <div class="text-muted">{{'此课程暂无资料'|trans}}</div>
   {% endif %}
 
   {% endblock %}

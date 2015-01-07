@@ -14,7 +14,7 @@
       {% if question %}
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
       {% else %}
-      此题已删除。
+      {{'此题已删除。'|trans}}
       {% endif %}
     </div>
 

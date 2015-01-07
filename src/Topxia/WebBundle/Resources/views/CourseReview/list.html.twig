@@ -6,7 +6,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4 class="modal-title">评价课程</h4>
+      <h4 class="modal-title">{{'评价课程'|trans}}</h4>
     </div>
     <div class="modal-body">
 
@@ -46,8 +46,8 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-link" data-dismiss="modal">取消</button>
-    <button class="btn btn-primary" data-url="{{ path('course_review_create', {id:course.id}) }}" id="back_to_create">返回</button>
+    <button class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+    <button class="btn btn-primary" data-url="{{ path('course_review_create', {id:course.id}) }}" id="back_to_create">{{'返回'|trans}}</button>
   
 </div>
       </div>

@@ -26,7 +26,7 @@
         {% if lesson %}
           <div class="live-course-lesson mbm">
             <span class="text-success fsm mrm">{{ lesson.startTime|date('n{{'月'|trans}}j{{'日'|trans}} H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            <span class="text-muted fsm mrm">{{'第'|trans}}{{ lesson.number }}{{'课时'|trans}}</span>
+            <span class="text-muted fsm mrm">{{'第{{ lesson.number }}课时'|trans}}</span>
           </div>
         {% endif %}
       {% else %}

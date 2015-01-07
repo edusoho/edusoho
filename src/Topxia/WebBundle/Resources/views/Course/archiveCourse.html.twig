@@ -67,7 +67,7 @@
 		        <ul class="media-list">
 		    	{% for lesson in lessons %}
 		            <li class="media">
-		              <div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">{{'第'|trans}}{{ lesson.number }}{{'课时：'|trans}} {{ lesson.title }}</a></div>
+		              <div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">{{'第{{ lesson.number }}课时：'|trans}} {{ lesson.title }}</a></div>
 		            </li>
 		        {% endfor %}
 		        </ul>

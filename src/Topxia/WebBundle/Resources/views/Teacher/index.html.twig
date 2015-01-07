@@ -1,9 +1,9 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}师资介绍 - {{ parent() }}{% endblock %}
+{% block title %}{{'师资介绍'|trans}} - {{ parent() }}{% endblock %}
 
-{% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
-{% block description %}{{ setting('site.name') }}的师资介绍。{% endblock %}
+{% block keywords %}{{'师资介绍'|trans}} {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ setting('site.name') }}{{'的师资介绍。'|trans}}{% endblock %}
 
 
 {% set bodyClass = 'teacherpage' %}
@@ -12,7 +12,7 @@
 <div class="es-row-wrap container-gap">
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>师资介绍</h1></div>
+      <div class="page-header"><h1>{{'师资介绍'|trans}}</h1></div>
     </div>
   </div>
 
@@ -27,7 +27,7 @@
               <img class="media-object" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
             </a>
             <div class="media-body">
-              <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>
+              <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">{{'私信'|trans}}</button>
 
               <h4 class="media-heading">
                 <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
@@ -36,7 +36,7 @@
                 {% if teacher.title %}
                   {{ teacher.title }}
                 {% else %}
-                  <span class="text-muted">请设置头衔</span>
+                  <span class="text-muted">{{'请设置头衔'|trans}}</span>
                 {% endif %}
               </div>
               <div class="teacher-about">{{ profile.about|raw }}</div>

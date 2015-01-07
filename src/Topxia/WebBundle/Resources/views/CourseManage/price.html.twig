@@ -1,13 +1,13 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}价格设置 - {{ parent() }}{% endblock %}
+{% block title %}{{'价格设置'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'price' %}
 {% set script_controller = 'course-manage/price' %}
 {% block main %}
 
 <div class="panel panel-default panel-col">
-	<div class="panel-heading">价格设置
+	<div class="panel-heading">{{'价格设置'|trans}}
 	</div>
 	<div class="panel-body">
 		{{ web_macro.flash_messages() }}
@@ -18,7 +18,7 @@
 
 				<div class="form-group">
 					<div class="col-md-2 control-label">
-						<label for="price">价格</label>
+						<label for="price">{{'价格'|trans}}</label>
 					</div>
 					<div class="col-md-8 controls">
 						<input type="text" id="price" name="price" class="form-control" value="{{course.price}}">
@@ -29,7 +29,7 @@
 				{% if setting('coin.coin_enabled') %}
 				<div class="form-group">
 					<div class="col-md-2 control-label">
-						<label for="coinPrice"> {{setting('coin.coin_name')}}价格</label>
+						<label for="coinPrice"> {{setting('coin.coin_name')}}{{'价格'|trans}}</label>
 					</div>
 					<div class="col-md-8 controls">
 						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.coinPrice}}">
@@ -41,7 +41,7 @@
 				{% if is_feature_enabled('free_limit') %}
 				<div class="form-group">
 					<div class="col-md-2 control-label">
-						<label for="freeStartTime">限免开始时间</label>
+						<label for="freeStartTime">{{'限免开始时间'|trans}}</label>
 					</div>
 					<div class="col-md-8 controls">
 						<input type="text" id="freeStartTime" name="freeStartTime" class="form-control" value="{{course.freeStartTime|default()|data_format('Y-m-d H:i')}}">
@@ -51,7 +51,7 @@
 
 				<div class="form-group">
 					<div class="col-md-2 control-label">
-						<label for="freeEndTime">限免结束时间</label>
+						<label for="freeEndTime">{{'限免结束时间'|trans}}</label>
 					</div>
 					<div class="col-md-8 controls">
 						<input type="text" id="freeEndTime" name="freeEndTime" class="form-control" value="{{course.freeEndTime|default()|data_format('Y-m-d H:i')}}">
@@ -64,13 +64,13 @@
 
 				<div class="form-group">
 					<div class="col-md-2 control-label">
-						<label for="price">会员课程设置</label>
+						<label for="price">{{'会员课程设置'|trans}}</label>
 					</div>
 					<div class="col-md-8 controls">
 					  <select name="vipLevelId" class="form-control width-input width-input-large">
-					  	{{ select_options(levels, course.vipLevelId, '无') }}
+					  	{{ select_options(levels, course.vipLevelId, '{{'无'|trans}}') }}
 					  </select>
-						<div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
+						<div class="help-block">{{'设置会员课程后，该会员及更高等级会员，可免费学习。'|trans}}</div>
 					</div>
 				</div>
 				{% endif %}
@@ -78,7 +78,7 @@
 
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-8 controls">
-						<button class="btn btn-fat btn-primary" id="price-save-btn" type="submit">保存</button>
+						<button class="btn btn-fat btn-primary" id="price-save-btn" type="submit">{{'保存'|trans}}</button>
 					</div>
 				</div>
 
@@ -86,7 +86,7 @@
 
 			</form>
 		{% else %}
-		  <div class="alert alert-danger">抱歉，您无权设置课程价格，如有需要请联系网站管理员！</div>
+		  <div class="alert alert-danger">{{'抱歉，您无权设置课程价格，如有需要请联系网站管理员！'|trans}}</div>
 		{% endif %}
 	</div>
 </div>
