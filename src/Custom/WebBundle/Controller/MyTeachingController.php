@@ -86,24 +86,57 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
-
+        $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'] , true);
         $myTeachingCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, $myTeachingCourseCount, true);
+        $courseIds = ArrayToolkit::column($myTeachingCourses, 'id');
 
+        $homeWorkResults = $this->waitingCheckHomeworks($user['id'], $courseIds);
+        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($homeWorkResults,'lessonId'));
+        $threads = $this->waitingAnswerTheards($user['id'], $myTeachingCourses);
+        $userIds =  array_merge(ArrayToolkit::column($homeWorkResults, 'userId'), ArrayToolkit::column($threads, 'userId'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        return $this->render('CustomWebBundle:MyTeaching:myService.html.twig', array(
+            'myTeachingCourses' => $myTeachingCourses,
+            'lessons' => $lessons,
+            'threads' => $threads,
+            'users' => $users,
+            'homeWorkResults' => $homeWorkResults,
+        ));
+    }
+
+    private function waitingAnswerTheards($userId, $courseIds)
+    {
+        
         $conditions = array(
-            'courseIds' => ArrayToolkit::column($myTeachingCourses, 'id'),
+            'courseIds' => $courseIds,
             'type' => 'question');
 
         $threads = $this->getThreadService()->searchThreadInCourseIds(
             $conditions,
             'createdNotStick',
             0,
-            4
+            PHP_INT_MAX
         );
 
-        return $this->render('CustomWebBundle:MyTeaching:myService.html.twig', array(
-            'threads' => $threads,
-        ));
+        $threadList=array();
+        foreach ($threads as $thread) {
+            $elitePosts=$this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, PHP_INT_MAX);
+            if(count($elitePosts)==0){
+                $threadList[]=$thread;
+            }
+        }
+        return $threadList;
+    }
+
+    private function waitingCheckHomeworks($userId, $courseIds)
+    {
+        $homeWorkResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
+            $courseIds,'reviewing',array('usedTime','DESC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        return $homeWorkResults;
     }
 
     protected function getCourseService()
@@ -119,5 +152,10 @@ class MyTeachingController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 }
