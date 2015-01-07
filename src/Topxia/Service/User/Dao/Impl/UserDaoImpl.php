@@ -63,10 +63,8 @@ class UserDaoImpl extends BaseDao implements UserDao
     {
         if(isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
-            // unset($conditions['keywordType']);
-            // unset($conditions['keyword']);
         }
-        // var_dump($conditions['keywordType']);exit();
+        
         $sql = "SELECT * FROM {$this->table} WHERE {$conditions['keywordType']} = '{$conditions['keyword']}' LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql);
     }
