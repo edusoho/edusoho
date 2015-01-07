@@ -23,10 +23,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			}
 
 			if($order["status"] == "created"){
-				$outFlow = $this->proccessCashFlow($order);
+				$outflow = $this->proccessCashFlow($order);
 
-				if($outFlow) {
-					$this->getOrderService()->updateOrderCashSn($order["id"], $outFlow["sn"]);
+				if($outflow) {
+					$this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
 					list($success, $order) = $this->processOrder($payData, false);
 				} else {
 					$order = $this->getOrderService()->cancelOrder($order["id"], '余额不足扣款不成功');
@@ -92,39 +92,39 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 		if(!empty($coinSetting) && array_key_exists("coin_enabled", $coinSetting) && $coinSetting["coin_enabled"] == 1) {
 			if($order["amount"] == 0 && $order["coinAmount"] > 0) {
-				$outFlow = $this->payAllByCoin($order);
+				$outflow = $this->payAllByCoin($order);
 			}
 			if($order["amount"] > 0 && $order["coinAmount"] >= 0) {
-				$outFlow = $this->payByCoinAndRmb($order);
+				$outflow = $this->payByCoinAndRmb($order);
 			}
 		} else {
-			$outFlow = $this->payByRmb($order);
+			$outflow = $this->payByRmb($order);
 		}
 
-		return $outFlow;
+		return $outflow;
 	}
 
 	private function payByRmb($order) {
-		$inFlow = array(
+		$inflow = array(
 			'userId' => $order["userId"],
             'amount' => $order["amount"],
             'name' => '入账',
             'orderSn' => $order['sn'],
-            'category' => 'inFlow',
+            'category' => 'inflow',
             'note' => ''
 		);
-		$inFlow = $this->getCashService()->inFlowByRmb($inFlow);
+		$inflow = $this->getCashService()->inflowByRmb($inflow);
 
-		$outFlow = array(
+		$outflow = array(
 			'userId' => $order["userId"],
             'amount' => $order["amount"],
             'name' => $order['title'],
             'orderSn' => $order['sn'],
             'category' => 'outflow',
             'note' => '',
-            'parentSn' => $inFlow['sn']
+            'parentSn' => $inflow['sn']
 		);
-		return $this->getCashService()->outFlowByRmb($outFlow);
+		return $this->getCashService()->outflowByRmb($outflow);
 	}
 
 	private function payAllByCoin($order) {
@@ -138,12 +138,12 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'note' => ''
 		);
 
-		return $this->getCashService()->outFlowByCoin($cashFlow);
+		return $this->getCashService()->outflowByCoin($cashFlow);
 	}
 
 	private function payByCoinAndRmb($order) {
 		$userId = $order["userId"];
-		$inFlow = array(
+		$inflow = array(
 			'userId' => $userId,
             'amount' => $order["amount"],
             'name' => '入账',
@@ -152,7 +152,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'note' => ''
 		);
 
-		$rmbInFlow = $this->getCashService()->inFlowByRmb($inFlow);
+		$rmbInFlow = $this->getCashService()->inflowByRmb($inflow);
 
 		$rmbOutFlow = array(
 			'userId' => $userId,
@@ -170,7 +170,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		if ($order["priceType"] == "RMB"){
 			$totalPrice = $totalPrice*$order['coinRate'];
 		}
-		$outFlow = array(
+		$outflow = array(
 			'userId' => $userId,
             'amount' => $totalPrice,
             'name' => $order['title'],
@@ -180,7 +180,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'parentSn' => $coinInFlow['sn']
 		);
 
-		return $this->getCashService()->outFlowByCoin($outFlow);
+		return $this->getCashService()->outflowByCoin($outflow);
 	}
 
 	protected function getAppService()
