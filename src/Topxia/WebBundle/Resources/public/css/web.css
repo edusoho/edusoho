@@ -4004,8 +4004,9 @@ body {
 	bottom: 0px;
 }
 
-.modal-body .slide-player {
+.modal-body .lesson-preview-ppt {
 	position: relative;
+	min-height: 500px;
 }
 
 .slide-player-body {
