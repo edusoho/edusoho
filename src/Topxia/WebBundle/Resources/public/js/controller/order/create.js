@@ -162,7 +162,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				showPayPassword()
+				showPayPassword();
 			}
 			conculatePrice();
 		});
@@ -215,7 +215,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				showPayPassword()
+				showPayPassword();
 			}
 			if(cashRateElement.data("priceType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);
