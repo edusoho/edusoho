@@ -29,7 +29,7 @@ class LoginRecordController extends BaseController
         }else{
             $conditions['userId'] = '';
         }
-        // var_dump($user);
+        var_dump($conditions);
 
         $conditions['action'] ='login_success';
 
@@ -45,6 +45,7 @@ class LoginRecordController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        var_dump($logRecords);
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
 
