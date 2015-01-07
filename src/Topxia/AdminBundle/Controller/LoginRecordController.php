@@ -25,13 +25,17 @@ class LoginRecordController extends BaseController
         // var_dump($userCondotions);
         if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
             $user = $this->getUserService()->searchUser($userCondotions);
-            $conditions['userId'] = $user['id'];
-        }else{
-            $conditions['userId'] = '';
+            if($user){
+                $conditions['userId'] = $user['id'];
+            }else{
+                $conditions[$conditions["keywordType"]] = $conditions["keyword"];
+                unset($conditions["keywordType"]);
+                unset($conditions["keyword"]);
+            }
         }
-        var_dump($conditions);
 
         $conditions['action'] ='login_success';
+        var_dump($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -45,7 +49,6 @@ class LoginRecordController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        var_dump($logRecords);
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
 
