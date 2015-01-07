@@ -29,7 +29,7 @@ a.link-muted {
 
 .modal-body {
 	word-wrap:break-word;
-	overflow:hidden;
+	overflow: hidden;
 }
 
 .modal-body img {
@@ -4002,6 +4002,10 @@ body {
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
+}
+
+.modal-body .slide-player {
+	position: relative;
 }
 
 .slide-player-body {
