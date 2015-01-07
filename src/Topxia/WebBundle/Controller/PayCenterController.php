@@ -25,7 +25,7 @@ class PayCenterController extends BaseController
         }
 
 		$fields = $request->query->all();
-		$order = $this->getOrderService()->getOrder($fields["id"]);
+		$order = $this->getOrderService()->getOrderBySn($fields["sn"]);
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');

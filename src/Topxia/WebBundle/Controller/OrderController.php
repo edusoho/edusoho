@@ -111,7 +111,7 @@ class OrderController extends BaseController
             $order = $processor->createOrder($orderFileds, $fields);
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'id' => $order['id']
+                'sn' => $order['sn']
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
