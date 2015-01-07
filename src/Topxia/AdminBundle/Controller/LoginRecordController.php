@@ -11,6 +11,23 @@ class LoginRecordController extends BaseController
 	public function indexAction (Request $request)
     {
     	$conditions = $request->query->all();
+        
+        $userCondotions = array();
+
+        if (!empty($conditions['keywordType'])) {
+            $userCondotions['keywordType'] =$conditions["keywordType"];
+        }
+
+        if (!empty($conditions['keyword'])) {
+            $userCondotions['keyword'] =$conditions["keyword"];
+        }
+
+        // var_dump($userCondotions);
+        if($userCondotions){
+            $user = $this->getUserService()->searchUser($userCondotions);
+        }
+        var_dump($user);
+        // $conditions['userId'] = $user[0]['id'];
 
         $conditions['action'] ='login_success';
 

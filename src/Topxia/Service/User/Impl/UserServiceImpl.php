@@ -38,6 +38,11 @@ class UserServiceImpl extends BaseService implements UserService
        return $this->getProfileDao()->getProfile($id);
     }
 
+    public function searchUser(array $conditions)
+    {
+        return $this->getUserDao()->searchUser($conditions);
+    }
+
     public function getUserByNickname($nickname){
         $user = $this->getUserDao()->findUserByNickname($nickname);
         if(!$user){
