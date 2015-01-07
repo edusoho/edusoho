@@ -173,16 +173,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		if ($order["priceType"] == "RMB"){
 			$totalPrice = $totalPrice*$order['coinRate'];
 		}
-		$outflow = array(
-			'userId' => $userId,
-            'amount' => $totalPrice,
-            'name' => $order['title'],
-            'orderSn' => $order['sn'],
-            'category' => 'outflow',
-            'note' => '',
-            'parentSn' => $coinInFlow['sn']
-		);
-
 		$outFlow = array(
 			'userId' => $userId,
             'amount' => $totalPrice,
