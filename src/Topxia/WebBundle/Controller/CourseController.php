@@ -256,9 +256,9 @@ class CourseController extends BaseController
 		$user = $this->getCurrentUser();
 
 		$conditions = array(
-				'user-key'=>$_COOKIE['user-key'],
-				'itemId'=>$id,
-				'itemType'=>'course',
+				'user-key' => empty($_COOKIE['user-key'])? '' :$_COOKIE['user-key'],
+				'itemId' => $id,
+				'itemType' => 'course',
 				'userId' => $user->id
 		);
 

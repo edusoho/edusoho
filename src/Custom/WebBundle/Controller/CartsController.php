@@ -88,9 +88,16 @@ class CartsController extends BaseController
     {
         $userId = $this->getCurrentUser()->id;
 
-        $condition = array(
-            'userId' => $userId,
-        );
+        if (empty($user['id'])) {
+            if (empty($_COOKIE['user-key'])){
+                $condition = array();
+            } else {
+                $userKey = $_COOKIE['user-key'];
+                $condition = array('userKey' => $userKey);
+            }
+        } else {
+            $condition = array('userId' => $userId);
+        }
 
         $carts = $this->getCartsService()->searchCarts(
             $condition,
