@@ -2,6 +2,9 @@
   <td>
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
     <input type="hidden" name="questionId[]" value="{{ question.id }}">
+    {% if part|default(0) !=0 %}
+      <input type="hidden" name="partId[]" value="{{ part }}">
+    {% endif %}
   </td>
   <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
   <td>

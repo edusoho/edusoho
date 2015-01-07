@@ -532,7 +532,7 @@ class TestpaperController extends BaseController
 
             $items = array();
             foreach ($data['questionId'] as $index => $questionId) {
-                $items[] = array('questionId' => $questionId, 'score' => $data['scores'][$index]);
+                $items[] = array('questionId' => $questionId, 'score' => $data['scores'][$index], 'partId' => $data['partId'][$index]);
             }
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
