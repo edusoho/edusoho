@@ -23,11 +23,13 @@ class LoginRecordController extends BaseController
         }
 
         // var_dump($userCondotions);
-        if($userCondotions){
+        if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
             $user = $this->getUserService()->searchUser($userCondotions);
+            $conditions['userId'] = $user['id'];
+        }else{
+            $conditions['userId'] = '';
         }
-        var_dump($user);
-        // $conditions['userId'] = $user[0]['id'];
+        // var_dump($user);
 
         $conditions['action'] ='login_success';
 
