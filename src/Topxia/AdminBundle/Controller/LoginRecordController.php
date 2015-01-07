@@ -13,7 +13,7 @@ class LoginRecordController extends BaseController
     	$conditions = $request->query->all();
         
         $userCondotions = array();
-
+        $user = '' ;
         if (!empty($conditions['keywordType'])) {
             $userCondotions['keywordType'] =$conditions["keywordType"];
         }
@@ -22,20 +22,16 @@ class LoginRecordController extends BaseController
             $userCondotions['keyword'] =$conditions["keyword"];
         }
 
-        // var_dump($userCondotions);
         if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
             $user = $this->getUserService()->searchUser($userCondotions);
             if($user){
                 $conditions['userId'] = $user['id'];
             }else{
                 $conditions[$conditions["keywordType"]] = $conditions["keyword"];
-                unset($conditions["keywordType"]);
-                unset($conditions["keyword"]);
             }
         }
 
         $conditions['action'] ='login_success';
-        var_dump($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -49,6 +45,10 @@ class LoginRecordController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        if(empty($user) && $conditions["keywordType"] == 'email' && !empty($conditions['keyword'])){
+            $logRecords = array();
+        }
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
 
