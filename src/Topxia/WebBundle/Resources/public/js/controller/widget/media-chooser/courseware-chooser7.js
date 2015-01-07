@@ -7,9 +7,9 @@ define(function(require, exports, module) {
     var CoursewareChooser = BaseChooser.extend({
         attrs: {
             uploaderSettings: {
-                file_types : "*.ppt;*.pptx;*.doc;*.pdf",
+                file_types : "*.doc;*.pdf",
                 file_size_limit : "100 MB",
-                file_types_description: "PPT,doc,pdf"
+                file_types_description: "doc,pdf"
             },
             preUpload: function(uploader, file) {
                 var data = {};

@@ -88,6 +88,7 @@ class UploadFileController extends BaseController
         }
 
         $fileInfo = $request->request->all();
+      
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
@@ -107,6 +108,7 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
 
         if ($lazyConvert) {
+           
             $convertHash = $this->getUploadFileService()->reconvertFile(
                 $file['id'],
                 $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)

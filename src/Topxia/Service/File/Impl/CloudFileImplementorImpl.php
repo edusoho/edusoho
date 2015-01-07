@@ -45,7 +45,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if ($fileInfo['lazyConvert']) {
             $fileInfo['convertHash'] = "lazy-{$uploadFile['hashId']}";
         }
-
+        
         if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
