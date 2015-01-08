@@ -5,4 +5,6 @@ interface CategoryProcessor
 {
 	public function getCategories();
 	public function getAllCategories();
+
+	public function getTags();
 }

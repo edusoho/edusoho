@@ -50,7 +50,7 @@ class HLSController extends BaseController
             }
 
             if ($hideBeginning) {
-                $params['line'] = 1;
+                $params['hideBeginning'] = 1;
             }
 
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
@@ -191,7 +191,7 @@ class HLSController extends BaseController
 
                 $beginning['beginningKey'] = $beginnings[$level]['key'];
                 $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
-                $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']));
+                $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
                 break;
             }
         }
