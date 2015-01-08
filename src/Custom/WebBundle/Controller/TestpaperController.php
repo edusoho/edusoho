@@ -189,7 +189,7 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
         }
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            return $this->redirect($this->generateUrl('course_manage_advanced_test_results', array('id' => $testpaperResult['id'])));
+            return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
         }
 
         list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($testpaperResult['testId'], 'doing', $testpaperResult['id']);
