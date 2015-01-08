@@ -1022,6 +1022,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             	array('title' => '笔记','data' => null),
             	array('title' => '私信','data' => null));
         }
+        $index = 0;
         
         $courseConditions = array(
             'userId' => $user['id']
@@ -1042,29 +1043,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'lessonId' => $courseInfo['largePicture'],
                 'time' => Date('c', $resultCourse['startTime'])
             );
+        }else{
+        	$data = null;
         }
-        $result[0] = array(
+        $result[$index++] = array(
             'title' => '在学课程',
             'data' => $data
         );
-        
-        $total           = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-        $coursesLearning = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], 0, $total);
-        
-        $resultLearning = $this->controller->filterCourses($coursesLearning);
-        
-        $total         = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
-        $coursesLeaned = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $total);
-        
-        $resultLeaned = $this->controller->filterCourses($coursesLeaned);
-        $courseIds    = ArrayToolkit::column($resultLearning + $resultLeaned, 'id');
-        
+
+        //----问答
         $conditions     = array(
             'userId' => $user['id'],
-            'courseIds' => $courseIds,
             'type' => 'question'
         );
-        $resultQuestion = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+        $total = $this->controller->getThreadService()->searchThreadCount($conditions);
+        $resultQuestion = $this->controller->getThreadService()->searchThreads($conditions, 'createdNotStick', 0, 1);
+        
         $resultQuestion = reset($resultQuestion);
         $data           = array();
         if ($resultQuestion != false) {
@@ -1075,14 +1069,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'lessonId' => $resultQuestion['lessonId'],
                 'time' => Date('c', $resultQuestion['latestPostTime'])
             );
+        }else{
+        	$data = null;
         }
-        $result[1] = array(
+        $result[$index++] = array(
             'title' => '问答',
             'data' => $data
-        ); //问答
-        
+    	); 
+
+        //----讨论
         $conditions['type'] = 'discussion';
-        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+        $resultDiscussion   = $this->controller->getThreadService()->searchThreads($conditions, 'createdNotStick', 0, 1);
         $resultDiscussion   = reset($resultDiscussion);
         $data               = array();
         if ($resultDiscussion != false) {
@@ -1093,11 +1090,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'lessonId' => $resultDiscussion['lessonId'],
                 'time' => Date('c', $resultQuestion['latestPostTime'])
             );
+        }else{
+        	$data = null;
         }
-        $result[2] = array(
+        $result[$index++] = array(
             'title' => '讨论',
             'data' => $data
-        ); //讨论
+    	); //讨论
+
         
         $conditions = array(
             'userId' => $user['id'],
@@ -1106,32 +1106,43 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, 'updated', 0, 1);
         $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, 'created', 0, 1);
+
         //最新的笔记
         $lastestNote     = array();
-        if ($updateTimeNote[0]['updatedTime'] > $createdTimeNote[0]['createdTime']) {
-            $lastestNote = $updateTimeNote;
-        } else {
-            $lastestNote = $createdTimeNote;
+        if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) > 0){
+        	if ($updateTimeNote[0]['updatedTime'] > $createdTimeNote[0]['createdTime']) {
+            	$lastestNote = $updateTimeNote;
+	        } else {
+	            $lastestNote = $createdTimeNote;
+	        }
+        }else if(sizeof($updateTimeNote) == 0 && sizeof($createdTimeNote) > 0){
+        	$lastestNote = $createdTimeNote;
+        }else if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) == 0){
+        	$lastestNote = $updateTimeNote;
         }
 
         $lastestNote = reset($lastestNote);
-        $data = array(
-            'content' => $lastestNote['content'],
-            'id' => $lastestNote['id'],
-            'courseId' => $lastestNote['courseId'],
-            'lessonId' => $lastestNote['lessonId']
-        );
-        if($lastestNote['updatedTime'] > $lastestNote['createdTime']){
-        	$data['time'] = Date('c', $lastestNote['updatedTime']);
+        if($lastestNote != false){
+	        $data = array(
+	            'content' => $lastestNote['content'],
+	            'id' => $lastestNote['id'],
+	            'courseId' => $lastestNote['courseId'],
+	            'lessonId' => $lastestNote['lessonId']
+	        );
+	        if($lastestNote['updatedTime'] > $lastestNote['createdTime']){
+	        	$data['time'] = Date('c', $lastestNote['updatedTime']);
+	        }else{
+				$data['time'] = Date('c', $lastestNote['createdTime']);
+	        }  	
+
         }else{
-			$data['time'] = Date('c', $lastestNote['createdTime']);
+        	$data = null;
         }
-        
-        $result[3] = array(
+        $result[$index++] = array(
             'title' => '笔记',
             'data' => $data
-        );
-        
+    	);     
+
         
         $messageConditions = array(
             'toId' => $user['id']
@@ -1146,18 +1157,24 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         foreach ($conversations as $key => $value) {
             $sort[$key] = $value['latestMessageTime'];
         }
+
+        if($conversations !=null ){
+        	array_multisort($sort, SORT_DESC, $conversations);
+        }
         
-        array_multisort($sort, SORT_DESC, $conversations);
         $lastestMessage = reset($conversations);
-        $data           = array(
-            'content' => $lastestMessage['latestMessageContent'],
-            'id' => $lastestMessage['id'],
-            'courseId' => $lastestMessage['fromId'],
-            'lessonId' => $lastestMessage['toId'],
-            'time' => Date('c', $lastestMessage['createdTime'])
-        );
-        
-        $result[4] = array(
+        if($lastestMessage != false){
+	        $data           = array(
+	            'content' => $lastestMessage['latestMessageContent'],
+	            'id' => $lastestMessage['id'],
+	            'courseId' => $lastestMessage['fromId'],
+	            'lessonId' => $lastestMessage['toId'],
+	            'time' => Date('c', $lastestMessage['createdTime'])
+	        );
+        }else{
+        	$data = null;
+        }
+        $result[$index++] = array(
             'title' => '私信',
             'data' => $data
         );
