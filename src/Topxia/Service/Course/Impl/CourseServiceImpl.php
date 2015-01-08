@@ -370,7 +370,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'freeStartTime' => 0,
 			'freeEndTime' => 0,
 			'deadlineNotify' => 'none',
-			'daysOfNotifyBeforeDeadline' => 0
+			'daysOfNotifyBeforeDeadline' => 0,
+			'discountActivityId'=>0,
 		));
 		
 		if (!empty($fields['about'])) {

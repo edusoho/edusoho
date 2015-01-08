@@ -41,6 +41,12 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->getTaskDao()->getConnection()->beginTransaction();
             $tasks=$this->findActiveTasks(time(),true);
 
+// $class =  "DiscountActivity\\DiscountActivityBundle\\Task\\UpdateCoursesActivityStatusAlsoPriceAndCoinPrice";
+// $task=new $class;
+
+// $task->run();  
+
+
             if($tasks){
 
                 foreach ($tasks as $task) {
@@ -65,7 +71,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $class= $taskClassFullNameWithNamespace;
         // $class="Topxia\\Service\\Task\\Activity\\".$taskClassName;
-
         $task=new $class;
 
         $task->run();  
