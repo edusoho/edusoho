@@ -172,6 +172,27 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeQuery($sql, $ids);
     }
 
+    public function getQuestionCountGroupByTypes($conditions)
+    {   
+        $sqlConditions = array();
+        $sql = "";
+        if(isset($conditions["types"])){
+            $marks = str_repeat('?,', count($conditions["types"]) - 1) . '?';
+            $sql .= " AND type IN ({$marks}) ";
+            $sqlConditions = array_merge($sqlConditions, $conditions["types"]);
+        }
+        if(isset($conditions["targets"])) {
+            $targetMarks = str_repeat('?,', count($conditions["targets"]) - 1) . '?';
+            $sqlConditions = array_merge($sqlConditions, $conditions["targets"]);
+            $sql .= " AND target IN ({$targetMarks}) ";
+        }
+        if(isset($conditions["courseId"])) {
+            $sql .= " AND (target='course-{$conditions['courseId']}' or target like 'course-{$conditions['courseId']}/%') ";   
+        }
+        $sql = "SELECT COUNT(*) AS questionNum, type FROM {$this->table} WHERE parentId = '0' {$sql} GROUP BY type ";
+        return $this->getConnection()->fetchAll($sql, $sqlConditions);
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function($value) {

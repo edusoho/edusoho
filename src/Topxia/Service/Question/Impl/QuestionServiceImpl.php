@@ -280,6 +280,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
     }
 
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
+    }
+
     private function getQuestionDao()
     {
         return $this->createDao('Question.QuestionDao');

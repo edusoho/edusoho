@@ -242,6 +242,11 @@ define(function(require, exports, module) {
             });
         },
 
+        getQuestionNums: function(){
+            var rangeValue = $('input[name=range]').val();
+            $.get('', );
+        },
+
         initRangeField: function() {
             var self = this;
             $('input[name=range]').on('click', function() {
@@ -336,6 +341,8 @@ define(function(require, exports, module) {
         new TestpaperForm({
             element: '#testpaper-form'
         });
+
+
     }
 
 });

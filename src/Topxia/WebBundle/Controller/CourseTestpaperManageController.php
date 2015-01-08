@@ -64,10 +64,16 @@ class CourseTestpaperManageController extends BaseController
             );
         }
 
+        $conditions["types"] = ArrayToolkit::column($types,"key");
+        $conditions["courseId"] = $course["id"];
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $questionNums = ArrayToolkit::index($questionNums, "type");
+
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
             'types' => $types,
+            'questionNums' => $questionNums
         ));
     }
 
