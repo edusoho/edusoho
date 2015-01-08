@@ -87,7 +87,7 @@ class TestpaperController extends BaseController
                 return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
             }
 
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
+            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => 'course', 'id' => $course['id']));
 
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
         }

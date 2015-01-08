@@ -390,9 +390,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'beginTime' => time(),
             'status' => 'doing',
             'usedTime' => 0,
-            'target' => empty($target['type']) ? '' : $testpaper['target']."/".$target['type']."-".$target['id']
+            'target' => empty($target['type']) ? '' : $target['type']."-".$target['id']
         );
-
+        
         return $this->getTestpaperResultDao()->addTestpaperResult($testpaperResult);
     }
 

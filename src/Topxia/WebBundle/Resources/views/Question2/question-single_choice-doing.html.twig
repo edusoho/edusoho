@@ -22,5 +22,6 @@
           <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key in  answerChoiceIndex|split(',') %}checked{% endif %}> {{ choiceIndex }}
         </label>
       {% endfor %}
-    </div>
+  </div>
+  {% include 'TopxiaWebBundle:Question2:question-actions.html.twig' with {flags:['mark','favorite']}%}
 {% endblock %}

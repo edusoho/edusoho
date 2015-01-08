@@ -84,8 +84,8 @@ class TestpaperController extends BaseController
             if ($testpaper['status'] == 'closed') {
                 return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
             }
-
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
+            
+            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => 'course', 'id' => $courseId));
 
             if ($testpaper['pattern'] == 'Part') {
                 return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testpaperResult['id'])));
@@ -113,10 +113,6 @@ class TestpaperController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
 
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            throw $this->createAccessDeniedException('试卷只能属于课程');
-        }
-
         $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
         if (empty($course)) {
@@ -134,7 +130,11 @@ class TestpaperController extends BaseController
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+            if ($testpaper['pattern'] == 'Part') {
+                return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testResult['id'])));
+            } else {
+                return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+            }
         }
 
         if ($testpaper['status'] == 'draft') {
@@ -146,7 +146,11 @@ class TestpaperController extends BaseController
 
         $testResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
 
-        return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+        if ($testpaper['pattern'] == 'Part') {
+            return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testResult['id'])));
+        } else {
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+        }
     }
 
     public function previewTestAction (Request $request, $testId)
@@ -199,7 +203,7 @@ class TestpaperController extends BaseController
             'paperResult' => $testpaperResult,
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'id' => $id,
-            'status' => 'doing',
+            'status' => 'doing'
         ));
     }
 

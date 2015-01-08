@@ -160,10 +160,22 @@ course_manage_do_test:
     pattern: /test/{testId}/do
     defaults: { _controller: CustomWebBundle:Testpaper:doTestpaper }
 
+course_manage_redo_test:
+    pattern: /test/{testId}/redo
+    defaults: { _controller: CustomWebBundle:Testpaper:reDoTestpaper }
+
 course_manage_show_advanced_test:
     pattern: /advanced-test/{id}/show
     defaults: { _controller: CustomWebBundle:Testpaper:showAdvancedTest }
 
-course_manage_test_results:
+course_manage_advanced_test_results:
     pattern: /advanced-test/{id}/result
     defaults: { _controller: CustomWebBundle:Testpaper:advancedTestResult }
+
+course_manage_submit_advanced_test:
+    pattern: /advanced-test/{id}/submit
+    defaults: { _controller: CustomWebBundle:Testpaper:submitTest }
+
+course_manage_finish_advanced_test:
+    pattern: /advanced-test/{id}/finish
+    defaults: { _controller: CustomWebBundle:Testpaper:finishTest }
