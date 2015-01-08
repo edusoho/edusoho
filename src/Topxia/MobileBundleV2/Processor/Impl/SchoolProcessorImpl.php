@@ -28,7 +28,17 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getSchoolApps()
     {
-
+        $article = array(
+            "code"=>"Article",
+            "name"=>"网校资讯",
+            "description"=>"EduSoho官方应用，网校资讯。",
+            "author"=>"EduSoho官方",
+            "version"=>"1.0.0",
+            "supprot_version"=>"2.4.0+"
+        );
+        return array(
+            $article
+            );
     }
     
     public function registDevice()
