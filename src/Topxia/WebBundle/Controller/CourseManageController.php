@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\ReviewType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\LiveClientFactory;
@@ -26,24 +27,20 @@ class CourseManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
         $courseSetting = $this->getSettingService()->get('course', array());
-
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
-
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
             return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
         }
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
-
         if ($course['type'] == 'live') {
             $client = LiveClientFactory::createClient();
             $liveCapacity = $client->getCapacity();
         } else {
             $liveCapacity = null;
         }
-
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
@@ -172,6 +169,14 @@ class CourseManageController extends BaseController
     public function priceAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
+        
+
+        $coinSetting=$this->getSettingService()->get('coin',array());
+        if(isset($coinSetting['cash_rate'])){
+            $cashRate=$coinSetting['cash_rate'];
+        }else{
+            $cashRate=1;
+        }
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
@@ -189,12 +194,14 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
+
             if(isset($fields['freeStartTime'])){
                 $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
                 $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
             }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
+
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
@@ -205,6 +212,7 @@ class CourseManageController extends BaseController
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
+            'cashRate'=> empty($cashRate)? 1 : $cashRate
         ));
     }
 
@@ -305,7 +313,6 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
-        
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers
@@ -418,5 +425,10 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

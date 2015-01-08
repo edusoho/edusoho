@@ -130,6 +130,23 @@
 				<td><a href="{{path('admin_operation_analysis_course_income',{tab:"trend",analysisDateType:'courseIncome'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_income',{tab:"detail",analysisDateType:'courseIncome'})}}">详情</a></td>
 			</tr>
 			{% endif %}
+			<tr>
+				<td>课程总数</td>
+				<td><span class="pull-right">{{todayCourseSum}}</span></td>
+				<td><span class="pull-right">{{yesterdayCourseSum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_course_sum',{tab:"trend",analysisDateType:'courseSum'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_sum',{tab:"detail",analysisDateType:'courseSum'})}}">详情</a></td>
+				{% endif %}
+			</tr>
+
+			<tr>
+				<td>用户总数</td>
+				<td><span class="pull-right">{{todayUserSum}}</span></td>
+				<td><span class="pull-right">{{yesterdayUserSum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_user_sum',{tab:"trend",analysisDateType:'userSum'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_user_sum',{tab:"detail",analysisDateType:'userSum'})}}">详情</a></td>
+				{% endif %}
+			</tr>
 {# 			<tr>
 				<td>退出学习数</td>
 				<td>{{todayExitLessonNum}}</td>

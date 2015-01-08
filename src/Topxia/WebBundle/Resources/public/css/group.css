@@ -144,6 +144,11 @@
     margin: 10px 0;
 }
 
+.group-thread .panel-heading .thread-list  {
+    float: right;
+    margin-top:-9px;
+}
+
 .group-thread .panel-heading .metas {
     font-size: 12px;
     color: #888;
@@ -215,4 +220,16 @@
 .nav nav-pills li{
     background-color: rgba(255, 255, 255, 0.70);
     filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ccffffff,endcolorstr=#ccffffff);
+}
+
+.hideContent{
+
+    border: 1px solid #999;
+    padding: 10px;
+
+}
+.hideContent h4{
+    color:#999;
+    text-align: center;
+    font-size:14px;
 }

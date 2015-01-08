@@ -1078,7 +1078,7 @@ return array(
 		)
 	),
 	's_header_my' => array(
-		'description' => '头部帐号的下拉',
+		'description' => '头部账号的下拉',
 		'param' => array(),
 		'list' => array(
 		)

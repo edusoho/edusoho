@@ -6,7 +6,7 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
 
-    static $apiVersionRange = "2.3.2";
+    const API_VERSIN_RANGE = '2.3.2';
     public $formData;
     public $controller;
     public $request;
@@ -216,7 +216,7 @@ class BaseProcessor {
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => BaseProcessor::$apiVersionRange
+                "max" => BaseProcessor::API_VERSIN_RANGE
             ) ,
         );
     }

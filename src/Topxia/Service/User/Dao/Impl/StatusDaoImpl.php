@@ -65,6 +65,12 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
 
+    private function _createSearchQueryBuilder($conditions)
+    {
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, $this->table);
+    }
+
     public function addStatus($fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
@@ -86,5 +92,13 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
-
+   public function deleteStatusesByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId)
+    {
+        return $this->getConnection()->delete($this->table, array(
+            'userId' => $userId,
+            'type' =>$type,
+            'objectType'=>$objectType,
+            'objectId'=>$objectId
+            ));
+    }
 }

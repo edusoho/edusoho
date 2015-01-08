@@ -19,8 +19,12 @@
       </select>
     </div>
 
-    <div class="form-group">
+   {#  <div class="form-group">
       <input class="form-control" type="text" placeholder="课程编号" name="courseId" value="{{ app.request.get('courseId') }}">
+    </div> #}
+    
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="课程名" name="courseTitle" value="{{ app.request.get('courseTitle') }}">
     </div>
 
     <div class="form-group">

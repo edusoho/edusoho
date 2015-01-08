@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -14,6 +15,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Topxia\Common\ConvertIpToolkit;
+use Topxia\WebBundle\DataDict\UserRoleDict;
 
 class UserController extends BaseController 
 {
@@ -21,6 +23,7 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
+
         $conditions = array(
             'roles'=>'',
             'keywordType'=>'',
@@ -43,10 +46,19 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-      
+
+        $app = $this->getAppService()->findInstallApp("UserImporter");
+        $enabled = $this->getSettingService()->get('plugin_userImporter_enabled');
+        
+        $showUserExport = false;
+        if(!empty($app) && array_key_exists('version', $app) && $enabled){
+            $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+        }
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'showUserExport' => $showUserExport
         ));
     }
 
@@ -147,24 +159,40 @@ class UserController extends BaseController
         }
 
         $user = $this->getUserService()->getUser($id);
-
+        $currentUser = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
+
             $this->getUserService()->changeUserRoles($user['id'], $roles);
+
+            $dataDict = new UserRoleDict();
+            $roleDict = $dataDict->getDict();
+            $role = "";
+            $roleCount = count($roles);
+            $deletedRoles = array_diff($user['roles'], $roles);
+            $addedRoles = array_diff($roles, $user['roles']);
+            if(!empty($deletedRoles) || !empty($addedRoles) ){
+                for ($i=0; $i<$roleCount; $i++) {
+                    $role .= $roleDict[$roles[$i]];
+                    if ($i<$roleCount - 1){
+                        $role .= "、";
+                    }
+                }
+                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”设置为“{$role}”身份。");
+            }
 
             if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
                 $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
             }
 
             $user = $this->getUserService()->getUser($id);
-
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $user
+            'user' => $user,
             ));
         }
            
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
-            'user' => $user
+            'user' => $user,
         ));
     }
 
@@ -407,8 +435,18 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 }

@@ -32,6 +32,16 @@
         {% if course.recommended %}
           <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
         {% endif %}
+        <li ><a class="copy-course" id="copy-course" href="javascript:" 
+        {% if course.type == "live" %}
+        title="直播课程不支持复制"
+        style="color:#909090"
+        {% endif %}
+        data-toggle="modal" 
+        data-target="#modal"  
+        data-url="{{ path('admin_course_copy', {id:course.id}) }}" 
+        data-type="{{course.type}}"
+        ><span class="badge">new</span><span class="glyphicon glyphicon-plus-sign"></span> 复制课程</a></li>
 
         <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
         <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>

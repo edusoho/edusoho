@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var EditorFactory = require('common/kindeditor-factory');
-    var DynamicCollection = require('../widget/dynamic-collection3');
+    var DynamicCollection = require('../widget/dynamic-collection4');
     require('jquery.sortable');
 
     exports.run = function() {

@@ -22,6 +22,21 @@ class CourseOrderController extends BaseController
     {
         $conditions = $this->prepareRefundSearchConditions($request->query->all());
 
+        if (!empty($conditions['title'])){
+            $conditions['targetType'] = 'course';
+
+            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['title']));
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            if (count($conditions['courseIds']) == 0){
+                return $this->render('TopxiaAdminBundle:CourseOrder:refunds.html.twig', array(
+                'refunds' => array(),
+                'users' => array(),
+                'orders' => array(),
+                'paginator' => new Paginator($request,0,20)
+                ));
+            }              
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOrderService()->searchRefundCount($conditions),
@@ -38,6 +53,7 @@ class CourseOrderController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($refunds, 'userId'));
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
+        
         return $this->render('TopxiaAdminBundle:CourseOrder:refunds.html.twig', array(
             'refunds' => $refunds,
             'users' => $users,

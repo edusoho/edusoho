@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {   
@@ -218,7 +219,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
         }
-
+                
         $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
 
         $key = null;
@@ -226,11 +227,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $key = $rawParams['key'];
         }
 
-        if (!empty($rawParams['targetType']) && !empty($rawParams['targetId'])) {
+        if (!empty($rawParams['targetType']) && isset($rawParams['targetId'])) {
             $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
             $key = "{$rawParams['targetType']}-{$rawParams['targetId']}/{$keySuffix}";
         }
-
+        
         if (empty($key)) {
             throw $this->createServiceException("key error.");
         }
@@ -283,6 +284,62 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
         return $result['persistentId'];
     }
+
+    public function reconvertOldFile($file, $convertCallback, $pipeline = null)
+    {
+        if (empty($file['convertParams'])) {
+            return null;
+        }
+
+        $params = array(
+            'convertCallback' => $convertCallback,
+            'convertor' => $file['convertParams']['convertor'],
+            'convertParams' => $file['convertParams'],
+        );
+
+        if ($file['type'] == 'video') {
+            $watermarks = $this->getVideoWatermarkImages();
+
+            $file['convertParams']['hasVideoWatermark'] = empty($watermarks) ? 0 : 1;
+            $file['convertParams'] = $this->encodeMetas($file['convertParams']);
+
+            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams'=>$file['convertParams']));
+        }
+
+        if ($pipeline) {
+            $params['pipeline'] = $pipeline;
+        }
+
+        if (($file['type'] == 'video') && $watermarks) {
+            $params['convertParams']['videoWatermarkImages'] = $watermarks;
+        }
+
+        $task = array();
+        $task['key'] = $file['hashId'];
+        $task['processor'] = 'video';
+        $task['directives'] = array(
+            'videoQuality' => $params['convertParams']['videoQuality'],
+            'audioQuality' => $params['convertParams']['audioQuality'],
+            'hlsKey' => $params['convertParams']['hlsKey'],
+            'hlsKeyUrl' => $params['convertParams']['hlsKeyUrl'],
+        );
+
+
+        if (!empty($params['convertParams']['videoWatermarkImages'])) {
+            $task['directives']['watermarks'] = $params['convertParams']['videoWatermarkImages'];
+        }
+
+        $task['callbackUrl'] = $convertCallback;
+
+        $api = $this->createAPIClient();
+        $result = $api->post('/processes', $task);
+        if (empty($result['taskNo'])) {
+            return null;
+        }
+
+        return $result['taskNo'];
+    }
+
 
     public function getMediaInfo($key, $mediaType) {
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
@@ -365,6 +422,17 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         return $this->createService('System.SettingService');
     }
+
+    protected function createAPIClient()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        return new CloudAPI(array(
+            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
+            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
+            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
+        ));
+    }
+
 }
 
 class HLSVideoConvertor
@@ -415,6 +483,9 @@ class HLSVideoConvertor
         }
 
         $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+        unset($file['metas2']['sd']);
+        unset($file['metas2']['hd']);
+        unset($file['metas2']['shd']);
         $file['metas2'] = array_merge($file['metas2'], $metas);
         $file['convertStatus'] = 'success';
 

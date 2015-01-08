@@ -35,7 +35,7 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {% set options = {sn: '订单号', buyer:'购买者用户名', targetId: dict_text('targetName', type) ~ '编号'} %}
+        {% set options = {sn: '订单号', buyer:'购买者用户名', targetId: dict_text('targetName', type) ~ '编号', title: '课程名'} %}
         {{ select_options(options, request.get('keywordType')) }}
       </select>
     </div>

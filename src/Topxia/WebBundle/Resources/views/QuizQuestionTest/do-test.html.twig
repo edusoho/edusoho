@@ -1,4 +1,4 @@
-{% if  ((paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status == 'reviewing' and not app.user.isTeacher() )  %}
+{% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] ) and not app.user.isTeacher() and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' and not app.user.isTeacher() )  %}
 {% else %}
 
 {# {% if showTestpaperNavbar|default('on') == 'off' %} #}

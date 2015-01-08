@@ -12,9 +12,36 @@
         return hrefArray[1];
     }
     exports.run = function() {
-        
-        if($('#thread_content').length>0){
-            var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+
+        var add_btn_clicked = false;
+
+        $('#add-btn').click(function(){
+            if(!add_btn_clicked)
+            {
+                $('#add-btn').button('loading').addClass('disabled');
+                add_btn_clicked=true;
+            }
+            return true;
+        });
+
+        $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function() {
+            var $this = $(this);
+
+            $.post($this.data('url'), function(){
+                $this.hide();
+                if ($this.hasClass('collect-btn')) {
+                    $this.parent().find('.uncollect-btn').show();
+                } else {
+                    $this.parent().find('.collect-btn').show();
+                }
+            });
+        });
+
+        $('.attach').tooltip();
+
+        if($('#thread_content1').length>0){
+
+            var editor_thread = EditorFactory.create('#thread_content1', 'haveHidden', {extraFileUploadParams:{group:'user'}});
             var validator_thread = new Validator({
             element: '#user-thread-form',
             failSilently: true,
@@ -24,30 +51,72 @@
                 }
                 $('#groupthread-save-btn').button('submiting').addClass('disabled');
             }
-        });
-        
-        validator_thread.addItem({
-            element: '[name="thread[title]"]',
-            required: true,
-            rule: 'minlength{min:2} maxlength{max:200}',
-            errormessageUrl: '长度为2-200位'
-           
+            });
             
-        });
-        validator_thread.addItem({
-            element: '[name="thread[content]"]',
-            required: true,
-            rule: 'minlength{min:2}'
-            
-        });
+            validator_thread.addItem({
+                element: '[name="thread[title]"]',
+                required: true,
+                rule: 'minlength{min:2} maxlength{max:200}',
+                errormessageUrl: '长度为2-200位'
+               
+                
+            });
+            validator_thread.addItem({
+                element: '[name="thread[content]"]',
+                required: true,
+                rule: 'minlength{min:2}'
+                
+            });
 
-        validator_thread.on('formValidate', function(elemetn, event) {
-            editor_thread.sync();
-        });
+            validator_thread.on('formValidate', function(elemetn, event) {
+                editor_thread.sync();
+            });
+        };
+
+        if($('#thread_content').length>0){
+            var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+
+            var validator_thread = new Validator({
+            element: '#user-thread-form',
+            failSilently: true,
+            onFormValidated: function(error){
+                if (error) {
+                    return false;
+                }
+                $('#groupthread-save-btn').button('submiting').addClass('disabled');
+            }
+            });
+            
+            validator_thread.addItem({
+                element: '[name="thread[title]"]',
+                required: true,
+                rule: 'minlength{min:2} maxlength{max:200}',
+                errormessageUrl: '长度为2-200位'
+               
+                
+            });
+            validator_thread.addItem({
+                element: '[name="thread[content]"]',
+                required: true,
+                rule: 'minlength{min:2}'
+                
+            });
+
+            validator_thread.on('formValidate', function(elemetn, event) {
+                editor_thread.sync();
+            });
         }
         
         if($('#post-thread-form').length>0){
-        var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+
+            if($('#group_reward').length>0){
+
+                var editor=EditorFactory.create('#post_content', 'haveHidden', {extraFileUploadParams:{group:'user'}});
+      
+            }else{
+                var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+      
+            }
         var validator_post_content = new Validator({
             element: '#post-thread-form',
             failSilently: true,
@@ -222,7 +291,12 @@
 
         }
 
+        if($('#hasAttach').length>0){
 
+            $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
+            
+        }
+        
         if($('#post-action').length>0){
           
             $('#post-action').on('click','#closeThread',function(){
@@ -239,7 +313,7 @@
                 });
             })
 
-            $('#post-action').on('click','#elite,#stick',function(){
+            $('#post-action').on('click','#elite,#stick,#cancelReward',function(){
            
                 var $trigger = $(this);
                 
@@ -259,7 +333,7 @@
         }
         if($('.actions').length>0){
        
-            $('.actions').on('click','.post-delete-btn',function(){
+            $('.group-post-list').on('click','.post-delete-btn,.post-adopt-btn',function(){
                 
                 var $trigger = $(this);
                  if (!confirm($trigger.attr('title') + '？')) {

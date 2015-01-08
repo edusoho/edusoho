@@ -4,7 +4,7 @@ namespace Topxia\Service\User\Dao;
 
 interface UserDao
 {
-	public function getUser($id);
+	public function getUser($id, $lock = false);
 
 	public function findUserByEmail($email);
 
@@ -25,5 +25,9 @@ interface UserDao
 	public function clearCounterById($id, $name);
 
 	public function analysisRegisterDataByTime($startTime,$endTime);
+
+	public function analysisUserSumByTime($endTime);
+
+	public function findUsersCountByLessThanCreatedTime($endTime);
 
 }

@@ -1,0 +1,12 @@
+<ul class="question-choices">
+ {% set rightAnswerIndex = question.answer %}
+
+  {% for key, choice in question.metas.choices %}
+    {% set choiceIndex = (65+key)|chr %}
+    <li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
+
+      <div class="homwork-choice-index {% if key in  rightAnswerIndex %}question-text-success{% endif %}">{{ choiceIndex }}.</div>
+      <div class="choice-body {% if key in  rightAnswerIndex %}question-text-success{% endif %}">{{ choice|bbCode2Html|raw }}</div>
+    </li>
+  {% endfor %}
+</ul>

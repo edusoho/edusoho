@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block content %}
+
   <div class="es-row-wrap container-gap">
 
     {% if blocks.home_top_banner %}
@@ -178,7 +179,11 @@
                               <p>{{ level.description|plain_text(40) }}</p>
                             </div>
                             <div class="vip-price col-sm-3 col-md-3">
-                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                                <h4> {{ set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
+                               {% else %}
+                                  <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% endif %}
                               <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                             </div>
                           </div>
@@ -284,7 +289,7 @@
         {% endif %}
 
         {# 学员动态 #}
-        {% set learns = data('LatestFinishedLearns', {'count':5}) %}
+        {% set learns = data('PersonDynamic', {'count':5}) %}
         {% if learns %}
           <div class="es-box status-side">
             <div class="es-box-heading">
@@ -293,23 +298,32 @@
             <div class="es-box-body">
               <ul class="media-list">
                 {% for learn in learns %}
-                  {% if learn.lesson is defined %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        {% if learn.status == 'learning' %}
-                          正在学习
-                        {% else %}
-                          在{{ learn.finishedTime|smart_time }} 完成了
-                        {% endif %}
-                        <a href="{{ path('course_show', {id:learn.courseId}) }}">《{{ learn.lesson.title|plain_text(15) }}》</a>
-                        的学习
-                      </div>
-                    </li>
-                  {% endif %}
+                  <li class="media">
+                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                      <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                    </a>
+                    <div class="media-body">
+                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                      {% if learn.type == "finished_testpaper" %}
+                      完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
+
+                      {% elseif learn.type == "finished_homework" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
+
+                      {% elseif learn.type == "finished_exercise" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
+
+                      {% elseif learn.type == "become_student" %}
+                      加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                      {% elseif learn.type == "learned_lesson" %}
+                      完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
+                      {% elseif learn.type == "favorite_course" %}
+                      收藏了课程 {{learn.properties.course.title|plain_text(15)}}
+                      {% elseif learn.type == "start_learn_lesson" %}
+                      开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
+                      {% endif %}
+                    </div>
+                  </li>
                 {% endfor %}
               </ul>
             </div>
@@ -393,14 +407,18 @@
             {% endif %}
 
             <span class="metas clearfix">
-              <span class="price-col">
-                <span class="meta-label">价格</span>
-                {% if course.price > 0 %}
-                  <span class="price-num">{{ course.price }}元</span>
-                {% else %}
-                  <span class="price-num">免费</span>
-                {% endif %}
+            {% if setting('course.coursesPrice') == 0 %}
+              <span style="text-align:left;">
+     
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                <span class="price-num mbm" style="display:block">价格：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                </span>
+              {% else %}
+                <span class="price-num mbm">价格：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
+                </span>
+              {% endif %}
               </span>
+            {% endif %}
 
               {% if course.showStudentNumType == 'opened' %}
               <span class="student-col">
@@ -409,7 +427,7 @@
               </span>
               {% endif %}
 
-              <span class="review-col">
+              <span class="review-col pull-left" style="text-align:left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
                   <span class="review-rating">

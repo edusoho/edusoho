@@ -29,6 +29,12 @@ services:
         arguments: ['@security.context', '@doctrine']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
+    user.login_generate_notification_handler:
+        class: Topxia\WebBundle\Handler\GenerateNotificationHandler
+        arguments: ['@service_container']
+        tags: [{ name: kernel.event_listener, event: security.interactive_login }]
+
+
 security:
     encoders:
         Topxia\Service\User\CurrentUser: sha256

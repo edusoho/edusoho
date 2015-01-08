@@ -9,7 +9,7 @@ define(function(require, exports, module) {
             $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
             $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
         });
-        var Share=require('../../util/share.js?2');
+        var Share=require('../../util/share');
         Share.create({
                 selector: '.share',
                 icons: 'itemsAll',
@@ -50,6 +50,18 @@ define(function(require, exports, module) {
                 top: 300
             }
         });
+
+        $(window).bind("scroll",function(){ 
+            var vtop=$(document).scrollTop();
+            if (vtop>300){
+                $('li.pull-right').css("display","inline");
+            }else{
+                $('li.pull-right').css("display","none");
+            }
+
+        });
+
+
 
         $('#course-nav-tabs').on('click', '.btn-index', function(event) {
             event.preventDefault();

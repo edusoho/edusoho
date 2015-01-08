@@ -44,7 +44,7 @@
 
 <div class="row form-group">
   <div class="col-md-3 control-label"><label for="url">链接地址</label></div>
-  <div class="col-md-8 controls"> <input class="form-control" type="text" id="url" value="{{navigation.url}}" name="url" ></div>
+  <div class="col-md-8 controls"> <input class="form-control" type="text" id="url" {% if navigation.url %} value="{{navigation.url}}" {% else %} value="http://" {% endif %} name="url" ></div>
 </div>
 
 <p></p>

@@ -26,6 +26,12 @@ class LiveCourseLessonManageController extends BaseController
 			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
 			$speaker = $speaker ? $speaker['nickname'] : '老师';
 
+			$liveLogo = $this->getSettingService()->get('course');
+	        $liveLogoUrl = "";
+	        if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
+	            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+	        }
+
 			$client = LiveClientFactory::createClient();
 			$live = $client->createLive(array(
 				'summary' => $liveLesson['summary'],
@@ -35,6 +41,7 @@ class LiveCourseLessonManageController extends BaseController
 				'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
 				'authUrl' => $this->generateUrl('live_auth', array(), true),
 				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
+				'liveLogoUrl' => $liveLogoUrl
 			));
 
 			if (empty($live) or isset($live['error'])) {
@@ -149,4 +156,9 @@ class LiveCourseLessonManageController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
+
+	private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

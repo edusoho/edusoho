@@ -32,7 +32,9 @@
             <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
 
         {% else %}
-            {{ lesson.content|raw }}
+            <div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
+                {{ lesson.content|raw }}
+            </div>
         {% endif %}
     {% else %}
         <div class="empty">课时尚未发布，无法预览！</div>
@@ -43,17 +45,33 @@
 {% block footer %}
     {% if lesson.status == 'published' %}
         {% if course.price=='0.00'  %}
-                <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">
+                <a id="buy-btn" type="button" class="btn btn-primary" 
+                {% if setting("course.buy_fill_userinfo")|default(false) %}
+                href="#modal" 
+                data-toggle="modal" 
+                data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                {% else %}
+                href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                {% endif %}
+                >
                     {% if user.id %}免费加入学习
                     {% else %}登录后加入学习
                     {% endif %}
-                </button>
+                </a>
         {% else %}
-                <button id="buy-btn" type="button" class="btn btn-primary" data-url="{{ path('course_buy', {id:course.id}) }}">
+                <a id="buy-btn" type="button" class="btn btn-primary" 
+                {% if setting("course.buy_fill_userinfo")|default(false) %}
+                href="#modal" 
+                data-toggle="modal" 
+                data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                {% else %}
+                href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                {% endif %}
+                >
                     {% if user.id %}觉得不错？点击购买此课程（{{ course.price }}元）
                     {% else %}登录后购买学习完整的课程
                     {% endif %}
-                </button>
+                </a>
         {% endif %}
     {% else %}
         <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>

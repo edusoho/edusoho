@@ -211,7 +211,7 @@ class WindidUserDm extends PwBaseDm {
 	}
 
 	/**
-	 * 设置支付帐号
+	 * 设置支付账号
 	 * 
 	 * @param string $alipay
 	 */

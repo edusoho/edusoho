@@ -48,11 +48,13 @@
             </div>
           </div>
 
+          {% if not setting('copyright.owned') %}
           <div class="form-group">
             <div class="col-md-offset-2 col-md-8 controls">
-              <p class="mtl"><a href="http://www.edusoho.com/intro/95" class="text-muted" target="_blank">如何创建课程？</a></p>
+              <p class="mtl"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">如何创建课程？</a></p>
             </div>
           </div>
+          {% endif %}
 
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="type" value="{{ type }}">

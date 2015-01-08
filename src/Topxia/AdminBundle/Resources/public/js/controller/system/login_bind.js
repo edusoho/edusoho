@@ -8,6 +8,29 @@ define(function(require, exports, module) {
         var validator = new Validator({
                 element: '#login_bind-form'
             });
+        
+        validator.addItem({
+            element: '[name=temporary_lock_allowed_times]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name=temporary_lock_minutes]',
+            rule: 'integer'
+        });
+
+        var hideOrShowTimeAndMinutes = function (){
+          if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1 ){
+            $('#times_and_minutes').show();
+          }else if ( $('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 0 ){
+            $('#times_and_minutes').hide();
+          };
+        };
+        hideOrShowTimeAndMinutes();
+        $('[name=temporary_lock_enabled]').change(function (){
+           hideOrShowTimeAndMinutes();
+        });  
+
 
         $('[name=enabled]').change(function(e) {
             var radio = e.target.value;

@@ -5,7 +5,9 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
+use Topxia\Service\Util\HTMLPurifierFactory;
 
 class WebExtension extends \Twig_Extension
 {
@@ -36,7 +38,9 @@ class WebExtension extends \Twig_Extension
             'score_text' => new \Twig_Filter_Method($this, 'scoreTextFilter'),
             'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
-            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter')
+            'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
+            'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
+            'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
         );
     }
 
@@ -52,6 +56,7 @@ class WebExtension extends \Twig_Extension
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
+            'set_price' => new \Twig_Function_Method($this, 'getSetPrice') ,
             'percent' => new \Twig_Function_Method($this, 'calculatePercent') ,
             'category_choices' => new \Twig_Function_Method($this, 'getCategoryChoices') ,
             'dict' => new \Twig_Function_Method($this, 'getDict') ,
@@ -65,8 +70,74 @@ class WebExtension extends \Twig_Extension
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
-            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP') ,
+            'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
+            'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
+            'userOutCash'=>new \Twig_Function_Method($this, 'getOutCash'),
+            'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
+            'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
+            'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
         );
+    }
+
+    public function getOutCash($userId,$timeType="oneWeek")
+    {   
+        $time=$this->filterTime($timeType);
+        $condition=array(
+            'userId'=>$userId,
+            'type'=>"outflow",
+            'cashType'=>'Coin',
+            'startTime'=>$time,
+            );
+
+        return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+    }
+
+    public function getInCash($userId,$timeType="oneWeek")
+    {   
+        $time=$this->filterTime($timeType);
+        $condition=array(
+            'userId'=>$userId,
+            'type'=>"inflow",
+            'cashType'=>'Coin',
+            'startTime'=>$time,
+            );
+        return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+    }
+
+    public function getAccount($userId)
+    {   
+        return ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($userId);
+    }
+
+    private function filterTime($type)
+    {   
+        $time=0;
+        switch ($type) {
+                case 'oneWeek':
+                    $time=time()-7*3600*24;
+                    break;
+                case 'oneMonth':
+                    $time=time()-30*3600*24;
+                    break;                
+                case 'threeMonths':
+                    $time=time()-90*3600*24;
+                    break;
+                default:
+                    break;
+        }
+
+        return $time;
+    }
+
+    public function getUserNickNameById($userId)
+    {
+        $user = $this->getUserById($userId);
+        return $user['nickname'];
+    }
+    
+    private function getUserById($userId)
+    {
+        return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
     }
 
     public function isExistInSubArrayById($currentTarget, $targetArray)
@@ -389,6 +460,9 @@ class WebExtension extends \Twig_Extension
     {
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
+
+        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
         
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
@@ -420,8 +494,12 @@ class WebExtension extends \Twig_Extension
             $url = ltrim($url, ' /');
             $url = $assets->getUrl($url);
 
-            if ($absolute) {
-                $url = $request->getSchemeAndHttpHost() . $url;
+            if ($cdnUrl) {
+                $url = $cdnUrl . $url;
+            } else {
+                if ($absolute) {
+                    $url = $request->getSchemeAndHttpHost() . $url;
+                }
             }
 
             return $url;
@@ -543,9 +621,39 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
+    public function getFileType($fileName,$string=null)
+    {
+        $fileName=explode(".", $fileName);
+
+        $name=strtolower($fileName[1]);
+        if($string) $name=strtolower($fileName[1]).$string;
+
+        return $name;
+    }
+
     public function chrFilter($index)
     {
         return chr($index);
+    }
+
+    public function isHideThread($id)
+    {
+        $need=ServiceKernel::instance()->createService('Group.ThreadService')->sumGoodsCoinsByThreadId($id);
+
+        $thread=ServiceKernel::instance()->createService('Group.ThreadService')->getThread($id);
+        
+        $data=explode('[/hide]',$thread['content']);
+        foreach ($data as $key => $value) {
+
+            $value=" ".$value;
+            sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
+            if($replyHideContent)
+                return true;
+        }
+
+        if($need) return true;
+
+        return false;
     }
 
     public function bbCode2HtmlFilter($bbCode)
@@ -596,6 +704,23 @@ class WebExtension extends \Twig_Extension
         return $target[1];
     }
 
+
+    public function getPurifyHtml($html,$trusted=false)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir') .  '/htmlpurifier'
+        );
+
+        $factory = new HTMLPurifierFactory($config);
+        $purifier = $factory->create($trusted);
+
+        return $purifier->purify($html);
+    }
+
     public function getSetting($name, $default = null)
     {
         $names = explode('.', $name);
@@ -635,6 +760,11 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
         return intval($number / $total * 100) . '%';
+    }
+
+    public function getSetPrice($price)
+    {
+        return NumberToolkit::roundUp($price);
     }
 
     public function getCategoryChoices($groupName, $indent = '　')

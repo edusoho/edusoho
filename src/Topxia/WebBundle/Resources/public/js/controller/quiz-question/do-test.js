@@ -131,6 +131,7 @@ define(function(require, exports, module) {
                     if (isAjaxing == 0) {
                         $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                             changeAnswers = {};
+                            usedTime = 0;
                             $('#timeout-dialog').show();
                             timer.stop();
                         }).error(function(){
@@ -145,6 +146,7 @@ define(function(require, exports, module) {
                                 clearInterval(timerFinish);
                                 $.post($('#finishPaper').data('url'), {data:changeAnswers, usedTime:usedTime }, function(){
                                     changeAnswers = {};
+                                    usedTime = 0;
                                     $('#timeout-dialog').show();
                                 }).error(function(){
                                     $('#timeout-dialog').find('.empty').text('系统好像出了点小问题，请稍后再交卷');
@@ -164,6 +166,7 @@ define(function(require, exports, module) {
                     $.post($('#finishPaper').data('ajax'), { data:changeAnswers, usedTime:usedTime }, function(){
                         changeAnswers = {};
                         isAjaxing = 0;
+                        usedTime = 0;
                     });
 
                     if (!isLimit){
@@ -185,7 +188,6 @@ define(function(require, exports, module) {
 
 
     //...
-
 
         $('*[data-type]').each(function(index){
             var name = $(this).attr('name');

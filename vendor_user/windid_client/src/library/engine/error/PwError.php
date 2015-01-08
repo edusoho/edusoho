@@ -30,7 +30,7 @@ class PwError {
 	 * @param array $var 错误信息中包含的错误输出变量，格式如{key}=>'value',在message中存在{key}
 	 * <pre>
 	 *  比如message中存在一条：
-	 *  login.error.pwd="帐号或密码错误,您还可以尝试{num}次"
+	 *  login.error.pwd="账号或密码错误,您还可以尝试{num}次"
 	 *  在返回该条错误的时候
 	 *  $error = new Pw('USER:login.error.pwd', array('{num}' => 5));
 	 *  </pre>

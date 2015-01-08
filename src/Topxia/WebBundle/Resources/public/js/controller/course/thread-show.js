@@ -59,6 +59,15 @@ define(function(require, exports, module) {
             });
         });
 
+        $('.thread-post-list').on('click','.thread-post-action',function(){
+
+            var userName=$(this).data('user');
+         
+            editor.focus();
+            editor.insertHtml('@'+userName+'&nbsp;');
+            
+        });
+
         $(".thread-post-list").on('click', '[data-action=post-delete]', function() {
             if (!confirm("您真的要删除该回帖吗？")) {
                 return false;

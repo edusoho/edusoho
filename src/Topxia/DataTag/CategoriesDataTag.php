@@ -11,7 +11,8 @@ class CategoriesDataTag extends CourseBaseDataTag implements DataTag
      * 
      * 可传入的参数：
      *
-     *   group 分类组CODE
+     *   group      分类组CODE
+     *   parentId   分类的父Id
      * 
      * @param  array $arguments 参数
      * @return array 分类
@@ -19,6 +20,7 @@ class CategoriesDataTag extends CourseBaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
+
         $this->checkGroupId($arguments);
 
         $group = $this->getCategoryService()->getGroupByCode($arguments['group']);
@@ -26,7 +28,13 @@ class CategoriesDataTag extends CourseBaseDataTag implements DataTag
             throw new \InvalidArgumentException("group:{$arguments['group']}不存在");
         }
 
-    	return $this->getCategoryService()->findCategories($group['id']);
+        if(array_key_exists("parentId", $arguments)){
+            return $this->getCategoryService()->findCategoriesByGroupIdAndParentId($group["id"], $arguments['parentId']);
+        } else {
+            return $this->getCategoryService()->findCategories($group['id']);
+        }
+
+        return array();
     }
 
 }
