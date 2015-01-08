@@ -781,6 +781,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     
     /*
     *   $course['coinType'] = $coinType;
+    *   coin_picture 虚拟币icon
+    *   coin_content 虚拟币介绍
     *   coin_enabled: 0 是否开启
     *   cash_rate: "100" 汇率
     *   price_type: "RMB" 价格类型 Coin虚拟币
