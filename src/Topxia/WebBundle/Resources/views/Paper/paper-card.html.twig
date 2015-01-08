@@ -3,12 +3,12 @@
         <div class="panel-heading">
             {% if paper.limitedTime != 0 %}
                 {# <span class="{{ paperCard.isPreview|default('') }} testpaper-card-timer" id="time_show" data-time="{% if paperResult.usedTime|default(0) == 0 %}{{ paperCard.limitTime }}{% else %}{{ paperCard.limitTime - paperResult.usedTime }}{% endif %}">00:00</span> #}
-                <button class="btn btn-sm btn-default pull-right" id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paper.id}) }}" data-goto="{{ path('my_quiz') }}">下次再做</button>
-                <button id="pause" class="btn btn-sm btn-default pull-right" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
+                
+                <button id="pause" class="btn btn-sm btn-default" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{ path('course_manage_do_test_pause') }}">暂停</button>
             {% else %}
               <span class="testpaper-card-timer"><small class="text-muted" style="font-size:14px;">时间不限</small></span>
-                <button class="btn btn-sm btn-default pull-right" id="suspend" data-url="{{ path('course_manage_do_test_suspend', {id:paper.id}) }}" data-goto="{{ path('my_quiz') }}">下次再做</button>
             {% endif %}
+            <button class="btn btn-sm btn-default pull-right" id="suspend" {% if id is defined %}data-url="{{ path('course_manage_do_test_suspend', {id:id}) }}" {% endif %} data-goto="{{ path('my_quiz') }}">下次再做</button>
         </div>
         <div class="panel-body">
 

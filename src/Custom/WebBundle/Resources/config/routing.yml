@@ -179,3 +179,4 @@ course_manage_submit_advanced_test:
 course_manage_finish_advanced_test:
     pattern: /advanced-test/{id}/finish
     defaults: { _controller: CustomWebBundle:Testpaper:finishTest }
+

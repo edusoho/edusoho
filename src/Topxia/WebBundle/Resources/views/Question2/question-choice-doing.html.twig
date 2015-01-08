@@ -18,7 +18,7 @@
     {% for key, choice in question.metas.choices %}
       {% set choiceIndex = (65+key)|chr %}
       <label class="checkbox-inline">
-        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}> {{ choiceIndex }}
+        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" data-type="choice" name="{{ question.id }}" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}> {{ choiceIndex }}
       </label>
     {% endfor %}
   </div>

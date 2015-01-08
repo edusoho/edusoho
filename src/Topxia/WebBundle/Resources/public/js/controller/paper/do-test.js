@@ -226,7 +226,6 @@ define(function(require, exports, module) {
 
                 changeAnswers[name] = values;
 
-
                 if (values.length > 0 && !isEmpty(values)) {
                     $('a[data-anchor="#question' + name + '"]').addClass('active');
                 } else {
@@ -240,7 +239,7 @@ define(function(require, exports, module) {
 
         $('.question-actions').on('click', 'a.marking', function(){
 
-            id = $(this).parents('.testpaper-question').attr('id');
+            id = $(this).parents('.question').attr('id');
             btn = $('.testpaper-card .panel-body [data-anchor="#'+id+'"]');
 
             btn.addClass('have-pro');
@@ -250,8 +249,8 @@ define(function(require, exports, module) {
             
         });
 
-        $('.testpaper-question-actions').on('click', 'a.unMarking', function(){
-            id = $(this).parents('.testpaper-question').attr('id');
+        $('.question-actions').on('click', 'a.unMarking', function(){
+            id = $(this).parents('.question').attr('id');
             btn = $('.testpaper-card .panel-body [data-anchor="#'+id+'"]');
 
             btn.removeClass('have-pro');
@@ -299,18 +298,18 @@ define(function(require, exports, module) {
 
         var isDoing = $('.testpaper-status-doing').length > 0;
 
-        $('.testpaper-question-choice').on('click', 'ul.testpaper-question-choices li', function(){
-            $input = $(this).parents('div.testpaper-question-choice').find('.testpaper-question-choice-inputs label').eq($(this).index()).find('input');
+        $('ul.question-choices ').on('click', 'li', function(){
+            $input = $(this).parents('div.question').find('.question-choices-inputs label').eq($(this).index()).find('input');
             isChecked = $input.prop("checked");
 
             $input.prop("checked", !isChecked).change();
 
-            $input.parents('.testpaper-question-choice-inputs').find('label').each(function(){
+            $input.parents('.question-choices-inputs').find('label').each(function(){
                 $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
             });
 
             if (isDoing) {
-                var $question = $(this).parents('.testpaper-question').next();
+                var $question = $(this).parents('.question').next();
                 playQuestion($question);
             }
             
@@ -318,18 +317,18 @@ define(function(require, exports, module) {
 
         if (isDoing) {
             setTimeout(function(){
-                playQuestion($('.testpaper-body').find('.testpaper-question:first'));
+                playQuestion($('.paper-content').find('.question:first'));
             }, 2000);
         }
 
-        $('.testpaper-question-choice-inputs,.testpaper-question-determine-inputs').on('click', 'input', function(){
+        $('.question-choices-inputs,.question-determine-inputs').on('click', 'input', function(){
             $input = $(this);
-            $input.parents('.testpaper-question-choice-inputs,.testpaper-question-determine-inputs').find('label').each(function(){
+            $input.parents('.question-choices-inputs,.question-determine-inputs').find('label').each(function(){
                 $(this).find('input').prop("checked") ? $(this).addClass('active') : $(this).removeClass('active');
             });
 
             if (isDoing) {
-                var $question = $(this).parents('.testpaper-question').next();
+                var $question = $(this).parents('.question').next();
                 playQuestion($question);
             }
 

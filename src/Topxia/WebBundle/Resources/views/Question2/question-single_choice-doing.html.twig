@@ -19,7 +19,7 @@
       {% for key, choice in question.metas.choices %}
         {% set choiceIndex = (65+key)|chr %}
         <label class="radio-inline">
-          <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key in  answerChoiceIndex|split(',') %}checked{% endif %}> {{ choiceIndex }}
+          <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="{{ question.id }}" value="{{ key }}" {% if key in  answerChoiceIndex|split(',') %}checked{% endif %}> {{ choiceIndex }}
         </label>
       {% endfor %}
   </div>
