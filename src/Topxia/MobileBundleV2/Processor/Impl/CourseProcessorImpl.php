@@ -779,6 +779,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return true;
     }
     
+    /*
+    *   $course['coinType'] = $coinType;
+    *   coin_enabled: 0 是否开启
+    *   cash_rate: "100" 汇率
+    *   price_type: "RMB" 价格类型 Coin虚拟币
+    *   cash_model: "none" 标价模式 none不使用 deduction用于低价 currency用于标价
+    */    
     public function getCourse()
     {
         $user     = $this->controller->getUserByToken($this->request);
@@ -816,6 +823,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'enabled' => 1
             ), 0, 100);
         }
+
+        $coinType= $this->getSettingService()->get('coin',array());
+        $course['coinType'] = $coinType;
         return array(
             "course" => $this->controller->filterCourse($course),
             "userFavorited" => $userFavorited,
