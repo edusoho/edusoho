@@ -149,3 +149,24 @@ class TestpaperTargetFinder extends AbstractTargetFinder
         return $targets;
     }
 }
+
+class CategoryTargetFinder extends AbstractTargetFinder
+{
+    public function find(array $ids)
+    {
+        $categories = ServiceKernel::instance()->createService('Taxonomy.CategoryService')->findCategoriesByIds($ids);
+
+        $targets = array();
+        foreach ($categories as $id => $category) {
+            $targets[$id] = array(
+                'type' => 'category',
+                'id' => $id,
+                'simple_name' => $category['code'],
+                'name' => $category['name'],
+                'full_name' => $category['name'],
+                'url' => '',
+            );
+        }
+        return $targets;
+    }
+}

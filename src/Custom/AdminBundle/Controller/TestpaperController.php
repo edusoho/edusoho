@@ -225,9 +225,9 @@ class TestpaperController extends BaseController
         }
 
 
-        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'previewing');
+        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'previewing', null);
 
-        return $this->render('TopxiaWebBundle:Paper:paper-reviewing.html.twig', array(
+        return $this->render('TopxiaWebBundle:Paper:paper.html.twig', array(
             'paper' => $paper,
             'questionItemSet' => $questionItemSet,
             'status' => 'previewing'
@@ -532,7 +532,7 @@ class TestpaperController extends BaseController
 
             $items = array();
             foreach ($data['questionId'] as $index => $questionId) {
-                $items[] = array('questionId' => $questionId, 'score' => $data['scores'][$index]);
+                $items[] = array('questionId' => $questionId, 'score' => $data['scores'][$index], 'partId' => $data['partId'][$index]);
             }
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);

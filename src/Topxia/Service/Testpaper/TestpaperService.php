@@ -35,6 +35,8 @@ interface TestpaperService
 
     public function canBuildTestpaper($builder, $options);
 
+    public function findTestpaperResultsByCourseIdsAndStatus($courseIds, $status, $start, $limit);
+
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 
     public function findTestpaperResultsCountByUserId ($id);
@@ -99,7 +101,7 @@ interface TestpaperService
 
     public function makeItemsByPart($part);
 
-    public function buildPaper($paperId, $status);
+    public function buildPaper($paperId, $status, $paperResultId);
 
     public function resetAdvancedTestPaper($id, $fields);
 }

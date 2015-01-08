@@ -323,6 +323,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $builder->canBuild($options);
     }
 
+    public function findTestpaperResultsByCourseIdsAndStatus($courseIds, $status, $start, $limit)
+    {
+        return $this->getTestpaperResultDao()->findTestpaperResultsByCourseIdsAndStatus($courseIds, $status, $start, $limit);
+    }
+
     public function findTestpaperResultsByUserId ($id, $start, $limit)
     {
         return $this->getTestpaperResultDao()->findTestpaperResultsByUserId($id, $start, $limit);
@@ -385,9 +390,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'beginTime' => time(),
             'status' => 'doing',
             'usedTime' => 0,
-            'target' => empty($target['type']) ? '' : $testpaper['target']."/".$target['type']."-".$target['id']
+            'target' => empty($target['type']) ? '' : $target['type']."-".$target['id']
         );
-
+        
         return $this->getTestpaperResultDao()->addTestpaperResult($testpaperResult);
     }
 
@@ -1097,19 +1102,20 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $questions;
     }
 
-    public function buildPaper($paperId, $status)
+    public function buildPaper($paperId, $status, $paperResultId)
     {
         $paper = $this->getTestpaper($paperId);
-        $questionItemSet = $this->makeQuestionItemSet($paperId);
+        $questionItemSet = $this->makeQuestionItemSet($paperId, $status, $paperResultId);
         return array($paper, $questionItemSet);
     }
 
-    public function makeQuestionItemSet($paperId)
+    public function makeQuestionItemSet($paperId, $status, $paperResultId)
     {
         $paperItems = $this->getTestpaperItems($paperId);
         $questionIds = ArrayToolkit::column($paperItems, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         $questionItemSet = array();
+        $questionIds = array();
         foreach ($paperItems as $paperItem) {
             if($paperItem['parentId'] != 0) {
                 continue;
@@ -1121,6 +1127,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 'question' => $questions[$paperItem['questionId']]
             );
 
+            $questionIds[] = $paperItem['questionId'];
+
             if($paperItem['questionType'] == 'material') {
                 $questionItem['subItems'] = array();
                 $childItems = $this->getTestpaperItemDao()->findItemsByParentId($paperItem['id']);
@@ -1130,12 +1138,28 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                         'item' => $item,
                         'question' => $questions[$item['questionId']]
                     );
+                    $questionIds[] = $item['questionId'];
                     $questionItem['subItems'][] = $subItem;
                 }
             }
 
             $questionItemSet[$paperItem['partId']][] = $questionItem;
         }
+
+        if(in_array($status, array('doning', 'paused', 'reviewing', 'finished')) && $paperResultId) {
+            $results = $this->getTestpaperItemResultDao()->findTestResultsByItemIdAndTestId($questionIds, $paperResultId);
+            $results = ArrayToolkit::index($results, 'questionId');
+            foreach ($questionItemSet as $partId => $questionItems) {
+                foreach ($questionItems as $key => $questionItem) {
+                    if(empty($results[$questionItem['question']['id']])) {
+                        $questionItem['result'] = $results[$questionItem['question']['id']];
+                        $questionItems[$key] = $questionItem;
+                    }
+                }
+                $questionItemSet[$partId] = $questionItems;
+            }
+        }
+
         return $questionItemSet;
     }
 

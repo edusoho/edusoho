@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-md-4">
+    <div class="title">
+      待回答的问答<span class="badge">{{ threads|length }}</span>
+    </div>
+    <div class="tasks">
+      <ul>
+        {% for thread in threads|slice(0,4) %}
+          {% set user = users[thread.userId] %}
+          <li>{{ loop.index }}、{{ user.nickname }} - <a href="{{ path('course_thread_show', {courseId:thread.courseId,id:thread.id}) }}" target="_blank">{{ thread.title }}</a></li>
+        {% else %}
+          <li class="empty">没有需要回答的问题...</li>
+        {% endfor %}
+      </ul>
+      {% if threads|length > 4 %}
+        <a class="pull-right more" href="{{ path('my_teaching_threads', {type:question}) }}" target="_blank">更多&gt;</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="title">
+      待批改的作业<span class="badge">{{ homeWorkResults|length }}</span>
+    </div>
+    <div class="tasks">
+      <ul>
+         {% for homework in homeWorkResults|slice(0,4) %}
+         {% set user = users[homework.userId] %}
+         {% set course = myTeachingCourses[homework.courseId] %}
+         {% set lesson = lessons[homework.lessonId] %}
+          <li>{{ loop.index }}、{{ user.nickname }} - <a href="{{ path('course_homework_check', {courseId:homework.courseId,userId:homework.userId, homeworkId:homework.homeworkId}) }}" target="_blank">课程&laquo; {{ course.title }}&raquo; - 课时{{ lesson.number}} {{ lesson.title }}</a></li>
+        {% else %}
+          <li class="empty">没有需要批改的作业...</li>
+        {% endfor %}
+      </ul>
+      {% if homeWorkResults|length > 4 %}
+        <a class="pull-right more" href="{{ path('my_teaching_homework_list') }}" target="_blank">更多&gt;</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="title">
+      待批阅的考试<span class="badge">{{ testResults|length }}</span>
+    </div>
+    <div class="tasks">
+      <ul>
+        {% for testResult in testResults|slice(0,4) %}
+          {% set user = users[testResult.userId] %}
+          {% set course = myTeachingCourses[testResult.target|split('-')[1]] %}
+          <li>{{ loop.index }}、{{ user.nickname }} - <a href="{{ path('course_manage_test_results', {courseId:course.id,id:testResult.id}) }}" target="_blank">课程&laquo; {{ course.title }}&raquo;</a></li>
+        {% else %}
+          <li class="empty">没有需要批改的试卷...</li>
+        {% endfor %}
+      </ul>
+      {% if testResults|length > 4 %}
+        <a class="pull-right more" href="{{ path('course_manage_list_teacher_test_reviewing') }}" target="_blank">更多&gt;</a>
+      {% endif %}
+    </div>
+  </div>
+</div>

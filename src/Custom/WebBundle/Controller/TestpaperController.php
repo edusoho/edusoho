@@ -1,9 +1,10 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace Custom\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\WebBundle\Controller\BaseController;
 
 class TestpaperController extends BaseController
 {
@@ -51,6 +52,7 @@ class TestpaperController extends BaseController
     {
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
+        $courseId = $request->query->get('courseId');
 
         $userId = $this->getCurrentUser()->id;
 
@@ -58,11 +60,7 @@ class TestpaperController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
 
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            throw $this->createAccessDeniedException('试卷只能属于课程');
-        }
-
-        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             return $this->createMessageResponse('info', '试卷所属课程不存在！');
@@ -86,10 +84,15 @@ class TestpaperController extends BaseController
             if ($testpaper['status'] == 'closed') {
                 return $this->createMessageResponse('info', '该试卷已关闭，如有疑问请联系老师！');
             }
+            
+            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => 'course', 'id' => $courseId));
 
-            $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => 'course', 'id' => $course['id']));
-
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
+            if ($testpaper['pattern'] == 'Part') {
+                return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testpaperResult['id'])));
+            } else {
+                return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
+            }
+            
         }
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
@@ -110,10 +113,6 @@ class TestpaperController extends BaseController
 
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
 
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            throw $this->createAccessDeniedException('试卷只能属于课程');
-        }
-
         $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
         if (empty($course)) {
@@ -131,7 +130,11 @@ class TestpaperController extends BaseController
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+            if ($testpaper['pattern'] == 'Part') {
+                return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testResult['id'])));
+            } else {
+                return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+            }
         }
 
         if ($testpaper['status'] == 'draft') {
@@ -143,7 +146,11 @@ class TestpaperController extends BaseController
 
         $testResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
 
-        return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+        if ($testpaper['pattern'] == 'Part') {
+            return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testResult['id'])));
+        } else {
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+        }
     }
 
     public function previewTestAction (Request $request, $testId)
@@ -172,7 +179,7 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function showTestAction (Request $request, $id)
+    public function showAdvancedTestAction (Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
         if (!$testpaperResult) {
@@ -182,24 +189,21 @@ class TestpaperController extends BaseController
             throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
         }
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
-            return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
+            return $this->redirect($this->generateUrl('course_manage_advanced_test_results', array('id' => $testpaperResult['id'])));
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        $result = $this->getTestpaperService()->showTestpaper($id);
-        $items = $result['formatItems'];
-        $total = $this->makeTestpaperTotal($testpaper, $items);
-
+        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($testpaperResult['testId'], 'doing', $testpaperResult['id']);
+        
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
-
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
-            'items' => $items,
+        
+        return $this->render('TopxiaWebBundle:Paper:paper.html.twig', array(
+            'questionItemSet' => $questionItemSet,
             'limitTime' => $testpaperResult['limitedTime'] * 60,
-            'paper' => $testpaper,
+            'paper' => $paper,
             'paperResult' => $testpaperResult,
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'id' => $id,
-            'total' => $total,
+            'status' => 'doing'
         ));
     }
 
