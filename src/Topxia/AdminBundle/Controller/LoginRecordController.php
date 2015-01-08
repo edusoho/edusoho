@@ -11,7 +11,6 @@ class LoginRecordController extends BaseController
 	public function indexAction (Request $request)
     {
     	$conditions = $request->query->all();
-        // var_dump($conditions);exit();
         $userCondotions = array();
         $user = '' ;
         if (!empty($conditions['keywordType'])) {
@@ -24,8 +23,9 @@ class LoginRecordController extends BaseController
 
         if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
             $user = $this->getUserService()->searchUsers($userCondotions,array('createdTime', 'DESC'),0,2000);
-            if($user){
-                $conditions['userId'] = $user['id'];
+            $userIds = ArrayToolkit::column($user, 'id');
+            if($userIds){
+                $conditions['userIds'] = $userIds;
             }else{
                 $conditions[$conditions["keywordType"]] = $conditions["keyword"];
             }
@@ -36,6 +36,9 @@ class LoginRecordController extends BaseController
             $user=$this->getUserService()->getUserByEmail($conditions['email']) ;
             $conditions['userId']=empty($user) ? -1 : $user['id'];
         }
+
+        unset($conditions['nickname']);
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getLogService()->searchLogCount($conditions),
@@ -50,7 +53,7 @@ class LoginRecordController extends BaseController
         );
 
         if (isset($conditions["keywordType"])) {
-            if(empty($user) && $conditions["keywordType"] == 'email' && !empty($conditions['keyword'])){
+            if(empty($user) && $conditions["keywordType"] == 'nickname' && !empty($conditions['keyword'])){
                 $logRecords = array();
             }
         }
