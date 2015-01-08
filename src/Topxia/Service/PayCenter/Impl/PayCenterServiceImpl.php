@@ -167,6 +167,9 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		$coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
 		$totalPrice = $order["totalPrice"];
+		if($order["couponDiscount"]){
+			$totalPrice = $totalPrice-$order["couponDiscount"];
+		}
 		if ($order["priceType"] == "RMB"){
 			$totalPrice = $totalPrice*$order['coinRate'];
 		}
