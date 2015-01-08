@@ -320,17 +320,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $course;
 	}
 
-	public function updateCourse($id, $fields)
+	public function updateCourse($id, $fields, $isTaskUpdate = false)
 	{
 		$course = $this->getCourseDao()->getCourse($id);
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
-		if (isset($fields['price'])){
-			$fields['originPrice'] = $fields['price'];
-		}
-		if (isset($fields['coinPrice'])){
-			$fields['originCoinPrice'] = $fields['coinPrice'];
+		if ($isTaskUpdate ){
+			if (isset($fields['price'])){
+				$fields['originPrice'] = $fields['price'];
+			}
+			if (isset($fields['coinPrice'])){
+				$fields['originCoinPrice'] = $fields['coinPrice'];
+			}
 		}		
 		$fields = $this->_filterCourseFields($fields);
 
