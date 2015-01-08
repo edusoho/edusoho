@@ -1147,8 +1147,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         foreach ($conversations as $key => $value) {
             $sort[$key] = $value['latestMessageTime'];
         }
+
+        if($conversations !=null ){
+        	array_multisort($sort, SORT_DESC, $conversations);
+        }
         
-        array_multisort($sort, SORT_DESC, $conversations);
         $lastestMessage = reset($conversations);
         if($lastestMessage != false){
 	        $data           = array(
