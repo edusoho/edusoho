@@ -942,6 +942,15 @@ class SettingController extends BaseController
     public function addUserFieldsAction(Request $request)
     {
         $field=$request->request->all();
+         if($field['field_title'] == '真实姓名'|| $field['field_title'] == '手机号码' 
+                  || $field['field_title'] == 'QQ' || $field['field_title'] == '所在公司'
+                  || $field['field_title'] == '身份证号码' 
+                  || $field['field_title'] == '性别' || $field['field_title'] == '职业'
+                  || $field['field_title'] == '微博' 
+                  || $field['field_title'] == '微信' )
+                {
+                      throw $this->createAccessDeniedException('请勿添加与默认字段相同的自定义字段！');
+                }
 
         $field=$this->getUserFieldService()->addUserField($field);
 
