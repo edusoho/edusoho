@@ -11,7 +11,7 @@ class LoginRecordController extends BaseController
 	public function indexAction (Request $request)
     {
     	$conditions = $request->query->all();
-        
+        // var_dump($conditions);exit();
         $userCondotions = array();
         $user = '' ;
         if (!empty($conditions['keywordType'])) {
@@ -46,8 +46,10 @@ class LoginRecordController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if(empty($user) && $conditions["keywordType"] == 'email' && !empty($conditions['keyword'])){
-            $logRecords = array();
+        if (isset($conditions["keywordType"])) {
+            if(empty($user) && $conditions["keywordType"] == 'email' && !empty($conditions['keyword'])){
+                $logRecords = array();
+            }
         }
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
