@@ -23,7 +23,7 @@ class LoginRecordController extends BaseController
         }
 
         if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
-            $user = $this->getUserService()->searchUser($userCondotions);
+            $user = $this->getUserService()->searchUsers($userCondotions,array('createdTime', 'DESC'),0,2000);
             if($user){
                 $conditions['userId'] = $user['id'];
             }else{
