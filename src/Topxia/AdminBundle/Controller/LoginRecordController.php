@@ -12,7 +12,6 @@ class LoginRecordController extends BaseController
     {
     	$conditions = $request->query->all();
         $userCondotions = array();
-        $user = '' ;
         if (!empty($conditions['keywordType'])) {
             $userCondotions['keywordType'] =$conditions["keywordType"];
         }
@@ -22,22 +21,26 @@ class LoginRecordController extends BaseController
         }
 
         if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
-            $user = $this->getUserService()->searchUsers($userCondotions,array('createdTime', 'DESC'),0,2000);
-            $userIds = ArrayToolkit::column($user, 'id');
+            $users = $this->getUserService()->searchUsers($userCondotions,array('createdTime', 'DESC'),0,2000);
+            $userIds = ArrayToolkit::column($users, 'id');
             if($userIds){
                 $conditions['userIds'] = $userIds;
-            }else{
-                $conditions[$conditions["keywordType"]] = $conditions["keyword"];
+                unset($conditions['nickname']);
+            } else {
+                $paginator = new Paginator(
+                    $this->get('request'),
+                    0,
+                    20
+                );
+                return $this->render('TopxiaAdminBundle:LoginRecord:index.html.twig', array(
+                    'logRecords' => array(),
+                    'users' => array(),
+                    'paginator' => $paginator
+                ));
             }
         }
 
         $conditions['action'] ='login_success';
-        if(!empty($conditions['email'])){
-            $user=$this->getUserService()->getUserByEmail($conditions['email']) ;
-            $conditions['userId']=empty($user) ? -1 : $user['id'];
-        }
-
-        unset($conditions['nickname']);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -51,12 +54,6 @@ class LoginRecordController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        if (isset($conditions["keywordType"])) {
-            if(empty($user) && $conditions["keywordType"] == 'nickname' && !empty($conditions['keyword'])){
-                $logRecords = array();
-            }
-        }
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
 
