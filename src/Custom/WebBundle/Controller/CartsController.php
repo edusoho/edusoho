@@ -11,16 +11,11 @@ class CartsController extends BaseController
 {
     public function showAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        if (empty($user['id'])) {
-            if (empty($_COOKIE['user-key'])){
-                $carts = array();
-            } else {
-                $userKey = $_COOKIE['user-key'];
-                $carts = $this->getCartsService()->findCartsByUserKey($userKey);
-            }
+        if (empty($_COOKIE['user-key'])){
+            $carts = array();
         } else {
-            $carts = $this->getCartsService()->findCartsByUserId($user['id']);
+            $userKey = $_COOKIE['user-key'];
+            $carts = $this->getCartsService()->findCartsByUserKey($userKey);
         }
 
         $courses = array();
@@ -88,15 +83,11 @@ class CartsController extends BaseController
     {
         $userId = $this->getCurrentUser()->id;
 
-        if (empty($user['id'])) {
-            if (empty($_COOKIE['user-key'])){
-                $condition = array();
-            } else {
-                $userKey = $_COOKIE['user-key'];
-                $condition = array('userKey' => $userKey);
-            }
+        if (empty($_COOKIE['user-key'])){
+            $condition = array();
         } else {
-            $condition = array('userId' => $userId);
+            $userKey = $_COOKIE['user-key'];
+            $condition = array('userKey' => $userKey);
         }
 
         $carts = $this->getCartsService()->searchCarts(
@@ -152,14 +143,9 @@ class CartsController extends BaseController
             'itemId' => $id,
             'itemType' => $itemType,
             'number' => 1,
-            'userId' => $user->id,
+            'userKey' => $_COOKIE['user-key'],
             'createdTime' => time()
         );
-
-        if (!$user->isLogin()) {
-            $Uuid = $_COOKIE['user-key'];
-            $cart['userKey'] = $Uuid;
-        }
 
         $carts = $this->getCartsService()->searchCarts($cart,array('createdTime','DESC'),0,1);
 

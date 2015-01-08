@@ -28,7 +28,6 @@ class CourseController extends BaseController
 			$category = array('id' => null);
 		}
 
-
 		$sort = $request->query->get('sort', 'latest');
 		$conditions = array(
 			'status' => 'published',
