@@ -77,6 +77,40 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
+    public function getQuestionCountGroupByTypesAction(Request $request, $courseId)
+    {
+        $params = $request->query->all();
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        if(empty($course)){
+            return $this->createJsonResponse(array());
+        }
+
+        $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
+        $types = array();
+        
+        foreach ($typeNames as $type => $name) {
+            $typeObj = QuestionTypeFactory::create($type);
+            $types[] = array(
+                'key' => $type,
+                'name' => $name,
+                'hasMissScore' => $typeObj->hasMissScore(),
+            );
+        }
+
+        $conditions["types"] = ArrayToolkit::column($types,"key");
+        if($params["range"] == "course") {
+            $conditions["courseId"] = $course["id"];
+        } else if($params["range"] == "lesson"){
+            $targets = $params["targets"];
+            $targets = explode(',', $targets);
+            $conditions["targets"] = $targets;
+        }
+
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $questionNums = ArrayToolkit::index($questionNums, "type");
+        return $this->createJsonResponse($questionNums);
+    }
+
     public function buildCheckAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
