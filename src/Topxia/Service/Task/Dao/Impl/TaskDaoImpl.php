@@ -34,7 +34,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
 
     public function findActiveTasks($time,$lock=false)
     {
-        $sql="SELECT * FROM {$this->table} WHERE startTime <= ? and status = ?  ". ($lock ? ' FOR UPDATE' : '');
+        $sql="SELECT * FROM {$this->table} WHERE startTime < ? and status = ?  ". ($lock ? ' FOR UPDATE' : '');
         
         return $this->getConnection()->fetchAll($sql, array($time,'open'));
     }
