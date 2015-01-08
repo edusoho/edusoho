@@ -26,6 +26,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getSchoolApps()
+    {
+
+    }
+    
     public function registDevice()
     {
         $result = false;
