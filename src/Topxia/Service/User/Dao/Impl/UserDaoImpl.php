@@ -59,16 +59,6 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchUser($conditions)
-    {
-        if(isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            $conditions[$conditions['keywordType']]=$conditions['keyword'];
-        }
-        
-        $sql = "SELECT * FROM {$this->table} WHERE {$conditions['keywordType']} = '{$conditions['keyword']}' LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql);
-    }
-
     private function createUserQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions,function($v){

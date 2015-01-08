@@ -10,8 +10,6 @@ interface UserService
 
     public function getUserByNickname($nickname);
     
-    public function searchUser(array $conditions);
-
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $ids);
