@@ -11,6 +11,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
 	public function pay($payData)
 	{
+		if ($payData['status'] != 'success') {
+			return array(false, array());
+		}
+
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
