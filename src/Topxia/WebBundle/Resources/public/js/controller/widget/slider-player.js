@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
 
-    require('screenfull');
+    var Screenfull = require('screenfull');
 
     var SlidePlayer = Widget.extend({
         attrs: {
@@ -51,27 +51,6 @@ define(function(require, exports, module) {
 
             this.$('.slide-player-body').html(html);
 
-        /*    if(!document.all) {
-                 
-                document.addEventListener(screenfull.raw.fullscreenchange, function () {
-
-                    if (screenfull.enabled) {
-
-                        if (!screenfull.isFullscreen) {
-                            $('.slide-player').removeClass("width-100");
-                            $('.slide-player-body').removeClass("img-center");
-                            $('.slide-player-body img').removeClass("max-img");
-                            $('.slide-player-body').addClass("loading-background");
-                        } else {
-                            $('.slide-player').addClass("width-100");
-                            $('.slide-player-body').addClass("img-center");
-                            $('.slide-player-body img').addClass("max-img");
-                            $('.slide-player-body').removeClass("loading-background");
-                        }
-                    }
-                });
-            }
-*/
             $(document).on('keydown', function(event){  
 
                 if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
@@ -136,12 +115,12 @@ define(function(require, exports, module) {
 
         onGotoFullscreen: function(event) {
 
-            if (screenfull.enabled) {
+            if (Screenfull.enabled) {
 
-                if (!screenfull.isFullscreen) {
-                    screenfull.request(this.element[0]);
+                if (!Screenfull.isFullscreen) {
+                    Screenfull.request(this.element[0]);
                 } else {
-                    screenfull.exit();
+                    Screenfull.exit();
                 }
             }
 
