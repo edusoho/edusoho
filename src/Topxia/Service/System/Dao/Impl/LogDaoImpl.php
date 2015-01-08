@@ -51,16 +51,8 @@ class LogDaoImpl extends BaseDao implements LogDao
 			->andWhere('createdTime < :endDateTime');
 
 		if (isset($conditions['userIds'])) {
-		    $userIds = array();
-		    foreach ($conditions['userIds'] as $userId) {
-		        if (ctype_digit((string)abs($userId))) {
-		            $userIds[] = $userId;
-		        }
-		    }
-		    if ($userIds) {
-		        $userIds = join(',', $userIds);
-		        $builder->andStaticWhere("userId IN ($userIds)");
-		    }
+		    $userIds = join(',', $conditions['userIds']);
+	        $builder->andStaticWhere("userId IN ($userIds)");
 		}
 
 		return $builder;
