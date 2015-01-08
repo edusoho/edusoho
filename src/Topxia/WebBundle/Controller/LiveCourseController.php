@@ -119,7 +119,7 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播教室不存在！');
         }
 
-        if ($lesson['startTime'] - time() > 3600) {
+        if ($lesson['startTime'] - time() > 7200) {
             return $this->createMessageResponse('info', '直播还没开始!');
         }
 
