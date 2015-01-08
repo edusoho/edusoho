@@ -207,7 +207,7 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function advancedTestResultAction (Request $request, $id)
+    public function testResultAction (Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
         if (!$testpaperResult) {

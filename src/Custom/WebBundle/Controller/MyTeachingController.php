@@ -93,9 +93,9 @@ class MyTeachingController extends BaseController
         $homeWorkResults = $this->waitingCheckHomeworks($user['id'], $courseIds);
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($homeWorkResults,'lessonId'));
         $threads = $this->waitingAnswerTheards($user['id'], $myTeachingCourses);
-        $userIds =  array_merge(ArrayToolkit::column($homeWorkResults, 'userId'), ArrayToolkit::column($threads, 'userId'));
-        $users = $this->getUserService()->findUsersByIds($userIds);
         $testResults = $this->waitingCheckTests($courseIds);
+        $userIds =  array_merge(ArrayToolkit::column($homeWorkResults, 'userId'), ArrayToolkit::column($threads, 'userId'), ArrayToolkit::column($testResults, 'userId'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
         return $this->render('CustomWebBundle:MyTeaching:myService.html.twig', array(
             'myTeachingCourses' => $myTeachingCourses,
             'lessons' => $lessons,

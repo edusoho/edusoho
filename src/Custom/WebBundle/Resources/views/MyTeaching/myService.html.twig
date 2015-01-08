@@ -45,8 +45,8 @@
       <ul>
         {% for testResult in testResults|slice(0,4) %}
           {% set user = users[testResult.userId] %}
-          {% set course = myTeachingCourses[testResult.courseId] %}
-          <li>{{ loop.index }}、{{ user.nickname }} - <a href="{{ path('course_thread_show', {courseId:thread.courseId,id:thread.id}) }}" target="_blank">课程&laquo; {{ course.title }}&raquo;</a></li>
+          {% set course = myTeachingCourses[testResult.target|split('-')[1]] %}
+          <li>{{ loop.index }}、{{ user.nickname }} - <a href="{{ path('course_manage_test_results', {courseId:course.id,id:testResult.id}) }}" target="_blank">课程&laquo; {{ course.title }}&raquo;</a></li>
         {% else %}
           <li class="empty">没有需要批改的试卷...</li>
         {% endfor %}

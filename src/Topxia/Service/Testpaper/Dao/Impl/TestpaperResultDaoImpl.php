@@ -26,10 +26,14 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
         }
         $marks = str_repeat('?,', count($courseIds) - 1) . '?';
 
+        array_walk($courseIds, function(&$value, $key){
+            $value = 'course-' . $value;
+        });
+
         array_push($courseIds, $status);
 
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE `testId` IN ({$marks}) AND `status` = ? ORDER BY endTime DESC LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE `target` IN ({$marks}) AND `status` = ? ORDER BY endTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, $courseIds) ? : array();
     }
 
