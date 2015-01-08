@@ -115,12 +115,19 @@ define(function(require, exports, module) {
 
         onGotoFullscreen: function(event) {
 
-            if (Screenfull.enabled) {
-
+            if (Screenfull) {
                 if (!Screenfull.isFullscreen) {
                     Screenfull.request(this.element[0]);
                 } else {
                     Screenfull.exit();
+                }
+            } else {
+                if ($('body').hasClass('slide-player-full-window')) {
+                    $('body').removeClass('slide-player-full-window');
+                    this.element.removeClass('slide-player-fullscreen');
+                } else {
+                    $('body').addClass('slide-player-full-window');
+                    this.element.addClass('slide-player-fullscreen');
                 }
             }
 
