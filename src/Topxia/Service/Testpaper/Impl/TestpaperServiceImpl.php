@@ -323,6 +323,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $builder->canBuild($options);
     }
 
+    public function findTestpaperResultsByCourseIdsAndStatus($courseIds, $status, $start, $limit)
+    {
+        return $this->getTestpaperResultDao()->findTestpaperResultsByCourseIdsAndStatus($courseIds, $status, $start, $limit);
+    }
+
     public function findTestpaperResultsByUserId ($id, $start, $limit)
     {
         return $this->getTestpaperResultDao()->findTestpaperResultsByUserId($id, $start, $limit);

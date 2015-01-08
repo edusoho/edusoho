@@ -48,11 +48,7 @@
           <div class="panel panel-default my-service">
               <div class="panel-heading">我的服务</div>
               <div class="panel-body">
-                  <div class="row">
-                      <div class="col-md-4">待回答的问答</div>
-                      <div class="col-md-4">待批改的作业</div>
-                      <div class="col-md-4">待批阅的考试</div>
-                  </div>
+                {{ render(controller('CustomWebBundle:MyTeaching:myService')) }}
               </div>
           </div>
       </div>
