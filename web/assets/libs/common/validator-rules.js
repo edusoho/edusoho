@@ -158,7 +158,12 @@ define(function(require, exports, module) {
             'float',
             /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
             '请输入正确的小数,只保留到两位小数'
-        ],  
+        ],
+        [
+            'decimal',
+            /^(([+]?[1-9]{1}\d*)|([+]?[0]{1}))(\.(\d){1})?$/i,
+            '请输入正确的小数,只保留到一位小数'
+        ],    
         [
             'int',
             /^[+-]?\d{1,9}$/,
@@ -227,6 +232,10 @@ define(function(require, exports, module) {
                 }
             },"开始时间必须小于或等于结束时间"
         ],
+        
+
+
+
         [
             'date_and_time',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/,
@@ -250,6 +259,32 @@ define(function(require, exports, module) {
                     return false;
                 }
             },"开始时间必须小于或等于结束时间"
+        ],        
+
+        [
+            'deadline_date_check',
+            function(opt) {
+                var now = new Date;
+                var v = opt.element.val();
+
+                if( parseInt(now.getFullYear()) > parseInt(v.split('-')[0]) ){
+                    return false;
+                }else if( parseInt(now.getFullYear()) < parseInt(v.split('-')[0]) ){
+                    return true;
+                }
+                
+                if( parseInt(now.getMonth()+1) > parseInt(v.split('-')[1]) ){
+                    return false;
+                }else if( parseInt(now.getMonth()+1) < parseInt(v.split('-')[1]) ){
+                    return true;
+                }
+                if( parseInt(now.getDate()) > parseInt(v.split('-')[2]) ){
+                    return false;
+                }else if( parseInt(now.getDate()) < parseInt(v.split('-')[2]) ){
+                    return true;
+                }
+                return true;
+            },"有效期必须大于等于当前日期"
         ]        
 
     ];

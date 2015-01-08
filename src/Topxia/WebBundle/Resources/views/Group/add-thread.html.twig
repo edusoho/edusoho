@@ -95,12 +95,22 @@
 
         </div>
 
+        <div class="form-group">        
+          <div class="controls">
+            <div class="col-md-4 control">
+            <input type="radio" id="type0" name="type" required="required" value="coin" checked=true>
+            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name|default('')}}:</label>
+            </div>
+            <div class="col-md-3 controls">
+               <input name="amount" class="form-control" tyoe="text" id="amount"/>
+            </div>
+          </div>
+        </div>
+
         <div class="row form-group">
           <div class="col-md-4 control">
-            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name}}:</label>
-          </div>
-          <div class="col-md-3 controls">
-             <input name="amount" class="form-control" tyoe="text" id="amount"/>
+            <input type="radio" id="type1" name="type" required="required" value="reply" >
+            <label for="amount" class="control-label"> 回复话题后可见</label>
           </div>
 
         </div>
@@ -108,7 +118,7 @@
       </form>
       </div>
       <div class="modal-footer">
-          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name}}会在扣除80%之后添加到您的账户
+          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name|default('')}}会在扣除50%之后添加到您的账户
           </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="button" class="btn btn-primary" id="insert">插入</button>

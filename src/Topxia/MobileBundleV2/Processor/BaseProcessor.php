@@ -5,6 +5,8 @@ namespace Topxia\MobileBundleV2\Processor;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
+
+    const API_VERSIN_RANGE = '2.3.2';
     public $formData;
     public $controller;
     public $request;
@@ -63,6 +65,11 @@ class BaseProcessor {
         return $this->controller->getService('Content.BlockService');
     }
 
+    protected function getUploadFileService()
+    {
+        return $this->controller->getService('File.UploadFileService');
+    }
+
     protected function getUserService(){
         return $this->controller->getService('User.UserService');
     }
@@ -109,6 +116,11 @@ class BaseProcessor {
     protected function getOrderService()
     {
         return $this->controller->getService('Order.OrderService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->controller->getService('Taxonomy.TagService');
     }
 
     protected function getFileService()
@@ -199,12 +211,12 @@ class BaseProcessor {
         return array(
             'name' => $site['name'],
             'url' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
-            'host' => $request->getSchemeAndHttpHost() ,
+            'host' => $request->getSchemeAndHttpHost(),
             'logo' => $logo,
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => "2.3.0"
+                "max" => BaseProcessor::API_VERSIN_RANGE
             ) ,
         );
     }
@@ -236,6 +248,14 @@ class BaseProcessor {
         curl_close($curl);
 
         return $response;
+    }
+
+    /**
+     *把\t\n转化成空字符串
+    */
+    public function filterSpace($content){
+        $pattern='[\\n\\t\\s]';
+        return preg_replace($pattern, '', $content);
     }
 }
 

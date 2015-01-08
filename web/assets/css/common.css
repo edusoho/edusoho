@@ -31,13 +31,11 @@
 
 .short-long-text .short-text {
   cursor: pointer;
-  word-break: break-all;
 }
 
 .short-long-text .long-text {
   cursor: pointer;
   display: none;
-  word-break: break-all;
 }
 
 .social-icon-weibo,
@@ -120,11 +118,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.esicon-safety:before { content: "\e600"; }
 .esicon-share:before { content: "\e601"; }
 .esicon-setting:before { content: "\e603"; }
 .esicon-like:before { content: "\e605"; }
 .esicon-exit:before { content: "\e602"; }
 .esicon-user:before { content: "\e607"; }
+
 
 
 
@@ -1811,4 +1811,16 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 .searchSelect {
   height: 46px;
+}
+
+.amount-num {
+  color: #434343;
+}
+
+.inflow-num {
+  color: #1bb974;
+}
+
+.outflow-num {
+  color: #ff7b0e;
 }

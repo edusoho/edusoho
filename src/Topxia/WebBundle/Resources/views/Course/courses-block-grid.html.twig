@@ -39,14 +39,16 @@
           {% endif %}
 
           <span class="metas clearfix">
+          {% if setting('course.coursesPrice') == 0 %}
             <span class="price-col">
               <span class="meta-label">价格</span>
-              {% if course.price > 0 %}
-                <span class="price-num">{{ course.price }}元</span>
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
               {% else %}
-                <span class="price-num">免费</span>
+              <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
               {% endif %}
             </span>
+          {% endif %}
 
             {% if course.showStudentNumType == 'opened' %}
             <span class="student-col">

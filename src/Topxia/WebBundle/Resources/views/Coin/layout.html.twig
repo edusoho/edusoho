@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}账户中心 - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="list-group-block">
+
+          <div class="list-group-panel">
+
+               
+            <div class="list-group-heading">账户中心</div>
+
+            <ul class="list-group">
+                <a class="list-group-item 
+                     {% if side_nav == 'my-bill' or side_nav == 'my-coin' %} active {% endif %} " 
+                     href="
+                     {% if setting('coin.coin_enabled') %}
+                      {{path('my_coin')}}
+                     {% else %}
+                      {{path('my_bill')}}
+                     {% endif %}
+                     "
+                     >我的账户{# 我的现金账单 #}</a>  
+                <a class="list-group-item 
+                     {% if side_nav == 'my-orders' %} active {% endif %} " 
+                     href="{{path('my_orders')}}">我的订单</a>              
+
+                {#虚拟币#}
+              {#   {% if setting('coin.coin_enabled') %}
+                      <a class="list-group-item 
+                        {% if side_nav == 'my-coin' %} active {% endif %} " 
+                        href="{{path('my_coin')}}">我的{{setting('coin.coin_name')}}</a>
+                {% endif %} #}
+              
+            </ul>
+          </div>
+
+            
+          </div><!-- /list-group-block -->
+        </div>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

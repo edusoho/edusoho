@@ -14,9 +14,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrder($id);
     }
 
-    public function getOrderBySn($sn)
+    public function getOrderBySn($sn, $lock=false)
     {
-        return $this->getOrderDao()->getOrderBySn($sn);
+        return $this->getOrderDao()->getOrderBySn($sn, $lock);
     }
 
     public function findOrdersByIds(array $ids)
@@ -27,12 +27,11 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function createOrder($order)
     {
-        
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode'));
+        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode', 'coinAmount', 'coinRate','priceType','totalPrice','coupon','couponDiscount'));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
         if (empty($orderUser)) {
@@ -52,10 +51,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 throw $this->createServiceException("优惠码不可用");            
             }
 
-            $order['couponDiscount'] = $order['amount'] - $couponInfo['afterAmount'];
-            $order['amount'] = $couponInfo['afterAmount'];
         }
-        $order['coupon'] = empty($order['couponCode']) ? '' : $order['couponCode'];
         unset($order['couponCode']);
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
@@ -66,10 +62,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         $order['status'] = 'created';
         $order['createdTime'] = time();
         $order = $this->getOrderDao()->addOrder($order);
-
-        if ($order['coupon']) {
-            $this->getCouponService()->useCoupon($order['coupon'], $order);
-        }
 
         $this->_createLog($order['id'], 'created', '创建订单');
         return $order;
@@ -426,6 +418,29 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function searchBill($conditions, $sort = 'latest', $start, $limit)
+    {
+        $orderBy = array();
+        if ($sort == 'latest') {
+            $orderBy =  array('createdTime', 'DESC');
+        }  elseif ($sort == 'early') {
+            $orderBy =  array('createdTime', 'ASC');
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        $conditions = $this->_prepareSearchConditions($conditions);
+        $orders = $this->getOrderDao()->searchBill($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function countUserBillNum($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->countUserBillNum($conditions);
+    }
+
     public function sumOrderAmounts($startTime,$endTime,array $courseId)
     {
         return $this->getOrderDao()->sumOrderAmounts($startTime,$endTime,$courseId);
@@ -496,6 +511,23 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         return $conditions;
+    }
+
+    public function updateOrderCashSn($id, $cashSn) 
+    {
+        $order = $this->getOrder($id);
+        if(empty($order)) {
+            throw $this->createServiceException('更新订单失败：订单不存在。');
+        }
+        if(empty($cashSn)) {
+            throw $this->createServiceException('更新订单失败：支付流水号不存在。');
+        }
+        $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
+    }
+
+    public function updateOrder($id, $orderFileds)
+    {
+        return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
     private function getLogService()

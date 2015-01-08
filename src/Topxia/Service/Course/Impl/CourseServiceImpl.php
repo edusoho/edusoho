@@ -2266,6 +2266,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
 	}
 
+	public function updateCoinPrice($cashRate)
+	{
+		$this->getCourseDao()->updateCoinPrice($cashRate);
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');

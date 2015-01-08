@@ -211,13 +211,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     protected function hideThings($content,$id)
     {   
+        $content=str_replace("#", "<!--></>", $content);
+        $content=str_replace("[hide=coin", "#[hide=coin", $content);
+
         $user = $this->getCurrentUser();
         $data=explode('[/hide]', $content);
      
         foreach ($data as $key => $value) {
 
             $value=" ".$value;
-            sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$title);
+            sscanf($value,"%[^#]#[hide=coin%[^]]]%[^$$]",$content,$coin,$title);
 
             if(!is_numeric($coin)) $coin=0;
 

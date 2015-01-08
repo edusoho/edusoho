@@ -70,8 +70,8 @@ define(function(require, exports, module) {
             };
 
             if (this.get('src').indexOf('.m3u8') > 0 || this.get('src').indexOf('HLSQualitiyList') > 0) {
-                // flashvars.plugin_hls = "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/HLSProviderOSMF.swf";
-                flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/HLSProviderOSMF-1.0.2.swf";
+                flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/flashls-0.4.0.3.swf";
+                flashvars.hls_maxbackbufferlength = 300;
             }
             
             if (this.element.data('watermark') && $('#videoWatermarkEmbedded').val() !=1) {
