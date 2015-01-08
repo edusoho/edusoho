@@ -3,7 +3,7 @@
 {% set script_controller = 'quiz-question/do-test' %}
 
 {% block paper_heading %}
-  {% include 'TopxiaWebBundle:Paper:paper-heading-previewing.html.twig' %}
+  {% include 'TopxiaWebBundle:Paper:paper-heading-' ~ status ~ '.html.twig' %}
 {% endblock %}
 
 {% block paper_content %}

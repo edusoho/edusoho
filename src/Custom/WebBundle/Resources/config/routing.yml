@@ -154,3 +154,16 @@ my_teaching_dashboard:
 my_teaching_course_review_list:
     pattern:  /my/teaching/course/{id}/review/list
     defaults: { _controller: CustomWebBundle:MyTeaching:reviewList }
+
+
+course_manage_do_test:
+    pattern: /test/{testId}/do
+    defaults: { _controller: CustomWebBundle:Testpaper:doTestpaper }
+
+course_manage_show_advanced_test:
+    pattern: /advanced-test/{id}/show
+    defaults: { _controller: CustomWebBundle:Testpaper:showAdvancedTest }
+
+course_manage_test_results:
+    pattern: /advanced-test/{id}/result
+    defaults: { _controller: CustomWebBundle:Testpaper:advancedTestResult }

@@ -1,7 +1,11 @@
 {% extends 'TopxiaWebBundle:Question2:question-choice-doing.html.twig' %}
 
+{% block heading %}
+  {{ parent() }}
+{% endblock %}
+
 {% block body %}
-  {{ question.stem|bbCode2Html|raw }}
+  {{ parent() }}
 {% endblock %}
 
 {% block footer %}

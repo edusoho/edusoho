@@ -101,7 +101,7 @@ interface TestpaperService
 
     public function makeItemsByPart($part);
 
-    public function buildPaper($paperId, $status);
+    public function buildPaper($paperId, $status, $paperResultId);
 
     public function resetAdvancedTestPaper($id, $fields);
 }
