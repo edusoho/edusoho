@@ -152,7 +152,7 @@ class UserDaoImpl extends BaseDao implements UserDao
          return $this->getConnection()->fetchAll($sql,array($endTime));
     }
 
-        public function findUsersCountByLessThanCreatedTime($endTime)
+    public function findUsersCountByLessThanCreatedTime($endTime)
     {
          
         $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";
