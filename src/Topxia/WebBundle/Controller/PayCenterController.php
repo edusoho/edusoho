@@ -156,6 +156,9 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $request->request->all());
 
         $payData = $response->getPayData();
+        if ($payData['status'] == "waitBuyerConfirmGoods") {
+            return new Response('success');
+        }
 
         if ($payData['status'] == "success") {
             list($success, $order) = $this->getPayCenterService()->pay($payData);

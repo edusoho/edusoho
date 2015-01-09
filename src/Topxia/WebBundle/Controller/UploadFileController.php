@@ -51,7 +51,7 @@ class UploadFileController extends BaseController
             $conditions['currentUserId'] = $user['id'];
         }
         
-        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 1000);
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
         
         return $this->createFilesJsonResponse($files);
     }
@@ -297,6 +297,13 @@ class UploadFileController extends BaseController
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
             $file['size'] = FileToolkit::formatFileSize($file['size']);
+
+            // Delete some file attributes to redunce the json response size
+            unset($file['hashId']);
+            unset($file['convertHash']);
+            unset($file['etag']);
+            unset($file['convertParams']);
+
             unset($file);
         }
         return $this->createJsonResponse($files);
