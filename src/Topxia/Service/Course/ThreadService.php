@@ -63,6 +63,8 @@ interface ThreadService
 	 */
 	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit);
 
+	public function findThreadsPostByThreadId($threadId);
+
 	/**
 	 * 获得话题回帖的数量
 	 * @param  integer  $courseId 话题的课程ID

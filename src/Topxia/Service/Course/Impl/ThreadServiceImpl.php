@@ -305,6 +305,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->findPostsByThreadIdAndIsElite($threadId, 1, $start, $limit);
 	}
 
+	public function findThreadsPostByThreadId($threadId)
+	{
+		return $this->getThreadPostDao()->findThreadsPostByThreadId($threadId);
+	}
+
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
