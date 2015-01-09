@@ -144,6 +144,36 @@
                     <div class="course-about">{{ course.about|plain_text(60) }}</div>
                     
                     <div class="mll">  
+
+
+
+
+                      {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoiPrice)) %}
+                            <div class="{# col-md-3 #} pull-right">
+                              <style type="text/css">
+                              .round {
+                                  position: relative;
+                                  background: #ff0000;
+                                  border-radius: 50%;
+                                  padding: 10px;
+                                  float: left;
+                                  z-index: 9999;
+                                }
+                              </style>
+                                                      
+                              <span class="round">
+                                <font color="#ffffff" size="5">
+                                  {% if course.price == 0 and course.coinPrice == 0 %}
+                                    免
+                                  {% else %}
+                                    折
+                                  {% endif %}
+                                </font> 
+                              </span>
+                            </div>
+                      {% endif %}
+
+
                       {% if setting('course.coursesPrice') == 0 %}
                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
                           <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
@@ -217,6 +247,39 @@
                       </div>
 
                       <div class="course-metas">
+
+
+
+
+                      {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoiPrice)) %}
+                            <div class="{# col-md-3 #} pull-right">
+                              <style type="text/css">
+                              .round {
+                                  position: relative;
+                                  background: #ff0000;
+                                  border-radius: 50%;
+                                  padding: 10px;
+                                  float: left;
+                                  z-index: 9999;
+                                }
+                              </style>
+                                                      
+                              <span class="round">
+                                <font color="#ffffff" size="5">
+                                  {% if course.price == 0 and course.coinPrice == 0 %}
+                                    免
+                                  {% else %}
+                                    折
+                                  {% endif %}
+                                </font> 
+                              </span>
+                            </div>
+                      {% endif %}
+
+
+
+
+
                         <p>  
                           {% if setting('course.coursesPrice') == 0 %}
                             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
