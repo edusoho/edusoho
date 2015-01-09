@@ -71,10 +71,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
 
-        list($totalPrice, $coinPayAmount) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
-
-        $totalPrice = NumberToolkit::roundUp($totalPrice);
-        $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
+        list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
         return array(
             'level' => empty($level) ? null : $level,

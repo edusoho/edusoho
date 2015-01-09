@@ -43,9 +43,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $course["price"];
         }
 
-        list($totalPrice, $coinPayAmount) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
+        list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
-        $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
         return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,

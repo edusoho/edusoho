@@ -2,6 +2,7 @@
 namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\NumberToolkit;
 use Exception;
 
 class BaseProcessor {
@@ -67,7 +68,11 @@ class BaseProcessor {
                 $coinPayAmount = $totalPrice*$cashRate;
             }
         }
-        return array($totalPrice, $coinPayAmount);
+
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
+        $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
+
+        return array($totalPrice, $coinPayAmount, $account, $hasPayPassword);
     }
 
     protected function getCashAccountService()
