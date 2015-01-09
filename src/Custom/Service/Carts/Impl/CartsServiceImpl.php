@@ -13,16 +13,11 @@ class CartsServiceImpl extends BaseService  implements CartsService
 
     public function getCartsCount()
     {
-        $user = $this->getCurrentUser();
-        if (empty($user['id'])) {
-            if (empty($_COOKIE['user-key'])){
-                return '0';
-            } else {
-                $userKey = $_COOKIE['user-key'];
-                $carts = $this->findCartsByUserKey($userKey);
-            }
+        if (empty($_COOKIE['user-key'])){
+            return '0';
         } else {
-            $carts = $this->findCartsByUserId($user['id']);
+            $userKey = $_COOKIE['user-key'];
+            $carts = $this->findCartsByUserKey($userKey);
         }
 
         return count($carts);

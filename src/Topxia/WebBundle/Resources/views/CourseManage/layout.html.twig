@@ -66,6 +66,7 @@
           </div>
           {% endif %}
 
+          {% if 'ROLE_ADMIN' in app.user.roles %}
           <div class="list-group-panel">
             <div class="list-group-heading">课件</div>
             <div class="list-group">
@@ -91,6 +92,7 @@
               </div>
             </div>
           </div>
+          {% endif %}
         </div>
 
       </div>
