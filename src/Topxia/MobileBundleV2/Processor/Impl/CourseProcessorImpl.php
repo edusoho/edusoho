@@ -632,7 +632,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             unset($announcement["courseId"]);
             unset($announcement["updatedTime"]);
             $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
-            $announcement["createdTime"] = date('Y-m-d H:i:s', $announcement['createdTime']);
+            $announcement["createdTime"] = date('c', $announcement['createdTime']);
             return $announcement;
         }, $announcements);
     }
