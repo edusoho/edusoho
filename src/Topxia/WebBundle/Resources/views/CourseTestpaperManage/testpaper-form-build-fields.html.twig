@@ -45,7 +45,8 @@
           <span style="min-width:85px;display:inline-block;_display:inline;">{{type.name}}</span>
           
           <span class="mlm">题目数量:</span>
-          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{type.key}}]"  value="0" />/<span class="text-info" role="questionNum" type="{{type.key}}">{{questionNums[type.key]["questionNum"]|default(0)}}</span>
+          <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{type.key}}]"  value="0" />/
+          <span class="text-info question-num" role="questionNum" type="{{type.key}}">{{questionNums[type.key]["questionNum"]|default(0)}}</span>
 
           <span class="mlm">题目分值:</span>
           <input type="text" class="form-control width-input width-input-mini input-sm item-score" name="scores[{{type.key}}]"  value="2" />
