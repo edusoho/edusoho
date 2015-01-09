@@ -6,14 +6,14 @@ use Symfony\Component\Debug\Debug;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 
-class HotGroupDataTagTests extends PHPUnit_Framework_TestCase
+class DataTagTests extends PHPUnit_Framework_TestCase
 {
-    public function test()
+    public function testHotGroupDataTag()
     {
         $Group = new HotGroupDataTag(1);
 
         $groups = $Group->getData(array('count'=>5));
-
+    
         $this->assertEquals(5, count($groups));
     }
 
