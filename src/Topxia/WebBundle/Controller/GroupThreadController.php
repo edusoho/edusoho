@@ -457,7 +457,7 @@ class GroupThreadController extends BaseController
                         'createdTime'=>time());
                     $this->getThreadService()->addTrade($data);
 
-                    $reward=$attach['coin']*0.2;
+                    $reward=$attach['coin']*0.5;
                     if(intval($reward)<1)
                     $reward=1;
                     $file=$this->getFileService()->getFile($attach['fileId']);
@@ -762,7 +762,7 @@ class GroupThreadController extends BaseController
 
             $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
             
-            $reward=$need*0.2;
+            $reward=$need*0.5;
             if(intval($reward)<1)
             $reward=1;
 
@@ -826,15 +826,17 @@ class GroupThreadController extends BaseController
         $data=explode('[/hide]',$thread['content']);
         
         $user=$this->getCurrentUser();
-        $role=$this->getGroupMemberRole($user->id);
+        $role=$this->getGroupMemberRole($thread['groupId']);
         $context="";
         $count=0;
-
+     
         foreach ($data as $key => $value) {
 
             $value=" ".$value;
             sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
             
+            sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
+
             $Trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
 
             if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
@@ -843,19 +845,18 @@ class GroupThreadController extends BaseController
 
                     if($role == 2 || $role ==3 || $user['id'] == $thread['userId']){
 
-                        $context.=$content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:8px;'>隐藏区域</span>".$hideContent."</div>";
+                        $context.=$content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>隐藏区域</span>".$hideContent."</div>";
 
                     }else{
 
                         $context.=$content.$hideContent;
                     }
-                    
-                    
+
                 }else{
 
                     $context.=$content;
                 }
-       
+
             }else{
 
                 if($coin){
@@ -876,10 +877,15 @@ class GroupThreadController extends BaseController
 
                     $context.=$content;
                 }
+                
             }
+
+            if($replyHideContent)
+            $context.=$this->replyCanSee($role,$thread,$content,$replyHideContent);
 
             unset($coin);
             unset($content);
+            unset($replyHideContent);
             unset($hideContent);
         }
         
@@ -891,6 +897,38 @@ class GroupThreadController extends BaseController
         
     }
 
+    private function replyCanSee($role,$thread,$content,$replyHideContent)
+    {   
+        $context="";
+        $user=$this->getCurrentUser();
+        if($replyHideContent){
+
+            if($role == 2 || $role ==3 || $user['id'] == $thread['userId']){
+
+            $context=$content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>回复可见区域</span>".$replyHideContent."</div>";
+            
+            return $context;
+            }
+
+            if(!$user['id']){
+                $context.=$content."<div class=\"hideContent mtl mbl\"><h4> 游客,如果您要查看本话题隐藏内容请先<a href=\"/login\">登录</a>或<a href=\"/register\">注册</a>！</h4></div>";  
+                return $context;
+            }
+
+            $count=$this->getThreadService()->searchPostsCount(array('userId'=>$user['id'],'threadId'=>$thread['id']));
+            
+            if($count>0){
+
+                $context.=$content.$replyHideContent;
+
+            }else{
+
+                $context.=$content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"#post-thread-form\">回复</a>本话题可见</h4></div>";
+            }
+        }
+          
+        return $context;
+    }
     public function uploadAction (Request $request)
     {
         $group = $request->query->get('group');
@@ -1028,17 +1066,17 @@ class GroupThreadController extends BaseController
         return $orderBys;
     }
 
-    private function getGroupMemberRole($userId)
+    private function getGroupMemberRole($groupId)
     {
        $user = $this->getCurrentUser();
 
        if (!$user['id']) return 0;
 
-       if ($this->getGroupService()->isOwner($userId, $user['id'])) return 2;
+       if ($this->getGroupService()->isOwner($groupId, $user['id'])) return 2;
 
-       if ($this->getGroupService()->isAdmin($userId, $user['id'])) return 3;
+       if ($this->getGroupService()->isAdmin($groupId, $user['id'])) return 3;
 
-       if ($this->getGroupService()->isMember($userId, $user['id'])) return 1;
+       if ($this->getGroupService()->isMember($groupId, $user['id'])) return 1;
 
        return 0;
     }

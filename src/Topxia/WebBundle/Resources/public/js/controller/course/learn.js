@@ -14,6 +14,7 @@ define(function(require, exports, module) {
     var SlidePlayer = require('../widget/slider-player');
 
     var iID = null;
+    var recordWatchTimeId = null;
 
     var LessonDashboard = Widget.extend({
 
@@ -268,9 +269,11 @@ define(function(require, exports, module) {
                         $.post("../../course/"+lesson.id+'/watch/paused');
                         that._onFinishLearnLesson();
                         that.set('playStatus', 'ended');
+                        clearInterval(recordWatchTimeId);
                     });
                     mediaPlayer.on('ready', function() {
-                       setInterval(recordWatchTime, 120000);
+                        clearInterval(recordWatchTimeId);
+                        recordWatchTimeId = setInterval(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
                         $.post("../../course/"+lesson.id+'/watch/paused');
@@ -317,7 +320,8 @@ define(function(require, exports, module) {
                                 $.post("../../course/"+lesson.id+'/watch/paused');
                             });
                             player.on('loadeddata',function(){
-                                setInterval(recordWatchTime, 120000);
+                                clearInterval(recordWatchTimeId);
+                                recordWatchTimeId = setInterval(recordWatchTime, 120000);
                             });
                             player.on('error', function(error){
                                 hasPlayerError = true;
@@ -365,7 +369,8 @@ define(function(require, exports, module) {
                                     $.post("../../course/"+lesson.id+'/watch/play');
                                 });
                                 media.addEventListener("loadeddata", function() {
-                                    setInterval(recordWatchTime, 120000);
+                                    clearInterval(recordWatchTimeId);
+                                    recordWatchTimeId = setInterval(recordWatchTime, 120000);
                                 });
                                 media.play();
                             }

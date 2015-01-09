@@ -18,4 +18,6 @@ interface MaterialService
 	public function findLessonMaterials($lessonId, $start, $limit);
 
 	public function getMaterialCount($courseId);
+
+	public function getMaterialCountByFileId($fileId);
 }

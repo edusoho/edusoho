@@ -85,12 +85,19 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
             $conditions['content'] = "%{$conditions['content']}%";
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
+        $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
                 ->andWhere('userId = :userId')
                 ->andWhere('courseId = :courseId')
                 ->andWhere('rating = :rating')
                 ->andWhere('content LIKE :content');
+
+        if (isset($conditions['courseIds']) && count($conditions['courseIds'])>0 ){
+            $courseIdsRange = '('.implode(', ',$conditions['courseIds']).')';
+            $builder = $builder->andStaticWhere("courseId IN {$courseIdsRange}");
+        }        
+
+        return $builder;
     }
 
 }

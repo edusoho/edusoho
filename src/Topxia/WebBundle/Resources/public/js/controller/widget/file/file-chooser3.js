@@ -4,12 +4,11 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    
-	if ($("div .file-browser-list-container").length > 0) {
-	    var FileBrowser = require('./file-browser-material-lib');
-    }else{
-	    var FileBrowser = require('./file-browser');
-    	}
+
+    if ($("div .file-browser-list-container").length > 0) {
+        var MaterialFileBrowser = require('../file/file-browser-material-lib');
+    }
+    var CourseFileBrowser = require('../file/file-browser');
 
     var FileChooser = Widget.extend({
         attrs: {
@@ -121,11 +120,20 @@ define(function(require, exports, module) {
         _initFileBrowser: function() {
             var self = this;
 
-            var browser = new FileBrowser({
-                element: this.$('[data-role=file-browser]')
+            if ($("div .file-browser-list-container").length > 0) {
+                var materialBrowser = new MaterialFileBrowser({
+                    element: this.$('[data-role=file-browser]')
+                }).show();
+
+                materialBrowser.on('select', function(file) {
+                    self.trigger('change', self._convertFileToMedia(file));
+                });
+            }
+            var courseBrowser = new CourseFileBrowser({
+                element: this.$('[data-role=course-file-browser]')
             }).show();
 
-            browser.on('select', function(file) {
+            courseBrowser.on('select', function(file) {
                 self.trigger('change', self._convertFileToMedia(file));
             });
         },
