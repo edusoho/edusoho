@@ -88,7 +88,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $priceType, 
                 $cashRate
             );
-            $amount = $couponResult["afterAmount"];
+            if($couponResult['useable'] == 'yes') {
+                $amount = $couponResult["afterAmount"];
+            } else {
+                unset($couponResult);
+            }
         }
 
         //虚拟币优惠价格
