@@ -62,7 +62,15 @@
 								{% endif %}
 								>{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
 							{% else %}
-								<a id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
+								<a id="course-buy-btn" 
+								{% if setting("course.buy_fill_userinfo")|default(false) %}
+								href="#modal" 
+								data-toggle="modal" 
+								data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}" 
+								{% else %}
+								href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+								{% endif %}
+								>{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
 							{% endif %}
 						</p>
 					</div>
