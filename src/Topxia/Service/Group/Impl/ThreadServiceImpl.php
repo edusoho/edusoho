@@ -125,6 +125,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             throw $this->createServiceException("用户ID不能为空！");
         }
         $thread['createdTime']=time();
+        $thread['updateTime']=time();
         $thread=$this->getThreadDao()->addThread($thread);
 
         $this->getGroupService()->waveGroup($thread['groupId'],'threadNum',+1);
@@ -330,7 +331,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $threadContent['threadId']=$threadId;
         $threadContent['postId']=$postId;
         $post=$this->getThreadPostDao()->addPost($threadContent);  
-        $this->getThreadDao()->updateThread($threadId,array('lastPostMemberId'=>$memberId,'lastPostTime'=>time()));
+        $this->getThreadDao()->updateThread($threadId,array('lastPostMemberId'=>$memberId,'lastPostTime'=>time(),'updateTime'=>time()));
         $this->getGroupService()->waveGroup($groupId,'postNum',+1);
         $this->getGroupService()->waveMember($groupId,$memberId,'postNum',+1);
         $this->waveThread($threadId,'postNum',+1);

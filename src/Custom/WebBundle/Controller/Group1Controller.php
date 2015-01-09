@@ -17,10 +17,17 @@ class Group1Controller extends GroupController
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
         
         $type=$request->query->get('type');
-        $sort=$this->filterSort('byCreatedTimeOnly');
+        $sort=$this->filterSort('byUpdateTime');
+       
         if($type && $type == "post"){
 
             $sort=$this->filterSort('byLastPostTimeOnly');
+
+        }
+
+        if($type && $type == "created"){
+
+            $sort=$this->filterSort('byCreatedTimeOnly');
 
         }
 
@@ -346,8 +353,14 @@ class Group1Controller extends GroupController
                     array('createdTime','DESC'),
                 );
                 break;
+            case 'byUpdateTime':
+                $orderBys=array(
+                    array('updateTime','DESC'),
+                    array('lastPostTime','DESC'),
+                );
+                break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createNotFoundException('参数sort不正确。');
         }
         return $orderBys;
     }

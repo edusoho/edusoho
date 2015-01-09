@@ -48,7 +48,11 @@
       <div class="panel-body">
         <ul class="nav nav-pills nav-mini mbl">
 
-          <li {% if type != "post" %}class="active"{% endif %}><a class="js-nav" href="{{path('group',{type:"created"})}}">最新发贴</a></li>
+          <li {% if type != "post" and type != "created" %}class="active"{% endif %}><a class="js-nav" href="{{path('group',{type:""})}}">默认</a></li>
+
+          <li><span class="mhm text-muted">|</span></li>
+
+          <li {% if type == "created" %}class="active"{% endif %}><a class="js-nav" href="{{path('group',{type:"created"})}}">最新发贴</a></li>
 
           <li><span class="mhm text-muted">|</span></li>
 
