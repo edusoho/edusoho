@@ -1016,17 +1016,14 @@ class AnalysisController extends BaseController
       
         if($userSumData){
             $countTmp = $userSumData[0]["count"];
-             foreach ($zeroData as $key => $value) {
-            if($value["date"]<$userSumData[0]["date"]){
-                $countTmp = 0;
-            }
-            $date = $value['date'];
-            if (array_key_exists($date,$currentData)){
-                $zeroData[$key]['count'] = $currentData[$date]['count'];
-                $countTmp = $currentData[$date]['count'];
-            } else {
-                $zeroData[$key]['count'] = $countTmp;
-            }
+            foreach ($zeroData as $key => $value) {
+                $date = $value['date'];
+                if (array_key_exists($date,$currentData)){
+                    $zeroData[$key]['count'] = $currentData[$date]['count'];
+                    $countTmp = $currentData[$date]['count'];
+                } else {
+                    $zeroData[$key]['count'] = $countTmp;
+                }
             }
         }
        

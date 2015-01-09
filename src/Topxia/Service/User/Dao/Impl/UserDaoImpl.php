@@ -149,8 +149,8 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function analysisUserSumByTime($endTime)
     {
-         $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  {$this->table}   i   WHERE   i.createdTime<=o.createdTime  )  as Count from {$this->table}  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
-         return $this->getConnection()->fetchAll($sql);
+         $sql="select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
+         return $this->getConnection()->fetchAll($sql,array($endTime));
     }
 
         public function findUsersCountByLessThanCreatedTime($endTime)
