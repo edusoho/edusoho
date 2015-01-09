@@ -185,6 +185,7 @@ class TestpaperController extends BaseController
 
         if ($testpaper['pattern'] == 'Part') {
             list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($testpaperResult['testId'], 'doing', $testpaperResult['id']);
+            
             return $this->render('TopxiaWebBundle:Paper:paper.html.twig', array(
                 'questionItemSet' => $questionItemSet,
                 'limitTime' => $testpaperResult['limitedTime'] * 60,

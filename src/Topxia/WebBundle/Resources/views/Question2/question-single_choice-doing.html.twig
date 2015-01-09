@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block footer %}
+
   {% if result.answer|default(null) %}
    {% set answerChoiceIndex = result.answer %}
    {% else %}

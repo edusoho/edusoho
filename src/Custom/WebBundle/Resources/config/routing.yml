@@ -172,6 +172,10 @@ course_manage_test_results:
     pattern: /test/{id}/result
     defaults: { _controller: CustomWebBundle:Testpaper:testResult }
 
+course_manage_do_test_suspend:
+    pattern: /test/{id}/suspend
+    defaults: { _controller: CustomWebBundle:Testpaper:testSuspend }
+
 course_manage_submit_advanced_test:
     pattern: /advanced-test/{id}/submit
     defaults: { _controller: CustomWebBundle:Testpaper:submitTest }
