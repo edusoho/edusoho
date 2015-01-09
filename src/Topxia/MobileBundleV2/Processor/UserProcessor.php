@@ -19,4 +19,6 @@ interface UserProcessor
 	public function getMessageList();
 
 	public function sendMessage();
+
+	public function getUserCoin();
 }

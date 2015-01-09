@@ -16,6 +16,27 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $this->formData;
     }
     
+    public function getUserCoin()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $coinEnabled = $this->controller->setting("coin.coin_enabled");
+        if(empty($coinEnabled) || $coinEnabled == 0) {
+            return $this->createErrorResponse('error', "网校虚拟币未开启！");
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($user->id,true);
+        
+        if(empty($account)){
+            $account = $this->getCashAccountService()->createAccount($user->id);
+        }
+
+        return $account;
+    }
+
     public function sendMessage()
     {
         $content = $this->getParam("content");

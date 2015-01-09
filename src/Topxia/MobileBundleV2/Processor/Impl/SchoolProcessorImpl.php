@@ -26,6 +26,25 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getSchoolApps()
+    {
+        $host = $this->request->getSchemeAndHttpHost();
+        $article = array(
+            "code"=>"Article",
+            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/article.png",
+            "name"=>"网校资讯",
+            "description"=>"EduSoho官方应用，网校资讯。",
+            "author"=>"官方",
+            "version"=>"1.0.0",
+            "supprot_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>"articleApp"
+        );
+        return array(
+            $article
+            );
+    }
+    
     public function registDevice()
     {
         $result = false;
