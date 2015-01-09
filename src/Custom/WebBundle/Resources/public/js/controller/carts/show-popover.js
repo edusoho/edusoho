@@ -9,7 +9,7 @@ define(function(require, exports, module) {
                 if(result.status == 'success') {
                     var count = Number($('#count').html());
                     count == 1 && $('.btn-carts .btn').popover('hide');
-                    count > 0 && $('#count').html(--count);
+                    count > 0 && $('#count, #carts-badge').html(--count);
 
                     var price = Number($('#price').html());
                     price = $('#price').html(price - Number($btn.prev('div').find('.course-price').html()));
