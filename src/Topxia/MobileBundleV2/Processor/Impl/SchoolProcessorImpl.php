@@ -30,11 +30,14 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     {
         $article = array(
             "code"=>"Article",
+            "icon"=>"/bundles/topxiamobilebundlev2/img/article.png",
             "name"=>"网校资讯",
             "description"=>"EduSoho官方应用，网校资讯。",
-            "author"=>"EduSoho官方",
+            "author"=>"官方",
             "version"=>"1.0.0",
-            "supprot_version"=>"2.4.0+"
+            "supprot_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>""
         );
         return array(
             $article
