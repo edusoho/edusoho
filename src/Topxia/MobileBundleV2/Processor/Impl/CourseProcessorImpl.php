@@ -632,7 +632,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             unset($announcement["courseId"]);
             unset($announcement["updatedTime"]);
             $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
-            $announcement["createdTime"] = date('Y-m-d H:i:s', $announcement['createdTime']);
+            $announcement["createdTime"] = date('c', $announcement['createdTime']);
             return $announcement;
         }, $announcements);
     }
@@ -779,15 +779,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return true;
     }
     
-    /*
-    *   $course['coinType'] = $coinType;
-    *   coin_picture 虚拟币icon
-    *   coin_content 虚拟币介绍
-    *   coin_enabled: 0 是否开启
-    *   cash_rate: "100" 汇率
-    *   price_type: "RMB" 价格类型 Coin虚拟币
-    *   cash_model: "none" 标价模式 none不使用 deduction用于低价 currency用于标价
-    */    
     public function getCourse()
     {
         $user     = $this->controller->getUserByToken($this->request);
@@ -825,9 +816,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'enabled' => 1
             ), 0, 100);
         }
-
-        $coinType= $this->getSettingService()->get('coin',array());
-        $course['coinType'] = $coinType;
         return array(
             "course" => $this->controller->filterCourse($course),
             "userFavorited" => $userFavorited,
