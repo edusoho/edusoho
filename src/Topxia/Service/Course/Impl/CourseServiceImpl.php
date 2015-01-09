@@ -326,7 +326,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
-		if ($isTaskUpdate ){
+		if (!$isTaskUpdate){
 			if (isset($fields['price'])){
 				$fields['originPrice'] = $fields['price'];
 			}
