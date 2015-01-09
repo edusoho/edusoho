@@ -21,12 +21,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
-        $coinSetting = $this->getSettingService()->get("coin");
+        list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
         
         $totalPrice = 0;
 
-        if(!isset($coinSetting["coin_enabled"]) 
-            || !$coinSetting["coin_enabled"]) {
+        if(!$coinEnable) {
         	$totalPrice = $course["price"];
         	return array(
 				'totalPrice' => $totalPrice,
@@ -38,38 +37,13 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         	);
         }
 
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
-
-        $priceType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $priceType = $coinSetting["price_type"];
-        }
-
-        $user = $this->getUserService()->getCurrentUser();
-        $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
-        $accountCash = $account["cash"];
-
-        $coinPayAmount = 0;
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
         if ($priceType == "Coin") {
             $totalPrice = $course["coinPrice"];
-            if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
-                $coinPayAmount = $accountCash;
-            } else if($hasPayPassword) {
-                $coinPayAmount = $totalPrice;
-            }                
         } else if($priceType == "RMB") {
             $totalPrice = $course["price"];
-            if($totalPrice*100 > $accountCash/$cashRate*100) {
-                $coinPayAmount = $accountCash;
-            } else {
-                $coinPayAmount = $totalPrice*$cashRate;
-            }
         }
+
+        list($totalPrice, $coinPayAmount) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
         $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
         return array(
@@ -189,11 +163,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getCashAccountService()
-    {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService');
     }
 
 	protected function getCourseOrderService() {

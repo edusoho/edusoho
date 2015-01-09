@@ -34,23 +34,10 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $buyType = "new";
         }
 
-
         $levelPrice = array(
         	'month' => $level['monthPrice'],
         	'year' => $level['yearPrice']
         );
-
-        $coinSetting = $this->getSettingService()->get("coin");
-
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
-
-        $priceType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $priceType = $coinSetting["price_type"];
-        }
 
         if($buyType == "upgrade") {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
@@ -61,19 +48,13 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
             $unitType = $fields['unit'];
             $duration = $fields['duration'];
-
             $unitPrice = $levelPrice[$unitType];
-            if ($priceType == "Coin") {
-                $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
-            }
-
             $totalPrice = $unitPrice * $duration;
         }
 
-        
+        list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
-        if(!array_key_exists("coin_enabled", $coinSetting) 
-            || !$coinSetting["coin_enabled"]) {
+        if(!$coinEnable) {
         	return array(
 				'totalPrice' => $totalPrice,
 				'targetId' => $targetId,
@@ -86,25 +67,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         	);
         }
 
-        $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
-        $accountCash = $account["cash"];
-
-        $coinPayAmount = 0;
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
         if ($priceType == "Coin") {
-            if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
-                $coinPayAmount = $accountCash;
-            } else if($hasPayPassword) {
-                $coinPayAmount = $totalPrice;
-            }                
-        } else if($priceType == "RMB") {
-            if($totalPrice*100 > $accountCash/$cashRate*100) {
-                $coinPayAmount = $accountCash;
-            } else {
-                $coinPayAmount = $totalPrice*$cashRate;
-            }
+            $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
+
+        list($totalPrice, $coinPayAmount) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
         $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
@@ -269,11 +236,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
-    }
-
     public function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
@@ -287,11 +249,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 	protected function getVipService()
     {
         return ServiceKernel::instance()->createService('Vip:Vip.VipService');
-    }
-
-    protected function getCashAccountService()
-    {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService');
     }
 
     protected function getOrderService()
