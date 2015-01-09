@@ -87,11 +87,7 @@ class TestpaperController extends BaseController
             
             $testpaperResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => 'course', 'id' => $courseId));
 
-            if ($testpaper['pattern'] == 'Part') {
-                return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testpaperResult['id'])));
-            } else {
-                return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
-            }
+         return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
             
         }
 
@@ -130,11 +126,7 @@ class TestpaperController extends BaseController
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
-            if ($testpaper['pattern'] == 'Part') {
-                return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testResult['id'])));
-            } else {
-                return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
-            }
+            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
         }
 
         if ($testpaper['status'] == 'draft') {
@@ -146,11 +138,7 @@ class TestpaperController extends BaseController
 
         $testResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
 
-        if ($testpaper['pattern'] == 'Part') {
-            return $this->redirect($this->generateUrl('course_manage_show_advanced_test', array('id' => $testResult['id'])));
-        } else {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
-        }
+        return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
     }
 
     public function previewTestAction (Request $request, $testId)
@@ -179,9 +167,10 @@ class TestpaperController extends BaseController
         ));
     }
 
-    public function showAdvancedTestAction (Request $request, $id)
+    public function showTestAction (Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
         if (!$testpaperResult) {
             throw $this->createNotFoundException('试卷不存在!');
         }
@@ -192,19 +181,37 @@ class TestpaperController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
         }
 
-        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($testpaperResult['testId'], 'doing', $testpaperResult['id']);
-        
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
-        
-        return $this->render('TopxiaWebBundle:Paper:paper.html.twig', array(
-            'questionItemSet' => $questionItemSet,
-            'limitTime' => $testpaperResult['limitedTime'] * 60,
-            'paper' => $paper,
-            'paperResult' => $testpaperResult,
-            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
-            'id' => $id,
-            'status' => 'doing'
-        ));
+
+        if ($testpaper['pattern'] == 'Part') {
+            list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($testpaperResult['testId'], 'doing', $testpaperResult['id']);
+            
+            return $this->render('TopxiaWebBundle:Paper:paper.html.twig', array(
+                'questionItemSet' => $questionItemSet,
+                'limitTime' => $testpaperResult['limitedTime'] * 60,
+                'paper' => $paper,
+                'paperResult' => $testpaperResult,
+                'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+                'id' => $id,
+                'status' => 'doing'
+            ));
+        } else {
+            $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+            $result = $this->getTestpaperService()->showTestpaper($id);
+            $items = $result['formatItems'];
+            $total = $this->makeTestpaperTotal($testpaper, $items);
+
+            return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
+                'items' => $items,
+                'limitTime' => $testpaperResult['limitedTime'] * 60,
+                'paper' => $testpaper,
+                'paperResult' => $testpaperResult,
+                'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+                'id' => $id,
+                'total' => $total,
+            ));
+        }
+
     }
 
     public function testResultAction (Request $request, $id)
