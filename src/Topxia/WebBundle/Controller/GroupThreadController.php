@@ -428,7 +428,7 @@ class GroupThreadController extends BaseController
     public function buyAttachAction(Request $request,$attachId)
     {
         $user=$this->getCurrentUser();
-        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+        $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
         $attach=$this->getThreadService()->getGoods($attachId);
 
@@ -449,7 +449,7 @@ class GroupThreadController extends BaseController
 
                 if(empty($Trade)){
 
-                    $this->getCashService()->reward($attach['coin'],'下载附件<'.$attach['title'].'>',$user->id,'cut');
+                    $this->getCashAccountService()->reward($attach['coin'],'下载附件<'.$attach['title'].'>',$user->id,'cut');
 
                     $data=array(
                         'GoodsId'=>$attach['id'],
@@ -462,7 +462,7 @@ class GroupThreadController extends BaseController
                     $reward=1;
                     $file=$this->getFileService()->getFile($attach['fileId']);
                     
-                    $this->getCashService()->reward(intval($reward),'您发表的附件<'.$attach['title'].'>被购买下载！',$file['userId']);
+                    $this->getCashAccountService()->reward(intval($reward),'您发表的附件<'.$attach['title'].'>被购买下载！',$file['userId']);
 
                 }
 
@@ -569,7 +569,7 @@ class GroupThreadController extends BaseController
     public function setEliteAction($threadId)
     {   
         $thread=$this->getThreadService()->getThread($threadId);
-        $this->getCashService()->reward(10,"话题被加精",$thread['userId']);
+        $this->getCashAccountService()->reward(10,"话题被加精",$thread['userId']);
 
         return $this->postAction($threadId,'setElite');
     }
@@ -577,7 +577,7 @@ class GroupThreadController extends BaseController
     public function removeEliteAction($threadId)
     {   
         $thread=$this->getThreadService()->getThread($threadId);
-        $this->getCashService()->reward(10,"话题被取消加精",$thread['userId'],'cut');
+        $this->getCashAccountService()->reward(10,"话题被取消加精",$thread['userId'],'cut');
 
         return $this->postAction($threadId,'removeElite');
     }
@@ -638,7 +638,7 @@ class GroupThreadController extends BaseController
     public function rewardAction(Request $request,$threadId)
     {   
         $user=$this->getCurrentUser();
-        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+        $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
         if(isset($account['cash']))
             $account['cash']=intval($account['cash']);
@@ -657,7 +657,7 @@ class GroupThreadController extends BaseController
                     
                 }
 
-                $this->getCashService()->reward($amount,'发布悬赏话题<'.$thread['title'].'>',$user->id,'cut');
+                $this->getCashAccountService()->reward($amount,'发布悬赏话题<'.$thread['title'].'>',$user->id,'cut');
 
                 $thread['type']='reward';
                 $thread['rewardCoin']=$amount;
@@ -688,9 +688,9 @@ class GroupThreadController extends BaseController
 
         if($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN')==true){
         
-            $account=$this->getCashService()->getAccountByUserId($user->id);
+            $account=$this->getCashAccountService()->getAccountByUserId($user->id);
 
-            $this->getCashService()->waveCashField($account['id'],$thread['rewardCoin']);
+            $this->getCashAccountService()->waveCashField($account['id'],$thread['rewardCoin']);
 
             $thread['type']='default';
             $thread['rewardCoin']=0;
@@ -727,7 +727,7 @@ class GroupThreadController extends BaseController
 
             $post=$this->getThreadService()->updatePost($post['id'],array('adopt'=>1));
 
-            $this->getCashService()->reward($thread['rewardCoin'],'您的回复被采纳为最佳回答！',$post['userId']);
+            $this->getCashAccountService()->reward($thread['rewardCoin'],'您的回复被采纳为最佳回答！',$post['userId']);
 
         }
 
@@ -740,7 +740,7 @@ class GroupThreadController extends BaseController
     public function hideAction($threadId,Request $request)
     {
         $user=$this->getCurrentUser();
-        $account=$this->getCashService()->getAccountByUserId($user->id,true);
+        $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
         if(isset($account['cash']))
             $account['cash']=intval($account['cash']);
@@ -756,9 +756,9 @@ class GroupThreadController extends BaseController
                 
             }
 
-            $account=$this->getCashService()->getAccountByUserId($user->id);
+            $account=$this->getCashAccountService()->getAccountByUserId($user->id);
 
-            $this->getCashService()->reward($need,'查看话题隐藏内容',$user->id,'cut');
+            $this->getCashAccountService()->reward($need,'查看话题隐藏内容',$user->id,'cut');
 
             $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
             
@@ -766,7 +766,7 @@ class GroupThreadController extends BaseController
             if(intval($reward)<1)
             $reward=1;
 
-            $this->getCashService()->reward(intval($reward),'您发表的话题<'.$thread['title'].'>的隐藏内容被查看！',$thread['userId']);
+            $this->getCashAccountService()->reward(intval($reward),'您发表的话题<'.$thread['title'].'>的隐藏内容被查看！',$thread['userId']);
 
         }
 
@@ -822,21 +822,24 @@ class GroupThreadController extends BaseController
     }
 
     public function hideThings($thread)
-    {
+    {   
+        $thread['content']=str_replace("#", "<!--></>", $thread['content']);
+        $thread['content']=str_replace("[hide=reply", "#[hide=reply", $thread['content']);
+        $thread['content']=str_replace("[hide=coin", "#[hide=coin", $thread['content']);
         $data=explode('[/hide]',$thread['content']);
         
         $user=$this->getCurrentUser();
         $role=$this->getGroupMemberRole($thread['groupId']);
         $context="";
         $count=0;
-     
+       
         foreach ($data as $key => $value) {
 
             $value=" ".$value;
-            sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
+            sscanf($value,"%[^#]#[hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
+        
+            sscanf($value,"%[^#]#[hide=reply]%[^$$]",$replyContent,$replyHideContent);
             
-            sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
-
             $Trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
 
             if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
@@ -887,12 +890,14 @@ class GroupThreadController extends BaseController
             unset($content);
             unset($replyHideContent);
             unset($hideContent);
+            unset($replyContent);
         }
         
         if($context)
         $thread['content']=$context;
         $thread['count']=$count;
 
+        $thread['content']=str_replace("<!--></>", "#", $thread['content']);
         return $thread;
         
     }
@@ -1092,9 +1097,14 @@ class GroupThreadController extends BaseController
         return false;
     }
 
-    private function getCashService(){
-      
+    private function getCashService()
+    {
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    private function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
 }

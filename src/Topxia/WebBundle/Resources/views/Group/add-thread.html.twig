@@ -99,7 +99,7 @@
           <div class="controls">
             <div class="col-md-4 control">
             <input type="radio" id="type0" name="type" required="required" value="coin" checked=true>
-            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name}}:</label>
+            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name|default("虚拟币")}}:</label>
             </div>
             <div class="col-md-3 controls">
                <input name="amount" class="form-control" tyoe="text" id="amount"/>

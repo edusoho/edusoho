@@ -309,7 +309,17 @@ class SettingController extends BaseController
             'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
             'captcha_enabled' => 0,
+            'register_protective'=>'none',
         );
+
+        if(isset($auth['captcha_enabled']) && $auth['captcha_enabled'] ){
+
+            if(!isset($auth['register_protective'])){
+
+                $auth['register_protective']="low";
+            }
+            
+        }
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
@@ -317,6 +327,15 @@ class SettingController extends BaseController
        
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
+            }
+
+            if($auth['register_protective']=="none"){
+
+                $auth['captcha_enabled']=0;
+
+            }else{
+
+                $auth['captcha_enabled']=1;  
             }
 
             $this->getSettingService()->set('auth', $auth);
@@ -661,6 +680,7 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
+            'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),

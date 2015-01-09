@@ -30,12 +30,24 @@ class RegisterController extends BaseController
 
                 $captchaCode = $request->getSession()->get('captcha_code');   
               
-                if ($captchaCode != $captchaCodePostedByUser){   
+                if ($captchaCode != $captchaCodePostedByUser){ 
+                    $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
                     throw new \RuntimeException('验证码错误。');
                 }
+                $request->getSession()->set('captcha_code',mt_rand(0,999999999));
             }
 
             $registration['createdIp'] = $request->getClientIp();
+
+            if(isset($authSettings['register_protective'])){
+
+                $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+
+                if(!$status){
+
+                    return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+                }
+            }
 
             $user = $this->getAuthService()->register($registration);
 
@@ -80,6 +92,44 @@ class RegisterController extends BaseController
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
         ));
+    }
+
+    private function protectiveRule($type,$ip)
+    {
+        switch ($type) {
+            case 'middle':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 30 ){
+                    
+                    return false;
+                }
+                return true;
+                break;
+            case 'high':
+                $condition=array(
+                    'startTime'=>time()-24*3600,
+                    'createdIp'=>$ip,);
+                $registerCount=$this->getUserService()->searchUserCount($condition);
+                if($registerCount > 10 ){
+                    
+                    return false;
+                }
+                $registerCount=$this->getUserService()->searchUserCount(array(
+                    'startTime'=>time()-3600,
+                    'createdIp'=>$ip,));
+                if($registerCount >= 1 ){
+                    
+                    return false;
+                }
+                return true;
+                break;
+            default:
+                return true;
+                break;
+        }
     }
 
     public function userTermsAction(Request $request)
@@ -226,6 +276,7 @@ class RegisterController extends BaseController
         if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
             $response = array('success' => true, 'message' => '验证码正确');
         } else {
+            $request->getSession()->set('captcha_code',mt_rand(0,999999999)); 
             $response = array('success' => false, 'message' => '验证码错误');
         }
         return $this->createJsonResponse($response);

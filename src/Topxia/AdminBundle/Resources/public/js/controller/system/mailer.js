@@ -27,6 +27,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="username"]',
                     required: true,
+                    rule: 'email email_remote',
                     errormessageRequired: '请输入SMTP用户名'
                 })
                 validator.addItem({
@@ -38,6 +39,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="from"]',
                     required: true,
+                    rule: 'email email_remote',
                     errormessageRequired: '请输入发信人地址'
                 })
                 validator.addItem({
