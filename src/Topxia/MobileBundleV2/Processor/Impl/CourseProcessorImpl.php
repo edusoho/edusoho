@@ -1041,35 +1041,42 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'data' => $data
         );
 
+        $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $learningCourses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'],0,$learningCourseTotal);
+        $resultLearning = $this->controller->filterCourses($learningCourses);
+
+        $learnedCourseTotal = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
+		$learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
+        $resultLearned = $this->controller->filterCourses($learnedCourses);
+        $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
         //----问答
         $conditions     = array(
             'userId' => $user['id'],
+            'courseIds' => $courseIds,
             'type' => 'question'
         );
-        $total = $this->controller->getThreadService()->searchThreadCount($conditions);
-        $resultQuestion = $this->controller->getThreadService()->searchThreads($conditions, 'createdNotStick', 0, 1);
-        
-        $resultQuestion = reset($resultQuestion);
-        $data           = array();
-        if ($resultQuestion != false) {
+
+        $resultThread= $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+        $resultThread = reset($resultThread);
+
+		if ($resultThread != false) {
             $data = array(
-                'content' => $resultQuestion['title'],
-                'id' => $resultQuestion['id'],
-                'courseId' => $resultQuestion['courseId'],
-                'lessonId' => $resultQuestion['lessonId'],
-                'time' => Date('c', $resultQuestion['latestPostTime'])
+                'content' => $resultThread['title'],
+                'id' => $resultThread['id'],
+                'courseId' => $resultThread['courseId'],
+                'lessonId' => $resultThread['lessonId'],
+                'time' => Date('c', $resultThread['latestPostTime'])
             );
-        }else{
-        	$data = null;
         }
         $result[$index++] = array(
             'title' => '问答',
             'data' => $data
-    	); 
+        ); 
+        
 
         //----讨论
         $conditions['type'] = 'discussion';
-        $resultDiscussion   = $this->controller->getThreadService()->searchThreads($conditions, 'createdNotStick', 0, 1);
+        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
         $resultDiscussion   = reset($resultDiscussion);
         $data               = array();
         if ($resultDiscussion != false) {
@@ -1078,7 +1085,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'id' => $resultDiscussion['id'],
                 'courseId' => $resultDiscussion['courseId'],
                 'lessonId' => $resultDiscussion['lessonId'],
-                'time' => Date('c', $resultQuestion['latestPostTime'])
+                'time' => Date('c', $resultDiscussion['latestPostTime'])
             );
         }else{
         	$data = null;
@@ -1088,7 +1095,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'data' => $data
     	); //讨论
 
-        
+        //笔记
         $conditions = array(
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0
@@ -1097,7 +1104,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, 'updated', 0, 1);
         $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, 'created', 0, 1);
 
-        //最新的笔记
         $lastestNote     = array();
         if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) > 0){
         	if ($updateTimeNote[0]['updatedTime'] > $createdTimeNote[0]['createdTime']) {
