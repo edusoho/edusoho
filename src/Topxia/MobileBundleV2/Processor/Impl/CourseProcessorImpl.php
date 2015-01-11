@@ -241,6 +241,63 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         return $review;
     }
+
+    public function getThreadsByUserCourseIds(){
+    	$user = $this->controller->getUserByToken($this->request);
+    	$type = $this->getParam("type", "question");
+    	$start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+
+        $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $learningCourses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'],0,$learningCourseTotal);
+        $resultLearning = $this->controller->filterCourses($learningCourses);
+
+        $learnedCourseTotal = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
+		$learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
+        $resultLearned = $this->controller->filterCourses($learnedCourses);
+        $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
+
+        //----问答
+        $conditions     = array(
+            'courseIds' => $courseIds,
+            'type' => $type
+        );
+
+        $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', $start,  $limit);
+        $controller = $this;
+        $threadsByUserCourseIds = array_map(function($thread) use ($controller)
+        {
+            $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
+            return $thread;
+        }, $threadsByUserCourseIds);
+
+        $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threadsByUserCourseIds, 'courseId'));
+        
+        $posts = array();
+        foreach ($threadsByUserCourseIds as $key => $thread) {
+            $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "default", 0, 1);
+            if (!empty($post)) {
+                $posts[$post[0]["threadId"]] = $post[0];
+            }
+        }
+        
+        $threadsByUserCourseIds = array_map(function($thread) use ($posts)
+        {
+            if (isset($posts[$thread["id"]])) {
+                $thread["latestPostContent"] = $posts[$thread["id"]]["content"];
+            }
+            return $thread;
+        }, $threadsByUserCourseIds);
+
+        $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threadsByUserCourseIds, 'userId'));
+        $threadsByUserCourseIds = $this->filterThreads($threadsByUserCourseIds, $courses, $users);
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => count($threadsByUserCourseIds),
+            'threads' => $threadsByUserCourseIds
+        );
+    }
     
     public function getCourseThreads()
     {
@@ -1051,7 +1108,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
         //----问答
         $conditions     = array(
-            'userId' => $user['id'],
             'courseIds' => $courseIds,
             'type' => 'question'
         );
