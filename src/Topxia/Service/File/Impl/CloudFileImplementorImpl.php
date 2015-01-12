@@ -573,6 +573,8 @@ class CoursewareConvertor
         $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
         $file['metas2'] = array_merge($file['metas2'], $metas);
         $file['convertStatus'] = 'success';
+
+        return $file;
     }
 
     public function getCovertParams($params)
