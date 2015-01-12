@@ -803,9 +803,4 @@ class SettingsController extends BaseController
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
 
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
 }
