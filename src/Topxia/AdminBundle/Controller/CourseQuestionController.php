@@ -27,9 +27,6 @@ class CourseQuestionController extends BaseController
             }  
         }               
         $conditions['type'] = 'question';
-        // if($postStatus == 'unPosted'){
-        //     $conditions['postNum'] = 0;
-        // }
 
         $paginator = new Paginator(
             $request,
@@ -44,58 +41,26 @@ class CourseQuestionController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $questions =ArrayToolkit::index($questions,'id');
-        // var_dump($questions);exit();
-
         $unPostedQuestion = array();
         $threadPosts = array();
         $threadUserId =array();
         foreach ($questions as $key => $value) {
-            $threadPosts[$value['id']] = $this->getThreadService()->findThreadsPostByThreadId($key);
-            $threadUserId[$value['id']] = array($value['userId']);
-            // if($value['userId'] == $value['latestPostUserId'] && $value['postNum'] == 1){
-            //     $unPostedQuestion[] = $value;
-            // }
-            // $threadPosts[] = ArrayToolkit::index($threadPosts,'threadId');
-        }
-        // var_dump($threadUserId);exit();
-
-        foreach ($threadPosts as $key => $value) {
-            // var_dump($key);
-            foreach ($threadUserId as $a => $b) {
-                if($key == $a){
-                    // var_dump($key);
-                    // var_dump($a);
-                    var_dump($value);
-                    var_dump($b);
-                     // $difference = array_diff($value, $b);
+            $threadPosts[$value['id']] = $this->getThreadService()->findThreadsPostByThreadId($value['id']);
+            $postUserIdCount = $this->getThreadService()->getPostUserIdCountByThreadId($value['id']);
+            $threadUserId['userId']=$value['userId'];
+            if ($value['postNum'] == 0) {
+                $unPostedQuestion[] = $value;
+            }else{
+                foreach ($threadPosts as $threadKey => $threadValue) {
+                    if(in_array($threadUserId,$threadValue) && $postUserIdCount == 1 && !(in_array($value, $unPostedQuestion))){
+                        $unPostedQuestion[] = $value;
+                    }
                 }
             }
-            // $a =ArrayToolkit::column($value,'userId');
-            // var_dump($a);
         }
-// var_dump($difference);
-exit();
-        if($postStatus == 'unPosted'){
-            $conditions['postNum'] = 0;
-        }
-
-         $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchThreadCount($conditions),
-            20
-        );
-
-        $questions = $this->getThreadService()->searchThreads(
-            $conditions,
-            'createdNotStick',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
           if($postStatus == 'unPosted'){
-                $questions = array_merge($questions,$unPostedQuestion);
+                $questions = $unPostedQuestion;
           }
-var_dump($questions);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));

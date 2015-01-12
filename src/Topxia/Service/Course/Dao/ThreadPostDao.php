@@ -12,6 +12,8 @@ interface ThreadPostDao
 	public function findThreadsPostByThreadId($threadId);
 
 	public function getPostCountByThreadId($threadId);
+	
+	public function getPostUserIdCountByThreadId($threadId);
 
 	public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit);
 

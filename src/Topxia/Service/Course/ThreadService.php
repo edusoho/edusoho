@@ -65,6 +65,8 @@ interface ThreadService
 
 	public function findThreadsPostByThreadId($threadId);
 
+	public function getPostUserIdCountByThreadId($threadId);
+
 	/**
 	 * 获得话题回帖的数量
 	 * @param  integer  $courseId 话题的课程ID
