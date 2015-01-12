@@ -381,10 +381,8 @@ class CourseLessonController extends BaseController
                 ));
             }
         }
-
-            return $this->createJsonResponse(array(
-                    'error' => array('code' => 'error', 'message' => "ok"),
-                ));
+        $result=array("success");
+        return $this->createJsonResponse($result);
     }
 
     public function fileAction(Request $request, $fileId, $isDownload = false)
