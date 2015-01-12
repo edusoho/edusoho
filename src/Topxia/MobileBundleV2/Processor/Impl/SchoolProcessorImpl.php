@@ -40,8 +40,20 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "action"=>array(),
             "url"=>"articleApp"
         );
+
+        $group = array(
+            "code"=>"Group",
+            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/group.png",
+            "name"=>"网校小组社区",
+            "description"=>"网校小组社区",
+            "author"=>"官方",
+            "version"=>"1.0.0",
+            "supprot_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>""
+        );
         return array(
-            $article
+            $article, $group
             );
     }
     
