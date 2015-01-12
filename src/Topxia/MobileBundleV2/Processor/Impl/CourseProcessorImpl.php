@@ -901,10 +901,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
         $count            = $this->controller->getCourseService()->searchLearnCount(array(
-            "status" => "learning"
         ));
         $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
-            "status" => "learning",
             "userId" => $user["id"]
         ), array(
             "finishedTime",
