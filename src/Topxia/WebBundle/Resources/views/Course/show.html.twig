@@ -43,7 +43,8 @@
 		<div class="col-sm-7 info">
 			{% if is_granted('ROLE_ADMIN') %}
 			<div class="btn-group pull-right">
-				<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
+				<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+					<i class="md md-settings hover-spin"></i>
 				</button>
 				<ul class="dropdown-menu pull-right">
 					<li>
@@ -121,11 +122,11 @@
 						免费体验
 					</a>
 					<a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-						<i class="glyphicon glyphicon-bookmark"></i>
+						<i class="md md-bookmark-outline"></i>
 						收藏课程
 					</a>
 					<a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
-						<i class="glyphicon glyphicon-bookmark"></i>
+						<i class="md md-bookmark"></i>
 						已收藏
 					</a>
 					<a class="btn btn-link" href="#" style="display:none;">
@@ -217,7 +218,7 @@
 							{% for goal in course.goals  %}
 							<li class="media">
 								<div class="pull-left">
-									<span class="glyphicon glyphicon-flag media-object"></span>
+									<span class="md md-flag media-object"></span>
 								</div>
 								<div class="media-body">{{ goal }}</div>
 							</li>
@@ -237,7 +238,7 @@
 							{% for audience in course.audiences %}
 							<li class="media">
 								<div class="pull-left">
-									<span class="glyphicon glyphicon-user media-object"></span>
+									<span class="md md-group media-object"></span>
 								</div>
 								<div class="media-body">{{ audience }}</div>
 							</li>

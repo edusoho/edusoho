@@ -1334,12 +1334,17 @@ body {
 	width: 36px;
 	height: 36px;
 	display: inline-block;
-	background: url(../img/course/course-item-types-white.png) 0 0 no-repeat;
+	/*background: url(../img/course/course-item-types-white.png) 0 0 no-repeat;*/
 }
 
 .course-item-list-multi .item-object-live {
 	background-color: #F8A269;
 	border-color: #DA9078;
+}
+
+.item-object i {
+	margin-top: 8px;
+	color: #fff;
 }
 
 .course-item-list-multi .item-object-video {

@@ -13,7 +13,15 @@
 				<li class="{% if item.type == 'live' %}col-md-6 live-item{% else %}col-md-4{% endif %} clearfix item">
 					<a class="item-object item-object-{{ item.type }}" href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">
 						{% if item.free %}<span class="item-free"></span>{% endif %}
-						<span class="item-icon"></span>
+						{% if item.type == 'video' %}
+							<i class="md-2x md-play-circle-outline"></i>
+						{% elseif item.type == 'text' %}
+							<i class="md-2x md-photo-library"></i>
+						{% elseif item.type == 'audio' %}
+							<i class="md-2x md-audiotrack"></i>
+						{% elseif item.type == 'ppt' %}
+							<i class="md-2x md-insert-chart"></i>
+						{% endif %}
 						{% if item.status == 'published' %}
 							<span class="item-length">
 								{% if item.type == 'text' %}

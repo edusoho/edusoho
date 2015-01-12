@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             var html='<div class="dropdown pull-right"><a class="dropdown-toggle text-muted "  href="#" id="dropdownMenu1" data-toggle="dropdown" >分享到<span class="caret"></span></a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><div class="bdsharebuttonbox" style="padding:1px;">';
         }
         else if(type=="dropdownWithIcon"){
-            var html='<div class="dropdown pull-right" style="padding:1px;"><a class="dropdown-toggle btn btn-link"  href="javascript:" id="dropdownMenu1" data-toggle="dropdown" ><span class="glyphicon glyphicon-share"></span> 分享到</a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><div class="bdsharebuttonbox" style="padding:1px;">';
+            var html='<div class="dropdown pull-right" style="padding:1px;"><a class="dropdown-toggle btn btn-link"  href="javascript:" id="dropdownMenu1" data-toggle="dropdown" ><span class="md md-share"></span> 分享到</a><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><div class="bdsharebuttonbox" style="padding:1px;">';
         }else{
             var html='<ul style="padding:1px;"><div class="bdsharebuttonbox" >';
         }
