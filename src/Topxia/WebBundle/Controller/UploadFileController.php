@@ -160,7 +160,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('文件不存在');
         }
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
- $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('result' => $file));
+
         if (in_array($file['convertStatus'], array('success', 'error'))) {
             $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
                 'file' => $file,
