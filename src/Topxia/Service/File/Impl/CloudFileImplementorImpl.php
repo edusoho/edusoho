@@ -565,8 +565,14 @@ class CoursewareConvertor
     const NAME = 'courseware';
 
     public function saveConvertResult($file, $result)
-    {
-
+    {   
+        $metas['thumb'] = $result['thumb'];
+        $metas['pdf'] = $result['pdf'];
+        $metas['swf'] = $result['swf'];
+        
+        $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+        $file['metas2'] = array_merge($file['metas2'], $metas);
+        $file['convertStatus'] = 'success';
     }
 
     public function getCovertParams($params)
