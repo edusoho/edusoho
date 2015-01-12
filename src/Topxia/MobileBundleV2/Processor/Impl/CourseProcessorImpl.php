@@ -257,7 +257,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $resultLearned = $this->controller->filterCourses($learnedCourses);
         $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
 
-        //----问答
         $conditions     = array(
             'courseIds' => $courseIds,
             'type' => $type
