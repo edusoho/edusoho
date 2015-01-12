@@ -294,7 +294,7 @@ class MobileBaseController extends BaseController
             }
             $userProfile = $controller->getUserService()->getUserProfile($user['id']);
             $user['signature'] = $userProfile['signature'];
-            $user['about'] = $this->convertAbsoluteUrl($userProfile['about']);
+            $user['about'] = $this->convertAbsoluteUrl($this->request, $userProfile['about']);
             
             unset($user['password']);
             unset($user['salt']);
