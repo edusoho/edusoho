@@ -126,7 +126,7 @@ class DataTagTests extends PHPUnit_Framework_TestCase
 
 /*             print_r($data);*/
     }
-
+    //当课程的tags为空时 会报错
     public function testCourseRelatedArticlesDataTag()
     {
         $Article = new CourseRelatedArticlesDataTag();
@@ -149,7 +149,70 @@ class DataTagTests extends PHPUnit_Framework_TestCase
     {
         $CourseThread = new CourseThreadDataTag();
 
-        $data = $CourseThread->getData(array('count'=>5,'reviewId'=>1));
+        $data = $CourseThread->getData(array('threadId'=>1,'courseId'=>1));
+/*
+             print_r($data);*/
+    }
+
+    public function testCourseThreadsByTypeDataTag()
+    {
+        $CourseThread = new CourseThreadsByTypeDataTag();
+
+        $data = $CourseThread->getData(array('count'=>5));
+/*
+             print_r($data);*/
+    }
+
+    public function testCoursesCountDataTag()
+    {
+        $CoursesCount = new CoursesCountDataTag();
+
+        $data = $CoursesCount->getData(array());
+
+/*             print_r($data);*/
+    }
+
+    public function testEliteCourseThreadsByTypeDataTag()
+    {
+        $EliteCourseThreads = new EliteCourseThreadsByTypeDataTag();
+
+        $data = $EliteCourseThreads->getData(array('count'=>5));
+
+/*             print_r($data);*/
+    }
+
+    public function testElitedCourseQuestionsDataTag()
+    {
+        $ElitedCourseQuestions = new ElitedCourseQuestionsDataTag();
+
+        $data = $ElitedCourseQuestions->getData(array('count'=>5,'courseId'=>1));
+
+ /*            print_r($data);*/
+    }
+
+    public function testElitedCourseThreadsDataTag()
+    {
+        $ElitedCourseThreads = new ElitedCourseThreadsDataTag();
+
+        $data = $ElitedCourseThreads->getData(array('count'=>5,'courseId'=>1));
+/*
+             print_r($data);*/
+    }
+
+    public function testFreeCoursesDataTag()
+    {
+        $FreeCourses = new FreeCoursesDataTag();
+
+        $data = $FreeCourses->getData(array('count'=>5));
+
+/*             print_r($data);*/
+    }
+
+    public function testFreeLessonsDataTag()
+    {
+        $FreeLessons = new FreeLessonsDataTag();
+
+        $data = $FreeLessons->getData(array('count'=>5));
 /*
              print_r($data);*/
     }
@@ -163,6 +226,300 @@ class DataTagTests extends PHPUnit_Framework_TestCase
     /*        print_r($groups);*/
 
     }
+
+    public function testHotThreadsDataTag()
+    {
+        $Threads = new HotThreadsDataTag();
+
+        $data = $Threads->getData(array('count'=>5));
+/*
+            print_r($data);*/
+
+    }
+
+    public function testLatestArticlesDataTag()
+    {
+        $Articles = new LatestArticlesDataTag();
+
+        $data = $Articles->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+
+    public function testLatestCourseMembers2DataTag()
+    {
+        $Members = new LatestCourseMembers2DataTag();
+
+        $data = $Members->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestCourseMembersDataTag()
+    {
+        $Members = new LatestCourseMembersDataTag();
+
+        $data = $Members->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestCourseQuestionsDataTag()
+    {
+        $CourseQuestions = new LatestCourseQuestionsDataTag();
+
+        $data = $CourseQuestions->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestCourseReviewsDataTag()
+    {
+        $CourseReviews = new LatestCourseReviewsDataTag();
+
+        $data = $CourseReviews->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestCourseThreadsByTypeDataTag()
+    {
+        $CourseThreads = new LatestCourseThreadsByTypeDataTag();
+
+        $data = $CourseThreads->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestCourseThreadsDataTag()
+    {
+        $CourseThreads = new LatestCourseThreadsDataTag();
+
+        $data = $CourseThreads->getData(array('count'=>5,'courseId'=>1));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestCoursesDataTag()
+    {
+        $Courses = new LatestCoursesDataTag();
+
+        $data = $Courses->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestFinishedLearnsDataTag()
+    {
+        $FinishedLearns = new LatestFinishedLearnsDataTag();
+
+        $data = $FinishedLearns->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestLoginUsersDataTag()
+    {
+        $LoginUsers = new LatestLoginUsersDataTag();
+
+        $data = $LoginUsers->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testLatestTeachersDataTag()
+    {
+        $Teachers = new LatestTeachersDataTag();
+
+        $data = $Teachers->getData(array('count'=>5));
+
+ /*           print_r($data);*/
+
+    }
+
+    public function testLatestUsersDataTag()
+    {
+        $Users = new LatestUsersDataTag();
+
+        $data = $Users->getData(array('count'=>5));
+
+ /*           print_r($data);*/
+
+    }
+
+    public function testNavigationDataTag()
+    {
+        $Navigation = new NavigationDataTag();
+
+        $data = $Navigation->getData(array('type'=>'top'));
+        $data = $Navigation->getData(array('type'=>'foot'));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testPersonDynamicDataTag()
+    {
+        $PersonDynamic = new PersonDynamicDataTag();
+
+        $data = $PersonDynamic->getData(array('count'=>'5'));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testPopularCoursesByCategoryDataTag()
+    {
+        $PopularCourses = new PopularCoursesByCategoryDataTag();
+
+        $data = $PopularCourses->getData(array('categoryId'=>1,'count'=>5));
+
+ /*           print_r($data);*/
+
+    }
+
+    public function testPopularCoursesDataTag()
+    {
+        $PopularCourses = new PopularCoursesDataTag();
+
+        $data = $PopularCourses->getData(array('type'=>'hitNum','count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testPromotedTeacherDataTag()
+    {
+        $Teacher = new PromotedTeacherDataTag();
+
+        $data = $Teacher->getData(array());
+
+/*            print_r($data);*/
+
+    }
+
+    public function testRecentLiveCoursesDataTag()
+    {
+        $Course = new RecentLiveCoursesDataTag();
+
+        $data = $Course->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testRecommendCoursesDataTag()
+    {
+        $Course = new RecommendCoursesDataTag();
+
+        $data = $Course->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testRecommendTeachersDataTag()
+    {
+        $Teachers = new RecommendTeachersDataTag();
+
+        $data = $Teachers->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testTagsCoursesDataTag()
+    {
+        $Tags = new TagsCoursesDataTag();
+
+        $data = $Tags->getData(array('count'=>5,'tags'=>array('默认标签')));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testTagsDataTag()
+    {
+        $Tags = new TagsDataTag();
+
+        $data = $Tags->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testTeacherCoursesDataTag()
+    {
+        $TeacherCourses = new TeacherCoursesDataTag();
+
+        $data = $TeacherCourses->getData(array('userId'=>1,'count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testTopRatingCourseReviewsDataTag()
+    {
+        $TopRatingCourse = new TopRatingCourseReviewsDataTag();
+
+        $data = $TopRatingCourse->getData(array('courseId'=>1,'count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testUserDataTag()
+    {
+        $Users = new UserDataTag();
+
+        $data = $Users->getData(array('userId'=>1));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testUserLatestLearnCoursesDataTag()
+    {
+        $Users = new UserLatestLearnCoursesDataTag();
+
+        $data = $Users->getData(array('userId'=>1,'count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testUserandProfilesDataTag()
+    {
+        $Users = new UserandProfilesDataTag();
+
+        $data = $Users->getData(array('userId'=>1));
+
+/*            print_r($data);*/
+
+    }
+
+    public function testVipLevelsDataTag()
+    {
+        $Users = new VipLevelsDataTag();
+
+        $data = $Users->getData(array('count'=>5));
+
+/*            print_r($data);*/
+
+    }
+
+
 
     public function __construct()
     {
