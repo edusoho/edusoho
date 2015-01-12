@@ -3,7 +3,13 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-  {% if targetType == 'courselesson' %} 上传课时文件 {% elseif targetType == 'coursematerial' %} 上传资料文件 {% endif %}
+  {% if targetType == 'courselesson' %} 
+  		上传课时文件 
+  {% elseif targetType == 'coursematerial' %} 
+  		上传资料文件
+  {% elseif targetType == 'materiallib' %}
+  		上传素材文件
+  {% endif %}
 {% endblock %}
   
 {% block body %}
@@ -60,7 +66,7 @@
       </tbody>
     </table>
   </div>
-  {% if targetType == 'courselesson' %}
+  {% if targetType == 'courselesson' or  targetType == 'materiallib'%}
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}

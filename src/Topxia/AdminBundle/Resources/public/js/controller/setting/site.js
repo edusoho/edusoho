@@ -47,7 +47,6 @@ define(function(require, exports, module) {
                 Notify.danger('上传网站浏览器图标失败，请重试！')
             },
             success: function(response) {
-                alert(response);
                 response = $.parseJSON(response);
                 $("#site-favicon-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
                 $form.find('[name=favicon]').val(response.path);

@@ -1,0 +1,53 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{user.nickname}}的{{ setting('coin.coin_name') }}明细 {% endblock %}
+{% block body %}
+
+  <p>
+    <span>账户余额: <strong class="amount-num">{{userAccount(user.id).cash}}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">充值: <strong class="inflow-num">{{userInCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">消费: <strong class="outflow-num">{{userOutCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+  </p>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        {% if cashes|default(null) %}
+        <tr>
+          <th>名称</th>          
+          <th>充值</th>
+          <th>消费</th>
+          <th>创建时间</th>  
+        </tr>
+        {% for cash in cashes %}
+           <tr>
+            <td><span class="text-sm">{{cash.name}}</span></td>
+
+            {% if cash.type =="inflow" %}
+            <td style="color:#1bb974;">
+               {{cash.amount}} 
+            </td>
+            <td></td>
+            {% endif %}
+            {% if cash.type =="outflow" %}
+            <td></td>
+            <td style="color:#ff7b0e;">
+               -&nbsp;{{cash.amount}}               
+            </td>
+            {% endif %}            
+            <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td> 
+          </tr>
+        {% endfor %}
+        {% else %}
+        <div class="empty">暂无记录</div>
+        {% endif %}
+      </table>
+    </div>
+     {{ web_macro.paginator(paginator) }}
+{% endblock %}
+
+{% block footer %}
+
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
+{% endblock %}

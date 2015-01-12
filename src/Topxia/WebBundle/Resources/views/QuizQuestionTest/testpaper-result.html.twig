@@ -35,7 +35,7 @@
 
 {% block testpaper_body_sidebar %}
 
-{% if ( paperResult.status in ['finished','reviewing'] and not app.user.isTeacher() and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
+{% if ( paperResult.status in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
 
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">

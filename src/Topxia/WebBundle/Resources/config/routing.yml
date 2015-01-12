@@ -80,9 +80,17 @@ register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
 
+register_captcha_check:
+    pattern:  /register/captcha/check
+    defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
+
 register_analysis:
     pattern:  /register/analysis
     defaults: { _controller: TopxiaWebBundle:Register:analysis }
+
+register_captcha_num:
+    path:     /captcha_num
+    defaults: { _controller: TopxiaWebBundle:Register:captcha }
 
 file_upload:
     pattern:  /file/upload
@@ -122,9 +130,17 @@ uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info/{type}
     defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
 
-uploadfile_cloud_get_head_leader_hlskey:
-    pattern: /uploadfile/get_head_leader_hlsKey
-    defaults: { _controller: TopxiaWebBundle:UploadFile:getHeadLeaderHlsKey}
+hls_playlist:
+    pattern: /hls/{id}/playlist/{token}.m3u8
+    defaults: { _controller: TopxiaWebBundle:HLS:playlist}
+
+hls_stream:
+    pattern: /hls/{id}/stream/{level}/{token}.m3u8
+    defaults: { _controller: TopxiaWebBundle:HLS:stream}
+
+hls_clef:
+    pattern: /hls/{id}/clef/{token}
+    defaults: { _controller: TopxiaWebBundle:HLS:clef}
 
 kindeditor_upload:
     pattern:  /kindeditor/upload
@@ -212,10 +228,6 @@ course_become_use_member:
     defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
     methods: [POST]
 
-course_buy:
-    pattern:  /course/{id}/buy
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
-
 course_rebuy:
     pattern:  /course/{courseId}/course_rebuy
     defaults: { _controller: TopxiaWebBundle:Course:rebuy }
@@ -228,23 +240,13 @@ order_result_notice:
     pattern: /order/result/notice
     defaults: { _controller: TopxiaWebBundle:Order:resultNotice }
 
-course_order_pay:
-    pattern:  /course/order/pay
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:pay }
-    methods: [POST]
+course_order_buy:
+    pattern:  /course/{id}/order/buy
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
 
 course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
-    methods: [POST]
-
-course_order_pay_return:
-    pattern:  /course/order/pay/{name}/return
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:payReturn }
-
-course_order_pay_notify:
-    pattern:  /course/order/pay/{name}/notify
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:payNotify }
 
 course_order_refund:
     pattern:  /course/{id}/order/refund
@@ -329,10 +331,6 @@ course_lesson_learn_cancel:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/cancel
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
     methods: [POST]
-
-course_lesson_hlskeyurl:
-    pattern:  /course/{courseId}/lesson/{lessonId}/kan/{token}
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:hlskeyurl }
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list
@@ -800,6 +798,10 @@ course_manage_testpaper_item_picked:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
 
+course_manage_testpaper_get_question_num:
+    pattern: /course/{courseId}/manage/testpaper/get_question_num
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:getQuestionCountGroupByTypes}
+
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
     defaults: { _controller: TopxiaWebBundle:CourseChapterManage:create }
@@ -889,6 +891,30 @@ settings_avatar_fetch_partner:
     pattern:  /settings/avatar/fetch_partner
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
+
+settings_security: 
+    pattern:  /settings/security 
+    defaults: { _controller: TopxiaWebBundle:Settings:security }
+
+settings_pay_password: 
+    pattern:  /settings/pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
+
+settings_reset_pay_password:
+    pattern:  /settings/reset_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
+
+settings_find_pay_password:
+    pattern:  /settings/find_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
+
+settings_update_pay_password:
+    pattern:  /settings/update_pay_password 
+    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions }
+
+settings_security_questions:
+    pattern:  /settings/security_questions
+    defaults: { _controller: TopxiaWebBundle:Settings:securityQuestions }
 
 setting_nickname:
     pattern: /settings/nickname
@@ -1049,6 +1075,15 @@ my_orders:
     pattern: /my/orders
     defaults: { _controller: TopxiaWebBundle:MyOrder:index }
 
+my_order_cancel:
+    pattern: /my/order/{id}/cancel
+    defaults: { _controller: TopxiaWebBundle:MyOrder:cancel }
+    methods: [POST]
+
+web_user_order_detail:
+    pattern: /order/{id}/detail
+    defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
+
 my_order_cancel_refund:
     pattern: /my/order/{id}/cancel_refund
     defaults: { _controller: TopxiaWebBundle:MyOrder:cancelRefund }
@@ -1133,7 +1168,7 @@ user_remind_counter:
     defaults: { _controller: TopxiaWebBundle:User:remindCounter }
 
 message_create:
-    pattern: /mesage/create/{toId}
+    pattern: /message/create/{toId}
     defaults: { _controller: TopxiaWebBundle:Message:create }
 
 message:
@@ -1193,6 +1228,10 @@ content_page_list:
 teacher:
     pattern: /teacher
     defaults: {_controller: TopxiaWebBundle:Teacher:index }
+
+teacher_search:
+    pattern: /teacher/search
+    defaults: {_controller: TopxiaWebBundle:Teacher:search }
 
 partner_login:
     pattern: /partner/login
@@ -1283,6 +1322,9 @@ group_member_threads:
 group_member_posts:
     pattern:  /my/group/posts
     defaults: { _controller: TopxiaWebBundle:Group:memberPosts}
+group_thread_collecting:
+    pattern:  /my/group/collecting
+    defaults: { _controller: TopxiaWebBundle:Group:collecting }
 group_show:
     pattern:  /group/{id}
     defaults: { _controller: TopxiaWebBundle:Group:groupIndex }
@@ -1343,6 +1385,14 @@ group_thread_check_user:
 group_thread_show:
     pattern:  /group/{id}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
+group_thread_collect:
+    pattern:  /group/thread/{threadId}/collect
+    defaults: { _controller: TopxiaWebBundle:GroupThread:collect }
+    methods: [POST]
+group_thread_uncollect:
+    pattern:  /group/thread/{threadId}/uncollect
+    defaults: { _controller: TopxiaWebBundle:GroupThread:uncollect }
+    methods: [POST]
 group_thread_setElite:
     pattern:  /group/thread/{threadId}/setElite
     defaults: { _controller: TopxiaWebBundle:GroupThread:setElite }
@@ -1361,11 +1411,107 @@ group_thread_closeThread:
 group_thread_deletePost:
     pattern:  /group/thread/deletePost/{postId}
     defaults: { _controller: TopxiaWebBundle:GroupThread:deletePost }
+    methods: [POST]
 group_thread_post_reply:
     pattern:  /group/post/{postId}/reply
     defaults: { _controller: TopxiaWebBundle:GroupThread:postReply }
+group_thread_reward:
+    pattern:  /thread/{threadId}/reward
+    defaults: { _controller: TopxiaWebBundle:GroupThread:reward }
+group_thread_cancel_reward:
+    pattern:  /thread/{threadId}/reward/cancel
+    defaults: { _controller: TopxiaWebBundle:GroupThread:cancelReward }
+group_thread_adopt:
+    pattern:  /thread/{postId}/adopt
+    defaults: { _controller: TopxiaWebBundle:GroupThread:adopt }
+group_thread_hide:
+    pattern:  /thread/{threadId}/hide
+    defaults: { _controller: TopxiaWebBundle:GroupThread:hide }
+group_upload:
+    pattern:  /group/thread/upload
+    defaults: { _controller: TopxiaWebBundle:GroupThread:upload }
+group_attach_download:
+    pattern:  /group/attach/download/{fileId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:download }
+group_thread_buy_attach:
+    pattern:  /group/attach/buy/{attachId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:buyAttach }
+group_thread_delete_attach:
+    pattern:  /group/attach/delete/{goodsId}
+    defaults: { _controller: TopxiaWebBundle:GroupThread:deleteAttach }
+    methods: [POST]
 
+my_bill:
+    pattern: /my/bill
+    defaults: { _controller: TopxiaWebBundle:Coin:cashBill }
+my_coin:
+    path:     /my/coin
+    defaults: { _controller: TopxiaWebBundle:Coin:index }
+coin_pay:
+    path:     /coin/pay
+    defaults: { _controller: TopxiaWebBundle:Coin:pay }
+coin_order_pay_return:
+    path:     /coin/pay/return/{name}
+    defaults: { _controller: TopxiaWebBundle:Coin:payReturn }
+coin_order_pay_notify:
+    path:     /coin/pay/notify/{name}
+    defaults: { _controller: TopxiaWebBundle:Coin:payNotify }
+coin_change:
+    path:     /coin/change
+    defaults: { _controller: TopxiaWebBundle:Coin:change }
+coin_show:
+    path:     /coin/show
+    defaults: { _controller: TopxiaWebBundle:Coin:show }
 
+user_password_check:
+    path:   /user/password/check
+    defaults: { _controller: TopxiaWebBundle:User:checkPassword }
+
+pay_center_show:
+    path:   /pay/center
+    defaults: { _controller: TopxiaWebBundle:PayCenter:show }
+
+pay_center_pay:
+    path:   /pay/center/pay
+    defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
+    methods: [POST]
+
+pay_return:
+    pattern:  /pay/center/pay/{name}/return
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }
+
+pay_notify:
+    pattern:  /pay/center/pay/{name}/notify
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payNotify }
+
+pay_success_show:
+    pattern:  /pay/center/success/show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:showTarget }
+
+pay_password_check:
+    pattern:  /pay/password/check
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payPasswordCheck }
+
+pay_error:
+    pattern:  /pay/error
+    defaults: { _controller: TopxiaWebBundle:PayCenter:payError }
+
+order_show:
+    pattern:  /order/show
+    defaults: { _controller: TopxiaWebBundle:Order:show }
+
+order_create:
+    pattern:  /order/create
+    defaults: { _controller: TopxiaWebBundle:Order:create }
+    methods: [POST]
+
+course_buy:
+    pattern: /course/{id}/buy
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
+
+course_buy_modify_user_info:
+    pattern: /course/buy/modify_user_info
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
 
 #占位
 vip:

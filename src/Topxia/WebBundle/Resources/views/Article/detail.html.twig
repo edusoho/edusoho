@@ -18,6 +18,7 @@
 
   <h2 class="thread-title">{{article.title}}</h2>
      <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
+     <div class="published-time pull-right">{{ article.hits|default(0) }} 次浏览</div>
      <p><br></p>
   <div class="thread-body">{{article.body |raw }}</div>
   {% if tags %}

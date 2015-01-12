@@ -111,19 +111,7 @@ class UserController extends BaseController
     public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowingCount($user['id']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->findUserFollowingCount($user['id']),
-            10
-        );
-
-        $followings = $this->getUserService()->findUserFollowing(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $followings = $this->getUserService()->findAllUserFollowing($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
@@ -136,19 +124,7 @@ class UserController extends BaseController
     public function followerAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowerCount($user['id']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->findUserFollowerCount($user['id']),
-            10
-        );
-
-        $followers = $this->getUserService()->findUserFollowers(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $followers=$this->getUserService()->findAllUserFollower($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
@@ -197,6 +173,23 @@ class UserController extends BaseController
         $this->getNotificationService()->notify($id, 'default', $message);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function checkPasswordAction(Request $request)
+    {
+        $password = $request->query->get('value');
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            $response = array('success' => false, 'message' => '请先登入');
+        }
+
+        if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
+            $response = array('success' => false, 'message' => '输入的密码不正确');
+        }else{
+            $response = array('success' => true, 'message' => '');
+        }
+        return $this->createJsonResponse($response);
     }
 
     protected function getUserService()

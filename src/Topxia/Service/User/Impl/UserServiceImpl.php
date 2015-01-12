@@ -74,9 +74,9 @@ class UserServiceImpl extends BaseService implements UserService
         return  ArrayToolkit::index($userProfiles, 'id');
     }
 
-    public function searchUsers(array $conditions, array $oderBy, $start, $limit)
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
-        $users = $this->getUserDao()->searchUsers($conditions, $oderBy, $start, $limit);
+        $users = $this->getUserDao()->searchUsers($conditions, $orderBy, $start, $limit);
         return UserSerialize::unserializes($users);
     }
 
@@ -198,14 +198,68 @@ class UserServiceImpl extends BaseService implements UserService
 
         $fields = array(
             'salt' => $salt,
-            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
+            'password' => $this->getPasswordEncoder()->encodePassword($password, $salt)
         );
 
         $this->getUserDao()->updateUser($id, $fields);
 
+        $this->clearUserConsecutivePasswordErrorTimesAndLockDeadline($id);
+
         $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
 
         return true;
+    }
+
+    public function changePayPassword($userId, $newPayPassword)
+    {
+        $user = $this->getUser($userId);
+        if (empty($user) or empty($newPayPassword)) {
+            throw $this->createServiceException('参数不正确，更改支付密码失败。');
+        }
+
+        $payPasswordSalt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+
+
+        $fields = array(
+            'payPasswordSalt' => $payPasswordSalt,
+            'payPassword' => $this->getPasswordEncoder()->encodePassword($newPayPassword, $payPasswordSalt)
+        );
+
+        $this->getUserDao()->updateUser($userId, $fields);
+
+        $this->getLogService()->info('user', 'pay-password-changed', "用户{$user['email']}(ID:{$user['id']})重置支付密码成功");
+
+        return true;
+    }
+
+    public function getUserSecureQuestionsByUserId($userId)
+    {
+        return $this->getUserSecureQuestionDao()->getUserSecureQuestionsByUserId($userId);
+    }
+
+    public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers)
+    {
+        
+        $encoder = $this->getPasswordEncoder();
+        $userSecureQuestionDao = $this->getUserSecureQuestionDao();
+
+        for ($questionNum = 1;$questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2);$questionNum++){
+                $fields = array('userId'=>$userId);
+        
+                $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
+                $fields['securityAnswerSalt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+                $fields['securityAnswer'] = 
+                    $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
+                $fields['createdTime'] = time();
+                
+                $userSecureQuestionDao ->addOneUserSecureQuestion($fields);  
+        } 
+        return true;             
+    }
+
+    public function verifyInSaltOut($in,$salt,$out)
+    {
+        return $out == $this->getPasswordEncoder()->encodePassword($in,$salt);
     }
 
     public function verifyPassword($id, $password)
@@ -214,10 +268,16 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('参数不正确，校验密码失败。');
         }
+        return $this->verifyInSaltOut($password, $user['salt'], $user['password']);
+    }
 
-        $encoder = $this->getPasswordEncoder();
-        $passwordHash = $encoder->encodePassword($password, $user['salt']);
-        return $user['password'] == $passwordHash;
+    public function verifyPayPassword($id, $payPassword)
+    {
+        $user = $this->getUser($id);
+        if (empty($user)) {
+            throw $this->createServiceException('参数不正确，校验密码失败。');
+        }
+        return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
     public function register($registration, $type = 'default')
@@ -668,6 +728,13 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->findUsersByIds($ids);
     }
 
+    public function findAllUserFollowing($userId)
+    {
+        $friends =$this->getFriendDao()->findAllUserFollowingByFromId($userId);
+        $ids = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+
     public function findUserFollowingCount($userId)
     {
         return $this->getFriendDao()->findFriendCountByFromId($userId);
@@ -676,6 +743,13 @@ class UserServiceImpl extends BaseService implements UserService
     public function findUserFollowers($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->findFriendsByToId($userId, $start, $limit);
+        $ids = ArrayToolkit::column($friends, 'fromId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findAllUserFollower($userId)
+    {
+        $friends =$this->getFriendDao()->findAllUserFollowerByToId($userId);
         $ids = ArrayToolkit::column($friends, 'fromId');
         return $this->findUsersByIds($ids);
     }
@@ -900,6 +974,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('User.UserProfileDao');
     }
 
+    private function getUserSecureQuestionDao()
+    {
+        return $this->createDao('User.UserSecureQuestionDao');
+    }
+
     private function getUserBindDao()
     {
         return $this->createDao('User.UserBindDao');
@@ -940,7 +1019,26 @@ class UserServiceImpl extends BaseService implements UserService
         return new MessageDigestPasswordEncoder('sha256');
     }
 
+    public function userLoginFail($user,$failAllowNum = 3,$temporaryMinutes = 20)
+    {
+        $currentTime = time();
+        if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum-1){
+            $this->getUserDao()->updateUser($user['id'], array('lockDeadline' => $currentTime+$temporaryMinutes*60));
+        } else {
+            $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
+        }
+        $this->getUserDao()->updateUser($user['id'], array('lastPasswordFailTime' => $currentTime));        
+    }
 
+    public function isUserTemporaryLockedOrLocked($user)
+    {
+        return ( $user['locked'] == 1 )||( $user['lockDeadline'] > time() );
+    }
+
+    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId)
+    {
+        $this->getUserDao()->updateUser($userId, array('lockDeadline' => 0, 'consecutivePasswordErrorTimes' => 0));
+    }
 }
 
 class UserSerialize
@@ -966,5 +1064,4 @@ class UserSerialize
             return UserSerialize::unserialize($user);
         }, $users);
     }
-
 }

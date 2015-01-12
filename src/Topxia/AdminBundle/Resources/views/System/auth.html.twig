@@ -11,7 +11,7 @@
 
 {{ web_macro.flash_messages() }}
 
-<form class="form-horizontal" method="post" novalidate>
+<form  id="auth-form" class="form-horizontal" method="post" novalidate>
   <div class="form-group">
     <div class="col-md-3 control-label">
       <label >新用户注册</label>
@@ -21,6 +21,90 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label >注册防护机制</label>
+    </div>
+    <div class="controls col-md-8 ">
+      <label class="radio-inline">
+        <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
+      </label>
+    </div>
+
+    <div class="controls col-md-8 mtl low register-help" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+      <div class="well">
+        方案说明：
+            <p class="mll mtm">1：注册时需填写验证码。</p>
+      </div>
+    </div>
+
+    <div class="controls col-md-8 mtl middle register-help" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+      <div class="well">
+        方案说明：
+            <p class="mll mtm">1：注册时需填写验证码。</p>
+            <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
+      </div>
+    </div>
+
+    <div class="controls col-md-8 mtl high register-help" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+      <div class="well">
+        方案说明：
+            <p class="mll mtm">1：注册时需填写验证码。</p>
+            <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
+            <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
+      </div>
+    </div>
+{# 
+    {% if auth.register_protective|default(none) != "none" %}
+    <div class="controls col-md-8 mtl"  id="register-help">
+      <div class="well">
+        方案说明：
+        {% if  auth.register_protective|default(null) == "low" %}
+          <div class="low">
+            <p class="mll mtm">1：注册时需填写验证码。</p>
+          </div>
+        {% endif %}
+
+        {% if  auth.register_protective|default(null) == "middle" %}
+          <div class="middle">
+            <p class="mll mtm">1：注册时需填写验证码。</p>
+            <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
+          </div>
+        {% endif %}
+
+        {% if  auth.register_protective|default(null) == "high" %}
+          <div class="high">
+            <p class="mll mtm">1：注册时需填写验证码。</p>
+            <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
+            <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
+          </div>
+        {% endif %}
+        </div>
+      </div>
+    {% endif %} #}
+  </div>
+
+
+{#   <div class="form-group">
+      <div class="col-md-3 control-label">
+          <label >是否开启注册时的验证码</label>
+      </div>
+      <div class="controls col-md-8 radios">
+          {{ radios('captcha_enabled', {1:'开启', 0:'关闭'}, auth.captcha_enabled) }} 
+          <p class="help-block">开启后，注册时使用验证码</p>
+      </div>
+  </div> #}
+
+  
   <fieldset>
     <legend>新用户激活邮件设置</legend>
 

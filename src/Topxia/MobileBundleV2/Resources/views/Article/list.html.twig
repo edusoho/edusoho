@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+
+<head>
+
+<title>资讯列表</title>
+
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<link href="{{ asset('assets/Article/css/font.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/Article/css/core-icon.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/Article/css/core-icon-button.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/Article/css/post-card.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/Article/css/font.css') }}" rel="stylesheet" />
+
+  <style>
+    core-icon-button {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      color: #636363;
+    }
+  html,body {
+    height: 100%;
+    margin: 0;
+    background-color: #E5E5E5;
+    font-family: 'RobotoDraft', sans-serif;
+  }
+  core-header-panel {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; 
+  }
+  core-toolbar {
+    background: #03a9f4;
+    color: white;
+  }
+  
+  .container {
+    width: 90%;
+    margin: 50px auto;
+  }
+  @media (min-width: 481px) {
+    .container {
+      width: 400px;
+    }
+  }
+  </style>
+</head>
+
+<body unresolved>
+
+<div class="container">
+      <div>
+        {% for latestArticle in latestArticles %}
+                  <post-card class="card-header">
+                  <core-icon-button id="favicon" icon="favorite">
+                    {{ latestArticle.publishedTime|date('Y-m-d H:i') }}
+                  </core-icon-button>
+                    <h3>{{ latestArticle.title}}</h3>
+                    <p>{{ latestArticle.body | plain_text(150)}}</p>
+                  </post-card>
+        {% endfor %}
+        
+    </div>
+</div>
+</body>
+
+</html>

@@ -35,7 +35,7 @@
 	<div class="row row-5-7 course-cover-heading">
 		<div class="col-sm-5 picture hidden-xs">
 			{% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
-			<a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
+			<a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
 			{% else %}
 			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
 			{% endif %}
@@ -55,22 +55,7 @@
 			<h1 class="title">{{ course.title }}</h1>
 			<div class="subtitle">{{ course.subtitle }}</div>
 			<div class="stats">
-				<p>
-					价　格：
-					{% if course.price > 0 %}
-						{% if free_limit_type(course) == 'free_now' %}
-							<span class="money-num">0.00</span>
-							<span class="money-text">元</span>
-							<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
-							<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-						{% else %}
-							<span class="money-num">{{ course.price }}</span>
-							<span class="money-text">元</span>
-						{% endif %}  
-					{% else %}
-						<span class="money-num" style="font-size:16px;">免费</span>
-					{% endif %}
-				</p>
+				{% include 'TopxiaWebBundle:Course:course-index-price.html.twig' with {'course':course} %}
 				<p>
 					评　价：
 					<span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
@@ -103,7 +88,17 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
-						<a class="btn btn-primary btn-fat" id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}">{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						<a class="btn btn-primary btn-fat" id="course-buy-btn" 
+						{% if setting("course.buy_fill_userinfo")|default(false) %}
+						href="#modal" 
+						data-toggle="modal" 
+						data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+						{% else %}
+						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+						{% endif %}
+						 >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
 
 						{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
 							<a id = "add-carts-btn" data-url="{% if isAddCarts %}{{ path('carts_list') }} {% else %}{{ path('carts_add',{id:course.id,itemType:'course'}) }}{% endif %}" data-is-add ="{{ isAddCarts|default(null) }}" class="btn btn-primary btn-fat" data-carts-list="{{ path('carts_list') }}">{% if isAddCarts %}已{% endif %}加入购物车</a>
@@ -174,6 +169,21 @@
 							课程评价
 							<span class="badge">{{ course.ratingNum }}</span>
 						</a>
+					</li>
+					<li class="pull-right" style="display:none;" >
+					<div>
+						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" 
+						{% if setting("course.buy_fill_userinfo")|default(false) %}
+						href="#modal" 
+						data-toggle="modal" 
+						data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+						{% else %}
+						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+						{% endif %}
+						>{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+					</div>
 					</li>
 				</ul>
 			</div>

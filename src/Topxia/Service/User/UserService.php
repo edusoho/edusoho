@@ -9,7 +9,7 @@ interface UserService
     public function getUser($id, $lock = false);
 
     public function getUserByNickname($nickname);
-
+    
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $ids);
@@ -36,6 +36,16 @@ interface UserService
 
     public function rememberLoginSessionId($id, $sessionId);
 
+    public function changePayPassword($userId, $newPayPassword);
+
+    public function verifyPayPassword($id, $payPassword);
+
+    public function getUserSecureQuestionsByUserId($userId);
+
+    public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers);
+
+    public function verifyInSaltOut($in,$salt,$out);
+    
     /**
      * 变更密码
      * 
@@ -150,12 +160,16 @@ interface UserService
     public function isFollowed($fromId, $toId);
 
     public function findUserFollowing($userId, $start, $limit);
+    
+    public function findAllUserFollowing($userId);
 
     public function findUserFollowingCount($userId);
 
     public function findUserFollowers($userId, $start, $limit);
 
     public function findUserFollowerCount($userId);
+    
+    public function findAllUserFollower($userId);
 
     /**
      * 过滤得到用户关注中的用户ID列表
@@ -189,5 +203,11 @@ interface UserService
     public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
+
+    public function userLoginFail($user,$failAllowNum = 3, $temporaryMinutes = 20);
+
+    public function isUserTemporaryLockedOrLocked($user);
+
+    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
 
 }

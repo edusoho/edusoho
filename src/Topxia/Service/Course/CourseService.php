@@ -21,6 +21,8 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+
+	public function findCoursesByLikeTitle($title);
 	
 	public function findMinStartTimeByCourseId($courseId);
 
@@ -71,6 +73,8 @@ interface CourseService
 	public function cancelRecommendCourse($id);
 
 	public function analysisCourseDataByTime($startTime,$endTime);
+
+	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
 
 	/**
 	 * 删除课程
@@ -206,6 +210,8 @@ interface CourseService
 
 	public function searchMember($conditions, $start, $limit);
 
+	public function countMembersByStartTimeAndEndTime($startTime,$endTime);
+	
 	public function searchMemberCount($conditions);
 
 	public function findWillOverdueCourses();

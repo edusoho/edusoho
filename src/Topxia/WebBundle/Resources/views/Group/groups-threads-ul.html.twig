@@ -18,6 +18,12 @@
           {% if thread.isElite %}
             <span class="label label-warning">精</span>
           {% endif %}
+
+          {% if is_feature_enabled('group_reward') %}
+            {% if thread.type == 'reward' and thread.rewardCoin > 0 %}
+              <span class="label label-danger">奖</span>
+            {% endif %}
+          {% endif %}
         </div>
         
         <div class="metas">

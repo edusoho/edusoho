@@ -1,5 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% set quality = "" %}
+  
 <tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
 
   <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
@@ -10,26 +11,29 @@
     {% endif %}
 
     {% if uploadFile.convertStatus == 'waiting' %}
-      {{uploadFile.filename|sub_text(15)}}<br><span class="text-warning text-sm">正在文件格式转换</span>
+      <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
+      <br><span class="text-warning text-sm">正在文件格式转换</span>
       {% if ( now - uploadFile.updatedTime ) > 28800 %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
 
     {% elseif uploadFile.convertStatus == 'doing' %}
-      {{uploadFile.filename|sub_text(15)}}<br><span class="text-info text-sm">正在文件格式转换</span>
+      <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
+      <br><span class="text-info text-sm">正在文件格式转换</span>
       {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
     {% elseif uploadFile.convertStatus == 'error' %}
-      {{uploadFile.filename|sub_text(15)}}<br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
+      <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
+      <br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
     {% else %}
       {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
-        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank">{{ uploadFile.filename|sub_text(15) }}</a>
+        <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
         {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
           <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
         {% endif %}
       {% else %}
-        {{ uploadFile.filename|sub_text(15) }}
+          <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
       {% endif %}
     {% endif %}
 

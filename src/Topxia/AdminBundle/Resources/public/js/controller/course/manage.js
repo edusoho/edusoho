@@ -42,6 +42,12 @@ define(function(require, exports, module) {
 
 		});
 
+		$table.find('.copy-course[data-type="live"]').tooltip();
+
+		$table.on('click', '.copy-course[data-type="live"]', function(e) {
+			e.stopPropagation();
+		});
+
 
 
 	};

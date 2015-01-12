@@ -28,8 +28,8 @@ a.link-muted {
 }
 
 .modal-body {
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow: hidden;
 }
 
 .modal-body img {
@@ -210,8 +210,8 @@ textarea {
 
 
 .dynamic-collection .list-group-item {
-	word-break: break-all;
-	word-wrap: break-word;	
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 
@@ -553,6 +553,12 @@ body {
 	font-size: 22px;
 }
 
+.course-cover-heading .coin-price {
+	background:orange;
+	 font-size:15px;
+	 color:white;
+}
+
 .course-cover-heading .money-text {
 	color: #777;
 	font-size: 12px;
@@ -711,8 +717,8 @@ body {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 5px;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 
 }
 
@@ -729,8 +735,8 @@ body {
 
 .thread-body {
 	margin-bottom: 15px;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .thread-body img,.thread-post-content img{
@@ -1823,8 +1829,8 @@ body {
 	max-width: 750px;
 	margin: 0 auto;
 	padding: 20px;
-	word-break: break-all;
-	word-wrap: break-word;	
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .lesson-dashboard .lesson-learner-show {
@@ -2039,8 +2045,15 @@ body {
 	padding: 10px;
 	background: #f9f9f9;
 	border: 1px solid #e6e6e6;
-	height: 200px;
-	overflow-y: scroll;
+	height: 210px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.file-browser-list-container {
+	height: 110px;
+	overflow-y: auto;
+	overflow-x: auto;
 }
 
 .file-browser-list {
@@ -2303,6 +2316,11 @@ body {
  */
 .money {
 	color: #f40;
+	font-size: 22px;
+}
+
+.danger{
+	color: #f40;
 }
 
 .shares-dropdown-menu > li > a {
@@ -2496,6 +2514,11 @@ body {
 	margin-bottom: 6px;
 }
 
+.notification-list .notification-body a{
+	color:#428bca;
+}
+
+
 .notification-list .notification-footer {
 	font-size: 12px;
 	color: #999;
@@ -2571,12 +2594,10 @@ body {
 }
 
 .notebook-note .notebook-note-body {
-	word-break: break-all;
 	display: block;
 }
 
 .notebook-note-collapsed .notebook-note-body {
-	word-break: break-all;
 	display: none;
 }
 
@@ -3061,6 +3082,10 @@ body {
 	color: #e57259;
 	font-size: 16px;
 }
+.course-coinPrice {
+	color: #e57259;
+	font-size: 16px;
+}
 
 .course-wide-list .divider {
 	width: 1px;
@@ -3096,8 +3121,8 @@ body {
 .latest-review-list .review-content {
 	font-size: 13px;
 	color: #999;
-	word-break: break-all;
-	word-wrap: break-word;
+	word-wrap:break-word;
+	overflow:hidden;
 }
 
 .latest-review-list .review-footer {
@@ -3331,6 +3356,8 @@ body {
 
 .userpage-header-info .about {
 	color: #777;
+	word-break: break-all;
+	word-wrap: break-word
 }
 
 .userpage-header-info .actions {
@@ -4039,6 +4066,30 @@ body {
 	bottom: 0px;
 }
 
+.slide-player-full-window {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.slide-player-fullscreen {
+  position: fixed;
+  overflow: hidden;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+.modal-body .lesson-preview-ppt {
+	position: relative;
+	min-height: 500px;
+}
+
 .slide-player-body {
 	position: absolute;
 	text-align: center;
@@ -4073,10 +4124,6 @@ body {
 .slide-player-control .fullscreen {
 	float: right;
 	margin-left: 15px;
-}
-
-.lt-ie9 .slide-player-control .fullscreen {
-	display: none;
 }
 
 .slide-player-control .goto-first {
@@ -4502,7 +4549,7 @@ a.homework-essay-textarea-pack-up{
 	margin-bottom: 20px;
 }
 
-.vip-item h3, p {
+.vip-item h3, .vip-item p {
 	color: #555;
 }
 
@@ -4572,4 +4619,324 @@ a.homework-essay-textarea-pack-up{
 
 .red {
 	color:red;
+}
+.coursesTypeChoices {
+	margin:15px 0;
+}
+
+.coursesTypeChoices .sortedCourses  {
+	overflow:hidden;
+	text-align:left;
+}
+
+.coursesTypeChoices input{
+	margin:0 0 0px 45px;
+}
+
+.order-pay .order-item {
+	border-bottom: 1px solid #E5E5E5;
+	padding-top: 30px;
+}
+
+.order-item {
+	line-height: 30px;
+}
+
+.order-item .order-item-title {
+	padding-left: 20px;
+	height: 48px;
+}
+
+.order-item-title .order-item-title-icon {
+	background-repeat: no-repeat;
+	background-position: -4px -9px;
+	display: inline-block;
+	width: 29px;
+	height: 29px;
+	float: left;
+}
+
+.order-item-title .title {
+	font-size: 18px;
+	font-weight: normal;
+	margin-left: 20px;
+	float: left;
+	margin-top: 2px;
+	line-height: 1.2em;
+}
+
+.order-item-title .add-coun {
+	display: inline-block;
+	font-size: 14px;
+	padding-bottom: 5px;
+	background-color: #fff8ed;
+	border: 1px solid #ffb841;
+	color: #ff7e00;
+	padding: 5px 7px;
+	line-height: 15px;
+	border-radius: 3px;
+	margin-left: 10px;
+	float: left;
+}
+
+.order-item-title .cancel {
+	margin-left: 20px;
+	float: left;
+	margin-top: 6px;
+	text-decoration: none;
+	color: #1071b5;
+	cursor: pointer;
+}
+
+.order-item .price_r {
+	float: right; 
+	margin-top: 4px; 
+	line-height: 19px;
+	position: relative;
+}
+
+.order-item .price_txt {
+	margin-right: 11px; 
+	margin-top: 4px; 
+	line-height: 19px;
+}
+
+.order-item .price_r_mark {
+	font-size: 27px; 
+	float: left; 
+	margin-right: 5px; 
+	margin-top: -3px;
+}
+
+.order-item .price_r_num {
+	font-size: 19px; 
+	float: left;margin-top: -4px; 
+	line-height: 26px;
+}
+
+.order-item .pricehead {
+	float: left;
+	font-size: 15px;
+}
+
+.order-item .coupon-detail {
+	padding: 0px 56px 17px 56px;
+	font-size: 14px;
+	margin-left: 15px;
+}
+
+.order-detail {
+	width: auto;
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+	min-height: 188px;
+	padding: 20px;
+}
+.order-price {
+	font-size: 24px;
+}
+
+.order-count {
+	padding: 20px 0 40px 0;
+}
+
+.order-item {
+	padding: 0 5px;
+}
+
+.order-panel {
+	padding: 20px 20px 40px 20px;
+}
+
+.course-text {
+	display: block;
+	font-size: 14px;
+	margin: 6px 0;
+}
+
+.coin-block {
+	padding: 40px 15px 25px 15px;
+	float: left;
+}
+
+.coin-text {
+	float: left;
+}
+
+.coin-text img {
+	margin: 0 10px 14px 0;
+	/*opacity: .5;*/
+}
+
+.coin-text strong {
+	font-size: 30px;
+	color: #ff5d42;
+}
+
+.coin-btn {
+	float: left;
+	margin: 4px 0 0 55px;
+}
+
+.table.order-table > tbody > tr > td,
+.table.order-table > tbody > tr > th {
+	padding:  10px;
+	line-height: 22px;
+}
+
+.money-text {
+	
+}
+
+
+.coupon-detail input {
+	height: 27px;
+	line-height: 27px;
+	border: 1px solid #b5b5b5;
+	font-size: 14px;
+}
+
+.order-item .order-item-detail{
+	padding: 0px 56px 17px 56px;
+}
+.order-item .coin-detail {
+	margin-left: 15px;
+	font-size: 14px;
+}
+
+.order-item .total-price {
+	float: right;
+	text-align: right;
+	margin-bottom: 30px;
+}
+
+.order-item .total-price .pay-rmb {
+	color: #f60;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.coin-detail input {
+	height: 27px;
+	line-height: 27px;
+	border: 1px solid #b5b5b5;
+	font-size: 18px;
+	margin: 0 15px;
+	width: 64px;
+	text-align: center;
+}
+
+.coin-detail span {
+	color: #ff7e00;
+}
+
+.order-pay .pay {
+	margin-top: 20px
+}
+
+.order-item-detail .pay-password {
+	margin-left: 15px;
+	font-size: 12px;
+	padding-top: 10px;
+}
+
+.order-item-detail .pay-password input {
+	width: 150px;
+}
+
+.pay-center .uncheck {
+	cursor: pointer;
+	width: 150px;
+	height: 58px;
+	position: relative;
+	text-align:center;
+	font-size: 16px;
+	line-height: 58px;
+	border: 1px solid #cccccc; 
+	margin-bottom: 30px;
+}
+
+.pay-center .check {
+	cursor: pointer;
+	width: 150px;
+	height: 58px;
+	position: relative;
+	text-align:center;
+	font-size: 16px;
+	line-height: 58px;
+	border: 1px solid #21a557; 
+	margin-bottom: 10px;
+}
+
+.pay-center .uncheck .icon {
+	background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat ;
+    top: 0px;
+    right: 0px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -30px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.pay-center .check .icon {
+	background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat ;
+    top: 0px;
+    right: 0px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -4px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.pay-center .help {
+	float: left;
+    width: 400px;
+    height: 40px;
+    line-height: 19px;
+    padding-left: 30px;
+    background: url(/bundles/topxiaweb/img/order-pay/iconfont-caution-block.png) no-repeat;
+    font-size: 12px;
+    color: #666;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.pay-center .pay-amount {
+	font-size: 20px;
+}
+
+.pay-center .pay-amount span {
+	color: #ff6600;
+}
+
+.pay-center .pay-type-lable {
+	padding-bottom: 10px
+}
+
+.pay-center .pay-button {
+	float:left;
+	margin-top: 15px;
+}
+
+.order-pay .buy-vip-num {
+	float: right; 
+	margin-right: 15px; 
+	margin-top: 4px; 
+	line-height: 19px;
+	position: relative;
+}
+.nav .qiandai{
+	line-height: 1px;
+	height:54px;
+}
+.nav-course-buy-btn{
+	padding-bottom: 8px;
+    padding-top: 8px;
+}
+.question-num {
+	display:inline-block;
+	width: 25px;
 }

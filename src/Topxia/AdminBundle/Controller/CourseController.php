@@ -52,7 +52,7 @@ class CourseController extends BaseController
         ));
     }
 
-    public function searchAction(Request $request)
+    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request,$twigToRender)
     {
         $key = $request->request->get("key");
         
@@ -70,13 +70,23 @@ class CourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array(
+        return $this->render($twigToRender, array(
             'key' => $key,
             'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator
         ));
+    }
+
+    public function searchAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search.html.twig');
+    }
+
+    public function searchToFillBannerAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
 
     public function deleteAction(Request $request, $id)
@@ -95,6 +105,50 @@ class CourseController extends BaseController
     {
         $this->getCourseService()->closeCourse($id);
         return $this->renderCourseTr($id);
+    }
+
+    public function copyAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
+            'course' => $course ,
+        ));
+    }
+
+    public function copingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        $conditions = $request->request->all();
+        $course['title']=$conditions['title'];
+        
+        $newCourse = $this->getCourseCopyService()->copyCourse($course);
+        
+        $newTeachers = $this->getCourseCopyService()->copyTeachers($course['id'], $newCourse);
+
+        $newChapters = $this->getCourseCopyService()->copyChapters($course['id'], $newCourse);
+
+        $newLessons = $this->getCourseCopyService()->copyLessons($course['id'], $newCourse, $newChapters);
+
+        $newQuestions = $this->getCourseCopyService()->copyQuestions($course['id'], $newCourse, $newLessons);
+
+        $newTestpapers = $this->getCourseCopyService()->copyTestpapers($course['id'], $newCourse, $newQuestions);
+
+        $this->getCourseCopyService()->convertTestpaperLesson($newLessons, $newTestpapers);
+        
+        $newMaterials = $this->getCourseCopyService()->copyMaterials($course['id'], $newCourse, $newLessons);
+        
+        $code = 'Homework';
+        $homework = $this->getAppService()->findInstallApp($code);
+        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+
+        if($isCopyHomework){
+            $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
+            $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
+        }
+
+        return $this->redirect($this->generateUrl('admin_course'));
     }
 
     public function recommendAction(Request $request, $id)
@@ -287,6 +341,11 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    private function getCourseCopyService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseCopyService');
+    }
+
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
@@ -310,5 +369,10 @@ class CourseController extends BaseController
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

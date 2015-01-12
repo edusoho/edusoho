@@ -38,7 +38,7 @@ class SettingController extends BaseController
             'status'=>'open',
             'closed_note'=>'',
             'favicon'=>'',
-            'copyright'=>''
+            'copyright'=>'',
         );
 
         $site = array_merge($default, $site);
@@ -83,14 +83,19 @@ class SettingController extends BaseController
             'bannerClick3' => '', // 轮播图3是否触发动作
             'bannerClick4' => '', // 轮播图4是否触发动作
             'bannerClick5' => '', // 轮播图5是否触发动作
+            'bannerJumpToCourseId1' => ' ',
+            'bannerJumpToCourseId2' => ' ',
+            'bannerJumpToCourseId3' => ' ',
+            'bannerJumpToCourseId4' => ' ',
+            'bannerJumpToCourseId5' => ' ',
             'notice' => '', //公告
             'courseIds' => '' //每周精品课
         );
 
         $mobile = array_merge($default, $mobile);
-
         if ($request->getMethod() == 'POST') {
             $mobile = $request->request->all();
+
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
@@ -105,9 +110,21 @@ class SettingController extends BaseController
                 $sortedCourses[] = $courses[$value];
         }
 
+
+        $bannerCourse1 = ($mobile['bannerJumpToCourseId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']):null;
+        $bannerCourse2 = ($mobile['bannerJumpToCourseId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']):null;
+        $bannerCourse3 = ($mobile['bannerJumpToCourseId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']):null;
+        $bannerCourse4 = ($mobile['bannerJumpToCourseId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']):null;
+        $bannerCourse5 = ($mobile['bannerJumpToCourseId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']):null;
+
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile'=>$mobile,
-            'courses'=>$sortedCourses
+            'courses'=>$sortedCourses,
+            "bannerCourse1" => $bannerCourse1,
+            "bannerCourse2" => $bannerCourse2,
+            "bannerCourse3" => $bannerCourse3,
+            "bannerCourse4" => $bannerCourse4,
+            "bannerCourse5" => $bannerCourse5,
         ));
     }
 
@@ -192,6 +209,48 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function liveLogoUploadAction(Request $request)
+    {
+        $file = $request->files->get('logo');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $courseSetting['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $courseSetting['live_logo'] = ltrim($courseSetting['live_logo'], '/');
+
+        $this->getSettingService()->set('course', $courseSetting);
+
+        $this->getLogService()->info('system', 'update_settings', "更新站点LOGO", array('live_logo' => $courseSetting['live_logo']));
+
+        $response = array(
+            'path' => $courseSetting['live_logo'],
+            'url' =>  $this->container->get('templating.helper.assets')->getUrl($courseSetting['live_logo']),
+        );
+
+        return new Response(json_encode($response));
+
+    }
+
+    public function liveLogoRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get("course");
+        $setting['live_logo'] = '';
+
+        $this->getSettingService()->set('course', $setting);
+
+        $this->getLogService()->info('system', 'update_settings', "移除直播LOGO");
+
+        return $this->createJsonResponse(true);
+    }
+
     public function faviconUploadAction(Request $request)
     {
         $file = $request->files->get('favicon');
@@ -249,7 +308,18 @@ class SettingController extends BaseController
             'user_terms_body' => '',
             'registerFieldNameArray'=>array(),
             'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
+            'captcha_enabled' => 0,
+            'register_protective'=>'none',
         );
+
+        if(isset($auth['captcha_enabled']) && $auth['captcha_enabled'] ){
+
+            if(!isset($auth['register_protective'])){
+
+                $auth['register_protective']="low";
+            }
+            
+        }
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
@@ -257,6 +327,15 @@ class SettingController extends BaseController
        
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
+            }
+
+            if($auth['register_protective']=="none"){
+
+                $auth['captcha_enabled']=0;
+
+            }else{
+
+                $auth['captcha_enabled']=1;  
             }
 
             $this->getSettingService()->set('auth', $auth);
@@ -327,6 +406,10 @@ class SettingController extends BaseController
             'renren_secret'=>'',
             'renren_set_fill_account'=>0,
             'verify_code' => '',
+            'captcha_enabled'=>0,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'temporary_lock_minutes' => 20,
         );
 
         $loginConnect = array_merge($default, $loginConnect);
@@ -597,12 +680,13 @@ class SettingController extends BaseController
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
+            'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
             'userinfoFields'=>array(),
             "userinfoFieldNameArray"=>array(),
             "copy_enabled"=>'0',
-            "picturePreview_enabled"=>'0',
+            "picturePreview_enabled"=>'0'
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -858,6 +942,10 @@ class SettingController extends BaseController
     public function addUserFieldsAction(Request $request)
     {
         $field=$request->request->all();
+        if(isset($field['field_title']) 
+            && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信' ))){
+            throw $this->createAccessDeniedException('请勿添加与默认字段相同的自定义字段！');
+        }
 
         $field=$this->getUserFieldService()->addUserField($field);
 

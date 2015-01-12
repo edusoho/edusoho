@@ -15,6 +15,7 @@ define(function(require, exports, module) {
     var SlidePlayer = require('../widget/slider-player');
 
     var iID = null;
+    var recordWatchTimeId = null;
 
     var LessonDashboard = Widget.extend({
 
@@ -251,13 +252,13 @@ define(function(require, exports, module) {
                     mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
                         if(parseInt(data.currentTime) != parseInt(data.duration)){
-                            DurationStorage.set(userId, lesson.mediaId, data.currentTime, lesson.headLength);
+                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
                         }
                     });
                     mediaPlayer.on("ready", function(playerId, data){
                         var player = document.getElementById(playerId);
                         var userId = $('#lesson-video-content').data("userId");
-                        player.seek(DurationStorage.get(userId, lesson.mediaId, lesson.headLength));
+                        player.seek(DurationStorage.get(userId, lesson.mediaId));
                     });
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
@@ -267,9 +268,11 @@ define(function(require, exports, module) {
                         $.post("../../course/"+lesson.id+'/watch/paused');
                         that._onFinishLearnLesson();
                         that.set('playStatus', 'ended');
+                        clearInterval(recordWatchTimeId);
                     });
                     mediaPlayer.on('ready', function() {
-                       setInterval(recordWatchTime, 120000);
+                        clearInterval(recordWatchTimeId);
+                        recordWatchTimeId = setInterval(recordWatchTime, 120000);
                     });
                     mediaPlayer.on('paused', function() {
                         $.post("../../course/"+lesson.id+'/watch/paused');
@@ -316,7 +319,8 @@ define(function(require, exports, module) {
                                 $.post("../../course/"+lesson.id+'/watch/paused');
                             });
                             player.on('loadeddata',function(){
-                                setInterval(recordWatchTime, 120000);
+                                clearInterval(recordWatchTimeId);
+                                recordWatchTimeId = setInterval(recordWatchTime, 120000);
                             });
                             player.on('error', function(error){
                                 hasPlayerError = true;
@@ -364,7 +368,8 @@ define(function(require, exports, module) {
                                     $.post("../../course/"+lesson.id+'/watch/play');
                                 });
                                 media.addEventListener("loadeddata", function() {
-                                    setInterval(recordWatchTime, 120000);
+                                    clearInterval(recordWatchTimeId);
+                                    recordWatchTimeId = setInterval(recordWatchTime, 120000);
                                 });
                                 media.play();
                             }
@@ -437,14 +442,14 @@ define(function(require, exports, module) {
                                 $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                             };
 
-                            if (0< startLeftSeconds && startLeftSeconds < 3600) {
+                            if (0< startLeftSeconds && startLeftSeconds < 7200) {
                                  $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
                                  var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
                                  if(lesson.isTeacher) {
                                     $countDown = $replayGuid;
-                                    $countDown += "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                    $countDown += "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                                 }else{
-                                    $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                    $countDown = "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                                 }
                             };
 
@@ -624,7 +629,7 @@ define(function(require, exports, module) {
     });
 
     var DurationStorage = {
-        set: function(userId,mediaId,duration, headLength) {
+        set: function(userId,mediaId,duration) {
             var durationTmps = localStorage.getItem("durations");
             if(durationTmps){
                 durations = new Array();
@@ -636,7 +641,7 @@ define(function(require, exports, module) {
                 durations = new Array();
             }
 
-            var value = userId+"-"+mediaId+":"+(duration-parseFloat(headLength));
+            var value = userId+"-"+mediaId+":"+duration;
             if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+mediaId)>-1){
                 durations.splice(durations.length-1, durations.length);
             }
@@ -646,7 +651,7 @@ define(function(require, exports, module) {
             durations.push(value);
             localStorage["durations"] = durations;
         },
-        get: function(userId,mediaId, headLength) {
+        get: function(userId,mediaId) {
             var durationTmps = localStorage.getItem("durations");
             if(durationTmps){
                 var durationTmpArray = durationTmps.split(",");
@@ -654,7 +659,7 @@ define(function(require, exports, module) {
                     var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
                     if(index>-1){
                         var key = durationTmpArray[i];
-                        return parseFloat(key.split(":")[1])+parseFloat(headLength)-5;
+                        return parseFloat(key.split(":")[1])-5;
                     }
                 }
             }

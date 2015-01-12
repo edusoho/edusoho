@@ -617,6 +617,19 @@ EOD;
 EOD;
 		$this->getBlockService()->updateContent($block['id'], $content);
 
+
+		$block = $this->getBlockService()->createBlock(array(
+            'code'=>'bill_banner',
+            'title'=>'我的账户Banner'
+        ));
+
+        $content = <<<'EOD'
+<br><div class="col-md-12">  
+<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" /></a>
+<br><br></div>
+EOD;
+		$this->getBlockService()->updateContent($block['id'], $content);
+
 	}
 
 	public function initLockFile()

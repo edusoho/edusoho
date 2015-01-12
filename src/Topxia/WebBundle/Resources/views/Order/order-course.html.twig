@@ -1,0 +1,19 @@
+<div class="order-detail">
+  {% for course in courses %}
+  <div class="col-md-4">
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      <img class="img-responsive" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
+    </a>
+  </div>
+  <div class="col-md-8">
+    <h3><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
+    <span class="course-text">课时：{{ course.lessonNum }} 课时</span>
+    {% set teacher = users[course.teacherIds|first]|default(null) %}
+    {% if teacher %}
+      <span class="course-text">
+        老师：<a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+      </span>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>

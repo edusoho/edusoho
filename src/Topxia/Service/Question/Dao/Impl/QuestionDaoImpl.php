@@ -52,10 +52,48 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
+    {
+        if (empty($types)) {
+            return array();
+        }
+
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
+        $questions = $this->getConnection()->fetchAll($sql, array($types));
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
+    }
+
+    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
+    {
+        if (empty($types)) {
+            return array();
+        }
+        if ($questionSource == 'course'){
+            $target = 'course-'.$courseId;
+        }else if ($questionSource == 'lesson'){
+            $target = 'course-'.$courseId.'/lesson-'.$lessonId;
+        }
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target`= '{$target}' )  LIMIT {$start},{$limit} ";
+        
+        $questions = $this->getConnection()->fetchAll($sql, array());
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
+    }
+
     public function findQuestionsCountbyTypes($types)
     {
         $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
         return $this->getConnection()->fetchColumn($sql, array($types));
+    }
+
+    public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
+    {
+        if ($questionSource == 'course'){
+            $target = 'course-'.$courseId;
+        }else if ($questionSource == 'lesson'){
+            $target = 'course-'.$courseId.'/lesson-'.$lessonId;
+        }
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target`= '{$target}' )";
+        return $this->getConnection()->fetchColumn($sql, array());
     }
 
     public function findQuestionsByParentIds(array $ids)
@@ -135,6 +173,27 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql = "UPDATE {$this->table} SET {$status} = {$status}+1 WHERE id IN ({$marks})";
         return $this->getConnection()->executeQuery($sql, $ids);
+    }
+
+    public function getQuestionCountGroupByTypes($conditions)
+    {   
+        $sqlConditions = array();
+        $sql = "";
+        if(isset($conditions["types"])){
+            $marks = str_repeat('?,', count($conditions["types"]) - 1) . '?';
+            $sql .= " AND type IN ({$marks}) ";
+            $sqlConditions = array_merge($sqlConditions, $conditions["types"]);
+        }
+        if(isset($conditions["targets"])) {
+            $targetMarks = str_repeat('?,', count($conditions["targets"]) - 1) . '?';
+            $sqlConditions = array_merge($sqlConditions, $conditions["targets"]);
+            $sql .= " AND target IN ({$targetMarks}) ";
+        }
+        if(isset($conditions["courseId"])) {
+            $sql .= " AND (target='course-{$conditions['courseId']}' or target like 'course-{$conditions['courseId']}/%') ";   
+        }
+        $sql = "SELECT COUNT(*) AS questionNum, type FROM {$this->table} WHERE parentId = '0' {$sql} GROUP BY type ";
+        return $this->getConnection()->fetchAll($sql, $sqlConditions);
     }
 
     private function _createSearchQueryBuilder($conditions)
@@ -240,6 +299,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             unset($conditions['knowledgeIds']);
         }
         
+        if (isset($conditions['excludeUnvalidatedMaterial']) and ($conditions['excludeUnvalidatedMaterial'] == 1)){
+            $builder->andStaticWhere(" not( type = 'material' and subCount = 0 )");
+        }
         return $builder;
     }
 

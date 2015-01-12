@@ -143,11 +143,19 @@ class BlockServiceImpl extends BaseService implements BlockService
         if(empty($codes)){
             throw $this->createServiceException("获取内容失败，不允许查询空编号所对应的内容!");
         }
+
+        $cdn = $this->getSettingService()->get('cdn');
+        $cdnUrl = empty($cdn['enabled']) ? '' : $cdn['url'];
+
         $contents = array();
         foreach ($codes as $key => $value) {
             $block = $this->getBlockDao()->getBlockByCode($value);
             if($block){
-                $contents[$value] = $block['content'];
+                if ($cdnUrl) {
+                    $contents[$value] = preg_replace('/\<img(\s+)src=\"\/files\//', "<img src=\"{$cdnUrl}/files/", $block['content']);
+                } else {
+                    $contents[$value] = $block['content'];
+                }
             } else {
                 $contents[$value] = '';
             }
@@ -179,5 +187,10 @@ class BlockServiceImpl extends BaseService implements BlockService
     private function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 }

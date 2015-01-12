@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% set modalSize = 'large' %}
+
+{% block title %}订单详情{% endblock %}
+{% block body %}
+    
+        {% if orderLogs %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="50%">日志信息</th>
+              <th width="25%">操作人</th>
+              <th width="25%">创建时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for orderLog in orderLogs %}
+              {% set logUser = users[orderLog.userId]|default(null) %}
+              <tr>
+                <td>
+                  {{ orderLog.message | plain_text(50) }}
+                  <br>
+                  <span class="text-muted text-sm">{{ orderLog.type }}</span>
+                </td>
+                <td>
+                  {% if logUser %}
+                    {{ admin_macro.user_link(logUser) }}
+                  {% else %}
+                    --
+                  {% endif %}
+                </td>
+                <td>
+                  {{ orderLog.createdTime|date('Y-n-d H:i')}}
+                  <br>
+                  <span class="text-muted text-sm">{{ orderLog.ip}}</span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+      <div class="empty">暂无交易日志!</div>
+      {% endif %}
+     
+{% endblock %}
+
+{% block footer %}
+  <div>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  </div>
+
+{% endblock %}
+
