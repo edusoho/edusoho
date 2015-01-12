@@ -76,7 +76,7 @@
 						{% endif %}
 					{% endif %}
 
-				    {% if (item.id in homeworkLessonIds) or (item.id in exercisesLessonIds) %}
+				    {% if (item.id in homeworkLessonIds|default(null)) or (item.id in exercisesLessonIds|default(null)) %}
 							<span class="glyphicon  glyphicon-list-alt" title="作业、练习"></span>
 				    {% endif %}
 
