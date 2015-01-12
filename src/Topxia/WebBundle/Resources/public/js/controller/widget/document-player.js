@@ -26,9 +26,11 @@ define(function(require, exports, module) {
 
             if (this.isSupportHtml5()) {
                 this.initPDFJSViewer(this);
+                console.log(1);
             }else{
                 this.initSwfViewer(this);
             }
+
         },
 
         isSupportHtml5: function(){
