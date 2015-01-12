@@ -18,17 +18,17 @@ define(function(require, exports, module) {
 
         setup: function() {
             var self = this;
-            self.init();
+            self.init(self);
 
         },
 
-        init: function () {
+        init: function (thiz) {
 
             if (this.isSupportHtml5()) {
-                this.initPDFJSViewer(this);
+                this.initPDFJSViewer(thiz);
                 console.log(1);
             }else{
-                this.initSwfViewer(this);
+                this.initSwfViewer(thiz);
             }
 
         },
