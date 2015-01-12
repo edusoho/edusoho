@@ -362,6 +362,29 @@ class CourseLessonController extends BaseController
         if ($lesson['type'] != 'courseware' or empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
+                $url = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $message = sprintf('课件转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => '课件还在转换中，还不能查看，请稍等。'),
+                ));
+            }
+        }
+
+            return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => "ok"),
+                ));
     }
 
     public function fileAction(Request $request, $fileId, $isDownload = false)
