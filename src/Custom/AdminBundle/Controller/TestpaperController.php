@@ -541,7 +541,7 @@ class TestpaperController extends BaseController
             return $this->redirect($this->generateUrl('admin_testpaper',array( 'categoryId' => $category['id'])));
         }
 
-        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'previewing');
+        list($paper, $questionItemSet) = $this->getTestpaperService()->buildPaper($id, 'previewing', null);
 
         return $this->render('CustomAdminBundle:Testpaper:advanced-items.html.twig', array(
             'category' => $category,

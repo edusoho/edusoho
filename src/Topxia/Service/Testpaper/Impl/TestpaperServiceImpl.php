@@ -1151,7 +1151,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
             $questionItemSet[$paperItem['partId']][] = $questionItem;
         }
-
+        
         if(in_array($status, array('doing', 'paused', 'reviewing', 'finished')) && $paperResultId) {
             $results = $this->getTestpaperItemResultDao()->findTestResultsByItemIdAndTestId($questionIds, $paperResultId);
             $results = ArrayToolkit::index($results, 'questionId');

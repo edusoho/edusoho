@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             'choice' : {name:'多选题', type: 'choice', mistakeScore: 0, missScore: 0 },
             'uncertain_choice' : {name:'不定向选择题', type: 'uncertain_choice', mistakeScore: 0 },
             'fill': {name:'填空题', type: 'fill' },
-            'determine' : {name:'判断题', type: 'single_choice', mistakeScore: 0 },
+            'determine' : {name:'判断题', type: 'determine', mistakeScore: 0 },
             'essay': {name:'问答题', type: 'essay' },
             'material' : {name:'材料题', type: 'material' }
         },
