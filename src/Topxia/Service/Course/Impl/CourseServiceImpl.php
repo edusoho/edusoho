@@ -840,7 +840,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-		if (in_array($lesson['type'], array('video', 'audio', 'ppt'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt','courseware'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");

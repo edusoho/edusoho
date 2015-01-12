@@ -347,6 +347,23 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function coursewareAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        if ($lesson['type'] != 'courseware' or empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+    }
+
     public function fileAction(Request $request, $fileId, $isDownload = false)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
