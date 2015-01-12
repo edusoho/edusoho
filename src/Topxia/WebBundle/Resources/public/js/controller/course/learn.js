@@ -12,6 +12,7 @@ define(function(require, exports, module) {
 
     var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
+    var DocumentPlayer = require('../widget/document-player');
 
     var iID = null;
     var recordWatchTimeId = null;
@@ -538,12 +539,11 @@ define(function(require, exports, module) {
                                 return ;
                             }
 
-                            var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
+                            var html = '<div id="docViewer" style="width:800px; height:600px;"></div>';
                             $("#lesson-courseware-content").html(html).show();
 
-                            var player = new SlidePlayer({
-                                element: '.slide-player',
-                                slides: response
+                            var player = new DocumentPlayer({
+                                element: '#docViewer'
                             });
 
                         }, 'json');
