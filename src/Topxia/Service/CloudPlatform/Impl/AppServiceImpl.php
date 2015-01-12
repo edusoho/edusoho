@@ -503,6 +503,13 @@ class AppServiceImpl extends BaseService implements AppService
         return true;
     }
 
+    public function getLoginToken()
+    {
+        $appClient = $this->createAppClient();
+        $result = $appClient->getLoginToken();
+        return $result;
+    }
+
     private function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
