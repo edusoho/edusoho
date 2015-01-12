@@ -382,7 +382,7 @@ class CourseController extends BaseController
 			'weeks' => $weeks,
 			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
-			'isAddCarts' => $isAddCarts
+			'isAddCarts' => $isAddCarts,
 			'ChargeCoin'=> $ChargeCoin
 		));
 
