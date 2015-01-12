@@ -234,6 +234,17 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function partPreviewAction(Request $request)
+    {
+        $part = json_decode($request->query->get('part'), true);
+        $questionItemSet = $this->getTestpaperService()->makeQuestionItemSetByPart($part);
+        return $this->render('CustomAdminBundle:Testpaper:part-modal.html.twig', array(
+            'part' => $part,
+            'questionItemSet' => $questionItemSet,
+            'status' => 'previewing'
+        ));
+    }
+
     public function advancedManageAction(Request $request, $id)
     {
 

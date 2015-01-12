@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}预览{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
+  {% include 'TopxiaWebBundle:Paper:paper-part.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" data-toggle="form-submit" data-target="#block-form">关闭</button>
+{% endblock %}

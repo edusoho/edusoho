@@ -103,6 +103,8 @@ interface TestpaperService
 
     public function makeItemsByPart($part);
 
+    public function makeQuestionItemSetByPart($part);
+
     public function buildPaper($paperId, $status, $paperResultId);
 
     public function resetAdvancedTestPaper($id, $fields);

@@ -25,8 +25,8 @@ define(function(require, exports, module) {
 
         events: {
             'click .part-update-btn': '_onClickPartUpdateBtn',
-            'click .part-remove-btn': '_onClickPartRemoveBtn'
-
+            'click .part-remove-btn': '_onClickPartRemoveBtn',
+            'click .part-preview-btn': '_onClickPartPreviewBtn'
         },
 
         _defaults: {
@@ -209,7 +209,7 @@ define(function(require, exports, module) {
             html += '<td>' + part.description + '</td>';
             html += '<td>';
             html += '  <a href="javascript:;" class="btn btn-link btn-xs part-update-btn" data-mode="update" data-toggle="modal" data-target="#testpaper-part-modal"><span class="glyphicon glyphicon-pencil"></span></a>';
-            html += '  <a href="javascript:;" class="btn btn-link btn-xs disabled"><span class="glyphicon glyphicon-eye-open"></span></a>';
+            html += '  <a href="javascript:;" class="btn btn-link btn-xs part-preview-btn"><span class="glyphicon glyphicon-eye-open"></span></a>';
             html += '  <a href="javascript:;" class="btn btn-link btn-xs part-remove-btn"><span class="glyphicon glyphicon-trash"></span></a>';
             html += '</td>';
             html += '</tr>';
@@ -224,6 +224,14 @@ define(function(require, exports, module) {
 
         _onClickPartRemoveBtn: function(e) {
             $(e.currentTarget).parents('tr').remove();
+        },
+        _onClickPartPreviewBtn: function(e) {
+            var target = e.currentTarget;
+            $.get($('#testpaper-form').data('partPreviewUrl'), {part:JSON.stringify($(target).parents('tr').data())}, function(html){
+                $('#modal').html(html);
+                $('#modal').modal('show');
+            });
+          
         },
         _getQuestionsCount: function(e) {
             var $form = $('#testpaper-form');

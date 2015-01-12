@@ -51,6 +51,10 @@ admin_testpaper_preview:
     pattern: /testpaper/{id}/preview
     defaults: { _controller: CustomAdminBundle:Testpaper:preview }
 
+admin_testpaper_part_preview:
+    pattern: /testpaper/partpreview
+    defaults: { _controller: CustomAdminBundle:Testpaper:partPreview }
+
 admin_testpaper_items:
     pattern: /testpaper/{id}/items
     defaults: { _controller: CustomAdminBundle:Testpaper:items }
@@ -74,3 +78,4 @@ admin_testpaper_item_picked:
 admin_testpaper_advanced_items:
     pattern: /testpaper/{id}/advanced-items
     defaults: { _controller: CustomAdminBundle:Testpaper:advancedItems }
+

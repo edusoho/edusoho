@@ -10,7 +10,7 @@
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/tag-chooser-2.css') }}" />
   <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/ztree.css') }}" />
 {% endblock %}
-
+  
 {% block main %}
 
 <div class="panel panel-default panel-col test-creator">
@@ -23,7 +23,7 @@
       <li class="active">高级组卷</li>
     </ol>
 
-    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-build-items-url="{{ path('admin_testpaper_build_items') }}">
+    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-build-items-url="{{ path('admin_testpaper_build_items') }}" data-part-preview-url="{{ path('admin_testpaper_part_preview') }}">
       {{ web_macro.flash_messages() }}
 
       {% include 'CustomAdminBundle:Testpaper:testpaper-form-base-fields.html.twig'%}

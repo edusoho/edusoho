@@ -1024,6 +1024,36 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return array('items' => $items, 'excludeIds' => implode(',', $excludeIds));
     }
 
+    public function makeQuestionItemSetByPart($part)
+    {
+        $questionIds = ArrayToolkit::column($part['items'], 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questionItemSet = array();
+        $seq = 1;
+        foreach ($part['items'] as $item) {
+            $questionItem = array(
+                'id' => $item['questionId'],
+                'item' => array(
+                    'seq' => $seq++,
+                    'score' => $item['score'],
+                ),
+                'question' => $questions[$item['questionId']]
+            );
+
+            if(!empty($item['parentId'])) {
+                $questionItemSet[$item['partId']][$item['parentId']]['subItems'][$item['questionId']] = $questionItem;
+            } else {
+                $questionItemSet[$item['partId']][$item['questionId']] = $questionItem;
+                if($item['questionType'] == 'material') {
+                    $seq--;
+                    $questionItemSet[$item['partId']][$item['questionId']]['subItems'] = array();
+                } 
+            }
+        
+        }
+        
+        return $questionItemSet;
+    }
     private function selectQuestionsWithDifficultlyPercentage($totalQuestions, $needCount, $percentages)
     {
         $difficultiedQuestions = ArrayToolkit::group($totalQuestions, 'difficulty');
