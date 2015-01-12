@@ -32,6 +32,8 @@ interface CourseProcessor
 
 	public function unLearnCourse();
 
+	public function getThreadsByUserCourseIds();
+
 	public function getCourseThreads();
 
 	public function commitCourse();
