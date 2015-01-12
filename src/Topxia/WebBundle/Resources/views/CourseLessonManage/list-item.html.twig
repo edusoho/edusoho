@@ -5,20 +5,22 @@
 
 		{% if lesson.type in ['video', 'live'] %}
 		  {% if mediaStatus == 'waiting' %}
-			<span class="glyphicon glyphicon-facetime-video text-warning"></span>
+			<span class="md md-play-circle-outline text-warning"></span>
 		  {% elseif mediaStatus == 'doing' %}
-			<span class="glyphicon glyphicon-facetime-video text-info"></span>
+			<span class="md md-play-circle-outline text-info"></span>
 		  {% elseif mediaStatus == 'error' %}
-			<span class="glyphicon glyphicon-facetime-video text-danger"></span>
+			<span class="md md-play-circle-outline text-danger"></span>
 		  {% else %}
-			<span class="glyphicon glyphicon-facetime-video text-success"></span>
+			<span class="md md-play-circle-outline text-success"></span>
 		  {% endif %}
 		{% elseif lesson.type == 'audio' %}
-		  <span class="glyphicon glyphicon-volume-up text-success"></span>
+		  <span class="md md-audiotrack text-success"></span>
 		{% elseif lesson.type == 'testpaper' %}
-		  <span class="glyphicon glyphicon-check text-success"></span>
+		  <span class="md md-description text-success"></span>
+		{% elseif lesson.type == 'text' %}
+			<span class="md md-photo text-success"></span>
 		{% else %}
-			<span class="glyphicon glyphicon-file text-success"></span>
+			<span class="md md-insert-chart text-success"></span>
 		{% endif %}
 		课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
 		

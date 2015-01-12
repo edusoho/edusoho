@@ -16,11 +16,13 @@
 						{% if item.type == 'video' %}
 							<i class="md-2x md-play-circle-outline"></i>
 						{% elseif item.type == 'text' %}
-							<i class="md-2x md-photo-library"></i>
+							<i class="md-2x md-photo"></i>
 						{% elseif item.type == 'audio' %}
 							<i class="md-2x md-audiotrack"></i>
 						{% elseif item.type == 'ppt' %}
 							<i class="md-2x md-insert-chart"></i>
+						{% elseif item.type == 'testpaper' %}
+							<i class="md-2x md-description"></i>
 						{% endif %}
 						{% if item.status == 'published' %}
 							<span class="item-length">
