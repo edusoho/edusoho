@@ -528,6 +528,10 @@ define(function(require, exports, module) {
 
                         }, 'json');
                     }
+
+                    else if (lesson.type == 'courseware' ) {
+                        $("#lesson-courseware-content").show();
+                    }
                 }
 
                 if (lesson.type == 'testpaper') {
