@@ -676,6 +676,8 @@ define(function(require, exports, module) {
             setTimeout(recordLearningTime, 120000);
         }
         setTimeout(recordLearningTime, 120000);
+
+        
     };
 
 });
