@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var swfobject = require('swfobject');
-    require('/bundles/topxiaweb/js/controller/pdfjs/viewer.css');
 
     var DocumentPlayer = Widget.extend({
         attrs: {
@@ -42,16 +41,12 @@ define(function(require, exports, module) {
 
         initPDFJSViewer: function(thiz){
             self=this;
-
+//self.attrs.pdfFileUrl.value
             $("html").attr('dir','ltr');
-            thiz.load("../../bundles/topxiaweb/js/controller/pdfjs/pdfjsViewerSegment",function(){
-                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/compatibility.js");
-                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/l10n.js");
-                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/pdf.js");
-                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/viewer.js",function(){
-                    setFileName(self.attrs.pdfFileUrl.value);
-                    webViewerLoad();
-                });
+            $('#viewerIframe').attr('src', '../../bundles/topxiaweb/js/controller/pdfjs/viewer.html');
+            $('#viewerIframe').load(function(){
+                $("#viewerIframe")[0].contentWindow.setFileName('http://7sbrob.com1.z0.glb.clouddn.com/largefile');
+                $("#viewerIframe")[0].contentWindow. webViewerLoad();
             });
         },
 

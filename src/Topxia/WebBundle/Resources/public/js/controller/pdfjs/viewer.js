@@ -38,8 +38,8 @@ var PAGE_NUMBER_LOADING_INDICATOR = 'visiblePageIsLoading';
 var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 
 PDFJS.imageResourcesPath = './images/';
-  PDFJS.workerSrc = '../../bundles/topxiaweb/js/controller/pdfjs/pdf.worker.js';
-  PDFJS.cMapUrl = '../web/cmaps/';
+  PDFJS.workerSrc = 'pdf.worker.js';
+  PDFJS.cMapUrl = '../pdfjs/cmaps/';
   PDFJS.cMapPacked = true;
 
 var mozL10n = document.mozL10n || document.webL10n;
@@ -6953,5 +6953,4 @@ window.addEventListener('afterprint', function afterPrint(evt) {
     window.requestAnimationFrame(resolve);
   });
 })();
-
 

@@ -176,13 +176,13 @@ html {
   /* Font size is needed to make the activity bar the correct size. */
   font-size: 10px;
 }
-/*
+
 body {
   height: 100%;
   background-color: #404040;
   background-image: url(images/texture.png);
 }
-*/
+
 body,
 input,
 button,
@@ -406,6 +406,7 @@ html[dir='rtl'] #viewerContainer {
 
 .toolbar {
   position: relative;
+  left: 0;
   right: 0;
   z-index: 9999;
   cursor: default;
@@ -1992,17 +1993,4 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   #scaleSelectContainer, #pageNumberLabel {
     display: none;
   }
-}
-
-#sidebarContainer{
-  z-index: 9999;
-}
-#viewerContainer{
-  z-index: 9999;
-}
-.page{
-  padding: 0;
-}
-#thumbnailView{
-  width:200px;
 }
