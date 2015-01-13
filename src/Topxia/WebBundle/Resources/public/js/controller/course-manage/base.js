@@ -105,7 +105,8 @@ define(function(require, exports, module) {
             element: '#refundRate',
             rule: 'rate',
             display: '退费比例'
-        })
+        });
+
         validator.addItem({
             element: '[name=maxStudentNum]',
             rule: 'integer',
@@ -142,13 +143,37 @@ define(function(require, exports, module) {
                 $("#deadlineNotifyBlock").show();
             }
         });
-        /*$("#refundType").prop('checked') && $('#refundRateDiv').attr('style','display:block');*/
+
+        $('input[type=checkbox]').change(function(){
+            var $element = $(this);
+            var urlInput = '#'+$(this).attr('id')+'Url';
+            if($element.prop('checked')) {
+                validator.query(urlInput) || registerValidate(urlInput);
+                $('#' + $element.attr('id') + 'UrlDiv').slideDown("normal");
+            }else {
+                validator.removeItem(urlInput);
+                $('#' + $element.attr('id') + 'UrlDiv').slideUp("normal");
+            }
+        });
+
+        $('input[type=checkbox]').each(function(){
+            $(this).prop('checked') && registerValidate('#'+$(this).attr('id')+'Url');
+        });
+
+        function registerValidate(selector) {
+            validator.addItem({
+                element: selector,
+                rule: 'url',
+                required: true,
+                display: '链接地址'
+            });
+        }
         $("#refundType").change(function(){
             var element = $(this);
             if(element.prop('checked')) {
-                $('#refundRateDiv').slideDown("slow");
+                $('#refundRateDiv').slideDown("normal");
             }else {
-               $('#refundRateDiv').slideUp("slow");
+               $('#refundRateDiv').slideUp("normal");
             }
         })
 
