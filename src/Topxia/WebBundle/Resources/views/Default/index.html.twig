@@ -277,6 +277,20 @@
 {% macro course_lists(courses) %}
   {% set mode = mode|default('default') %}
   <ul class="course-wide-list">
+
+
+                              <style type="text/css">
+                              .round {
+                                  position: relative;
+                                  background: #D85252;
+                                  border-radius: 50%;
+                                  padding: 10px;
+                                  float: left;
+                                  z-index: 9999;
+                                }
+                              </style>
+
+
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
@@ -328,18 +342,7 @@
 
 
                       {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoiPrice)) %}
-                            <div class="{# col-md-3 #} pull-right">
-                              <style type="text/css">
-                              .round {
-                                  position: relative;
-                                  background: #D85252;
-                                  border-radius: 50%;
-                                  padding: 10px;
-                                  float: left;
-                                  z-index: 9999;
-                                }
-                              </style>
-                                                      
+                            <div class="{# col-md-3 #} pull-right">                                                      
                               <span class="round">
                                 <font color="#ffffff" size="5">
                                   {% if course.price == 0 and course.coinPrice == 0 %}
