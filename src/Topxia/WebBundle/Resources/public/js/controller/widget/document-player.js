@@ -41,11 +41,11 @@ define(function(require, exports, module) {
 
         initPDFJSViewer: function(thiz){
             self=this;
-//self.attrs.pdfFileUrl.value
+
             $("html").attr('dir','ltr');
             $('#viewerIframe').attr('src', '../../bundles/topxiaweb/js/controller/pdfjs/viewer.html');
             $('#viewerIframe').load(function(){
-                $("#viewerIframe")[0].contentWindow.setFileName('http://7sbrob.com1.z0.glb.clouddn.com/largefile');
+                $("#viewerIframe")[0].contentWindow.setFileName(self.attrs.pdfFileUrl.value);
                 $("#viewerIframe")[0].contentWindow. webViewerLoad();
             });
         },
