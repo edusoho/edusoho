@@ -384,4 +384,26 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         
         return $user;
     }
+
+    public function getFollowings(){
+        $user = $this->controller->getUserByToken($this->request);
+        $start = $this->getParam('start',0);
+        $limit = $this->getParam('limit',10);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能查看关注");
+        }
+        $followings = $this->controller->getUserService()->findUserFollowing($user['id'], $start, $limit);
+        return $followings;
+    }
+
+    public function getFollowers(){
+        $user = $this->controller->getUserByToken($this->request);
+        $start = $this->getParam('start',0);
+        $limit = $this->getParam('limit',10);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能查看关注");
+        }
+        $followers = $this->controller->getUserService()->findUserFollowers($user['id'], $start, $limit);
+        return $followers;
+    }
 }

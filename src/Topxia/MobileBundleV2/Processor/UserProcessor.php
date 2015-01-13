@@ -21,4 +21,8 @@ interface UserProcessor
 	public function sendMessage();
 
 	public function getUserCoin();
+
+	public function getFollowings();
+
+	public function getFollowers();
 }
