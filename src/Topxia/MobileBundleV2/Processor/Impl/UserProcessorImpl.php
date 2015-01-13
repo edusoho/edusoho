@@ -386,13 +386,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     }
 
     public function getFollowings(){
-        $user = $this->controller->getUserByToken($this->request);
+        $userId = $this->getParam('userId');
         $start = $this->getParam('start',0);
         $limit = $this->getParam('limit',10);
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能查看关注");
+        if (empty($userId)) {
+            return $this->createErrorResponse('userId', "userId参数错误");
         }
-        $followings = $this->controller->getUserService()->findUserFollowing($user['id'], $start, $limit);
+        $followings = $this->controller->getUserService()->findUserFollowing($userId, $start, $limit);
         $result = array();
         $index = 0;
         foreach ($followings as $key => $following) {
@@ -407,13 +407,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     }
 
     public function getFollowers(){
-        $user = $this->controller->getUserByToken($this->request);
+        $userId = $this->getParam('userId');
         $start = $this->getParam('start',0);
         $limit = $this->getParam('limit',10);
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能查看关注");
+        if (empty($userId)) {
+            return $this->createErrorResponse('userId', "userId参数错误");
         }
-        $followers = $this->controller->getUserService()->findUserFollowers($user['id'], $start, $limit);
+        $followers = $this->controller->getUserService()->findUserFollowers($userId, $start, $limit);
         $result = array();
         $index = 0;
         foreach ($followers as $key => $follower) {
