@@ -63,9 +63,9 @@ interface ThreadService
 	 */
 	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit);
 
-	public function findThreadsPostByThreadId($threadId);
+	public function getPostCountByuserIdAndThreadId($userId,$threadId);
 
-	public function getPostUserIdCountByThreadId($threadId);
+	public function getThreadPostCountByThreadId($threadId);
 
 	/**
 	 * 获得话题回帖的数量

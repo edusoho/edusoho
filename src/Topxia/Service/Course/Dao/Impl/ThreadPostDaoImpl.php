@@ -31,16 +31,10 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->fetchColumn($sql, array($threadId));
 	}
 
-	public function getPostUserIdCountByThreadId($threadId)
+	public function getPostCountByuserIdAndThreadId($userId,$threadId)
 	{
-        $sql = "SELECT COUNT(distinct(userId)) FROM {$this->table} WHERE threadId = ? ";
-        return $this->getConnection()->fetchColumn($sql, array($threadId));
-	}
-
-	public function findThreadsPostByThreadId($threadId)
-	{
-        $sql = "SELECT distinct(userId) FROM {$this->table} WHERE threadId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($threadId));
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND threadId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($userId,$threadId));
 	}
 
 	public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit)

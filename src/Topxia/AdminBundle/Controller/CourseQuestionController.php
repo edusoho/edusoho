@@ -42,22 +42,18 @@ class CourseQuestionController extends BaseController
         );
 
         $unPostedQuestion = array();
-        $threadPosts = array();
-        $threadUserId =array();
         foreach ($questions as $key => $value) {
             if ($value['postNum'] == 0) {
                 $unPostedQuestion[] = $value;
             }else{
-                $threadPosts[$value['id']] = $this->getThreadService()->findThreadsPostByThreadId($value['id']);
-                $postUserIdCount = $this->getThreadService()->getPostUserIdCountByThreadId($value['id']);
-                $threadUserId['userId']=$value['userId'];
-                foreach ($threadPosts as $threadKey => $threadValue) {
-                    if(in_array($threadUserId,$threadValue) && $postUserIdCount == 1 && !(in_array($value, $unPostedQuestion))){
+                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
+                $userPostsNum = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'],$value['id']);
+                    if($userPostsNum == $threadPostsNum){
                         $unPostedQuestion[] = $value;
                     }
-                }
             }
         }
+        
           if($postStatus == 'unPosted'){
                 $questions = $unPostedQuestion;
           }
