@@ -2,14 +2,15 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var swfobject = require('swfobject');
+    require('/bundles/topxiaweb/js/controller/pdfjs/viewer.css');
 
     var DocumentPlayer = Widget.extend({
         attrs: {
             slides: [],
             swfFileUrl:'http://7tebfn.com1.z0.glb.clouddn.com/testWord-pdf-swf',
             pdfFileUrl:'http://7sbrob.com1.z0.glb.clouddn.com/ActionScript 3.pdf',
-            swfPlayerUrl:'swf/zviewer5.swf',
-            swfPlayerWidth:'600',
+            swfPlayerUrl:'../../bundles/topxiaweb/js/controller/swf/zviewer5.swf',
+            swfPlayerWidth:'800',
             swfPlayerheight:'400'
         },
 
@@ -18,7 +19,8 @@ define(function(require, exports, module) {
 
         setup: function() {
             var self = this;
-            self.init(self);
+
+            self.init(this.element);
 
         },
 
@@ -26,7 +28,7 @@ define(function(require, exports, module) {
 
             if (this.isSupportHtml5()) {
                 this.initPDFJSViewer(thiz);
-                console.log(1);
+           
             }else{
                 this.initSwfViewer(thiz);
             }
@@ -40,17 +42,17 @@ define(function(require, exports, module) {
         },
 
         initPDFJSViewer: function(thiz){
+            self=this;
 
             $("html").attr('dir','ltr');
-            thiz.load("pdfjs/pdfjsViewerSegment",function(){
-                $.getScript("pdfjs/compatibility.js");
-                $.getScript("pdfjs/l10n.js");
-                $.getScript("pdfjs/pdf.js");
-                $.getScript("pdfjs/viewer.js",function(){
-                    setFileName(this.get['pdfFileUrl']);
+            thiz.load("../../bundles/topxiaweb/js/controller/pdfjs/pdfjsViewerSegment",function(){
+                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/compatibility.js");
+                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/l10n.js");
+                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/pdf.js");
+                $.getScript("../../bundles/topxiaweb/js/controller/pdfjs/viewer.js",function(){
+                    setFileName(self.attrs.pdfFileUrl.value);
                     webViewerLoad();
                 });
-              
             });
         },
 

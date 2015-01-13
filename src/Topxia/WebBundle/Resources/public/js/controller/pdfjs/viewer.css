@@ -406,7 +406,6 @@ html[dir='rtl'] #viewerContainer {
 
 .toolbar {
   position: relative;
-  left: 0;
   right: 0;
   z-index: 9999;
   cursor: default;
@@ -1993,4 +1992,17 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   #scaleSelectContainer, #pageNumberLabel {
     display: none;
   }
+}
+
+#sidebarContainer{
+  z-index: 9999;
+}
+#viewerContainer{
+  z-index: 9999;
+}
+.page{
+  padding: 0;
+}
+#thumbnailView{
+  width:200px;
 }

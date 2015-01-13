@@ -539,7 +539,7 @@ define(function(require, exports, module) {
                                 return ;
                             }
 
-                            var html = '<div id="docViewer" style="width:800px; height:600px;"></div>';
+                            var html = '<div id="docViewer" style="width:900px; height:600px;"></div>';
                             $("#lesson-courseware-content").html(html).show();
 
                             var player = new DocumentPlayer({
