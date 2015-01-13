@@ -27,4 +27,6 @@ interface UserProcessor
 	public function getFollowers();
 
 	public function follow();
+
+	public function unfollow();
 }
