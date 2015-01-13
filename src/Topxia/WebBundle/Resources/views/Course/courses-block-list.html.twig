@@ -10,34 +10,6 @@
      <div style="float:right;" class="text-muted mrm mls">
 
 
-              {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoiPrice)) %}
-                    <div class="{# col-md-3 #} pull-right">
-                      <style type="text/css">
-                      .round {
-                          position: relative;
-                          background: #ff0000;
-                          border-radius: 50%;
-                          padding: 10px;
-                          float: left;
-                          z-index: 9999;
-                        }
-                      </style>
-                                              
-                      <span class="round">
-                        <font color="#ffffff" size="5">
-                          {% if course.price == 0 and course.coinPrice == 0 %}
-                            免
-                          {% else %}
-                            折
-                          {% endif %}
-                        </font> 
-                      </span>
-                    </div>
-              {% endif %}
-
-
-
-
          {% if setting('course.coursesPrice') == 0 %}
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                 {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
@@ -102,6 +74,36 @@
       {% endif %}
 
       <div class="course-footer clearfix">
+
+
+              {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoiPrice)) %}
+                    <div class="{# col-md-3 #} pull-right">
+                      <style type="text/css">
+                      .round {
+                          position: relative;
+                          background: #D85252;
+                          border-radius: 50%;
+                          padding: 10px;
+                          float: left;
+                          z-index: 9999;
+                        }
+                      </style>
+                                              
+                      <span class="round">
+                        <font color="#ffffff" size="5">
+                          {% if course.price == 0 and course.coinPrice == 0 %}
+                            &nbsp免&nbsp
+                          {% else %}
+                            &nbsp折&nbsp
+                          {% endif %}
+                        </font> 
+                      </span>
+                    </div>
+              {% endif %}
+
+
+
+
         {% set teacher = users[course.teacherIds|first]|default(null) %}
         {% if teacher %}
           <div class="teacher">
