@@ -649,7 +649,7 @@ class AppServiceImpl extends BaseService implements AppService
         $this->getAppDao()->addApp($app);
     }
 
-    private function updateAppForPackageUpdate($package)
+    private function updateAppForPackageUpdate($package, $packageDir)
     {
         $newApp = array(
             'code' => $package['product']['code'],
@@ -662,6 +662,12 @@ class AppServiceImpl extends BaseService implements AppService
             'developerName' => $package['product']['developerName'],
             'updatedTime' => time(),
         );
+
+        if (file_exists($packageDir . '/ThemeApp')) {
+            $newApp['type'] = 'theme';
+        } else {
+            $newApp['type'] = 'plugin';
+        }
 
         $app = $this->getAppDao()->getAppByCode($package['product']['code']);
 

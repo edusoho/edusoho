@@ -38,6 +38,7 @@ class BuildThemeAppCommand extends BaseCommand
 
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
+        file_put_contents($distDir . '/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
         $this->_zip($distDir);
     }
