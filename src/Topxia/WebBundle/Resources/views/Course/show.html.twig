@@ -117,11 +117,11 @@
 						免费体验
 					</a>
 					<a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-						<i class="md md-bookmark-outline"></i>
+						<i class="glyphicon glyphicon-star-empty"></i>
 						收藏课程
 					</a>
 					<a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
-						<i class="md md-bookmark"></i>
+						<i class="glyphicon glyphicon-star"></i>
 						取消收藏
 					</a>
 					<a class="btn btn-link" href="#" style="display:none;">

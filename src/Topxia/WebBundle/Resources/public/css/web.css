@@ -1310,10 +1310,6 @@ body {
 	padding: 0;
 }
 
-.course-item-list-multi ul li {
-
-}
-
 .course-item-list-multi .item-object {
 	position: relative;
 	width: 64px;
@@ -1343,16 +1339,9 @@ body {
 }
 
 .item-object i {
-	margin-top: 8px;
+	margin-top: 12px;
+	font-size: 24px;
 	color: #fff;
-}
-
-.course-item-list-multi .item-object-video {
-
-}
-
-.course-item-list-multi .item-object-video .item-icon {
-
 }
 
 .course-item-list-multi .item-object-audio {
