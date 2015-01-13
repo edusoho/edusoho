@@ -69,7 +69,7 @@
                 {% endif %}
             {% if canManage %}
             <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
-            <i class="md md-settings"></i>
+            <i class="md md-settings hover-spin"></i>
             </a>
             {% endif %}
           </div>
@@ -83,7 +83,7 @@
             {% endif %}
 
             <div class="btn-group">
-              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <span class="caret"></span></button>
+              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <i class="md-arrow-drop-down"></i></button>
               <ul class="dropdown-menu pull-right">
                   <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank">作为 已购买用户</a></li>
                   <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">作为 未购买用户</a></li>
