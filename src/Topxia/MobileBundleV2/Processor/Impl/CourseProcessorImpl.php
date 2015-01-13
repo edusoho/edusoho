@@ -441,6 +441,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 );
             }
         }
+        $sort = array();
+        foreach ($noteInfos as $key => $value) {
+            $sort[$key] = $value['noteLastUpdateTime'];
+        }
+
+        if($noteInfos != null ){
+            array_multisort($sort, SORT_DESC, $noteInfos);
+        }
+
         return $noteInfos;
     }
     
@@ -1207,7 +1216,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $sort[$key] = $value['latestMessageTime'];
         }
 
-        if($conversations !=null ){
+        if($conversations != null ){
         	array_multisort($sort, SORT_DESC, $conversations);
         }
         
