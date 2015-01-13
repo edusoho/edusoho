@@ -396,7 +396,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result = array();
         $index = 0;
         foreach ($followings as $key => $following) {
+            $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
+            $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
+            $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
             $result[$index++] = $following;
+
         }
         return $result;
     }
@@ -409,6 +413,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录，不能查看关注");
         }
         $followers = $this->controller->getUserService()->findUserFollowers($user['id'], $start, $limit);
-        return $followers;
+        $result = array();
+        $index = 0;
+        foreach ($followers as $key => $follower) {
+            $follower['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['smallAvatar'], 'course-large.png', true);
+            $follower['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['mediumAvatar'], 'course-large.png', true);
+            $follower['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['largeAvatar'], 'course-large.png', true);
+            $result[$index++] = $follower;
+        }
+        return $result;
     }
 }
