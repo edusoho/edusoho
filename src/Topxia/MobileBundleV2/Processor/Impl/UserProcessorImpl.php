@@ -423,4 +423,35 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         return $result;
     }
+
+    public function follow(){
+        $user = $this->controller->getUserByToken($this->request);
+        $toId = $this->getParam('toId');
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        $result = $this->controller->getUserService()->follow($user['id'], $toId);
+
+        $userShowUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经关注了你！";
+        $this->controller->getNotificationService()->notify($toId, 'default', $message);
+
+        return $result;
+    }
+
+    public function unfollow(){
+        $user = $this->controller->getUserByToken($this->request);
+        $toId = $this->getParam('toId');
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
+
+        $userShowUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
+        $this->getNotificationService()->notify($toId, 'default', $message);
+
+        return $result;
+    }
 }
