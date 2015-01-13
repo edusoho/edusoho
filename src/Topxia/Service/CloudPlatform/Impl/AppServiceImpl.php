@@ -456,7 +456,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         if (empty($errors)) {
-            $this->updateAppForPackageUpdate($package);
+            $this->updateAppForPackageUpdate($package, $packageDir);
             $this->createPackageUpdateLog($package, 'SUCCESS');
             PluginUtil::refresh();
         }
