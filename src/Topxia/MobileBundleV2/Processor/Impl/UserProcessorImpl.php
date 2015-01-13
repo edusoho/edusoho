@@ -399,8 +399,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
             $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
             $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
+            $following['following'] = $this->controller->getUserService()->findUserFollowingCount($following['id']);
+            $following['follower'] = $this->controller->getUserService()->findUserFollowerCount($following['id']);
             $result[$index++] = $following;
-
         }
         return $result;
     }
@@ -419,6 +420,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $follower['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['smallAvatar'], 'course-large.png', true);
             $follower['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['mediumAvatar'], 'course-large.png', true);
             $follower['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['largeAvatar'], 'course-large.png', true);
+            $follower['following'] = $this->controller->getUserService()->findUserFollowingCount($follower['id']);
+            $follower['follower'] = $this->controller->getUserService()->findUserFollowerCount($follower['id']);
             $result[$index++] = $follower;
         }
         return $result;
