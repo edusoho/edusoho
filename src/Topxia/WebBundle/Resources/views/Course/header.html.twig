@@ -38,16 +38,16 @@
           {% if not manage %}
           <div class="btn-group">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="评价" data-placement="top" href="#modal">
-              <i class="md md-thumb-up"></i> {{ course.ratingNum }}</a>
+              <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
 
             {% if course.showStudentNumType == 'opened' or member.role|default('student') == 'teacher' or isAdmin %}
               <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom"
-              href="#modal"><i class="md md-group"></i> {{course.studentNum}}</a>
+              href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
             {% endif %}
 
             <div class="btn-group" data-role="tooltip" title="分享到" data-placement="left" >
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                <i class="md md-share"></i>
+                <i class="esicon esicon-share"></i>
               </button>
               <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
                 
@@ -62,14 +62,14 @@
             {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
                    <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}">
-                   <i class="md md-cancel"></i></a>
+                   <i class="esicon esicon-exit"></i></a>
                   {% else %}
                   <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="md md-cancel"></i></a>
                     {% endif %}
                 {% endif %}
             {% if canManage %}
             <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
-            <i class="md md-settings hover-spin"></i>
+            <i class="esicon esicon-setting"></i>
             </a>
             {% endif %}
           </div>
@@ -83,7 +83,7 @@
             {% endif %}
 
             <div class="btn-group">
-              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <i class="md-arrow-drop-down"></i></button>
+              <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">预览 <span class="caret"></span></button>
               <ul class="dropdown-menu pull-right">
                   <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank">作为 已购买用户</a></li>
                   <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">作为 未购买用户</a></li>
