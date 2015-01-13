@@ -393,7 +393,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录，不能查看关注");
         }
         $followings = $this->controller->getUserService()->findUserFollowing($user['id'], $start, $limit);
-        return $followings;
+        $result = array();
+        $index = 0;
+        foreach ($followings as $key => $following) {
+            $result[$index++] = $following;
+        }
+        return $result;
     }
 
     public function getFollowers(){
