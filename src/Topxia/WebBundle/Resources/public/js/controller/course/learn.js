@@ -543,7 +543,9 @@ define(function(require, exports, module) {
                             $("#lesson-courseware-content").html(html).show();
 
                             var player = new DocumentPlayer({
-                                element: '#docViewer'
+                                element: '#docViewer',
+                                swfFileUrl:response.swfUri,
+                                pdfFileUrl:response.pdfUri
                             });
 
                         }, 'json');

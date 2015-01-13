@@ -6,9 +6,8 @@ define(function(require, exports, module) {
 
     var DocumentPlayer = Widget.extend({
         attrs: {
-            slides: [],
-            swfFileUrl:'http://7tebfn.com1.z0.glb.clouddn.com/testWord-pdf-swf',
-            pdfFileUrl:'http://7sbrob.com1.z0.glb.clouddn.com/ActionScript 3.pdf',
+            swfFileUrl:'',
+            pdfFileUrl:'',
             swfPlayerUrl:'../../bundles/topxiaweb/js/controller/swf/zviewer5.swf',
             swfPlayerWidth:'800',
             swfPlayerheight:'400'
