@@ -428,7 +428,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $noteInfos[]  = array(
                     "coursesId" => $courseMember['courseId'],
                     "courseTitle" => $course['title'],
-                    "noteLastUpdateTime" => date('c', $courseMember['noteLastUpdateTime']),
+                    "noteLastUpdateTime" => date('c', $value['updatedTime']),
                     "lessonId" => $lessonInfo['id'],
                     "lessonTitle" => $lessonInfo['title'],
                     "learnStatus" => $lessonStatus,
@@ -503,8 +503,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('wrong_content_param', "笔记内容不能为空！");
         }
         
-        $content             = $this->uploadImage($content);
-        $noteInfo['content'] = $content;
+        $noteInfo['content'] = $this->uploadImage($content);
         
         $result                = $this->controller->getNoteService()->saveNote($noteInfo);
         $result['createdTime'] = date('c', $result['createdTime']);
