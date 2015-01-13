@@ -206,6 +206,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 .teacher-dashboard .teacher-income .money {
   color: #F00;
+  font-size: 12px;
 }
 .teacher-dashboard .teacher-income .avatar {
   width: 40%;
