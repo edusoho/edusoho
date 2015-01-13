@@ -951,6 +951,49 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
         return $result;
     }
+
+    public function getLearningCourseWithoutToken(){
+        $userId = $this->getParam('userId');
+        if (empty($userId)) {
+            return $this->createErrorResponse('userId', "userId参数错误");
+        }
+        
+        $start   = (int) $this->getParam("start", 0);
+        $limit   = (int) $this->getParam("limit", 10);
+        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($userId);
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses($userId, $start, $limit);
+        
+        $count            = $this->controller->getCourseService()->searchLearnCount(array(
+        ));
+        $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+            "userId" => $userId
+        ), array(
+            "finishedTime",
+            "ASC"
+        ), 0, $count);
+        
+        $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+        
+        $tempCourse = array();
+        foreach ($courses as $key => $course) {
+            $tempCourse[$course["id"]] = $course;
+        }
+        
+        foreach ($lessons as $key => $lesson) {
+            $courseId = $lesson["courseId"];
+            if (isset($tempCourse[$courseId])) {
+                $tempCourse[$courseId]["lastLessonTitle"] = $lesson["title"];
+            }
+        }
+        
+        $result = array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data" => $this->controller->filterCourses(array_values($tempCourse))
+        );
+        return $result;
+    }
     
     public function getLearningCourse()
     {

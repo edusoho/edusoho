@@ -6,6 +6,7 @@ interface CourseProcessor
 	public function getVersion();
 	public function getCourses();
 	public function getLearningCourse();
+	public function getLearningCourseWithoutToken();
 	public function getLearnedCourse();
 	public function getFavoriteCoruse();
 
