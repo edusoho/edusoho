@@ -45,12 +45,12 @@ class CourseQuestionController extends BaseController
         $threadPosts = array();
         $threadUserId =array();
         foreach ($questions as $key => $value) {
-            $threadPosts[$value['id']] = $this->getThreadService()->findThreadsPostByThreadId($value['id']);
-            $postUserIdCount = $this->getThreadService()->getPostUserIdCountByThreadId($value['id']);
-            $threadUserId['userId']=$value['userId'];
             if ($value['postNum'] == 0) {
                 $unPostedQuestion[] = $value;
             }else{
+                $threadPosts[$value['id']] = $this->getThreadService()->findThreadsPostByThreadId($value['id']);
+                $postUserIdCount = $this->getThreadService()->getPostUserIdCountByThreadId($value['id']);
+                $threadUserId['userId']=$value['userId'];
                 foreach ($threadPosts as $threadKey => $threadValue) {
                     if(in_array($threadUserId,$threadValue) && $postUserIdCount == 1 && !(in_array($value, $unPostedQuestion))){
                         $unPostedQuestion[] = $value;
