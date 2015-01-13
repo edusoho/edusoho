@@ -381,7 +381,16 @@ class CourseLessonController extends BaseController
                 ));
             }
         }
-        $result=array("success");
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        $metas2=$file['metas2'];
+        $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $result['pdfUri'] = $url['url'];
+        $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        $result['swfUri'] = $url['url'];
+
         return $this->createJsonResponse($result);
     }
 
