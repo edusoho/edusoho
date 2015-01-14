@@ -31,4 +31,6 @@ interface UserProcessor
 	public function unfollow();
 
 	public function searchUserIsFollowed();
+
+	public function getConversationIdByFromIdAndToId();
 }
