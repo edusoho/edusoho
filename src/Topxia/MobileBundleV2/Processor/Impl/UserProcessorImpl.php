@@ -49,7 +49,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $user = $this->controller->getUserService()->getUser($user['id']);
-        
+
         $message = $this->getMessageService()->sendMessage($user['id'], $fromId, $content);
         $toId = $message['toId'];
         $nickname = $user['nickname'];
@@ -470,6 +470,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
         $this->getNotificationService()->notify($toId, 'default', $message);
 
+        return $result;
+    }
+
+    public function getConversationIdByFromIdAndToId(){
+        $fromId = $this->getParam('fromId');
+        $toId = $this->getParam('toId');
+        $result = $this->getMessageService()->getConversationByFromIdAndToId($fromId, $toId);
+        if(!empty($result)){
+            $fromUser = $this->controller->getUserService()->getUser($fromId);
+            $result['fromUserName'] = $fromUser['nickname'];
+        }
         return $result;
     }
 }
