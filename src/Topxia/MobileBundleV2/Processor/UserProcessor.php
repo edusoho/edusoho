@@ -29,4 +29,6 @@ interface UserProcessor
 	public function follow();
 
 	public function unfollow();
+
+	public function searchUserIsFollowed();
 }

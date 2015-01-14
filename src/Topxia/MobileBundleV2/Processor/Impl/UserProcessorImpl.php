@@ -427,6 +427,18 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $result;
     }
 
+    public function searchUserIsFollowed(){
+        $userId = $this->getParam('userId');
+        $toId = $this->getParam('toId');
+        $followingIds = array($toId);
+        $result = $this->controller->getUserService()->filterFollowingIds($userId, $followingIds);
+        if(empty($result)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public function follow(){
         $user = $this->controller->getUserByToken($this->request);
         $toId = $this->getParam('toId');
