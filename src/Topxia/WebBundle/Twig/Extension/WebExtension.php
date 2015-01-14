@@ -182,11 +182,12 @@ class WebExtension extends \Twig_Extension
     public function getPluginVersion($name)
     {
         $plugins = $this->container->get('kernel')->getPlugins();
-        if (!array_key_exists($name, $plugins)) {
-            return null;
+        foreach ($plugins as $plugin) {
+            if ( strtolower($plugin['code']) == strtolower($name) ) {
+                return $plugin['version'];
+            }
         }
-
-        return $plugins[$name]['version'];
+        return null;
     }
 
     public function versionCompare($version1, $version2, $operator)
