@@ -266,6 +266,11 @@ class DataDict
         'coinOrderType'=>array(
             'userName'=>'用户名',
         ),
+        'CourseSubType' => array(
+        	'refund' => '退费',
+        	'retake' => '重修',
+        	'mentoring' => '辅导'
+        )
 	);
 
 	public static function dict($type)

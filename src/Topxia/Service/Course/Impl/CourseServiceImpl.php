@@ -378,6 +378,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'locationId' => 0,
 			'type' => '',
 			'subType' => array(),
+			'subTypeUrl' => array(),
 			'subjectIds' => array(),
 			'address' => '',
 			'maxStudentNum' => 0,
@@ -2626,6 +2627,14 @@ class CourseSerialize
     		}
     	}
 
+    	if (isset($course['subTypeUrl'])) {
+    		if (is_array($course['subTypeUrl']) and !empty($course['subTypeUrl'])) {
+    			$course['subTypeUrl'] = json_encode($course['subTypeUrl']);
+    		} else {
+    			$course['subTypeUrl'] = null;
+    		}
+    	}
+
         return $course;
     }
 
@@ -2668,22 +2677,18 @@ class CourseSerialize
 			$course['tagIds'] = explode('|', trim($course['tagIds'], '|'));
 		}
 
-		$subType = array(
-			'normal' => '',
-			'refund' => '',
-			'retake' => '',
-			'mentoring' => '',
-		);
+		$subType = array();
 		if(!empty($course['subType'] )) {
 			$temp = explode('|', trim($course['subType'], '|'));
 			foreach ($temp as $key) {
-				if(array_key_exists($key, $subType)) {
-					$subType[$key] ='true';
-				}
+				$subType[$key] = 'true';
 			}
 		}
 		$course['subType'] = $subType;
 
+		if(!empty($course['subTypeUrl'])) {
+			$course['subTypeUrl'] = json_decode($course['subTypeUrl'], true);
+		}
 
 		return $course;
     }

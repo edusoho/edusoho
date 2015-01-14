@@ -13,33 +13,24 @@
 	<label class="col-md-2 control-label">课程类型</label>
 	<div class="col-md-8 controls">
 		<label class="checkbox-inline">
-		  <input type="checkbox" id="normalType" name="subType[]" value="normal" {% if course.subType['normal'] %} checked {% endif %}>非协议班
+		  <input type="checkbox" id="refundType" name="subType[]" value="refund" {% if course.subType['refund']|default(null) %} checked {% endif %}>退费班
 		</label>
 		<label class="checkbox-inline">
-		  <input type="checkbox" id="refundType" name="subType[]" value="refund" {% if course.subType['refund'] %} checked {% endif %}>退费班
+		  <input type="checkbox" id="retakeType" name="subType[]" value="retake" {% if course.subType['retake']|default(null) %} checked {% endif %}>重修班
 		</label>
 		<label class="checkbox-inline">
-		  <input type="checkbox" id="retakeType" name="subType[]" value="retake" {% if course.subType['retake'] %} checked {% endif %}>重修班
-		</label>
-		<label class="checkbox-inline">
-		  <input type="checkbox" id="mentoringType" name="subType[]" value="mentoring" {% if course.subType['mentoring'] %} checked {% endif %}>辅导班
+		  <input type="checkbox" id="mentoringType" name="subType[]" value="mentoring" {% if course.subType['mentoring']|default(null) %} checked {% endif %}>辅导班
 		</label>
 	</div>
 </div>
 
-<div class="form-group" id="normalTypeUrlDiv" {% if not course.subType['normal'] %} style="display:none" {% endif %}>
-	<label class="col-md-2 control-label" for="normalTypeUrl">非协议班</label>
-	<div class="col-md-6 controls">
-		<input type="text" class="form-control js-subTypeUrl" id="normalTypeUrl" data-id="normalType" name="subTypeUrl[normal]" value="{{ course.subTypeUrl.normal|default('') }}">
-	</div>
-</div>
-<div class="form-group" id="refundTypeUrlDiv" {% if not course.subType['refund'] %} style="display:none" {% endif %}>
+<div class="form-group" id="refundTypeUrlDiv" {% if not course.subType['refund']|default(null) %} style="display:none" {% endif %}>
 	<label class="col-md-2 control-label" for="refundTypeUrl">退费班</label>
 	<div class="col-md-6 controls">
 		<input type="text" class="form-control js-subTypeUrl"  id="refundTypeUrl" data-id="refundType" name="subTypeUrl[refund]" value="{{ course.subTypeUrl.refund|default('') }}">
 	</div>
 </div>
-<div class="form-group" id="refundRateDiv" {% if not course.subType['refund'] %} style="display:none" {% endif %}>
+<div class="form-group" id="refundRateDiv" {% if not course.subType['refund']|default(null) %} style="display:none" {% endif %}>
 	<label class="col-md-2 control-label">退费比例</label>
 	<div class="col-md-3 controls">
 		<input type="text" id="refundRate" name="refundRate" required="required" class="form-control" value="{{ course.refundRate|default(0.00) }}">
@@ -47,13 +38,13 @@
 		<div class="help-block" style="display:none;"></div>
 	</div>
 </div>
-<div class="form-group" id="retakeTypeUrlDiv" {% if not course.subType['retake'] %} style="display:none" {% endif %}>
+<div class="form-group" id="retakeTypeUrlDiv" {% if not course.subType['retake']|default(null) %} style="display:none" {% endif %}>
 	<label class="col-md-2 control-label" for="retakeTypeUrl">重修班</label>
 	<div class="col-md-6 controls">
 		<input type="text" class="form-control js-subTypeUrl" id="retakeTypeUrl" data-id="retakeType" name="subTypeUrl[retake]" value="{{ course.subTypeUrl.retake|default('') }}">
 	</div>
 </div>
-<div class="form-group" id="mentoringTypeUrlDiv" {% if not course.subType['mentoring'] %} style="display:none" {% endif %}>
+<div class="form-group" id="mentoringTypeUrlDiv" {% if not course.subType['mentoring']|default(null) %} style="display:none" {% endif %}>
 	<label class="col-md-2 control-label" for="mentoringTypeUrl">辅导班</label>
 	<div class="col-md-6 controls">
 		<input type="text" class="form-control js-subTypeUrl" id="mentoringTypeUrl" data-id="mentoringType"  name="subTypeUrl[mentoring]" value="{{ course.subTypeUrl.mentoring|default('') }}">
