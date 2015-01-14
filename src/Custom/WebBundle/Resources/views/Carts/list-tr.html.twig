@@ -23,9 +23,15 @@
         <a href="#" class="btn btn-link">
             <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}" data-id={{ cart.id }}></span>
         </a>
-
-        <a href="javascript:;" class="btn btn-link" data-role="single-favourite-btn" title="收藏"  data-url="{{ path('carts_course_favorite') }}" data-item-id="{{ course.id }}" {% if favouritedCourseId %} disabled {% endif %}>
-            <span class="glyphicon glyphicon-bookmark {% if favouritedCourseId %}favourited{% endif %}"　data-toggle="tooltip" data-placement="top"  ></span>
-        </a>
+      
+            <a href="javascript:;" class="btn btn-link un-favorite-btn"  data-role="single-un-favourite-btn" title="取消收藏"  {% if not favouritedCourseId %}style="display:none;"{% endif %} data-url="{{ path('course_unfavorite', {id:course.id}) }}" data-item-id="{{ course.id }}">
+                <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top">已收藏</span>
+            </a>
+        
+             <a href="javascript:;" class="btn btn-link favorite-btn" data-role="single-favourite-btn" title="收藏" {% if  favouritedCourseId %}style="display:none;"{% endif %} data-url="{{path('course_favorite', {id:course.id})  }}" data-item-id="{{ course.id }}">
+                <span class="glyphicon glyphicon-bookmark" 　data-toggle="tooltip" data-placement="top">收藏</span>
+            </a>
+       
+       
     </td>
 </tr>
