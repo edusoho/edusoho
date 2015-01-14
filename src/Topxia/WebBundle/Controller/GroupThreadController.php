@@ -822,21 +822,24 @@ class GroupThreadController extends BaseController
     }
 
     public function hideThings($thread)
-    {
+    {   
+        $thread['content']=str_replace("#", "<!--></>", $thread['content']);
+        $thread['content']=str_replace("[hide=reply", "#[hide=reply", $thread['content']);
+        $thread['content']=str_replace("[hide=coin", "#[hide=coin", $thread['content']);
         $data=explode('[/hide]',$thread['content']);
         
         $user=$this->getCurrentUser();
         $role=$this->getGroupMemberRole($thread['groupId']);
         $context="";
         $count=0;
-     
+       
         foreach ($data as $key => $value) {
 
             $value=" ".$value;
-            sscanf($value,"%[^[][hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
+            sscanf($value,"%[^#]#[hide=coin%[^]]]%[^$$]",$content,$coin,$hideContent);
+        
+            sscanf($value,"%[^#]#[hide=reply]%[^$$]",$replyContent,$replyHideContent);
             
-            sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
-
             $Trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
 
             if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
@@ -887,12 +890,14 @@ class GroupThreadController extends BaseController
             unset($content);
             unset($replyHideContent);
             unset($hideContent);
+            unset($replyContent);
         }
         
         if($context)
         $thread['content']=$context;
         $thread['count']=$count;
 
+        $thread['content']=str_replace("<!--></>", "#", $thread['content']);
         return $thread;
         
     }

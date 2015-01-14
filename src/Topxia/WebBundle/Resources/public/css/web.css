@@ -29,7 +29,7 @@ a.link-muted {
 
 .modal-body {
 	word-wrap:break-word;
-	overflow:hidden;
+	overflow: hidden;
 }
 
 .modal-body img {
@@ -1310,10 +1310,6 @@ body {
 	padding: 0;
 }
 
-.course-item-list-multi ul li {
-
-}
-
 .course-item-list-multi .item-object {
 	position: relative;
 	width: 64px;
@@ -1334,7 +1330,7 @@ body {
 	width: 36px;
 	height: 36px;
 	display: inline-block;
-	background: url(../img/course/course-item-types-white.png) 0 0 no-repeat;
+	/*background: url(../img/course/course-item-types-white.png) 0 0 no-repeat;*/
 }
 
 .course-item-list-multi .item-object-live {
@@ -1342,12 +1338,10 @@ body {
 	border-color: #DA9078;
 }
 
-.course-item-list-multi .item-object-video {
-
-}
-
-.course-item-list-multi .item-object-video .item-icon {
-
+.item-object i {
+	margin-top: 12px;
+	font-size: 24px;
+	color: #fff;
 }
 
 .course-item-list-multi .item-object-audio {
@@ -4006,6 +4000,11 @@ body {
 	bottom: 0px;
 }
 
+.modal-body .lesson-preview-ppt {
+	position: relative;
+	min-height: 500px;
+}
+
 .slide-player-body {
 	position: absolute;
 	text-align: center;
@@ -4827,4 +4826,8 @@ a.homework-essay-textarea-pack-up{
 .nav .qiandai{
 	line-height: 1px;
 	height:54px;
+}
+.nav-course-buy-btn{
+	padding-bottom: 8px;
+    padding-top: 8px;
 }
