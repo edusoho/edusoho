@@ -61,10 +61,17 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
-    private function init($taskClassFullNameWithNamespace)
+    private function init($taskClassName)
     {
-        $class= $taskClassFullNameWithNamespace;
-        // $class="Topxia\\Service\\Task\\Activity\\".$taskClassName;
+        if(substr($taskClassName, 0,6) == "Plugin"){
+
+            $class="DiscountActivity\\DiscountActivityBundle\\Task\\".$taskClassName;  
+
+        }else{
+
+            $class="Topxia\\Service\\Task\\Activity\\".$taskClassName;  
+        }
+        
         $task=new $class;
 
         $task->run();  
