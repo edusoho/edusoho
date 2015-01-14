@@ -27,6 +27,14 @@ use Topxia\Service\Util\PluginUtil;
         }
      }
 
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
+
  }
 
 
