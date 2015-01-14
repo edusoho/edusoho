@@ -506,7 +506,7 @@ class AppServiceImpl extends BaseService implements AppService
     private function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
-        $filesystem->mirror("{$packageDir}/source",  $this->getPackageRootDirectory($package) , null, array(
+        $filesystem->mirror("{$packageDir}/source",  $this->getPackageRootDirectory($package, $packageDir) , null, array(
             'override' => true,
             'copy_on_windows' => true
         ));
@@ -539,7 +539,7 @@ class AppServiceImpl extends BaseService implements AppService
         $filesystem = new Filesystem();
         $fh = fopen($packageDir . '/delete', 'r');
         while ($filepath = fgets($fh)) {
-            $fullpath = $this->getPackageRootDirectory($package). '/' . trim($filepath);
+            $fullpath = $this->getPackageRootDirectory($package, $packageDir). '/' . trim($filepath);
             if (file_exists($fullpath)) {
                 $filesystem->remove($fullpath);
             }
@@ -586,13 +586,17 @@ class AppServiceImpl extends BaseService implements AppService
         }
     }
 
-    private function getPackageRootDirectory($package) 
+    private function getPackageRootDirectory($package, $packageDir) 
     {
         if ($package['product']['code'] == 'MAIN') {
             return $this->getSystemRootDirectory();
-        } else {
-            return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
         }
+
+        if (file_exists($packageDir . '/ThemeApp')) {
+            return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'web/themes');
+        }
+
+        return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
     }
 
     private function getSystemRootDirectory()

@@ -45,7 +45,7 @@ class BuildThemeAppCommand extends BaseCommand
 
     private function _copySource($name, $themeDir, $distDir)
     {
-        $sourceTargetDir = $distDir . '/source/web/themes/' . $name;
+        $sourceTargetDir = $distDir . '/source/' . $name;
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
 
