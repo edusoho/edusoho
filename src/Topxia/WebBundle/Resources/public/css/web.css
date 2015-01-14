@@ -1359,6 +1359,11 @@ body {
 	border-color: #8B8B5C;
 }
 
+.course-item-list-multi .item-object-courseware {
+	background-color: #ae0073;
+	border-color: #8e055f;
+}
+
 .course-item-list-multi .item-object-text .item-icon {
 	background-position: -72px 0;
 }

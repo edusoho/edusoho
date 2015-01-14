@@ -38,7 +38,7 @@
 
 				      <span class="type">PPT <i class="fa fa-file-powerpoint-o"></i></span>
 	    		    {% elseif item.type == 'courseware' %}
-				      <span class="type">课件 <span class="glyphicon glyphicon-picture"></span></span>
+				      <span class="type">课件 <i class="fa fa-file-word-o"></i></span>
 				    {% elseif item.type == 'live' %}
 				       	{% if item.startTime > currentTime %}
 							<small class="type">{{ item.startTime|date('m月d日') }} 
