@@ -23,19 +23,19 @@
 			    	{% if item.type == 'video' %}
 				    	<span class="type" title="视频时长{{ item.length|duration }}">
 				    		<span>{{ item.length|duration }}</span>
-				    		<span class="fa fa-file-video-o"></span>
+				    		<i class="fa fa-file-video-o"></i>
 				    	</span>
 				    {% elseif item.type == 'audio' %}
 				      <span class="type" title="音频时长{{ item.length|duration }}">
 				    		<span>{{ item.length|duration }}</span>
-				    		<span class="fa fa-file-audio-o"></span>
+				    		<i class="fa fa-file-audio-o"></i>
 				      </span>
 				    {% elseif item.type == 'text' %}
-				      <span class="type">图文 <span class="fa fa-file-photo-o"></span></span>
+				      <span class="type">图文 <i class="fa fa-file-photo-o"></i></span>
 				    {% elseif item.type == 'testpaper' %}
-				      <span class="type">试卷 <span class="fa fa-file-text-o"></span></span>
+				      <span class="type">试卷 <i class="fa fa-file-text-o"></i></span>
 				    {% elseif item.type == 'ppt' %}
-				      <span class="type">PPT <span class="fa fa-file-powerpoint-o"></span></span>
+				      <span class="type">PPT <i class="fa fa-file-powerpoint-o"></i></span>
 				    {% elseif item.type == 'live' %}
 				       	{% if item.startTime > currentTime %}
 							<small class="type">{{ item.startTime|date('m月d日') }} 
