@@ -165,9 +165,15 @@ class WebExtension extends \Twig_Extension
     public function isPluginInstaled($name)
     {
         $plugins = $this->container->get('kernel')->getPlugins();
-        foreach (array_keys($plugins) as $plugin) {
-            if (strtolower($name) == strtolower($plugin)) {
-                return true;
+        foreach ($plugins as $plugin) {
+            if (is_array($plugin)) {
+                if (strtolower($name) == strtolower($plugin['code'])) {
+                    return true;
+                }
+            } else {
+                if (strtolower($name) == strtolower($plugin)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -196,11 +202,14 @@ class WebExtension extends \Twig_Extension
         $plugins = $this->container->get('kernel')->getPlugins();
         $names = array();
         foreach ($plugins as $plugin) {
-            if ($plugin['type'] != 'plugin') {
-                continue;
+            if (is_array($plugin)) {
+                if ($plugin['type'] != 'plugin') {
+                    continue;
+                }
+                $names[] = $plugin['code'];
+            } else {
+                $names[] = $plugin;
             }
-
-            $names[] = $plugin['code'];
         }
 
         $names[] = "customweb";
