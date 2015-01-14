@@ -253,12 +253,12 @@ define(function(require, exports, module) {
                 }
                 var startTime = strtotimestamp($('[name=startTime]').val());
                 var endTime = strtotimestamp($('[name=endTime]').val());
-                if (endTime >= startTime) {
+                if (endTime > startTime) {
                     return true;
                 }else{
                     return false;
                 }
-            },"开始时间必须小于或等于结束时间"
+            },"开始时间必须小于结束时间"
         ],        
 
         [
