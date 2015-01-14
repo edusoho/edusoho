@@ -13,14 +13,14 @@
 		  {% else %}
 			<i class="fa fa-file-video-o text-success"></i>
 		  {% endif %}
-		{% elseif lesson.type == 'audio' %}
-		  <i class="fa fa-file-audio-o text-success"></i>
-		{% elseif lesson.type == 'testpaper' %}
-		  <i class="fa fa-file-text-o text-success"></i>
-		{% elseif lesson.type == 'text' %}
+			{% elseif lesson.type == 'audio' %}
+			<i class="fa fa-file-audio-o text-success"></i>
+			{% elseif lesson.type == 'testpaper' %}
+			<i class="fa fa-file-text-o text-success"></i>
+			{% elseif lesson.type == 'text' %}
 			<i class="fa fa-file-photo-o text-success"></i>
-		{% elseif lesson.type == 'courseware' %}
-		<i class="fa fa-files-o text-success"></i>
+			{% elseif lesson.type == 'courseware' %}
+			<i class="fa fa-files-o text-success"></i>
 		{% else %}
 			<i class="fa fa-file-powerpoint-o text-success"></i>
 		{% endif %}

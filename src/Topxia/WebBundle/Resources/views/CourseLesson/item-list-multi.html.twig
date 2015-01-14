@@ -36,6 +36,8 @@
 									{{ item.length|duration }}
 								{% elseif item.type == 'ppt' %}
 									PPT
+								{% elseif item.type == 'courseware' %}
+									课件
 								{% else %}
 									{{ item.length|duration }}
 								{% endif %}
