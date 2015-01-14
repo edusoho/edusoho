@@ -48,10 +48,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录！");
         }
 
+        $user = $this->controller->getUserService()->getUser($user['id']);
+        
         $message = $this->getMessageService()->sendMessage($user['id'], $fromId, $content);
         $toId = $message['toId'];
         $nickname = $user['nickname'];
         //PushService::sendMsg("$toId","0|$fromId|$nickname|$conversationId");
+        $message['createdUser'] = $this->controller->filterUser($user);
         return $message;
     }
 
