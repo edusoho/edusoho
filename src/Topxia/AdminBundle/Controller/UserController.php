@@ -372,18 +372,21 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
+        
+        if (isset($auth['email_activation_body'])) {
+            $content = $auth['email_activation_body'];
+        }else{
+             $content = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
+                'user' => $user,  
+                'token' => $token,  
+                )) ;
+        }
+
         try {
             $this->sendEmail(
                 $user['email'],
                 "请激活你的帐号，完成注册",
-                if (isset($auth['email_activation_body'])) {
-                    $auth['email_activation_body']
-                }else{
-                     $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
-                        'user' => $user,  
-                        'token' => $token,  
-                        )) 
-                }
+                $content
             );
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch(\Exception $e) {
