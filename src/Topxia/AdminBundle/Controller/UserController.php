@@ -373,10 +373,21 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
         
-        if (!empty($auth['email_activation_body'])) {
-            $content = $auth['email_activation_body'];
+        $site = $this->getSettingService()->get('site', array());
+        $emailTitle = $this->setting('auth.email_activation_title',
+            '请激活你的帐号 完成注册');
+        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
+        $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
+        $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
+
+        if (!empty($emailBody)) {
+            $emailBody = $emailBody;
         }else{
-             $content = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
+             $emailBody = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
                 'user' => $user,  
                 'token' => $token,  
                 )) ;
@@ -385,8 +396,8 @@ class UserController extends BaseController
         try {
             $this->sendEmail(
                 $user['email'],
-                "请激活你的帐号，完成注册",
-                $content
+                $emailTitle,
+                $emailBody
             );
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch(\Exception $e) {
