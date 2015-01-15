@@ -382,6 +382,7 @@
                               </style>
 
     {% for course in courses %}
+    {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
           <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
@@ -419,44 +420,19 @@
             {% endif %}
 
             <span class="metas clearfix">
-
-
-                      {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
-                            <div class="{# col-md-3 #} pull-right">                                                      
-                              <span class="round">
-                                <font color="#ffffff" size="5">
-                                  {% if course.price == 0 and course.coinPrice == 0 %}
-                                    &nbsp免&nbsp
-                                  {% else %}
-                                    &nbsp折&nbsp
-                                  {% endif %}
-                                </font> 
-                              </span>
-                            </div>
-                      {% endif %}
-
-
             {% if setting('course.coursesPrice') == 0 %}
-              <span style="text-align:left;">
-     
+              <div class="price-block">
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
                 <span class="price-num mbm" style="display:block">价格：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
                 </span>
               {% else %}
-                <span class="price-num mbm">价格：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
-                </span>
+                <span class="price-num mbm">折扣价：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                <span class="origin-price">原价：<del>1000元</del></span>
               {% endif %}
-              </span>
+              </div>
             {% endif %}
 
-              {% if course.showStudentNumType == 'opened' %}
-              <span class="student-col">
-                <span class="meta-label">学生</span>
-                <span class="student-num">{{ course.studentNum }}人</span>
-              </span>
-              {% endif %}
-
-              <span class="review-col pull-left" style="text-align:left;">
+              <div class="price-block">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
                   <span class="review-rating">
@@ -468,7 +444,15 @@
                     <span class="stars-0">&nbsp;</span>
                   </span>
                 {% endif %}
-              </span>
+                <span class="label label-danger">8折</span>
+              </div>
+
+              {% if course.showStudentNumType == 'opened' %}
+              <div class="price-block">
+                <span class="meta-label">学生</span>
+                <span class="student-num">{{ course.studentNum }}人</span>
+              </div>
+              {% endif %}
 
             </span>
           {% endif %}
@@ -517,6 +501,126 @@
 
         </a>
       </li>
+    {% else %}
+          <li class="course-grid">
+        <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+          <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
+            {% if course.status == 'draft' %}
+              <span class="label  label-warning course-status">未发布</span>
+            {% elseif course.status == 'closed' %}
+              <span class="label label-danger course-status">已关闭</span>
+            {% endif %} 
+            {% if course.serializeMode=='serialize' %}
+              <span class="label label-success series-mode-label">更新中</span>
+            {% elseif course.serializeMode=='finished' %}
+              <span class="label label-warning series-mode-label">已完结</span>
+            {% endif %}
+
+            {% if course.type == 'live' %}
+              {% set lesson = course['lesson']|default(null) %}
+              {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                <span class="label label-warning series-mode-label">正在直播中</span>
+              {% else %}
+                <span class="label label-success series-mode-label">直播</span>
+              {% endif %}
+            {% endif %}
+
+          <span class="title">{{ course.title }}</span>
+          {% if mode in ['default', 'teach'] %}
+
+            {% if course.type == 'live' %}
+              {% set lesson = course['lesson']|default(null) %}
+              {% if lesson %}
+                <span class="live-course-lesson metas">
+                  <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+                  <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+                </span>
+              {% endif %}
+            {% endif %}
+
+            <span class="metas clearfix">
+            {% if setting('course.coursesPrice') == 0 %}
+              <div class="price-block">
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                <span class="price-num mbm" style="display:block">价格：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                </span>
+              {% else %}
+                <span class="price-num mbm">价格：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                <span class="origin-price">原价：<del>1000元</del></span>
+              {% endif %}
+              </div>
+            {% endif %}
+
+              <div class="price-block">
+                {% if course.ratingNum > 0 %}
+                  <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+                  <span class="review-rating">
+                    <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
+                  </span>
+                {% else %}
+                  <span class="meta-label">无评价</span>
+                  <span class="review-rating">
+                    <span class="stars-0">&nbsp;</span>
+                  </span>
+                {% endif %}
+                <span class="label label-danger">8折</span>
+              </div>
+
+              {% if course.showStudentNumType == 'opened' %}
+              <div class="price-block">
+                <span class="meta-label">学生</span>
+                <span class="student-num">{{ course.studentNum }}人</span>
+              </div>
+              {% endif %}
+
+            </span>
+          {% endif %}
+
+          {% if mode in ['default'] %}
+            {% set user = users[course.teacherIds|first]|default(null) %}
+            {% if user %}
+              <span class="teacher clearfix">
+                <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="thumb">
+                <span class="nickname ellipsis">{{ user.nickname }}</span>
+                <span class="user-title ellipsis">{{ user.title }}</span>
+              </span>
+            {% endif %}
+          {% endif  %}
+
+          {% if mode in ['learn'] %}
+            <div class="learn-status">
+              {% if course.memberIsLearned %}
+                <div class="progress">
+                  <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
+                </div>
+                <div class="action"><span class="btn btn-default btn-sm">查看课程</span></div>
+              {% else %}
+                <div class="progress">
+                  <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }};"></div>
+                </div>
+                <div class="action"><span class="btn btn-primary btn-sm">继续学习</span></div>
+              {% endif %}
+            </div>
+            {% if course.status == 'draft' %}
+              <span class="label  label-warning course-status">未发布</span>
+            {% elseif course.status == 'closed' %}
+              <span class="label label-danger course-status">已关闭</span>
+            {% endif %}       
+          {% endif %}
+
+          {% if mode == 'teach' %}
+            {% if course.status == 'published' %}
+              <span class="label label-success course-status">已发布</span>
+            {% elseif course.status == 'draft' %}
+              <span class="label  label-warning course-status">未发布</span>
+            {% elseif course.status == 'closed' %}
+              <span class="label label-danger course-status">已关闭</span>
+            {% endif %}
+          {% endif %}
+
+        </a>
+      </li>
+    {% endif %}
     {% endfor %}
   </ul>
   {% else %}

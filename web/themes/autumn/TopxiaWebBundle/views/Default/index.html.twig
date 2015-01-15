@@ -89,7 +89,6 @@
                     </div>
 
                     <div class="course-metas">
-
                       <span class="teachers">
                          主讲:
                         {% for teacher in course.teachers %}
@@ -164,6 +163,7 @@
                          {{ web_macro.user_link(teacher, 'text-muted') }}
                         {% endfor %}
                       </span>
+                      <span class="label label-danger">8折</span>
                     </div>
                   </li>
                   {% else %}
@@ -206,7 +206,6 @@
                   </div>
                   
                     <div class="course-metas">
-
                       <span class="teachers">
                          主讲:
                         {% for teacher in course.teachers %}

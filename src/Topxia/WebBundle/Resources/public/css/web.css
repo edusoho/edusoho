@@ -2946,8 +2946,12 @@ body {
 }
 
 .course-grid .metas .meta-label {
-	display: block;
 	color: #999;
+}
+
+.course-grid .price-block {
+	text-align: left;
+	padding: 6px 0;
 }
 
 .course-grid .metas .price-num {
@@ -2955,7 +2959,6 @@ body {
 	font-size: 15px;
 	font-weight: bold;
 	color: #e57259;
-	display: block;
 }
 
 .course-grid .metas .review-col {
@@ -2973,7 +2976,6 @@ body {
 }
 
 .course-grid .metas .student-num {
-	display: block;
 	margin-top: 5px;
 	font-size: 13px;
 }
@@ -3119,7 +3121,7 @@ body {
 .course-wide-list .course-metas {
 	float: right;
 	text-align: right;
-	margin-top: 10px;
+	margin-top: 4px;
 }
 
 .course-wide-list .course-price {
@@ -3129,6 +3131,10 @@ body {
 .course-coinPrice {
 	color: #e57259;
 	font-size: 16px;
+}
+
+.origin-price {
+	font-size: 12px;
 }
 
 .course-wide-list .divider {
