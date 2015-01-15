@@ -3,12 +3,20 @@
         <div class="course-property">
             <span class="course-property">折后价：</span>
                 {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                    <span class="discount-num">{{course.coinPrice}}</span>
-                    &nbsp;
-                    <span class="money-text">{{setting('coin.coin_name')}}</span>
-                    &nbsp;
+                    {% if course.coinPrice > 0 %}
+                        <span class="discount-num">{{course.coinPrice}}</span>
+                        &nbsp;
+                        <span class="money-text">{{setting('coin.coin_name')}}</span>
+                        &nbsp;
+                    {% else %}
+                        <span class="discount-num">免费</span>
+                    {% endif %}
                 {% else %}
-                    <span class="discount-num">¥{{course.price}}</span>
+                    {% if course.price > 0 %}
+                        <span class="discount-num">¥{{course.price}}</span>                        
+                    {% else %}
+                        <span class="discount-num">免费</span>
+                    {% endif %}  
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 {% endif %}
                 &nbsp;&nbsp;                    
@@ -27,7 +35,9 @@
                                 <span class="label label-danger label-discount">
                                     <i class="glyphicon glyphicon-tags"></i>
                                     &nbsp;&nbsp;
-                                    {{ course.coinPrice/course.originCoinPrice * 10 }}折
+                                    {% if course.coinPrice > 0 %}    
+                                        {{ course.coinPrice/course.originCoinPrice * 10 }}折 
+                                    {% endif %}
                                 </span>
                             </span>
                         </span>                    
@@ -37,7 +47,18 @@
             {% else %}
                 {% if course.originPrice > 0 %}
                     <span class="course-price" >
-                        <span class="money-num">¥<del>{{ course.originPrice }}</del>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-danger label-discount"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;{{ course.price/course.originPrice * 10 }}折</span></span>
+                        <span class="money-num">
+                            ¥
+                            <del>{{ course.originPrice }}</del>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="label label-danger label-discount">
+                                <i class="glyphicon glyphicon-tags"></i>
+                                &nbsp;&nbsp;
+                                {% if course.price > 0 %}
+                                    {{ course.price/course.originPrice * 10 }}折
+                                {% endif %}    
+                            </span>
+                        </span>
                     </span>
                 {% else %}
                     <span class="money-num" style="font-size:16px;">免费</span>

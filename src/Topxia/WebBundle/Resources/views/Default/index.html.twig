@@ -303,11 +303,20 @@
 
             {% if setting('course.coursesPrice') == 0 %}
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                <span class="course-price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                </span>
+                {% if course.discountActivityId > 0 %}
+                  <span class="course-price">折后价：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
+                  <span class="origin-price"><del>原价：{{ course.originCoinPrice }}{{setting('coin.coin_name')}}</del></span>
+                {% else %}
+                  <span class="course-price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                  </span>
+                {% endif %}
               {% else %}
-                <span class="course-price">折后价：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                <span class="origin-price"><del>原价：110元</del></span>
+                {% if course.discountActivityId > 0 %}
+                  <span class="course-price">折后价：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                  <span class="origin-price"><del>原价：{{ course.originPrice }}元</del></span>
+                {% else %}
+                  <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                {% endif %}
               {% endif %}
             {% endif %}
             </div>
