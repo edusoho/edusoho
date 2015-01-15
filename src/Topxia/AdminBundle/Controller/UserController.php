@@ -373,7 +373,7 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
         
-        if (isset($auth['email_activation_body'])) {
+        if (empty($auth['email_activation_body'])) {
             $content = $auth['email_activation_body'];
         }else{
              $content = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
