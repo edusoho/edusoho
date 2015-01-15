@@ -1,43 +1,87 @@
 {% if setting('course.coursesPrice') == 0 %}
-<div class="course-property">
-	<span class="course-property">折后价：</span>
-	<span class="discount-num">¥20</span>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<i class="glyphicon glyphicon-time"></i> 22 小时 55 分 44.12 秒
-</div>
-<div class="course-property">
-	<span>原&nbsp;&nbsp;&nbsp;&nbsp;价：</span>
-	{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-		{% if course.coinPrice > 0 %}
-			{% if free_limit_type(course) == 'free_now' %}
-				<span class="money-num">0.00</span>
-				<span class="money-text">{{setting('coin.coin_name')}}</span>
-				<span class="text-muted">(原价：<del>{{ course.coinPrice }}</del> {{setting('coin.coin_name')}})</span>
-				<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-			{% else %}
-				<span class="course-price">
-					<span class="money-num">{{ course.coinPrice }}</span>
-					<span class="money-text" > {{setting('coin.coin_name')}}</span>
-				</span>
-			{% endif %}
-		{% else %}
-			<span class="money-num" style="font-size:16px;">免费</span>
-		{% endif %}
-	{% else %}
-		{% if course.price > 0 %}
-			{% if free_limit_type(course) == 'free_now' %}
-				<span class="money-num">0.00</span>
-				<span class="money-text">元</span>
-				<span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
-				<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-			{% else %}
-			<span class="course-price" >
-				<span class="money-num"><del>¥{{ course.price }}</del>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-danger label-discount"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;8折</span></span>
-			</span>
-			{% endif %}
-		{% else %}
-			<span class="money-num" style="font-size:16px;">免费</span>
-		{% endif %}
-	{% endif %}
-</div>
+    {% if course.discountActivityId >0  %}
+        <div class="course-property">
+            <span class="course-property">折后价：</span>
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    <span class="discount-num">{{course.coinPrice}}</span>
+                    &nbsp;
+                    <span class="money-text">{{setting('coin.coin_name')}}</span>
+                    &nbsp;
+                {% else %}
+                    <span class="discount-num">¥{{course.price}}</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                {% endif %}
+                &nbsp;&nbsp;                    
+            <i class="glyphicon glyphicon-time"></i> 22 小时 55 分 44.12 秒
+        </div>
+        <div class="course-property">
+            <span>原&nbsp;&nbsp;&nbsp;&nbsp;价：</span>
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                {% if course.originCoinPrice > 0 %}
+                        <span class="course-price" >
+                            <span class="money-num">
+                                <del>{{ course.originCoinPrice }}</del>
+                                &nbsp;
+                                <span class="money-text">{{setting('coin.coin_name')}}</span>
+                                &nbsp;
+                                <span class="label label-danger label-discount">
+                                    <i class="glyphicon glyphicon-tags"></i>
+                                    &nbsp;&nbsp;
+                                    {{ course.coinPrice/course.originCoinPrice * 10 }}折
+                                </span>
+                            </span>
+                        </span>                    
+                {% else %}
+                    <span class="money-num" style="font-size:16px;">免费</span>
+                {% endif %}
+            {% else %}
+                {% if course.originPrice > 0 %}
+                    <span class="course-price" >
+                        <span class="money-num">¥<del>{{ course.originPrice }}</del>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-danger label-discount"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;{{ course.price/course.originPrice * 10 }}折</span></span>
+                    </span>
+                {% else %}
+                    <span class="money-num" style="font-size:16px;">免费</span>
+                {% endif %}
+
+            {% endif %}
+        </div>
+    {% else %}
+        <p>
+        价　格：
+        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            {% if course.coinPrice > 0 %}
+                {% if free_limit_type(course) == 'free_now' %}
+                    <span class="money-num">0.00</span>
+                    <span class="money-text">{{setting('coin.coin_name')}}</span>
+                    <span class="text-muted">(原价：<del>{{ course.coinPrice }}</del> {{setting('coin.coin_name')}})</span>
+                    <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
+                {% else %}
+                    <span class="course-price">
+                        <span class="money-num">{{ course.coinPrice }}</span>
+                        <span class="money-text" > {{setting('coin.coin_name')}}</span>
+                    </span>
+                {% endif %}
+            {% else %}
+                <span class="money-num" style="font-size:16px;">免费</span>
+            {% endif %}
+        {% else %}
+            {% if course.price > 0 %}
+                {% if free_limit_type(course) == 'free_now' %}
+                    <span class="money-num">0.00</span>
+                    <span class="money-text">元</span>
+                    <span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
+                    <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
+                {% else %}
+                    <span class="course-price" >
+                        <span class="money-num">{{ course.price }}</span>
+                        <span class="money-text">元</span>
+                    </span>
+                {% endif %}
+            {% else %}
+                <span class="money-num" style="font-size:16px;">免费</span>
+            {% endif %}
+            {% endif %}
+
+            </p>
+    {% endif %}
 {% endif %}

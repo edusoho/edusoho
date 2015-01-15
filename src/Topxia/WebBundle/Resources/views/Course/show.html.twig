@@ -37,7 +37,9 @@
 			{% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
 			<a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
 			{% else %}
-			<span class="label label-activity">双十二活动</span>
+			{% if course.discountActivityId > 0 %}
+				<span class="label label-activity">{{course.discountActivity.activityName}}</span>
+			{% endif %}
 			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
 			{% endif %}
 		</div>
