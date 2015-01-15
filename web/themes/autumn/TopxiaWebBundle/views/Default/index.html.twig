@@ -89,7 +89,6 @@
                     </div>
 
                     <div class="course-metas">
-
                       <span class="teachers">
                          主讲:
                         {% for teacher in course.teachers %}
@@ -117,7 +116,7 @@
             <ul class="autumn-grids">
               {% for course in latestCourses %}
                 {% if course %}
-
+                  {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
                   <li class="autumn-grid autumn-course-grid">
                     <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
                       {% if course.status == 'draft' %}
@@ -145,43 +144,13 @@
                     <div class="course-about">{{ course.about|plain_text(60) }}</div>
                     
                     <div class="mll">  
-
-
-
-
-                      {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
-                            <div class="{# col-md-3 #} pull-right">
-                              <style type="text/css">
-                              .round {
-                                  position: relative;
-                                  background: #ff0000;
-                                  border-radius: 50%;
-                                  padding: 10px;
-                                  float: left;
-                                  z-index: 9999;
-                                }
-                              </style>
-                                                      
-                              <span class="round">
-                                <font color="#ffffff" size="5">
-                                  {% if course.price == 0 and course.coinPrice == 0 %}
-                                    免
-                                  {% else %}
-                                    折
-                                  {% endif %}
-                                </font> 
-                              </span>
-                            </div>
-                      {% endif %}
-
-
                       {% if setting('course.coursesPrice') == 0 %}
                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
                           <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
                           </span>
                         {% else %}
-                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                          </span>
+                          <span class="price-show">{% if course.price > 0 %}折后价：{{ course.price }}元{% else %}免费{% endif %}</span>&nbsp;&nbsp;
+                          <span class="origin-price">原价：<del>1000元</del></span>
                       {% endif %}
                     {% endif %}
                   </div>
@@ -194,8 +163,58 @@
                          {{ web_macro.user_link(teacher, 'text-muted') }}
                         {% endfor %}
                       </span>
+                      <span class="label label-danger">8折</span>
                     </div>
                   </li>
+                  {% else %}
+                  <li class="autumn-grid autumn-course-grid">
+                    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
+                      {% if course.status == 'draft' %}
+                        <span class="label  label-warning course-status">未发布</span>
+                      {% elseif course.status == 'closed' %}
+                        <span class="label label-danger course-status">已关闭</span>
+                      {% endif %} 
+
+                      {% if course.serializeMode == 'serialize' %}
+                        <span class="label label-success series-mode-label">更新中</span>
+                      {% elseif course.serializeMode == 'finished' %}
+                        <span class="label label-warning series-mode-label">已完结</span>
+                      {% endif %}
+
+                      {% if course.type == 'live' %}
+                        {% set lesson = course['lesson']|default(null) %}
+                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                          <span class="label label-warning series-mode-label">正在直播中</span>
+                        {% else %}
+                          <span class="label label-success series-mode-label">直播</span>
+                        {% endif %}
+                      {% endif %}
+                    </a>
+                    <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
+                    <div class="course-about">{{ course.about|plain_text(60) }}</div>
+                    
+                    <div class="mll">  
+                      {% if setting('course.coursesPrice') == 0 %}
+                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                          </span>
+                        {% else %}
+                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
+                          </span>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                  
+                    <div class="course-metas">
+                      <span class="teachers">
+                         主讲:
+                        {% for teacher in course.teachers %}
+                         {{ web_macro.user_link(teacher, 'text-muted') }}
+                        {% endfor %}
+                      </span>
+                    </div>
+                  </li>
+                  {% endif %}
                 {% endif %}
               {% endfor %}
             </ul>

@@ -1,6 +1,12 @@
 {% if setting('course.coursesPrice') == 0 %}
-<p>
-	价　格：
+<div class="course-property">
+	<span class="course-property">折后价：</span>
+	<span class="discount-num">¥20</span>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<i class="glyphicon glyphicon-time"></i> 22 小时 55 分 44.12 秒
+</div>
+<div class="course-property">
+	<span>原&nbsp;&nbsp;&nbsp;&nbsp;价：</span>
 	{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
 		{% if course.coinPrice > 0 %}
 			{% if free_limit_type(course) == 'free_now' %}
@@ -26,14 +32,12 @@
 				<span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
 			{% else %}
 			<span class="course-price" >
-				<span class="money-num">{{ course.price }}</span>
-				<span class="money-text">元</span>
+				<span class="money-num"><del>¥{{ course.price }}</del>&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-danger label-discount"><i class="glyphicon glyphicon-tags"></i>&nbsp;&nbsp;8折</span></span>
 			</span>
 			{% endif %}
 		{% else %}
 			<span class="money-num" style="font-size:16px;">免费</span>
 		{% endif %}
 	{% endif %}
-
-</p>
+</div>
 {% endif %}
