@@ -445,6 +445,58 @@ body {
  * COURSE
  */
 
+.course-card-detail {
+	padding-top: 16px;
+}
+
+.course-action {
+	margin-top: 10px;
+	margin-right: 24px;
+	float: right;
+}
+
+.btn-course {
+	padding: 16px 64px;
+	float: right;
+	text-align: center;
+	font-size: 16px;
+}
+
+.btn-course:hover {
+	border-color: #285e8e;
+}
+
+.course-card-btn {
+	padding: 0 !important;
+}
+
+.course-card-wrap .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.course-card-top {
+	padding: 24px 0; 
+}
+
+.course-card hr {
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+
+.course-card-bottom {
+	width: 100%;
+	background: #f1f1f1;
+}
+
+.course-card-share {
+	padding-top: 10px;
+}
+
+.course-card-bottom .btn-course a {
+	color: #fff;
+}
+
 .course-header {
 	position: relative;
 }
@@ -1866,6 +1918,60 @@ body {
 /**
  * </COURSE>
  */
+
+.course-list-price {
+	color: #d9534f;
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.course-photo {
+	position: relative;
+}
+
+.course-title {
+	line-height: 32px;
+	margin: 8px 0 16px 0;
+}
+
+.course-subtitle {
+	margin-bottom: 8px;
+	color: #aaa;
+}
+
+.label-activity {
+	background-color: #d9534f;
+	position: absolute;
+	top: 0px;
+	left: 32px;
+	padding: 4px 8px;
+	font-size: 14px;
+	line-height: 24px;
+	font-weight: normal;
+	border-radius: 0;
+}
+
+.label-discount {
+	border-radius: 0;
+	padding: 4px 8px;
+}
+
+.course-property {
+	color: #aaa;
+	padding-bottom: 10px;
+}
+
+.discount-num {
+	color: #d9534f;
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.activity-num {
+	color: #d9534f;
+	font-size: 24px;
+	margin: 3px;
+}
 
 .lesson-manage-panel .panel-heading.sticky {
 	margin: 0;
