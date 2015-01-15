@@ -3,5 +3,10 @@
 {% for cart in carts %}
   {% set course = courses[cart.itemId] %}
   {% set favouritedCourseId = favoritedCourses[cart.itemId].id|default(null) %}
-      {% include 'CustomWebBundle:Carts:course-list-tr.html.twig' %}
+    {% include 'CustomWebBundle:Carts:course-list-tr.html.twig' %}
+  {% if course.type == 'package' %}
+    {% for subcourse in course.subcourses %}
+      {% include 'CustomWebBundle:Carts:course-list-tr.html.twig' with { course:subcourse,issubcourse:true } %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}

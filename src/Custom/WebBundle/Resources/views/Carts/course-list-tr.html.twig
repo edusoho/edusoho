@@ -1,7 +1,11 @@
 <tr data-role="cart-tr-{{cart.id}}" class="cart-tr">
-    <td><input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}"></td>
     <td>
-        <div class="clearfix cart-item">
+        {% if not issubcourse|default(false) %}
+            <input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}">
+        {% endif %}
+    </td>
+    <td>
+        <div class="clearfix cart-item {% if issubcourse|default(false)  %} item-offset {% endif %}">
             <a href="{{ path('course_show', {id:course.id}) }}">
                 <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
             </a>
@@ -30,11 +34,18 @@
           {% endif  %}
         </div>
     </td>
-    <td data-role="price" class="text-center money-theme"><p>{{ course.price }}</p></td>
+    <td class="text-center money-theme">
+        {% if course.type == 'package' and course.costPrice is defined %}
+            <p><s>{{ course.costPrice|number_format(2) }}</s></p>   
+        {% endif %}
+        <p>{{ course.price }}</p>
+    </td>
     <td class="text-center">
         {{ cart.number }}
     </td>
-    <td  class="text-center money-theme"><p>{{ course.price }}</p></td>
+    <td  {% if not issubcourse|default(false) %} data-role="price" {% endif %} class="text-center money-theme">
+        <p>{{ course.price }}</p>
+    </td>
     <td  class="text-center">
         <a href="#" class="btn btn-link">
             <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}" data-id={{ cart.id }}></span>

@@ -16,17 +16,19 @@ class CourseItemType extends AbstractCartItemType
         }
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $teacherIds = $this->mergeUserIds($courses, array());
+        list($teacherIds, $temp) = $this->mergeUserIdsAndCountTotalPrice($courses, array());
         foreach ($courses as $key => $course) {
             if($course['type'] == 'package') {
                 list($raletions, $subcourses) = $this->getCourseService()->findSubcoursesByCourseId($course['id']);
+                list($teacherIds, $totalPrice) = $this->mergeUserIdsAndCountTotalPrice($subcourses, $teacherIds);
                 $course['subcourses'] = $subcourses;
-                $teacherIds = $this->mergeUserIds($subcourses, $teacherIds);
+                $course['costPrice'] = $totalPrice;
                 $courses[$key] = $course;
             }
         }
 
-        $users = $this->getUserService()->findUsersByIds(array_unique($teacherIds));
+        $teacherIds = array_values(array_unique($teacherIds));
+        $users = $this->getUserService()->findUsersByIds($teacherIds);
         return array(
             'items' => $courses, 
             'extra' => array(
@@ -35,12 +37,14 @@ class CourseItemType extends AbstractCartItemType
         );
     }
 
-    private function mergeUserIds($courses, $userIds)
+    private function mergeUserIdsAndCountTotalPrice($courses, $userIds)
     {
+        $totalPrice = 0;
         foreach ($courses as $course) {
             $userIds = array_merge($course['teacherIds'], $userIds);
+            $totalPrice += intval($course['price']);
         }
-        return $userIds;
+        return array($userIds, $totalPrice);
     }
 
     private function getCourseService()
