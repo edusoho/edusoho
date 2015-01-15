@@ -369,18 +369,6 @@
   {% set mode = mode|default('default') %}
   {% if courses %}
   <ul class="course-grids">
-
-                              <style type="text/css">
-                              .round {
-                                  position: relative;
-                                  background: #D85252;
-                                  border-radius: 50%;
-                                  padding: 10px;
-                                  float: left;
-                                  z-index: 9999;
-                                }
-                              </style>
-
     {% for course in courses %}
     {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
       <li class="course-grid">
@@ -423,11 +411,12 @@
             {% if setting('course.coursesPrice') == 0 %}
               <div class="price-block">
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                <span class="price-num mbm" style="display:block">价格：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+                <span class="price-num mbm" style="display:block">折扣价：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
                 </span>
+                <span class="origin-price">原价：<del>{{ course.originCoinPrice }}{{setting('coin.coin_name')}}</del></span>
               {% else %}
                 <span class="price-num mbm">折扣价：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                <span class="origin-price">原价：<del>1000元</del></span>
+                <span class="origin-price">原价：<del>{{ course.originPrice }}元</del></span>
               {% endif %}
               </div>
             {% endif %}
@@ -444,7 +433,21 @@
                     <span class="stars-0">&nbsp;</span>
                   </span>
                 {% endif %}
-                <span class="label label-danger">8折</span>
+                <span class="label label-danger">
+                  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                      {% if course.coinPrice > 0 %}
+                          {{ course.coinPrice/course.originCoinPrice * 10 }}折
+                      {% else %}
+                          免
+                      {% endif %}
+                  {% else %}
+                      {% if course.price > 0 %}
+                          {{ course.price/course.originPrice * 10 }}折
+                      {% else %}
+                          免
+                      {% endif %}
+                  {% endif %}
+                </span>
               </div>
 
               {% if course.showStudentNumType == 'opened' %}
@@ -546,7 +549,6 @@
                 </span>
               {% else %}
                 <span class="price-num mbm">价格：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-                <span class="origin-price">原价：<del>1000元</del></span>
               {% endif %}
               </div>
             {% endif %}
@@ -563,7 +565,6 @@
                     <span class="stars-0">&nbsp;</span>
                   </span>
                 {% endif %}
-                <span class="label label-danger">8折</span>
               </div>
 
               {% if course.showStudentNumType == 'opened' %}

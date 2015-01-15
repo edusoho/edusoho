@@ -359,7 +359,21 @@
             </div>
           {% endif %}
           <div class="course-metas">
-            <span class="label label-danger">8折</span>
+            <span class="label label-danger">
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                  {% if course.coinPrice > 0 %}
+                      {{ course.coinPrice/course.originCoinPrice * 10 }}折
+                  {% else %}
+                      免
+                  {% endif %}
+              {% else %}
+                  {% if course.price > 0 %}
+                      {{ course.price/course.originPrice * 10 }}折
+                  {% else %}
+                      免
+                  {% endif %}
+              {% endif %}
+            </span>
             <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
             <span class="divider"></span>
             {% if course.showStudentNumType == 'opened' %}
