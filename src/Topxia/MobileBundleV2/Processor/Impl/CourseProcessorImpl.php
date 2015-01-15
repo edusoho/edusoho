@@ -1289,7 +1289,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $conditions = array(
-            'userId' => $user['id']
+            'userId' => $user['id'],
+            'type' => 'question'
         );
         //问答数量
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
