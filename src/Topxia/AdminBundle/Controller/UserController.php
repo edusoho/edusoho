@@ -374,14 +374,11 @@ class UserController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
         
         $site = $this->getSettingService()->get('site', array());
-        $emailTitle = $this->setting('auth.email_activation_title',
-            '请激活你的帐号 完成注册');
         $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
         $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
-        $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
 
         if (!empty($emailBody)) {
@@ -396,7 +393,7 @@ class UserController extends BaseController
         try {
             $this->sendEmail(
                 $user['email'],
-                $emailTitle,
+                '请激活你的帐号 完成注册',
                 $emailBody
             );
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
