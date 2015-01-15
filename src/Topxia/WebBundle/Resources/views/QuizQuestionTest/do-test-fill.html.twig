@@ -18,7 +18,7 @@
 			    	  {% elseif item.question.testResult.status == "right" %}
 			    	  ，你的答案　<strong class="text-success">{{ userAnswer }}</strong>。 
 			    	  {% elseif item.question.testResult.status == "partRight" %}
-			    	  ，你的答案　<strong class="text-info">{{ userAnswer }}</strong>。 
+			    	  ，你的答案　<strong class="text-warning">{{ userAnswer }}</strong>。 
 			    	  {% else %}
 			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。 
 			    	  {% endif %}
@@ -29,7 +29,7 @@
 		    {% if item.question.testResult.status == "right" %}
 			    <p class="text-success">回答正确。</p>
 			  {% elseif item.question.testResult.status == "partRight" %}
-			    <p class="text-success">回答部分正确，本题得分：{{ item.question.testResult.score }}分。</p>
+			    <p class="text-warning">回答部分正确，本题得分：{{ item.question.testResult.score }}分。</p>
 			  {% else %}
 			    <p class="text-danger">回答错误。</p>
 			  {% endif %}
