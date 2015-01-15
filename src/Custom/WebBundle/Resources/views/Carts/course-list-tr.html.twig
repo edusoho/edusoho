@@ -14,7 +14,7 @@
                 <div class="subtype-list">
                     {% for subType,value in course.subType %}
                         {% if value %}
-                            <a href="{{ course.subTypeUrl[subType] }}" target="_blank">{{ dict_text('CourseSubType', subType) }}</a>
+                            <a href="{{ course.subTypeUrl[subType]|default('') }}" target="_blank">{{ dict_text('CourseSubType', subType) }}</a>
                         {% endif %}
                         {% if loop.index < loop.length %}
                             |
