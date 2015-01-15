@@ -73,6 +73,19 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return true;
     }
 
+    public function findCurrentUserCarts()
+    {
+        $userId = $this->getCurrentUser()->id;
+        $userKey = $_COOKIE['user-key'];
+        if($userId) {
+            $carts = $this->findCartsByUserId($userId);
+        } else {
+            $carts = $this->findCartsByUserKey($userKey);
+        }
+
+        return $carts;
+    }
+
     private function getCartsDao()
     {
         return $this->createDao('Custom:Carts.CartsDao');

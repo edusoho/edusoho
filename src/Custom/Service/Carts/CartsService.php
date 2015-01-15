@@ -20,5 +20,6 @@ interface CartsService
     public function findCartsByUserId($userId);
 
     public function findCartsByUserKey($userKey);
-    
+	
+	public function findCurrentUserCarts();    
 }

@@ -4,6 +4,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.money-theme {
+  color: #c00;
+  font-weight: 700;
+  font-size: 12px;
+}
 /* subcourse manage */
 .sub-course-media .title {
   margin-top: 20px;
@@ -270,4 +275,35 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+#carts-module .cart-item {
+  float: left;
+  position: relative;
+  width: 60%;
+  font-size: 12px;
+}
+#carts-module .cart-item .picture {
+  float: left;
+  width: 110px;
+  height: 60px;
+  margin-right: 10px;
+}
+#carts-module .cart-item .title {
+  margin: 5px 170px 10px 0;
+  padding: 0;
+  line-height: 1.2;
+  font-size: 12px;
+  font-weight: bold;
+  word-break: break-all;
+}
+#carts-module .extra-section {
+  float: left;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  font-size: 12px;
+  width: 40%;
+}
+#carts-module table tbody td {
+  vertical-align: middle;
 }

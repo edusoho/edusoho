@@ -1,25 +1,41 @@
 <tr data-role="cart-tr-{{cart.id}}" class="cart-tr">
     <td><input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}"></td>
     <td>
-        <div class="clearfix course-header">
+        <div class="clearfix cart-item">
             <a href="{{ path('course_show', {id:course.id}) }}">
                 <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
             </a>
             <a class="title">{{ course.title }}</a>
-            <div class="teachers">
-              {% if course.teacherIds|default(null) %}
-                教师：
+            {% if  course.subType %}
+                <div class="subtype-list">
+                    {% for subType,value in course.subType %}
+                        {% if value %}
+                            <a href="{{ course.subTypeUrl[subType] }}" target="_blank">{{ dict_text('CourseSubType', subType) }}</a>
+                        {% endif %}
+                        {% if loop.index < loop.length %}
+                            |
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="extra-section">
+          {% if course.teacherIds|default(null) %}
+            <p>教师：
                 {% for id in course.teacherIds %}
                   {% set user = users[id] %}
                   <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
                 {% endfor %}
-              {% endif  %}
-            </div>
+            </p>
+          {% endif  %}
         </div>
-
     </td>
-    <td data-role="price" class="text-danger">{{ course.price }}</td>
-    <td>
+    <td data-role="price" class="text-center money-theme"><p>{{ course.price }}</p></td>
+    <td class="text-center">
+        {{ cart.number }}
+    </td>
+    <td  class="text-center money-theme"><p>{{ course.price }}</p></td>
+    <td  class="text-center">
         <a href="#" class="btn btn-link">
             <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}" data-id={{ cart.id }}></span>
         </a>

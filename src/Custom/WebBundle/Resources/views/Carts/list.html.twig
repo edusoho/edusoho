@@ -16,9 +16,11 @@
     <table class="table table-hover table-striped" id="carts-table">
       <thead>
           <td><input type="checkbox" data-role="batch-select"></td>
-          <th width="50%">商品信息</th>
-          <th width="30%">单价（元）</th>
-          <th >操作</th>
+          <th class="text-muted" width="60%">商品信息</th>
+          <th class="text-center text-muted" width="10%">单价（元）</th>
+          <th class="text-center text-muted" width="10%">数量</th>
+          <th class="text-center text-muted" width="10%">金额（元）</th>
+          <th class="text-center text-muted" width="10%">操作</th>
       </thead>
       <tbody>
       {% for cart in carts|default(null) %}
