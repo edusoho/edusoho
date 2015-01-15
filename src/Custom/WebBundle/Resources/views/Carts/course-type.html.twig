@@ -1,0 +1,7 @@
+{% set courses = itemResult['course']['items'] %}
+{% set users = itemResult[type]['extra']['users'] %}
+{% for cart in carts %}
+  {% set course = courses[cart.itemId] %}
+  {% set favouritedCourseId = favoritedCourses[cart.itemId].id|default(null) %}
+      {% include 'CustomWebBundle:Carts:course-list-tr.html.twig' %}
+{% endfor %}

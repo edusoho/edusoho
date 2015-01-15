@@ -3,6 +3,8 @@ namespace Custom\Service\Carts\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Custom\Service\Carts\CartsService;
+use Topxia\Common\ArrayToolkit;
+use Custom\Service\Carts\Type\CartItemTypeFactory;
 
 class CartsServiceImpl extends BaseService  implements CartsService
 {
@@ -11,15 +13,26 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return $this->getCartsDao()->getCart($id);
     }
 
+    public function isAddedByUserId($userId, $itemId, $itemType)
+    {
+        return $this->getCartsDao()->getCartByUserIdAndItemIdAndItemType($userId, $itemId, $itemType) ? true : false;
+    }
+
+    public function isAddedByUserKey($userKey, $itemId, $itemType)
+    {
+        return $this->getCartsDao()->getCartByuserKeyAndItemIdAndItemType($userKey, $itemId, $itemType) ? true : false;
+    }
+
     public function getCartsCount()
     {
-        if (empty($_COOKIE['user-key'])){
-            return '0';
+        $userId = $this->getCurrentUser()->id;
+        $userKey = $_COOKIE['user-key'];
+        if($userId) {
+            $carts = $this->findCartsByUserId($userId);
         } else {
-            $userKey = $_COOKIE['user-key'];
             $carts = $this->findCartsByUserKey($userKey);
         }
-
+        
         return count($carts);
     }
 
@@ -43,9 +56,24 @@ class CartsServiceImpl extends BaseService  implements CartsService
         return $this->getCartsDao()->findCartsByUserKey($userKey);
     }
 
-    public function addCart(array $carts)
+    public function addCart(array $fields)
     {
-        return $this->getCartsDao()->addCart($carts);
+        $fields = $this->_filterCartFields($fields);
+        $userId = $this->getCurrentUser()->id;
+        $userKey = $_COOKIE['user-key'];
+        $fields['userId'] = $userId;
+        $fields['userKey'] = $userKey;
+        if($userId) {
+            if($this->isAddedByUserId($userId, $fields['itemId'], $fields['itemType'])) {
+                return array();
+            }
+        } else {
+            if($this->isAddedByUserId($userKey, $fields['itemId'], $fields['itemType'])) {
+                return array();
+            }
+        }
+        
+        return $this->getCartsDao()->addCart($fields);
     }
 
     public function updateCart($id,$carts)
@@ -83,7 +111,44 @@ class CartsServiceImpl extends BaseService  implements CartsService
             $carts = $this->findCartsByUserKey($userKey);
         }
 
-        return $carts;
+        $groupCarts = ArrayToolkit::group($carts, 'itemType');
+        $itemResult = array();
+        foreach ($groupCarts as $itemType => $carts) {
+            $itemIds = ArrayToolkit::column($carts, 'itemId');
+            $itemResult[$itemType] = CartItemTypeFactory::create($itemType)->getItemsAndExtra($itemIds, null);
+        }
+        return array(
+            $groupCarts, $itemResult
+        );
+    }
+
+    public function persistCarts($userId)
+    {
+        $userKey = $_COOKIE['user-key'];
+        $carts = $this->findCartsByUserKey($userKey);
+        if($carts) {
+            $fields = array(
+                'userKey' => null,
+                'userId' => $userId
+            );
+            foreach ($carts as $cart) {
+                $this->updateCart($cart['id'], $fields);
+            }
+        }
+    }
+
+
+    private function _filterCartFields($fields)
+    {
+        $fields = ArrayToolkit::filter($fields, array(
+            'itemId' => 0,
+            'itemType' => '',
+            'userId' => 0,
+            'userKey' => '',
+            'createdTime' => 0
+        ));
+        
+        return $fields;
     }
 
     private function getCartsDao()

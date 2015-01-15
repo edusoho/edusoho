@@ -6,6 +6,10 @@ interface CartsDao
 {
     public function getCart($id);
 
+    public function getCartByUserIdAndItemIdAndItemType($userId, $itemId, $itemType);
+
+    public function getCartByuserKeyAndItemIdAndItemType($userKey, $itemId, $itemType);
+
     public function searchCarts($conditions, $oderBy, $start, $limit);
 
     public function searchCartsCount(array $conditions);

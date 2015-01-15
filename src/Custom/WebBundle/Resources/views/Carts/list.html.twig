@@ -12,7 +12,7 @@
   <div class="panel panel-default">
     <div class="panel-heading"><span class="glyphicon glyphicon-shopping-cart"></span>我的购物车</div>
 
-  {% if carts|default(null) %}
+  {% if groupCarts|default(null) %}
     <table class="table table-hover table-striped" id="carts-table">
       <thead>
           <td><input type="checkbox" data-role="batch-select"></td>
@@ -23,12 +23,8 @@
           <th class="text-center text-muted" width="10%">操作</th>
       </thead>
       <tbody>
-      {% for cart in carts|default(null) %}
-          {% if cart.itemType == 'course' %}
-          {% set course = courses[cart.itemId] %}
-          {% set favouritedCourseId = favoritedCourses[cart.itemId].id|default(null) %}
-              {% include 'CustomWebBundle:Carts:list-tr.html.twig' %}
-          {% endif %}
+      {% for type,carts in groupCarts|default(null) %}
+        {% include 'CustomWebBundle:Carts:' ~ type ~ '-type.html.twig' %}
       {% endfor %}
     {% else %}
       <div> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>

@@ -11,23 +11,17 @@ class CartsController extends BaseController
 {
     public function showAction(Request $request)
     {
-        if (empty($_COOKIE['user-key'])){
-            $carts = array();
+        list($groupCarts, $itemResult) = $this->getCartsService()->findCurrentUserCarts();
+        if($groupCarts) {
+            $carts = $groupCarts['course'];
+            $courses = $itemResult['course']['items'];
+            $users = $itemResult['course']['extra']['users'];
         } else {
-            $userKey = $_COOKIE['user-key'];
-            $carts = $this->getCartsService()->findCartsByUserKey($userKey);
+            $carts = array();
+            $courses = array();
+            $users = array();
         }
-
-        $courses = array();
-        $users = array();
-
-        if (!empty($carts)){
-            $courseIds = ArrayToolkit::column($carts,'itemId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $courses = ArrayToolkit::index($courses,'id');
-            $teacherIds = ArrayToolkit::column($courses,'teacherIds');
-            $users = $this->getUsers($teacherIds);
-        }
+      
 
         $totalPrice = 0;
         foreach ($courses as $course) {
@@ -82,35 +76,14 @@ class CartsController extends BaseController
     public function listAction(Request $request)
     {
         $userId = $this->getCurrentUser()->id;
-
-        if (empty($_COOKIE['user-key'])){
-            $condition = array();
-        } else {
-            $userKey = $_COOKIE['user-key'];
-            $condition = array('userKey' => $userKey);
-        }
-
-        $carts = $this->getCartsService()->searchCarts(
-            $condition,
-            array('createdTime','DESC'),
-            0,
-            $this->getCartsService()->searchCartsCount($condition)
-        );
-
-        $ids = ArrayToolkit::column($carts,'itemId');
-        $courses = $this->getCourseService()->findCoursesByIds($ids);
-
-        $teacherIds = ArrayToolkit::column($courses,'teacherIds');
-        $users = $this->getUsers($teacherIds);
-
+        list($groupCarts, $itemResult) = $this->getCartsService()->findCurrentUserCarts();
         $favoritedTotal = $this->getCourseService()->findUserFavoritedCourseCount($userId);
         $favoritedCourses = $this->getCourseService()->findUserFavoritedCourses($userId,0,$favoritedTotal);
         $favoritedCourses = ArrayToolkit::index($favoritedCourses,'id');
 
         return $this->render('CustomWebBundle:Carts:list.html.twig',array(
-            'carts' => $carts,
-            'courses' =>$courses,
-            'users' => $users,
+            'groupCarts' => $groupCarts,
+            'itemResult' => $itemResult,
             'favoritedCourses' => $favoritedCourses
         ));
     }

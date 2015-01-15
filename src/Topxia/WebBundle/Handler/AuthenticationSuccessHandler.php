@@ -38,6 +38,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $this->getUserService()->clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
         }
 
+        $this->getCartsService()->persistCarts($userId);
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => true
@@ -72,5 +73,10 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    private function getCartsService()
+    {
+        return ServiceKernel::instance()->createService('Custom:Carts.CartsService');
     }
 }

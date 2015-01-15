@@ -5,6 +5,10 @@ interface CartsService
 {
     public function getCart($id);
 
+    public function isAddedByUserId($userId, $itemId, $itemType);
+
+    public function isAddedByUserKey($userKey, $itemId, $itemType);
+
     public function searchCarts(array $conditions, array $sort, $start, $limit);
 
     public function searchCartsCount(array $conditions);
@@ -21,5 +25,7 @@ interface CartsService
 
     public function findCartsByUserKey($userKey);
 	
-	public function findCurrentUserCarts();    
+	public function findCurrentUserCarts();
+
+    public function persistCarts($userId);    
 }
