@@ -16,7 +16,8 @@ define(function(require,exports,module){
             "click [data-role=single-select]" : "_initTotal",
             "click [data-role=batch-delete-btn]" : "_OnClickBatchDelete",
             "click [data-role=batch-favourite-btn]" : "_OnClickBatchFavourite",
-            "click [data-role=single-favourite-btn]" : "_OnClickSingleFavourite"
+            "click [data-role=single-favourite-btn]" : "_OnClickSingleFavourite",
+            "click [data-role=single-un-favourite-btn]" : "_OnClickSingleUnFavourite"
         },
 
         setup: function() {
@@ -66,7 +67,14 @@ define(function(require,exports,module){
             this._initTotal();
         },
 
+
+
         _OnClickBatchDelete: function(e) {
+
+           if( !this.get('cartsIds')){
+                Notify.warning("您还未选中任何记录");
+                return ;
+           }
 
             var msg = this.get('selectConfirmMsg');
 
@@ -121,6 +129,11 @@ define(function(require,exports,module){
         },
 
         _OnClickBatchFavourite: function (e) {
+            if( !this.get('cartsIds')){
+                Notify.warning("您还未选中任何记录");
+                return ;
+           }
+
             var $btn = $(e.currentTarget);
             var ids = [];
             var items = [];
@@ -129,11 +142,10 @@ define(function(require,exports,module){
             this.trigger('selectedItems');
             items = this.get('cartsIds');
             ids = this.get('selectedItems');
-
             $.post($btn.data('url'),{ids:ids},function(result){
                 $.each(items,function(index,itemId){
-                    self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-favourite-btn]').attr('disabled',true);
-                    self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-favourite-btn] > span').addClass('favourited');
+                    self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-favourite-btn]').hide();
+                    self.$('[data-role=cart-tr-'+itemId+']').find('[data-role=single-un-favourite-btn]').show();
                 });
             }).error(function(result){
             });
@@ -142,16 +154,29 @@ define(function(require,exports,module){
         _OnClickSingleFavourite: function (e) {
   
             $btn = $(e.currentTarget);
-            var id = [];
-            id.push($btn.data('itemId'));
-            $.post($btn.data('url'),{ids:id},function(result){
-                // Notify.success('收藏成功');
-                $btn.attr('disabled',true);
-                $btn.find('.glyphicon-bookmark').addClass('favourited');
+            
+            $.post($btn.data('url'),function(result){
+                $btn.hide();
+                $btn.siblings(".un-favorite-btn").show();
+                // $("#un-favorite-btn").show();
             }).error(function(result){
                 // Notify.danger('已经收藏');
             });
+        },
+        _OnClickSingleUnFavourite: function (e) {
+  
+            $btn = $(e.currentTarget);
+          
+            $.post($btn.data('url'),function(result){
+                $btn.hide();
+                // $("#favorite-btn").show();
+                $btn.siblings(".favorite-btn").show();
+
+            }).error(function(result){
+               
+            });
         }
+        
 
     });
 
