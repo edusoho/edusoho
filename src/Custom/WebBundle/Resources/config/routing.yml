@@ -183,4 +183,10 @@ course_manage_submit_advanced_test:
 course_manage_finish_advanced_test:
     pattern: /advanced-test/{id}/finish
     defaults: { _controller: CustomWebBundle:Testpaper:finishTest }
+order_verify:
+    pattern: /order/verify
+    defaults: { _controller: CustomWebBundle:Order:verify }
+order_user_verify:
+    pattern: /order/user/verify
+    defaults: { _controller: CustomWebBundle:Order:userVerify }
 
