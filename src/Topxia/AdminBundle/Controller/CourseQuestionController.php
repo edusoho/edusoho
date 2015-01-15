@@ -27,9 +27,6 @@ class CourseQuestionController extends BaseController
             }  
         }               
         $conditions['type'] = 'question';
-        if($postStatus == 'unPosted'){
-            $conditions['postNum'] = 0;
-        }
 
         $paginator = new Paginator(
             $request,
@@ -43,6 +40,23 @@ class CourseQuestionController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $unPostedQuestion = array();
+        foreach ($questions as $key => $value) {
+            if ($value['postNum'] == 0) {
+                $unPostedQuestion[] = $value;
+            }else{
+                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
+                $userPostsNum = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'],$value['id']);
+                    if($userPostsNum == $threadPostsNum){
+                        $unPostedQuestion[] = $value;
+                    }
+            }
+        }
+        
+          if($postStatus == 'unPosted'){
+                $questions = $unPostedQuestion;
+          }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
