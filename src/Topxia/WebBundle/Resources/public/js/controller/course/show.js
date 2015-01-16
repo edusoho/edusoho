@@ -125,7 +125,7 @@ define(function(require, exports, module) {
         });
 
 
-        var refreshAvtivityTimeLeft = function() {
+        refreshAvtivityTimeLeft = function() {
             var activityEndTime = $("#price-after-discount").data("activityendtime");
             if (null != activityEndTime) {
                 // console.log(activityEndTime);
@@ -152,13 +152,15 @@ define(function(require, exports, module) {
                 var minutesLeft = Math.floor((activityEndTime - now) % 3600.0 / 60.0);
                 var secondsLeft = Math.floor((activityEndTime - now) % 3600.0 % 60.0);
 
-
-                console.log(hoursLeft);
-                console.log(minutesLeft);
-                console.log(secondsLeft);
                 $("#hours-left").html(hoursLeft);
                 $("#minutes-left").html(minutesLeft);
                 $("#seconds-left").html(secondsLeft);
+
+                if (now < activityEndTime) {
+                    setTimeout("refreshAvtivityTimeLeft()", 500);
+                } else {
+
+                }
             }
         }
         refreshAvtivityTimeLeft();
