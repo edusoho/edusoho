@@ -193,3 +193,6 @@ order_user_verify:
     pattern: /order/user/verify
     defaults: { _controller: CustomWebBundle:Order:userVerify }
 
+user_address:
+    pattern: /user/address/{action}
+    defaults: { _controller: CustomWebBundle:Address:address }
