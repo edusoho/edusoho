@@ -13,7 +13,11 @@ class OrderController extends BaseController
 
     public function verifyAction(Request $request)
     {
-        
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
          
         ));
