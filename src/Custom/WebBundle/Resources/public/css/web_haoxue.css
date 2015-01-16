@@ -5,7 +5,7 @@
   white-space: nowrap;
 }
 .money-theme {
-  color: #c00;
+  color: #cc0000;
   font-weight: 700;
   font-size: 12px;
 }
@@ -308,4 +308,26 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 #carts-module table tbody td {
   vertical-align: middle;
+}
+.order-header {
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+.order-header div {
+  float: left;
+  left: 30%;
+  position: relative;
+  width: 150px;
+  height: 24px;
+  line-height: 24px;
+  margin-left: 5px;
+}
+.order-header .step {
+  background: #ccc;
+  color: #000;
+}
+.order-header .process-step {
+  background: #cc0000;
+  color: #FFF;
 }

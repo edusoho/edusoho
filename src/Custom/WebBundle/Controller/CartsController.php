@@ -110,24 +110,22 @@ class CartsController extends BaseController
         if (empty($id)) {
             return $this->createNotFoundException();
         }
-        $user = $this->getCurrentUser();
 
         $cart = array(
             'itemId' => $id,
             'itemType' => $itemType,
             'number' => 1,
-            'userKey' => $_COOKIE['user-key'],
             'createdTime' => time()
         );
 
-        $carts = $this->getCartsService()->searchCarts($cart,array('createdTime','DESC'),0,1);
+        $cart = $this->getCartsService()->addCart($cart);
 
-        if (empty($carts)) {
-            $carts = $this->getCartsService()->addCart($cart);
+        if ($cart) {
             return $this->createJsonResponse(array('status' => 'success'));
+        } else {
+             return $this->createJsonResponse(array('status' => 'exists'));
         }
-
-        return $this->createJsonResponse(array('status' => 'exists'));
+       
     }
 
     private function getUsers($userIds)

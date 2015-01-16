@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}订单确认 - {{ parent() }}{% endblock %}
+
+{# {% set script_controller = 'customwebbundle/controller/carts/list' %}
+
+{% set pageNav = pageNav|default('hotSale') %} #}
+
+{# <div class="page-header"><h1>订单确认</h1></div> #}
+{% block content %}
+  
+  {{ web_macro.flash_messages() }}
+
+  <div class="row">
+    {% include 'CustomWebBundle:Order:order-header.html.twig'  with { process : 'verify'} %}
+  </div>
+
+  {% block orderbody %}
+    {% include 'CustomWebBundle:Order:order-' ~ process ~ '.html.twig' %}
+  {% endblock %}  
+
+{% endblock %}

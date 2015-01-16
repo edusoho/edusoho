@@ -67,6 +67,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
             if($this->isAddedByUserId($userId, $fields['itemId'], $fields['itemType'])) {
                 return array();
             }
+            $fields['userKey'] = null;
         } else {
             if($this->isAddedByUserId($userKey, $fields['itemId'], $fields['itemType'])) {
                 return array();
