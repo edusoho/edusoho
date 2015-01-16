@@ -25,12 +25,20 @@ define(function(require,exports,module){
             this.on('selectedItems',function(){
                 var $items = [];
                 var $cartsIds = [];
+                var self = this;
+                var selected = false;
                 this.$('[data-role=single-select]').each(function(index,item){
                     if ($(item).is(':checked')) {
+                        selected = true;
+                        self.$('[data-role=batch-account-btn]').removeClass('disabled');
                         $cartsIds.push($(item).data('id'));
                         $items.push($(item).data('itemId'));
                     };
                 });
+
+                disabled = this.$('[data-role=batch-account-btn]').hasClass('disabled');
+                !disabled && !selected && this.$('[data-role=batch-account-btn]').addClass('disabled');
+
                 this.set('cartsIds',$cartsIds);
                 this.set('selectedItems',$items);
             });
@@ -176,7 +184,6 @@ define(function(require,exports,module){
                
             });
         }
-        
 
     });
 
