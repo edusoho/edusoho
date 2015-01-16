@@ -333,6 +333,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			if (isset($fields['coinPrice'])){
 				$fields['originCoinPrice'] = $fields['coinPrice'];
 			}
+			$fields['discountActivityId'] = 0;
 		}		
 		$fields = $this->_filterCourseFields($fields);
 
