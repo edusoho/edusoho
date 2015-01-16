@@ -277,20 +277,6 @@
 {% macro course_lists(courses) %}
   {% set mode = mode|default('default') %}
   <ul class="course-wide-list">
-
-
-                              <style type="text/css">
-                              .round {
-                                  position: relative;
-                                  background: #D85252;
-                                  border-radius: 50%;
-                                  padding: 10px;
-                                  float: left;
-                                  z-index: 9999;
-                                }
-                              </style>
-
-
     {% for course in courses %}
     {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
     <li class="course-item clearfix">

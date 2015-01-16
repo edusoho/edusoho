@@ -1,18 +1,5 @@
 <ul class="course-wide-list">
 
-
-                      <style type="text/css">
-                      .round {
-                          position: relative;
-                          background: #D85252;
-                          border-radius: 50%;
-                          padding: 10px;
-                          float: left;
-                          z-index: 9999;
-                        }
-                      </style>
-                      
-
   {% for course in courses %}
   <li class="course-item clearfix">
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
@@ -56,6 +43,23 @@
                   {% else %}免费{% endif %}
                 </span>
             {% endif %}
+            {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
+              <label class="label label-danger label-discount pull-right">
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {% if course.coinPrice > 0 %}
+                        {{ course.coinPrice/course.originCoinPrice * 10 }}折
+                    {% else %}
+                        免
+                    {% endif %}
+                {% else %}
+                    {% if course.price > 0 %}
+                        {{ course.price/course.originPrice * 10 }}折
+                    {% else %}
+                        免
+                    {% endif %}
+                {% endif %}                      
+              </label>
+            {% endif %}
           {% endif %}
         </div>
 
@@ -88,25 +92,6 @@
       {% endif %}
 
       <div class="course-footer clearfix">
-
-
-              {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
-                    <div class="{# col-md-3 #} pull-right">                                              
-                      <span class="round">
-                        <font color="#ffffff" size="5">
-                          {% if course.price == 0 and course.coinPrice == 0 %}
-                            &nbsp免&nbsp
-                          {% else %}
-                            &nbsp折&nbsp
-                          {% endif %}
-                        </font> 
-                      </span>
-                    </div>
-              {% endif %}
-
-
-
-
         {% set teacher = users[course.teacherIds|first]|default(null) %}
         {% if teacher %}
           <div class="teacher">

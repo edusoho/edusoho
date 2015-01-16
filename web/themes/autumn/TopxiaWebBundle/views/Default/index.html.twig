@@ -33,19 +33,7 @@
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
-            <ul class="autumn-grids">
-
-                              <style type="text/css">
-                              .round {
-                                  position: relative;
-                                  background: #D85252;
-                                  border-radius: 50%;
-                                  padding: 10px;
-                                  float: left;
-                                  z-index: 9999;
-                                }
-                              </style>
-              
+            <ul class="autumn-grids">             
               {% for course in recommendCourses %}
                 {% if course %}
                   <li class="autumn-grid autumn-course-grid">
