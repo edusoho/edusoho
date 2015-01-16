@@ -466,6 +466,13 @@ body {
 	border-color: #285e8e;
 }
 
+.btn-course-vip {
+	padding: 16px 64px;
+	float: right;
+	text-align: center;
+	font-size: 16px;
+}
+
 .course-card-btn {
 	padding: 0 !important;
 }
@@ -490,7 +497,8 @@ body {
 }
 
 .course-card-share {
-	padding-top: 10px;
+	margin-top: 10px;
+	margin-right: 20px;
 }
 
 .course-card-bottom .btn-course a {
@@ -1954,6 +1962,21 @@ body {
 .label-discount {
 	border-radius: 0;
 	padding: 4px 8px;
+	position: relative;
+	top: -8px;
+	left: 8px;
+}
+
+.label-discount s{
+	position: absolute;
+	width: 0;
+	display: block;
+	font-size: 0;
+	left: -4px;
+	bottom: 0;
+	height: 0;
+	border: 3px solid #d9534f;
+	border-color: transparent #d9534f #d9534f transparent;	
 }
 
 .course-property {

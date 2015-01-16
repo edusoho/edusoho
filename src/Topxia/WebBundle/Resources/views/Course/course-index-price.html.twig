@@ -8,16 +8,28 @@
                         &nbsp;
                         <span class="money-text">{{setting('coin.coin_name')}}</span>
                         &nbsp;
+                        <span class="label label-danger label-discount"><s></s><i class="glyphicon glyphicon-tags"></i>
+                            &nbsp;&nbsp;
+                            {% if course.coinPrice > 0 %}    
+                                {{ course.coinPrice/course.originCoinPrice * 10 }}折 
+                            {% endif %}
+                        </span>
                     {% else %}
                         <span class="discount-num">免费</span>
                     {% endif %}
                 {% else %}
                     {% if course.price > 0 %}
-                        <span class="discount-num">¥{{course.price}}</span>                        
+                        <span class="discount-num">¥{{course.price}}</span> 
+                        <span class="label label-danger label-discount"><s></s><i class="glyphicon glyphicon-tags"></i>
+                            &nbsp;&nbsp;
+                            {% if course.price > 0 %}    
+                                {{ course.price/course.originPrice * 10 }}折 
+                            {% endif %}
+                        </span>
                     {% else %}
                         <span class="discount-num">免费</span>
                     {% endif %}  
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;                   
                 {% endif %}
                 &nbsp;&nbsp;                    
             <i class="glyphicon glyphicon-time"></i> 22 小时 55 分 44.12 秒
@@ -32,13 +44,13 @@
                                 &nbsp;
                                 <span class="money-text">{{setting('coin.coin_name')}}</span>
                                 &nbsp;
-                                <span class="label label-danger label-discount">
+                                {# <span class="label label-danger label-discount">
                                     <i class="glyphicon glyphicon-tags"></i>
                                     &nbsp;&nbsp;
                                     {% if course.coinPrice > 0 %}    
                                         {{ course.coinPrice/course.originCoinPrice * 10 }}折 
                                     {% endif %}
-                                </span>
+                                </span> #}
                             </span>
                         </span>                    
                 {% else %}
@@ -51,13 +63,13 @@
                             ¥
                             <del>{{ course.originPrice }}</del>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="label label-danger label-discount">
+                            {# <span class="label label-danger label-discount">
                                 <i class="glyphicon glyphicon-tags"></i>
                                 &nbsp;&nbsp;
                                 {% if course.price > 0 %}
                                     {{ course.price/course.originPrice * 10 }}折
                                 {% endif %}    
-                            </span>
+                            </span> #}
                         </span>
                     </span>
                 {% else %}

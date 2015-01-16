@@ -3,9 +3,9 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {%- block keywords -%}
-  {% if category %}{{ category.name }}{% endif %}
-  {% for tag in tags %}{{ tag.name }}{% endfor %}
-  {{ course.title }} {{ setting('site.name') }}
+{% if category %}{{ category.name }}{% endif %}
+{% for tag in tags %}{{ tag.name }}{% endfor %}
+{{ course.title }} {{ setting('site.name') }}
 {%- endblock -%}
 {% block description %}{{ course.about|plain_text(150) }}{% endblock %}
 
@@ -14,299 +14,320 @@
 
 {% block content %}
 
-{% if member and member.locked %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="mtl alert alert-warning">
-      您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
-      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
-    </div>
-  </div>
-</div>
-{% endif %}
+    {% if member and member.locked %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mtl alert alert-warning">
+                    您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
+                    <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
-{% if course.type == 'live' %}
+    {% if course.type == 'live' %}
 
-  {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
+        {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
 
-{% else %}
-<div class="course-card-wrap">
-	<div class="row panel panel-default course-card">
-		<div class="row course-card-top">
-		<div class="col-sm-5 hidden-xs course-photo">
-			{% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
-			<a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
-			{% else %}
-			{% if course.discountActivityId > 0 %}
-				<span class="label label-activity">{{course.discountActivity.activityName}}</span>
-			{% endif %}
-			<img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
-			{% endif %}
-		</div>
-		<div class="col-sm-7 info">
-			{% if is_granted('ROLE_ADMIN') %}
-			<div class="btn-group pull-right">
-				<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
-				</button>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
-					</li>
-				</ul>
-			</div>
-			{% endif %}
-			<h2 class="course-title">{{ course.title }}</h2>
-			<div class="course-subtitle">{{ course.subtitle }}</div>
-			<hr>
-				{% include 'TopxiaWebBundle:Course:course-index-price.html.twig' with {'course':course} %}
-				<div class="course-property">
-					<span>评&nbsp;&nbsp;&nbsp;&nbsp;价：</span>
-					<span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
-					<span class="rating-num">{{ course.rating|number_format(1) }}分</span>
-					<a href="javascript:">（{{ course.ratingNum }}人评价）</a>
-				</div>
-				{% if course.showStudentNumType == 'opened' %}
-				<div class="course-property">
-					学员数：
-					<span class="text-success"><strong>{{ course.studentNum }}</strong></span>
-					<span class="member-text">人</span>
-				</div>
-				{% endif %}
-				
-				<div class="course-property">
+    {% else %}
+        <div class="course-card-wrap">
+            <div class="row panel panel-default course-card">
+                <div class="row course-card-top">
+                    <div class="col-sm-5 hidden-xs course-photo">
+                        {% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
+                            <a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" ><span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span><img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" /></a>
+                            {% else %}
+                                {% if course.discountActivityId > 0 %}
+                                <span class="label label-activity">{{course.discountActivity.activityName}}</span>
+                            {% endif %}
+                            <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-7 info">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="btn-group pull-right">
+                                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li>
+                                        <a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <h2 class="course-title">{{ course.title }}</h2>
+                        <div class="course-subtitle">{{ course.subtitle }}</div>
+                        <hr>
+                        {% include 'TopxiaWebBundle:Course:course-index-price.html.twig' with {'course':course} %}
+                        <div class="course-property">
+                            <span>评&nbsp;&nbsp;&nbsp;&nbsp;价：</span>
+                            <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
+                            <span class="rating-num">{{ course.rating|number_format(1) }}分</span>
+                            <a href="javascript:">（{{ course.ratingNum }}人评价）</a>
+                        </div>
+                        {% if course.showStudentNumType == 'opened' %}
+                            <div class="course-property">
+                                学员数：
+                                <span class="text-success"><strong>{{ course.studentNum }}</strong></span>
+                                <span class="member-text">人</span>
+                            </div>
+                        {% endif %}
 
-				</div>
-				{% if not course.expiryDay == 0 %}
-				<div class="course-property">
-					有效期：
-					<span class="member-num">{{ course.expiryDay }}</span>
-					<span class="member-text">天</span>
-				</div>
-				{% endif %}
-				{% if course.status=='closed' %}  
-				<div class="course-property">
-					状　态： <span class="label label-danger ">已关闭</span>
-				</div>
-				{% elseif course.status=='draft' %}
-				<div class="course-property">
-					状　态： <span class="label label-warning ">未发布</span>
-				</div>
-				{% endif %} 
+                        <div class="course-property">
 
-		</div>
-		</div>
-		<div class="course-card-bottom row">
-				<div class="col-md-3 pull-right course-card-btn">
-					{% if course.status != 'published' %}
-					{% else %}
-						<a class="btn-course btn-primary btn-block" id="course-buy-btn" 
-						{% if setting("course.buy_fill_userinfo")|default(false) %}
-						href="#modal" 
-						data-toggle="modal" 
-						data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-						{% else %}
-						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-						{% endif %}
-						 >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+                        </div>
+                        {% if not course.expiryDay == 0 %}
+                            <div class="course-property">
+                                有效期：
+                                <span class="member-num">{{ course.expiryDay }}</span>
+                                <span class="member-text">天</span>
+                            </div>
+                        {% endif %}
+                        {% if course.status=='closed' %}  
+                            <div class="course-property">
+                                状　态： <span class="label label-danger ">已关闭</span>
+                            </div>
+                        {% elseif course.status=='draft' %}
+                            <div class="course-property">
+                                状　态： <span class="label label-warning ">未发布</span>
+                            </div>
+                        {% endif %} 
+
+                    </div>
+                </div>
+                <div class="course-card-bottom row">
+
+                    {% if course.status != 'published' %}
+                    {% else %}
+
+
+                        {% if courseMemberLevel %}
+                            <div class="pull-right course-card-btn col-md-12 col-lg-6 row">
+
+                                {% if checkMemberLevelResult == 'not_login' %}
+                                    <a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
+                                {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
+                                    <a href="{{ path('vip_buy') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
+                                {% elseif checkMemberLevelResult == 'level_low' %}
+                                    <a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>
+                                {% elseif checkMemberLevelResult == 'ok' %}
+                                    <a class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6" href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}">{{ courseMemberLevel.name }}，免费学</a>
+                                {% endif %}
+
+                                <a class="btn-course btn-primary col-xs-12 col-sm-6 col-md-6" id="course-buy-btn" 
+                                   {% if setting("course.buy_fill_userinfo")|default(false) %}
+                                       href="#modal" 
+                                       data-toggle="modal" 
+                                       data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                                   {% else %}
+                                       href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                                   {% endif %}
+                                   >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+	 								or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+	 								 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+                            </div>
+                        {% else %}
+                            <div class="pull-right course-card-btn col-md-3 col-xs-12 row">
+                                <a class="btn-course btn-primary col-xs-12" id="course-buy-btn" 
+                                   {% if setting("course.buy_fill_userinfo")|default(false) %}
+                                       href="#modal" 
+                                       data-toggle="modal" 
+                                       data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                                   {% else %}
+                                       href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                                   {% endif %}
+                                   >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
+	 								or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+	 								 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+                            </div>
+
+
+                        {% endif %}
+                    {% endif %}
+
+
+                    <div class="course-card-share pull-right">
+                        <div class="pull-right ">
+                            <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
+                                免费体验
+                            </a>
+                            <a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+                                <i class="glyphicon glyphicon-bookmark"></i>
+                                收藏课程
+                            </a>
+                            <a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
+                                <i class="glyphicon glyphicon-bookmark"></i>
+                                已收藏
+                            </a>
+                            <a class="btn btn-link" href="#" style="display:none;">
+                                <i class="glyphicon glyphicon-gift"></i>
+                                赠送
+                            </a>
+                        </div>
+                        <div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="course-card-wrap">
+            <div class="row panel panel-default course-card-detail">
+                <div class="row row-8-4">
+                    <div class="col-md-8">
+
+                        <div class="course-nav-tabs">
+                            <ul class="nav mbl nav-pills" id="course-nav-tabs">
+                                <li class="active">
+                                    <a href="#course-about-pane" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
+                                </li>
+                                {% if course.goals %}
+                                    <li>
+                                        <a href="#course-goal-pane" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
+                                    </li>
+                                {% endif %}
+                                {% if course.audiences %}
+                                    <li>
+                                        <a href="#course-audience-pane" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="#course-list-pane" class="btn-index" data-anchor="#course-list-pane">课程列表</a>
+                                </li>
+                                <li>
+                                    <a href="#course-review-pane" class="btn-index" data-anchor="#course-review-pane">
+                                        课程评价
+                                        <span class="badge">{{ course.ratingNum }}</span>
+                                    </a>
+                                </li>
+                                <li class="pull-right" style="display:none;" >
+                                    <div>
+                                        <a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" 
+                                           {% if setting("course.buy_fill_userinfo")|default(false) %}
+                                               href="#modal" 
+                                               data-toggle="modal" 
+                                               data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                                           {% else %}
+                                               href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                                           {% endif %}
+                                           >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
 						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
 						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
-
-						{% if courseMemberLevel %}
-							{% if checkMemberLevelResult == 'not_login' %}
-								<a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
-							{% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
-								<a href="{{ path('vip_buy') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
-							{% elseif checkMemberLevelResult == 'level_low' %}
-								<a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>
-							{% elseif checkMemberLevelResult == 'ok' %}
-								<a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn btn-warning mll become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
-							{% endif %}
-
-						{% endif %}
-					{% endif %}
-				</div>
-				<div class="col-md-9 course-card-share">
-					<div class="pull-right ">
-						<a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
-							免费体验
-						</a>
-						<a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-							<i class="glyphicon glyphicon-bookmark"></i>
-							收藏课程
-						</a>
-						<a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
-							<i class="glyphicon glyphicon-bookmark"></i>
-							已收藏
-						</a>
-						<a class="btn btn-link" href="#" style="display:none;">
-							<i class="glyphicon glyphicon-gift"></i>
-							赠送
-						</a>
-					</div>
-					<div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
-				</div>
-		</div>
-	</div>
-</div>
-<div class="course-card-wrap">
-	<div class="row panel panel-default course-card-detail">
-	<div class="row row-8-4">
-		<div class="col-md-8">
-
-			<div class="course-nav-tabs">
-				<ul class="nav mbl nav-pills" id="course-nav-tabs">
-					<li class="active">
-						<a href="#course-about-pane" class="btn-index" data-anchor="#course-about-pane">课程介绍</a>
-					</li>
-					{% if course.goals %}
-						<li>
-							<a href="#course-goal-pane" class="btn-index" data-anchor="#course-goal-pane">课程目标</a>
-						</li>
-					{% endif %}
-					{% if course.audiences %}
-						<li>
-							<a href="#course-audience-pane" class="btn-index" data-anchor="#course-audience-pane">适合人群</a>
-						</li>
-					{% endif %}
-					<li>
-						<a href="#course-list-pane" class="btn-index" data-anchor="#course-list-pane">课程列表</a>
-					</li>
-					<li>
-						<a href="#course-review-pane" class="btn-index" data-anchor="#course-review-pane">
-							课程评价
-							<span class="badge">{{ course.ratingNum }}</span>
-						</a>
-					</li>
-					<li class="pull-right" style="display:none;" >
-					<div>
-						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" 
-						{% if setting("course.buy_fill_userinfo")|default(false) %}
-						href="#modal" 
-						data-toggle="modal" 
-						data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-						{% else %}
-						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-						{% endif %}
-						>{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
-						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
-						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
-					</div>
-					</li>
-				</ul>
-			</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
 
 
-			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-about-pane'} %}
-				{% block heading %}
-					<h3 class="panel-title">课程介绍</h3>
-				{% endblock %}
-				{% block body %}
+                        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-about-pane'} %}
+                            {% block heading %}
+                                <h3 class="panel-title">课程介绍</h3>
+                            {% endblock %}
+                            {% block body %}
 
-					{% if course.about %}
-						{{ course.about|raw }}
-					{% else %}
-						<span class="text-muted">还没有课程介绍...</span>
-					{% endif %}
-					{% if tags %}
-						<div class="mtm">
-						<span class="text-muted">标签：</span>{% for tag in tags %}
-						<a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
-						{% endfor %}
-						</div>
-					{% endif %}
+                                {% if course.about %}
+                                    {{ course.about|raw }}
+                                {% else %}
+                                    <span class="text-muted">还没有课程介绍...</span>
+                                {% endif %}
+                                {% if tags %}
+                                    <div class="mtm">
+                                        <span class="text-muted">标签：</span>{% for tag in tags %}
+                                        <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
+                                        {% endfor %}
+                                        </div>
+                                        {% endif %}
 
-				{% endblock %}
-			{% endembed %}
+                                            {% endblock %}
+                                                {% endembed %}
 
-			{% if course.goals %}
-				{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-goal-pane'} %}
-					{% block heading %}
-						<h3 class="panel-title">课程目标</h3>
-					{% endblock %}
-					{% block body %}
-						<ul class="media-list">
-							{% for goal in course.goals  %}
-							<li class="media">
-								<div class="pull-left">
-									<span class="glyphicon glyphicon-flag media-object"></span>
-								</div>
-								<div class="media-body">{{ goal }}</div>
-							</li>
-							{% endfor %}
-						</ul>
-					{% endblock %}
-				{% endembed %}
-			{% endif %}
+                                                    {% if course.goals %}
+                                                        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-goal-pane'} %}
+                                                            {% block heading %}
+                                                                <h3 class="panel-title">课程目标</h3>
+                                                            {% endblock %}
+                                                            {% block body %}
+                                                                <ul class="media-list">
+                                                                    {% for goal in course.goals  %}
+                                                                        <li class="media">
+                                                                            <div class="pull-left">
+                                                                                <span class="glyphicon glyphicon-flag media-object"></span>
+                                                                            </div>
+                                                                            <div class="media-body">{{ goal }}</div>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endblock %}
+                                                        {% endembed %}
+                                                    {% endif %}
 
-			{% if course.audiences %}
-				{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-audience-pane'} %}
-					{% block heading %}
-						<h3 class="panel-title">适合人群</h3>
-					{% endblock %}
-					{% block body %}
-						<ul class="media-list">
-							{% for audience in course.audiences %}
-							<li class="media">
-								<div class="pull-left">
-									<span class="glyphicon glyphicon-user media-object"></span>
-								</div>
-								<div class="media-body">{{ audience }}</div>
-							</li>
-							{% endfor %}
-						</ul>
-					{% endblock %}
-				{% endembed %}
-			{% endif %}
+                                                    {% if course.audiences %}
+                                                        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-audience-pane'} %}
+                                                            {% block heading %}
+                                                                <h3 class="panel-title">适合人群</h3>
+                                                            {% endblock %}
+                                                            {% block body %}
+                                                                <ul class="media-list">
+                                                                    {% for audience in course.audiences %}
+                                                                        <li class="media">
+                                                                            <div class="pull-left">
+                                                                                <span class="glyphicon glyphicon-user media-object"></span>
+                                                                            </div>
+                                                                            <div class="media-body">{{ audience }}</div>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endblock %}
+                                                        {% endembed %}
+                                                    {% endif %}
 
-			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-list-pane'} %}
-				{% block heading %}
-					<h3 class="panel-title">课时列表</h3>
-				{% endblock %}
-				{% block body %}
+                                                    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-list-pane'} %}
+                                                        {% block heading %}
+                                                            <h3 class="panel-title">课时列表</h3>
+                                                        {% endblock %}
+                                                        {% block body %}
 
-					{% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
+                                                            {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
 
-				{% endblock %}
-			{% endembed %}
+                                                        {% endblock %}
+                                                    {% endembed %}
 
 
-			{% if courseReviews %}
-			{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-review-pane'} %}
-				{% block heading %}
-					<h3 class="panel-title">课程评价</h3>
-				{% endblock %}
-				{% block body %}
+                                                    {% if courseReviews %}
+                                                        {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {'id' : 'course-review-pane'} %}
+                                                            {% block heading %}
+                                                                <h3 class="panel-title">课程评价</h3>
+                                                            {% endblock %}
+                                                            {% block body %}
 
-					<div id="course-review-pane-show" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">正在载入课程评价数据...</div>
+                                                                <div id="course-review-pane-show" data-url="{{ path('course_review_list', {id:course.id, previewAs:previewAs}) }}">正在载入课程评价数据...</div>
 
-				{% endblock %}
-			{% endembed %}
-			{% endif %}
+                                                            {% endblock %}
+                                                        {% endembed %}
+                                                    {% endif %}
 
-			{% if setting('course.relatedCourses') == 1 %}
-				{{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
-			{% endif %}
-		</div>
-		<div class="col-md-4">
-			{{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
+                                                    {% if setting('course.relatedCourses') == 1 %}
+                                                    {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
+                                                    {% endif %}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        {{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
 
-			{{ render(controller('TopxiaWebBundle:CourseThread:latestBlock',{course:course})) }}
+                                                        {{ render(controller('TopxiaWebBundle:CourseThread:latestBlock',{course:course})) }}
 
-			{{ render(controller('TopxiaWebBundle:Course:latestMembersBlock',{course:course})) }}
+                                                        {{ render(controller('TopxiaWebBundle:Course:latestMembersBlock',{course:course})) }}
 
-			{{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+                                                        {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
 
-		</div>
-	</div>
-	</div>
-</div>
-{% endif %}
-</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        </div>
 
-{% endblock %}
+                                        {% endblock %}
 
-{% block bottom %}
-<div id="course-modal" class="modal"></div>
-<div id="course-edit-modal" class="modal"></div>
-{% endblock %}
+                                            {% block bottom %}
+                                                <div id="course-modal" class="modal"></div>
+                                                <div id="course-edit-modal" class="modal"></div>
+                                            {% endblock %}
 
