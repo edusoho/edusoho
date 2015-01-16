@@ -1,31 +1,28 @@
   <fieldset>
-    <legend>用户信息确认</legend>
-    <div class="row">
-      <label for="nickname" class="col-md-1 control-label">昵称</label>
+    <legend>确认个人信息</legend>
+      <div class="form-group">
+        <label for="nickname" class="col-md-1 control-label">昵称</label>
+          <div class="col-md-2">
+            <input type="text" class="form-control" id="nickname" name="nickname" value="{{app.user.nickname}}" readonly>
+          </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="title" class="col-md-1 control-label">姓名</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" id="nickname" name="nickname" value="{{app.user.nickname}}" readonly>
+          <input type="text" class="form-control" id="title" name="title" value="" readonly>
         </div>
 
-    </div>
+        <label for="title" class="col-md-1 control-label">邮箱</label>
+        <div class="col-md-2">
+          <input type="text" class="form-control" id="title" name="title" value="" readonly>
+        </div>
 
-    <div class="row">
-      <label for="title" class="col-sm-1 control-label">姓名</label>
-      <div class="col-sm-3">
-      	{# {{user.profile[truename]}} #}
-      	{{ profile.truename|default('') }}
-      {#   <input type="text" class="form-control" id="title" name="title" value="{{ profile[truename]|default('')}}"> #}
-      	
-      </div>
-      <label for="title" class="col-sm-1 control-label">邮箱</label>
-      <div class="col-sm-3">
-      {#   <input type="text" class="form-control" id="title" name="title" value="{{ lesson.title|default('') }}" placeholder="请输入标题"> #}
-      	 {{ profile.email|default('') }}
-      </div>
-        <label for="title" class="col-sm-1 control-label">手机号</label>
-      <div class="col-sm-3">
-      {#   <input type="text" class="form-control" id="title" name="title" value="{{ lesson.title|default('') }}" placeholder="请输入标题"> #}
-      {{ profile.mobile|default('') }}
-      </div>
+        <label for="title" class="col-md-1 control-label">手机号码</label>
+        <div class="col-md-2">
+          <input type="text" class="form-control" id="title" name="title" value="" readonly>
+        </div>
 
-    </div>
+      </div>
+    
   </fieldset>

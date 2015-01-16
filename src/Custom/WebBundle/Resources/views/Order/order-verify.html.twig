@@ -1,6 +1,7 @@
 {% extends 'CustomWebBundle:Order:layout.html.twig' %}
 
 {% block orderbody %}
+<form class="form-horizontal">
   <div class="row">
     {# 确认用户信息 #}
     {{ render(controller('CustomWebBundle:Order:userVerify'))}}
@@ -8,7 +9,7 @@
   <div class="row">
     {# 发票信息 #}
     {# {{ render(controller('CustomWebBundle:Order:userVerify'))}} #}
-    {% include 'CustomWebBundle:Order:bill.html.twig' %}
+    {% include 'CustomWebBundle:Order:order-bill.html.twig' %}
   </div>
   <div class="row">
     {# 地址信息 #}
@@ -18,4 +19,6 @@
     {# 订单信息 #}
     {# {{ render(controller('CustomWebBundle:Order:userVerify'))}} #}
   </div>
+</form>
+
 {% endblock %}
