@@ -38,7 +38,7 @@ class HLSController extends BaseController
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 2, 'duration' => 3600));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 3, 'duration' => 3600));
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
@@ -99,7 +99,7 @@ class HLSController extends BaseController
         $params = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 2, 'duration' => 3600));
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
@@ -190,7 +190,7 @@ class HLSController extends BaseController
                 }
 
                 $beginning['beginningKey'] = $beginnings[$level]['key'];
-                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 2, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
                 $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
                 break;
             }
