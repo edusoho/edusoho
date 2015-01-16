@@ -1,9 +1,34 @@
   <fieldset>
     <legend>用户信息确认</legend>
-    <div id="consult-qqgroup">
-   
+     <div class="row form-group">
+     	
+    <label for="title" class="col-sm-1 control-label">昵称</label>
+    <div class="col-sm-11">
+     {#  <input type="text" class="form-control" id="nickname" name="nickname" value="{{user.nickname}}" readonly="readonly"> #}
+     	{{app.user.nickname}}
+    </div>
+ 
+
     </div>
     <div class="row form-group">
-     
+     	
+    <label for="title" class="col-sm-1 control-label">姓名</label>
+    <div class="col-sm-3">
+    	{# {{user.profile[truename]}} #}
+    	{{ profile.truename|default('') }}
+    {#   <input type="text" class="form-control" id="title" name="title" value="{{ profile[truename]|default('')}}"> #}
+    	
+    </div>
+    <label for="title" class="col-sm-1 control-label">邮箱</label>
+    <div class="col-sm-3">
+    {#   <input type="text" class="form-control" id="title" name="title" value="{{ lesson.title|default('') }}" placeholder="请输入标题"> #}
+    	 {{ profile.email|default('') }}
+    </div>
+      <label for="title" class="col-sm-1 control-label">手机号</label>
+    <div class="col-sm-3">
+    {#   <input type="text" class="form-control" id="title" name="title" value="{{ lesson.title|default('') }}" placeholder="请输入标题"> #}
+    {{ profile.mobile|default('') }}
+    </div>
+
     </div>
   </fieldset>

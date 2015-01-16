@@ -27,9 +27,13 @@ class OrderController extends BaseController
     }
     public function userVerifyAction(Request $request)
     {
-        $user = array('name' =>'zhangsan' ,'age'=>18 );
+        $user = $this->getCurrentUser();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['title'] = $user['title'];
+
+     
         return $this->render('CustomWebBundle:Order:user-verify.html.twig',array(
-            'user' => $user
+           'profile' => $profile
         ));
     }
     
