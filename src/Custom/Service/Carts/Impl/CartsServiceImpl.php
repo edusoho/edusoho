@@ -124,14 +124,23 @@ class CartsServiceImpl extends BaseService  implements CartsService
 
     public function persistCarts($userId)
     {
+        /* TODO 如果有数量的时候要加1,现在先不考虑,如果直接在数据库中找出相同的cart,就不用遍历了! */
         $userKey = $_COOKIE['user-key'];
         $carts = $this->findCartsByUserKey($userKey);
+        $existCarts = $this->findCartsByUserId($userId);
         if($carts) {
             $fields = array(
                 'userKey' => null,
                 'userId' => $userId
             );
             foreach ($carts as $cart) {
+                foreach ($existCarts as $existCart) {
+                    if($existCart['itemType'] == $cart['itemType'] && $existCart['itemId'] == $cart['itemId']) {
+                        $this->deleteCart($cart['id']);
+                        break;
+                    }
+                }
+
                 $this->updateCart($cart['id'], $fields);
             }
         }

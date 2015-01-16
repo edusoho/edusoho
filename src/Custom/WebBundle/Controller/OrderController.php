@@ -18,6 +18,9 @@ class OrderController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
+
+        $data = $request->request;
+        
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
          
         ));

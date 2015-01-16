@@ -41,7 +41,9 @@ define(function(require,exports,module){
 
                 this.set('cartsIds',$cartsIds);
                 this.set('selectedItems',$items);
+                this.$('#carts-form').find('[name=cartIds]').val($cartsIds);
             });
+            this.trigger('selectedItems');
         },
 
         _OnClickDeleteItem: function(e){

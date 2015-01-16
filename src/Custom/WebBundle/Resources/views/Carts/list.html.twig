@@ -33,16 +33,22 @@
       </tbody>
     </table>
     <br>
+
   <div class="well well-sm clearfix">
-    <div>
-      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-      <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-url="{{ path('carts_delete')}}" >删除</button>
+    <form id="carts-form" class="" action="{{ path('order_verify')}}" method="POST" novalidate>
+      <input type="hidden" name="cartIds">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <div>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-url="{{ path('carts_delete')}}" >删除</button>
 
-      <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-favourite-btn" data-url="{{ path('carts_course_favorite') }}" >加入收藏</button>
+        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-favourite-btn" data-url="{{ path('carts_course_favorite') }}" >加入收藏</button>
 
-      <a  type="button" class="btn btn-danger btn-sm mlm disabled pull-right" data-role="batch-account-btn"  href="{{ path('order_verify')}}" style="margin-right:100px">结算</a>
-      <sapn class="pull-right" style="margin-right:30px;margin-top:5px" >已选 <strong><span data-role="total-num" class="text-danger">0</span></strong> 门课程：<strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">0.00</span></strong></p>
-    </div>
+        <button  type="submit" class="btn btn-danger btn-sm mlm disabled pull-right" data-role="batch-account-btn" style="margin-right:100px">结算</button>
+        <sapn class="pull-right" style="margin-right:30px;margin-top:5px" >已选 <strong><span data-role="total-num" class="text-danger">0</span></strong> 门课程：<strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger">0.00</span></strong></p>
+      </div>
+    </form>
+
   </div>
 
   </div>
