@@ -38,7 +38,7 @@ class HLSController extends BaseController
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 1, 'duration' => 3600));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 2, 'duration' => 3600));
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
