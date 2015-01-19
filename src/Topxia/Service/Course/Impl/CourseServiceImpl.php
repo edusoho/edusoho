@@ -2299,6 +2299,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array(
 			'id' => $course['id'],
 			'title' => $course['title'],
+			'status' =>$course['status'],
 			'picture' => $course['middlePicture'],
 			'type' => $course['type'],
 			'rating' => $course['rating'],
@@ -2312,6 +2313,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array(
 			'id' => $lesson['id'],
 			'number' => $lesson['number'],
+			'status'=>$lesson['status'],
 			'type' => $lesson['type'],
 			'title' => $lesson['title'],
 			'summary' => StringToolkit::plain($lesson['summary'], 100),

@@ -163,6 +163,7 @@
             <div class="es-box-body">
               <ul class="media-list">
                 {% for learn in learns %}
+                {{dump(learn.properties.course.status)}}
                   {% if learn.type == "finished_testpaper" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
