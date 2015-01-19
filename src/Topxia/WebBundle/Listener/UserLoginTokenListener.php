@@ -44,10 +44,17 @@ class UserLoginTokenListener
         if($auth && array_key_exists('email_enabled',$auth) 
         	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0){
            if($auth['email_enabled'] == 'opened'){
-	$goto = $this->generateUrl('register_submited', array(
-                'id' => $user['id'], 'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request),
-            ));
+                $request->getSession()->invalidate();
+                $this->container->get("security.context")->setToken(null);
+
+                $goto = $this->container->get('router')->generate('register_submited', array(
+                    'id' => $user['id'], 'hash' => $this->makeHash($user)
+                ));
+
+                $response = new RedirectResponse($goto, '302');
+
+                $response->headers->setCookie(new Cookie("REMEMBERME", ''));
+                $event->setResponse($response);
            }
         }
 
@@ -74,6 +81,12 @@ class UserLoginTokenListener
 
     		$event->setResponse($response);
     	}
+    }
+
+    private function makeHash($user)
+    {
+        $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
+        return md5($string);
     }
 
     protected function getUserService()
