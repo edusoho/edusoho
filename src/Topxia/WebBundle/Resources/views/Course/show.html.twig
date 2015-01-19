@@ -43,13 +43,9 @@
 		<div class="col-sm-7 info">
 			{% if is_granted('ROLE_ADMIN') %}
 			<div class="btn-group pull-right">
-				<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
-				</button>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
-					</li>
-				</ul>
+		            <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+		            <i class="esicon esicon-setting"></i>
+		            </a>
 			</div>
 			{% endif %}
 			<h1 class="title">{{ course.title }}</h1>
