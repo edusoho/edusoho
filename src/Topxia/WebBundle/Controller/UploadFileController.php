@@ -56,6 +56,20 @@ class UploadFileController extends BaseController
         return $this->createFilesJsonResponse($files);
     }
 
+     public function browsersAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权查看此页面！');
+        }
+
+        $conditions = $request->query->all();
+
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
+        
+        return $this->createFilesJsonResponse($files);
+    }
+    
     public function paramsAction(Request $request)
     {
         $user = $this->getCurrentUser();
