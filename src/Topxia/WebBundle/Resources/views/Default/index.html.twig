@@ -60,7 +60,7 @@
               {% if article %}
                 <li class="col-md-6">
                   <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
+                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
                 </li>
               {% endif %}
             {% endfor %}
