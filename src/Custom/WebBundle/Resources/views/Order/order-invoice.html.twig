@@ -4,14 +4,14 @@
   <div class="form-group">
     <label class="col-md-1 control-label">需要发票</label>
     <div class="col-md-2 controls radios">
-      {{ radios('needinvoice', {'yes':'是', 'no':'否'}, 'no' ) }}
+      {{ radios('needInvoice', {'yes':'是', 'no':'否'}, 'no' ) }}
     </div>
   </div>
 
   <div class="form-group">
     <label for="invoiceTitle" class="col-md-1 control-label">抬头</label>
     <div class="col-md-2">
-      <input type="text" class="form-control" id="invoiceTitle" name="invoiceTitle" value="">
+      <input type="text" class="form-control" id="invoiceTitle" name="invoiceTitle" value="{{ invoices|first.title|default('') }}" data-update-url="{{ path('ajax_user_invoice_update', {userId:app.user.id,id:invoices|first.id|default(0)}) }}">
     </div>
 
     <label for="invoiceType" class="col-md-1 control-label">类别</label>

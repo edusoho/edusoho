@@ -4,12 +4,13 @@ define(function(require, exports, module) {
     var OrderVerify = Widget.extend({
         attrs: {},
         events: {
-            "change [name=needBill]": "_onChangeNeedBill"
+            "change [name=needInvoice]": "_onChangeNeedInvoice",
+            "change [name=invoiceTitle]": "_onChangeInvoiceTitle"
         },
         setup: function() {
 
         },
-        _onChangeNeedBill: function(e) {
+        _onChangeNeedInvoice: function(e) {
             var $radios = $(e.currentTarget);
             if($radios.val() == 'yes') {
 
@@ -17,7 +18,12 @@ define(function(require, exports, module) {
             } else {
                 this.$('[data-role=address]').slideUp('normal');
             }
-        } 
+        },
+        _onChangeInvoiceTitle: function(e) {
+            var $target = $(e.currentTarget);
+            $.post($target.data('updateUrl'), {title:$target.val()});
+        }
+
         
     });
 

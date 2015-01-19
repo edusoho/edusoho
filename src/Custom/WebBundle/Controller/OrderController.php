@@ -20,9 +20,9 @@ class OrderController extends BaseController
         }
 
         $data = $request->request;
-        
+        $invoices = $this->getUserInvoiceService()->findUserInvoicesByUserId($user['id']);
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
-         
+            'invoices' => $invoices
         ));
     }
     public function userVerifyAction(Request $request)
@@ -46,5 +46,10 @@ class OrderController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getUserInvoiceService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Order.UserInvoiceService');
     }
 }

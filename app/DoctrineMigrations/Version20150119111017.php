@@ -20,6 +20,7 @@ class Version20150119111017 extends AbstractMigration
 			PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户发票表';
     	");
+        $this->addSql("ALTER TABLE `user_invoice` ADD `createdTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间' AFTER `title`;");
     }
 
     public function down(Schema $schema)

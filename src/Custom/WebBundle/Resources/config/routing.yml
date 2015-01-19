@@ -42,6 +42,11 @@ ajax_questions_count:
     pattern:  /ajax/category/{categoryId}/questions/count
     defaults: { _controller: CustomWebBundle:AjaxQuestion:getQuestionsCount }
 
+ajax_user_invoice_update:
+    pattern:  /ajax/user/{userId}/invoice/{id}/update
+    defaults: { _controller: CustomWebBundle:AjaxOrder:updateUserInvoice }
+    methods: [POST]
+
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: CustomWebBundle:CourseLessonManage:create }
