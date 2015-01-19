@@ -1,0 +1,31 @@
+<fieldset>
+  <legend>确认发票信息</legend>
+
+  <div class="form-group">
+    <label class="col-md-1 control-label">需要发票</label>
+    <div class="col-md-2 controls radios">
+      {{ radios('needInvoice', {'yes':'是', 'no':'否'}, 'no' ) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="invoiceTitle" class="col-md-1 control-label">抬头</label>
+    <div class="col-md-2">
+      <input type="text" class="form-control" id="invoiceTitle" name="invoiceTitle" value="{{ invoices|first.title|default('') }}" data-update-url="{{ path('ajax_user_invoice_update', {userId:app.user.id,id:invoices|first.id|default(0)}) }}">
+    </div>
+
+    <label for="invoiceType" class="col-md-1 control-label">类别</label>
+    <div class="col-md-2">
+      <select class="form-control" name="invoiceType" id="invoiceType">
+         {{ select_options({'electronics' : '电子设备', 'book': '图书' ,'food':'食物'}, 'electronics') }}
+      </select>
+    </div>
+
+    <label for="" class="col-md-1 control-label">备注</label>
+    <div class="col-md-3 controls">
+      <input type="text" class="form-control" id="invoiceComment" name="invoiceComment" value="">
+    </div>
+  </div>  
+
+
+</fieldset>

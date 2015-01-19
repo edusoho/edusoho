@@ -9,24 +9,25 @@ use Topxia\Common\Paginator;
 
 class OrderController extends BaseController
 {
-
-
     public function verifyAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
-        $profile = $this->getUserService()->getUserProfile($user['id']);
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $data = $request->request;
-        
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $invoices = $this->getUserInvoiceService()->findUserInvoicesByUserId($user['id']);
+
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
-            'profile' => $profile
+            'profile' => $profile,
+            'invoices' => $invoices
         ));
     }
+
     public function userVerifyAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -48,5 +49,10 @@ class OrderController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getUserInvoiceService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Order.UserInvoiceService');
     }
 }

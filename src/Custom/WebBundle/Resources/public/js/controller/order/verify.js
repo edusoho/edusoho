@@ -9,14 +9,15 @@ define(function(require, exports, module) {
         },
 
         events: {
-            "change [name=needBill]": "_onChangeNeedBill",
             "blur [name=truename]": "_onBlurTruename",
             "blur [name=mobile]": "_onBlurMobile"
+            "change [name=needInvoice]": "_onChangeNeedInvoice",
+            "change [name=invoiceTitle]": "_onChangeInvoiceTitle"
         },
         setup: function() {
             this._initForm();
         },
-        _onChangeNeedBill: function(e) {
+        _onChangeNeedInvoice: function(e) {
             var $radios = $(e.currentTarget);
             if($radios.val() == 'yes') {
 
@@ -70,6 +71,11 @@ define(function(require, exports, module) {
 
             return validator;
         }
+        _onChangeInvoiceTitle: function(e) {
+            var $target = $(e.currentTarget);
+            $.post($target.data('updateUrl'), {title:$target.val()});
+        }
+
     });
 
     new OrderVerify({
