@@ -248,6 +248,9 @@ define(function(require, exports, module) {
                   var new_str = datestr.replace(/:/g,"-");
                   new_str = new_str.replace(/ /g,"-");
                   var arr = new_str.split("-");
+                  if (arr[3] >= 16){
+                       arr[2] -= 1;
+                  }                  
                   var datum = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3],arr[4],arr[5]));
                   return (datum.getTime()/1000);  //为PHP所用
                 }

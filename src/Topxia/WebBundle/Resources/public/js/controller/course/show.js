@@ -128,35 +128,16 @@ define(function(require, exports, module) {
         refreshAvtivityTimeLeft = function() {
             var activityEndTime = $("#price-after-discount").data("activityendtime");
             if (null != activityEndTime) {
-                // console.log(activityEndTime);
-                var strtotimestamp = function(datestr) {
-                    var new_str = datestr.replace(/:/g, "-");
-                    new_str = new_str.replace(/ /g, "-");
-                    var arr = new_str.split("-");
-                    var datum = new Date(Date.UTC(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]));
-                    return (datum.getTime() / 1000);
-                }
-                activityEndTime = strtotimestamp(activityEndTime);
-
-                var now = new Date;
-                var month = ((now.getMonth() + 1) >= 10) ? (now.getMonth() + 1) : '0' + (now.getMonth() + 1);
-                var day = (now.getDate() >= 10) ? now.getDate() : '0' + now.getDate();
-                var hours = (now.getHours() >= 10) ? now.getHours() : '0' + now.getHours();
-                var minutes = (now.getMinutes() >= 10) ? now.getMinutes() : '0' + now.getMinutes();
-                var seconds = (now.getSeconds() >= 10) ? now.getSeconds() : '0' + now.getSeconds();
-                var now = strtotimestamp(now.getFullYear() + '-' + month + '-' + day + ' ' + hours + ":" + minutes + ":" + seconds);
-
-                // console.log(activityEndTime - now);
-
-                var hoursLeft = Math.floor((activityEndTime - now) / 3600.0);
-                var minutesLeft = Math.floor((activityEndTime - now) % 3600.0 / 60.0);
-                var secondsLeft = Math.floor((activityEndTime - now) % 3600.0 % 60.0);
+                
+                var hoursLeft = Math.floor((activityEndTime - Math.round($.now()/1000)) / 3600.0);
+                var minutesLeft = Math.floor((activityEndTime - Math.round($.now()/1000)) % 3600.0 / 60.0);
+                var secondsLeft = Math.floor((activityEndTime - Math.round($.now()/1000)) % 3600.0 % 60.0);
 
                 $("#hours-left").html(hoursLeft);
                 $("#minutes-left").html(minutesLeft);
                 $("#seconds-left").html(secondsLeft);
 
-                if (now < activityEndTime) {
+                if (Math.round($.now()/1000) < activityEndTime) {
                     setTimeout("refreshAvtivityTimeLeft()", 500);
                 } else {
 

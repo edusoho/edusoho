@@ -79,7 +79,7 @@
             {% endif %}
         </div>
     {% else %}
-        <p>
+        <div class="course-property">
         价　格：
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
             {% if course.coinPrice > 0 %}
@@ -115,6 +115,6 @@
             {% endif %}
             {% endif %}
 
-            </p>
+        </div>
     {% endif %}
 {% endif %}
