@@ -80,6 +80,12 @@ class EduSohoAppClient implements AppClient
 
     }
 
+    public function getLoginToken()
+    {
+        $args = array();
+        return $this->callRemoteApi('POST', 'GetLoginToken', $args);
+    }
+
     private function callRemoteApi($httpMethod, $action, array $args)
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
