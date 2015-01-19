@@ -60,6 +60,7 @@ class RegisterController extends BaseController
             ));
 
             if ($this->getAuthService()->hasPartnerAuth()) {
+                var_dump(111);exit();
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
@@ -67,6 +68,7 @@ class RegisterController extends BaseController
             if(!$mailerSetting['enabled']){
                 return $this->redirect($this->getTargetPath($request));
             }
+            var_dump(222);
             return $this->redirect($goto);
             
         }
@@ -158,16 +160,29 @@ class RegisterController extends BaseController
     public function submitedAction(Request $request, $id, $hash)
     {
         $user = $this->checkHash($id, $hash);
+
         if (empty($user)) {
             throw $this->createNotFoundException();
         }
 
-        return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
-            'user' => $user,
-            'hash' => $hash,
-            'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-            '_target_path' => $this->getTargetPath($request),
-        ));
+        $auth = $this->getSettingService()->get('auth');
+        if($auth && array_key_exists('email_enabled',$auth)){
+           if($auth['email_enabled'] == 'opened'){
+               return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
+           }else{
+                return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
+           }
+        }
     }
 
     private function getTargetPath($request)
