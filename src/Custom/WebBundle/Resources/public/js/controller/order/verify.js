@@ -10,7 +10,7 @@ define(function(require, exports, module) {
 
         events: {
             "blur [name=truename]": "_onBlurTruename",
-            "blur [name=mobile]": "_onBlurMobile"
+            "blur [name=mobile]": "_onBlurMobile",
             "change [name=needInvoice]": "_onChangeNeedInvoice",
             "change [name=invoiceTitle]": "_onChangeInvoiceTitle"
         },
@@ -70,7 +70,8 @@ define(function(require, exports, module) {
             });
 
             return validator;
-        }
+        },
+
         _onChangeInvoiceTitle: function(e) {
             var $target = $(e.currentTarget);
             $.post($target.data('updateUrl'), {title:$target.val()});
