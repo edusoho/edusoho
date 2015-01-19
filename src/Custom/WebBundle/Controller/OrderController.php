@@ -22,9 +22,15 @@ class OrderController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $invoices = $this->getUserInvoiceService()->findUserInvoicesByUserId($user['id']);
 
+        $userId = $this->getCurrentUser()->id;
+        list($groupCarts, $itemResult) = $this->getCartsService()->findCurrentUserCarts();
+
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
             'profile' => $profile,
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'itemResult' => $itemResult,
+            'groupCarts' => $groupCarts,
+            'role' => 'verify'
         ));
     }
 

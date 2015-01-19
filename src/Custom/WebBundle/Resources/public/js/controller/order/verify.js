@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         },
         setup: function() {
             this._initForm();
+            this._initTotal();
         },
         _onChangeNeedInvoice: function(e) {
             var $radios = $(e.currentTarget);
@@ -64,9 +65,10 @@ define(function(require, exports, module) {
             });
 
             validator.addItem({
-                element: '#mobile',
+                element: '[name=mobile]',
                 required: false,
-                rule:'phone'
+                rule:'phone',
+                display: '手机号码'
             });
 
             return validator;
@@ -75,8 +77,17 @@ define(function(require, exports, module) {
         _onChangeInvoiceTitle: function(e) {
             var $target = $(e.currentTarget);
             $.post($target.data('updateUrl'), {title:$target.val()});
-        }
+        },
 
+        _initTotal :function() {
+            var priceTotal = 0;
+            $.each($.find('[data-role=price]'),function(index,item){
+                $price = $(item).text();
+                priceTotal += Number($price)
+            });
+
+            this.$('[data-role=total-price]').html(priceTotal.toFixed(2));
+        }
     });
 
     new OrderVerify({

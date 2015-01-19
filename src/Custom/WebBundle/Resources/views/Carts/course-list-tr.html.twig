@@ -1,7 +1,9 @@
 <tr data-role="cart-tr-{{cart.id}}" class="cart-tr">
     <td>
-        {% if not issubcourse|default(false) %}
-            <input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}">
+        {% if role|default('carts') == 'carts' %}
+            {% if not issubcourse|default(false) %}
+                <input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}">
+            {% endif %}
         {% endif %}
     </td>
     <td>
@@ -9,7 +11,7 @@
             <a href="{{ path('course_show', {id:course.id}) }}">
                 <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
             </a>
-            <a class="title">{{ course.title }}</a>
+            <a class="title">{{ course.title|sub_text(20) }}</a>
             {% if  course.subType %}
                 <div class="subtype-list">
                     {% for subType,value in course.subType %}
@@ -22,17 +24,32 @@
                     {% endfor %}
                 </div>
             {% endif %}
-        </div>
-        <div class="extra-section">
-          {% if course.teacherIds|default(null) %}
-            <p>教师：
-                {% for id in course.teacherIds %}
-                  {% set user = users[id] %}
-                  <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
-                {% endfor %}
-            </p>
+            {% if role|default('carts') == 'verify' %}
+                <div class="">
+                  {% if course.teacherIds|default(null) %}
+                    教师：
+                        {% for id in course.teacherIds %}
+                          {% set user = users[id] %}
+                          <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}" class="">{{ user.nickname }}</a>
+                        {% endfor %}
+
+                  {% endif  %}
+                  <br>退费｜重修｜辅导
+                </div>
           {% endif  %}
         </div>
+        {% if role|default('carts') == 'carts' %}
+            <div class="extra-section">
+              {% if course.teacherIds|default(null) %}
+                <p>教师：
+                    {% for id in course.teacherIds %}
+                      {% set user = users[id] %}
+                      <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+                    {% endfor %}
+                </p>
+              {% endif  %}
+            </div>
+      {% endif  %}
     </td>
     <td class="text-center money-theme">
         {% if course.type == 'package' and course.costPrice is defined %}
@@ -46,6 +63,8 @@
     <td  {% if not issubcourse|default(false) %} data-role="price" {% endif %} class="text-center money-theme">
         <p>{{ course.price }}</p>
     </td>
+
+    {% if role|default('carts') == 'carts' %}
     <td  class="text-center">
         <a href="#" class="btn btn-link">
             <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}" data-id={{ cart.id }}></span>
@@ -61,4 +80,5 @@
        
        
     </td>
+    {% endif %}
 </tr>
