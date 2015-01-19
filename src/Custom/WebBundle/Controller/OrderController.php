@@ -15,6 +15,8 @@ class OrderController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
@@ -22,7 +24,7 @@ class OrderController extends BaseController
         $data = $request->request;
         
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
-         
+            'profile' => $profile
         ));
     }
     public function userVerifyAction(Request $request)
