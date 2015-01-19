@@ -41,6 +41,8 @@ class AlipayRequest extends Request {
 
         if ($this->getPaymentType() == 'dualfun') {
             $converted['service'] = 'trade_create_by_buyer';
+        } elseif ($this->getPaymentType() == 'escow') {
+            $converted['service'] = 'create_partner_trade_by_buyer';
         } else {
             $converted['service'] = 'create_direct_pay_by_user';
         }
