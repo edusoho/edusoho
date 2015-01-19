@@ -50,8 +50,13 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
+            
+            if($authSettings && array_key_exists('email_enabled',$authSettings)){
+               if($authSettings['email_enabled'] == 'closed'){
+                        $this->authenticateUser($user);
+               }
+            }
 
-            $this->authenticateUser($user);
             $this->sendRegisterMessage($user);
 
             $goto = $this->generateUrl('register_submited', array(
@@ -60,7 +65,6 @@ class RegisterController extends BaseController
             ));
 
             if ($this->getAuthService()->hasPartnerAuth()) {
-                var_dump(111);exit();
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
@@ -68,7 +72,6 @@ class RegisterController extends BaseController
             if(!$mailerSetting['enabled']){
                 return $this->redirect($this->getTargetPath($request));
             }
-            var_dump(222);
             return $this->redirect($goto);
             
         }
