@@ -39,6 +39,18 @@ class UserLoginTokenListener
             return;
         }
 
+        $auth = $this->getSettingService()->get('auth');
+
+        if($auth && array_key_exists('email_enabled',$auth) 
+        	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0){
+           if($auth['email_enabled'] == 'opened'){
+	$goto = $this->generateUrl('register_submited', array(
+                'id' => $user['id'], 'hash' => $this->makeHash($user),
+                'goto' => $this->getTargetPath($request),
+            ));
+           }
+        }
+
         $loginBind = $this->getSettingService()->get('login_bind');
         if (empty($loginBind['login_limit'])) {
             return;
