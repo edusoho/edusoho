@@ -107,6 +107,12 @@ class CoinController extends BaseController
 
             $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
 
+            foreach ($courses as $courseIndex => $course) {              
+                if ($courses[$courseIndex]['discountActivityId'] > 0){
+                    $courses[$courseIndex]['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($courses[$courseIndex]['discountActivityId']);
+                }
+            }
+            
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
             'set' => $set,
             'courses'=>$courses
@@ -930,7 +936,10 @@ class CoinController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-
+    protected function getDiscountActivityService() 
+    {
+        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
+    }
 
 
 }
