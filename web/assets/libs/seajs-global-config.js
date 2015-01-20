@@ -55,7 +55,9 @@ seajs.config({
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
 		'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
-		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js'
+		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
+		'chineserp': 'chineserp/1.0.0/chineserp-debug.js',
+		'chineserp-jquery': 'chineserp-jquery/1.0.0/chineserp-jquery-debug.js'
 	},
 
 	// 预加载项

@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Widget = require('widget');
+        require("chineserp-jquery");
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
