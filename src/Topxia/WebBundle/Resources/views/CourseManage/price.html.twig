@@ -38,7 +38,7 @@
                                                             {% if course.discountActivityId > 0 %}
                                                                 <br>
                                                                 <span>
-                                                                    当前为活动“{{ course.discountActivity.activityName }}”价格，修改后将会退出活动
+                                                                    当前为活动“{{ course.discountActivity.activityName }}”中的价格，修改后价格会变成活动折扣后的价格，活动结束后价格恢复为您本次输入的价格
                                                                 </span>
                                                             {% endif %}                                                            
         						</div>
@@ -57,7 +57,7 @@
                                                                 {% if course.discountActivityId > 0 %}
                                                                     <br>
                                                                     <span class="label label-xs label-danger" style="white-space: normal;">
-                                                                        当前为活动“{{ course.discountActivity.activityName }}”价格，修改后将会退出活动
+                                                                        当前为活动“{{ course.discountActivity.activityName }}”中的价格，修改后价格会变成活动折扣后的价格，活动结束后价格恢复为您本次输入的价格
                                                                     </span>
                                                                 {% endif %}                                                                
         						</div>
@@ -74,7 +74,7 @@
                                                     <div class="help-block" >
                                                         {% if course.discountActivityId > 0 %}
                                                             <span class="label label-xs label-danger" style="white-space: normal;">
-                                                                当前为活动“{{ course.discountActivity.activityName }}”价格，修改后将会退出活动
+                                                                当前为活动“{{ course.discountActivity.activityName }}”中的价格，修改后价格会变成活动折扣后的价格，活动结束后价格恢复为您本次输入的价格
                                                             </span>
                                                         {% endif %}
                                                     </div>

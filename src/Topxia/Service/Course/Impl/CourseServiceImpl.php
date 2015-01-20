@@ -333,7 +333,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 			if (isset($fields['coinPrice'])){
 				$fields['originCoinPrice'] = $fields['coinPrice'];
 			}
-			$fields['discountActivityId'] = 0;
+
+			if ($course['discountActivityId']>0){
+				if (isset($fields['price'])){
+					if($course['originPrice'] != 0){
+						$fields['price'] = $fields['price']*($course['price']/$course['originPrice']);
+					}
+				}
+				if (isset($fields['coinPrice'])){
+					if($course['originCoinPrice'] != 0){
+						$fields['coinPrice'] = $fields['coinPrice']*($course['coinPrice']/$course['originCoinPrice']);
+					}
+				}
+			}
+			$this->getDiscountActivityService()->createDiscountActivityTask(time());
 		}		
 		$fields = $this->_filterCourseFields($fields);
 
@@ -2453,6 +2466,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('Course.MaterialService');
     }
+
+	protected function getDiscountActivityService() 
+	{
+		return $this->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
+	}    
 
 }
 
