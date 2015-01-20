@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     var Widget = require('widget');
-
+        require("chineserp-jquery");
     var OrderVerify = Widget.extend({
         attrs: {},
         events: {
