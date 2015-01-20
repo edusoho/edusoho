@@ -55,7 +55,7 @@ class AlipayRequest extends Request {
         $converted['subject'] = $this->filterText($params['title']);
         $converted['seller_id'] = $this->options['key'];
 
-        if ($this->getPaymentType() == 'dualfun') {
+        if (in_array($this->getPaymentType(), array('dualfun', 'escow'))) {
             $converted['price'] = $params['amount'];
             $converted['quantity'] = 1;
             $converted['logistics_type'] = 'POST';
