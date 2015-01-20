@@ -4,13 +4,13 @@
   <div>
     <p>
       寄送至 浙江省 杭州市 滨江区 东信大道270号逸天广场2号楼2单元3楼物业服务中心（仅限业主）(电话:0571-81608339) 
-      <a class="pull-right" href="#modal" data-url="{{ path('user_address', {action:'update'}) }}" data-toggle="modal">修改收货地址</a>
+      <a class="pull-right" href="#modal" data-url="{{ path('user_shipping_address', {id:shippingAddress.id|default(0)}) }}" data-toggle="modal">修改收货地址</a>
     </p>
   </div>
 
   <div>
     <p>
-      <a href="#modal" data-url="{{ path('user_address', {action:'add'}) }}" data-toggle="modal">新增收货地址</a>
+      <a href="#modal" data-url="{{ path('user_shipping_address', {id:shippingAddress.id|default(0)}) }}" data-toggle="modal">新增收货地址</a>
     </p>
   </div>
 

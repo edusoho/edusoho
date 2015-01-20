@@ -203,9 +203,9 @@ order_user_verify:
     pattern: /order/user/verify
     defaults: { _controller: CustomWebBundle:Order:userVerify }
 
-user_address:
-    pattern: /user/address/{action}
-    defaults: { _controller: CustomWebBundle:Address:showAddress }
+user_shipping_address:
+    pattern: /user/shippingaddress/{id}
+    defaults: { _controller: CustomWebBundle:Address:showShippingAddress }
 
 ajax_user_profile_update:
     pattern: /user/profile/update
