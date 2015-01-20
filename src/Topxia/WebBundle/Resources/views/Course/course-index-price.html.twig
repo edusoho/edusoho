@@ -11,7 +11,7 @@
                         <span class="label label-danger label-discount"><s></s><i class="glyphicon glyphicon-tags"></i>
                             &nbsp;&nbsp;
                             {% if course.coinPrice > 0 %}    
-                                {{ course.coinPrice/course.originCoinPrice * 10 }}折 
+                                {{ (course.coinPrice/course.originCoinPrice * 10 )|round(1, 'floor') }}折 
                             {% endif %}
                         </span>
                     {% else %}
@@ -23,7 +23,7 @@
                         <span class="label label-danger label-discount"><s></s><i class="glyphicon glyphicon-tags"></i>
                             &nbsp;&nbsp;
                             {% if course.price > 0 %}    
-                                {{ course.price/course.originPrice * 10 }}折 
+                                {{ (course.price/course.originPrice * 10 )|round(1, 'floor') }}折 
                             {% endif %}
                         </span>
                     {% else %}
