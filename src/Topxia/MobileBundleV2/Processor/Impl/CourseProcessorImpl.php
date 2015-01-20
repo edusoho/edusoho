@@ -1312,7 +1312,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         			'test' => $testSum );
     }
 
-    public function getLiveCourse(){
+    public function getLiveCourse($courseId, $lessonId){
             $user = $this->controller->getUserService()->getCurrentUser();
             if (!$user->isLogin()) {
                 return $this->createErrorResponse('not_login', "您尚未登录！");
