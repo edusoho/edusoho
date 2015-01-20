@@ -144,5 +144,5 @@ interface CourseProcessor
 	/**
 	*测试直播参数
 	*/
-	public function getLiveCourse($courseId, $lessonId);
+	public function getLiveCourse();
 }
