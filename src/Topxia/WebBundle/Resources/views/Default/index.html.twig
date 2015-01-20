@@ -348,13 +348,13 @@
             <span class="label label-danger">
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                   {% if course.coinPrice > 0 %}
-                      {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'floor') }}折
+                      {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'ceil') }}折
                   {% else %}
                       免
                   {% endif %}
               {% else %}
                   {% if course.price > 0 %}
-                      {{ (course.price/course.originPrice * 10)|round(1, 'floor') }}折
+                      {{ (course.price/course.originPrice * 10)|round(1, 'ceil') }}折
                   {% else %}
                       免
                   {% endif %}
