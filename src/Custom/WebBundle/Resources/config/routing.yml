@@ -201,3 +201,7 @@ order_user_verify:
 user_address:
     pattern: /user/address/{action}
     defaults: { _controller: CustomWebBundle:Address:address }
+
+ajax_user_profile_update:
+    pattern: /user/profile/update
+    defaults: { _controller: CustomWebBundle:AjaxUserProfile:update }

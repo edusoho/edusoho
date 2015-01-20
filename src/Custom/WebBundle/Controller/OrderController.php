@@ -9,22 +9,31 @@ use Topxia\Common\Paginator;
 
 class OrderController extends BaseController
 {
-
-
     public function verifyAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $data = $request->request;
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $invoices = $this->getUserInvoiceService()->findUserInvoicesByUserId($user['id']);
+
+        $userId = $this->getCurrentUser()->id;
+        list($groupCarts, $itemResult) = $this->getCartsService()->findCurrentUserCarts();
+
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
-            'invoices' => $invoices
+            'profile' => $profile,
+            'invoices' => $invoices,
+            'itemResult' => $itemResult,
+            'groupCarts' => $groupCarts,
+            'role' => 'verify'
         ));
     }
+
     public function userVerifyAction(Request $request)
     {
         $user = $this->getCurrentUser();

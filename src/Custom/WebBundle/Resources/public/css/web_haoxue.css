@@ -276,6 +276,39 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+#order-table .cart-item {
+  float: left;
+  position: relative;
+  width: 60%;
+  font-size: 12px;
+}
+#order-table .cart-item .picture {
+  float: left;
+  width: 110px;
+  height: 60px;
+  margin-right: 10px;
+}
+#order-table .cart-item .title {
+  padding: 0;
+  line-height: 1.2;
+  font-size: 12px;
+  font-weight: bold;
+  word-break: break-all;
+}
+#order-table .item-offset {
+  margin-left: 5%;
+}
+#order-table .extra-section {
+  float: left;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  font-size: 12px;
+  width: auto;
+}
+#order-table table tbody td {
+  vertical-align: middle;
+}
 #carts-module .cart-item {
   float: left;
   position: relative;
@@ -330,4 +363,23 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .order-header .process-step {
   background: #cc0000;
   color: #FFF;
+}
+#order-verify .form-group {
+  margin-right: -15px;
+  margin-left: 0px;
+}
+.order-verify .total-price {
+  margin-right: 50px;
+}
+.order-verify .total-price-text {
+  font-size: 20px;
+}
+.order-verify .buyer {
+  margin-right: 50px;
+}
+.order-verify .submit-order {
+  margin-top: 10px;
+}
+.order-verify .submit-order-btn {
+  margin-right: 50px;
 }

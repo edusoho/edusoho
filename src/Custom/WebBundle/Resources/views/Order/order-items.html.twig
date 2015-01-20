@@ -1,8 +1,32 @@
 <fieldset>
   <legend>确认订单信息</legend>
 
-  <div>
-   hello 
+  <div class="order-verify">
+  {% if groupCarts|default(null) %}
+      <table class="table table-hover" id="order-table">
+        <thead>
+            <td></td>
+            <th class="text-muted" width="50%">商品信息</th>
+            <th class="text-center text-muted" width="20%">单价（元）</th>
+            <th class="text-center text-muted" width="20%">数量</th>
+            <th class="text-center text-muted" width="20%">小计（元）</th>
+        </thead>
+        <tbody>
+        {% for type,carts in groupCarts|default(null) %}
+          {% include 'CustomWebBundle:Carts:' ~ type ~ '-type.html.twig' %}
+        {% endfor %}
+      {% else %}
+        <div> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
+    {% endif %}
+        <div class="hide carts-text-help"> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
+        </tbody>
+      </table>
+
+          <div class=" text-danger clearfix total-price" ><span class="pull-right">实付款：<strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger total-price-text">0.00</span></strong></span></div>
+          <div class="clearfix buyer"><span class="pull-right">购买人：{{ app.user.nickname }} {{ profile.mobile }}</span></div>
+          <div class="clearfix submit-order" >
+              <span class="pull-right btn btn-sm btn-danger submit-order-btn">提交订单</span>
+          </div>
   </div>
 
 </fieldset>

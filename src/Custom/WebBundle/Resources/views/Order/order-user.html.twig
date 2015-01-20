@@ -2,25 +2,26 @@
     <legend>确认个人信息</legend>
       <div class="form-group">
         <label for="nickname" class="col-md-1 control-label">昵称</label>
-          <div class="col-md-2">
+          <div class="col-md-2 controls">
             <input type="text" class="form-control" id="nickname" name="nickname" value="{{app.user.nickname}}" readonly>
           </div>
       </div>
-      
-      <div class="form-group">
+
         <label for="title" class="col-md-1 control-label">姓名</label>
-        <div class="col-md-2">
-          <input type="text" class="form-control" id="title" name="title" value="" readonly>
+        <div class="col-md-2 controls">
+          <input type="text" class="form-control" id="truename" name="truename" value="{{ profile.truename }}" data-url="{{ path('ajax_user_profile_update') }}">
         </div>
 
         <label for="title" class="col-md-1 control-label">邮箱</label>
-        <div class="col-md-2">
-          <input type="text" class="form-control" id="title" name="title" value="" readonly>
+        <div class="col-md-2 controls">
+          <input type="text" class="form-control" id="email" name="email" value="{{ app.user.email }}" readonly>
         </div>
 
+      <div class="form-group">
+
         <label for="title" class="col-md-1 control-label">手机号码</label>
-        <div class="col-md-2">
-          <input type="text" class="form-control" id="title" name="title" value="" readonly>
+        <div class="col-md-2 controls">
+          <input type="text" class="form-control" id="mobile" name="mobile" value="{{ profile.mobile }}" data-url="{{ path('ajax_user_profile_update') }}">
         </div>
 
       </div>
