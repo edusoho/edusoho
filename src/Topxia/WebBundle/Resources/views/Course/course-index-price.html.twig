@@ -48,7 +48,7 @@
                                     <i class="glyphicon glyphicon-tags"></i>
                                     &nbsp;&nbsp;
                                     {% if course.coinPrice > 0 %}    
-                                        {{ course.coinPrice/course.originCoinPrice * 10 }}折 
+                                        {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'floor') }}折 
                                     {% endif %}
                                 </span> #}
                             </span>
