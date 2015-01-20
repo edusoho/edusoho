@@ -21,7 +21,6 @@ define(function(require,exports,module){
         },
 
         setup: function() {
-            this._initTotal();
             this.on('selectedItems',function(){
                 var $items = [];
                 var $cartsIds = [];
@@ -44,6 +43,7 @@ define(function(require,exports,module){
                 this.$('#carts-form').find('[name=cartIds]').val($cartsIds);
             });
             this.trigger('selectedItems');
+            this._initTotal();
         },
 
         _OnClickDeleteItem: function(e){
@@ -125,6 +125,7 @@ define(function(require,exports,module){
             this.trigger('selectedItems');
             var items = [];
             items = this.get('cartsIds');
+
             var self = this;
             var priceTotal = 0;
 
