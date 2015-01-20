@@ -12,18 +12,7 @@
                 <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
             </a>
             <a class="title">{{ course.title|sub_text(20) }}</a>
-            {% if  course.subType %}
-                <div class="subtype-list">
-                    {% for subType,value in course.subType %}
-                        {% if value %}
-                            <a href="{{ course.subTypeUrl[subType]|default('') }}" target="_blank">{{ dict_text('CourseSubType', subType) }}</a>
-                        {% endif %}
-                        {% if loop.index < loop.length %}
-                            |
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
+
             {% if role|default('carts') == 'verify' %}
                 <div class="">
                   {% if course.teacherIds|default(null) %}
@@ -32,12 +21,23 @@
                           {% set user = users[id] %}
                           <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}" class="">{{ user.nickname }}</a>
                         {% endfor %}
-
                   {% endif  %}
-                  <br>退费｜重修｜辅导
                 </div>
           {% endif  %}
-        </div>
+
+          {% if  course.subType %}
+              <div class="subtype-list">
+                  {% for subType,value in course.subType %}
+                      {% if value %}
+                          <a href="{{ course.subTypeUrl[subType]|default('') }}" target="_blank">{{ dict_text('CourseSubType', subType) }}</a>
+                      {% endif %}
+                      {% if loop.index < loop.length %}
+                          |
+                      {% endif %}
+                  {% endfor %}
+              </div>
+          {% endif %}
+       </div>
         {% if role|default('carts') == 'carts' %}
             <div class="extra-section">
               {% if course.teacherIds|default(null) %}
