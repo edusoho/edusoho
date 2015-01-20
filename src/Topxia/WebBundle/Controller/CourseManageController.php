@@ -208,6 +208,11 @@ class CourseManageController extends BaseController
 
 
         response:
+
+        if ($course['discountActivityId'] > 0){
+            $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountActivityId']);
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
@@ -431,4 +436,8 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
+
+    protected function getDiscountActivityService() {
+        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
+    }    
 }
