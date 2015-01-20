@@ -1319,7 +1319,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
 
             $courseId = $this->getParam("courseId", 0);
-            $threadId = $this->getParam("threadId", 0);
+            $lessonId = $this->getParam("lessonId", 0);
             $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
             $now = time();
             $params = array();
