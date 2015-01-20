@@ -519,7 +519,7 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新系统默认设置", $defaultSetting);
             $this->setFlashMessage('success', '系统默认设置已保存！');
         }
-var_dump($defaultSetting);
+
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => false,
