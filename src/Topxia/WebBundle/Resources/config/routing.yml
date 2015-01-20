@@ -1419,6 +1419,10 @@ coin_change:
 user_password_check:
     path:   /user/password/check
     defaults: { _controller: TopxiaWebBundle:User:checkPassword }
+    
+uploadfile_browsers:
+    pattern:  /uploadfile/browsers
+    defaults: { _controller: TopxiaWebBundle:UploadFile:browsers }
 
 
 #占位
