@@ -1,0 +1,77 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if action == 'add' %}新增{% else %}修改{% endif %}收货地址{% endblock %}
+{% block body %}
+  <form id="address-from" method="post" class="form-horizontal"  action="">
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="region">所在地区<span class="asterisk">*</span></label>
+      </div>
+      <div class="col-md-7 controls">
+        <input class="form-control" type="text" id="region" name="region" data-role ="region-picker" data-remote="{{ path('ajax_region_remote') }}" data-picked="{{ address.region|default('') }}" data-visible="10">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="address">详细地址<span class="asterisk">*</span></label>
+      </div>
+      <div class="col-md-7 controls">
+        <textarea id="address" name="address" class="form-control" rows="2" value="{{ address.address|default('') }}"></textarea>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="postcode">邮政编码<span class="asterisk">*</span></label>
+      </div>
+      <div class="col-md-7 controls">
+        <input class="form-control" type="text" id="postcode" name="postcode" value="{{ address.postcode|default('') }}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="username">收货人姓名<span class="asterisk">*</span></label>
+      </div>
+      <div class="col-md-7 controls">
+        <input class="form-control" type="text" id="username" name="username" value="{{ address.username|default('') }}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="MobileNo">手机号码</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input class="form-control" type="text" id="MobileNo" name="MobileNo" value="{{ address.MobileNo|default('') }}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="TelNo">电话号码</label>
+      </div>
+      <div class="col-md-2 controls">
+        <input class="form-control" type="text" id="TelNo" name="TelNo[0]" value="{{ address.TelNo[0]|default('') }}" placeholder="区号">
+      </div>
+      <div class="col-md-3 controls">
+        <input class="form-control" type="text" id="TelNo" name="TelNo[1]" value="{{ address.TelNo[1]|default('') }}" placeholder="电话号码">
+      </div>
+      <div class="col-md-2 controls">
+        <input class="form-control" type="text" id="TelNo" name="TelNo[2]" value="{{ address.TelNo[2]|default('') }}" placeholder="分机">
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+    <button class="btn btn-link" data-dismiss="modal">取消</button>
+    <button class="btn btn-primary" id="create-btn" type="submit" data-submiting-text="正在保存..." data-toggle="form-submit" data-target="#review-form">保存</button>
+  <script>
+      app.load('customwebbundle/controller/address/address-modal');
+  </script>
+{% endblock %}

@@ -383,3 +383,6 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 .order-verify .submit-order-btn {
   margin-right: 50px;
 }
+.asterisk {
+  color: #cc0000;
+}

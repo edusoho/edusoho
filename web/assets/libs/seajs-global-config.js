@@ -57,7 +57,8 @@ seajs.config({
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
 		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
 		'chineserp': 'chineserp/1.0.0/chineserp-debug.js',
-		'chineserp-jquery': 'chineserp-jquery/1.0.0/chineserp-jquery-debug.js'
+		'chineserp-jquery': 'chineserp-jquery/1.0.0/chineserp-jquery-debug.js',
+		'chineserp-jquery-css': 'chineserp-jquery/1.0.0/jquery.chineserp.css'
 	},
 
 	// 预加载项

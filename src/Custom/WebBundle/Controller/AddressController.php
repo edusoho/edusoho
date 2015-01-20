@@ -9,8 +9,11 @@ use Topxia\Common\Paginator;
 
 class AddressController extends BaseController
 {
-	public function addressAction(Request $request, $action)
+	public function showAddressAction(Request $request, $action)
 	{
-		return null;
+
+		return $this->render('CustomWebBundle:Address:address-modal.html.twig', array(
+			'action' => $action
+		));
 	}
 }
