@@ -140,4 +140,9 @@ interface CourseProcessor
 	*获取单条回复信息
 	*/
 	public function getOneThreadPost();
+
+	/**
+	*测试直播参数
+	*/
+	public function getLiveCourse();
 }

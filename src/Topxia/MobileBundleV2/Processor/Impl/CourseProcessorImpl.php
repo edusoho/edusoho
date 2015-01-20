@@ -1312,4 +1312,41 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         			'test' => $testSum );
     }
 
+    public functon getLiveCourse(){
+            $user = $this->controller->getUserByToken($this->request);
+            if (!$user->isLogin()) {
+                return $this->createErrorResponse('not_login', "您尚未登录！");
+            }
+
+            $now = time();
+            $params = array();
+
+            $params['email'] = 'live-' . $user['id'] . '@edusoho.net';
+            $params['nickname'] = $user['nickname'];
+
+            $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
+            $params['sign'] .= 's' . $this->makeSign($params['sign']);
+
+            $params['liveId'] = $lesson['mediaId'];
+            $params['provider'] = $lesson["liveProvider"];
+            $params['role'] = 'student';
+
+            $client = LiveClientFactory::createClient();
+
+            $params['user'] = $params['email'];
+
+            $result = $client->entryLive($params);
+
+            // return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+            //     'lesson' => $lesson,
+            //     'url' => $result['url'],
+            // ));
+
+            return array('data' =>
+                array(
+                'lesson' => $lesson,
+                'url' => $result['url'],
+            ));
+    }
+
 }
