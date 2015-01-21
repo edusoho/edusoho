@@ -50,8 +50,13 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
+            
+            if($authSettings && array_key_exists('email_enabled',$authSettings)){
+               if($authSettings['email_enabled'] == 'closed'){
+                        $this->authenticateUser($user);
+               }
+            }
 
-            $this->authenticateUser($user);
             $this->sendRegisterMessage($user);
 
             $goto = $this->generateUrl('register_submited', array(
@@ -158,16 +163,29 @@ class RegisterController extends BaseController
     public function submitedAction(Request $request, $id, $hash)
     {
         $user = $this->checkHash($id, $hash);
+
         if (empty($user)) {
             throw $this->createNotFoundException();
         }
 
-        return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
-            'user' => $user,
-            'hash' => $hash,
-            'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-            '_target_path' => $this->getTargetPath($request),
-        ));
+        $auth = $this->getSettingService()->get('auth');
+        if($auth && array_key_exists('email_enabled',$auth)){
+           if($auth['email_enabled'] == 'opened'){
+               return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
+           }else{
+                return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
+           }
+        }
     }
 
     private function getTargetPath($request)

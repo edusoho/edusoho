@@ -84,7 +84,7 @@ define(function(require, exports, module) {
             }
 
             if (!/^[a-zA-z]+:\/\/[^\s]*$/.test(url)) {
-                Notify.danger('请输入视频页面地址格式不正确');
+                Notify.danger('请输入正确的视频网址');
                 return;
             }
 

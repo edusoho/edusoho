@@ -298,6 +298,8 @@ class SettingController extends BaseController
 
         $default = array(
             'register_mode'=>'closed',
+            'email_enabled'=>'closed',
+            'setting_time'=> -1,
             'email_activation_title' => '',
             'email_activation_body' => '',
             'welcome_enabled' => 'closed',
@@ -324,8 +326,16 @@ class SettingController extends BaseController
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
-            $auth = $request->request->all();
-       
+
+         	if (isset($auth['setting_time']) && $auth['setting_time'] > 0 ) {
+         		$firstSettingTime =  $auth['setting_time'];
+         		$auth = $request->request->all(); 
+         		$auth['setting_time'] = $firstSettingTime;
+        	}else{
+        		$auth = $request->request->all(); 
+        		$auth['setting_time'] = time();
+       	}     
+
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
