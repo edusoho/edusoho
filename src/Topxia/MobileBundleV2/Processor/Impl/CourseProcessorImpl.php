@@ -1352,7 +1352,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     protected function makeSign($string)
     {
-        $secret = $this->controller->container->getParameter('secret');
+        $secret = $this->controller->getContainer()->getParameter('secret');
         return md5($string . $secret);
     }
 }
