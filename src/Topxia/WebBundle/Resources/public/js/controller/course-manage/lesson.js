@@ -61,14 +61,18 @@ define(function(require, exports, module) {
         });
 
         $list.on('click', '.delete-chapter-btn', function(e) {
-            if (!confirm('您真的要删除该章节吗？')) {
+            var chapter_name = $(this).data('charpter') ;
+            var part_name = $(this).data('part') ; 
+            if (!confirm('您真的要删除该'+chapter_name+''+part_name+'吗？')) {
                 return ;
             }
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(response) {
                 $btn.parents('.item-chapter').remove();
                 sortList($list);
-                Notify.success('章节已删除！');
+                var chapter_name = $('.delete-chapter-btn').data('charpter') ;
+            	   var part_name = $('.delete-chapter-btn').data('part') ; 
+                Notify.success(''+chapter_name+''+part_name+'已删除！');
             }, 'json');
         });
 
