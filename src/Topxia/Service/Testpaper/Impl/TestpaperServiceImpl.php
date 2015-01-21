@@ -565,17 +565,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $this->getTestpaperResultDao()->updateTestpaperResultActive($testpaperResult['testId'],$testpaperResult['userId']);
 
         $testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
-
-        $this->getStatusService()->publishStatus(array(
-            'type' => 'finished_testpaper',
-            'objectType' => 'testpaper',
-            'objectId' => $testpaper['id'],
-            'properties' => array(
-                'testpaper' => $this->simplifyTestpaper($testpaper),
-                'result' => $this->simplifyTestpaperResult($testpaperResult),
-            )
-        ));
-
+        if($course['status'] == 'published' ){
+                $this->getStatusService()->publishStatus(array(
+                    'type' => 'finished_testpaper',
+                    'objectType' => 'testpaper',
+                    'objectId' => $testpaper['id'],
+                    'properties' => array(
+                        'testpaper' => $this->simplifyTestpaper($testpaper),
+                        'result' => $this->simplifyTestpaperResult($testpaperResult),
+                    )
+                ));
+        }
         return $testpaperResult;
     }
 
