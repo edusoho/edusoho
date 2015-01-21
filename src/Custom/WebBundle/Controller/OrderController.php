@@ -91,6 +91,14 @@ class OrderController extends BaseController
         ));
     }
 
+
+    public function payAction(Request $request)
+    {
+        return $this->render('CustomWebBundle:Order:order-finish.html.twig', array(
+            'process' => 'finish'
+        ));
+    }
+
     private function getCourseTotalPrice($courses)
     {
         $totalPrice = 0;

@@ -433,3 +433,52 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 #shipping-address-from .asterisk {
   color: #cc0000;
 }
+#order-payment-form {
+  margin-top: 20px;
+  padding: 0 20px;
+}
+#order-payment-form .order-info {
+  background-color: #B1F3B1;
+  border: 2px solid #55C555;
+  height: 100px;
+}
+#order-payment-form .order-info .order-tips {
+  float: left;
+  margin: 15px 30px;
+  width: 50%;
+  border: 2px solid #55C555;
+}
+#order-payment-form .order-info .order-tips p {
+  margin: 0;
+  padding: 5px;
+}
+#order-payment-form .order-info .payment-amount {
+  line-height: 95px;
+  margin-left: 100px;
+  float: left;
+  ine-height: 95px;
+}
+#order-payment-form .payment-method {
+  margin-top: 20px;
+}
+#order-payment-form .payment-method .icon {
+  background: url(/bundles/topxiaweb/img/order-pay/pay-check-status.png) no-repeat;
+  top: 0px;
+  right: 0px;
+  width: 23px;
+  height: 26px;
+  background-position: 0 -4px;
+  position: absolute;
+  overflow: hidden;
+}
+#order-payment-form .payment-method .check {
+  cursor: pointer;
+  width: 150px;
+  height: 58px;
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  line-height: 58px;
+  border: 1px solid #21a557;
+  margin-bottom: 10px;
+}
