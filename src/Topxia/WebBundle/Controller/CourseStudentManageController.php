@@ -42,7 +42,7 @@ class CourseStudentManageController extends BaseController
 
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
 			'course' => $course,
 			'students' => $students,
@@ -52,6 +52,7 @@ class CourseStudentManageController extends BaseController
 			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
 			'paginator' => $paginator,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
+			'default'=>$default
 		));
 
 	}
@@ -238,11 +239,12 @@ class CourseStudentManageController extends BaseController
 			$member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 			return $this->createStudentTrResponse($course, $member);
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:remark-modal.html.twig',array(
 			'member'=>$member,
 			'user'=>$user,
-			'course'=>$course
+			'course'=>$course,
+			'default'=>$default
 		));
 	}
 

@@ -5,7 +5,7 @@
 {% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}备注{% endblock %}
 {% block body %}
 
-<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}">
+<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}" data-user="{{default.user_name}}">
 
   <div class="form-group">
     <div class="controls">
