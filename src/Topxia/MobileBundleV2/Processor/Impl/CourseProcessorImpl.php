@@ -1316,6 +1316,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $noteSum += $member['noteNum'];
         }
 
+        settype($noteSum, "string");
+
         //考试数量
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
