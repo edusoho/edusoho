@@ -11,7 +11,7 @@
     {{ checkboxs('roles', dict('userRole'), user.roles) }}
     {% else %}
     <label>
-    	<input type="checkbox" name="roles[]" value="ROLE_USER" {% if 'ROLE_USER' in user.roles %}checked="checked"{% endif %}>学员
+    	<input type="checkbox" name="roles[]" value="ROLE_USER" {% if 'ROLE_USER' in user.roles %}checked="checked"{% endif %}>{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}
     </label>
     <label>
     	<input type="checkbox" name="roles[]" value="ROLE_TEACHER" {% if 'ROLE_TEACHER' in user.roles %}checked="checked"{% endif %}>教师
