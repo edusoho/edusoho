@@ -1839,6 +1839,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->addMember($fields);
 
+        $this->setMemberNoteNumber(
+            $courseId,
+            $userId, 
+            $this->getNoteDao()->getNoteCountByUserIdAndCourseId($userId, $courseId)
+        );
+		        
 		$setting = $this->getSettingService()->get('course', array());
 		if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
 			$message = $this->getWelcomeMessageBody($user, $course);
@@ -2438,6 +2444,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('User.StatusService');
     }
+
+    private function getNoteDao()
+    {
+    	return $this->createDao('Course.CourseNoteDao');
+    }
+
 
     private function getCourseMaterialService()
     {
