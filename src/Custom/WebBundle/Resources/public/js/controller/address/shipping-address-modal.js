@@ -76,7 +76,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '#telNo1',
+            element: '#telNo3',
             required: false,
             rule:'positive_integer',
             display: '分机'

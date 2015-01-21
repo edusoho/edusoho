@@ -19,13 +19,13 @@ class Version20150120150858 extends AbstractMigration
 			`contactName` varchar(255) NOT NULL COMMENT '收货人姓名',
 			`region` text NOT NULL COMMENT '地区',
 			`address` text NOT NULL COMMENT '详细地址',
-			`postCode` int(10) unsigned NOT NULL COMMENT '邮编',
-			`mobileNo` int(15) unsigned DEFAULT NULL COMMENT '手机号码',
+			`postCode` varchar(32) NOT NULL COMMENT '邮编',
+			`mobileNo` varchar(32) DEFAULT NULL COMMENT '手机号码',
 			`telNo` varchar(255) DEFAULT NULL COMMENT '电话',
 			`isDefault` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否默认地址',
 			`createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
 			PRIMARY KEY (`id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户收货地址表';
+			) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户收货地址表';
     	");
     }
 

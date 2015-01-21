@@ -371,14 +371,32 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 
 #order-verify-form {
+	a {
+		color: #428bca;
+		&:hover,
+		&.active,
+		&:focus {
+		  color: #2a6496;
+		  text-decoration: underline;
+		}
+	}
 	.form-group {
 		margin-right: -15px;
 		margin-left: 0px;
 	}
 
+	legend {
+		margin-bottom: 5px;
+	}
 	.shipping-address {
+		padding: 10px;
 		span {
 			color: @money;	 
+		}
+
+		.address-content {
+			padding: 10px;
+			border: 2px solid @money;
 		}
 	}
 }
