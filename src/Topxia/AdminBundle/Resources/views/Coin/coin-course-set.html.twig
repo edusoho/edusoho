@@ -60,11 +60,6 @@
                           <input type="hidden" class="rmb" value="{{course.price}}" data-id="{{course.id}}"/>
                           {{course.price}}
                         {% endif %}
-                          <br>
-                          {% if course.discountActivityId > 0 %}
-                            <span class="text-muted{# label label-xs label-danger #}" style="white-space: normal;">原价{{ course.originPrice }}元,当前为活动“{{ course.discountActivity.activityName }}”中的价格，活动结束后价格恢复原价</span>
-                          {% endif %}
-    
                       </td>
                     <td>
          
@@ -72,10 +67,6 @@
                         <span id="cash{{course.id}}">{{course.price * set.cash_rate }}</sapn>
                       {% else %}
                         <input type="text" id="cash{{course.id}}" class="form-control cashPrice" style="width:40%;" value="" name="course-cash[{{course.id}}]"/>
-                          <br>
-                          {% if course.discountActivityId > 0 %}
-                            <span class="text-muted{# label label-xs label-danger #}" style="white-space: normal;">原价{{ course.originCoinPrice }}{{setting('coin.coin_name')}},课程处于活动“{{ course.discountActivity.activityName }}”中，设置后价格会变成活动折扣后的价格，活动结束后价格恢复为您本次输入的价格</span>
-                          {% endif %}
                       {% endif %}
   
                     </td>
