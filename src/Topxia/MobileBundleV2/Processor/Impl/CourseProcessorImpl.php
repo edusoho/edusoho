@@ -1293,6 +1293,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'userId' => $user['id'],
             'type' => 'question'
         );
+
         //问答数量
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
@@ -1300,16 +1301,27 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         //话题数量
         $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        $conditions['userId'] = $user['id'];
-        //笔记数量
-        $noteSum = $this->controller->getNoteService()->searchNoteCount($conditions);
+
+        $conditions = array(
+            'userId' => $user['id'],
+            'noteNumGreaterThan' => 0.1
+        );
+
+        $total = $this->controller->getCourseService()->searchMemberCount($conditions);
+        
+        $courseMembers = $this->controller->getCourseService()->searchMember($conditions, 0, $total);
+
+        $noteSum = 0;
+        foreach ($courseMembers as $member) {
+            $noteSum += $member['noteNum'];
+        }
 
         //考试数量
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
         return array('thread' => $threadSum,
         			'discussion' => $discussionSum,
-        			'note' => $noteSum,
+        			'note' => $noteSum ,
         			'test' => $testSum );
     }
 
