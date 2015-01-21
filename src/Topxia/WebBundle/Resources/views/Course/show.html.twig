@@ -107,7 +107,7 @@
 						data-toggle="modal" 
 						data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
 						{% else %}
-						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+						href="{{ path('order_verify', {targetId:course.id, targetType:'course',referer:'showAction'}) }}"
 						{% endif %}
 						 >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
 						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))

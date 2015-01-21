@@ -42,7 +42,7 @@ class CourseItemType extends AbstractCartItemType
         $totalPrice = 0;
         foreach ($courses as $course) {
             $userIds = array_merge($course['teacherIds'], $userIds);
-            $totalPrice += intval($course['price']);
+            $totalPrice += floatval($course['price']);
         }
         return array($userIds, $totalPrice);
     }

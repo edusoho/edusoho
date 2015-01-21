@@ -192,7 +192,6 @@ course_manage_finish_advanced_test:
 order_verify:
     pattern: /order/verify
     defaults: { _controller: CustomWebBundle:Order:verify }
-    methods: [POST]
     
 order_user_verify:
     pattern: /order/user/verify
