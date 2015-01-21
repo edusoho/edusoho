@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             var self = this;
             var validator = new Validator({
                 element: $form,
-                autoSubmit: false
+                autoSubmit: true
             });
 
             validator.addItem({

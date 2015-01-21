@@ -198,6 +198,10 @@ order_verify:
     pattern: /order/verify
     defaults: { _controller: CustomWebBundle:Order:verify }
 
+order_submit:
+    pattern: /order/submit
+    defaults: { _controller: CustomWebBundle:Order:submit }
+
 order_user_verify:
     pattern: /order/user/verify
     defaults: { _controller: CustomWebBundle:Order:userVerify }

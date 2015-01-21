@@ -56,6 +56,7 @@ class OrderController extends BaseController
             'itemResult' => $itemResult,
             'groupCarts' => $groupCarts,
             'role' => 'verify',
+            'process' => 'verify',
             'referer' => $referer,
             'type' => $type,
             'targetId' => $targetId,
@@ -108,6 +109,13 @@ class OrderController extends BaseController
         $newGroupCarts['course'] = $groupCarts;
 
         return $newGroupCarts;
+    }
+
+    public function submitAction(Request $request)
+    {
+        return $this->render('CustomWebBundle:Order:order-payment.html.twig', array(
+            'process' => 'payment'
+        ));
     }
 
     private function getCourseTotalPriceAndUserIds($course,$subcourses)

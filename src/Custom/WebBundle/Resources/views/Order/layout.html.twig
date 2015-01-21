@@ -12,11 +12,10 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="row">
-        {% include 'CustomWebBundle:Order:order-header.html.twig'  with { process : 'verify'} %}
+        {% include 'CustomWebBundle:Order:order-header.html.twig'  with { process : process } %}
       </div>
 
       {% block orderbody %}
-          {% include 'CustomWebBundle:Order:order-' ~ process ~ '.html.twig' %}
       {% endblock %}  
     </div>
   </div>
