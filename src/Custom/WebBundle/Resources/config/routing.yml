@@ -47,6 +47,11 @@ ajax_user_invoice_update:
     defaults: { _controller: CustomWebBundle:AjaxOrder:updateUserInvoice }
     methods: [POST]
 
+ajax_region_remote:
+    pattern:  /ajax/region/{json}
+    defaults: { _controller: CustomWebBundle:AjaxRegion:getJson, json:''}
+    methods: [GET]
+
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: CustomWebBundle:CourseLessonManage:create }
@@ -192,14 +197,14 @@ course_manage_finish_advanced_test:
 order_verify:
     pattern: /order/verify
     defaults: { _controller: CustomWebBundle:Order:verify }
-    
+
 order_user_verify:
     pattern: /order/user/verify
     defaults: { _controller: CustomWebBundle:Order:userVerify }
 
-user_address:
-    pattern: /user/address/{action}
-    defaults: { _controller: CustomWebBundle:Address:address }
+user_shipping_address:
+    pattern: /user/shippingaddress/{id}
+    defaults: { _controller: CustomWebBundle:Address:showShippingAddress }
 
 ajax_user_profile_update:
     pattern: /user/profile/update

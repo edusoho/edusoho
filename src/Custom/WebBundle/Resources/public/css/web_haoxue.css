@@ -364,9 +364,31 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   background: #cc0000;
   color: #FFF;
 }
-#order-verify .form-group {
+#order-verify-form a {
+  color: #428bca;
+}
+#order-verify-form a:hover,
+#order-verify-form a.active,
+#order-verify-form a:focus {
+  color: #2a6496;
+  text-decoration: underline;
+}
+#order-verify-form .form-group {
   margin-right: -15px;
   margin-left: 0px;
+}
+#order-verify-form legend {
+  margin-bottom: 5px;
+}
+#order-verify-form .shipping-address {
+  padding: 10px;
+}
+#order-verify-form .shipping-address span {
+  color: #cc0000;
+}
+#order-verify-form .shipping-address .address-content {
+  padding: 10px;
+  border: 2px solid #cc0000;
 }
 .order-verify .total-price {
   margin-right: 50px;
@@ -382,4 +404,22 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 }
 .order-verify .submit-order-btn {
   margin-right: 50px;
+}
+#shipping-address-from .form-control[readonly] {
+  background-color: initial;
+  cursor: initial;
+  opacity: initial;
+}
+#shipping-address-from .region-picker-input {
+  border: 1px solid #CCC;
+  display: block;
+  width: 100%;
+  color: #666;
+  font-size: 16px;
+  -moz-box-shadow: 0 0 5px #ccc inset;
+  -webkit-box-shadow: 0 0 5px #ccc inset;
+  box-shadow: 0 0 5px #ccc inset;
+}
+#shipping-address-from .asterisk {
+  color: #cc0000;
 }

@@ -370,10 +370,34 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   }
 }
 
-#order-verify {
+#order-verify-form {
+	a {
+		color: #428bca;
+		&:hover,
+		&.active,
+		&:focus {
+		  color: #2a6496;
+		  text-decoration: underline;
+		}
+	}
 	.form-group {
 		margin-right: -15px;
 		margin-left: 0px;
+	}
+
+	legend {
+		margin-bottom: 5px;
+	}
+	.shipping-address {
+		padding: 10px;
+		span {
+			color: @money;	 
+		}
+
+		.address-content {
+			padding: 10px;
+			border: 2px solid @money;
+		}
 	}
 }
 
@@ -397,4 +421,27 @@ ul.sort-ul.sub-course-media li.placeholder:before {
 	.submit-order-btn {
 		margin-right:50px
 	}
+
 }
+
+#shipping-address-from {
+	.form-control[readonly] {
+		background-color: initial;
+		cursor: initial; 
+		opacity: initial;
+	}
+	.region-picker-input {
+		border: 1px solid #CCC;
+		display: block;
+		width: 100%;
+		color: #666;
+		font-size: 16px;
+		-moz-box-shadow: 0 0 5px #ccc inset;
+		-webkit-box-shadow: 0 0 5px #ccc inset;
+		box-shadow: 0 0 5px #ccc inset;
+	}
+
+	.asterisk {
+		color: @money;	
+	}
+} 

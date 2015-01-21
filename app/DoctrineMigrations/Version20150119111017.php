@@ -17,6 +17,7 @@ class Version20150119111017 extends AbstractMigration
 			`id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统Id',
 			`userId` int(10) unsigned NOT NULL COMMENT '用户Id',
 			`title` varchar(255) NOT NULL COMMENT '发票抬头',
+            `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
 			PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户发票表';
     	");

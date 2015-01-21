@@ -22,6 +22,8 @@ class OrderController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $invoices = $this->getUserInvoiceService()->findUserInvoicesByUserId($user['id']);
 
+        $shippingAddress = $this->getShippingAddressService()->getDefaultShippingAddressByUserId($user['id']);
+        $userId = $this->getCurrentUser()->id;
         list($groupCarts, $itemResult) = $this->getCartsService()->findCurrentUserCarts();
 
         $type = '';
@@ -59,6 +61,7 @@ class OrderController extends BaseController
         return $this->render('CustomWebBundle:Order:order-verify.html.twig',array(
             'profile' => $profile,
             'invoices' => $invoices,
+            'shippingAddress' => $shippingAddress,
             'itemResult' => $itemResult,
             'groupCarts' => $groupCarts,
             'role' => 'verify',
@@ -103,5 +106,10 @@ class OrderController extends BaseController
     private function getUserInvoiceService()
     {
         return $this->getServiceKernel()->createService('Custom:Order.UserInvoiceService');
+    }
+
+    private function getShippingAddressService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Address.ShippingAddressService');
     }
 }

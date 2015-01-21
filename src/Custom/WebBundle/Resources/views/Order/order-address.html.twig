@@ -1,17 +1,7 @@
 <fieldset data-role="address" style="display:none">
   <legend>确认地址信息(用于发票寄送或者教材寄送)</legend>
-
-  <div>
-    <p>
-      寄送至 浙江省 杭州市 滨江区 东信大道270号逸天广场2号楼2单元3楼物业服务中心（仅限业主）(电话:0571-81608339) 
-      <a class="pull-right" href="#modal" data-url="{{ path('user_address', {action:'update'}) }}" data-toggle="modal">修改收货地址</a>
-    </p>
+  <div class="js-shipping-address">
+    {% include 'CustomWebBundle:Address:default-shipping-address.html.twig' %}
   </div>
-
-  <div>
-    <p>
-      <a>新增收货地址</a>
-    </p>
-  </div>
-
+  
 </fieldset>
