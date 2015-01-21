@@ -124,7 +124,6 @@ class OrderController extends BaseController
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
-        
         return $this->render('TopxiaWebBundle:Order:submit-pay-request.html.twig', array(
             'form' => $paymentRequest->form(),
             'order' => $order,

@@ -1,0 +1,11 @@
+{% set courses = itemResult[type]['items'] %}
+{% set course = itemResult[type]['items'][targetId] %}
+{% set subcourses = itemResult[targetId]['subcourses'] %}
+{% set users = itemResult[type]['extra']['users'] %}
+    {% include 'CustomWebBundle:Order:course-list-tr.html.twig' %}
+
+{% if course.type == 'package' %}
+	{% for subcourse in subcourses %}
+	  {% include 'CustomWebBundle:Order:course-list-tr.html.twig' with { course:subcourse,issubcourse:true } %}
+	{% endfor %}
+{% endif %}

@@ -16,9 +16,26 @@
           {% include 'CustomWebBundle:Carts:' ~ type ~ '-type.html.twig' %}
         {% endfor %}
       {% else %}
+      {% if referer == 'cartsAction' %}
         <div> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
+      {% endif %}
     {% endif %}
+    {% if referer == 'showAction' %}
+
+       <table class="table table-hover" id="order-table">
+        <thead>
+            <td></td>
+            <th class="text-muted" width="50%">商品信息</th>
+            <th class="text-center text-muted" width="20%">单价（元）</th>
+            <th class="text-center text-muted" width="20%">数量</th>
+            <th class="text-center text-muted" width="20%">小计（元）</th>
+        </thead>
+        <tbody>
+
+      {% include 'CustomWebBundle:Order:' ~ type ~ '-type-good.html.twig' %}
+      {% else %}
         <div class="hide carts-text-help"> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
+    {% endif %}
         </tbody>
       </table>
 

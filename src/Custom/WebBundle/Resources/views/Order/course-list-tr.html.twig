@@ -1,0 +1,84 @@
+<tr data-role="cart-tr" class="cart-tr">
+    <td>
+        {% if role|default('carts') == 'carts' %}
+            {% if not issubcourse|default(false) %}
+                <input type="checkbox" data-role="single-select" data-id={{ cart.id }} data-item-id="{{ course.id }}">
+            {% endif %}
+        {% endif %}
+    </td>
+    <td>
+        <div class="clearfix cart-item {% if issubcourse|default(false)  %} item-offset {% endif %}">
+            <a href="{{ path('course_show', {id:course.id}) }}">
+                <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
+            </a>
+            <a class="title">{{ course.title|sub_text(20) }}</a>
+
+            {% if role|default('carts') == 'verify' %}
+                <div class="">
+                  {% if course.teacherIds|default(null) %}
+                    教师：
+                        {% for id in course.teacherIds %}
+                          {% set user = users[id] %}
+                          <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}" class="">{{ user.nickname }}</a>
+                        {% endfor %}
+                  {% endif  %}
+                </div>
+          {% endif  %}
+
+          {% if  course.subType %}
+              <div class="subtype-list">
+                  {% for subType,value in course.subType %}
+                      {% if value %}
+                          <a href="{{ course.subTypeUrl[subType]|default('') }}" target="_blank">{{ dict_text('CourseSubType', subType) }}</a>
+                      {% endif %}
+                      {% if loop.index < loop.length %}
+                          |
+                      {% endif %}
+                  {% endfor %}
+              </div>
+          {% endif %}
+       </div>
+        {% if role|default('carts') == 'carts' %}
+            <div class="extra-section">
+              {% if course.teacherIds|default(null) %}
+                <p>教师：
+                    {% for id in course.teacherIds %}
+                      {% set user = users[id] %}
+                      <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+                    {% endfor %}
+                </p>
+              {% endif  %}
+            </div>
+      {% endif  %}
+    </td>
+    <td class="text-center money-theme">
+        {% if course.type == 'package' and course.costPrice is defined %}
+            <p><s>{{ course.costPrice|number_format(2) }}</s></p>   
+        {% endif %}
+        <p>{{ course.price }}</p>
+    </td>
+    <td class="text-center">
+        1
+    </td>
+    <td  {% if not issubcourse|default(false) %} data-role="price" {% endif %} class="text-center money-theme">
+        <p>{{ course.price }}</p>
+    </td>
+
+    {% if role|default('carts') == 'carts' %}
+    <td  class="text-center">
+        <a href="#" class="btn btn-link">
+            <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" data-role="delete-carts-btn" title="删除" data-url="{{ path('carts_delete',{id:cart.id})}}" data-id={{ cart.id }}></span>
+        </a>
+      
+            <a href="javascript:;" class="btn btn-link un-favorite-btn"  data-role="single-un-favourite-btn" title="取消收藏"  {% if not favouritedCourseId %}style="display:none;"{% endif %} data-url="{{ path('course_unfavorite', {id:course.id}) }}" data-item-id="{{ course.id }}">
+                <span class="glyphicon glyphicon-bookmark"　data-toggle="tooltip" data-placement="top">已收藏</span>
+            </a>
+        
+             <a href="javascript:;" class="btn btn-link favorite-btn" data-role="single-favourite-btn" title="收藏" {% if  favouritedCourseId %}style="display:none;"{% endif %} data-url="{{path('course_favorite', {id:course.id})  }}" data-item-id="{{ course.id }}">
+                <span class="glyphicon glyphicon-bookmark" 　data-toggle="tooltip" data-placement="top">收藏</span>
+            </a>
+       
+       
+    </td>
+    {% endif %}
+</tr>
