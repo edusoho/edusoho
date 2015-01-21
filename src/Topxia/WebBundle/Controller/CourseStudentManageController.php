@@ -116,9 +116,10 @@ class CourseStudentManageController extends BaseController
 
 			return $this->createStudentTrResponse($course, $member);
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:create-modal.html.twig',array(
-			'course'=>$course
+			'course'=>$course,
+		             'default'=> $default
 		));
 	}
 
