@@ -9,22 +9,22 @@ Class ShippingAddressServiceImpl extends BaseService  implements ShippingAddress
 {
 	public function getShippingAddress($id)
 	{
-        return $this->getShippingAddressDao()->getShippingAddress($id);
+        return ShippingAddressSerialize::unserialize($this->getShippingAddressDao()->getShippingAddress($id));
 	}
 
     public function getDefaultShippingAddressByUserId($userId)
     {
-        return $this->getShippingAddressDao()->getDefaultShippingAddressByUserId($userId);
+        return ShippingAddressSerialize::unserialize($this->getShippingAddressDao()->getDefaultShippingAddressByUserId($userId));
     }
 
 	public function findShippingAddressesByUserId($userId)
 	{
-		return $this->getShippingAddressDao()->findShippingAddresssByUserId($userId);
+		return ShippingAddressSerialize::unserializes($this->getShippingAddressDao()->findShippingAddresssByUserId($userId));
 	}
 
     public function addShippingAddress($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('contactName', 'region', 'address', 'postcode'))) {
+        if (!ArrayToolkit::requireds($fields, array('contactName', 'region', 'address', 'postCode'))) {
             throw $this->createServiceException('缺少必要字段，创建收获地址失败！');
         }
 
@@ -34,12 +34,12 @@ Class ShippingAddressServiceImpl extends BaseService  implements ShippingAddress
             $fields['isDefault'] = 1;
         }
 
-        return $this->getShippingAddressDao()->createShippingAddress($fields);  
+        return ShippingAddressSerialize::unserialize($this->getShippingAddressDao()->addShippingAddress($fields));  
     }
     
     public function updateShippingAddress($id, $fields)
     {
-        return $this->getShippingAddressDao()->updateShippingAddress($id,$fields);
+        return ShippingAddressSerialize::unserialize($this->getShippingAddressDao()->updateShippingAddress($id,$fields));
     }
 
     private function _filterShippingAddressFields($fields)
@@ -49,7 +49,7 @@ Class ShippingAddressServiceImpl extends BaseService  implements ShippingAddress
             'contactName' => '',
             'region' => '',
             'address' => '',
-            'postcode' => 0,
+            'postCode' => 0,
             'mobileNo' => 0,
             'telNo' => '',
             'isDefault' => 0
@@ -61,5 +61,33 @@ Class ShippingAddressServiceImpl extends BaseService  implements ShippingAddress
     private function getShippingAddressDao()
     {
         return $this->createDao('Custom:Address.ShippingAddressDao');
+    }
+}
+
+class ShippingAddressSerialize
+{
+    public static function serialize(array $shippingAddress)
+    {
+        return $shippingAddress;
+    }
+
+    public static function unserialize(array $shippingAddress = null)
+    {
+        if (empty($shippingAddress)) {
+            return $shippingAddress;
+        }
+
+        if(!empty($shippingAddress['telNo'])) {
+            $shippingAddress['telNo'] = explode('-', $shippingAddress['telNo']);
+        }
+
+        return $shippingAddress;
+    }
+
+    public static function unserializes(array $shippingAddresses)
+    {
+        return array_map(function($shippingAddress) {
+            return ShippingAddressSerialize::unserialize($shippingAddress);
+        }, $shippingAddresses);
     }
 }

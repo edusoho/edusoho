@@ -92,7 +92,7 @@ define(function(require, exports, module) {
     });
 
     new OrderVerify({
-        'element': '#order-verify'
+        'element': '#order-verify-form'
     });
 
 });

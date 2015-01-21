@@ -9,7 +9,7 @@
         <label for="region">所在地区<span class="asterisk">*</span></label>
       </div>
       <div class="col-md-7 controls">
-        <input class="form-control" type="text" id="region" name="region" data-role ="region-picker" data-remote="{{ path('ajax_region_remote') }}" data-picked="{{ shippingAddress.region|default('') }}" data-visible="10">
+        <input class="form-control region-picker-input" type="text" id="region" name="region" data-role ="region-picker" data-remote="{{ path('ajax_region_remote') }}" data-picked="{{ shippingAddress.region|default('') }}" data-visible="10" readonly value="{{ shippingAddress.region|default('') }}">
       </div>
     </div>
 
@@ -18,7 +18,7 @@
         <label for="address">详细地址<span class="asterisk">*</span></label>
       </div>
       <div class="col-md-7 controls">
-        <textarea id="address" name="address" class="form-control" rows="2" value="{{ shippingAddress.address|default('') }}"></textarea>
+        <textarea id="address" name="address" class="form-control" rows="2">{{ shippingAddress.address|default('') }}</textarea>
       </div>
     </div>
 
@@ -42,10 +42,10 @@
 
     <div class="row form-group">
       <div class="col-md-3 control-label">
-        <label for="MobileNo">手机号码</label>
+        <label for="mobileNo">手机号码</label>
       </div>
       <div class="col-md-7 controls">
-        <input class="form-control" type="text" id="MobileNo" name="MobileNo" value="{{ shippingAddress.mobileNo|default('') }}">
+        <input class="form-control" type="text" id="mobileNo" name="mobileNo" value="{{ shippingAddress.mobileNo|default('') }}">
       </div>
     </div>
 

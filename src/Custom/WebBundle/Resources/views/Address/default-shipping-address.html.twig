@@ -1,0 +1,21 @@
+{% if shippingAddress.id|default(0) %}
+	<div class="shipping-address">
+	  <p>
+	    <span class="send-text">寄送至</span> {{ shippingAddress.region }} {{ shippingAddress.address }}（{{ shippingAddress.contactName }} 收）
+	    {% if shippingAddress.mobileNo %}
+	    	{{ shippingAddress.mobileNo }}
+	    {% elseif shippingAddress.telNo %}
+	    	(电话:{{ shippingAddress.telNo }}) 
+	    {% else %}
+	    {% endif %}
+	    
+	    <a class="pull-right" href="#modal" data-url="{{ path('user_shipping_address', {id:shippingAddress.id|default(0)}) }}" data-toggle="modal">修改收货地址</a>
+	  </p>
+	</div>
+{% else %}
+	<div class="shipping-address">
+	  <p>
+	    <a href="#modal" data-url="{{ path('user_shipping_address', {id:shippingAddress.id|default(0)}) }}" data-toggle="modal">新增收货地址</a>
+	  </p>
+	</div>
+{% endif %}

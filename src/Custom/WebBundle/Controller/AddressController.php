@@ -15,11 +15,15 @@ class AddressController extends BaseController
 			$fields = $request->request->all();
 			$fields['telNo'] = implode('-', $fields['telNo']);
 			if(empty($id)) {
-				$this->getShippingAddressService()->addShippingAddress($fields);
-				return $this->createJsonResponse(true);
+				$shippingAddress = $this->getShippingAddressService()->addShippingAddress($fields);
+				return $this->render('CustomWebBundle:Address:default-shipping-address.html.twig', array(
+					'shippingAddress' => $shippingAddress
+				));
 			} else {
-				$this->getShippingAddress()->updateShippingAddress($id, $fields);
-				return $this->createJsonResponse(true);
+				$shippingAddress = $this->getShippingAddressService()->updateShippingAddress($id, $fields);
+				return $this->render('CustomWebBundle:Address:default-shipping-address.html.twig', array(
+					'shippingAddress' => $shippingAddress
+				));
 			}
 		}
 

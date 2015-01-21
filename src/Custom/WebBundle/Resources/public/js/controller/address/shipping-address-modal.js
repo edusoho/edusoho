@@ -18,11 +18,12 @@ define(function(require, exports, module) {
                     return false;
                 }
 
-                $.post($form.data('url'), $form.serialize(), function(){
+                $.post($form.data('url'), $form.serialize(), function(html){
                     $modal.modal('hide');
+                    $('#order-verify-form .js-shipping-address').html(html);
                     Notify.success('保存成功');
                 }).fail(function(){
-                    Notify.success('保存失败!');
+                    Notify.danger('保存失败!');
                 });
 
             }
@@ -54,7 +55,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=MobileNo]',
+            element: '[name=mobileNo]',
             required: false,
             rule:'phone',
             display: '手机号码'
@@ -83,7 +84,7 @@ define(function(require, exports, module) {
          
         /* region picker */
         $form.find('[data-role =region-picker]').regionPicker().on('picked.rp', function(e, regions){
-          console.log(e, regions);
+          $('[data-role =region-picker]').val(regions.map(function(r){ return r.n; }).join(" "));
         });
     }
 });
