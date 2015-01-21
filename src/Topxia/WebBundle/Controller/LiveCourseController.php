@@ -57,12 +57,13 @@ class LiveCourseController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
             'recentCourses' => $recentCourses,
             'liveCourses' => $liveCourses,
             'users' => $users,
             'paginator' => $paginator,
+            'default'=> $default
         ));
 	}
 

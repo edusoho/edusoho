@@ -52,7 +52,9 @@ define(function(require, exports, module) {
               var $parent = $('#'+$form.data('parentid'));
               if ($item.length) {
                   $item.replaceWith(html);
-                  Notify.success('章节信息已保存');
+                  var chapter_name = $('#course-chapter-btn').data('charpter') ;
+                  var part_name = $('#course-chapter-btn').data('part') ;
+                  Notify.success(''+chapter_name+''+part_name+'信息已保存');
               } else {
                  if($parent.length){
                   var add = 0;
@@ -73,8 +75,9 @@ define(function(require, exports, module) {
                  }else{
                     $("#course-item-list").append(html);
                  }
-                    
-                  Notify.success('章节添加成功');
+                  var chapter_name = $('#course-chapter-btn').data('charpter') ;
+                  var part_name = $('#course-chapter-btn').data('part') ; 
+                  Notify.success(''+chapter_name+''+part_name+'添加成功');
               }
               $(id).find('.btn-link').tooltip();
               $form.parents('.modal').modal('hide');

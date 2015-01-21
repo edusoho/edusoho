@@ -17,7 +17,7 @@
 		 {% else %}
 		  	<ul class="dropdown-menu" role="menu">
 			    <li>
-			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 小{% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %} </a>
+			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 {% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %} </a>
 			    </li>
 			   <li>
 			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'normal' %}{{ path('course_manage_lesson_create', {id:course.id, parentId:'chapter-'~chapter.id}) }}{% else %}{{ path('live_course_manage_lesson_create', {id:course.id, parentId:'chapter-'~chapter.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'normal' %} 添加 课时 {% else %} 添加 直播课时 {% endif %} </a>

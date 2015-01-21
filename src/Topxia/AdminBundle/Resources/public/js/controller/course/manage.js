@@ -31,7 +31,9 @@ define(function(require, exports, module) {
 		});
 
 		$table.on('click', '.delete-course', function() {
-			if (!confirm('删除课程，将删除课程的章节、课时、学员信息。真的要删除该课程吗？')) {
+			var chapter_name = $(this).data('charpter') ;
+			var part_name = $(this).data('part') ;
+			if (!confirm('删除课程，将删除课程的'+chapter_name+''+part_name+'、课时、学员信息。真的要删除该课程吗？')) {
 				return ;
 			}
 

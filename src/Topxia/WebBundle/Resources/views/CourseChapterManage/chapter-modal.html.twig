@@ -3,7 +3,7 @@
 {% set chapter = chapter|default(null) %}
 
 {% block title %}
-  {% if chapter %}编辑{% else %}添加{% endif %}{% if type == 'unit' %}小{% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %}{% else %}{% if setting('default.chapter_name') %}{{setting('default.chapter_name')}}{% else %}章{% endif %}{% endif %}
+  {% if chapter %}编辑{% else %}添加{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %}{% else %}{% if setting('default.chapter_name') %}{{setting('default.chapter_name')}}{% else %}章{% endif %}{% endif %}
 {% endblock %}
 {% block body %}
 
@@ -17,7 +17,7 @@
   <div class="row form-group">
     <div class="col-md-3 control-label">
       {% if type == 'unit' %}
-        <label for="chapter-title-field">小{% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %}标题</label>
+        <label for="chapter-title-field">{% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %}标题</label>
       {% else %}
         <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{setting('default.chapter_name')}}{% else %}章{% endif %}标题</label>
         {% endif %}
@@ -33,7 +33,7 @@
 
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button id="course-chapter-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form">{% if chapter %}保存{% else %}添加{% endif %}</button>
+    <button id="course-chapter-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-charpter="{{default.chapter_name}}" data-part="{{default.part_name}}">{% if chapter %}保存{% else %}添加{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

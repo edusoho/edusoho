@@ -22,11 +22,12 @@ class CourseChapterManageController extends BaseController
 				'chapter' => $chapter,
 			));
         }
-
+	$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
             'type' => $type,
-            'parentId' => $parentId
+            'parentId' => $parentId,
+             'default'=> $default
 		));
 	}
 
@@ -47,11 +48,12 @@ class CourseChapterManageController extends BaseController
 				'chapter' => $chapter,
 			));
         }
-
+	$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
 			'chapter' => $chapter,
             'type' => $chapter['type'],
+             'default'=> $default
 		));
 		
 	}
@@ -67,5 +69,10 @@ class CourseChapterManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+        private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
