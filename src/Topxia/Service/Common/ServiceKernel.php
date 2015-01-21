@@ -75,6 +75,14 @@ class ServiceKernel
         return $this->parameterBag->get($name);
     }
 
+    public function hasParameter($name)
+    {
+        if (is_null($this->parameterBag)) {
+            throw new \RuntimeException('尚未初始化ParameterBag');
+        }
+        return $this->parameterBag->has($name);
+    }
+
     public function setCurrentUser($currentUser)
     {
         $this->currentUser = $currentUser;

@@ -76,131 +76,50 @@
       </div> 
   </div>
   </fieldset>
-<br>
 
-  <fieldset>
-    <legend>微博登录</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-          <label >微博登录</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('weibo_enabled', {1:'开启', 0:'关闭'}, loginConnect.weibo_enabled) }}
-        <div class="help-block"><a href="http://open.weibo.com/authentication/" target="_blank">申请微博登录</a></div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="weibo_key" >App Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="weibo_key" name="weibo_key" class="form-control" value="{{loginConnect.weibo_key}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="weibo_secret" >App Secret</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="weibo_secret" name="weibo_secret" class="form-control" value="{{loginConnect.weibo_secret}}">
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="">登录时必须设置帐号和邮箱</label>
-      </div>
-        <div class="controls col-md-8 radios">    
-        {{ radios('weibo_set_fill_account', {1:'开启', 0:'关闭'}, loginConnect.weibo_set_fill_account) }}
-              <p class="help-block">在微博官方审核通过您的接入申请以前，请不要开启此选项，否则审核将无法通过</p>
+  {% for type, client in clients %}
+    <fieldset>
+      <legend>{{ client.name }}</legend>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+            <label >{{ client.name }}</label>
         </div>
-    </div>
-  </fieldset>
-
-  <fieldset>
-    <legend>QQ登录</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label >QQ登录</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('qq_enabled', {1:'开启', 0:'关闭'}, loginConnect.qq_enabled) }}
-        <div class="help-block"><a href="http://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E7%BD%91%E7%AB%99%E6%8E%A5%E5%85%A5#2._QQ.E7.99.BB.E5.BD.95" target="_blank">申请QQ登录</a></div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="qq_key" >App ID</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="qq_key" name="qq_key" class="form-control" value="{{loginConnect.qq_key}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="qq_secret" >App Secret</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="qq_secret" name="qq_secret" class="form-control" value="{{loginConnect.qq_secret}}">
-      </div>
-    </div>
-
-     <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="">登录时必须设置帐号和邮箱</label>
-      </div>
-        <div class="controls col-md-8 radios">    
-        {{ radios('qq_set_fill_account', {1:'开启', 0:'关闭'}, loginConnect.qq_set_fill_account) }}
-              <p class="help-block">在QQ官方审核通过您的接入申请以前，请不要开启此选项，否则审核将无法通过</p>
+        <div class="controls col-md-8 radios">
+          {{ radios( type ~ '_enabled', {1:'开启', 0:'关闭'}, loginConnect[type ~ '_enabled']) }}
+          {% if client.apply_url|default(null) %}
+            <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">申请{{ client.name }}</a></div>
+          {% endif %}
         </div>
-    </div>
+      </div>
 
-  </fieldset>
-
-  <fieldset>
-    <legend>人人连接</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label >人人连接</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('renren_enabled', {1:'开启', 0:'关闭'}, loginConnect.renren_enabled) }}
-        <div class="help-block"><a href="http://wiki.dev.renren.com/wiki/WEB%E7%BD%91%E7%AB%99%E5%B8%90%E5%8F%B7%E7%99%BB%E5%BD%95%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B" target="_blank">申请人人连接</a></div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="renren_key" >App Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="renren_key" name="renren_key" class="form-control" value="{{loginConnect.renren_key}}">
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="renren_secret" >App Secret</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="renren_secret" name="renren_secret" class="form-control" value="{{loginConnect.renren_secret}}">
-      </div>
-    </div>
-
-     <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="">登录时必须设置帐号和邮箱</label>
-      </div>
-        <div class="controls col-md-8 radios">    
-        {{ radios('renren_set_fill_account', {1:'开启', 0:'关闭'}, loginConnect.renren_set_fill_account) }}
-              <p class="help-block">在人人官方审核通过您的接入申请以前，请不要开启此选项，否则审核将无法通过</p>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="{{ type }}_key" >{{ client.key_setting_label }}</label>
         </div>
-    </div>
+        <div class="controls col-md-8">
+          <input type="text" id="{{ type }}_key" name="{{ type }}_key" class="form-control" value="{{loginConnect[type ~ '_key']}}">
+        </div>
+      </div>
 
-  </fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="{{ type }}_secret" >{{ client.secret_setting_label }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control" value="{{loginConnect[type ~ '_secret']}}">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="">登录时必须设置帐号和邮箱</label>
+        </div>
+          <div class="controls col-md-8 radios">    
+            {{ radios(type ~ '_set_fill_account' , {1:'开启', 0:'关闭'}, loginConnect[type ~ '_set_fill_account']) }}
+            <p class="help-block">在{{ client.name }}官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过</p>
+          </div>
+      </div>
+    </fieldset>
+  {% endfor %}
 
   <fieldset>
     <legend>登录接口验证代码</legend>

@@ -206,7 +206,11 @@
 
         </form>
 
-        {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
+        {% if setting('login_bind.enabled') %}
+          <div class="social-logins">
+            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+          </div>
+        {% endif %}
 
       </div><!-- /panel -->
     {% else %}

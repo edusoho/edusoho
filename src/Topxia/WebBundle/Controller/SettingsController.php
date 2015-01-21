@@ -615,20 +615,14 @@ class SettingsController extends BaseController
 	public function bindsAction(Request $request)
 	{
 		$user = $this->getCurrentUser();
-		$binds = array(
-			'weibo' => array(
-				'type' => '新浪微博帐号' , 'image' => '/assets/img/social/weibo.png' , 'state' => null),
-			'qq' => array(
-				'type' => 'QQ帐号' , 'image' => '/assets/img/social/qq.png' , 'state' => null),
-			'renren' => array(
-				'type' => '人人网帐号' , 'image' => '/assets/img/social/renren.gif' , 'state' => null)
-		);
+		$clients = OAuthClientFactory::clients();
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
-
 		foreach($userBinds as $userBind) {
-			$binds[$userBind['type']]['state'] = 'bind';
+			$clients[$userBind['type']]['status'] = 'bind';
 		}
-		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array('binds'=>$binds));
+		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array(
+			'clients' => $clients,
+		));
 	}
 
 	public function unBindAction(Request $request, $type)

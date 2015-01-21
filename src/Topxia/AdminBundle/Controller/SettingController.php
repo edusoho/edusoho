@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 
 use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
@@ -393,24 +394,20 @@ class SettingController extends BaseController
         $default = array(
             'login_limit'=>0,
             'enabled'=>0,
-            'weibo_enabled'=>0,
-            'weibo_key'=>'',
-            'weibo_secret'=>'',
-            'weibo_set_fill_account'=>0,
-            'qq_enabled'=>0,
-            'qq_key'=>'',
-            'qq_secret'=>'',
-            'qq_set_fill_account'=>0,
-            'renren_enabled'=>0,
-            'renren_key'=>'',
-            'renren_secret'=>'',
-            'renren_set_fill_account'=>0,
             'verify_code' => '',
             'captcha_enabled'=>0,
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
             'temporary_lock_minutes' => 20,
         );
+        
+        $clients = OAuthClientFactory::clients();
+        foreach ($clients as $type => $client) {
+            $default["{$type}_enabled"] = 0;
+            $default["{$type}_key"] = '';
+            $default["{$type}_secret"] = '';
+            $default["{$type}_set_fill_account"] = 0;
+        }
 
         $loginConnect = array_merge($default, $loginConnect);
         if ($request->getMethod() == 'POST') {
@@ -421,7 +418,8 @@ class SettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
-            'loginConnect' => $loginConnect
+            'loginConnect' => $loginConnect,
+            'clients' => $clients,
         ));
     }
 
