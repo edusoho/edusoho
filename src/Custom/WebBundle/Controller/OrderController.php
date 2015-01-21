@@ -65,6 +65,7 @@ class OrderController extends BaseController
             'itemResult' => $itemResult,
             'groupCarts' => $groupCarts,
             'role' => 'verify',
+            'process' => 'verify',
             'referer' => $referer,
             'type' => $type,
             'targetId' => $targetId
@@ -82,6 +83,14 @@ class OrderController extends BaseController
         ));
     }
     
+
+    public function submitAction(Request $request)
+    {
+        return $this->render('CustomWebBundle:Order:order-payment.html.twig', array(
+            'process' => 'payment'
+        ));
+    }
+
     private function getCourseTotalPrice($courses)
     {
         $totalPrice = 0;

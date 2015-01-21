@@ -17,12 +17,13 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-
+                $('#modal-save-btn').button('submiting').addClass('disabled');
                 $.post($form.data('url'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $('#order-verify-form .js-shipping-address').html(html);
                     Notify.success('保存成功');
                 }).fail(function(){
+                    $('#modal-save-btn').button('reset')
                     Notify.danger('保存失败!');
                 });
 

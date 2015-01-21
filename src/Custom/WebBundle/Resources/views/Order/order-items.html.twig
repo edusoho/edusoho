@@ -42,7 +42,7 @@
           <div class=" text-danger clearfix total-price" ><span class="pull-right">实付款：<strong><span class="text-danger">  ¥ </span><span data-role="total-price" class="text-danger total-price-text">0.00</span></strong></span></div>
           <div class="clearfix buyer"><span class="pull-right">购买人：{{ app.user.nickname }} {{ profile.mobile }}</span></div>
           <div class="clearfix submit-order" >
-              <span class="pull-right btn btn-sm btn-danger submit-order-btn">提交订单</span>
+              <button class="pull-right btn btn-sm btn-danger submit-order-btn" id="form-submit-btn" type="submit" data-submiting-text="正在提交..." data-toggle="form-submit" data-target="#order-verify-form">提交订单</button>
           </div>
   </div>
 

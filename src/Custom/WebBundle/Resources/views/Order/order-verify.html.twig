@@ -1,7 +1,7 @@
 {% extends 'CustomWebBundle:Order:layout.html.twig' %}
 
 {% block orderbody %}
-<form class="form-horizontal" id="order-verify-form">
+<form class="form-horizontal" id="order-verify-form" action="{{ path('order_submit') }}" method="post">
   <div class="row">
     {# 确认用户信息 #}
     {% include 'CustomWebBundle:Order:order-user.html.twig' %}
@@ -18,6 +18,8 @@
     {# 订单信息 #}
     {% include 'CustomWebBundle:Order:order-items.html.twig' %}
   </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
 {% endblock %}
