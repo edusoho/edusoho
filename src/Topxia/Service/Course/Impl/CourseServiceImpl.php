@@ -1283,7 +1283,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$memberFields = array();
 		$memberFields['learnedNum'] = count($learns);
-		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+		$course = $this->getCourseDao()->getCourse($courseId);
+                          if ($course['serializeMode'] != 'serialize' ) {
+                            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+                          }
 		$memberFields['credit'] = $totalCredits;
 		if($course['status'] == 'published' ){
 			$this->getStatusService()->publishStatus(array(
