@@ -47,7 +47,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form">保存</button>
+    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{default.user_name}}">保存</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   <script>app.load('course-manage/set-expiryday-modal')</script>

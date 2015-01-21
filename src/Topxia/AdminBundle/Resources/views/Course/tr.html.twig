@@ -49,7 +49,7 @@
         <li class="divider"></li>
 
         {% if course.status == 'published' %}
-          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id}) }}" data-user="{{default.user_name}}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
         {% endif %}
 
         {% if course.status != 'published' %}
@@ -59,7 +59,7 @@
         <li class="divider"></li>
 
         <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}"
-        data-charpter="{{default.chapter_name}}" data-part="{{default.part_name}}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
+        data-charpter="{{default.chapter_name}}" data-part="{{default.part_name}}" data-user="{{default.user_name}}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
       </ul>
     </div>
   </td>
