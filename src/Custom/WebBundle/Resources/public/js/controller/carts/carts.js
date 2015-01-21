@@ -125,7 +125,6 @@ define(function(require,exports,module){
             this.trigger('selectedItems');
             var items = [];
             items = this.get('cartsIds');
-
             var self = this;
             var priceTotal = 0;
 

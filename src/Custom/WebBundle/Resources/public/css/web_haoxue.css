@@ -384,7 +384,7 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   height: 28px;
 }
 #order-verify-form legend {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   font-size: 16px;
 }
 #order-verify-form fieldset {
@@ -400,19 +400,19 @@ ul.sort-ul.sub-course-media li.placeholder:before {
   padding: 10px;
   border: 2px solid #cc0000;
 }
-.order-verify .total-price {
+#order-verify-form .order-verify-good .total-price {
   margin-right: 50px;
 }
-.order-verify .total-price-text {
+#order-verify-form .order-verify-good .total-price-text {
   font-size: 20px;
 }
-.order-verify .buyer {
+#order-verify-form .order-verify-good .buyer {
   margin-right: 50px;
 }
-.order-verify .submit-order {
+#order-verify-form .order-verify-good .submit-order {
   margin-top: 10px;
 }
-.order-verify .submit-order-btn {
+#order-verify-form .order-verify-good .submit-order-btn {
   margin-right: 50px;
 }
 #shipping-address-from .form-control[readonly] {
