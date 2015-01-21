@@ -158,7 +158,7 @@ class DataDict
 			'nickname' => '用户名',
 			'email' => '邮件地址',
 			'loginIp' => '登录IP'
-		),
+		),		
 		'logLevel' => array(
 			'info' => '提示',
 			'warning' => '警告',
@@ -195,6 +195,10 @@ class DataDict
 			'renren' => '人人连接',
 			'qq' => 'QQ登录',
 			'douban' => '豆瓣连接'
+		),
+		'userKeyWordTypes' => array(
+			'nickname' => '用户名',
+			'email' => '邮件地址',
 		),
 		'questionType' => array(
 	    	'single_choice' => '单选题',

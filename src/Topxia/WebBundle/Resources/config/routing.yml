@@ -782,6 +782,10 @@ course_manage_testpaper_item_picked:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
 
+course_manage_testpaper_get_question_num:
+    pattern: /course/{courseId}/manage/testpaper/get_question_num
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:getQuestionCountGroupByTypes}
+
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create
     defaults: { _controller: TopxiaWebBundle:CourseChapterManage:create }

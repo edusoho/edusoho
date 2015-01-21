@@ -4005,6 +4005,25 @@ body {
 	bottom: 0px;
 }
 
+.slide-player-full-window {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.slide-player-fullscreen {
+  position: fixed;
+  overflow: hidden;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
 .modal-body .lesson-preview-ppt {
 	position: relative;
 	min-height: 500px;
@@ -4044,10 +4063,6 @@ body {
 .slide-player-control .fullscreen {
 	float: right;
 	margin-left: 15px;
-}
-
-.lt-ie9 .slide-player-control .fullscreen {
-	display: none;
 }
 
 .slide-player-control .goto-first {
@@ -4835,4 +4850,8 @@ a.homework-essay-textarea-pack-up{
 .nav-course-buy-btn{
 	padding-bottom: 8px;
     padding-top: 8px;
+}
+.question-num {
+	display:inline-block;
+	width: 25px;
 }

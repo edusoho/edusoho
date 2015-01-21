@@ -43,7 +43,7 @@
           {% elseif app.code|lower == 'questionplus' %}
             <a href="../question/plumber/setting" class="btn btn-primary">管理</a>
           {% elseif app.code|lower in ['homework', 'materiallib'] %}
-          {% elseif app.code|lower != 'main' %}
+          {% elseif app.code|lower != 'main' and app.type == 'plugin' %}
             <a href="../{{ app.code|lower }}/index" class="btn btn-primary">管理</a>
           {% endif %}
 
