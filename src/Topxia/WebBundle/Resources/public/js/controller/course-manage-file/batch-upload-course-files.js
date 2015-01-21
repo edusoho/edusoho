@@ -144,6 +144,7 @@ define(function(require, exports, module) {
 
         chunkUpload.on("upload_success_handler", function(file, serverData, fileIndex) {
         	serverData = $.parseJSON(serverData);
+            
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
             var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov";
@@ -169,6 +170,11 @@ define(function(require, exports, module) {
             } else {
                 serverData.mimeType=file.type;
             }
+
+            if('*.ppt;*.pptx'.indexOf(getFileExt(file.name)[0])>-1){
+                serverData.lazyConvert = 1;
+            } 
+
             if (this.element.data('callback')) {
                 var url = this.element.data('callback');
                 if(serverData.lazyConvert == 1){
