@@ -6,6 +6,7 @@ use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
+use Topxia\Service\Util\LiveClientFactory;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
