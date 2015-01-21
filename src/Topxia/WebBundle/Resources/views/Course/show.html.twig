@@ -102,7 +102,7 @@
 
 
                         {% if courseMemberLevel %}
-                            <div class="pull-right course-card-btn col-md-12 col-lg-6 row">
+                            <div class="pull-right course-card-btn col-md-12 col-lg-6 col-sm-12 row">
 
                                 {% if checkMemberLevelResult == 'not_login' %}
                                     <a href="{{ path('login') }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6">{{ courseMemberLevel.name }}，免费学</a>  

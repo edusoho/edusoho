@@ -1959,12 +1959,23 @@ body {
 	border-radius: 0;
 }
 
+.course-list-block .price-num {
+	color: #d9534f;
+}
+
 .label-discount {
 	border-radius: 0;
 	padding: 4px 8px;
 	position: relative;
 	top: -8px;
 	left: 8px;
+}
+
+.label-discount-list {
+	margin-left: 8px;
+	border-radius: 0;
+	padding: 4px 8px;
+	position: relative;
 }
 
 .label-discount s{
