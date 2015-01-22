@@ -19,4 +19,5 @@
 	    <a href="#modal" data-url="{{ path('user_shipping_address', {id:shippingAddress.id|default(0)}) }}" data-toggle="modal">新增收货地址</a>
 	  </div>
 	</div>
+	<input type="hidden" name="shippingAddressId" value="{{ shippingAddress.id|default(0) }}">
 {% endif %}
