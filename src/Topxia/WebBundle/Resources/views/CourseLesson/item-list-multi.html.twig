@@ -23,7 +23,7 @@
 							<i class="fa fa-file-powerpoint-o"></i>
 						{% elseif item.type == 'testpaper' %}
 							<i class="fa fa-file-text-o"></i>
-						{% elseif item.type == 'courseware' %}
+						{% elseif item.type == 'document' %}
 							<i class="fa fa-files-o"></i>
 						{% endif %}
 						{% if item.status == 'published' %}
@@ -36,7 +36,7 @@
 									{{ item.length|duration }}
 								{% elseif item.type == 'ppt' %}
 									PPT
-								{% elseif item.type == 'courseware' %}
+								{% elseif item.type == 'document' %}
 									课件
 								{% else %}
 									{{ item.length|duration }}

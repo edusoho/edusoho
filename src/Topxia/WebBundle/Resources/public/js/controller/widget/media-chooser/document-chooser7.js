@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     require('jquery.perfect-scrollbar');
     var Notify = require('common/bootstrap-notify');
 
-    var CoursewareChooser = BaseChooser.extend({
+    var documentChooser = BaseChooser.extend({
         attrs: {
             uploaderSettings: {
                 file_types : "*.doc;*.pdf",
@@ -40,12 +40,12 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-            CoursewareChooser.superclass.setup.call(this);
+            documentChooser.superclass.setup.call(this);
         }
 
     });
 
-    module.exports = CoursewareChooser;
+    module.exports = documentChooser;
 
 });
 

@@ -560,9 +560,9 @@ class AudioConvertor
     }
 }
 
-class CoursewareConvertor
+class DocumentConvertor
 {
-    const NAME = 'courseware';
+    const NAME = 'document';
 
     public function saveConvertResult($file, $result)
     {   

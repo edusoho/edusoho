@@ -530,20 +530,20 @@ define(function(require, exports, module) {
                         }, 'json');
                     }
 
-                    else if (lesson.type == 'courseware' ) {
+                    else if (lesson.type == 'document' ) {
 
-                        $.get(that.get('courseUri') + '/lesson/' + id + '/courseware', function(response) {
+                        $.get(that.get('courseUri') + '/lesson/' + id + '/document', function(response) {
                             if (response.error) {
                                 var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
-                                $("#lesson-courseware-content").html(html).show();
+                                $("#lesson-document-content").html(html).show();
                                 return ;
                             }
 
                             var html = '<iframe id=\'viewerIframe\' width=\'100%\' height=\'100%\'></iframe>';
-                            $("#lesson-courseware-content").html(html).show();
+                            $("#lesson-document-content").html(html).show();
 
                             var player = new DocumentPlayer({
-                                element: '#lesson-courseware-content',
+                                element: '#lesson-document-content',
                                 swfFileUrl:response.swfUri,
                                 pdfFileUrl:response.pdfUri
                             });

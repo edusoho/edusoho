@@ -347,7 +347,7 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function coursewareAction(Request $request, $courseId, $lessonId)
+    public function documentAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
@@ -359,7 +359,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        if ($lesson['type'] != 'courseware' or empty($lesson['mediaId'])) {
+        if ($lesson['type'] != 'document' or empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
 

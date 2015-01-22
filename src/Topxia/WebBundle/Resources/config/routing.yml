@@ -309,9 +309,9 @@ course_lesson_ppt:
     pattern:  /course/{courseId}/lesson/{lessonId}/ppt
     defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
 
-course_lesson_courseware:
-    pattern:  /course/{courseId}/lesson/{lessonId}/courseware
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:courseware }
+course_lesson_document:
+    pattern:  /course/{courseId}/lesson/{lessonId}/document
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:document }
 
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
