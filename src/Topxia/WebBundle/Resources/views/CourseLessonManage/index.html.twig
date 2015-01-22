@@ -19,14 +19,14 @@
 
 			<div class="btn-group">
 			  <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
-			    <i class="glyphicon glyphicon-plus"></i> 章节 <span class="caret"></span>
+			    <i class="glyphicon glyphicon-plus"></i> {% if setting('default.chapter_name') %}{{setting('default.chapter_name')}}{% else %}章{% endif %}{% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %} <span class="caret"></span>
 			  </button>
 			  <ul class="dropdown-menu" role="menu">
 			    <li>
-			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 章</a>
+			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 {% if setting('default.chapter_name') %}{{setting('default.chapter_name')}}{% else %}章{% endif %}</a>
 			    </li>
 			    <li>
-			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 小节</a>
+			      <a href="#" id="chapter-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit'}) }}"><i class="glyphicon glyphicon-plus"></i> 添加 {% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %}</a>
 			    </li>
 			  </ul>
 			</div>

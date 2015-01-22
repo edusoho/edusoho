@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}课程学员{% endblock %}
+{% block title %}课程{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
 

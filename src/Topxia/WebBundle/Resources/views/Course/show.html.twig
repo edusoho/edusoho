@@ -60,7 +60,7 @@
 				</p>
 				{% if course.showStudentNumType == 'opened' %}
 				<p>
-					学员数：
+					{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}数：
 					<span class="member-num">{{ course.studentNum }}</span>
 					<span class="member-text">人</span>
 				</p>

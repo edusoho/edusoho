@@ -54,12 +54,13 @@ class LiveCourseController extends BaseController
                 $paginator->getPerPageCount()
             );
         }
-        
+         $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
             'status' => $status,
             'lessons' => $lessons,
             'courses' => $courses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'default'=> $default
         ));
     }
 

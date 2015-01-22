@@ -3,7 +3,7 @@
             <tr>
               <th>课程</th>
               <th>创建者</th>
-              <th>学员数</th>
+              <th>{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}数</th>
               <th>价格</th>
             </tr>
           </thead>

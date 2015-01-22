@@ -22,13 +22,17 @@ class CourseController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
+
+        $default = $this->getSettingService()->get('default', array());
+
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses ,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator,
-            'liveSetEnabled' => $courseSetting['live_course_enabled']
+            'liveSetEnabled' => $courseSetting['live_course_enabled'],
+            'default'=> $default
         ));
     }
 

@@ -7,12 +7,12 @@
 		  {% if 'chapter' in id %}
 		    {% if item.type == 'unit' %}
 				  <li class="item chapter-item chapter-item-unit clearfix">
-				  	<span class="name">第 {{ item.number }} 节</span>
+				  	<span class="name">第 {{ item.number }} {% if setting('default.part_name') %}{{setting('default.part_name')}}{% else %}节{% endif %}</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
 		    {% else %}
 				  <li class="item chapter-item clearfix">
-				  	<span class="name">第 {{ item.number }} 章</span>
+				  	<span class="name">第 {{ item.number }} {% if setting('default.chapter_name') %}{{setting('default.chapter_name')}}{% else %}章{% endif %}</span>
 				  	<span class="title">{{ item.title }}</span>
 		  	  </li>
 		    {% endif %}

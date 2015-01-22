@@ -503,6 +503,25 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
+
+        if (isset($defaultSetting['user_name'])) {
+           $defaultSetting['user_name'] = $defaultSetting['user_name'];
+        }else{
+                $defaultSetting['user_name'] ='学员';
+        }
+
+        if (isset($defaultSetting['chapter_name'])) {
+           $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
+        }else{
+                $defaultSetting['chapter_name'] ='章';
+        }
+
+        if (isset($defaultSetting['part_name'])) {
+           $defaultSetting['part_name'] = $defaultSetting['part_name'];
+        }else{
+                $defaultSetting['part_name'] ='节';
+        }
+
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);
 
@@ -549,6 +568,9 @@ class SettingController extends BaseController
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'user_name' => '学员',
+            'chapter_name' => '章',
+            'part_name' =>'节',
         );
 
         return $default;
