@@ -122,7 +122,7 @@ class OrderController extends BaseController
         }
 
         /* TODO set not null filed for order */
-        $fields['targetId'] = 0;
+        $fields['targetId'] = 1;
         $fields['targetType'] = 'course';
         
         $goodIds = $fields['goodIds'];
