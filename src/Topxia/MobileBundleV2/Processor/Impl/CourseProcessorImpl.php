@@ -1358,7 +1358,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return array('data' =>
                 array(
                 'lesson' => $lesson,
-                'url' => $result['url'],
+                'result' => $result,
             ));
     }
 
