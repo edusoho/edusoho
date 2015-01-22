@@ -3,7 +3,7 @@
 {% set script_controller = 'customwebbundle/controller/order/verify' %}
 
 {% block orderbody %}
-<form class="form-horizontal" id="order-verify-form" action="{{ path('order_submit') }}" method="post">
+<form class="form-horizontal" id="order-verify-form" action="{{ path('order_create') }}" method="post">
   <div class="row">
     {# 确认用户信息 #}
     {% include 'CustomWebBundle:Order:order-user.html.twig' %}
@@ -21,6 +21,7 @@
     {% include 'CustomWebBundle:Order:order-items.html.twig' %}
   </div>
 
+  <input type="hidden" name="accountPayable" value="">
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 

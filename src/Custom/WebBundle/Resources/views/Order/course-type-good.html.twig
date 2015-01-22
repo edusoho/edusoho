@@ -2,6 +2,7 @@
 {% set course = itemResult[type]['items'][targetId] %}
 {% set subcourses = itemResult[targetId]['subcourses'] %}
 {% set users = itemResult[type]['extra']['users'] %}
+<input type="hidden" name="goodIds[course][]" value="{{ course.id|default(0) }}">
     {% include 'CustomWebBundle:Order:course-list-tr.html.twig' %}
 
 {% if course.type == 'package' %}

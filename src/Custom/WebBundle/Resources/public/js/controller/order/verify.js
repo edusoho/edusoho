@@ -62,7 +62,13 @@ define(function(require, exports, module) {
             var self = this;
             var validator = new Validator({
                 element: $form,
-                autoSubmit: true
+                autoSubmit: true,
+                onFormValidated: function(error){
+                    if (error) {
+                      return false;
+                    }
+                    $('#form-submit-btn').button('submiting').addClass('disabled');
+                }
             });
 
             validator.addItem({
@@ -88,6 +94,7 @@ define(function(require, exports, module) {
             });
 
             this.$('[data-role=total-price]').html(priceTotal.toFixed(2));
+            this.$('[name=accountPayable]').val(priceTotal.toFixed(2));
         }
     });
 

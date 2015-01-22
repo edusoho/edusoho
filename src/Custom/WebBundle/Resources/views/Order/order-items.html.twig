@@ -2,7 +2,8 @@
   <legend>确认订单信息</legend>
 
   <div class="order-verify-good">
-  {% if groupCarts|default(null) %}
+    {% if groupCarts|default(null) %}
+
       <table class="table table-hover" id="order-table">
         <thead>
             <td></td>
@@ -11,15 +12,18 @@
             <th class="text-center text-muted" width="20%">数量</th>
             <th class="text-center text-muted" width="20%">小计（元）</th>
         </thead>
+
         <tbody>
         {% for type,carts in groupCarts|default(null) %}
           {% include 'CustomWebBundle:Carts:' ~ type ~ '-type.html.twig' %}
         {% endfor %}
-      {% else %}
+    {% else %}
       {% if referer == 'cartsAction' %}
         <div> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
       {% endif %}
+
     {% endif %}
+
     {% if referer == 'showAction' %}
 
        <table class="table table-hover" id="order-table">
@@ -33,7 +37,7 @@
         <tbody>
 
       {% include 'CustomWebBundle:Order:' ~ type ~ '-type-good.html.twig' %}
-      {% else %}
+    {% else %}
         <div class="hide carts-text-help"> <p class="text-center" style="margin-top:30px">您的购物车还是空的，赶紧行动吧！</p></div>
     {% endif %}
         </tbody>

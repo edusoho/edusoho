@@ -111,11 +111,68 @@ class OrderController extends BaseController
         return $newGroupCarts;
     }
 
-    public function submitAction(Request $request)
+    public function createAction(Request $request)
     {
-        return $this->render('CustomWebBundle:Order:order-payment.html.twig', array(
-            'process' => 'payment'
-        ));
+        $fields = $request->request->all();
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
+        }
+
+        /* TODO set not null filed for order */
+        $fields['targetId'] = 0;
+        $fields['targetType'] = 'course';
+        
+        $goodIds = $fields['goodIds'];
+
+        /* TOD only calculate the course type goods */
+        $courseIds = array_unique(array_merge($goodIds['course']));
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $amount = 0;
+        foreach ($courses as $course) {
+            $amount += floatval($course['price']);
+        }
+        try {
+            $accountPayable = floatval($fields["accountPayable"]);
+            //价格比较
+            if($amount != $accountPayable) {
+                return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+            }
+
+            /* TOD hardcode fields */
+            $orderFileds = array(
+                'priceType' => 'RMB',
+                'totalPrice' => $accountPayable,
+                'amount' => $amount,
+                'coinRate' => 1,
+                'coinAmount' => 0,
+                'userId' => $user["id"],
+                'payment' => 'alipay',
+                'targetId' => 0,
+                'coupon' => null,
+                'couponDiscount' => null,
+                'needInvoice' => $fields['needInvoice'],
+                'shippingAddressId' => $fields['shippingAddressId'],
+                'invoice' => array(
+                    'title' => $fields['invoiceTitle'],
+                    'type' => $fields['invoiceType'],
+                    'comment' => $fields['invoiceComment'],
+                    'userId' => $user["id"],
+                    'amount' => $accountPayable,
+                    'createdTime' => time()
+                )
+            );
+
+            $order = $this->getCourseOrderService()->createOrder($orderFileds);
+
+            return $this->redirect($this->generateUrl('pay_center_show', array(
+                'id' => $order['id']
+            )));
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', $e->getMessage());
+        }
+
     }
 
 
@@ -162,5 +219,10 @@ class OrderController extends BaseController
     private function getShippingAddressService()
     {
         return $this->getServiceKernel()->createService('Custom:Address.ShippingAddressService');
+    }
+
+    private function getCourseOrderService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Course.CourseOrderService');
     }
 }

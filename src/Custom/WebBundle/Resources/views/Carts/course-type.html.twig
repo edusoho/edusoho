@@ -3,6 +3,7 @@
 {% for cart in carts %}
   {% set course = courses[cart.itemId] %}
   {% set favouritedCourseId = favoritedCourses[cart.itemId].id|default(null) %}
+  <input type="hidden" name="goodIds[course][]" value="{{ course.id|default(0) }}">
     {% include 'CustomWebBundle:Carts:course-list-tr.html.twig' %}
   {% if course.type == 'package' %}
     {% for subcourse in course.subcourses %}
