@@ -78,7 +78,7 @@
   </fieldset>
 
   {% for type, client in clients %}
-    <fieldset>
+    <fieldset data-role="oauth2-setting" data-type="{{ type }}">
       <legend>{{ client.name }}</legend>
       <div class="form-group">
         <div class="col-md-3 control-label">

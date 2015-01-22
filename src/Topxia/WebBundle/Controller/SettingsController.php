@@ -726,7 +726,7 @@ class SettingsController extends BaseController
 
 	private function checkBindsName($type) 
 	{
-		$types = array('weibo', 'qq', 'renren');
+		$types = array_keys(OAuthClientFactory::clients());
 		if (!in_array($type, $types)) {
 			throw new NotFoundHttpException();
 		}
