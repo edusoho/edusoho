@@ -8,7 +8,9 @@
           <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
         </a>
       {% else %}
-        {% if course.discountActivityId > 0 %}
+        {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.orignCoinPrice > 0) or
+(setting('coin.coin_enabled') and setting('coin.price_type') != 'Coin' and course.originPrice > 0) or
+(not setting('coin.coin_enabled') and course.originPrice > 0)) %}
           <span class="label label-activity">{{course.discountActivity.activityName}}</span>
         {% endif %}
         <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
@@ -27,7 +29,9 @@
       </div>
       {% endif %}
      
-        {% if course.discountActivityId == 0 %}
+        {% if not (course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.orignCoinPrice > 0) or
+(setting('coin.coin_enabled') and setting('coin.price_type') != 'Coin' and course.originPrice > 0) or
+(not setting('coin.coin_enabled') and course.originPrice > 0))) %}
             <h2 class="course-title">{{ course.title }}</h2>
             <div class="course-subtitle">{{ course.subtitle }}</div>
             <hr>
