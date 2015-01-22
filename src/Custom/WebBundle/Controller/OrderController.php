@@ -150,7 +150,7 @@ class OrderController extends BaseController
                 'coinAmount' => 0,
                 'userId' => $user["id"],
                 'payment' => 'alipay',
-                'targetId' => 0,
+                'targetId' => $fields['targetId'],
                 'coupon' => null,
                 'couponDiscount' => null,
                 'needInvoice' => $fields['needInvoice'],
