@@ -51,7 +51,7 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
             
-            if ($user['type'] == 'default') {
+            if ($user['type'] != 'default') {
             	      $this->authenticateUser($user);
                    $this->sendRegisterMessage($user);
                    $goto = $this->generateUrl('register_submited', array(
@@ -74,12 +74,12 @@ class RegisterController extends BaseController
                  $this->authenticateUser($user);
                  $this->sendRegisterMessage($user);
             }
-
+            if ($user['type'] != 'default') {
             $goto = $this->generateUrl('register_submited', array(
                 'id' => $user['id'], 'hash' => $this->makeHash($user),
                 'goto' => $this->getTargetPath($request),
             ));
-
+        }
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
