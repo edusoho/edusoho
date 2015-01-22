@@ -13,8 +13,6 @@ class PayCenterController extends BaseController
     {
         $fields = $request->request->all();
         $user = $this->getCurrentUser();
-        //test
-        $fields["orderId"] = 93;
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
@@ -56,7 +54,6 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
-
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return $this->forward("TopxiaWebBundle:Order:resultNotice");
         }
@@ -121,7 +118,6 @@ class PayCenterController extends BaseController
     {
         $options = $this->getPaymentOptions($name);
         $response = Payment::createResponse($name, $options);
-
         return $response->setParams($params);
     }
 

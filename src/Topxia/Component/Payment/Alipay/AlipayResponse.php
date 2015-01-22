@@ -63,7 +63,6 @@ class AlipayResponse extends Response
                 'service' => 'notify_verify',
                 'partner' => $this->options['key'],
             ));
-
             if (strtolower($notifyResult) !== 'true') {
                 return 'notify_verify_error';
             }
@@ -124,7 +123,6 @@ class AlipayResponse extends Response
 
         ksort($params);
         $params = array_filter($params);
-
         $sign = '';
         foreach ($params as $key => $value) {
             $sign .= $key . '=' . $value . '&';
