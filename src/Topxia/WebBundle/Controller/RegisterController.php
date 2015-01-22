@@ -51,10 +51,8 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
             
-            if($authSettings && array_key_exists('email_enabled',$authSettings)){
-               if($authSettings['email_enabled'] == 'closed'){
+            if($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') && $user['type'] == 'default'){
                         $this->authenticateUser($user);
-               }
             }
 
             $this->sendRegisterMessage($user);
