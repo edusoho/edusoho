@@ -111,9 +111,8 @@
 	  <div class="controls col-md-8 radios">
 	    {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
 	  </div>
-	  <div class="help-block">开启后,邮箱未验证的用户将无法登录</div>
 	</div>
-
+	<div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录</div>
 	<input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
   
   <fieldset>
