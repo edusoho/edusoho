@@ -344,8 +344,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 					if($course['originCoinPrice'] != 0){
 						$fields['coinPrice'] = $fields['coinPrice']*($course['coinPrice']/$course['originCoinPrice']);
 					}
-				}
-				$this->getDiscountActivityService()->createDiscountActivityTask(time());
+				}				
+			}
+			try{
+				$this->getDiscountActivityService()->createDiscountActivityTask(time(), $isUnixTimeStamp = true);
+			}catch (Exception $e){
+				
 			}
 		}		
 		$fields = $this->_filterCourseFields($fields);
