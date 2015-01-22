@@ -52,6 +52,7 @@ class RegisterController extends BaseController
             $user = $this->getAuthService()->register($registration);
             
             if ($user['type'] != 'default') {
+                var_dump(11);exit();
             	      $this->authenticateUser($user);
                    $this->sendRegisterMessage($user);
                    $goto = $this->generateUrl('register_submited', array(
