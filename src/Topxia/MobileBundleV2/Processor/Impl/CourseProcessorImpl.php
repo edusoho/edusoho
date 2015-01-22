@@ -1286,7 +1286,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getUserNum(){
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
+            return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
 
         $conditions = array(
