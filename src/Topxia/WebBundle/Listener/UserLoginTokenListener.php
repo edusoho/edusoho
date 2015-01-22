@@ -42,7 +42,7 @@ class UserLoginTokenListener
         $auth = $this->getSettingService()->get('auth');
 
         if($auth && array_key_exists('email_enabled',$auth) 
-        	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0){
+        	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0 && $user['type'] == 'default'){
            if($auth['email_enabled'] == 'opened'){
                 $request->getSession()->invalidate();
                 $this->container->get("security.context")->setToken(null);

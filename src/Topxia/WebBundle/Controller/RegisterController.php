@@ -50,36 +50,17 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
-            
-            if ($user['type'] != 'default') {
-            	      $this->authenticateUser($user);
-                   $this->sendRegisterMessage($user);
-                   $goto = $this->generateUrl('register_submited', array(
-                    'id' => $user['id'], 'hash' => $this->makeHash($user),
-                    'goto' => $this->getTargetPath($request),
-                ));
-
-                if ($this->getAuthService()->hasPartnerAuth()) {
-                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-                }
-
-                $mailerSetting=$this->getSettingService()->get('mailer');
-                if(!$mailerSetting['enabled']){
-                    return $this->redirect($this->getTargetPath($request));
-                }
-                return $this->redirect($goto);
-            }
 
             if($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed')){
                  $this->authenticateUser($user);
                  $this->sendRegisterMessage($user);
             }
-            if ($user['type'] != 'default') {
+
             $goto = $this->generateUrl('register_submited', array(
                 'id' => $user['id'], 'hash' => $this->makeHash($user),
                 'goto' => $this->getTargetPath($request),
             ));
-        }
+
             if ($this->getAuthService()->hasPartnerAuth()) {
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
