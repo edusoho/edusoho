@@ -346,12 +346,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 					}
 				}				
 			}
-			try{
+
+	        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
+	        $isPluginInstalled = !is_null($plugin);
+	        
+			if ($isPluginInstalled)	{
 				$this->getDiscountActivityService()->createDiscountActivityTask(time(), $isUnixTimeStamp = true);
-			}catch (Exception $e){
-				
-			}
-		}		
+			}	
+		}	
+
 		$fields = $this->_filterCourseFields($fields);
 
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
@@ -2475,6 +2478,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		return $this->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
 	}    
+
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform.AppService');
+    }	
 
 }
 
