@@ -13,6 +13,49 @@ class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 		return $this->getReviewPostDao()->getReviewPost($id);
 	}
 
+	public function saveReview($fields)
+	{
+		if (!ArrayToolkit::requireds($fields, array('courseId', 'userId', 'rating'))) {
+			throw $this->createServiceException('参数不正确，评价失败！');
+		}
+
+		list($course, $member) = $this->getCourseService()->tryTakeCourse($fields['courseId']);
+
+		$userId = $this->getCurrentUser()->id;
+
+		if (empty($course)) {
+			throw $this->createServiceException("课程(#{$fields['courseId']})不存在，评价失败！");
+		}
+		$user = $this->getUserService()->getUser($fields['userId']);
+		if (empty($user)) {
+			return $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
+		}
+
+		$review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
+		if (empty($review)) {
+			$review = $this->getReviewDao()->addReview(array(
+				'userId' => $fields['userId'],
+				'courseId' => $fields['courseId'],
+				'rating' => $fields['rating'],
+				'content' => empty($fields['content']) ? '' : $fields['content'],
+				'createdTime' => time(),
+			));
+		} else {
+  			$reviewPost = array(
+  				'courseId'=>$review['courseId'],
+  				'reviewId'=>$review['id'],
+  				'userId' =>$user['id'],
+  				'content'=>$fields['content'],
+  				'createdTime'=>time()
+  			);
+  			$this->saveReviewPost($reviewPost);
+		}
+
+		$this->calculateCourseRating($course['id']);
+
+		return $review;
+	}
+
 	public function saveReviewPost($fields)
 	{
 		if (!ArrayToolkit::requireds($fields, array('courseId', 'reviewId','userId', 'content'))) {
@@ -50,8 +93,17 @@ class ReviewServiceImpl extends BaseReviewServiceImpl implements ReviewService
 		}
 		$post['content']=$fields['content'];
 		return $this->getReviewPostDao()->updateReviewPost($id,$post);
+	}
 
-		
+	private function calculateCourseRating($courseId)
+	{
+		$ratingSum = $this->getReviewDao()->getReviewRatingSumByCourseId($courseId);
+		$ratingNum = $this->getReviewDao()->getReviewCountByCourseId($courseId);
+
+		$this->getCourseService()->updateCourseCounter($courseId, array(
+			'rating' => $ratingNum ? $ratingSum / $ratingNum : 0,
+			'ratingNum' => $ratingNum,
+		));
 	}
 
 	public function findReviewPostsByReviewIds(array $reviewIds)

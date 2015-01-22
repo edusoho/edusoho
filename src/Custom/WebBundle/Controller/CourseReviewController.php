@@ -113,7 +113,7 @@ class CourseReviewController extends BaseController
         if(in_array($user['id'], $course['teacherIds']) || $user->isAdmin()){
             $canPost=1;
         }
-
+        $selfReview = $this->getReviewService()->getUserCourseReview($user['id'],$course['id']);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getReviewService()->getCourseReviewCount($id)
@@ -131,6 +131,7 @@ class CourseReviewController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
             'course' => $course,
+            'selfReview' => $selfReview,
             'reviews' => $reviews,
             'reviewPosts' => $reviewPosts,
             'users' => $users,
