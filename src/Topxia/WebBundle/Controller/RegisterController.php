@@ -50,7 +50,7 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
-            
+            var_dump($user);exit();
             if ($user['type'] != 'default') {
             	      $this->authenticateUser($user);
                    $this->sendRegisterMessage($user);
