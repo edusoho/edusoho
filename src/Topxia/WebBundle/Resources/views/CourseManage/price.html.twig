@@ -26,10 +26,9 @@
                                                         <div class="help-block" {#style="display:none;"#}>
                                                             {% if course.discountActivityId > 0 %}
                                                                 <br>
-                                                                <span class="text-muted" style="white-space: normal;">
-                                                                    原价{{ course.originCoinPrice }}{{setting('coin.coin_name')}}，
-                                                                    当前为“{{ course.discountActivity.activityName }}”活动价格（折扣），活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                    
+                                                                <span class="text-muted" style="white-space: normal;">                    
+                                                                    当前为“{{ course.discountActivity.activityName }}”活动价格，活动中修改的价格都将有活动折扣，请谨慎修改 
+                                                                    原价{{ course.originCoinPrice }}{{setting('coin.coin_name')}}
                                                                 </span>
                                                             {% endif %}                                                             
                                                         </div>
@@ -47,8 +46,8 @@
                                                             {% if course.discountActivityId > 0 %}
                                                                 <br>
                                                                 <span class="text-muted" style="white-space: normal;">
-                                                                    当前为“{{ course.discountActivity.activityName }}，”活动价格（折扣），活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                    原价{{ course.originPrice }}元
+                                                                    当前为“{{ course.discountActivity.activityName }}”活动价格，活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                     原价{{ course.originPrice }}元
                                                                 </span>
                                                             {% endif %}                                                            
         						</div>
@@ -67,8 +66,8 @@
                                                                 {% if course.discountActivityId > 0 %}
                                                                     <br>
                                                                     <span class="text-muted" style="white-space: normal;">
-                                                                        当前为“{{ course.discountActivity.activityName }}，”活动价格（折扣），活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                        原价{{ course.originPrice }}元
+                                                                        当前为“{{ course.discountActivity.activityName }}”活动价格，活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                         原价{{ course.originPrice }}元
                                                                     </span>
                                                                 {% endif %}                                                                
         						</div>
@@ -85,8 +84,8 @@
                                                     <div class="help-block" >
                                                         {% if course.discountActivityId > 0 %}
                                                             <span class="text-muted" style="white-space: normal;">
-                                                                当前为“{{ course.discountActivity.activityName }}，”活动价格（折扣），活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                原价{{ course.originPrice }}元
+                                                                当前为“{{ course.discountActivity.activityName }}”活动价格，活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                 原价{{ course.originPrice }}元
                                                             </span>
                                                         {% endif %}
                                                     </div>
