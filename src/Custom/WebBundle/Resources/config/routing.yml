@@ -217,3 +217,20 @@ user_shipping_address:
 ajax_user_profile_update:
     pattern: /user/profile/update
     defaults: { _controller: CustomWebBundle:AjaxUserProfile:update }
+
+pay_center_pay:
+    path:   /pay/center/pay
+    defaults: { _controller: CustomWebBundle:PayCenter:pay }
+    methods: [POST]
+
+pay_return:
+    pattern:  /pay/center/pay/{name}/return
+    defaults: { _controller: CustomWebBundle:PayCenter:payReturn }
+
+pay_notify:
+    pattern:  /pay/center/pay/{name}/notify
+    defaults: { _controller: CustomWebBundle:PayCenter:payNotify }
+
+pay_success_show:
+    pattern:  /pay/center/success/show
+    defaults: { _controller: CustomWebBundle:PayCenter:showTarget }

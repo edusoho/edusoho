@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Component\Payment\Payment;
 
 class OrderController extends BaseController
 {
@@ -124,6 +125,58 @@ class OrderController extends BaseController
         return $this->render('CustomWebBundle:Order:order-finish.html.twig', array(
             'process' => 'finish'
         ));
+    }
+
+    public function submitPayRequestAction(Request $request , $order, $requestParams)
+    {
+        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
+        return $this->render('CustomWebBundle:Order:submit-pay-request.html.twig', array(
+            'form' => $paymentRequest->form(),
+            'order' => $order,
+        ));
+    }
+
+    private function createPaymentRequest($order, $requestParams)
+    {
+        $options = $this->getPaymentOptions($order['payment']);
+        $request = Payment::createRequest($order['payment'], $options);
+
+        $requestParams = array_merge($requestParams, array(
+            'orderSn' => $order['sn'],
+            'title' => $order['title'],
+            'summary' => '',
+            'amount' => $order['amount'],
+        ));
+        return $request->setParams($requestParams);
+    }
+
+    private function getPaymentOptions($payment)
+    {
+        $settings = $this->setting('payment');
+
+        if (empty($settings)) {
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings['enabled'])) {
+            throw new \RuntimeException("支付模块未开启，请先开启。");
+        }
+
+        if (empty($settings[$payment. '_enabled'])) {
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+
+        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+        }
+
+        $options = array(
+            'key' => $settings["{$payment}_key"],
+            'secret' => $settings["{$payment}_secret"],
+            'type' => $settings["{$payment}_type"]
+        );
+
+        return $options;
     }
 
     private function getCourseTotalPriceAndUserIds($course,$subcourses)
