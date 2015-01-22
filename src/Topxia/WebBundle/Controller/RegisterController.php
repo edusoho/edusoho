@@ -169,8 +169,7 @@ class RegisterController extends BaseController
         }
 
         $auth = $this->getSettingService()->get('auth');
-        if($auth && array_key_exists('email_enabled',$auth)){
-           if($auth['email_enabled'] == 'opened'){
+        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') ){
                return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
@@ -185,7 +184,6 @@ class RegisterController extends BaseController
                 '_target_path' => $this->getTargetPath($request),
                 ));
            }
-        }
     }
 
     private function getTargetPath($request)
