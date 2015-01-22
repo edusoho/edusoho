@@ -192,18 +192,16 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->controller->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses,'id');
+        var_dump($courses);
+        exit();
         $sortedCourses = array();
-        try{
-            foreach ( $courseIds as $value){
-                if(!empty($value))
+        foreach ( $courseIds as $value){
+            if(!empty($value))
+                if(array_key_exists($value, $courses)){
                     $sortedCourses[] = $courses[$value];
-            } 
-        }catch(Exception $e){
-            
-        }
-        
-
-
+                }
+        } 
+         
         $result = array(
             "start"=>0,
             "limit"=>3,
