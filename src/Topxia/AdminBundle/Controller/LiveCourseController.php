@@ -69,4 +69,8 @@ class LiveCourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }
