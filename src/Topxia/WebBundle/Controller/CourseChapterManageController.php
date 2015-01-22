@@ -17,17 +17,19 @@ class CourseChapterManageController extends BaseController
         	$chapter = $request->request->all();
         	$chapter['courseId'] = $course['id'];
         	$chapter = $this->getCourseService()->createChapter($chapter);
+        		$default = $this->getSettingService()->get('default', array());
 			return $this->render('TopxiaWebBundle:CourseChapterManage:list-item.html.twig', array(
 				'course' => $course,
 				'chapter' => $chapter,
+				 'default'=> $default
 			));
         }
-	$default = $this->getSettingService()->get('default', array());
+
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
             'type' => $type,
             'parentId' => $parentId,
-             'default'=> $default
+
 		));
 	}
 
