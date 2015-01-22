@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\SimpleValidator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
@@ -580,9 +581,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('解除第三方绑定失败，该用户不存在');
         }
 
-        $result = in_array($type, array('qq','renren','weibo'),true);
-        if(!$result) {
-            throw $this->createServiceException('解除第三方绑定失败,当前只支持weibo,qq,renren');
+        $types = array_keys(OAuthClientFactory::clients());
+        if(!in_array($type, $types)) {
+            throw $this->createServiceException("{$type}类型不正确，解除第三方绑定失败。");
         }
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
         if($bind){
@@ -603,9 +604,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
         }
 
-        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
-        if(!$result) {
-            throw $this->createServiceException('获取第三方登录信息失败,当前只支持weibo,qq,renren');
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, array('discuz', 'phpwind'));
+
+        if(!in_array($type, $types)) {
+            throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
 
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
@@ -617,9 +620,12 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，第三方绑定失败');
         }
-        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
-        if(!$result) {
-            throw $this->createServiceException('第三方绑定失败,当前只支持weibo,qq,renren, discuz, phpwind');
+
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, array('discuz', 'phpwind'));
+
+        if(!in_array($type, $types)) {
+            throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
         }
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,

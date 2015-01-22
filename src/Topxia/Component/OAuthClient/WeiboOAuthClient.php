@@ -58,14 +58,6 @@ class WeiboOAuthClient extends AbstractOAuthClient
     	return $info;
     }
 
-    public function getClientInfo()
-    {
-        return array(
-            'type' => 'weibo',
-            'name' => '微博',
-        );
-    }
-
     private function checkError($userInfo)
     {
         if (!array_key_exists('error_code', $userInfo)) {
