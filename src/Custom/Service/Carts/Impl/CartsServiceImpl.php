@@ -26,7 +26,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
     public function getCartsCount()
     {
         $userId = $this->getCurrentUser()->id;
-        $userKey = $_COOKIE['user-key'];
+        $userKey = empty($_COOKIE['user-key'])? '' : $_COOKIE['user-key'];
         if($userId) {
             $carts = $this->findCartsByUserId($userId);
         } else {
@@ -60,7 +60,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
     {
         $fields = $this->_filterCartFields($fields);
         $userId = $this->getCurrentUser()->id;
-        $userKey = $_COOKIE['user-key'];
+        $userKey = empty($_COOKIE['user-key'])? '' : $_COOKIE['user-key'];
         $fields['userId'] = $userId;
         $fields['userKey'] = $userKey;
         if($userId) {
@@ -105,7 +105,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
     public function findCurrentUserCarts()
     {
         $userId = $this->getCurrentUser()->id;
-        $userKey = $_COOKIE['user-key'];
+        $userKey = empty($_COOKIE['user-key'])? '' : $_COOKIE['user-key'];
         if($userId) {
             $carts = $this->findCartsByUserId($userId);
         } else {
@@ -126,7 +126,7 @@ class CartsServiceImpl extends BaseService  implements CartsService
     public function persistCarts($userId)
     {
         /* TODO 如果有数量的时候要加1,现在先不考虑,如果直接在数据库中找出相同的cart,就不用遍历了! */
-        $userKey = $_COOKIE['user-key'];
+        $userKey = empty($_COOKIE['user-key'])? '' : $_COOKIE['user-key'];
         $carts = $this->findCartsByUserKey($userKey);
         $existCarts = $this->findCartsByUserId($userId);
         if($carts) {
