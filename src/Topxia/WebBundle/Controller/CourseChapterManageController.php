@@ -24,12 +24,12 @@ class CourseChapterManageController extends BaseController
 				 'default'=> $default
 			));
         }
-
+        		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseChapterManage:chapter-modal.html.twig', array(
 			'course' => $course,
             'type' => $type,
             'parentId' => $parentId,
-
+	'default'=> $default
 		));
 	}
 
