@@ -51,12 +51,8 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
             
-            if ($user['type'] != 'default') {
+            if (($user['type'] != 'default') ||($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed'))) {
             	   $this->authenticateUser($user);
-            }
-
-            if($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed')){
-                 $this->authenticateUser($user);
             }
 
             $this->sendRegisterMessage($user);
@@ -168,6 +164,15 @@ class RegisterController extends BaseController
 
         if (empty($user)) {
             throw $this->createNotFoundException();
+        }
+
+        if($user['type'] != 'default'){
+                return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
         }
 
         $auth = $this->getSettingService()->get('auth');
