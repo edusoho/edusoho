@@ -52,9 +52,7 @@ define(function(require, exports, module) {
               var $parent = $('#'+$form.data('parentid'));
               if ($item.length) {
                   $item.replaceWith(html);
-                  var chapter_name = $('#course-chapter-btn').data('chapter') ;
-                  var part_name = $('#course-chapter-btn').data('part') ;
-                  Notify.success(''+chapter_name+''+part_name+'信息已保存');
+                  Notify.success('信息已保存');
               } else {
                  if($parent.length){
                   var add = 0;
@@ -76,9 +74,8 @@ define(function(require, exports, module) {
                     $("#course-item-list").append(html);
                     $(".lesson-manage-panel").find('.empty').remove();
                  }
-                  var chapter_name = $('#course-chapter-btn').data('chapter') ;
-                  var part_name = $('#course-chapter-btn').data('part') ; 
-                  Notify.success(''+chapter_name+''+part_name+'添加成功');
+
+                  Notify.success('添加成功');
 
               }
               $(id).find('.btn-link').tooltip();
