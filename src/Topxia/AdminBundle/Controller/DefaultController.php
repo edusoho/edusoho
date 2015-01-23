@@ -300,10 +300,26 @@ class DefaultController extends BaseController
     public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
-            array('type' => 'question', 'postNum' => 0),
+            array('type' => 'question'),
             'createdNotStick',
             0,5
         );
+
+        $unPostedQuestion = array();
+        foreach ($questions as $key => $value) {
+            if ($value['postNum'] == 0) {
+                $unPostedQuestion[] = $value;
+            }else{
+                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
+                $userPostsNum = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'],$value['id']);
+                    if($userPostsNum == $threadPostsNum){
+                        $unPostedQuestion[] = $value;
+                    }
+            }
+        }
+
+        $questions = $unPostedQuestion;
+
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $askers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));

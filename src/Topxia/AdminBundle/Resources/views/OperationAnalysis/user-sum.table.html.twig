@@ -20,6 +20,7 @@
                   {% elseif data.type=="renren" %}人人
                   {% elseif data.type=="discuz" %}discuz
                   {% elseif data.type=="phpwind" %}phpwind
+                  {% else %}其他
                   {% endif %}</td>
                 <td>{{data.createdIp}}</td>
                 <td>{{data.createdTime|date("Y-m-d H:i:s")}}</td>

@@ -668,10 +668,11 @@ class CourseController extends BaseController
 			$this->getCourseService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
 			return $this->createJsonResponse(true);
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:set-expiryday-modal.html.twig', array(
 			'course' => $course,
-			'user' => $user
+			'user' => $user,
+			 'default'=> $default
 		));
 	}
 
