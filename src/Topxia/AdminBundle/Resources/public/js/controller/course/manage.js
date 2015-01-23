@@ -32,7 +32,7 @@ define(function(require, exports, module) {
 		});
 
 		$table.on('click', '.delete-course', function() {
-			var chapter_name = $(this).data('charpter') ;
+			var chapter_name = $(this).data('chapter') ;
 			var part_name = $(this).data('part') ;
 			var user_name = $(this).data('user') ;
 			if (!confirm('删除课程，将删除课程的'+chapter_name+''+part_name+'、课时、'+user_name+'信息。真的要删除该课程吗？')) {
