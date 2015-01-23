@@ -38,7 +38,7 @@ class Version20150123161655 extends AbstractMigration
             CREATE TABLE IF NOT EXISTS `classroom_review` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL DEFAULT '0',
-              `classId` int(10) unsigned NOT NULL DEFAULT '0',
+              `classroomId` int(10) unsigned NOT NULL DEFAULT '0',
               `title` varchar(255) NOT NULL DEFAULT '',
               `content` text NOT NULL,
               `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评分0-5',
@@ -49,7 +49,7 @@ class Version20150123161655 extends AbstractMigration
         $this->addSql("
            CREATE TABLE IF NOT EXISTS `thread` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-              `targetaType` varchar(255) NOT NULL DEFAULT 'class_thread' COMMENT '所属 类型',
+              `targetaType` varchar(255) NOT NULL DEFAULT 'classroom_thread' COMMENT '所属 类型',
               `targetId` int(10) unsigned NOT NULL DEFAULT '0',
               `title` varchar(255) NOT NULL,
               `content` text,
