@@ -24,7 +24,7 @@
         					<div class="col-md-8 controls">
         						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.coinOriginPrice}}" data-cashrate="{{cashRate}}">
                                                         <div class="help-block" {#style="display:none;"#}>
-                                                            {% if course.discountActivityId > 0 %}
+                                                            {% if course.discountActivityId > 0 and course.status == 'published' %}
                                                                 <br>
                                                                 <span class="text-muted" style="white-space: normal;">                    
                                                                     当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -55,7 +55,7 @@
         						<input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
         						<div class="help-block">
                                                             因手机端不支持虚拟币支付，价格仍显示为人民币价格
-                                                            {% if course.discountActivityId > 0 %}
+                                                            {% if course.discountActivityId > 0 and course.status == 'published'  %}
                                                                 <br>
                                                                 <span class="text-muted" style="white-space: normal;">
                                                                     当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -87,7 +87,7 @@
         						<input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
         						<div class="help-block" >
         							<span class="text-muted">{{cashRate}}{{setting('coin.coin_name')}}可抵扣１元</span>
-                                                                {% if course.discountActivityId > 0 %}
+                                                                {% if course.discountActivityId > 0 and course.status == 'published' %}
                                                                     <br>
                                                                     <span class="text-muted" style="white-space: normal;">
                                                                         当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -118,7 +118,7 @@
                                                     <input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
         					
                                                     <div class="help-block" >
-                                                        {% if course.discountActivityId > 0 %}
+                                                        {% if course.discountActivityId > 0  and course.status == 'published' %}
                                                             <span class="text-muted" style="white-space: normal;">
                                                                 当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             {% if course.coinPrice > 0 %}
