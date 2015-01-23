@@ -158,7 +158,7 @@
       {% if learns %}
         <div class="es-box status-side">
           <div class="es-box-heading">
-            <h2>{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}动态</h2>
+            <h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态</h2>
           </div>
             <div class="es-box-body">
               <ul class="media-list">
@@ -336,7 +336,7 @@
             <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
             <span class="divider"></span>
             {% if course.showStudentNumType == 'opened' %}
-            <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}</span>
+            <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</span>
             {% endif %}
           </div>
         </div>
