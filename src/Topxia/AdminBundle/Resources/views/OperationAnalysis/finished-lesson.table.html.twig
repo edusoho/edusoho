@@ -3,7 +3,7 @@
             <tr>
               <th>课时</th>
               <th>课时类型</th>
-              <th>学员</th>
+              <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</th>
             </tr>
           </thead>
           <tbody>

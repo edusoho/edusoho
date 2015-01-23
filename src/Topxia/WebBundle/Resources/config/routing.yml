@@ -110,6 +110,10 @@ uploadfile_params:
     pattern:  /uploadfile/params
     defaults: { _controller: TopxiaWebBundle:UploadFile:params }
 
+uploadfile_browsers:
+    pattern:  /uploadfile/browsers
+    defaults: { _controller: TopxiaWebBundle:UploadFile:browsers }
+
 uploadfile_cloud_callback:
     pattern:  /uploadfile/cloud_callback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
@@ -777,6 +781,10 @@ course_manage_testpaper_item_picker:
 course_manage_testpaper_item_picked:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/item_picked
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemPicked }
+
+course_manage_testpaper_get_question_num:
+    pattern: /course/{courseId}/manage/testpaper/get_question_num
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:getQuestionCountGroupByTypes}
 
 course_manage_chapter_create:
     pattern:  /course/{id}/manage/chapter/create

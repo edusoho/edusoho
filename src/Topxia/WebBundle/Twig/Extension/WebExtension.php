@@ -64,6 +64,8 @@ class WebExtension extends \Twig_Extension
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
             'is_plugin_installed' => new \Twig_Function_Method($this, 'isPluginInstaled'),
+            'plugin_version' => new \Twig_Function_Method($this, 'getPluginVersion'),
+            'version_compare' => new \Twig_Function_Method($this, 'versionCompare'),
             'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
@@ -164,11 +166,33 @@ class WebExtension extends \Twig_Extension
     {
         $plugins = $this->container->get('kernel')->getPlugins();
         foreach ($plugins as $plugin) {
-            if (strtolower($name) == strtolower($plugin)) {
-                return true;
+            if (is_array($plugin)) {
+                if (strtolower($name) == strtolower($plugin['code'])) {
+                    return true;
+                }
+            } else {
+                if (strtolower($name) == strtolower($plugin)) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    public function getPluginVersion($name)
+    {
+        $plugins = $this->container->get('kernel')->getPlugins();
+        foreach ($plugins as $plugin) {
+            if ( strtolower($plugin['code']) == strtolower($name) ) {
+                return $plugin['version'];
+            }
+        }
+        return null;
+    }
+
+    public function versionCompare($version1, $version2, $operator)
+    {
+        return version_compare($version1, $version2, $operator);
     }
 
     public function getJsPaths()
@@ -177,16 +201,27 @@ class WebExtension extends \Twig_Extension
         $theme = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();
+        $names = array();
+        foreach ($plugins as $plugin) {
+            if (is_array($plugin)) {
+                if ($plugin['type'] != 'plugin') {
+                    continue;
+                }
+                $names[] = $plugin['code'];
+            } else {
+                $names[] = $plugin;
+            }
+        }
 
-        $plugins[] = "customweb";
-        $plugins[] = "customadmin";
+        $names[] = "customweb";
+        $names[] = "customadmin";
 
         $paths = array(
             'common' => 'common',
             'theme' => "{$basePath}/themes/{$theme}/js"
         );
 
-        foreach ($plugins as $name) {
+        foreach ($names as $name) {
             $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }

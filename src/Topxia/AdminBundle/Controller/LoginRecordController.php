@@ -11,12 +11,37 @@ class LoginRecordController extends BaseController
 	public function indexAction (Request $request)
     {
     	$conditions = $request->query->all();
+        $userCondotions = array();
+        if (!empty($conditions['keywordType'])) {
+            $userCondotions['keywordType'] =$conditions["keywordType"];
+        }
+
+        if (!empty($conditions['keyword'])) {
+            $userCondotions['keyword'] =$conditions["keyword"];
+        }
+
+        if(isset($userCondotions['keywordType']) && isset($userCondotions['keyword'])){
+            $users = $this->getUserService()->searchUsers($userCondotions,array('createdTime', 'DESC'),0,2000);
+            $userIds = ArrayToolkit::column($users, 'id');
+            if($userIds){
+                $conditions['userIds'] = $userIds;
+                unset($conditions['nickname']);
+            } else {
+                $paginator = new Paginator(
+                    $this->get('request'),
+                    0,
+                    20
+                );
+                return $this->render('TopxiaAdminBundle:LoginRecord:index.html.twig', array(
+                    'logRecords' => array(),
+                    'users' => array(),
+                    'paginator' => $paginator
+                ));
+            }
+        }
 
         $conditions['action'] ='login_success';
-        if(!empty($conditions['email'])){
-            $user=$this->getUserService()->getUserByEmail($conditions['email']) ;
-            $conditions['userId']=empty($user) ? -1 : $user['id'];
-        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getLogService()->searchLogCount($conditions),

@@ -47,12 +47,4 @@ class RenrenOAuthClient extends AbstractOAuthClient
         $userInfo['largeAvatar'] = $infos['avatar'][2]['url'];
         return $userInfo;
     }
-
-    public function getClientInfo()
-    {
-        return array(
-            'type' => 'renren',
-            'name' => '人人',
-        );
-    }
 }
