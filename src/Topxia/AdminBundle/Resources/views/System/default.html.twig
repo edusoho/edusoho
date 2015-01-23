@@ -49,7 +49,7 @@
             <label for="user_name">用户名称</label>
         </div>
         <div class="controls col-md-4">
-          <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name}}" {% else %} value="学员" {% endif %}>
+          <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
         </div>
     </div>
 

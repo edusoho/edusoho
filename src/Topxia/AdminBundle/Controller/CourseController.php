@@ -312,11 +312,12 @@ class CourseController extends BaseController
     private function renderCourseTr($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-
+        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course' => $course ,
+            'default'=>$default
         ));
     }
 

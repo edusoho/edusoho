@@ -61,7 +61,7 @@ define(function(require, exports, module) {
         });
 
         $list.on('click', '.delete-chapter-btn', function(e) {
-            var chapter_name = $(this).data('charpter') ;
+            var chapter_name = $(this).data('chapter') ;
             var part_name = $(this).data('part') ; 
             if (!confirm('您真的要删除该'+chapter_name+''+part_name+'吗？')) {
                 return ;

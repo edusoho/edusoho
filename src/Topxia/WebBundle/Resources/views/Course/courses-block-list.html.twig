@@ -85,7 +85,7 @@
           <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
           <span class="divider"></span>
           {% if course.showStudentNumType == 'opened' %}
-          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{% if setting('default.user_name') %}{{setting('default.user_name')}}{% else %}学员{% endif %}</span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</span>
           {% endif %}
 
           <div class="countdown-list">
