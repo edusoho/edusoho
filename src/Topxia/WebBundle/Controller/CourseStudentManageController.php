@@ -345,7 +345,7 @@ class CourseStudentManageController extends BaseController
 		$user = $this->getUserService()->getUser($student['userId']);
 		$isFollowing = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $student['userId']);
 		$progress = $this->calculateUserLearnProgress($course, $student);
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:tr.html.twig', array(
 			'course' => $course,
 			'student' => $student,
@@ -353,6 +353,7 @@ class CourseStudentManageController extends BaseController
 			'progress' => $progress,
 			'isFollowing' => $isFollowing,
 			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
+			'default'=>$default
 		));
 	}
 
