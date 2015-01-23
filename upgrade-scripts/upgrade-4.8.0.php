@@ -20,6 +20,10 @@ use Symfony\Component\Filesystem\Filesystem;
      private function updateDefaultSetting()
      {
 
+        $connection = $this->getConnection();
+        $connection->exec("ALTER TABLE `orders` CHANGE `totalPrice` `totalPrice` FLOAT(10,2) NOT NULL DEFAULT '0';");
+        $connection->exec("ALTER TABLE `orders` CHANGE `coinAmount` `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0';");
+        
         $settingService = $this->createService('System.SettingService');
 
         $defaultSetting = array();
