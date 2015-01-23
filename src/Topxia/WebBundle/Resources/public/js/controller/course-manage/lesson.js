@@ -70,8 +70,6 @@ define(function(require, exports, module) {
             $.post($(this).data('url'), function(response) {
                 $btn.parents('.item-chapter').remove();
                 sortList($list);
-                var chapter_name = $('.delete-chapter-btn').data('charpter') ;
-            	   var part_name = $('.delete-chapter-btn').data('part') ; 
                 Notify.success(''+chapter_name+''+part_name+'已删除！');
             }, 'json');
         });
