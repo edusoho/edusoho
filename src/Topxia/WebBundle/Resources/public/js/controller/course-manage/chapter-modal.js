@@ -77,15 +77,17 @@ define(function(require, exports, module) {
                    
                  }else{
                     $("#course-item-list").append(html);
+                    $(".lesson-manage-panel").find('.empty').remove();
                  }
                   var chapter_name = $('#course-chapter-btn').data('charpter') ;
                   var part_name = $('#course-chapter-btn').data('part') ; 
                   Notify.success(''+chapter_name+''+part_name+'添加成功');
+
               }
               $(id).find('.btn-link').tooltip();
               $form.parents('.modal').modal('hide');
           });
-
+	
         });
 
 	};
