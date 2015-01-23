@@ -6,8 +6,8 @@
 
 {% block body %}
 
-{# {% set fileItemResultAnswer = itemResult.answer|split(',') %} #}
-{% set fileItemResultAnswer = itemResult.answer %}
+{% set fileItemResultAnswer = itemResult.answer|split(',') %}
+
 
 {% if itemResult.status == 'right' %}
 
@@ -46,7 +46,6 @@
 
               {% if itemResult.status == 'right' %}
                   <span class="glyphicon glyphicon-ok question-text-success">
-              {% elseif itemResult.status == "partRight" %}
 
               {% else %}
                   <span class="glyphicon glyphicon-remove question-text-danger">
@@ -54,9 +53,7 @@
             </li>
 
           {% endfor %}
-          {% if itemResult.status == 'partRight' %}
-              <p class="text-warning">部分回答正确</p>
-          {% endif %}
+
          </ul>
       </div>
     </div>
