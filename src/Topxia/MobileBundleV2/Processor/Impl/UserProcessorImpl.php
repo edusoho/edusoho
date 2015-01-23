@@ -484,27 +484,29 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $result;
     }
 
-        public function getUserNum(){
+    public function getUserNum(){
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
 
-        $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-        $learningCourses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'],0,$learningCourseTotal);
-        $resultLearning = $this->controller->filterCourses($learningCourses);
-
-        $learnedCourseTotal = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
-        $learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
-        $resultLearned = $this->controller->filterCourses($learnedCourses);
-        $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
-
-
         $conditions = array(
             'userId' => $user['id'],
-            'courseIds' => $courseIds,
             'type' => 'question'
         );
+
+        $total = $this->controller->getThreadService()->searchThreadCount($conditions);
+
+        $threads = $this->controller->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            0,
+            $total
+        );
+
+        $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+
+        $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
 
         //问答数量
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
@@ -512,7 +514,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $conditions['type'] = 'discussion';
         //话题数量
         $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
-
 
         $conditions = array(
             'userId' => $user['id'],
@@ -539,8 +540,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     'test' => $testSum );
     }
 
-    public function getSchoolRoom()
-    {
+    public function getSchoolRoom(){
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $result = array(array('title' => '在学课程','data' => null),
@@ -713,4 +713,5 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         
         return $result;
     }
+    
 }
