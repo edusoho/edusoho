@@ -33,4 +33,15 @@ interface UserProcessor
 	public function searchUserIsFollowed();
 
 	public function getConversationIdByFromIdAndToId();
+
+	/**
+	*获取用户个人主页的问答、讨论、笔记、考试的总数
+	*/
+	public function getUserNum();
+
+	/**
+	*
+	*获取学堂页面展示数据
+	*/
+	public function getSchoolRoom();
 }
