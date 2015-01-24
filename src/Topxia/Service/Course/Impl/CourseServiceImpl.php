@@ -348,9 +348,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 
 	        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
-	        $isPluginInstalled = !is_null($plugin);
-	        
-			if ($isPluginInstalled)	{
+			if (!empty($plugin))	{
 				$this->getDiscountActivityService()->createDiscountActivityTask(time(), $isUnixTimeStamp = true);
 			}	
 		}	
