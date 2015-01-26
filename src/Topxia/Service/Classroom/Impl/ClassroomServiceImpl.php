@@ -30,6 +30,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService {
         return $this->createDao('Classroom.ClassroomDao');
     }
 
-  
+    public function addClassroom($classroom)
+    {   
+        $title=trim($classroom['title']);
+        if (empty($title)) {
+            throw $this->createServiceException("班级名称不能为空！");
+        }
+
+        $classroom['createdTime']=time();
+        $classroom = $this->getClassroomDao()->addClassroom($classroom);
+
+        return $classroom;
+    }
 
 }

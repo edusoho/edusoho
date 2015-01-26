@@ -1509,3 +1509,11 @@ vip_renew:
 
 vip_upgrade:
     pattern: /vip/upgrade
+
+classroom_add:
+    pattern:  /classroom/add
+    defaults: { _controller: TopxiaWebBundle:Classroom:addClassroom }
+
+classroom_manage:
+    pattern:  /Classroom/{id}/manage
+    defaults: { _controller: TopxiaWebBundle:Classroom:index }
