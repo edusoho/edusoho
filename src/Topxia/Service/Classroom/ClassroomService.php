@@ -11,4 +11,6 @@ interface ClassroomService
 
     public function searchClassroomsCount($condtions);
 
+    public function addClassroom($classroom);
+
 }

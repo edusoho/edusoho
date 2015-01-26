@@ -53,4 +53,23 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         return $builder;
     }
 
+    public function addClassroom($classroom)
+    {
+        $classroom = $this->createSerializer()->serialize($classroom, $this->serializeFields);
+
+        $affected = $this->getConnection()->insert($this->table, $classroom);
+        if ($affected <= 0) {
+
+            throw $this->createDaoException('Insert Classroom error.');
+        }
+
+        return $this->getClassroom($this->getConnection()->lastInsertId());
+    }
+
+    public function getClassroom($id)
+    {
+        $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
 }

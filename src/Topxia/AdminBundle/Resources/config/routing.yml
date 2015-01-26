@@ -1089,3 +1089,7 @@ admin_coin_model_save:
 admin_classroom:
     path:     /classroom/
     defaults: { _controller: TopxiaAdminBundle:Classroom:index }
+
+admin_classroom_add:
+    pattern:  /classroom/add
+    defaults: { _controller: TopxiaAdminBundle:Classroom:addClassroom }
