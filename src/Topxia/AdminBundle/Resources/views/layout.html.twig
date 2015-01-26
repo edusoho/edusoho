@@ -56,6 +56,10 @@
           {% if is_granted('ROLE_SUPER_ADMIN') %}
             <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
           {% endif %}
+
+          {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+            <li {% if nav == 'classroom' %}class="active"{% endif %}><a href="{{ path('admin_classroom') }}">班级</a></li>
+          {% endif %}
         </ul>
 
         <ul class="nav navbar-nav navbar-right">

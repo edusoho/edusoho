@@ -1,0 +1,42 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="classroom-table-tr-{{ classroom.id }}">
+    <td>
+    <strong>  
+      <a target="_blank" href="{{ path('group_show', {id:classroom.id}) }}">{{ classroom.title}}</a>
+    </strong>
+    </td>
+
+    <td>
+    {{ classroom.studentNum }}
+    </td>
+
+    <td>
+    {{ classroom.studentNum }}
+    </td>
+
+    <td>
+    {{ classroom.price }}
+    </td>
+
+    <td>
+    {% if classroom.status=='published' %}
+    已发布
+    {% elseif classroom.status=='closed'%}
+    已关闭
+    {% else %}
+    未发布
+    {% endif %}
+    </td>
+
+    <td>
+
+  <div class="btn-group">
+
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+      编辑
+      <span class="caret"></span>
+    </button>
+
+  </div>
+ </td>
+</tr>
