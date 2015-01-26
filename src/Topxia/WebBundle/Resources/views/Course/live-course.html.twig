@@ -8,7 +8,7 @@
           <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
         </a>
       {% else %}
-        {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.orignCoinPrice > 0) or
+        {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.originCoinPrice > 0) or
 (setting('coin.coin_enabled') and setting('coin.price_type') != 'Coin' and course.originPrice > 0) or
 (not setting('coin.coin_enabled') and course.originPrice > 0)) %}
           <span class="label label-activity">{{course.discountActivity.activityName}}</span>
@@ -19,17 +19,13 @@
     <div class="col-sm-7 info">
       {% if is_granted('ROLE_ADMIN') %}
       <div class="btn-group pull-right">
-        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
-        </button>
-        <ul class="dropdown-menu pull-right">
-          <li>
-            <a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
-          </li>
-        </ul>
-      </div>
+                                <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+                                    <i class="esicon esicon-setting"></i>
+                                </a>
+                            </div>
       {% endif %}
      
-        {% if not (course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.orignCoinPrice > 0) or
+        {% if not (course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.originCoinPrice > 0) or
 (setting('coin.coin_enabled') and setting('coin.price_type') != 'Coin' and course.originPrice > 0) or
 (not setting('coin.coin_enabled') and course.originPrice > 0))) %}
             <h2 class="course-title">{{ course.title }}</h2>

@@ -1,5 +1,5 @@
 {% if setting('course.coursesPrice') == 0 %}
-    {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.orignCoinPrice > 0) or
+    {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.originCoinPrice > 0) or
 (setting('coin.coin_enabled') and setting('coin.price_type') != 'Coin' and course.originPrice > 0) or
 (not setting('coin.coin_enabled') and course.originPrice > 0))  %}
         <div class="course-property">
