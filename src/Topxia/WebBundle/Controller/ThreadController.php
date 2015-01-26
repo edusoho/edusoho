@@ -14,19 +14,18 @@ class ThreadController extends BaseController
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        $course = $this->getCourseService()->getCourse($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        if (empty($classroom)) {
+            throw $this->createNotFoundException("班级不存在，或已删除。");
         }
 
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        }
+        // if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
+        //     return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+        // }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-
+        list($classroom, $member) = $this->getClassroomService()->tryTakeClassroom($id);
         $filters = $this->getThreadSearchFilters($request);
-        $conditions = $this->convertFiltersToConditions($course, $filters);
+        $conditions = $this->convertFiltersToConditions($classroom, $filters);
 
         $paginator = new Paginator(
             $request,
@@ -41,21 +40,20 @@ class ThreadController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         $userIds = array_merge(
             ArrayToolkit::column($threads, 'userId'),
-            ArrayToolkit::column($threads, 'latestPostUserId')
+            ArrayToolkit::column($threads, 'lastPostMemberId')
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
-        return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
-            'course' => $course,
+
+        return $this->render("TopxiaWebBundle:Thread:{$template}.html.twig", array(
+            'classroom' => $classroom,
             'threads' => $threads,
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
-            'lessons'=>$lessons
         ));
     }
 
@@ -475,12 +473,7 @@ class ThreadController extends BaseController
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
     private function getThreadSearchFilters($request)
@@ -498,9 +491,9 @@ class ThreadController extends BaseController
         return $filters;
     }
 
-    private function convertFiltersToConditions($course, $filters)
+    private function convertFiltersToConditions($classroom, $filters)
     {
-        $conditions = array('courseId' => $course['id']);
+        $conditions = array('targetId' => $classroom['id']);
         switch ($filters['type']) {
             case 'question':
                 $conditions['type'] = 'question';
@@ -523,4 +516,14 @@ class ThreadController extends BaseController
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     } 
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom.ClassroomService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
 }

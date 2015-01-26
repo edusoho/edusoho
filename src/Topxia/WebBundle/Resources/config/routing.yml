@@ -1535,10 +1535,6 @@ classroom_threads:
     pattern:  /classroom/{id}/thread
     defaults: { _controller: TopxiaWebBundle:Thread:index }
 
-# course_threads:
-#     pattern:  /course/{id}/thread
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:index }
-
 # course_thread_create:
 #     pattern:  /course/{id}/thread/create
 #     defaults: { _controller: TopxiaWebBundle:CourseThread:create }

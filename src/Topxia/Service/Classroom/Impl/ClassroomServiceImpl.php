@@ -30,11 +30,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
          return $count;
     }
 
-    private function getClassroomDao() 
-    {
-        return $this->createDao('Classroom.ClassroomDao');
-    }
-
     public function addClassroom($classroom)
     {   
         $title=trim($classroom['title']);
@@ -47,5 +42,69 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         return $classroom;
     }
+
+    public function canTakeClassroom($classroom)
+    {
+        $classroom = !is_array($classroom) ? $this->getClassroom(intval($classroom)) : $classroom;
+        if (empty($classroom)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+            return true;
+        }
+
+        $member = $this->getMemberDao()->getMemberByClassIdAndUserId($classroom['id'], $user['id']);
+        if ($member and in_array($member['role'], array('teacher', 'student','aduitor'))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function tryTakeClassroom($classId)
+    {
+        $classroom = $this->getClassroom($classId);
+        if (empty($classroom)) {
+            throw $this->createNotFoundException();
+        }
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
+        }
+
+        $member = $this->getMemberDao()->getMemberByClassIdAndUserId($classId, $user['id']);
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+            return array($classroom, $member);
+        }
+
+        if (empty($member) or !in_array($member['role'], array('teacher', 'student','aduitor'))) {
+            throw $this->createAccessDeniedException('您不是班级学员，不能查看课程内容，请先购买课程！');
+        }
+
+        return array($classroom, $member);
+    }
+
+    public function getClassroomMember($classId, $userId)
+    {
+        return $this->getMemberDao()->getMemberByClassIdAndUserId($classId, $userId);
+    }
+
+    private function getClassroomDao() 
+    {
+        return $this->createDao('Classroom.ClassroomDao');
+    }
+
+    private function getMemberDao ()
+    {
+        return $this->createDao('Classroom.ClassroomMemberDao');
+    }
+
+    
 
 }

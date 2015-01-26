@@ -13,4 +13,10 @@ interface ClassroomService
 
     public function addClassroom($classroom);
 
+    public function canTakeClassroom($classroom);
+
+    public function tryTakeClassroom($classId);
+    
+    public function getClassroomMember($classId, $userId);
+
 }
