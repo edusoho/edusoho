@@ -144,7 +144,7 @@
 
         <div class="tab-pane" id="video-chooser-course-file">
             <div id="file-browser-video" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'video'}) }}" 
+            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'video'}) }}" 
             data-empty="暂无视频文件，请先上传。">
             </div>
         </div>
@@ -250,7 +250,7 @@
 
         <div class="tab-pane" id="audio-chooser-course-file">
           <div id="file-browser-audio" data-role="course-file-browser"
-          data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+          data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
         </div>
 
       </div>
@@ -262,7 +262,7 @@
 
 
   <div class="file-chooser" id="ppt-chooser" style="display:none;"
-    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt'}) }}"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt', lazyConvert:1}) }}"
     data-targetType="{{targetType}}"
     data-targetId="{{targetId}}"
   >
@@ -296,7 +296,7 @@
               <span id="ppt-choose-uploader-btn" 
                 data-role="uploader-btn"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId,lazyConvert:1}) }}{% endif %}" 
                 data-storage-type="{{storageSetting.upload_mode}}"
                 data-progressbar="#ppt-chooser-progress">
                 <a class="uploadBtn btn btn-default btn-lg">
@@ -335,7 +335,7 @@
 
         <div class="tab-pane" id="ppt-chooser-course-file">
             <div id="file-browser-ppt" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
         </div>
         
       </div>

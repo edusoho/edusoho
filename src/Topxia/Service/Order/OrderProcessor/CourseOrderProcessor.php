@@ -107,8 +107,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         $couponSetting = $this->getSettingService()->get("coupon");
-
-        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"], 
                 $targetId, 
@@ -116,7 +115,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $priceType, 
                 $cashRate
             );
-            $amount = $couponResult["afterAmount"];
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+                $amount = $couponResult["afterAmount"];
+            }
         }
 
         //虚拟币优惠价格

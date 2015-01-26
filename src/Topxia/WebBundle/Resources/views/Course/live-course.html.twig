@@ -280,6 +280,7 @@
                 {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
               {% endif %}
           </div>
+
           {% else %}
             
             <div class="pull-right course-card-btn col-md-3 col-xs-12 row">

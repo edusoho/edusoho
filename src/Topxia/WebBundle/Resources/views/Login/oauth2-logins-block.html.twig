@@ -1,0 +1,14 @@
+{% set settings = setting('login_bind', []) %}
+
+{% for type, client in clients %}
+  {% if settings[type ~ '_enabled']|default(false) %}
+    <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default('')}) }}" class="social-login-btn">
+      {% if client.icon_class|default(null) %}
+        <i class="{{ client.icon_class }}"></i>
+      {% elseif client.icon_img|default(null) %}
+        <img src="{{ asset(client.icon_img) }}" class="social-img">
+      {% endif %}
+      {% if displayName %} {{ client.name }} {% endif %}
+    </a>
+  {% endif %}
+{% endfor %}

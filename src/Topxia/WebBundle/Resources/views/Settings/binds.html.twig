@@ -12,19 +12,21 @@
     {% block body %}
       {{ web_macro.flash_messages() }}
        <ul class="media-list">
-          {% for type, bind in binds %} 
+          {% for type, client in clients %} 
           {% if settings[type ~ '_enabled']|default(false) %}
             <li class="media">
-              <img src="{{ bind.image }}" class=" media-object pull-left">
+              {% if client.large_icon_img|default(null) %}
+                <img src="{{ asset(client.large_icon_img) }}" class=" media-object pull-left">
+              {% endif %}
               <div class="media-body">
-                {% if bind.state == 'bind' %}
-                <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">取消绑定</a>
+                {% if client.status|default(null) == 'bind' %}
+                  <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">取消绑定</a>
                 {% else %}
-                <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">绑定</a>
+                  <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">绑定</a>
                 {% endif %}
 
-                <div>{{ bind.type }}</div>
-                {% if bind.state == 'bind' %}
+                <div>{{ client.name }}</div>
+                {% if client.status|default(null) == 'bind' %}
                   <div class="text-success">已绑定</div>
                 {% else %}
                   <div class="text-muted">未绑定</div>

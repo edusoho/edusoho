@@ -37,6 +37,7 @@ class InitCommand extends BaseCommand
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
 		$this->initFile($output);
+        $this->initDefaultSetting($output);
         $this->initInstallLock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
@@ -208,6 +209,23 @@ EOD;
 
 		$output->writeln(' ...<info>成功</info>');
 	}
+
+	private function initDefaultSetting($output)
+    {
+    	$output->write('  初始化章节的默认设置');
+        $settingService = $this->getSettingService();
+
+        $defaultSetting = array();
+        $defaultSetting['user_name'] ='学员';
+        $defaultSetting['chapter_name'] ='章';
+        $defaultSetting['part_name'] ='节';
+
+        $default = $settingService->get('default', array());
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        $settingService->set('default', $defaultSetting);
+        $output->writeln(' ...<info>成功</info>');
+    }
 
 	private function initStorageSetting($output)
 	{

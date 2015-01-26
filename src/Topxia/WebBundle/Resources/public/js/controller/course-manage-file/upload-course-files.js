@@ -62,9 +62,7 @@ define(function(require, exports, module) {
 					response = $.parseJSON(info.response);
 					var url = divData.callback;
 					if (url) {
-						if (file.type != 'audio/mpeg' 
-							&& file.type != 'application/vnd.ms-powerpoint' 
-							&& file.type != 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+						if (file.type != 'audio/mpeg') {
 							url = url+'&lazyConvert=1';
 						}
 						$.post(url, response, function(response) {
@@ -97,6 +95,7 @@ define(function(require, exports, module) {
 							data.convertor = '';
 						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 							data.convertor = 'ppt';
+							data.lazyConvert = 1;
 						} else {
 							if (switcher) {
 								data.videoQuality = switcher.get('videoQuality');

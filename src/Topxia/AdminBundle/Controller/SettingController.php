@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 
 use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
@@ -297,6 +298,8 @@ class SettingController extends BaseController
 
         $default = array(
             'register_mode'=>'closed',
+            'email_enabled'=>'closed',
+            'setting_time'=> -1,
             'email_activation_title' => '',
             'email_activation_body' => '',
             'welcome_enabled' => 'closed',
@@ -323,8 +326,16 @@ class SettingController extends BaseController
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
-            $auth = $request->request->all();
-       
+
+         	if (isset($auth['setting_time']) && $auth['setting_time'] > 0 ) {
+         		$firstSettingTime =  $auth['setting_time'];
+         		$auth = $request->request->all(); 
+         		$auth['setting_time'] = $firstSettingTime;
+        	}else{
+        		$auth = $request->request->all(); 
+        		$auth['setting_time'] = time();
+       	}     
+
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
@@ -393,24 +404,20 @@ class SettingController extends BaseController
         $default = array(
             'login_limit'=>0,
             'enabled'=>0,
-            'weibo_enabled'=>0,
-            'weibo_key'=>'',
-            'weibo_secret'=>'',
-            'weibo_set_fill_account'=>0,
-            'qq_enabled'=>0,
-            'qq_key'=>'',
-            'qq_secret'=>'',
-            'qq_set_fill_account'=>0,
-            'renren_enabled'=>0,
-            'renren_key'=>'',
-            'renren_secret'=>'',
-            'renren_set_fill_account'=>0,
             'verify_code' => '',
             'captcha_enabled'=>0,
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
             'temporary_lock_minutes' => 20,
         );
+        
+        $clients = OAuthClientFactory::clients();
+        foreach ($clients as $type => $client) {
+            $default["{$type}_enabled"] = 0;
+            $default["{$type}_key"] = '';
+            $default["{$type}_secret"] = '';
+            $default["{$type}_set_fill_account"] = 0;
+        }
 
         $loginConnect = array_merge($default, $loginConnect);
         if ($request->getMethod() == 'POST') {
@@ -421,7 +428,8 @@ class SettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
-            'loginConnect' => $loginConnect
+            'loginConnect' => $loginConnect,
+            'clients' => $clients,
         ));
     }
 
@@ -493,6 +501,25 @@ class SettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
+
+            if (isset($defaultSetting['user_name'])) {
+                $defaultSetting['user_name'] = $defaultSetting['user_name'];
+            }else{
+                $defaultSetting['user_name'] ='学员';
+            }
+
+            if (isset($defaultSetting['chapter_name'])) {
+                $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
+            }else{
+                $defaultSetting['chapter_name'] ='章';
+            }
+
+            if (isset($defaultSetting['part_name'])) {
+                $defaultSetting['part_name'] = $defaultSetting['part_name'];
+            }else{
+                $defaultSetting['part_name'] ='节';
+            }
+
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);
 
@@ -539,6 +566,9 @@ class SettingController extends BaseController
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'user_name' => '学员',
+            'chapter_name' => '章',
+            'part_name' =>'节',
         );
 
         return $default;
@@ -942,6 +972,10 @@ class SettingController extends BaseController
     public function addUserFieldsAction(Request $request)
     {
         $field=$request->request->all();
+        if(isset($field['field_title']) 
+            && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信' ))){
+            throw $this->createAccessDeniedException('请勿添加与默认字段相同的自定义字段！');
+        }
 
         $field=$this->getUserFieldService()->addUserField($field);
 

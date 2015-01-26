@@ -34,5 +34,10 @@ interface AppClient
      * 获得包信息
      */
     public function getPackage($id);
+    
+    /**
+     * 获取token
+     */
+    public function getLoginToken();
 
 }
