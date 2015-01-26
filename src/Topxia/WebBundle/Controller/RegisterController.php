@@ -228,11 +228,15 @@ class RegisterController extends BaseController
             return $this->createNotFoundException();
         }
 
-        $this->getUserService()->setEmailVerified($user['id']);
+        if (strtoupper($request->getMethod()) ==  'POST') {
+            $this->getUserService()->setEmailVerified($user['id']);
+            $this->getUserService()->deleteToken('email-verify', $token['token']);
+            return $this->createJsonResponse(true);
+        }
 
-        $this->getUserService()->deleteToken('email-verify', $token['token']);
-
-        return $this->render('TopxiaWebBundle:Register:email-verify-success.html.twig');
+        return $this->render('TopxiaWebBundle:Register:email-verify-success.html.twig', array(
+            'token' => $token,
+        ));
     }
 
     private function makeHash($user)

@@ -502,23 +502,23 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
 
-        if (isset($defaultSetting['user_name'])) {
-           $defaultSetting['user_name'] = $defaultSetting['user_name'];
-        }else{
+            if (isset($defaultSetting['user_name'])) {
+                $defaultSetting['user_name'] = $defaultSetting['user_name'];
+            }else{
                 $defaultSetting['user_name'] ='学员';
-        }
+            }
 
-        if (isset($defaultSetting['chapter_name'])) {
-           $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
-        }else{
+            if (isset($defaultSetting['chapter_name'])) {
+                $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
+            }else{
                 $defaultSetting['chapter_name'] ='章';
-        }
+            }
 
-        if (isset($defaultSetting['part_name'])) {
-           $defaultSetting['part_name'] = $defaultSetting['part_name'];
-        }else{
+            if (isset($defaultSetting['part_name'])) {
+                $defaultSetting['part_name'] = $defaultSetting['part_name'];
+            }else{
                 $defaultSetting['part_name'] ='节';
-        }
+            }
 
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);

@@ -47,9 +47,12 @@ define(function(require, exports, module) {
           $('#course-chapter-btn').button('submiting').addClass('disabled');
 
           $.post($form.attr('action'), $form.serialize(), function(html) {
+
               var id = '#' + $(html).attr('id'),
                   $item = $(id);
               var $parent = $('#'+$form.data('parentid'));
+              var $panel = $('.lesson-manage-panel');
+              $panel.find('.empty').remove();
               if ($item.length) {
                   $item.replaceWith(html);
                   Notify.success('信息已保存');
