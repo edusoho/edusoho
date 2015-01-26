@@ -169,6 +169,7 @@ function install_step3()
         $init->initLockFile();
         $init->initRefundSetting();
         $init->initArticleSetting();
+        $init->initDefaultSetting();
 
         header("Location: start-install.php?step=4");
         exit();
@@ -323,6 +324,21 @@ class SystemInit
 
         $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN'));
         return $this->getUserService()->getUser($user['id']);
+    }
+
+    public function initDefaultSetting()
+    {
+        $settingService = $this->getSettingService();
+
+        $defaultSetting = array();
+        $defaultSetting['user_name'] ='学员';
+        $defaultSetting['chapter_name'] ='章';
+        $defaultSetting['part_name'] ='节';
+
+        $default = $settingService->get('default', array());
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        $settingService->set('default', $defaultSetting);
     }
 
     public function initKey()
