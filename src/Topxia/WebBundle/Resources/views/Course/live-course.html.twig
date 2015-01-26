@@ -263,7 +263,7 @@
             {% elseif checkMemberLevelResult == 'level_low' %}
               <a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6">{{ courseMemberLevel.name }}，免费学</a>
             {% elseif checkMemberLevelResult == 'ok' %}
-              <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6">{{ courseMemberLevel.name }}，免费学</a>
+              <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6 become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
             {% endif %}
              <a class="btn-course btn-primary col-xs-12 col-sm-6 col-md-6" id="course-buy-btn" 
               {% if setting("course.buy_fill_userinfo")|default(false) %}
@@ -290,7 +290,7 @@
             {% elseif checkMemberLevelResult == 'level_low' %}
               <a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6">{{ courseMemberLevel.name }}，免费学</a>
             {% elseif checkMemberLevelResult == 'ok' %}
-              <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6">{{ courseMemberLevel.name }}，免费学</a>
+              <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn-course-vip btn-warning col-xs-12 col-sm-6 col-md-6 become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
             {% endif %}
              <a class="btn-course btn-primary col-xs-12" id="course-buy-btn" 
               {% if setting("course.buy_fill_userinfo")|default(false) %}
