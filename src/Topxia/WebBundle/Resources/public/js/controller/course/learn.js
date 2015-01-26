@@ -539,7 +539,7 @@ define(function(require, exports, module) {
                                 return ;
                             }
 
-                            var html = '<iframe id=\'viewerIframe\' width=\'100%\' height=\'100%\'></iframe>';
+                            var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
                             $("#lesson-document-content").html(html).show();
 
                             var player = new DocumentPlayer({

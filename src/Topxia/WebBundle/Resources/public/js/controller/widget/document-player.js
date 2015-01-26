@@ -7,9 +7,9 @@ define(function(require, exports, module) {
         attrs: {
             swfFileUrl:'',
             pdfFileUrl:'',
-            swfPlayerUrl:'../../bundles/topxiaweb/js/controller/swf/zviewer5.swf',
+            swfPlayerUrl:'http://7sbrob.com1.z0.glb.clouddn.com/edusohoViewer.swf',
             swfPlayerWidth:'800',
-            swfPlayerheight:'400'
+            swfPlayerheight:'100%'
         },
 
         events: {
@@ -54,8 +54,7 @@ define(function(require, exports, module) {
 
             thiz.html('<div id="website"><p align="center" class="style1">需要plash player版本９+</p><p align="center"><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p></div>');
             var flashvars = {
-              doc_url: this.get['swfFileUrl'],
-              autoPlay:false
+              doc_url: escape(this.attrs.swfFileUrl.value) 
             };
             var params = {
                 //menu: "false",
