@@ -6,7 +6,7 @@ class ClassroomManageController extends BaseController
 {   
     public function indexAction($id)
     {   
-        $classroom=$this->getClassroomService()->getClassromm($id);
+        $classroom=$this->getClassroomService()->getClassroom($id);
 
         return $this->render("TopxiaWebBundle:ClassroomManage:index.html.twig",array(
             'classroom'=>$classroom));
@@ -14,7 +14,7 @@ class ClassroomManageController extends BaseController
 
     public function studentsAction($id)
     {   
-        $classroom=$this->getClassroomService()->getClassromm($id);
+        $classroom=$this->getClassroomService()->getClassroom($id);
 
         return $this->render("TopxiaWebBundle:ClassroomManage:students.html.twig",array(
             'classroom'=>$classroom));
@@ -22,7 +22,7 @@ class ClassroomManageController extends BaseController
 
     public function teachersAction($id)
     {   
-        $classroom=$this->getClassroomService()->getClassromm($id);
+        $classroom=$this->getClassroomService()->getClassroom($id);
 
         return $this->render("TopxiaWebBundle:ClassroomManage:teachers.html.twig",array(
             'classroom'=>$classroom));
@@ -30,7 +30,7 @@ class ClassroomManageController extends BaseController
 
     public function setAction($id)
     {   
-        $classroom=$this->getClassroomService()->getClassromm($id);
+        $classroom=$this->getClassroomService()->getClassroom($id);
 
         return $this->render("TopxiaWebBundle:ClassroomManage:set.html.twig",array(
             'classroom'=>$classroom));
@@ -38,7 +38,7 @@ class ClassroomManageController extends BaseController
 
     public function coursesAction($id)
     {   
-        $classroom=$this->getClassroomService()->getClassromm($id);
+        $classroom=$this->getClassroomService()->getClassroom($id);
 
         return $this->render("TopxiaWebBundle:ClassroomManage:courses.html.twig",array(
             'classroom'=>$classroom));

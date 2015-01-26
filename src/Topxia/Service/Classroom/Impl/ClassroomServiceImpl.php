@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService 
 {
-    public function getClassromm($id)
+    public function getClassroom($id)
     {
-        return $this->getClassroomDao()->getClassromm($id);
+        return $this->getClassroomDao()->getClassroom($id);
     }
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
