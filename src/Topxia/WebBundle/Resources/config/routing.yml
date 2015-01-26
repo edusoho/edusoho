@@ -1530,3 +1530,61 @@ classroom_manage_students:
 classroom_manage_teachers:
     pattern: /classroom/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }
+
+classroom_threads:
+    pattern:  /classroom/{id}/thread
+    defaults: { _controller: TopxiaWebBundle:Thread:index }
+
+# course_threads:
+#     pattern:  /course/{id}/thread
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:index }
+
+# course_thread_create:
+#     pattern:  /course/{id}/thread/create
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:create }
+
+# course_thread_show:
+#     pattern:  /course/{courseId}/thread/{id}
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:show }
+
+# course_thread_post:
+#     pattern:  /course/{courseId}/thread/{id}/post
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:post }
+
+# course_thread_edit:
+#     pattern:  /course/{courseId}/thread/{id}/edit
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:edit }
+
+# course_thread_post_delete:
+#     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/delete
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:deletePost }
+#     methods: [POST]
+
+# course_thread_post_edit:
+#     pattern:  /course/{courseId}/thread/{threadId}/post/{id}/edit
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:editPost }
+
+# course_thread_stick:
+#     pattern:  /course/{courseId}/thread/{id}/stick
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:stick }
+#     methods: [POST]
+
+# course_thread_unstick:
+#     pattern:  /course/{courseId}/thread/{id}/unstick
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:unstick }
+#     methods: [POST]
+
+# course_thread_elite:
+#     pattern:  /course/{courseId}/thread/{id}/elite
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:elite }
+#     methods: [POST]
+
+# course_thread_unelite:
+#     pattern:  /course/{courseId}/thread/{id}/unelite
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:unelite }
+#     methods: [POST]
+
+# course_thread_delete:
+#     pattern:  /course/{courseId}/thread/{id}/delete
+#     defaults: { _controller: TopxiaWebBundle:CourseThread:delete }
+#     methods: [POST]
