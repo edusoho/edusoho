@@ -27,7 +27,7 @@ PDFJS.build = 'fatal: Not a git repository (or any of the parent directories): .
 
 (function pdfjsWrapper() {
   // Use strict in our context only - users might not want it
-  'use strict';
+  //'use strict';
 
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
@@ -48,7 +48,7 @@ PDFJS.build = 'fatal: Not a git repository (or any of the parent directories): .
 /* globals Cmd, ColorSpace, Dict, MozBlobBuilder, Name, PDFJS, Ref, URL,
            Promise */
 
-'use strict';
+//'use strict';
 
 var globalScope = (typeof window === 'undefined') ? this : window;
 
@@ -38555,7 +38555,7 @@ var bidi = PDFJS.bidi = (function bidiClosure() {
  */
 /* globals Uint32ArrayView */
 
-'use strict';
+//'use strict';
 
 var MurmurHash3_64 = (function MurmurHash3_64Closure (seed) {
   // Workaround for missing math precison in JS.
@@ -38703,7 +38703,7 @@ var MurmurHash3_64 = (function MurmurHash3_64Closure (seed) {
 if (!PDFJS.workerSrc && typeof document !== 'undefined') {
   // workerSrc is not set -- using last script url to define default location
   PDFJS.workerSrc = (function () {
-    'use strict';
+    //'use strict';
     var scriptTagContainer = document.body ||
                              document.getElementsByTagName('head')[0];
     var pdfjsSrc = scriptTagContainer.lastChild.src;
