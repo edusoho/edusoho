@@ -12,7 +12,12 @@ use Imagine\Image\ImageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 
-class ClassroomServiceImpl extends BaseService implements ClassroomService {
+class ClassroomServiceImpl extends BaseService implements ClassroomService 
+{
+    public function getClassromm($id)
+    {
+        return $this->getClassroomDao()->getClassromm($id);
+    }
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {

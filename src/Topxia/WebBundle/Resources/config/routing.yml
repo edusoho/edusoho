@@ -1509,3 +1509,24 @@ vip_renew:
 
 vip_upgrade:
     pattern: /vip/upgrade
+
+
+classroom_manage:
+    pattern: /classroom/{id}/manage
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:index }
+
+classroom_manage_courses:
+    pattern: /classroom/{id}/manage/courses
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:courses }
+
+classroom_manage_set:
+    pattern: /classroom/{id}/manage/set
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:set }
+
+classroom_manage_students:
+    pattern: /classroom/{id}/manage/students
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:students }
+
+classroom_manage_teachers:
+    pattern: /classroom/{id}/manage/teachers
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }
