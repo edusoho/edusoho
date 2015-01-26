@@ -37,8 +37,8 @@ class InitCommand extends BaseCommand
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
 		$this->initFile($output);
-        $this->initInstallLock($output);
         $this->initDefaultSetting($output);
+        $this->initInstallLock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
