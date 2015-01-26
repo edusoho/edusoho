@@ -5,7 +5,7 @@ namespace Topxia\Service\Classroom;
 interface ClassroomService
 
 {   
-    public function getClassromm($id);
+    public function getClassroom($id);
     
     public function searchClassrooms($conditions,$orderBy,$start,$limit);
 

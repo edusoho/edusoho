@@ -13,6 +13,12 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         'tagIds' => 'json',
     );
 
+    public function getClassroom($id)
+    {
+        $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+    
     public function searchClassrooms($conditions,$orderBy,$start,$limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -58,12 +64,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         return $this->getClassroom($this->getConnection()->lastInsertId());
-    }
-
-    public function getClassroom($id)
-    {
-        $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
 }
