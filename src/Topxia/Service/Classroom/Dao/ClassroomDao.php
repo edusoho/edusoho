@@ -4,7 +4,6 @@ namespace Topxia\Service\Classroom\Dao;
 
 interface ClassroomDao
 {   
-    public function getClassromm($id);
     
     public function searchClassrooms($conditions, $orderBy, $start, $limit);
 

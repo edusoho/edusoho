@@ -15,42 +15,10 @@ class ClassroomController extends BaseController
 {
         public function indexAction(Request $request, $id)
     {
-        return $this->forward('TopxiaWebBundle:CourseManage:base',  array('id' => $id));
+        return $this->forward('TopxiaWebBundle:ClassroomManage:index.html.twig',  array('id' => $id));
     }
 
-    public function addClassroomAction(Request $request) 
-    {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
-            return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
-        }
-
-        $user = $this->getCurrentUser();
-  
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
-        }
-
-        if ($request->getMethod() == 'POST') {
-
-            $myClassroom = $request->request->all();
-
-            $title=trim($myClassroom['title']);
-            if(empty($title)){
-                $this->setFlashMessage('danger',"班级名称不能为空！");
-
-                return $this->render("TopxiaWebBundle:Classroom:classroomadd.html.twig");
-            }
-
-            $classroom = array(
-                'title' => $myClassroom['title'],
-            );
-
-            $classroom = $this->getClassroomService()->addClassroom($classroom);
-            return $this->redirect($this->generateUrl('classroom_manage',array('id'=>$classroom['id'])));
-        }
-
-        return $this->render("TopxiaWebBundle:Classroom:classroomadd.html.twig");
-    }
+    
 
     
 
