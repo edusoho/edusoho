@@ -569,7 +569,9 @@ class GroupThreadController extends BaseController
     public function setEliteAction($threadId)
     {   
         $thread=$this->getThreadService()->getThread($threadId);
-        $this->getCashAccountService()->reward(10,"话题被加精",$thread['userId']);
+        if($this->isFeatureEnabled('group_reward')){
+            $this->getCashAccountService()->reward(10,"话题被加精",$thread['userId']);
+        }
 
         return $this->postAction($threadId,'setElite');
     }
@@ -577,8 +579,9 @@ class GroupThreadController extends BaseController
     public function removeEliteAction($threadId)
     {   
         $thread=$this->getThreadService()->getThread($threadId);
-        $this->getCashAccountService()->reward(10,"话题被取消加精",$thread['userId'],'cut');
-
+        if($this->isFeatureEnabled('group_reward')){
+            $this->getCashAccountService()->reward(10,"话题被取消加精",$thread['userId'],'cut');
+        }
         return $this->postAction($threadId,'removeElite');
     }
 
@@ -964,6 +967,12 @@ class GroupThreadController extends BaseController
         unset($record['uri']);
         $record['name']=$file->getClientOriginalName();
         return new Response(json_encode($record));
+    }
+
+    private function isFeatureEnabled($feature)
+    {         
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();         
+        return in_array($feature, $features);     
     }
 
     protected function getFileService()

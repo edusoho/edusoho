@@ -18,13 +18,13 @@
             </a>
             <div class="media-body">
               <div><strong>{{ oauthUser.name }}</strong></div>
-              <div class="text-muted">您正在使用<strong class="text-primary"> {{ client.clientInfo.name }} </strong>登录{{ setting('site.name') }}</div>
+              <div class="text-muted">您正在使用<strong class="text-primary"> {{ clientMeta.name }} </strong>登录{{ setting('site.name') }}</div>
             </div>
           </div>
 
         </div>
 
-      {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
+      {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
 
        <form id="set-bind-exist-form" class="form-vertical" method="post" >
           <div class="form-group">
@@ -55,15 +55,15 @@
         <div class="tac pvl">
           <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
 
-       {% if setting('login_bind.' ~ client.clientInfo.type ~ '_set_fill_account') == 1 %}
+       {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
 
-            <button id="set-bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_newset', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_newset', {type:type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
         
         </form>
 
         {% else %}
 
-            <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:client.clientInfo.type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">直接登录</button>
+            <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">直接登录</button>
 
         {% endif %}
         </div>
@@ -71,10 +71,10 @@
 
         <p class="text-primary">
           已有帐号？绑定到已有帐号：
-          <a href="{{ path('login_bind_exist', {type: client.clientInfo.type}) }}"></a>
+          <a href="{{ path('login_bind_exist', {type: type}) }}"></a>
         </p>
 
-        <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_exist', {type:client.clientInfo.type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
+        <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_exist', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
 
           <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
 

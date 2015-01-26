@@ -109,6 +109,7 @@ CREATE TABLE `cloud_app` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '云应用ID',
   `name` varchar(255) NOT NULL COMMENT '云应用名称',
   `code` varchar(64) NOT NULL COMMENT '云应用编码',
+  `type` enum('plugin','theme') NOT NULL DEFAULT 'plugin' COMMENT '应用类型(plugin插件应用, theme主题应用)',
   `description` text NOT NULL COMMENT '云应用描述',
   `icon` varchar(255) NOT NULL COMMENT '云应用图标',
   `version` varchar(32) NOT NULL COMMENT '云应用当前版本',

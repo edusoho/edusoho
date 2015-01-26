@@ -47,13 +47,14 @@ class CourseLessonManageController extends BaseController
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems,
 			'exercises' => empty($exercises) ? array() : $exercises,
 			'homeworks' => empty($homeworks) ? array() : $homeworks,
-			'files' => ArrayToolkit::index($files,'id')
+			'files' => ArrayToolkit::index($files,'id'),
+			'default'=> $default
 		));
 	}
 
@@ -470,6 +471,11 @@ class CourseLessonManageController extends BaseController
     private function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

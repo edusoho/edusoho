@@ -57,12 +57,13 @@ class LiveCourseController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
             'recentCourses' => $recentCourses,
             'liveCourses' => $liveCourses,
             'users' => $users,
             'paginator' => $paginator,
+            'default'=> $default
         ));
 	}
 
@@ -119,7 +120,7 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播教室不存在！');
         }
 
-        if ($lesson['startTime'] - time() > 3600) {
+        if ($lesson['startTime'] - time() > 7200) {
             return $this->createMessageResponse('info', '直播还没开始!');
         }
 
@@ -249,10 +250,11 @@ class LiveCourseController extends BaseController
                 $courseItems[$key] = $item;
             }
         }
-
+        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:index.html.twig', array(
             'course' => $course,
-            'items' => $courseItems
+            'items' => $courseItems,
+	'default'=> $default
         ));
     }
 
@@ -307,4 +309,8 @@ class LiveCourseController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

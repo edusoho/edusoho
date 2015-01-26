@@ -436,7 +436,8 @@ body {
 	margin-right: 20px;
 }
 
-.social-logins .social-login-btn .social-icon {
+.social-logins .social-login-btn .social-icon,
+.social-logins .social-login-btn .social-img {
 	margin-right: 8px;
 }
 
@@ -4150,6 +4151,25 @@ body {
 	bottom: 0px;
 }
 
+.slide-player-full-window {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.slide-player-fullscreen {
+  position: fixed;
+  overflow: hidden;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
 .modal-body .lesson-preview-ppt {
 	position: relative;
 	min-height: 500px;
@@ -4189,10 +4209,6 @@ body {
 .slide-player-control .fullscreen {
 	float: right;
 	margin-left: 15px;
-}
-
-.lt-ie9 .slide-player-control .fullscreen {
-	display: none;
 }
 
 .slide-player-control .goto-first {
@@ -4980,4 +4996,8 @@ a.homework-essay-textarea-pack-up{
 .nav-course-buy-btn{
 	padding-bottom: 9px;
     padding-top: 9px;
+}
+.question-num {
+	display:inline-block;
+	width: 25px;
 }

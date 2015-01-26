@@ -48,13 +48,9 @@
                     <div class="col-sm-7 info">
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="btn-group pull-right">
-                                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        <a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
-                                    </li>
-                                </ul>
+                                <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+                                    <i class="esicon esicon-setting"></i>
+                                </a>
                             </div>
                         {% endif %}
                         <h2 class="course-title">{{ course.title }}</h2>
@@ -210,8 +206,7 @@
                                            {% else %}
                                                href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
                                            {% endif %}
-                                           >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
-						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
+                                           >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0) or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
 						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
                                     </div>
                                 </li>

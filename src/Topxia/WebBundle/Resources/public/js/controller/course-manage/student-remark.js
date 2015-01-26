@@ -19,9 +19,11 @@ define(function(require, exports, module) {
                     var $html = $(html);
                     $('#'+$html.attr('id')).replaceWith($html);
                     $modal.modal('hide');
-                    Notify.success('备注学员成功');
+                    var user_name = $('#student-remark-form').data('user') ;
+                    Notify.success('备注'+user_name+'成功');
                 }).error(function(){
-                    Notify.danger('备注学员失败，请重试！');
+                    var user_name = $('#student-remark-form').data('user') ;
+                    Notify.danger('备注'+user_name+'失败，请重试！');
                 });
             }
 

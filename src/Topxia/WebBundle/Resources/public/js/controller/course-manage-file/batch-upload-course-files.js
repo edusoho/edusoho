@@ -41,6 +41,7 @@ define(function(require, exports, module) {
 				data.convertor = '';
 			} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 				data.convertor = 'ppt';
+                data.lazyConvert = 1;
 			} else {
 				if (switcher) {
 					data.videoQuality = switcher.get('videoQuality');
@@ -168,6 +169,13 @@ define(function(require, exports, module) {
             } else {
                 serverData.mimeType=file.type;
             }
+
+            if('*.ppt;*.pptx'.indexOf(getFileExt(file.name)[0])>-1){
+ 
+                serverData.lazyConvert = 1;
+   
+            }
+            
             if (this.element.data('callback')) {
                 var url = this.element.data('callback');
                 if(serverData.lazyConvert == 1){

@@ -662,7 +662,7 @@
       {% if learns %}
         <div class="panel panel-autumn panel-autumn-default status-side">
           <div class="panel-heading side-autumn-default">
-            <h2 class="panel-title">学员动态 / <small>Students Dynamic</small></h2>
+            <h2 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态 / <small>Students Dynamic</small></h2>
           </div>
           <div class="panel-body">
             <ul class="media-list">

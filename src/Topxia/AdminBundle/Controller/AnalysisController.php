@@ -74,45 +74,48 @@ class AnalysisController extends BaseController
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                    return $this->redirect($this->generateUrl('admin_operation_analysis_user_sum', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_user_sum', array(
+               'tab' => "trend",
+            )));
         }
 
-        $paginator = new Paginator(
-                $request,
-                $this->getUserService()->findUsersCountByLessThanCreatedTime($timeRange['endTime']),
-                20
+        $result = array(
+            'tab' => $tab,
         );
+        if($tab == "trend"){
+            $userSumData = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
+            $data=$this->fillAnalysisUserSum($condition,$userSumData);            
+            $result["data"] = $data;
+        } else {
+            $paginator = new Paginator(
+                $request,
+                $this->getUserService()->searchUserCount($timeRange),
+                20
+            );
 
-        $userSumDetail=$this->getUserService()->searchUsers(
-            $timeRange,
-            array('createdTime', 'DESC'),
-              $paginator->getOffsetCount(),
-              $paginator->getPerPageCount()
-         );
+            $userSumDetail=$this->getUserService()->searchUsers(
+                $timeRange,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $result['userSumDetail'] = $userSumDetail;
+            $result['paginator'] = $paginator;
+        }
 
-        $userSumData="";
-        if($tab=="trend"){
-        $userSumData=$this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-        $data=$this->fillAnalysisUserSum($condition,$userSumData);            
-            }
+        $userSumStartData = $this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
 
-        $userSumStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
-
-        if($userSumStartData) $userSumStartDate=date("Y-m-d",$userSumStartData[0]['createdTime']);
+        if($userSumStartData) {
+            $userSumStartDate = date("Y-m-d",$userSumStartData[0]['createdTime']);
+        }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
-        return $this->render("TopxiaAdminBundle:OperationAnalysis:user-sum.html.twig",array(
-            'userSumDetail'=>$userSumDetail,
-            'paginator'=>$paginator,
-            'tab'=>$tab,
-            'data'=>$data,
-            'userSumStartDate'=>$userSumStartDate,
-            'dataInfo'=>$dataInfo,    
-        ));
+
+        $result['userSumStartDate'] = $userSumStartDate;
+        $result['dataInfo'] = $dataInfo;
+
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:user-sum.html.twig",$result);
     }
 
     public function courseSumAction(Request $request,$tab)
@@ -1016,17 +1019,14 @@ class AnalysisController extends BaseController
       
         if($userSumData){
             $countTmp = $userSumData[0]["count"];
-             foreach ($zeroData as $key => $value) {
-            if($value["date"]<$userSumData[0]["date"]){
-                $countTmp = 0;
-            }
-            $date = $value['date'];
-            if (array_key_exists($date,$currentData)){
-                $zeroData[$key]['count'] = $currentData[$date]['count'];
-                $countTmp = $currentData[$date]['count'];
-            } else {
-                $zeroData[$key]['count'] = $countTmp;
-            }
+            foreach ($zeroData as $key => $value) {
+                $date = $value['date'];
+                if (array_key_exists($date,$currentData)){
+                    $zeroData[$key]['count'] = $currentData[$date]['count'];
+                    $countTmp = $currentData[$date]['count'];
+                } else {
+                    $zeroData[$key]['count'] = $countTmp;
+                }
             }
         }
        

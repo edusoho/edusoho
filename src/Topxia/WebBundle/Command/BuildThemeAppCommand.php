@@ -38,13 +38,14 @@ class BuildThemeAppCommand extends BaseCommand
 
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
+        file_put_contents($distDir . '/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
         $this->_zip($distDir);
     }
 
     private function _copySource($name, $themeDir, $distDir)
     {
-        $sourceTargetDir = $distDir . '/source/web/themes/' . $name;
+        $sourceTargetDir = $distDir . '/source/' . $name;
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
 

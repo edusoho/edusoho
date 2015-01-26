@@ -1,0 +1,24 @@
+{% extends 'TopxiaMobileBundleV2::article.layout.html.twig' %}
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+
+<div class="app-page detail" style="padding:10px;" data-page="home">
+	 <div class="app-content">
+	 	<h4>{{ article.title | raw}}</h4>
+	 	<h6>{{ article.publishedTime|date('Y-m-d H:i') }}  <span class="source" >{{ article.source}}</span> 阅读 {{ article.hits }}</h6>
+	 	<p>{{ article.body | raw}}</p>
+	 </div>
+</div>
+
+{% block head_scripts %}
+  {{ parent() }}
+	<script src="{{ asset('bundles/articleapp/js/zoomImage.js') }}"></script>
+	<script type="text/javascript">
+  		App.load('home', function(){
+  			autoZoomImage();
+  		});
+  	</script>
+{% endblock %}
+
+{% endblock %}
