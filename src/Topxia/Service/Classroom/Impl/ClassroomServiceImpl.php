@@ -84,7 +84,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if (empty($member) or !in_array($member['role'], array('teacher', 'student','aduitor'))) {
-            throw $this->createAccessDeniedException('您不是班级学员，不能查看课程内容，请先购买课程！');
+            throw $this->createAccessDeniedException('您不是班级学员，不能查看课程内容，请先购买班级！');
         }
 
         return array($classroom, $member);

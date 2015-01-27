@@ -1531,13 +1531,13 @@ classroom_manage_teachers:
     pattern: /classroom/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }
 
-classroom_threads:
-    pattern:  /classroom/{id}/thread
+threads:
+    pattern:  /{targetType}/{id}/thread
     defaults: { _controller: TopxiaWebBundle:Thread:index }
 
-# course_thread_create:
-#     pattern:  /course/{id}/thread/create
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:create }
+thread_create:
+    pattern:  /{targetType}/{id}/thread/create
+    defaults: { _controller: TopxiaWebBundle:Thread:create }
 
 # course_thread_show:
 #     pattern:  /course/{courseId}/thread/{id}

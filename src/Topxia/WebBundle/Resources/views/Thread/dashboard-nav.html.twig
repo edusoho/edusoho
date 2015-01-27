@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs course-dashboard-tabs clearfix" id="course-tabs">
   {% block course_dashboard_nav %}
-            <li class="{% if nav == 'threads' %}active{% endif %}"><a class="js-nav" href="{{ path('classroom_threads', {id:classroom.id}) }}">话题</a></li>
+            <li class="{% if nav == 'threads' %}active{% endif %}"><a class="js-nav" href="{{ path('threads', {targetType:targetType,id:classroom.id}) }}">话题</a></li>
   {% endblock %}
 </ul>

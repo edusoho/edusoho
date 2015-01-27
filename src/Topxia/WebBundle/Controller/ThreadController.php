@@ -7,25 +7,40 @@ use Topxia\Common\Paginator;
 
 class ThreadController extends BaseController
 {
-    public function indexAction(Request $request, $id)
+    private function checkTargetType($id,$targetType)
+    {           
+        switch ($targetType) {
+            case 'classroom':
+                $classroom = $this->getClassroomService()->getClassroom($id);
+                if (empty($classroom)) {
+                    throw $this->createNotFoundException("班级不存在，或已删除。");
+                }
+
+                // if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
+                //     return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+                // }
+
+                 $result = $this->getClassroomService()->tryTakeClassroom($id);
+                break;
+            default:
+
+                throw $this->createNotFoundException('参数targetType不正确。');
+        }
+        return $result;
+
+    }
+
+    public function indexAction(Request $request, $id, $targetType)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
-        if (empty($classroom)) {
-            throw $this->createNotFoundException("班级不存在，或已删除。");
-        }
+        $this->checkTargetType($id,$targetType);
 
-        // if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
-        //     return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        // }
-
-        list($classroom, $member) = $this->getClassroomService()->tryTakeClassroom($id);
         $filters = $this->getThreadSearchFilters($request);
-        $conditions = $this->convertFiltersToConditions($classroom, $filters);
+        $conditions = $this->convertFiltersToConditions($id, $filters);
 
         $paginator = new Paginator(
             $request,
@@ -49,11 +64,12 @@ class ThreadController extends BaseController
         $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
 
         return $this->render("TopxiaWebBundle:Thread:{$template}.html.twig", array(
-            'classroom' => $classroom,
+            'id' => $id,
             'threads' => $threads,
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
+            'targetType' =>$targetType
         ));
     }
 
@@ -129,25 +145,22 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $id)
+    public function createAction(Request $request, $id, $targetType)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-
-        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-            return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
-        }
-
-        if ($member && $member['levelId'] > 0) {
-            if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
-                return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
-            }
-        }
-
+        // list($classroom,$member) = $this->checkTargetType($id,$targetType);
+        
+        // if ($member && $member['levelId'] > 0) {
+        //     if ($this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+        //         return $this->redirect($this->generateUrl('course_show',array('id' => $id)));
+        //     }
+        // }
+        
+        $this->checkTargetType($id,$targetType);
 
         $type = $request->query->get('type') ? : 'discussion';
         $form = $this->createThreadForm(array(
         	'type' => $type,
-        	'courseId' => $course['id'],
+        	'targetId' => $id,
     	));
 
         if ($request->getMethod() == 'POST') {
@@ -165,6 +178,7 @@ class ThreadController extends BaseController
             'course' => $course,
             'form' => $form->createView(),
             'type' => $type,
+            'targetType'
         ));
     }
 
@@ -491,9 +505,9 @@ class ThreadController extends BaseController
         return $filters;
     }
 
-    private function convertFiltersToConditions($classroom, $filters)
+    private function convertFiltersToConditions($id, $filters)
     {
-        $conditions = array('targetId' => $classroom['id']);
+        $conditions = array('targetId' => $id);
         switch ($filters['type']) {
             case 'question':
                 $conditions['type'] = 'question';
