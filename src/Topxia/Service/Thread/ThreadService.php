@@ -80,12 +80,12 @@ interface ThreadService
 	/**
 	 * 回复话题
 	 **/
-	public function getPost($courseId, $id);
+	public function getPost($targetId, $id);
 
 	public function createPost($post);
 
-	public function updatePost($courseId, $id, $fields);
+	public function updatePost($targetId, $id, $fields);
 
-	public function deletePost($courseId, $id);
+	public function deletePost($targetType,$targetId, $id);
 
 }

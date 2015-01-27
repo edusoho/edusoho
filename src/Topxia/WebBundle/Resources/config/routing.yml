@@ -1572,9 +1572,9 @@ thread_unelite:
     defaults: { _controller: TopxiaWebBundle:Thread:unelite }
     methods: [POST]
 
-# course_thread_post:
-#     pattern:  /course/{courseId}/thread/{id}/post
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:post }
+thread_post:
+    pattern:  /{targetType}/{targetId}/thread/{id}/post
+    defaults: { _controller: TopxiaWebBundle:Thread:post }
 
 
 thread_post_delete:

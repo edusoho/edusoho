@@ -56,7 +56,7 @@
 	    <ul class="thread-post-list media-list">
 	      {% for post in elitePosts %}
 	        {% set author = users[post.userId] %}
-	        {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+	        {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig' %}
 	      {% endfor %}
 	    </ul>
 		{% endif %}
@@ -69,7 +69,7 @@
     <ul class="thread-post-list media-list">
       {% for post in posts %}
         {% set author = users[post.userId] %}
-        {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+        {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig' %}
       {% else %}
         <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
       {% endfor %}
@@ -80,7 +80,7 @@
     
     <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> 添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h3>
 
-    {{ render(controller('TopxiaWebBundle:CourseThread:post', {courseId:course.id, id:thread.id})) }}
+    {{ render(controller('TopxiaWebBundle:Thread:post', {targetType:targetType,targetId:targetId, id:thread.id})) }}
 
 
 	</div>

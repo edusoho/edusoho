@@ -32,8 +32,8 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:id}|merge(filters)|merge({sort:'posted'})) }}">最后回复</a></li>
-          <li class="{% if filters.sort == 'created' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
+          <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('threads', {targetType:targetType,id:id}|merge(filters)|merge({sort:'posted'})) }}">最后回复</a></li>
+          <li class="{% if filters.sort == 'created' %}active{% endif %}"><a class="js-nav" href="{{ path('threads', {targetType:targetType,id:id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
         </ul>
       </li>
 
@@ -59,7 +59,7 @@
               {% if thread.type == 'question' %}
                 <span class="label label-info" title="问答帖">问</span>
               {% endif  %}
-              <a class="js-nav" href="{{ path('course_thread_show', {courseId:id, id:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+              <a class="js-nav" href="{{ path('thread_show', {targetType:targetType,targetId:id, id:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 
               {% if thread.isElite %}
                 <span class="label label-warning" title="精华帖">精</span>
@@ -71,7 +71,7 @@
               by {{ web_macro.user_link(author, 'link-muted') }}
 
               {% if thread.postNum > 0 %}
-                {% set poster = users[thread.latestPostUserId] %}
+                {% set poster = users[thread.lastPostMemberId] %}
                 <span class="bullet">•</span>
                 <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
               {% endif %}
@@ -83,7 +83,7 @@
           </div>
       </li>
     {% else %}
-      <li class="mvl tac text-muted">课程暂无话题</li>
+      <li class="mvl tac text-muted">暂无话题</li>
     {% endfor %}
   </ul>
 

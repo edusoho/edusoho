@@ -251,7 +251,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	    }
 
                   if ($targetType == 'classroom') {
-		    $classroom = $this->getClassroom($classId);
+		    $classroom = $this->getClassroom($targetId);
 		    if (empty($classroom)) {
 		        throw $this->createNotFoundException();
 		    }
@@ -259,7 +259,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		        throw $this->createAccessDeniedException('班级未发布,无法查看,请联系管理员！');
 		    }
 
-		    $member = $this->getMemberDao()->getMemberByClassIdAndUserId($classId, $user['id']);
+		    $member = $this->getMemberDao()->getMemberByClassIdAndUserId($targetId, $user['id']);
 		    if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
 		        return $classroom;
 		    }
@@ -363,10 +363,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
 	}
 
-	public function getPost($courseId, $id)
+	public function getPost($targetId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
-		if (empty($post) or $post['courseId'] != $courseId) {
+		if (empty($post) or $post['targetId'] != $targetId) {
 			return null;
 		}
 		return $post;
@@ -374,20 +374,20 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function createPost($post)
 	{
-		$requiredKeys = array('courseId', 'threadId', 'content');
+		$requiredKeys = array('targetId', 'threadId', 'content');
 		if (!ArrayToolkit::requireds($post, $requiredKeys)) {
 			throw $this->createServiceException('参数缺失');
 		}
 
-		$thread = $this->getThread($post['courseId'], $post['threadId']);
+		$thread = $this->getThread($post['targetId'], $post['threadId']);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('课程(ID: %s)话题(ID: %s)不存在。', $post['courseId'], $post['threadId']));
 		}
 
-		list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
+		// list($course, $member) = $this->getCourseService()->tryTakeCourse($post['targetId']);
 
 		$post['userId'] = $this->getCurrentUser()->id;
-		$post['isElite'] = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
+		// $post['isElite'] = $this->getCourseService()->isCourseTeacher($post['targetId'], $post['userId']) ? 1 : 0;
 		$post['createdTime'] = time();
 
 		//创建post过滤html
@@ -397,23 +397,24 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		// 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
 		$threadFields = array(
 			'postNum' => $thread['postNum'] + 1,
-			'latestPostUserId' => $post['userId'],
+			'lastPostMemberId' => $post['userId'],
 			'lastPostTime' => $post['createdTime'],
+			'updateTime' => time(),
 		);
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
 
 		return $post;
 	}
 
-	public function updatePost($courseId, $id, $fields)
+	public function updatePost($targetId, $id, $fields)
 	{
-		$post = $this->getPost($courseId, $id);
+		$post = $this->getPost($targetId, $id);
 		if (empty($post)) {
 			throw $this->createServiceException("回帖#{$id}不存在。");
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+		// ($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
 
 
 		$fields  = ArrayToolkit::parts($fields, array('content'));
@@ -426,17 +427,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->updatePost($id, $fields);
 	}
 
-	public function deletePost($courseId, $id)
+	public function deletePost($targetType,$targetId, $id)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$this->tryManage($targetType,$targetId);
 
 		$post = $this->getThreadPostDao()->getPost($id);
 		if (empty($post)) {
 			throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $id));
 		}
 
-		if ($post['courseId'] != $courseId) {
-			throw $this->createServiceException(sprintf('帖子#%s不属于课程#%s，删除失败。', $id, $courseId));
+		if ($post['targetId'] != $targetId) {
+			throw $this->createServiceException(sprintf('帖子#%s不属于内容#%s，删除失败。', $id, $targetId));
 		}
 
 		$this->getThreadPostDao()->deletePost($post['id']);

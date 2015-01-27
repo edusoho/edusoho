@@ -9,7 +9,7 @@
 {% block dashboard_main %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('threads', {targetType:targetType,id:id}) }}">话题</a></li>
+  <li><a href="{{ path('threads', {targetType:targetType,id:targetId}) }}">话题</a></li>
   {% if thread %}
     <li><a href="{{ path('thread_show', {targetType:targetType,targetId:thread.targetId, id:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
     <li class="active">{% if type == 'question' %}编辑问题{% else %}编辑话题{% endif %}</li>
@@ -23,7 +23,7 @@
   {% if thread %}
     action="{{ path('thread_edit', {targetType:targetType,targetId:targetId, id:thread.id}) }}"
   {% else %}
-    action="{{ path('thread_create', {targetType:targetType,id:id}) }}"
+    action="{{ path('thread_create', {targetType:targetType,id:targetId}) }}"
     {% endif %}
   >
 
@@ -47,7 +47,7 @@
         <a href="{{ path('thread_show', {targetType:targetType,targetId:thread.targetId, id:thread.id}) }}" class="btn btn-link">取消</a>
         <button type="submit" class="btn btn-primary btn-fat">保存</button>
       {% else %}
-        <a href="{{ path('threads', {targetType:targetType,id:id}) }}" class="btn btn-link">取消</a>
+        <a href="{{ path('threads', {targetType:targetType,id:targetId}) }}" class="btn btn-link">取消</a>
         <button type="submit" class="btn btn-primary">发表</button>
       {% endif  %}
     </div>
