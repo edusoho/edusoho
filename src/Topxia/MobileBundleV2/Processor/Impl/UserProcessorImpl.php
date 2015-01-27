@@ -558,6 +558,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'startTime',
             'DESC'
         );
+
         $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
         $resultCourse     = reset($resultCourse);
         if ($resultCourse != false) {
@@ -586,49 +587,59 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
         $resultLearned = $this->controller->filterCourses($learnedCourses);
         $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
-        //----问答
-        $conditions     = array(
-            'courseIds' => $courseIds,
-            'type' => 'question'
-        );
 
-        $resultThread= $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultThread = reset($resultThread);
-
-        if ($resultThread != false) {
-            $data = array(
-                'content' => $resultThread['title'],
-                'id' => $resultThread['id'],
-                'courseId' => $resultThread['courseId'],
-                'lessonId' => $resultThread['lessonId'],
-                'time' => Date('c', $resultThread['latestPostTime'])
+        $threadData = null;
+        $discussionData = null;
+        if(sizeof($courseIds) > 0){
+            //----问答
+            $conditions     = array(
+                'courseIds' => $courseIds,
+                'type' => 'question'
             );
+
+            $resultThread = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+            
+            $resultThread = reset($resultThread);
+
+            if ($resultThread != false) {
+                $threadData = array(
+                    'content' => $resultThread['title'],
+                    'id' => $resultThread['id'],
+                    'courseId' => $resultThread['courseId'],
+                    'lessonId' => $resultThread['lessonId'],
+                    'time' => Date('c', $resultThread['latestPostTime'])
+                );
+            }
+
+            //----讨论
+            $conditions['type'] = 'discussion';
+            $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+            $resultDiscussion   = reset($resultDiscussion);
+            
+            if ($resultDiscussion != false) {
+                $discussionData = array(
+                    'content' => $resultDiscussion['title'],
+                    'id' => $resultDiscussion['id'],
+                    'courseId' => $resultDiscussion['courseId'],
+                    'lessonId' => $resultDiscussion['lessonId'],
+                    'time' => Date('c', $resultDiscussion['latestPostTime'])
+                );
+            }else{
+                $discussionData = null;
+            }
         }
+
+        
         $result[$index++] = array(
             'title' => '问答',
-            'data' => $data
+            'data' => $threadData
         ); 
         
 
-        //----讨论
-        $conditions['type'] = 'discussion';
-        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultDiscussion   = reset($resultDiscussion);
-        $data               = array();
-        if ($resultDiscussion != false) {
-            $data = array(
-                'content' => $resultDiscussion['title'],
-                'id' => $resultDiscussion['id'],
-                'courseId' => $resultDiscussion['courseId'],
-                'lessonId' => $resultDiscussion['lessonId'],
-                'time' => Date('c', $resultDiscussion['latestPostTime'])
-            );
-        }else{
-            $data = null;
-        }
+        
         $result[$index++] = array(
             'title' => '讨论',
-            'data' => $data
+            'data' => $discussionData
         ); //讨论
 
         //笔记
