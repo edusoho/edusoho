@@ -8,7 +8,7 @@ define(function(require, exports, module) {
             swfFileUrl:'',
             pdfFileUrl:'',
             swfPlayerUrl:'../../bundles/topxiaweb/js/controller/swf/edusohoViewer.swf',
-            swfPlayerWidth:'800',
+            swfPlayerWidth:'100%',
             swfPlayerheight:'100%'
         },
 
