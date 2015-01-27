@@ -258,39 +258,42 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $resultLearned = $this->controller->filterCourses($learnedCourses);
         $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
 
-        $conditions     = array(
-            'courseIds' => $courseIds,
-            'type' => $type
-        );
+        $threadsByUserCourseIds = array();
+        if(sizeof($courseIds) > 0){
+            $conditions     = array(
+                'courseIds' => $courseIds,
+                'type' => $type
+            );
 
-        $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', $start,  $limit);
-        $controller = $this;
-        $threadsByUserCourseIds = array_map(function($thread) use ($controller)
-        {
-            $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
-            return $thread;
-        }, $threadsByUserCourseIds);
+            $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', $start,  $limit);
+            $controller = $this;
+            $threadsByUserCourseIds = array_map(function($thread) use ($controller)
+            {
+                $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
+                return $thread;
+            }, $threadsByUserCourseIds);
 
-        $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threadsByUserCourseIds, 'courseId'));
-        
-        $posts = array();
-        foreach ($threadsByUserCourseIds as $key => $thread) {
-            $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "default", 0, 1);
-            if (!empty($post)) {
-                $posts[$post[0]["threadId"]] = $post[0];
+            $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threadsByUserCourseIds, 'courseId'));
+            
+            $posts = array();
+            foreach ($threadsByUserCourseIds as $key => $thread) {
+                $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "default", 0, 1);
+                if (!empty($post)) {
+                    $posts[$post[0]["threadId"]] = $post[0];
+                }
             }
+            
+            $threadsByUserCourseIds = array_map(function($thread) use ($posts)
+            {
+                if (isset($posts[$thread["id"]])) {
+                    $thread["latestPostContent"] = $posts[$thread["id"]]["content"];
+                }
+                return $thread;
+            }, $threadsByUserCourseIds);
+
+            $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threadsByUserCourseIds, 'userId'));
+            $threadsByUserCourseIds = $this->filterThreads($threadsByUserCourseIds, $courses, $users);
         }
-        
-        $threadsByUserCourseIds = array_map(function($thread) use ($posts)
-        {
-            if (isset($posts[$thread["id"]])) {
-                $thread["latestPostContent"] = $posts[$thread["id"]]["content"];
-            }
-            return $thread;
-        }, $threadsByUserCourseIds);
-
-        $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threadsByUserCourseIds, 'userId'));
-        $threadsByUserCourseIds = $this->filterThreads($threadsByUserCourseIds, $courses, $users);
         return array(
             "start" => $start,
             "limit" => $limit,
