@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         attrs: {
             swfFileUrl:'',
             pdfFileUrl:'',
-            swfPlayerUrl:'http://7sbrob.com1.z0.glb.clouddn.com/edusohoViewer.swf',
+            swfPlayerUrl:'../../bundles/topxiaweb/js/controller/swf/edusohoViewer.swf',
             swfPlayerWidth:'800',
             swfPlayerheight:'100%'
         },
