@@ -73,7 +73,7 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function showAction(Request $request, $courseId, $id)
+    public function showAction(Request $request, $targetId, $id,$targetType)
     {
 
         $user = $this->getCurrentUser();
@@ -81,67 +81,46 @@ class ThreadController extends BaseController
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
 
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
-        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-            // return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
-            $isMemberNonExpired = false;
-        } else {
-            $isMemberNonExpired = true;
-        }
-        
-        $thread = $this->getThreadService()->getThread($course['id'], $id);
+        $thread = $this->getThreadService()->getThread($targetId, $id);
         if (empty($thread)) {
             throw $this->createNotFoundException("话题不存在，或已删除。");
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->getThreadPostCount($course['id'], $thread['id']),
+            $this->getThreadService()->getThreadPostCount($targetId, $thread['id']),
             30
         );
 
         $posts = $this->getThreadService()->findThreadPosts(
-            $thread['courseId'],
+            $thread['targetId'],
             $thread['id'],
             'default',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        if ($thread['type'] == 'question' and $paginator->getCurrentPage() == 1) {
-            $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
-        } else {
-            $elitePosts = array();
-        }
+        $elitePosts = array();
+        $isManager = '';
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $this->getThreadService()->hitThread($courseId, $id);
+        $this->getThreadService()->hitThread($targetId, $id);
 
-        $isManager = $this->getCourseService()->canManageCourse($course['id']);
+        if ($targetType == 'classroom') {
+            $isManager = $this->getClassroomService()->canManageClassroom($targetId);
+        }
 
-        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
-        return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
-            'course' => $course,
-            'lesson' => $lesson,
+        return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
             'elitePosts' => $elitePosts,
             'users' => $users,
             'isManager' => $isManager,
-            'isMemberNonExpired' => $isMemberNonExpired,
             'paginator' => $paginator,
+            'targetType' =>$targetType
         ));
     }
 
@@ -168,17 +147,18 @@ class ThreadController extends BaseController
             if ($form->isValid()) {
                 $thread = $this->getThreadService()->createThread($form->getData());
                 return $this->redirect($this->generateUrl('course_thread_show', array(
-                   'courseId' => $thread['courseId'],
+                   'targetId' => $thread['targetId'],
                    'id' => $thread['id'], 
+                   'targetType'=>$targetType,
                 )));
             }
         }
 
-        return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
-            'course' => $course,
+        return $this->render("TopxiaWebBundle:Thread:form.html.twig", array(
+            'id' => $id,
             'form' => $form->createView(),
             'type' => $type,
-            'targetType'
+            'targetType'=>$targetType,
         ));
     }
 

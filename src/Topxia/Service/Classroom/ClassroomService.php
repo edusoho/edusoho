@@ -19,4 +19,6 @@ interface ClassroomService
     
     public function getClassroomMember($classId, $userId);
 
+    public function canManageClassroom($targetId);
+
 }

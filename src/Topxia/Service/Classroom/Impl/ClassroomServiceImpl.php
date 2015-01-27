@@ -73,6 +73,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
+        if ($classroom['status'] != 'published') {
+            throw $this->createAccessDeniedException('班级未发布,无法查看,请联系管理员！');
+        }
+
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
@@ -88,6 +92,30 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return array($classroom, $member);
+    }
+
+
+    public function canManageClassroom($targetId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return false;
+        }
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        $classroom = $this->getClassroom($targetId);
+        if (empty($classroom)) {
+            return $user->isAdmin();
+        }
+
+        $member = $this->getMemberDao()->getMemberByClassIdAndUserId($targetId, $user->id);
+        if ($member and ($member['role'] == 'teacher')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getClassroomMember($classId, $userId)

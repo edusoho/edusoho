@@ -8,13 +8,13 @@ use Topxia\Common\ArrayToolkit;
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
 
-	public function getThread($courseId, $threadId)
+	public function getThread($targetId, $threadId)
 	{
 		$thread = $this->getThreadDao()->getThread($threadId);
 		if (empty($thread)) {
 			return null;
 		}
-		return $thread['courseId'] == $courseId ? $thread : null;
+		return $thread['targetId'] == $targetId ? $thread : null;
 	}
 
 	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit)
@@ -145,45 +145,31 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	}
 
 	public function createThread($thread)
-	{
-		if (empty($thread['courseId'])) {
-			throw $this->createServiceException('Course ID can not be empty.');
+	{	
+		if (empty($thread['title'])) {
+		    throw $this->createServiceException("标题名称不能为空！");
+		}
+		$thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
+
+		if (empty($thread['content'])) {
+		    throw $this->createServiceException("话题内容不能为空！");
+		}
+		$thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
+
+		if (empty($thread['targetId'])) {
+			throw $this->createServiceException(' Id不能为空！');
 		}
 		if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question'))) {
 			throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
 		}
 
-		list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
-
 		$thread['userId'] = $this->getCurrentUser()->id;
-		$thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
 
-		//创建thread过滤html
-		$thread['content'] = $this->purifyHtml($thread['content']);
 		$thread['createdTime'] = time();
-		$thread['latestPostUserId'] = $thread['userId'];
+		$thread['updateTime'] = time();
+		$thread['lastPostMemberId'] = $thread['userId'];
 		$thread['lastPostTime'] = $thread['createdTime'];
 		$thread = $this->getThreadDao()->addThread($thread);
-
-		foreach ($course['teacherIds'] as $teacherId) {
-			if ($teacherId == $thread['userId']) {
-				continue;
-			}
-
-			if ($thread['type'] != 'question') {
-				continue;
-			}
-
-			$this->getNotifiactionService()->notify($teacherId, 'thread', array(
-				'threadId' => $thread['id'],
-				'threadUserId' => $thread['userId'],
-				'threadUserNickname' => $this->getCurrentUser()->nickname,
-				'threadTitle' => $thread['title'],
-				'threadType' => $thread['type'],
-				'courseId' => $course['id'],
-				'courseTitle' => $course['title'],
-			));
-		}
 
 		return $thread;
 	}
@@ -273,14 +259,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 0));
 	}
 
-	public function hitThread($courseId, $threadId)
+	public function hitThread($targetId, $threadId)
 	{
 		$this->getThreadDao()->waveThread($threadId, 'hitNum', +1);
 	}
 
-	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit)
+	public function findThreadPosts($targetId, $threadId, $sort = 'default', $start, $limit)
 	{
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($targetId, $threadId);
 		if (empty($thread)) {
 			return array();
 		}
@@ -295,7 +281,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->findPostsByThreadId($threadId, $orderBy, $start, $limit);
 	}
 
-	public function getThreadPostCount($courseId, $threadId)
+	public function getThreadPostCount($targetId, $threadId)
 	{
 		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
 	}

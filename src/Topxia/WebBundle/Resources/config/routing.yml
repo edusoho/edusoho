@@ -1539,9 +1539,9 @@ thread_create:
     pattern:  /{targetType}/{id}/thread/create
     defaults: { _controller: TopxiaWebBundle:Thread:create }
 
-# course_thread_show:
-#     pattern:  /course/{courseId}/thread/{id}
-#     defaults: { _controller: TopxiaWebBundle:CourseThread:show }
+thread_show:
+    pattern:  /{targetType}/{targetId}/thread/{id}
+    defaults: { _controller: TopxiaWebBundle:Thread:show }
 
 # course_thread_post:
 #     pattern:  /course/{courseId}/thread/{id}/post

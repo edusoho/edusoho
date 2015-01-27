@@ -6,7 +6,7 @@ namespace Topxia\Service\Thread;
  */
 interface ThreadService
 {
-	public function getThread($courseId, $threadId);
+	public function getThread($targetId, $threadId);
 
 	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit);
 
@@ -48,7 +48,7 @@ interface ThreadService
 	 * @param integer $threadId 话题ID
 	 * 
 	 */
-	public function hitThread($courseId, $threadId);
+	public function hitThread($targetId, $threadId);
 
 	/**
 	 * 获得话题的回帖
@@ -61,7 +61,7 @@ interface ThreadService
 	 * 
 	 * @return array 获得的话题回帖列表。
 	 */
-	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit);
+	public function findThreadPosts($targetId, $threadId, $sort = 'default', $start, $limit);
 
 	public function getPostCountByuserIdAndThreadId($userId,$threadId);
 
@@ -73,7 +73,7 @@ interface ThreadService
 	 * @param  integer  $threadId 话题ID
 	 * @return integer  话题回帖的数量
 	 */
-	public function getThreadPostCount($courseId, $threadId);
+	public function getThreadPostCount($targetId, $threadId);
 
 	public function findThreadElitePosts($courseId, $threadId, $start, $limit);
 
