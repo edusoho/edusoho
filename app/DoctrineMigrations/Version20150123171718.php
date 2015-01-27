@@ -16,16 +16,16 @@ class Version20150123171718 extends AbstractMigration
         $this->addSql("
             CREATE TABLE IF NOT EXISTS `classroom_member` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-              `classId` int(10) unsigned NOT NULL DEFAULT '0',
-              `userId` int(10) unsigned NOT NULL DEFAULT '0',
-              `orderId` int(10) unsigned NOT NULL DEFAULT '0',
-              `levelId` int(10) unsigned NOT NULL DEFAULT '0',
-              `noteNum` int(10) unsigned NOT NULL DEFAULT '0',
-              `threadNum` int(10) unsigned NOT NULL DEFAULT '0',
+              `classId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
+              `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
+              `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单ID',
+              `levelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
+              `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数',
+              `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
               `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0',
               `remark` text COMMENT '备注',
-              `role` enum('aduitor','student','teacher') NOT NULL DEFAULT 'aduitor',
-              `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+              `role` enum('aduitor','student','teacher') NOT NULL DEFAULT 'aduitor' COMMENT '角色',
+              `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
     }
