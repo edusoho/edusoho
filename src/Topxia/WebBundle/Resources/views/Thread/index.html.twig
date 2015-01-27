@@ -7,17 +7,17 @@
   <div class="pull-right">
     <a class="btn btn-sm btn-info" href="{{ path('thread_create', {targetType:targetType,id:id, type:'discussion'}) }}">发话题</a>
 
-    <a class="btn btn-sm btn-info" href="{{ path('course_thread_create', {id:id, type:'question'}) }}">提问题</a> 
+    <a class="btn btn-sm btn-info" href="{{ path('thread_create', {targetType:targetType,id:id, type:'question'}) }}">提问题</a> 
 
   </div>
 
   <div class="thread-filters clearfix">
     <ul class="nav nav-pills nav-mini pull-left">
-      <li{% if filters.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
+      <li{% if filters.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('threads', {targetType:targetType,id:id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
 
-      <li{% if filters.type == 'question' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
+      <li{% if filters.type == 'question' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('threads', {targetType:targetType,id:id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
 
-      <li{% if filters.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
+      <li{% if filters.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('threads', {targetType:targetType,id:id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
 
       <li><span class="mhm text-muted">|</span></li>
 

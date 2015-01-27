@@ -21,7 +21,7 @@
 
 <form id="thread-form" class="form-vertical" method="post" 
   {% if thread %}
-    action="{{ path('course_thread_edit', {courseId:id, id:thread.id}) }}"
+    action="{{ path('thread_edit', {targetType:targetType,targetId:targetId, id:thread.id}) }}"
   {% else %}
     action="{{ path('thread_create', {targetType:targetType,id:id}) }}"
     {% endif %}

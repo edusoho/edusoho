@@ -174,15 +174,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $thread;
 	}
 
-	public function updateThread($courseId, $threadId, $fields)
+	public function updateThread($targetId, $threadId, $fields)
 	{
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($targetId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException('话题不存在，更新失败！');
 		}
+		$thread['updateTime'] = time();
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+		// ($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
 		if (empty($fields)) {
@@ -194,14 +195,44 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->updateThread($threadId, $fields);
 	}
 
-	public function deleteThread($threadId)
+	public function canManage($targetType,$targetId)
+	{
+	    $user = $this->getCurrentUser();
+	    if (!$user->isLogin()) {
+	        return false;
+	    }
+	    if ($user->isAdmin()) {
+	        return true;
+	    }
+
+	    if ($targetType == 'classroom') {
+		$classroom = $this->getClassroom($targetId);
+		if (empty($classroom)) {
+		    return $user->isAdmin();
+		}
+
+		$member = $this->getMemberDao()->getMemberByClassIdAndUserId($targetId, $user->id);
+		if ($member and ($member['role'] == 'teacher')) {
+		    return true;
+		}
+	    }
+
+	    return false;
+	}
+
+	public function getClassroom($id)
+	{
+	return $this->getClassroomDao()->getClassroom($id);
+	}
+
+	public function deleteThread($targetType,$threadId)
 	{
 		$thread = $this->getThreadDao()->getThread($threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
 		}
 
-		if (!$this->getCourseService()->canManageCourse($thread['courseId'])) {
+		if ($this->canManage($targetType,$thread['targetId']) == false) {
 			throw $this->createServiceException('您无权限删除该话题');
 		}
 
@@ -211,11 +242,42 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
 	}
 
-	public function stickThread($courseId, $threadId)
+	public function tryManage($targetType,$targetId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+	    $result =''; 
+	    $user = $this->getCurrentUser();
+	    if (!$user->isLogin()) {
+	        throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
+	    }
 
-		$thread = $this->getThread($courseId, $threadId);
+                  if ($targetType == 'classroom') {
+		    $classroom = $this->getClassroom($classId);
+		    if (empty($classroom)) {
+		        throw $this->createNotFoundException();
+		    }
+		    if ($classroom['status'] != 'published') {
+		        throw $this->createAccessDeniedException('班级未发布,无法查看,请联系管理员！');
+		    }
+
+		    $member = $this->getMemberDao()->getMemberByClassIdAndUserId($classId, $user['id']);
+		    if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+		        return $classroom;
+		    }
+
+		    if (empty($member) or !in_array($member['role'], array('teacher', 'student','aduitor'))) {
+		        throw $this->createAccessDeniedException('您不是班级学员，不能查看课程内容，请先购买班级！');
+		    }
+
+		    return $classroom;
+                  }
+                  return $result;
+	}
+
+	public function stickThread($targetType,$targetId, $threadId)
+	{
+		$this->tryManage($targetType,$targetId);
+
+		$thread = $this->getThread($targetId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -223,11 +285,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 1));
 	}
 
-	public function unstickThread($courseId, $threadId)
+	public function unstickThread($targetType,$targetId, $threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$this->tryManage($targetType,$targetId);
 
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($targetId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -235,11 +297,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 0));
 	}
 
-	public function eliteThread($courseId, $threadId)
+	public function eliteThread($targetType,$targetId, $threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$this->tryManage($targetType,$targetId);
 
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($targetId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -247,11 +309,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
 	}
 
-	public function uneliteThread($courseId, $threadId)
+	public function uneliteThread($targetType,$targetId, $threadId)
 	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+		$this->tryManage($targetType,$targetId);
 
-		$thread = $this->getThread($courseId, $threadId);
+		$thread = $this->getThread($targetId, $threadId);
 		if (empty($thread)) {
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
@@ -388,7 +450,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	private function getThreadPostDao()
 	{
-		return $this->createDao('Course.ThreadPostDao');
+		return $this->createDao('Thread.ThreadPostDao');
 	}
 
 	private function getCourseService()
@@ -409,6 +471,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     private function getLogService()
     {
     	return $this->createService('System.LogService');
+    }
+
+        private function getMemberDao ()
+    {
+        return $this->createDao('Classroom.ClassroomMemberDao');
+    }
+
+    private function getClassroomDao() 
+    {
+        return $this->createDao('Classroom.ClassroomDao');
     }
 
 }
