@@ -1,0 +1,25 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr>
+  <td>{{courseCarousel.seq|default(0)}}</td>
+  <td>{{courseCarousel.name}}</td>
+  <td>
+    {% if courseCarousel.display|default('') %}是{% else %}否{% endif %}
+  </td>
+  <td>
+    {% if category %}
+      {{category.name}}
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>
+    {% if column %}
+      {{column.name}}
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>
+    <button class="btn btn-sm btn-primary update-btn" data-url="{{path('admin_courseCarousel_edit',{code:courseCarousel.code})}}" data-toggle="modal" data-target="#modal">编辑内容</button>
+  </td>
+</tr>

@@ -16,7 +16,9 @@ class ColumnServiceImpl extends BaseService implements ColumnService
 
     public function getColumn($id)
     {
-        
+        if (empty($id)) {
+            return null;
+        }
         return ColumnSerialize::unserialize($this->getColumnDao()->getColumn($id));
     }
     public function getColumnByCode($code){
@@ -52,7 +54,16 @@ class ColumnServiceImpl extends BaseService implements ColumnService
         return $this->getColumnDao()->findAllColumnsCount();
     }
 
-  
+    public function searchColumns(array $conditions, array $orderBy, $start, $limit)
+    {
+        return $this->getColumnDao()->searchColumns($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchColumnCount(array $conditions)
+    {
+        return $this->getColumnDao()->searchColumnCount($conditions);
+    }
+    
 
     public function isColumnNameAvalieable($name, $exclude=null)
     {

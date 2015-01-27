@@ -1,6 +1,6 @@
-# homepage:
-#     pattern:  /
-#     defaults: { _controller: CustomWebBundle:Default:index }
+homepage:
+    pattern:  /
+    defaults: { _controller: CustomWebBundle:Default:index }
 
 course_show:
     pattern:  /course/{id}

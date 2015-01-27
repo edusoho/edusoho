@@ -95,4 +95,35 @@ class ColumnDaoImpl extends BaseDao implements ColumnDao
        
     }
 
+    public function searchColumns(array $conditions,array $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createColumnQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function searchColumnCount(array $conditions)
+    {
+        $builder = $this->createColumnQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    private function createColumnQueryBuilder($conditions)
+    {
+        if (isset($conditions['name'])) {
+            $conditions['name'] = "%{$conditions['name']}%";
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, $this->table)
+            ->andWhere('name like :name');
+
+        return $builder;
+    }
+
 }

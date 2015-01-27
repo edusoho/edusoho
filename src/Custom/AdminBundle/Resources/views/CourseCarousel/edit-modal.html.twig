@@ -1,0 +1,53 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}设置课程轮播{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="carousel-form" action="{{path('admin_courseCarousel_edit',{code:courseCarousel.code})}}" method="post">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="seq">序号</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="seq" type="text" name="seq" value="{{ courseCarousel.seq }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="name">名称</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="name" type="text" name="name" value="{{ courseCarousel.name }}">
+      </div>
+    </div>
+
+    <div {% if not category %}style="display:none;"{% endif %} class="form-group">
+      <label class="col-md-3 control-label" for="categoryId">分类</label>
+      <div class="col-md-6 controls">
+        <select id="categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+            {{ select_options(category_choices('course'), courseCarousel.categoryId, '分类') }}
+          </select>
+      </div>
+    </div>
+
+    <div {% if not column %}style="display:none;"{% endif %} class="form-group">
+      <label class="col-md-3 control-label" for="columnId">专栏</label>
+      <div class="col-md-6 controls">
+
+        <input type="text" id="columnId" name="columnId" class="select2-offscreen" data-url="{{path('admin_column_match')}}" value="{{column.name|default('')}}({{column.code|default('')}})" data-id="{{ column.id|default(0)}}" data-name="{{ column.name|default('')}}({{column.code|default('')}})">
+        
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="display">显示</label>
+      <div style="padding-top:7px;" class="col-md-6 controls">
+        <input class="" type="checkbox" {% if courseCarousel.display %}checked="checked"{% endif %} value="{{ courseCarousel.display }}" name="display">
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('customadminbundle/controller/courseCarousel/edit')</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+  <button id="carousel-edit-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#carousel-form">保存</button>
+{% endblock %}

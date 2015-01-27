@@ -1,24 +1,32 @@
 custom_admin_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: CustomAdminBundle:Default:index }
+
+
+
 admin_tag:
     pattern:  /tag
     defaults: { _controller: CustomAdminBundle:Tag:index }
+
 admin_tag_create:
     pattern:  /tag/create
     defaults: { _controller: CustomAdminBundle:Tag:create }
+
 admin_tag_update:
     pattern:  /tag/{id}/update
     defaults: { _controller: CustomAdminBundle:Tag:update }
+
 admin_tag_avatar:
      pattern: /tag/{id}/avatar
      defaults: {_controller: CustomAdminBundle:Tag:avatar}
+
 admin_tag_avatar_crop:
     pattern: /tag/{id}/avatar/crop
     defaults: {_controller: CustomAdminBundle:Tag:avatarCrop}
-# admin_user_avatar:
-#     pattern:  /user/{id}/avatar
-#     defaults: { _controller: TopxiaAdminBundle:User:avatar }
+
+
+
+
 admin_column:
     pattern:  /column
     defaults: { _controller: CustomAdminBundle:Column:index }
@@ -39,29 +47,51 @@ admin_column_delete:
     pattern:  /column/{id}/delete
     defaults: { _controller: CustomAdminBundle:Column:delete }
     methods:  [POST]
+
 admin_column_avatar:
      pattern: /column/{id}/avatar
      defaults: {_controller: CustomAdminBundle:Column:avatar}
+
 admin_column_avatar_crop:
     pattern: /column/{id}/avatar/crop
     defaults: {_controller: CustomAdminBundle:Column:avatarCrop}
+
+admin_column_match:
+    pattern: /column/match
+    defaults: {_controller: CustomAdminBundle:Column:match}
+
+
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: CustomAdminBundle:Setting:courseSetting }
+
 admin_column_course_vote:
     pattern:  /column/course/vote
     defaults: { _controller: CustomAdminBundle:ColumnCourseVote:index }
+
 admin_column_course_vote_create:
     pattern:  /column/course/vote/create
     defaults: { _controller: CustomAdminBundle:ColumnCourseVote:create }
+
 admin_column_course_vote_update:
     pattern:  /column/course/vote/{id}/update
     defaults: { _controller: CustomAdminBundle:ColumnCourseVote:update }
+
 admin_column_check_code:
     pattern:  /column/checkCode
     defaults: { _controller: CustomAdminBundle:Column:checkCode}
+
+
+
 
 admin_category_isSearch:
     pattern:  /category/{id}/isSearch
     defaults: { _controller: CustomAdminBundle:Category:isSearch}
 
+admin_courseCarousel:
+    pattern:  /courseCarousel
+    defaults: { _controller: CustomAdminBundle:CourseCarousel:index}
+
+admin_courseCarousel_edit:
+    pattern:  /courseCarousel/{code}/edit
+    defaults: { _controller: CustomAdminBundle:CourseCarousel:edit}

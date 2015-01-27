@@ -27,4 +27,7 @@ interface ColumnDao
 
     public function findTagIdsByColumnIdAndCourseComplexity($columId,$courseComplexity);
     
+    public function searchColumns(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchColumnCount(array $conditions);
 }
