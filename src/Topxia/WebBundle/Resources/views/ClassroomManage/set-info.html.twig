@@ -1,0 +1,45 @@
+{% extends 'TopxiaWebBundle:ClassroomManage:set-layout.html.twig' %}
+
+{% set settingNav = "info" %}
+{% set script_controller = 'classroom/set-info' %}
+
+{% block classroom_set_body %}
+<form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
+
+        <div class="row form-group">
+          <div class="col-md-2 control-label">
+            <label for="title">名称</label>
+          </div>
+          <div class="controls col-md-8">
+            <input name="title" type="text"  id="title" class="form-control" value="{{classroom.title}}"/>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-2 control-label">
+            <label >简介</label>
+          </div>
+          <div class="controls col-md-8">
+            <textarea name="about" class="form-control" >{{classroom.about|raw}}</textarea>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-2 control-label">
+            <label >课程说明</label>
+          </div>
+          <div class="controls col-md-8">
+            <textarea name="courseInstruction" rows="10" class="form-control" id="courseInstruction">{{classroom.courseInstruction}}</textarea>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-2 control-label"></div>
+          <div class="controls col-md-8">
+            <button type="submit" class="btn btn-primary" id="classroom-save">提交</button>  
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+{% endblock %}

@@ -6,6 +6,8 @@ interface ClassroomService
 
 {   
     public function getClassroom($id);
+
+    public function updateClassroom($id,$fields);
     
     public function searchClassrooms($conditions,$orderBy,$start,$limit);
 

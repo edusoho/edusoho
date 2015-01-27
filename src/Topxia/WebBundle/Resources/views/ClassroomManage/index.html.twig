@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:ClassroomManage:layout.html.twig' %}
 
-{% block title %}班级管理 - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('classroom.name')|default("班级") }}管理 - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'main' %}
 
@@ -8,7 +8,7 @@
 
        
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">设置</div>
+  <div class="panel-heading">{{ setting('classroom.name')|default("班级") }}管理</div>
   <div class="panel-body">
 
   </div>

@@ -1,17 +1,28 @@
-{% extends 'TopxiaWebBundle:ClassroomManage:layout.html.twig' %}
+{% extends 'TopxiaWebBundle:ClassroomManage:set-layout.html.twig' %}
 
-{% block title %}班级管理 - {{ parent() }}{% endblock %}
+{% set settingNav = "set" %}
+{% set script_controller = 'classroom/set' %}
 
-{% set side_nav = 'set' %}
+{% block classroom_set_body %}
+<form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
 
-{% block main %}
+        <div class="row form-group">
+          <div class="col-md-2 control-label">
+            <label for="price">价格</label>
+          </div>
+          <div class="controls col-md-8">
+            <input name="price" type="text"  id="price" class="form-control" value="{{classroom.price}}"/>
+          </div>
+        </div>
 
-       
-<div class="panel panel-default panel-col">
-  <div class="panel-heading">设置</div>
-  <div class="panel-body">
 
-  </div>
-</div>
+        <div class="row form-group">
+          <div class="col-md-2 control-label"></div>
+          <div class="controls col-md-8">
+            <button type="submit" class="btn btn-primary" id="classroom-save">提交</button>  
+          </div>
+        </div>
 
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
 {% endblock %}

@@ -66,4 +66,11 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         return $this->getClassroom($this->getConnection()->lastInsertId());
     }
 
+    public function updateClassroom($id,$fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+
+        return $this->getClassroom($id);
+    }
+
 }

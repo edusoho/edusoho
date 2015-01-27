@@ -48,4 +48,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
+    public function updateClassroom($id,$fields)
+    {   
+        if (empty(trim($fields['title']))) {
+            throw $this->createServiceException("班级名称不能为空！");
+        }
+
+        $classroom['title']=$fields['title'];
+        $classroom['about']=$fields['about'];
+        $classroom['courseInstruction']=$fields['courseInstruction'];
+
+        $classroom=$this->getClassroomDao()->updateClassroom($id,$classroom);
+
+        return $classroom;
+    }
 }

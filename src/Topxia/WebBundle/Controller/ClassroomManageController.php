@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomManageController extends BaseController
 {   
@@ -28,13 +29,36 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom));
     }
 
-    public function setAction($id)
+    public function setInfoAction($id,Request $request)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
+
+        if($request->getMethod()=="POST"){
+
+            $class=$request->request->all();
+
+            $classroom=$this->getClassroomService()->updateClassroom($id,$class);
+        }
+
+        return $this->render("TopxiaWebBundle:ClassroomManage:set-info.html.twig",array(
+            'classroom'=>$classroom));
+    }
+
+    public function setAction($id,Request $request)
+    {   
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        if($request->getMethod()=="POST"){
+
+            $class=$request->request->all();
+
+            $classroom=$this->getClassroomService()->updateClassroom($id,$class);
+        }
 
         return $this->render("TopxiaWebBundle:ClassroomManage:set.html.twig",array(
             'classroom'=>$classroom));
     }
+
 
     public function coursesAction($id)
     {   
