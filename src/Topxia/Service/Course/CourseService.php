@@ -338,4 +338,5 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
+
 }

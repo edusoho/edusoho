@@ -76,4 +76,6 @@ interface QuestionService
     public function deleteCategory($id);
 
     public function sortCategories($target, array $sortedIds);
+
+    public function getQuestionCountGroupByTypes($conditions);
 }

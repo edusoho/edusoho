@@ -42,7 +42,11 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
 
+
         foreach ($articles as $key => $article) {
+            if (empty($article['categoryId'])) {
+                continue;
+            }
             
             if ($article['categoryId'] == $categorise[$article['categoryId']]['id']) {
 

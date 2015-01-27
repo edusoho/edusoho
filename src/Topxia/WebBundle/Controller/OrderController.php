@@ -59,6 +59,9 @@ class OrderController extends BaseController
     public function createAction(Request $request)
     {
         $fields = $request->request->all();
+        if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
+            $fields["couponCode"]="";
+        }
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
@@ -85,7 +88,6 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount = (string)((float)$amount);
             $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
@@ -93,6 +95,11 @@ class OrderController extends BaseController
             //价格比较
             if($amount != $shouldPayMoney) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
+            }
+
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes") {
+                $coupon = $fields["couponCode"];
+                $couponDiscount = $couponResult["decreaseAmount"];
             }
 
             $orderFileds = array(
@@ -104,8 +111,8 @@ class OrderController extends BaseController
                 'userId' => $user["id"],
                 'payment' => 'alipay',
                 'targetId' => $targetId,
-                'coupon' => empty($couponResult) ? null : $fields["couponCode"],
-                'couponDiscount' => empty($couponResult) ? null : $couponResult["decreaseAmount"],
+                'coupon' => empty($coupon) ? null : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
             );
 
             $order = $processor->createOrder($orderFileds, $fields);

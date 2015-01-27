@@ -9,7 +9,7 @@ interface UserService
     public function getUser($id, $lock = false);
 
     public function getUserByNickname($nickname);
-
+    
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $ids);

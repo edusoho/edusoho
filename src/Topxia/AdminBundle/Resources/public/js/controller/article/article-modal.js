@@ -80,7 +80,7 @@ define(function(require, exports, module) {
             width: 'off',
             createSearchChoice: function() {
                 return null;
-            },
+            }
         });
     }
 
