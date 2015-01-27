@@ -213,6 +213,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
+        if (isset($conditions['notFree']) && $conditions['notFree'] == true){
+        	if (isset($conditions['chargeCoin'])&&$conditions['chargeCoin'] == true){
+        		$builder->andStaticWhere('originCoinPrice > 0');
+        	}else{
+        		$builder->andStaticWhere('originPrice > 0');
+        	}
+        }
+
         return $builder;
     }
 
