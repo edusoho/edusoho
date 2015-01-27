@@ -15,6 +15,20 @@
           </div>
         </div>
 
+        {% if setting('vip.enabled') %}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label">
+            <label for="price">可用会员身份免费加入</label>
+          </div>
+          <div class="col-md-8 controls">
+            <select name="vipLevelId" class="form-control width-input width-input-large">
+              {{ select_options(levels, classroom.vipLevelId, '无') }}
+            </select>
+            <div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
+          </div>
+        </div>
+        {% endif %}
 
         <div class="row form-group">
           <div class="col-md-2 control-label"></div>

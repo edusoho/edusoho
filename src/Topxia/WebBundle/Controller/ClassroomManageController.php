@@ -48,6 +48,12 @@ class ClassroomManageController extends BaseController
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
+
         if($request->getMethod()=="POST"){
 
             $class=$request->request->all();
@@ -56,9 +62,9 @@ class ClassroomManageController extends BaseController
         }
 
         return $this->render("TopxiaWebBundle:ClassroomManage:set.html.twig",array(
+            'levels' => $this->makeLevelChoices($levels),
             'classroom'=>$classroom));
     }
-
 
     public function coursesAction($id)
     {   
@@ -68,8 +74,23 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom));
     }
 
+    private function makeLevelChoices($levels)
+    {
+        $choices = array();
+        foreach ($levels as $level) {
+            $choices[$level['id']] = $level['name'];
+        }
+        return $choices;
+    }
+
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom.ClassroomService');
     }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
 }
