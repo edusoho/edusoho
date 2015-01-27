@@ -56,7 +56,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom['title']=$fields['title'];
         $classroom['about']=$fields['about'];
-        $classroom['courseInstruction']=$fields['courseInstruction'];
+        $classroom['description']=$fields['description'];
 
         $classroom=$this->getClassroomDao()->updateClassroom($id,$classroom);
 

@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var editor_classroom = EditorFactory.create('#courseInstruction', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+        var editor_classroom = EditorFactory.create('#description', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
         var validator = new Validator({
             element: '#classroom-set-form',
             onFormValidated: function(error){
