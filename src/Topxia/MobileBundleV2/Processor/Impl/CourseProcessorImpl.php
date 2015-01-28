@@ -1193,14 +1193,24 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
+        $tempLiveLessons;
         $tempLessons = array();
-        foreach($tempCourseIds as $key => $tempCourseId){
+        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++){
             foreach($lessons as $key => $lesson){
-                if(!strcmp($lesson["courseId"], $tempCourseId)){
-                    $tempLessons[$key]["lessonId"] = $lesson;
+                if(!strcmp($lesson["courseId"], $tempCourseIds[$tempCourseIdIndex])){
+                    $tempLiveLessons[] = $lesson;
                 }
             }
+            $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
         }
+
+        // foreach($tempCourseIds as $key => $tempCourseId){
+        //     foreach($lessons as $key => $lesson){
+        //         if(!strcmp($lesson["courseId"], $tempCourseId)){
+        //             $tempLessons[$key]["lessonId"] = $lesson;
+        //         }
+        //     }
+        // }
 
         $liveLessons = array();
         $tempLiveLesson;
