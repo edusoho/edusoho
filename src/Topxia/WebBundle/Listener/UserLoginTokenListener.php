@@ -46,7 +46,7 @@ class UserLoginTokenListener
         	&& $user['type'] == 'default'
         	&& $auth['email_enabled'] == 'opened'
             && $request->get('_route') != 'register_email_verify')
-        {
+        {error_log('OOOPPPKKK',3,'/var/tmp/mylogs.log');
                 $request->getSession()->invalidate();
                 $this->container->get("security.context")->setToken(null);
 
