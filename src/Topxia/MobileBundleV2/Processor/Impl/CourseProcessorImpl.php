@@ -1202,7 +1202,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                     $tempLiveLessons[] = $lesson;
                 }
             }
-            $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
+            if(isset($tempLiveLessons)){
+                $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
+                unset($tempLiveLessons);
+            }
         }
 
         return array("start" => $start,
