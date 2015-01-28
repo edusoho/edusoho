@@ -40,15 +40,13 @@ class UserLoginTokenListener
         }
 
         $auth = $this->getSettingService()->get('auth');
-error_log( $request->getRequestUri(),3,'/var/tmp/mylogs.log');
- error_log(       strstr(strtolower($request->getRequestUri()),'/email/verify/') );
 
         if($auth && array_key_exists('email_enabled',$auth) 
         	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0 
         	&& $user['type'] == 'default'
         	&& $auth['email_enabled'] == 'opened'
             && strstr(strtolower($request->getRequestUri()),'/email/verify/'))
-        {error_log('OOOPPPKKK',3,'/var/tmp/mylogs.log');
+        {
                 $request->getSession()->invalidate();
                 $this->container->get("security.context")->setToken(null);
 
