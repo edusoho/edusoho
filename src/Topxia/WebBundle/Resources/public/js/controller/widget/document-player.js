@@ -24,13 +24,16 @@ define(function(require, exports, module) {
 
         init: function (thiz) {
 
-            if (this.isSupportHtml5()) {
+            if (this.isSupportHtml5() && !this.isIE9()) {
                 this.initPDFJSViewer(thiz);
            
             }else{
                 this.initSwfViewer(thiz);
             }
 
+        },
+        isIE9: function(){
+            return navigator.appVersion.indexOf("MSIE 9.")!=-1;
         },
 
         isSupportHtml5: function(){
@@ -52,7 +55,7 @@ define(function(require, exports, module) {
 
         initSwfViewer: function(thiz){
 
-            thiz.html('<div id="website"><p align="center" class="style1">需要plash player版本９+</p><p align="center"><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p></div>');
+            thiz.html('<div id="website"><p align="center" class="style1">您还没有安装flash播放器 请点击<a href="http://www.adobe.com/go/getflashplayer">这里</a>安装</p></div>');
             var flashvars = {
               doc_url: escape(this.attrs.swfFileUrl.value) 
             };

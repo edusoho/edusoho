@@ -1206,7 +1206,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
 .toolbarField.pageNumber {
   -moz-appearance: textfield; /* hides the spinner in moz */
   min-width: 16px;
-  text-align: right;
+  text-align: center;
   width: 40px;
 }
 
