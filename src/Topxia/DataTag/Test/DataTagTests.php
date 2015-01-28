@@ -223,7 +223,7 @@ class DataTagTests extends PHPUnit_Framework_TestCase
 
         $groups = $Group->getData(array('count'=>5));
 
-    /*        print_r($groups);*/
+/*            print_r($groups);*/
 
     }
 
@@ -232,8 +232,8 @@ class DataTagTests extends PHPUnit_Framework_TestCase
         $Threads = new HotThreadsDataTag();
 
         $data = $Threads->getData(array('count'=>5));
-/*
-            print_r($data);*/
+
+/*            print_r($data);*/
 
     }
 
@@ -374,9 +374,9 @@ class DataTagTests extends PHPUnit_Framework_TestCase
         $PersonDynamic = new PersonDynamicDataTag();
 
         $data = $PersonDynamic->getData(array('count'=>'5'));
-
-/*            print_r($data);*/
-
+/*
+            print_r($data);
+*/
     }
 
     public function testPopularCoursesByCategoryDataTag()

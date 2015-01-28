@@ -38,8 +38,9 @@ class Version20150127114241 extends AbstractMigration
           `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
-    }
-
+     }
+        
+   
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs

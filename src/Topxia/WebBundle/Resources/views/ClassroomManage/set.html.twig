@@ -12,6 +12,7 @@
           </div>
           <div class="controls col-md-8">
             <input name="price" type="text"  id="price" class="form-control" value="{{classroom.price}}"/>
+            <div class="help-block">当前共有 7 个课程，原价共计 1596 元。</div>
           </div>
         </div>
 
@@ -23,7 +24,7 @@
           </div>
           <div class="col-md-8 controls">
             <select name="vipLevelId" class="form-control width-input width-input-large">
-              {{ select_options(levels, classroom.vipLevelId, '无') }}
+              {{ select_options(levels, classroom.vipLevelId|default(0), '不支持') }}
             </select>
             <div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
           </div>
