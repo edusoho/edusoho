@@ -246,7 +246,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getThreadsByUserCourseIds(){
     	$user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能获取问答！");
+            return $this->createErrorResponse('not_login', "您尚未登录，不能获取问答！");
         }
     	$type = $this->getParam("type", "question");
     	$start = (int) $this->getParam("start", 0);
@@ -1158,5 +1158,48 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $secret = $this->controller->getContainer()->getParameter('secret');
         return md5($string . $secret);
+    }
+
+    public function getLiveingCourse(){
+    $user = $this->controller->getUserByToken($this->request);
+    if (!$user->isLogin()) {
+        return $this->createErrorResponse('not_login', "您尚未登录！");
+    }
+    
+    $start   = (int) $this->getParam("start", 0);
+    $limit   = (int) $this->getParam("limit", 10);
+    $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+    $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+    
+    $count            = $this->controller->getCourseService()->searchLearnCount(array(
+    ));
+    $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+        "userId" => $user["id"]
+    ), array(
+        "finishedTime",
+        "ASC"
+    ), 0, $count);
+    
+    $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+    
+    $tempCourse = array();
+    $tempCourseId;
+    foreach ($courses as $key => $course) {  
+        if(!strcmp($course["type"],"live"))
+        {
+            $tempCourse[$course["id"]] = $course;
+            $tempCourseId = $course["id"];
+        }
+    }
+
+    return array('lesson' => $lessons);
+    // foreach($lessons as $key => $lessons){
+    //     if(!strcmp($lesson["courseId"], $tempCourseId)){
+    //         $tempCourse[$tempCourseId]["liveLesson"] = $lessons["title"];
+    //         $tempCourse[$tempCourseId]["liveStartTime"] = $lessons["startTime"];
+    //         $tempCourse[$tempCourseId]["liveEndTime"] = $lessons["endTime"];
+    //     }
+    // }
+
     }
 }
