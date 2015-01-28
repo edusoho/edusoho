@@ -1209,7 +1209,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 continue;
             }
             $tempLiveLesson = $tempLesson[0]["startTime"];
-            for($i=1; $i < sizeof($tempLesson); i++){
+            for($i=1; $i < sizeof($tempLesson); $i++){
                 if($tempLiveLesson > $tempLesson[i]["startTime"]){
                     $tempLiveLesson = $tempLesson[i]["startTime"];
                 }
