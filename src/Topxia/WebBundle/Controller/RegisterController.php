@@ -234,6 +234,9 @@ class RegisterController extends BaseController
             return $this->createJsonResponse(true);
         }
 
+        $this->getUserService()->setupAccount($user['id']);
+        $this->authenticateUser($user);
+
         return $this->render('TopxiaWebBundle:Register:email-verify-success.html.twig', array(
             'token' => $token,
         ));
