@@ -1194,6 +1194,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $tempLiveLessons;
+        $tempCourseIdIndex = 0;
         $tempLessons = array();
         for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++){
             foreach($lessons as $key => $lesson){
@@ -1215,14 +1216,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $liveLessons = array();
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
+        $tempLessonIndex;
         foreach($tempLessons as $key => $tempLesson){
             $tempLiveLesson = $tempLesson[0];
             if(sizeof($tempLesson) > 1){
                 $recentlyLiveLessonStartTime = $tempLesson[0]["startTime"];
-                for($i=1; $i < sizeof($tempLesson); $i++){
-                    if($recentlyLiveLessonStartTime > $tempLesson[i]["startTime"]){
-                        $recentlyLiveLessonStartTime = $tempLesson[i]["startTime"];
-                        $tempLiveLesson = $tempLesson[i];
+                for($tempLessonIndex=1; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
+                    if($recentlyLiveLessonStartTime > $tempLesson[$tempLessonIndex]["startTime"]){
+                        $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
+                        $tempLiveLesson = $tempLesson[$tempLessonIndex];
                     }
                 }
             }
