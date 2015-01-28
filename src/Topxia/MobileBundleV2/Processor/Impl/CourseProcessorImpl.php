@@ -1204,14 +1204,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $liveLessons = array();
         $tempLiveLesson;
+        $recentlyLiveLessonStartTime;
         foreach($tempLessons as $key => $tempLesson){
-            if(sizeof($tempLesson) <= 1){
-                continue;
-            }
-            $tempLiveLesson = $tempLesson[0]["startTime"];
-            for($i=1; $i < sizeof($tempLesson); $i++){
-                if($tempLiveLesson > $tempLesson[i]["startTime"]){
-                    $tempLiveLesson = $tempLesson[i]["startTime"];
+            $tempLiveLesson = $tempLesson[0];
+            if(sizeof($tempLesson) > 1){
+                $recentlyLiveLessonStartTime = $tempLesson[0]["startTime"];
+                for($i=1; $i < sizeof($tempLesson); $i++){
+                    if($recentlyLiveLessonStartTime > $tempLesson[i]["startTime"]){
+                        $recentlyLiveLessonStartTime = $tempLesson[i]["startTime"];
+                        $tempLiveLesson = $tempLesson[i];
+                    }
                 }
             }
             $liveLessons[$key] = $tempLiveLesson;
