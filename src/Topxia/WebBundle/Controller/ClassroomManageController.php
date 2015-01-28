@@ -2,6 +2,12 @@
 namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\FileToolkit;
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class ClassroomManageController extends BaseController
 {   
@@ -78,24 +84,12 @@ class ClassroomManageController extends BaseController
 
         if($request->getMethod()=="POST"){
 
-            echo 1;die;
-        }
-
-        return $this->render("TopxiaWebBundle:ClassroomManage:set-picture.html.twig",array(
-            'classroom'=>$classroom));
-    }
-
-    public function pictureAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
-        if($request->getMethod() == 'POST'){
             $file = $request->files->get('picture');
             if (!FileToolkit::isImageFile($file)) {
                 return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
             }
 
-            $filenamePrefix = "course_{$course['id']}_";
+            $filenamePrefix = "classroom_{$classroom['id']}_";
             $hash = substr(md5($filenamePrefix . time()), -8);
             $ext = $file->getClientOriginalExtension();
             $filename = $filenamePrefix . $hash . '.' . $ext;
@@ -105,21 +99,20 @@ class ClassroomManageController extends BaseController
 
             $fileName = str_replace('.', '!', $file->getFilename());
 
-            return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
-                'id' => $course['id'],
+            return $this->redirect($this->generateUrl('classroom_manage_picture_crop', array(
+                'id' => $classroom['id'],
                 'file' => $fileName)
             ));
         }
 
-        return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
-            'course' => $course,
-        ));
+        return $this->render("TopxiaWebBundle:ClassroomManage:set-picture.html.twig",array(
+            'classroom'=>$classroom));
     }
 
     public function pictureCropAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
+        $classroom=$this->getClassroomService()->getClassroom($id);
+      
         //@todo 文件名的过滤
         $filename = $request->query->get('file');
         $filename = str_replace('!', '.', $filename);
@@ -129,8 +122,8 @@ class ClassroomManageController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $c = $request->request->all();
-            $this->getCourseService()->changeCoursePicture($course['id'], $pictureFilePath, $c);
-            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
+            $this->getClassroomService()->changePicture($classroom['id'], $pictureFilePath, $c);
+            return $this->redirect($this->generateUrl('classroom_manage_set_picture', array('id' => $classroom['id'])));
         }
 
         try {
@@ -144,14 +137,13 @@ class ClassroomManageController extends BaseController
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen(480)->heighten(270);
 
-        // @todo fix it.
         $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
         $pictureUrl = ltrim($pictureUrl, ' /');
         $pictureUrl = $assets->getUrl($pictureUrl);
 
-        return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
-            'course' => $course,
+        return $this->render('TopxiaWebBundle:ClassroomManage:picture-crop.html.twig', array(
+            'classroom' => $classroom,
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
@@ -164,6 +156,24 @@ class ClassroomManageController extends BaseController
 
         return $this->render("TopxiaWebBundle:ClassroomManage:courses.html.twig",array(
             'classroom'=>$classroom));
+    }
+
+    public function publishAction($id)
+    {
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        $this->getClassroomService()->publishClassroom($id);
+
+        return new Response("success");
+    }
+
+    public function closeAction($id)
+    {
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        $this->getClassroomService()->closeClassroom($id);
+
+        return new Response("success");
     }
 
     private function makeLevelChoices($levels)

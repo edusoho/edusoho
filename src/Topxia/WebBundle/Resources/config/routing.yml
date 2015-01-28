@@ -215,6 +215,10 @@ course_create:
     pattern:  /course/create
     defaults: { _controller: TopxiaWebBundle:Course:create }
 
+course_select:
+    pattern:  /course/select
+    defaults: { _controller: TopxiaWebBundle:Course:select }
+
 course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
@@ -1523,6 +1527,14 @@ classroom_manage_set_info:
     pattern: /classroom/{id}/manage/set_info
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:setInfo }
 
+classroom_manage_set_picture:
+    pattern: /classroom/{id}/manage/set_picture
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:setPicture }
+
+classroom_manage_picture_crop:
+    pattern: /classroom/{id}/manage/picture_crop
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:pictureCrop }
+
 classroom_manage_set:
     pattern: /classroom/{id}/manage/set
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:set }
@@ -1534,3 +1546,11 @@ classroom_manage_students:
 classroom_manage_teachers:
     pattern: /classroom/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }
+
+classroom_manage_publish:
+    pattern: /classroom/{id}/manage/publish
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:publish }
+
+classroom_manage_close:
+    pattern: /classroom/{id}/manage/close
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:close }

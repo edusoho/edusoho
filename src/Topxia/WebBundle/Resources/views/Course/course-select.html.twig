@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class= "modal-lg" %}
+
+{% block title %}选择课程{% endblock %}
+{% block body %}
+
+<form action="/admin/course/search" class="form-inline" role="search-form">
+      <div class="form-group ">
+        <input type="text" class="form-control" name="key" value="" placeholder="课程名称">
+      </div>
+      <button type="button" class="btn btn-primary">搜索</button>
+</form>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+  <button id="sure" class="btn btn-primary pull-right" >确定</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+
+    <script>app.load('course/select')</script>
+{% endblock %}

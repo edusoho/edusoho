@@ -15,4 +15,10 @@ interface ClassroomService
 
     public function addClassroom($classroom);
 
+    public function closeClassroom($id);
+
+    public function publishClassroom($id);
+
+    public function changePicture ($id, $filePath, array $options);
+
 }

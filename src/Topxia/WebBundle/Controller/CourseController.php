@@ -780,6 +780,12 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function selectAction()
+	{
+		return $this->render("TopxiaWebBundle:Course:course-select.html.twig", array(
+		));
+	}
+
 	public function relatedCoursesBlockAction($course)
 	{   
 

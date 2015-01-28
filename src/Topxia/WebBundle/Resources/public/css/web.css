@@ -4855,3 +4855,8 @@ a.homework-essay-textarea-pack-up{
 	display:inline-block;
 	width: 25px;
 }
+
+.text-success-large {
+	color: #449d44;
+	font-size: 22px;
+}

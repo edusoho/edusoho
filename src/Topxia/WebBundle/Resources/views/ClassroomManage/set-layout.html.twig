@@ -13,7 +13,7 @@
     <ul class="nav nav-pills mbl">
           <li {% if settingNav == 'info' %}class="active"{% endif %}><a href="{{path('classroom_manage_set_info',{id:classroom.id})}}">基本信息 </a></li>
           <li {% if settingNav == 'set' %}class="active"{% endif %}> <a  href="{{path('classroom_manage_set',{id:classroom.id})}}">设置</a></li>
-          <li {% if settingNav == 'picture' %}class="active"{% endif %}>  <a  href="#">示意图片</a></li>
+          <li {% if settingNav == 'picture' %}class="active"{% endif %}>  <a  href="{{path('classroom_manage_set_picture',{id:classroom.id})}}">示意图片</a></li>
         </ul>
         {{ web_macro.flash_messages() }}
         {% block classroom_set_body %}{% endblock %}

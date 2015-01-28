@@ -82,6 +82,9 @@ class ClassroomController extends BaseController
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
+            
+            $this->setFlashMessage('success',"恭喜！创建班级成功！");
+            
             return $this->redirect($this->generateUrl('classroom_manage',array('id'=>$classroom['id'])));
         }
 
