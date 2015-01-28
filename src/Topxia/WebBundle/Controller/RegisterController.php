@@ -29,7 +29,19 @@ class RegisterController extends BaseController
                 $captchaCodePostedByUser = strtolower($registration['captcha_num']);
 
                 $captchaCode = $request->getSession()->get('captcha_code');   
-              
+                
+                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){
+   
+                    throw new \RuntimeException('验证码错误。');
+    
+                }                
+   
+                if (!isset($captchaCode)||strlen($captchaCode)<5){
+    
+                    throw new \RuntimeException('验证码错误。');
+    
+                }
+
                 if ($captchaCode != $captchaCodePostedByUser){ 
                     $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
                     throw new \RuntimeException('验证码错误。');
