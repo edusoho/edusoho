@@ -226,9 +226,10 @@ class RegisterController extends BaseController
     {
 
         $token = $this->getUserService()->getToken('email-verify', $token);
+
         if (empty($token)) {
             $currentUser = $this->getCurrentUser();
-            if (empty($currentUser)) {
+            if (empty($currentUser) || $currentUser['id'] == 0) {
                 return $this->render('TopxiaWebBundle:Register:email-verify-error.html.twig');
             } else {
                 return $this->redirect($this->generateUrl('settings'));
@@ -240,8 +241,10 @@ class RegisterController extends BaseController
             return $this->createNotFoundException();
         }
 
+        $this->authenticateUser($user);
+        $this->getUserService()->setEmailVerified($user['id']);
+
         if (strtoupper($request->getMethod()) ==  'POST') {
-            $this->getUserService()->setEmailVerified($user['id']);
             $this->getUserService()->deleteToken('email-verify', $token['token']);
             return $this->createJsonResponse(true);
         }
