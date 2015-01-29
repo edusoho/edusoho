@@ -1968,7 +1968,7 @@ body {
 	border-radius: 0;
 	padding: 4px 8px;
 	position: relative;
-	top: -8px;
+	/*top: -8px;*/
 	left: 8px;
 }
 

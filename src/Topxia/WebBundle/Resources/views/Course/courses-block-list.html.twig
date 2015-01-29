@@ -43,7 +43,7 @@
                   {% else %}免费{% endif %}
                 </span>
             {% endif %}
-            {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
+            {% if course.discountActivityId > 0 %}
               <label class="label label-danger label-discount pull-right">
                 {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                     {% if course.coinPrice > 0 %}
