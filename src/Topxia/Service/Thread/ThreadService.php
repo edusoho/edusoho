@@ -75,17 +75,20 @@ interface ThreadService
 	 */
 	public function getThreadPostCount($targetId, $threadId);
 
-	public function findThreadElitePosts($courseId, $threadId, $start, $limit);
+	public function findThreadElitePosts($targetId, $threadId, $start, $limit);
 
 	/**
 	 * 回复话题
 	 **/
 	public function getPost($targetId, $id);
 
-	public function createPost($post);
+	public function createPost($post,$parentId=0);
 
 	public function updatePost($targetId, $id, $fields);
 
 	public function deletePost($targetType,$targetId, $id);
 
+	public function searchPostsCount($conditions);
+
+	public function searchPosts($conditions,$orderBy,$start,$limit);
 }

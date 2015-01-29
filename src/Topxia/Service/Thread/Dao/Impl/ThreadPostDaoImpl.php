@@ -44,6 +44,14 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->fetchAll($sql, array($threadId,  $isElite)) ? : array();
 	}
 
+	public function searchPostsCount($conditions)
+	{
+	    $builder = $this->_createThreadSearchBuilder($conditions)
+	                     ->select('count(id)');
+
+	    return $builder->execute()->fetchColumn(0); 
+	}
+
 	public function addPost(array $post)
 	{
         $affected = $this->getConnection()->insert($this->table, $post);
@@ -68,6 +76,30 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 	{	
         $sql ="DELETE FROM {$this->table} WHERE threadId = ?";
         return $this->getConnection()->executeUpdate($sql, array($threadId));
+	}
+
+	public function searchPosts($conditions,$orderBy,$start,$limit)
+	{
+	    $this->filterStartLimit($start,$limit);
+
+	    $builder=$this->_createThreadSearchBuilder($conditions)
+	    ->select('*')
+	    ->setFirstResult($start)
+	    ->setMaxResults($limit)
+	    ->orderBy($orderBy[0],$orderBy[1]);
+	    
+	    return $builder->execute()->fetchAll() ? : array(); 
+	}
+
+	private function _createThreadSearchBuilder($conditions)
+	{
+	    $builder = $this->createDynamicQueryBuilder($conditions)
+	        ->from($this->table,$this->table)
+	        ->andWhere('userId = :userId')
+	        ->andWhere('id < :id')
+	        ->andWhere('parentId = :parentId')
+	        ->andWhere('threadId = :threadId');
+	    return $builder;
 	}
 
 }

@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -87,22 +88,59 @@ class ThreadController extends BaseController
             throw $this->createNotFoundException("话题不存在，或已删除。");
         }
 
+        // if($request->query->get('post'))
+        // {   
+        //     $url=$this->getPost($targetType,$request->query->get('post'),$targetId,$id);
+            
+        //     return $this->redirect($url);
+        // }
+        
+        $condition=array('threadId'=>$thread['id'],'status'=>'open','parentId'=>0);
+        $postCount=$this->getThreadService()->searchPostsCount($condition);
+
         $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->getThreadPostCount($targetId, $thread['id']),
-            30
+            $this->get('request'),
+            $postCount,
+            30  
         );
 
-        $posts = $this->getThreadService()->findThreadPosts(
-            $thread['targetId'],
-            $thread['id'],
-            'default',
+        $posts=$this->getThreadService()->searchPosts($condition,array('createdTime','asc'),
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $paginator->getPerPageCount());
 
+        $postMemberIds = ArrayToolkit::column($posts, 'userId');
+        $postId=ArrayToolkit::column($posts, 'id');
         $elitePosts = array();
+        $postReplyAll=array();
+        $postReply=array();
+        $postReplyCount=array();
+        $postReplyPaginator=array();
         $isManager = '';
+
+        foreach ($postId as $key => $value) {
+            $replyCount=$this->getThreadService()->searchPostsCount(array('parentId'=>$value));
+            $replyPaginator = new Paginator(
+                $this->get('request'),
+                $replyCount,
+                10  
+            );
+
+            $reply=$this->getThreadService()->searchPosts(array('parentId'=>$value),array('createdTime','asc'),
+                $replyPaginator->getOffsetCount(),
+                $replyPaginator->getPerPageCount());
+
+            $postReplyCount[$value]=$replyCount;
+            $postReply[$value]=$reply;
+            $postReplyPaginator[$value]=$replyPaginator;
+
+            if($reply){
+                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
+            }
+
+        }
+
+        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
+        $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
@@ -122,8 +160,16 @@ class ThreadController extends BaseController
             'paginator' => $paginator,
             'targetType' =>$targetType,
             'targetId' => $targetId,
+            'postCount' =>$postCount,
+            'postMember'=>$postMember,
+            'postReply'=>$postReply,
+            'postReplyMembers'=>$postReplyMembers,
+            'postReplyCount'=>$postReplyCount,
+            'postReplyPaginator'=>$postReplyPaginator,
+            'replyPaginator'=>$replyPaginator,
         ));
     }
+
 
     public function createAction(Request $request, $id, $targetType)
     {
@@ -299,11 +345,17 @@ class ThreadController extends BaseController
     public function postAction(Request $request, $targetType,$targetId, $id)
     {
         // list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $user=$this->getCurrentUser();
+        if (!$user->isLogin()) {
+        return new Response($this->generateUrl('login'));
+        }
+
         $thread = $this->getThreadService()->getThread($targetId, $id);
         $form = $this->createPostForm(array(
             'targetId' => $thread['targetId'],
             'threadId' => $thread['id'],
             'targetType'=>$targetType,
+            // 'postId'=>0,
         ));
 
         $currentUser = $this->getCurrentUser();
@@ -314,11 +366,17 @@ class ThreadController extends BaseController
                 $postData=$form->getData();
                 
                 list($postData,$users)=$this->replaceMention($postData);
-             
-                $post = $this->getThreadService()->createPost($postData);
+                
+                if(isset($postData['parentId'])){
+                    $post=$this->getThreadService()->createPost($postData,$postData['parentId']);
+
+                }else{
+                    $post = $this->getThreadService()->createPost($postData);
+                }
 
                 $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
                 $threadUrl .= "#post-". $post['id'];
+                $url=$this->getPost($targetType,$post['id'],$thread['id'],$targetId);
 
                 if ($thread['userId'] != $currentUser->id) {
 
@@ -342,14 +400,8 @@ class ThreadController extends BaseController
                     $isManager = $this->getClassroomService()->canManageClassroom($targetId);
                 }
 
-                return $this->render('TopxiaWebBundle:Thread:post-list-item.html.twig', array(
-                    'targetId' => $targetId,
-                    'thread' => $thread,
-                    'post' => $post,
-                    'author' => $this->getUserService()->getUser($post['userId']),
-                    'isManager' => $isManager,
-                    'targetType'=>$targetType,
-                ));
+                return new Response($url);
+
             } else {
                 return $this->createJsonResponse(false);
             }
@@ -361,6 +413,50 @@ class ThreadController extends BaseController
             'form' => $form->createView(),
             'targetType'=>$targetType,
         ));
+    }
+
+    private function getPost($targetType,$parentId,$threadId,$id)
+    {   
+        $post=$this->getThreadService()->getPost($id,$parentId);
+        if($post['parentId']!=0)$parentId=$post['parentId'];
+        $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$parentId,'parentId'=>0));
+
+        $page=floor(($count)/30)+1;
+
+        $url=$this->generateUrl('thread_show',array('targetId'=>$id,'threadId'=>$threadId,'targetType'=>$targetType));
+
+        $url=$url."?page=$page#post-$parentId";
+        return $url;
+    }
+
+
+    public function postReplyAction(Request $request,$targetType,$parentId)
+    {   
+        $postReplyAll=array();
+
+        $replyCount=$this->getThreadService()->searchPostsCount(array('parentId'=>$parentId));
+
+        $postReplyPaginator = new Paginator(
+                $this->get('request'),
+                $replyCount,
+                10  
+            );
+
+        $postReply=$this->getThreadService()->searchPosts(array('parentId'=>$parentId),array('createdTime','asc'),
+                $postReplyPaginator->getOffsetCount(),
+                $postReplyPaginator->getPerPageCount());
+
+        if($postReply){
+                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($postReply, 'userId'));
+        }
+        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
+        return $this->render('TopxiaWebBundle:Thread:post-list-item.html.twig',array(
+            'postMain' => array('id'=>$parentId),
+            'postReply'=>$postReply,
+            'postReplyMembers'=>$postReplyMembers,
+            'postReplyCount'=>$replyCount,
+            'postReplyPaginator'=>$postReplyPaginator,
+            ));
     }
 
     private function replaceMention($postData)
@@ -478,6 +574,7 @@ class ThreadController extends BaseController
             ->add('targetId', 'hidden')
             ->add('threadId', 'hidden')
             ->add('targetType', 'hidden')
+            ->add('parentId', 'hidden')
             ->getForm();
     }
 

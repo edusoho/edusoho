@@ -18,7 +18,7 @@
   {% if post %}
     action="{{ path('thread_post_edit', {targetType:targetType,targetId:targetId, threadId:post.threadId, id:post.id}) }}"
   {% else %}
-    action="{{ path('thread_post', {targetType:targetType,courseId:targetId, id:post.id}) }}"
+    action="{{ path('thread_post', {targetType:targetType,targetId:targetId, id:post.id}) }}"
   {% endif %}
   >
   <div class="form-group">

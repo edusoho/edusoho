@@ -1,30 +1,45 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-<li id="post-{{ post.id }}" class="thread-post media clearfix">
-  {{ web_macro.user_avatar(author, 'pull-left media-object') }}
 
-  {% if isManager or app.user.id == author.id %}
-  <div class="thread-post-dropdown">
-    <a href="javascript:" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse-down"></i></a>
-    <ul class="dropdown-menu pull-right">
-      <li><a href="{{ path('thread_post_edit', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}"><i class="glyphicon glyphicon-edit"></i> 编辑</a></li>
-      {% if isManager %}
-        <li><a href="javascript:" data-action="post-delete" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> 删除</a></li>
-      {% endif %}
+  <div class="reply-post-list-{{postMain.id}}">
+    <ul class="media-list">
+      {% for post in postReply %}
+        <li class="media li-reply-{{postMain.id}}">
+          {{ web_macro.user_avatar(postReplyMembers[post.userId], 'pull-left media-object') }} 
+          <div class="media-body">
+            <div class="metas">
+              <strong>{{ web_macro.user_link(postReplyMembers[post.userId]) }}</strong>
+              <span class="mhm">{{post.createdTime|smart_time}}</span>
+            </div>
+            <div class="content">{{post.content|raw}}</div>
+            <div class="text-muted text-normal pull-right">
+              <a href="javascript:" class="li-reply" parentId="{{postMain.id}}" postName="{{postReplyMembers[post.userId].nickname}}"> 回复</a>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
     </ul>
-  </div>
-  {% endif %}
 
-  <div class="thread-post-body media-body" style="word-break:break-all;">
-    <div class="media-heading">
-      <a href="javascript:">{{ author.nickname }}</a>
-      <span class="bullet">•</span>
-      <span class="text-muted">{{ post.createdTime|smart_time }}</span>
-
-
+    <div class="actions">
+      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" parentId="{{postMain.id}}" href="javascript:;">我也要说</a>
     </div>
-    <div class="thread-post-content">{{ post.content|raw }}</div>
-    {% if app.user.id != author.id %}
-    <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >回复</a></div>
+    <div class="clearfix">
+    {% if postReplyPaginator.lastPage > 1 %}
+      <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left ">
+        {% if postReplyPaginator.currentPage == postReplyPaginator.firstPage %}
+          <li class="disabled "><span>上一页</span></li>
+        {% else %}
+          <li class="postReply-page"  parentId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.previousPage})}}"><a >上一页</a></li>
+        {% endif %}
+        {% for page in postReplyPaginator.pages %}
+          <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %} class="postReply-page"  parentId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a  >{{ page }}</a></li>
+        {% endfor %}
+
+        {% if postReplyPaginator.currentPage == postReplyPaginator.lastPage %}
+          <li class="disabled"><span>下一页</span></li>
+        {% else %}
+          <li class="postReply-page"  parentId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.nextPage})}}"><a>下一页</a></li>
+        {% endif %}
+      </ul>
     {% endif %}
+    </div>
   </div>
-</li>

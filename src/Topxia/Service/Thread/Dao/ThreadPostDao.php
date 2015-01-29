@@ -15,6 +15,10 @@ interface ThreadPostDao
 
 	public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit);
 
+	public function searchPostsCount($conditions);
+
+	public function searchPosts($conditions,$orderBy,$start,$limit);
+
 	public function addPost(array $fields);
 
 	public function updatePost($id, array $fields);

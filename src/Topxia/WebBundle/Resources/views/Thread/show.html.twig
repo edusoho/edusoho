@@ -68,10 +68,66 @@
 
     <ul class="thread-post-list media-list">
       {% for post in posts %}
+        {% set subPosts = postReply[post.id]|default(null) %}
         {% set author = users[post.userId] %}
-        {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig' %}
-      {% else %}
-        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+
+       <li id="post-{{ post.id }}" class="thread-post media clearfix">
+          {{ web_macro.user_avatar(author, 'pull-left media-object') }} 
+          <div class="media-body">
+              <div class="metas">
+                  <span class="floor" style="float: right;font-size: 12px;color: #999;">
+                  {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}楼
+                  </span>
+                {{ web_macro.user_link(postMember[post.userId]) }}
+                <span class="bullet">•</span>
+                <span class="text-muted">{{post.createdTime|smart_time}} </span>
+              </div>
+              <div class="thread-post-content">{{ post.content|raw }}</div>
+
+         <div class="actions">
+<!--           {% if isManager %}
+            <li><a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> 删除</a></li>
+          {% endif %} -->
+
+                {% if not subPosts %}
+                      <a href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">回复</a>
+                      <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}" style="display:none;">收起</a>
+                {% else %}
+                      <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">回复({{postReplyCount[post.id]}})</a>
+                      <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}" >收起</a>
+                {% endif %}
+            </div>
+
+
+            <div class="reply-{{post.id}}">
+                  {% if subPosts %}
+                                {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig'  with {targetType:targetType,postReply:subPosts, postReplyMembers:postReplyMembers,postMain:post,postReplyPaginator:replyPaginator} %}
+                  {% else %}
+
+                <div class="reply-{{post.id}}" style="display:none;">
+                  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('thread_post',{targetType:targetType,targetId:targetId,id:thread.id})}}">
+                    <div class="form-group">
+                      <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
+                      <div class="controls">
+                      <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
+                    </div>
+                    </div>
+                    <div id="fromUserIdNoSubDiv"></div>
+                    <div class="form-group">
+                      <button type="submit" parentId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+                    </div>
+                  </form>
+                </div>
+
+
+
+<!--                       <div class="reply-{{post.id}} empty" style="display:none;">
+                          <span>还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</span>
+                       </div> -->
+                   {% endif %}
+            </div>
+        </div>
+    </li>
       {% endfor %}
     </ul>
 

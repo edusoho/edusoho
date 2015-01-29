@@ -124,7 +124,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
+			if (!in_array($conditions['keywordType'], array('title', 'content', 'targetId', 'targetTitle'))) {
 				throw $this->createServiceException('keywordType参数不正确');
 			}
 			$conditions[$conditions['keywordType']] = $conditions['keyword'];
@@ -140,6 +140,22 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			$author = $this->getUserService()->getUserByNickname($conditions['author']);
 			$conditions['userId'] = $author ? $author['id'] : -1;
 		}
+
+		// if(isset($conditions['userName'])&&$conditions['userName']!==""){
+		//     $user=$this->getUserService()->getUserByNickname($conditions['userName']);
+		//     if(!empty($user)){
+		//       $conditions['userId']=$user['id'];  
+		//     }else{
+		//       $conditions['userId']=0;  
+		//     }   
+		// }
+
+		//  if(isset($conditions['status']))
+		// {
+		//     if($conditions['status']==""){
+		//        unset( $conditions['status']);
+		//     }
+		// }   
 
 		return $conditions;
 	}
@@ -348,7 +364,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
 	}
 
-	public function findThreadElitePosts($courseId, $threadId, $start, $limit)
+	public function findThreadElitePosts($targetId, $threadId, $start, $limit)
 	{
 		return $this->getThreadPostDao()->findPostsByThreadIdAndIsElite($threadId, 1, $start, $limit);
 	}
@@ -372,7 +388,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $post;
 	}
 
-	public function createPost($post)
+	public function createPost($post,$parentId=0)
 	{
 		$requiredKeys = array('targetId', 'threadId', 'content');
 		if (!ArrayToolkit::requireds($post, $requiredKeys)) {
@@ -392,6 +408,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 		//创建post过滤html
 		$post['content'] = $this->purifyHtml($post['content']);
+		$post['parentId']=$parentId;
 		$post = $this->getThreadPostDao()->addPost($post);
 
 		// 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
@@ -442,6 +459,20 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 		$this->getThreadPostDao()->deletePost($post['id']);
 		$this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
+	}
+
+	public function searchPostsCount($conditions)
+	{
+	    $conditions = $this->prepareThreadSearchConditions($conditions);
+	    $count= $this->getThreadPostDao()->searchPostsCount($conditions);
+	    return $count;
+	}
+
+	public function searchPosts($conditions,$orderBy,$start,$limit)
+	{
+	    $conditions = $this->prepareThreadSearchConditions($conditions);
+	    return $this->getThreadPostDao()->searchPosts($conditions,$orderBy,$start,$limit);
+
 	}
 
 	private function getThreadDao()
