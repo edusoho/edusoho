@@ -158,6 +158,16 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom));
     }
 
+
+    public function coursesSelectAction(Request $request)
+    {
+        $ids=$request->request->all();
+
+        print_r($ids);
+
+        return new Response('aa');
+    }
+
     public function publishAction($id)
     {
         $classroom=$this->getClassroomService()->getClassroom($id);

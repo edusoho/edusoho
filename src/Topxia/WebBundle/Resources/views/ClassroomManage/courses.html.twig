@@ -6,10 +6,10 @@
 
 {% block main %}
 
-       
+{% set url = path('classroom_courses_select',{id:classroom.id}) %}       
 <div class="panel panel-default panel-col">
   <div class="panel-heading">课程管理
-    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('course_select')}}">添加课程</button></div>
+    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('course_select',{url:url})}}">添加课程</button></div>
   <div class="panel-body">
 
   </div>

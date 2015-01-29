@@ -1523,6 +1523,10 @@ classroom_manage_courses:
     pattern: /classroom/{id}/manage/courses
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:courses }
 
+classroom_courses_select:
+    pattern: /classroom/{id}/courses/select
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:coursesSelect }
+
 classroom_manage_set_info:
     pattern: /classroom/{id}/manage/set_info
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:setInfo }

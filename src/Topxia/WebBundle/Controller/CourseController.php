@@ -780,8 +780,14 @@ class CourseController extends BaseController
 		));
 	}
 
-	public function selectAction()
+	public function selectAction(Request $request)
 	{	
+		$url="";
+		if($request->query->get('url')){
+
+			$url=$request->query->get('url');
+		}
+
 		$conditions = array(
 			'status' => 'published'
 		);
@@ -808,6 +814,7 @@ class CourseController extends BaseController
 
 		return $this->render("TopxiaWebBundle:Course:course-select.html.twig", array(
 			'users'=>$users,
+			'url'=>$url,
 			'courses'=>$courses,
 			'paginator'=>$paginator
 		));
