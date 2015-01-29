@@ -58,7 +58,6 @@ class UserLoginTokenListener
                 && ($request->getMethod() !=  'POST') 
             )
         {
-                error_log($request->get('_route'),3,'/var/tmp/wangchaolog');
                 $request->getSession()->invalidate();
                 $this->container->get("security.context")->setToken(null);
 
