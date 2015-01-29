@@ -49,11 +49,11 @@ class UserLoginTokenListener
                 && $user["emailVerified"] == 0 
             	&& $user['type'] == 'default'
             	&& $auth['email_enabled'] == 'opened'
-                && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
+                // && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
                 && ($request->get('_route')!='register_email_verify')
                 && ($request->get('_route')!='register_submited')
                 && ($request->get('_route')!='register')
-                && ($request->get('_route')!='register_email_send') 
+                && ($request->getMethod()) !=  'POST') 
             )
         {
                 $request->getSession()->invalidate();
