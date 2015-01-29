@@ -55,9 +55,19 @@ class BaseProcessor {
         return $this->controller->getContainer();
     }
 
+    protected function getCashAccountService()
+    {
+        return $this->controller->getService('Cash.CashAccountService');
+    }
+
     protected function getAppService()
     {
         return $this->controller->getService('CloudPlatform.AppService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->controller->getService('Cash.CashOrdersService');
     }
 
     protected function getBlockService()
@@ -136,6 +146,11 @@ class BaseProcessor {
     protected function getCourseService()
     {
         return $this->controller->getService('Course.CourseService');
+    }
+
+    protected function getPayCenterService()
+    {
+        return $this->controller->getService('PayCenter.PayCenterService');
     }
 
     protected function getTestpaperService()

@@ -110,6 +110,10 @@ uploadfile_params:
     pattern:  /uploadfile/params
     defaults: { _controller: TopxiaWebBundle:UploadFile:params }
 
+uploadfile_browsers:
+    pattern:  /uploadfile/browsers
+    defaults: { _controller: TopxiaWebBundle:UploadFile:browsers }
+
 uploadfile_cloud_callback:
     pattern:  /uploadfile/cloud_callback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }

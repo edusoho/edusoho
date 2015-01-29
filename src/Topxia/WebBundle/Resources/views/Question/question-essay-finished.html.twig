@@ -7,7 +7,7 @@
 {% block body %}
 
 <div style="margin-bottom:18px">
-	<div style="margin-bottom:5px">学员回答:</div>
+	<div style="margin-bottom:5px">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:</div>
 	<strong class="">{{ itemResult.answer|raw }}</strong>
 
 </div>

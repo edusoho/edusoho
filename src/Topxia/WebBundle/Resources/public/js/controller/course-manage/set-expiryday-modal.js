@@ -16,11 +16,13 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $.post($form.attr('action'), $form.serialize(), function() {
-                    Notify.success('增加学员有效期操作成功!');
+                    var user_name = $('#submit').data('user') ;
+                    Notify.success('增加'+user_name+'有效期操作成功!');
                     $modal.modal('hide');
                     window.location.reload();
                 }).error(function(){
-                    Notify.danger('增加学员有效期操作失败!');
+                    var user_name = $('#submit').data('user') ;
+                    Notify.danger('增加'+user_name+'有效期操作失败!');
                 });
 
             }

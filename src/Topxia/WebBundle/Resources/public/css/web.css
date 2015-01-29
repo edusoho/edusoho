@@ -436,7 +436,8 @@ body {
 	margin-right: 20px;
 }
 
-.social-logins .social-login-btn .social-icon {
+.social-logins .social-login-btn .social-icon,
+.social-logins .social-login-btn .social-img {
 	margin-right: 8px;
 }
 

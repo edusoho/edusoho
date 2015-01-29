@@ -26,6 +26,37 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getSchoolApps()
+    {
+        $host = $this->request->getSchemeAndHttpHost();
+        $article = array(
+            "code"=>"Article",
+            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/article.png",
+            "name"=>"网校资讯",
+            "description"=>"EduSoho官方应用，网校资讯。",
+            "author"=>"官方",
+            "version"=>"1.0.0",
+            "supprot_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>"articleApp"
+        );
+
+        $group = array(
+            "code"=>"Group",
+            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/group.png",
+            "name"=>"网校小组社区",
+            "description"=>"网校小组社区",
+            "author"=>"官方",
+            "version"=>"1.0.0",
+            "supprot_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>""
+        );
+        return array(
+            $article, $group
+            );
+    }
+    
     public function registDevice()
     {
         $result = false;
@@ -164,9 +195,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $sortedCourses = array();
         foreach ( $courseIds as $value){
             if(!empty($value))
-                $sortedCourses[] = $courses[$value];
-        }
-
+                if(array_key_exists($value, $courses)){
+                    $sortedCourses[] = $courses[$value];
+                }
+        } 
+         
         $result = array(
             "start"=>0,
             "limit"=>3,

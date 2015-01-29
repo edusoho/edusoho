@@ -1,0 +1,101 @@
+{% extends 'TopxiaMobileBundleV2::group.layout.html.twig' %}
+{% block title %}app{% endblock %}
+
+{% block content %}
+
+{% block head_scripts %}
+  {{ parent() }}
+  
+{% endblock %}
+
+{% verbatim %}
+<script type="text/x-handlebars-template" id="amz-tpl">
+  {{>header header}}
+
+  {{>menu menu}}
+
+  {{>navbar navbar}}
+</script>
+{% endverbatim %}
+
+<script>
+  $(function() {
+    var $tpl = $('#amz-tpl'),
+      source = $tpl.text(),
+      template = Handlebars.compile(source),
+      data = {
+        header: {
+          "content": {
+            "title": "小组"
+          }
+        },
+
+        navbar: {
+          "options": {
+            "cols": "4",
+            "iconpos": "top"
+          },
+          "content": [
+            {
+              "title": "热门小组",
+              "link": "",
+              "icon": "fire",
+              "dataApi": "data-am-navbar-share"
+            },
+            {
+              "title": "最近话题",
+              "link": "",
+              "icon": "group",
+              "dataApi": "data-am-navbar-qrcode"
+            },
+            {
+              "title": "我的小组",
+              "link": "http://yunshipei.com",
+              "icon": "user-md",
+              "dataApi": ""
+            }
+          ]
+        }
+      },
+      html = template(data);
+
+    $tpl.before(html);
+
+    $.each(['navbar'], function(i, m) {
+      var module = $.AMUI[m];
+      module && module.init && module.init();
+    })
+  });
+</script>
+
+<div data-am-widget="list_news" class="am-list-news am-list-news-default">
+  <!--列表标题-->
+  <div class="am-list-news-hd am-cf">
+    <!--带更多链接-->
+    <a href="###">
+      <h2>热门小组</h2>
+      <span class="am-list-news-more am-fr">更多 &raquo;</span>
+    </a>
+  </div>
+  <div class="am-list-news-bd">
+    <ul class="am-list">
+      <!--缩略图在标题左边-->
+      <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left">
+        <div class="am-u-sm-4 am-list-thumb">
+          <a href="http://www.douban.com/online/11614662/">
+            <img src="http://img5.douban.com/lpic/o636459.jpg" alt="我很囧，你保重....晒晒旅行中的那些囧！"
+            />
+          </a>
+        </div>
+        <div class=" am-u-sm-8 am-list-main">
+          <h3 class="am-list-item-hd">
+            <a href="http://www.douban.com/online/11614662/">我很囧，你保重....晒晒旅行中的那些囧！</a>
+          </h3>
+          <div class="am-list-item-text">囧人囧事囧照，人在囧途，越囧越萌。标记《带你出发，陪我回家》http://book.douban.com/subject/25711202/为“想读”“在读”或“读过”，有机会获得此书本活动进行3个月，每月送出三本书。会有不定期bonus！</div>
+        </div>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+{% endblock %}

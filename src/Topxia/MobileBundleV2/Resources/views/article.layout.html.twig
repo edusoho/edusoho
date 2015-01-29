@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+
+<title>{% block title %}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+{% block stylesheets %}
+<link href="{{ asset('bundles/topxiamobilebundlev2/css/app.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/css/ratchet.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/css/ratchet-theme-ios.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/css/style.css') }}" rel="stylesheet" />
+{% endblock %}
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova.js') }}"></script>
+
+</head>
+
+<body unresolved  onload="onLoad()">
+
+<script type="text/javascript">
+	window.onLoad = function() {
+        		document.addEventListener("deviceready", onDeviceReady, false);
+    	}
+
+  	window.onDeviceReady = function() {
+        		navigator.cordovaUtil.createMenu();
+        		console.log("createMenu");
+  	}
+</script>
+{% block content %}
+
+{% block head_scripts %}
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/zepto.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/app.min.js') }}"></script>
+<!--
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/swapper.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/clickable.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/scrollable.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/utils.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/events.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/metrics.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/dialog.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/form.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/scroll.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/scroll-fix.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/pages.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/stack.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/transitions.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/navigation.js') }}"></script>
+-->
+
+{% endblock %}
+
+{% endblock %}
+</body>
+
+</html>

@@ -124,6 +124,10 @@ class BuildPackageCommand extends BaseCommand
              return str_ireplace('src/Topxia/AdminBundle/Resources/public', 'web/bundles/topxiaadmin', $file);
         }
 
+        if (stripos($file, 'src/Topxia/MobileBundleV2/Resources/public') === 0) {
+             return str_ireplace('src/Topxia/MobileBundleV2/Resources/public', 'web/bundles/topxiamobilebundlev2', $file);
+        }
+
         return null;
     }
 
