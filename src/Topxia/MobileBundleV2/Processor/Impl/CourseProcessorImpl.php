@@ -1230,6 +1230,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
             if(isset($tempLiveLesson)){
                 $liveLessons[$key] = $tempLiveLesson;
+                unset($tempLiveLesson);
             }
         }
 
