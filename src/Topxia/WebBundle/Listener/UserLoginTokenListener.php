@@ -47,7 +47,8 @@ class UserLoginTokenListener
         	&& $auth['email_enabled'] == 'opened'
             // && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
             &&($request->get('_route')!='register_email_verify')
-            &&($request->get('_route')!='register_submited'))
+            &&($request->get('_route')!='register_submited')
+            &&($request->get('_route')!='register'))
         {
                 $request->getSession()->invalidate();
                 $this->container->get("security.context")->setToken(null);
