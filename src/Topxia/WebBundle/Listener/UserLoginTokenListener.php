@@ -50,10 +50,10 @@ class UserLoginTokenListener
             	&& $user['type'] == 'default'
             	&& $auth['email_enabled'] == 'opened'
                 && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
-                // && ($request->get('_route')!='register_email_verify')
-                // && ($request->get('_route')!='register_submited')
-                // && ($request->get('_route')!='register')
-                // && ($request->get('_route')!='register_email_send') 
+                && ($request->get('_route')!='register_email_verify')
+                && ($request->get('_route')!='register_submited')
+                && ($request->get('_route')!='register')
+                && ($request->get('_route')!='register_email_send') 
             )
         {
                 $request->getSession()->invalidate();
