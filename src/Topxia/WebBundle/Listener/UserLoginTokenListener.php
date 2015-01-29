@@ -53,7 +53,7 @@ class UserLoginTokenListener
                 && ($request->get('_route')!='register_email_verify')
                 && ($request->get('_route')!='register_submited')
                 && ($request->get('_route')!='register')
-                && ($request->getMethod()) !=  'POST') 
+                && ($request->getMethod() !=  'POST') 
             )
         {
                 $request->getSession()->invalidate();
