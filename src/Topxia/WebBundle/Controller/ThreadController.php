@@ -116,6 +116,7 @@ class ThreadController extends BaseController
         $postReplyCount=array();
         $postReplyPaginator=array();
         $isManager = '';
+        $replyPaginator='';
 
         foreach ($postId as $key => $value) {
             $replyCount=$this->getThreadService()->searchPostsCount(array('parentId'=>$value));
@@ -351,79 +352,141 @@ class ThreadController extends BaseController
         }
 
         $thread = $this->getThreadService()->getThread($targetId, $id);
-        $form = $this->createPostForm(array(
-            'targetId' => $thread['targetId'],
-            'threadId' => $thread['id'],
-            'targetType'=>$targetType,
-            // 'postId'=>0,
-        ));
 
-        $currentUser = $this->getCurrentUser();
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            $userId = $currentUser->id;
-            if ($form->isValid()) {
-                $postData=$form->getData();
-                
-                list($postData,$users)=$this->replaceMention($postData);
-                
-                if(isset($postData['parentId'])){
-                    $post=$this->getThreadService()->createPost($postData,$postData['parentId']);
+        $postContent=$request->request->all();
 
-                }else{
-                    $post = $this->getThreadService()->createPost($postData);
-                }
+        $targetId = empty($postContent['targetId']) ? $targetId : $postContent['targetId'];
+        $content=array('content'=>$postContent['content'],'targetId'=>$targetId);
+        // var_dump($postContent);exit();
 
-                $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
-                $threadUrl .= "#post-". $post['id'];
-                $url=$this->getPost($targetType,$post['id'],$thread['id'],$targetId);
+        if(isset($postContent['parentId'])){
 
-                if ($thread['userId'] != $currentUser->id) {
+             $post=$this->getThreadService()->createPost($content,$targetId,$user['id'],$id,$postContent['parentId']);
 
-                    $userUrl = $this->generateUrl('user_show', array('id'=>$userId), true);
-                    
-                    $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
-                }
+        }else{
 
-                foreach ($users as $user) {
-                    if ($thread['userId'] != $user['id']) {
-                        if ($user['id'] != $userId) {
-                        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                        $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
-                        }
-                    }
-                }
+            $post=$this->getThreadService()->createPost($content,$targetId,$user['id'],$id);
 
-                $isManager = '';
+        }       
 
-                if ($targetType == 'classroom') {
-                    $isManager = $this->getClassroomService()->canManageClassroom($targetId);
-                }
+        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
+        $url=$this->getPost($targetType,$post['id'],$thread['id'],$targetId);
 
-                return new Response($url);
-
-            } else {
-                return $this->createJsonResponse(false);
-            }
+         if ($thread['userId'] != $user->id) {
+                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
         }
 
-        return $this->render('TopxiaWebBundle:Thread:post.html.twig', array(
-            'targetId' => $targetId,
-            'thread' => $thread,
-            'form' => $form->createView(),
-            'targetType'=>$targetType,
-        ));
+        $content=$postContent['content'];
+        $users=array();
+        preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $content, $matches);
+        $mentions = array_unique($matches[1]);
+   
+        foreach ($mentions as $mention) {
+            
+            $user=$this->getUserService()->getUserByNickname($mention);
+            
+            if($user){
+
+                $path = $this->generateUrl('user_show', array('id' => $user['id']));
+                $nickname=$user['nickname'];
+                $html = "<a href=\"{$path}\" class=\"show-user\">@{$nickname}</a>";
+
+                $content = preg_replace("/@{$nickname}/ui", $html, $content);
+
+                $users[]=$user;
+            }
+         
+        }
+
+            foreach ($users as $user) {
+                if ($thread['userId'] != $user['id']) {
+                    if ($user['id'] != $userId) {
+                    $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                    $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                    }
+                }
+            }
+
+            return new Response($url);
+
+        // $form = $this->createPostForm(array(
+        //     'targetId' => $thread['targetId'],
+        //     'threadId' => $thread['id'],
+        //     'targetType'=>$targetType,
+        //     'parentId'=>0,
+        // ));
+
+        // $currentUser = $this->getCurrentUser();
+        // if ($request->getMethod() == 'POST') {
+        //     $form->bind($request);
+        //     $userId = $currentUser->id;
+        //     if ($form->isValid()) {
+        //         $postData=$form->getData();
+                
+        //         list($postData,$users)=$this->replaceMention($postData);
+                
+        //         if(isset($postData['parentId'])){
+        //             $post=$this->getThreadService()->createPost($postData,$postData['parentId']);
+
+        //         }else{
+        //             $post = $this->getThreadService()->createPost($postData);
+
+        //         }
+
+        //         $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
+
+        //         $threadUrl .= "#post-". $post['id'];
+
+        //         $url=$this->getPost($targetType,$post['id'],$thread['id'],$targetId);
+
+        //         if ($thread['userId'] != $currentUser->id) {
+
+        //             $userUrl = $this->generateUrl('user_show', array('id'=>$userId), true);
+                    
+        //             $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+        //         }
+
+        //         foreach ($users as $user) {
+        //             if ($thread['userId'] != $user['id']) {
+        //                 if ($user['id'] != $userId) {
+        //                 $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+        //                 $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+        //                 }
+        //             }
+        //         }
+
+        //         $isManager = '';
+
+        //         if ($targetType == 'classroom') {
+        //             $isManager = $this->getClassroomService()->canManageClassroom($targetId);
+        //         }
+
+        //         return new Response($url);
+
+        //     } else {
+        //         return $this->createJsonResponse(false);
+        //     }
+        // }
+
+        // return $this->render('TopxiaWebBundle:Thread:post.html.twig', array(
+        //     'targetId' => $targetId,
+        //     'thread' => $thread,
+        //     'form' => $form->createView(),
+        //     'targetType'=>$targetType,
+        // ));
     }
 
     private function getPost($targetType,$parentId,$threadId,$id)
     {   
         $post=$this->getThreadService()->getPost($id,$parentId);
+
         if($post['parentId']!=0)$parentId=$post['parentId'];
         $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$parentId,'parentId'=>0));
 
         $page=floor(($count)/30)+1;
 
-        $url=$this->generateUrl('thread_show',array('targetId'=>$id,'threadId'=>$threadId,'targetType'=>$targetType));
+        $url=$this->generateUrl('thread_show',array('targetId'=>$id,'id'=>$threadId,'targetType'=>$targetType));
 
         $url=$url."?page=$page#post-$parentId";
         return $url;
@@ -450,12 +513,13 @@ class ThreadController extends BaseController
                 $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($postReply, 'userId'));
         }
         $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
-        return $this->render('TopxiaWebBundle:Thread:post-list-item.html.twig',array(
+        return $this->render('TopxiaWebBundle:Thread:thread-reply-list.html.twig',array(
             'postMain' => array('id'=>$parentId),
             'postReply'=>$postReply,
             'postReplyMembers'=>$postReplyMembers,
             'postReplyCount'=>$replyCount,
             'postReplyPaginator'=>$postReplyPaginator,
+            'targetType' =>$targetType,
             ));
     }
 

@@ -82,7 +82,7 @@ interface ThreadService
 	 **/
 	public function getPost($targetId, $id);
 
-	public function createPost($post,$parentId=0);
+	public function createPost($threadContent,$targetId,$memberId,$threadId,$parentId=0);
 
 	public function updatePost($targetId, $id, $fields);
 

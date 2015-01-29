@@ -19,7 +19,7 @@ interface ThreadPostDao
 
 	public function searchPosts($conditions,$orderBy,$start,$limit);
 
-	public function addPost(array $fields);
+	public function addPost($fields);
 
 	public function updatePost($id, array $fields);
 

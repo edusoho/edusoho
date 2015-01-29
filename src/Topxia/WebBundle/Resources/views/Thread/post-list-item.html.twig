@@ -1,10 +1,9 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-
+<div class="well">
   <div class="reply-post-list-{{postMain.id}}">
     <ul class="media-list">
-      {% for post in postReply %}
-        <li class="media li-reply-{{postMain.id}}">
-          {{ web_macro.user_avatar(postReplyMembers[post.userId], 'pull-left media-object') }} 
+      {% for post in posts %}
+        <li class="media li-reply-{{postMain.id}}" {% if loop.index > 5 %}style="display:none;"{% endif %}>
+          {{ web_macro.user_avatar(author, 'pull-left media-object') }} 
           <div class="media-body">
             <div class="metas">
               <strong>{{ web_macro.user_link(postReplyMembers[post.userId]) }}</strong>
@@ -12,34 +11,55 @@
             </div>
             <div class="content">{{post.content|raw}}</div>
             <div class="text-muted text-normal pull-right">
-              <a href="javascript:" class="li-reply" parentId="{{postMain.id}}" postName="{{postReplyMembers[post.userId].nickname}}"> 回复</a>
+              <a href="javascript:" class="li-reply" parentId="{{postMain.id}}" postName="{{users[post.userId].nickname}}" data-from-user-id= "{{ users[post.userId].id }}"> 回复</a>
             </div>
           </div>
         </li>
       {% endfor %}
+    <div class="actions">
+      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" parentId="{{post.id}}" href="javascript:;">我也要说</a>
+      {% if posts|length > 5 %}
+      <div class="lookOver-{{postMain.id}}">
+        <span class="text-muted ">还有{{postReplyCount[post.id]-5}}条回复，</span><a href="javascript:" parentId="{{postMain.id}}" class="lookOver">点击查看</a>
+      </div>
+      {% endif %}
+      <span class="text-muted">&nbsp;</sapn>
+    </div>
     </ul>
 
-    <div class="actions">
-      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" parentId="{{postMain.id}}" href="javascript:;">我也要说</a>
-    </div>
     <div class="clearfix">
-    {% if postReplyPaginator.lastPage > 1 %}
-      <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left ">
-        {% if postReplyPaginator.currentPage == postReplyPaginator.firstPage %}
+    {% if postReplyPaginator[postMain.id].lastPage > 1 %}
+      <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left " style="display:none;">
+        {% if postReplyPaginator[postMain.id].currentPage == postReplyPaginator[postMain.id].firstPage %}
           <li class="disabled "><span>上一页</span></li>
         {% else %}
-          <li class="postReply-page"  parentId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.previousPage})}}"><a >上一页</a></li>
+          <li class="postReply-page"  parentId="{{postMain.id}}"  data-url="{{path('thread_post_reply',{targetType:targetType,parentId:postMain.id,page:postReplyPaginator[postMain.id].previousPage})}}"><a  style="cursor:pointer;">上一页</a></li>
         {% endif %}
-        {% for page in postReplyPaginator.pages %}
-          <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %} class="postReply-page"  parentId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a  >{{ page }}</a></li>
+        {% for page in postReplyPaginator[postMain.id].pages %}
+          <li {% if page == postReplyPaginator[postMain.id].currentPage %}class="active"{% endif %} class="postReply-page"  parentId="{{postMain.id}}"  data-url="{{path('thread_post_reply',{targetType:targetType,parentId:postMain.id,page:page})}}"><a   style="cursor:pointer;">{{ page }}</a></li>
         {% endfor %}
 
-        {% if postReplyPaginator.currentPage == postReplyPaginator.lastPage %}
+        {% if postReplyPaginator[postMain.id].currentPage == postReplyPaginator[postMain.id].lastPage %}
           <li class="disabled"><span>下一页</span></li>
         {% else %}
-          <li class="postReply-page"  parentId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.nextPage})}}"><a>下一页</a></li>
+          <li class="postReply-page"  parentId="{{postMain.id}}" data-url="{{path('thread_post_reply',{targetType:targetType,parentId:postMain.id,page:postReplyPaginator[postMain.id].nextPage})}}"><a style="cursor:pointer;">下一页</a></li>
         {% endif %}
       </ul>
     {% endif %}
     </div>
   </div>
+  <div id="li-{{post.id}}" style="display:none;">
+  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('thread_post',{targetType:targetType,targetId:targetId,id:thread.id})}}">
+    <div class="form-group">
+      <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
+      <div class="controls">
+      <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
+      </div>
+    <div id="fromUserIdDiv"></div>
+    </div>
+    <div class="form-group">
+      <button type="submit" parentId="{{postMain.id}}" targetId="{{targetId}}"  class="reply-btn btn btn-xs btn-primary pull-right"  style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+    </div>
+  </form>
+</div>
+</div>

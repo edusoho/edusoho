@@ -1576,7 +1576,6 @@ thread_post:
     pattern:  /{targetType}/{targetId}/thread/{id}/post
     defaults: { _controller: TopxiaWebBundle:Thread:post }
 
-
 thread_post_delete:
     pattern:  /{targetType}/{targetId}/thread/{threadId}/post/{id}/delete
     defaults: { _controller: TopxiaWebBundle:Thread:deletePost }

@@ -9,7 +9,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 {
 
 	protected $table = 'thread_post';
-
+    private $serializeFields = array(
+        'tagIds' => 'json',
+    );
 	public function getPost($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -52,12 +54,15 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 	    return $builder->execute()->fetchColumn(0); 
 	}
 
-	public function addPost(array $post)
+	public function addPost($fields)
 	{
-        $affected = $this->getConnection()->insert($this->table, $post);
+    	$this->createSerializer()->serialize($fields, $this->serializeFields);
+
+    	$affected = $this->getConnection()->insert($this->table, $fields);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert course post error.');
+            throw $this->createDaoException('Insert postThread error.');
         }
+
         return $this->getPost($this->getConnection()->lastInsertId());
 	}
 

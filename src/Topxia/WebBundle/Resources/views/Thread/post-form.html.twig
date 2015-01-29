@@ -14,7 +14,7 @@
   <li class="active">编辑帖子</li>
 </ul>
 
-<form id="thread-post-form" method="post"
+<form id="post-thread-form" method="post"
   {% if post %}
     action="{{ path('thread_post_edit', {targetType:targetType,targetId:targetId, threadId:post.threadId, id:post.id}) }}"
   {% else %}

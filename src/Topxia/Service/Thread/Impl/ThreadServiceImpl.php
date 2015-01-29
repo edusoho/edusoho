@@ -388,8 +388,35 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $post;
 	}
 
-	public function createPost($post,$parentId=0)
-	{
+	public function createPost($threadContent,$targetId,$memberId,$threadId,$parentId=0)
+	{          
+                        $targetId = empty($threadContent['targetId']) ? $targetId : $threadContent['targetId'];
+                        $thread = $this->getThread($targetId, $threadId);
+
+                        if (empty($threadContent['content'])) {
+                            throw $this->createServiceException("回复内容不能为空！");
+                        }
+                        $threadContent['content']=$this->purifyHtml($threadContent['content']);
+                        $threadContent['userId']=$memberId;
+                        $threadContent['createdTime']=time();
+                        $threadContent['threadId']=$threadId;
+                        $threadContent['parentId']=$parentId;
+                        $post=$this->getThreadPostDao()->addPost($threadContent);  
+                        
+                        // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
+                        $threadFields = array(
+                            'postNum' => $thread['postNum'] + 1,
+                            'lastPostMemberId' => $threadContent['userId'],
+                            'lastPostTime' => $threadContent['createdTime'],
+                            'updateTime' => time(),
+                        );
+                        $this->getThreadDao()->updateThread($thread['id'], $threadFields);
+                        
+                        return $post;
+
+
+
+
 		$requiredKeys = array('targetId', 'threadId', 'content');
 		if (!ArrayToolkit::requireds($post, $requiredKeys)) {
 			throw $this->createServiceException('参数缺失');

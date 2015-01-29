@@ -2,7 +2,7 @@
 
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/thread-show' %}
+{% set script_controller = 'thread/thread-show' %}
 
 {% block dashboard_main %}
 
@@ -61,12 +61,21 @@
 	    </ul>
 		{% endif %}
 
-		<h3 class="thread-posts-heading">
+
+ {% if thread.postNum %}
+  <div class="panel panel-default thread-post-list">
+        <div class="panel-heading">
+            <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
+        </div>
+
+    <div class="panel-body">
+
+<!-- 		<h3 class="thread-posts-heading">
 			<span class="glyphicon glyphicon-share-alt"></span>
       <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
-		</h3>
+		</h3> -->
 
-    <ul class="thread-post-list media-list">
+    <ul class="media-list">
       {% for post in posts %}
         {% set subPosts = postReply[post.id]|default(null) %}
         {% set author = users[post.userId] %}
@@ -101,7 +110,7 @@
 
             <div class="reply-{{post.id}}">
                   {% if subPosts %}
-                                {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig'  with {targetType:targetType,postReply:subPosts, postReplyMembers:postReplyMembers,postMain:post,postReplyPaginator:replyPaginator} %}
+                                {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig'  with {targetType:targetType,posts:subPosts, users:postReplyMembers,postMain:post} %}
                   {% else %}
 
                 <div class="reply-{{post.id}}" style="display:none;">
@@ -114,7 +123,7 @@
                     </div>
                     <div id="fromUserIdNoSubDiv"></div>
                     <div class="form-group">
-                      <button type="submit" parentId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+                      <button type="submit" parentId="{{post.id}}" targetId="{{targetId}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
                     </div>
                   </form>
                 </div>
@@ -126,20 +135,49 @@
                        </div> -->
                    {% endif %}
             </div>
-        </div>
+        <!-- </div> -->
     </li>
       {% endfor %}
     </ul>
 
     {{ web_macro.paginator(paginator) }}
 
-    
-    <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> 添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h3>
-
-    {{ render(controller('TopxiaWebBundle:Thread:post', {targetType:targetType,targetId:targetId, id:thread.id})) }}
 
 
-	</div>
+    </div>
+    </div>
+  {% endif %}
+
+      <div class="panel panel-default">
+    <div class="panel-heading">发表回复</div>
+    <div class="panel-body">
+
+      {% if app.user %}
+        <form id="post-thread-form" class="post-thread-form thread-form" method="post" post-url="{{path('thread_post',{targetType:targetType,targetId:targetId,id:thread.id})}}">
+
+          <div class="form-group">
+              <label class="control-label hide" for="post_content">回复内容</label>
+              <div class="controls">
+              <textarea name="content" value="" rows="10" id="post_content" class="form-control"></textarea>
+              </div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+            <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
+            </div>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
+      {% else %}
+        <div class="empty">
+          你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+        </div>
+
+      {% endif %}
+
+    </div>
+  </div>
+
 
 
 {% endblock %}

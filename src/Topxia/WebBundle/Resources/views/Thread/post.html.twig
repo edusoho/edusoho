@@ -1,4 +1,4 @@
-<form id="thread-post-form" class="form-vertical" method="post" action="{{ path('thread_post', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-auto-submit="false" novalidate>
+<form id="post-thread-form" class="form-vertical" method="post" action="{{ path('thread_post', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-auto-submit="false" novalidate>
 	<div class="form-group">
 		<div class="controls">
 			{{ form_widget(form.content, {attr:{class:'form-control', rows:8, 'data-display':'内容'}}) }}
