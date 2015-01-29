@@ -61,9 +61,9 @@
               </label>
               <br>
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                <span class="text-sm" style="display:block"><del>99.00{{setting('coin.coin_name')}}</del></span>
+                <span class="text-sm" style="display:inline"><del>{{course.originCoinPrice}}{{setting('coin.coin_name')}}</del></span>
               {% else %}
-                <span class="text-sm" style="display:block"><del>99.00元</del></span>
+                <span class="text-sm" style="display:inline"><del>{{course.originPrice}}元</del></span>
               {% endif %}
             {% endif %}
           {% endif %}
