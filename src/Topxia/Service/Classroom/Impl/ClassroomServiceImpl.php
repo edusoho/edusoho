@@ -30,11 +30,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
          return $count;
     }
 
-    private function getClassroomDao() 
-    {
-        return $this->createDao('Classroom.ClassroomDao');
-    }
-
     public function addClassroom($classroom)
     {   
         $title=trim($classroom['title']);
@@ -119,6 +114,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->updateClassroom($id,$fields);
     }
 
+    public function addCourse($id,$courseId)
+    {
+        $classroomCourse=array(
+            'classroomId'=>$id,
+            'courseId'=>$courseId);
+
+        $this->getClassroomCourseDao()
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
@@ -127,5 +131,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getLogService() 
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getClassroomDao() 
+    {
+        return $this->createDao('Classroom.ClassroomDao');
+    }
+
+    protected function getClassroomCourseDao() 
+    {
+        return $this->createDao('Classroom.ClassroomCourseDao');
     }
 }

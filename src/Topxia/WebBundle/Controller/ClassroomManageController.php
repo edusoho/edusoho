@@ -161,11 +161,17 @@ class ClassroomManageController extends BaseController
 
     public function coursesSelectAction(Request $request)
     {
-        $ids=$request->request->all();
+        $data=$request->request->all();
 
-        print_r($ids);
+        $ids=$data['ids'];
 
-        return new Response('aa');
+        $ids=explode(",", $ids);
+
+        foreach ($ids as $key => $value) {
+            
+        }
+
+        return new Response('success');
     }
 
     public function publishAction($id)
