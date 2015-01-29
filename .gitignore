@@ -45,3 +45,4 @@ composer.sublime-workspace
 web/assets/img/default/video.png
 .publish
 .buildpath
+.phpintel*
