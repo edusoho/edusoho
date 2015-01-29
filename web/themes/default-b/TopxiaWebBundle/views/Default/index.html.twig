@@ -161,8 +161,8 @@
           {% if levels %}
             <div class="es-box vip">
               <div class="es-box-heading">
-                <h2>会员专区</h2>
                 <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
+                <h2>会员专区</h2>
               </div>
               <div class="es-box-body">
                 <ul class="row vip-lists">
@@ -204,7 +204,7 @@
           {% set groups = data('HotGroup', {'count':15}) %}
           {% if groups %}
             <div class="es-box hot-group">
-              <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
+              <div class="es-box-heading"><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a><h2>最热小组</h2></div>
               <div class="es-box-body">
                  <ul class="list-unstyled">
                   {% for group in groups %}
