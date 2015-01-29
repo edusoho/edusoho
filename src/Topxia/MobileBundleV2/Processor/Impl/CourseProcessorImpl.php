@@ -1113,10 +1113,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
         return $member;
     }
-    
-    
-
-
 
     public function getLiveCourse(){
         $user = $this->controller->getUserService()->getCurrentUser();

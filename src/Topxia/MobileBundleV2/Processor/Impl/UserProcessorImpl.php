@@ -396,15 +396,22 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('userId', "userId参数错误");
         }
         $followings = $this->controller->getUserService()->findUserFollowing($userId, $start, $limit);
+        $followIds = ArrayToolkit::column($followings, 'id');
         $result = array();
         $index = 0;
-        foreach ($followings as $key => $following) {
-            $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
-            $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
-            $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
-            $following['following'] = $this->controller->getUserService()->findUserFollowingCount($following['id']);
-            $following['follower'] = $this->controller->getUserService()->findUserFollowerCount($following['id']);
-            $result[$index++] = $following;
+        foreach ($followIds as $key => $followingId) {
+            $user = $this->controller->getUserService()->getUser($key);
+            $userProfile = $this->controller->getUserService()->getUserProfile($key);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($key);
+            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($key);
+            // $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
+            // $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
+            // $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
+            // $following['following'] = $this->controller->getUserService()->findUserFollowingCount($following['id']);
+            // $following['follower'] = $this->controller->getUserService()->findUserFollowerCount($following['id']);
+            $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
     }
@@ -417,15 +424,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('userId', "userId参数错误");
         }
         $followers = $this->controller->getUserService()->findUserFollowers($userId, $start, $limit);
+        $followIds = ArrayToolkit::column($followers, 'id');
         $result = array();
         $index = 0;
         foreach ($followers as $key => $follower) {
-            $follower['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['smallAvatar'], 'course-large.png', true);
-            $follower['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['mediumAvatar'], 'course-large.png', true);
-            $follower['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['largeAvatar'], 'course-large.png', true);
-            $follower['following'] = $this->controller->getUserService()->findUserFollowingCount($follower['id']);
-            $follower['follower'] = $this->controller->getUserService()->findUserFollowerCount($follower['id']);
-            $result[$index++] = $follower;
+            $user = $this->controller->getUserService()->getUser($key);
+            $userProfile = $this->controller->getUserService()->getUserProfile($key);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($key);
+            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($key);
+            $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
     }
@@ -634,9 +643,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'title' => '问答',
             'data' => $threadData
         ); 
-        
-
-        
+               
         $result[$index++] = array(
             'title' => '讨论',
             'data' => $discussionData
