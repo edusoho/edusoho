@@ -1211,7 +1211,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $nowTime = time();
         $liveLessons = array();
         $tempLiveLesson;
-        $recentlyLiveLessonStartTime = 2*$nowTime;
+        $recentlyLiveLessonStartTime;
         $tempLessonIndex;
 
         foreach($tempLessons as $key => $tempLesson){
@@ -1219,6 +1219,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $tempLiveLesson = $tempLesson[0];
             }
             if(sizeof($tempLesson) > 1){
+                $recentlyLiveLessonStartTime = 2*$nowTime;
                 for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
                     if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
                         if($tempLesson[$tempLessonIndex]["endTime"] < $recentlyLiveLessonStartTime){
