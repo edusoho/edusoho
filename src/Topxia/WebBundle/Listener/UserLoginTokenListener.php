@@ -50,7 +50,6 @@ class UserLoginTokenListener
                 && $user["emailVerified"] == 0 
             	&& $user['type'] == 'default'
             	&& $auth['email_enabled'] == 'opened'
-                // && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
                 && (isset($route))
                 && ($route != '')
                 && ($route != 'register_email_verify')
