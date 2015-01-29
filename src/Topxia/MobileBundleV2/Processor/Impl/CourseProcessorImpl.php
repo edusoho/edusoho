@@ -151,6 +151,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $content    = $this->getParam("content", "");
         $action     = $this->getParam("action", "update");
         $imageCount = $this->getParam("imageCount", 0);
+        $hitNum     = $this->getParam("hitNum", 0);
         
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
@@ -173,7 +174,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $fields = array(
                 "title" => $title,
-                "content" => $content
+                "content" => $content,
+                "hitNum" => $hitNum
             );
             $result = $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
         }
@@ -1160,39 +1162,95 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return md5($string . $secret);
     }
 
-    public function getLiveingCourse(){
-    $user = $this->controller->getUserByToken($this->request);
-    if (!$user->isLogin()) {
-        return $this->createErrorResponse('not_login', "您尚未登录！");
-    }
-    
-    $start   = (int) $this->getParam("start", 0);
-    $limit   = (int) $this->getParam("limit", 10);
-    $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-    $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
-    
-    $count            = $this->controller->getCourseService()->searchLearnCount(array(
-    ));
-    $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
-        "userId" => $user["id"]
-    ), array(
-        "finishedTime",
-        "ASC"
-    ), 0, $count);
-    
-    $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
-    
-    $tempCourse = array();
-    $tempCourseId;
-    foreach ($courses as $key => $course) {  
-        if(!strcmp($course["type"],"live"))
-        {
-            $tempCourse[$course["id"]] = $course;
-            $tempCourseId = $course["id"];
+    public function getLiveingCourse()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
         }
-    }
+        
+        $start   = (int) $this->getParam("start", 0);
+        $limit   = (int) $this->getParam("limit", 10);
+        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+        
+        $count            = $this->controller->getCourseService()->searchLearnCount(array(
+        ));
+        $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+            "userId" => $user["id"]
+        ), array(
+            "finishedTime",
+            "ASC"
+        ), 0, $count);
+        
+        $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+        
+        $tempCourses = array();
+        $tempCourseIds = array();
+        foreach ($courses as $key => $course) {  
+            if(!strcmp($course["type"],"live"))
+            {
+                $tempCourses[$course["id"]] = $course;
+                $tempCourseIds[] = $course["id"];
+            }
+        }
 
-    return array('lesson' => $lessons);
+        $tempLiveLessons;
+        $tempCourseIdIndex = 0;
+        $tempLessons = array();
+        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++){
+            foreach($lessons as $key => $lesson){
+                if(!strcmp($lesson["courseId"], $tempCourseIds[$tempCourseIdIndex])){
+                    $tempLiveLessons[] = $lesson;
+                }
+            }
+            if(isset($tempLiveLessons)){
+                $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
+                unset($tempLiveLessons);
+            }
+        }
+
+        $nowTime = time();
+        $liveLessons = array();
+        $tempLiveLesson;
+        $recentlyLiveLessonStartTime;
+        $tempLessonIndex;
+
+        foreach($tempLessons as $key => $tempLesson){
+            if($nowTime <= $tempLesson[0]["endTime"]){
+                $tempLiveLesson = $tempLesson[0];
+            }
+            if(sizeof($tempLesson) > 1){
+                $recentlyLiveLessonStartTime = 2*$nowTime;
+                for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
+                    if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
+                        if($tempLesson[$tempLessonIndex]["endTime"] < $recentlyLiveLessonStartTime){
+                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
+                            $tempLiveLesson = $tempLesson[$tempLessonIndex];
+                        }
+                    }
+                }
+            }
+            if(isset($tempLiveLesson)){
+                $liveLessons[$key] = $tempLiveLesson;
+                unset($tempLiveLesson);
+            }
+        }
+
+        foreach($tempCourses as $key => $value){
+            if(isset($liveLessons[$key])){
+                $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
+                $tempCourses[$key]["liveStartTime"] = $liveLessons[$key]["startTime"];
+                $tempCourses[$key]["liveEndTime"] = $liveLessons[$key]["endTime"];
+            }else{
+                $tempCourses[$key]["liveLessonTitle"] = "";
+            }
+        }
+
+        return array("start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data" => $this->controller->filterCourses(array_values($tempCourses)));
     }
 
     public function hitThread(){
