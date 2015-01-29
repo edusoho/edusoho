@@ -129,6 +129,8 @@ interface CourseProcessor
 	*/
 	public function getOneThreadPost();
 
+	public function hitThread();
+
 	/**
 	*测试直播参数
 	*/

@@ -1193,13 +1193,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     }
 
     return array('lesson' => $lessons);
-    // foreach($lessons as $key => $lessons){
-    //     if(!strcmp($lesson["courseId"], $tempCourseId)){
-    //         $tempCourse[$tempCourseId]["liveLesson"] = $lessons["title"];
-    //         $tempCourse[$tempCourseId]["liveStartTime"] = $lessons["startTime"];
-    //         $tempCourse[$tempCourseId]["liveEndTime"] = $lessons["endTime"];
-    //     }
-    // }
+    }
 
+    public function hitThread(){
+        $courseId = $this->getParam("courseId", 0);
+        $threadId = $this->getParam("threadId", 0);
+        if(empty($courseId) || empty($threadId)){
+            return $this->createErrorResponse('wrong threadId', "问答不存在或已删除");
+        }
+        return $this->controller->getThreadService()->hitThread($courseId, $threadId);
     }
 }
