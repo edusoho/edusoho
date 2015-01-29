@@ -7,9 +7,9 @@ define(function(require, exports, module) {
     var documentChooser = BaseChooser.extend({
         attrs: {
             uploaderSettings: {
-                file_types : "*.doc;*.pdf",
+                file_types : "*.doc;*.docx;*.pdf",
                 file_size_limit : "100 MB",
-                file_types_description: "doc,pdf"
+                file_types_description: "doc,docx,pdf"
             },
             preUpload: function(uploader, file) {
                 var data = {};
