@@ -1119,38 +1119,38 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
 
     public function getLiveCourse(){
-            $user = $this->controller->getUserService()->getCurrentUser();
-            if (!$user->isLogin()) {
-                return $this->createErrorResponse('not_login', "您尚未登录！");
-            }
+        $user = $this->controller->getUserService()->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
 
-            $courseId = $this->getParam("courseId", 0);
-            $lessonId = $this->getParam("lessonId", 0);
-            $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
-            $now = time();
-            $params = array();
+        $courseId = $this->getParam("courseId", 0);
+        $lessonId = $this->getParam("lessonId", 0);
+        $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $now = time();
+        $params = array();
 
-            $params['email'] = 'live-' . $user['id'] . '@edusoho.net';
-            $params['nickname'] = $user['nickname'];
+        $params['email'] = 'live-' . $user['id'] . '@edusoho.net';
+        $params['nickname'] = $user['nickname'];
 
-            $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
-            $params['sign'] .= 's' . $this->makeSign($params['sign']);
+        $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
+        $params['sign'] .= 's' . $this->makeSign($params['sign']);
 
-            $params['liveId'] = $lesson['mediaId'];
-            $params['provider'] = $lesson["liveProvider"];
-            $params['role'] = 'student';
+        $params['liveId'] = $lesson['mediaId'];
+        $params['provider'] = $lesson["liveProvider"];
+        $params['role'] = 'student';
 
-            $client = LiveClientFactory::createClient();
+        $client = LiveClientFactory::createClient();
 
-            $params['user'] = $params['email'];
+        $params['user'] = $params['email'];
 
-            $result = $client->entryLive($params);
+        $result = $client->entryLive($params);
 
-            return array('data' =>
-                array(
-                'lesson' => $lesson,
-                'result' => $result,
-            ));
+        return array('data' =>
+            array(
+            'lesson' => $lesson,
+            'result' => $result,
+        ));
     }
 
 
@@ -1160,7 +1160,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return md5($string . $secret);
     }
 
-    public function getLiveingCourse()
+    public function getLiveCourses()
     {
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
