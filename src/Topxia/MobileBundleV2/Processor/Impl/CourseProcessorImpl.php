@@ -151,7 +151,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $content    = $this->getParam("content", "");
         $action     = $this->getParam("action", "update");
         $imageCount = $this->getParam("imageCount", 0);
-        $hitNum     = $this->getParam("hitNum", 0);
         
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
@@ -174,8 +173,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $fields = array(
                 "title" => $title,
-                "content" => $content,
-                "hitNum" => $hitNum
+                "content" => $content
             );
             $result = $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
         }
@@ -1251,14 +1249,5 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "limit" => $limit,
             "total" => $total,
             "data" => $this->controller->filterCourses(array_values($tempCourses)));
-    }
-
-    public function hitThread(){
-        $courseId = $this->getParam("courseId", 0);
-        $threadId = $this->getParam("threadId", 0);
-        if(empty($courseId) || empty($threadId)){
-            return $this->createErrorResponse('wrong threadId', "问答不存在或已删除");
-        }
-        return $this->controller->getThreadService()->hitThread($courseId, $threadId);
     }
 }
