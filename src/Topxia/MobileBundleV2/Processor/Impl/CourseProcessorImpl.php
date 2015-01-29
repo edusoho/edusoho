@@ -1250,4 +1250,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "total" => $total,
             "data" => $this->controller->filterCourses(array_values($tempCourses)));
     }
+
+    public function hitThread(){
+        $courseId = $this->getParam("courseId", 0);
+        $threadId = $this->getParam("threadId", 0);
+        if(empty($courseId) || empty($threadId)){
+            return $this->createErrorResponse('wrong threadId', "问答不存在或已删除");
+        }
+        return $this->controller->getThreadService()->hitThread($courseId, $threadId);
+    }
 }
