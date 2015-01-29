@@ -172,6 +172,7 @@ define(function(require, exports, module) {
             }
 
             if('*.ppt;*.pptx'.indexOf(getFileExt(file.name)[0])>-1){
+
                 serverData.lazyConvert = 1;
             } 
 

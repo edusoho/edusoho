@@ -190,9 +190,10 @@ class UserController extends BaseController
             'user' => $user,
             ));
         }
-           
+        $default = $this->getSettingService()->get('default', array());     
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
             'user' => $user,
+            'default'=> $default
         ));
     }
 

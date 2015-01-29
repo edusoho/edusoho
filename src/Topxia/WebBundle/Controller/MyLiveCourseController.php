@@ -47,16 +47,22 @@ class MyLiveCourseController extends BaseController
                 $newCourses[$key]['lesson'] = $lesson;
             }
         }
-        
+        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:MyLiveCourse:index.html.twig', array(
             'courses' => $newCourses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'default'=> $default
         ));
     }
 
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+        private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

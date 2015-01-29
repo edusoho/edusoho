@@ -71,4 +71,6 @@ interface AppService
 
     public function updateAppVersion($code,$fromVersion,$version);
 
+    public function getLoginToken();
+
 }

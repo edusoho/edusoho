@@ -6,6 +6,7 @@ use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
+use Topxia\Service\Util\LiveClientFactory;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -241,6 +242,62 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         return $review;
     }
+
+    public function getThreadsByUserCourseIds(){
+    	$user = $this->controller->getUserByToken($this->request);
+    	$type = $this->getParam("type", "question");
+    	$start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+
+        $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $learningCourses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'],0,$learningCourseTotal);
+        $resultLearning = $this->controller->filterCourses($learningCourses);
+
+        $learnedCourseTotal = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
+		$learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
+        $resultLearned = $this->controller->filterCourses($learnedCourses);
+        $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
+
+        $conditions     = array(
+            'courseIds' => $courseIds,
+            'type' => $type
+        );
+
+        $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', $start,  $limit);
+        $controller = $this;
+        $threadsByUserCourseIds = array_map(function($thread) use ($controller)
+        {
+            $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
+            return $thread;
+        }, $threadsByUserCourseIds);
+
+        $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threadsByUserCourseIds, 'courseId'));
+        
+        $posts = array();
+        foreach ($threadsByUserCourseIds as $key => $thread) {
+            $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "default", 0, 1);
+            if (!empty($post)) {
+                $posts[$post[0]["threadId"]] = $post[0];
+            }
+        }
+        
+        $threadsByUserCourseIds = array_map(function($thread) use ($posts)
+        {
+            if (isset($posts[$thread["id"]])) {
+                $thread["latestPostContent"] = $posts[$thread["id"]]["content"];
+            }
+            return $thread;
+        }, $threadsByUserCourseIds);
+
+        $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threadsByUserCourseIds, 'userId'));
+        $threadsByUserCourseIds = $this->filterThreads($threadsByUserCourseIds, $courses, $users);
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => count($threadsByUserCourseIds),
+            'threads' => $threadsByUserCourseIds
+        );
+    }
     
     public function getCourseThreads()
     {
@@ -372,7 +429,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $noteInfos[]  = array(
                     "coursesId" => $courseMember['courseId'],
                     "courseTitle" => $course['title'],
-                    "noteLastUpdateTime" => date('c', $courseMember['noteLastUpdateTime']),
+                    "noteLastUpdateTime" => date('c', $value['updatedTime']),
                     "lessonId" => $lessonInfo['id'],
                     "lessonTitle" => $lessonInfo['title'],
                     "learnStatus" => $lessonStatus,
@@ -385,6 +442,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 );
             }
         }
+        $sort = array();
+        foreach ($noteInfos as $key => $value) {
+            $sort[$key] = $value['noteLastUpdateTime'];
+        }
+
+        if($noteInfos != null ){
+            array_multisort($sort, SORT_DESC, $noteInfos);
+        }
+
         return $noteInfos;
     }
     
@@ -438,8 +504,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('wrong_content_param', "笔记内容不能为空！");
         }
         
-        $content             = $this->uploadImage($content);
-        $noteInfo['content'] = $content;
+        $noteInfo['content'] = $this->uploadImage($content);
         
         $result                = $this->controller->getNoteService()->saveNote($noteInfo);
         $result['createdTime'] = date('c', $result['createdTime']);
@@ -632,7 +697,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             unset($announcement["courseId"]);
             unset($announcement["updatedTime"]);
             $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
-            $announcement["createdTime"] = date('Y-m-d H:i:s', $announcement['createdTime']);
+            $announcement["createdTime"] = date('c', $announcement['createdTime']);
             return $announcement;
         }, $announcements);
     }
@@ -887,6 +952,49 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
         return $result;
     }
+
+    public function getLearningCourseWithoutToken(){
+        $userId = $this->getParam('userId');
+        if (empty($userId)) {
+            return $this->createErrorResponse('userId', "userId参数错误");
+        }
+        
+        $start   = (int) $this->getParam("start", 0);
+        $limit   = (int) $this->getParam("limit", 10);
+        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($userId);
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses($userId, $start, $limit);
+        
+        $count            = $this->controller->getCourseService()->searchLearnCount(array(
+        ));
+        $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+            "userId" => $userId
+        ), array(
+            "finishedTime",
+            "ASC"
+        ), 0, $count);
+        
+        $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+        
+        $tempCourse = array();
+        foreach ($courses as $key => $course) {
+            $tempCourse[$course["id"]] = $course;
+        }
+        
+        foreach ($lessons as $key => $lesson) {
+            $courseId = $lesson["courseId"];
+            if (isset($tempCourse[$courseId])) {
+                $tempCourse[$courseId]["lastLessonTitle"] = $lesson["title"];
+            }
+        }
+        
+        $result = array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data" => $this->controller->filterCourses(array_values($tempCourse))
+        );
+        return $result;
+    }
     
     public function getLearningCourse()
     {
@@ -901,10 +1009,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
         $count            = $this->controller->getCourseService()->searchLearnCount(array(
-            "status" => "learning"
         ));
         $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
-            "status" => "learning",
             "userId" => $user["id"]
         ), array(
             "finishedTime",
@@ -1002,186 +1108,49 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $member;
     }
     
-    public function getSchoolRoom()
+    
+
+
+
+    public function getLiveCourse(){
+            $user = $this->controller->getUserService()->getCurrentUser();
+            if (!$user->isLogin()) {
+                return $this->createErrorResponse('not_login', "您尚未登录！");
+            }
+
+            $courseId = $this->getParam("courseId", 0);
+            $lessonId = $this->getParam("lessonId", 0);
+            $lesson = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+            $now = time();
+            $params = array();
+
+            $params['email'] = 'live-' . $user['id'] . '@edusoho.net';
+            $params['nickname'] = $user['nickname'];
+
+            $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
+            $params['sign'] .= 's' . $this->makeSign($params['sign']);
+
+            $params['liveId'] = $lesson['mediaId'];
+            $params['provider'] = $lesson["liveProvider"];
+            $params['role'] = 'student';
+
+            $client = LiveClientFactory::createClient();
+
+            $params['user'] = $params['email'];
+
+            $result = $client->entryLive($params);
+
+            return array('data' =>
+                array(
+                'lesson' => $lesson,
+                'result' => $result,
+            ));
+    }
+
+
+    protected function makeSign($string)
     {
-        $user = $this->controller->getUserByToken($this->request);
-        if (!$user->isLogin()) {
-            return $result = array(array('title' => '在学课程','data' => null),
-            	array('title' => '问答','data' => null),
-            	array('title' => '讨论','data' => null),
-            	array('title' => '笔记','data' => null),
-            	array('title' => '私信','data' => null));
-        }
-        
-        $courseConditions = array(
-            'userId' => $user['id']
-        );
-        $sort             = array(
-            'startTime',
-            'DESC'
-        );
-        $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
-        $resultCourse     = reset($resultCourse);
-        if ($resultCourse != false) {
-            $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
-            //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
-            $data       = array(
-                'content' => $courseInfo['title'],
-                'id' => $resultCourse['id'],
-                'courseId' => $resultCourse['courseId'],
-                'lessonId' => $courseInfo['largePicture'],
-                'time' => Date('c', $resultCourse['startTime'])
-            );
-        }
-        $result[0] = array(
-            'title' => '在学课程',
-            'data' => $data
-        );
-        
-        $total           = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-        $coursesLearning = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], 0, $total);
-        
-        $resultLearning = $this->controller->filterCourses($coursesLearning);
-        
-        $total         = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
-        $coursesLeaned = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $total);
-        
-        $resultLeaned = $this->controller->filterCourses($coursesLeaned);
-        $courseIds    = ArrayToolkit::column($resultLearning + $resultLeaned, 'id');
-        
-        $conditions     = array(
-            'userId' => $user['id'],
-            'courseIds' => $courseIds,
-            'type' => 'question'
-        );
-        $resultQuestion = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultQuestion = reset($resultQuestion);
-        $data           = array();
-        if ($resultQuestion != false) {
-            $data = array(
-                'content' => $resultQuestion['title'],
-                'id' => $resultQuestion['id'],
-                'courseId' => $resultQuestion['courseId'],
-                'lessonId' => $resultQuestion['lessonId'],
-                'time' => Date('c', $resultQuestion['latestPostTime'])
-            );
-        }
-        $result[1] = array(
-            'title' => '问答',
-            'data' => $data
-        ); //问答
-        
-        $conditions['type'] = 'discussion';
-        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultDiscussion   = reset($resultDiscussion);
-        $data               = array();
-        if ($resultDiscussion != false) {
-            $data = array(
-                'content' => $resultDiscussion['title'],
-                'id' => $resultDiscussion['id'],
-                'courseId' => $resultDiscussion['courseId'],
-                'lessonId' => $resultDiscussion['lessonId'],
-                'time' => Date('c', $resultQuestion['latestPostTime'])
-            );
-        }
-        $result[2] = array(
-            'title' => '讨论',
-            'data' => $data
-        ); //讨论
-        
-        $conditions = array(
-            'userId' => $user['id'],
-            'noteNumGreaterThan' => 0
-        );
-        
-        $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, 'updated', 0, 1);
-        $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, 'created', 0, 1);
-        //最新的笔记
-        $lastestNote     = array();
-        if ($updateTimeNote[0]['updatedTime'] > $createdTimeNote[0]['createdTime']) {
-            $lastestNote = $updateTimeNote;
-        } else {
-            $lastestNote = $createdTimeNote;
-        }
-
-        $lastestNote = reset($lastestNote);
-        $data = array(
-            'content' => $lastestNote['content'],
-            'id' => $lastestNote['id'],
-            'courseId' => $lastestNote['courseId'],
-            'lessonId' => $lastestNote['lessonId']
-        );
-        if($lastestNote['updatedTime'] > $lastestNote['createdTime']){
-        	$data['time'] = Date('c', $lastestNote['updatedTime']);
-        }else{
-			$data['time'] = Date('c', $lastestNote['createdTime']);
-        }
-        
-        $result[3] = array(
-            'title' => '笔记',
-            'data' => $data
-        );
-        
-        
-        $messageConditions = array(
-            'toId' => $user['id']
-        );
-        $sort              = array(
-            'createTime',
-            'DESC'
-        );
-        
-        $msgCount      = $this->getMessageService()->getUserConversationCount($user['id']);
-        $conversations = $this->getMessageService()->findUserConversations($user['id'], 0, $msgCount);
-        foreach ($conversations as $key => $value) {
-            $sort[$key] = $value['latestMessageTime'];
-        }
-        
-        array_multisort($sort, SORT_DESC, $conversations);
-        $lastestMessage = reset($conversations);
-        $data           = array(
-            'content' => $lastestMessage['latestMessageContent'],
-            'id' => $lastestMessage['id'],
-            'courseId' => $lastestMessage['fromId'],
-            'lessonId' => $lastestMessage['toId'],
-            'time' => Date('c', $lastestMessage['createdTime'])
-        );
-        
-        $result[4] = array(
-            'title' => '私信',
-            'data' => $data
-        );
-        
-        return $result;
+        $secret = $this->controller->getContainer()->getParameter('secret');
+        return md5($string . $secret);
     }
-
-    public function getUserNum(){
-        $user = $this->controller->getUserByToken($this->request);
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
-        }
-
-        $conditions = array(
-            'userId' => $user['id']
-        );
-        //问答数量
-        $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
-
-        $conditions['type'] = 'discussion';
-        //话题数量
-        $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
-
-        $conditions['userId'] = $user['id'];
-        //笔记数量
-        $noteSum = $this->controller->getNoteService()->searchNoteCount($conditions);
-
-        //考试数量
-        $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
-
-        return array('thread' => $threadSum,
-        			'discussion' => $discussionSum,
-        			'note' => $noteSum,
-        			'test' => $testSum );
-    }
-
 }
