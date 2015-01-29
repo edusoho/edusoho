@@ -3,7 +3,11 @@
     <ul class="media-list">
       {% for post in posts %}
         <li class="media li-reply-{{postMain.id}}" {% if loop.index > 5 %}style="display:none;"{% endif %}>
-          {{ web_macro.user_avatar(author, 'pull-left media-object') }} 
+          {{ web_macro.user_avatar(users[post.userId], 'pull-left media-object') }} 
+
+<!--                     <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
+            <img src="{{ default_path('avatar', users[post.userId].smallAvatar, '') }}" class="media-object">
+          </a> -->
           <div class="media-body">
             <div class="metas">
               <strong>{{ web_macro.user_link(postReplyMembers[post.userId]) }}</strong>
@@ -11,6 +15,12 @@
             </div>
             <div class="content">{{post.content|raw}}</div>
             <div class="text-muted text-normal pull-right">
+
+              {% if member.role == 'teacher' or app.user.id == thread.userId %}
+                 <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
+              {% endif %} 
+
+
               <a href="javascript:" class="li-reply" parentId="{{postMain.id}}" postName="{{users[post.userId].nickname}}" data-from-user-id= "{{ users[post.userId].id }}"> 回复</a>
             </div>
           </div>

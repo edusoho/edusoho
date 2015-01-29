@@ -17,9 +17,10 @@ class ThreadController extends BaseController
                     throw $this->createNotFoundException("班级不存在，或已删除。");
                 }
 
-                // if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
-                //     return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-                // }
+                if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
+                    // return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+                    return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, null);             
+                }
 
                  $result = $this->getClassroomService()->tryTakeClassroom($id);
                 break;
@@ -55,7 +56,8 @@ class ThreadController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+// var_dump($conditions);
+// var_dump($threads);exit();
         $userIds = array_merge(
             ArrayToolkit::column($threads, 'userId'),
             ArrayToolkit::column($threads, 'lastPostMemberId')
@@ -70,7 +72,9 @@ class ThreadController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
-            'targetType' =>$targetType
+            'targetType' =>$targetType,
+            'sort'=>'posted',
+            'type'=>'all',
         ));
     }
 
@@ -82,8 +86,15 @@ class ThreadController extends BaseController
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
+         list($classroom,$member) = $this->checkTargetType($targetId,$targetType);
+         if (empty($member)) {
+            // return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $targetId)));
+            return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, null);
+         }
+
 
         $thread = $this->getThreadService()->getThread($targetId, $id);
+
         if (empty($thread)) {
             throw $this->createNotFoundException("话题不存在，或已删除。");
         }
@@ -168,6 +179,9 @@ class ThreadController extends BaseController
             'postReplyCount'=>$postReplyCount,
             'postReplyPaginator'=>$postReplyPaginator,
             'replyPaginator'=>$replyPaginator,
+            'sort'=>'posted',
+            'type'=>'all',
+            'member'=>$member,
         ));
     }
 
@@ -207,6 +221,8 @@ class ThreadController extends BaseController
             'form' => $form->createView(),
             'type' => $type,
             'targetType'=>$targetType,
+            'sort'=>'posted',
+            'type'=>'all',
         ));
     }
 
@@ -249,6 +265,8 @@ class ThreadController extends BaseController
             'thread' => $thread,
             'type' => $thread['type'],
             'targetType'=>$targetType,
+            'sort'=>'posted',
+            'type'=>'all',
         ));
 
     }
@@ -596,6 +614,8 @@ class ThreadController extends BaseController
             'post' => $post,
             'thread' => $thread,
             'targetType'=>$targetType,
+            'sort'=>'posted',
+            'type'=>'all',
         ));
 
     }
@@ -611,6 +631,12 @@ class ThreadController extends BaseController
             $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$threadId,'targetType'=>$targetType), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员删除。");
             $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员删除。");
+        }
+
+        if ($thread['userId'] == $user['id']) {
+            $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$threadId,'targetType'=>$targetType), true);
+            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被话题作者删除。");
+            $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被话题作者删除。");
         }
 
         return $this->createJsonResponse(true);

@@ -1535,6 +1535,10 @@ threads:
     pattern:  /{targetType}/{id}/thread
     defaults: { _controller: TopxiaWebBundle:Thread:index }
 
+# group_thread_show:
+#     pattern:  /group/{id}/thread/{threadId}
+#     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
+
 thread_create:
     pattern:  /{targetType}/{id}/thread/create
     defaults: { _controller: TopxiaWebBundle:Thread:create }

@@ -10,7 +10,6 @@
   <li><a href="{{ path('threads', {targetType:targetType,id:targetId}) }}">话题</a></li>
   <li class="active">{% if thread.type == 'question' %}问答{% else %}话题{% endif %}</li>
 </ul>
-
 	<div class="thread">
 	  <div class="thread-header">
 	    {{ web_macro.user_avatar(author, 'pull-right thread-author-avatar') }}
@@ -29,11 +28,12 @@
 	    </div>
 	  </div>
 	  <div class="thread-body">{{ thread.content|raw }}</div>
-	  {% if isManager or app.user.id == author.id %}
+      
+	  {% if member.role == 'teacher' or app.user.id == author.id %}
 		  <div class="thread-footer" >
 		    <a href="{{ path('thread_edit', {targetType:targetType,targetId:thread.targetId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
-		    {% if isManager %}
-			    <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-after-url="{{ path('threads', {targetType:targetType,id:targetId}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+                                <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-after-url="{{ path('threads', {targetType:targetType,id:targetId}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+		    {% if member.role == 'teacher' %}
 			    {% if thread.isStick %}
 			      <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_unstick', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
 			    {% else %}
@@ -79,9 +79,10 @@
       {% for post in posts %}
         {% set subPosts = postReply[post.id]|default(null) %}
         {% set author = users[post.userId] %}
+        {% set avatar = postMember[post.userId] %}
 
        <li id="post-{{ post.id }}" class="thread-post media clearfix">
-          {{ web_macro.user_avatar(author, 'pull-left media-object') }} 
+          {{ web_macro.user_avatar(avatar, 'pull-left media-object') }} 
           <div class="media-body">
               <div class="metas">
                   <span class="floor" style="float: right;font-size: 12px;color: #999;">
@@ -91,21 +92,28 @@
                 <span class="bullet">•</span>
                 <span class="text-muted">{{post.createdTime|smart_time}} </span>
               </div>
-              <div class="thread-post-content">{{ post.content|raw }}</div>
+                       
+            <div class="actions pull-right">
 
-         <div class="actions">
-<!--           {% if isManager %}
-            <li><a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> 删除</a></li>
-          {% endif %} -->
+                {% if member.role == 'teacher' or app.user.id == thread.userId %}
+                   <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
+
+<!--                   <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a> -->
+
+                {% endif %} 
 
                 {% if not subPosts %}
-                      <a href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">回复</a>
+                      <a href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}" >回复</a>
                       <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}" style="display:none;">收起</a>
                 {% else %}
-                      <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">回复({{postReplyCount[post.id]}})</a>
-                      <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}" >收起</a>
+
+                      <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="" >回复({{postReplyCount[post.id]}})</a>
+                      <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}"  >收起</a>
                 {% endif %}
             </div>
+              <div class="thread-post-content">{{ post.content|raw }}</div>
+
+
 
 
             <div class="reply-{{post.id}}">
@@ -146,6 +154,7 @@
 
     </div>
     </div>
+
   {% endif %}
 
       <div class="panel panel-default">
