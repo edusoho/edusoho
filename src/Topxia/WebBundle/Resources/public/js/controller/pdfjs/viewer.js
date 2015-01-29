@@ -40,6 +40,7 @@ var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 PDFJS.imageResourcesPath = './images/';
   PDFJS.workerSrc = 'pdf.worker.min.js';
   PDFJS.cMapUrl = '../pdfjs/cmaps/';
+  PDFJS.disableRange = true;
   PDFJS.cMapPacked = true;
 
 var mozL10n = document.mozL10n || document.webL10n;
@@ -6402,7 +6403,27 @@ function webViewerInitialized() {
 
   document.getElementById('presentationMode').addEventListener('click',
     SecondaryToolbar.presentationModeClick.bind(SecondaryToolbar));
-
+var isPageFullScreen = false;
+document.getElementById('customerPresentationMode').addEventListener('click',
+    function(){
+      var parentContent = window.parent.document.getElementById("lesson-document-content");
+      if (isPageFullScreen) {
+          parentContent.removeAttribute("style");
+          //$("#lesson-document-content").removeAttr("style");
+      }else{
+          //alert(parent.document.height);
+          parentContent.style.width = window.parent.document.body.offsetWidth+"px";
+          //parentContent.style.height = parent.document.height+"px";
+          parentContent.style.position = "fixed";
+          parentContent.style.left = "0";
+          parentContent.style.top = "0";
+          parentContent.style.zIndex = "9999";
+          //$("#lesson-document-content").width(window.parent.document.width);
+          //$("#lesson-document-content").height(window.parent.document.height);
+          
+      }
+      isPageFullScreen = !isPageFullScreen;
+    });
   // document.getElementById('openFile').addEventListener('click',
   //   SecondaryToolbar.openFileClick.bind(SecondaryToolbar));
 
