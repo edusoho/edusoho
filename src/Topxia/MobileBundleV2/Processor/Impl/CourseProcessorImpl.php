@@ -1221,8 +1221,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             if(sizeof($tempLesson) > 1){
                 for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
                     if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
-                        if($tempLesson[$tempLessonIndex]["endTime"] <= $recentlyLiveLessonStartTime){
-                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["endTime"];
+                        if(true){
+                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
                             $tempLiveLesson = $tempLesson[$tempLessonIndex];
                         }
                     }
