@@ -45,7 +45,7 @@ class UserLoginTokenListener
         	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0 
         	&& $user['type'] == 'default'
         	&& $auth['email_enabled'] == 'opened'
-            && strstr(strtolower($request->getRequestUri()),'/email/verify/'))
+            && (!strpos(strtolower($request->getRequestUri()),'/email/verify/')))
         {
                 $request->getSession()->invalidate();
                 $this->container->get("security.context")->setToken(null);
