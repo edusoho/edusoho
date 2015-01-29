@@ -230,9 +230,9 @@ class RegisterController extends BaseController
         }
 
         $this->authenticateUser($user);
+        $this->getUserService()->setEmailVerified($user['id']);
 
         if (strtoupper($request->getMethod()) ==  'POST') {
-            $this->getUserService()->setEmailVerified($user['id']);
             $this->getUserService()->deleteToken('email-verify', $token['token']);
             return $this->createJsonResponse(true);
         }
