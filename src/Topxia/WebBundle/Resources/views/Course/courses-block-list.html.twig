@@ -58,14 +58,18 @@
                         免
                     {% endif %}
                 {% endif %}                      
-              </label>
-              <br>
+              </label>              
+            {% endif %}
+ 
+            {% if course.discountActivityId > 0 %}
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                <span class="text-sm" style="display:inline"><del>{{course.originCoinPrice}}{{setting('coin.coin_name')}}</del></span>
+                <br>
+                <span class="text-sm" style="display: inline;">原价：<del>{{course.originCoinPrice}}{{setting('coin.coin_name')}}</del></span>
               {% else %}
-                <span class="text-sm" style="display:inline"><del>{{course.originPrice}}元</del></span>
+                <span class="text-sm" style="display: inline;">原价：<del>{{course.originPrice}}元</del></span>
               {% endif %}
             {% endif %}
+
           {% endif %}
         </div>
 
