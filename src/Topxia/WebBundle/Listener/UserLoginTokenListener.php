@@ -40,7 +40,7 @@ class UserLoginTokenListener
         }
 
         $auth = $this->getSettingService()->get('auth');
-
+error_log($request->get('_route'),3,'/var/tmp/wangchaolog');
         if($auth && array_key_exists('email_enabled',$auth) 
         	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0 
         	&& $user['type'] == 'default'
