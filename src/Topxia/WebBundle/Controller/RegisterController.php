@@ -74,6 +74,8 @@ class RegisterController extends BaseController
             ));
 
             if ($this->getAuthService()->hasPartnerAuth()) {
+                 $this->authenticateUser($user);
+                 $this->sendRegisterMessage($user);
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
@@ -178,7 +180,7 @@ class RegisterController extends BaseController
         }
 
         $auth = $this->getSettingService()->get('auth');
-        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') ){
+        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
                return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
