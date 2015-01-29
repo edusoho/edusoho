@@ -151,6 +151,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $content    = $this->getParam("content", "");
         $action     = $this->getParam("action", "update");
         $imageCount = $this->getParam("imageCount", 0);
+        $hitNum     = $this->getParam("hitNum", 0);
         
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
@@ -173,7 +174,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $fields = array(
                 "title" => $title,
-                "content" => $content
+                "content" => $content,
+                "hitNum" => $hitNum
             );
             $result = $this->controller->getThreadService()->updateThread($courseId, $threadId, $fields);
         }
