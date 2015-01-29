@@ -41,15 +41,19 @@ class UserLoginTokenListener
 
         $auth = $this->getSettingService()->get('auth');
 
-        if($auth && array_key_exists('email_enabled',$auth) 
-        	&& $user["createdTime"] > $auth["setting_time"] && $user["emailVerified"] == 0 
-        	&& $user['type'] == 'default'
-        	&& $auth['email_enabled'] == 'opened'
-            // && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
-            &&($request->get('_route')!='register_email_verify')
-            &&($request->get('_route')!='register_submited')
-            &&($request->get('_route')!='register')
-            &&($request->get('_route')!='register_email_send') 
+        if
+            (
+                $auth 
+                && array_key_exists('email_enabled',$auth) 
+            	&& $user["createdTime"] > $auth["setting_time"] 
+                && $user["emailVerified"] == 0 
+            	&& $user['type'] == 'default'
+            	&& $auth['email_enabled'] == 'opened'
+                && (!strpos(strtolower($request->getRequestUri()),'/email/verify/'))
+                // && ($request->get('_route')!='register_email_verify')
+                // && ($request->get('_route')!='register_submited')
+                // && ($request->get('_route')!='register')
+                // && ($request->get('_route')!='register_email_send') 
             )
         {
                 $request->getSession()->invalidate();
