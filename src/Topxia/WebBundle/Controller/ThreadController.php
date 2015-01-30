@@ -245,11 +245,10 @@ class ThreadController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $thread = $this->getThreadService()->updateThread($thread['targetId'], $thread['id'], $form->getData());
-                
-                if ($user->isAdmin()) {             
-                    $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$thread['id'],'targetType'=>$targetType), true);
-                    $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑");
-                }
+
+                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$thread['id'],'targetType'=>$targetType), true);
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
 
                 return $this->redirect($this->generateUrl('thread_show', array(
                    'targetId' => $thread['targetId'],
@@ -612,12 +611,13 @@ class ThreadController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['targetId'], $threadId,$post['id'], $form->getData());
-                if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$threadId,'targetType'=>$targetType), true);
-                    $threadUrlAnchor = $threadUrl."#post-".$id;
-                    $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
-                    $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
-                }
+
+                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+                $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$threadId,'targetType'=>$targetType), true);
+                $threadUrlAnchor = $threadUrl."#post-".$id;
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
+                $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
+
                 return $this->redirect($this->generateUrl('thread_show', array(
                     'targetId' => $post['targetId'],
                     'id' => $post['threadId'],

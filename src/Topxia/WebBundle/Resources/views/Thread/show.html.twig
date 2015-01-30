@@ -96,6 +96,9 @@
             <div class="actions pull-right">
 
                 {% if member.role|default('') == 'teacher' or app.user.id == thread.userId or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+
+                 <a href="{{ path('thread_post_edit', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}"> 编辑</a>
+
                    <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
 
 <!--                   <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a> -->
