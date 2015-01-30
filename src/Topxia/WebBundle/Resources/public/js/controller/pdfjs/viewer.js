@@ -6409,17 +6409,12 @@ document.getElementById('customerPresentationMode').addEventListener('click',
       var parentContent = window.parent.document.getElementById("lesson-document-content");
       if (isPageFullScreen) {
           parentContent.removeAttribute("style");
-          //$("#lesson-document-content").removeAttr("style");
       }else{
-          //alert(parent.document.height);
           parentContent.style.width = window.parent.document.body.offsetWidth+"px";
-          //parentContent.style.height = parent.document.height+"px";
           parentContent.style.position = "fixed";
           parentContent.style.left = "0";
           parentContent.style.top = "0";
           parentContent.style.zIndex = "9999";
-          //$("#lesson-document-content").width(window.parent.document.width);
-          //$("#lesson-document-content").height(window.parent.document.height);
           
       }
       isPageFullScreen = !isPageFullScreen;
