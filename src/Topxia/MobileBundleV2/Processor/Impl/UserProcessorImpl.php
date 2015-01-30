@@ -503,14 +503,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
-
+        //问答数量
         $conditions = array(
             'userId' => $user['id'],
             'type' => 'question'
         );
-
         $total = $this->controller->getThreadService()->searchThreadCount($conditions);
-
         $threads = $this->controller->getThreadService()->searchThreads(
             $conditions,
             'createdNotStick',
@@ -519,10 +517,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         );
         $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
-        //问答数量
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        $conditions['type'] = 'discussion';
+        //话题数量
+        $conditions = array(
+            'userId' => $user['id'],
+            'type' => 'discussion'
+        );
         $totalDiscussion = $this->controller->getThreadService()->searchThreadCount($conditions);
         $discussion = $this->controller->getThreadService()->searchThreads(
             $conditions,
@@ -530,10 +531,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             0,
             $totalDiscussion
         );
+
         $discussionCourses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($discussion, 'courseId'));
+
         $conditions['courseIds'] = ArrayToolkit::column($discussionCourses,'id');
 
-        //话题数量
         $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
         $conditions = array(
