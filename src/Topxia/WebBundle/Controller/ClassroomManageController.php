@@ -153,6 +153,10 @@ class ClassroomManageController extends BaseController
     
     public function coursesAction($id)
     {   
+        $userIds = array();
+        $coinPrice=0;
+        $price=0;
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         $classroomCourses=$this->getClassroomService()->getAllCourses($id);
@@ -160,12 +164,23 @@ class ClassroomManageController extends BaseController
         $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-        print_r($classroomCourses);
-        print_r($courses);
+
+        foreach ($courses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+
+            $coinPrice+=$course['coinPrice'];
+            $price+=$course['price'];
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
         return $this->render("TopxiaWebBundle:ClassroomManage:courses.html.twig",array(
             'classroom'=>$classroom,
             'classroomCourses'=>$classroomCourses,
-            'courses'=>$courses));
+            'courses'=>$courses,
+            'price'=>$price,
+            'coinPrice'=>$coinPrice,
+            'users'=>$users));
     }
 
 
@@ -184,6 +199,8 @@ class ClassroomManageController extends BaseController
             if(empty($course))
             $this->getClassroomService()->addCourse($id,$value);
         }
+
+        $this->setFlashMessage('success',"课程添加成功");
 
         return new Response('success');
     }

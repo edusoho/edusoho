@@ -71,9 +71,6 @@
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</span>
           {% endif %}
 
-          <div class="countdown-list">
-            {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
-          </div>
           {% if free_limit_type(course) == 'free_now' %}
            <span class="text-muted text-sm">
             到期时间
@@ -138,7 +135,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="sure" class="btn btn-primary pull-right" data-url="{{url}}" >确定</button>
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{url}}" >添加</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 
     <script>app.load('course/select')</script>

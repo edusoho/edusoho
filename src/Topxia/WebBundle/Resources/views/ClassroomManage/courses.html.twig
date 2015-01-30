@@ -16,6 +16,12 @@
     padding-left: 20px;
 }
 
+.price{
+
+  color: #e57259;
+  font-size: 16px;
+
+}
 </style>
 
 {% set url = path('classroom_courses_select',{id:classroom.id}) %}       
@@ -37,6 +43,7 @@
                 <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
                 <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
                     </a>
+                        <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;">× </button>
                     <div class="course-body">
                      <div style="float:right;" class="text-muted mrm mls">
                          {% if setting('course.coursesPrice') == 0 %}
@@ -74,23 +81,6 @@
                                 </span>
                             {% endif %}
                           {% endif %}          
-                    
-                          <span class="divider"></span>
-                          {% if course.showStudentNumType == 'opened' %}
-                          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</span>
-                          {% endif %}
-
-                          <div class="countdown-list">
-                            {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
-                          </div>
-                          {% if free_limit_type(course) == 'free_now' %}
-                           <span class="text-muted text-sm">
-                            到期时间
-                            <span>{{course.freeEndTime|date('n')}}</span>月
-                            <span>{{course.freeEndTime|date('d')}}</span>日
-                            <span>{{course.freeEndTime|date('H')}}</span>时
-                          </span>
-                           {% endif %}
 
                         </div>
 
@@ -132,10 +122,36 @@
                           </div>
                         {% endif %}
 
-                        <div class="course-metas-{{course.id}}" style="display:none;">        
-                          <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
+                        <div class="course-metas">  
+
+                          {% if course.showStudentNumType == 'opened' %}
+                          <span class="text-muted">{{ course.studentNum }}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</span>
+                          {% endif %}
+                          <span class="divider"></span>
+                          {% if free_limit_type(course) == 'free_now' %}
+                           <span class="text-muted text-sm">
+                            到期时间
+                            <span>{{course.freeEndTime|date('n')}}</span>月
+                            <span>{{course.freeEndTime|date('d')}}</span>日
+                            <span>{{course.freeEndTime|date('H')}}</span>时
+                          </span>
+                           {% endif %}      
+                            <span class="text-muted text-sm">
+                                {{course.lessonNum}}个课时
+                            </span>
+                            <span class="divider"></span>
+                            <span class="text-muted text-sm">
+                                有效期:
+                                {% if course.expiryDay %}
+                                    {{course.expiryDay}}天
+                                {% else %}
+                                    永久
+                                {% endif %}
+                            </span>
                         </div>
+
                       </div>
+
                     </div>
                 </li>
 
@@ -146,8 +162,27 @@
           </div>
 
           <div class="form-group">
-            <div class="col-md-offset-2 col-md-8 controls">
-              <button type="submit" class="btn btn-fat btn-primary">保存</button>
+            <div class="col-md-offset-9 col-md-3 controls">
+              <div class="mbl pull-right">共计: &nbsp; &nbsp;
+                {% if setting('course.coursesPrice') == 0 %}
+                      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                        <span class="price" style="display:inline">
+
+                            {{ coinPrice }}{{setting('coin.coin_name')}}
+
+                          </span>
+
+                      {% else %}
+                        <span class="price">
+
+                            {{ price }}元
+                          
+                        </span>
+                    {% endif %}
+                  {% endif %}     
+              </div>
+
+              <button type="submit" class="btn btn-fat btn-primary pull-right">保存修改</button>
             </div>  
           </div>
 
