@@ -51,6 +51,9 @@ class LiveCourseController extends BaseController
             'type' => 'live'
         ), 'lastest',0, 10 );
 
+        var_dump($liveCourses);
+        exit();
+
         $userIds = array();
         foreach ($liveCourses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
