@@ -35,7 +35,6 @@ define(function(require, exports, module) {
         isIE9: function(){
             return navigator.appVersion.indexOf("MSIE 9.")!=-1;
         },
-
         isSupportHtml5: function(){
 
             return $.support.leadingWhitespace;
@@ -44,12 +43,11 @@ define(function(require, exports, module) {
 
         initPDFJSViewer: function(thiz){
             self=this;
-
             $("html").attr('dir','ltr');
             $('#viewerIframe').attr('src', '../../bundles/topxiaweb/js/controller/pdfjs/viewer.html');
             $('#viewerIframe').load(function(){
                 $("#viewerIframe")[0].contentWindow.setFileName(self.attrs.pdfFileUrl.value);
-                $("#viewerIframe")[0].contentWindow. webViewerLoad();
+                $("#viewerIframe")[0].contentWindow.webViewerLoad();
             });
         },
 

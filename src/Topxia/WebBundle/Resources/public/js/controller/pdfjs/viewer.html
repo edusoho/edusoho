@@ -83,7 +83,10 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 
         <div id="secondaryToolbar" class="secondaryToolbar hidden doorHangerRight">
           <div id="secondaryToolbarButtonContainer">
-            <button id="secondaryPresentationMode" class="secondaryToolbarButton presentationMode visibleLargeView" title="Switch to Presentation Mode" tabindex="51" data-l10n-id="presentation_mode">
+            <button id="secondaryPresentationMode" class="secondaryToolbarButton hidden presentationMode visibleLargeView" title="Switch to Presentation Mode" tabindex="51" data-l10n-id="presentation_mode">
+              <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
+            </button>
+            <button id="secondaryCustomPresentationMode" class="secondaryToolbarButton presentationMode" title="Switch to Presentation Mode" tabindex="51" data-l10n-id="presentation_mode">
               <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
             </button>
 
@@ -190,11 +193,13 @@ http://sourceforge.net/adobe/cmap/wiki/License/
                       <option title="" value="4" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 400 }'>400%</option>
                     </select>
                   </span>
-                <button id="presentationMode" class="toolbarButton presentationMode hiddenLargeView" title="Switch to Presentation Mode" tabindex="31" data-l10n-id="presentation_mode">
+                <button id="presentationMode" class="toolbarButton presentationMode hidden hiddenLargeView" title="Switch to Presentation Mode" tabindex="31" data-l10n-id="presentation_mode">
                   <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
                 </button>
-
-                <!-- <button id="openFile" class="toolbarButton openFile hidden" title="Open File" tabindex="32" data-l10n-id="open_file">
+                <button id="customerPresentationMode" class="toolbarButton presentationMode" title="Switch to Presentation Mode" tabindex="31" data-l10n-id="presentation_mode">
+                  <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
+                </button>
+                 <!-- <button id="openFile" class="toolbarButton openFile hidden" title="Open File" tabindex="32" data-l10n-id="open_file">
                   <span data-l10n-id="open_file_label">Open</span>
                 </button> -->
 
