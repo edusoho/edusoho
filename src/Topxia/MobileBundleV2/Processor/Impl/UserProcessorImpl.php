@@ -521,11 +521,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $conditions,
             'createdNotStick',
             0,
-            10
+            $totalDiscussion
         );
-        var_dump($discussion);
-        exit();
+
         $discussionCourses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($discussion, 'courseId'));
+                var_dump($discussionCourses);
+        exit();
         $conditions['courseIds'] = ArrayToolkit::column($discussionCourses,'id');
 
         $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
