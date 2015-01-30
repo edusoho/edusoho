@@ -13,14 +13,10 @@ use Topxia\Common\Paginator;
 
 class ClassroomController extends BaseController 
 {
-        public function indexAction(Request $request, $id)
+    public function indexAction(Request $request, $id)
     {
         return $this->forward('TopxiaWebBundle:ClassroomManage:index.html.twig',  array('id' => $id));
     }
-
-    
-
-    
 
     private function getClassroomService() 
     {

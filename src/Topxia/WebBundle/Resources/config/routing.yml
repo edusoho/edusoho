@@ -215,6 +215,14 @@ course_create:
     pattern:  /course/create
     defaults: { _controller: TopxiaWebBundle:Course:create }
 
+course_select:
+    pattern:  /course/select
+    defaults: { _controller: TopxiaWebBundle:Course:select }
+
+course_search:
+    pattern:  /course/search
+    defaults: { _controller: TopxiaWebBundle:Course:search }
+
 course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
@@ -1519,6 +1527,22 @@ classroom_manage_courses:
     pattern: /classroom/{id}/manage/courses
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:courses }
 
+classroom_courses_select:
+    pattern: /classroom/{id}/courses/select
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:coursesSelect }
+
+classroom_manage_set_info:
+    pattern: /classroom/{id}/manage/set_info
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:setInfo }
+
+classroom_manage_set_picture:
+    pattern: /classroom/{id}/manage/set_picture
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:setPicture }
+
+classroom_manage_picture_crop:
+    pattern: /classroom/{id}/manage/picture_crop
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:pictureCrop }
+
 classroom_manage_set:
     pattern: /classroom/{id}/manage/set
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:set }
@@ -1534,10 +1558,6 @@ classroom_manage_teachers:
 threads:
     pattern:  /{targetType}/{id}/thread
     defaults: { _controller: TopxiaWebBundle:Thread:index }
-
-# group_thread_show:
-#     pattern:  /group/{id}/thread/{threadId}
-#     defaults: { _controller: TopxiaWebBundle:GroupThread:groupThreadIndex }
 
 thread_create:
     pattern:  /{targetType}/{id}/thread/create
@@ -1593,5 +1613,11 @@ thread_post_reply:
     pattern:  /{targetType}/post/{parentId}/reply
     defaults: { _controller: TopxiaWebBundle:Thread:postReply }
 
+classroom_manage_publish:
+    pattern: /classroom/{id}/manage/publish
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:publish }
 
+classroom_manage_close:
+    pattern: /classroom/{id}/manage/close
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:close }
 

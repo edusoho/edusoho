@@ -39,6 +39,21 @@ class ClassroomController extends BaseController
 	
     }
 
+    public function setAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+
+            $this->setFlashMessage('success',"班级设置成功！");
+
+            $set=$request->request->all();
+
+            $this->getSettingService()->set('classroom', $set);
+        }
+
+        return $this->render('TopxiaAdminBundle:Classroom:set.html.twig', array(
+        ));
+    }
+    
     public function addClassroomAction(Request $request) 
     {
         if ($this->get('security.context')->isGranted('ROLE_ADMIN')!==true) {
@@ -67,6 +82,9 @@ class ClassroomController extends BaseController
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
+            
+            $this->setFlashMessage('success',"恭喜！创建班级成功！");
+            
             return $this->redirect($this->generateUrl('classroom_manage',array('id'=>$classroom['id'])));
         }
 

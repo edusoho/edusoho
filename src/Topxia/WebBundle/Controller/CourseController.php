@@ -780,6 +780,80 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function selectAction(Request $request)
+	{	
+		$url="";
+		if($request->query->get('url')){
+
+			$url=$request->query->get('url');
+		}
+
+		$conditions = array(
+			'status' => 'published'
+		);
+
+		$paginator = new Paginator(
+			$this->get('request'),
+			$this->getCourseService()->searchCourseCount($conditions)
+			, 5
+		);
+
+		$courses = $this->getCourseService()->searchCourses(
+			$conditions, 'latest',
+			$paginator->getOffsetCount(),
+			$paginator->getPerPageCount()
+		);
+
+		$userIds = array();
+		foreach ($courses as &$course) {
+			$course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+			$userIds = array_merge($userIds, $course['teacherIds']);
+		}
+
+		$users = $this->getUserService()->findUsersByIds($userIds);
+
+		return $this->render("TopxiaWebBundle:Course:course-select.html.twig", array(
+			'users'=>$users,
+			'url'=>$url,
+			'courses'=>$courses,
+			'paginator'=>$paginator
+		));
+	}
+
+    public function searchAction(Request $request)
+    {	
+        $key = $request->request->get("key");
+        
+        $conditions = array( "title"=>$key );
+        $conditions['status'] = 'published';
+
+        $paginator = new Paginator(
+			$this->get('request'),
+			$this->getCourseService()->searchCourseCount($conditions)
+			, 5
+		);
+
+		$courses = $this->getCourseService()->searchCourses(
+			$conditions, 'latest',
+			$paginator->getOffsetCount(),
+			$paginator->getPerPageCount()
+		);
+
+		$userIds = array();
+		foreach ($courses as &$course) {
+			$course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+			$userIds = array_merge($userIds, $course['teacherIds']);
+		}
+
+		$users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+			'users'=>$users,
+			'courses'=>$courses,
+			'paginator'=>$paginator
+		));
+    }
+
 	public function relatedCoursesBlockAction($course)
 	{   
 

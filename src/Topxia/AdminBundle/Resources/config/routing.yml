@@ -1090,6 +1090,10 @@ admin_classroom:
     path:     /classroom/
     defaults: { _controller: TopxiaAdminBundle:Classroom:index }
 
+admin_classroom_set:
+    path:     /classroom/set
+    defaults: { _controller: TopxiaAdminBundle:Classroom:set }
+
 admin_classroom_add:
     pattern:  /classroom/add
     defaults: { _controller: TopxiaAdminBundle:Classroom:addClassroom }

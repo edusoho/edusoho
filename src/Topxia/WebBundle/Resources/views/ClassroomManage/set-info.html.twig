@@ -1,34 +1,37 @@
 {% extends 'TopxiaWebBundle:ClassroomManage:set-layout.html.twig' %}
 
-{% set settingNav = "set" %}
-{% set script_controller = 'classroom/set' %}
+{% set settingNav = "info" %}
+{% set script_controller = 'classroom/set-info' %}
 
 {% block classroom_set_body %}
 <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
 
         <div class="row form-group">
           <div class="col-md-2 control-label">
-            <label for="price">价格</label>
+            <label for="title">名称</label>
           </div>
           <div class="controls col-md-8">
-            <input name="price" type="text"  id="price" class="form-control" value="{{classroom.price}}"/>
-            <div class="help-block">当前共有 7 个课程，原价共计 1596 元。</div>
+            <input name="title" type="text"  id="title" class="form-control" value="{{classroom.title}}"/>
           </div>
         </div>
 
-        {% if setting('vip.enabled') %}
-
-        <div class="form-group">
+        <div class="row form-group">
           <div class="col-md-2 control-label">
-            <label for="price">可用会员身份免费加入</label>
+            <label >简介</label>
           </div>
-          <div class="col-md-8 controls">
-            <select name="vipLevelId" class="form-control width-input width-input-large">
-              {{ select_options(levels, classroom.vipLevelId|default(0), '不支持') }}
-            </select>
+          <div class="controls col-md-8">
+            <textarea name="about" class="form-control" >{{classroom.about|raw}}</textarea>
           </div>
         </div>
-        {% endif %}
+
+        <div class="row form-group">
+          <div class="col-md-2 control-label">
+            <label >课程说明</label>
+          </div>
+          <div class="controls col-md-8">
+            <textarea name="description" rows="10" class="form-control" id="description">{{classroom.description}}</textarea>
+          </div>
+        </div>
 
         <div class="row form-group">
           <div class="col-md-2 control-label"></div>
