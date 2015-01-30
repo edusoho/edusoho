@@ -33,6 +33,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks});";
+        var_dump($sql);
+        exit();
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
