@@ -511,6 +511,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
 
+        var_dump($conditions);
+        exit();
+
         //问答数量
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
