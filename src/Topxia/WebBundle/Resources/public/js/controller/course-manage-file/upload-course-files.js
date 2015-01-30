@@ -96,7 +96,10 @@ define(function(require, exports, module) {
 						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 							data.convertor = 'ppt';
 							data.lazyConvert = 1;
-						} else {
+						}else if ( (file.type == 'application/msword') || (file.type == 'application/pdf') || (file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+			                data.convertor = 'document';
+			                data.lazyConvert = 1;
+			            } else {
 							if (switcher) {
 								data.videoQuality = switcher.get('videoQuality');
 								data.audioQuality = switcher.get('audioQuality');
