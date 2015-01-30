@@ -1242,7 +1242,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
-        var_dump($value["resultLiveCourses"]);
+        var_dump($resultLiveCourses);
             exit();
 
         $sort = array();
