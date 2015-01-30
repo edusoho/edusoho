@@ -152,9 +152,8 @@ define(function(require, exports, module) {
                         });
                         $('.thread-post-list').on('click', '.li-reply', function() {
                             var parentId = $(this).attr('parentId');
-                            var targetId = $(this).attr('targetId');
-                            // var fromUserId = $(this).data('fromUserId');
-                            $('#fromUserIdDiv').html('<input type="hidden" id="targetId" value="' + targetId + '">');
+                            var fromUserId = $(this).data('fromUserId');
+                            $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="'+fromUserId+'">');
                             $('#li-' + parentId).show();
                             $('#reply-content-' + parentId).focus();
                             $('#reply-content-' + parentId).val("回复 " + $(this).attr("postName") + ":");
@@ -164,10 +163,11 @@ define(function(require, exports, module) {
                         $('.thread-post-list').on('click', '.reply', function() {
                             var parentId = $(this).attr('parentId');
                             var targetId = $(this).attr('targetId');
-                            if (targetId != "") {
+                            if ($(this).data('fromUserIdNosub') != "") {
 
-                                $('#fromUserIdNoSubDiv').html('<input type="hidden" id="targetId" value="' + targetId + '">')
-                                $('#fromUserIdDiv').html("");
+                            var fromUserIdNosubVal = $(this).data('fromUserIdNosub');
+                            $('#fromUserIdNoSubDiv').html('<input type="hidden" id="fromUserIdNosub" value="'+fromUserIdNosubVal+'">')
+                            $('#fromUserIdDiv').html("");
 
                             };
                             $(this).hide();
@@ -226,18 +226,18 @@ define(function(require, exports, module) {
 
                                 var parentId = $(this).attr('parentId');
                                 var targetId = $(this).attr('targetId');
-                                // var fromUserIdVal = "";
+                                var fromUserIdVal = "";
                                 var replyContent = $('#reply-content-' + parentId + '').val();
 
-                                // if ($('#fromUserId').length > 0) {
-                                //     fromUserIdVal = $('#fromUserId').val();
-                                // } else {
-                                //     if ($('#fromUserIdNosub').length > 0) {
-                                //         fromUserIdVal = $('#fromUserIdNosub').val();
-                                //     } else {
-                                //         fromUserIdVal = "";
-                                //     }
-                                // }
+                                if ($('#fromUserId').length > 0) {
+                                    fromUserIdVal = $('#fromUserId').val();
+                                } else {
+                                    if ($('#fromUserIdNosub').length > 0) {
+                                        fromUserIdVal = $('#fromUserIdNosub').val();
+                                    } else {
+                                        fromUserIdVal = "";
+                                    }
+                                }
 
                     var validator_threadPost = new Validator({
                     element: '.thread-post-reply-form',
@@ -251,7 +251,7 @@ define(function(require, exports, module) {
                         $(this).button('submiting').addClass('disabled');
                             $.ajax({
                             url : $(".thread-post-reply-form").attr('post-url'),
-                            data:"content="+replyContent+'&'+'parentId='+parentId+'&'+'targetId='+targetId,
+                            data:"content="+replyContent+'&'+'parentId='+parentId+'&'+'fromUserId='+fromUserIdVal,
                             cache : false, 
                             async : false,
                             type : "POST",

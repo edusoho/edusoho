@@ -29,11 +29,11 @@
 	  </div>
 	  <div class="thread-body">{{ thread.content|raw }}</div>
       
-	  {% if member.role == 'teacher' or app.user.id == author.id %}
+	  {% if member.role|default('') == 'teacher' or app.user.id == author.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
 		  <div class="thread-footer" >
 		    <a href="{{ path('thread_edit', {targetType:targetType,targetId:thread.targetId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
                                 <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-after-url="{{ path('threads', {targetType:targetType,id:targetId}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
-		    {% if member.role == 'teacher' %}
+		    {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
 			    {% if thread.isStick %}
 			      <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_unstick', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
 			    {% else %}
@@ -62,7 +62,7 @@
 		{% endif %}
 
 
- {% if thread.postNum %}
+ {% if postCount %}
   <div class="panel panel-default thread-post-list">
         <div class="panel-heading">
             <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
@@ -95,7 +95,7 @@
                        
             <div class="actions pull-right">
 
-                {% if member.role == 'teacher' or app.user.id == thread.userId %}
+                {% if member.role|default('') == 'teacher' or app.user.id == thread.userId or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
                    <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
 
 <!--                   <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a> -->
@@ -154,7 +154,10 @@
 
     </div>
     </div>
-
+  {% else %}
+          <div class="empty">
+                <span>还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</span>
+          </div>
   {% endif %}
 
       <div class="panel panel-default">

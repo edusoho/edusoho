@@ -298,7 +298,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
 
-		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 1));
+		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 1,'updateTime' => time()));
 	}
 
 	public function unstickThread($targetType,$targetId, $threadId)
@@ -310,7 +310,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
 
-		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 0));
+		$this->getThreadDao()->updateThread($thread['id'], array('isStick' => 0,'updateTime' => time()));
 	}
 
 	public function eliteThread($targetType,$targetId, $threadId)
@@ -322,7 +322,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
 
-		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
+		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1,'updateTime' => time()));
 	}
 
 	public function uneliteThread($targetType,$targetId, $threadId)
@@ -334,7 +334,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
 		}
 
-		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 0));
+		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 0,'updateTime' => time()));
 	}
 
 	public function hitThread($targetId, $threadId)
@@ -388,9 +388,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $post;
 	}
 
-	public function createPost($threadContent,$targetId,$memberId,$threadId,$parentId=0)
+	public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0)
 	{          
-                        $targetId = empty($threadContent['targetId']) ? $targetId : $threadContent['targetId'];
+                        // $targetId = empty($threadContent['targetId']) ? $targsetId : $threadContent['targetId'];
                         $thread = $this->getThread($targetId, $threadId);
 
                         if (empty($threadContent['content'])) {
@@ -398,9 +398,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                         }
                         $threadContent['content']=$this->purifyHtml($threadContent['content']);
                         $threadContent['userId']=$memberId;
+                        $threadContent['fromUserId']=$threadContent['fromUserId'];
                         $threadContent['createdTime']=time();
                         $threadContent['threadId']=$threadId;
                         $threadContent['parentId']=$parentId;
+                        $threadContent['targetType']=$targetType;
+                        $threadContent['targetId']=$targetId;
                         $post=$this->getThreadPostDao()->addPost($threadContent);  
                         
                         // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
@@ -450,8 +453,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $post;
 	}
 
-	public function updatePost($targetId, $id, $fields)
-	{
+	public function updatePost($targetId, $threadId,$id, $fields)
+	{                        
+                        	$thread = $this->getThread($targetId, $threadId);
+		
 		$post = $this->getPost($targetId, $id);
 		if (empty($post)) {
 			throw $this->createServiceException("回帖#{$id}不存在。");
@@ -468,12 +473,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 		//更新post过滤html
 		$fields['content'] = $this->purifyHtml($fields['content']);
+
+		 $threadFields = array(
+                            'updateTime' => time(),
+		);
+		$this->getThreadDao()->updateThread($threadId, $threadFields);
+
 		return $this->getThreadPostDao()->updatePost($id, $fields);
 	}
 
-	public function deletePost($targetType,$targetId, $id)
+	public function deletePost($targetType,$threadId,$targetId, $id)
 	{
 		$this->tryManage($targetType,$targetId);
+		$thread = $this->getThread($targetId, $threadId);
 
 		$post = $this->getThreadPostDao()->getPost($id);
 		if (empty($post)) {
@@ -486,6 +498,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 		$this->getThreadPostDao()->deletePost($post['id']);
 		$this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
+
+		 $threadFields = array(
+                            'updateTime' => time(),
+		);
+		$this->getThreadDao()->updateThread($threadId, $threadFields);
 	}
 
 	public function searchPostsCount($conditions)

@@ -82,11 +82,11 @@ interface ThreadService
 	 **/
 	public function getPost($targetId, $id);
 
-	public function createPost($threadContent,$targetId,$memberId,$threadId,$parentId=0);
+	public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0);
 
-	public function updatePost($targetId, $id, $fields);
+	public function updatePost($targetId,$threadId, $id, $fields);
 
-	public function deletePost($targetType,$targetId, $id);
+	public function deletePost($targetType,$threadId,$targetId, $id);
 
 	public function searchPostsCount($conditions);
 
