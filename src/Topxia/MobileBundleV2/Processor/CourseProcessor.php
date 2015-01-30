@@ -129,8 +129,13 @@ interface CourseProcessor
 	*/
 	public function getOneThreadPost();
 
+	public function hitThread();
+
 	/**
 	*测试直播参数
 	*/
 	public function getLiveCourse();
+
+	public function getLiveCourses();
+
 }

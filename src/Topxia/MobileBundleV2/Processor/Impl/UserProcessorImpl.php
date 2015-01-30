@@ -398,15 +398,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('userId', "userId参数错误");
         }
         $followings = $this->controller->getUserService()->findUserFollowing($userId, $start, $limit);
+        $followIds = ArrayToolkit::column($followings, 'id');
         $result = array();
         $index = 0;
-        foreach ($followings as $key => $following) {
-            $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
-            $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
-            $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
-            $following['following'] = $this->controller->getUserService()->findUserFollowingCount($following['id']);
-            $following['follower'] = $this->controller->getUserService()->findUserFollowerCount($following['id']);
-            $result[$index++] = $following;
+        foreach ($followIds as $followingId) {
+            $user = $this->controller->getUserService()->getUser($followingId);
+            $userProfile = $this->controller->getUserService()->getUserProfile($followingId);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($followingId);
+            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($followingId);
+            $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
     }
@@ -419,15 +421,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('userId', "userId参数错误");
         }
         $followers = $this->controller->getUserService()->findUserFollowers($userId, $start, $limit);
-        $result = array();
+        $followIds = ArrayToolkit::column($followers, 'id');
         $index = 0;
-        foreach ($followers as $key => $follower) {
-            $follower['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['smallAvatar'], 'course-large.png', true);
-            $follower['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['mediumAvatar'], 'course-large.png', true);
-            $follower['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['largeAvatar'], 'course-large.png', true);
-            $follower['following'] = $this->controller->getUserService()->findUserFollowingCount($follower['id']);
-            $follower['follower'] = $this->controller->getUserService()->findUserFollowerCount($follower['id']);
-            $result[$index++] = $follower;
+        foreach ($followIds as $followerId) {
+            $user = $this->controller->getUserService()->getUser($followerId);
+            $userProfile = $this->controller->getUserService()->getUserProfile($followerId);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($followerId);
+            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($followerId);
+            $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
     }
@@ -560,6 +563,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'startTime',
             'DESC'
         );
+
         $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
         $resultCourse     = reset($resultCourse);
         if ($resultCourse != false) {
@@ -588,49 +592,57 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
         $resultLearned = $this->controller->filterCourses($learnedCourses);
         $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
-        //----问答
-        $conditions     = array(
-            'courseIds' => $courseIds,
-            'type' => 'question'
-        );
 
-        $resultThread= $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultThread = reset($resultThread);
-
-        if ($resultThread != false) {
-            $data = array(
-                'content' => $resultThread['title'],
-                'id' => $resultThread['id'],
-                'courseId' => $resultThread['courseId'],
-                'lessonId' => $resultThread['lessonId'],
-                'time' => Date('c', $resultThread['latestPostTime'])
+        $threadData = null;
+        $discussionData = null;
+        if(sizeof($courseIds) > 0){
+            //----问答
+            $conditions     = array(
+                'courseIds' => $courseIds,
+                'type' => 'question'
             );
+
+            $resultThread = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+            
+            $resultThread = reset($resultThread);
+
+            if ($resultThread != false) {
+                $threadData = array(
+                    'content' => $resultThread['title'],
+                    'id' => $resultThread['id'],
+                    'courseId' => $resultThread['courseId'],
+                    'lessonId' => $resultThread['lessonId'],
+                    'time' => Date('c', $resultThread['latestPostTime'])
+                );
+            }
+
+            //----讨论
+            $conditions['type'] = 'discussion';
+            $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+            $resultDiscussion   = reset($resultDiscussion);
+            
+            if ($resultDiscussion != false) {
+                $discussionData = array(
+                    'content' => $resultDiscussion['title'],
+                    'id' => $resultDiscussion['id'],
+                    'courseId' => $resultDiscussion['courseId'],
+                    'lessonId' => $resultDiscussion['lessonId'],
+                    'time' => Date('c', $resultDiscussion['latestPostTime'])
+                );
+            }else{
+                $discussionData = null;
+            }
         }
+
+        
         $result[$index++] = array(
             'title' => '问答',
-            'data' => $data
+            'data' => $threadData
         ); 
-        
-
-        //----讨论
-        $conditions['type'] = 'discussion';
-        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultDiscussion   = reset($resultDiscussion);
-        $data               = array();
-        if ($resultDiscussion != false) {
-            $data = array(
-                'content' => $resultDiscussion['title'],
-                'id' => $resultDiscussion['id'],
-                'courseId' => $resultDiscussion['courseId'],
-                'lessonId' => $resultDiscussion['lessonId'],
-                'time' => Date('c', $resultDiscussion['latestPostTime'])
-            );
-        }else{
-            $data = null;
-        }
+               
         $result[$index++] = array(
             'title' => '讨论',
-            'data' => $data
+            'data' => $discussionData
         ); //讨论
 
         //笔记
