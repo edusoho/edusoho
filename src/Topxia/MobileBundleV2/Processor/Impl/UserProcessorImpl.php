@@ -216,7 +216,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             //var_dump($matches);
             $className = $matches[2];
             if ($className == "notification-footer") {
-                return "<div class=\"notification-footer\" <font color=\"red\">>";
+                return "<div class=\"notification-footer\" <font color=\"red\">";
             }
         }, $message);
 
