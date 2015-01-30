@@ -16,8 +16,12 @@ class ClassroomManageController extends BaseController
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        $courses=$this->getClassroomService()->getAllCourses($id);
+        $coursesCount=count($courses);
+
         return $this->render("TopxiaWebBundle:ClassroomManage:index.html.twig",array(
-            'classroom'=>$classroom));
+            'classroom'=>$classroom,
+            'coursesCount'=>$coursesCount));
     }
 
     public function studentsAction($id)
@@ -151,13 +155,24 @@ class ClassroomManageController extends BaseController
         ));
     }
     
-    public function coursesAction($id)
+    public function coursesAction(Request $request,$id)
     {   
         $userIds = array();
         $coinPrice=0;
         $price=0;
 
         $classroom=$this->getClassroomService()->getClassroom($id);
+
+        if($request->getMethod() == 'POST') {
+
+            $courseIds=$request->request->get('courseIds');
+            
+            if(empty($courseIds)) $courseIds=array();
+
+            $this->getClassroomService()->updateCourses($id,$courseIds);
+
+            $this->setFlashMessage('success',"课程修改成功");
+        }
 
         $classroomCourses=$this->getClassroomService()->getAllCourses($id);
         

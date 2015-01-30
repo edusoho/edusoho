@@ -27,4 +27,6 @@ interface ClassroomService
 
     public function getAllCourses($classroomId);
 
+    public function updateCourses($classroomId,array $courseIds);
+
 }

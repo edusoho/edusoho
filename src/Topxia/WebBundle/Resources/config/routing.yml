@@ -219,6 +219,10 @@ course_select:
     pattern:  /course/select
     defaults: { _controller: TopxiaWebBundle:Course:select }
 
+course_search:
+    pattern:  /course/search
+    defaults: { _controller: TopxiaWebBundle:Course:search }
+
 course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }

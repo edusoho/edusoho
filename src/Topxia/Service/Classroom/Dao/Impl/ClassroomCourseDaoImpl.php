@@ -38,6 +38,12 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         return $this->getConnection()->fetchAssoc($sql, array($classroomId,$courseId)) ? : null;
     }
 
+    public function deleteCoursesByClassroomId($classroomId)
+    {
+        $sql ="DELETE FROM {$this->table} WHERE classroomId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($classroomId));
+    }
+
     public function searchCourses($conditions,$orderBy,$start,$limit)
     {
         $this->filterStartLimit($start, $limit);

@@ -5,8 +5,8 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var ids=[];
-        $('#sure').on('click',function(){
 
+        $('#sure').on('click',function(){
             $('#sure').button('submiting').addClass('disabled');
 
             $.ajax({
@@ -24,7 +24,16 @@ define(function(require, exports, module) {
 
         });
 
-        $('.course-wide-list').on('click',".course-item ",function(){
+        $('#search').on('click',function(){
+
+            $.post($(this).data('url'),$('.form-search').serialize(),function(data){
+
+                $('.courses-list').html(data);
+            });
+
+        });
+
+        $('.row').on('click',".course-item ",function(){
 
             var id=$(this).data('id');
 

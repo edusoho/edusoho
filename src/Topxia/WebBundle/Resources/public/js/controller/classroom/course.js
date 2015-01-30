@@ -7,6 +7,14 @@ define(function(require, exports, module) {
         $(".course-list-group").sortable({
             'distance':20
         });
+
+        $(".course-list-group").on('click','.close',function(){
+
+            var courseId=$(this).data('id');
+
+            $('.item-'+courseId).remove();
+
+        });
     };
 
 });

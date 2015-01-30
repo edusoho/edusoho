@@ -46,7 +46,7 @@
                                 <table class="table">
                                     <tr>
                                         <td>课程数</td>
-                                        <td><a class="btn btn-danger btn-xs pull-right" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">0 <i class="glyphicon glyphicon-circle-arrow-right"></i></a></span></td>
+                                        <td><a class="btn btn-{% if coursesCount > 0 %}info{% else %}danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{coursesCount|default(0)}} <i class="glyphicon glyphicon-circle-arrow-right"></i></a></span></td>
                                     </tr>
                                     <tr>
                                         <td>课时数</td>
