@@ -212,15 +212,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             "notification"=>$notification
             ))->getContent();
 
-        $message = preg_replace_callback('/<div class=\"([\\w-]+)\">(.*)<\/div>/', function($matches) {
-            var_dump($matches[1]);
+        $message = preg_replace_callback('/<div class=\"([\\w-]+)\">([^>]*)<\/div>/', function($matches) {
             $content = $matches[2];
             $className = $matches[1];
-            if ($className == "media-body") {
-                return $content;
-            }
             if ($className == "notification-footer") {
-                return "<p><font color=#CFCFCF>" . $content . "</font></p>";
+                return "<div><font color=#CFCFCF>" . $content . "</font></div>";
             }
             
         }, $message);
