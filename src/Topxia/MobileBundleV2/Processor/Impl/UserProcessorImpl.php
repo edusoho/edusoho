@@ -562,7 +562,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function getSchoolRoom(){
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $result = array(array('title' => '在学课程','data' => null),
+            return $result = array(
+                array('title' => '在学直播课','data' => null),
+                array('title' => '在学课程','data' => null),
                 array('title' => '问答','data' => null),
                 array('title' => '讨论','data' => null),
                 array('title' => '笔记','data' => null),

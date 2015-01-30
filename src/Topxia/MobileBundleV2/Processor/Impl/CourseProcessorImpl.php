@@ -1241,10 +1241,21 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
+        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
+
+        $sort = array();
+        foreach ($resultLiveCourses as $key => $value) {
+            $sort[$key] = $value['liveStartTime'];
+        }
+
+        if($resultLiveCourses != null ){
+            array_multisort($sort, SORT_DESC, $resultLiveCourses);
+        }
+
         return array("start" => $start,
             "limit" => $limit,
             "total" => $total,
-            "data" => $this->controller->filterCourses(array_values($tempCourses)));
+            "data" => $resultLiveCourses);
     }
 
     public function hitThread(){
@@ -1264,6 +1275,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'type' => 'live'
         ), 'lastest',$start, $limit);
         return $liveCourses;
+    }
+
+    private function filterLiveCourse(){
 
     }
 }
