@@ -40,7 +40,7 @@
 	
 	</div>
 
-  {% if targetType == 'courselesson' %}
+  {% if targetType == 'courselesson' or  targetType == 'materiallib' %}
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}
