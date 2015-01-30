@@ -48,7 +48,7 @@ class UserLoginTokenListener
                 && array_key_exists('email_enabled',$auth) 
             	&& $user["createdTime"] > $auth["setting_time"] 
                 && $user["emailVerified"] == 0 
-            	&& $user['type'] == 'default'
+            	&& ($user['type'] == 'default'||$user['type'] == 'discuz'||$user['type'] == 'phpwind')
             	&& $auth['email_enabled'] == 'opened'
                 && (isset($route))
                 && ($route != '')
