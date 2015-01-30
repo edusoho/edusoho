@@ -1255,4 +1255,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
         return $this->controller->getThreadService()->hitThread($courseId, $threadId);
     }
+
+    public function getAllLiveCourse(){
+        $start = $this->getParam("start", 0);
+        $limit = $this->getParam("limit", 10);
+        $liveCourses = $this->controller->getCourseService()->searchCourses(array(
+            'status' => 'published',
+            'type' => 'live'
+        ), 'lastest',$start, $limit);
+        return $liveCourses;
+
+    }
 }
