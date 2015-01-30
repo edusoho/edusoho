@@ -125,7 +125,7 @@ class DataDict
     		'audio' => '音频',
     		'text' => '图文',
             'ppt' => 'PPT',
-            'document' => '课件',
+            'document' => '文档',
 		),
 		'videoStorageType' =>array(
 			'local'=>'本地视频',

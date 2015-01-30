@@ -37,7 +37,7 @@
 				    {% elseif item.type == 'ppt' %}
 				      <span class="type">PPT <i class="fa fa-file-powerpoint-o"></i></span>
 	    		    {% elseif item.type == 'document' %}
-				      <span class="type">课件 <i class="fa fa-files-o"></i></span>
+				      <span class="type">文档 <i class="fa fa-files-o"></i></span>
 				    {% elseif item.type == 'live' %}
 				       	{% if item.startTime > currentTime %}
 							<small class="type">{{ item.startTime|date('m月d日') }} 
