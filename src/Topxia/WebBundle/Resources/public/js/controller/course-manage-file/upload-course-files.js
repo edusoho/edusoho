@@ -28,7 +28,7 @@ define(function(require, exports, module) {
 		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
-				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx';
+				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx,doc,docx,pdf';
 			} else {
 				extensions = 'mp3,mp4';
 			}
