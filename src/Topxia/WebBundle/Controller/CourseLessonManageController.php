@@ -123,6 +123,15 @@ class CourseLessonManageController extends BaseController
 			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+				if($file['type']=="document" && $file['convertStatus'] == "none" ){
+
+		            $convertHash = $this->getUploadFileService()->reconvertFile(
+		                $file['id'],
+		                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+		            );
+				}
+
 				$lesson['mediaStatus'] = $file['convertStatus'];
 			}
 					  //  if ($shortcut == 'true') 
