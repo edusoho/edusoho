@@ -517,7 +517,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
 
-        var_dump($conditions);
+        var_dump($courses);
         exit();
 
         //问答数量
