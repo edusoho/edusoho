@@ -120,7 +120,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId'=>$id,
             'courseId'=>$courseId);
 
-        $this->getClassroomCourseDao()
+        $this->getClassroomCourseDao()->addCourse($classroomCourse);
+    }
+
+    public function getCourseByClassroomIdAndCourseId($id,$courseId)
+    {
+        return $this->getClassroomCourseDao()->getCourseByClassroomIdAndCourseId($id,$courseId);
+    }
+
+    public function getAllCourses($classroomId)
+    {   
+        $conditions=array('classroomId'=>$classroomId);
+
+        $courses=$this->getClassroomCourseDao()->searchCourses($conditions,array('id','desc'),0,9999);
+
+        return $courses;
     }
 
     protected function getFileService()

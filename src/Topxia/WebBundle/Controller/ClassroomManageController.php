@@ -8,6 +8,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Common\ArrayToolkit;
 
 class ClassroomManageController extends BaseController
 {   
@@ -154,12 +155,21 @@ class ClassroomManageController extends BaseController
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        $classroomCourses=$this->getClassroomService()->getAllCourses($id);
+        
+        $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
+
+        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+        print_r($classroomCourses);
+        print_r($courses);
         return $this->render("TopxiaWebBundle:ClassroomManage:courses.html.twig",array(
-            'classroom'=>$classroom));
+            'classroom'=>$classroom,
+            'classroomCourses'=>$classroomCourses,
+            'courses'=>$courses));
     }
 
 
-    public function coursesSelectAction(Request $request)
+    public function coursesSelectAction(Request $request,$id)
     {
         $data=$request->request->all();
 
@@ -169,6 +179,10 @@ class ClassroomManageController extends BaseController
 
         foreach ($ids as $key => $value) {
             
+            $course=$this->getClassroomService()->getCourseByClassroomIdAndCourseId($id,$value);
+
+            if(empty($course))
+            $this->getClassroomService()->addCourse($id,$value);
         }
 
         return new Response('success');
@@ -209,6 +223,11 @@ class ClassroomManageController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }

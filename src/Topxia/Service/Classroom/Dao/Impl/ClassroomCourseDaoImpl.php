@@ -32,4 +32,33 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+    public function getCourseByClassroomIdAndCourseId($classroomId,$courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} where classroomId=? and courseId=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($classroomId,$courseId)) ? : null;
+    }
+
+    public function searchCourses($conditions,$orderBy,$start,$limit)
+    {
+        $this->filterStartLimit($start, $limit);
+
+        $builder = $this->_createSearchBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->addOrderBy($orderBy[0], $orderBy[1]);
+  
+        return $builder->execute()->fetchAll() ? : array();  
+    }
+
+    private function _createSearchBuilder($conditions)
+    {
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table,$this->table)
+            ->andWhere('classroomId =:classroomId')
+            ->andWhere('courseId = :courseId');
+
+        return $builder;
+    }
 }

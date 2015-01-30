@@ -21,6 +21,10 @@ interface ClassroomService
 
     public function changePicture ($id, $filePath, array $options);
 
-    public function addCourse($id,$courseId);
+    public function addCourse($classroomId,$courseId);
+
+    public function getCourseByClassroomIdAndCourseId($classroomId,$courseId);
+
+    public function getAllCourses($classroomId);
 
 }
