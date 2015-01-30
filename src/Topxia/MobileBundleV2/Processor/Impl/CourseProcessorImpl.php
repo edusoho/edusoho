@@ -1242,18 +1242,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
-        var_dump($resultLiveCourses);
-            exit();
+        // var_dump($resultLiveCourses);
+        //     exit();
 
-        $sort = array();
-        foreach ($resultLiveCourses as $key => $value) {
+        // $sort = array();
+        // foreach ($resultLiveCourses as $key => $value) {
 
-            $sort[$key] = $value["liveStartTime"];
-        }
+        //     $sort[$key] = $value["liveStartTime"];
+        // }
 
-        if($resultLiveCourses != null ){
-            array_multisort($sort, SORT_DESC, $resultLiveCourses);
-        }
+        // if($resultLiveCourses != null ){
+        //     array_multisort($sort, SORT_DESC, $resultLiveCourses);
+        // }
 
         return array("start" => $start,
             "limit" => $limit,
