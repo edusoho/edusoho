@@ -212,7 +212,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             "notification"=>$notification
             ))->getContent();
 
-        $message = preg_replace_callback('/<[\\/]?([\\w]+)[^>]*>/', function($matches) {
+        $message = preg_replace_callback('/<[\\/]?li[^>]*>/', function($matches) {
             return "";
         }, $message);
 
