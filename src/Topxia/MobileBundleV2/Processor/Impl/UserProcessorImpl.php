@@ -214,7 +214,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $message = preg_replace_callback('/<div class=\"notification-footer\">([^>]*)<\/div>/', function($matches) {
             $content = $matches[1];
-            return "<p><font color=#EFEFEF>" . $content . "</font></p>";
+            return "<p><font color=#8F8F8F>" . $content . "</font></p>";
         }, $message);
 
         $message = str_replace("\n", "", $message);
