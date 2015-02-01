@@ -227,7 +227,7 @@ define(function(require, exports, module) {
                     element: '#lesson-media-field',
                     required: true,
                     rule: 'mediaValueEmpty',
-                    display: '课件'
+                    display: '文档'
                 });
                 break;
         }

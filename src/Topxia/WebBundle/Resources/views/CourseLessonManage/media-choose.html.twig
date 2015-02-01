@@ -357,7 +357,7 @@
 
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
-        <li class="active"><a class="file-chooser-uploader-tab" href="#document-chooser-upload-pane" data-toggle="tab">上传课件</a></li>
+        <li class="active"><a class="file-chooser-uploader-tab" href="#document-chooser-upload-pane" data-toggle="tab">上传文档</a></li>
         {% if is_plugin_installed('MaterialLib') %}
         <li><a href="#document-chooser-disk-pane" data-toggle="tab">
               从资料库中选择
@@ -375,7 +375,7 @@
         <div class="tab-pane active" id="document-chooser-upload-pane">
 
           <div class="file-chooser-uploader">
-            <div class="file-chooser-uploader-label">选择你要上传的课件：</div>
+            <div class="file-chooser-uploader-label">选择你要上传的文档：</div>
             <div class="file-chooser-uploader-control">
               <span id="document-choose-uploader-btn" 
                 data-role="uploader-btn"
@@ -398,8 +398,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>pdf,doc</strong>格式的课件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>课件将上传到<strong>云服务器</strong></li>
+                <li>支持<strong>pdf,doc,docx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                <li>文档将上传到<strong>云服务器</strong></li>
               </ul>
             </div>
           </div>
@@ -411,7 +411,7 @@
                 data-base-url="{{ path('uploadfile_browser', {type:'document'}) }}" 
               data-default-url="{{ path('uploadfile_browser', {type:'document', source:'upload'}) }}" 
               data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-                data-empty="暂无课件，请先上传。">
+                data-empty="暂无文档，请先上传。">
               <div class="file-browser-list-container"></div>
             </div>
           </div>
@@ -419,7 +419,7 @@
 
         <div class="tab-pane" id="document-chooser-course-file">
             <div id="file-browser-document" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'document'}) }}" data-empty="暂无课件，请先上传。"></div>
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'document'}) }}" data-empty="暂无文档，请先上传。"></div>
         </div>
         
       </div>
