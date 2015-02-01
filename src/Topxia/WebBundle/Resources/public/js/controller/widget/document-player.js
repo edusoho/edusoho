@@ -2,6 +2,20 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var swfobject = require('swfobject');
+    window.onmessage=function(e){  
+        var isPageFullScreen = e.data;
+        var docContent = document.getElementById("lesson-document-content");
+        if (isPageFullScreen) {
+          docContent.removeAttribute("style");
+        }else{
+          docContent.style.width = window.document.body.offsetWidth+"px";
+          docContent.style.position = "fixed";
+          docContent.style.left = "0";
+          docContent.style.top = "0";
+          docContent.style.zIndex = "9999";
+          
+        }
+    };
 
     var DocumentPlayer = Widget.extend({
         attrs: {
