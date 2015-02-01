@@ -44,11 +44,7 @@ define(function(require, exports, module) {
         initPDFJSViewer: function(thiz){
             self=this;
             $("html").attr('dir','ltr');
-            $('#viewerIframe').attr('src', '../../bundles/topxiaweb/js/controller/pdfjs/viewer.html');
-            $('#viewerIframe').load(function(){
-                $("#viewerIframe")[0].contentWindow.setFileName(self.attrs.pdfFileUrl.value);
-                $("#viewerIframe")[0].contentWindow.webViewerLoad();
-            });
+            $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v1/viewer.html#'+self.attrs.pdfFileUrl.value);
         },
 
         initSwfViewer: function(thiz){
