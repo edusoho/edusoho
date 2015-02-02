@@ -21,8 +21,8 @@
 <script src="{{ asset('assets/libs/seajs-global-config.js?4.9.0') }}"></script>
 
 <script>
-seajs.use(app.mainScript, function(){
-    alert(1);
+seajs.use(app.mainScript, function(require){
+    alert(require);
     var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
     $("#lesson-document-content").html(html).show();
 
