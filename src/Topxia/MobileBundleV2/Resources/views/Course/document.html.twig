@@ -30,6 +30,7 @@ seajs.use(app.mainScript, function(){
             swfFileUrl:'{{swfUri | raw}}',
             pdfFileUrl:'{{pdfUri | raw}}'
         });
+        $("#viewerIframe").height(document.body.clientHeight);
     });
     
 });
