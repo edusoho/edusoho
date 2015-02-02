@@ -6,7 +6,7 @@
   </title>
 </head>
 
-<body>
+<body style="height:100%; width:100%;">
 <div id="lesson-document-content"></div>
 <script>
   var app = {};
@@ -30,7 +30,6 @@ seajs.use(app.mainScript, function(){
             swfFileUrl:'{{swfUri | raw}}',
             pdfFileUrl:'{{pdfUri | raw}}'
         });
-        $("#viewerIframe").height(document.body.clientHeight);
     });
     
 });
