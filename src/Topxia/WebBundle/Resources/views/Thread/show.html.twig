@@ -53,7 +53,7 @@
 	</div>
 
 	<div class="thread-posts">
-		{% if thread.type == 'question' and elitePosts %}
+<!-- 		{% if thread.type == 'question' and elitePosts %}
 			<h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 教师的答案</h3>
 	    <ul class="thread-post-list media-list">
 	      {% for post in elitePosts %}
@@ -61,7 +61,7 @@
 	        {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig' %}
 	      {% endfor %}
 	    </ul>
-		{% endif %}
+		{% endif %} -->
 
 
  {% if postCount %}
@@ -71,11 +71,6 @@
         </div>
 
     <div class="panel-body">
-
-<!-- 		<h3 class="thread-posts-heading">
-			<span class="glyphicon glyphicon-share-alt"></span>
-      <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
-		</h3> -->
 
     <ul class="media-list">
       {% for post in posts %}
@@ -140,15 +135,8 @@
                     </div>
                   </form>
                 </div>
-
-
-
-<!--                       <div class="reply-{{post.id}} empty" style="display:none;">
-                          <span>还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</span>
-                       </div> -->
                    {% endif %}
             </div>
-        <!-- </div> -->
     </li>
       {% endfor %}
     </ul>
