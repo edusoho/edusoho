@@ -316,6 +316,85 @@ class MobileBaseController extends BaseController
         }, $users);
     }
 
+    public function filterLiveCourses($user, $start, $limit){
+        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+        
+        $count            = $this->controller->getCourseService()->searchLearnCount(array(
+        ));
+        $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
+            "userId" => $user["id"]
+        ), array(
+            "finishedTime",
+            "ASC"
+        ), 0, $count);
+        
+        $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+        
+        $tempCourses = array();
+        $tempCourseIds = array();
+        foreach ($courses as $key => $course) {  
+            if(!strcmp($course["type"],"live"))
+            {
+                $tempCourses[$course["id"]] = $course;
+                $tempCourseIds[] = $course["id"];
+            }
+        }
+
+        $tempLiveLessons;
+        $tempCourseIdIndex = 0;
+        $tempLessons = array();
+        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++){
+            foreach($lessons as $key => $lesson){
+                if(!strcmp($lesson["courseId"], $tempCourseIds[$tempCourseIdIndex])){
+                    $tempLiveLessons[] = $lesson;
+                }
+            }
+            if(isset($tempLiveLessons)){
+                $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
+                unset($tempLiveLessons);
+            }
+        }
+
+        $nowTime = time();
+        $liveLessons = array();
+        $tempLiveLesson;
+        $recentlyLiveLessonStartTime;
+        $tempLessonIndex;
+
+        foreach($tempLessons as $key => $tempLesson){
+            if($nowTime <= $tempLesson[0]["endTime"]){
+                $tempLiveLesson = $tempLesson[0];
+            }
+            if(sizeof($tempLesson) > 1){
+                $recentlyLiveLessonStartTime = 2*$nowTime;
+                for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
+                    if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
+                        if($tempLesson[$tempLessonIndex]["endTime"] < $recentlyLiveLessonStartTime){
+                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
+                            $tempLiveLesson = $tempLesson[$tempLessonIndex];
+                        }
+                    }
+                }
+            }
+            if(isset($tempLiveLesson)){
+                $liveLessons[$key] = $tempLiveLesson;
+                unset($tempLiveLesson);
+            }
+        }
+
+        foreach($tempCourses as $key => $value){
+            if(isset($liveLessons[$key])){
+                $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
+                $tempCourses[$key]["liveStartTime"] = $liveLessons[$key]["startTime"];
+                $tempCourses[$key]["liveEndTime"] = $liveLessons[$key]["endTime"];
+            }else{
+                $tempCourses[$key]["liveLessonTitle"] = "";
+            }
+        }
+        return $tempCourses;
+    }
+
     /**
      * @todo 要移走，放这里不合适
      */
