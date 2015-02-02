@@ -547,7 +547,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                 $lesson['content'] = $render->getContent();
 
-                return $content;
+                return $render->getContent();
             }
 
             private function getHeadLeaderInfo()
