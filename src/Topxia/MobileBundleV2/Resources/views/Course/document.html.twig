@@ -10,7 +10,7 @@
 <div id="lesson-document-content"></div>
 <script>
   var app = {};
-  app.controller = "../widget/document-player";
+  app.controller = "/bundles/topxiaweb/js/controller/widget/document-player";
   app.mainScript = "/bundles/topxiaweb/js/app.js?4.9.0";
 </script>
 
@@ -21,7 +21,7 @@
 seajs.use(app.mainScript, function(){
     alert(1);
     var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
-$("#lesson-document-content").html(html).show();
+    $("#lesson-document-content").html(html).show();
 
 var player = new DocumentPlayer({
     element: '#lesson-document-content',
