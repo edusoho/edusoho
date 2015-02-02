@@ -44,6 +44,9 @@ seajs.use(app.mainScript, function(){
             pdfFileUrl:'{{pdfUri | raw}}'
         });
         $("#viewerIframe").height(document.body.clientHeight);
+        document.getElementById("customerPresentationMode").addEventListener("click",function(){
+            window.jsobj.toggleFullScreen();
+        });
     });
     
 });
