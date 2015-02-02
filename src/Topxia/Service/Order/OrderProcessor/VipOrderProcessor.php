@@ -34,16 +34,15 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $buyType = "new";
         }
 
-
         $levelPrice = array(
         	'month' => $level['monthPrice'],
         	'year' => $level['yearPrice']
         );
 
         $coinSetting = $this->getSettingService()->get("coin");
-
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
         $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
+        if($coinEnabled && array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }
 
@@ -68,9 +67,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             }
 
             $totalPrice = $unitPrice * $duration;
-        }
 
-        
+        }
 
         if(!array_key_exists("coin_enabled", $coinSetting) 
             || !$coinSetting["coin_enabled"]) {
@@ -163,7 +161,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
         } else {
             $unitPrice = $level[$orderData['unitType'] . 'Price'];
-            var_dump($unitPrice);
             if ($priceType == "Coin") {
                 $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
             }
@@ -185,17 +182,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
                 $cashRate
             );
 
-            var_dump(array(
-                            $orderData["couponCode"], 
-                            'vip',
-                            $targetId, 
-                            $totalPrice, 
-                            $priceType, 
-                            $cashRate
-                        ));
             if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
-            var_dump($couponResult);
-
                 $amount = $couponResult["afterAmount"];
             }
         }
@@ -230,10 +217,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 	}
 
 	public function createOrder($orderInfo, $fields) 
-	{
-		// unset($orderInfo['coupon']);
-		// unset($orderInfo['couponDiscount']);
-		
+	{		
         $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
 
         $unitNames = array('month' => '个月', 'year' => '年');

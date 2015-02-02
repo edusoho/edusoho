@@ -24,7 +24,7 @@ class BaseProcessor {
         return round($amount*1000 - $coinPreferentialPrice*1000)/1000;
 	}
 
-    protected function afterCouponPay($couponCode, $targetType, $targetId, $amount, $priceType='RMB', $cashRate=1)
+    protected function afterCouponPay($couponCode, $targetType, $targetId, $amount, $priceType, $cashRate)
     {
         $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, $targetType, $targetId, $amount);   
         return $couponResult;
