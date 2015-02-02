@@ -527,13 +527,15 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                 $metas2=$file['metas2'];
                 $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-                $result['pdfUri'] = $url['url'];
+                $pdfUri = $url['url'];
                 $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-                $result['swfUri'] = $url['url'];
+                $swfUri = $url['url'];
 
+                $content = $lesson['content'];
                 $content= $this->controller->convertAbsoluteUrl($this->request, $content);
                 $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-                            'content' => $content
+                            'pdfUri' => $pdfUri,
+                            'swfUri' => $swfUri
                         ));
 
                 $lesson['content'] = $render->getContent();
