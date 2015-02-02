@@ -527,7 +527,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                 $metas2=$file['metas2'];
                 $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-                var_dump($metas2);
+                var_dump($url);
                 $result['pdfUri'] = $url['url'];
                 $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
                 $result['swfUri'] = $url['url'];
