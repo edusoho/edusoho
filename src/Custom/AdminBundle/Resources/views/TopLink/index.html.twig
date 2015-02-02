@@ -1,0 +1,32 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}顶部链接管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_topLink' %}
+{% set script_controller = 'customadminbundle/controller/topLink/list' %}
+{% block main %}
+<div class="page-header">
+  <button class="btn btn-info btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{path('admin_topLink_create')}}"><span class="glyphicon glyphicon-plus"></span> 添加新链接</button>
+  <h1>顶部链接管理</h1>
+</div>
+<table id="block-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th width="30%">名称</th>
+      <th width="50%">链接</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for topLink in topLinks %}
+      {% include 'CustomAdminBundle:TopLink:list-tr.html.twig' %}
+    {% else %}
+      <tr><td colspan="20"><div class="empty">暂无顶部链接设置</div></td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+{# {{ web_macro.paginator(paginator) }}  #}
+{% endblock %}

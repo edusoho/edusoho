@@ -88,6 +88,9 @@ admin_category_isSearch:
     pattern:  /category/{id}/isSearch
     defaults: { _controller: CustomAdminBundle:Category:isSearch}
 
+
+
+
 admin_courseCarousel:
     pattern:  /courseCarousel
     defaults: { _controller: CustomAdminBundle:CourseCarousel:index}
@@ -95,3 +98,22 @@ admin_courseCarousel:
 admin_courseCarousel_edit:
     pattern:  /courseCarousel/{code}/edit
     defaults: { _controller: CustomAdminBundle:CourseCarousel:edit}
+
+
+
+
+admin_topLink:
+    pattern:  /topLink
+    defaults: { _controller: CustomAdminBundle:TopLink:index}
+admin_topLink_create:
+    pattern:  /topLink/create
+    defaults: { _controller: CustomAdminBundle:TopLink:create}
+
+admin_topLink_edit:
+    pattern:  /topLink/{id}/edit
+    defaults: { _controller: CustomAdminBundle:TopLink:edit}
+
+admin_topLink_remove:
+    pattern:  /topLink/{id}/remove
+    defaults: { _controller: CustomAdminBundle:TopLink:remove}
+    methods:  [POST]

@@ -21,12 +21,19 @@ class DefaultController extends BaseController
             $recentLiveCourses = array();
         }
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
+        
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
         
         $courseCarousels=$this->getCourseCarouselService()->findAllCourseCarousels();
         $columns=$this->getColumnService()->findColumnsByIds(ArrayToolkit::column($courseCarousels,'columnId'));
         $columns=ArrayToolkit::index($columns,'id');
-
+        $categories=ArrayToolkit::index($categories,'id');
+        $showCarouselCode = '';
+        foreach ($courseCarousels as $courseCarousel) {
+            if($courseCarousel['display'] && empty($showCarouselCode)){
+                $showCarouselCode=$courseCarousel['code'];
+            }
+        }
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
@@ -34,6 +41,7 @@ class DefaultController extends BaseController
             'recentLiveCourses' => $recentLiveCourses,
             'consultDisplay' => true,
             'courseCarousels'=>$courseCarousels,
+            'showCarouselCode' =>$showCarouselCode,
             'columns'=>$columns
         ));
     }

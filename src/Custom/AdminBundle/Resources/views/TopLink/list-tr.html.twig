@@ -1,0 +1,9 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr>
+  <td>{{ topLink.name }}</td>
+  <td>{{ topLink.url }}</td>
+  <td>
+    <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_topLink_edit',{id:topLink.id}) }}" data-toggle="modal" data-target="#modal">编辑内容</button>
+    <button class="btn btn-sm btn-default js-topLink-delete-btn" data-url="{{ path('admin_topLink_remove',{id:topLink.id}) }}" data-target="1">删除</button>
+  </td>
+</tr>

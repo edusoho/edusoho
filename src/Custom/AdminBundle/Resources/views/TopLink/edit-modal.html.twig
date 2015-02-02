@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if topLink|default('') %}修改{% else %}新增{% endif %}顶部链接{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="topLink-form" action="{% if topLink|default('') %}{{path('admin_topLink_edit',{id:topLink.id})}}{% else %}{{path('admin_topLink_create')}}{% endif %}" method="post">
+
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="name">名称</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="name" type="text" name="name" value="{{ topLink.name|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="url">链接地址</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="url" type="text" name="url" value="{{ topLink.url|default('') }}">
+      </div>
+    </div>
+
+    
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('customadminbundle/controller/topLink/edit')</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+  <button id="topLink-edit-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#topLink-form">保存</button>
+{% endblock %}
