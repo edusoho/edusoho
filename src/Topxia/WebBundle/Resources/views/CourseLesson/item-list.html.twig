@@ -39,6 +39,7 @@
 	    		    {% elseif item.type == 'document' %}
 				      <span class="type">文档 <i class="fa fa-files-o"></i></span>
 				    {% elseif item.type == 'live' %}
+				      <span class="type">&nbsp;<i class="fa fa-video-camera"></i></span>
 				       	{% if item.startTime > currentTime %}
 							<small class="type">{{ item.startTime|date('m月d日') }} 
 								{% for key,week in weeks %}

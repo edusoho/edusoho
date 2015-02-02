@@ -41,6 +41,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+
         $cashRate = 1;
         if($coinEnabled && array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
