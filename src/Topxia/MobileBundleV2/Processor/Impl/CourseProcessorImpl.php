@@ -1165,8 +1165,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-        $total   = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
+        $total = sizeof($tempCourses);
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
         return array("start" => $start,
