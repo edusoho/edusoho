@@ -1165,29 +1165,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
+        $total   = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
-        settype($tempCourses['total'], 'integer') ;
-
-        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses['liveCourse']));
-
+        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
         return array("start" => $start,
             "limit" => $limit,
-            "total" => $tempCourses['total'],
+            "total" => $total,
             "data" => $resultLiveCourses);
-
-        // var_dump($resultLiveCourses);
-        //     exit();
-
-        // $sort = array();
-        // foreach ($resultLiveCourses as $key => $value) {
-
-        //     $sort[$key] = $value["liveStartTime"];
-        // }
-
-        // if($resultLiveCourses != null ){
-        //     array_multisort($sort, SORT_DESC, $resultLiveCourses);
-        // }
     }
 
     public function hitThread(){
@@ -1210,6 +1195,32 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     }
 
     private function filterLiveCourse(){
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+        
+        $start   = (int) $this->getParam("start", 0);
+        $limit   = (int) $this->getParam("limit", 10);
+        $total   = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
+        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
+        foreach ($resultLiveCourses as $key => $liveCourse) {
+           if(!isset($liveCourse['liveStartTime'])){
+                unset($liveCourse);
+           }
+        }
+
+        $sort = array();
+        foreach ($resultLiveCourses as $key => $value) {
+            $sort[$key] = $value["liveStartTime"];
+        }
+
+        if($resultLiveCourses != null ){
+            array_multisort($sort, SORT_DESC, $resultLiveCourses);
+        }
+
+        return $resultLiveCourses;
     }
 }

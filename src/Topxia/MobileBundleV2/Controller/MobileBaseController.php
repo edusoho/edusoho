@@ -317,7 +317,6 @@ class MobileBaseController extends BaseController
     }
 
     public function filterLiveCourses($user, $start, $limit){
-        $total   = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
         $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
         $count            = $this->getCourseService()->searchLearnCount(array(
@@ -392,8 +391,7 @@ class MobileBaseController extends BaseController
                 $tempCourses[$key]["liveLessonTitle"] = "";
             }
         }
-        return $arrayLiveCourses = array('liveCourse' => $tempCourses,
-                                        'total' => $total ); 
+        return $tempCourses;
     }
 
     /**
