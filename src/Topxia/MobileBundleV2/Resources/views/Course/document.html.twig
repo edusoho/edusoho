@@ -18,9 +18,9 @@
 <script src="{{ asset('assets/libs/seajs-global-config.js?4.9.0') }}"></script>
 
 <script>
-seajs.use(app.mainScript);
-
-var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+seajs.use(app.mainScript, function(){
+    alert(1);
+    var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
 $("#lesson-document-content").html(html).show();
 
 var player = new DocumentPlayer({
@@ -28,6 +28,8 @@ var player = new DocumentPlayer({
     swfFileUrl:'{{swfUri}}',
     pdfFileUrl:'{{pdfUri}}'
 });
+});
+
 </script>
 
 </body>
