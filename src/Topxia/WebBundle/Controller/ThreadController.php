@@ -63,8 +63,6 @@ class ThreadController extends BaseController
             'paginator' => $paginator,
             'filters' => $filters,
             'targetType' =>$targetType,
-            'sort'=>'posted',
-            'type'=>'all',
         ));
     }
 

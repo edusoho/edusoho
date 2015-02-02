@@ -1,4 +1,6 @@
+{% if targetType == 'classroom' %}
 {% extends 'TopxiaWebBundle:Classroom:dashboard-layout.html.twig' %}
+{% endif %}
 
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 
