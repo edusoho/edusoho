@@ -97,7 +97,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 		if(isset($createdUserIds)){
 			$conditions['createdUserIds'] = $createdUserIds;
 		}
-		
+
 		return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
     }
 

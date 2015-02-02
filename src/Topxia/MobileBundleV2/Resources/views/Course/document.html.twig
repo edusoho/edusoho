@@ -1,0 +1,29 @@
+<!doctype html>
+
+<head>
+ <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>
+  </title>
+</head>
+<div id="lesson-document-content"></div>
+
+<script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js?4.9.0') }}"></script>
+<script>
+if (response.error) {
+    var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+    $("#lesson-document-content").html(html).show();
+    return ;
+}
+
+var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+$("#lesson-document-content").html(html).show();
+
+var player = new DocumentPlayer({
+    element: '#lesson-document-content',
+    swfFileUrl:response.swfUri,
+    pdfFileUrl:response.pdfUri
+});
+</script>
+<body>
+</body>
+</html>

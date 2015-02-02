@@ -429,13 +429,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             'largePicture' => $course['largePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['largePicture']) : null
         );
 
-
-        array_map(function($oldPicture){
-        	if (!empty($oldPicture)){
-	            @unlink($oldPicture);
-        	}
-        }, $oldPictures);
-
+    	$courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
+    	if ($courseCount <= 1) {
+    		array_map(function($oldPicture){
+                	if (!empty($oldPicture)){
+        	            @unlink($oldPicture);
+                	}
+                }, $oldPictures);
+        }
 		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
         
         return $this->getCourseDao()->updateCourse($courseId, $fields);
@@ -786,7 +787,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','document'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -841,7 +842,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-		if (in_array($lesson['type'], array('video', 'audio', 'ppt'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt','document'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");

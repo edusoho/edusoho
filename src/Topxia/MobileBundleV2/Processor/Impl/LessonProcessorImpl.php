@@ -372,6 +372,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                                 return $this->getVideoLesson($lesson);
                                     case 'testpaper':
                                                 return $this->getTestpaperLesson($lesson);
+                                    case 'document':
+                                                return $this->getDocumentLesson($lesson);
 			default:
 				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
@@ -503,6 +505,35 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         		return $lesson;
 	}
+
+            private function getDocumentLesson($lesson)
+            {
+
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                if (empty($file)) {
+                    return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
+                }
+
+                if ($file['convertStatus'] != 'success') {
+                    if ($file['convertStatus'] == 'error') {
+                        return $this->createErrorResponse('not_document', '文档转换失败，请联系管理员!');
+                    } else {
+                        return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等!');
+                    }
+                }
+
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+
+                $metas2=$file['metas2'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+                var_dump($url);
+                $result['pdfUri'] = $url['url'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+                $result['swfUri'] = $url['url'];
+
+                return $result;
+            }
 
             private function getHeadLeaderInfo()
             {
