@@ -13,7 +13,6 @@
   app.basePath = '';
   app.jsPaths = {"common":"common","theme":"\/themes\/default-b\/js","couponbundle":"\/bundles\/coupon\/js","questionplusbundle":"\/bundles\/questionplus\/js","vipbundle":"\/bundles\/vip\/js","customwebbundle":"\/bundles\/customweb\/js","customadminbundle":"\/bundles\/customadmin\/js"};
 
-  //app.controller = "widget/document-player";
   app.mainScript = "/bundles/topxiaweb/js/app.js?4.9.0";
 </script>
 
@@ -23,7 +22,6 @@
 <script>
 seajs.use(app.mainScript, function(){
     seajs.use("/bundles/topxiaweb/js/controller/widget/document-player", function(DocumentPlayer){
-            //var DocumentPlayer = require('../widget/document-player');
             var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
             $("#lesson-document-content").html(html).show();
 
@@ -32,6 +30,7 @@ seajs.use(app.mainScript, function(){
             swfFileUrl:'{{swfUri | raw}}',
             pdfFileUrl:'{{pdfUri | raw}}'
         });
+        $("#viewerIframe").height(document.body.clientHeight);
     });
     
 });
