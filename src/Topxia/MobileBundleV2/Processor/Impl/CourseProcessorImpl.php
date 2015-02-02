@@ -1167,7 +1167,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $limit   = (int) $this->getParam("limit", 10);
         
         $courses = $this->controller->getCourseService()->findUserLeaningCourses(
-            $currentUser['id'], 0, 1000
+            $user['id'], 0, 1000
         );
         $courseIds = ArrayToolkit::column($courses, 'id');
 
