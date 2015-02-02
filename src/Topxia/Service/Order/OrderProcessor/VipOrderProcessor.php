@@ -170,19 +170,35 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         //$totalPrice = intval($totalPrice*1000)/1000;
+        $amount = $totalPrice;
+        //优惠码优惠价格
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        $couponSetting = $this->getSettingService()->get("coupon");
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
+            $couponResult = $this->afterCouponPay(
+                $orderData["couponCode"], 
+                $targetId, 
+                $totalPrice, 
+                $priceType, 
+                $cashRate
+            );
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+                $amount = $couponResult["afterAmount"];
+            }
+        }
 
+        //虚拟币优惠价格
         if(array_key_exists("coinPayAmount", $orderData)) {
             $amount = $this->afterCoinPay(
             	$coinEnabled, 
             	$priceType, 
             	$cashRate, 
-                $totalPrice,
+                $amount,
             	$orderData['coinPayAmount'], 
             	$orderData["payPassword"]
             );
-        } else {
-            $amount = $totalPrice;
-        }
+        } 
+
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;
         }
@@ -195,7 +211,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return array(
         	$amount, 
         	$totalPrice, 
-        	null
+        	empty($couponResult) ? null : $couponResult,
         );
 
 	}
@@ -261,6 +277,22 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
 	    $this->getNotificationService()->notify($order['userId'], 'default', $message);
 
+    }
+
+    private function afterCouponPay($couponCode, $targetId, $amount, $priceType='RMB', $cashRate=1)
+    {
+        if ($priceType == 'RMB'){
+            $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "vip", $targetId, $amount);
+        }else{
+            $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "vip", $targetId, $amount/$cashRate);
+        }
+
+        return $couponResult;
+    }
+
+    protected function getCouponService()
+    {
+        return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService');
     }
 
     protected function getUserService()

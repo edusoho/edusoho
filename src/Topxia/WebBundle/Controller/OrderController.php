@@ -146,14 +146,20 @@ class OrderController extends BaseController
         if ($request->getMethod() == 'POST') {
             $code = $request->request->get('code');
 
-            //判断coupon是否合法，是否存在跟是否过期跟是否可用于当前课程
-            $course = $this->getCourseService()->getCourse($id);
-            $coinSetting = $this->setting("coin");
-            if(isset($coinSetting["coin_enabled"]) && isset($coinSetting["price_type"]) && $coinSetting["coin_enabled"]==1 && $coinSetting["price_type"]=="Coin"){
-                $price = $course['coinPrice'];
-            } else {
-                $price = $course['price'];
+            if ($type == 'course') {
+                $course = $this->getCourseService()->getCourse($id);
+                $coinSetting = $this->setting("coin");
+                if(isset($coinSetting["coin_enabled"]) && isset($coinSetting["price_type"]) && $coinSetting["coin_enabled"]==1 && $coinSetting["price_type"]=="Coin"){
+                    $price = $course['coinPrice'];
+                } else {
+                    $price = $course['price'];
+                }
             }
+
+            if ($type == 'vip') {
+                $price = $request->request->get('amount');
+            }
+
             $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $price);
             return $this->createJsonResponse($couponInfo);
         }
