@@ -169,7 +169,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $unitPrice * $orderData['duration'];
         }
 
-        $totalPrice = intval($totalPrice*100)/100;
+        //$totalPrice = intval($totalPrice*1000)/1000;
 
         if(array_key_exists("coinPayAmount", $orderData)) {
             $amount = $this->afterCoinPay(
@@ -192,7 +192,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $amount = NumberToolkit::roundUp($amount);
-
         return array(
         	$amount, 
         	$totalPrice, 
