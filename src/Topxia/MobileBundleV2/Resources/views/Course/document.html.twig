@@ -1,13 +1,15 @@
 <!doctype html>
 
 <head>
- <meta name="viewport" content="width=device-width, height=device-height,minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+ <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>
   </title>
 </head>
 
 <body style="height:100%; width:100%;">
-<div id="lesson-document-content"></div>
+    <div id="lesson-document-content">
+        <iframe id='viewerIframe' width='100%' allowfullscreen webkitallowfullscreen height='100%'></iframe>
+    </div>
 <script>
   var app = {};
   app.basePath = '';
@@ -22,8 +24,6 @@
 <script>
 seajs.use(app.mainScript, function(){
     seajs.use("/bundles/topxiaweb/js/controller/widget/document-player", function(DocumentPlayer){
-            var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
-            $("#lesson-document-content").html(html).show();
 
         var player = new DocumentPlayer({
             element: '#lesson-document-content',
