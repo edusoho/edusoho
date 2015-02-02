@@ -542,7 +542,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                 $content= $this->controller->convertAbsoluteUrl($this->request, $content);
                 $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
                             'pdfUri' => $pdfUri,
-                            'swfUri' => $swfUri
+                            'swfUri' => $swfUri,
+                            'title'=>$lesson['title']
                         ));
 
                 $lesson['content'] = $render->getContent();
