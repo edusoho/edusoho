@@ -369,7 +369,7 @@ class MobileBaseController extends BaseController
                 $recentlyLiveLessonStartTime = 2*$nowTime;
                 for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
                     if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
-                        if($tempLesson[$tempLessonIndex]["endTime"] < $recentlyLiveLessonStartTime){
+                        if($tempLesson[$tempLessonIndex]["startTime"] < $recentlyLiveLessonStartTime){
                             $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
                             $tempLiveLesson = $tempLesson[$tempLessonIndex];
                         }
