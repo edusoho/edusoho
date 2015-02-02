@@ -7,12 +7,18 @@
 </head>
 <div id="lesson-document-content"></div>
 
+<script>
+  var app = {};
+
+  app.mainScript = '../widget/document-player';
+</script>
+
 <script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js?4.9.0') }}"></script>
 <script src="{{ asset('assets/libs/seajs-global-config.js?4.9.0') }}"></script>
 
 <script>
-seajs.use('/bundles/topxiaweb/js/app.js?4.9.0');
-var DocumentPlayer = require('../widget/document-player');
+seajs.use(app.mainScript );
+
 var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
 $("#lesson-document-content").html(html).show();
 
