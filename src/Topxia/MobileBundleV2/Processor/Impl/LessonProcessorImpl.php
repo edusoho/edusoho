@@ -506,6 +506,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         		return $lesson;
 	}
 
+            public function test()
+            {
+                $user = $this->controller->getUserByToken($this->request);
+                $lesson = $this->controller->getCourseService()->getCourseLesson(11, 185);
+                return $this->getDocumentLesson($lesson);
+            }
+
             private function getDocumentLesson($lesson)
             {
 
@@ -540,7 +547,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                 $lesson['content'] = $render->getContent();
 
-                return $lesson;
+                return $render;
             }
 
             private function getHeadLeaderInfo()
