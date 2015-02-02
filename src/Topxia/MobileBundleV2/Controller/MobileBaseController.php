@@ -385,12 +385,13 @@ class MobileBaseController extends BaseController
         foreach($tempCourses as $key => $value){
             if(isset($liveLessons[$key])){
                 $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
-                $tempCourses[$key]["liveStartTime"] = $liveLessons[$key]["startTime"];
-                $tempCourses[$key]["liveEndTime"] = $liveLessons[$key]["endTime"];
+                $tempCourses[$key]["liveStartTime"] = date("Y-m-d h:i", $liveLessons[$key]["startTime"]);
+                $tempCourses[$key]["liveEndTime"] = date("Y-m-d h:i", $liveLessons[$key]["endTime"]);
             }else{
                 $tempCourses[$key]["liveLessonTitle"] = "";
             }
         }
+
         return $tempCourses;
     }
 
