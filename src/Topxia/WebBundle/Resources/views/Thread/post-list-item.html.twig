@@ -4,10 +4,6 @@
       {% for post in posts %}
         <li class="media li-reply-{{postMain.id}}" {% if loop.index > 5 %}style="display:none;"{% endif %}>
           {{ web_macro.user_avatar(users[post.userId], 'pull-left media-object') }} 
-
-<!--                     <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
-            <img src="{{ default_path('avatar', users[post.userId].smallAvatar, '') }}" class="media-object">
-          </a> -->
           <div class="media-body">
             <div class="metas">
               <strong>{{ web_macro.user_link(postReplyMembers[post.userId]) }}</strong>
