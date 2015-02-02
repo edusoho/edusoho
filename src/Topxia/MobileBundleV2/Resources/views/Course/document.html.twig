@@ -21,7 +21,7 @@
 <script src="{{ asset('assets/libs/seajs-global-config.js?4.9.0') }}"></script>
 
 <script>
-seajs.use(app.mainScript, function(require){
+seajs.use(app.mainScript, function(require, exports, module){
     alert(require);
     var DocumentPlayer = require('../widget/document-player');
     var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
