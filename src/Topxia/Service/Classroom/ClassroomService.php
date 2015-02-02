@@ -29,4 +29,5 @@ interface ClassroomService
 
     public function updateCourses($classroomId,array $courseIds);
 
+    public function isClassroomStudent($classroomId, $studentId);
 }
