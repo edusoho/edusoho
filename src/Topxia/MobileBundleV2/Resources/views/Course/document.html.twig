@@ -17,7 +17,9 @@
 <script src="{{ asset('assets/libs/seajs-global-config.js?4.9.0') }}"></script>
 
 <script>
-seajs.use(app.mainScript );
+
+window.$ = window.jQuery = require('jquery');
+seajs.use(app.mainScript);
 
 var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
 $("#lesson-document-content").html(html).show();
