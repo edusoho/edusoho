@@ -91,7 +91,7 @@ class OrderController extends BaseController
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount = (string)((float)$amount);
             $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
-
+var_dump($cashRate);var_dump($shouldPayMoney);exit;
             //价格比较
             if($amount != $shouldPayMoney) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');

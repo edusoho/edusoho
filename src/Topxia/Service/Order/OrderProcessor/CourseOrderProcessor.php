@@ -110,6 +110,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"], 
+                'course',
                 $targetId, 
                 $totalPrice, 
                 $priceType, 
@@ -149,12 +150,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 	public function createOrder($orderInfo, $fields) 
 	{
 		return $this->getCourseOrderService()->createOrder($orderInfo);
-	}
-
-	private function afterCouponPay($couponCode, $targetId, $amount, $priceType, $cashRate)
-	{
-		$couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "course", $targetId, $amount);
-        return $couponResult;
 	}
 
 	public function doPaySuccess($success, $order) {

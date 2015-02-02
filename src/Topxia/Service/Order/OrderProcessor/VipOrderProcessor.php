@@ -163,6 +163,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
         } else {
             $unitPrice = $level[$orderData['unitType'] . 'Price'];
+            var_dump($unitPrice);
             if ($priceType == "Coin") {
                 $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
             }
@@ -177,12 +178,24 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $orderData["couponCode"], 
+                'vip',
                 $targetId, 
                 $totalPrice, 
                 $priceType, 
                 $cashRate
             );
+
+            var_dump(array(
+                            $orderData["couponCode"], 
+                            'vip',
+                            $targetId, 
+                            $totalPrice, 
+                            $priceType, 
+                            $cashRate
+                        ));
             if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+            var_dump($couponResult);
+
                 $amount = $couponResult["afterAmount"];
             }
         }
@@ -218,8 +231,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
 	public function createOrder($orderInfo, $fields) 
 	{
-		unset($orderInfo['coupon']);
-		unset($orderInfo['couponDiscount']);
+		// unset($orderInfo['coupon']);
+		// unset($orderInfo['couponDiscount']);
 		
         $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
 
@@ -277,22 +290,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
 	    $this->getNotificationService()->notify($order['userId'], 'default', $message);
 
-    }
-
-    private function afterCouponPay($couponCode, $targetId, $amount, $priceType='RMB', $cashRate=1)
-    {
-        if ($priceType == 'RMB'){
-            $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "vip", $targetId, $amount);
-        }else{
-            $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "vip", $targetId, $amount/$cashRate);
-        }
-
-        return $couponResult;
-    }
-
-    protected function getCouponService()
-    {
-        return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService');
     }
 
     protected function getUserService()

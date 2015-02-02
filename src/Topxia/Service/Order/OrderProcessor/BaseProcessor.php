@@ -24,9 +24,25 @@ class BaseProcessor {
         return round($amount*1000 - $coinPreferentialPrice*1000)/1000;
 	}
 
+    protected function afterCouponPay($couponCode, $targetType, $targetId, $amount, $priceType='RMB', $cashRate=1)
+    {
+        $couponResult = $this->getCouponService()->checkCouponUseable($couponCode, $targetType, $targetId, $amount);   
+        return $couponResult;
+    }
+
+    protected function getCouponService()
+    {
+        return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService');
+    }
+
 	protected function getAuthService()
     {
         return ServiceKernel::instance()->createService('User.AuthService');
+    }
+
+    protected function getAppService()
+    {
+        return ServiceKernel::instance()->createService('CloudPlatform.AppService');
     }
 
 }
