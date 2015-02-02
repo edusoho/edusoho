@@ -1165,9 +1165,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-        $tempCourses = $this->filterLiveCourses($user, $start, $limit);
+        $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
+        settype($tempCourses['total'], 'integer') ;
 
-        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
+        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses['liveCourse']));
+
+
+        return array("start" => $start,
+            "limit" => $limit,
+            "total" => $tempCourses['total'],
+            "data" => $resultLiveCourses);
+
         // var_dump($resultLiveCourses);
         //     exit();
 
@@ -1180,11 +1188,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         // if($resultLiveCourses != null ){
         //     array_multisort($sort, SORT_DESC, $resultLiveCourses);
         // }
-
-        return array("start" => $start,
-            "limit" => $limit,
-            "total" => $total,
-            "data" => $resultLiveCourses);
     }
 
     public function hitThread(){
