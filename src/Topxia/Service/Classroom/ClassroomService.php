@@ -19,6 +19,8 @@ interface ClassroomService
 
     public function publishClassroom($id);
 
+    public function updateClassroomTeachers($id);
+
     public function changePicture ($id, $filePath, array $options);
 
     public function addCourse($classroomId,$courseId);

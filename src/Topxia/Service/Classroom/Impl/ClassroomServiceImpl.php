@@ -15,8 +15,12 @@ use Symfony\Component\HttpFoundation\File\File;
 class ClassroomServiceImpl extends BaseService implements ClassroomService 
 {
     public function getClassroom($id)
-    {
-        return $this->getClassroomDao()->getClassroom($id);
+    {   
+        $classroom=$this->getClassroomDao()->getClassroom($id);
+
+        $classroom['teacherIds']=$classroom['teacherIds'] ? json_decode($classroom['teacherIds'],true) : array();
+
+        return $classroom;
     }
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
@@ -47,7 +51,48 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {   
         $classroom=$this->getClassroomDao()->updateClassroom($id,$fields);
 
+        $classroom['teacherIds']=$classroom['teacherIds'] ? json_decode($classroom['teacherIds'],true) : array();
+
         return $classroom;
+    }
+
+    public function updateClassroomTeachers($id)
+    {
+        $courses=$this->getAllCourses($id);
+
+        $classroom=$this->getClassroom($id);
+        
+        $teacherIds=$classroom['teacherIds'] ? : array();
+
+        foreach ($teacherIds as $key => $value) {
+            
+            $course=$this->getCourseByClassroomIdAndCourseId($id,$value);
+
+            if(empty($course)){
+
+                unset($teacherIds[$key]);
+            }
+        }
+
+        foreach ($courses as $key => $value) {
+            
+            $course=$this->getCourseService()->getCourse($value['courseId']);
+
+            $teacherIds=array_merge($teacherIds,$course['teacherIds']);
+
+        }
+
+        $teacherIds=array_unique($teacherIds);
+
+        foreach ($teacherIds as $key => $value) {
+            
+            $ids[]=$value;
+        }
+        
+        $teacherIds=json_encode($ids);
+
+        $this->updateClassroom($id,array('teacherIds'=>$teacherIds));
+        
     }
 
     public function publishClassroom($id)
@@ -162,8 +207,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom.ClassroomDao');
     }
 
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
+    }
+
     protected function getClassroomCourseDao() 
     {
         return $this->createDao('Classroom.ClassroomCourseDao');
     }
 }
+
