@@ -49,33 +49,35 @@
         <form id="teachers-form" class="form-horizontal" method="post">
 
               {{ web_macro.flash_messages() }}
-
+              {% if teacherIds %}
               <div class="form-group" id="teachers-form-group">
                 <div class="col-md-3 control-label"><label>设置班级教师顺序</label></div>
                 <div class="col-md-8 controls">
-                  <ul class="teacher-list-group sortable-list course-wide-list" id="course-list-group" data-role="list" >
 
-                {% for teacherId in teacherIds %}
-                  <li class="list-group-item clearfix" data-role="item">
-                      <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                      <img src="{{ default_path('avatar',teachers[teacherId].smallAvatar, '') }}" class="avatar-small">
-                      <span class="nickname">{{teachers[teacherId].nickname}}</span>
-                      <input type="hidden" name="teacherIds[]" value="{{teacherId}}">     
-                  </li>
-                {% endfor %}
+                      <ul class="teacher-list-group sortable-list course-wide-list" id="course-list-group" data-role="list" >
 
-                  </ul>
-                </div>  
-              </div>
+                        {% for teacherId in teacherIds %}
+                          <li class="list-group-item clearfix" data-role="item">
+                              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                              <img src="{{ default_path('avatar',teachers[teacherId].smallAvatar, '') }}" class="avatar-small">
+                              <span class="nickname">{{teachers[teacherId].nickname}}</span>
+                              <input type="hidden" name="teacherIds[]" value="{{teacherId}}">     
+                          </li>
+                        {% endfor %}
 
+                        </ul>
+                  </div>  
+                </div>
 
-              <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                <div class="form-group">
+                  <div class="col-md-8 col-md-offset-3 control-label">相关页面中的老师列举将会按照这里设定的顺序显示。</div>
 
-              <div class="form-group">
-                <div class="col-md-8 col-md-offset-3 control-label">相关页面中的老师列举将会按照这里设定的顺序显示。</div>
+                </div>
 
-              </div>
-
+              {% else %}
+              <div class="form-group empty">还没有教师!赶紧去设置课程吧！</div>
+              {% endif %}
+              <hr>
               <div class="form-group">
                 <div class="col-md-3 control-label"><label>设置班主任</label></div>
 
@@ -100,7 +102,7 @@
 
               <div class="form-group mtl">
               <div class="col-md-offset-8 col-md-3 controls">
-
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
               <button type="submit" class="btn btn-fat btn-primary pull-right">保存</button>
               </div>
               </div>

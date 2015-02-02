@@ -36,19 +36,25 @@ class ClassroomManageController extends BaseController
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        $fields=array();
+
         if($request->getMethod()=="POST"){
 
             $data=$request->request->all();
-            $teacherIds=$data['teacherIds'];
-            $teacherIds=json_encode($teacherIds);
 
-            $fields=array('teacherIds'=>$teacherIds);
+            if(isset($data['teacherIds'])){
+                $teacherIds=$data['teacherIds'];
+                $teacherIds=json_encode($teacherIds);
 
-            if($data['headerTeacherId'])
+                $fields=array('teacherIds'=>$teacherIds);  
+            }
+
+            if(isset($data['headerTeacherId']))
             {
                 $fields['headerTeacherId']=$data['headerTeacherId'];
             }
 
+            if($fields)
             $classroom=$this->getClassroomService()->updateClassroom($id,$fields);
 
             $this->setFlashMessage('success',"保存成功！");
@@ -264,11 +270,16 @@ class ClassroomManageController extends BaseController
     public function checkNameAction(Request $request)
     {   
         $nickName=$request->request->get('name');
+        $user=array();
 
-        $user = $this->getUserService()->searchUsers(array('nickname'=>$nickName, 'roles'=> 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 1);
+        if($nickName!=""){
+
+            $user = $this->getUserService()->searchUsers(array('nickname'=>$nickName, 'roles'=> 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 1);
+
+        }
 
         $user=$user ? $user[0] :array();
-
+   
         return $this->render('TopxiaWebBundle:ClassroomManage:teacher-info.html.twig',array(
             'user'=>$user));
     }
