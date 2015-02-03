@@ -55,16 +55,16 @@
                     <td>
 
                         {% if set.cash_model =="deduction" %}
-                          <input id="rmb{{course.id}}" type="text" class="form-control rmbPrice" style="width:40%;" value="{{course.price}}" name="course-rmb[{{course.id}}]" data-id="{{course.id}}"/>
+                          <input id="rmb{{course.id}}" type="text" class="form-control rmbPrice" style="width:40%;" value="{{course.originPrice}}" name="course-rmb[{{course.id}}]" data-id="{{course.id}}"/>
                         {% else %}
-                          <input type="hidden" class="rmb" value="{{course.price}}" data-id="{{course.id}}"/>
-                          {{course.price}}
+                          <input type="hidden" class="rmb" value="{{course.originPrice}}" data-id="{{course.id}}"/>
+                          {{course.originPrice}}
                         {% endif %}
                       </td>
                     <td>
          
                       {% if set.cash_model =="deduction" %}
-                        <span id="cash{{course.id}}">{{course.price * set.cash_rate }}</sapn>
+                        <span id="cash{{course.id}}">{{course.originPrice * set.cash_rate }}</sapn>
                       {% else %}
                         <input type="text" id="cash{{course.id}}" class="form-control cashPrice" style="width:40%;" value="" name="course-cash[{{course.id}}]"/>
                       {% endif %}
