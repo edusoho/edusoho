@@ -17,7 +17,7 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
     config.toolbar_Question = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'QuestionBlank', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source'] },
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'QuestionBlank', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source'] },
     ];
 
     config.toolbar_Group = [
@@ -36,7 +36,5 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.extraPlugins = 'questionblank,smiley';
 
-    console.log(config.toolbar);
-     
 };
 

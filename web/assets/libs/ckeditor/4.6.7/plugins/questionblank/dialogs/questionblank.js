@@ -5,12 +5,15 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
         generalLabel = editor.lang.common.generalTab,
         validNameRegex = /^[^\[\]\<\>]+$/;
 
+    var inputId = 0;
+
     var makeBlankInput = function(value) {
+        inputId ++;
         if (!value) {
             value = '';
         }
 
-        var html = '<table class="cke_dialog_ui_hbox" data-role="input-row" style="margin-bottom:10px;">' + '  <tr class="cke_dialog_ui_hbox">' + '    <td class="cke_dialog_ui_hbox_first" style="width:85%">' + '      <input type="text" class="qb-input cke_dialog_ui_input_text" value="' + value + '">' + '    </td>' + '    <td class="cke_dialog_ui_hbox_last" style="width:15%">' + '      <a href="javascript:;" class="cke_dialog_ui_button" data-role="delete"><span class="cke_dialog_ui_button">删</span></a>' + '    </td>' + '  </tr>' + '</table>';
+        var html = '<table class="cke_dialog_ui_hbox" data-role="input-row" style="margin-bottom:10px;">' + '  <tr class="cke_dialog_ui_hbox">' + '    <td class="cke_dialog_ui_hbox_first" style="width:85%">' + '      <input type="text" class="qb-input cke_dialog_ui_input_text" value="' + value + '" id=qb-input-' + inputId + '>' + '    </td>' + '    <td class="cke_dialog_ui_hbox_last" style="width:15%">' + '      <a href="javascript:;" class="cke_dialog_ui_button" data-role="delete"><span class="cke_dialog_ui_button">删</span></a>' + '    </td>' + '  </tr>' + '</table>';
         return html;
     };
 
@@ -20,6 +23,7 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
     }
 
 
+    var dialog;
     return {
         title: lang.title,
         minWidth: 360,
@@ -32,6 +36,9 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
                 id: 'blanks',
                 type: 'html',
                 html: '<div class="qb-container"></div>',
+                onLoad: function( event ) {
+                    dialog = event.sender;
+                },
                 setup: function(widget) {
                     var html = '';
 
@@ -44,6 +51,10 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
 
                     var $container = $('#' + this.domId);
                     $container.html(html + makeBlankAddButton());
+
+                    $container.find('.qb-input').each(function(){
+                        dialog.addFocusable(new CKEDITOR.dom.element( document.getElementById( $(this).attr('id') ) ));
+                    });
                 },
                 commit: function(widget) {
                     var $container = $('#' + this.domId);
@@ -76,14 +87,13 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
             });
 
             $body.on('click', '[data-role=add]', function() {
-                var $row = $body.find('[data-role=input-row]:first').clone();
-                $row.find('.qb-input').val('');
+                var $row = $(makeBlankInput(''));
                 $body.find('.input-blank-rows').append($row);
+                dialog.addFocusable(new CKEDITOR.dom.element( document.getElementById( $row.find('.qb-input').attr('id') ) ));
                 if ($body.find('.qb-input').length > 1) {
                     $body.find('[data-role=delete]').show();
                 }
             });
-
 
         }
 
