@@ -563,7 +563,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $result = array(
-                array('title' => '在学直播课','data' => null),
+                array('title' => '在学直播','data' => null),
                 array('title' => '在学课程','data' => null),
                 array('title' => '问答','data' => null),
                 array('title' => '讨论','data' => null),
@@ -571,6 +571,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 array('title' => '私信','data' => null));
         }
         $index = 0;
+
+        $liveCourse = $this->controller->filterOneLiveCourseByDESC($user);
+        if(sizeof($liveCourse) == 0){
+            $liveCourse = null;
+
+        }
+        $result[$index++] = array(
+            'title' => '在学直播',
+            'data' => $liveCourse
+        );
         
         $courseConditions = array(
             'userId' => $user['id']
@@ -579,7 +589,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'startTime',
             'DESC'
         );
-
         $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
         $resultCourse     = reset($resultCourse);
         if ($resultCourse != false) {

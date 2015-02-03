@@ -319,17 +319,6 @@ class MobileBaseController extends BaseController
     public function filterLiveCourses($user, $start, $limit){
         $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
-        $count            = $this->getCourseService()->searchLearnCount(array(
-        ));
-        $learnStatusArray = $this->getCourseService()->searchLearns(array(
-            "userId" => $user["id"]
-        ), array(
-            "finishedTime",
-            "ASC"
-        ), 0, $count);
-        
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
-        
         $tempCourses = array();
         $tempCourseIds = array();
         foreach ($courses as $key => $course) {  
@@ -343,12 +332,9 @@ class MobileBaseController extends BaseController
         $tempLiveLessons;
         $tempCourseIdIndex = 0;
         $tempLessons = array();
-        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++){
-            foreach($lessons as $key => $lesson){
-                if(!strcmp($lesson["courseId"], $tempCourseIds[$tempCourseIdIndex])){
-                    $tempLiveLessons[] = $lesson;
-                }
-            }
+        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
+        {
+            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIdIndex);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
                 unset($tempLiveLessons);
@@ -393,6 +379,37 @@ class MobileBaseController extends BaseController
         }
 
         return $tempCourses;
+    }
+
+    public function filterOneLiveCourseByDESC($user){
+        $courses = $this->getCourseService()->findUserLeaningCourses(
+            $user['id'], 0, 1000
+        );
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $conditions = array(
+            'status' => 'published',
+            'startTimeGreaterThan' => time(),
+            'courseIds' => $courseIds
+        );
+        $total = $this->getCourseService()->searchLessonCount($conditions);
+        $tempCourses = $this->filterLiveCourses($user, 0, $total);
+        $liveCourses = $this->filterCourses(array_values($tempCourses));
+
+        $sort = array();
+        $resultLiveCourses = array();
+        foreach ($liveCourses as $key => $liveCourse) {
+           if(!empty($liveCourse['liveStartTime'])){
+                $sort[$key] = $liveCourse["liveStartTime"];
+                $resultLiveCourses[$key] = $liveCourse;
+           }
+        }
+
+        if($liveCourses != null ){
+            array_multisort($sort, SORT_DESC, $resultLiveCourses);
+        }
+
+        return $resultLiveCourses;
     }
 
     /**
