@@ -335,15 +335,15 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $tempLiveLessons;
+        $tempLiveLessons = array();
         $tempCourseIdIndex = 0;
         $tempLessons = array();
         for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
         {
-            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIdIndex);
+            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
-                unset($tempLiveLessons);
+                // unset($tempLiveLessons);
             }
         }
 
@@ -352,8 +352,15 @@ class MobileBaseController extends BaseController
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
+        // $emptyLessonCourseId = array();
+        // $tempCoursesIndex = 0;
 
         foreach($tempLessons as $key => $tempLesson){
+            if(!sizeof($tempLesson)){
+                // $emptyLessonCourseId[$key] = $tempCoursesIndex;
+                // $tempCoursesIndex++;
+                continue;
+            }
             if($nowTime <= $tempLesson[0]["endTime"]){
                 $tempLiveLesson = $tempLesson[0];
             }
@@ -372,17 +379,26 @@ class MobileBaseController extends BaseController
                 $liveLessons[$key] = $tempLiveLesson;
                 unset($tempLiveLesson);
             }
+            // $tempCoursesIndex++;
         }
 
         foreach($tempCourses as $key => $value){
             if(isset($liveLessons[$key])){
                 $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
-                $tempCourses[$key]["liveStartTime"] = date("Y-m-d h:i", $liveLessons[$key]["startTime"]);
-                $tempCourses[$key]["liveEndTime"] = date("Y-m-d h:i", $liveLessons[$key]["endTime"]);
+                $tempCourses[$key]["liveStartTime"] = date("c", $liveLessons[$key]["startTime"]);
+                $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
             }else{
                 $tempCourses[$key]["liveLessonTitle"] = "";
+                $tempCourses[$key]["liveStartTime"] = "";
+                $tempCourses[$key]["liveEndTime"] = "";
             }
         }
+
+        // foreach($tempCourses as $key => $value){
+        //     if(isset($emptyLessonCourseId[$key])){
+        //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
+        //     }
+        // }
 
         return $tempCourses;
     }
