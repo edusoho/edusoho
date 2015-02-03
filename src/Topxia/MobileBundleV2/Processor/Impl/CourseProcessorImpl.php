@@ -1206,7 +1206,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $liveCourses;
     }
 
-    private function filterLiveCourse(){
+    public function filterLiveCourse(){
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录！");
@@ -1218,16 +1218,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
+        $sort = array();
         foreach ($resultLiveCourses as $key => $liveCourse) {
            if(!isset($liveCourse['liveStartTime'])){
                 unset($liveCourse);
+           }else{
+                $sort[$key] = $value["liveStartTime"];
            }
         }
 
-        $sort = array();
-        foreach ($resultLiveCourses as $key => $value) {
-            $sort[$key] = $value["liveStartTime"];
-        }
+        // $sort = array();
+        // foreach ($resultLiveCourses as $key => $value) {
+        //     $sort[$key] = $value["liveStartTime"];
+        // }
 
         if($resultLiveCourses != null ){
             array_multisort($sort, SORT_DESC, $resultLiveCourses);

@@ -140,4 +140,6 @@ interface CourseProcessor
 
 	public function getAllLiveCourse();
 
+	public function filterLiveCourse();
+
 }
