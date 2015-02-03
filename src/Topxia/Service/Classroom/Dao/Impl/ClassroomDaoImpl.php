@@ -73,4 +73,9 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         return $this->getClassroom($id);
     }
 
+    public function deleteClassroom($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
 }

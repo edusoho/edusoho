@@ -210,7 +210,6 @@ class ClassroomManageController extends BaseController
         }
 
         $classroomCourses=$this->getClassroomService()->getAllCourses($id);
-        
         $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);

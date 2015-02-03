@@ -6,9 +6,9 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
 	exports.run = function() {
-		var $table=$('#group-table');
+		var $table=$('#classroom-table');
 
-		$table.on('click','.close-group,.open-group',function(){
+		$table.on('click','.close-classroom,.open-classroom',function(){
 			var $trigger = $(this);
 		if (!confirm($trigger.attr('title') + '吗？')) {
 				return ;
@@ -23,6 +23,16 @@ define(function(require, exports, module) {
 
 		});
 
+
+        $('.delete-classroom').on('click', function(){
+            if (!confirm('真的要删除该班级吗？')) {
+                return ;
+            }
+            $.post($(this).data('url'), function(){
+                Notify.success('删除成功！');
+                window.location.reload();
+            });
+        });
 
 	}
 	
