@@ -376,23 +376,21 @@ class MobileBaseController extends BaseController
             $tempCoursesIndex++;
         }
 
-        return $emptyLessonCourseId;
+        foreach($tempCourses as $key => $value){
+            if(isset($emptyLessonCourseId[$key])){
+                array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
+            }else if(isset($liveLessons[$key])){
+                $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
+                $tempCourses[$key]["liveStartTime"] = date("c", $liveLessons[$key]["startTime"]);
+                $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
+            }else{
+                $tempCourses[$key]["liveLessonTitle"] = "";
+                $tempCourses[$key]["liveStartTime"] = "";
+                $tempCourses[$key]["liveEndTime"] = "";
+            }
+        }
 
-        // foreach($tempCourses as $key => $value){
-        //     if(isset($emptyLessonCourseId[$key])){
-        //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
-        //     }else if(isset($liveLessons[$key])){
-        //         $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
-        //         $tempCourses[$key]["liveStartTime"] = date("c", $liveLessons[$key]["startTime"]);
-        //         $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
-        //     }else{
-        //         $tempCourses[$key]["liveLessonTitle"] = "";
-        //         $tempCourses[$key]["liveStartTime"] = "";
-        //         $tempCourses[$key]["liveEndTime"] = "";
-        //     }
-        // }
-
-        // return $tempCourses;
+        return $tempCourses;
     }
 
     public function filterOneLiveCourseByDESC($user){
