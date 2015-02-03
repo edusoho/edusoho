@@ -228,7 +228,7 @@ CKEDITOR.lang['zh-cn'] = {
     	tag_h5 : '标题 5',
     	tag_h6 : '标题 6',
     	tag_p : '普通',
-    	tag_pre : '已编排格式'
+    	tag_pre : '代码块'
     },
     flash : 
     {
