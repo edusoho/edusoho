@@ -98,7 +98,11 @@ define(function(require, exports, module) {
         });
     }
 
-
+    $("i.hover-spin").mouseenter(function() {
+    	$(this).addClass("md-spin");
+    }).mouseleave(function() {
+    	$(this).removeClass("md-spin");
+    });
 
 
 });

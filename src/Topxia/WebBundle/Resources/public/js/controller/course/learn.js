@@ -12,6 +12,7 @@ define(function(require, exports, module) {
 
     var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
+    var DocumentPlayer = require('../widget/document-player');
 
     var iID = null;
     var recordWatchTimeId = null;
@@ -528,6 +529,27 @@ define(function(require, exports, module) {
 
                         }, 'json');
                     }
+
+                    else if (lesson.type == 'document' ) {
+
+                        $.get(that.get('courseUri') + '/lesson/' + id + '/document', function(response) {
+                            if (response.error) {
+                                var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+                                $("#lesson-document-content").html(html).show();
+                                return ;
+                            }
+
+                            var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+                            $("#lesson-document-content").html(html).show();
+
+                            var player = new DocumentPlayer({
+                                element: '#lesson-document-content',
+                                swfFileUrl:response.swfUri,
+                                pdfFileUrl:response.pdfUri
+                            });
+
+                        }, 'json');
+                    }
                 }
 
                 if (lesson.type == 'testpaper') {
@@ -676,6 +698,8 @@ define(function(require, exports, module) {
             setTimeout(recordLearningTime, 120000);
         }
         setTimeout(recordLearningTime, 120000);
+
+        
     };
 
 });
