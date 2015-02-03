@@ -43,10 +43,10 @@
     <br>
     <span class="label label-danger tip">未使用</span>
     {% endif %}
-    {% if uploadFile.convertStatus == 'none' and uploadFile.type == 'document' %}
+    {% if uploadFile.convertStatus == 'none' and uploadFile.type != 'flash' %}
       <span class="label label-default tip">未转码</span>
     {% endif %}
-    {% if uploadFile.convertStatus == 'success' and uploadFile.type == 'document' %}
+    {% if uploadFile.convertStatus == 'success' %}
       <br>
       <span class="label label-success tip">已转码</span>
     {% endif %}

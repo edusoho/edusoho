@@ -29,6 +29,7 @@ class DataDict
 			'document' => '文档',
 			'image' => '图片',
             'ppt' => 'PPT',
+            'flash' => 'Flash',
 			'other' => '其他'
 		),
 		'fileType:html' => array(
