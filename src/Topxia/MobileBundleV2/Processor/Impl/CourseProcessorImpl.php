@@ -1216,24 +1216,24 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $limit   = (int) $this->getParam("limit", 10);
         $total   = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
-        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
+        $liveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
-        var_dump(sizeof($resultLiveCourses));
+        var_dump(sizeof($liveCourses));
         $sort = array();
-        foreach ($resultLiveCourses as $key => $liveCourse) {
-           if(!isset($liveCourse['liveStartTime'])){
-                unset($liveCourse);
-           }else{
+        $resultLiveCourses = array();
+        foreach ($liveCourses as $key => $liveCourse) {
+           if(isset($liveCourse['liveStartTime'])){
                 $sort[$key] = $value["liveStartTime"];
+                $resultLiveCourses[$key] = $liveCourse;
            }
         }
         var_dump(sizeof($resultLiveCourses));
         exit();
 
-        if($resultLiveCourses != null ){
-            array_multisort($sort, SORT_DESC, $resultLiveCourses);
+        if($liveCourses != null ){
+            array_multisort($sort, SORT_DESC, $$resultLiveCourses);
         }
 
-        return $resultLiveCourses;
+        return $$resultLiveCourses;
     }
 }
