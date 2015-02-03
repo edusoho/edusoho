@@ -63,7 +63,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom=$this->getClassroom($id);
         
         $teacherIds=$classroom['teacherIds'] ? : array();
-
+        $ids=array();
         foreach ($teacherIds as $key => $value) {
             
             $course=$this->getCourseByClassroomIdAndCourseId($id,$value);
