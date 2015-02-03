@@ -1566,3 +1566,7 @@ classroom_manage_publish:
 classroom_manage_close:
     pattern: /classroom/{id}/manage/close
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:close }
+
+classroom_manage_checkName:
+    pattern: /classroom/manage/checkName
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:checkName }

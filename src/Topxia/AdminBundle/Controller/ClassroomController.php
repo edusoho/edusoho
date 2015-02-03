@@ -32,11 +32,41 @@ class ClassroomController extends BaseController
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
         );
+        
+        $classroomIds=ArrayToolkit::column($classroomInfo,'id');
+
+        $coinPriceAll=array();
+        $priceAll=array();
+        $classroomCourses = array();
+        $classroomCoursesNum = array();
+
+        foreach ($classroomIds as $key => $value) {
+            $classroomCourses= $this->getClassroomService()->getAllCourses($value);
+            $classroomCoursesNum[$value] = count($classroomCourses);
+           
+            $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
+            $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+            $coinPrice=0;
+            $price=0;
+            foreach ($courses as $course) {
+                $coinPrice+=$course['coinPrice'];
+                $price+=$course['price'];
+            }
+            $coinPriceAll[$value] = $coinPrice;
+            $priceAll[$value] = $price;
+        }
+
+// var_dump($priceAll);
+// exit();
 
         return $this->render('TopxiaAdminBundle:Classroom:index.html.twig',array(
             'classroomInfo'=>$classroomInfo,
-            'paginator' => $paginator));
-	
+            'paginator' => $paginator,
+            'classroomCoursesNum' =>$classroomCoursesNum,
+            'priceAll'=>$priceAll,
+            'coinPriceAll'=>$coinPriceAll,
+
+            ));
     }
 
     public function setAction(Request $request)
@@ -90,6 +120,74 @@ class ClassroomController extends BaseController
 
         return $this->render("TopxiaAdminBundle:Classroom:classroomadd.html.twig");
     }
+
+    public function  closeClassroomAction($id)
+    {
+        $this->getClassroomService()->closeClassroom($id);
+
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        $coinPrice=0;
+        $price=0;
+        $coinPriceAll=array();
+        $priceAll=array();
+        $classroomCoursesNum =array();
+        $classroomCourses= $this->getClassroomService()->getAllCourses($id);
+        $classroomCoursesNum[$id] = count($classroomCourses);
+       
+        $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
+        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+        foreach ($courses as $course) {
+            $coinPrice+=$course['coinPrice'];
+            $price+=$course['price'];
+        }
+        $coinPriceAll[$id] = $coinPrice;
+        $priceAll[$id] = $price;
+    
+        return $this->render('TopxiaAdminBundle:Classroom:table-tr.html.twig', array(
+            'classroom' => $classroom,
+            'classroomCoursesNum'=>$classroomCoursesNum,
+            'coinPriceAll'=>$coinPriceAll,
+            'priceAll'=>$priceAll
+        ));
+    }
+
+    public function openClassroomAction($id)
+    {
+        $this->getClassroomService()->publishClassroom($id);
+
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        $coinPrice=0;
+        $price=0;
+        $coinPriceAll=array();
+        $priceAll=array();
+        $classroomCoursesNum =array();
+        $classroomCourses= $this->getClassroomService()->getAllCourses($id);
+        $classroomCoursesNum[$id] = count($classroomCourses);
+       
+        $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
+        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+        foreach ($courses as $course) {
+            $coinPrice+=$course['coinPrice'];
+            $price+=$course['price'];
+        }
+        $coinPriceAll[$id] = $coinPrice;
+        $priceAll[$id] = $price;
+
+        return $this->render('TopxiaAdminBundle:Classroom:table-tr.html.twig', array(
+            'classroom' => $classroom,
+            'classroomCoursesNum'=>$classroomCoursesNum,
+            'coinPriceAll'=>$coinPriceAll,
+            'priceAll'=>$priceAll
+        ));
+    }
+
+    public function deleteClassroomAction($id)
+    {
+        $this->getClassroomService()->deleteClassroom($id);
+        return $this->createJsonResponse(true);
+    }
     
     protected function getClassroomService()
     {
@@ -99,6 +197,11 @@ class ClassroomController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }

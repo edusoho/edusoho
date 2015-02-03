@@ -32,17 +32,48 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom));
     }
 
-    public function teachersAction($id)
+    public function teachersAction(Request $request,$id)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        $fields=array();
+
+        if($request->getMethod()=="POST"){
+
+            $data=$request->request->all();
+
+            if(isset($data['teacherIds'])){
+                $teacherIds=$data['teacherIds'];
+                $teacherIds=json_encode($teacherIds);
+
+                $fields=array('teacherIds'=>$teacherIds);  
+            }
+
+            if(isset($data['headerTeacherId']))
+            {
+                $fields['headerTeacherId']=$data['headerTeacherId'];
+            }
+
+            if($fields)
+            $classroom=$this->getClassroomService()->updateClassroom($id,$fields);
+
+            $this->setFlashMessage('success',"保存成功！");
+        }
+
         $teacherIds=$classroom['teacherIds'];
 
+        $teachers=$this->getUserService()->findUsersByIds($teacherIds);
+
+        $headerTeacher=$this->getUserService()->getUser($classroom['headerTeacherId']);
+
         return $this->render("TopxiaWebBundle:ClassroomManage:teachers.html.twig",array(
-            'classroom'=>$classroom));
+            'classroom'=>$classroom,
+            'teachers'=>$teachers,
+            'teacherIds'=>$teacherIds,
+            'headerTeacher'=>$headerTeacher));
     }
 
-    public function setInfoAction($id,Request $request)
+    public function setInfoAction(Request $request,$id)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
@@ -59,7 +90,7 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom));
     }
 
-    public function setAction($id,Request $request)
+    public function setAction(Request $request,$id)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
@@ -85,7 +116,7 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom));
     }
 
-    public function setPictureAction($id,Request $request)
+    public function setPictureAction(Request $request,$id)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
@@ -173,11 +204,12 @@ class ClassroomManageController extends BaseController
 
             $this->getClassroomService()->updateCourses($id,$courseIds);
 
+            $this->getClassroomService()->updateClassroomTeachers($id);
+
             $this->setFlashMessage('success',"课程修改成功");
         }
 
         $classroomCourses=$this->getClassroomService()->getAllCourses($id);
-        
         $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);
@@ -232,6 +264,23 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->publishClassroom($id);
 
         return new Response("success");
+    }
+
+    public function checkNameAction(Request $request)
+    {   
+        $nickName=$request->request->get('name');
+        $user=array();
+
+        if($nickName!=""){
+
+            $user = $this->getUserService()->searchUsers(array('nickname'=>$nickName, 'roles'=> 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 1);
+
+        }
+
+        $user=$user ? $user[0] :array();
+   
+        return $this->render('TopxiaWebBundle:ClassroomManage:teacher-info.html.twig',array(
+            'user'=>$user));
     }
 
     public function closeAction($id)

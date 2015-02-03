@@ -1097,3 +1097,15 @@ admin_classroom_set:
 admin_classroom_add:
     pattern:  /classroom/add
     defaults: { _controller: TopxiaAdminBundle:Classroom:addClassroom }
+
+admin_classroom_close:
+    pattern:  /classroom/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:Classroom:closeClassroom }
+
+admin_classroom_open:
+    pattern:  /classroom/{id}/open
+    defaults: { _controller: TopxiaAdminBundle:Classroom:openClassroom }
+
+admin_classroom_delete:
+    pattern:  /classroom/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Classroom:deleteClassroom }

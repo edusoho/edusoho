@@ -12,7 +12,15 @@ define(function(require, exports, module) {
 
             var courseId=$(this).data('id');
 
+            var currentPrice=$('.course-price-'+courseId).data('price');
+            var price=$('#price').html();
+            price=price-currentPrice;
+
+            var price=$('#price').html(price);
+
             $('.item-'+courseId).remove();
+
+
 
         });
     };
