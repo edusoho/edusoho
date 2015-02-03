@@ -41,9 +41,10 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         );
 
         $coinSetting = $this->getSettingService()->get("coin");
-
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        
         $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
+        if($coinEnabled && array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }
 
@@ -169,7 +170,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $unitPrice * $orderData['duration'];
         }
 
-        $totalPrice = intval($totalPrice*100)/100;
+        //$totalPrice = intval($totalPrice*1000)/1000;
 
         if(array_key_exists("coinPayAmount", $orderData)) {
             $amount = $this->afterCoinPay(
@@ -192,7 +193,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $amount = NumberToolkit::roundUp($amount);
-
         return array(
         	$amount, 
         	$totalPrice, 

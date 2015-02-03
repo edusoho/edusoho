@@ -100,6 +100,12 @@ class CloudSettingController extends BaseController
                 goto render;
             }
 
+            $user = $api->get('/me');
+            if ($user['edition'] != 'opensource') {
+                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
+                goto render;
+            }
+
             $settings['cloud_access_key'] = $options['accessKey'];
             $settings['cloud_secret_key'] = $options['secretKey'];
             $settings['cloud_key_applied'] = 1;

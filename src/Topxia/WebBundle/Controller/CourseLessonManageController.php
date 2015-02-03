@@ -105,10 +105,10 @@ class CourseLessonManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-						$parentId = $request->query->get('parentId');
-					if($request->getMethod() == 'POST') {
-						$lesson = $request->request->all();
-					   $lesson['courseId'] = $course['id'];
+		$parentId = $request->query->get('parentId');
+			if($request->getMethod() == 'POST') {
+				$lesson = $request->request->all();
+				$lesson['courseId'] = $course['id'];
 
 			if ($lesson['media']) {
 				$lesson['media'] = json_decode($lesson['media'], true);
@@ -123,6 +123,15 @@ class CourseLessonManageController extends BaseController
 			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+				if($file['type']=="document" && $file['convertStatus'] == "none" ){
+
+		            $convertHash = $this->getUploadFileService()->reconvertFile(
+		                $file['id'],
+		                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+		            );
+				}
+
 				$lesson['mediaStatus'] = $file['convertStatus'];
 			}
 					  //  if ($shortcut == 'true') 

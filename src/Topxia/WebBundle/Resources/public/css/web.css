@@ -1311,19 +1311,15 @@ body {
 	padding: 0;
 }
 
-.course-item-list-multi ul li {
-
-}
-
 .course-item-list-multi .item-object {
 	position: relative;
 	width: 64px;
 	height: 54px;
-	background-color: #00AE76;
+	background-color: #1abc9c;
 	float: left;
 	margin-bottom: 20px;
 	border-radius: 5px;
-	border: 1px solid #096;
+	border: 1px solid #16a085;
 	text-align: center;
 }
 
@@ -1335,7 +1331,6 @@ body {
 	width: 36px;
 	height: 36px;
 	display: inline-block;
-	background: url(../img/course/course-item-types-white.png) 0 0 no-repeat;
 }
 
 .course-item-list-multi .item-object-live {
@@ -1343,49 +1338,50 @@ body {
 	border-color: #DA9078;
 }
 
-.course-item-list-multi .item-object-video {
-
-}
-
-.course-item-list-multi .item-object-video .item-icon {
-
+.item-object i {
+	margin-top: 8px;
+	font-size: 24px;
+	color: #fff;
 }
 
 .course-item-list-multi .item-object-audio {
-	background-color: #9999cc;
-	border-color: #7C7CBE;
-}
-
-.course-item-list-multi .item-object-audio .item-icon {
-	background-position: -36px 0;
-	
+	background-color: #fbcf4b;
+	border-color: #dca83f;
 }
 
 .course-item-list-multi .item-object-text {
-	background-color: #999966;
-	border-color: #8B8B5C;
+	background-color: #9b59b6;
+	border-color: #8e44ad;
 }
 
-.course-item-list-multi .item-object-text .item-icon {
-	background-position: -72px 0;
+.course-item-list-multi .item-object-courseware {
+	background-color: #ae0073;
+	border-color: #8e055f;
 }
 
 .course-item-list-multi .item-object-testpaper {
-	background-color: #009999;
-	border-color: #006699;
-}
-
-.course-item-list-multi .item-object-testpaper .item-icon {
-	background-position: -108px 0;
+	background-color: #95a5a6;
+	border-color: #7f8c8d;
 }
 
 .course-item-list-multi .item-object-ppt {
-	background-color: #ae4200;
-	border-color: #ae4200;
+	background-color: #f58043;
+	border-color: #b34330;
 }
 
-.course-item-list-multi .item-object-ppt .item-icon {
+.course-item-list-multi .item-object-pdf {
+	background-color: #b70b3b;
+	border-color: #970c33;
+}
 
+.course-item-list-multi .item-object-doc {
+	background-color: #38adca;
+	border-color: #29859a;
+}
+
+.course-item-list-multi .item-object-xls {
+	background-color: #75d073;
+	border-color: #39872d;
 }
 
 .course-item-list-multi .item-object .item-length {
@@ -1950,11 +1946,13 @@ body {
 .lesson-form .for-audio-type,
 .lesson-form .for-text-type,
 .lesson-form .for-ppt-type, 
+.lesson-form .for-document-type, 
 .lesson-form .for-none-type {
 	display: none;
 }
 
 .lesson-form-video .for-video-type,
+.lesson-form-document .for-document-type, 
 .lesson-form-audio .for-audio-type,
 .lesson-form-text .for-text-type,
 .lesson-form-ppt .for-ppt-type {

@@ -45,12 +45,18 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if ($fileInfo['lazyConvert']) {
             $fileInfo['convertHash'] = "lazy-{$uploadFile['hashId']}";
         }
-
+       
         if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
             $uploadFile['convertParams'] = '';
-        } else {
+        } else if($fileInfo['mimeType']=="application/msword" || $fileInfo['mimeType']=="application/pdf" || $fileInfo['mimeType']=="application/vnd.openxmlformats-officedocument.wordprocessingml.document" ) {
+
+            $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
+            $uploadFile['convertStatus'] = 'none';
+            $uploadFile['convertParams'] = $fileInfo['convertParams'];
+            
+        }else{
             $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
             $uploadFile['convertStatus'] = 'waiting';
             $uploadFile['convertParams'] = $fileInfo['convertParams'];
@@ -84,9 +90,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $convertor = $this->getConvertor($file['convertParams']['convertor']);
-
+        
         $file = $convertor->saveConvertResult($file, $result);
-
+        
         return_result:
         return $file;
     }
@@ -219,9 +225,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
         }
-                
+     
         $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
-
+ 
         $key = null;
         if (!empty($rawParams['key'])) {
             $key = $rawParams['key'];
@@ -244,7 +250,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $params['postParams']['key'] = $key;
         // $params['postParams']['x:convertKey'] = md5($params['postParams']['key']);
         $params['postParams']['x:convertParams'] = json_encode($rawUploadParams['convertParams']);
-
+       
         return $params;
     }
 
@@ -556,6 +562,31 @@ class AudioConvertor
         return array(
             'convertor' => self::NAME,
             'shd' => 'mp3',
+        );
+    }
+}
+
+class DocumentConvertor
+{
+    const NAME = 'document';
+
+    public function saveConvertResult($file, $result)
+    {   
+        $metas['thumb'] = $result['thumb'];
+        $metas['pdf'] = $result['pdf'];
+        $metas['swf'] = $result['swf'];
+        
+        $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
+        $file['metas2'] = array_merge($file['metas2'], $metas);
+        $file['convertStatus'] = 'success';
+
+        return $file;
+    }
+
+    public function getCovertParams($params)
+    {
+        return array(
+            'convertor' => self::NAME,
         );
     }
 }

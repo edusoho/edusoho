@@ -36,6 +36,8 @@ class ClassroomManageController extends BaseController
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        $teacherIds=$classroom['teacherIds'];
+
         return $this->render("TopxiaWebBundle:ClassroomManage:teachers.html.twig",array(
             'classroom'=>$classroom));
     }
@@ -213,7 +215,10 @@ class ClassroomManageController extends BaseController
 
             if(empty($course))
             $this->getClassroomService()->addCourse($id,$value);
+        
         }
+
+        $this->getClassroomService()->updateClassroomTeachers($id);
 
         $this->setFlashMessage('success',"课程添加成功");
 
