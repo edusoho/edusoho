@@ -13,6 +13,13 @@
     </div>
 
     <div class="form-group">
+      <label class="col-md-3 control-label" for="seq">序号</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="seq" type="text" name="seq" value="{{ topLink.seq|default(0) }}">
+      </div>
+    </div>
+
+    <div class="form-group">
       <label class="col-md-3 control-label" for="url">链接地址</label>
       <div class="col-md-6 controls">
         <input class="form-control" id="url" type="text" name="url" value="{{ topLink.url|default('') }}">

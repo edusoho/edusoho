@@ -19,7 +19,7 @@ class TopLinkController extends BaseController
 
         $topLinks = $this->getTopLinkService()->searchTopLinks(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('seq', 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

@@ -41,6 +41,7 @@ class TopLinkServiceImpl extends BaseService implements TopLinkService
 
         $fields = ArrayToolkit::filter($fields, array(
             'name' => '',
+            'seq' => 0,
             'url' => '',
         ));
         return $this->getTopLinkDao()->updateTopLink($id,$fields);

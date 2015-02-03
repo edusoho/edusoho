@@ -32,6 +32,11 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
+            element: '[name="seq"]',
+            required: true
+        });
+
+        validator.addItem({
             element: '[name="url"]',
             required: true
         });
