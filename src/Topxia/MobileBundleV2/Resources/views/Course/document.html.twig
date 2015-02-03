@@ -1,8 +1,8 @@
 <!doctype html>
 
 <head>
- <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>文档转换</title>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<title>{{title}}</title>
 
 <style type="text/css">    
 html,body{ width:100%; height:100%;}    
@@ -11,13 +11,17 @@ body {
         margin-top: 0px;    
         margin-right: 0px;    
         margin-bottom: 0px;    
-}    
+}
+
+iframe{
+    border: 0px;
+}
 </style> 
 </head>
 
 <body>
     <div id="lesson-document-content">
-        <iframe id='viewerIframe' border=0 width='100%' allowfullscreen webkitallowfullscreen height='100%'></iframe>
+        <iframe id='viewerIframe' width='100%' allowfullscreen webkitallowfullscreen height='100%'></iframe>
     </div>
 <script>
   var app = {};
@@ -39,7 +43,22 @@ seajs.use(app.mainScript, function(){
             swfFileUrl:'{{swfUri | raw}}',
             pdfFileUrl:'{{pdfUri | raw}}'
         });
+
         $("#viewerIframe").height(document.body.clientHeight);
+        window.onmessage=function(e){  
+            window.jsobj.toggleFullScreen();
+            var isPageFullScreen = e.data;
+            var docContent = document.getElementById("lesson-document-content");
+            if (isPageFullScreen) {
+              docContent.removeAttribute("style");
+            }else{
+              docContent.style.width = window.document.body.offsetWidth+"px";
+              docContent.style.position = "fixed";
+              docContent.style.left = "0";
+              docContent.style.top = "0";
+              docContent.style.zIndex = "9999";
+            }
+        };
     });
     
 });
