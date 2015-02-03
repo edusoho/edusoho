@@ -563,7 +563,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $result = array(
-                array('title' => '在学直播课','data' => null),
+                array('title' => '在学直播','data' => null),
                 array('title' => '在学课程','data' => null),
                 array('title' => '问答','data' => null),
                 array('title' => '讨论','data' => null),
@@ -578,7 +578,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         }
         $result[$index++] = array(
-            'title' => '在学直播课',
+            'title' => '在学直播',
             'data' => $liveCourse
         );
         
