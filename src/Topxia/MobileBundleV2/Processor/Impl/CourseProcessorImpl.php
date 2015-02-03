@@ -1223,7 +1223,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $resultLiveCourses = array();
         foreach ($liveCourses as $key => $liveCourse) {
            if(!empty($liveCourse['liveStartTime'])){
-                $sort[$key] = $value["liveStartTime"];
+                $sort[$key] = $liveCourse["liveStartTime"];
                 $resultLiveCourses[$key] = $liveCourse;
            }
         }
@@ -1231,9 +1231,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         exit();
 
         if($liveCourses != null ){
-            array_multisort($sort, SORT_DESC, $$resultLiveCourses);
+            array_multisort($sort, SORT_DESC, $resultLiveCourses);
         }
 
-        return $$resultLiveCourses;
+        return $resultLiveCourses;
     }
 }
