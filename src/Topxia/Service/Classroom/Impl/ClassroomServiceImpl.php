@@ -213,7 +213,28 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function searchMemberCount($conditions)
     {   
         $conditions = $this->_prepareClassroomConditions($conditions);
-        return $this->getMemberDao()->searchMemberCount($conditions);
+        return $this->getClassroomMemberDao()->searchMemberCount($conditions);
+    }
+
+    public function searchMembers($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareClassroomConditions($conditions);
+        return $this->getClassroomMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
+    }
+
+    public function getClassroomMember($classroomId, $userId)
+    {
+        return $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
+    }
+
+    public function remarkStudent($classroomId, $userId, $remark)
+    {
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createServiceException('学员不存在，备注失败!');
+        }
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        return $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
     }
 
     private function _prepareClassroomConditions($conditions)
@@ -242,6 +263,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getClassroomDao() 
     {
         return $this->createDao('Classroom.ClassroomDao');
+    }
+
+    protected function getClassroomMemberDao() 
+    {
+        return $this->createDao('Classroom.ClassroomMemberDao');
     }
 
     protected function getCourseService()

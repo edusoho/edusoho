@@ -24,7 +24,7 @@ class ClassroomManageController extends BaseController
             'coursesCount'=>$coursesCount));
     }
 
-    public function studentsAction($id)
+    public function studentsAction(Request $request,$id)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
@@ -36,27 +36,127 @@ class ClassroomManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname)),
+            $this->getClassroomService()->searchMemberCount(array('classId'=>$id,'role'=>'student','nickname'=>$nickname)),
             20
         );
 
-        $students = $this->getCourseService()->searchMembers(
-            array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname),
+        $students = $this->getClassroomService()->searchMembers(
+            array('classId'=>$id,'role'=>'student','nickname'=>$nickname),
             array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+        // var_dump($students);exit();
+        $studentUserIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+
+        // $progresses = array();
+        // foreach ($students as $student) {
+        //     $progresses[$student['userId']] = $this->calculateUserLearnProgress($course, $student);
+        // }
+
+
+
+
         return $this->render("TopxiaWebBundle:ClassroomManage:student.html.twig",array(
-            'classroom'=>$classroom));
+            'classroom'=>$classroom,
+            'students' => $students,
+            'users'=>$users,
+            // 'progresses' => $progresses,
+            'paginator' => $paginator,
+            ));
     }
 
-    public function aduitorAction($id)
+    public function aduitorAction(Request $request,$id)
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
+        $fields = $request->query->all();
+        $nickname="";
+        if(isset($fields['nickName'])){
+            $nickname =$fields['nickName'];
+        } 
+
+        $paginator = new Paginator(
+            $request,
+            $this->getClassroomService()->searchMemberCount(array('classId'=>$id,'role'=>'aduitor','nickname'=>$nickname)),
+            20
+        );
+
+        $students = $this->getClassroomService()->searchMembers(
+            array('classId'=>$id,'role'=>'aduitor','nickname'=>$nickname),
+            array('createdTime','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        // var_dump($students);exit();
+        $studentUserIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+
         return $this->render("TopxiaWebBundle:ClassroomManage:aduitor.html.twig",array(
-            'classroom'=>$classroom));
+            'classroom'=>$classroom,
+            'students' => $students,
+            'users'=>$users,
+            // 'progresses' => $progresses,
+            'paginator' => $paginator,
+            ));
+    }
+
+    public function remarkAction(Request $request, $classroomId, $userId)
+    {
+        // $course = $this->getCourseService()->tryManageCourse($classroomId);
+        $classroom=$this->getClassroomService()->getClassroom($classroomId);
+        $user = $this->getUserService()->getUser($userId);
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+
+        if ('POST' == $request->getMethod()) {
+            $data = $request->request->all();
+            $member = $this->getClassroomService()->remarkStudent($classroom['id'], $user['id'], $data['remark']);
+            return $this->createStudentTrResponse($classroom, $member);
+        }
+
+        return $this->render('TopxiaWebBundle:ClassroomManage:remark-modal.html.twig',array(
+            'member'=>$member,
+            'user'=>$user,
+            'classroom'=>$classroom,
+        ));
+    }
+
+    private function createStudentTrResponse($classroom, $student)
+    {
+        // $courseSetting = $this->getSettingService()->get('course', array());
+        // $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
+
+        $user = $this->getUserService()->getUser($student['userId']);
+        // $progress = $this->calculateUserLearnProgress($course, $student);
+
+        return $this->render('TopxiaWebBundle:ClassroomManage:aduitor.tr.html.twig', array(
+            'classroom' => $classroom,
+            'student' => $student,
+            'user'=>$user,
+            // 'progress' => $progress,
+            // 'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
+        ));
+    }
+
+    public function removeAction(Request $request, $classroomId, $userId)
+    {
+        // $courseSetting = $this->getSettingService()->get('course', array());
+
+        // if (!empty($courseSetting['teacher_manage_student'])) {
+        //     $course = $this->getCourseService()->tryManageCourse($courseId);
+        // } else {
+        //     $course = $this->getCourseService()->tryAdminCourse($courseId);
+        // }
+
+        $this->getCourseService()->removeStudent($courseId, $userId);
+
+        $this->getNotificationService()->notify($userId, 'student-remove', array(
+            'courseId' => $course['id'], 
+            'courseTitle' => $course['title'],
+        ));
+
+        return $this->createJsonResponse(true);
     }
 
     public function teachersAction(Request $request,$id)

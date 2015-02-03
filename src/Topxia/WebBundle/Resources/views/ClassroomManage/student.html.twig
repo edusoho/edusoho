@@ -4,7 +4,7 @@
 
 {% set submenu = 'student' %}
 
-{% set script_controller = 'setting/cloud-key' %}
+{% set script_controller = 'course-manage/students' %}
 
 {% block maincontent %}
 
@@ -28,8 +28,16 @@
         </tr>
       </thead>
       <tbody>
+        {% for student in students %}
+          {% set user = users[student.userId] %}
+          {% include 'TopxiaWebBundle:ClassroomManage:student.tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="20">无学员记录</td></tr>
+        {% endfor %}
       </tbody>
     </table>
+
+    {{ web_macro.paginator(paginator) }}
 
 
 
