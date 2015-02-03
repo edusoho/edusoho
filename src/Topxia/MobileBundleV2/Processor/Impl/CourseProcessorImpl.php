@@ -1232,6 +1232,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         //     $sort[$key] = $value["liveStartTime"];
         // }
 
+        var_dump($resultLiveCourses);
+
+        var_dump($sort);
+        exit();
+
         if($resultLiveCourses != null ){
             array_multisort($sort, SORT_DESC, $resultLiveCourses);
         }
