@@ -80,7 +80,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             
             'totalPrice' => $totalPrice,
             'targetId' => $targetId,
-            'targetType' => "course",
+            'targetType' => "classroom",
             'cashRate' => $cashRate,
             'priceType' => $priceType,
             'account' => $account,

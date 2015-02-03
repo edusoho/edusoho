@@ -20,7 +20,7 @@ class OrderController extends BaseController
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
 
-        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip")) ) {
+        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createMessageResponse('error', '参数不正确');
         }
         

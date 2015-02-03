@@ -147,6 +147,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
+    public function isClassroomStudent($classroomId, $studentId)
+    {
+        $classroomMember = $this->getClassroomMemberDao()->findClassroomMemberByClassIdAndUserIdAndRole($classroomId,$studentId,"student");
+        if(!empty($classroomMember)){
+            return true;
+        }
+        return false;
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
@@ -160,6 +169,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getClassroomDao() 
     {
         return $this->createDao('Classroom.ClassroomDao');
+    }
+
+    protected function getClassroomMemberDao()
+    {
+        return $this->createDao('Classroom.ClassroomMemberDao');
     }
 
     protected function getClassroomCourseDao() 

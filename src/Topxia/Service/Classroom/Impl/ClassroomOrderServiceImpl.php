@@ -4,6 +4,9 @@ namespace Topxia\Service\Classroom\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Classroom\ClassroomOrderService;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 
 class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderService 
@@ -27,56 +30,29 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getClassroomService()->isClassroomStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException('已经是课程学员，创建课程订单失败。');
+                throw $this->createServiceException('已经是班级学员，创建订单失败。');
             }
 
-            $course = $this->getCourseService()->getCourse($info['targetId']);
-            if (empty($course)) {
-                throw $this->createServiceException('课程不存在，创建课程订单失败。');
+            $classroom = $this->getClassroomService()->getClassroom($info['targetId']);
+            if (empty($classroom)) {
+                throw $this->createServiceException('班级不存在，创建课程订单失败。');
             }
 
-            $this->cancelOldOrders($course, $user);
+            $this->cancelOldOrders($classroom, $user);
 
             $order = array();
 
             $order['userId'] = $user['id'];
-            $order['title'] = "购买课程《{$course['title']}》";
-            $order['targetType'] = 'course';
-            $order['targetId'] = $course['id'];
+            $order['title'] = "购买班级《{$classroom['title']}》";
+            $order['targetType'] = 'classroom';
+            $order['targetId'] = $classroom['id'];
             $order['payment'] = $info['payment'];
             $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
             $order['priceType'] = $info['priceType'];
             $order['totalPrice'] = $info["totalPrice"];
             $order['coinRate'] = $info['coinRate'];
             $order['coinAmount'] = $info['coinAmount'];
-
-            $courseSetting=$this->getSettingService()->get('course',array());
-
-            if (array_key_exists("coursesPrice", $courseSetting)) {
-                $notShowPrice = $courseSetting['coursesPrice'];
-            }else{
-                $notShowPrice = 0;
-            }
-
-            if($notShowPrice == 1) {
-                $order['amount'] = 0;
-                $order['totalPrice'] = 0;
-            }
-
-            if($order['amount'] > 0){
-                //如果是限时打折，判断是否在限免期，如果是，则Amout为0
-                if($course['freeStartTime'] < time() &&  $course['freeEndTime'] > time() ){
-                    $order['amount'] = 0;
-                    $order['totalPrice'] = 0;
-                }
-            }
-
-            $order['snPrefix'] = 'C';
-
-            if (!empty($info['coupon'])) {
-                $order['coupon'] = $info['coupon'];
-                $order['couponDiscount'] = $info['couponDiscount'];
-            }
+            $order['snPrefix'] = 'CR';
 
             if (!empty($info['note'])) {
                 $order['data'] = array('note' => $info['note']);
@@ -84,7 +60,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
             $order = $this->getOrderService()->createOrder($order);
             if (empty($order)) {
-                throw $this->createServiceException('创建课程订单失败！');
+                throw $this->createServiceException('创建订单失败！');
             }
 
             // 免费课程，就直接将订单置为已购买
@@ -100,7 +76,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                     'orderId' => $order['id'],
                     'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
                 );
-                $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+                $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
 
             $connection->commit();
@@ -125,10 +101,63 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
         );
 
-        if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-            $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+        if (!$this->getClassroomService()->isCourseStudent($order['targetId'], $order['userId'])) {
+            $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         }
 
         return ;
     }
+
+    private function cancelOldOrders($classroom, $user)
+    {
+        $conditions = array(
+            'userId' => $user['id'],
+            'status' => 'created',
+            'targetType' => 'classroom',
+            'targetId' => $classroom['id'],
+        );
+        $count = $this->getOrderService()->searchOrderCount($conditions);
+
+        if ($count == 0) {
+            return ;
+        }
+
+        $oldOrders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, $count);
+
+        foreach ($oldOrders as $order) {
+            $this->getOrderService()->cancelOrder($order['id'], '系统自动取消');
+        }
+
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order.OrderService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom.ClassroomService');
+    }
+
+    protected function getCashService()
+    {
+        return $this->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->createService('Cash.CashAccountService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
+    }
+
 }
