@@ -1222,7 +1222,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $sort = array();
         $resultLiveCourses = array();
         foreach ($liveCourses as $key => $liveCourse) {
-           if(!isset($liveCourse['liveStartTime'])){
+           if(isset($liveCourse['liveStartTime'])){
                 $sort[$key] = $value["liveStartTime"];
                 $resultLiveCourses[$key] = $liveCourse;
            }
