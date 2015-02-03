@@ -1227,7 +1227,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $resultLiveCourses[$key] = $liveCourse;
            }
         }
-        var_dump(sizeof($$resultLiveCourses));
+        var_dump(sizeof($resultLiveCourses));
         exit();
 
         if($liveCourses != null ){
