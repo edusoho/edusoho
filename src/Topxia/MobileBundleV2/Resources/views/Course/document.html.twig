@@ -49,7 +49,7 @@ seajs.use(app.mainScript, function(){
             var height = 0;
             window.jsobj.toggleFullScreen();
             var isPageFullScreen = e.data;
-            var docContent = document.getElementById("lesson-document-content");
+            var docContent = document.getElementById("viewerIframe");
             if (isPageFullScreen) {
                 height = document.body.clientHeight;
                 docContent.removeAttribute("style");
