@@ -388,7 +388,7 @@ class MobileBaseController extends BaseController
             }
         }
 
-        for($tempCourses as $key => $value){
+        foreach($tempCourses as $key => $value){
             if(isset($emptyLessonCourseId[$key])){
                 array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
             }
