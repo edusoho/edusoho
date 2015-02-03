@@ -1184,7 +1184,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return array("start" => $start,
             "limit" => $limit,
             // "total" => $total,
-            "data" => $resultLiveCourses);
+            "data" => $tempCourses);
     }
 
     public function hitThread(){
