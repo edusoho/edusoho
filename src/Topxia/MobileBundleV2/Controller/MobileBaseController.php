@@ -333,6 +333,7 @@ class MobileBaseController extends BaseController
         $tempCourseIdIndex = 0;
         $tempLessons = array();
         for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
+        {
             $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIdIndex);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
