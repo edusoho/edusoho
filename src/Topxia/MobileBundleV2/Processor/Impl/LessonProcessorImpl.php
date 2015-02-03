@@ -510,7 +510,39 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             {
                 $user = $this->controller->getUserByToken($this->request);
                 $lesson = $this->controller->getCourseService()->getCourseLesson(11, 185);
-                return $this->getDocumentLesson($lesson);
+                
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                if (empty($file)) {
+                    return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
+                }
+
+                if ($file['convertStatus'] != 'success') {
+                    if ($file['convertStatus'] == 'error') {
+                        return $this->createErrorResponse('not_document', '文档转换失败，请联系管理员!');
+                    } else {
+                        return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等!');
+                    }
+                }
+
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+
+                $metas2=$file['metas2'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+                $pdfUri = $url['url'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+                $swfUri = $url['url'];
+
+                $content = $lesson['content'];
+                $content= $this->controller->convertAbsoluteUrl($this->request, $content);
+                $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
+                            'pdfUri' => $pdfUri,
+                            'swfUri' => $swfUri,
+                            'title'=>$lesson['title']
+                        ));
+
+                $lesson['content'] = $render->getContent();
+                return $render;
             }
 
             private function getDocumentLesson($lesson)
@@ -548,7 +580,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                 $lesson['content'] = $render->getContent();
 
-                return $render;
+                return $lesson;
             }
 
             private function getHeadLeaderInfo()
