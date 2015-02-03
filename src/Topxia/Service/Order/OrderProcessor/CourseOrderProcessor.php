@@ -55,23 +55,26 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $coinPayAmount = 0;
 
         $hasPayPassword = strlen($user['payPassword']) > 0;
-        if ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
-            if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
-                $coinPayAmount = $accountCash;
-            } else if($hasPayPassword) {
-                $coinPayAmount = $totalPrice;
-            }                
-        } else if($priceType == "RMB") {
-            $totalPrice = $course["price"];
-            if($totalPrice*100 > $accountCash/$cashRate*100) {
-                $coinPayAmount = $accountCash;
-            } else {
-                $coinPayAmount = $totalPrice*$cashRate;
+        if($hasPayPassword) {
+            if ($priceType == "Coin") {
+                $totalPrice = $course["coinPrice"];
+                if($totalPrice*100 > $accountCash*100) {
+                    $coinPayAmount = $accountCash;
+                } else {
+                    $coinPayAmount = $totalPrice;
+                }                
+            } else if($priceType == "RMB") {
+                $totalPrice = $course["price"];
+                if($totalPrice*100 > $accountCash/$cashRate*100) {
+                    $coinPayAmount = $accountCash;
+                } else {
+                    $coinPayAmount = $totalPrice*$cashRate;
+                }
             }
         }
 
         $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
         return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,

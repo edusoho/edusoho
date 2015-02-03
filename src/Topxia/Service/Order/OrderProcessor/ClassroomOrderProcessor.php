@@ -60,21 +60,25 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $coinPayAmount = 0;
 
         $hasPayPassword = strlen($user['payPassword']) > 0;
-        if ($priceType == "Coin") {
-            if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
-                $coinPayAmount = $accountCash;
-            } else if($hasPayPassword) {
-                $coinPayAmount = $totalPrice;
-            }                
-        } else if($priceType == "RMB") {
-            if($totalPrice*100 > $accountCash/$cashRate*100) {
-                $coinPayAmount = $accountCash;
-            } else {
-                $coinPayAmount = $totalPrice*$cashRate;
+        if ($hasPayPassword){
+            if ($priceType == "Coin") {
+                if($totalPrice*100 > $accountCash*100) {
+                    $coinPayAmount = $accountCash;
+                } else {
+                    $coinPayAmount = $totalPrice;
+                }                
+            } else if($priceType == "RMB") {
+                if($totalPrice*100 > $accountCash/$cashRate*100) {
+                    $coinPayAmount = $accountCash;
+                } else {
+                    $coinPayAmount = $totalPrice*$cashRate;
+                }
             }
         }
 
         $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
+
         return array(
             'classroom' => empty($classroom) ? null : $classroom,
             

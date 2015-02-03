@@ -156,6 +156,104 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
+    public function becomeStudent($classroomId, $userId, $info = array())
+    {
+        $classroom = $this->getClassroom($classroomId);
+
+        if (empty($classroom)) {
+            throw $this->createNotFoundException();
+        }
+
+        if($classroom['status'] != 'published') {
+            throw $this->createServiceException('不能加入未发布班级');
+        }
+
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+        }
+
+        $member = $this->getClassroomMemberDao()->findClassroomMemberByClassIdAndUserIdAndRole($courseId, $userId, "student");
+        if ($member) {
+            throw $this->createServiceException("用户(#{$userId})已加入该班级！");
+        }
+
+        $levelChecked = '';
+        if (!empty($info['becomeUseMember'])) {
+            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+            if ($levelChecked != 'ok') {
+                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入班级！");
+            }
+            $userMember = $this->getVipService()->getMemberByUserId($user['id']);
+        }
+
+        if (!empty($info['orderId'])) {
+            $order = $this->getOrderService()->getOrder($info['orderId']);
+            if (empty($order)) {
+                throw $this->createServiceException("订单(#{$info['orderId']})不存在，加入班级失败！");
+            }
+        } else {
+            $order = null;
+        }
+
+        $fields = array(
+            'classId' => $classroomId,
+            'userId' => $userId,
+            'orderId' => empty($order) ? 0 : $order['id'],
+            'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
+            'role' => 'student',
+            'remark' => empty($order['note']) ? '' : $order['note'],
+            'createdTime' => time()
+        );
+
+        if (empty($fields['remark'])) {
+            $fields['remark'] = empty($info['note']) ? '' : $info['note'];
+        }
+
+        $member = $this->getClassroomMemberDao()->addMember($fields);
+                
+        $setting = $this->getSettingService()->get('course', array());
+        if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
+            $message = $this->getWelcomeMessageBody($user, $course);
+            $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
+        }
+
+        $fields = array(
+            'studentNum'=> $this->getClassroomStudentCount($classroomId),
+        );
+        if ($order) {
+            $fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('classroomId', $classroomId);
+        }
+        $this->getClassroomDao()->updateClassroom($classroomId, $fields);
+        if($classroom['status'] == 'published' ){
+            $this->getStatusService()->publishStatus(array(
+                'type' => 'become_student',
+                'objectType' => 'classroom',
+                'objectId' => $courseId,
+                'properties' => array(
+                    'classroom' => $this->simplifyClassroom($classroom),
+                )
+            ));
+        }
+        return $member;
+    }
+
+    public function getClassroomStudentCount($courseId)
+    {
+        return $this->getClassroomMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+    }
+
+    private function simplifyClassroom($classroom)
+    {
+        return array(
+            'id' => $classroom['id'],
+            'title' => $classroom['title'],
+            'picture' => $classroom['middlePicture'],
+            'about' => StringToolkit::plain($classroom['about'], 100),
+            'price' => $classroom['price'],
+        );
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
