@@ -329,7 +329,7 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $tempLiveLessons;
+        $tempLiveLessons = array();
         $tempCourseIdIndex = 0;
         $tempLessons = array();
         for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
