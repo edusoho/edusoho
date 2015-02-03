@@ -44,22 +44,16 @@ seajs.use(app.mainScript, function(){
             pdfFileUrl:'{{pdfUri | raw}}'
         });
 
-        $("#viewerIframe").height(document.body.clientHeight);
-        window.onmessage=function(e){ 
-            var height = 0;
+        var clientHeight = document.body.clientHeight;
+        $("#viewerIframe").height(clientHeight);
+        window.onmessage=function(e){
             window.jsobj.toggleFullScreen();
             var isPageFullScreen = e.data;
             var docContent = document.getElementById("viewerIframe");
             if (isPageFullScreen) {
-                height = document.body.clientHeight;
-                docContent.style.height = height + "px";
+                docContent.style.height = clientHeight + "px";
             }else{
-              height = window.screen.height;
-              docContent.style.width = window.document.body.offsetWidth+"px";
-              docContent.style.position = "fixed";
-              docContent.style.left = "0";
-              docContent.style.top = "0";
-              docContent.style.zIndex = "9999";
+              var height = window.screen.height;
               docContent.style.height = height + "px";
             }
         };
