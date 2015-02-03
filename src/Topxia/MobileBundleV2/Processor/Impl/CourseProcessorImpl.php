@@ -1179,7 +1179,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         // $total = $this->controller->getCourseService()->searchLessonCount($conditions);
 
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
-        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
+        // $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
         return array("start" => $start,
             "limit" => $limit,
