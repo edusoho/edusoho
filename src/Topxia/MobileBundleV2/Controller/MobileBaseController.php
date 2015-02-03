@@ -341,34 +341,35 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $nowTime = time();
-        $liveLessons = array();
-        $tempLiveLesson;
-        $recentlyLiveLessonStartTime;
-        $tempLessonIndex;
+        return $tempLessons;
+        // $nowTime = time();
+        // $liveLessons = array();
+        // $tempLiveLesson;
+        // $recentlyLiveLessonStartTime;
+        // $tempLessonIndex;
 
-        foreach($tempLessons as $key => $tempLesson){
-            if($nowTime <= $tempLesson[0]["endTime"]){
-                $tempLiveLesson = $tempLesson[0];
-            }
-            if(sizeof($tempLesson) > 1){
-                $recentlyLiveLessonStartTime = 2*$nowTime;
-                for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
-                    if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
-                        if($tempLesson[$tempLessonIndex]["startTime"] < $recentlyLiveLessonStartTime){
-                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
-                            $tempLiveLesson = $tempLesson[$tempLessonIndex];
-                        }
-                    }
-                }
-            }
-            if(isset($tempLiveLesson)){
-                $liveLessons[$key] = $tempLiveLesson;
-                unset($tempLiveLesson);
-            }
-        }
+        // foreach($tempLessons as $key => $tempLesson){
+        //     if($nowTime <= $tempLesson[0]["endTime"]){
+        //         $tempLiveLesson = $tempLesson[0];
+        //     }
+        //     if(sizeof($tempLesson) > 1){
+        //         $recentlyLiveLessonStartTime = 2*$nowTime;
+        //         for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
+        //             if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
+        //                 if($tempLesson[$tempLessonIndex]["startTime"] < $recentlyLiveLessonStartTime){
+        //                     $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
+        //                     $tempLiveLesson = $tempLesson[$tempLessonIndex];
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     if(isset($tempLiveLesson)){
+        //         $liveLessons[$key] = $tempLiveLesson;
+        //         unset($tempLiveLesson);
+        //     }
+        // }
 
-        return $liveLessons;
+        // return $liveLessons;
         // foreach($tempCourses as $key => $value){
         //     if(isset($liveLessons[$key])){
         //         $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
