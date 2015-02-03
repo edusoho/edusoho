@@ -28,7 +28,34 @@ class ClassroomManageController extends BaseController
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
-        return $this->render("TopxiaWebBundle:ClassroomManage:students.html.twig",array(
+        $fields = $request->query->all();
+        $nickname="";
+        if(isset($fields['nickName'])){
+            $nickname =$fields['nickName'];
+        } 
+
+        $paginator = new Paginator(
+            $request,
+            $this->getClassroomService()->searchMemberCount(array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname)),
+            20
+        );
+
+        $students = $this->getCourseService()->searchMembers(
+            array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname),
+            array('createdTime','DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
+        return $this->render("TopxiaWebBundle:ClassroomManage:student.html.twig",array(
+            'classroom'=>$classroom));
+    }
+
+    public function aduitorAction($id)
+    {   
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        return $this->render("TopxiaWebBundle:ClassroomManage:aduitor.html.twig",array(
             'classroom'=>$classroom));
     }
 

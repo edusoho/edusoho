@@ -1555,6 +1555,10 @@ classroom_manage_students:
     pattern: /classroom/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:students }
 
+classroom_manage_aduitor:
+    pattern: /classroom/{id}/manage/aduitor
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:aduitor }
+
 classroom_manage_teachers:
     pattern: /classroom/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }

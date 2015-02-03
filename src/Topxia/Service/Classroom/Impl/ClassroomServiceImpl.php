@@ -210,6 +210,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ArrayToolkit::index( $this->getClassroomCourseDao()->findCoursesByIds($ids), 'id');
     }
 
+    public function searchMemberCount($conditions)
+    {   
+        $conditions = $this->_prepareClassroomConditions($conditions);
+        return $this->getMemberDao()->searchMemberCount($conditions);
+    }
+
+    private function _prepareClassroomConditions($conditions)
+    {
+        $conditions = array_filter($conditions);
+
+        if(isset($conditions['nickname'])){
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['nickname']);
+        }
+        
+        return $conditions;
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
@@ -233,6 +252,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getClassroomCourseDao() 
     {
         return $this->createDao('Classroom.ClassroomCourseDao');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }
 

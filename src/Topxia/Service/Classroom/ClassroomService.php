@@ -35,4 +35,6 @@ interface ClassroomService
 
     public function findCoursesByIds(array $ids);
 
+    public function searchMemberCount($conditions);
+
 }
