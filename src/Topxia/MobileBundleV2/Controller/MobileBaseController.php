@@ -341,7 +341,7 @@ class MobileBaseController extends BaseController
             }
         }
 
-        return $tempLiveLessons;
+        return $tempLessons;
 
         // $nowTime = time();
         // $liveLessons = array();
