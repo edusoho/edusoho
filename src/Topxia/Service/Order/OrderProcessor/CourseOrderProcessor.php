@@ -38,8 +38,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         	);
         }
 
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
         $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
+        if($coinEnabled && array_key_exists("cash_rate", $coinSetting)) {
             $cashRate = $coinSetting["cash_rate"];
         }
 

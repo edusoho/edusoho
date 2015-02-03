@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var VideoChooser = require('../widget/media-chooser/video-chooser7');
     var AudioChooser = require('../widget/media-chooser/audio-chooser8');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser7');
+    var DocumentChooser = require('../widget/media-chooser/document-chooser7');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
 
@@ -221,6 +222,14 @@ define(function(require, exports, module) {
                     display: 'PPT'
                 });
                 break;
+            case 'document':
+                validator.addItem({
+                    element: '#lesson-media-field',
+                    required: true,
+                    rule: 'mediaValueEmpty',
+                    display: '文档'
+                });
+                break;
         }
 
     }
@@ -292,6 +301,11 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
+        var documentChooser = new DocumentChooser({
+            element: '#document-chooser',
+            choosed: choosedMedia,
+        });
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
@@ -309,19 +323,25 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        documentChooser.on('change', function(item) {
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
+        });
+
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
             videoChooser.destroy();
             audioChooser.destroy();
             pptChooser.destroy();
+            documentChooser.destroy();
         });
 
-        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
+        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser]);
        
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
 
-            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
+            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt").removeClass("lesson-form-document")
             $form.addClass("lesson-form-" + type);
             
             if (type == 'text'){
@@ -332,14 +352,23 @@ define(function(require, exports, module) {
                 videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
+                documentChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
+                documentChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'ppt') {
                 pptChooser.show();
+                videoChooser.hide();
+                audioChooser.hide();
+                documentChooser.hide();
+                clearInterval(Timer);
+            } else if (type == 'document') {
+                documentChooser.show();
+                pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
                 clearInterval(Timer);

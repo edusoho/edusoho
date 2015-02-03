@@ -29,7 +29,19 @@ class RegisterController extends BaseController
                 $captchaCodePostedByUser = strtolower($registration['captcha_num']);
 
                 $captchaCode = $request->getSession()->get('captcha_code');   
-              
+                
+                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){
+   
+                    throw new \RuntimeException('验证码错误。');
+    
+                }                
+   
+                if (!isset($captchaCode)||strlen($captchaCode)<5){
+    
+                    throw new \RuntimeException('验证码错误。');
+    
+                }
+
                 if ($captchaCode != $captchaCodePostedByUser){ 
                     $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
                     throw new \RuntimeException('验证码错误。');
@@ -62,6 +74,8 @@ class RegisterController extends BaseController
             ));
 
             if ($this->getAuthService()->hasPartnerAuth()) {
+                 $this->authenticateUser($user);
+                 $this->sendRegisterMessage($user);
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
@@ -166,7 +180,7 @@ class RegisterController extends BaseController
         }
 
         $auth = $this->getSettingService()->get('auth');
-        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') ){
+        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
                return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
@@ -214,9 +228,10 @@ class RegisterController extends BaseController
     {
 
         $token = $this->getUserService()->getToken('email-verify', $token);
+
         if (empty($token)) {
             $currentUser = $this->getCurrentUser();
-            if (empty($currentUser)) {
+            if (empty($currentUser) || $currentUser['id'] == 0) {
                 return $this->render('TopxiaWebBundle:Register:email-verify-error.html.twig');
             } else {
                 return $this->redirect($this->generateUrl('settings'));
@@ -228,8 +243,10 @@ class RegisterController extends BaseController
             return $this->createNotFoundException();
         }
 
+        $this->authenticateUser($user);
+        $this->getUserService()->setEmailVerified($user['id']);
+
         if (strtoupper($request->getMethod()) ==  'POST') {
-            $this->getUserService()->setEmailVerified($user['id']);
             $this->getUserService()->deleteToken('email-verify', $token['token']);
             return $this->createJsonResponse(true);
         }

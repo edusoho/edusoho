@@ -18,7 +18,7 @@
 {% set script_controller = 'course/learn' %}
 {% set bodyClass = 'lesson-dashboard-page' %}
 
-{% block content %}
+{% block content %}       
     <div class="container lesson-dashboard" id="lesson-dashboard"
          data-course-id="{{ course.id }}"
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
@@ -59,6 +59,11 @@
           {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
             <div class="lesson-content-text-body"></div>
           </div>
+
+          <div class="lesson-content lesson-content-document" id="lesson-document-content" data-role="lesson-content" style="display:none;">
+            <div class="lesson-content-document-body"></div>
+          </div>   
+
           <div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
           </div>
