@@ -43,12 +43,11 @@ seajs.use(app.mainScript, function(){
             swfFileUrl:'{{swfUri | raw}}',
             pdfFileUrl:'{{pdfUri | raw}}'
         });
-        //$("#viewerIframe").height(document.body.clientHeight);
-        $("#customerPresentationMode").live("click",function(){
+
+        $("#viewerIframe").height(document.body.clientHeight);
+        window.onmessage=function(e){  
             window.jsobj.toggleFullScreen();
-        });
-    });
-    
+        };
 });
 
 </script>
