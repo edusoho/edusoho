@@ -124,10 +124,10 @@ class DataDict
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
+            'flash' => 'flash',
     		'text' => '图文',
             'ppt' => 'PPT',
-            'document' => '文档',
-            'flash' => 'flash'
+            'document' => '文档'
 		),
 		'videoStorageType' =>array(
 			'local'=>'本地视频',
