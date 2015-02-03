@@ -101,7 +101,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
         );
 
-        if (!$this->getClassroomService()->isCourseStudent($order['targetId'], $order['userId'])) {
+        if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         }
 

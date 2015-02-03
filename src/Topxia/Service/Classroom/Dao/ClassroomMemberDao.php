@@ -10,4 +10,5 @@ interface ClassroomMemberDao
 
     public function getMember($id);
 
+    public function getClassroomStudentCount($classroomId);
 }

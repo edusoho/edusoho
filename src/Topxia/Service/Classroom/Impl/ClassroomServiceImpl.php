@@ -229,7 +229,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->getStatusService()->publishStatus(array(
                 'type' => 'become_student',
                 'objectType' => 'classroom',
-                'objectId' => $courseId,
+                'objectId' => $classroomId,
                 'properties' => array(
                     'classroom' => $this->simplifyClassroom($classroom),
                 )
@@ -238,9 +238,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $member;
     }
 
-    public function getClassroomStudentCount($courseId)
+    public function getClassroomStudentCount($classroomId)
     {
-        return $this->getClassroomMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+        return $this->getClassroomMemberDao()->getClassroomStudentCount($classroomId);
     }
 
     private function simplifyClassroom($classroom)

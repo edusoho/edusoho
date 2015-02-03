@@ -29,4 +29,11 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         }
         return $this->getMember($this->getConnection()->lastInsertId());
     }
+
+    public function getClassroomStudentCount($classroomId)
+    {
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classId = ? LIMIT 1";
+        return $this->getConnection()->fetchColumn($sql, array($classroomId)) ? : null;
+    }
 }
+
