@@ -353,7 +353,7 @@ class MobileBaseController extends BaseController
             if(!sizeof($tempLesson)){
                 $emptyLessonCourseId[$key] = $tempCoursesIndex;
                 $tempCoursesIndex++;
-                break;
+                continue;
             }
             if($nowTime <= $tempLesson[0]["endTime"]){
                 $tempLiveLesson = $tempLesson[0];
@@ -377,7 +377,7 @@ class MobileBaseController extends BaseController
         }
 
         return $emptyLessonCourseId;
-        
+
         // foreach($tempCourses as $key => $value){
         //     if(isset($emptyLessonCourseId[$key])){
         //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
