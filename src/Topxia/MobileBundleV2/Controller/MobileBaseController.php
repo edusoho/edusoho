@@ -319,9 +319,9 @@ class MobileBaseController extends BaseController
     public function filterLiveCourses($user, $start, $limit){
         $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
-        $count            = $this->getCourseService()->searchLearnCount(array(
+        $count            = $this->getCourseService()->searchLessonCount(array(
         ));
-        $learnStatusArray = $this->getCourseService()->searchLearns(array(
+        $learnStatusArray = $this->getCourseService()->searchLessons(array(
             "userId" => $user["id"]
         ), array(
             "finishedTime",
@@ -329,6 +329,8 @@ class MobileBaseController extends BaseController
         ), 0, $count);
         
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
+
+        
         
         $tempCourses = array();
         $tempCourseIds = array();
