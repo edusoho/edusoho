@@ -69,7 +69,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
         $uploadFile['updatedUserId'] = $uploadFile['createdUserId'];
         $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
-
+    
         return $uploadFile; 
     }
 
@@ -581,6 +581,23 @@ class DocumentConvertor
         $file['convertStatus'] = 'success';
 
         return $file;
+    }
+
+    public function getCovertParams($params)
+    {
+        return array(
+            'convertor' => self::NAME,
+        );
+    }
+}
+
+class FlashConvertor
+{
+    const NAME = 'flash';
+
+    public function saveConvertResult($file, $result)
+    {   
+
     }
 
     public function getCovertParams($params)

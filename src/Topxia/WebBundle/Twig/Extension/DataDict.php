@@ -126,6 +126,7 @@ class DataDict
     		'text' => '图文',
             'ppt' => 'PPT',
             'document' => '文档',
+            'flash' => 'flash'
 		),
 		'videoStorageType' =>array(
 			'local'=>'本地视频',
