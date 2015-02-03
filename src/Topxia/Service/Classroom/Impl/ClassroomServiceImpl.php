@@ -211,13 +211,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $member = $this->getClassroomMemberDao()->addMember($fields);
-                
-        $setting = $this->getSettingService()->get('course', array());
-        if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
-            $message = $this->getWelcomeMessageBody($user, $course);
-            $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
-        }
-
+        
         $fields = array(
             'studentNum'=> $this->getClassroomStudentCount($classroomId),
         );
@@ -225,7 +219,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('classroomId', $classroomId);
         }
         $this->getClassroomDao()->updateClassroom($classroomId, $fields);
-        if($classroom['status'] == 'published' ){
+        if($classroom['status'] == 'published' ) {
             $this->getStatusService()->publishStatus(array(
                 'type' => 'become_student',
                 'objectType' => 'classroom',
