@@ -9,6 +9,8 @@ interface ClassroomService
 
     public function updateClassroom($id,$fields);
     
+    public function deleteClassroom($id);
+    
     public function searchClassrooms($conditions,$orderBy,$start,$limit);
 
     public function searchClassroomsCount($condtions);
@@ -30,5 +32,7 @@ interface ClassroomService
     public function getAllCourses($classroomId);
 
     public function updateCourses($classroomId,array $courseIds);
+
+    public function findCoursesByIds(array $ids);
 
 }

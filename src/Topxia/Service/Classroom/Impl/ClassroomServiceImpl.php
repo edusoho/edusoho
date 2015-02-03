@@ -56,6 +56,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
+    public function deleteClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+            
+        if(empty($classroom)){
+            throw $this->createServiceException("班级不存在，操作失败。");
+        }
+
+        $this->getClassroomDao()->deleteClassroom($id);
+        $this->getLogService()->info('Classroom', 'delete', "班级#{$id}永久删除");
+        return true;
+    }
+
     public function updateClassroomTeachers($id)
     {
         $courses=$this->getAllCourses($id);
@@ -190,6 +203,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             
             $this->addCourse($classroomId,$value);
         }
+    }
+
+    public function findCoursesByIds(array $ids)
+    {
+        return ArrayToolkit::index( $this->getClassroomCourseDao()->findCoursesByIds($ids), 'id');
     }
 
     protected function getFileService()
