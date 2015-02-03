@@ -2,8 +2,6 @@
 {% extends 'TopxiaWebBundle:Classroom:dashboard-layout.html.twig' %}
 {% endif %}
 
-{% set script_controller = 'thread/common' %}
-
 {% block dashboard_main %}
   <div class="pull-right">
     <a class="btn btn-sm btn-info" href="{{ path('thread_create', {targetType:targetType,id:id, type:'discussion'}) }}">发话题</a>

@@ -15,7 +15,11 @@ define(function(require, exports, module) {
 
 
             exports.run = function() {
-                    require('./common').run();
+                     Share.create({
+                selector: '.share',
+                icons: 'itemsAll',
+                display: ''
+        });
 
         if($('#post-thread-form').length>0){
         var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});

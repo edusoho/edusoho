@@ -264,16 +264,6 @@ class ThreadController extends BaseController
             ->getForm();
     }
 
-    public function latestBlockAction($course)
-    {
-    	$threads = $this->getThreadService()->searchThreads(array('courseId' => $course['id']), 'createdNotStick', 0, 10);
-
-    	return $this->render('TopxiaWebBundle:CourseThread:latest-block.html.twig', array(
-    		'course' => $course,
-            'threads' => $threads,
-		));
-    }
-
     public function deleteAction(Request $request, $targetType, $targetId, $id)
     {
         $thread = $this->getThreadService()->getThread($targetId, $id);
@@ -440,37 +430,6 @@ class ThreadController extends BaseController
             'postReplyPaginator'=>$postReplyPaginator,
             'targetType' =>$targetType,
             ));
-    }
-
-    private function replaceMention($postData)
-    {   
-        $currentUser = $this->getCurrentUser();
-        $content=$postData['content'];
-        $users=array();
-        preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $content, $matches);
-        $mentions = array_unique($matches[1]);
-   
-        foreach ($mentions as $mention) {
-            
-            $user=$this->getUserService()->getUserByNickname($mention);
-            
-            if($user){
-
-                $path = $this->generateUrl('user_show', array('id' => $user['id']));
-                $nickname=$user['nickname'];
-                $html = "<a href=\"{$path}\" class=\"show-user\">@{$nickname}</a>";
-
-                $content = preg_replace("/@{$nickname}/ui", $html, $content);
-
-                $users[]=$user;
-            }
-         
-        }
-     
-        $postData['content']=$content;
-    
-        return array($postData,$users);
-        
     }
 
     public function editPostAction(Request $request, $targetType,$targetId, $threadId, $id)

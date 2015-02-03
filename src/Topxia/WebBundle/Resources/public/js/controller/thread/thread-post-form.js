@@ -8,7 +8,7 @@ define(function(require, exports, module) {
         var editor = EditorFactory.create('#post_content', 'simple', {extraFileUploadParams:{group:'course'}});
 
         var validator = new Validator({
-            element: '#thread-post-form',
+            element: '#post-thread-form',
         });
 
         validator.addItem({
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             required: true
         });
 
-        Validator.query('#thread-post-form').on('formValidate', function(elemetn, event) {
+        Validator.query('#post-thread-form').on('formValidate', function(elemetn, event) {
             editor.sync();
         });
 
