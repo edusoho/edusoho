@@ -52,13 +52,12 @@ seajs.use(app.mainScript, function(){
               docContent.removeAttribute("style");
             }else{
               docContent.style.width = window.document.body.offsetWidth+"px";
-              docContent.style.height = window.document.body.offsetHeight+"px";
               docContent.style.position = "fixed";
               docContent.style.left = "0";
               docContent.style.top = "0";
               docContent.style.zIndex = "9999";
             }
-
+            $("#viewerIframe").height(document.body.clientHeight);
             window.jsobj.toggleFullScreen();
         };
     });
