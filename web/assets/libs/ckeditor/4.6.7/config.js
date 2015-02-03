@@ -34,6 +34,8 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Find', '-', 'Source', '-', 'Maximize'] },
     ];
 
+    config.resize_enabled = false;
+
     config.extraPlugins = 'questionblank,smiley,table';
 
 };
