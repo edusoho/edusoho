@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
         { items: [ 'TextColor', 'BGColor' ] },
         { items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe' ] },
-        { items: [ 'Paste', 'PasteText', 'PasteFromWord'] },
+        { items: [ 'PasteText', 'PasteFromWord'] },
         { items: [ 'Find', '-', 'Source', '-', 'Maximize'] },
     ];
 
