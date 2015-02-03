@@ -7,7 +7,7 @@ use Exception;
 
 class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-	protected $router = "classroom_show";
+	protected $router = "classroom_manage";
 
 	public function getRouter() {
 		return $this->router;
