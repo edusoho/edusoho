@@ -59,7 +59,7 @@
                               {% endif %}
 
                               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                                  <span class="course-price" style="display:inline">
+                                  <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.coinPrice }}">
                                     {% if course.coinPrice > 0 %}
                                       {% if free_limit_type(course) == 'free_now' %}
                                         0.00 元
@@ -70,7 +70,7 @@
                                   </span>
 
                               {% else %}
-                                <span class="course-price">
+                                <span class="course-price course-price-{{course.id}}" data-price="{{ course.price }}">
                                   {% if course.price > 0 %}
                                     {% if free_limit_type(course) == 'free_now' %}
                                       0.00 元
@@ -170,9 +170,9 @@
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                         <span class="price" style="display:inline">
 
-                            {{ coinPrice }}{{setting('coin.coin_name')}}
+                            <span  id="price">{{ coinPrice }}</span>{{setting('coin.coin_name')}}
 
-                          </span>
+                        </span>
 
                       {% else %}
                         <span class="price">
