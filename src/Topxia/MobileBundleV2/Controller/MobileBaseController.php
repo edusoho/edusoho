@@ -350,7 +350,7 @@ class MobileBaseController extends BaseController
         $tempCoursesIndex = 0;
 
         foreach($tempLessons as $key => $tempLesson){
-            if(!isset($tempLesson)){
+            if(!sizeof($tempLesson)){
                 $emptyLessonCourseId[$key] = $tempCoursesIndex;
                 $tempCoursesIndex++;
                 break;
