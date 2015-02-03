@@ -571,6 +571,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 array('title' => '私信','data' => null));
         }
         $index = 0;
+
+        $result[$index++] = array(
+            'title' => '在学直播课',
+            'data' => $this->controller->filterOneLiveCourseByDESC($user)
+        );
         
         $courseConditions = array(
             'userId' => $user['id']
