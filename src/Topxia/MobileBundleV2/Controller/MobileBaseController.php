@@ -346,13 +346,13 @@ class MobileBaseController extends BaseController
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
-        $emptyLessonCourseId = array();
-        $tempCoursesIndex = 0;
+        // $emptyLessonCourseId = array();
+        // $tempCoursesIndex = 0;
 
         foreach($tempLessons as $key => $tempLesson){
             if(!sizeof($tempLesson)){
-                $emptyLessonCourseId[$key] = $tempCoursesIndex;
-                $tempCoursesIndex++;
+                // $emptyLessonCourseId[$key] = $tempCoursesIndex;
+                // $tempCoursesIndex++;
                 continue;
             }
             if($nowTime <= $tempLesson[0]["endTime"]){
@@ -373,7 +373,7 @@ class MobileBaseController extends BaseController
                 $liveLessons[$key] = $tempLiveLesson;
                 unset($tempLiveLesson);
             }
-            $tempCoursesIndex++;
+            // $tempCoursesIndex++;
         }
 
         foreach($tempCourses as $key => $value){
@@ -388,11 +388,11 @@ class MobileBaseController extends BaseController
             }
         }
 
-        foreach($tempCourses as $key => $value){
-            if(isset($emptyLessonCourseId[$key])){
-                array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
-            }
-        }
+        // foreach($tempCourses as $key => $value){
+        //     if(isset($emptyLessonCourseId[$key])){
+        //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
+        //     }
+        // }
 
         return $tempCourses;
     }
