@@ -45,8 +45,7 @@ seajs.use(app.mainScript, function(){
         });
 
         $("#viewerIframe").height(document.body.clientHeight);
-        window.onmessage=function(e){  
-            window.jsobj.toggleFullScreen();
+        window.onmessage=function(e){ 
             var isPageFullScreen = e.data;
             var docContent = document.getElementById("lesson-document-content");
             if (isPageFullScreen) {
@@ -58,6 +57,8 @@ seajs.use(app.mainScript, function(){
               docContent.style.top = "0";
               docContent.style.zIndex = "9999";
             }
+            
+            window.jsobj.toggleFullScreen();
         };
     });
     
