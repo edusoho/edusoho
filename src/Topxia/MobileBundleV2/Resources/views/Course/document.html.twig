@@ -28,11 +28,11 @@ iframe{
   app.basePath = '';
   app.jsPaths = {"common":"common","theme":"\/themes\/default-b\/js","couponbundle":"\/bundles\/coupon\/js","questionplusbundle":"\/bundles\/questionplus\/js","vipbundle":"\/bundles\/vip\/js","customwebbundle":"\/bundles\/customweb\/js","customadminbundle":"\/bundles\/customadmin\/js"};
 
-  app.mainScript = "/bundles/topxiaweb/js/app.js?4.9.0";
+  app.mainScript = "{{ asset('bundles/topxiaweb/js/app.js') }}";
 </script>
 
-<script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js?4.9.0') }}"></script>
-<script src="{{ asset('assets/libs/seajs-global-config.js?4.9.0') }}"></script>
+<script src="{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}"></script>
+<script src="{{ asset('assets/libs/seajs-global-config.js') }}"></script>
 
 <script>
 seajs.use(app.mainScript, function(){
