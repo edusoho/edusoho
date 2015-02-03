@@ -92,7 +92,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
     public function doSuccessPayOrder($id)
     {
         $order = $this->getOrderService()->getOrder($id);
-        if (empty($order) or $order['targetType'] != 'course') {
+        if (empty($order) or $order['targetType'] != 'classroom') {
             throw $this->createServiceException('非课程订单，加入课程失败。');
         }
 
