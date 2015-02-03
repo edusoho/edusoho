@@ -329,14 +329,15 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $tempLiveLessons;
+        $tempLiveLessons = array();
         $tempCourseIdIndex = 0;
         $tempLessons = array();
         for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
-            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIdIndex);
+        {
+            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
-                unset($tempLiveLessons);
+                // unset($tempLiveLessons);
             }
         }
 
