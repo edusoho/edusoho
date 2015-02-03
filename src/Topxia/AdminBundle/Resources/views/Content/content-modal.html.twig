@@ -51,7 +51,7 @@
 				{% endif %}
 				>
 					<div class="controls">
-						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body">{{ field_value(content, 'body') }}</textarea>
+						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ field_value(content, 'body') }}</textarea>
 					</div>
 				</div>
 

@@ -50,9 +50,9 @@
           <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">内容</label>
           <div class="col-xs-7 controls">
             {% if is_feature_enabled('group_reward') %}
-            <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control">{{thread.content|default('')}}</textarea>
+            <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% else %}
-            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control">{{thread.content|default('')}}</textarea>
+            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% endif %}
           </div>
         </div>
@@ -90,7 +90,7 @@
             <label class="control-label"> 请输入要隐藏的内容:</label>
           </div>
           <div class="col-md-7 controls">
-            <textarea class="form-control" rows="3" id="text"> </textarea>
+            <textarea class="form-control" rows="3" id="text" > </textarea>
           </div>
 
         </div>
