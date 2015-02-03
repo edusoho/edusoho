@@ -51,11 +51,17 @@ seajs.use(app.mainScript, function(){
             var isPageFullScreen = e.data;
             var docContent = document.getElementById("lesson-document-content");
             if (isPageFullScreen) {
-              height = window.screen.height;
+                height = document.body.clientHeight;
+                docContent.removeAttribute("style");
             }else{
-              height = document.body.clientHeight;
+              height = window.screen.height;
+              docContent.style.width = window.document.body.offsetWidth+"px";
+              docContent.style.position = "fixed";
+              docContent.style.left = "0";
+              docContent.style.top = "0";
+              docContent.style.zIndex = "9999";
+              docContent.style.height = height;
             }
-            $("#viewerIframe").height(height);
         };
     });
     
