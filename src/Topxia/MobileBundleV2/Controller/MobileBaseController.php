@@ -337,7 +337,7 @@ class MobileBaseController extends BaseController
             $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
-                unset($tempLiveLessons);
+                // unset($tempLiveLessons);
             }
         }
 
