@@ -37,6 +37,19 @@
       <span class="caret"></span>
     </button>
 
+ <ul class="dropdown-menu">
+       <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 管理班级</a></li>
+
+       {% if classroom.status=='published'%}
+       <li><a href="javascript:" class="close-group" title="关闭班级({{classroom.title}})" data-url="{{path('admin_group_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭小组</a></li>
+
+       {% else %}
+       <li><a href="javascript:" class="open-group" title="开启班级({{classroom.title}})" data-url="{{path('admin_group_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>开启小组</a></li>
+
+       {% endif %}
+
+
+
   </div>
  </td>
 </tr>
