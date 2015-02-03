@@ -52,7 +52,7 @@ seajs.use(app.mainScript, function(){
             var docContent = document.getElementById("viewerIframe");
             if (isPageFullScreen) {
                 height = document.body.clientHeight;
-                docContent.removeAttribute("style");
+                docContent.style.height = height + "px";
             }else{
               height = window.screen.height;
               docContent.style.width = window.document.body.offsetWidth+"px";
