@@ -2,6 +2,20 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var swfobject = require('swfobject');
+    window.onmessage=function(e){  
+        var isPageFullScreen = e.data;
+        var docContent = document.getElementById("lesson-document-content");
+        if (isPageFullScreen) {
+          docContent.removeAttribute("style");
+        }else{
+          docContent.style.width = window.document.body.offsetWidth+"px";
+          docContent.style.position = "fixed";
+          docContent.style.left = "0";
+          docContent.style.top = "0";
+          docContent.style.zIndex = "9999";
+          
+        }
+    };
 
     var DocumentPlayer = Widget.extend({
         attrs: {
@@ -44,11 +58,7 @@ define(function(require, exports, module) {
         initPDFJSViewer: function(thiz){
             self=this;
             $("html").attr('dir','ltr');
-            $('#viewerIframe').attr('src', '../../bundles/topxiaweb/js/controller/pdfjs/viewer.html');
-            $('#viewerIframe').load(function(){
-                $("#viewerIframe")[0].contentWindow.setFileName(self.attrs.pdfFileUrl.value);
-                $("#viewerIframe")[0].contentWindow.webViewerLoad();
-            });
+            $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v1/viewer.html#'+self.attrs.pdfFileUrl.value);
         },
 
         initSwfViewer: function(thiz){
