@@ -319,17 +319,6 @@ class MobileBaseController extends BaseController
     public function filterLiveCourses($user, $start, $limit){
         $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
-        $count            = $this->getCourseService()->searchLearnCount(array(
-        ));
-        $learnStatusArray = $this->getCourseService()->searchLearns(array(
-            "userId" => $user["id"]
-        ), array(
-            "finishedTime",
-            "ASC"
-        ), 0, $count);
-        
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
-        
         $tempCourses = array();
         $tempCourseIds = array();
         foreach ($courses as $key => $course) {  
@@ -343,12 +332,8 @@ class MobileBaseController extends BaseController
         $tempLiveLessons;
         $tempCourseIdIndex = 0;
         $tempLessons = array();
-        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++){
-            foreach($lessons as $key => $lesson){
-                if(!strcmp($lesson["courseId"], $tempCourseIds[$tempCourseIdIndex])){
-                    $tempLiveLessons[] = $lesson;
-                }
-            }
+        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
+            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIdIndex);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
                 unset($tempLiveLessons);
