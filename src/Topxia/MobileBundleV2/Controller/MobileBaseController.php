@@ -346,8 +346,15 @@ class MobileBaseController extends BaseController
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
+        $emptyLessonCourseId = array();
+        $tempCoursesIndex = 0;
 
         foreach($tempLessons as $key => $tempLesson){
+            if(!isset($tempLesson)){
+                $emptyLessonCourseId[$key] = $tempCoursesIndex;
+                $tempCoursesIndex++;
+                break;
+            }
             if($nowTime <= $tempLesson[0]["endTime"]){
                 $tempLiveLesson = $tempLesson[0];
             }
@@ -366,15 +373,20 @@ class MobileBaseController extends BaseController
                 $liveLessons[$key] = $tempLiveLesson;
                 unset($tempLiveLesson);
             }
+            $tempCoursesIndex++;
         }
 
         foreach($tempCourses as $key => $value){
-            if(isset($liveLessons[$key])){
+            if(isset($emptyLessonCourseId[$key])){
+                array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
+            }else if(isset($liveLessons[$key])){
                 $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
                 $tempCourses[$key]["liveStartTime"] = date("c", $liveLessons[$key]["startTime"]);
                 $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
             }else{
                 $tempCourses[$key]["liveLessonTitle"] = "";
+                $tempCourses[$key]["liveStartTime"] = "";
+                $tempCourses[$key]["liveEndTime"] = "";
             }
         }
 
