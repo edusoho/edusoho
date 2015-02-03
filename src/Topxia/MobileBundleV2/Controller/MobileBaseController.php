@@ -113,6 +113,12 @@ class MobileBaseController extends BaseController
         return $this->getUser();
     }
 
+    public function autoLogin($user)
+    {
+        $user = $this->getUserService()->getUser($user->id);
+        $this->authenticateUser($user);
+    }
+
     public function createToken($user, $request)
     {
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
