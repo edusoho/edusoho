@@ -62,19 +62,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
 	public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
 	{
-        $totalPrice = 0;
-        $course = $this->getCourseService()->getCourse($targetId);
-        if($priceType == "RMB") {
-            $totalPrice = $course["price"];
-        } else if ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
-        }
+        $totalPrice = $this->getTotalPrice($targetId, $priceType);
 
-        if($totalPrice != $fields['totalPrice']) {
-            throw new Exception("实际价格不匹配，不能创建订单!");
-        }
-
-        $totalPrice = (float)$totalPrice;
         $amount = $totalPrice;
 
         //优惠码优惠价格
@@ -113,7 +102,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if($amount<0){
             $amount = 0;
         }
+        
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
         $amount = NumberToolkit::roundUp($amount);
+
         return array(
         	$amount, 
         	$totalPrice, 
@@ -125,6 +117,19 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 	{
 		return $this->getCourseOrderService()->createOrder($orderInfo);
 	}
+
+    private function getTotalPrice($targetId, $priceType)
+    {
+        $totalPrice = 0;
+        $course = $this->getCourseService()->getCourse($targetId);
+        if($priceType == "RMB") {
+            $totalPrice = $course["price"];
+        } else if ($priceType == "Coin") {
+            $totalPrice = $course["coinPrice"];
+        }
+        $totalPrice = (float)$totalPrice;
+        return $totalPrice;
+    }
 
 	private function afterCouponPay($couponCode, $targetId, $amount, $priceType, $cashRate)
 	{

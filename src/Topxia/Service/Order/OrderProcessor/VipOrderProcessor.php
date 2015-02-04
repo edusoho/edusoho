@@ -93,8 +93,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
 	public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $orderData)
 	{
-		$totalPrice = 0;
-
 		if (!ArrayToolkit::requireds($orderData, array('buyType', 'targetId', 'unitType', 'duration'))) {
             throw new Exception('订单数据缺失，创建会员订单失败。');
         }
@@ -133,8 +131,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $unitPrice * $orderData['duration'];
         }
 
-        //$totalPrice = intval($totalPrice*1000)/1000;
-
         if(array_key_exists("coinPayAmount", $orderData)) {
             $amount = $this->afterCoinPay(
             	$coinEnabled, 
@@ -155,7 +151,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $amount = 0;
         }
 
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
         $amount = NumberToolkit::roundUp($amount);
+
         return array(
         	$amount, 
         	$totalPrice, 

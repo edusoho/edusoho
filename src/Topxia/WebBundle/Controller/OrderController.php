@@ -59,9 +59,7 @@ class OrderController extends BaseController
     public function createAction(Request $request)
     {
         $fields = $request->request->all();
-        if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
-            $fields["couponCode"]="";
-        }
+        
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
@@ -88,9 +86,18 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
+            if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
+                $fields["couponCode"] = "";
+            } 
+
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount = (string)((float)$amount);
             $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
+
+            //价格比较
+            if($totalPrice != $fields['totalPrice']) {
+                $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
+            }
 
             //价格比较
             if($amount != $shouldPayMoney) {
