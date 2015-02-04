@@ -16,17 +16,8 @@
     {% if app.request.query.get('targetType') in ['course','vip'] %}
       <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
 
-       {{ totalPrice }} 
+       {{ totalPrice }}  {# {{courses[0]['price']}} #}
 
-{#       {% if app.request.query.get('targetType') == 'course' %}
-        {{courses[0]['price']}}
-      {% else %}
-        {% if setting('coin.coin_enabled') %}
-          {{ (totalPrice/cashRate)|round(2,'common') }} 
-        {% else %}
-          {{ totalPrice }} 
-        {% endif %}
-      {% endif %} #}
       "/> 
     {% endif %}
     <span role="code-notify" class="code-notify"></span>
