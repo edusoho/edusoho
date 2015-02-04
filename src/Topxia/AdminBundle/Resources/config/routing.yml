@@ -1101,3 +1101,7 @@ admin_setting_apply_for_sms:
 admin_setting_sms_open:
     pattern:  /setting/sms/{open}
     defaults: { _controller: TopxiaAdminBundle:Setting:smsOpen }
+
+admin_setting_sms_usage:
+    pattern:  /setting/sms-usage
+    defaults: { _controller: TopxiaAdminBundle:Setting:smsUsage }
