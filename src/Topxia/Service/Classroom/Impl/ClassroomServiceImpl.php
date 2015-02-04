@@ -210,6 +210,46 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ArrayToolkit::index( $this->getClassroomCourseDao()->findCoursesByIds($ids), 'id');
     }
 
+    public function searchMemberCount($conditions)
+    {   
+        $conditions = $this->_prepareClassroomConditions($conditions);
+        return $this->getClassroomMemberDao()->searchMemberCount($conditions);
+    }
+
+    public function searchMembers($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareClassroomConditions($conditions);
+        return $this->getClassroomMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
+    }
+
+    public function getClassroomMember($classroomId, $userId)
+    {
+        return $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
+    }
+
+    public function remarkStudent($classroomId, $userId, $remark)
+    {
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if (empty($member)) {
+            throw $this->createServiceException('学员不存在，备注失败!');
+        }
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        return $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
+    }
+
+    private function _prepareClassroomConditions($conditions)
+    {
+        $conditions = array_filter($conditions);
+
+        if(isset($conditions['nickname'])){
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['nickname']);
+        }
+        
+        return $conditions;
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
@@ -225,6 +265,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom.ClassroomDao');
     }
 
+    protected function getClassroomMemberDao() 
+    {
+        return $this->createDao('Classroom.ClassroomMemberDao');
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
@@ -233,6 +278,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getClassroomCourseDao() 
     {
         return $this->createDao('Classroom.ClassroomCourseDao');
+    }
+
+    private function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }
 

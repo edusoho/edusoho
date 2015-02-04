@@ -1555,6 +1555,10 @@ classroom_manage_students:
     pattern: /classroom/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:students }
 
+classroom_manage_aduitor:
+    pattern: /classroom/{id}/manage/aduitor
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:aduitor }
+
 classroom_manage_teachers:
     pattern: /classroom/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }
@@ -1570,3 +1574,12 @@ classroom_manage_close:
 classroom_manage_checkName:
     pattern: /classroom/manage/checkName
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:checkName }
+
+classroom_manage_student_remark:
+    pattern:  /classroom/{classroomId}/manage/student/{userId}/remark
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:remark }
+
+classroom_manage_student_remove:
+    pattern:  /classroom/{classroomId}/manage/student/{userId}/remove
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:remove }
+    methods: [POST]
