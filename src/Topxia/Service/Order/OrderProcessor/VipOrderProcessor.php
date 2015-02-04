@@ -51,11 +51,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $unitType = $fields['unit'];
             $duration = $fields['duration'];
             $unitPrice = $levelPrice[$unitType];
+            if ($priceType == "Coin") {
+                $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
+            }
             $totalPrice = $unitPrice * $duration;
 
-            if ($priceType == "Coin") {
-                $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
-            }
         }
 
         if(!$coinEnable) {
