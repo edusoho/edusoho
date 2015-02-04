@@ -144,6 +144,16 @@ define(function(require, exports, module) {
 			validator.removeItem('[name="payPassword"]');
 		}
 
+		function showPayPassword(){
+			$(".pay-password div[role='password-input']").show();
+			validator.addItem({
+				element: '[name="payPassword"]',
+				required: true,
+				display: '支付密码',
+    			rule: 'remote'
+			});
+		}
+
 		$('[role="coinNum"]').blur(function(e){
 			var coinNum = $(this).val();
 			coinNum = Math.round(coinNum*100)/100;
@@ -152,13 +162,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				$(".pay-password div[role='password-input']").show();
-				validator.addItem({
-					element: '[name="payPassword"]',
-					required: true,
-					display: '支付密码',
-        			rule: 'remote'
-				});
+				showPayPassword();
 			}
 			conculatePrice();
 		});
@@ -212,13 +216,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				$(".pay-password div[role='password-input']").show();
-				validator.addItem({
-					element: '[name="payPassword"]',
-					required: true,
-					display: '支付密码',
-        			rule: 'remote'
-				});
+				showPayPassword();
 			}
 			if(cashRateElement.data("priceType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);

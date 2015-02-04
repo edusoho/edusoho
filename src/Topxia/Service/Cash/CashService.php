@@ -7,11 +7,11 @@ interface CashService
 
     public function searchFlowsCount($conditions);
 
-    public function outFlowByCoin($outFlow);
+    public function outflowByCoin($outflow);
 
-    public function inFlowByRmb($inFlow);
+    public function inflowByRmb($inflow);
 
-    public function outFlowByRmb($outFlow);
+    public function outflowByRmb($outflow);
 
     public function changeRmbToCoin($rmbFlow);
 
