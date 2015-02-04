@@ -165,12 +165,17 @@ class ClassroomManageController extends BaseController
         // }
         $classroom=$this->getClassroomService()->getClassroom($classroomId);
 
+        $user = $this->getCurrentUser();
+        
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
-        $this->getNotificationService()->notify($userId, 'student-remove', array(
-            'classId' => $classroom['id'], 
-            'classroomTitle' => $classroom['title'],
-        ));
+        // $this->getNotificationService()->notify($userId, 'student-remove', array(
+        //     'classId' => $classroom['id'], 
+        //     'classroomTitle' => $classroom['title'],
+        // ));
+
+        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+        $this->getNotifiactionService()->notify($userId, 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>移出班级<strong>{$classroom['title']}</strong>");
 
         return $this->createJsonResponse(true);
     }
@@ -225,11 +230,13 @@ class ClassroomManageController extends BaseController
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-
-            $this->getNotificationService()->notify($member['userId'], 'student-create', array(
-                'classId' => $classroom['id'], 
-                'classroomTitle' => $classroom['title'],
-            ));
+            
+            $userUrl = $this->generateUrl('user_show', array('id'=>$currentUser['id']), true);
+            $this->getNotificationService()->notify($member['userId'], 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>加入班级<strong>{$classroom['title']}</strong>,成为正式学员");
+            // $this->getNotificationService()->notify($member['userId'], 'student-create', array(
+            //     'classId' => $classroom['id'], 
+            //     'classroomTitle' => $classroom['title'],
+            // ));
 
             $this->getLogService()->info('classroom', 'add_student', "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
