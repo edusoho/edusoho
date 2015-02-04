@@ -39,6 +39,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         	'year' => $level['yearPrice']
         );
 
+        list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
+
         if($buyType == "upgrade") {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         }else{
@@ -50,9 +52,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $duration = $fields['duration'];
             $unitPrice = $levelPrice[$unitType];
             $totalPrice = $unitPrice * $duration;
-        }
 
-        list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
+            if ($priceType == "Coin") {
+                $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
+            }
+        }
 
         if(!$coinEnable) {
         	return array(
@@ -65,10 +69,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 				'duration' => empty($duration) ? null : $duration,
 				'buyType' => empty($buyType) ? null : $buyType,
         	);
-        }
-
-        if ($priceType == "Coin") {
-            $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
