@@ -97,6 +97,11 @@ class OrderController extends BaseController
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes") {
+                $coupon = $fields["couponCode"];
+                $couponDiscount = $couponResult["decreaseAmount"];
+            }
+
             $orderFileds = array(
                 'priceType' => $priceType,
                 'totalPrice' => $totalPrice,
@@ -106,8 +111,8 @@ class OrderController extends BaseController
                 'userId' => $user["id"],
                 'payment' => 'alipay',
                 'targetId' => $targetId,
-                'coupon' => empty($couponResult) ? null : $fields["couponCode"],
-                'couponDiscount' => empty($couponResult) ? null : $couponResult["decreaseAmount"],
+                'coupon' => empty($coupon) ? null : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
             );
 
             $order = $processor->createOrder($orderFileds, $fields);

@@ -43,13 +43,11 @@
 		<div class="col-sm-7 info">
 			{% if is_granted('ROLE_ADMIN') %}
 			<div class="btn-group pull-right">
-				<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-cog"></i>
-				</button>
-				<ul class="dropdown-menu pull-right">
-					<li>
-						<a href="{{ path('course_manage', {id:course.id}) }}">课程管理</a>
-					</li>
-				</ul>
+
+            <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+            <i class="esicon esicon-setting"></i>
+            </a>
+
 			</div>
 			{% endif %}
 			<h1 class="title">{{ course.title }}</h1>
@@ -64,7 +62,7 @@
 				</p>
 				{% if course.showStudentNumType == 'opened' %}
 				<p>
-					学员数：
+					{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数：
 					<span class="member-num">{{ course.studentNum }}</span>
 					<span class="member-text">人</span>
 				</p>
@@ -121,12 +119,12 @@
 						免费体验
 					</a>
 					<a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-						<i class="glyphicon glyphicon-bookmark"></i>
+						<i class="glyphicon glyphicon-star-empty"></i>
 						收藏课程
 					</a>
 					<a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
-						<i class="glyphicon glyphicon-bookmark"></i>
-						已收藏
+						<i class="glyphicon glyphicon-star"></i>
+						取消收藏
 					</a>
 					<a class="btn btn-link" href="#" style="display:none;">
 						<i class="glyphicon glyphicon-gift"></i>

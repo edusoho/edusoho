@@ -16,6 +16,27 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $this->formData;
     }
     
+    public function getUserCoin()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $coinEnabled = $this->controller->setting("coin.coin_enabled");
+        if(empty($coinEnabled) || $coinEnabled == 0) {
+            return $this->createErrorResponse('error', "网校虚拟币未开启！");
+        }
+
+        $account = $this->getCashAccountService()->getAccountByUserId($user->id,true);
+        
+        if(empty($account)){
+            $account = $this->getCashAccountService()->createAccount($user->id);
+        }
+
+        return $account;
+    }
+
     public function sendMessage()
     {
         $content = $this->getParam("content");
@@ -27,10 +48,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录！");
         }
 
+        $user = $this->controller->getUserService()->getUser($user['id']);
+
         $message = $this->getMessageService()->sendMessage($user['id'], $fromId, $content);
         $toId = $message['toId'];
         $nickname = $user['nickname'];
         //PushService::sendMsg("$toId","0|$fromId|$nickname|$conversationId");
+        $message['createdUser'] = $this->controller->filterUser($user);
         return $message;
     }
 
@@ -204,6 +228,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
+        $user['following'] = $this->controller->getUserService()->findUserFollowingCount($userId);
+        $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         return $this->controller->filterUser($user);
     }
 
@@ -307,6 +333,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version)
         );
+        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
+        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $this->log("user_login", "用户二维码登录",  array(
                 "userToken" => $token)
             );
@@ -334,6 +362,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'token' => $token,
             'user' => $this->controller->filterUser($user)
         );
+
+        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
+        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
@@ -356,4 +387,331 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         
         return $user;
     }
+
+    public function getFollowings(){
+        $userId = $this->getParam('userId');
+        $start = $this->getParam('start',0);
+        $limit = $this->getParam('limit',10);
+        if (empty($userId)) {
+            return $this->createErrorResponse('userId', "userId参数错误");
+        }
+        $followings = $this->controller->getUserService()->findUserFollowing($userId, $start, $limit);
+        $result = array();
+        $index = 0;
+        foreach ($followings as $key => $following) {
+            $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
+            $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
+            $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
+            $following['following'] = $this->controller->getUserService()->findUserFollowingCount($following['id']);
+            $following['follower'] = $this->controller->getUserService()->findUserFollowerCount($following['id']);
+            $result[$index++] = $following;
+        }
+        return $result;
+    }
+
+    public function getFollowers(){
+        $userId = $this->getParam('userId');
+        $start = $this->getParam('start',0);
+        $limit = $this->getParam('limit',10);
+        if (empty($userId)) {
+            return $this->createErrorResponse('userId', "userId参数错误");
+        }
+        $followers = $this->controller->getUserService()->findUserFollowers($userId, $start, $limit);
+        $result = array();
+        $index = 0;
+        foreach ($followers as $key => $follower) {
+            $follower['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['smallAvatar'], 'course-large.png', true);
+            $follower['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['mediumAvatar'], 'course-large.png', true);
+            $follower['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['largeAvatar'], 'course-large.png', true);
+            $follower['following'] = $this->controller->getUserService()->findUserFollowingCount($follower['id']);
+            $follower['follower'] = $this->controller->getUserService()->findUserFollowerCount($follower['id']);
+            $result[$index++] = $follower;
+        }
+        return $result;
+    }
+
+    public function searchUserIsFollowed(){
+        $userId = $this->getParam('userId');
+        $toId = $this->getParam('toId');
+        $followingIds = array($toId);
+        $result = $this->controller->getUserService()->filterFollowingIds($userId, $followingIds);
+        if(empty($result)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function follow(){
+        $user = $this->controller->getUserByToken($this->request);
+        $toId = $this->getParam('toId');
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        $result = $this->controller->getUserService()->follow($user['id'], $toId);
+
+        $userShowUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经关注了你！";
+        $this->controller->getNotificationService()->notify($toId, 'default', $message);
+
+        return $result;
+    }
+
+    public function unfollow(){
+        $user = $this->controller->getUserByToken($this->request);
+        $toId = $this->getParam('toId');
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
+
+        $userShowUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
+        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
+        $this->getNotificationService()->notify($toId, 'default', $message);
+
+        return $result;
+    }
+
+    public function getConversationIdByFromIdAndToId(){
+        $fromId = $this->getParam('fromId');
+        $toId = $this->getParam('toId');
+        $result = $this->getMessageService()->getConversationByFromIdAndToId($fromId, $toId);
+        if(!empty($result)){
+            $fromUser = $this->controller->getUserService()->getUser($fromId);
+            $result['fromUserName'] = $fromUser['nickname'];
+        }
+        return $result;
+    }
+
+    public function getUserNum(){
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
+        }
+
+        $conditions = array(
+            'userId' => $user['id'],
+            'type' => 'question'
+        );
+
+        $total = $this->controller->getThreadService()->searchThreadCount($conditions);
+
+        $threads = $this->controller->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            0,
+            $total
+        );
+
+        $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+
+        $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
+
+        //问答数量
+        $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
+
+        $conditions['type'] = 'discussion';
+        //话题数量
+        $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
+
+        $conditions = array(
+            'userId' => $user['id'],
+            'noteNumGreaterThan' => 0.1
+        );
+
+        $total = $this->controller->getCourseService()->searchMemberCount($conditions);
+        
+        $courseMembers = $this->controller->getCourseService()->searchMember($conditions, 0, $total);
+
+        $noteSum = 0;
+        foreach ($courseMembers as $member) {
+            $noteSum += $member['noteNum'];
+        }
+
+        settype($noteSum, "string");
+
+        //考试数量
+        $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
+
+        return array('thread' => $threadSum,
+                    'discussion' => $discussionSum,
+                    'note' => $noteSum ,
+                    'test' => $testSum );
+    }
+
+    public function getSchoolRoom(){
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $result = array(array('title' => '在学课程','data' => null),
+                array('title' => '问答','data' => null),
+                array('title' => '讨论','data' => null),
+                array('title' => '笔记','data' => null),
+                array('title' => '私信','data' => null));
+        }
+        $index = 0;
+        
+        $courseConditions = array(
+            'userId' => $user['id']
+        );
+        $sort             = array(
+            'startTime',
+            'DESC'
+        );
+        $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
+        $resultCourse     = reset($resultCourse);
+        if ($resultCourse != false) {
+            $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
+            //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
+            $data       = array(
+                'content' => $courseInfo['title'],
+                'id' => $resultCourse['id'],
+                'courseId' => $resultCourse['courseId'],
+                'lessonId' => $courseInfo['largePicture'],
+                'time' => Date('c', $resultCourse['startTime'])
+            );
+        }else{
+            $data = null;
+        }
+        $result[$index++] = array(
+            'title' => '在学课程',
+            'data' => $data
+        );
+
+        $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $learningCourses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'],0,$learningCourseTotal);
+        $resultLearning = $this->controller->filterCourses($learningCourses);
+
+        $learnedCourseTotal = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
+        $learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
+        $resultLearned = $this->controller->filterCourses($learnedCourses);
+        $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
+        //----问答
+        $conditions     = array(
+            'courseIds' => $courseIds,
+            'type' => 'question'
+        );
+
+        $resultThread= $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+        $resultThread = reset($resultThread);
+
+        if ($resultThread != false) {
+            $data = array(
+                'content' => $resultThread['title'],
+                'id' => $resultThread['id'],
+                'courseId' => $resultThread['courseId'],
+                'lessonId' => $resultThread['lessonId'],
+                'time' => Date('c', $resultThread['latestPostTime'])
+            );
+        }
+        $result[$index++] = array(
+            'title' => '问答',
+            'data' => $data
+        ); 
+        
+
+        //----讨论
+        $conditions['type'] = 'discussion';
+        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+        $resultDiscussion   = reset($resultDiscussion);
+        $data               = array();
+        if ($resultDiscussion != false) {
+            $data = array(
+                'content' => $resultDiscussion['title'],
+                'id' => $resultDiscussion['id'],
+                'courseId' => $resultDiscussion['courseId'],
+                'lessonId' => $resultDiscussion['lessonId'],
+                'time' => Date('c', $resultDiscussion['latestPostTime'])
+            );
+        }else{
+            $data = null;
+        }
+        $result[$index++] = array(
+            'title' => '讨论',
+            'data' => $data
+        ); //讨论
+
+        //笔记
+        $conditions = array(
+            'userId' => $user['id'],
+            'noteNumGreaterThan' => 0
+        );
+        
+        $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, 'updated', 0, 1);
+        $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, 'created', 0, 1);
+
+        $lastestNote     = array();
+        if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) > 0){
+            if ($updateTimeNote[0]['updatedTime'] > $createdTimeNote[0]['createdTime']) {
+                $lastestNote = $updateTimeNote;
+            } else {
+                $lastestNote = $createdTimeNote;
+            }
+        }else if(sizeof($updateTimeNote) == 0 && sizeof($createdTimeNote) > 0){
+            $lastestNote = $createdTimeNote;
+        }else if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) == 0){
+            $lastestNote = $updateTimeNote;
+        }
+
+        $lastestNote = reset($lastestNote);
+        if($lastestNote != false){
+            $data = array(
+                'content' => $lastestNote['content'],
+                'id' => $lastestNote['id'],
+                'courseId' => $lastestNote['courseId'],
+                'lessonId' => $lastestNote['lessonId']
+            );
+            if($lastestNote['updatedTime'] > $lastestNote['createdTime']){
+                $data['time'] = Date('c', $lastestNote['updatedTime']);
+            }else{
+                $data['time'] = Date('c', $lastestNote['createdTime']);
+            }   
+
+        }else{
+            $data = null;
+        }
+        $result[$index++] = array(
+            'title' => '笔记',
+            'data' => $data
+        );     
+
+        
+        $messageConditions = array(
+            'toId' => $user['id']
+        );
+        $sort              = array(
+            'createTime',
+            'DESC'
+        );
+        
+        $msgCount      = $this->getMessageService()->getUserConversationCount($user['id']);
+        $conversations = $this->getMessageService()->findUserConversations($user['id'], 0, $msgCount);
+        foreach ($conversations as $key => $value) {
+            $sort[$key] = $value['latestMessageTime'];
+        }
+
+        if($conversations != null ){
+            array_multisort($sort, SORT_DESC, $conversations);
+        }
+        
+        $lastestMessage = reset($conversations);
+        if($lastestMessage != false){
+            $data           = array(
+                'content' => $lastestMessage['latestMessageContent'],
+                'id' => $lastestMessage['id'],
+                'courseId' => $lastestMessage['fromId'],
+                'lessonId' => $lastestMessage['toId'],
+                'time' => Date('c', $lastestMessage['createdTime'])
+            );
+        }else{
+            $data = null;
+        }
+        $result[$index++] = array(
+            'title' => '私信',
+            'data' => $data
+        );
+        
+        return $result;
+    }
+    
 }

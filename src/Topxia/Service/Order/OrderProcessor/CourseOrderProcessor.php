@@ -88,7 +88,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $priceType, 
                 $cashRate
             );
-            if($couponResult['useable'] == 'yes') {
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
                 $amount = $couponResult["afterAmount"];
             } else {
                 unset($couponResult);

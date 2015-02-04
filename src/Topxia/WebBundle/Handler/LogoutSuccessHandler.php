@@ -11,12 +11,14 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
     public function onLogoutSuccess(Request $request)
     {
         $goto = $request->query->get('goto');
+
         if(!$goto){
             $goto = "login";
         }
         $this->targetUrl = $this->httpUtils->generateUri($request, $goto);
-        if ($this->getAuthService()->hasPartnerAuth()) {
+        if ($this->getAuthService()->hasPartnerAuth()) { 
             $user = ServiceKernel::instance()->getCurrentUser();
+            setcookie("REMEMBERME");
             if (!$user->isLogin()) {
                 return parent::onLogoutSuccess($request);
             }
@@ -26,7 +28,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             $url = $url . '?' . http_build_query($queries);
             return $this->httpUtils->createRedirectResponse($request, $url);
         }
-
+     
         return parent::onLogoutSuccess($request);
     }
 

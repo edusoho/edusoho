@@ -429,13 +429,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             'largePicture' => $course['largePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['largePicture']) : null
         );
 
-
-        array_map(function($oldPicture){
-        	if (!empty($oldPicture)){
-	            @unlink($oldPicture);
-        	}
-        }, $oldPictures);
-
+    	$courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
+    	if ($courseCount <= 1) {
+    		array_map(function($oldPicture){
+                	if (!empty($oldPicture)){
+        	            @unlink($oldPicture);
+                	}
+                }, $oldPictures);
+        }
 		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
         
         return $this->getCourseDao()->updateCourse($courseId, $fields);
@@ -553,15 +554,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("该收藏已经存在，请不要重复收藏!");
 		}
 		//添加动态
-		$this->getStatusService()->publishStatus(array(
-			'type' => 'favorite_course',
-			'objectType' => 'course',
-			'objectId' => $courseId,
-			'properties' => array(
-				'course' => $this->simplifyCousrse($course),
-			)
-		));
-
+		if($course['status'] == 'published' ){
+			$this->getStatusService()->publishStatus(array(
+				'type' => 'favorite_course',
+				'objectType' => 'course',
+				'objectId' => $courseId,
+				'properties' => array(
+					'course' => $this->simplifyCousrse($course),
+				)
+			));
+		}
 		$this->getFavoriteDao()->addFavorite(array(
 			'courseId'=>$course['id'],
 			'userId'=>$user['id'], 
@@ -785,7 +787,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','document'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
 
@@ -840,7 +842,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-		if (in_array($lesson['type'], array('video', 'audio', 'ppt'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt','document'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");
@@ -1172,17 +1174,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->getCurrentUser();
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
-
-	$this->getStatusService()->publishStatus(array(
-		'type' => 'start_learn_lesson',
-		'objectType' => 'lesson',
-		'objectId' => $lessonId,
-		'properties' => array(
-			'course' => $this->simplifyCousrse($course),
-			'lesson' => $this->simplifyLesson($lesson),
-		)
-	));
-
+		if($course['status'] == 'published' ){
+			$this->getStatusService()->publishStatus(array(
+				'type' => 'start_learn_lesson',
+				'objectType' => 'lesson',
+				'objectId' => $lessonId,
+				'properties' => array(
+					'course' => $this->simplifyCousrse($course),
+					'lesson' => $this->simplifyLesson($lesson),
+				)
+			));
+		}
 		if (!empty($lesson) && $lesson['type'] != 'video') {
 
 			$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
@@ -1282,18 +1284,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$memberFields = array();
 		$memberFields['learnedNum'] = count($learns);
-		$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+		$course = $this->getCourseDao()->getCourse($courseId);
+                          if ($course['serializeMode'] != 'serialize' ) {
+                            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+                          }
 		$memberFields['credit'] = $totalCredits;
-
-		$this->getStatusService()->publishStatus(array(
-			'type' => 'learned_lesson',
-			'objectType' => 'lesson',
-			'objectId' => $lessonId,
-			'properties' => array(
-				'course' => $this->simplifyCousrse($course),
-				'lesson' => $this->simplifyLesson($lesson),
-			)
-		));
+		if($course['status'] == 'published' ){
+			$this->getStatusService()->publishStatus(array(
+				'type' => 'learned_lesson',
+				'objectType' => 'lesson',
+				'objectId' => $lessonId,
+				'properties' => array(
+					'course' => $this->simplifyCousrse($course),
+					'lesson' => $this->simplifyLesson($lesson),
+				)
+			));
+		}
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
@@ -1837,6 +1843,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->addMember($fields);
 
+        $this->setMemberNoteNumber(
+            $courseId,
+            $userId, 
+            $this->getNoteDao()->getNoteCountByUserIdAndCourseId($userId, $courseId)
+        );
+		        
 		$setting = $this->getSettingService()->get('course', array());
 		if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
 			$message = $this->getWelcomeMessageBody($user, $course);
@@ -1850,16 +1862,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
 	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
-
-		$this->getStatusService()->publishStatus(array(
-			'type' => 'become_student',
-			'objectType' => 'course',
-			'objectId' => $courseId,
-			'properties' => array(
-				'course' => $this->simplifyCousrse($course),
-			)
-		));
-
+		if($course['status'] == 'published' ){
+			$this->getStatusService()->publishStatus(array(
+				'type' => 'become_student',
+				'objectType' => 'course',
+				'objectId' => $courseId,
+				'properties' => array(
+					'course' => $this->simplifyCousrse($course),
+				)
+			));
+		}
 		return $member;
 	}
 
@@ -2436,6 +2448,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('User.StatusService');
     }
+
+    private function getNoteDao()
+    {
+    	return $this->createDao('Course.CourseNoteDao');
+    }
+
 
     private function getCourseMaterialService()
     {

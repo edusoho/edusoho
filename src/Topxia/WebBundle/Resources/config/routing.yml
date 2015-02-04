@@ -110,6 +110,10 @@ uploadfile_params:
     pattern:  /uploadfile/params
     defaults: { _controller: TopxiaWebBundle:UploadFile:params }
 
+uploadfile_browsers:
+    pattern:  /uploadfile/browsers
+    defaults: { _controller: TopxiaWebBundle:UploadFile:browsers }
+
 uploadfile_cloud_callback:
     pattern:  /uploadfile/cloud_callback
     defaults: { _controller: TopxiaWebBundle:UploadFile:cloudCallback }
@@ -304,6 +308,10 @@ course_lesson_media_download:
 course_lesson_ppt:
     pattern:  /course/{courseId}/lesson/{lessonId}/ppt
     defaults: { _controller: TopxiaWebBundle:CourseLesson:ppt }
+
+course_lesson_document:
+    pattern:  /course/{courseId}/lesson/{lessonId}/document
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:document }
 
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status

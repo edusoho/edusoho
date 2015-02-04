@@ -41,7 +41,11 @@ define(function(require, exports, module) {
 				data.convertor = '';
 			} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 				data.convertor = 'ppt';
-			} else {
+                data.lazyConvert = 1;
+			}else if ( (file.type == 'application/msword') || (file.type == 'application/pdf') || (file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                data.convertor = 'document';
+                data.lazyConvert = 1;
+            } else {
 				if (switcher) {
 					data.videoQuality = switcher.get('videoQuality');
 					data.audioQuality = switcher.get('audioQuality');
@@ -143,6 +147,7 @@ define(function(require, exports, module) {
 
         chunkUpload.on("upload_success_handler", function(file, serverData, fileIndex) {
         	serverData = $.parseJSON(serverData);
+
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
             var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov";
@@ -168,6 +173,12 @@ define(function(require, exports, module) {
             } else {
                 serverData.mimeType=file.type;
             }
+
+            if('*.ppt;*.pptx;*.doc;*.docx;*.pdf'.indexOf(getFileExt(file.name)[0])>-1){
+
+                serverData.lazyConvert = 1;
+            } 
+
             if (this.element.data('callback')) {
                 var url = this.element.data('callback');
                 if(serverData.lazyConvert == 1){

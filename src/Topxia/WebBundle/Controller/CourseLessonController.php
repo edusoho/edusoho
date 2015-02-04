@@ -48,7 +48,7 @@ class CourseLessonController extends BaseController
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
 
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
                     $hls = array(
                         'url' => $this->generateUrl('hls_playlist', array(
                             'id' => $file['id'], 
@@ -165,7 +165,7 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
                             $url = array(
                                 'url' => $this->generateUrl('hls_playlist', array(
                                     'id' => $file['id'], 
@@ -343,6 +343,53 @@ class CourseLessonController extends BaseController
         $client = $factory->createClient();
 
         $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+
+        return $this->createJsonResponse($result);
+    }
+
+    public function documentAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        if ($lesson['type'] != 'document' or empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
+                $url = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message),
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。'),
+                ));
+            }
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        $metas2=$file['metas2'];
+        $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $result['pdfUri'] = $url['url'];
+        $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        $result['swfUri'] = $url['url'];
 
         return $this->createJsonResponse($result);
     }

@@ -41,7 +41,7 @@
               <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
 
             {% if course.showStudentNumType == 'opened' or member.role|default('student') == 'teacher' or isAdmin %}
-              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看学员的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
               href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
             {% endif %}
 
@@ -61,9 +61,11 @@
             </div>
             {% if member.role|default(null) == 'student' %}
                   {% if member.orderId %}
-                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}"><i class="esicon esicon-exit"></i></a>
+                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}">
+                   <i class="esicon esicon-exit"></i></a>
                   {% else %}
-                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}"><i class="esicon esicon-exit"></i></a>
+                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}">
+                    <i class="esicon esicon-exit"></i></a>
                     {% endif %}
                 {% endif %}
             {% if canManage %}

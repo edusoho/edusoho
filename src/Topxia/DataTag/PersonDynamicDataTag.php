@@ -7,10 +7,17 @@ use Topxia\Common\ArrayToolkit;
 
 class PersonDynamicDataTag extends BaseDataTag implements DataTag  
 {
+    /**
+     * 获取个人动态
+     *
+     *   count    必需 
+     * @param  array $arguments 参数
+     * @return array 个人动态
+     */
     public function getData(array $arguments)
     {   
         $personDynamics=$this->getStatusService()->searchStatuses(array(), array('createdTime','DESC'), 0, $arguments['count']);
-        
+
         $ownerIds = ArrayToolkit::column($personDynamics, 'userId');
 
         $owners=$this->getUserService()->findUsersByIds($ownerIds);

@@ -23,9 +23,11 @@ define(function(require, exports, module) {
                     $table.find('tr.empty').remove();
                     $(html).prependTo($table.find('tbody'));
                     $modal.modal('hide');
-                    Notify.success('添加学员操作成功!');
+                    var user_name = $('#student-create-form-submit').data('user') ;
+                    Notify.success('添加'+user_name+'操作成功!');
                 }).error(function(){
-                    Notify.danger('添加学员操作失败!');
+                    var user_name = $('#student-create-form-submit').data('user') ;
+                    Notify.danger('添加'+user_name+'操作失败!');
                     $btn.button('reset').removeClass('disabled');
                 });
 

@@ -56,6 +56,20 @@ class UploadFileController extends BaseController
         return $this->createFilesJsonResponse($files);
     }
 
+     public function browsersAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权查看此页面！');
+        }
+
+        $conditions = $request->query->all();
+
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
+        
+        return $this->createFilesJsonResponse($files);
+    }
+    
     public function paramsAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -75,7 +89,8 @@ class UploadFileController extends BaseController
         }
         
         $params = $this->getUploadFileService()->makeUploadParams($params);
-
+  
+    
         return $this->createJsonResponse($params);
     }
 
@@ -87,6 +102,7 @@ class UploadFileController extends BaseController
         }
 
         $fileInfo = $request->request->all();
+      
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
@@ -105,7 +121,8 @@ class UploadFileController extends BaseController
 
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
 
-        if ($lazyConvert) {
+        if ($lazyConvert && $file['type']!="document") {
+        
             $convertHash = $this->getUploadFileService()->reconvertFile(
                 $file['id'],
                 $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)

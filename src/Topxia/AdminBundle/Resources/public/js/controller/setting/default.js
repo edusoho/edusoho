@@ -74,6 +74,26 @@ define(function(require, exports, module) {
             });
         };
 
+
+        var validator = new Validator({
+            element: '#cloud-setting-form'
+        });
+
+        validator.addItem({
+            element: '[name="user_name"]',
+            required: true
+        });
+
+        validator.addItem({
+            element: '[name="chapter_name"]',
+            required: true
+        });
+
+        validator.addItem({
+            element: '[name="part_name"]',
+            required: true
+        });
+
     };
 
 });

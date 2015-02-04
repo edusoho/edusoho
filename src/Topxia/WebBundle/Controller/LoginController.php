@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 
 class LoginController extends BaseController
 {
@@ -24,6 +25,35 @@ class LoginController extends BaseController
             'last_username' => $request->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
             '_target_path' => $this->getTargetPath($request),
+        ));
+    }
+
+    public function ajaxAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Login:ajax.html.twig', array(
+            '_target_path' => $this->getTargetPath($request),
+        ));
+    }
+
+    public function checkEmailAction(Request $request)
+    {
+        $email = $request->query->get('value');
+        $user = $this->getUserService()->getUserByEmail($email);
+        if ($user) {
+            $response = array('success' => true, 'message' => '该Email地址可以登录');
+        } else {
+            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+        }
+        return $this->createJsonResponse($response);
+    }
+
+    public function oauth2LoginsBlockAction($targetPath, $displayName = true)
+    {
+        $clients = OAuthClientFactory::clients();
+        return $this->render('TopxiaWebBundle:Login:oauth2-logins-block.html.twig', array(
+            'clients' => $clients,
+            'targetPath' => $targetPath,
+            'displayName' => $displayName
         ));
     }
 
@@ -54,22 +84,7 @@ class LoginController extends BaseController
         return $targetPath;
     }
 
-    public function ajaxAction(Request $request)
-    {
-        return $this->render('TopxiaWebBundle:Login:ajax.html.twig', array(
-            '_target_path' => $this->getTargetPath($request),
-        ));
-    }
 
-    public function checkEmailAction(Request $request)
-    {
-        $email = $request->query->get('value');
-        $user = $this->getUserService()->getUserByEmail($email);
-        if ($user) {
-            $response = array('success' => true, 'message' => '该Email地址可以登录');
-        } else {
-            $response = array('success' => false, 'message' => '该Email地址尚未注册');
-        }
-        return $this->createJsonResponse($response);
-    }
+
+
 }

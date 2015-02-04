@@ -1,0 +1,78 @@
+.table-view-cell .subtitle {
+  margin-top: 8px;
+  height: 14px;
+  color: #777;
+  font-size: 12px;
+  line-height: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-view-cell .small {
+  color: #777;
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-view-cell .body-title {
+  font-size: 16px;
+  line-height: 20px;
+  max-height: 40px;
+  color: #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail p {
+  color: #333;
+}
+
+.detail .source {
+  color: #03b884;
+}
+
+.placeholder.active {
+  display: block;
+}
+
+.placeholder {
+  display: none;
+  margin: 0;
+  width: 100%;
+  height: 100px;
+  color: #999;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -55px;
+}
+
+.placeholder.search span {
+  background-image: url("../img/empty_icon.png");
+}
+
+.placeholder span {
+  display: block;
+  margin: 0 auto 16px;
+  height: 65px;
+  width: 65px;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.app-dialog .text {
+  padding: 0;
+}
+
+.btn-normal {
+  color: #333;
+  border: 1px solid #333;
+}
+
+.btn-outlined.btn-nomal {
+  color: #333;
+}
