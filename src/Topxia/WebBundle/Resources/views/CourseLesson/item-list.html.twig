@@ -38,6 +38,8 @@
 				      <span class="type">PPT <i class="fa fa-file-powerpoint-o"></i></span>
 	    		    {% elseif item.type == 'document' %}
 				      <span class="type">文档 <i class="fa fa-files-o"></i></span>
+			      	{% elseif item.type == 'flash' %}
+				      <span class="type">Flash <i class="fa fa-film"></i></span>
 				    {% elseif item.type == 'live' %}
 				      <span class="type">&nbsp;<i class="fa fa-video-camera"></i></span>
 				       	{% if item.startTime > currentTime %}
