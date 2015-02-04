@@ -481,8 +481,6 @@ class EdusohoCloudClient implements CloudClient
         }
 
 		curl_setopt($curl, CURLOPT_URL, $url );
-error_log($url,3,'/var/tmp/wangchao');
-error_log($cookie,3,'/var/tmp/wangchao');
 		$response = curl_exec($curl);
 
 		return $response;
