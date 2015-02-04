@@ -3,13 +3,12 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderController extends BaseController
 {
-    public function showAction(Request $request) 
+    public function showAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
 
@@ -20,16 +19,16 @@ class OrderController extends BaseController
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
 
-        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip")) ) {
+        if (empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip"))) {
             return $this->createMessageResponse('error', '参数不正确');
         }
-        
+
         $processor = OrderProcessorFactory::create($targetType);
 
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
-        if($orderInfo["totalPrice"] == 0){
+        if ($orderInfo["totalPrice"] == 0) {
             $formData = array();
             $formData['userId'] = $currentUser["id"];
             $formData["targetId"] = $fields["targetId"];
@@ -37,8 +36,8 @@ class OrderController extends BaseController
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
             $coinSetting = $this->setting("coin");
-            $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
-            $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
+            $formData['priceType'] = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
+            $formData['coinRate'] = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
             $formData['payment'] = 'alipay';
             $order = $processor->createOrder($formData, $fields);
@@ -49,8 +48,9 @@ class OrderController extends BaseController
         }
 
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
-        if(isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"],"<="))
+        if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
             $orderInfo["showCoupon"] = true;
+        }
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
 
@@ -59,29 +59,29 @@ class OrderController extends BaseController
     public function createAction(Request $request)
     {
         $fields = $request->request->all();
-        if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
-            $fields["couponCode"]="";
+        if (isset($fields["couponCode"]) && $fields["couponCode"] == "请输入优惠码") {
+            $fields["couponCode"] = "";
         }
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
         }
 
-        if(!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
+        if (!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
             return $this->createMessageResponse('error', '订单中没有购买的内容，不能创建!');
         }
-        
+
         $targetType = $fields["targetType"];
         $targetId = $fields["targetId"];
 
         $priceType = "RMB";
         $coinSetting = $this->setting("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
-        if($coinEnabled && isset($coinSetting["price_type"])) {
+        if ($coinEnabled && isset($coinSetting["price_type"])) {
             $priceType = $coinSetting["price_type"];
         }
         $cashRate = 1;
-        if($coinEnabled && isset($coinSetting["cash_rate"])) {
+        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
             $cashRate = $coinSetting["cash_rate"];
         }
 
@@ -89,15 +89,15 @@ class OrderController extends BaseController
 
         try {
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
-            $amount = (string)((float)$amount);
-            $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
+            $amount = (string) ((float) $amount);
+            $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
 
             //价格比较
-            if($amount != $shouldPayMoney) {
+            if ($amount != $shouldPayMoney) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
-            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes") {
+            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
                 $coupon = $fields["couponCode"];
                 $couponDiscount = $couponResult["decreaseAmount"];
             }
@@ -107,7 +107,7 @@ class OrderController extends BaseController
                 'totalPrice' => $totalPrice,
                 'amount' => $amount,
                 'coinRate' => $cashRate,
-                'coinAmount' => empty($fields["coinPayAmount"])?0:$fields["coinPayAmount"],
+                'coinAmount' => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId' => $user["id"],
                 'payment' => 'alipay',
                 'targetId' => $targetId,
@@ -118,7 +118,7 @@ class OrderController extends BaseController
             $order = $processor->createOrder($orderFileds, $fields);
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'id' => $order['id']
+                'id' => $order['id'],
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
@@ -126,10 +126,10 @@ class OrderController extends BaseController
 
     }
 
-    public function submitPayRequestAction(Request $request , $order, $requestParams)
+    public function submitPayRequestAction(Request $request, $order, $requestParams)
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
-        
+
         return $this->render('TopxiaWebBundle:Order:submit-pay-request.html.twig', array(
             'form' => $paymentRequest->form(),
             'order' => $order,
@@ -141,24 +141,16 @@ class OrderController extends BaseController
         return $this->render('TopxiaWebBundle:Order:resultNotice.html.twig');
     }
 
-    public function couponCheckAction (Request $request, $type, $id)
+    public function couponCheckAction(Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {
             $code = $request->request->get('code');
 
-            if ($type == 'course') {
-                $course = $this->getCourseService()->getCourse($id);
-                $coinSetting = $this->setting("coin");
-                if(isset($coinSetting["coin_enabled"]) && isset($coinSetting["price_type"]) && $coinSetting["coin_enabled"]==1 && $coinSetting["price_type"]=="Coin"){
-                    $price = $course['coinPrice'];
-                } else {
-                    $price = $course['price'];
-                }
+            if ($type != 'course' && $type != 'vip') {
+                throw new \RuntimeException('优惠码不支持的购买项目。');
             }
 
-            if ($type == 'vip') {
-                $price = $request->request->get('amount');
-            }
+            $price = $request->request->get('amount');
 
             $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $price);
             return $this->createJsonResponse($couponInfo);
@@ -167,7 +159,7 @@ class OrderController extends BaseController
 
     protected function doPayReturn(Request $request, $name, $successCallback = null)
     {
-        $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
+        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
 
         $payData = $response->getPayData();
@@ -205,7 +197,7 @@ class OrderController extends BaseController
     }
 
     private function createPaymentRequest($order, $requestParams)
-    {   
+    {
         $options = $this->getPaymentOptions($order['payment']);
         $request = Payment::createRequest($order['payment'], $options);
 
@@ -226,7 +218,6 @@ class OrderController extends BaseController
         return $response->setParams($params);
     }
 
-
     private function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
@@ -239,7 +230,7 @@ class OrderController extends BaseController
             throw new \RuntimeException("支付模块未开启，请先开启。");
         }
 
-        if (empty($settings[$payment. '_enabled'])) {
+        if (empty($settings[$payment . '_enabled'])) {
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
 
@@ -250,7 +241,7 @@ class OrderController extends BaseController
         $options = array(
             'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
+            'type' => $settings["{$payment}_type"],
         );
 
         return $options;
@@ -258,7 +249,7 @@ class OrderController extends BaseController
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');   
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getCashService()
