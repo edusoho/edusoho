@@ -45,9 +45,9 @@ class TaskServiceImpl extends BaseService implements TaskService
 
                 foreach ($tasks as $task) {
 
+                    $this->updateTask($task['id'], array('status' => 'close'));
                     $this->init($task['taskName'], $currentTime);
 
-                    $this->updateTask($task['id'], array('status' => 'close'));
                 }
             }
 
