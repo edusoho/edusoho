@@ -50,7 +50,7 @@
                                     </tr>
                                     <tr>
                                         <td>课时数</td>
-                                        <td><span class="label label-default pull-right">0</span></td>
+                                        <td><span class="label label-default pull-right">{{lessonNum}}</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -61,11 +61,11 @@
                                 <table class="table">
                                     <tr>
                                         <td>学员数</td>
-                                        <td><a class="btn {% if (classroom.studentNum + classroom.auditorNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{classroom.studentNum + classroom.auditorNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i></a></span></td>
+                                        <td><a class="btn {% if (classroom.studentNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{classroom.studentNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i></a></span></td>
                                     </tr>
                                     <tr>
-                                        <td>课时数</td>
-                                        <td><span class="label label-default pull-right">0</span></td>
+                                        <td>旁听生数</td>
+                                        <td><a class="btn {% if (classroom.auditorNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{classroom.auditorNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i></a></td>
                                     </tr>
                                 </table>
                             </div>

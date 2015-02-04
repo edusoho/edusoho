@@ -18,9 +18,19 @@ class ClassroomManageController extends BaseController
 
         $courses=$this->getClassroomService()->getAllCourses($id);
         $coursesCount=count($courses);
+        $lessonNum=0;
 
+        foreach ($courses as $key => $value) {
+        
+            $course=$this->getCourseService()->getCourse($value['courseId']);
+
+            if($course)
+            $lessonNum+=$course['lessonNum'];
+        }
+   
         return $this->render("TopxiaWebBundle:ClassroomManage:index.html.twig",array(
             'classroom'=>$classroom,
+            'lessonNum'=>$lessonNum,
             'coursesCount'=>$coursesCount));
     }
 
