@@ -95,6 +95,7 @@ class OrderController extends BaseController
             $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
 
             //价格比较
+            if($totalPrice != $fields["totalPrice"]) {
                 $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
             }
 
