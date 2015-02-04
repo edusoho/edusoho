@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var AudioChooser = require('../widget/media-chooser/audio-chooser8');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser7');
     var DocumentChooser = require('../widget/media-chooser/document-chooser7');
+    var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
 
@@ -305,6 +306,10 @@ define(function(require, exports, module) {
             element: '#document-chooser',
             choosed: choosedMedia,
         });
+        var flashChooser = new FlashChooser({
+            element: '#flash-chooser',
+            choosed: choosedMedia,
+        });
 
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
@@ -328,20 +333,26 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        flashChooser.on('change', function(item) {
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
+        });
+
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
             videoChooser.destroy();
             audioChooser.destroy();
             pptChooser.destroy();
             documentChooser.destroy();
+            flashChooser.destroy();
         });
 
-        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser]);
+        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);
        
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
 
-            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt").removeClass("lesson-form-document")
+            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt").removeClass("lesson-form-document").removeClass("lesson-form-flash")
             $form.addClass("lesson-form-" + type);
             
             if (type == 'text'){
@@ -353,21 +364,32 @@ define(function(require, exports, module) {
                 audioChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
+                flashChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
+                flashChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'ppt') {
                 pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
                 documentChooser.hide();
+                flashChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'document') {
                 documentChooser.show();
+                pptChooser.hide();
+                videoChooser.hide();
+                audioChooser.hide();
+                flashChooser.hide();
+                clearInterval(Timer);
+            } else if (type == 'flash') {
+                flashChooser.show();
+                documentChooser.hide();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();

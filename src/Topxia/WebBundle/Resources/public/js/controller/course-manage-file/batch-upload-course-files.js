@@ -39,7 +39,9 @@ define(function(require, exports, module) {
 		if ((targetType == 'courselesson' || targetType == 'materiallib') && uploadMode == 'cloud') {
 			if (file.type == 'audio/mpeg') {
 				data.convertor = '';
-			} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
+			} else if (file.type == 'application/x-shockwave-flash') {
+                data.convertor = '';
+            } else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 				data.convertor = 'ppt';
                 data.lazyConvert = 1;
 			}else if ( (file.type == 'application/msword') || (file.type == 'application/pdf') || (file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
