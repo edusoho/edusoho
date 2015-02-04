@@ -24,6 +24,17 @@
 						<div class="help-block">课程原始价格，没有折扣和限时免费时和价格一样</div>
 					</div>
 			</div>
+			{% if setting('coin.coin_enabled') %}
+				<div class="form-group">
+					<div class="col-md-2 control-label">
+						<label for="coinPrice"> {{setting('coin.coin_name')}}价格</label>
+					</div>
+					<div class="col-md-8 controls">
+						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.coinPrice}}">
+						<div class="help-block" style="display:none;"></div>
+					</div>
+				</div>
+			{% endif %}
 			{# <div class="form-group">
 					<div class="col-md-2 control-label">
 						<label for="isFree">限时免费</label>
