@@ -14,13 +14,26 @@ class ClassroomManageController extends BaseController
 {   
     public function indexAction($id)
     {   
+        $this->getClassroomService()->tryManageClassroom($id);
+        $roles=$this->getClassroomRole($id);
+  
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         $courses=$this->getClassroomService()->getAllCourses($id);
         $coursesCount=count($courses);
+        $lessonNum=0;
 
+        foreach ($courses as $key => $value) {
+        
+            $course=$this->getCourseService()->getCourse($value['courseId']);
+
+            if($course)
+            $lessonNum+=$course['lessonNum'];
+        }
+   
         return $this->render("TopxiaWebBundle:ClassroomManage:index.html.twig",array(
             'classroom'=>$classroom,
+            'lessonNum'=>$lessonNum,
             'coursesCount'=>$coursesCount));
     }
 
@@ -253,6 +266,8 @@ class ClassroomManageController extends BaseController
 
     public function teachersAction(Request $request,$id)
     {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         $fields=array();
@@ -294,6 +309,8 @@ class ClassroomManageController extends BaseController
 
     public function setInfoAction(Request $request,$id)
     {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         if($request->getMethod()=="POST"){
@@ -311,6 +328,8 @@ class ClassroomManageController extends BaseController
 
     public function setAction(Request $request,$id)
     {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         if ($this->setting('vip.enabled')) {
@@ -337,6 +356,8 @@ class ClassroomManageController extends BaseController
 
     public function setPictureAction(Request $request,$id)
     {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         if($request->getMethod()=="POST"){
@@ -367,7 +388,9 @@ class ClassroomManageController extends BaseController
     }
 
     public function pictureCropAction(Request $request, $id)
-    {
+    {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
       
         //@todo 文件名的过滤
@@ -409,6 +432,8 @@ class ClassroomManageController extends BaseController
     
     public function coursesAction(Request $request,$id)
     {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $userIds = array();
         $coinPrice=0;
         $price=0;
@@ -453,7 +478,9 @@ class ClassroomManageController extends BaseController
 
 
     public function coursesSelectAction(Request $request,$id)
-    {
+    {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $data=$request->request->all();
 
         $ids=$data['ids'];
@@ -477,7 +504,9 @@ class ClassroomManageController extends BaseController
     }
 
     public function publishAction($id)
-    {
+    {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         $this->getClassroomService()->publishClassroom($id);
@@ -503,7 +532,9 @@ class ClassroomManageController extends BaseController
     }
 
     public function closeAction($id)
-    {
+    {   
+        $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         $this->getClassroomService()->closeClassroom($id);
@@ -518,6 +549,13 @@ class ClassroomManageController extends BaseController
             $choices[$level['id']] = $level['name'];
         }
         return $choices;
+    }
+
+    protected function getClassroomRole($classroomId)
+    {   
+        $user=$this->getCurrentUser();
+
+        return $this->getClassroomService()->getClassroomRole($classroomId,$user['id']);
     }
 
     protected function getClassroomService()

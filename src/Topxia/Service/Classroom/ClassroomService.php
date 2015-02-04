@@ -8,6 +8,8 @@ interface ClassroomService
     public function getClassroom($id);
 
     public function updateClassroom($id,$fields);
+
+    public function tryManageClassroom($id);
     
     public function deleteClassroom($id);
     
@@ -25,6 +27,7 @@ interface ClassroomService
 
     public function changePicture ($id, $filePath, array $options);
 
+
     public function addCourse($classroomId,$courseId);
 
     public function getCourseByClassroomIdAndCourseId($classroomId,$courseId);
@@ -34,6 +37,7 @@ interface ClassroomService
     public function updateCourses($classroomId,array $courseIds);
 
     public function findCoursesByIds(array $ids);
+
 
     public function searchMemberCount($conditions);
 
@@ -50,6 +54,8 @@ interface ClassroomService
     public function becomeStudent($classroomId, $userId);
 
     public function isClassroomTeacher($classroomId, $userId);
+
+    public function getClassroomRole($classroomId,$userId);
 
 
 }

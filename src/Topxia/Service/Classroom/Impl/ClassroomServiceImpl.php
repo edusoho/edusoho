@@ -386,6 +386,70 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $conditions;
     }
 
+    public function tryManageClassroom($id)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            throw $this->createNotFoundException();
+        }
+
+        $role=$this->getClassroomRole($id,$user['id']);
+
+        if(!(in_array('admin', $role) or in_array('headerTeacher', $role)) ){
+            throw $this->createAccessDeniedException('您不是班主任或管理员，无权操作！');
+        }
+
+    }
+
+    public function getClassroomRole($classroomId,$userId)
+    {
+        $roles=array();
+
+        $member=$this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId,$userId);
+
+        if($this->getUserService()->hasAdminRoles($userId)){
+            
+            $roles=array_merge($roles,array('admin'));
+        }
+
+        if($this->isHeaderTeacher($classroomId,$userId)){
+
+            $roles=array_merge($roles,array('headerTeacher'));
+        }
+
+        if($member && $member['role']=="teacher"){
+
+            $roles=array_merge($roles,array('teacher'));
+        }
+
+        if($member && $member['role']=="student"){
+
+            $roles=array_merge($roles,array('student'));
+        }
+
+        if($member && $member['role']=="aduitor"){
+
+            $roles=array_merge($roles,array('aduitor'));
+        }
+
+        return $roles;
+    }
+
+    protected function isHeaderTeacher($classroomId,$userId)
+    {
+        $classroom=$this->getClassroom($classroomId);
+
+        if($classroom['headerTeacherId'] == $userId )
+            return true;
+
+        return false;
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');

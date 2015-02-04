@@ -4,7 +4,13 @@
             <div class="panel-body clearfix">
                 <img class="picture" src="{{ default_path('coursePicture',classroom.smallPicture, '') }}">
                 
-                <h1 class="title"><a href="#">{{classroom.title}}</a></h1>
+                <h1 class="title"><a href="#">{{classroom.title}}</a>
+                    {% if classroom.status == "draft" %}
+                    <span class="label label-warning ">未发布</span>
+                    {% elseif classroom.status == "closed" %}
+                    <span class="label label-danger ">已关闭</span>
+                    {% endif %}
+                </h1>
             </div>
         </div>
     </div>
