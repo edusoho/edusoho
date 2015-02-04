@@ -5,6 +5,7 @@ namespace Topxia\Service\Classroom\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Classroom\ClassroomService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
@@ -237,6 +238,141 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
     }
 
+    public function removeStudent($classroomId, $userId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+            
+        if(empty($classroom)){
+            throw $this->createServiceException("班级不存在，操作失败。");
+        }
+
+        $member = $this->getClassroomMember($classroomId, $userId);
+
+        if (empty($member) or !(in_array($member['role'], array('student','aduitor'))) ) {
+            throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
+        }
+
+        $this->getClassroomMemberDao()->deleteMember($member['id']);
+
+        $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员#{$member['id']}");
+    }
+
+    public function isClassroomStudent($classroomId, $userId)
+    {
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if(!$member){
+            return false;
+        } else {
+            return empty($member) or $member['role'] != 'student' ? false : true;
+        }
+    }
+
+    public function becomeStudent($classroomId, $userId, $info = array())
+    {
+        $classroom = $this->getClassroom($classroomId);
+
+        if (empty($classroom)) {
+            throw $this->createNotFoundException();
+        }
+
+        if($classroom['status'] != 'published') {
+            throw $this->createServiceException('不能加入未发布班级');
+        }
+
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
+        }
+
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if ($member['role'] == 'student') {
+            throw $this->createServiceException("用户(#{$userId})已加入该班级！");
+        }
+
+        $levelChecked = '';
+        if (!empty($info['becomeUseMember'])) {
+            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+            if ($levelChecked != 'ok') {
+                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
+            }
+            $userMember = $this->getVipService()->getMemberByUserId($user['id']);
+        }
+
+        if (!empty($info['orderId'])) {
+            $order = $this->getOrderService()->getOrder($info['orderId']);
+            if (empty($order)) {
+                throw $this->createServiceException("订单(#{$info['orderId']})不存在，加入班级失败！");
+            }
+        } else {
+            $order = null;
+        }
+
+        $fields = array(
+            'classId' => $classroomId,
+            'userId' => $userId,
+            'orderId' => empty($order) ? 0 : $order['id'],
+            'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
+            'role' => 'student',
+            'remark' => empty($order['note']) ? '' : $order['note'],
+            'createdTime' => time()
+        );
+
+        if (empty($fields['remark'])) {
+            $fields['remark'] = empty($info['note']) ? '' : $info['note'];
+        }
+
+        if ($member['role'] == 'aduitor') {
+            $member = $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
+        }else{
+            $member = $this->getClassroomMemberDao()->addMember($fields);
+        }
+
+        $fields = array(
+            'studentNum'=> $this->getClassroomStudentCount($classroomId),
+        );
+
+        $this->getClassroomDao()->updateClassroom($classroomId, $fields);
+        
+        if($classroom['status'] == 'published' ){
+            $this->getStatusService()->publishStatus(array(
+                'type' => 'become_student',
+                'objectType' => 'lassroom',
+                'objectId' => $classroomId,
+                'properties' => array(
+                'course' => $this->simplifyClassroom($classroom),
+                )
+            ));
+        }
+
+        return $member;
+    }
+
+    public function getClassroomStudentCount($classroomId)
+    {
+        return $this->getClassroomMemberDao()->findMemberCountByClassroomIdAndRole($classroomId, 'student');
+    }
+
+    public function isClassroomTeacher($classroomId, $userId)
+    {
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if(!$member){
+            return false;
+        } else {
+            return empty($member) or $member['role'] != 'teacher' ? false : true;
+        }
+    }
+
+    private function simplifyClassroom($classroom)
+    {
+        return array(
+            'id' => $classroom['id'],
+            'title' => $classroom['title'],
+            'picture' => $classroom['middlePicture'],
+            'about' => StringToolkit::plain($classroom['about'], 100),
+            'price' => $classroom['price'],
+        );
+    }
+
     private function _prepareClassroomConditions($conditions)
     {
         $conditions = array_filter($conditions);
@@ -284,5 +420,26 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         return $this->createService('User.UserService');
     }
+
+    private function getOrderService()
+    {
+        return $this->createService('Order.OrderService');
+    }
+
+    private function getVipService()
+    {
+        return $this->createService('Vip:Vip.VipService');
+    }
+
+    private function getNoteDao()
+    {
+        return $this->createDao('Course.CourseNoteDao');
+    }
+
+    private function getStatusService()
+    {
+        return $this->createService('User.StatusService');
+    }
+
 }
 

@@ -30,7 +30,7 @@
       <tbody>
         {% for student in students %}
           {% set user = users[student.userId] %}
-          {% include 'TopxiaWebBundle:ClassroomManage:student.tr.html.twig' %}
+          {% include 'TopxiaWebBundle:ClassroomManage:tr.html.twig' %}
         {% else %}
           <tr class="empty"><td colspan="20">无学员记录</td></tr>
         {% endfor %}

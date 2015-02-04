@@ -24,7 +24,7 @@ class ClassroomManageController extends BaseController
             'coursesCount'=>$coursesCount));
     }
 
-    public function studentsAction(Request $request,$id)
+    public function studentsAction(Request $request,$id,$role='student')
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
@@ -64,10 +64,11 @@ class ClassroomManageController extends BaseController
             'users'=>$users,
             // 'progresses' => $progresses,
             'paginator' => $paginator,
+            'role'=>$role
             ));
     }
 
-    public function aduitorAction(Request $request,$id)
+    public function aduitorAction(Request $request,$id,$role='aduitor')
     {   
         $classroom=$this->getClassroomService()->getClassroom($id);
 
@@ -97,8 +98,8 @@ class ClassroomManageController extends BaseController
             'classroom'=>$classroom,
             'students' => $students,
             'users'=>$users,
-            // 'progresses' => $progresses,
             'paginator' => $paginator,
+            'role'=>$role
             ));
     }
 
@@ -130,10 +131,11 @@ class ClassroomManageController extends BaseController
         $user = $this->getUserService()->getUser($student['userId']);
         // $progress = $this->calculateUserLearnProgress($course, $student);
 
-        return $this->render('TopxiaWebBundle:ClassroomManage:aduitor.tr.html.twig', array(
+        return $this->render('TopxiaWebBundle:ClassroomManage:tr.html.twig', array(
             'classroom' => $classroom,
             'student' => $student,
             'user'=>$user,
+            'role'=>$student["role"],
             // 'progress' => $progress,
             // 'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
         ));
@@ -148,15 +150,105 @@ class ClassroomManageController extends BaseController
         // } else {
         //     $course = $this->getCourseService()->tryAdminCourse($courseId);
         // }
+        $classroom=$this->getClassroomService()->getClassroom($classroomId);
 
-        $this->getCourseService()->removeStudent($courseId, $userId);
+        $this->getClassroomService()->removeStudent($classroomId, $userId);
 
         $this->getNotificationService()->notify($userId, 'student-remove', array(
-            'courseId' => $course['id'], 
-            'courseTitle' => $course['title'],
+            'classId' => $classroom['id'], 
+            'classroomTitle' => $classroom['title'],
         ));
 
         return $this->createJsonResponse(true);
+    }
+
+    public function createAction(Request $request, $id)
+    {
+        // $courseSetting = $this->getSettingService()->get('course', array());
+        
+        // if (!empty($courseSetting['teacher_manage_student'])) {
+        //     $course = $this->getCourseService()->tryManageCourse($id);
+        // } else {
+        //     $course = $this->getCourseService()->tryAdminCourse($id);
+        // }
+
+        $classroom=$this->getClassroomService()->getClassroom($id);
+
+        $currentUser = $this->getCurrentUser();
+
+        if ('POST' == $request->getMethod()) {
+            $data = $request->request->all();
+            $user = $this->getUserService()->getUserByNickname($data['nickname']);
+            if (empty($user)) {
+                throw $this->createNotFoundException("用户{$data['nickname']}不存在");
+            }
+
+            if ($this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id'])) {
+                throw $this->createNotFoundException("用户已经是学员，不能添加！");
+            }
+
+            $order = $this->getOrderService()->createOrder(array(
+                'userId' => $user['id'],
+                'title' => "购买班级《{$classroom['title']}》(管理员添加)",
+                'targetType' => 'classroom',
+                'targetId' => $classroom['id'],
+                'amount' => $data['price'],
+                'payment' => 'none',
+                'snPrefix' => 'CR',
+            ));
+
+            $this->getOrderService()->payOrder(array(
+                'sn' => $order['sn'],
+                'status' => 'success', 
+                'amount' => $order['amount'], 
+                'paidTime' => time(),
+            ));
+
+            $info = array(
+                'orderId' => $order['id'],
+                'note'  => $data['remark'],
+            );
+
+            $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
+
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+
+            $this->getNotificationService()->notify($member['userId'], 'student-create', array(
+                'classId' => $classroom['id'], 
+                'classroomTitle' => $classroom['title'],
+            ));
+
+            $this->getLogService()->info('classroom', 'add_student', "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+
+            return $this->createStudentTrResponse($classroom, $member);
+        }
+
+        return $this->render('TopxiaWebBundle:ClassroomManage:create-modal.html.twig',array(
+            'classroom'=>$classroom,
+        ));
+    }
+
+    public function checkNicknameAction(Request $request, $id)
+    {
+        $nickname = $request->query->get('value');
+        $result = $this->getUserService()->isNicknameAvaliable($nickname);
+        if ($result) {
+            $response = array('success' => false, 'message' => '该用户不存在');
+        } else {
+            $user = $this->getUserService()->getUserByNickname($nickname);
+            $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
+            if($isClassroomStudent){
+                $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
+            } else {
+                $response = array('success' => true, 'message' => '');
+            }
+            
+            $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($id, $user['id']);
+            if($isClassroomTeacher){
+                $response = array('success' => false, 'message' => '该用户是本班级的教师，不能添加');
+            }
+        }
+        return $this->createJsonResponse($response);
     }
 
     public function teachersAction(Request $request,$id)
@@ -441,6 +533,16 @@ class ClassroomManageController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
 }
