@@ -175,7 +175,7 @@ class ClassroomManageController extends BaseController
         // ));
 
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $this->getNotifiactionService()->notify($userId, 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>移出班级<strong>{$classroom['title']}</strong>");
+        $this->getNotificationService()->notify($userId, 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>移出班级<strong>{$classroom['title']}</strong>");
 
         return $this->createJsonResponse(true);
     }
