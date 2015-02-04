@@ -1094,3 +1094,6 @@ admin_setting_sms:
     pattern:  /setting/sms
     defaults: { _controller: TopxiaAdminBundle:Setting:sms }
 
+admin_setting_apply_for_sms:
+    pattern:  /setting/apply-for-sms
+    defaults: { _controller: TopxiaAdminBundle:Setting:applyForSms }
