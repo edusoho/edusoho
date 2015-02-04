@@ -855,7 +855,7 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
     }
 
-    public function applySms($value = '')
+    public function applyForSmsAction(Request $request)
     {
         # code...
     }
