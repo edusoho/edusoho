@@ -860,6 +860,11 @@ class SettingController extends BaseController
         # code...
     }
 
+    public function smsOpenAction(Request $request, $open)
+    {
+        # code...
+    }
+
     public function modifyVersionAction(Request $request)
     {
         $fromVersion = $request->query->get('fromVersion');
