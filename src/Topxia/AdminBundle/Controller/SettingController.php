@@ -848,6 +848,18 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:edu-cloud.html.twig', array());
     }
 
+    public function smsAction(Request $request)
+    {
+        //8888888888
+
+        return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
+    }
+
+    public function applySms($value = '')
+    {
+        # code...
+    }
+
     public function modifyVersionAction(Request $request)
     {
         $fromVersion = $request->query->get('fromVersion');

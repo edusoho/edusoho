@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Client;
 
-class CloudAPI 
+class CloudAPI
 {
     const VERSION = 'v1';
 
@@ -15,9 +15,9 @@ class CloudAPI
 
     private $debug = false;
 
-    public function __construct (array $options)
+    public function __construct(array $options)
     {
-        $this->accessKey = $options['accessKey']; 
+        $this->accessKey = $options['accessKey'];
         $this->secretKey = $options['secretKey'];
 
         if (!empty($options['apiUrl'])) {
@@ -86,7 +86,7 @@ class CloudAPI
         $headers[] = 'Auth-Token: ' . $this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
         curl_close($curl);
@@ -107,7 +107,7 @@ class CloudAPI
             throw new \RuntimeException('Make AuthToken Error.');
         }
 
-        $text = $matches[1] . "\n". json_encode($params) . "\n" . $this->secretKey;
+        $text = $matches[1] . "\n" . json_encode($params) . "\n" . $this->secretKey;
 
         $hash = md5($text);
 

@@ -1090,3 +1090,7 @@ admin_setting_edu_cloud:
     pattern:  /setting/edu-cloud
     defaults: { _controller: TopxiaAdminBundle:Setting:eduCloud }
 
+admin_setting_sms:
+    pattern:  /setting/sms
+    defaults: { _controller: TopxiaAdminBundle:Setting:sms }
+
