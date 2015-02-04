@@ -136,7 +136,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			'originalPrice'=>'',
 			'isFree'=>'none',
 			'discount'=>null,
-			'columns'=>''
+			'columns'=>'',
+			'coinPrice'=>''
 
 		));
 		
