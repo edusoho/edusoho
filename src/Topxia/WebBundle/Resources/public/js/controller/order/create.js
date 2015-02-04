@@ -193,11 +193,12 @@ define(function(require, exports, module) {
 			if(data.code == ""){
 				return;
 			}
-			data.targetType = "course";
+			data.targetType = $(this).data("targetType");
+			// data.targetType = "course";
 			data.targetId = $(this).data("targetId");
 			data.amount = $(this).data("amount");
 			
-			$.post('/course/'+data.targetId+'/coupon/check', data, function(data){
+			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				if(data.useable == "no") {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){

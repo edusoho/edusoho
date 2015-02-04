@@ -131,18 +131,37 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $unitPrice * $orderData['duration'];
         }
 
+        $amount = $totalPrice;
+        //优惠码优惠价格
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        $couponSetting = $this->getSettingService()->get("coupon");
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
+            $couponResult = $this->afterCouponPay(
+                $orderData["couponCode"], 
+                'vip',
+                $targetId, 
+                $totalPrice, 
+                $priceType, 
+                $cashRate
+            );
+
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+                $amount = $couponResult["afterAmount"];
+            }
+        }
+
+        //虚拟币优惠价格
         if(array_key_exists("coinPayAmount", $orderData)) {
             $amount = $this->afterCoinPay(
             	$coinEnabled, 
             	$priceType, 
             	$cashRate, 
-                $totalPrice,
+                $amount,
             	$orderData['coinPayAmount'], 
             	$orderData["payPassword"]
             );
-        } else {
-            $amount = $totalPrice;
-        }
+        } 
+
         if ($priceType == "Coin") {
             $amount = $amount/$cashRate;
         }
@@ -157,16 +176,13 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return array(
         	$amount, 
         	$totalPrice, 
-        	null
+        	empty($couponResult) ? null : $couponResult,
         );
 
 	}
 
 	public function createOrder($orderInfo, $fields) 
-	{
-		unset($orderInfo['coupon']);
-		unset($orderInfo['couponDiscount']);
-		
+	{		
         $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
 
         $unitNames = array('month' => '个月', 'year' => '年');
