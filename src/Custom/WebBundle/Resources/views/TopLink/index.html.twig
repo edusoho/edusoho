@@ -1,10 +1,10 @@
 <div class="toolbar-menu hidden-xs">
   <ul class="clearfix">
-    <li {% if app.user.newNotificationNum > 0 %} class="message"{% endif %}><a href="{{ path('notification') }}">我的通知</a></li>
 
     {% for topLink in topLinks %}
-      <li>|</li><li><a href="{{topLink.url}}">{{topLink.name}}</a></li>
+      <li><a href="{{topLink.url}}">{{topLink.name}}</a></li><li>|</li>
     {% endfor %}
     
+    <li {% if app.user.newNotificationNum > 0 %} class="message"{% endif %}><a href="{{ path('notification') }}">我的通知</a></li>
   </ul>
 </div>
