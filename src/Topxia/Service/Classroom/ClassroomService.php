@@ -27,7 +27,6 @@ interface ClassroomService
 
     public function changePicture ($id, $filePath, array $options);
 
-
     public function addCourse($classroomId,$courseId);
 
     public function getCourseByClassroomIdAndCourseId($classroomId,$courseId);
@@ -37,7 +36,6 @@ interface ClassroomService
     public function updateCourses($classroomId,array $courseIds);
 
     public function findCoursesByIds(array $ids);
-
 
     public function searchMemberCount($conditions);
 

@@ -1591,3 +1591,7 @@ classroom_manage_student_create:
 classroom_manage_student_check_nickname:
     pattern:  /classroom/{id}/manage/nickname_check
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:checkNickname }
+
+classroom_manage_student_export_csv:
+    pattern:  /classroom/{id}/manage/student/export
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:exportCsv }

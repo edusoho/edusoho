@@ -4,7 +4,7 @@
 
 {% set submenu = 'student' %}
 
-{% set script_controller = 'course-manage/students' %}
+{% set script_controller = 'classroom/students' %}
 
 {% block maincontent %}
 
@@ -30,6 +30,7 @@
       <tbody>
         {% for student in students %}
           {% set user = users[student.userId] %}
+          {% set progress = progresses[student.userId] %}
           {% include 'TopxiaWebBundle:ClassroomManage:tr.html.twig' %}
         {% else %}
           <tr class="empty"><td colspan="20">无学员记录</td></tr>
