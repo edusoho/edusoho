@@ -1,0 +1,33 @@
+{% extends 'TopxiaAdminBundle:System:edu-cloud-layout.html.twig' %}
+
+{% block title %}教育云 - {{ parent() }}{% endblock %}
+
+{# {% set menu = '' %} #}
+{# {% set script_controller = '' %} #}
+
+{% block main %}
+  <div class="page-header"><h1>概览</h1></div>
+
+  {# {{ web_macro.flash_messages() }} #}
+<table>
+  <thead>
+    <tr>
+      <td style="width: 40%"></td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="text-align: left;">
+      <td>账户余额： <span>8888</span> 元 </td>
+      <td><a class="btn btn-primary btn-sm" href="" target="_blank"> 去充值 </a></td>
+    </tr>
+  
+    <tr style="text-align: left;">
+      <td>短信状态： <span></span></td>
+      <td><span class="btn btn-primary btn-sm"> 申请开通 </span></td>
+    </tr>
+  <tbody>
+</table>
+
+
+{% endblock %}

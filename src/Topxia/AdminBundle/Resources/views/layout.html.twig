@@ -55,6 +55,7 @@
 
           {% if is_granted('ROLE_SUPER_ADMIN') %}
             <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
+            <li {% if nav == 'edu-cloud' %}class="active"{% endif %}><a href="{{ path('admin_setting_edu_cloud') }}">教育云</a></li>
           {% endif %}
         </ul>
 
