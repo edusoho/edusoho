@@ -26,8 +26,23 @@ class EduCloudController extends BaseController
 
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
+        var_dump($client->getBucket());
+        var_dump($client->getBills($client->getBucket()));
+        exit;
 
-        var_dump($client->getBills($client->getBucket())); exit;
+    // return $this->render('TopxiaAdminBundle:Cloud:bill.html.twig', array(
+    //             'money' => $result['money'],
+    //             'bills' => $result['bills'],
+    //             'token' => $loginToken["token"]
+    //         ));
+
+      // <div class="well well-sm">
+      //   账户余额：<strong class="text-success">{{ money }}元</strong>&nbsp;&nbsp;&nbsp;&nbsp;
+      //   <a href="http://open.edusoho.com/token_login?token={{token}}&goto=order_recharge" target="_blank" class="btn btn-primary">充值</a>
+      //   <a href="http://open.edusoho.com/article/1#recharge" style="float:right;" target="_blank" class="btn btn-link">充值帮助</a>
+      // </div>
+
+
         // $result = $client->getBills($client->getBucket());
 
 
