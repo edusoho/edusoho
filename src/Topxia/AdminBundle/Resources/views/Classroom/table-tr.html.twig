@@ -2,7 +2,7 @@
 <tr id="classroom-table-tr-{{ classroom.id }}">
     <td>
     <strong>  
-      <a target="_blank" href="{{ path('group_show', {id:classroom.id}) }}">{{ classroom.title}}</a>
+      <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
     </strong>
     </td>
 
@@ -25,19 +25,13 @@
    {{ classroom.price }}
      </span>
     &nbsp;
-    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-    
-    <span style="font-size: 13px;color: #666;">
-    原价 {{coinPriceAll[classroom.id]|default(0)}}{{setting('coin.coin_name')}}
-    </span>
 
-    {% else %}
 
     <span style="font-size: 13px;color: #666;">
     原价 {{priceAll[classroom.id|default(0)]}}元
     </span>
 
-    {% endif %}
+
     </td>
 
     <td>

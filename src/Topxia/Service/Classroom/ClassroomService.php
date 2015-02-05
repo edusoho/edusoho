@@ -18,6 +18,8 @@ interface ClassroomService
     public function searchClassroomsCount($condtions);
 
     public function addClassroom($classroom);
+    
+    public function findClassroomByTitle($title);
 
     public function closeClassroom($id);
 

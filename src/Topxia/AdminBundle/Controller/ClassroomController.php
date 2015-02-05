@@ -107,6 +107,14 @@ class ClassroomController extends BaseController
                 return $this->render("TopxiaAdminBundle:Classroom:classroomadd.html.twig");
             }
 
+            $isClassroomExisted = $this->getClassroomService()->findClassroomByTitle($title);
+
+            if (!empty($isClassroomExisted)) {
+                $this->setFlashMessage('danger',"班级名称已被使用，创建班级失败！");
+
+                return $this->render("TopxiaAdminBundle:Classroom:classroomadd.html.twig");
+            }
+
             $classroom = array(
                 'title' => $myClassroom['title'],
             );

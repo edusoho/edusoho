@@ -48,6 +48,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
+    public function findClassroomByTitle($title)
+    {
+         return $this->getClassroomDao()->findClassroomByTitle($title);
+    }
+
     public function updateClassroom($id,$fields)
     {   
         $classroom=$this->getClassroomDao()->updateClassroom($id,$fields);
@@ -253,6 +258,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $this->getClassroomMemberDao()->deleteMember($member['id']);
+
+        $fields = array(
+            'studentNum'=> $this->getClassroomStudentCount($classroomId),
+        );
+
+        $this->getClassroomDao()->updateClassroom($classroomId, $fields);
 
         $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员#{$member['id']}");
     }
