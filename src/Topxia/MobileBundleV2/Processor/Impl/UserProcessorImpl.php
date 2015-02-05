@@ -216,7 +216,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $content = $matches[2];
             $className = $matches[1];
             if ($className == "notification-footer") {
-                return "<br><br><font size ='2' color=#CFCFCF>" . $content . "</font>";
+                return "<br><br><font color=#CFCFCF>" . $content . "</font>";
             }
             
         }, $message);
