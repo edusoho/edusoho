@@ -19,6 +19,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {   
         $classroom=$this->getClassroomDao()->getClassroom($id);
 
+        if($classroom)
         $classroom['teacherIds']=$classroom['teacherIds'] ? json_decode($classroom['teacherIds'],true) : array();
 
         return $classroom;
