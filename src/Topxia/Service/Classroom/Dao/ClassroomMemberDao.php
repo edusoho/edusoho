@@ -13,6 +13,8 @@ interface ClassroomMemberDao
     public function updateMember($id, $member);
 
     public function deleteMember($id);
+    
+    public function deleteMemberByClassroomIdAndUserId($classroomId, $userId);
 
     public function addMember($member);
 
