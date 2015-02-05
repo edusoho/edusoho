@@ -28,7 +28,7 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat', 'Format' ] },
         { items: [ 'Link', 'Unlink' ] },
         { items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-        { items: [ 'TextColor', 'BGColor' ] },
+        { items: [ 'FontSize', 'TextColor', 'BGColor' ] },
         { items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe' ] },
         { items: [ 'PasteText', 'PasteFromWord'] },
         { items: [ 'Find', '-', 'Source', '-', 'Maximize'] },
@@ -36,7 +36,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.resize_enabled = false;
 
-    config.extraPlugins = 'questionblank,smiley,table';
+    config.extraPlugins = 'questionblank,smiley,table,font';
 
 };
 
