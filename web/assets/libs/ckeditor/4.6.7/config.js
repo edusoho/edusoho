@@ -37,6 +37,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.resize_enabled = false;
 
     config.extraPlugins = 'questionblank,smiley,table,font';
+    config.title = false;
 
 };
 
