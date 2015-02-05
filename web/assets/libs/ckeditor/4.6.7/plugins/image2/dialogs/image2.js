@@ -415,7 +415,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 			// Get the natural height of the image.
 			preLoadedHeight = domHeight = natural.height;
 
-			if (image.$.currentSrc == '') {
+			if (preLoadedWidth == 0) {
 				this.selectPage('Upload');
 			}
 		},
