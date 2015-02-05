@@ -107,6 +107,7 @@ define(function(require, exports, module) {
         var editor = CKEDITOR.replace('richeditor-body-field', {
             toolbar: 'Full',
             filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
             height: 300
         });
 

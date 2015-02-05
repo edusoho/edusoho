@@ -65,7 +65,10 @@
 			<div class="form-group">
 				<label for="richeditor-body-field" class="control-label">正文</label>
 				<div class="controls">
-					<textarea class="form-control" id="richeditor-body-field" rows="16" name="body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ article.body|default('') }}</textarea>
+					<textarea class="form-control" id="richeditor-body-field" rows="16" name="body"
+					  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+					  data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+					 >{{ article.body|default('') }}</textarea>
 				</div>
 			</div>
 		

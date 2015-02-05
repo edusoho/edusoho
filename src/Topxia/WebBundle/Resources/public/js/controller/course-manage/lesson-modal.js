@@ -388,6 +388,7 @@ define(function(require, exports, module) {
         editor = CKEDITOR.replace('lesson-content-field', {
             toolbar: 'Full',
             filebrowserImageUploadUrl: $('#lesson-content-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#lesson-content-field').data('flashUploadUrl'),
             height: 300
         });
 

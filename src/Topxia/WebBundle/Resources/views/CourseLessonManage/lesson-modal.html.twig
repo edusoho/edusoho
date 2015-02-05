@@ -66,7 +66,10 @@
       </a>
       {% endif %}
 
-      <textarea class="form-control" id="lesson-content-field" name="content" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ lesson.content|default('') }}</textarea>
+      <textarea class="form-control" id="lesson-content-field" name="content"
+      data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+      data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+      >{{ lesson.content|default('') }}</textarea>
     </div>
   </div>
 
