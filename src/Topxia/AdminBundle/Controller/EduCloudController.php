@@ -23,12 +23,12 @@ class EduCloudController extends BaseController
     public function smsAction(Request $request)
     {
         //8888888888
-
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-        var_dump($client->getBucket());
-        var_dump($client->getBills($client->getBucket()));
-        exit;
+        // depricated
+        // $factory = new CloudClientFactory();
+        // $client = $factory->createClient();
+        // var_dump($client->getBucket());
+        // var_dump($client->getBills($client->getBucket()));
+        // exit;
 
     // return $this->render('TopxiaAdminBundle:Cloud:bill.html.twig', array(
     //             'money' => $result['money'],
@@ -54,7 +54,12 @@ class EduCloudController extends BaseController
         );
 
         $api = $this->createAPIClient();
+
+        // $result = $api->get('/me');
+
         //get bills
+        // $result = $api->get(sprintf('/accounts'));
+        $result = $api->get('/accounts');
 
         //verify accesss key
         // $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
@@ -72,7 +77,7 @@ class EduCloudController extends BaseController
         // $result = $api->post(
         //     sprintf('/sms/%s/sendVerify', $options['accessKey']),
         //     $params=array('mobile'=>'13758129341', 'verify'=>'D35H72', 'category' => '不必须') );
-        // var_dump($result);
+        var_dump($result);
         exit;
         return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
     }
