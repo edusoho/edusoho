@@ -11,4 +11,10 @@ interface ClassroomMemberDao
     public function getMemberByClassroomIdAndUserId($classroomId, $userId);
 
     public function updateMember($id, $member);
+
+    public function deleteMember($id);
+
+    public function addMember($member);
+
+    public function findMemberCountByClassroomIdAndRole($classroomId, $role);
 }

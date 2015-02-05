@@ -1583,3 +1583,15 @@ classroom_manage_student_remove:
     pattern:  /classroom/{classroomId}/manage/student/{userId}/remove
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:remove }
     methods: [POST]
+
+classroom_manage_student_create:
+    pattern:  /classroom/{id}/manage/student/create
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:create }
+
+classroom_manage_student_check_nickname:
+    pattern:  /classroom/{id}/manage/nickname_check
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:checkNickname }
+
+classroom_manage_student_export_csv:
+    pattern:  /classroom/{id}/manage/student/export
+    defaults: { _controller: TopxiaWebBundle:ClassroomManage:exportCsv }

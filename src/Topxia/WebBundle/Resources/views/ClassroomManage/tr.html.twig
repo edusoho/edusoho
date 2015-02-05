@@ -10,7 +10,12 @@
 	</td>
 
 	<td>
-
+		          {% if role == 'student' %}
+			<div class="progress" title="已学{{ progress.number }}课程">
+				<div class="progress-bar" style="width: {{ progress.percent }}">
+				</div>
+			</div>
+		          {% endif %}
 	</td>
 
 	<td>
@@ -31,8 +36,8 @@
 			<ul class="dropdown-menu pull-right">
 				<li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id})}}">备注</a></li>
 
-				{% if app.user.isAdmin() or  app.user.isTeacher() and  isTeacherAuthManageStudent == 1 %}
-					<li><a class="student-remove" href="javascript:;" data-url="{{path('course_manage_student_remove', {courseId:classroom.id, userId:user.id})}}" data-user="{{default.user_name|default('学员')}}">移除</a></li>
+				{% if canManage %}
+					<li><a class="student-remove" href="javascript:;" data-url="{{path('classroom_manage_student_remove', {classroomId:classroom.id, userId:user.id})}}" data-user="{{default.user_name|default('学员')}}">移除</a></li>
 				{% endif %}
 			</ul>
 		</div>

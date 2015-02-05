@@ -4,7 +4,7 @@
 
 {% set submenu = 'aduitor' %}
 
-{% set script_controller = 'course-manage/students' %}
+{% set script_controller = 'classroom/students' %}
 
 {% block maincontent %}
 
@@ -22,14 +22,15 @@
     <table class="table table-striped" id="course-student-list">
       <thead>
         <tr>
-          <th width="50%">旁听生</th>
-          <th width="6%">操作</th>
+          <th width="40%">旁听生</th>
+           <th width="30%"></th>
+          <th width="30%">操作</th>
         </tr>
       </thead>
       <tbody>
          {% for student in students %}
           {% set user = users[student.userId] %}
-          {% include 'TopxiaWebBundle:ClassroomManage:aduitor.tr.html.twig' %}
+          {% include 'TopxiaWebBundle:ClassroomManage:tr.html.twig' %}
         {% else %}
           <tr class="empty"><td colspan="20">无学员记录</td></tr>
         {% endfor %}
