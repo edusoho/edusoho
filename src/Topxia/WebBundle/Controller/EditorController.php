@@ -28,7 +28,8 @@ class EditorController extends BaseController
                     throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
                 }
             } elseif ($token['type'] == 'flash') {
-                if (!empty(FileToolkit::validateFileExtension($file, 'swf'))) {
+                $errors = FileToolkit::validateFileExtension($file, 'swf');
+                if (!empty($errors)) {
                     throw new \RuntimeException("您上传的不是Flash文件，请重新上传。");
                 }
             } else {
