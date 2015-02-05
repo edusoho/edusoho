@@ -1086,22 +1086,22 @@ admin_coin_model_save:
     path:     /coin/model/save
     defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }
 
-admin_setting_edu_cloud:
-    pattern:  /setting/edu-cloud
-    defaults: { _controller: TopxiaAdminBundle:Setting:eduCloud }
+admin_edu_cloud:
+    pattern:  /edu-cloud
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
-admin_setting_sms:
-    pattern:  /setting/sms
-    defaults: { _controller: TopxiaAdminBundle:Setting:sms }
+admin_edu_cloud_sms:
+    pattern:  /edu-cloud/sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
 
-admin_setting_apply_for_sms:
-    pattern:  /setting/apply-for-sms
-    defaults: { _controller: TopxiaAdminBundle:Setting:applyForSms }
+admin_edu_cloud_apply_for_sms:
+    pattern:  /edu-cloud/apply-for-sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
 
-admin_setting_sms_switch:
-    pattern:  /setting/sms/{switch}
-    defaults: { _controller: TopxiaAdminBundle:Setting:smsSwitch }
+admin_edu_cloud_sms_switch:
+    pattern:  /edu-cloud/sms/{switch}
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsSwitch }
 
-admin_setting_sms_usage:
-    pattern:  /setting/sms-usage
-    defaults: { _controller: TopxiaAdminBundle:Setting:smsUsage }
+admin_edu_cloud_sms_usage:
+    pattern:  /edu-cloud/sms-usage
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsUsage }
