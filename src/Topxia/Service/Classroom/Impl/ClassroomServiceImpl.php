@@ -144,11 +144,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->updateClassroom($id,array("status"=>"published"));
     }
 
-    public function findClassroomIds($courseId)
-    {
-        return $this->getClassroomCourseDao()->findClassroomIds($courseId);
-    }
-
     public function closeClassroom($id)
     {    
         $this->updateClassroom($id,array("status"=>"closed"));

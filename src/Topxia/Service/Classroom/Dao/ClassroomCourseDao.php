@@ -14,5 +14,4 @@ interface ClassroomCourseDao
 
     public function findCoursesByIds(array $ids);
 
-    public function findClassroomIds($courseId);
 }

@@ -57,7 +57,7 @@ interface ClassroomService
 
     public function getClassroomRole($classroomId,$userId);
     
-    public function findClassroomIds($courseId);
+
 
 
 }
