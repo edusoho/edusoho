@@ -385,6 +385,16 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 
 			// Create a pre-loader used for determining dimensions of new images.
 			preLoader = createPreLoader();
+
+			this.on('selectPage', function(e) {
+				var btn = e.sender.getButton('ok');
+				if (e.data.page == 'Upload') {
+					$('#' + btn.domId).hide();
+				} else {
+					$('#' + btn.domId).show();
+				}
+			});
+
 		},
 		onShow: function() {
 			// Create a "global" reference to edited widget.
@@ -404,6 +414,10 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 
 			// Get the natural height of the image.
 			preLoadedHeight = domHeight = natural.height;
+
+			if (image.$.currentSrc == '') {
+				this.selectPage('Upload');
+			}
 		},
 		contents: [
 			{
