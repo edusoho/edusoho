@@ -595,25 +595,29 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'startTime',
             'DESC'
         );
-        $resultCourseTotal = $this->controller->getCourseService()->searchLearnCount($courseConditions);
-        $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, $resultCourseTotal);
+        $allCourseTotal = $this->controller->getCourseService()->searchLearnCount($courseConditions);
+        $allLearnCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, $allCourseTotal);
         $courseInfo = null;
-        foreach ($resultCourse as $key => $value) {
-            $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse[$key]['courseId']);
-            if($courseInfo['type'] == 'live')
+        $resultCourse = null;
+        foreach ($allLearnCourse as $key => $value) {
+            $courseInfo = $this->controller->getCourseService()->getCourse($allLearnCourse[$key]['courseId']);
+            if($courseInfo['type'] == 'live'){
                 continue;
-            else
+            }
+            else{
+                $resultCourse = $value;
                 break;
+            }
         }
         if ($courseInfo != null) {
-            //$courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
-            //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
+            $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
+            //$lesson = $this->controller->getCourseService()->getCourseLesson($allLearnCourse['courseId'], $allLearnCourse['lessonId']);
             $data       = array(
                 'content' => $courseInfo['title'],
-                'id' => $courseInfo['id'],
-                'courseId' => $courseInfo['courseId'],
+                'id' => $resultCourse['id'],
+                'courseId' => $resultCourse['courseId'],
                 'lessonId' => $courseInfo['largePicture'],
-                'time' => Date('c', $courseInfo['createdTime'])
+                'time' => Date('c', $resultCourse['startTime'])
             );
         }else{
             $data = null;
