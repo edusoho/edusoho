@@ -441,7 +441,7 @@
 
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-mini mbs file-chooser-tabs">
-        <li class="active"><a class="file-chooser-uploader-tab" href="#flash-chooser-upload-pane" data-toggle="tab">上传flash</a></li>
+        <li class="active"><a class="file-chooser-uploader-tab" href="#flash-chooser-upload-pane" data-toggle="tab">上传Flash</a></li>
         {% if is_plugin_installed('MaterialLib') %}
         <li><a href="#flash-chooser-disk-pane" data-toggle="tab">
               从资料库中选择
@@ -459,7 +459,7 @@
         <div class="tab-pane active" id="flash-chooser-upload-pane">
 
           <div class="file-chooser-uploader">
-            <div class="file-chooser-uploader-label">选择你要上传的flash：</div>
+            <div class="file-chooser-uploader-label">选择你要上传的Flash：</div>
             <div class="file-chooser-uploader-control">
               <span id="flash-choose-uploader-btn" 
                 data-role="uploader-btn"
@@ -483,7 +483,7 @@
             <div class="alert alert-info">
               <ul>
                 <li>支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>flash将上传到<strong>云服务器</strong></li>
+                <li>Flash将上传到<strong>云服务器</strong></li>
               </ul>
             </div>
           </div>
@@ -495,7 +495,7 @@
                 data-base-url="{{ path('uploadfile_browser', {type:'flash'}) }}" 
               data-default-url="{{ path('uploadfile_browser', {type:'flash', source:'upload'}) }}" 
               data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-                data-empty="暂无flash，请先上传。">
+                data-empty="暂无Flash，请先上传。">
               <div class="file-browser-list-container"></div>
             </div>
           </div>
@@ -503,7 +503,7 @@
 
         <div class="tab-pane" id="flash-chooser-course-file">
             <div id="file-browser-flash" data-role="course-file-browser"
-            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'flash'}) }}" data-empty="暂无flash，请先上传。"></div>
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
         </div>
         
       </div>
