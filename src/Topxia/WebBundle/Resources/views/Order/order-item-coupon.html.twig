@@ -13,10 +13,12 @@
     </div>
   </div>
   <div class="coupon-detail" >
-    {% if app.request.query.get('targetType') == 'course' %}
-      <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-type="course" data-target-id="{{courses[0]['id']}}" data-amount="{{courses[0]['price']}}"/>  
-    {% elseif app.request.query.get('targetType') == 'vip' %}
-      <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-type="vip" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="{{ totalPrice }}"/> 
+    {% if app.request.query.get('targetType') in ['course','vip'] %}
+      <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+
+       {{ totalPrice }}  {# {{courses[0]['price']}} #}
+
+      "/> 
     {% endif %}
     <span role="code-notify" class="code-notify"></span>
     <div role="no-use-coupon-code" style="display: block;">没有使用优惠码</div>
