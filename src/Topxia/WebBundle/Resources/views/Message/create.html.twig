@@ -2,10 +2,10 @@
 
 {% block title %}{{ '写私信'|trans }} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/create' %}
-{% 
+{%
   set script_arguments = {
     followingMatchByNickname: path('following_match_bynickname')
-  } 
+  }
 %}
 
 {% block content %}
@@ -62,7 +62,7 @@
         <div class="form-group">
           <div class="col-md-12 controls">
             {{ form_rest(form) }}
-            <input id="message-create-btn" class="btn btn-primary pull-right" type="submit" value="{{ '{{'发送'|trans}}'|trans }}">
+            <input id="message-create-btn" class="btn btn-primary pull-right" type="submit" value="{{'发送'|trans}}">
           </div>
         </div>
 
