@@ -347,7 +347,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	private function _filterCourseFields($fields)
-	{
+	{print_r($fields);
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'subtitle' => '',
@@ -370,6 +370,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'freeStartTime' => 0,
 			'freeEndTime' => 0,
 			'deadlineNotify' => 'none',
+			'useInClassroom'=>'single',
+			'singleBuy'=>0,
 			'daysOfNotifyBeforeDeadline' => 0
 		));
 		
