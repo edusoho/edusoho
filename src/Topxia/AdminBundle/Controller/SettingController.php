@@ -860,7 +860,7 @@ class SettingController extends BaseController
         # code...
     }
 
-    public function smsOpenAction(Request $request, $open)
+    public function smsSwitchAction(Request $request, $open)
     {
         # code...
     }

@@ -1098,9 +1098,9 @@ admin_setting_apply_for_sms:
     pattern:  /setting/apply-for-sms
     defaults: { _controller: TopxiaAdminBundle:Setting:applyForSms }
 
-admin_setting_sms_open:
-    pattern:  /setting/sms/{open}
-    defaults: { _controller: TopxiaAdminBundle:Setting:smsOpen }
+admin_setting_sms_switch:
+    pattern:  /setting/sms/{switch}
+    defaults: { _controller: TopxiaAdminBundle:Setting:smsSwitch }
 
 admin_setting_sms_usage:
     pattern:  /setting/sms-usage
