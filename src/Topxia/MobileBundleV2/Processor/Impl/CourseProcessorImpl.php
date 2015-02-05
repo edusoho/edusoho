@@ -1030,18 +1030,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $tempCourse[$course["id"]] = $course;
         }
         
+        $resultCourse = array();
         foreach ($lessons as $key => $lesson) {
             $courseId = $lesson["courseId"];
             if (isset($tempCourse[$courseId])) {
                 $tempCourse[$courseId]["lastLessonTitle"] = $lesson["title"];
+                if($tempCourse[$courseId]['type'] != "live"){
+                    $resultCourse[$courseId] = $tempCourse[$courseId];
+                }
             }
         }
-        
+        unset($tempCourse);
         $result = array(
             "start" => $start,
             "limit" => $limit,
             "total" => $total,
-            "data" => $this->controller->filterCourses(array_values($tempCourse))
+            "data" => $this->controller->filterCourses(array_values($resultCourse))
         );
         return $result;
     }
