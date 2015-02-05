@@ -69,10 +69,7 @@ class PayCenterController extends BaseController
 
             $goto = $success && !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true):$this->generateUrl('homepage', array(), true);
 
-            return $this->createMessageResponse(
-                "info","订单{$order['sn']}支付成功!","支付成功",5,
-                $goto
-            );
+            return $this->redirect($goto);
         }
 
 		return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', array(
