@@ -138,6 +138,6 @@ interface CourseProcessor
 
 	public function getLiveCourses();
 
-	public function getAllLiveCourse();
+	public function getAllLiveCourses();
 
 }
