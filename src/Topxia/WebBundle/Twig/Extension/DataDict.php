@@ -124,7 +124,7 @@ class DataDict
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
-            'flash' => 'flash',
+            'flash' => 'Flash',
     		'text' => '图文',
             'ppt' => 'PPT',
             'document' => '文档'
