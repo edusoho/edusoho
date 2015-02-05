@@ -851,7 +851,19 @@ class SettingController extends BaseController
     public function smsAction(Request $request)
     {
         //8888888888
+        $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
+        $options = array(
+            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
+            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
+            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
+        );
 
+        $api = $this->createAPIClient();
+        // $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
+        $result = $api->post(
+            sprintf('/sms/%s/apply', $options['accessKey']), 
+            $params=array('name'=>'Eschol8' ) );
+        var_dump($result);exit;
         return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
     }
 
