@@ -431,6 +431,8 @@ class MobileBaseController extends BaseController
             array_multisort($sort, SORT_DESC, $resultLiveCourses);
         }
 
+        unset($liveCourse);
+
         return $resultLiveCourses;
     }
 
