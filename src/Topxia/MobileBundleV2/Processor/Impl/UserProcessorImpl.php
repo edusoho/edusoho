@@ -584,7 +584,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'id' => $liveCourse[0]['id'],
                 'courseId' => $liveCourse[0]['id'],
                 'lessonId' => null,
-                'time' => Date('c', $liveCourse[0]['liveStartTime'])
+                'time' => $liveCourse[0]['liveStartTime']
                 )
         );
         
