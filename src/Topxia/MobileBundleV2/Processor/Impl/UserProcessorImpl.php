@@ -595,17 +595,25 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'startTime',
             'DESC'
         );
-        $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
-        $resultCourse     = reset($resultCourse);
-        if ($resultCourse != false) {
-            $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
+        $resultCourseTotal = $this->controller->getCourseService()->searchLearnCount($courseConditions);
+        $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, $resultCourseTotal);
+        $courseInfo = null;
+        foreach ($resultCourse as $key => $value) {
+            $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse[$key]['courseId']);
+            if($courseInfo['type'] == 'live')
+                continue;
+            else
+                break;
+        }
+        if ($courseInfo != null) {
+            //$courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
             //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
             $data       = array(
                 'content' => $courseInfo['title'],
-                'id' => $resultCourse['id'],
-                'courseId' => $resultCourse['courseId'],
+                'id' => $courseInfo['id'],
+                'courseId' => $courseInfo['courseId'],
                 'lessonId' => $courseInfo['largePicture'],
-                'time' => Date('c', $resultCourse['startTime'])
+                'time' => Date('c', $courseInfo['createdTime'])
             );
         }else{
             $data = null;
