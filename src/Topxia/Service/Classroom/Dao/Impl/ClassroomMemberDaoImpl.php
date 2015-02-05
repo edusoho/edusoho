@@ -64,6 +64,11 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
+
+    public function deleteMemberByClassroomIdAndUserId($classroomId, $userId)
+    {
+        return $this->getConnection()->delete($this->table, array('classId' => $classroomId,'userId' => $userId));
+    }
     
     private function _createSearchQueryBuilder($conditions)
     {   
