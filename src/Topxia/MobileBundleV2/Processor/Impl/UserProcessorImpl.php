@@ -581,10 +581,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'title' => '在学直播',
             'data' => array(
                 'content' => $liveCourse[0]['title'],
-                'id' => $liveCourse['id'],
-                'courseId' => $liveCourse['id'],
+                'id' => $liveCourse[0]['id'],
+                'courseId' => $liveCourse[0]['id'],
                 'lessonId' => null,
-                'time' => Date('c', $liveCourse['liveStartTime'])
+                'time' => Date('c', $liveCourse[0]['liveStartTime'])
                 )
         );
         
