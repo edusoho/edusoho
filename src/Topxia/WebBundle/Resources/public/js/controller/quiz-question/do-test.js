@@ -222,9 +222,10 @@ define(function(require, exports, module) {
                 }
                 //essay
                 if ($(this).data('type') == 'essay') {
-                    if ($(this).val() != "") {
-                        values.push($(this).val());
-                    }     
+                    var $this = $(this);
+                    if ($this.val() != "") {
+                        values.push($this.val());
+                    }
                 }
 
                 changeAnswers[name] = values;
@@ -442,10 +443,10 @@ define(function(require, exports, module) {
                 editor.updateElement();
             });
 
-            editor.on('instanceReady', function(e){
+            editor.on('instanceReady', function(e) {
                 this.focus();
 
-                $textareaBtn.one('click', function(){
+                $textareaBtn.one('click', function() {
                     $shortTextarea.val($(editor.getData()).text());
                     editor.destroy();
                     $longTextarea.hide();
@@ -457,6 +458,14 @@ define(function(require, exports, module) {
             editor.on('key', function(){
                 editor.updateElement();
                 $longTextarea.change();
+            });
+
+            editor.on('insertHtml', function(e) {
+                editor.updateElement();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
+                    $longTextarea.change();
+                }, 1);
             });
 
         });
