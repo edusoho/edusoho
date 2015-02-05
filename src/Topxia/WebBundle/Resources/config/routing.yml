@@ -1410,7 +1410,7 @@ coin_order_pay_return:
     path:     /coin/pay/return/{name}
     defaults: { _controller: TopxiaWebBundle:Coin:payReturn }
 coin_order_pay_notify:
-    path:     /coin/order/notify/{name}
+    path:     /coin/pay/notify/{name}
     defaults: { _controller: TopxiaWebBundle:Coin:payNotify }
 coin_change:
     path:     /coin/change
