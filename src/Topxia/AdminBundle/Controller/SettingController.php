@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\CloudClientFactory;
 
 class SettingController extends BaseController
 {
@@ -851,6 +852,14 @@ class SettingController extends BaseController
     public function smsAction(Request $request)
     {
         //8888888888
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+
+        var_dump($client->getBills($client->getBucket())); exit;
+        // $result = $client->getBills($client->getBucket());
+
+
         $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
         $options = array(
             'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
@@ -859,11 +868,26 @@ class SettingController extends BaseController
         );
 
         $api = $this->createAPIClient();
+        //get bills
+
+        //verify accesss key
         // $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
-        $result = $api->post(
-            sprintf('/sms/%s/apply', $options['accessKey']), 
-            $params=array('name'=>'Eschol8' ) );
-        var_dump($result);exit;
+
+        //apply for sms service
+        // $result = $api->post(
+        //     sprintf('/sms/%s/apply', $options['accessKey']), 
+        //     $params=array('name'=>'Eschol8' ) );
+
+        //look for apply status
+        // $result = $api->post(
+        //     sprintf('/sms/%s/applyResult', $options['accessKey']) );
+
+        //send a sms
+        // $result = $api->post(
+        //     sprintf('/sms/%s/sendVerify', $options['accessKey']),
+        //     $params=array('mobile'=>'13758129341', 'verify'=>'D35H72', 'category' => '不必须') );
+        // var_dump($result);
+        exit;
         return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
     }
 
