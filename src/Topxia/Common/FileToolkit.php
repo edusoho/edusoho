@@ -102,6 +102,9 @@ class FileToolkit
             'application/vnd.ms-powerpoint',
             'application/vnd.openxmlformats-officedocument.presentationml.presentation'))) {
             return 'ppt';
+        } elseif (strpos($mimeType, 'application/x-shockwave-flash') === 0 
+            or strpos($mimeType, 'application/vnd.adobe.flash.movie') === 0) {
+            return 'flash';
         } elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
             or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
         			or strpos($mimeType, 'application/msword') === 0

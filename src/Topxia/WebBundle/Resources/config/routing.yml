@@ -245,10 +245,6 @@ coupon_check:
     pattern:  /{type}/{id}/coupon/check
     defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
 
-order_result_notice:
-    pattern: /order/result/notice
-    defaults: { _controller: TopxiaWebBundle:Order:resultNotice }
-
 course_order_buy:
     pattern:  /course/{id}/order/buy
     defaults: { _controller: TopxiaWebBundle:CourseOrder:buy }
@@ -1488,6 +1484,10 @@ pay_password_check:
 pay_error:
     pattern:  /pay/error
     defaults: { _controller: TopxiaWebBundle:PayCenter:payError }
+
+pay_result_notice:
+    pattern: /pay/result/notice
+    defaults: { _controller: TopxiaWebBundle:PayCenter:resultNotice }
 
 order_show:
     pattern:  /order/show
