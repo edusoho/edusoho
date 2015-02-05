@@ -84,7 +84,7 @@ class CloudAPI
         }
 
         $headers[] = 'Auth-Token: ' . $this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
-
+error_log(serialize($headers),3,'/var/tmp/wangchao');
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
 

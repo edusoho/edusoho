@@ -857,17 +857,17 @@ class SettingController extends BaseController
 
     public function applyForSmsAction(Request $request)
     {
-        # code...
+        //8888888888
     }
 
     public function smsSwitchAction(Request $request, $open)
     {
-        # code...
+        //8888888888
     }
 
     public function smsUsageAction(Request $request)
     {
-        # code...
+        //8888888888
     }
 
     public function modifyVersionAction(Request $request)
