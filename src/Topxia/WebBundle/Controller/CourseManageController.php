@@ -294,6 +294,7 @@ class CourseManageController extends BaseController
             		'isVisible' => empty($data['visible_' . $teacherId]) ? 0 : 1
         		);
             }
+
             $this->getCourseService()->setCourseTeachers($id, $teachers);
             $this->setFlashMessage('success', '教师设置成功！');
 
@@ -315,6 +316,18 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
+
+        $classroomApp = $this->getAppService()->findInstallApp('Classroom');
+        if(!empty($classroomApp)){
+
+            $findClassroomIds =  ArrayToolkit::column($this->getClassroomService()->findClassroomIds($course['id']),'classroomId');
+
+            foreach ($findClassroomIds as $key => $value) 
+            {
+                       $this->getClassroomService()->updateClassroomTeachers($value);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers
@@ -433,4 +446,10 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom.ClassroomService');
+    }
+
 }

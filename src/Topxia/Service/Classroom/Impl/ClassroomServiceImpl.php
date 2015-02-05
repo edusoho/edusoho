@@ -112,17 +112,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         
         $teacherIds=json_encode($ids);
 
-        // var_dump($ids);
-        // exit();
-        if(count($classroom['teacherIds']) > count($ids))
+        $classroomTeacherIds=$classroom['teacherIds'] ? : array();
+        if(count($classroomTeacherIds) > count($ids))
         {
-            $diff=array_diff($classroom['teacherIds'],$ids);
+            $diff=array_diff($classroomTeacherIds,$ids);
             foreach($diff as $key =>$value)
           {
             $this->getClassroomMemberDao()->deleteMemberByClassroomIdAndUserId($id, $value);
           }
         }else{
-            $diff=array_diff($ids,$classroom['teacherIds']);
+            $diff=array_diff($ids,$classroomTeacherIds);
             foreach ($diff as $key => $value) {
                 $fields = array(
                     'classId' => $id,
@@ -130,13 +129,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'role' => 'teacher',
                     'createdTime' => time()
                 );
-                
-                $member = $this->getClassroomMember($id, $value);
-                if ($member) {
-                    $member = $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
-                }else{
-                    $member = $this->getClassroomMemberDao()->addMember($fields);
-                }
+
+                $member = $this->getClassroomMemberDao()->addMember($fields);
+
             }
         }
 
@@ -147,6 +142,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function publishClassroom($id)
     {    
         $this->updateClassroom($id,array("status"=>"published"));
+    }
+
+    public function findClassroomIds($courseId)
+    {
+        return $this->getClassroomCourseDao()->findClassroomIds($courseId);
     }
 
     public function closeClassroom($id)

@@ -13,4 +13,6 @@ interface ClassroomCourseDao
     public function deleteCoursesByClassroomId($classroomId);
 
     public function findCoursesByIds(array $ids);
+
+    public function findClassroomIds($courseId);
 }
