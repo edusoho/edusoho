@@ -8,6 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
      {
         $this->getConnection()->beginTransaction();
         try{
+            $this->updateScheme();
             $this->updateDefaultSetting();
 
             $this->getConnection()->commit();
@@ -17,13 +18,16 @@ use Symfony\Component\Filesystem\Filesystem;
         }
      }
 
-     private function updateDefaultSetting()
+     private function updateScheme()
      {
-
         $connection = $this->getConnection();
         $connection->exec("ALTER TABLE `orders` CHANGE `totalPrice` `totalPrice` FLOAT(10,2) NOT NULL DEFAULT '0';");
         $connection->exec("ALTER TABLE `orders` CHANGE `coinAmount` `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0';");
-        
+     }
+
+     private function updateDefaultSetting()
+     {
+
         $settingService = $this->createService('System.SettingService');
 
         $defaultSetting = array();
