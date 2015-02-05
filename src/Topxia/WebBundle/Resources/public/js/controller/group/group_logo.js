@@ -1,7 +1,6 @@
  define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
         if($('#group-avatar-form').length>0){

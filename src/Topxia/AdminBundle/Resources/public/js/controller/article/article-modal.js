@@ -1,8 +1,9 @@
 define(function(require, exports, module) {
 
+    require('ckeditor');
+
     var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
-    var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
 
     require('jquery.select2-css');
@@ -86,11 +87,12 @@ define(function(require, exports, module) {
 
     function _initEditorFields($form, validator) {
 
-        var editor = EditorFactory.create('#richeditor-body-field', 'full', {
-            height: '500px',
-            extraFileUploadParams: {
-                group: 'default'
-            }
+        // group: 'default'
+        CKEDITOR.replace('richeditor-body-field', {
+            toolbar: 'Full',
+            filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
+            height: 300
         });
         
         $("#article_thumb_remove").on('click', function(){
@@ -106,12 +108,6 @@ define(function(require, exports, module) {
                 Notify.danger('删除失败！');
             });
         });
-
-        validator.on('formValidate', function(element, event) {
-            editor.sync();
-        });
-
-        return editor;
     }
 
     function _initValidator($form, $modal) {

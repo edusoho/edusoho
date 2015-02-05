@@ -144,6 +144,16 @@ define(function(require, exports, module) {
 			validator.removeItem('[name="payPassword"]');
 		}
 
+		function showPayPassword(){
+			$(".pay-password div[role='password-input']").show();
+			validator.addItem({
+				element: '[name="payPassword"]',
+				required: true,
+				display: '支付密码',
+    			rule: 'remote'
+			});
+		}
+
 		$('[role="coinNum"]').blur(function(e){
 			var coinNum = $(this).val();
 			coinNum = Math.round(coinNum*100)/100;
@@ -152,13 +162,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				$(".pay-password div[role='password-input']").show();
-				validator.addItem({
-					element: '[name="payPassword"]',
-					required: true,
-					display: '支付密码',
-        			rule: 'remote'
-				});
+				showPayPassword();
 			}
 			conculatePrice();
 		});
@@ -189,11 +193,12 @@ define(function(require, exports, module) {
 			if(data.code == ""){
 				return;
 			}
-			data.targetType = "course";
+			data.targetType = $(this).data("targetType");
+			// data.targetType = "course";
 			data.targetId = $(this).data("targetId");
 			data.amount = $(this).data("amount");
 			
-			$.post('/course/'+data.targetId+'/coupon/check', data, function(data){
+			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				if(data.useable == "no") {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
@@ -211,13 +216,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				$(".pay-password div[role='password-input']").show();
-				validator.addItem({
-					element: '[name="payPassword"]',
-					required: true,
-					display: '支付密码',
-        			rule: 'remote'
-				});
+				showPayPassword();
 			}
 			if(cashRateElement.data("priceType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);

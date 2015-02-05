@@ -550,6 +550,16 @@ define(function(require, exports, module) {
 
                         }, 'json');
                     }
+
+                    else if (lesson.type == 'flash' ) {
+                        
+                            $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+                            swfobject.embedSWF(lesson.mediaUri, 
+                                'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                                {wmode:'opaque',allowFullScreen:'true'});
+                            $("#lesson-swf-content").show();
+
+                    }
                 }
 
                 if (lesson.type == 'testpaper') {

@@ -13,7 +13,7 @@
 </div>
 <div class="question-eassy-form-control">
 	 {% for rightAnswer in question.answer %}
-		   <div class="question-eassy-rightanswer">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+		   <div class="question-eassy-rightanswer">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</strong>
 	{% endfor %}
 
 </div>

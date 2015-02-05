@@ -8,6 +8,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\WebBundle\Util\UploadToken;
 
 class WebExtension extends \Twig_Extension
 {
@@ -70,6 +71,7 @@ class WebExtension extends \Twig_Extension
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
+            'upload_token' => new \Twig_Function_Method($this, 'makeUpoadToken') ,
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
@@ -256,6 +258,12 @@ class WebExtension extends \Twig_Extension
             return $default;
         }
         return $this->container->getParameter($name);
+    }
+
+    public function makeUpoadToken($group, $type = 'image' , $duration = 18000)
+    {
+        $maker = new UploadToken();
+        return $maker->make($group, $type, $duration);
     }
 
     public function getConvertIP($IP)
