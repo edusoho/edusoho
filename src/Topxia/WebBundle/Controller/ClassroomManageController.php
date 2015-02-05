@@ -263,7 +263,7 @@ class ClassroomManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportCsvAction(Request $request, $id)
+    public function exportCsvAction(Request $request, $id,$role)
     {   
         $this->getClassroomService()->tryManageClassroom($id);
         $gender=array('female'=>'女','male'=>'男','secret'=>'秘密');
@@ -271,7 +271,12 @@ class ClassroomManageController extends BaseController
         $classroom=$this->getClassroomService()->getClassroom($id);
 
         $userinfoFields=array('truename','job','mobile','qq','company','gender','idcard','weixin');
-        $classroomMembers = $this->getClassroomService()->searchMembers( array('classId' => $classroom['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
+
+        if ($role == 'student') {
+            $classroomMembers = $this->getClassroomService()->searchMembers( array('classId' => $classroom['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
+        }else{
+            $classroomMembers = $this->getClassroomService()->searchMembers( array('classId' => $classroom['id'],'role' => 'aduitor'),array('createdTime', 'DESC'), 0, 1000);
+        }
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
