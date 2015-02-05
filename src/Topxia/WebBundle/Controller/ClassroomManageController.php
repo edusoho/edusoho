@@ -369,6 +369,7 @@ class ClassroomManageController extends BaseController
             if(isset($data['headerTeacherId']))
             {
                 $fields['headerTeacherId']=$data['headerTeacherId'];
+
             }
 
             if($fields)

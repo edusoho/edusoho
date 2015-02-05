@@ -336,7 +336,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if($classroom['status'] == 'published' ){
             $this->getStatusService()->publishStatus(array(
                 'type' => 'become_student',
-                'objectType' => 'lassroom',
+                'objectType' => 'classroom',
                 'objectId' => $classroomId,
                 'properties' => array(
                 'course' => $this->simplifyClassroom($classroom),

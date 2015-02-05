@@ -8,12 +8,12 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150204152700 extends AbstractMigration
+class Version20150205100847 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `course` ADD `useInClassroom` ENUM('single','more') NOT NULL DEFAULT 'single' COMMENT '课程能否用于多个班级' AFTER `vipLevelId`, ADD `singleBuy` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '加入班级后课程能否单独购买' AFTER `useInClassroom`;");
+        $this->addSql("ALTER TABLE `classroom_member` CHANGE `role` `role` ENUM('aduitor','student','teacher','headerTeacher') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'aduitor' COMMENT '角色';");
     }
 
     public function down(Schema $schema)
