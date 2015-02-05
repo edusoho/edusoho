@@ -113,6 +113,12 @@ class MobileBaseController extends BaseController
         return $this->getUser();
     }
 
+    public function autoLogin($user)
+    {
+        $user = $this->getUserService()->getUser($user->id);
+        $this->authenticateUser($user);
+    }
+
     public function createToken($user, $request)
     {
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
@@ -346,8 +352,15 @@ class MobileBaseController extends BaseController
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
+        // $emptyLessonCourseId = array();
+        // $tempCoursesIndex = 0;
 
         foreach($tempLessons as $key => $tempLesson){
+            if(!sizeof($tempLesson)){
+                // $emptyLessonCourseId[$key] = $tempCoursesIndex;
+                // $tempCoursesIndex++;
+                continue;
+            }
             if($nowTime <= $tempLesson[0]["endTime"]){
                 $tempLiveLesson = $tempLesson[0];
             }
@@ -366,6 +379,7 @@ class MobileBaseController extends BaseController
                 $liveLessons[$key] = $tempLiveLesson;
                 unset($tempLiveLesson);
             }
+            // $tempCoursesIndex++;
         }
 
         foreach($tempCourses as $key => $value){
@@ -375,8 +389,16 @@ class MobileBaseController extends BaseController
                 $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
             }else{
                 $tempCourses[$key]["liveLessonTitle"] = "";
+                $tempCourses[$key]["liveStartTime"] = "";
+                $tempCourses[$key]["liveEndTime"] = "";
             }
         }
+
+        // foreach($tempCourses as $key => $value){
+        //     if(isset($emptyLessonCourseId[$key])){
+        //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
+        //     }
+        // }
 
         return $tempCourses;
     }
