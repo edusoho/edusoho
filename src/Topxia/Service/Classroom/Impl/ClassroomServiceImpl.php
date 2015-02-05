@@ -82,6 +82,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom=$this->getClassroom($id);
         
         $teacherIds=$classroom['teacherIds'] ? : array();
+
         $ids=array();
         foreach ($teacherIds as $key => $value) {
             
@@ -109,6 +110,25 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
         
         $teacherIds=json_encode($ids);
+
+        // var_dump($ids);
+        // exit();
+
+        // foreach ($ids as $key => $value) {
+        //     $fields = array(
+        //         'classId' => $id,
+        //         'userId' => $value,
+        //         'role' => 'teacher',
+        //         'createdTime' => time()
+        //     );
+            
+        //     $member = $this->getClassroomMember($id, $value);
+        //     if ($member) {
+        //         $member = $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
+        //     }else{
+        //         $member = $this->getClassroomMemberDao()->addMember($fields);
+        //     }
+        // }
 
         $this->updateClassroom($id,array('teacherIds'=>$teacherIds));
         
