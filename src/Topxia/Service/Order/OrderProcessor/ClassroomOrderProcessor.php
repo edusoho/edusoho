@@ -25,6 +25,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $coinSetting = $this->getSettingService()->get("coin");
 
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+        $users = array();
+        foreach ($courses as $key => $course) {
+            $users = array_merge($this->getUserService()->findUsersByIds($course['teacherIds']), $users);
+        }
+        $headerTeacher = $this->getUserService()->getUser($classroom["headerTeacherId"]);
+
         if(!isset($coinSetting["coin_enabled"]) 
             || !$coinSetting["coin_enabled"]) {
         	$totalPrice = $classroom["price"];
@@ -34,6 +41,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             	'targetType' => "classroom",
 
 				'classroom' => empty($classroom) ? null : $classroom,
+                'courses' => $courses,
+                'users' => $users,
+                'headerTeacher' => $headerTeacher
         	);
         }
 
@@ -81,6 +91,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         return array(
             'classroom' => empty($classroom) ? null : $classroom,
+            'courses' => $courses,
+            'users' => $users,
+            'headerTeacher' => $headerTeacher,
             
             'totalPrice' => $totalPrice,
             'targetId' => $targetId,
