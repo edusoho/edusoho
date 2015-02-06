@@ -98,7 +98,7 @@
       <label for="mobile_about">网校简介</label>
     </div>
     <div class="controls col-md-8">
-      <textarea class="form-control" id="mobile_about" rows="10" name="about">{{ mobile.about }}</textarea>
+      <textarea class="form-control" id="mobile_about" rows="10" name="about" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ mobile.about }}</textarea>
       <div class="help-block">此简介将显示在移动客户端的"关于网校"</div>
     </div>
   </div>

@@ -138,7 +138,7 @@ class ArticleController extends BaseController
         $defaultSetting = $this->getSettingService()->get('default', array());
         $site = $this->getSettingService()->get('site', array());
 
-        if (empty($defaultSetting)){
+        if (empty($defaultSetting) || !isset($defaultSetting['articleShareContent'])){
             $articleShareContent = '';
         } else {
             $articleShareContent = $defaultSetting['articleShareContent'];

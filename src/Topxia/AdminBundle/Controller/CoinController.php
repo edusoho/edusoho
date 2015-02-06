@@ -96,6 +96,7 @@ class CoinController extends BaseController
             if($set['cash_model']=="none"){
 
                 $coinSettings['cash_model']="none";
+                $coinSettings['price_type']="RMB";
                 $coinSettings['cash_rate']=$set['cash_rate'];
                 $coinSettings['coin_enabled']=0;
 

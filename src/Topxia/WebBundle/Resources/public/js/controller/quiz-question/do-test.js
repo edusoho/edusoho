@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
 
-    var EditorFactory = require('common/kindeditor-factory');
+    require('ckeditor');
 
     var AudioPlayer = require('./audioplayer');
     var playedQuestions = [];
@@ -222,9 +222,10 @@ define(function(require, exports, module) {
                 }
                 //essay
                 if ($(this).data('type') == 'essay') {
-                    if ($(this).val() != "") {
-                        values.push($(this).val());
-                    }     
+                    var $this = $(this);
+                    if ($this.val() != "") {
+                        values.push($this.val());
+                    }
                 }
 
                 changeAnswers[name] = values;
@@ -433,32 +434,40 @@ define(function(require, exports, module) {
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
-            var editor = EditorFactory.create($longTextarea, 'simple', {
+            var editor = CKEDITOR.replace($longTextarea.attr('id'), {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
+            });
 
-                extraFileUploadParams:{group:'default'},
+            editor.on('blur', function(e) {
+                editor.updateElement();
+            });
 
-                afterBlur: function() {
-                    editor.sync();
-                },
+            editor.on('instanceReady', function(e) {
+                this.focus();
 
-                afterCreate: function() {
-                    this.focus();
+                $textareaBtn.one('click', function() {
+                    $shortTextarea.val($(editor.getData()).text());
+                    editor.destroy();
+                    $longTextarea.hide();
+                    $textareaBtn.hide();
+                    $shortTextarea.show();
+                });
+            });
 
-                    $textareaBtn.click(function(){
-                        editor.remove();
-                        $shortTextarea.val(editor.text());
-                        $longTextarea.hide();
-                        $textareaBtn.hide();
-                        $shortTextarea.show();
-                    });
+            editor.on('key', function(){
+                editor.updateElement();
+                $longTextarea.change();
+            });
 
-                },
-
-                afterChange: function(){
-                    this.sync();
+            editor.on('insertHtml', function(e) {
+                editor.updateElement();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
                     $longTextarea.change();
-                }
-            });        
+                }, 1);
+            });
+
         });
 
 
@@ -472,31 +481,31 @@ define(function(require, exports, module) {
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-long').show();
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-btn').show();
 
-            var editor = EditorFactory.create($longTextarea, 'simple', {
 
-                extraFileUploadParams:{group:'default'},
+            var editor = CKEDITOR.replace($longTextarea.attr('id'), {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
+            });
 
+            editor.on('blur', function(e) {
+                editor.updateElement();
+            });
 
-                afterCreate: function() {
-                    this.focus();
-                    $textareaBtn.click(function(){
-                        editor.remove();
-                        $shortTextarea.val(editor.text());
-                        $longTextarea.hide();
-                        $textareaBtn.hide();
-                        $shortTextarea.show();
-                    });
-                },
+            editor.on('instanceReady', function(e){
+                this.focus();
 
-                afterBlur: function() {
-                    this.sync();
-                },
+                $textareaBtn.one('click', function(){
+                    $shortTextarea.val($(editor.getData()).text());
+                    editor.destroy();
+                    $longTextarea.hide();
+                    $textareaBtn.hide();
+                    $shortTextarea.show();
+                });
+            });
 
-
-                afterChange: function(){
-                    this.sync();
-                    $longTextarea.change();
-                }
+            editor.on('key', function(){
+                editor.updateElement();
+                $longTextarea.change();
             });
 
         });
