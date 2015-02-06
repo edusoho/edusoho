@@ -10,4 +10,6 @@ interface EduCloudService
     public function lookForStatus();
 
     public function sendSms($to, $captcha, $category = 'captcha');
+
+    public function verifyKeys();
 }

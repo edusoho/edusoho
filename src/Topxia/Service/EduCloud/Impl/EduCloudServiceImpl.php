@@ -78,4 +78,14 @@ class EduCloudServiceImpl extends BaseService
         );
         return $result;
 	}
+
+    public function verifyKeys()
+    {
+        $api = $this->getCloudApi();
+        $options = $this->getCloudOptions();
+        $result = $api->post(
+            sprintf('/keys/%s/verification', $options['accessKey'])
+        );
+        return $result;
+    }	
 }

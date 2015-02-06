@@ -1,0 +1,59 @@
+{% extends 'TopxiaAdminBundle:EduCloud:edu-cloud-layout.html.twig' %}
+
+{% block title %}教育云 - {{ parent() }}{% endblock %}
+
+{# {% set menu = '' %} #}
+{# {% set script_controller = '' %} #}
+
+{% block main %}
+  <div class="page-header"><h1>概览</h1></div>
+
+<div class="col-md-offset-2">
+  <table>
+    <thead>
+      <tr>
+        <td style="width: 30%"></td>
+        <td style="width: 35%"></td>
+        <td style="width: 25%"></td>
+      </tr>
+    </thead>
+    <tbody>
+      {% if hasAccount %}
+        <tr style="text-align: left; padding: 10px 0px;">
+          <td>账户余额<span class="pull-right">:</span></td> 
+          <td>&nbsp;&nbsp;&nbsp;<span>{{money}}</span> 元 </td>
+          <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/token_login?token={{token}}&goto=order_recharge" target="_blank"> 去充值 </a></td>
+        </tr>
+      
+        <tr style="text-align: left; padding: 10px 0px;">
+          <td>云短信状态<span class="pull-right">:</span></td>
+          <td>&nbsp;&nbsp;&nbsp;
+            <span>
+            {% if smsStatus.status == 'auditing' %}
+              审核中
+            {% endif %}
+            {% if smsStatus.status == 'failed' %}
+              未通过
+            {% endif %}
+            {% if smsStatus.status == 'passed' %}
+              通过
+            {% endif %}
+            {% if smsStatus.status == 'error' %}
+              {{ smsStatus.message }}
+            {% endif %}
+            </span>
+          </td>
+
+          <td>
+            <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
+          </td>
+        </tr>
+      {% else %}
+        <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/register" target="_blank"> 没有帐号? 去注册 </a></td>
+      {% endif %}
+
+    <tbody>
+  </table>
+</div>
+
+{% endblock %}

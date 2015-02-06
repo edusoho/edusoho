@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %} 申请开通云短信 {% endblock %}
+
+{% block body %}
+	<form id="apply-sms-form" class="form-horizontal" data-url="{{ path('admin_edu_cloud_apply_for_sms') }}">
+		<fieldset>
+			<div class="row form-group">
+		      <div class="col-md-2 control-label">
+		        <label>提醒</label>
+		      </div>
+		      <div class="col-md-7 controls" style="padding-top: 5px;">
+		      	<span>审核需24小时，期间短信验证功能仍可以正常使用</span>
+		      </div>
+		    </div>
+
+			<div class="row form-group">
+		      <div class="col-md-2 control-label">
+		        <label for="name">网校名称</label>
+		      </div>
+		      <div class="col-md-7 controls">
+		        <input type="text" name="name" class="form-control" id="name">
+		      </div>
+		    </div>
+		</fieldset>
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+{% endblock %}
+
+{% block footer %}
+	<button class="btn btn-primary pull-right" id="js-submit">提交</button>
+	<button class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
+	<script>app.load('educloud/apply-sms')</script>
+{% endblock %}
