@@ -50,8 +50,6 @@ interface ClassroomService
 
     public function removeStudent($classroomId, $userId);
 
-    public function isClassroomStudent($classroomId, $userId);
-
     public function becomeStudent($classroomId, $userId);
 
     public function isClassroomTeacher($classroomId, $userId);
