@@ -17,7 +17,7 @@
       <div class="form-group ">
         <input type="text" class="form-control" name="key" value="" placeholder="课程名称">
       </div>
-      <button type="button" class="btn btn-primary"  id="search"  data-url="{{path('course_search')}}">搜索</button>
+      <button type="button" class="btn btn-primary"  id="search"  data-url="{{path('course_search',{type:type,classroomId:classroomId})}}">搜索</button>
 </form>
 
 <div class="row mtl">

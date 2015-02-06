@@ -347,7 +347,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	private function _filterCourseFields($fields)
-	{
+	{print_r($fields);
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'subtitle' => '',
@@ -370,6 +370,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'freeStartTime' => 0,
 			'freeEndTime' => 0,
 			'deadlineNotify' => 'none',
+			'useInClassroom'=>'single',
+			'singleBuy'=>0,
 			'daysOfNotifyBeforeDeadline' => 0
 		));
 		
@@ -400,7 +402,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(480, 270));
+        $largeImage->resize(new Box(390, 260));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
         $largeFileRecord = $this->getFileService()->uploadFile('course', new File($largeFilePath));
@@ -615,6 +617,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function analysisCourseDataByTime($startTime,$endTime)
 	{
     	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
+	}
+
+	public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId)
+	{
+    	return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 	}
 
 	public function waveLearningTime($lessonId,$userId,$time)

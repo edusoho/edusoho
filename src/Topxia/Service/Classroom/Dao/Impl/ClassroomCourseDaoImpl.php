@@ -57,6 +57,14 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         return $builder->execute()->fetchAll() ? : array();  
     }
 
+    public function findCoursesByIds(array $ids) 
+    {
+        if(empty($ids)){ return array(); }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE classroomId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids) ? : array();
+    }
+
     private function _createSearchBuilder($conditions)
     {
 

@@ -783,14 +783,30 @@ class CourseController extends BaseController
 	public function selectAction(Request $request)
 	{	
 		$url="";
+		$type="";
+		$classroomId=0;
+
 		if($request->query->get('url')){
 
 			$url=$request->query->get('url');
 		}
 
+		if($request->query->get('type')){
+
+			$type=$request->query->get('type');
+		}
+
+		if($request->query->get('classroomId')){
+
+			$classroomId=$request->query->get('classroomId');
+		}
+
+
 		$conditions = array(
 			'status' => 'published'
 		);
+
+		$conditions =$this->filterCondition($conditions,$request);
 
 		$paginator = new Paginator(
 			$this->get('request'),
@@ -816,8 +832,44 @@ class CourseController extends BaseController
 			'users'=>$users,
 			'url'=>$url,
 			'courses'=>$courses,
+			'type'=>$type,
+			'classroomId'=>$classroomId,
 			'paginator'=>$paginator
 		));
+	}
+
+	private function filterCondition($conditions,$request)
+	{	
+		$courseIds=array();
+		if($request->query->get('type') !="classroom")
+			return $conditions;
+
+		$classroomId=$request->query->get('classroomId');
+
+	 	$courses=$this->getClassroomService()->findCourses();
+
+        foreach ($courses as $key => $value) {
+            
+	            $courseIds[]=$value['courseId'];	
+ 
+        }
+
+        $courseIds=array_unique($courseIds);
+
+        foreach ($courseIds as $key => $value) {
+        	
+        	$course=$this->getCourseService()->getCourse($value);
+
+        	if($course && $course['useInClassroom'] =="more" && !$this->getClassroomService()->getCourseByClassroomIdAndCourseId($classroomId,$value)){
+
+        		unset($courseIds[$key]);
+        	}
+
+        }
+
+        $conditions=array_merge($conditions,array('courseIds'=>$courseIds));
+
+        return $conditions;
 	}
 
     public function searchAction(Request $request)
@@ -826,6 +878,8 @@ class CourseController extends BaseController
         
         $conditions = array( "title"=>$key );
         $conditions['status'] = 'published';
+
+        $conditions =$this->filterCondition($conditions,$request);
 
         $paginator = new Paginator(
 			$this->get('request'),
@@ -949,5 +1003,10 @@ class CourseController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }

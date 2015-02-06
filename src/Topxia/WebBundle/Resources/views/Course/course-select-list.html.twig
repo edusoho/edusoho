@@ -1,5 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <ul class="course-wide-list">
+  {% if courses %}
   {% for course in courses %}
   <li class="course-item clearfix" data-id="{{course.id}}">
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
@@ -104,5 +105,8 @@
     </div>
   </li>
   {% endfor %}
+  {% else %}
+  <div class="empty">找不到相关课程！</div>
+  {% endif %}
 </ul>
 {{ web_macro.paginator(paginator) }}
