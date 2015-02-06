@@ -26,7 +26,10 @@ class EduCloudController extends BaseController
     public function smsAction(Request $request)
     {
         //8888888888
-        $result = $this->lookForStatus();
+        // $result = $this->lookForStatus();
+        // $result = $this->sendSms('13758129341', '3572');
+        // $result = $this->applyForSms();
+        $result = $this->getAccounts();
         var_dump($result);
         exit;
         return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
@@ -76,42 +79,26 @@ class EduCloudController extends BaseController
 
     private function getAccounts()
     {
-        $api = $this->getCloudApi();
-        $options = $this->getCloudOptions();
-        return $api->get('/accounts');
+        return $this->getEduCloudService()->getAccounts();
     }
 
     private function applyForSms($name = 'smsHead')
     {
-        $api = $this->getCloudApi();
-        $options = $this->getCloudOptions();
-        
-        $result = $api->post(
-            sprintf('/sms/%s/apply', $options['accessKey']), 
-            $params = array('name' => $name)
-        );
-
-        return $result;
+        return $this->getEduCloudService()->applyForSms($name);
     }    
 
     private function lookForStatus()
     {
-        $api = $this->getCloudApi();
-        $options = $this->getCloudOptions();
-        $result = $api->post(
-            sprintf('/sms/%s/applyResult', $options['accessKey'])
-        );
-        return $result;
+        return $this->getEduCloudService()->lookForStatus();
     }
 
     private function sendSms($to, $captcha, $category = 'captcha')
     {
-        $api = $this->getCloudApi();
-        $options = $this->getCloudOptions();
-        $result = $api->post(
-            sprintf('/sms/%s/sendVerify', $options['accessKey']),
-            $params=array('mobile' => $to, 'verify'=> $captcha, 'category' => $category)
-        );
-        return $result;
-    }    
+        return $this->getEduCloudService()->sendSms($to, $captcha, $category);
+    }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');   
+    }
 }
