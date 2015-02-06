@@ -576,6 +576,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if(sizeof($liveCourse) == 0){
             $liveCourse = reset($liveCourse);
         }
+        var_dump($liveCourse);
+        exit();
         $result[$index++] = array(
             'title' => '在学直播',
             'data' => array(
