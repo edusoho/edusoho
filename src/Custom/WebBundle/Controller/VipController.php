@@ -18,6 +18,7 @@ class VipController extends BaseController
         $deadlineAlertCookie = $request->cookies->get('deadlineAlert');
 
     	$conditions = array();
+        $conditions = array('status' => 'published');
         $members = $this->getVipService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 9);
         $memberIds = ArrayToolkit::column($members,'userId');
         $latestMembers = $this->getUserService()->findUsersByIds($memberIds);
