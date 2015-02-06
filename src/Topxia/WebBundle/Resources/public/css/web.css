@@ -1946,13 +1946,15 @@ body {
 .lesson-form .for-audio-type,
 .lesson-form .for-text-type,
 .lesson-form .for-ppt-type, 
-.lesson-form .for-document-type, 
+.lesson-form .for-document-type,
+.lesson-form .for-flash-type,
 .lesson-form .for-none-type {
 	display: none;
 }
 
 .lesson-form-video .for-video-type,
 .lesson-form-document .for-document-type, 
+.lesson-form-flash .for-flash-type, 
 .lesson-form-audio .for-audio-type,
 .lesson-form-text .for-text-type,
 .lesson-form-ppt .for-ppt-type {

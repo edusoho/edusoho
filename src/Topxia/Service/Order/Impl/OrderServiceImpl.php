@@ -50,8 +50,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             if ($couponInfo['useable'] != 'yes') {
                 throw $this->createServiceException("优惠码不可用");            
             }
-
         }
+        
         unset($order['couponCode']);
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
@@ -61,6 +61,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['status'] = 'created';
         $order['createdTime'] = time();
+
         $order = $this->getOrderDao()->addOrder($order);
 
         $this->_createLog($order['id'], 'created', '创建订单');

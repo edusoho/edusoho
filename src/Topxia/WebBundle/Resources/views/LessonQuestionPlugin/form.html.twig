@@ -8,7 +8,7 @@
 
 	<div class="form-group detail-form-group hide">
 		<div class="controls">
-	    {{ form_widget(form.content, {attr:{class:'form-control', rows:5, placeholder:'详细描述你的问题'}}) }}
+	    {{ form_widget(form.content, {attr:{class:'form-control', rows:5, placeholder:'详细描述你的问题', 'data-image-upload-url': path('editor_upload', {token:upload_token('course')}) }}) }}
 	  </div>
 	</div>
 

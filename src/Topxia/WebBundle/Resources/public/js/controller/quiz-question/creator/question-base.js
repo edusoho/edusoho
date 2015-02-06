@@ -4,15 +4,15 @@ define(function(require, exports, module) {
     var Handlebars = require('handlebars');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
-    var EditorFactory = require('common/kindeditor-factory');
     require('common/validator-rules').inject(Validator);
     require('webuploader');
+    require('ckeditor');
 
     var QuestionCreator = Widget.extend({
         attrs: {
             validator : null,
             form : null,
-            stemEditorName: 'simple_noimage'
+            stemEditorName: 'Minimal'
         },
 
         events: {
@@ -32,11 +32,14 @@ define(function(require, exports, module) {
         },
 
         _initAnalysisField: function() {
-            var editor = EditorFactory.create('#question-analysis-field', 'simple_noimage');
-            this.get('validator').on('formValidate', function(elemetn, event) {
-                editor.sync();
+            var editor = CKEDITOR.replace('question-analysis-field', {
+                toolbar: 'Minimal',
+                height: 120
             });
 
+            this.get('validator').on('formValidate', function(elemetn, event) {
+                editor.updateElement();
+            });
 
             var uploader = WebUploader.create({
                 swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
@@ -81,9 +84,16 @@ define(function(require, exports, module) {
         _initStemField: function() {
             var self = this;
             var height = $('#question-stem-field').height();
-            var editor = EditorFactory.create('#question-stem-field', this.get('stemEditorName'), {height:height});
+
+            // group: 'default'
+            var editor = CKEDITOR.replace('question-stem-field', {
+                toolbar: this.get('stemEditorName'),
+                filebrowserImageUploadUrl: $('#question-stem-field').data('imageUploadUrl'),
+                height: height
+            });
+
             this.get('validator').on('formValidate', function(elemetn, event) {
-                editor.sync();
+                editor.updateElement();
             });
 
             var uploader = WebUploader.create({
