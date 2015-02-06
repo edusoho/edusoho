@@ -3,7 +3,7 @@ define(function(require, exports, module) {
             var Notify = require('common/bootstrap-notify');
             var Validator = require('bootstrap.validator');
             require('common/validator-rules').inject(Validator);
-            var EditorFactory = require('common/kindeditor-factory');
+            require('ckeditor');
             var Share = require('../../util/share.js');
 
             function checkUrl(url) {
@@ -22,7 +22,10 @@ define(function(require, exports, module) {
         });
 
         if($('#post-thread-form').length>0){
-        var editor=EditorFactory.create('#post_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
+        var editor =  CKEDITOR.replace('post_content', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
+        });
         var validator_post_content = new Validator({
             element: '#post-thread-form',
             failSilently: true,
@@ -68,51 +71,9 @@ define(function(require, exports, module) {
         });
 
         validator_post_content.on('formValidate', function(elemetn, event) {
-            editor.sync();
+            editor.updateElement();
         });
         }
-
-                    // var editor = EditorFactory.create('#post_content', 'simple', {
-                    //     extraFileUploadParams: {
-                    //         group: 'course'
-                    //     }
-                    // });
-
-                    // var validator = new Validator({
-                    //     element: '#thread-post-form'
-                    // });
-
-                    // validator.addItem({
-                    //     element: '[name="post[content]"]',
-                    //     required: true
-                    // });
-
-                    // Validator.query('#thread-post-form').on('formValidate', function(elemetn, event) {
-                    //     editor.sync();
-                    // });
-
-                    // Validator.query('#thread-post-form').on('formValidated', function(err, msg, ele) {
-                    //     if (err == true) {
-                    //         return;
-                    //     }
-
-                    //     $('.thread-post-list').find('li.empty').remove();
-                    //     var $form = $("#thread-post-form");
-
-                    //     $form.find('[type=submit]').attr('disabled', 'disabled');
-                    //     $.post($form.attr('action'), $form.serialize(), function(html) {
-                    //         $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
-                    //         var id = $(html).appendTo('.thread-post-list').attr('id');
-                    //         editor.html('');
-
-                    //         $form.find('[type=submit]').removeAttr('disabled');
-
-                    //         window.location.href = '#' + id;
-                    //     });
-
-                    //     return false;
-                    // });
-
                     $('[data-role=confirm-btn]').click(function() {
                         var $btn = $(this);
                         if (!confirm($btn.data('confirmMessage'))) {
