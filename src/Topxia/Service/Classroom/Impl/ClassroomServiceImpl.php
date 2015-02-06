@@ -316,6 +316,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ArrayToolkit::index( $this->getClassroomCourseDao()->findCoursesByIds($ids), 'id');
     }
 
+    public function findClassroomByTitle($title)
+    {
+        return $this->getClassroomDao()->findClassroomByTitle($title);
+    }
+
     public function searchMemberCount($conditions)
     {   
         $conditions = $this->_prepareClassroomConditions($conditions);
@@ -326,11 +331,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
         return $this->getClassroomMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
-    }
-
-    public function getClassroomMember($classroomId, $userId)
-    {
-        return $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
     }
 
     public function remarkStudent($classroomId, $userId, $remark)
