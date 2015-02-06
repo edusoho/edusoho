@@ -26,7 +26,7 @@ class EduCloudController extends BaseController
     public function smsAction(Request $request)
     {
         //8888888888
-        $result = $this->sendSms('13758129341','3577');
+        $result = $this->lookForStatus();
         var_dump($result);
         exit;
         return $this->render('TopxiaAdminBundle:System:sms.html.twig', array());
