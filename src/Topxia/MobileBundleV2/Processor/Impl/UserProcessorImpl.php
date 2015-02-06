@@ -574,17 +574,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $liveCourse = $this->controller->filterOneLiveCourseByDESC($user);
         if(sizeof($liveCourse) == 0){
-            $liveCourse = null;
-
+            $liveCourse = reset($liveCourse);
         }
         $result[$index++] = array(
             'title' => '在学直播',
             'data' => array(
-                'content' => $liveCourse[0]['title'],
-                'id' => $liveCourse[0]['id'],
-                'courseId' => $liveCourse[0]['id'],
+                'content' => $liveCourse['title'],
+                'id' => $liveCourse['id'],
+                'courseId' => $liveCourse['id'],
                 'lessonId' => null,
-                'time' => $liveCourse[0]['liveStartTime']
+                'time' => $liveCourse['liveStartTime']
                 )
         );
         

@@ -404,7 +404,36 @@ class MobileBaseController extends BaseController
     }
 
     public function filterOneLiveCourseByDESC($user){
-        $courses = $this->getCourseService()->findUserLeaningCourses(
+        // $courses = $this->getCourseService()->findUserLeaningCourses(
+        //     $user['id'], 0, 1000
+        // );
+        // $courseIds = ArrayToolkit::column($courses, 'id');
+
+        // $conditions = array(
+        //     'status' => 'published',
+        //     'startTimeGreaterThan' => time(),
+        //     'courseIds' => $courseIds
+        // );
+        // $total = $this->getCourseService()->searchLessonCount($conditions);
+        // $tempCourses = $this->filterLiveCourses($user, 0, $total);
+        // $liveCourses = $this->filterCourses(array_values($tempCourses));
+
+        // $sort = array();
+        // $resultLiveCourses = array();
+        // foreach ($liveCourses as $key => $liveCourse) {
+        //    if(!empty($liveCourse['liveStartTime'])){
+        //         $sort[$key] = $liveCourse["liveStartTime"];
+        //         $resultLiveCourses[$key] = $liveCourse;
+        //    }
+        // }
+
+        // if($liveCourses != null){
+        //     array_multisort($sort, SORT_DESC, $resultLiveCourses);
+        // }
+
+        // unset($liveCourse);
+
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses(
             $user['id'], 0, 1000
         );
         $courseIds = ArrayToolkit::column($courses, 'id');
@@ -414,24 +443,10 @@ class MobileBaseController extends BaseController
             'startTimeGreaterThan' => time(),
             'courseIds' => $courseIds
         );
-        $total = $this->getCourseService()->searchLessonCount($conditions);
-        $tempCourses = $this->filterLiveCourses($user, 0, $total);
-        $liveCourses = $this->filterCourses(array_values($tempCourses));
+        $total = $this->controller->getCourseService()->searchLessonCount($conditions);
 
-        $sort = array();
-        $resultLiveCourses = array();
-        foreach ($liveCourses as $key => $liveCourse) {
-           if(!empty($liveCourse['liveStartTime'])){
-                $sort[$key] = $liveCourse["liveStartTime"];
-                $resultLiveCourses[$key] = $liveCourse;
-           }
-        }
-
-        if($liveCourses != null ){
-            array_multisort($sort, SORT_DESC, $resultLiveCourses);
-        }
-
-        unset($liveCourse);
+        $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
+        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
         return $resultLiveCourses;
     }
