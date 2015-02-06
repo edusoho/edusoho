@@ -50,11 +50,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             if ($couponInfo['useable'] != 'yes') {
                 throw $this->createServiceException("优惠码不可用");            
             }
-            $order["coupon"] = $order['couponCode'];
-            $order["couponDiscount"] = $couponInfo["decreaseAmount"];
-        }else{
-            $order["coupon"]="";
-            $order["couponDiscount"]=0;
         }
         
         unset($order['couponCode']);
