@@ -433,7 +433,7 @@ class MobileBaseController extends BaseController
 
         // unset($liveCourse);
 
-        $courses = $this->controller->getCourseService()->findUserLeaningCourses(
+        $courses = $this->getCourseService()->findUserLeaningCourses(
             $user['id'], 0, 1000
         );
         $courseIds = ArrayToolkit::column($courses, 'id');
@@ -443,10 +443,10 @@ class MobileBaseController extends BaseController
             'startTimeGreaterThan' => time(),
             'courseIds' => $courseIds
         );
-        $total = $this->controller->getCourseService()->searchLessonCount($conditions);
+        $total = $this->getCourseService()->searchLessonCount($conditions);
 
-        $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
-        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
+        $tempCourses = $this->filterLiveCourses($user, $start, $limit);
+        $resultLiveCourses = $this->filterCourses(array_values($tempCourses));
 
         return $resultLiveCourses;
     }
