@@ -15,12 +15,30 @@ class EduCloudController extends BaseController
 {
     private $cloudOptions = null;
     private $cloudApi = null;
+    private $debug = true;
 
     public function indexAction(Request $request)
     {
         //8888888888
+        $money = '--';
+        $result = $this->getAccounts();
+        if (isset($result['cash'])){
+            $money = $result['cash'];
+        }
 
-        return $this->render('TopxiaAdminBundle:System:edu-cloud.html.twig', array());
+        $loginToken = $this->getAppService()->getLoginToken();
+        $hasAccount = isset($loginToken["token"]);
+
+        if($this->debug){
+            $hasAccount = true;
+            $loginToken["token"] = '8888';
+        }
+
+        return $this->render('TopxiaAdminBundle:System:edu-cloud.html.twig', array(
+            'money' => $money,
+            'hasAccount' => $hasAccount,
+            'token' => $hasAccount ? $loginToken["token"] : '',
+        ));
     }
 
     public function smsAction(Request $request)
@@ -101,4 +119,9 @@ class EduCloudController extends BaseController
     {
         return $this->getServiceKernel()->createService('EduCloud.EduCloudService');   
     }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }    
 }

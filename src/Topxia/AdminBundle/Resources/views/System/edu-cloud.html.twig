@@ -18,17 +18,22 @@
     </tr>
   </thead>
   <tbody>
-    <tr style="text-align: left; padding: 10px 0px;">
-      <td>账户余额<span class="pull-right">:</span></td> 
-      <td>&nbsp;&nbsp;&nbsp;<span>8888</span> 元 </td>
-      <td><a class="btn btn-primary btn-sm" href="" target="_blank"> 去充值 </a></td>
-    </tr>
+    {% if hasAccount %}
+      <tr style="text-align: left; padding: 10px 0px;">
+        <td>账户余额<span class="pull-right">:</span></td> 
+        <td>&nbsp;&nbsp;&nbsp;<span>{{money}}</span> 元 </td>
+        <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/token_login?token={{token}}&goto=order_recharge" target="_blank"> 去充值 </a></td>
+      </tr>
+    
+      <tr style="text-align: left; padding: 10px 0px;">
+        <td>云短信状态<span class="pull-right">:</span></td>
+        <td>&nbsp;&nbsp;&nbsp;<span>----</span></td>
+        <td><span class="btn btn-primary btn-sm"> &nbsp;申请开通云短信&nbsp; </span></td>
+      </tr>
+    {% else %}
+      <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/register" target="_blank"> 没有帐号? 去注册 </a></td>
+    {% endif %}
 
-    <tr style="text-align: left; padding: 10px 0px;">
-      <td>云短信状态<span class="pull-right">:</span></td>
-      <td>&nbsp;&nbsp;&nbsp;<span>----</span></td>
-      <td><span class="btn btn-primary btn-sm"> 申请开通 </span></td>
-    </tr>
   <tbody>
 </table>
 
