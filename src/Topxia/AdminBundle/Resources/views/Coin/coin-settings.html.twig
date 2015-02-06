@@ -75,7 +75,7 @@
                 <label for="coin_content">虚拟币说明</label>
               </div>
           <div class="controls col-md-8">
-            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
+            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
             <p class="help-block">虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
             </p>
           </div>

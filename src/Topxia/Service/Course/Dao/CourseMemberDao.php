@@ -44,4 +44,7 @@ interface CourseMemberDao
     public function deleteMemberByCourseIdAndUserId($courseId, $userId);
 
     public function findCourseMembersByUserId($userId);
+
+    public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
+    
 }

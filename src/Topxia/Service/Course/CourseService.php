@@ -73,6 +73,8 @@ interface CourseService
 	public function cancelRecommendCourse($id);
 
 	public function analysisCourseDataByTime($startTime,$endTime);
+	
+	public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
 

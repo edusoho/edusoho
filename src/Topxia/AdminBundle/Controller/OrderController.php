@@ -17,8 +17,8 @@ class OrderController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['targetType'] = $type;
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'title'){$conditions['keyword'] = '%'. trim($conditions['keyword']) .'%';}
-        
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'title') {$conditions['keyword'] = '%' . trim($conditions['keyword']) . '%';}
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),
@@ -38,13 +38,13 @@ class OrderController extends BaseController
             'request' => $request,
             'type' => $type,
             'layout' => $layout,
-            'orders' => $orders ,
+            'orders' => $orders,
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
-    public  function detailAction(Request $request, $id)
+    public function detailAction(Request $request, $id)
     {
         $order = $this->getOrderService()->getOrder($id);
         $user = $this->getUserService()->getUser($order['userId']);
@@ -52,15 +52,14 @@ class OrderController extends BaseController
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-        
+
         return $this->render('TopxiaAdminBundle:Order:detail-modal.html.twig', array(
-            'order'=>$order,
-            'user'=>$user,
-            'orderLogs'=>$orderLogs,
-            'users' => $users
+            'order' => $order,
+            'user' => $user,
+            'orderLogs' => $orderLogs,
+            'users' => $users,
         ));
     }
-
 
     protected function getOrderService()
     {

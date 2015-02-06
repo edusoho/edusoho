@@ -21,38 +21,38 @@ class CashServiceImpl extends BaseService implements CashService
     {
         return $this->getFlowDao()->analysisAmount($conditions);
     }
-    public function outFlowByCoin($outFlow)
+    public function outflowByCoin($outflow)
     {
-        if(!ArrayToolkit::requireds($outFlow, array(
+        if(!ArrayToolkit::requireds($outflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
             throw $this->createServiceException('参数缺失');
         }
 
-        if(!is_numeric($outFlow["amount"]) || $outFlow["amount"] <= 0) {
+        if(!is_numeric($outflow["amount"]) || $outflow["amount"] <= 0) {
             throw $this->createServiceException('金额必须为数字，并且不能小于0');
         }
 
-        $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"], true);
+        $account = $this->getCashAccountService()->getAccountByUserId($outflow["userId"], true);
         if(empty($account)){
-            $account = $this->getCashAccountService()->createAccount($outFlow["userId"]);
-            $account = $this->getCashAccountService()->getAccountByUserId($outFlow["userId"], true);
+            $account = $this->getCashAccountService()->createAccount($outflow["userId"]);
+            $account = $this->getCashAccountService()->getAccountByUserId($outflow["userId"], true);
         }
-        if((round($account["cash"]*100)/100 - round($outFlow["amount"]*100)/100)<0) {
+        if((round($account["cash"]*100)/100 - round($outflow["amount"]*100)/100)<0) {
             return false;
         }
 
-        $outFlow["cashType"] = "Coin";
-        $outFlow["type"] = "outflow";
-        $outFlow["sn"] = $this->makeSn();
-        $outFlow["createdTime"] = time();
-        $outFlow["cash"] = $account["cash"]-$outFlow["amount"];
+        $outflow["cashType"] = "Coin";
+        $outflow["type"] = "outflow";
+        $outflow["sn"] = $this->makeSn();
+        $outflow["createdTime"] = time();
+        $outflow["cash"] = $account["cash"]-$outflow["amount"];
 
-        $outFlow = $this->getFlowDao()->addFlow($outFlow);
+        $outflow = $this->getFlowDao()->addFlow($outflow);
 
-        $this->getCashAccountService()->waveDownCashField($account["id"], $outFlow["amount"]);
+        $this->getCashAccountService()->waveDownCashField($account["id"], $outflow["amount"]);
 
-        return $outFlow;
+        return $outflow;
     }
 
     public function inflowByCoin($inflow)
@@ -86,47 +86,47 @@ class CashServiceImpl extends BaseService implements CashService
         return $inflow;
     }
 
-    public function inFlowByRmb($inFlow)
+    public function inflowByRmb($inflow)
     {
-        if(!ArrayToolkit::requireds($inFlow, array(
+        if(!ArrayToolkit::requireds($inflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
             throw $this->createServiceException('参数缺失');
         }
 
-        if(!is_numeric($inFlow["amount"]) || $inFlow["amount"] <= 0) {
+        if(!is_numeric($inflow["amount"]) || $inflow["amount"] <= 0) {
             throw $this->createServiceException('金额必须为数字，并且不能小于0');
         }
 
-        $inFlow["cashType"] = "RMB";
-        $inFlow["type"] = "inflow";
-        $inFlow["sn"] = $this->makeSn();
-        $inFlow["createdTime"] = time();
+        $inflow["cashType"] = "RMB";
+        $inflow["type"] = "inflow";
+        $inflow["sn"] = $this->makeSn();
+        $inflow["createdTime"] = time();
 
-        $inFlow = $this->getFlowDao()->addFlow($inFlow);
-        return $inFlow;
+        $inflow = $this->getFlowDao()->addFlow($inflow);
+        return $inflow;
 
     }
 
-    public function outFlowByRmb($outFlow)
+    public function outflowByRmb($outflow)
     {
-        if(!ArrayToolkit::requireds($outFlow, array(
+        if(!ArrayToolkit::requireds($outflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
             throw $this->createServiceException('参数缺失');
         }
 
-        if(!is_numeric($outFlow["amount"]) || $outFlow["amount"] <= 0) {
+        if(!is_numeric($outflow["amount"]) || $outflow["amount"] <= 0) {
             throw $this->createServiceException('金额必须为数字，并且不能小于0');
         }
 
-        $outFlow["cashType"] = "RMB";
-        $outFlow["type"] = "outflow";
-        $outFlow["sn"] = $this->makeSn();
-        $outFlow["createdTime"] = time();
+        $outflow["cashType"] = "RMB";
+        $outflow["type"] = "outflow";
+        $outflow["sn"] = $this->makeSn();
+        $outflow["createdTime"] = time();
 
-        $outFlow = $this->getFlowDao()->addFlow($outFlow);
-        return $outFlow;
+        $outflow = $this->getFlowDao()->addFlow($outflow);
+        return $outflow;
     }
 
     public function findUserIdsByFlows($type,$createdTime,$orderBy, $start, $limit)
@@ -141,7 +141,7 @@ class CashServiceImpl extends BaseService implements CashService
 
     public function changeRmbToCoin($rmbFlow)
     {
-        $outFlow = $this->outFlowByRmb($rmbFlow);
+        $outflow = $this->outflowByRmb($rmbFlow);
 
         $coinSetting = $this->getSettingService()->get("coin");
 
@@ -150,36 +150,36 @@ class CashServiceImpl extends BaseService implements CashService
             $coinRate = $coinSetting["cash_rate"];
         }
 
-        $amount = $outFlow["amount"] * $coinRate;
+        $amount = $outflow["amount"] * $coinRate;
 
-        $inFlow = array(
-            'userId' => $outFlow["userId"],
+        $inflow = array(
+            'userId' => $outflow["userId"],
             'amount' => $amount,
             'name' => "充值",
-            'orderSn' => $outFlow['orderSn'],
+            'orderSn' => $outflow['orderSn'],
             'category' => 'change',
             'note' => '',
-            'parentSn' => $outFlow['sn']
+            'parentSn' => $outflow['sn']
         );
 
-        $inFlow["cashType"] = "Coin";
-        $inFlow["type"] = "inflow";
-        $inFlow["sn"] = $this->makeSn();
-        $inFlow["createdTime"] = time();
+        $inflow["cashType"] = "Coin";
+        $inflow["type"] = "inflow";
+        $inflow["sn"] = $this->makeSn();
+        $inflow["createdTime"] = time();
 
-        $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"], true);
+        $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"], true);
         if(empty($account)){
-            $account = $this->getCashAccountService()->createAccount($inFlow["userId"]);
-            $account = $this->getCashAccountService()->getAccountByUserId($inFlow["userId"], true);
+            $account = $this->getCashAccountService()->createAccount($inflow["userId"]);
+            $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"], true);
         }
 
-        $inFlow["cash"] = $account["cash"]+$inFlow["amount"];
+        $inflow["cash"] = $account["cash"]+$inflow["amount"];
 
-        $inFlow = $this->getFlowDao()->addFlow($inFlow);
+        $inflow = $this->getFlowDao()->addFlow($inflow);
 
-        $this->getCashAccountService()->waveCashField($account["id"], $inFlow["amount"]);
+        $this->getCashAccountService()->waveCashField($account["id"], $inflow["amount"]);
 
-        return $inFlow;
+        return $inflow;
     }
 
     private function makeSn()

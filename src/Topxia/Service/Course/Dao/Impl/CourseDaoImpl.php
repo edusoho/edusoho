@@ -214,6 +214,19 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
+        if (isset($conditions['courseIds'])) {
+
+            $courseIds=$conditions['courseIds'];
+
+            if(!empty($courseIds)){
+
+                $courseIds = join(',', $courseIds);
+                
+                $builder->andStaticWhere("id NOT IN ($courseIds)");
+            }
+
+        }
+
         return $builder;
     }
 

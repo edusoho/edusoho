@@ -347,7 +347,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	private function _filterCourseFields($fields)
-	{
+	{print_r($fields);
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'subtitle' => '',
@@ -370,6 +370,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'freeStartTime' => 0,
 			'freeEndTime' => 0,
 			'deadlineNotify' => 'none',
+			'useInClassroom'=>'single',
+			'singleBuy'=>0,
 			'daysOfNotifyBeforeDeadline' => 0
 		));
 		
@@ -400,7 +402,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $largeImage = $rawImage->copy();
         $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(480, 270));
+        $largeImage->resize(new Box(390, 260));
         $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
         $largeImage->save($largeFilePath, array('quality' => 90));
         $largeFileRecord = $this->getFileService()->uploadFile('course', new File($largeFilePath));
@@ -617,6 +619,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->getCourseDao()->analysisCourseDataByTime($startTime,$endTime);
 	}
 
+	public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId)
+	{
+    	return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
+	}
+
 	public function waveLearningTime($lessonId,$userId,$time)
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
@@ -787,10 +794,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('添加课时失败，课程不存在。');
 		}
 
-		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','document'))) {
+		if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt','document','flash'))) {
 			throw $this->createServiceException('课时类型不正确，添加失败！');
 		}
-
 
 		$this->fillLessonMediaFields($lesson);
 
@@ -842,7 +848,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function fillLessonMediaFields(&$lesson)
 	{
-		if (in_array($lesson['type'], array('video', 'audio', 'ppt','document'))) {
+		if (in_array($lesson['type'], array('video', 'audio', 'ppt','document','flash'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
 			if (empty($media) or empty($media['source']) or empty($media['name'])) {
 				throw $this->createServiceException("media参数不正确，添加课时失败！");

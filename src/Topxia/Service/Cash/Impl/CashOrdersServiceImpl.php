@@ -70,7 +70,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                         'note' => ''
                     );
 
-                    $rmbInFlow = $this->getCashService()->inFlowByRmb($inFlow);
+                    $rmbInFlow = $this->getCashService()->inflowByRmb($inFlow);
 
                     $rmbOutFlow = array(
                         'userId' => $userId,

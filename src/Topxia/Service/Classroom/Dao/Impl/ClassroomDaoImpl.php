@@ -66,11 +66,22 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         return $this->getClassroom($this->getConnection()->lastInsertId());
     }
 
+    public function findClassroomByTitle($title)
+    {
+        $sql = "SELECT * FROM {$this->table} where title=? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($title)) ? : null;
+    }
+
     public function updateClassroom($id,$fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getClassroom($id);
+    }
+
+    public function deleteClassroom($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
 }

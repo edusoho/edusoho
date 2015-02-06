@@ -399,7 +399,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
         <label for="user_terms_body">条款内容</label>
       </div>
       <div class="controls col-md-8">
-        <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body">{{ auth.user_terms_body }}</textarea>
+        <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.user_terms_body }}</textarea>
       </div>
     </div>
 

@@ -2,12 +2,12 @@ define(function(require, exports, module) {
 
     var Widget     = require('widget');
     var Notify = require('common/bootstrap-notify');
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('jquery.nouislider');
     require('jquery.nouislider-css');
     require('jquery.sortable');
+    require('ckeditor');
 
     var TestpaperForm = Widget.extend({
 
@@ -37,9 +37,16 @@ define(function(require, exports, module) {
 
         initBaseFields: function() {
             var validator = this.get('validator');
-            var editor = EditorFactory.create('#testpaper-description-field', 'simple_noimage');
+
+            // group: 'default'
+            var editor = CKEDITOR.replace('testpaper-description-field', {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $('#testpaper-description-field').data('imageUploadUrl'),
+                height: 100
+            });
+
             validator.on('formValidate', function(elemetn, event) {
-                editor.sync();
+                editor.updateElement();
             });
 
             validator.addItem({

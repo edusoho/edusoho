@@ -69,7 +69,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
         $uploadFile['updatedUserId'] = $uploadFile['createdUserId'];
         $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
-
+    
         return $uploadFile; 
     }
 
