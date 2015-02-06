@@ -2,13 +2,13 @@ define(function(require, exports, module) {
     
    var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    var EditorFactory = require('common/kindeditor-factory');
     var Uploader = require('upload');
     require('common/validator-rules').inject(Validator);
     require('jquery.select2-css');
     require('jquery.select2');
     require('jquery.bootstrap-datetimepicker');
     require('jquery.form');
+    require('ckeditor');
 
 exports.run = function() {
     
@@ -75,7 +75,7 @@ exports.run = function() {
 
 
 
-         function _initValidator($form, $modal)
+    function _initValidator($form, $modal)
     {
         var validator = new Validator({
             element: $form,
@@ -87,13 +87,11 @@ exports.run = function() {
 
     function _initEditorFields($form, validator)
     {
-        
-        var editor = EditorFactory.create('#coin_content', 'full', {extraFileUploadParams:{group:'default'}});
-        validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
+        // group: 'default'
+        CKEDITOR.replace('coin_content', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#coin_content').data('imageUploadUrl')
         });
-
-        return editor;
     }
 
         var global_number_reserved = [];

@@ -4,7 +4,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var EditorFactory = require('common/kindeditor-factory');
 
     exports.run = function() {
 
