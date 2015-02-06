@@ -27,7 +27,7 @@ define(function(require, exports, module) {
             var $trigger = $(this);
             var $oldTr = $trigger.parents('tr');
 
-            if (!confirm('真的要' + $trigger.attr('title') + '吗？ 试卷发布后无论是否关闭都将无法修改或删除。')) {
+            if (!confirm('真的要' + $trigger.attr('title') + '吗？ 试卷发布后无论是否关闭都将无法修改。')) {
                 return ;
             }
 
