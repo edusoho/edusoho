@@ -433,8 +433,10 @@ class MobileBaseController extends BaseController
 
         // unset($liveCourse);
 
+        $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+
         $courses = $this->getCourseService()->findUserLeaningCourses(
-            $user['id'], 0, 1000
+            $user['id'], 0, $learningCourseTotal
         );
         $courseIds = ArrayToolkit::column($courses, 'id');
 
