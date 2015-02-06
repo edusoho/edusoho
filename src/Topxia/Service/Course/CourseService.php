@@ -341,4 +341,6 @@ interface CourseService
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
+	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+
 }
