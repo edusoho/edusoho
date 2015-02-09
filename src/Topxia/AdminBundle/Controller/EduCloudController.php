@@ -21,15 +21,24 @@ class EduCloudController extends BaseController
     {
         $loginToken = $this->getAppService()->getLoginToken();
         $hasAccount = isset($loginToken["token"]);
-        
+
         $money = '--';
-        $result = $this->getAccounts();
+        try{
+            $result = $this->getAccounts();
+        }catch(\RuntimeException $e){
+            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+        }
+        
         if (isset($result['cash'])){
             $money = $result['cash'];
         }
 
         $smsStatus = array();
-        $result = $this->lookForStatus();
+        try{
+            $result = $this->lookForStatus();
+        }catch(\RuntimeException $e){
+            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+        }
         if (isset($result['apply']) && isset($result['apply']['status'])){
             $smsStatus['status'] = $result['apply']['status'];
             $smsStatus['message'] = $result['apply']['message'];
@@ -55,7 +64,13 @@ class EduCloudController extends BaseController
     {
         $this->handleSmsSetting($request);
         $smsStatus = array();
-        $result = $this->lookForStatus();
+
+        try{
+            $result = $this->lookForStatus();
+        }catch(\RuntimeException $e){
+            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+        }
+
         if (isset($result['apply']) && isset($result['apply']['status'])){
             $smsStatus['status'] = $result['apply']['status'];
         }else if (isset($result['error'])) {
