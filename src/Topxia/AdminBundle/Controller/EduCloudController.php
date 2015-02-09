@@ -53,15 +53,31 @@ class EduCloudController extends BaseController
 
     public function smsAction(Request $request)
     {
-        //8888888888
-        // $result = $this->lookForStatus();
-        // $result = $this->sendSms('13758129341', '3572');
-        // $result = $this->applyForSms('Sch'.rand(100,999));
-        // $result = $this->lookForStatus();
-        // $result = $this->verifyKeys();
-        // $result = $this->lookForStatus();
-        // var_dump($result);
-        // exit;
+        if ($request->getMethod() == 'POST') {
+            $dataUserPosted =  $request->request->all();
+            $this->setCloudSmsKey('sms_enabled', $dataUserPosted['sms_enabled']);
+            if (isset($dataUserPosted['sms_registration'])&&($dataUserPosted['sms_registration']=='on')) {
+                $this->setCloudSmsKey('sms_registration', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_registration', 'off');
+            }
+            if (isset($dataUserPosted['sms_find_password'])&&($dataUserPosted['sms_find_password']=='on')) {
+                $this->setCloudSmsKey('sms_find_password', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_find_password', 'off');
+            }
+            if (isset($dataUserPosted['sms_user_pay'])&&($dataUserPosted['sms_user_pay']=='on')) {
+                $this->setCloudSmsKey('sms_user_pay', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_user_pay', 'off');
+            }
+            if (isset($dataUserPosted['sms_find_pay_password'])&&($dataUserPosted['sms_find_pay_password']=='on')) {
+                $this->setCloudSmsKey('sms_find_pay_password', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_find_pay_password', 'off');
+            }            
+        }
+
         $smsStatus = array();
         $result = $this->lookForStatus();
         if (isset($result['apply']) && isset($result['apply']['status'])){
@@ -100,7 +116,7 @@ class EduCloudController extends BaseController
             ){
                 $result = $this->applyForSms($dataUserPosted['name']);                
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
-                    $this->setSchoolName($dataUserPosted['name']);
+                    $this->setCloudSmsKey('sms_school_name', $dataUserPosted['name']);
                     return $this->createJsonResponse(array('ACK' => 'ok'));
                 }
             }
@@ -141,18 +157,18 @@ class EduCloudController extends BaseController
         }        
         return $this->cloudOptions;
     }
-
-    private function setSchoolName($name)
+      
+    private function setCloudSmsKey($key, $val)
     {        
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $storageSetting['sms_school_name'] = $name;
-        $this->getSettingService()->set('storage', $storageSetting);
-    }    
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting[$key] = $val;
+        $this->getSettingService()->set('cloud_sms', $setting);
+    }
 
-    private function getSchoolName($name)
+    private function getCloudSmsKey($key)
     {        
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        return $storageSetting['sms_school_name'];
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        return $setting[$key];
     } 
 
     private function getCloudApi()

@@ -3,16 +3,16 @@ define(function(require, exports, module) {
 	require('common/validator-rules').inject(Validator);
 
 	if ($('#sms-form').length>0){	
-		var validator = new Validator({
-	        element: '#sms-form',
-	        autoSubmit: false,
-	        onFormValidated: function(error, results, $form) {
-	            if (error) {
-	                return false;
-	            }
-	        }
+		// var validator = new Validator({
+	 //        element: '#sms-form',
+	 //        autoSubmit: false,
+	 //        onFormValidated: function(error, results, $form) {
+	 //            if (error) {
+	 //                return false;
+	 //            }
+	 //        }
 
-	    });
+	 //    });
 
 	    // validator.addItem({
 	    //     element: '[name="sms-school-name"]',

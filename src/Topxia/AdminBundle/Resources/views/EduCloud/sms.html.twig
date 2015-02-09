@@ -20,7 +20,7 @@
 
 	{% if smsStatus.status == 'auditing' %}
 		<br>
-		短信内容：【 {{ setting('storage.sms_school_name') }} 】您的验证码是：123456<br>
+		短信内容：【 {{ setting('cloud_sms.sms_school_name')|default('') }} 】您的验证码是：123456<br>
 		审核时间：审核需24小时，期间短信验证功能仍可以正常使用<br>
 		短信价格：0.07元/条<br>
 		云短信状态:
@@ -31,7 +31,7 @@
 	{% endif %}
 
 	{% if smsStatus.status == 'failed' %}
-		因为申请的网校名称不符合规范，您新申请的网校名称“{{setting('storage.sms_school_name')}}”未通过审核。
+		因为申请的网校名称不符合规范，您新申请的网校名称“{{setting('cloud_sms.sms_school_name')|default('')}}”未通过审核。
 		<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
 	{% endif %}
 
@@ -46,11 +46,19 @@
 
 	      			<div class="controls col-md-8 radios">
 	        			<label>
-	        				<input type="radio" name="sms_switch" value=""> 
+	        				<input type="radio" name="sms_enabled" value="1"
+	        				{% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
+	        					checked="checked"
+	        				{% endif %}
+	        				> 
 	        				开启
 	        			</label>
 	        			<label>
-	        				<input type="radio" name="sms_switch" value="" {# checked="checked" #}> 
+	        				<input type="radio" name="sms_enabled" value="0" 
+	        				{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
+	        					checked="checked"
+	        				{% endif %}
+	        				> 
 	        				关闭
 	        			</label>
 	      			</div>
@@ -61,9 +69,9 @@
 	        			<label for="name" class="pull-right">网校名称</label>
 	      			</div>
 		      		<div class="col-md-7 controls">
-		        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('storage.sms_school_name')}}" readonly="readonly">
+		        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
 		        		<p class="help-block"></p>
-		        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('storage.sms_school_name')}}</span>】您的验证码是：123456,此短信30分钟内有效”</p>
+		        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456,此短信30分钟内有效”</p>
 		      		</div>
 		      		<div class="col-md-2" style="padding-top: 5px;padding-left: 5px;">
 		      			<span class="btn btn-xs btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
@@ -78,24 +86,46 @@
 
 	      			<div class="controls col-md-8 radios checkboxes">
 	        			<label>
-					    	<input type="checkbox"> 用户注册时
+					    	<input name="sms_registration" type="checkbox" 
+					    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+					    		checked
+					    	{% endif %}
+					    	> 用户注册时
 					    </label>
 					    <br>
 					    <label>
-					    	<input type="checkbox"> 忘记密码时
+					    	<input name="sms_find_password" type="checkbox"
+					    	{% if (setting('cloud_sms.sms_find_password')|default('')) == 'on' %}
+					    		checked
+					    	{% endif %}
+					    	> 忘记密码时
 					    </label>
 					    <br>
 					    <label>
-					    	<input type="checkbox"> 账户支付时
+					    	<input name="sms_user_pay" type="checkbox"
+					    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
+					    		checked
+					    	{% endif %}
+					    	> 账户支付时
 					    </label>
 					    <br>
 					    <label>
-					    	<input type="checkbox"> 忘记支付密码时
+					    	<input name="sms_find_pay_password" type="checkbox"
+					    	{% if (setting('cloud_sms.sms_find_pay_password')|default('')) == 'on' %}
+					    		checked
+					    	{% endif %}
+					    	> 忘记支付密码时
 					    </label>
 	      			</div>
 	    		</div>
 
 			</fieldset>
+			<div class="form-group">
+				<div class="controls col-md-offset-3 col-md-8">
+	      			<button type="submit" class="btn btn-primary">提交</button>
+	    		</div>
+    		</div>
+    		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		</form>
 	{% endif %}
 
