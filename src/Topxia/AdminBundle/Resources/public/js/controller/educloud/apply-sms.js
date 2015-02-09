@@ -20,21 +20,27 @@ define(function(require, exports, module) {
     });
 
 	$('#js-submit').click(function(){
-		var url = $('#apply-sms-form').data('url');
-		var data = {};
-		data.name = $("[name='name']").val();
-		$('#js-submit').addClass('disabled');
-		$.post(
-			url,
-			data,
-			function(response){
-				if (response['ACK'] == 'ok') {
-					// window.location.reload();
+		validator.execute(function(error, results, element) {
+            if (error) {
+                return false;
+            }               
+        
+			var url = $('#apply-sms-form').data('url');
+			var data = {};
+			data.name = $("[name='name']").val();
+			$('#js-submit').addClass('disabled');
+			$.post(
+				url,
+				data,
+				function(response){
+					if (response['ACK'] == 'ok') {
+						window.location.reload();
+						$('#js-submit').removeClass('disabled');
+					}
 				}
-				$('#js-submit').removeClass('disabled');
-			}
-		);	
-		$('#js-submit').removeClass('disabled');
+			);	
+			$('#js-submit').removeClass('disabled');
+		});
 	});
 
 });
