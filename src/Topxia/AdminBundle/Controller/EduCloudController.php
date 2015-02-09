@@ -79,6 +79,8 @@ class EduCloudController extends BaseController
 
             if ('1' == $dataUserPosted['sms_enabled']){
                 $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');   
+            }else{
+                $this->setFlashMessage('success', '设置成功。');  
             }
 
         }
