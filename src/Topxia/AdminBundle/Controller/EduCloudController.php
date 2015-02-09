@@ -53,38 +53,7 @@ class EduCloudController extends BaseController
 
     public function smsAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $dataUserPosted =  $request->request->all();
-            $this->setCloudSmsKey('sms_enabled', $dataUserPosted['sms_enabled']);
-            if (isset($dataUserPosted['sms_registration'])&&($dataUserPosted['sms_registration']=='on')) {
-                $this->setCloudSmsKey('sms_registration', 'on');
-            }else{
-                $this->setCloudSmsKey('sms_registration', 'off');
-            }
-            if (isset($dataUserPosted['sms_find_password'])&&($dataUserPosted['sms_find_password']=='on')) {
-                $this->setCloudSmsKey('sms_find_password', 'on');
-            }else{
-                $this->setCloudSmsKey('sms_find_password', 'off');
-            }
-            if (isset($dataUserPosted['sms_user_pay'])&&($dataUserPosted['sms_user_pay']=='on')) {
-                $this->setCloudSmsKey('sms_user_pay', 'on');
-            }else{
-                $this->setCloudSmsKey('sms_user_pay', 'off');
-            }
-            if (isset($dataUserPosted['sms_find_pay_password'])&&($dataUserPosted['sms_find_pay_password']=='on')) {
-                $this->setCloudSmsKey('sms_find_pay_password', 'on');
-            }else{
-                $this->setCloudSmsKey('sms_find_pay_password', 'off');
-            }   
-
-            if ('1' == $dataUserPosted['sms_enabled']){
-                $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');   
-            }else{
-                $this->setFlashMessage('success', '设置成功。');  
-            }
-
-        }
-
+        $this->handleSmsPosted($request);
         $smsStatus = array();
         $result = $this->lookForStatus();
         if (isset($result['apply']) && isset($result['apply']['status'])){
@@ -146,6 +115,41 @@ class EduCloudController extends BaseController
     {
         //8888888888
     }    
+
+
+    private function handleSmsPosted(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $dataUserPosted =  $request->request->all();
+            $this->setCloudSmsKey('sms_enabled', $dataUserPosted['sms_enabled']);
+            if (isset($dataUserPosted['sms_registration'])&&($dataUserPosted['sms_registration']=='on')) {
+                $this->setCloudSmsKey('sms_registration', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_registration', 'off');
+            }
+            if (isset($dataUserPosted['sms_find_password'])&&($dataUserPosted['sms_find_password']=='on')) {
+                $this->setCloudSmsKey('sms_find_password', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_find_password', 'off');
+            }
+            if (isset($dataUserPosted['sms_user_pay'])&&($dataUserPosted['sms_user_pay']=='on')) {
+                $this->setCloudSmsKey('sms_user_pay', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_user_pay', 'off');
+            }
+            if (isset($dataUserPosted['sms_find_pay_password'])&&($dataUserPosted['sms_find_pay_password']=='on')) {
+                $this->setCloudSmsKey('sms_find_pay_password', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_find_pay_password', 'off');
+            }   
+
+            if ('1' == $dataUserPosted['sms_enabled']){
+                $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');   
+            }else{
+                $this->setFlashMessage('success', '设置成功。');  
+            }
+        }
+    }
 
     private function calStrlen($str)
     {
