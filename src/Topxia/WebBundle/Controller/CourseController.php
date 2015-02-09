@@ -346,6 +346,15 @@ class CourseController extends BaseController
 			$course['coinPrice'] =0;
 		}
 
+		$classroom = $this->getAppService()->findInstallApp('Classroom');
+		$classrooms=array();
+		if ($classroom) {
+			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomIds($id),'classroomId');
+		}
+		foreach ($classroomIds as $key => $value) {
+			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
+		}
+		// var_dump($classrooms);exit();
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -363,7 +372,8 @@ class CourseController extends BaseController
 			'weeks' => $weeks,
 			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
-			'ChargeCoin'=> $ChargeCoin
+			'ChargeCoin'=> $ChargeCoin,
+			'classrooms'=> $classrooms
 		));
 
 	}

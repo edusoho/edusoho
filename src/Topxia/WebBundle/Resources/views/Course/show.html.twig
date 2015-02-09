@@ -134,11 +134,21 @@
 
 				</div><div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
 			</div>
+
+			  {% if is_plugin_installed('Classroom') and classrooms%}
+			  <br>
 				<div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
 					<span>
-本课程已加入到 PHP基础入门班 PHP高级专家班 点击查看
+					本课程已加入到
+					{% for classroom in classrooms%}
+					<a class="btn-link" href="#">
+					{{classroom.title}}
+				             </a>
+					{% endfor %}
 					</span>
 				</div>
+			{% endif %}
+		
 		</div>
 	</div>
 
