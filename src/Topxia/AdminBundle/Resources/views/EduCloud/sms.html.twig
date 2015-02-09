@@ -67,7 +67,7 @@
 		      		<div class="col-md-7 controls">
 		        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly" {# style="width: 75%;" #}>
 		        		<p class="help-block"></p>
-		        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456,此短信30分钟内有效”</p>
+		        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456，此短信30分钟内有效”</p>
 		      		</div>
 		      		<div class="col-md-2" style="padding-top: 5px;padding-left: 5px;">
 		      			<span class="btn btn-xs btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
