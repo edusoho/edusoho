@@ -33,13 +33,13 @@ define(function(require, exports, module) {
 				url,
 				data,
 				function(response){
+					$('#js-submit').removeClass('disabled');
 					if (response['ACK'] == 'ok') {
 						window.location.reload();
-						$('#js-submit').removeClass('disabled');
 					}
 				}
 			);	
-			$('#js-submit').removeClass('disabled');
+			// $('#js-submit').removeClass('disabled');
 		});
 	});
 
