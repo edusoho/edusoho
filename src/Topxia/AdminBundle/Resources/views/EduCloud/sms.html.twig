@@ -1,15 +1,70 @@
-{% extends 'TopxiaAdminBundle:System:edu-cloud-layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:EduCloud:edu-cloud-layout.html.twig' %}
 
-{% block title %}教育云 - {{ parent() }}{% endblock %}
+{% block title %}云短信 - 教育云 - {{ parent() }}{% endblock %}
 
 {% set menu = 'sms' %}
 {# {% set menu = '' %} #}
-{# {% set script_controller = '' %} #}
+{% set script_controller = 'educloud/sms-setting' %}
 
 {% block main %}
   <div class="page-header"><h1>云短信</h1></div>
 
 
 
+
+
+    {% if smsStatus.status == 'error' %}
+	  	您还未开通云短信服务 &nbsp; &nbsp;
+	  	<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
+    {% endif %}
+
+	{% if smsStatus.status == 'auditing' %}
+		<br>
+		短信内容：【 {{ setting('storage.sms_school_name') }} 】您的验证码是：123456<br>
+		审核时间：审核需24小时，期间短信验证功能仍可以正常使用<br>
+		短信价格：0.07元/条<br>
+		云短信状态:
+		<strong>
+		    审核中		    
+		</strong>
+		<br>
+	{% endif %}
+
+	{% if smsStatus.status == 'failed' %}
+		因为申请的网校名称不符合规范，您新申请的网校名称“{{setting('storage.sms_school_name')}}”未通过审核。
+		<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
+	{% endif %}
+
+	{% if smsStatus.status == 'passed' %}
+		<form class="form-horizontal" method="post" id="sms-form" novalidate="">
+			<fieldset>
+				<legend>短信设置</legend>
+				<div class="form-group">
+	      			<div class="col-md-3 control-label">
+	        			<label class="pull-right">短信功能</label>
+	      			</div>
+
+	      			<div class="controls col-md-8 radios">
+	        			<label><input type="radio" name="sms_switch" value=""> 开启</label><label><input type="radio" name="sms_switch" value="" {# checked="checked" #}> 关闭</label>
+	      				{# <p class="help-block">开启后，新学员加入课程后，会收到教师的欢迎私信</p> #}
+	      			</div>
+	    		</div>
+
+	    		<div class="form-group">
+	      			<div class="col-md-3 control-label">
+	        			<label for="name" class="pull-right">网校名称</label>
+	      			</div>
+		      		<div class="col-md-7 controls">
+		        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('storage.sms_school_name')}}" readonly="readonly">
+		        		<p class="help-block"></p>
+		        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('storage.sms_school_name')}}</span>】您的验证码是：123456”</p>
+		      		</div>
+		      		<div class="col-md-2" style="padding-top: 5px;padding-left: 5px;">
+		      			<span class="btn btn-xs btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
+		      		</div>
+	    		</div>			
+			</fieldset>
+		</form>
+	{% endif %}
 
 {% endblock %}

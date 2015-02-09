@@ -38,9 +38,12 @@ define(function(require, exports, module) {
 						window.location.reload();
 					}
 				}
-			);	
-			// $('#js-submit').removeClass('disabled');
+			);
 		});
+	});
+
+	$('[name="name"]').keyup(function(){
+		$('#js-school-name').html($('[name="name"]').val());
 	});
 
 });

@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %} 申请开通云短信 {% endblock %}
+{% block title %} 申请云短信 {% endblock %}
 
 {% block body %}
 	<form id="apply-sms-form" class="form-horizontal" data-url="{{ path('admin_edu_cloud_apply_for_sms') }}">
@@ -20,6 +20,7 @@
 		      </div>
 		      <div class="col-md-7 controls">
 		        <input type="text" name="name" class="form-control" id="name">
+		        <p>短信内容：“【<span id="js-school-name"></span>】您的验证码是：123456”</p>
 		      </div>
 		    </div>
 		</fieldset>

@@ -32,6 +32,7 @@ class EduCloudController extends BaseController
         $result = $this->lookForStatus();
         if (isset($result['apply']) && isset($result['apply']['status'])){
             $smsStatus['status'] = $result['apply']['status'];
+            $smsStatus['message'] = $result['apply']['message'];
         }else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';
             $smsStatus['message'] = $result['error'];
@@ -55,13 +56,24 @@ class EduCloudController extends BaseController
         //8888888888
         // $result = $this->lookForStatus();
         // $result = $this->sendSms('13758129341', '3572');
-        $result = $this->applyForSms('Sch'.rand(100,999));
+        // $result = $this->applyForSms('Sch'.rand(100,999));
         // $result = $this->lookForStatus();
         // $result = $this->verifyKeys();
         // $result = $this->lookForStatus();
-        var_dump($result);
-        exit;
-        return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array());
+        // var_dump($result);
+        // exit;
+        $smsStatus = array();
+        $result = $this->lookForStatus();
+        if (isset($result['apply']) && isset($result['apply']['status'])){
+            $smsStatus['status'] = $result['apply']['status'];
+        }else if (isset($result['error'])) {
+            $smsStatus['status'] = 'error';
+            $smsStatus['message'] = $result['error'];
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
+            'smsStatus' => $smsStatus,
+        ));
     }
 
     public function smsUsageAction(Request $request)
@@ -86,12 +98,13 @@ class EduCloudController extends BaseController
                 && ($this->calStrlen($dataUserPosted['name'])>=2) 
                 && ($this->calStrlen($dataUserPosted['name'])<=8)
             ){
-                $result = $this->applyForSms($dataUserPosted['name']);
+                $result = $this->applyForSms($dataUserPosted['name']);                
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
+                    $this->setSchoolName($dataUserPosted['name']);
                     return $this->createJsonResponse(array('ACK' => 'ok'));
                 }
             }
-            error_log(serialize($result),3,'/var/tmp/wangchao');
+
             return $this->createJsonResponse(array(
                 'ACK' => 'failed', 
                 'message' => $result['error'].'|'.($this->calStrlen($dataUserPosted['name']))
@@ -128,6 +141,19 @@ class EduCloudController extends BaseController
         }        
         return $this->cloudOptions;
     }
+
+    private function setSchoolName($name)
+    {        
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting['sms_school_name'] = $name;
+        $this->getSettingService()->set('storage', $storageSetting);
+    }    
+
+    private function getSchoolName($name)
+    {        
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        return $storageSetting['sms_school_name'];
+    } 
 
     private function getCloudApi()
     {        
@@ -170,5 +196,10 @@ class EduCloudController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }    
+    } 
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }   
 }
