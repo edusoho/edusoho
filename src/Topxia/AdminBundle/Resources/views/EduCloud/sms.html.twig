@@ -65,7 +65,7 @@
 	        			<label for="name" class="pull-right">网校名称</label>
 	      			</div>
 		      		<div class="col-md-7 controls">
-		        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
+		        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly" {# style="width: 75%;" #}>
 		        		<p class="help-block"></p>
 		        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456,此短信30分钟内有效”</p>
 		      		</div>
