@@ -8,8 +8,8 @@ EduSoho是杭州阔知网络科技有限公司推出的开源、免费的互联�
 
 ## 安装使用
 
-* 安装教程： [http://demo.edusoho.com/course/125](http://demo.edusoho.com/course/125)
-* 官方QQ群：221927826
+* 安装教程： [http://www.qiqiuyu.com/course/explore/install](http://www.qiqiuyu.com/course/explore/install)
+* 官方QQ群：280645300
 
 ## 版权协议
 
