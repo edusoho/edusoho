@@ -14,3 +14,8 @@ EduSoho是杭州阔知网络科技有限公司推出的开源、免费的互联�
 ## 版权协议
 
 请查阅[EduSoho开源协议V1.0版本](https://github.com/EduSoho/EduSoho/wiki/EduSoho%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AEV1.0%E7%89%88%E6%9C%AC)。
+
+## 加入我们
+
+* [官网招聘页](http://www.edusoho.com/abouts/joinus)
+* [拉勾网招聘页](http://www.lagou.com/gongsi/7868.html)
