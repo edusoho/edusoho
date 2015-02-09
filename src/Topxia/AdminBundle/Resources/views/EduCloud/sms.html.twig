@@ -74,47 +74,52 @@
 		      		</div>
 	    		</div>	
 
-	    		<legend>短信验证</legend>
-	    		<div class="form-group">
-	      			<div class="col-md-3 control-label">
-	        			<label class="pull-right">使用场景</label>
-	      			</div>
+	    		<div class="js-usage" 
+	    		{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
+	    			style="display:none;" 
+	    		{% endif %}
+	    		>
+		    		<legend>短信验证</legend>
+		    		<div class="form-group">
+		      			<div class="col-md-3 control-label">
+		        			<label class="pull-right">使用场景</label>
+		      			</div>
 
-	      			<div class="controls col-md-8 radios checkboxes">
-	        			<label>
-					    	<input name="sms_registration" type="checkbox" 
-					    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
-					    		checked
-					    	{% endif %}
-					    	> 用户注册时
-					    </label>
-					    <br>
-					    <label>
-					    	<input name="sms_find_password" type="checkbox"
-					    	{% if (setting('cloud_sms.sms_find_password')|default('')) == 'on' %}
-					    		checked
-					    	{% endif %}
-					    	> 忘记密码时
-					    </label>
-					    <br>
-					    <label>
-					    	<input name="sms_user_pay" type="checkbox"
-					    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
-					    		checked
-					    	{% endif %}
-					    	> 账户支付时
-					    </label>
-					    <br>
-					    <label>
-					    	<input name="sms_find_pay_password" type="checkbox"
-					    	{% if (setting('cloud_sms.sms_find_pay_password')|default('')) == 'on' %}
-					    		checked
-					    	{% endif %}
-					    	> 忘记支付密码时
-					    </label>
-	      			</div>
+		      			<div class="controls col-md-8 radios checkboxes">
+		        			<label>
+						    	<input name="sms_registration" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> 用户注册时
+						    </label>
+						    <br>
+						    <label>
+						    	<input name="sms_find_password" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_find_password')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> 忘记密码时
+						    </label>
+						    <br>
+						    <label>
+						    	<input name="sms_user_pay" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> 账户支付时
+						    </label>
+						    <br>
+						    <label>
+						    	<input name="sms_find_pay_password" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_find_pay_password')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> 忘记支付密码时
+						    </label>
+		      			</div>
+		    		</div>
 	    		</div>
-
 			</fieldset>
 			<div class="form-group">
 				<div class="controls col-md-offset-3 col-md-8">
@@ -124,11 +129,6 @@
     		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		</form>
 		{{ web_macro.flash_messages() }}
-{# 		<div class="alert alert-info currency ">
-		  <p>
-		    短信功能开启成功，每条短信0.07元。
-		  </p>
-		</div> #}
 	{% endif %}
 
 {% endblock %}
