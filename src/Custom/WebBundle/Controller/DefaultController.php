@@ -11,6 +11,7 @@ class DefaultController extends BaseController
 {
     public function indexAction ()
     {
+        
         $conditions = array('status' => 'published', 'type' => 'normal');
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -45,7 +46,41 @@ class DefaultController extends BaseController
             'columns'=>$columns
         ));
     }
+    private function getRecentLiveCourses()
+    {
 
+        $recenntLessonsCondition = array(
+            'status' => 'published',
+            'endTimeGreaterThan' => time(),
+        );
+
+        $recentlessons = $this->getCourseService()->searchLessons(
+            $recenntLessonsCondition,  
+            array('startTime', 'ASC'),
+            0,
+            20
+        );
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
+
+        $recentCourses = array();
+        foreach ($recentlessons as $lesson) {
+            $course = $courses[$lesson['courseId']];
+            if ($course['status'] != 'published') {
+                continue;
+            }
+            $course['lesson'] = $lesson;
+            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+            if (count($recentCourses) >= 8) {
+                break;
+            }
+
+            $recentCourses[] = $course;
+        }
+
+        return $recentCourses;
+    }
     protected function getCourseCarouselService()
     {
         return $this->getServiceKernel()->createService('Custom:CourseCarousel.CourseCarouselService');
