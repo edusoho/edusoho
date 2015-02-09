@@ -53,7 +53,7 @@ class EduCloudController extends BaseController
 
     public function smsAction(Request $request)
     {
-        $this->handleSmsPosted($request);
+        $this->handleSmsSetting($request);
         $smsStatus = array();
         $result = $this->lookForStatus();
         if (isset($result['apply']) && isset($result['apply']['status'])){
@@ -75,15 +75,9 @@ class EduCloudController extends BaseController
 
     public function applyForSmsAction(Request $request)
     {
-        // $verification = $this->verifyKeys();
-        // if (isset($verification['status']) && ($verification['status'] == 'ok')) {
-        //     return $this->createJsonResponse(array('ACK' => 'failed'));
-        // }
-
         if ($request->getMethod() == 'POST') {
             $result = null;
             $dataUserPosted = $request->request->all();
-            error_log(serialize($dataUserPosted),3,'/var/tmp/wangchao');
 
             if (
                 isset($dataUserPosted['name']) 
@@ -117,7 +111,7 @@ class EduCloudController extends BaseController
     }    
 
 
-    private function handleSmsPosted(Request $request)
+    private function handleSmsSetting(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $dataUserPosted =  $request->request->all();
