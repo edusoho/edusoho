@@ -46,4 +46,8 @@ define(function(require, exports, module) {
 		$('#js-school-name').html($('[name="name"]').val());
 	});
 
+	$('[name="name"]').blur(function(){
+		$('#js-school-name').html($('[name="name"]').val());
+	});
+
 });

@@ -20,7 +20,7 @@
 		      </div>
 		      <div class="col-md-7 controls">
 		        <input type="text" name="name" class="form-control" id="name">
-		        <p>短信内容：“【<span id="js-school-name"></span>】您的验证码是：123456”</p>
+		        <p>短信内容：“【<span id="js-school-name"></span>】您的验证码是：123456”,此短信30分钟内有效</p>
 		      </div>
 		    </div>
 		</fieldset>
@@ -29,7 +29,7 @@
 {% endblock %}
 
 {% block footer %}
-	<button class="btn btn-primary pull-right" id="js-submit">提交</button>
-	<button class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
+	<button class="btn btn-default col-md-offset-7" data-dismiss="modal">关闭</button>
+	<button class="btn btn-primary col-md-offset-2" id="js-submit">提交</button>
 	<script>app.load('educloud/apply-sms')</script>
 {% endblock %}
