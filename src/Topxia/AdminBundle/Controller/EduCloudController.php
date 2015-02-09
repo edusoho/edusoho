@@ -75,7 +75,12 @@ class EduCloudController extends BaseController
                 $this->setCloudSmsKey('sms_find_pay_password', 'on');
             }else{
                 $this->setCloudSmsKey('sms_find_pay_password', 'off');
-            }            
+            }   
+
+            if ('1' == $dataUserPosted['sms_enabled']){
+                $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');   
+            }
+
         }
 
         $smsStatus = array();

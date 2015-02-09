@@ -9,10 +9,6 @@
 {% block main %}
   <div class="page-header"><h1>云短信</h1></div>
 
-
-
-
-
     {% if smsStatus.status == 'error' %}
 	  	您还未开通云短信服务 &nbsp; &nbsp;
 	  	<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
@@ -127,6 +123,12 @@
     		</div>
     		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		</form>
+		{{ web_macro.flash_messages() }}
+{# 		<div class="alert alert-info currency ">
+		  <p>
+		    短信功能开启成功，每条短信0.07元。
+		  </p>
+		</div> #}
 	{% endif %}
 
 {% endblock %}
