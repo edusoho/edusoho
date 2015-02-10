@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 		var validator = new Validator({
             element: '#bind-mobile-form',
+            autoSubmit: true,
             onFormValidated: function(error){
                 if (error) {
                     return false;
@@ -26,26 +27,17 @@ define(function(require, exports, module) {
         });
 
         $('.js-sms-send').click(function() {
-        	validator.removeItem('[name="sms_code"]');
-        	validator.execute(function(error, results, element) {
-	            if (error) {
-	                return false;
-	            } 
 
-	        	var url = $('.js-sms-send').data('url');
-	        	var data = {};
-	        	data.to = $('[name="mobile"]').val();
-	        	data.sms_type = "sms_registration";
-	        	$.post(url,data,function(response){
-	        		console.log(response);
+				validator.query('[name="mobile"]').execute(function() {
+				    var url = $('.js-sms-send').data('url');
+		        	var data = {};
+		        	data.to = $('[name="mobile"]').val();
+		        	data.sms_type = "sms_registration";
+		        	$.post(url,data,function(response){
+		        		console.log(response);
 
-	        	});
-            });
-            validator.addItem({
-	            element: '[name="sms_code"]',
-	            required: true,
-	            rule: 'integer minlength{min:6} maxlength{max:6}'            
-	        });
+		        	});
+				});
 
         });
 
