@@ -27,8 +27,7 @@ class EduCloudController extends BaseController
             $result = $this->getAccounts();
         }catch(\RuntimeException $e){
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
-        }
-        
+        }        
         if (isset($result['cash'])){
             $money = $result['cash'];
         }
