@@ -43,6 +43,7 @@
 {% endblock %}
 
 {% block footer %}
+{% if is_plugin_installed('Classroom') and course.singleBuy == 1 %}
     {% if lesson.status == 'published' %}
         {% if course.price=='0.00'  %}
                 <a id="buy-btn" type="button" class="btn btn-primary" 
@@ -69,9 +70,11 @@
                 {% endif %}
                 >
                     {% if user.id %}觉得不错？点击购买此课程（{{ course.price }}元）
+                    
                     {% else %}登录后购买学习完整的课程
                     {% endif %}
                 </a>
+        {% endif %}
         {% endif %}
     {% else %}
         <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>

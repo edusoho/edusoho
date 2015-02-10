@@ -1,0 +1,191 @@
+/* =========================== color =========================== */
+/* =========================== media =========================== */
+.inline-block {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zan-transition {
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+.zan-transform {
+  -webkit-transform: scale(1.1, 1.1);
+  -moz-transform: scale(1.1, 1.1);
+  -ms-transform: scale(1.1, 1.1);
+  -o-transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);
+}
+/* =========================== common =========================== */
+a {
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+a:hover,
+a:focus {
+  color: #428bca;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+/* =========================== main =========================== */
+.es-class-wrap {
+  padding: 25px;
+  background-color: #fff;
+  border: 1px solid #e1e1e1;
+}
+.es-class-wrap .page-header {
+  margin: 0 0 20px 0;
+}
+.es-class-wrap .page-header h1 {
+  margin-top: 0;
+  font-size: 24px;
+}
+.class-wide-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  color: #999;
+}
+.class-wide-list .class-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+}
+.class-wide-list .class-item:hover .mask {
+  top: 0;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+.class-wide-list .class-item:last-child {
+  border: none;
+}
+.class-wide-list .class-picture-link {
+  position: relative;
+  float: left;
+  margin-right: 30px;
+  overflow: hidden;
+}
+@media (max-width: 767px) {
+  .class-wide-list .class-picture-link {
+    float: none;
+    display: block;
+    margin-right: 0;
+  }
+}
+.class-wide-list .class-picture-link > img {
+  width: 345px;
+}
+@media (max-width: 767px) {
+  .class-wide-list .class-picture-link > img {
+    width: 100%;
+    display: block;
+  }
+}
+.class-wide-list .class-picture-link .mask {
+  position: absolute;
+  top: 100%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #428bca;
+  background-color: rgba(66, 139, 202, 0.8);
+  color: #fff;
+  font-size: 18px;
+  padding: 15px 40px;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+.class-wide-list .class-picture-link .course-num {
+  margin-bottom: 15px;
+}
+.class-wide-list .class-title {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 20px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.class-wide-list .class-title a {
+  color: #555;
+  font-weight: bold;
+}
+.class-wide-list .class-title a:hover {
+  color: #428bca;
+}
+.class-wide-list .class-metas p {
+  margin-bottom: 20px;
+}
+.class-wide-list .class-metas .fa {
+  margin-right: 5px;
+  font-size: 18px;
+}
+.class-wide-list .class-metas .period-num {
+  color: #555;
+  font-size: 16px;
+}
+.class-wide-list .class-metas .class-price {
+  float: right;
+  font-size: 18px;
+  margin-right: 50px;
+}
+.class-wide-list .class-metas .class-teacher {
+  margin-right: 35px;
+}
+.class-wide-list .class-metas .class-teacher a {
+  margin-right: 5px;
+  color: #999;
+}
+.class-wide-list .class-metas .class-teacher a:hover {
+  color: #428bca;
+}
+.class-wide-list .class-about {
+  height: 40px;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+.class-wide-list .class-in .btn {
+  padding: 9px 83px;
+  font-size: 18px;
+}
+@media (max-width: 767px) {
+  .class-wide-list .class-in .btn {
+    padding: 5px 30px;
+  }
+}
+@media (max-width: 767px) {
+  .class-wide-list .class-body {
+    margin: 15px auto;
+  }
+}
+.course-hover-list {
+  padding: 0;
+  margin: -10px -18px;
+  list-style-type: none;
+}
+.course-hover-list li {
+  float: left;
+  width: 50%;
+  padding: 10px 18px;
+}
+.course-hover-list li img {
+  border: 2px solid #fff;
+}

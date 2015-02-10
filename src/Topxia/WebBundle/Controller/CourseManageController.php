@@ -152,7 +152,7 @@ class CourseManageController extends BaseController
         }
 
         $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(390)->heighten(260);
+        $scaledSize = $naturalSize->widen(480)->heighten(270);
 
         // @todo fix it.
         $assets = $this->container->get('templating.helper.assets');
