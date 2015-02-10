@@ -86,6 +86,7 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
+					{% if course.singleBuy == 1 %}
 						<a class="btn btn-primary btn-fat" id="course-buy-btn" 
 						{% if setting("course.buy_fill_userinfo")|default(false) %}
 						href="#modal" 
@@ -96,7 +97,7 @@
 						{% endif %}
 						 >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
 						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
-						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>{% endif %}
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
@@ -112,7 +113,7 @@
 						{% endif %}
 					{% endif %}
 				</div>
-				
+
 				<div class="pull-right ">
 
 					<a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
@@ -134,6 +135,20 @@
 				</div><div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
 			</div>
 
+			  {% if is_plugin_installed('Classroom') and classrooms%}
+			  <br>
+				<div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
+					<span>
+					本课程已加入到
+					{% for classroom in classrooms%}
+					<a class="btn-link" href="#">
+					{{classroom.title}}
+				             </a>
+					{% endfor %}
+					</span>
+				</div>
+			{% endif %}
+		
 		</div>
 	</div>
 
@@ -164,6 +179,7 @@
 							<span class="badge">{{ course.ratingNum }}</span>
 						</a>
 					</li>
+				{% if course.singleBuy == 1 %}
 					<li class="pull-right" style="display:none;" >
 					<div>
 						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" 
@@ -176,9 +192,10 @@
 						{% endif %}
 						>{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
 						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
-						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a> 
 					</div>
 					</li>
+				{% endif %}
 				</ul>
 			</div>
 
