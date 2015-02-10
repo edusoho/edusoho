@@ -347,7 +347,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	private function _filterCourseFields($fields)
-	{print_r($fields);
+	{
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'subtitle' => '',
