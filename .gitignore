@@ -47,3 +47,4 @@ web/assets/img/default/video.png
 .buildpath
 .phpintel*
 .phpintel/*
+/web/*

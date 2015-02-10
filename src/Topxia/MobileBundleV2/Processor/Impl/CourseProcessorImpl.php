@@ -636,6 +636,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $course            = $this->controller->getCourseService()->getCourse($thread['courseId']);
         $user              = $this->controller->getUserService()->getUser($thread['userId']);
+        
         $user['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
         $user['follower']  = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $result            = $this->filterThread($thread, $course, $user);
