@@ -6,10 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
-use Topxia\Service\Util\CloudClientFactory;
 
 class EduCloudController extends BaseController
 {
@@ -82,11 +78,6 @@ class EduCloudController extends BaseController
         ));
     }
 
-    public function smsUsageAction(Request $request)
-    {
-        //8888888888
-    }
-
     public function applyForSmsAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -111,6 +102,11 @@ class EduCloudController extends BaseController
             ));
         }
         return $this->render('TopxiaAdminBundle:EduCloud:apply-sms-form.html.twig', array());
+    }
+
+    public function smsUsageAction(Request $request)
+    {
+        //8888888888
     }
 
     public function smsSwitchAction(Request $request, $open)
