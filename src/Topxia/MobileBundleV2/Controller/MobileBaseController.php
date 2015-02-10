@@ -143,12 +143,16 @@ class MobileBaseController extends BaseController
             return array();
         }
 
+        $controller = $this;
+
         $simplifyUsers = array();
         foreach ($users as $key => $user) {
             $simplifyUsers[$key] = array (
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'title' => $user['title'],
+                'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
+                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
                 'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
@@ -170,7 +174,7 @@ class MobileBaseController extends BaseController
 
         $self = $this;
         return array_map(function($review) use ($self, $users) {
-            $review['user'] = $self->filterUsers($users);
+            $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser($users[$review['userId']]);
             unset($review['userId']);
 
             $review['createdTime'] = date('c', $review['createdTime']);
