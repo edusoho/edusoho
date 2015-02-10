@@ -46,5 +46,7 @@ interface CourseMemberDao
     public function findCourseMembersByUserId($userId);
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
     
 }

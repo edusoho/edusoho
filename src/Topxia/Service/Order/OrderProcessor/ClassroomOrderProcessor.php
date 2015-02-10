@@ -2,6 +2,7 @@
 namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolKit;
 use Topxia\Common\NumberToolkit;
 use Exception;
 
@@ -21,10 +22,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception("找不到要购买的班级!");
         }
 
-        $totalPrice = 0;
-
-        $coinSetting = $this->getSettingService()->get("coin");
-
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
         $users = array();
         foreach ($courses as $key => $course) {
@@ -32,8 +29,14 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
         $headerTeacher = $this->getUserService()->getUser($classroom["headerTeacherId"]);
 
-        if(!isset($coinSetting["coin_enabled"]) 
-            || !$coinSetting["coin_enabled"]) {
+        list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
+
+        $courseIds = ArrayToolKit::column($courses, "id");
+
+        $currentUser = $this->getUserService()->getCurrentUser();
+        $paidCourses = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+
+        if(!$coinEnable) {
         	$totalPrice = $classroom["price"];
         	return array(
 				'totalPrice' => $totalPrice,
@@ -42,20 +45,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
 				'classroom' => empty($classroom) ? null : $classroom,
                 'courses' => $courses,
+                'paidCourses' => $paidCourses,
                 'users' => $users,
                 'headerTeacher' => $headerTeacher
         	);
         }
 
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
-
-        $priceType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $priceType = $coinSetting["price_type"];
-        }
+        $totalPrice = 0;
 
         if($priceType == "Coin"){
             $totalPrice = $classroom["price"] * $cashRate;
@@ -63,35 +59,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $classroom["price"];
         }
 
-        $user = $this->getUserService()->getCurrentUser();
-        $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
-        $accountCash = $account["cash"];
-
-        $coinPayAmount = 0;
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
-        if ($hasPayPassword){
-            if ($priceType == "Coin") {
-                if($totalPrice*100 > $accountCash*100) {
-                    $coinPayAmount = $accountCash;
-                } else {
-                    $coinPayAmount = $totalPrice;
-                }                
-            } else if($priceType == "RMB") {
-                if($totalPrice*100 > $accountCash/$cashRate*100) {
-                    $coinPayAmount = $accountCash;
-                } else {
-                    $coinPayAmount = $totalPrice*$cashRate;
-                }
-            }
-        }
-
-        $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
-        $totalPrice = NumberToolkit::roundUp($totalPrice);
-
+        list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
+        
         return array(
             'classroom' => empty($classroom) ? null : $classroom,
             'courses' => $courses,
+            'paidCourses' => $paidCourses,
             'users' => $users,
             'headerTeacher' => $headerTeacher,
             
@@ -178,6 +151,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
     protected function getCashAccountService()

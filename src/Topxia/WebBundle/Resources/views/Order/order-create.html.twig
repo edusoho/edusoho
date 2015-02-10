@@ -60,7 +60,7 @@
             </div>
 
             {% if targetType == "classroom" %}
-            
+              {% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
             {% endif %}
             
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip']) and showCoupon|default(false) %}

@@ -343,4 +343,6 @@ interface CourseService
 
 	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
 
+	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
 }

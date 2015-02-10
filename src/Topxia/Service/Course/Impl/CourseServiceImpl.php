@@ -2307,6 +2307,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->updateCoinPrice($cashRate);
 	}
 
+	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+	{
+		$courses = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+		$courseIds = ArrayToolkit::column($courses, "courseId");
+		$courses = $this->findCoursesByIds($courseIds);
+		return $courses;
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
