@@ -636,7 +636,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $course            = $this->controller->getCourseService()->getCourse($thread['courseId']);
         $user              = $this->controller->getUserService()->getUser($thread['userId']);
-        $result            = $this->filterThread($thread, $course, $user);
+        $result            = $this->filterThread($thread, $course, $this->controller->filterUser($user));
         $result['content'] = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $result['content']));
         return $result;
     }
