@@ -170,7 +170,7 @@ class MobileBaseController extends BaseController
 
         $self = $this;
         return array_map(function($review) use ($self, $users) {
-            $review['user'] = $this->filterUsers($users);
+            $review['user'] = $self->filterUsers($users);
             unset($review['userId']);
 
             $review['createdTime'] = date('c', $review['createdTime']);
