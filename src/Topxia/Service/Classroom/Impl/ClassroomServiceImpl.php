@@ -446,6 +446,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $roles=array();
 
+        $user=$this->getUserService()->getUser($userId);
+
+        if(!$user) return array();
+
         $member=$this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId,$userId);
 
         if($this->getUserService()->hasAdminRoles($userId)){
