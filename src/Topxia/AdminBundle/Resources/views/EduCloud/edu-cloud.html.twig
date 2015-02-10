@@ -21,13 +21,13 @@
       {% if hasAccount %}
         <tr>
           <td>账户余额</td> 
-          <td>&nbsp;<span>{{money}}</span> 元 </td>
+          <td><span>{{money}}</span> 元 </td>
           <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/token_login?token={{token}}&goto=order_recharge" target="_blank"> 去充值 </a></td>
         </tr>
       
         <tr>
           <td>云短信状态</td>
-          <td>&nbsp;
+          <td>
             <span>
             {% if smsStatus.status == 'auditing' %}
               审核中
@@ -46,7 +46,7 @@
 
           <td>
             {% if smsStatus.status == 'error' or smsStatus.status == 'failed' %}
-              <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
+              <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
             {% endif %}
           </td>
         </tr>
