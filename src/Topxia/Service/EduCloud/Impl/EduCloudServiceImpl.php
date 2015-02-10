@@ -68,13 +68,13 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-	public function sendSms($to, $captcha, $category = 'captcha')
+	public function sendSms($to, $verify, $category = 'verify')
 	{
         $api = $this->getCloudApi();
         $options = $this->getCloudOptions();
         $result = $api->post(
             sprintf('/sms/%s/sendVerify', $options['accessKey']),
-            $params=array('mobile' => $to, 'verify'=> $captcha, 'category' => $category)
+            $params=array('mobile' => $to, 'verify'=> $verify, 'category' => $category)
         );
         return $result;
 	}
