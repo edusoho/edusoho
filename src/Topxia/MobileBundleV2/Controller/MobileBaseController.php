@@ -300,8 +300,14 @@ class MobileBaseController extends BaseController
             }
             $userProfile = $controller->getUserService()->getUserProfile($user['id']);
             $user['signature'] = $userProfile['signature'];
-            $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
-            
+            if(isset($user['about']))
+            {
+                $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
+            }
+
+            $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
+            $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+
             unset($user['password']);
             unset($user['salt']);
             unset($user['createdIp']);

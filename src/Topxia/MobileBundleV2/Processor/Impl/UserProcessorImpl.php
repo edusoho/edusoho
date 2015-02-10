@@ -235,8 +235,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
-        $user['following'] = $this->controller->getUserService()->findUserFollowingCount($userId);
-        $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         return $this->controller->filterUser($user);
     }
 
@@ -340,8 +338,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version)
         );
-        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $this->log("user_login", "用户二维码登录",  array(
                 "userToken" => $token)
             );
@@ -369,9 +365,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'token' => $token,
             'user' => $this->controller->filterUser($user)
         );
-
-        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
@@ -411,8 +404,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($followingId);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($followingId);
-            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($followingId);
             $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
@@ -433,8 +424,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($followerId);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($followerId);
-            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($followerId);
             $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
