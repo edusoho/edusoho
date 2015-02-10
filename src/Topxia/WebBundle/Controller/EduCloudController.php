@@ -20,15 +20,21 @@ class EduCloudController extends BaseController
 
 			$smsType = $request->getSession()->get('sms_type');
 			$this->checkSmsType($smsType, $currentUser);
+			$user = $currentUser->toArray();
 
 			$smsCode = $this->generateSmsCode();
-			$user = $currentUser->toArray();
 			if ( isset($user['verifiedMobile']) && (strlen($user['verifiedMobile'])>0) && ($smsType !='sms_registration') ){
 				$to = $user['verifiedMobile'];
 			}else{
 				$to = $request->request->get('to');				
 			}
 			$this->checkPhoneNum($to); 
+			
+			//必须 开启短信验证、适用场景、并且用户已经有verifiedMobile
+			if (($smsType == 'sms_forget_password')&&($to != $user['verifiedMobile'])){
+				return $this->createJsonResponse(array('error' => 'mobile not match'));
+			}
+
 			try{
 			  $result = $this->getEduCloudService()->sendSms($to, $smsCode);
 			  if (isset($result['error'])){
@@ -46,14 +52,7 @@ class EduCloudController extends BaseController
 
 			return $this->createJsonResponse(array('ACK' => 'ok'));
 		}
-		
-		// $user = $this->getCurrentUser();
-		// $user = $user->toArray();
-		// if ( isset($user['verifiedMobile']) && (strlen($user['verifiedMobile'])>0) ){
 
-		// }
-
-		// var_dump($user)	;exit;
 		return $this->createJsonResponse(array('error' => 'GET method'));		
 	}
 
