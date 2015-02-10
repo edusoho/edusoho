@@ -138,23 +138,7 @@
 		        			<label class="pull-right">使用场景</label>
 		      			</div>
 
-		      			<div class="controls col-md-8 radios checkboxes">
-		        			<label>
-						    	<input name="sms_registration" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> 用户注册时
-						    </label>
-						    <br>
-						    <label>
-						    	<input name="sms_find_password" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_find_password')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> 忘记密码时
-						    </label>
-						    <br>
+		      			<div class="controls col-md-8 radios checkboxes">	 
 						    <label>
 						    	<input name="sms_user_pay" type="checkbox"
 						    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
@@ -169,6 +153,22 @@
 						    		checked
 						    	{% endif %}
 						    	> 忘记支付密码时
+						    </label>
+						    <br>
+						    <label>
+						    	<input name="sms_registration" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> <span class="text-danger">用户注册时(会有攻击者，恶意刷短信的风险)</span>
+						    </label>
+						    <br>
+						    <label>
+						    	<input name="sms_find_password" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_find_password')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> <span class="text-danger">忘记密码时(会有攻击者，恶意刷短信的风险)</span>
 						    </label>
 		      			</div>
 		    		</div>
