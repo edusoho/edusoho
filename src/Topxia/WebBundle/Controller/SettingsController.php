@@ -349,7 +349,7 @@ class SettingsController extends BaseController
 	        'token' => $token?:null
         ));
 	}
-	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
+	public function updatePayPasswordFromEmailOrQuestionsAction(Request $request)
 	{
 
 		$token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token')?:$request->request->get('token'));
