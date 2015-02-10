@@ -475,6 +475,12 @@ class SettingsController extends BaseController
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
+	public function bindMobileAction(Request $request)
+	{
+		//888
+		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
+	}
+
 	public function passwordAction(Request $request)
 	{
 		$user = $this->getCurrentUser();

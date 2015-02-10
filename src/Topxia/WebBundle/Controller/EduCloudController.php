@@ -21,7 +21,7 @@ class EduCloudController extends BaseController
                 return $this->createJsonResponse(array('error' => 'wait to resent'));
             }
 
-            $smsType = $request->getSession()->get('sms_type');
+            $smsType = $request->request->get('sms_type');
             $this->checkSmsType($smsType, $currentUser);
 
             if ($smsType == 'sms_registration') {
@@ -51,18 +51,20 @@ class EduCloudController extends BaseController
                 $to = $user['verifiedMobile'];
             }
 
-            if ($this->checkPhoneNum($to)){
-                return $this->createJsonResponse(array('error' => 'mobile number error'));
+            if (!$this->checkPhoneNum($to)){
+                return $this->createJsonResponse(array('error' => "mobile number error:{$to}"));
             }
 
             $smsCode = $this->generateSmsCode();
             try {
                 $result = $this->getEduCloudService()->sendSms($to, $smsCode);
                 if (isset($result['error'])) {
-                    return $this->createJsonResponse(array('error' => 'failed to send sms'));
+                    $serializedResult = serialize($result);
+                    return $this->createJsonResponse(array('error' => "failed to send sms|{$serializedResult}"));
                 }
             } catch (\RuntimeException $e) {
-                return $this->createJsonResponse(array('error' => 'failed to send sms'));
+                $serializedResult = serialize($result);
+                return $this->createJsonResponse(array('error' => "failed to send sms|{$serializedResult}"));
             }
 
             $this->getLogService()->info('sms', 'sms', "对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
@@ -88,10 +90,7 @@ class EduCloudController extends BaseController
 
     private function checkPhoneNum($num)
     {
-        if (!preg_match("/^1\d{10}$/", $num)) {
-            return false;
-        }
-        return true;
+        return preg_match("/^1\d{10}$/", $num);
     }
 
     private function checkLastTime($smsLastTime, $allowedTime = 120)

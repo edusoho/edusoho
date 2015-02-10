@@ -1517,3 +1517,7 @@ vip_upgrade:
 edu_cloud_sms_send:
     pattern:  /edu-cloud/sms-send
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
+
+settings_bind_mobile:
+    pattern:  /settings/bind-mobile
+    defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
