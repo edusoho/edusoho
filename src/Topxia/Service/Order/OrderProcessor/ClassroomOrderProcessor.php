@@ -36,12 +36,26 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $currentUser = $this->getUserService()->getCurrentUser();
         $paidCourses = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
 
+        $coursesTotalPrice = $this->getCoursesTotalPrice($courses, "RMB");
+        $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, "RMB");
+
         if(!$coinEnable) {
-        	$totalPrice = $classroom["price"];
+            $totalPrice = $classroom["price"];
+
+            $discountRate = $totalPrice/$coursesTotalPrice;
+
+            foreach ($paidCourses as $key => $paidCourse) {
+                $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
+            }
+
         	return array(
 				'totalPrice' => $totalPrice,
 				'targetId' => $targetId,
             	'targetType' => "classroom",
+                'paidCourses' => $paidCourses,
+                'coursesTotalPrice' => $coursesTotalPrice,
+                'paidCoursesTotalPrice' => $paidCoursesTotalPrice,
+                'discountRate' => $discountRate,
 
 				'classroom' => empty($classroom) ? null : $classroom,
                 'courses' => $courses,
@@ -51,15 +65,14 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         	);
         }
 
-        $totalPrice = 0;
-
-        if($priceType == "Coin"){
-            $totalPrice = $classroom["price"] * $cashRate;
-        } else {
-            $totalPrice = $classroom["price"];
-        }
+        $totalPrice = $classroom["price"];
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
+
+        $discountRate = $totalPrice/$coursesTotalPrice;
+        foreach ($paidCourses as $key => $paidCourse) {
+            $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
+        }
         
         return array(
             'classroom' => empty($classroom) ? null : $classroom,
@@ -67,6 +80,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             'paidCourses' => $paidCourses,
             'users' => $users,
             'headerTeacher' => $headerTeacher,
+            'coursesTotalPrice' => $coursesTotalPrice,
+            'paidCoursesTotalPrice' => $paidCoursesTotalPrice,
+            'discountRate' => $discountRate,
             
             'totalPrice' => $totalPrice,
             'targetId' => $targetId,
@@ -128,7 +144,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->getClassroomOrderService()->createOrder($orderInfo);
 	}
 
-	public function doPaySuccess($success, $order) {
+	public function doPaySuccess($success, $order) 
+    {
         if (!$success) {
             return ;
         }
@@ -136,6 +153,30 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $this->getClassroomOrderService()->doSuccessPayOrder($order['id']);
 
         return ;
+    }
+
+    private function afterDiscountPrice($course, $priceType, $discountRate)
+    {
+        $coursePrice = 0;
+        if($priceType == "RMB") {
+            $coursePrice += $course["price"];
+        } else if($priceType == "Coin") {
+            $coursePrice += $course["coinPrice"];
+        }
+        return $coursePrice*$discountRate;
+    }
+
+    private function getCoursesTotalPrice($courses, $priceType)
+    {
+        $coursesTotalPrice = 0;
+        foreach ($courses as $key => $course) {
+            if($priceType == "RMB") {
+                $coursesTotalPrice += $course["price"];
+            } else if($priceType == "Coin") {
+                $coursesTotalPrice += $course["coinPrice"];
+            }
+        }
+        return $coursesTotalPrice;
     }
 
     protected function getClassroomService()
