@@ -342,7 +342,7 @@ class SettingsController extends BaseController
         ));
 	}
 
-	private function  updatePayPasswordReturn($form, $token)
+	private function updatePayPasswordReturn($form, $token)
 	{
         return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
 	        'form' => $form->createView(),
