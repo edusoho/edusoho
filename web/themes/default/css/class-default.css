@@ -24,6 +24,7 @@
   -o-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
 }
+
 /* =========================== temp =========================== */
 .stars-0,
 .stars-1,
@@ -33,6 +34,7 @@
 .stars-5 {
   background: url("../img-temp/stars.png") no-repeat;
 }
+
 /* =========================== common =========================== */
 a {
   -webkit-transition: all .3s ease;
@@ -56,6 +58,7 @@ a:focus {
 .es-class-wrap {
   padding: 25px;
   margin-bottom: 20px;
+
   background-color: #fff;
   border: 1px solid #e1e1e1;
 }
@@ -114,6 +117,8 @@ a:focus {
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
+  height: 100%;
   background-color: #428bca;
   background-color: rgba(66, 139, 202, 0.8);
   color: #fff;
@@ -201,6 +206,7 @@ a:focus {
 .course-hover-list li img {
   border: 2px solid #fff;
 }
+
 .class-header {
   color: #999;
 }
@@ -463,3 +469,4 @@ a:focus {
   padding: 8px 10px;
   float: left;
 }
+
