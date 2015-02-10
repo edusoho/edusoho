@@ -648,7 +648,6 @@ class SettingsController extends BaseController
 			goto response;
 		}
 
-
 		$callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
 		try {
 			$token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
