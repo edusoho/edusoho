@@ -267,7 +267,6 @@ class SettingsController extends BaseController
 			->add('confirmPayPassword', 'password')
 			->getForm();
 
-
 		if ($request->getMethod() == 'POST') {
 			$form->bind($request);
 			if ($form->isValid()) {
@@ -293,14 +292,12 @@ class SettingsController extends BaseController
 	{ 
 		$user = $this->getCurrentUser(); 
 
-
 		$form = $this->createFormBuilder()
 			// ->add('currentUserLoginPassword','password')
 			->add('oldPayPassword', 'password')
 			->add('newPayPassword', 'password')
 			->add('confirmPayPassword', 'password')
 			->getForm();
-
 
 		if ($request->getMethod() == 'POST') {
 			$form->bind($request);
@@ -335,6 +332,7 @@ class SettingsController extends BaseController
 			'questionNum' => $questionNum,
 		)); 		
 	}
+
 	private function setPayPasswordPage($request, $userId)
 	{
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
@@ -343,7 +341,6 @@ class SettingsController extends BaseController
             'request' => $request 
         ));
 	}
-
 
 	private function  updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token)
 	{
@@ -411,7 +408,6 @@ class SettingsController extends BaseController
  			$isAnswerRight = $this->getUserService()->verifyInSaltOut(
                                           $answer, $userSecureQuestion['securityAnswerSalt'] , $userSecureQuestion['securityAnswer'] ); 
 
-
  			if (!$isAnswerRight){
  				$this->setFlashMessage('danger', '回答错误。');
  				return $this->findPayPasswordActionReturn($userSecureQuestions);
@@ -421,7 +417,6 @@ class SettingsController extends BaseController
  			return $this->setPayPasswordPage($request, $user['id']);
 
 		}
-
 		return $this->findPayPasswordActionReturn($userSecureQuestions);
 	}
 
@@ -433,7 +428,6 @@ class SettingsController extends BaseController
 			$question2 = $userSecureQuestions[1]['securityQuestionCode'];
 			$question3 = $userSecureQuestions[2]['securityQuestionCode'];
 		}
-
 
 		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
 			'hasSecurityQuestions' => $hasSecurityQuestions,
