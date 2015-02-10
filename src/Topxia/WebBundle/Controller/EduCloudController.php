@@ -18,7 +18,7 @@ class EduCloudController extends BaseController
 
             $smsLastTime = $request->getSession()->get('sms_last_time');
             if (!$this->checkLastTime($smsLastTime)) {
-                return $this->createJsonResponse(array('error' => 'wait 30 minutes'));
+                return $this->createJsonResponse(array('error' => 'wait to resent'));
             }
 
             $smsType = $request->getSession()->get('sms_type');
@@ -94,7 +94,7 @@ class EduCloudController extends BaseController
         return true;
     }
 
-    private function checkLastTime($smsLastTime, $allowedTime = 1800)
+    private function checkLastTime($smsLastTime, $allowedTime = 120)
     {
         if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
             return false;
