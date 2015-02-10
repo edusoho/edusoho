@@ -42,7 +42,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #428bca;
+  color: #83bb36;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
   -o-transition: all .3s ease;
@@ -131,7 +131,7 @@ a:focus {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #428bca;
+  background-color: #83bb36;
   background-color: rgba(66, 139, 202, 0.8);
   color: #fff;
   font-size: 18px;
@@ -158,7 +158,7 @@ a:focus {
   font-weight: bold;
 }
 .class-wide-list .class-title a:hover {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-wide-list .class-metas p {
   margin-bottom: 20px;
@@ -184,7 +184,7 @@ a:focus {
   color: #999;
 }
 .class-wide-list .class-metas .class-teacher a:hover {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-wide-list .class-about {
   height: 40px;
@@ -397,7 +397,7 @@ a:focus {
   }
 }
 .class-join-header-bottom .class-freebuy a:hover {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-join-header-bottom .class-buy {
   padding: 10px 15px;
@@ -474,7 +474,7 @@ a:focus {
   color: #999;
 }
 .class-header-bottom .class-buy a:hover {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-header-bottom .class-view {
   padding: 10px 15px;
@@ -589,7 +589,7 @@ a:focus {
   color: #999;
 }
 .class-dashbord-main .class-course .metas a:hover {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-dashbord-main .class-note {
   padding: 0;
@@ -647,7 +647,7 @@ a:focus {
   color: #999;
 }
 .class-dashbord-main .class-note .user-name a {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-dashbord-main .class-note .note-date {
   margin-left: 20px;
@@ -681,7 +681,7 @@ a:focus {
 }
 .class-dashbord-main .topic-list .topic-title .fa {
   font-size: 20px;
-  color: #428bca;
+  color: #83bb36;
   margin-right: 10px;
 }
 .class-dashbord-main .topic-list .topic-content {
@@ -700,14 +700,14 @@ a:focus {
   margin-right: 10px;
 }
 .class-dashbord-main .topic-list .topic-user a {
-  color: #428bca;
+  color: #83bb36;
 }
 .class-dashbord-main .topic-list .topic-date {
   color: #b2b2b2;
 }
 .class-dashbord-main .topic-list .topic-reply a {
   margin-left: 5px;
-  color: #428bca;
+  color: #83bb36;
 }
 .class-dashbord-main .evaluste-list {
   padding: 0;
@@ -798,7 +798,7 @@ a:focus {
 }
 .class-dashbord-sidebar .sign-in .sign-in-info span {
   margin: 0 3px;
-  color: #428bca;
+  color: #83bb36;
 }
 .class-dashbord-sidebar .sign-in .fa-pencil-square-o {
   margin-right: 10px;
@@ -864,10 +864,13 @@ a:focus {
   margin-bottom: 0;
 }
 .class-dashbord-sidebar .dynamic .dynamic-body p a {
-  color: #428bca;
+  color: #83bb36;
   margin: 0 5px;
 }
 .class-dashbord-sidebar .dynamic .dynamic-body .date {
   color: #999;
   text-align: right;
+}
+.class-wide-list .class-picture-link .mask {
+  background-color: rgba(131, 187, 54, 0.8);
 }
