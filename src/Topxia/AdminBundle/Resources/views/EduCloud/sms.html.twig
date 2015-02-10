@@ -10,25 +10,79 @@
   <div class="page-header"><h1>云短信</h1></div>
 
     {% if smsStatus.status == 'error' %}
-	  	您还未开通云短信服务 &nbsp; &nbsp;
-	  	<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
+    	<div class="panel panel-default">
+			<table class="table table-striped table-hover" style="word-break:break-all;">
+				<thead>
+                    <tr>
+                        <th style="text-align: center; width: 70%">原因</th>
+                        <th style="text-align: center; width: 30%">操作</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                	<tr>
+                		<td>
+                			您还未开通云短信服务
+                		</td>
+                		<td>
+                			<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
+                		</td>
+                	</tr>
+                </tbody>
+			</table>
+		</div>
     {% endif %}
 
 	{% if smsStatus.status == 'auditing' %}
 		<br>
-		短信内容：【 {{ setting('cloud_sms.sms_school_name')|default('') }} 】您的验证码是：123456<br>
-		审核时间：审核需24小时，期间短信验证功能仍可以正常使用<br>
-		短信价格：0.07元/条<br>
-		云短信状态:
-		<strong>
-		    审核中		    
-		</strong>
-		<br>
+		<div class="panel panel-default">
+			<table class="table table-striped table-hover" style="word-break:break-all;">
+				<thead>
+                    <tr>
+                        <th style="text-align: center; width: 40%">短信内容</th>
+                        <th style="text-align: center; width: 30%">审核时间</th>
+                        <th style="text-align: center; width: 20%">短信价格</th>
+                        <th style="text-align: center;">云短信状态</th>
+                    </tr>
+                </thead>
+
+                <tbody style="text-align: center;">
+                	<tr>
+                		<td>【 {{ setting('cloud_sms.sms_school_name')|default('') }} 】您的验证码是：123456，此短信30分钟内有效</td>
+                		<td>审核需24小时，期间短信验证功能仍可以正常使用</td>
+                		<td>0.07元/条</td>
+                		<td>
+                			<strong>
+		    					审核中		    
+							</strong>
+						</td>
+                	</tr>
+                </tbody>
+			</table>
+		</div>
+	
 	{% endif %}
 
 	{% if smsStatus.status == 'failed' %}
-		因为申请的网校名称不符合规范，您新申请的网校名称“{{setting('cloud_sms.sms_school_name')|default('')}}”未通过审核。
-		<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > &nbsp;申请开通云短信&nbsp; </span>
+		<div class="panel panel-default">
+			<table class="table table-striped table-hover" style="word-break:break-all;">
+				<thead>
+                    <tr>
+                        <th style="text-align: center; width: 70%">原因</th>
+                        <th style="text-align: center; width: 30%">操作</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                	<tr>
+                		<td>
+                			因为申请的网校名称不符合规范，您新申请的网校名称“{{setting('cloud_sms.sms_school_name')|default('')}}”未通过审核
+                		</td>
+                		<td>
+                			<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
+                		</td>
+                	</tr>
+                </tbody>
+			</table>
+		</div>
 	{% endif %}
 
 	{% if smsStatus.status == 'passed' %}
