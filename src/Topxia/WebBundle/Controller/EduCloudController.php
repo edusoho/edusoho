@@ -53,7 +53,7 @@ class EduCloudController extends BaseController
 				return $this->createJsonResponse(array('error' => 'failed to send sms'));
 			}
 
-			$this->getLogService()->info('sms', 'sms', "对{$to}发送用于{$smsType}的验证短信{$smsCode}");
+			$this->getLogService()->info('sms', 'sms', "对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
 
 			$request->getSession()->set('sms_code', $smsCode);
 			$request->getSession()->set('sms_last_time', $currentTime);
@@ -69,7 +69,7 @@ class EduCloudController extends BaseController
 	{
 		$code = rand(0,9);
 		for ($i = 1; $i < $length; $i++){
-			$code = $code .rand(0,9);
+			$code = $code . rand(0,9);
 		}
 		return $code;
 	}
