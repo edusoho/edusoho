@@ -228,9 +228,6 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-
-
-
 	public function securityAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
