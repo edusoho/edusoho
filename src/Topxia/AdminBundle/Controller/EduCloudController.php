@@ -114,12 +114,10 @@ class EduCloudController extends BaseController
         //8888888888
     }
 
-
     public function smsCaptchaAction(Request $request)
     {
         //8888888888
     }    
-
 
     private function handleSmsSetting(Request $request)
     {
