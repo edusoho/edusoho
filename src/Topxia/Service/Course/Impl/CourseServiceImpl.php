@@ -1881,6 +1881,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $member;
 	}
 
+	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info)
+	{
+		$fields = array(
+			'courseId' => $courseId,
+			'userId' => $userId,
+			'orderId' => empty($info["orderId"]) ? 0 : $info["orderId"],
+			'deadline' => empty($info['deadline']) ? 0 : $info['deadline'],
+			'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+			'role' => 'student',
+			'remark' => empty($info["orderNote"]) ? '' : $info["orderNote"],
+			'createdTime' => time(),
+			'classroomId' => $classRoomId,
+			'joinedType' => 'classroom'
+		);
+
+		$member = $this->getMemberDao()->addMember($fields);
+
+	}
+
 	private function getWelcomeMessageBody($user, $course)
     {
         $setting = $this->getSettingService()->get('course', array());
@@ -2286,6 +2305,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function updateCoinPrice($cashRate)
 	{
 		$this->getCourseDao()->updateCoinPrice($cashRate);
+	}
+
+	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+	{
+		$courses = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+		$courseIds = ArrayToolkit::column($courses, "courseId");
+		$courses = $this->findCoursesByIds($courseIds);
+		return $courses;
 	}
 
 	private function getCourseLessonReplayDao()

@@ -39,6 +39,10 @@
               {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
+            {% if targetType == "classroom" %}
+              {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
+            {% endif %}
+
             <div class="order-item clearfix" 
             {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and targetType in ['course','vip']) or setting('coin.coin_enabled')) %}
             style="display:none"
@@ -54,6 +58,10 @@
                 {% endif %}
               </div>
             </div>
+
+            {% if targetType == "classroom" %}
+              {% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
+            {% endif %}
             
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip']) and showCoupon|default(false) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
