@@ -243,7 +243,6 @@ class SettingsController extends BaseController
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 		$hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
-
 		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
 
@@ -311,11 +310,6 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 		
-				// if ( !( $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])
-				// 			&& $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
-				// {
-				// 	$this->setFlashMessage('danger', '当前用户登陆密码或者支付密码不正确，请重试！');
-				// }
 				if ( !($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
 				{
 					$this->setFlashMessage('danger', '支付密码不正确，请重试！');
@@ -323,7 +317,6 @@ class SettingsController extends BaseController
 				else 
 				{
 					$this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-					// $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 					$this->setFlashMessage('success', '重置支付密码成功。');
 				}
 
