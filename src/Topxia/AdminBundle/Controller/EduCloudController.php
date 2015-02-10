@@ -186,9 +186,9 @@ class EduCloudController extends BaseController
         return $this->getEduCloudService()->lookForStatus();
     }
 
-    private function sendSms($to, $captcha, $category = 'captcha')
+    private function sendSms($to, $verify, $category = 'verify')
     {
-        return $this->getEduCloudService()->sendSms($to, $captcha, $category);
+        return $this->getEduCloudService()->sendSms($to, $verify, $category);
     }
 
     private function verifyKeys()
