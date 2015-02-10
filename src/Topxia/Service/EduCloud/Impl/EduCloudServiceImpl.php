@@ -87,7 +87,7 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-    public function checkSms(Request $request, $scenario)
+    public function checkSms(Request $request, $scenario, $allowedTime = 1800)
     {
         $smsType = $request->getSession()->get('sms_type');
 
@@ -100,7 +100,7 @@ class EduCloudServiceImpl extends BaseService
 
         $currentTime = time();
         $smsLastTime = $request->getSession()->get('sms_last_time');
-        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > 1800)) {
+        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
             return false;
         }
 

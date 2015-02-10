@@ -27,7 +27,7 @@ class EduCloudController extends BaseController
             if ($smsType == 'sms_registration') {
                 $to = $request->request->get('to');
             }
-            
+
             if ($smsType == 'sms_forget_password') {
                 $nickname = $request->request->get('nickname');
                 if (strlen($nickname) == 0){
@@ -94,9 +94,9 @@ class EduCloudController extends BaseController
         return true;
     }
 
-    private function checkLastTime($smsLastTime)
+    private function checkLastTime($smsLastTime, $allowedTime = 1800)
     {
-        if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > 1800))) {
+        if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
             return false;
         }
         return true;
