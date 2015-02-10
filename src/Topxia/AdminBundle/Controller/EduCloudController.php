@@ -157,19 +157,6 @@ class EduCloudController extends BaseController
     {
         return (strlen($str) + mb_strlen($str,'UTF8')) / 2; 
     }  
-
-    private function getCloudOptions()
-    {        
-        if (empty($this->cloudOptions)) {
-            $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
-            $this->cloudOptions = array(
-                'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-                'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-                'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
-            );
-        }        
-        return $this->cloudOptions;
-    }
       
     private function setCloudSmsKey($key, $val)
     {        
@@ -183,14 +170,6 @@ class EduCloudController extends BaseController
         $setting = $this->getSettingService()->get('cloud_sms', array());
         return $setting[$key];
     } 
-
-    private function getCloudApi()
-    {        
-        if (empty($this->cloudApi)) {
-            $this->cloudApi = $this->createAPIClient();
-        }        
-        return $this->cloudApi;
-    }
 
     private function getAccounts()
     {
