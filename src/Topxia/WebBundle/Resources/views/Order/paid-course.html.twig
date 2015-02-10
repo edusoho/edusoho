@@ -12,7 +12,7 @@
     <div>
       <h4>{{paidCourse.title}}</h4>
       <span role="course-price">现价：{{paidCourse.price}}</span>
-      <span role="course-discount-price">折价：- {{paidCourse.afterDiscountPrice}}</span>
+      折价：- <span role="course-discount-price">{{paidCourse.afterDiscountPrice}}</span>
       
     </div>
     {% endfor %}
