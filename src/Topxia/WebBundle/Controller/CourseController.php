@@ -354,7 +354,7 @@ class CourseController extends BaseController
 		foreach ($classroomIds as $key => $value) {
 			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 		}
-		// var_dump($classrooms);exit();
+
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
