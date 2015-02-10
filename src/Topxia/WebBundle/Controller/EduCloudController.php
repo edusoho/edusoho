@@ -34,7 +34,7 @@ class EduCloudController extends BaseController
 			}
 			$this->checkPhoneNum($to); 
 			
-			//必须 开启短信验证、适用场景、并且用户已经有verifiedMobile  才有通过短信重置密码页面
+			//前台页面 必须 开启短信验证、适用场景、并且用户已经有verifiedMobile  才有通过短信重置密码页面
 			if ($smsType == 'sms_forget_password'){
 				if ((!isset($user['verifiedMobile'])||( strlen($user['verifiedMobile']) == 0 ))) {
 					return $this->createJsonResponse(array('error' => '用户没有verifiedMobile'));
