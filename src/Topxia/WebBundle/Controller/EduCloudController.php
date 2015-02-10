@@ -23,24 +23,37 @@ class EduCloudController extends BaseController
 
             $smsType = $request->getSession()->get('sms_type');
             $this->checkSmsType($smsType, $currentUser);
-            $user = $currentUser->toArray();
-
-            //sms_forget_password:前台页面 必须 开启短信验证、适用场景、并且用户已经有verifiedMobile  才有通过短信重置密码页面
-            if (in_array($smsType, array('sms_forget_password', 'sms_user_pay', 'sms_forget_pay_password'))) {
-                if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
-                    return $this->createJsonResponse(array('error' => '用户没有verifiedMobile'));
-                }
-                if (($smsType == 'sms_forget_password') && ($request->request->get('to') != $user['verifiedMobile'])) {
-                    return $this->createJsonResponse(array('error' => 'mobile not match'));
-                }
-                $to = $user['verifiedMobile'];
-            }
 
             if ($smsType == 'sms_registration') {
                 $to = $request->request->get('to');
             }
+            
+            if ($smsType == 'sms_forget_password') {
+                $nickname = $request->request->get('nickname');
+                if (strlen($nickname) == 0){
+                    return $this->createJsonResponse(array('error' => 'nickname is null'));
+                }
+                $targetUser = $this->getUserService()->getUserByNickname($nickname);
+                if (empty($targetUser)){
+                    return $this->createJsonResponse(array('error' => 'user not exist'));    
+                }
+                if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
+                    return $this->createJsonResponse(array('error' => '用户没有verifiedMobile'));
+                }
+                $to = $targetUser['verifiedMobile'];
+            }
 
-            $this->checkPhoneNum($to);
+            if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
+                $user = $currentUser->toArray();
+                if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
+                    return $this->createJsonResponse(array('error' => '用户没有verifiedMobile'));
+                }
+                $to = $user['verifiedMobile'];
+            }
+
+            if ($this->checkPhoneNum($to)){
+                return $this->createJsonResponse(array('error' => 'mobile number error'));
+            }
 
             $smsCode = $this->generateSmsCode();
             try {
@@ -76,8 +89,9 @@ class EduCloudController extends BaseController
     private function checkPhoneNum($num)
     {
         if (!preg_match("/^1\d{10}$/", $num)) {
-            throw new \RuntimeException('phone num error');
+            return false;
         }
+        return true;
     }
 
     private function checkLastTime($smsLastTime)
@@ -94,7 +108,7 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('不存在的sms Type');
         }
 
-        if ((!$user->isLogin()) && ($smsType == 'sms_user_pay' || $smsType == 'sms_forget_pay_password')) {
+        if ((!$user->isLogin()) && (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password')))) {
             throw new \RuntimeException('用户未登陆');
         }
 
@@ -122,5 +136,10 @@ class EduCloudController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
