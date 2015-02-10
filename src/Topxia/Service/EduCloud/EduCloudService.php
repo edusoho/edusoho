@@ -12,4 +12,6 @@ interface EduCloudService
     public function sendSms($to, $captcha, $category = 'captcha');
 
     public function verifyKeys();
+
+    public function checkSms($request, $smsUserPosted, $scenario);
 }

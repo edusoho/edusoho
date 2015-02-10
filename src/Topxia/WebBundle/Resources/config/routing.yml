@@ -1513,3 +1513,7 @@ vip_renew:
 
 vip_upgrade:
     pattern: /vip/upgrade
+
+edu_cloud_sms_send:
+    pattern:  /edu-cloud/sms-send
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }

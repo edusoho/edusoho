@@ -87,5 +87,34 @@ class EduCloudServiceImpl extends BaseService
             sprintf('/keys/%s/verification', $options['accessKey'])
         );
         return $result;
+    }
+
+    public function checkSms($request, $scenario)
+    {
+    	$smsType = $request->getSession()->get('sms_type');
+
+    	if (strlen($smsType)==0)){
+			return false;
+		}
+		if (strlen($scenario)==0)){
+			return false;
+		}
+		if ($smsType!=$scenario){
+			return false;
+		}
+
+		$currentTime = time();
+		$smsLastTime = $request->getSession()->get('sms_last_time');
+		if ((strlen($smsLastTime)==0)||(($currentTime - $smsLastTime) > 1800)){
+			return false;
+		}
+
+		$smsCode = $request->getSession()->get('sms_code');
+		$smsCodePosted = $request->request->get('sms_code');
+		if ((strlen($smsCodePosted) == 0)|| (strlen($smsCode) == 0)){
+			return false;
+		}
+
+		return ($smsCode == $smsCodePosted);
     }	
 }
