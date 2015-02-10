@@ -129,20 +129,20 @@ class EduCloudController extends BaseController
             }else{
                 $this->setCloudSmsKey('sms_registration', 'off');
             }
-            if (isset($dataUserPosted['sms_find_password'])&&($dataUserPosted['sms_find_password']=='on')) {
-                $this->setCloudSmsKey('sms_find_password', 'on');
+            if (isset($dataUserPosted['sms_forget_password'])&&($dataUserPosted['sms_forget_password']=='on')) {
+                $this->setCloudSmsKey('sms_forget_password', 'on');
             }else{
-                $this->setCloudSmsKey('sms_find_password', 'off');
+                $this->setCloudSmsKey('sms_forget_password', 'off');
             }
             if (isset($dataUserPosted['sms_user_pay'])&&($dataUserPosted['sms_user_pay']=='on')) {
                 $this->setCloudSmsKey('sms_user_pay', 'on');
             }else{
                 $this->setCloudSmsKey('sms_user_pay', 'off');
             }
-            if (isset($dataUserPosted['sms_find_pay_password'])&&($dataUserPosted['sms_find_pay_password']=='on')) {
-                $this->setCloudSmsKey('sms_find_pay_password', 'on');
+            if (isset($dataUserPosted['sms_forget_pay_password'])&&($dataUserPosted['sms_forget_pay_password']=='on')) {
+                $this->setCloudSmsKey('sms_forget_pay_password', 'on');
             }else{
-                $this->setCloudSmsKey('sms_find_pay_password', 'off');
+                $this->setCloudSmsKey('sms_forget_pay_password', 'off');
             }   
 
             if ('1' == $dataUserPosted['sms_enabled']){

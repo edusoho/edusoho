@@ -93,10 +93,10 @@ class EduCloudServiceImpl extends BaseService
     {
     	$smsType = $request->getSession()->get('sms_type');
 
-    	if (strlen($smsType)==0)){
+    	if (strlen($smsType)==0){
 			return false;
 		}
-		if (strlen($scenario)==0)){
+		if (strlen($scenario)==0){
 			return false;
 		}
 		if ($smsType!=$scenario){

@@ -10,17 +10,24 @@ class EduCloudController extends BaseController
 {
 	public function smsSendAction(Request $request)
 	{
+
 		if ($request->getMethod() ==  'POST'){
+			$currentUser = $this->getCurrentUser();
 			$currentTime = time();
 
 			$smsLastTime = $request->getSession()->get('sms_last_time');
 			$this->checkLastTime($smsLastTime);
 
 			$smsType = $request->getSession()->get('sms_type');
-			$this->checkSmsType($smsType);
+			$this->checkSmsType($smsType, $currentUser);
 
 			$smsCode = $this->generateSmsCode();
-			$to = $request->request->get('to');
+			$user = $currentUser->toArray();
+			if ( isset($user['verifiedMobile']) && (strlen($user['verifiedMobile'])>0) && ($smsType !='sms_registration') ){
+				$to = $user['verifiedMobile'];
+			}else{
+				$to = $request->request->get('to');				
+			}
 			$this->checkPhoneNum($to); 
 			try{
 			  $result = $this->getEduCloudService()->sendSms($to, $smsCode);
@@ -31,12 +38,22 @@ class EduCloudController extends BaseController
 			  return $this->createJsonResponse(array('error' => 'failed to send sms'));
 			}
 
+			$this->getLogService()->info('sms', 'sms', "对{$to}发送用于{$smsType}的验证短信{$smsCode}");
+
 			$request->getSession()->set('sms_code', $smsCode);
 			$request->getSession()->set('sms_last_time', $currentTime);
 			$request->getSession()->set('sms_type', $smsType);
 
 			return $this->createJsonResponse(array('ACK' => 'ok'));
 		}
+		
+		// $user = $this->getCurrentUser();
+		// $user = $user->toArray();
+		// if ( isset($user['verifiedMobile']) && (strlen($user['verifiedMobile'])>0) ){
+
+		// }
+
+		// var_dump($user)	;exit;
 		return $this->createJsonResponse(array('error' => 'GET method'));		
 	}
 
@@ -63,19 +80,24 @@ class EduCloudController extends BaseController
 		}
 	}
 
-	private function checkSmsType($smsType)
+	private function checkSmsType($smsType, $user)
 	{
-		$user = $this->getCurrentUser();
-        if((!$user->isLogin())&&($smsType=='sms_user_pay'||$smsType=='sms_find_pay_password')) {
+		if (!in_array($smsType, array('sms_user_pay' , 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))){
+			throw new \RuntimeException('不存在的sms Type');
+		}
+
+        if((!$user->isLogin())&&($smsType=='sms_user_pay'||$smsType=='sms_forget_pay_password')) {
             throw new \RuntimeException('用户未登陆');	
-        }
-        if(($user->isLogin())&&($smsType=='sms_registration')) {
-            throw new \RuntimeException('用户已经登陆');	
         }
 	}
 
 	protected function getEduCloudService()
     {
         return $this->getServiceKernel()->createService('EduCloud.EduCloudService');   
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 }
