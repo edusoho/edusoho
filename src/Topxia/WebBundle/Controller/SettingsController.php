@@ -478,6 +478,9 @@ class SettingsController extends BaseController
 	public function bindMobileAction(Request $request)
 	{
 		//888
+		// if ($this->getCloudSmsKey($smsType) != 'on') {
+  //           throw new \RuntimeException('该使用场景未开启');
+  //       }
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
 	}
 
