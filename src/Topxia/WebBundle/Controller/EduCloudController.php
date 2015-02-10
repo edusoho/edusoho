@@ -99,7 +99,7 @@ class EduCloudController extends BaseController
         }
 
         if ($this->getCloudSmsKey($smsType) != 'on') {
-        	throw new \RuntimeException('该场景未开启');	
+        	throw new \RuntimeException('该使用场景未开启');	
         }
 	}
 
