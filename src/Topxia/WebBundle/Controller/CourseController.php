@@ -857,7 +857,7 @@ class CourseController extends BaseController
 		$classroomId=$request->query->get('classroomId');
 
 	 	$courseIds=$this->getClassroomService()->findAllDistinctCourseIds();
-
+		$courseIds = ArrayToolkit::column($courseIds, "courseId");
         foreach ($courseIds as $key => $value) {
         	
         	$course=$this->getCourseService()->getCourse($value);
