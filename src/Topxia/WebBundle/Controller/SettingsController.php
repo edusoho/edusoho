@@ -487,7 +487,7 @@ class SettingsController extends BaseController
         return null;
     }
 
-    private function paraForSmsCheck($request)
+    private function paramForSmsCheck($request)
     {
     	$sessionField['sms_type'] = $request->getSession()->get('sms_type');
         $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
@@ -516,7 +516,7 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-	        list($sessionField, $requestField) = $this->paraForSmsCheck($request);
+	        list($sessionField, $requestField) = $this->paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			if ($result) {
 				$verifiedMobile = $request->getSession()->get('to');
