@@ -513,6 +513,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $noteInfo['content'] = $this->uploadImage($content);
         
         $result                = $this->controller->getNoteService()->saveNote($noteInfo);
+        $result['content'] = $this->controller->convertAbsoluteUrl($this->request, $result['content']);
         $result['createdTime'] = date('c', $result['createdTime']);
         $result['updatedTime'] = date('c', $result['updatedTime']);
         
