@@ -512,7 +512,7 @@ class SettingsController extends BaseController
 				$this->setFlashMessage('success', '绑定成功。');
 			}else{
 				$setMobileResult = 'fail';
-				$this->setFlashMessage('danger', '绑定失败，处于安全考虑，原短信失效，您需要重新获取。');
+				$this->setFlashMessage('danger', '绑定失败，出于安全考虑，原短信失效，您需要重新获取。');
 			}
 
 			$request->getSession()->set('to',rand(0,999999));
