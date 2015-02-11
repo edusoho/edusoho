@@ -109,7 +109,19 @@ class EduCloudServiceImpl extends BaseService
         if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
             return false;
         }
+        if ($smsCode != $smsCodePosted){
+            return false;
+        }
 
-        return ($smsCode == $smsCodePosted);
+        $to = $request->getSession()->get('to');
+        $mobile = $request->request->get('mobile');
+        if ((strlen($to) == 0) || (strlen($mobile) == 0)) {
+            return false;
+        }
+        if ($to != $mobile){
+            return false;
+        }        
+
+        return true;
     }
 }

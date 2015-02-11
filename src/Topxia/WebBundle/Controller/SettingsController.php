@@ -489,6 +489,11 @@ class SettingsController extends BaseController
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
 		$result = $this->getEduCloudService()->checkSms($request, $scenario);
+		var_dump($result);
+		if ($result) {
+			$verifiedMobile = $request->getSession()->get('to');
+			// $this->getUserService()->
+		}
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
 	}
 

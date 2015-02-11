@@ -6,8 +6,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EduCloudController extends BaseController
 {
+    private $debug = true;
+
     public function smsSendAction(Request $request)
     {
+        if ($this->debug) {
+            $request->getSession()->set('to', '13758129341');
+            $request->getSession()->set('sms_code', '357212');
+            $request->getSession()->set('sms_last_time', time());
+            $request->getSession()->set('sms_type', 'sms_registration');
+
+            return $this->createJsonResponse(array('ACK' => 'ok', 'debug' => 'true'));
+        }
+
         if ($request->getMethod() == 'POST') {
             if ($this->getCloudSmsKey('sms_enabled') != '1') {
                 return $this->createJsonResponse(array('error' => 'sms is disabled'));
@@ -17,7 +28,12 @@ class EduCloudController extends BaseController
             $currentTime = time();
 
             $smsLastTime = $request->getSession()->get('sms_last_time');
-            if (!$this->checkLastTime($smsLastTime)) {
+            if ($this->debug){
+                $allowedTime = 1;
+            }else{
+                $allowedTime = 120;
+            }
+            if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
                 return $this->createJsonResponse(array('error' => 'wait to resent'));
             }
 
@@ -69,6 +85,7 @@ class EduCloudController extends BaseController
 
             $this->getLogService()->info('sms', 'sms', "对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
 
+            $request->getSession()->set('to', $to);
             $request->getSession()->set('sms_code', $smsCode);
             $request->getSession()->set('sms_last_time', $currentTime);
             $request->getSession()->set('sms_type', $smsType);
@@ -93,7 +110,7 @@ class EduCloudController extends BaseController
         return preg_match("/^1\d{10}$/", $num);
     }
 
-    private function checkLastTime($smsLastTime, $allowedTime = 120)
+    private function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
     {
         if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
             return false;
@@ -129,7 +146,7 @@ class EduCloudController extends BaseController
 
     protected function getLogService()
     {
-        return $this->createService('System.LogService');
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 
     protected function getSettingService()
