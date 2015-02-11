@@ -1173,18 +1173,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
         
-        // $courses = $this->controller->getCourseService()->findUserLeaningCourses(
-        //     $user['id'], 0, 1000
-        // );
-        // $courseIds = ArrayToolkit::column($courses, 'id');
-
-        // $conditions = array(
-        //     'status' => 'published',
-        //     'startTimeGreaterThan' => time(),
-        //     'courseIds' => $courseIds
-        // );
-        // $total = $this->controller->getCourseService()->searchLessonCount($conditions);
-
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
@@ -1210,12 +1198,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'status' => 'published',
             'type' => 'live'
         );
-        // $threadsByUserCourseIds = array_map(function($thread) use ($controller)
-        // {
-        //     $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
-        //     return $thread;
-        // }, $threadsByUserCourseIds);
-
         $total = $this->controller->getCourseService()->searchCourseCount($condition);  
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
         

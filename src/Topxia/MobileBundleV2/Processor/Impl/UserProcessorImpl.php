@@ -488,7 +488,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
-        //问答数量
+
         $conditions = array(
             'userId' => $user['id'],
             'type' => 'question'
@@ -504,7 +504,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        //话题数量
         $conditions = array(
             'userId' => $user['id'],
             'type' => 'discussion'
@@ -539,7 +538,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         settype($noteSum, "string");
 
-        //考试数量
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
         return array('thread' => $threadSum,
@@ -602,7 +600,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         if ($courseInfo != null) {
             $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
-            //$lesson = $this->controller->getCourseService()->getCourseLesson($allLearnCourse['courseId'], $allLearnCourse['lessonId']);
+            
             $data       = array(
                 'content' => $courseInfo['title'],
                 'id' => $resultCourse['id'],
@@ -630,7 +628,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $threadData = null;
         $discussionData = null;
         if(sizeof($courseIds) > 0){
-            //----问答
             $conditions     = array(
                 'courseIds' => $courseIds,
                 'type' => 'question'
@@ -650,7 +647,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 );
             }
 
-            //----讨论
             $conditions['type'] = 'discussion';
             $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
             $resultDiscussion   = reset($resultDiscussion);
@@ -677,9 +673,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result[$index++] = array(
             'title' => '讨论',
             'data' => $discussionData
-        ); //讨论
+        );
 
-        //笔记
         $conditions = array(
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0
