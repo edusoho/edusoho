@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 	    	validator.addItem({
 	            element: '[name="sms_code"]',
 	            required: true,
-	            rule: 'integer minlength{min:6} maxlength{max:6}'            
+	            rule: 'integer constLength{len:6}'            
 	        });
 
 	    	refreshTimeLeft = function() { 

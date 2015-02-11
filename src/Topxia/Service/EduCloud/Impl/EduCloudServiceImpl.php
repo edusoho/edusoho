@@ -87,9 +87,17 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-    public function checkSms($request, $scenario, $allowedTime = 1800)
+    public function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
-        $smsType = $request->getSession()->get('sms_type');
+        // $sessionField['sms_type']
+        // $sessionField['sms_last_time']
+        // $sessionField['sms_code']
+        // $sessionField['to']
+
+        // $requestField['sms_code']
+        // $requestField['mobile']
+
+        $smsType = $sessionField['sms_type'];
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
             return false;
         }
@@ -98,13 +106,13 @@ class EduCloudServiceImpl extends BaseService
         }
 
         $currentTime = time();
-        $smsLastTime = $request->getSession()->get('sms_last_time');
+        $smsLastTime = $sessionField['sms_last_time'];
         if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
             return false;
         }
 
-        $smsCode = $request->getSession()->get('sms_code');
-        $smsCodePosted = $request->request->get('sms_code');
+        $smsCode = $sessionField['sms_code'];
+        $smsCodePosted = $requestField['sms_code'];
         if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
             return false;
         }
@@ -112,8 +120,8 @@ class EduCloudServiceImpl extends BaseService
             return false;
         }
 
-        $to = $request->getSession()->get('to');
-        $mobile = $request->request->get('mobile');
+        $to = $sessionField['to'];
+        $mobile = $requestField['mobile'];
         if ((strlen($to) == 0) || (strlen($mobile) == 0)) {
             return false;
         }

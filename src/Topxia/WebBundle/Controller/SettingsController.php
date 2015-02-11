@@ -503,7 +503,16 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-			$result = $this->getEduCloudService()->checkSms($request, $scenario);
+        	
+        	$sessionField['sms_type'] = $request->getSession()->get('sms_type');
+	        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
+	        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
+	        $sessionField['to'] = $request->getSession()->get('to');
+
+	        $requestField['sms_code'] = $request->request->get('sms_code');
+	        $requestField['mobile'] = $request->request->get('mobile');
+
+			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			if ($result) {
 				$verifiedMobile = $request->getSession()->get('to');
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);

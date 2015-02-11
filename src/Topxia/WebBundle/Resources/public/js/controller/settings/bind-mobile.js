@@ -14,10 +14,11 @@ define(function(require, exports, module) {
                 $('#submit-btn').button('submiting').addClass('disabled');
             }
         });
-		var smsSender = new SmsSender();
-        smsSender.setValidator(validator);
-        smsSender.setSmsType('sms_bind');
-        smsSender.sethasMobile(true);
+		var smsSender = new SmsSender({
+            validator: validator,
+            smsType:'sms_bind',
+            hasMobile:true            
+        });
         smsSender.takeEffect();
 
 	};

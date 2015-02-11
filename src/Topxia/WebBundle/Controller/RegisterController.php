@@ -8,7 +8,6 @@ use Gregwar\Captcha\CaptchaBuilder;
 
 class RegisterController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -109,6 +108,15 @@ class RegisterController extends BaseController
             '_target_path' => $this->getTargetPath($request),
         ));
     }
+
+    private function getCloudSmsKey($key)
+    {
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        if (isset($setting[$key])){
+            return $setting[$key];
+        }
+        return null;
+    }    
 
     private function protectiveRule($type,$ip)
     {

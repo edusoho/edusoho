@@ -137,10 +137,11 @@ define(function(require, exports, module) {
 
         }
 
-        var smsSender = new SmsSender();
-        smsSender.setValidator(validator);
-        smsSender.setSmsType('sms_registration');
-        smsSender.sethasMobile(true);
+        var smsSender = new SmsSender({
+            validator: validator,
+            smsType:'sms_registration',
+            hasMobile:true            
+        });
         smsSender.takeEffect();
 
     };
