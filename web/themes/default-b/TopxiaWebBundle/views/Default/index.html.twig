@@ -315,8 +315,12 @@
                       {% elseif learn.type == "finished_exercise" %}
                       完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
 
-                      {% elseif learn.type == "become_student" %}
+                      {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                      {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                      {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
                       {% elseif learn.type == "learned_lesson" %}
                       完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
                       {% elseif learn.type == "favorite_course" %}

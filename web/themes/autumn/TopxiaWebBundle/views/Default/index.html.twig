@@ -495,7 +495,7 @@
                   </div>
                 </li>
                                   
-                {% elseif learn.type == "become_student" %}
+                {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
                     <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
@@ -503,6 +503,26 @@
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                  </div>
+                </li>
+                {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                  </div>
+                </li>
+                {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
                   </div>
                 </li>
                 {% elseif learn.type == "learned_lesson" %}
