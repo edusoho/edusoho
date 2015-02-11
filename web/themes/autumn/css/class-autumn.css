@@ -24,15 +24,6 @@
   -o-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
 }
-/* =========================== temp =========================== */
-.stars-0,
-.stars-1,
-.stars-2,
-.stars-3,
-.stars-4,
-.stars-5 {
-  background: url("../img-temp/stars.png") no-repeat;
-}
 /* =========================== common =========================== */
 a {
   -webkit-transition: all .3s ease;
@@ -471,13 +462,27 @@ a:focus {
 .class-header-bottom .class-buy a {
   font-size: 16px;
   line-height: 25px;
+  vertical-align: middle;
   color: #999;
 }
 .class-header-bottom .class-buy a:hover {
   color: #83bb36;
 }
+@media (min-width: 768px) {
+  .class-header-bottom .class-buy .line-height50 {
+    line-height: 50px;
+  }
+}
 .class-header-bottom .class-view {
   padding: 10px 15px;
+}
+.class-dashbord-main .empty-data {
+  color: #999;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.class-dashbord-main .empty-data .esfont {
+  font-size: 120px;
 }
 .class-dashbord-main .class-about {
   text-indent: 2em;
@@ -870,6 +875,26 @@ a:focus {
 .class-dashbord-sidebar .dynamic .dynamic-body .date {
   color: #999;
   text-align: right;
+}
+.review-form {
+  margin-left: 20px;
+}
+.review-form .comment-submit {
+  margin-top: 10px;
+}
+.review-form .comment-submit .btn {
+  padding: 5px 20px;
+}
+.go-class p span {
+  font-size: 16px;
+  color: #333;
+  margin: 0 3px;
+}
+.go-class .go-class-link {
+  margin-top: 6px;
+}
+.go-class .go-class-link a {
+  color: #83bb36;
 }
 .class-wide-list .class-picture-link .mask {
   background-color: rgba(131, 187, 54, 0.8);
