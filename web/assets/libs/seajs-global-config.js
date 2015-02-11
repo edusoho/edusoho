@@ -48,7 +48,7 @@ seajs.config({
 		'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
 		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
-		'edusoho.smsSend':'edusoho/sms/1.0.0/sms-send.js'
+		'edusoho.smsSender':'edusoho/sms/1.0.0/sms-sender.js'
 	},
 
 	// 预加载项

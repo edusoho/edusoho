@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var SmsSend = require('edusoho.smsSend');
+    var SmsSender = require('edusoho.smsSender');
 
     exports.run = function() {
 		var validator = new Validator({
@@ -14,11 +14,11 @@ define(function(require, exports, module) {
                 $('#submit-btn').button('submiting').addClass('disabled');
             }
         });
-		var smsSend = new SmsSend();
-        smsSend.setValidator(validator);
-        smsSend.setSmsType('sms_bind');
-        smsSend.sethasMobile(true);
-        smsSend.takeEffect();
+		var smsSender = new SmsSender();
+        smsSender.setValidator(validator);
+        smsSender.setSmsType('sms_bind');
+        smsSender.sethasMobile(true);
+        smsSender.takeEffect();
 
 	};
 });

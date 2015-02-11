@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
 
-    var SmsSend = Widget.extend({
+    var SmsSender = Widget.extend({
         attrs: {
         	validator: 0,
         	smsType:'',
@@ -89,5 +89,5 @@ define(function(require, exports, module) {
     	}
     });
 
-    module.exports = SmsSend;
+    module.exports = SmsSender;
 });
