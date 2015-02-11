@@ -475,12 +475,20 @@ class SettingsController extends BaseController
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
+    private function getCloudSmsKey($key)
+    {
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        return $setting[$key];
+    }
+
 	public function bindMobileAction(Request $request)
 	{
 		//888
-		// if ($this->getCloudSmsKey($smsType) != 'on') {
-  //           throw new \RuntimeException('该使用场景未开启');
-  //       }
+		$scenario = "sms_registration";
+		if ($this->getCloudSmsKey($scenario) != 'on') {
+			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
+        }
+		$result = $this->getEduCloudService()->checkSms($request, $scenario);
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
 	}
 
@@ -788,5 +796,10 @@ class SettingsController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }	
 
 }
