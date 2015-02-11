@@ -12,15 +12,15 @@
     		<div class="col-md-2 tar">
     			<span class="esicon esicon-safety {% if progressScore > 90 %}text-success{% elseif progressScore > 60 %}text-warning{% else %}text-danger{% endif %}" style="font-size:32px"></span>
     		</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="progress" style="margin-top:10px;">
 				  <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
 				</div>
 			</div>
 			<div class="col-md-4">
-				{% if progressScore > 90 %}
+				{% if progressScore > 80 %}
 					<span class="text-success" style="display:block;margin-top:10px;">安全等级：高</span>
-				{% elseif progressScore > 60 %}
+				{% elseif progressScore > 40 %}
 				<span class="text-warning" style="display:block;margin-top:10px;">安全等级：中</span>
 				{% else %}
 					<span class="text-danger" style="display:block;margin-top:10px;">安全等级：低</span>

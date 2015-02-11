@@ -242,7 +242,7 @@ class SettingsController extends BaseController
 		$hasVerifiedMobile = (isset($user['verifiedMobile'])&&(strlen($user['verifiedMobile'])>0));
 		//999
 
-		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 ) + ($hasVerifiedMobile? 33:0 );
+		$progressScore = 1 + ($hasLoginPassword? 25:0 ) + ($hasPayPassword? 25:0 ) + ($hasFindPayPasswordQuestion? 25:0 ) + ($hasVerifiedMobile? 25:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
