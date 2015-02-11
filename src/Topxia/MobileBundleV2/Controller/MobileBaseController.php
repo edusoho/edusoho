@@ -421,28 +421,33 @@ class MobileBaseController extends BaseController
         );
 
 
-        $courseIds = ArrayToolkit::column($learningCourses, 'id');
+        // $courseIds = ArrayToolkit::column($learningCourses, 'id');
 
-        $condition = array(
-            'status' => 'published',
-            'type' => 'live'
-        );
-        // $threadsByUserCourseIds = array_map(function($thread) use ($controller)
-        // {
-        //     $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
-        //     return $thread;
-        // }, $threadsByUserCourseIds);
+        // $condition = array(
+        //     'status' => 'published',
+        //     'type' => 'live'
+        // );
 
-        $total = $this->controller->getCourseService()->searchCourseCount($condition);  
-        $allLiveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest', $start, $total);
+        $resultLiveCourses = array();
 
-        $learningLiveCourses = array_map(function($liveCourse){
-            foreach ($courseIds => $id) {
-                if($liveCourse['id'] == $id){
-                    return $liveCourse;
-                }
+        foreach ($learningCourses as $key => $value) {
+            if($value['type'] == 'live'){
+                $resultLiveCourses[$key] = $value;
             }
-        }, $learningLiveCourses);
+            # code...
+        }
+
+        // $total = $this->controller->getCourseService()->searchCourseCount($condition);  
+        // $allLiveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest', $start, $total);
+
+        // $learningLiveCourses = array_map(function($liveCourse){
+        //     foreach ($courseIds => $id) {
+        //         if($liveCourse['id'] == $id){
+        //             return $liveCourse;
+        //         }
+        //     }
+        // }, $learningLiveCourses);
+
 
         return $resultLiveCourses;
     }
