@@ -12,6 +12,8 @@
 	      <li><a href="{{ path('settings_security') }}">安全设置</a></li>
 	      <li class="active">手机号码绑定</li>
 	    </ul>
+	    
+	    {{ web_macro.flash_messages() }}
 
 	    <form id="bind-mobile-form" class="form-horizontal" method="post"> 
 		    <div class="form-group row"> 
@@ -37,6 +39,12 @@
 
         	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"> 
 	    </form>
+
+	    {% if verifiedMobile | length > 0 %}
+		    <div class="alert alert-info">
+			  <p>用户已经绑定了手机{{verifiedMobile}}</p>
+			</div>
+		{% endif %}
 
     {% endblock %}
   {% endembed %}

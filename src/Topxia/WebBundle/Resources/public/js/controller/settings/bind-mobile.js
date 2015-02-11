@@ -28,7 +28,10 @@ define(function(require, exports, module) {
 
         $('.js-sms-send').click(function() {
 
-				validator.query('[name="mobile"]').execute(function() {
+				validator.query('[name="mobile"]').execute(function(error, results, element) {
+					if (error){
+						return false;
+					}
 				    var url = $('.js-sms-send').data('url');
 		        	var data = {};
 		        	data.to = $('[name="mobile"]').val();

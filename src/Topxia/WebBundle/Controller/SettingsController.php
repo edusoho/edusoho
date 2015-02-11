@@ -485,9 +485,13 @@ class SettingsController extends BaseController
 	{
 		//888
 		$currentUser = $this->getCurrentUser()->toArray();
-
+		$verifiedMobile = '';
 		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
-		
+		if ($hasVerifiedMobile) {
+			$verifiedMobile = $currentUser['verifiedMobile'];
+		}
+		$setMobileResult = 'none';
+
 		$scenario = "sms_registration";
 		if ($this->getCloudSmsKey($scenario) != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
@@ -498,9 +502,17 @@ class SettingsController extends BaseController
 			if ($result) {
 				$verifiedMobile = $request->getSession()->get('to');
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
+				$setMobileResult = 'success';
+				$this->setFlashMessage('success', '绑定成功。');
+			}else{
+				$setMobileResult = 'fail';
 			}
 		}
-		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
+		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
+			'hasVerifiedMobile' => $hasVerifiedMobile,
+			'setMobileResult' => $setMobileResult,
+			'verifiedMobile' => $verifiedMobile
+		)); 
 	}
 
 	public function passwordAction(Request $request)
