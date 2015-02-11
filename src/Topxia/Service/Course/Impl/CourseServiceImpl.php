@@ -2309,6 +2309,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
 	{
+		if(empty($courseIds) || count($courseIds) == 0) {
+			return array();
+		}
 		$courses = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
 		$courseIds = ArrayToolkit::column($courses, "courseId");
 		$courses = $this->findCoursesByIds($courseIds);
