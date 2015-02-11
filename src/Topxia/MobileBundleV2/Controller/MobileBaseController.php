@@ -414,23 +414,31 @@ class MobileBaseController extends BaseController
     }
 
     public function filterOneLiveCourseByDESC($user){
-        $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        // $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
 
-        $courses = $this->getCourseService()->findUserLeaningCourses(
-            $user['id'], 0, $learningCourseTotal
-        );
-        $courseIds = ArrayToolkit::column($courses, 'id');
+        // $courses = $this->getCourseService()->findUserLeaningCourses(
+        //     $user['id'], 0, $learningCourseTotal
+        // );
 
-        $conditions = array(
+
+        // $courseIds = ArrayToolkit::column($courses, 'id');
+
+        // $conditions = array(
+        //     'status' => 'published',
+        //     'startTimeGreaterThan' => time(),
+        //     'courseIds' => $courseIds
+        // );
+        // $total = $this->getCourseService()->searchLessonCount($conditions);
+
+        $condition = array(
+            'userId' => $user['id'],
             'status' => 'published',
-            'startTimeGreaterThan' => time(),
-            'courseIds' => $courseIds
+            'type' => 'live'
         );
-        $total = $this->getCourseService()->searchLessonCount($conditions);
 
-        var_dump($total);
-        exit();
-        
+        $total = $this->getCourseService()->searchCourseCount($condition); 
+
+
         $tempCourses = $this->filterLiveCourses($user, 0, $total);
         $resultLiveCourses = $this->filterCourses(array_values($tempCourses));
 
