@@ -224,7 +224,8 @@ class DataDict
         ),
         'targetName' => array(
         	'course' => '课程',
-        	'vip' => '会员'
+        	'vip' => '会员',
+        	'classroom' => '班级'
     	),
     	'groupstatus'=>array(
     		'open'=>'开启',
