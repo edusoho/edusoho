@@ -342,6 +342,11 @@ class SettingController extends BaseController
             }
 
             $this->getSettingService()->set('auth', $auth);
+            if (in_array('mobile',$auth['registerSort'])){
+                $this->setCloudSmsKey('sms_registration', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_registration', 'off');
+            }
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
             $this->setFlashMessage('success', '注册设置已保存！');
@@ -362,6 +367,13 @@ class SettingController extends BaseController
             'auth' => $auth,
             'userFields' => $userFields,
         ));
+    }
+    
+    private function setCloudSmsKey($key, $val)
+    {
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting[$key] = $val;
+        $this->getSettingService()->set('cloud_sms', $setting);
     }
 
     public function mailerAction(Request $request)

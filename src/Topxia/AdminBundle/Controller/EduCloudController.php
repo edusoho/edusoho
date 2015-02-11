@@ -122,11 +122,21 @@ class EduCloudController extends BaseController
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
             $this->setCloudSmsKey('sms_enabled', $dataUserPosted['sms_enabled']);
+
+            $auth = $this->getSettingService()->get('auth', array());
             if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
                 $this->setCloudSmsKey('sms_registration', 'on');
+                if (!in_array('mobile', $auth['registerSort'])) {
+                    $auth['registerSort'][] = 'mobile';
+                }
             } else {
                 $this->setCloudSmsKey('sms_registration', 'off');
+                if (in_array('mobile', $auth['registerSort'])) {
+                    unset($auth['registerSort']['mobile']);
+                }
             }
+            $this->getSettingService()->set('auth', $auth);
+
             if (isset($dataUserPosted['sms_forget_password']) && ($dataUserPosted['sms_forget_password'] == 'on')) {
                 $this->setCloudSmsKey('sms_forget_password', 'on');
             } else {
