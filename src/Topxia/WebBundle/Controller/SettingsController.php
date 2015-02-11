@@ -500,6 +500,14 @@ class SettingsController extends BaseController
         return array($sessionField, $requestField);
     }
 
+    private function clearSmsSession($request)
+    {
+    	$request->getSession()->set('to',rand(0,999999));
+		$request->getSession()->set('sms_code',rand(0,999999));
+		$request->getSession()->set('sms_last_time','');
+		$request->getSession()->set('sms_type', rand(0,999999));
+    }
+
 	public function bindMobileAction(Request $request)
 	{
 		$currentUser = $this->getCurrentUser()->toArray();
@@ -529,10 +537,7 @@ class SettingsController extends BaseController
 				$this->setFlashMessage('danger', '绑定失败，出于安全考虑，原短信失效，您需要重新获取。');
 			}
 
-			$request->getSession()->set('to',rand(0,999999));
-			$request->getSession()->set('sms_code',rand(0,999999));
-			$request->getSession()->set('sms_last_time','');
-			$request->getSession()->set('sms_type', rand(0,999999));				
+			$this->clearSmsSession($request);			
 		}
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
 			'hasVerifiedMobile' => $hasVerifiedMobile,
