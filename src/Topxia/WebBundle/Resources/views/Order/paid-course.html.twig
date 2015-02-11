@@ -1,4 +1,20 @@
 
 <div class="order-item clearfix" >
-  已经付款的课程列表
+  <div class="order-item-title">
+    <i class="order-item-title-icon">
+      <img src="/bundles/topxiaweb/img/order-pay/iconfont-coupon.png" width="25px">
+    </i>
+    <h4 class="title">已购买的课程可折价抵扣</h4>
+  </div>
+  <div class="order-item-detail">
+    <span class="label label-info">抵扣以所含课程当前的正常价格为准。抵扣金额=课程单价 ×（课程包总价÷课程包原价）</span>
+    {% for paidCourse in paidCourses %}
+    <div>
+      <h4>{{paidCourse.title}}</h4>
+      <span role="course-price">现价：{{paidCourse.price}}</span>
+      折价：- <span role="course-discount-price">{{paidCourse.afterDiscountPrice}}</span>
+      
+    </div>
+    {% endfor %}
+  </div>
 </div>
