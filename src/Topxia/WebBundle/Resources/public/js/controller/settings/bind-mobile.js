@@ -51,10 +51,14 @@ define(function(require, exports, module) {
 		        	data.to = $('[name="mobile"]').val();
 		        	data.sms_type = "sms_registration";
 		        	$.post(url,data,function(response){
-		        		console.log(response);
-		        		$('#js-time-left').html('120');
-		        		$('#js-fetch-btn-text').html('秒后重新获取');
-		        		refreshTimeLeft();
+		        		console.log(response.ACK);
+		        		console.log(typeof response['ACK']);
+		        		
+		        		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
+			        		$('#js-time-left').html('120');
+			        		$('#js-fetch-btn-text').html('秒后重新获取');
+			        		refreshTimeLeft();
+			        	}
 		        	});
 				});
 
