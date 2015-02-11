@@ -517,7 +517,7 @@ class SettingsController extends BaseController
 
 			$request->getSession()->set('to',rand(0,999999));
 			$request->getSession()->set('sms_code',rand(0,999999));
-			$request->getSession()->set('sms_last_time',rand(0,999999));
+			$request->getSession()->set('sms_last_time','');
 			$request->getSession()->set('sms_type', rand(0,999999));				
 		}
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(

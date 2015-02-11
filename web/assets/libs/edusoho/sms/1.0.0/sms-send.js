@@ -58,8 +58,6 @@ define(function(require, exports, module) {
 	        	}
 	        	data.sms_type = smsType;
 	        	$.post(url,data,function(response){
-	        		console.log(response.ACK);
-	        		console.log(typeof response['ACK']);
 	        		
 	        		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
 		        		$('#js-time-left').html('120');
