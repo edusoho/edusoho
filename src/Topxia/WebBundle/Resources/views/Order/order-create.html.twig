@@ -44,7 +44,7 @@
             {% endif %}
 
             <div class="order-item clearfix" 
-            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and targetType in ['course','vip']) or setting('coin.coin_enabled')) %}
+            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and targetType in ['course','vip','classroom']) or setting('coin.coin_enabled')) %}
             style="display:none"
             {% endif %}
             >
