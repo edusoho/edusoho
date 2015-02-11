@@ -28,7 +28,10 @@
 		        <div class="col-md-4 controls"> 
 		        	<input type="text" id="sms_code" name="sms_code" class="form-control" value="">
 		        	<br>
-		        	<span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}"><span id="js-time-left"></span>获取短信验证码{# 秒后重新获取 #}</span> 
+		        	<span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+		        		<span id="js-time-left"></span>
+		        		<span id="js-fetch-btn-text">获取短信验证码{# 秒后重新获取 #}</span>
+		        	</span> 
 		        </div> 
 	    	</div>
 	    	<div class="form-group row"> 

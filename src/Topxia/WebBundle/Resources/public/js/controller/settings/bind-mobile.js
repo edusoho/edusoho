@@ -26,8 +26,22 @@ define(function(require, exports, module) {
             rule: 'integer minlength{min:6} maxlength{max:6}'            
         });
 
-        $('.js-sms-send').click(function() {
+        refreshTimeLeft = function() { 
+        	var leftTime = $('#js-time-left').html();
+        	$('#js-time-left').html(leftTime-1);
+        	if (leftTime-1 > 0) {
+        		setTimeout("refreshTimeLeft()", 1000);
+        	}else{
+        		$('#js-time-left').html('');
+		        $('#js-fetch-btn-text').html('获取短信验证码');
+        	}
+        }
 
+        $('.js-sms-send').click(function() {
+        		var leftTime = $('#js-time-left').html();
+        		if (leftTime.length > 0){
+        			return false;
+        		}
 				validator.query('[name="mobile"]').execute(function(error, results, element) {
 					if (error){
 						return false;
@@ -38,7 +52,9 @@ define(function(require, exports, module) {
 		        	data.sms_type = "sms_registration";
 		        	$.post(url,data,function(response){
 		        		console.log(response);
-
+		        		$('#js-time-left').html('120');
+		        		$('#js-fetch-btn-text').html('秒后重新获取');
+		        		refreshTimeLeft();
 		        	});
 				});
 
