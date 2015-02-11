@@ -506,6 +506,7 @@ class SettingsController extends BaseController
 				$this->setFlashMessage('success', '绑定成功。');
 			}else{
 				$setMobileResult = 'fail';
+				$this->setFlashMessage('danger', '绑定失败。');
 			}
 		}
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
