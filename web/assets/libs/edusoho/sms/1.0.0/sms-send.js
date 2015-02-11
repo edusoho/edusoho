@@ -58,7 +58,7 @@ define(function(require, exports, module) {
 	        	}
 	        	data.sms_type = smsType;
 	        	$.post(url,data,function(response){
-	        		
+	        		console.log(response);
 	        		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
 		        		$('#js-time-left').html('120');
 		        		$('#js-fetch-btn-text').html('秒后重新获取');
