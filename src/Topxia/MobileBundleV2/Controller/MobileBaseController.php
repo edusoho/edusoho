@@ -438,6 +438,9 @@ class MobileBaseController extends BaseController
 
         $total = $this->getCourseService()->searchCourseCount($condition); 
 
+        var_dump($total);
+        exit();
+
 
         $tempCourses = $this->filterLiveCourses($user, 0, $total);
         $resultLiveCourses = $this->filterCourses(array_values($tempCourses));
