@@ -137,10 +137,11 @@ define(function(require, exports, module) {
 
         }
 
-        // var smsSend = new SmsSend();
-        // smsSend.setValidator(validator);
-        // smsSend.alert()
-        // var smsSend = new SmsSend({ element: $('progressbar')});
+        var smsSend = new SmsSend();
+        smsSend.setValidator(validator);
+        smsSend.setSmsType('sms_registration');
+        smsSend.sethasMobile(true);
+        smsSend.takeEffect();
 
     };
 

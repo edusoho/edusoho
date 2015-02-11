@@ -8,12 +8,6 @@ define(function(require, exports, module) {
         	smsType:'',
         	hasMobile:false
         },
-        alert: function () {
-        	console.log(this.element)
-        	console.log(this.get("validator"));
-	        alert(23);
-	        return this;
-    	},
     	setValidator: function (validator) {
     		this.set("validator", validator);
     		return this;
