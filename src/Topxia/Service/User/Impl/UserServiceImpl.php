@@ -233,6 +233,24 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function changeMobile($id, $mobile)
+    {
+        $user = $this->getUser($id);
+        if (empty($user) or empty($mobile)) {
+            throw $this->createServiceException('参数不正确，更改失败。');
+        }
+
+        $fields = array(
+            'verifiedMobile' => $mobile
+        );
+
+        $this->getUserDao()->updateUser($id, $fields);
+
+        $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
+
+        return true;
+    }
+
     public function getUserSecureQuestionsByUserId($userId)
     {
         return $this->getUserSecureQuestionDao()->getUserSecureQuestionsByUserId($userId);

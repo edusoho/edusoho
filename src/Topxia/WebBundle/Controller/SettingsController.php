@@ -492,8 +492,10 @@ class SettingsController extends BaseController
 		var_dump($result);
 		if ($result) {
 			$verifiedMobile = $request->getSession()->get('to');
-			// $this->getUserService()->
+			$user = $this->getCurrentUser();
+			$this->getUserService()->changeMobile($user->getId(), $verifiedMobile);
 		}
+		
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
 	}
 
