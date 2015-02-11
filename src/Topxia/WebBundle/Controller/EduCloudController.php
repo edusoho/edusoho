@@ -10,15 +10,6 @@ class EduCloudController extends BaseController
 
     public function smsSendAction(Request $request)
     {
-        if ($this->debug) {
-            $request->getSession()->set('to', '13758129341');
-            $request->getSession()->set('sms_code', '357212');
-            $request->getSession()->set('sms_last_time', time());
-            $request->getSession()->set('sms_type', 'sms_registration');
-
-            return $this->createJsonResponse(array('ACK' => 'ok', 'debug' => 'true'));
-        }
-
         if ($request->getMethod() == 'POST') {
             if ($this->getCloudSmsKey('sms_enabled') != '1') {
                 return $this->createJsonResponse(array('error' => 'sms is disabled'));
@@ -41,7 +32,7 @@ class EduCloudController extends BaseController
             $smsType = $request->request->get('sms_type');
             $this->checkSmsType($smsType, $currentUser);
 
-            if ($smsType == 'sms_registration') {
+            if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
             }
 
@@ -70,6 +61,15 @@ class EduCloudController extends BaseController
 
             if (!$this->checkPhoneNum($to)){
                 return $this->createJsonResponse(array('error' => "mobile number error:{$to}"));
+            }
+
+            if ($this->debug) {
+                $request->getSession()->set('to', '13758129341');
+                $request->getSession()->set('sms_code', '357212');
+                $request->getSession()->set('sms_last_time', time());
+                $request->getSession()->set('sms_type', 'sms_registration');
+
+                return $this->createJsonResponse(array('ACK' => 'ok', 'debug' => 'true'));
             }
 
             $smsCode = $this->generateSmsCode();
@@ -121,11 +121,11 @@ class EduCloudController extends BaseController
 
     private function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
+        if (!in_array($smsType, array('sms_bind','sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
             throw new \RuntimeException('不存在的sms Type');
         }
 
-        if ((!$user->isLogin()) && (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password')))) {
+        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
             throw new \RuntimeException('用户未登陆');
         }
 
@@ -137,7 +137,10 @@ class EduCloudController extends BaseController
     private function getCloudSmsKey($key)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
-        return $setting[$key];
+        if (isset($setting[$key])){
+            return $setting[$key];
+        }
+        return null;
     }
 
     protected function getEduCloudService()

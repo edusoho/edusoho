@@ -49,7 +49,7 @@ define(function(require, exports, module) {
 				    var url = $('.js-sms-send').data('url');
 		        	var data = {};
 		        	data.to = $('[name="mobile"]').val();
-		        	data.sms_type = "sms_registration";
+		        	data.sms_type = "sms_bind";
 		        	$.post(url,data,function(response){
 		        		console.log(response.ACK);
 		        		console.log(typeof response['ACK']);

@@ -160,7 +160,15 @@
 						    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
 						    		checked
 						    	{% endif %}
-						    	> <span>用户注册、绑定手机时</span>
+						    	> <span>新用户注册时</span>
+						    </label>
+						    <br>
+						    <label>
+						    	<input name="sms_bind" type="checkbox"
+						    	{% if (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
+						    		checked
+						    	{% endif %}
+						    	> <span>老用户绑定手机时</span>
 						    </label>
 						    <br>
 						    <label>

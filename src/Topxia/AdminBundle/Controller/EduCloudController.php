@@ -142,6 +142,11 @@ class EduCloudController extends BaseController
             } else {
                 $this->setCloudSmsKey('sms_forget_pay_password', 'off');
             }
+            if (isset($dataUserPosted['sms_bind']) && ($dataUserPosted['sms_bind'] == 'on')) {
+                $this->setCloudSmsKey('sms_bind', 'on');
+            } else {
+                $this->setCloudSmsKey('sms_bind', 'off');
+            }
 
             if ('1' == $dataUserPosted['sms_enabled']) {
                 $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');
@@ -166,7 +171,10 @@ class EduCloudController extends BaseController
     private function getCloudSmsKey($key)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
-        return $setting[$key];
+        if (isset($setting[$key])){
+            return $setting[$key];
+        }
+        return null;
     }
 
     private function getAccounts()
