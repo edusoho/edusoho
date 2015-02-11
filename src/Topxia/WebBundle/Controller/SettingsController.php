@@ -481,7 +481,10 @@ class SettingsController extends BaseController
     private function getCloudSmsKey($key)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
-        return $setting[$key];
+        if (isset($setting[$key])){
+            return $setting[$key];
+        }
+        return null;
     }
 
 	public function bindMobileAction(Request $request)
@@ -495,7 +498,7 @@ class SettingsController extends BaseController
 		}
 		$setMobileResult = 'none';
 
-		$scenario = "sms_registration";
+		$scenario = "sms_bind";
 		if ($this->getCloudSmsKey('sms_enabled') != '1'  || $this->getCloudSmsKey($scenario) != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
