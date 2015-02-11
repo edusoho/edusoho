@@ -493,7 +493,7 @@ class SettingsController extends BaseController
 		$setMobileResult = 'none';
 
 		$scenario = "sms_registration";
-		if ($this->getCloudSmsKey($scenario) != 'on') {
+		if ($this->getCloudSmsKey('sms_enabled') != '1'  || $this->getCloudSmsKey($scenario) != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
 
