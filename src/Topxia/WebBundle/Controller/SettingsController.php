@@ -484,18 +484,22 @@ class SettingsController extends BaseController
 	public function bindMobileAction(Request $request)
 	{
 		//888
+		$currentUser = $this->getCurrentUser()->toArray();
+
+		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
+		
 		$scenario = "sms_registration";
 		if ($this->getCloudSmsKey($scenario) != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
-		$result = $this->getEduCloudService()->checkSms($request, $scenario);
-		var_dump($result);
-		if ($result) {
-			$verifiedMobile = $request->getSession()->get('to');
-			$user = $this->getCurrentUser();
-			$this->getUserService()->changeMobile($user->getId(), $verifiedMobile);
+
+        if ($request->getMethod() == 'POST') {
+			$result = $this->getEduCloudService()->checkSms($request, $scenario);
+			if ($result) {
+				$verifiedMobile = $request->getSession()->get('to');
+				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
+			}
 		}
-		
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array()); 
 	}
 
