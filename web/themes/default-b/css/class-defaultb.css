@@ -40,9 +40,6 @@ a:focus {
   transition: all .3s ease;
 }
 /* =========================== rewrite =========================== */
-.es-course-list > div {
-  height: auto;
-}
 @media (max-width: 767px) {
   .course-dashboard-tabs.nav > li > a {
     padding: 5px 8px;
@@ -750,6 +747,17 @@ a:focus {
   margin-top: 10px;
   line-height: 24px;
 }
+.class-dashbord-sidebar .class-teacher-column .class-teacher {
+  max-height: 324px;
+  overflow: hidden;
+}
+.class-dashbord-sidebar .class-teacher-column .show-more {
+  display: block;
+  text-align: center;
+}
+.class-dashbord-sidebar .class-teacher-column .show-more .fa {
+  font-size: 30px;
+}
 .class-dashbord-sidebar ul {
   padding: 0;
   margin: 0;
@@ -895,4 +903,89 @@ a:focus {
 }
 .go-class .go-class-link a {
   color: #428bca;
+}
+/* =========================== index =========================== */
+.home-class-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.home-class-list .class-item {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.home-class-list .class-item:hover {
+  background: #f9f9f9;
+}
+.home-class-list .class-body {
+  padding: 10px 0;
+}
+.home-class-list .class-picture-link {
+  float: left;
+  margin-right: 25px;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-picture-link {
+    float: none;
+    display: block;
+    margin-right: 0;
+  }
+}
+.home-class-list .class-picture-link > img {
+  width: 213px;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-picture-link > img {
+    width: 100%;
+    display: block;
+  }
+}
+.home-class-list .class-title {
+  margin-bottom: 15px;
+  margin-top: 0;
+  font-size: 16px;
+  height: 48px;
+  line-height: 24px;
+  color: #222;
+  overflow: hidden;
+}
+.home-class-list .class-title a {
+  font-weight: bold;
+  color: #555;
+}
+.home-class-list .class-metas {
+  margin-bottom: 20px;
+  color: #999;
+}
+.home-class-list .class-metas .fa {
+  margin-right: 5px;
+  font-size: 18px;
+}
+.home-class-list .class-metas a {
+  color: #555;
+}
+.home-class-list .class-teacher {
+  margin-right: 20px;
+}
+.home-class-list .class-teacher span {
+  margin-right: 10px;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-teacher {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+.home-class-list .class-price {
+  float: right;
+  font-size: 18px;
+}
+@media (min-width: 1200px) {
+  .home-class-list .class-price {
+    margin-right: 50px;
+  }
 }

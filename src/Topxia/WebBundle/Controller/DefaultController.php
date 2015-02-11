@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
+use Topxia\Common\Paginator;
 
 class DefaultController extends BaseController
 {
@@ -34,6 +35,48 @@ class DefaultController extends BaseController
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->searchClassroomsCount(array('status' => 'published'))
+            , 6
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+                array('status' => 'published'),
+                array('createdTime','desc'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+        );
+
+        $classroomIds = ArrayToolkit::column($classrooms,'id');
+
+        $users = array();
+
+        foreach ($classrooms as &$classroom) {
+            if (empty($classroom['teacherIds'])) {
+                $classroomTeacherIds=array();
+            }else{
+                $classroomTeacherIds=json_decode($classroom['teacherIds']);
+            }
+
+            $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+
+        }
+
+        $coursesOfClassroom = array();
+        $coursesNum = array();
+
+        foreach ($classroomIds as $key => $value) {
+            $classroomCourses=$this->getClassroomService()->getAllCourses($value);
+            $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
+
+            $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+            $coursesOfClassroom[$value] = $courses;
+            $coursesNum[$value] = count($coursesOfClassroom[$value]);
+
+        }
+
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
@@ -41,6 +84,10 @@ class DefaultController extends BaseController
             'recentLiveCourses' => $recentLiveCourses,
             'consultDisplay' => true,
             'cashRate' => $cashRate,
+            'classrooms' => $classrooms,
+            'users' => $users,
+            'coursesOfClassroom' => $coursesOfClassroom,
+            'coursesNum' => $coursesNum,
         ));
     }
 
@@ -237,5 +284,10 @@ class DefaultController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }
