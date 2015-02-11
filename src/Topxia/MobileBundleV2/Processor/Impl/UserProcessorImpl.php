@@ -333,6 +333,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $site = $this->controller->getSettingService()->get('site', array());
 
+        if($user != null){
+            $userProfile = $this->controller->getUserService()->getUserProfile($token['userId']);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+        }
+
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
             'user' => empty($user) ? null : $this->controller->filterUser($user),
