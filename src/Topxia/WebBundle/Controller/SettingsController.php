@@ -487,6 +487,19 @@ class SettingsController extends BaseController
         return null;
     }
 
+    private function paraForSmsCheck($request)
+    {
+    	$sessionField['sms_type'] = $request->getSession()->get('sms_type');
+        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
+        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
+        $sessionField['to'] = $request->getSession()->get('to');
+
+        $requestField['sms_code'] = $request->request->get('sms_code');
+        $requestField['mobile'] = $request->request->get('mobile');
+
+        return array($sessionField, $requestField);
+    }
+
 	public function bindMobileAction(Request $request)
 	{
 		$currentUser = $this->getCurrentUser()->toArray();
@@ -503,15 +516,7 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-        	
-        	$sessionField['sms_type'] = $request->getSession()->get('sms_type');
-	        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
-	        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
-	        $sessionField['to'] = $request->getSession()->get('to');
-
-	        $requestField['sms_code'] = $request->request->get('sms_code');
-	        $requestField['mobile'] = $request->request->get('mobile');
-
+	        list($sessionField, $requestField) = $this->paraForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			if ($result) {
 				$verifiedMobile = $request->getSession()->get('to');
