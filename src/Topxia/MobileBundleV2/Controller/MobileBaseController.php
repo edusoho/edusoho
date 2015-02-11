@@ -414,36 +414,35 @@ class MobileBaseController extends BaseController
     }
 
     public function filterOneLiveCourseByDESC($user){
-        // $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
 
-        // $courses = $this->getCourseService()->findUserLeaningCourses(
-        //     $user['id'], 0, $learningCourseTotal
-        // );
+        $learningCourses = $this->getCourseService()->findUserLeaningCourses(
+            $user['id'], 0, $learningCourseTotal
+        );
 
 
-        // $courseIds = ArrayToolkit::column($courses, 'id');
-
-        // $conditions = array(
-        //     'status' => 'published',
-        //     'startTimeGreaterThan' => time(),
-        //     'courseIds' => $courseIds
-        // );
-        // $total = $this->getCourseService()->searchLessonCount($conditions);
+        $courseIds = ArrayToolkit::column($learningCourses, 'id');
 
         $condition = array(
-            'userId' => $user['id'],
             'status' => 'published',
             'type' => 'live'
         );
+        // $threadsByUserCourseIds = array_map(function($thread) use ($controller)
+        // {
+        //     $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
+        //     return $thread;
+        // }, $threadsByUserCourseIds);
 
-        $total = $this->getCourseService()->searchCourseCount($condition); 
+        $total = $this->controller->getCourseService()->searchCourseCount($condition);  
+        $allLiveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest', $start, $total);
 
-        var_dump($total);
-        exit();
-
-
-        $tempCourses = $this->filterLiveCourses($user, 0, $total);
-        $resultLiveCourses = $this->filterCourses(array_values($tempCourses));
+        $learningLiveCourses = array_map(function($liveCourse){
+            foreach ($courseIds => $id) {
+                if($liveCourse['id'] == $id){
+                    return $liveCourse;
+                }
+            }
+        }, $learningLiveCourses);
 
         return $resultLiveCourses;
     }
