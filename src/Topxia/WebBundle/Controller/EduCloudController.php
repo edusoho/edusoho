@@ -28,8 +28,9 @@ class EduCloudController extends BaseController
             $currentTime = time();
 
             $smsLastTime = $request->getSession()->get('sms_last_time');
+
             if ($this->debug){
-                $allowedTime = 1;
+                $allowedTime = 0;
             }else{
                 $allowedTime = 120;
             }
