@@ -59,7 +59,7 @@
               </div>
             </div>
 
-            {% if targetType == "classroom" and is_plugin_installed("Classroom") %}
+            {% if targetType == "classroom" and is_plugin_installed("Classroom") and paidCourses|length > 0 %}
               {% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
             {% endif %}
             
