@@ -489,7 +489,6 @@ class SettingsController extends BaseController
 
 	public function bindMobileAction(Request $request)
 	{
-		//888
 		$currentUser = $this->getCurrentUser()->toArray();
 		$verifiedMobile = '';
 		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
@@ -515,7 +514,7 @@ class SettingsController extends BaseController
 				$setMobileResult = 'fail';
 				$this->setFlashMessage('danger', '绑定失败，处于安全考虑，原短信失效，您需要重新获取。');
 			}
-			
+
 			$request->getSession()->set('to',rand(0,999999));
 			$request->getSession()->set('sms_code',rand(0,999999));
 			$request->getSession()->set('sms_last_time',rand(0,999999));
