@@ -87,16 +87,13 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
+    /**
+     * @param  array $sessionField 必须包含元素：'sms_type' 'sms_last_time' 'sms_code' 'to'
+     * @param  array $requestField 必须包含元素：'sms_code' 'mobile'
+     * @return boolean
+     */
     public function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
-        // $sessionField['sms_type']
-        // $sessionField['sms_last_time']
-        // $sessionField['sms_code']
-        // $sessionField['to']
-
-        // $requestField['sms_code']
-        // $requestField['mobile']
-
         $smsType = $sessionField['sms_type'];
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
             return false;
