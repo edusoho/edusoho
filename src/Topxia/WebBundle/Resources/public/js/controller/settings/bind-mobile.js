@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    var SmsSend = require('edusoho.smsSend');
 
     exports.run = function() {
 		var validator = new Validator({
@@ -13,56 +14,11 @@ define(function(require, exports, module) {
                 $('#submit-btn').button('submiting').addClass('disabled');
             }
         });
-
-        validator.addItem({
-            element: '[name="mobile"]',
-            required: true,
-            rule: 'phone'            
-        });
-
-        validator.addItem({
-            element: '[name="sms_code"]',
-            required: true,
-            rule: 'integer minlength{min:6} maxlength{max:6}'            
-        });
-
-        refreshTimeLeft = function() { 
-        	var leftTime = $('#js-time-left').html();
-        	$('#js-time-left').html(leftTime-1);
-        	if (leftTime-1 > 0) {
-        		setTimeout("refreshTimeLeft()", 1000);
-        	}else{
-        		$('#js-time-left').html('');
-		        $('#js-fetch-btn-text').html('获取短信验证码');
-        	}
-        }
-
-        $('.js-sms-send').click(function() {
-        		var leftTime = $('#js-time-left').html();
-        		if (leftTime.length > 0){
-        			return false;
-        		}
-				validator.query('[name="mobile"]').execute(function(error, results, element) {
-					if (error){
-						return false;
-					}
-				    var url = $('.js-sms-send').data('url');
-		        	var data = {};
-		        	data.to = $('[name="mobile"]').val();
-		        	data.sms_type = "sms_bind";
-		        	$.post(url,data,function(response){
-		        		console.log(response.ACK);
-		        		console.log(typeof response['ACK']);
-		        		
-		        		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
-			        		$('#js-time-left').html('120');
-			        		$('#js-fetch-btn-text').html('秒后重新获取');
-			        		refreshTimeLeft();
-			        	}
-		        	});
-				});
-
-        });
+		var smsSend = new SmsSend();
+        smsSend.setValidator(validator);
+        smsSend.setSmsType('sms_bind');
+        smsSend.sethasMobile(true);
+        smsSend.takeEffect();
 
 	};
 });

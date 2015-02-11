@@ -90,7 +90,6 @@ class EduCloudServiceImpl extends BaseService
     public function checkSms($request, $scenario, $allowedTime = 1800)
     {
         $smsType = $request->getSession()->get('sms_type');
-
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
             return false;
         }

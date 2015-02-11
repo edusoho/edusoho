@@ -508,12 +508,18 @@ class SettingsController extends BaseController
 			if ($result) {
 				$verifiedMobile = $request->getSession()->get('to');
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
+
 				$setMobileResult = 'success';
 				$this->setFlashMessage('success', '绑定成功。');
 			}else{
 				$setMobileResult = 'fail';
 				$this->setFlashMessage('danger', '绑定失败。');
 			}
+			
+			$request->getSession()->set('to',rand(0,999999));
+			$request->getSession()->set('sms_code',rand(0,999999));
+			$request->getSession()->set('sms_last_time',rand(0,999999));
+			$request->getSession()->set('sms_type', rand(0,999999));				
 		}
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
 			'hasVerifiedMobile' => $hasVerifiedMobile,

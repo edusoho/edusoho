@@ -67,7 +67,7 @@ class EduCloudController extends BaseController
                 $request->getSession()->set('to', '13758129341');
                 $request->getSession()->set('sms_code', '357212');
                 $request->getSession()->set('sms_last_time', time());
-                $request->getSession()->set('sms_type', 'sms_registration');
+                $request->getSession()->set('sms_type', $smsType);
 
                 return $this->createJsonResponse(array('ACK' => 'ok', 'debug' => 'true'));
             }

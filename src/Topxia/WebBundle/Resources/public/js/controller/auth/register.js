@@ -2,6 +2,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require("jquery.bootstrap-datetimepicker");
+    var SmsSend = require('edusoho.smsSend');
 
     exports.run = function() {
         $(function(){
@@ -135,6 +136,11 @@ define(function(require, exports, module) {
             });
 
         }
+
+        // var smsSend = new SmsSend();
+        // smsSend.setValidator(validator);
+        // smsSend.alert()
+        // var smsSend = new SmsSend({ element: $('progressbar')});
 
     };
 
