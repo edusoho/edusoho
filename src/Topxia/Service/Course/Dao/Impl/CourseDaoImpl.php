@@ -99,6 +99,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
+            var_dump($builder->getSQL());
+            exit();
         return $builder->execute()->fetchColumn(0);
     }
 
