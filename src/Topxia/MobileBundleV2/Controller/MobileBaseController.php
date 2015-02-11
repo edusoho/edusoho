@@ -416,41 +416,7 @@ class MobileBaseController extends BaseController
     public function filterOneLiveCourseByDESC($user){
         $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
 
-        $learningCourses = $this->getCourseService()->findUserLeaningCourses(
-            $user['id'], 0, $learningCourseTotal
-        );
-
-
-        // $courseIds = ArrayToolkit::column($learningCourses, 'id');
-
-        // $condition = array(
-        //     'status' => 'published',
-        //     'type' => 'live'
-        // );
-
-        $resultLiveCourses = array();
-
-        foreach ($learningCourses as $key => $value) {
-            if($value['type'] == 'live'){
-                $resultLiveCourses[$key] = $value;
-            }
-            # code...
-        }
-
-                var_dump($resultLiveCourses);
-        exit();
-
-        // $total = $this->controller->getCourseService()->searchCourseCount($condition);  
-        // $allLiveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest', $start, $total);
-
-        // $learningLiveCourses = array_map(function($liveCourse){
-        //     foreach ($courseIds => $id) {
-        //         if($liveCourse['id'] == $id){
-        //             return $liveCourse;
-        //         }
-        //     }
-        // }, $learningLiveCourses);
-
+        $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
 
         return $resultLiveCourses;
     }
