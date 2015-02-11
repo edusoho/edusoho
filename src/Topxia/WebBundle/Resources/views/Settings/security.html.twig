@@ -110,6 +110,38 @@
 			</a>
 		</div>
 
+		<hr>
+	    
+		<div class="row">
+			<div class="col-md-2 tar
+				{% if hasVerifiedMobile %} 
+					text-success
+				{% else %}
+					text-danger
+				{% endif %}	" 
+				style="font-size:20px">
+			
+				{% if hasVerifiedMobile %} 
+					<span class="glyphicon glyphicon-ok"></span>
+				{% else %}
+					<span class="glyphicon glyphicon-warning-sign"></span>
+				{% endif %}
+			</div>
+
+			<span class="col-md-3 " style="margin-top: 5px;" >手机绑定</span>
+
+			<span class="col-md-4 " style="margin-top: 5px;" >增加账户登陆、购买课程时的安全性，同时还可以找回登陆密码，支付密码。</span>
+
+			<a href="{{ path('settings_bind_mobile') }}" class="col-md-offset-1 btn btn-primary" style="margin-top: -3px;" >
+			{% if hasVerifiedMobile %}
+				修改
+			{% else %}
+				绑定
+			{% endif %}
+
+			</a>
+		</div>
+
     {% endblock %}
   {% endembed %}
 {% endblock %}
