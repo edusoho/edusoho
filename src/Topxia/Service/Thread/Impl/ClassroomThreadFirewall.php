@@ -33,9 +33,19 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         return $this->hasManagePermission($thread, false);
     }
 
+    public function accessThreadCancelStick($thread)
+    {
+        return $this->hasManagePermission($thread, false);
+    }
+
     public function accessThreadNice($thread)
     {
         return $this->hasManagePermission($thread, false);
+    }
+
+    public function accessThreadCancelNice($thread)
+    {
+     return $this->hasManagePermission($thread, false);
     }
 
     public function accessPostCreate($post)

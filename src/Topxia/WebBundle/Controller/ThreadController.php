@@ -208,56 +208,59 @@ class ThreadController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function stickAction(Request $request,$targetType, $targetId, $id)
+    public function setStickyAction(Request $request, $target, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-        $this->getThreadService()->stickThread($targetType,$targetId, $id);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $this->getThreadService()->setThreadSticky($threadId);
         $user = $this->getCurrentUser();
 
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
+        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
+        
         $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>设为置顶");
-
 
         return $this->createJsonResponse(true);
     }
 
-    public function unstickAction(Request $request, $targetType,$targetId, $id)
+    public function cancelStickyAction(Request $request, $target, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-        $this->getThreadService()->unstickThread($targetType,$targetId, $id);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $this->getThreadService()->cancelThreadSticky($threadId);
         $user = $this->getCurrentUser();
 
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
+        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
+
         $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>取消置顶");
 
 
         return $this->createJsonResponse(true);
     }
 
-    public function eliteAction(Request $request, $targetType,$targetId, $id)
+    public function niceAction(Request $request, $target, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-        $this->getThreadService()->eliteThread($targetType,$targetId, $id);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $this->getThreadService()->setThreadNice($threadId);
         $user = $this->getCurrentUser();
 
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
+        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
+
         $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>加精");
 
 
         return $this->createJsonResponse(true);
     }
 
-    public function uneliteAction(Request $request, $targetType,$targetId, $id)
+    public function cancelNiceAction(Request $request, $target, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-        $this->getThreadService()->uneliteThread($targetType,$targetId, $id);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $this->getThreadService()->cancelThreadNice($threadId);
         $user = $this->getCurrentUser();
 
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
+        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
+
         $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>取消加精");
 
 
