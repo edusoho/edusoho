@@ -1,14 +1,16 @@
 define(function(require, exports, module) {
 
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('jquery.sortable');
+    require('ckeditor');
 
     exports.run = function() {
 
-        var editor = EditorFactory.create('#user_terms_body', 'simple');
-
-            editor.sync();
+        // group: 'default'
+        CKEDITOR.replace('user_terms_body', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#user_terms_body').data('imageUploadUrl')
+        });
 
           	$(".register-list").sortable({
       			'distance':20

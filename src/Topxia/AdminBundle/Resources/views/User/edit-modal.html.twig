@@ -94,7 +94,7 @@
         <label for="about">自我介绍</label>
       </div>
       <div class="col-md-7 controls">
-        <textarea id="about" name="about">{{profile.about}}</textarea>
+        <textarea id="about" name="about" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{profile.about}}</textarea>
       </div>
     </div>
     <p></p>

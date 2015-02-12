@@ -40,7 +40,7 @@
             {% endif %}
 
             <div class="order-item clearfix" 
-            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType) or setting('coin.coin_enabled')) %}
+            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and targetType in ['course','vip']) or setting('coin.coin_enabled')) %}
             style="display:none"
             {% endif %}
             >
@@ -55,7 +55,7 @@
               </div>
             </div>
             
-            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and 'course' in targetType and showCoupon|default(false) %}
+            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip']) and showCoupon|default(false) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
