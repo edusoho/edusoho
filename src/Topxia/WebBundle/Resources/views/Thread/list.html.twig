@@ -10,7 +10,7 @@
               <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
             {% endif %}
             <div class="mbm">
-              {% if thread.isStick %}
+              {% if thread.sticky %}
                 <span class="label label-danger" title="置顶帖">置顶</span>
               {% endif %}
               {% if thread.type == 'question' %}
@@ -18,7 +18,7 @@
               {% endif  %}
               <a class="js-nav" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 
-              {% if thread.isElite %}
+              {% if thread.nice %}
                 <span class="label label-warning" title="精华帖">精</span>
               {% endif %}
             </div>

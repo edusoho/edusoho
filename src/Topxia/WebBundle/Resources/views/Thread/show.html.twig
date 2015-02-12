@@ -24,13 +24,13 @@
       <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
       <a href="javascript:;" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_delete', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
       {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
-        {% if thread.isStick %}
+        {% if thread.sticky %}
           <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_cancel_stick', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
         {% else %}
           <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_stick', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
         {% endif %}
 
-        {% if thread.isElite %}
+        {% if thread.nice %}
           <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_cancel_nice', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
         {% else %}
           <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_nice', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>

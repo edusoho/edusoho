@@ -75,13 +75,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         switch ($sort) {
             case 'created':
                 $orderBys = array(
-                    array('isStick', 'DESC'),
+                    array('sticky', 'DESC'),
                     array('createdTime', 'DESC'),
                 );
                 break;
             case 'posted':
                 $orderBys = array(
-                    array('isStick', 'DESC'),
+                    array('sticky', 'DESC'),
                     array('lastPostTime', 'DESC'),
                 );
                 break;
