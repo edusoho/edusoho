@@ -340,7 +340,7 @@ class SettingsController extends BaseController
 	{
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
 		$request->request->set('token',$token);
-		return $this->forward('TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions', array(
+		return $this->forward('TopxiaWebBundle:Settings:updatePayPassword', array(
             'request' => $request 
         ));
 	}
@@ -352,7 +352,7 @@ class SettingsController extends BaseController
 	        'token' => $token?:null
         ));
 	}
-	public function updatePayPasswordFromEmailOrQuestionsAction(Request $request)
+	public function updatePayPasswordAction(Request $request)
 	{
 
 		$token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token')?:$request->request->get('token'));
