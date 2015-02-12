@@ -350,15 +350,14 @@ class ThreadController extends BaseController
 
     }
 
-    public function deletePostAction(Request $request, $targetType,$targetId, $threadId, $id)
+    public function postDeleteAction(Request $request, $target, $thread, $post)
     {
-        $post = $this->getThreadService()->getPost($targetId, $id);
-        $this->getThreadService()->deletePost($targetType,$threadId,$targetId, $id);
+        $this->getThreadService()->deletePost($post['id'],$thread['id']);
         $user = $this->getCurrentUser();
-        $thread = $this->getThreadService()->getThread($targetId, $threadId);
 
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$threadId,'targetType'=>$targetType), true);
+        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
+
         $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除。");
         $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除。");
 

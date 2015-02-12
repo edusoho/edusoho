@@ -86,7 +86,7 @@ interface ThreadService
 
 	public function updatePost($id, $fields);
 
-	public function deletePost($targetType,$threadId,$targetId, $id);
+	public function deletePost($postId,$threadId);
 
 	public function searchPostsCount($conditions);
 

@@ -391,18 +391,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->updatePost($id, $fields);
     }
 
-    public function deletePost($targetType,$threadId,$targetId, $id)
+    public function deletePost($postId,$threadId)
     {
-        $this->tryManage($targetType,$targetId);
-        $thread = $this->getThread($targetId, $threadId);
-
-        $post = $this->getThreadPostDao()->getPost($id);
+        $post = $this->getPost($postId);
         if (empty($post)) {
             throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $id));
-        }
-
-        if ($post['targetId'] != $targetId) {
-            throw $this->createServiceException(sprintf('帖子#%s不属于内容#%s，删除失败。', $id, $targetId));
         }
 
         $this->getThreadPostDao()->deletePost($post['id']);
