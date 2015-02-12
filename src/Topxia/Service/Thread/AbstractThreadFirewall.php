@@ -26,9 +26,19 @@ abstract class AbstractThreadFirewall
         throw new UnderflowException("Method accessThreadStick is not implement");
     }
 
+    public function accessThreadCancelStick($thread)
+    {
+        throw new UnderflowException("Method accessThreadCancelStick is not implement");
+    }
+
     public function accessThreadNice($thread)
     {
         throw new UnderflowException("Method accessThreadNice is not implement");
+    }
+
+    public function accessThreadCancelNice($thread)
+    {
+        throw new UnderflowException("Method accessThreadCancelNice is not implement");
     }
 
     public function accessPostCreate($post)

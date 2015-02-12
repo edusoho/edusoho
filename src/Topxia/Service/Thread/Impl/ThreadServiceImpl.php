@@ -212,70 +212,51 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function setThreadSticky($threadId)
     {
+        $thread = $this->getThreadDao()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+        }
 
+        $this->tryAccess('thread.setSticky', $thread);
+
+        $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 1,'updateTime' => time()));
     }
 
     public function cancelThreadSticky($threadId)
     {
+        $thread = $this->getThreadDao()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+        }
+
+        $this->tryAccess('thread.cancelSticky', $thread);
+
+        $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 0,'updateTime' => time()));
 
     }
 
     public function setThreadNice($threadId)
     {
+        $thread = $this->getThreadDao()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+        }
 
+        $this->tryAccess('thread.nice', $thread);
+
+        $this->getThreadDao()->updateThread($thread['id'], array('nice' => 1,'updateTime' => time()));
     }
 
     public function cancelThreadNice($threadId)
     {
-
-    }
-
-    public function stickThread($targetType,$targetId, $threadId)
-    {
-        $this->tryManage($targetType,$targetId);
-
-        $thread = $this->getThread($targetId, $threadId);
+        $thread = $this->getThreadDao()->getThread($threadId);
         if (empty($thread)) {
             throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
         }
 
-        $this->getThreadDao()->updateThread($thread['id'], array('isStick' => 1,'updateTime' => time()));
-    }
+        $this->tryAccess('thread.cancelNice', $thread);
 
-    public function unstickThread($targetType,$targetId, $threadId)
-    {
-        $this->tryManage($targetType,$targetId);
-
-        $thread = $this->getThread($targetId, $threadId);
-        if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
-        }
-
-        $this->getThreadDao()->updateThread($thread['id'], array('isStick' => 0,'updateTime' => time()));
-    }
-
-    public function eliteThread($targetType,$targetId, $threadId)
-    {
-        $this->tryManage($targetType,$targetId);
-
-        $thread = $this->getThread($targetId, $threadId);
-        if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
-        }
-
-        $this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1,'updateTime' => time()));
-    }
-
-    public function uneliteThread($targetType,$targetId, $threadId)
-    {
-        $this->tryManage($targetType,$targetId);
-
-        $thread = $this->getThread($targetId, $threadId);
-        if (empty($thread)) {
-            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
-        }
-
-        $this->getThreadDao()->updateThread($thread['id'], array('isElite' => 0,'updateTime' => time()));
+        $this->getThreadDao()->updateThread($thread['id'], array('nice' => 0,'updateTime' => time()));
     }
 
     public function hitThread($targetId, $threadId)
@@ -467,8 +448,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'thread.read' => 'accessThreadRead',
             'thread.update' => 'accessThreadUpdate',
             'thread.delete' => 'accessThreadDelete',
-            'thread.stick' => 'accessThreadStick',
+            'thread.setSticky' => 'accessThreadStick',
+            'thread.cancelSticky' => 'accessThreadCancelStick',
             'thread.nice' => 'accessThreadNice',
+            'thread.cancelNice' => 'accessThreadCancelNice',
             'post.create' => 'accessPostCreate',
             'post.update' => 'accessPostUpdate',
             'post.delete' => 'accessPostDelete',
