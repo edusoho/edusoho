@@ -14,6 +14,8 @@ class WebExtension extends \Twig_Extension
 {
     protected $container;
 
+    protected static $jsInjection;
+
     public function __construct ($container)
     {
         $this->container = $container;
@@ -80,6 +82,8 @@ class WebExtension extends \Twig_Extension
             'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
+            'import_javascript' => new \Twig_Function_Method($this, 'setJavascript'),
+            'get_javascript' => new \Twig_Function_Method($this, 'getJavascript'), 
         );
     }
 
@@ -571,6 +575,20 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public static function setJavascript(array $js)
+    {
+        if(self::$jsInjection) {
+            self::$jsInjection = array_merge(self::$jsInjection, $js);
+        } else {
+            self::$jsInjection = $js;
+        }
+    }
+
+    public static function getJavascript()
+    {
+        return self::$jsInjection;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)
