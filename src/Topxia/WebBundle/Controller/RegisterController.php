@@ -23,39 +23,37 @@ class RegisterController extends BaseController
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){
-                
+            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
                 $captchaCodePostedByUser = strtolower($registration['captcha_num']);
-
-                $captchaCode = $request->getSession()->get('captcha_code');   
-                
-                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){
-   
-                    throw new \RuntimeException('验证码错误。');
-    
-                }                
-   
-                if (!isset($captchaCode)||strlen($captchaCode)<5){
-    
-                    throw new \RuntimeException('验证码错误。');
-    
+                $captchaCode = $request->getSession()->get('captcha_code');                   
+                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
+                    throw new \RuntimeException('验证码错误。');    
+                }                   
+                if (!isset($captchaCode)||strlen($captchaCode)<5){    
+                    throw new \RuntimeException('验证码错误。');    
                 }
-
                 if ($captchaCode != $captchaCodePostedByUser){ 
                     $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
                     throw new \RuntimeException('验证码错误。');
                 }
                 $request->getSession()->set('captcha_code',mt_rand(0,999999999));
             }
+            //888  sms check
+            $registration['verifiedMobile'] = '';
+            if (in_array('mobile', $authSettings['registerSort'])){
+                list($sessionField, $requestField) = $this->paramForSmsCheck($request);
+                $result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario = 'sms_registration');
+                if ($result){
+                   $registration['verifiedMobile'] = $sessionField['to'];
+                }else{
+                    return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
+                }
+            }
 
             $registration['createdIp'] = $request->getClientIp();
-
             if(isset($authSettings['register_protective'])){
-
                 $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
-
                 if(!$status){
-
                     return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
                 }
             }
@@ -107,6 +105,27 @@ class RegisterController extends BaseController
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
         ));
+    }
+
+    private function paramForSmsCheck($request)
+    {
+        $sessionField['sms_type'] = $request->getSession()->get('sms_type');
+        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
+        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
+        $sessionField['to'] = $request->getSession()->get('to');
+
+        $requestField['sms_code'] = $request->request->get('sms_code');
+        $requestField['mobile'] = $request->request->get('mobile');
+
+        return array($sessionField, $requestField);
+    }
+
+    private function clearSmsSession($request)
+    {
+        $request->getSession()->set('to',rand(0,999999));
+        $request->getSession()->set('sms_code',rand(0,999999));
+        $request->getSession()->set('sms_last_time','');
+        $request->getSession()->set('sms_type', rand(0,999999));
     }
 
     private function getCloudSmsKey($key)
@@ -383,6 +402,11 @@ class RegisterController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 
     protected function getAuthService()
     {

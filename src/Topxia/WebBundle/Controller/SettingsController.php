@@ -527,7 +527,7 @@ class SettingsController extends BaseController
 	        list($sessionField, $requestField) = $this->paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			if ($result) {
-				$verifiedMobile = $request->getSession()->get('to');
+				$verifiedMobile = $sessionField['to'];
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
 				$setMobileResult = 'success';
