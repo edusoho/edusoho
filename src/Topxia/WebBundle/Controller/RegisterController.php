@@ -43,6 +43,7 @@ class RegisterController extends BaseController
             if (in_array('mobile', $authSettings['registerSort'])){
                 list($sessionField, $requestField) = $this->paramForSmsCheck($request);
                 $result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario = 'sms_registration');
+                $this->clearSmsSession($request);
                 if ($result){
                    $registration['verifiedMobile'] = $sessionField['to'];
                 }else{
