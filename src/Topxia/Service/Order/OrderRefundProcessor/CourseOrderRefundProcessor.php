@@ -4,40 +4,43 @@ namespace Topxia\Service\Order\OrderRefundProcessor;
 use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessor;
 use Topxia\Service\Common\ServiceKernel;
 
-class ClassroomOrderRefundProcessor implements OrderRefundProcessor
+class CourseOrderRefundProcessor implements OrderRefundProcessor
 {
 	public function getLayout()
 	{
-		return 'ClassroomBundle:ClassroomAdmin:layout.html.twig';
+		return "TopxiaAdminBundle:Course:layout.html.twig";
 	}
 
 	public function findByLikeTitle($title)
 	{
-		return $this->getClassroomService()->findClassroomsByLikeTitle($title);
+		return $this->getCourseService()->findCoursesByLikeTitle($title);
 	}
 
 	public function auditRefundOrder($id, $pass, $data)
 	{
 		$order = $this->getOrderService()->getOrder($id);
 		if ($pass) {
-            if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
-                $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);
+            if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
+            }
+        } else {
+            if ($this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
+                $this->getCourseService()->unlockStudent($order['targetId'], $order['userId']);
             }
         }
 
         $this->sendAuditRefundNotification($order, $pass, $data['amount'], $data['note']);
-
 	}
 
 	public function cancelRefundOrder($id)
 	{
-		$this->getClassroomOrderService()->cancelRefundOrder($id);
+		$this->getCourseOrderService()->cancelRefundOrder($id);
 	}
 
 	private function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $course = $this->getCourseService()->getCourse($order['targetId']);
-        if (empty($course)) {
+        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
+        if (empty($classroom)) {
             return false;
         }
 
@@ -51,9 +54,9 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
             return false;
         }
 
-        $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
+        $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
         $variables = array(
-            'course' => "<a href='{$courseUrl}'>{$course['title']}</a>",
+            'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
             'amount' => $amount,
             'note' => $note,
         );
@@ -64,7 +67,12 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
         return true;
     }
 
-	protected function getNotificationService()
+	protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
     }
@@ -77,15 +85,5 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
     protected function getOrderService()
     {
         return ServiceKernel::instance()->createService('Order.OrderService');
-    }
-
-    protected function getClassroomService()
-    {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    protected function getClassroomOrderService()
-    {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomOrderService');
     }
 }
