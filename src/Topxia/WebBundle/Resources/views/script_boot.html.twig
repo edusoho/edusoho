@@ -112,7 +112,7 @@
     app.arguments = {{ script_arguments|json_encode|raw }};
   {% endif %}
   
-  app.injectScripts = {{ export_scripts()|default(null)|json_encode|raw }};
+  app.loadScripts = {{ export_scripts()|default(null)|json_encode|raw }};
 
   app.mainScript = '{{ script_main }}';
 </script>

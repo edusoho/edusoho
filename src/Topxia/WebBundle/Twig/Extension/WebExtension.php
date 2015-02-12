@@ -14,7 +14,7 @@ class WebExtension extends \Twig_Extension
 {
     protected $container;
 
-    protected $jsInjection;
+    protected $pageScripts;
 
     public function __construct ($container)
     {
@@ -579,22 +579,18 @@ class WebExtension extends \Twig_Extension
 
     public  function loadScript($js)
     {
-        if(!is_array($js)) {
-            $temp = array();
-            $temp[] = $js;
-            $js = $temp;
-        }
+        $js = is_array($js) ? $js : array($js);
         
-        if($this->jsInjection) {
-            $this->jsInjection = array_merge($this->jsInjection, $js);
+        if($this->pageScripts) {
+            $this->pageScripts = array_merge($this->pageScripts, $js);
         } else {
-            $this->jsInjection = $js;
+            $this->pageScripts = $js;
         }
     }
 
     public function exportScripts()
     {
-        return $this->jsInjection;
+        return $this->pageScripts;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)
