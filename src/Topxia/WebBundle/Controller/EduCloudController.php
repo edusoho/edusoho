@@ -74,7 +74,7 @@ class EduCloudController extends BaseController
 
             $smsCode = $this->generateSmsCode();
             try {
-                $result = $this->getEduCloudService()->sendSms($to, $smsCode);
+                $result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
                 if (isset($result['error'])) {
                     $serializedResult = serialize($result);
                     return $this->createJsonResponse(array('error' => "failed to send sms|{$serializedResult}"));

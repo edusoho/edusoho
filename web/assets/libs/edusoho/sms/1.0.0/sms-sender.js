@@ -6,7 +6,8 @@ define(function(require, exports, module) {
         attrs: {
         	validator: 0,
         	smsType:'',
-        	hasMobile:false
+        	hasMobile:false,
+        	hasNickname:false
         },
     	setValidator: function (validator) {
     		this.set("validator", validator);
@@ -20,16 +21,28 @@ define(function(require, exports, module) {
     		this.set("hasMobile", hasMobile);
     		return this;
     	},
+    	sethasNickname: function (hasNickname) {
+    		this.set("hasNickname", hasNickname);
+    		return this;
+    	},
     	takeEffect: function () {
     		validator = this.get("validator");
     		smsType = this.get("smsType");
     		hasMobile = this.get("hasMobile");
+    		hasNickname = this.get("hasNickname");
 
 	    	if (hasMobile){	
 	    		validator.addItem({
 		            element: '[name="mobile"]',
 		            required: true,
 		            rule: 'phone'            
+		        });
+	    	}
+
+	    	if (hasNickname){	
+	    		validator.addItem({
+		            element: '[name="nickname"]',
+		            required: true          
 		        });
 	    	}
 
@@ -56,6 +69,9 @@ define(function(require, exports, module) {
 	        	if(hasMobile){
 	        		data.to = $('[name="mobile"]').val();
 	        	}
+	        	if(hasNickname){
+	        		data.nickname = $('[name="nickname"]').val();
+	        	}
 	        	data.sms_type = smsType;
 	        	$.post(url,data,function(response){
 	        		console.log(response);
@@ -67,21 +83,29 @@ define(function(require, exports, module) {
 	        	});
 	        }
 
+	        $('.js-sms-send').unbind("click");
 	        $('.js-sms-send').click(function() {
-	        		var leftTime = $('#js-time-left').html();
-	        		if (leftTime.length > 0){
-	        			return false;
-	        		}
-	        		if (hasMobile){
-						validator.query('[name="mobile"]').execute(function(error, results, element) {
-							if (error){
-								return false;
-							}
-						    postData();
-						});
-					}else{
-						postData();
-					}
+        		var leftTime = $('#js-time-left').html();
+        		if (leftTime.length > 0){
+        			return false;
+        		}
+        		if (hasNickname){
+        			validator.query('[name="nickname"]').execute(function(error, results, element) {
+						if (error){
+							return false;
+						}
+					});
+        		}
+        		if (hasMobile){
+					validator.query('[name="mobile"]').execute(function(error, results, element) {
+						if (error){
+							return false;
+						}
+					    postData();
+					});
+				}else{
+					postData();
+				}
 
 	        });
 
