@@ -9,31 +9,11 @@ use Topxia\Common\Paginator;
 class ThreadController extends BaseController
 {
 
-    public function indexAction(Request $request, $id, $targetType)
+    public function listAction(Request $request, $target, $filters)
     {
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
 
-        if (!in_array($targetType, array('classroom'))) {
-            throw $this->createNotFoundException('参数targetType不正确。');
-        }else{
-            if ($targetType == 'classroom' ) {
-                $classroom = $this->getClassroomService()->getClassroom($id);
-                if (empty($classroom)) {
-                    throw $this->createNotFoundException("班级不存在，或已删除。");
-                }
-
-                if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
-                    // return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-                    return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, null);             
-                }
-            }
-        }
-
-        $filters = $this->getThreadSearchFilters($request);
-        $conditions = $this->convertFiltersToConditions($id, $filters);
+        $conditions = $this->convertFiltersToConditions($target['id'], $filters);
 
         $paginator = new Paginator(
             $request,
@@ -54,52 +34,20 @@ class ThreadController extends BaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
-
-        return $this->render("TopxiaWebBundle:Thread:{$template}.html.twig", array(
-            'id' => $id,
+        return $this->render("TopxiaWebBundle:Thread:list.html.twig", array(
+            'target' => $target,
             'threads' => $threads,
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
-            'targetType' =>$targetType,
         ));
     }
 
-    public function showAction(Request $request, $targetId, $id,$targetType)
+    public function showAction(Request $request, $target, $thread)
     {
-
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
-        $member = '';
-        if (!in_array($targetType, array('classroom'))) {
-            throw $this->createNotFoundException('参数targetType不正确。');
-        }else{
-            if ($targetType == 'classroom' ) {
-                $classroom = $this->getClassroomService()->getClassroom($targetId);
-                if (empty($classroom)) {
-                    throw $this->createNotFoundException("班级不存在，或已删除。");
-                }
-
-                if (!$this->getClassroomService()->canTakeClassroom($classroom)) {
-                    // return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-                    return $this->createMessageResponse('info', "您还不是班级《{$classroom['title']}》的学员，请先购买或加入学习。", null, 3000, null);             
-                }
-
-            list($classroom, $member) = $this->getClassroomService()->tryTakeClassroom($targetId);
-            }
-        }
         
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-
-        if (empty($thread)) {
-            throw $this->createNotFoundException("话题不存在，或已删除。");
-        }
-
         $condition=array('threadId'=>$thread['id'],'status'=>'open','parentId'=>0);
+
         $postCount=$this->getThreadService()->searchPostsCount($condition);
 
         $paginator = new Paginator(
@@ -149,22 +97,16 @@ class ThreadController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $this->getThreadService()->hitThread($targetId, $id);
-
-        if ($targetType == 'classroom') {
-            $isManager = $this->getClassroomService()->canManageClassroom($targetId);
-        }
+        $this->getThreadService()->hitThread($target['id'], $thread['id']);
 
         return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
+            'target' => $target,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
             'elitePosts' => $elitePosts,
             'users' => $users,
-            'isManager' => $isManager,
             'paginator' => $paginator,
-            'targetType' =>$targetType,
-            'targetId' => $targetId,
             'postCount' =>$postCount,
             'postMember'=>$postMember,
             'postReply'=>$postReply,
@@ -174,43 +116,32 @@ class ThreadController extends BaseController
             'replyPaginator'=>$replyPaginator,
             'sort'=>'posted',
             'type'=>'all',
-            'member'=>$member,
         ));
     }
 
 
-    public function createAction(Request $request, $id, $targetType)
+    public function createAction(Request $request, $target)
     {
-        if ($targetType == 'classroom' ) {
-            list($classroom, $member) = $this->getClassroomService()->tryTakeClassroom($id);
-        }
-
-        $type = $request->query->get('type') ? : 'discussion';
         $form = $this->createThreadForm(array(
-            'type' => $type,
-            'targetId' => $id,
-            'targetType'=>$targetType,
+            'type' => 'discussion',
+            'targetId' => $target['id'],
+            'targetType'=>$target['type'],
         ));
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
                 $thread = $this->getThreadService()->createThread($form->getData());
-                return $this->redirect($this->generateUrl('thread_show', array(
-                   'targetId' => $thread['targetId'],
-                   'id' => $thread['id'], 
-                   'targetType'=>$targetType,
+                return $this->redirect($this->generateUrl( "{$target['type']}_thread_show", array(
+                   "{$target['type']}Id" => $thread['targetId'],
+                   'threadId' => $thread['id'],
                 )));
             }
         }
 
-        return $this->render("TopxiaWebBundle:Thread:form.html.twig", array(
-            'targetId' => $id,
+        return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
+            'target' => $target,
             'form' => $form->createView(),
-            'type' => $type,
-            'targetType'=>$targetType,
-            'sort'=>'posted',
-            'type'=>'all',
         ));
     }
 
@@ -264,16 +195,15 @@ class ThreadController extends BaseController
             ->getForm();
     }
 
-    public function deleteAction(Request $request, $targetType, $targetId, $id)
+    public function deleteAction(Request $request, $target, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-        $this->getThreadService()->deleteThread($targetType,$id);
+        $thread = $this->getThreadService()->getThread($threadId);
+
+        $this->getThreadService()->deleteThread($threadId);
+
         $user = $this->getCurrentUser();
-
         $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除");
-
+        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='#' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除");
 
         return $this->createJsonResponse(true);
     }
@@ -334,48 +264,36 @@ class ThreadController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function postAction(Request $request, $targetType,$targetId, $id)
+    public function postAction(Request $request, $target, $thread)
     {
-        if ($targetType == 'classroom' ) {
-            list($classroom, $member) = $this->getClassroomService()->tryTakeClassroom($targetId);
-        }
+        $user = $this->getCurrentUser();
+        if ($request->getMethod() == 'POST') {
+            $postContent=$request->request->all();
 
-        $user=$this->getCurrentUser();
-        if (!$user->isLogin()) {
-        return new Response($this->generateUrl('login'));
-        }
+            $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
+            $content=array(
+            'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
 
-        $thread = $this->getThreadService()->getThread($targetId, $id);
+            if(isset($postContent['parentId'])){
+                 $post=$this->getThreadService()->createPost($content,$target['type'], $target['id'], $user['id'], $thread['id'], $postContent['parentId']);
+            }else{
+                $post=$this->getThreadService()->createPost($content,$target['type'], $target['id'], $user['id'],$thread['id']);
+            }
 
-        $postContent=$request->request->all();
+            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
+            $url=$this->getPost($target['type'] ,$post['id'],$thread['id'],$target['id']);
+            echo 'bb';exit();       
 
-        $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
-        $content=array(
-        'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
-
-        if(isset($postContent['parentId'])){
-
-             $post=$this->getThreadService()->createPost($content,$targetType,$targetId,$user['id'],$id,$postContent['parentId']);
-
-        }else{
-
-            $post=$this->getThreadService()->createPost($content,$targetType,$targetId,$user['id'],$id);
-
-        }       
-
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$id,'targetType'=>$targetType), true);
-        $url=$this->getPost($targetType,$post['id'],$thread['id'],$targetId);
-
-         if ($thread['userId'] != $user->id) {
+            if ($thread['userId'] != $user->id) {
                 $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
-        }
+            }
 
-        if (empty($fromUserId) && !empty($postContent['postId'])) {
+            if (empty($fromUserId) && !empty($postContent['postId'])) {
                 $post = $this->getThreadService()->getPost($postContent['postId']);
-                if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
-                    $this->getNotifiactionService()->notify($post['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
-                }
+                    if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
+                        $this->getNotifiactionService()->notify($post['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
+                    }
             }
 
             if (!empty($fromUserId) && $fromUserId != $user->id && $fromUserId != $thread['userId']) {
@@ -383,6 +301,12 @@ class ThreadController extends BaseController
             }
 
             return new Response($url);
+        }
+
+        return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
+            'target' => $target,
+            'thread' => $thread,
+        ));
 
     }
 
@@ -395,7 +319,7 @@ class ThreadController extends BaseController
 
         $page=floor(($count)/30)+1;
 
-        $url=$this->generateUrl('thread_show',array('targetId'=>$id,'id'=>$threadId,'targetType'=>$targetType));
+        $url=$this->generateUrl( $targetType . '_thread_show',array("{$targetType}Id" => $id, 'threadId'=>$threadId));
 
         $url=$url."?page=$page#post-$parentId";
         return $url;
@@ -520,21 +444,6 @@ class ThreadController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
-    }
-
-    private function getThreadSearchFilters($request)
-    {
-        $filters = array();
-        $filters['type'] = $request->query->get('type');
-        if (!in_array($filters['type'], array('all', 'question', 'elite'))) {
-            $filters['type'] = 'all';
-        }
-        $filters['sort'] = $request->query->get('sort');
-
-        if (!in_array($filters['sort'], array('created', 'posted', 'createdNotStick', 'postedNotStick'))) {
-            $filters['sort'] = 'posted';
-        }
-        return $filters;
     }
 
     private function convertFiltersToConditions($id, $filters)

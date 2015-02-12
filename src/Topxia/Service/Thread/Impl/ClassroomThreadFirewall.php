@@ -1,16 +1,21 @@
 <?php
 namespace Topxia\Service\Thread\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Thread\ThreadService;
-use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Thread\AbstractThreadFirewall;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomThreadFirewall extends AbstractThreadFirewall
 {
 
     public function accessThreadRead($thread)
     {
+        $user = $this->getCurrentUser();
+        return $this->getClassroomService()->getClassroomMember($thread['targetId'], $user['id']);
+    }
 
+    public function accessThreadCreate($thread)
+    {
+        return $this->hasCreatePermission($thread);
     }
 
     public function accessThreadDelete($thread)
@@ -35,7 +40,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     public function accessPostCreate($post)
     {
-
+        return $this->hasCreatePermission($post);
     }
 
     public function accessPostUpdate($post)
@@ -50,32 +55,26 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     private function hasCreatePermission($resource)
     {
-        $user = $this->getCurrentUser();
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        if ($this->getClassroomService()->isClassroomManager($resource['targetId'], $user['id'])) {
-            return true;
-        }
+        return $this->getClassroomService()->canTakeClassroom($resource['targetId']);
     }
 
     private function hasManagePermission($resource, $ownerCanManage = false)
     {
+        if ($this->getClassroomService()->canManageClassroom($resource['targetId'])) {
+            return true;
+        }
+
         $user = $this->getCurrentUser();
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        if ($this->getClassroomService()->isClassroomManager($resource['targetId'], $user['id'])) {
-            return true;
-        }
-
-        if ($ownerCanManage && ($resource['userId'] == $user['id'];)) {
+        if ($ownerCanManage && ($resource['userId'] == $user['id'])) {
             return true;
         }
 
         return false;
+    }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getKernel()

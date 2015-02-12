@@ -8,13 +8,9 @@ use Topxia\Common\ArrayToolkit;
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
 
-    public function getThread($targetId, $threadId)
+    public function getThread($threadId)
     {
-        $thread = $this->getThreadDao()->getThread($threadId);
-        if (empty($thread)) {
-            return null;
-        }
-        return $thread['targetId'] == $targetId ? $thread : null;
+        return $this->getThreadDao()->getThread($threadId);
     }
 
     public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit)
@@ -182,10 +178,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread)) {
             throw $this->createServiceException('话题不存在，更新失败！');
         }
+
+        $this->tryAccess('thread.update', $thread);
+
         $thread['updateTime'] = time();
 
         $user = $this->getCurrentUser();
-        // ($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
 
         $fields = ArrayToolkit::parts($fields, array('title', 'content'));
         if (empty($fields)) {
@@ -197,82 +195,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->updateThread($threadId, $fields);
     }
 
-    public function canManage($targetType,$targetId)
-    {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return false;
-        }
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        if ($targetType == 'classroom') {
-        $classroom = $this->getClassroom($targetId);
-        if (empty($classroom)) {
-            return $user->isAdmin();
-        }
-
-        $member = $this->getMemberDao()->getMemberByClassIdAndUserId($targetId, $user->id);
-        if ($member and ($member['role'] == 'teacher')) {
-            return true;
-        }
-        }
-
-        return false;
-    }
-
-    public function getClassroom($id)
-    {
-    return $this->getClassroomDao()->getClassroom($id);
-    }
-
-    public function deleteThread($targetType,$threadId)
+    public function deleteThread($threadId)
     {
         $thread = $this->getThreadDao()->getThread($threadId);
         if (empty($thread)) {
             throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $threadId));
         }
 
-        if ($this->canManage($targetType,$thread['targetId']) == false) {
-            throw $this->createServiceException('您无权限删除该话题');
-        }
+        $this->tryAccess('thread.delete', $thread);
 
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
 
         $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
-    }
-
-    public function tryManage($targetType,$targetId)
-    {
-        $result =''; 
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
-        }
-
-                  if ($targetType == 'classroom') {
-            $classroom = $this->getClassroom($targetId);
-            if (empty($classroom)) {
-                throw $this->createNotFoundException();
-            }
-            if ($classroom['status'] != 'published') {
-                throw $this->createAccessDeniedException('班级未发布,无法查看,请联系管理员！');
-            }
-
-            $member = $this->getMemberDao()->getMemberByClassIdAndUserId($targetId, $user['id']);
-            if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
-                return $classroom;
-            }
-
-            if (empty($member) or !in_array($member['role'], array('teacher', 'student','aduitor'))) {
-                throw $this->createAccessDeniedException('您不是班级学员，不能查看课程内容，请先购买班级！');
-            }
-
-            return $classroom;
-                  }
-                  return $result;
     }
 
     public function stickThread($targetType,$targetId, $threadId)
@@ -505,47 +440,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     }
 
-    private function getThreadDao()
-    {
-        return $this->createDao('Thread.ThreadDao');
-    }
-
-    private function getThreadPostDao()
-    {
-        return $this->createDao('Thread.ThreadPostDao');
-    }
-
-    private function getCourseService()
-    {
-        return $this->createService('Course.CourseService');
-    }
-
-    private function getUserService()
-    {
-          return $this->createService('User.UserService');
-    }
-
-    private function getNotifiactionService()
-    {
-          return $this->createService('User.NotificationService');
-    }
-
-    private function getLogService()
-    {
-        return $this->createService('System.LogService');
-    }
-
-        private function getMemberDao ()
-    {
-        return $this->createDao('Classroom.ClassroomMemberDao');
-    }
-
-    private function getClassroomDao() 
-    {
-        return $this->createDao('Classroom.ClassroomDao');
-    }
-
-
     public function canAccess($permision, $resource)
     {
         $permisions = array(
@@ -573,10 +467,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function tryAccess($permision, $resource)
     {
-        if ($this->getTargetFirewall($resource)->canAccess($permision, $resource)) {
-            return ;
+        if (!$this->canAccess($permision, $resource)) {
+            throw $this->createAccessDeniedException("Permision `{$permision}`, resource `{$resource['targetType']}[{$resource['targetId']}]`, access denied.");
         }
-        throw $this->createAccessDeniedException("Permision `{$permision}`, resource `{$resource['targetType']}[{$resource['targetId']}]`, access denied.");
     }
 
     private function getTargetFirewall($resource)
@@ -585,8 +478,34 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw new InvalidArgumentException("Resource  targetType or targetId argument missing."); 
         }
 
-        $class = "Topxia\\Service\\Thread\\" . ucfirst($resource['targetType']) . 'ThreadFirewall';
+        $class = __NAMESPACE__ . "\\" . ucfirst($resource['targetType']) . 'ThreadFirewall';
+
         return new $class();
+    }
+
+    private function getThreadDao()
+    {
+        return $this->createDao('Thread.ThreadDao');
+    }
+
+    private function getThreadPostDao()
+    {
+        return $this->createDao('Thread.ThreadPostDao');
+    }
+
+    private function getUserService()
+    {
+          return $this->createService('User.UserService');
+    }
+
+    private function getNotifiactionService()
+    {
+          return $this->createService('User.NotificationService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 

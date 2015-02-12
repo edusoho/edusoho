@@ -6,7 +6,7 @@ namespace Topxia\Service\Thread;
  */
 interface ThreadService
 {
-	public function getThread($targetId, $threadId);
+	public function getThread($threadId);
 
 	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit);
 
@@ -29,7 +29,7 @@ interface ThreadService
 
 	public function updateThread($targetId, $threadId, $thread);
 
-	public function deleteThread($targetType,$threadId);
+	public function deleteThread($threadId);
 
 	public function stickThread($targetType,$targetId, $threadId);
 

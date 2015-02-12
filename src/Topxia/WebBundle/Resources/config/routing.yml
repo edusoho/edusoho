@@ -1565,64 +1565,6 @@ classroom_manage_teachers:
     pattern: /classroom/{id}/manage/teachers
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:teachers }
 
-threads:
-    pattern:  /{targetType}/{id}/thread
-    defaults: { _controller: TopxiaWebBundle:Thread:index }
-
-thread_create:
-    pattern:  /{targetType}/{id}/thread/create
-    defaults: { _controller: TopxiaWebBundle:Thread:create }
-
-thread_show:
-    pattern:  /{targetType}/{targetId}/thread/{id}
-    defaults: { _controller: TopxiaWebBundle:Thread:show }
-
-thread_edit:
-    pattern:  /{targetType}/{targetId}/thread/{id}/edit
-    defaults: { _controller: TopxiaWebBundle:Thread:edit }
-
-thread_delete:
-    pattern:  /{targetType}/{targetId}/thread/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:Thread:delete }
-    methods: [POST]
-
-thread_stick:
-    pattern:  /{targetType}/{targetId}/thread/{id}/stick
-    defaults: { _controller: TopxiaWebBundle:Thread:stick }
-    methods: [POST]
-
-thread_unstick:
-    pattern:  /{targetType}/{targetId}/thread/{id}/unstick
-    defaults: { _controller: TopxiaWebBundle:Thread:unstick }
-    methods: [POST]
-
-thread_elite:
-    pattern:  /{targetType}/{targetId}/thread/{id}/elite
-    defaults: { _controller: TopxiaWebBundle:Thread:elite }
-    methods: [POST]
-
-thread_unelite:
-    pattern:  /{targetType}/{targetId}/thread/{id}/unelite
-    defaults: { _controller: TopxiaWebBundle:Thread:unelite }
-    methods: [POST]
-
-thread_post:
-    pattern:  /{targetType}/{targetId}/thread/{id}/post
-    defaults: { _controller: TopxiaWebBundle:Thread:post }
-
-thread_post_delete:
-    pattern:  /{targetType}/{targetId}/thread/{threadId}/post/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:Thread:deletePost }
-    methods: [POST]
-
-thread_post_edit:
-    pattern:  /{targetType}/{targetId}/thread/{threadId}/post/{id}/edit
-    defaults: { _controller: TopxiaWebBundle:Thread:editPost }
-
-thread_post_reply:
-    pattern:  /{targetType}/post/{parentId}/reply
-    defaults: { _controller: TopxiaWebBundle:Thread:postReply }
-
 classroom_manage_publish:
     pattern: /classroom/{id}/manage/publish
     defaults: { _controller: TopxiaWebBundle:ClassroomManage:publish }

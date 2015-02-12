@@ -1,68 +1,47 @@
-{% if targetType == 'classroom' %}
-{% extends 'TopxiaWebBundle:Classroom:dashboard-layout.html.twig' %}
-{% endif %}
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+<div class="thread">
+  <div class="thread-header">
+    {{ web_macro.user_avatar(author, 'pull-right thread-author-avatar') }}
+    <h2 class="thread-title">
+      {% if thread.type == 'question' %}
+      <span class="label label-info">问</span>
+      {% endif %}
+      {{ thread.title }}
+    </h2>
+    <div class="thread-metas">
+      By {{  web_macro.user_link(author, 'link-muted') }}
+      <span class="bullet mhs">•</span>
+      {{ thread.createdTime|smart_time }}
+      <span class="bullet mhs">•</span>
+      {{ thread.hitNum}} 次浏览
+    </div>
+  </div>
+  <div class="thread-body">{{ thread.content|raw }}</div>
+    
+  {% if member.role|default('') == 'teacher' or app.user.id == author.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="thread-footer" >
+      <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+      <a href="javascript:;" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_delete', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+      {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+        {% if thread.isStick %}
+          <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_cancel_stick', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+        {% else %}
+          <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_stick', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
+        {% endif %}
 
-{% set script_controller = 'thread/thread-show' %}
+        {% if thread.isElite %}
+          <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_cancel_nice', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+        {% else %}
+          <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_nice', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
 
-{% block dashboard_main %}
 
-<ul class="breadcrumb">
-  <li><a href="{{ path('threads', {targetType:targetType,id:targetId}) }}">话题</a></li>
-  <li class="active">{% if thread.type == 'question' %}问答{% else %}话题{% endif %}</li>
-</ul>
-	<div class="thread">
-	  <div class="thread-header">
-	    {{ web_macro.user_avatar(author, 'pull-right thread-author-avatar') }}
-	    <h2 class="thread-title">
-	      {% if thread.type == 'question' %}
-	      <span class="label label-info">问</span>
-	      {% endif %}
-	      {{ thread.title }}
-	    </h2>
-	    <div class="thread-metas">
-	      By {{  web_macro.user_link(author, 'link-muted') }}
-	      <span class="bullet mhs">•</span>
-	      {{ thread.createdTime|smart_time }}
-	      <span class="bullet mhs">•</span>
-	      {{ thread.hitNum}} 次浏览
-	    </div>
-	  </div>
-	  <div class="thread-body">{{ thread.content|raw }}</div>
-      
-	  {% if member.role|default('') == 'teacher' or app.user.id == author.id or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
-		  <div class="thread-footer" >
-		    <a href="{{ path('thread_edit', {targetType:targetType,targetId:thread.targetId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
-                                <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-after-url="{{ path('threads', {targetType:targetType,id:targetId}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
-		    {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
-			    {% if thread.isStick %}
-			      <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_unstick', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
-			    {% else %}
-			      <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_stick', {targetType:targetType,targetId:targetId, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
-			    {% endif %}
-
-			    {% if thread.isElite %}
-			      <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_unelite', {targetType:targetType,targetId:targetId, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
-			    {% else %}
-			      <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_elite', {targetType:targetType,targetId:targetId, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
-			    {% endif %}
-		    {% endif %}
-		  </div>
-	  {% endif %}
-	</div>
-
-	<div class="thread-posts">
-<!-- 		{% if thread.type == 'question' and elitePosts %}
-			<h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 教师的答案</h3>
-	    <ul class="thread-post-list media-list">
-	      {% for post in elitePosts %}
-	        {% set author = users[post.userId] %}
-	        {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig' %}
-	      {% endfor %}
-	    </ul>
-		{% endif %} -->
-
+<div class="thread-posts">
 
  {% if postCount %}
   <div class="panel panel-default thread-post-list">
@@ -92,15 +71,10 @@
                        
             <div class="actions pull-right">
 
-                {% if member.role|default('') == 'teacher' or app.user.id == thread.userId or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+                 <a href="{{ path( target.type ~ '_thread_post_update', {(target.type ~ 'Id'): target.id, threadId:thread.id, postId:post.id}) }}"> 编辑</a>
 
-                 <a href="{{ path('thread_post_edit', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}"> 编辑</a>
+                   <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path( target.type ~ '_thread_post_delete', {(target.type ~ 'Id'): target.id, threadId:thread.id, postId:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
 
-                   <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path('thread_post_delete', {targetType:targetType,targetId:targetId,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
-
-<!--                   <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a> -->
-
-                {% endif %} 
 
                 {% if not subPosts %}
                       <a href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}" >回复</a>
@@ -122,7 +96,7 @@
                   {% else %}
 
                 <div class="reply-{{post.id}}" style="display:none;">
-                  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('thread_post',{targetType:targetType,targetId:targetId,id:thread.id})}}">
+                  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path( target.type ~ '_thread_post', {(target.type ~ 'Id'): target.id, threadId:thread.id})}}">
                     <div class="form-group">
                       <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
                       <div class="controls">
@@ -131,7 +105,7 @@
                     </div>
                     <div id="fromUserIdNoSubDiv"></div>
                     <div class="form-group">
-                      <button type="submit" parentId="{{post.id}}" targetId="{{targetId}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+                      <button type="submit" parentId="{{post.id}}" targetId="{{ target.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
                     </div>
                   </form>
                 </div>
@@ -153,36 +127,9 @@
           </div>
   {% endif %}
 
-      <div class="panel panel-default">
-    <div class="panel-heading">发表回复</div>
-    <div class="panel-body">
-
-      {% if app.user %}
-        <form id="post-thread-form" class="post-thread-form thread-form" method="post" post-url="{{path('thread_post',{targetType:targetType,targetId:targetId,id:thread.id})}}">
-
-          <div class="form-group">
-              <label class="control-label hide" for="post_content">回复内容</label>
-              <div class="controls">
-              <textarea name="content" value="" rows="10" id="post_content" class="form-control"></textarea>
-              </div>
-          </div>
-          <div class="form-group">
-            <div class="controls">
-            <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
-            </div>
-          </div>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        </form>
-      {% else %}
-        <div class="empty">
-          你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
-        </div>
-
-      {% endif %}
-
-    </div>
-  </div>
+</div>
+</div>
+</div>
 
 
 
-{% endblock %}
