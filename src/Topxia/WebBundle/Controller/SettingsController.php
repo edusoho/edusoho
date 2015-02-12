@@ -99,9 +99,9 @@ class SettingsController extends BaseController
 	public function nicknameCheckAction(Request $request)
 	{
 		$nickname = $request->query->get('value');
-		$currenUser = $this->getUserService()->getCurrentUser();
+		$currentUser = $this->getUserService()->getCurrentUser();
 
-		if ($currenUser['nickname'] == $nickname){
+		if ($currentUser['nickname'] == $nickname){
 			return $this->createJsonResponse(array('success' => true, 'message' => ''));
 		}
 
@@ -423,6 +423,39 @@ class SettingsController extends BaseController
 		return $this->findPayPasswordActionReturn($userSecureQuestions);
 	}
 
+	public function findPayPasswordBySmsAction(Request $request)
+	{
+		//888
+		$eduCloudService = $this->getEduCloudService();
+		$scenario = "sms_forget_pay_password";
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
+        }
+		
+
+		$currentUser = $this->getCurrentUser();
+		if (!(isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0))){
+			$this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
+			return $this->redirect($this->generateUrl('settings_bind_mobile', array(
+            )));
+		}
+
+		if ($request->getMethod() == 'POST'){
+			list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
+			$eduCloudService->clearSmsSession($request);
+			if ($result) {
+				$this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
+ 				return $this->setPayPasswordPage($request, $currentUser['id']);
+			}else{
+				$this->setFlashMessage('danger', '验证错误。');
+			}
+			
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password-by-sms.html.twig', array());
+	}
+
 	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
 	{
 		$question1 = null;$question2 = null;$question3 = null;
@@ -512,6 +545,7 @@ class SettingsController extends BaseController
 
 	        list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
+			$eduCloudService->clearSmsSession($request);
 			if ($result) {
 				$verifiedMobile = $sessionField['to'];
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
@@ -521,9 +555,7 @@ class SettingsController extends BaseController
 			}else{
 				$setMobileResult = 'fail';
 				$this->setFlashMessage('danger', '绑定失败，原短信失效');
-			}
-
-			$eduCloudService->clearSmsSession($request);			
+			}						
 		}
 
 		return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
