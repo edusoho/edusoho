@@ -425,7 +425,6 @@ class SettingsController extends BaseController
 
 	public function findPayPasswordBySmsAction(Request $request)
 	{
-		//888
 		$eduCloudService = $this->getEduCloudService();
 		$scenario = "sms_forget_pay_password";
 		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
