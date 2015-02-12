@@ -21,6 +21,8 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+	
+	public function findCoursesByCourseIds(array $ids, $start, $limit);
 
 	public function findCoursesByLikeTitle($title);
 	
@@ -340,5 +342,9 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
+
+	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+
+	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
 
 }

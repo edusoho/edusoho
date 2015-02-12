@@ -89,8 +89,21 @@ define(function(require, exports, module) {
 			
 		}
 
+		function afterDiscountCourses(totalPrice){
+			var courseDiscountPrices = $("[role='course-discount-price']");
+			for (var i = 0; i < courseDiscountPrices.length; i++) {
+				courseDiscountPrice = courseDiscountPrices[i];
+				totalPrice -= parseFloat($(courseDiscountPrice).text());
+			};
+			if(totalPrice < 0 ) {
+				totalPrice = 0;
+			}
+			return totalPrice;
+		}
+
 		function conculatePrice(){
 			var totalPrice = afterCouponPay();
+			totalPrice = afterDiscountCourses(totalPrice);
 			if(totalPrice <= 0){
 				totalPrice = 0;
 				coinPriceZero();
@@ -232,6 +245,7 @@ define(function(require, exports, module) {
  		} else {
  			$('[role="cash-discount"]').text("0.00");
  		}
+ 		totalPrice = afterDiscountCourses(totalPrice);
  		shouldPay(totalPrice);
 	}
 });

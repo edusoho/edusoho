@@ -14,6 +14,8 @@ class WebExtension extends \Twig_Extension
 {
     protected $container;
 
+    protected $pageScripts;
+
     public function __construct ($container)
     {
         $this->container = $container;
@@ -80,7 +82,21 @@ class WebExtension extends \Twig_Extension
             'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
+            'sub_str' => new \Twig_Function_Method($this, 'subStr'),
+            'load_script' => new \Twig_Function_Method($this, 'loadScript'),
+            'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
         );
+    }
+
+    public function subStr($text, $start, $length)
+    {
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text) > $length) )  {
+            $text = mb_substr($text, $start, $length, 'UTF-8');
+        }
+        return $text;
     }
 
     public function getOutCash($userId,$timeType="oneWeek")
@@ -571,6 +587,22 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public  function loadScript($js)
+    {
+        $js = is_array($js) ? $js : array($js);
+        
+        if($this->pageScripts) {
+            $this->pageScripts = array_merge($this->pageScripts, $js);
+        } else {
+            $this->pageScripts = $js;
+        }
+    }
+
+    public function exportScripts()
+    {
+        return $this->pageScripts;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)

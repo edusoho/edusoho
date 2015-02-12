@@ -39,11 +39,11 @@
               {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
-            <div class="order-item clearfix" 
-            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and targetType in ['course','vip']) or setting('coin.coin_enabled')) %}
-            style="display:none"
+            {% if targetType == "classroom" and is_plugin_installed("Classroom") %}
+              {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
             {% endif %}
-            >
+
+            <div class="order-item clearfix" >
               <div class="pull-right order-count">
                 订单金额：
                 <span role="total-price" class="order-price">{{totalPrice}}</span>
@@ -54,6 +54,10 @@
                 {% endif %}
               </div>
             </div>
+
+            {% if targetType == "classroom" and is_plugin_installed("Classroom") and paidCourses|length > 0 %}
+              {% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
+            {% endif %}
             
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip']) and showCoupon|default(false) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}

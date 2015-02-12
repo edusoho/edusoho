@@ -1,6 +1,10 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 {% set bodyClass = 'homepage' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
+{% endblock %}
 
 {% block content %}
 
@@ -16,6 +20,59 @@
   <div class="row row-9-3">
 
     <div class="col-md-9">
+
+
+<div class="es-box">
+              <div class="es-box-heading">
+                <h2>班级</h2>
+                <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
+              </div>
+              <div class="es-box-body">
+                 {% for classroom in classrooms %}
+                 {% set teachers = users[classroom.id]|default(null) %}
+                 {% if loop.index <= 5%}
+                <ul class="home-class-list">
+                  <li class="class-item">
+                    <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                      <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                    </a>
+                    <div class="class-body">
+                      <h3 class="class-title">
+                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                      </h3>
+                      <div class="class-metas">
+                        {% if teachers %}
+                      <span class="class-teacher">
+                        <i class="fa fa-user"></i>
+                        {% for teacher in teachers %}
+                          {% if loop.index <= 5%}
+                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                           {% endif %}
+                        {% endfor %}
+                      </span>
+                    {% endif %}
+                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{ classroom.studentNum }}</span>
+                        <span class="class-price">
+
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                             {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                          {% else %}
+                              {{ classroom.price }}元
+                          {% endif %}
+
+                        </span>
+                      </div>
+                      <div class="course-num">共{{coursesNum[classroom.id]}}课程</div>
+                    </div>
+                  </li>
+                   {% endif %}
+                 {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+
+
       {% if courses %}
         <div class="es-box">
           <div class="es-box-heading">
@@ -199,7 +256,7 @@
                   </div>
                 </li>
 
-                  {% elseif learn.type == "become_student" %}
+                  {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
                       <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
@@ -209,6 +266,29 @@
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
                     </div>
                   </li>
+
+                   {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                    <li class="media">
+                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                    </a>
+                    <div class="media-body">
+                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                    </div>
+                  </li>
+
+                      {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                       <li class="media">
+                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                    </a>
+                    <div class="media-body">
+                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+                    </div>
+                  </li>
+                  
                   {% elseif learn.type == "learned_lesson" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
