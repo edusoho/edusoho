@@ -38,7 +38,7 @@ class RegisterController extends BaseController
                 }
                 $request->getSession()->set('captcha_code',mt_rand(0,999999999));
             }
-            //888  sms check
+            
             $registration['verifiedMobile'] = '';
             if (in_array('mobile', $authSettings['registerSort'])){
                 $eduCloudService = $this->getEduCloudService();
