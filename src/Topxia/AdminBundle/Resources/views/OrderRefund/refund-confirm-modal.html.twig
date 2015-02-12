@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}审核退款申请{% endblock %}
+{% block body %}
+
+  <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {id:order.id}) }}">
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">订单成交金额</label>
+      <div class="col-md-8 controls">
+        <span class="control-text">{{ order.amount }}元</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">审核结果</label>
+      <div class="col-md-8 controls radios">
+        {{ radios('result', {pass:'同意', unpass:'不同意'}) }}
+      </div>
+    </div>
+
+    <div class="form-group amount-form-group" style="display:none;">
+      <label class="col-md-3 control-label" for="refund-amount-field">实际退款金额</label>
+      <div class="col-md-8 controls">
+        <input id="refund-amount-field" class="form-control" type="text" name="amount">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-3" for="refund-note-field">审核说明</label>
+      <div class="col-md-8 controls">
+        <textarea id="refund-note-field" class="form-control" name="note"></textarea>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="refund-confirm-btn" data-submiting-text="正在提交" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#order-refund-confirm-form">提交</button>
+  <script>app.load('order/refund-confirm-modal')</script>
+{% endblock %}

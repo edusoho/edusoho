@@ -21,9 +21,9 @@ class CourseOrderController extends BaseController
     public function refundsAction(Request $request)
     {
         $conditions = $this->prepareRefundSearchConditions($request->query->all());
-
+        $conditions['targetType'] = 'course';
+        
         if (!empty($conditions['title'])){
-            $conditions['targetType'] = 'course';
 
             $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['title']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
