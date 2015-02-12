@@ -47,7 +47,7 @@
       </form>
 
 
-      <form id="password-reset-by-mobile-form" class="form-vertical" method="post" style="display: none;">
+      <form id="password-reset-by-mobile-form" class="form-vertical" action="{{ path('password_reset_by_sms') }}" method="post" style="display: none;">
         <div class="form-group">
           <label class="control-label required" for="nickname">用户名</label>
           <div class="controls">
@@ -85,8 +85,6 @@
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        <input type="hidden" name="mobile-form" value="1">
-
       </form>
 
     </div><!-- /panel -->

@@ -74,7 +74,7 @@ class PasswordResetController extends BaseController
 
     public function updateAction(Request $request)
     {
-        $token = $this->getUserService()->getToken('password-reset', $request->query->get('token'));
+        $token = $this->getUserService()->getToken('password-reset', $request->query->get('token')?:$request->request->get('token'));
         if (empty($token)) {
             return $this->render('TopxiaWebBundle:PasswordReset:error.html.twig');
         }
@@ -103,6 +103,40 @@ class PasswordResetController extends BaseController
         ));
     }
 
+    public function updateBySmsAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+
+            $eduCloudService = $this->getEduCloudService();
+            list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+            $result = $eduCloudService->checkSms($sessionField, $requestField, $scenario = 'sms_forget_password');
+            $eduCloudService->clearSmsSession($request);
+            if ($result){
+                //888
+                $nickname = $data['nickname'];
+                if (strlen($nickname) == 0){
+                    return $this->createMessageResponse('error', '用户名不存在，请重新找回');
+                }
+                $targetUser = $this->getUserService()->getUserByNickname($nickname);
+                if (empty($targetUser)){
+                    return $this->createMessageResponse('error', '用户不存在，请重新找回');    
+                }
+
+                $token = $this->getUserService()->makeToken('password-reset',$targetUser['id'],strtotime('+1 day'));
+                $request->request->set('token',$token);
+
+                return $this->redirect($this->generateUrl('password_reset_update', array(
+                    'token' => $token,
+                )));
+                
+            }else{
+                return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
+            }
+        }
+        return $this->createJsonResponse('GET method');
+    }
+
     public function getEmailLoginUrl ($email)
     {
         $host = substr($email, strpos($email, '@') + 1);
@@ -123,4 +157,8 @@ class PasswordResetController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 }
