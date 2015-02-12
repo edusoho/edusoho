@@ -80,7 +80,19 @@ class WebExtension extends \Twig_Extension
             'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
+            'sub_str' => new \Twig_Function_Method($this, 'subStr'),
         );
+    }
+
+    public function subStr($text, $start, $length)
+    {
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text) > $length) )  {
+            $text = mb_substr($text, $start, $length, 'UTF-8');
+        }
+        return $text;
     }
 
     public function getOutCash($userId,$timeType="oneWeek")
