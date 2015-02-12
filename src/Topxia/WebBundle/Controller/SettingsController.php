@@ -517,7 +517,7 @@ class SettingsController extends BaseController
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
 				$setMobileResult = 'success';
-				$this->setFlashMessage('success', '绑定成功。');
+				$this->setFlashMessage('success', '绑定成功');
 			}else{
 				$setMobileResult = 'fail';
 				$this->setFlashMessage('danger', '绑定失败，原短信失效');
