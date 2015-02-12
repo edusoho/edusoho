@@ -21,8 +21,7 @@
         <textarea class="form-control" name="reason[note]" placeholder="请输入您的退学原因" style="margin-top:10px;display:none;"></textarea>
       </div>
     </div>
-    {% if order.payment != 'coin'%} 
-    {% if maxRefundDays > 0 and (order.amount * 100) > 0 %}
+    {% if order.payment != 'coin' and maxRefundDays > 0 and (order.amount * 100) > 0 %}
 
       <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
@@ -35,7 +34,6 @@
         </div>
       </div>
 
-    {% endif %}
     {% endif %}
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

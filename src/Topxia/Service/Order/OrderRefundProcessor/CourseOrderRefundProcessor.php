@@ -39,8 +39,8 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
 	private function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
-        if (empty($classroom)) {
+        $course = $this->getCourseService()->getCourse($order['targetId']);
+        if (empty($course)) {
             return false;
         }
 
@@ -54,9 +54,9 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
             return false;
         }
 
-        $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
+        $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
         $variables = array(
-            'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
+            'course' => "<a href='{$courseUrl}'>{$course['title']}</a>",
             'amount' => $amount,
             'note' => $note,
         );
