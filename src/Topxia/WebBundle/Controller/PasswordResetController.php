@@ -103,7 +103,7 @@ class PasswordResetController extends BaseController
         ));
     }
 
-    public function updateBySmsAction(Request $request)
+    public function resetBySmsAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();

@@ -1524,4 +1524,4 @@ settings_bind_mobile:
 
 password_reset_by_sms:
     pattern:  /password/reset/by-sms
-    defaults: { _controller: TopxiaWebBundle:PasswordReset:updateBySms }
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
