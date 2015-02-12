@@ -2,7 +2,7 @@
 
 <form id="thread-form" class="form-vertical" method="post" 
   {% if thread %}
-    action="{{ path(target.type ~ 'thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
+    action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
   {% else %}
     action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id}) }}"
     {% endif %}
@@ -10,19 +10,18 @@
 
   <div class="form-group">
     <div class="controls">
-      {{ form_widget(form.title, {attr:{class:'form-control', placeholder:'标题', 'data-display':'标题'}}) }}
+      <input class="form-control" type="text" placeholder="标题" data-display="标题" name= "title" value="{{ thread.title|default('') }}">
     </div>
   </div>
 
   <div class="form-group">
     <div class="controls">
-      {{ form_widget(form.content, {attr:{class:'form-control', rows:15, 'data-display':'内容'}}) }}
+      <textarea class="form-control" rows="15" data-display="内容">{{ thread.content|default('') }}</textarea>
     </div>
   </div>
 
   <div class="form-group clearfix">
     <div class="controls pull-right">
-      {{ form_rest(form) }}
       {% if thread %}
         <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link">取消</a>
         <button type="submit" class="btn btn-primary btn-fat">保存</button>
