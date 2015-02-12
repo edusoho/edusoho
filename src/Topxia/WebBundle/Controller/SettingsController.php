@@ -478,6 +478,15 @@ class SettingsController extends BaseController
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
+	private function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
+	{
+		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
+			'hasVerifiedMobile' => $hasVerifiedMobile,
+			'setMobileResult' => $setMobileResult,
+			'verifiedMobile' => $verifiedMobile
+		)); 
+	}
+
 	public function bindMobileAction(Request $request)
 	{
 		$eduCloudService = $this->getEduCloudService();
@@ -495,6 +504,12 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
+        	$password = $request->request->get('password');
+        	if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
+				$this->setFlashMessage('danger', '您的登陆密码错误');
+				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+			}
+
 	        list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			if ($result) {
@@ -510,11 +525,8 @@ class SettingsController extends BaseController
 
 			$eduCloudService->clearSmsSession($request);			
 		}
-		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
-			'hasVerifiedMobile' => $hasVerifiedMobile,
-			'setMobileResult' => $setMobileResult,
-			'verifiedMobile' => $verifiedMobile
-		)); 
+
+		return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 	}
 
 	public function passwordAction(Request $request)

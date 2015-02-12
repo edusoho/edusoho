@@ -14,6 +14,12 @@ define(function(require, exports, module) {
                 $('#submit-btn').button('submiting').addClass('disabled');
             }
         });
+
+        validator.addItem({
+            element: '[name="password"]',
+            required: true          
+        });
+
 		var smsSender = new SmsSender({
             validator: validator,
             smsType:'sms_bind',
