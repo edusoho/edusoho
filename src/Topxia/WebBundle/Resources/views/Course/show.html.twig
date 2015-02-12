@@ -141,7 +141,7 @@
 					<span>
 					本课程已加入到
 					{% for classroom in classrooms%}
-					<a class="btn-link" href="#">
+					<a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
 					{{classroom.title}}
 				             </a>
 					{% endfor %}
