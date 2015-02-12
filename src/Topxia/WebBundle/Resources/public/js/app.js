@@ -33,8 +33,8 @@ define(function(require, exports, module) {
 		exports.load(app.controller);
 	}
 
-	if (app.injection) {
-		exports.inject(app.injection);
+	if (app.injections) {
+		exports.inject(app.injections);
 	}
 
 	$(document).ajaxError(function(event, jqxhr, settings, exception) {
