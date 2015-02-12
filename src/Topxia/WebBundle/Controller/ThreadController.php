@@ -123,7 +123,11 @@ class ThreadController extends BaseController
     public function createAction(Request $request, $target, $thread = null)
     {
         if ($request->getMethod() == 'POST') {
-            $thread = $this->getThreadService()->createThread($request->request->all());
+            $data = $request->request->all();
+            $data['type'] = 'discussion';
+            $data['targetType'] = $target['type'];
+            $data['targetId'] = $target['id'];
+            $thread = $this->getThreadService()->createThread($data);
             return $this->redirect($this->generateUrl( "{$target['type']}_thread_show", array(
                "{$target['type']}Id" => $thread['targetId'],
                'threadId' => $thread['id'],
@@ -136,54 +140,25 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function editAction(Request $request,  $targetType, $targetId, $id)
+    public function updateAction(Request $request,  $target, $thread)
     {
-        $thread = $this->getThreadService()->getThread($targetId, $id);
-        if (empty($thread)) {
-            throw $this->createNotFoundException();
-        }
-
-        $user = $this->getCurrentUser();
-
-        $form = $this->createThreadForm($thread);
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $thread = $this->getThreadService()->updateThread($thread['targetId'], $thread['id'], $form->getData());
+            $user = $this->getCurrentUser();
+            $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
+            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
+            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
 
-                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$thread['id'],'targetType'=>$targetType), true);
-                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
-
-                return $this->redirect($this->generateUrl('thread_show', array(
-                   'targetId' => $thread['targetId'],
-                   'id' => $thread['id'], 
-                   'targetType'=>$targetType,
-                )));
-            }
+            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                "{$target['type']}Id" => $target['id'],
+                'threadId' => $thread['id'],
+            )));
         }
 
-        return $this->render("TopxiaWebBundle:Thread:form.html.twig", array(
-            'form' => $form->createView(),
-            'targetId' => $targetId,
+        return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
+            'target' => $target,
             'thread' => $thread,
-            'type' => $thread['type'],
-            'targetType'=>$targetType,
-            'sort'=>'posted',
-            'type'=>'all',
         ));
-
-    }
-
-    private function createThreadForm($data = array())
-    {
-        return $this->createNamedFormBuilder('thread', $data)
-            ->add('title', 'text')
-            ->add('content', 'textarea')
-            ->add('type', 'hidden')
-            ->add('targetId', 'hidden')
-            ->add('targetType', 'hidden')
-            ->getForm();
     }
 
     public function deleteAction(Request $request, $target, $threadId)
@@ -277,7 +252,7 @@ class ThreadController extends BaseController
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
             $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
             $url=$this->getPost($target['type'] ,$post['id'],$thread['id'],$target['id']);
-            echo 'bb';exit();       
+
 
             if ($thread['userId'] != $user->id) {
                 $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");

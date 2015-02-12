@@ -16,7 +16,7 @@
 
   <div class="form-group">
     <div class="controls">
-      <textarea class="form-control" rows="15" data-display="内容">{{ thread.content|default('') }}</textarea>
+      <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content">{{ thread.content|default('') }}</textarea>
     </div>
   </div>
 

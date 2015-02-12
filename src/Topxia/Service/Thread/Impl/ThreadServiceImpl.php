@@ -172,9 +172,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $thread;
     }
 
-    public function updateThread($targetId, $threadId, $fields)
+    public function updateThread($id, $fields)
     {
-        $thread = $this->getThread($targetId, $threadId);
+        $thread = $this->getThread($id);
         if (empty($thread)) {
             throw $this->createServiceException('话题不存在，更新失败！');
         }
@@ -192,7 +192,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        return $this->getThreadDao()->updateThread($threadId, $fields);
+        return $this->getThreadDao()->updateThread($id, $fields);
     }
 
     public function deleteThread($threadId)

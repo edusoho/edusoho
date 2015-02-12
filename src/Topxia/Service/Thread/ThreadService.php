@@ -27,7 +27,7 @@ interface ThreadService
 	 */
 	public function createThread($thread);
 
-	public function updateThread($targetId, $threadId, $thread);
+	public function updateThread($id, $fields);
 
 	public function deleteThread($threadId);
 

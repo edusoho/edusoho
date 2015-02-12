@@ -1,20 +1,15 @@
 define(function(require, exports, module) {
 
-       require('ckeditor');
+    require('ckeditor');
     var Validator = require('bootstrap.validator');
     var Share=require('../../util/share.js');
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-                Share.create({
-                selector: '.share',
-                icons: 'itemsAll',
-                display: ''
-        });
 
-        var editor = CKEDITOR.replace('thread_content', {
+        var editor = CKEDITOR.replace('thread-content-field', {
             toolbar: 'Simple',
-            filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
+            filebrowserImageUploadUrl: $('#thread-content-field').data('imageUploadUrl')
         });
 
         var validator = new Validator({
@@ -22,13 +17,13 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="thread[title]"]',
+            element: '[name="title"]',
             required: true,
             rule:'visible_character'
         });
 
         validator.addItem({
-            element: '[name="thread[content]"]',
+            element: '[name="content"]',
             required: true
         });
 
