@@ -210,6 +210,26 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
+    public function setThreadSticky($threadId)
+    {
+
+    }
+
+    public function cancelThreadSticky($threadId)
+    {
+
+    }
+
+    public function setThreadNice($threadId)
+    {
+
+    }
+
+    public function cancelThreadNice($threadId)
+    {
+
+    }
+
     public function stickThread($targetType,$targetId, $threadId)
     {
         $this->tryManage($targetType,$targetId);
