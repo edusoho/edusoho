@@ -113,7 +113,6 @@ class PasswordResetController extends BaseController
             $result = $eduCloudService->checkSms($sessionField, $requestField, $scenario = 'sms_forget_password');
             $eduCloudService->clearSmsSession($request);
             if ($result){
-                //888
                 $nickname = $data['nickname'];
                 if (strlen($nickname) == 0){
                     return $this->createMessageResponse('error', '用户名不存在，请重新找回');
@@ -129,7 +128,6 @@ class PasswordResetController extends BaseController
                 return $this->redirect($this->generateUrl('password_reset_update', array(
                     'token' => $token,
                 )));
-                
             }else{
                 return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
             }
