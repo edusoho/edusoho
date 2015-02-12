@@ -48,6 +48,9 @@ class EduCloudController extends BaseController
                 if ((!isset($targetUser['verifiedMobile']) || (strlen($targetUser['verifiedMobile']) == 0))) {
                     return $this->createJsonResponse(array('error' => '用户没有verifiedMobile'));
                 }
+                if ($targetUser['verifiedMobile'] != $request->request->get('to')) {
+                    return $this->createJsonResponse(array('error' => '手机与用户名不匹配'));
+                }
                 $to = $targetUser['verifiedMobile'];
             }
 

@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
+    var Notify = require('common/bootstrap-notify');
 
     var SmsSender = Widget.extend({
         attrs: {
@@ -79,6 +80,12 @@ define(function(require, exports, module) {
 		        		$('#js-time-left').html('120');
 		        		$('#js-fetch-btn-text').html('秒后重新获取');
 		        		refreshTimeLeft();
+		        	}else{
+		        		if ("undefined" != typeof response['error']){
+		        			Notify.danger(response['error']);
+		        		}else{
+		        			Notify.danger('发送短信失败，请联系管理员');
+		        		}
 		        	}
 	        	});
 	        }
