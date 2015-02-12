@@ -435,7 +435,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $noteInfos[]  = array(
                     "coursesId" => $courseMember['courseId'],
                     "courseTitle" => $course['title'],
-                    "noteLastUpdateTime" => date('c', $value['updatedTime']),
+                    "noteLastUpdateTime" => date('c', $value['updatedTime'] == 0 ? $value['createdTime'] : $value['updatedTime']),
                     "lessonId" => $lessonInfo['id'],
                     "lessonTitle" => $lessonInfo['title'],
                     "learnStatus" => $lessonStatus,
@@ -514,6 +514,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $result                = $this->controller->getNoteService()->saveNote($noteInfo);
         $result['content'] = $this->controller->convertAbsoluteUrl($this->request, $result['content']);
+        if($result['updatedTime'] == 0){
+            $result['updatedTime'] = $result['createdTime'];
+        }
         $result['createdTime'] = date('c', $result['createdTime']);
         $result['updatedTime'] = date('c', $result['updatedTime']);
         
