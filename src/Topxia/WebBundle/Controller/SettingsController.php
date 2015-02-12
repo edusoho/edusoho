@@ -478,38 +478,9 @@ class SettingsController extends BaseController
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
-    private function getCloudSmsKey($key)
-    {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
-        if (isset($setting[$key])){
-            return $setting[$key];
-        }
-        return null;
-    }
-
-    private function paramForSmsCheck($request)
-    {
-    	$sessionField['sms_type'] = $request->getSession()->get('sms_type');
-        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
-        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
-        $sessionField['to'] = $request->getSession()->get('to');
-
-        $requestField['sms_code'] = $request->request->get('sms_code');
-        $requestField['mobile'] = $request->request->get('mobile');
-
-        return array($sessionField, $requestField);
-    }
-
-    private function clearSmsSession($request)
-    {
-    	$request->getSession()->set('to',rand(0,999999));
-		$request->getSession()->set('sms_code',rand(0,999999));
-		$request->getSession()->set('sms_last_time','');
-		$request->getSession()->set('sms_type', rand(0,999999));
-    }
-
 	public function bindMobileAction(Request $request)
 	{
+		$eduCloudService = $this->getEduCloudService();
 		$currentUser = $this->getCurrentUser()->toArray();
 		$verifiedMobile = '';
 		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
@@ -519,12 +490,12 @@ class SettingsController extends BaseController
 		$setMobileResult = 'none';
 
 		$scenario = "sms_bind";
-		if ($this->getCloudSmsKey('sms_enabled') != '1'  || $this->getCloudSmsKey($scenario) != 'on') {
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
 
         if ($request->getMethod() == 'POST') {
-	        list($sessionField, $requestField) = $this->paramForSmsCheck($request);
+	        list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			if ($result) {
 				$verifiedMobile = $sessionField['to'];
@@ -537,7 +508,7 @@ class SettingsController extends BaseController
 				$this->setFlashMessage('danger', '绑定失败，出于安全考虑，原短信失效，您需要重新获取。');
 			}
 
-			$this->clearSmsSession($request);			
+			$eduCloudService->clearSmsSession($request);			
 		}
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
 			'hasVerifiedMobile' => $hasVerifiedMobile,

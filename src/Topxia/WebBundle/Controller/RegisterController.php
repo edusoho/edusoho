@@ -41,9 +41,10 @@ class RegisterController extends BaseController
             //888  sms check
             $registration['verifiedMobile'] = '';
             if (in_array('mobile', $authSettings['registerSort'])){
-                list($sessionField, $requestField) = $this->paramForSmsCheck($request);
-                $result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario = 'sms_registration');
-                $this->clearSmsSession($request);
+                $eduCloudService = $this->getEduCloudService();
+                list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+                $result = $eduCloudService->checkSms($sessionField, $requestField, $scenario = 'sms_registration');
+                $eduCloudService->clearSmsSession($request);
                 if ($result){
                    $registration['verifiedMobile'] = $sessionField['to'];
                 }else{
@@ -107,36 +108,6 @@ class RegisterController extends BaseController
             '_target_path' => $this->getTargetPath($request),
         ));
     }
-
-    private function paramForSmsCheck($request)
-    {
-        $sessionField['sms_type'] = $request->getSession()->get('sms_type');
-        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
-        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
-        $sessionField['to'] = $request->getSession()->get('to');
-
-        $requestField['sms_code'] = $request->request->get('sms_code');
-        $requestField['mobile'] = $request->request->get('mobile');
-
-        return array($sessionField, $requestField);
-    }
-
-    private function clearSmsSession($request)
-    {
-        $request->getSession()->set('to',rand(0,999999));
-        $request->getSession()->set('sms_code',rand(0,999999));
-        $request->getSession()->set('sms_last_time','');
-        $request->getSession()->set('sms_type', rand(0,999999));
-    }
-
-    private function getCloudSmsKey($key)
-    {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
-        if (isset($setting[$key])){
-            return $setting[$key];
-        }
-        return null;
-    }    
 
     private function protectiveRule($type,$ip)
     {
