@@ -14,6 +14,8 @@ class WebExtension extends \Twig_Extension
 {
     protected $container;
 
+    protected $pageScripts;
+
     public function __construct ($container)
     {
         $this->container = $container;
@@ -81,6 +83,8 @@ class WebExtension extends \Twig_Extension
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
             'sub_str' => new \Twig_Function_Method($this, 'subStr'),
+            'load_script' => new \Twig_Function_Method($this, 'loadScript'),
+            'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
         );
     }
 
@@ -583,6 +587,22 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public  function loadScript($js)
+    {
+        $js = is_array($js) ? $js : array($js);
+        
+        if($this->pageScripts) {
+            $this->pageScripts = array_merge($this->pageScripts, $js);
+        } else {
+            $this->pageScripts = $js;
+        }
+    }
+
+    public function exportScripts()
+    {
+        return $this->pageScripts;
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)

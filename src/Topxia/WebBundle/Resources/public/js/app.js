@@ -16,6 +16,13 @@ define(function(require, exports, module) {
 
 	};
 
+	exports.loadScript = function(scripts) {
+		for(var index in scripts) {
+			exports.load(scripts[index]);
+		}
+		
+	}
+
 	window.app.load = exports.load;
 
 	if (app.themeGlobalScript) {
@@ -26,6 +33,9 @@ define(function(require, exports, module) {
 		exports.load(app.controller);
 	}
 
+	if (app.scripts) {
+		exports.loadScript(app.scripts);
+	}
 
 	$(document).ajaxError(function(event, jqxhr, settings, exception) {
 		var json = jQuery.parseJSON(jqxhr.responseText);
