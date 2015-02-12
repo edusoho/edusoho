@@ -29,6 +29,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByCourseIds(array $ids, $start, $limit)
+	{
+		$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findCoursesByCourseIds($ids, $start, $limit)
+        );
+        return ArrayToolkit::index($courses, 'id');
+	}
+
 	public function findCoursesByLikeTitle($title)
 	{
 		$coursesUnserialized = $this->getCourseDao()->findCoursesByLikeTitle($title);
