@@ -16,9 +16,9 @@ define(function(require, exports, module) {
 
 	};
 
-	exports.loadScript = function(loadScripts) {
-		for(var index in loadScripts) {
-			exports.load(loadScripts[index]);
+	exports.loadScript = function(scripts) {
+		for(var index in scripts) {
+			exports.load(scripts[index]);
 		}
 		
 	}
@@ -33,8 +33,8 @@ define(function(require, exports, module) {
 		exports.load(app.controller);
 	}
 
-	if (app.loadScripts) {
-		exports.loadScript(app.loadScripts);
+	if (app.scripts) {
+		exports.loadScript(app.scripts);
 	}
 
 	$(document).ajaxError(function(event, jqxhr, settings, exception) {
