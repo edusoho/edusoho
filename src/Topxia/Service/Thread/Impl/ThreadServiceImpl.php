@@ -301,13 +301,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
     }
 
-    public function getPost($targetId, $id)
+    public function getPost($id)
     {
-        $post = $this->getThreadPostDao()->getPost($id);
-        if (empty($post) or $post['targetId'] != $targetId) {
-            return null;
-        }
-        return $post;
+        return $this->getThreadPostDao()->getPost($id);
     }
 
     public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0)
@@ -375,18 +371,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $post;
     }
 
-    public function updatePost($targetId, $threadId,$id, $fields)
+    public function updatePost($id, $fields)
     {                        
-                            $thread = $this->getThread($targetId, $threadId);
-        
-        $post = $this->getPost($targetId, $id);
+        $post = $this->getPost($id);
         if (empty($post)) {
             throw $this->createServiceException("回帖#{$id}不存在。");
         }
 
         $user = $this->getCurrentUser();
-        // ($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
-
 
         $fields  = ArrayToolkit::parts($fields, array('content'));
         if (empty($fields)) {
@@ -395,11 +387,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新post过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-
-         $threadFields = array(
-                            'updateTime' => time(),
-        );
-        $this->getThreadDao()->updateThread($threadId, $threadFields);
 
         return $this->getThreadPostDao()->updatePost($id, $fields);
     }

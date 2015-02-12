@@ -5,9 +5,9 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var editor = CKEDITOR.replace('post_content', {
+        var editor = CKEDITOR.replace('post-content-field', {
             toolbar: 'Simple',
-            filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl'),
+            filebrowserImageUploadUrl: $('#post-content-field').data('imageUploadUrl'),
             height: 300
         });
 
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="post[content]"]',
+            element: '#post-content-field',
             required: true
         });
 

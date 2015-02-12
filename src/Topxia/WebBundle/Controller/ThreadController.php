@@ -325,46 +325,27 @@ class ThreadController extends BaseController
             ));
     }
 
-    public function editPostAction(Request $request, $targetType,$targetId, $threadId, $id)
+    public function postUpdateAction(Request $request, $target, $thread, $post)
     {
-        $post = $this->getThreadService()->getPost($targetId, $id);
-        if (empty($post)) {
-            throw $this->createNotFoundException();
-        }
-
         $user = $this->getCurrentUser();
 
-        $thread = $this->getThreadService()->getThread($targetId, $threadId);
-
-        $form = $this->createPostForm($post);
-
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $post = $this->getThreadService()->updatePost($post['targetId'], $threadId,$post['id'], $form->getData());
 
-                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                $threadUrl = $this->generateUrl('thread_show', array('targetId'=>$targetId,'id'=>$threadId,'targetType'=>$targetType), true);
-                $threadUrlAnchor = $threadUrl."#post-".$id;
-                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
-                $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
+            $post = $this->getThreadService()->updatePost($post['id'], $request->request->all());
 
-                return $this->redirect($this->generateUrl('thread_show', array(
-                    'targetId' => $post['targetId'],
-                    'id' => $post['threadId'],
-                    'targetType'=>$targetType
-                )));
-            }
+            // $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
+            // $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
+
+            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                "{$target['type']}Id" => $target['id'],
+                'threadId' => $post['threadId'],
+            )));
         }
 
-        return $this->render('TopxiaWebBundle:Thread:post-form.html.twig', array(
-            'targetId' => $targetId,
-            'form' => $form->createView(),
-            'post' => $post,
+        return $this->render('TopxiaWebBundle:Thread:post-update.html.twig', array(
+            'target' => $target,
             'thread' => $thread,
-            'targetType'=>$targetType,
-            'sort'=>'posted',
-            'type'=>'all',
+            'post' => $post,
         ));
 
     }

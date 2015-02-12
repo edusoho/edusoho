@@ -80,11 +80,11 @@ interface ThreadService
 	/**
 	 * 回复话题
 	 **/
-	public function getPost($targetId, $id);
+	public function getPost($id);
 
 	public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0);
 
-	public function updatePost($targetId,$threadId, $id, $fields);
+	public function updatePost($id, $fields);
 
 	public function deletePost($targetType,$threadId,$targetId, $id);
 
