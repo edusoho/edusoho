@@ -27,10 +27,10 @@ define(function(require, exports, module) {
     		return this;
     	},
     	takeEffect: function () {
-    		var validator = this.get("validator");
-    		var smsType = this.get("smsType");
-    		var hasMobile = this.get("hasMobile");
-    		var hasNickname = this.get("hasNickname");
+    		validator = this.get("validator");
+    		smsType = this.get("smsType");
+    		hasMobile = this.get("hasMobile");
+    		hasNickname = this.get("hasNickname");
 
 	    	if (hasMobile){	
 	    		validator.addItem({
