@@ -82,8 +82,8 @@ class WebExtension extends \Twig_Extension
             'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
-            'import_javascript' => new \Twig_Function_Method($this, 'addJavascript'),
-            'get_javascript' => new \Twig_Function_Method($this, 'getJavascript'), 
+            'load_script' => new \Twig_Function_Method($this, 'loadScript'),
+            'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
         );
     }
 
@@ -577,7 +577,7 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
-    public static function addJavascript($js)
+    public static function loadScript($js)
     {
         if(!is_array($js)) {
             $temp = array();
@@ -592,7 +592,7 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public static function getJavascript()
+    public static function exportScripts()
     {
         return self::$jsInjection;
     }
