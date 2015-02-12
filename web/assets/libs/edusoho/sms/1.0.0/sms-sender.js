@@ -79,6 +79,7 @@ define(function(require, exports, module) {
 	        		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
 		        		$('#js-time-left').html('120');
 		        		$('#js-fetch-btn-text').html('秒后重新获取');
+		        		Notify.success('发送短信成功');
 		        		refreshTimeLeft();
 		        	}else{
 		        		if ("undefined" != typeof response['error']){
