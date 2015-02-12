@@ -87,7 +87,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         list($afterCourseDiscountPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($afterCourseDiscountPrice, $priceType, $cashRate);
-        
+
         return array(
             'classroom' => empty($classroom) ? null : $classroom,
             'courses' => $courses,
