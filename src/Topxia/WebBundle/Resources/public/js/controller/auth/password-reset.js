@@ -51,8 +51,8 @@ define(function(require, exports, module) {
             $('.js-find-by-mobile').removeClass('active');
 
             makeValidator('email');
-            $('#password-reset-form').show();
             $('#password-reset-by-mobile-form').hide();
+            $('#password-reset-form').show();
         })
 
         $('.js-find-by-mobile').mouseover(function () {
