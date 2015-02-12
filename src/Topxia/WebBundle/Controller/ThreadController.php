@@ -120,28 +120,19 @@ class ThreadController extends BaseController
     }
 
 
-    public function createAction(Request $request, $target)
+    public function createAction(Request $request, $target, $thread = null)
     {
-        $form = $this->createThreadForm(array(
-            'type' => 'discussion',
-            'targetId' => $target['id'],
-            'targetType'=>$target['type'],
-        ));
-
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $thread = $this->getThreadService()->createThread($form->getData());
-                return $this->redirect($this->generateUrl( "{$target['type']}_thread_show", array(
-                   "{$target['type']}Id" => $thread['targetId'],
-                   'threadId' => $thread['id'],
-                )));
-            }
+            $thread = $this->getThreadService()->createThread($request->request->all());
+            return $this->redirect($this->generateUrl( "{$target['type']}_thread_show", array(
+               "{$target['type']}Id" => $thread['targetId'],
+               'threadId' => $thread['id'],
+            )));
         }
 
         return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
             'target' => $target,
-            'form' => $form->createView(),
+            'thread' => $thread
         ));
     }
 
