@@ -52,10 +52,7 @@ define(function(require, exports, module) {
                 url:this.get('signUrl'),
                 dataType: 'json',
                 success: function(data){
-                    /*window.location.reload();*/
-                    self.showSignTable();
-                    self.initTable(true);
-                    self.element.find('.d-' + today).addClass('signed_anime_day');
+                    window.location.reload();
                 },
                 error: function(xhr){
                 }
