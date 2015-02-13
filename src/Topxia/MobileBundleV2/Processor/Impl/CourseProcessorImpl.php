@@ -42,12 +42,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($lessonNote)) {
             return null;
         }
-        $lesson                    = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson  = $this->controller->getCourseService()->getCourseLesson($courseId, $lessonId);
         $lessonNote['lessonTitle'] = $lesson['title'];
         $lessonNote['lessonNum']   = $lesson['number'];
-        $content                   = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
+        $content  = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
         ;
-        $content               = $this->filterNote($content);
+        $content  = $this->filterNote($content);
         $lessonNote['content'] = $content;
         return $lessonNote;
     }
@@ -108,10 +108,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录，不能评价课程！");
         }
-        
-        // if (empty($thread)) {
-        //     return $this->createErrorResponse('not_thread', "问答不存在或已删除");
-        // }
         
         if (!empty($postId)) {
             $post = $this->controller->getThreadService()->getPost($courseId, $postId);
@@ -382,14 +378,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
         $lessons     = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
         for ($i = 0; $i < count($courseNotes); $i++) {
-            $courseNote                = $courseNotes[$i];
-            $lesson                    = $lessons[$courseNote['lessonId']];
+            $courseNote  = $courseNotes[$i];
+            $lesson = $lessons[$courseNote['lessonId']];
             $courseNote['lessonTitle'] = $lesson['title'];
-            $courseNote['lessonNum']   = $lesson['number'];
-            $content                   = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);
-            $content                   = $this->filterNote($content);
-            $courseNote['content']     = $content;
-            $courseNotes[$i]           = $courseNote;
+            $courseNote['lessonNum'] = $lesson['number'];
+            $content = $this->controller->convertAbsoluteUrl($this->request, $courseNote['content']);
+            $content = $this->filterNote($content);
+            $courseNote['content'] = $content;
+            $courseNotes[$i] = $courseNote;
         }
         return $courseNotes;
     }
@@ -418,12 +414,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
         
         $courseMembers = $this->controller->getCourseService()->searchMember($conditions, $start, $limit);
-        $courses       = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
-        $noteInfos     = array();
+        $courses  = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+        $noteInfos = array();
         for ($i = 0; $i < count($courseMembers); $i++) {
             $courseMember = $courseMembers[$i];
-            $course       = $courses[$courseMember['courseId']];
-            $noteNum      = $courseMember['noteNum'];
+            $course = $courses[$courseMember['courseId']];
+            $noteNum = $courseMember['noteNum'];
             if (empty($noteNum) or $noteNum == '0') {
                 continue;
             }
@@ -439,8 +435,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                     "lessonId" => $lessonInfo['id'],
                     "lessonTitle" => $lessonInfo['title'],
                     "learnStatus" => $lessonStatus,
-                    // "content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
-                    //  array('content' => $noteContent))->getContent(),
                     "content" => $noteContent,
                     "createdTime" => date('c', $value['createdTime']),
                     "noteNum" => $noteNum,
@@ -466,20 +460,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
         }
-        $noteId       = $this->getParam("noteId", 0);
-        $noteInfo     = $this->controller->getNoteService()->getNote($noteId);
-        $lessonInfo   = $this->controller->getCourseService()->getCourseLesson($noteInfo['courseId'], $noteInfo['lessonId']);
+        $noteId = $this->getParam("noteId", 0);
+        $noteInfo = $this->controller->getNoteService()->getNote($noteId);
+        $lessonInfo = $this->controller->getCourseService()->getCourseLesson($noteInfo['courseId'], $noteInfo['lessonId']);
         $lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $noteInfo['courseId'], $noteInfo['lessonId']);
-        $noteContent  = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $noteInfo['content']));
-        $noteInfos    = array(
+        $noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $noteInfo['content']));
+        $noteInfos = array(
             "coursesId" => null,
             "courseTitle" => null,
             "noteLastUpdateTime" => null,
             "lessonId" => $lessonInfo['id'],
             "lessonTitle" => $lessonInfo['title'],
             "learnStatus" => $lessonStatus,
-            // "content"=>$this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', 
-            //  array('content' => $noteContent))->getContent(),
             "content" => $noteContent,
             "createdTime" => date('c', $noteInfo['createdTime']),
             "noteNum" => null,
@@ -511,8 +503,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
         
         $noteInfo['content'] = $this->uploadImage($content);
-        
-        $result                = $this->controller->getNoteService()->saveNote($noteInfo);
+        $result = $this->controller->getNoteService()->saveNote($noteInfo);
         $result['createdTime'] = date('c', $result['createdTime']);
         $result['updatedTime'] = date('c', $result['updatedTime']);
         
@@ -929,14 +920,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $conditions['sort'] = $sort;
         
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
-		$result = array(
-			"start"=>$start,
-			"limit"=>$limit,
-			"total"=>$total,
-			"data"=>$this->controller->filterCourses($courses)
-			);
-		return $result;
-	}
+        $result = array(
+            "start"=>$start,
+            "limit"=>$limit,
+            "total"=>$total,
+            "data"=>$this->controller->filterCourses($courses)
+            );
+        return $result;
+    }
     
     public function getLearnedCourse()
     {
@@ -1014,7 +1005,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
         $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
-        $count            = $this->controller->getCourseService()->searchLearnCount(array(
+        $count = $this->controller->getCourseService()->searchLearnCount(array(
+            "userId" => $user["id"]
         ));
         $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
             "userId" => $user["id"]
@@ -1047,6 +1039,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "total" => $total,
             "data" => $this->controller->filterCourses(array_values($resultCourse))
         );
+
         return $result;
     }
     
@@ -1169,25 +1162,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-        
-        // $courses = $this->controller->getCourseService()->findUserLeaningCourses(
-        //     $user['id'], 0, 1000
-        // );
-        // $courseIds = ArrayToolkit::column($courses, 'id');
-
-        // $conditions = array(
-        //     'status' => 'published',
-        //     'startTimeGreaterThan' => time(),
-        //     'courseIds' => $courseIds
-        // );
-        // $total = $this->controller->getCourseService()->searchLessonCount($conditions);
-
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
         return array("start" => $start,
             "limit" => $limit,
-            // "total" => $total,
             "data" => $resultLiveCourses);
     }
 
@@ -1207,11 +1186,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'status' => 'published',
             'type' => 'live'
         );
-        // $threadsByUserCourseIds = array_map(function($thread) use ($controller)
-        // {
-        //     $thread['content'] = $controller->filterSpace($controller->controller->convertAbsoluteUrl($controller->request, $thread['content']));
-        //     return $thread;
-        // }, $threadsByUserCourseIds);
 
         $total = $this->controller->getCourseService()->searchCourseCount($condition);  
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
