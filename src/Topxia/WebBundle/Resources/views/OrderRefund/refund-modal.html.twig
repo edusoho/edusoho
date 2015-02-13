@@ -3,7 +3,7 @@
 {% block title %}退出学习{% endblock %}
 {% block body %}
 
-  <form id="course-refund-form" class="form-horizontal" method="post" action="{{ path('course_order_refund', {id:course.id}) }}" data-goto="{{ path('course_show', {id:course.id}) }}">
+  <form id="course-refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {id:target.id, targetType:targetType}) }}" data-goto="{{ path(targetType ~ '_show', {id:target.id}) }}">
 
     <div class="form-group">
       <div class="col-md-3 control-label">退学原因</div>
@@ -21,13 +21,12 @@
         <textarea class="form-control" name="reason[note]" placeholder="请输入您的退学原因" style="margin-top:10px;display:none;"></textarea>
       </div>
     </div>
-    {% if order.payment != 'coin'%} 
-    {% if maxRefundDays > 0 and (order.amount * 100) > 0 %}
+    {% if order.payment != 'coin' and maxRefundDays > 0 and (order.amount * 100) > 0 %}
 
       <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
           <div class="checkbox">
-            <label><input type="checkbox" name="applyRefund" value="1"{% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> 申请退款 <span class="text-muted text-sm">（购买课程时的价格：{{ order.amount }}元）</span></label>
+            <label><input type="checkbox" name="applyRefund" value="1"{% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> 申请退款 <span class="text-muted text-sm">（购买时的价格：{{ order.amount }}元）</span></label>
           </div>
           {% if maxRefundDays > 0 and refundOverdue %}
             <div class="alert alert-warning">已经超出了退款期限{{ maxRefundDays }}天，不能申请退款。</div>
@@ -35,7 +34,6 @@
         </div>
       </div>
 
-    {% endif %}
     {% endif %}
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
