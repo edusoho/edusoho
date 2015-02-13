@@ -91,8 +91,6 @@ class OrderController extends BaseController
             }
         }
 
-        var_dump($fields);exit;
-
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，创建订单失败。');
