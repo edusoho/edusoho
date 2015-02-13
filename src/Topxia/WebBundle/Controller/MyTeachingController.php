@@ -56,7 +56,7 @@ class MyTeachingController extends BaseController
 
         $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
 
-        $members=$this->getClassroomService()->findMembersByClassroomIds($classroomIds);
+        $members=$this->getClassroomService()->findMembersByClassroomIdsAndUserId($classroomIds,$user->id);
         
         foreach ($classrooms as $key => $classroom) {
             
