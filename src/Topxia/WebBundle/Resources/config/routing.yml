@@ -1522,6 +1522,7 @@ vip_upgrade:
 edu_cloud_sms_send:
     pattern:  /edu-cloud/sms-send
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
+    methods: [POST]
 
 settings_bind_mobile:
     pattern:  /settings/bind-mobile
@@ -1530,6 +1531,7 @@ settings_bind_mobile:
 password_reset_by_sms:
     pattern:  /password/reset/by-sms
     defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
+    methods: [POST]
 
 settings_find_pay_password_by_sms:
     pattern:  /settings/find_pay_password_by_sms 
