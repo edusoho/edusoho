@@ -111,7 +111,7 @@ class EduCloudController extends BaseController
             $auth = $this->getSettingService()->get('auth', array());
             if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
                 $this->setCloudSmsKey('sms_registration', 'on');
-                if (!in_array('mobile', $auth['registerSort'])) {
+                if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
                     $auth['registerSort'][] = 'mobile';
                 }
             } else {
