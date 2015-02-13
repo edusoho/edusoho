@@ -241,7 +241,7 @@ class SettingsController extends BaseController
 		$hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 		$hasVerifiedMobile = (isset($user['verifiedMobile'])&&(strlen($user['verifiedMobile'])>0));
 
-		$progressScore = 1 + ($hasLoginPassword? 10:0 ) + ($hasPayPassword? 40:0 ) + ($hasFindPayPasswordQuestion? 5:0 ) + ($hasVerifiedMobile? 45:0 );
+		$progressScore = 1 + ($hasLoginPassword? 25:0 ) + ($hasPayPassword? 25:0 ) + ($hasFindPayPasswordQuestion? 25:0 ) + ($hasVerifiedMobile? 25:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
@@ -325,16 +325,6 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	private function findPayPasswordActionReturn($userSecureQuestions)
-	{
-		$questionNum = rand(0,2);
-		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
-		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
-			'question' => $question,
-			'questionNum' => $questionNum,
-		)); 		
-	}
-
 	private function setPayPasswordPage($request, $userId)
 	{
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
@@ -388,14 +378,32 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
 	}
 
+	private function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
+	{
+		$questionNum = rand(0,2);
+		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
+			'question' => $question,
+			'questionNum' => $questionNum,
+			'hasSecurityQuestions' => $hasSecurityQuestions,
+			'hasVerifiedMobile' => $hasVerifiedMobile
+		)); 		
+	}
+
 	public function findPayPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $verifiedMobile = $user['verifiedMobile'];
+        $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
 
-		if (!$hasSecurityQuestions){
+		if (((!$hasSecurityQuestions)&&$hasVerifiedMobile)||(!$hasSecurityQuestions)&&(!$hasVerifiedMobile)){
+			// return $this->forward('TopxiaWebBundle:Settings:findPayPasswordBySms');
+			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
+		}
+
+		if (!$hasSecurityQuestions) {
 			$this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
 			return $this->forward('TopxiaWebBundle:Settings:securityQuestions');
 		}
@@ -419,7 +427,7 @@ class SettingsController extends BaseController
  			return $this->setPayPasswordPage($request, $user['id']);
 
 		}
-		return $this->findPayPasswordActionReturn($userSecureQuestions);
+		return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
 	}
 
 	public function findPayPasswordBySmsAction(Request $request)
@@ -431,7 +439,13 @@ class SettingsController extends BaseController
         }		
 
 		$currentUser = $this->getCurrentUser();
-		if (!(isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0))){
+		
+		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
+        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $verifiedMobile = $currentUser['verifiedMobile'];
+        $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
+
+		if (!$hasVerifiedMobile){
 			$this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
 			return $this->redirect($this->generateUrl('settings_bind_mobile', array(
             )));
@@ -453,7 +467,10 @@ class SettingsController extends BaseController
 			
 		}
 
-		return $this->render('TopxiaWebBundle:Settings:find-pay-password-by-sms.html.twig', array());
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password-by-sms.html.twig', array(
+			'hasSecurityQuestions' => $hasSecurityQuestions,
+			'hasVerifiedMobile' => $hasVerifiedMobile
+		));
 	}
 
 	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)

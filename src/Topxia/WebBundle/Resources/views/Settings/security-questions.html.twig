@@ -15,15 +15,14 @@
 
   {%  if not hasSecurityQuestions  %}
 
-
     <ul class="breadcrumb">
       <li><a href="{{ path('settings_security') }}">安全设置</a></li>
       <li class="active">设置安全问题</li>
     </ul>
 
     <div class="alert alert-warning"> <span class="glyphicon glyphicon-info-sign"></span> 安全问题一经设置，不可再次修改。</div>
-    
-      <ul class="nav nav-tabs mbl">
+
+{#       <ul class="nav nav-tabs mbl">
 
         <li class="active js-find-by-question">
           <a href="{{ path('settings_find_pay_password') }}" style="cursor: pointer;">通过安全问题找回
@@ -36,7 +35,7 @@
           </li>
         {% endif %}
 
-      </ul>
+      </ul> #}
 
     <form id="settings-security-questions-form" class="form-horizontal" autocomplete="off" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}> 
       
