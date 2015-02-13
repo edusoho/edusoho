@@ -73,6 +73,12 @@ class MyTeachingController extends BaseController
             $allCount=$studentCount+$auditorCount;
 
             $classrooms[$key]['allCount']=$allCount;
+
+            $todayTimeStart=strtotime(date("Y-m-d",time()));
+            $todayTimeEnd=strtotime(date("Y-m-d",time()+24*3600));
+            $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("targetType"=>"classroom","courseIds"=>$courseIds,"startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
+
+            $classrooms[$key]['todayFinishedLessonNum']=$todayFinishedLessonNum;
         }
 
         return $this->render('TopxiaWebBundle:MyTeaching:classroom.html.twig', array(
