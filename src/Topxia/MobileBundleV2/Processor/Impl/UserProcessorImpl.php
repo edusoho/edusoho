@@ -366,6 +366,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         
         $token = $this->controller->createToken($user, $this->request);
+
+        $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
+        $userProfile = $this->filterUserProfile($userProfile);
+        $user = array_merge($user, $userProfile);
         
         $result = array(
             'token' => $token,
