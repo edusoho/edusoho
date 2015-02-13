@@ -69,6 +69,21 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
         return true;
     }
 
+    public function getTarget($id)
+    {
+        return $this->getClassroomService()->getClassroom($id);
+    }
+
+    public function applyRefundOrder($orderId, $amount, $reason, $container)
+    {
+        return $this->getClassroomOrderService()->applyRefundOrder($orderId, $amount, $reason, $container);
+    }
+
+    public function getTargetMember($targetId, $userId)
+    {
+        return $this->getClassroomService()->getClassroomMember($targetId, $userId);
+    }
+
 	protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User.NotificationService');

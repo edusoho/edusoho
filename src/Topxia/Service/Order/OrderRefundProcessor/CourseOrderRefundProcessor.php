@@ -67,6 +67,26 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
         return true;
     }
 
+    public function getTarget($id)
+    {
+        return $this->getCourseService()->getClassroom($id);
+    }
+
+    public function applyRefundOrder($orderId, $amount, $reason, $container)
+    {
+        return $this->getCourseOrderService()->applyRefundOrder($orderId, $amount, $reason, $container);
+    }
+
+    public function getTargetMember($targetId, $userId)
+    {
+        return $this->getCourseService()->getCourseMember($targetId, $userId);
+    }
+
+    protected function getCourseOrderService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseOrderService');
+    }
+
 	protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
