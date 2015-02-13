@@ -926,7 +926,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     private function findCourseByConditions($conditions)
     {
         $conditions['status'] = 'published';
-        //$conditions['type']   = 'normal';
+        $conditions['type']   = 'normal';
         
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
