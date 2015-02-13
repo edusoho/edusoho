@@ -59,6 +59,9 @@ class EduCloudController extends BaseController
                 if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
                     return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
                 }
+                if ($user['verifiedMobile'] != $request->request->get('to')) {
+                    return $this->createJsonResponse(array('error' => '您输入的手机号，不是已绑定的手机'));
+                }
                 $to = $user['verifiedMobile'];
             }
 

@@ -440,6 +440,9 @@ class SettingsController extends BaseController
 		}
 
 		if ($request->getMethod() == 'POST'){
+			if ($currentUser['verifiedMobile'] != $request->request->get('mobile')){
+				$this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
+			}
 			list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
 			$eduCloudService->clearSmsSession($request);
