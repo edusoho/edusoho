@@ -135,7 +135,7 @@
 				</div><div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
 			</div>
 
-			  {% if is_plugin_installed('Classroom') and classrooms%}
+			  {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) %}
 			  <br>
 				<div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
 					<span>

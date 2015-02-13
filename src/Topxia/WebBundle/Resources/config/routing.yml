@@ -1031,6 +1031,10 @@ my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
 
+my_teaching_classrooms:
+    pattern: /my/teaching/classrooms
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }
+
 my_live_courses_learning:
     pattern: /my/livecourses/learing
     defaults: { _controller: TopxiaWebBundle:MyLiveCourse:index }

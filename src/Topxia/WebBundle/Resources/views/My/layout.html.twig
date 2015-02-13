@@ -20,6 +20,13 @@
                <a class="list-group-item
                {% if side_nav == 'my-teaching-courses' %} active {% endif %}" 
                href="{{path('my_teaching_courses')}}">在教课程</a>
+
+              {% if is_plugin_installed('Classroom') and setting('classroom.enabled')|default(0) %}
+               <a class="list-group-item
+               {% if side_nav == 'my-teaching-classroom' %} active {% endif %}" 
+               href="{{path('my_teaching_classrooms')}}">所在班级</a>
+              {% endif %}
+              
                <a class="list-group-item 
                {% if side_nav == 'my-teaching-questions' %} active {% endif %}" 
                 href="{{path('my_teaching_threads', {type:'question'}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}问答</a>
@@ -47,6 +54,13 @@
                <a class="list-group-item
                {% if side_nav == 'my-learning' %} active {% endif %}" 
                href="{{path('my_courses_learning')}}">我的课程</a>
+
+               {% if is_plugin_installed('Classroom') and setting('classroom.enabled')|default(0) %}
+               <a class="list-group-item
+               {% if side_nav == 'my-classroom' %} active {% endif %}" 
+               href="{{path('my_classrooms')}}">我的班级</a>
+               {% endif %}
+
                {% if setting('course.live_course_enabled') %}
                <a class="list-group-item
                {% if side_nav == 'my-learning-live' %} active {% endif %}" 

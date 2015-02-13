@@ -778,14 +778,28 @@ class CourseController extends BaseController
 	public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
 	{
 		$userIds = array();
-		foreach ($courses as $course) {
+		foreach ($courses as $key => $course) {
 			$userIds = array_merge($userIds, $course['teacherIds']);
+
+			$classrooms=$this->getClassroomService()->findClassroomIds($course['id']);
+
+			$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+			$courses[$key]['classroomCount']=count($classroomIds);
+
+			if(count($classroomIds)>0){
+
+				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
+				$courses[$key]['classroom']=$classroom;
+			}
 		}
+		
 		$users = $this->getUserService()->findUsersByIds($userIds);
 		
 		return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
 			'courses' => $courses,
 			'users' => $users,
+			'classrooms'=>$classrooms,
 			'mode' => $mode,
 		));
 	}
