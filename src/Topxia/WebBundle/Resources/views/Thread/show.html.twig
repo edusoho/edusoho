@@ -15,8 +15,8 @@
     {{ thread.content|raw }}
   </div>
 
-  <div class="panel-footer">
-
+  <div class="panel-footer clearfix">
+    <div class="pull-right">
       <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
       <a href="javascript:;" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_delete', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
       {% if thread.sticky %}
@@ -30,103 +30,39 @@
       {% else %}
         <a href="javascript:" class="btn btn-link" data-url="{{ path(target.type ~ '_thread_nice', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
       {% endif %}
-
-
-
+    </div>
   </div>
 </div>
 
-
-
-<div class="thread-posts">
-
- {% if postCount %}
-  <div class="panel panel-default thread-post-list">
-        <div class="panel-heading">
-            <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
-        </div>
-
-    <div class="panel-body">
-
-    <ul class="media-list">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {{ thread.postNum }} 回复
+  </div>
+  <div class="panel-body">
+    <ul class="media-list thread-post-list">
       {% for post in posts %}
-        {% set subPosts = postReply[post.id]|default(null) %}
         {% set author = users[post.userId] %}
-        {% set avatar = postMember[post.userId] %}
-
-       <li id="post-{{ post.id }}" class="thread-post media clearfix">
-          {{ web_macro.user_avatar(avatar, 'pull-left media-object') }} 
+        <li id="post-{{ post.id }}" class="thread-post media">
+          <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
+            <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
+          </a>
           <div class="media-body">
-              <div class="metas">
-                  <span class="floor" style="float: right;font-size: 12px;color: #999;">
-                  {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}楼
-                  </span>
-                {{ web_macro.user_link(postMember[post.userId]) }}
-                <span class="bullet">•</span>
-                <span class="text-muted">{{post.createdTime|smart_time}} </span>
-              </div>
-                       
-            <div class="actions pull-right">
-
-                 <a href="{{ path( target.type ~ '_thread_post_update', {(target.type ~ 'Id'): target.id, threadId:thread.id, postId:post.id}) }}"> 编辑</a>
-
-                   <a href="javascript:" data-action="post-delete"  class="mhm post-delete-btn" data-url="{{ path( target.type ~ '_thread_post_delete', {(target.type ~ 'Id'): target.id, threadId:thread.id, postId:post.id}) }}" data-for="#post-{{ post.id }}"> 删除</a>
-
-
-                {% if not subPosts %}
-                      <a href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}" >回复</a>
-                      <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}" style="display:none;">收起</a>
-                {% else %}
-
-                      <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  parentId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="" >回复({{postReplyCount[post.id]}})</a>
-                      <a href="javascript:" class="unreply" id="unreply-{{post.id}}" parentId="{{post.id}}"  >收起</a>
-                {% endif %}
+            <div class="metas">
+              {% include 'TopxiaWebBundle:Thread:post-manage-menu.html.twig' %}
+              <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
+              <span class="bullet">•</span>
+              <span class="text-muted">{{post.createdTime|smart_time}} </span>
             </div>
-              <div class="thread-post-content">{{ post.content|raw }}</div>
-
-
-
-
-            <div class="reply-{{post.id}}">
-                  {% if subPosts %}
-                                {% include 'TopxiaWebBundle:Thread:post-list-item.html.twig'  with {targetType:targetType,posts:subPosts, users:postReplyMembers,postMain:post} %}
-                  {% else %}
-
-                <div class="reply-{{post.id}}" style="display:none;">
-                  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path( target.type ~ '_thread_post', {(target.type ~ 'Id'): target.id, threadId:thread.id})}}">
-                    <div class="form-group">
-                      <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
-                      <div class="controls">
-                      <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
-                    </div>
-                    </div>
-                    <div id="fromUserIdNoSubDiv"></div>
-                    <div class="form-group">
-                      <button type="submit" parentId="{{post.id}}" targetId="{{ target.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
-                    </div>
-                  </form>
-                </div>
-                   {% endif %}
+            <div class="thread-post-content">{{ post.content|raw }}</div>
+            <div>
+              {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
             </div>
-    </li>
+            {% if post.subposts %}
+              {{ render(controller('TopxiaWebBundle:Thread:subposts', {request:app.request, target:target, thread:thread, parentId:post.id})) }}
+            {% endif %}
+          </div>
+        </li>
       {% endfor %}
     </ul>
-
-    {{ web_macro.paginator(paginator) }}
-
-
-
-    </div>
-    </div>
-  {% else %}
-          <div class="empty">
-                <span>还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</span>
-          </div>
-  {% endif %}
-
+  </div>
 </div>
-</div>
-</div>
-
-
-

@@ -82,6 +82,10 @@ interface ThreadService
 	 **/
 	public function getPost($id);
 
+	public function findPostsByParentId($parentId, $start, $limit);
+
+	public function findPostsCountByParentId($parentId);
+
 	public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0);
 
 	public function updatePost($id, $fields);

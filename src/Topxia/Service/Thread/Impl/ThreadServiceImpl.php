@@ -306,6 +306,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->getPost($id);
     }
 
+    public function findPostsByParentId($parentId, $start, $limit)
+    {
+        return $this->getThreadPostDao()->findPostsByParentId($parentId, $start, $limit);
+    }
+
+    public function findPostsCountByParentId($parentId)
+    {
+        return $this->getThreadPostDao()->findPostsCountByParentId($parentId);
+    }
+
     public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0)
     {          
                         // $targetId = empty($threadContent['targetId']) ? $targsetId : $threadContent['targetId'];

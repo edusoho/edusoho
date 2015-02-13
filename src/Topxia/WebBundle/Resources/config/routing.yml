@@ -1514,6 +1514,11 @@ course_buy_modify_user_info:
     pattern: /course/buy/modify_user_info
     defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
 
+thread_post_reply:
+    pattern:  /thread/{threadId}/post/{postId}/
+    defaults: { _controller: TopxiaWebBundle:Order:create }
+    methods: [POST]
+
 #占位
 vip:
     pattern: /vip/

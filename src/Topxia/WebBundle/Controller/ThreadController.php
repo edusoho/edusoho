@@ -46,54 +46,23 @@ class ThreadController extends BaseController
     public function showAction(Request $request, $target, $thread)
     {
         
-        $condition=array('threadId'=>$thread['id'],'status'=>'open','parentId'=>0);
-
-        $postCount=$this->getThreadService()->searchPostsCount($condition);
+        $conditions = array (
+            'threadId'=>$thread['id'],
+            'parentId'=>0
+        );
 
         $paginator = new Paginator(
             $this->get('request'),
-            $postCount,
-            30  
+            $this->getThreadService()->searchPostsCount($conditions),
+            20
         );
 
-        $posts=$this->getThreadService()->searchPosts($condition,array('createdTime','asc'),
+        $posts=$this->getThreadService()->searchPosts(
+            $conditions,
+            array('createdTime','asc'),
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
-
-        $postMemberIds = ArrayToolkit::column($posts, 'userId');
-        $postId=ArrayToolkit::column($posts, 'id');
-        $elitePosts = array();
-        $postReplyAll=array();
-        $postReply=array();
-        $postReplyCount=array();
-        $postReplyPaginator=array();
-        $isManager = '';
-        $replyPaginator='';
-
-        foreach ($postId as $key => $value) {
-            $replyCount=$this->getThreadService()->searchPostsCount(array('parentId'=>$value));
-            $replyPaginator = new Paginator(
-                $this->get('request'),
-                $replyCount,
-                10  
-            );
-
-            $reply=$this->getThreadService()->searchPosts(array('parentId'=>$value),array('createdTime','asc'),
-                $replyPaginator->getOffsetCount(),
-                $replyPaginator->getPerPageCount());
-
-            $postReplyCount[$value]=$replyCount;
-            $postReply[$value]=$reply;
-            $postReplyPaginator[$value]=$replyPaginator;
-
-            if($reply){
-                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($reply, 'userId'));
-            }
-
-        }
-
-        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
-        $postMember=$this->getUserService()->findUsersByIds($postMemberIds);
+            $paginator->getPerPageCount()
+        );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
@@ -104,18 +73,27 @@ class ThreadController extends BaseController
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
-            'elitePosts' => $elitePosts,
             'users' => $users,
             'paginator' => $paginator,
-            'postCount' =>$postCount,
-            'postMember'=>$postMember,
-            'postReply'=>$postReply,
-            'postReplyMembers'=>$postReplyMembers,
-            'postReplyCount'=>$postReplyCount,
-            'postReplyPaginator'=>$postReplyPaginator,
-            'replyPaginator'=>$replyPaginator,
-            'sort'=>'posted',
-            'type'=>'all',
+        ));
+    }
+
+    public function subpostsAction(Request $request, $target, $thread, $parentId)
+    {
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->findPostsCountByParentId($parentId),
+            2
+        );
+        $posts = $this->getThreadService()->findPostsByParentId($parentId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
+        return $this->render("TopxiaWebBundle:Thread:subposts.html.twig", array(
+            'target' => $target,
+            'thread' => $thread,
+            'posts' => $posts,
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
