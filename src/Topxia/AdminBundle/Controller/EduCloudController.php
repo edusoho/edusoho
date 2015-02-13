@@ -116,7 +116,7 @@ class EduCloudController extends BaseController
                 }
             } else {
                 $this->setCloudSmsKey('sms_registration', 'off');
-                if (in_array('mobile', $auth['registerSort'])) {
+                if (isset($auth['registerSort'])&&(in_array('mobile', $auth['registerSort']))) {
                     $index = array_search('mobile',$auth['registerSort']);
                     unset($auth['registerSort'][$index]);
                 }
