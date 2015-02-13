@@ -32,7 +32,7 @@
 
 <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">推荐班级 / <small>RecommendClasses</small></h2>
+              <h2 class="panel-title">最新班级 / <small>RecommendClasses</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
@@ -61,11 +61,20 @@
                     {% endif %}
                       <span class="class-student hidden-md"><i class="fa fa-users"></i>{{ classroom.studentNum }}</span>
                       <span class="class-price">
-                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                             {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if classroom.price > 0 %}
+                               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                免费
+                              {% endif %}
                           {% else %}
-                              {{ classroom.price }}元
+                              {% if classroom.price > 0 %}
+                                {{ classroom.price }}元
+                              {% else %}
+                                免费
+                              {% endif %}
                           {% endif %}
+
 
                       </span>
                     </div>
