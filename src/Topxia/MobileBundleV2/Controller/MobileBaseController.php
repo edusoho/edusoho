@@ -143,12 +143,16 @@ class MobileBaseController extends BaseController
             return array();
         }
 
+        $controller = $this;
+
         $simplifyUsers = array();
         foreach ($users as $key => $user) {
             $simplifyUsers[$key] = array (
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'title' => $user['title'],
+                'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
+                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
                 'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
@@ -170,7 +174,7 @@ class MobileBaseController extends BaseController
 
         $self = $this;
         return array_map(function($review) use ($self, $users) {
-            $review['user'] = empty($users[$review['userId']]) ? null : $self->simpleUser($users[$review['userId']]);
+            $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser($users[$review['userId']]);
             unset($review['userId']);
 
             $review['createdTime'] = date('c', $review['createdTime']);
@@ -300,8 +304,14 @@ class MobileBaseController extends BaseController
             }
             $userProfile = $controller->getUserService()->getUserProfile($user['id']);
             $user['signature'] = $userProfile['signature'];
-            $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
-            
+            if(isset($user['about']))
+            {
+                $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
+            }
+
+            $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
+            $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+
             unset($user['password']);
             unset($user['salt']);
             unset($user['createdIp']);
@@ -404,49 +414,9 @@ class MobileBaseController extends BaseController
     }
 
     public function filterOneLiveCourseByDESC($user){
-        // $courses = $this->getCourseService()->findUserLeaningCourses(
-        //     $user['id'], 0, 1000
-        // );
-        // $courseIds = ArrayToolkit::column($courses, 'id');
+        $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
 
-        // $conditions = array(
-        //     'status' => 'published',
-        //     'startTimeGreaterThan' => time(),
-        //     'courseIds' => $courseIds
-        // );
-        // $total = $this->getCourseService()->searchLessonCount($conditions);
-        // $tempCourses = $this->filterLiveCourses($user, 0, $total);
-        // $liveCourses = $this->filterCourses(array_values($tempCourses));
-
-        // $sort = array();
-        // $resultLiveCourses = array();
-        // foreach ($liveCourses as $key => $liveCourse) {
-        //    if(!empty($liveCourse['liveStartTime'])){
-        //         $sort[$key] = $liveCourse["liveStartTime"];
-        //         $resultLiveCourses[$key] = $liveCourse;
-        //    }
-        // }
-
-        // if($liveCourses != null){
-        //     array_multisort($sort, SORT_DESC, $resultLiveCourses);
-        // }
-
-        // unset($liveCourse);
-
-        $courses = $this->getCourseService()->findUserLeaningCourses(
-            $user['id'], 0, 1000
-        );
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $conditions = array(
-            'status' => 'published',
-            'startTimeGreaterThan' => time(),
-            'courseIds' => $courseIds
-        );
-        $total = $this->getCourseService()->searchLessonCount($conditions);
-
-        $tempCourses = $this->filterLiveCourses($user, 0, $total);
-        $resultLiveCourses = $this->filterCourses(array_values($tempCourses));
+        $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
 
         return $resultLiveCourses;
     }

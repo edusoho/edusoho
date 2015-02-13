@@ -431,7 +431,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $noteInfos[]  = array(
                     "coursesId" => $courseMember['courseId'],
                     "courseTitle" => $course['title'],
-                    "noteLastUpdateTime" => date('c', $value['updatedTime']),
+                    "noteLastUpdateTime" => date('c', $value['updatedTime'] == 0 ? $value['createdTime'] : $value['updatedTime']),
                     "lessonId" => $lessonInfo['id'],
                     "lessonTitle" => $lessonInfo['title'],
                     "learnStatus" => $lessonStatus,
@@ -503,7 +503,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
         
         $noteInfo['content'] = $this->uploadImage($content);
-        $result = $this->controller->getNoteService()->saveNote($noteInfo);
+        
+        $result                = $this->controller->getNoteService()->saveNote($noteInfo);
+        $result['content'] = $this->controller->convertAbsoluteUrl($this->request, $result['content']);
+        if($result['updatedTime'] == 0){
+            $result['updatedTime'] = $result['createdTime'];
+        }
         $result['createdTime'] = date('c', $result['createdTime']);
         $result['updatedTime'] = date('c', $result['updatedTime']);
         
@@ -627,6 +632,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $course            = $this->controller->getCourseService()->getCourse($thread['courseId']);
         $user              = $this->controller->getUserService()->getUser($thread['userId']);
+        
+        $user['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
+        $user['follower']  = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $result            = $this->filterThread($thread, $course, $user);
         $result['content'] = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $result['content']));
         return $result;
@@ -890,6 +898,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $search              = $this->getParam("search", '');
         $tagId               = $this->getParam("tagId", '');
+        $type                = $this->getParam("type", 'normal');
         $conditions['title'] = $search;
         
         if (empty($tagId)) {
@@ -897,20 +906,24 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $conditions['tagId'] = $tagId;
         }
-        return $this->findCourseByConditions($conditions);
+        return $this->findCourseByConditions($conditions,"");
     }
     
     public function getCourses()
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
         $conditions['categoryId'] = $categoryId;
-        return $this->findCourseByConditions($conditions);
+        return $this->findCourseByConditions($conditions,"normal");
     }
     
-    private function findCourseByConditions($conditions)
+    private function findCourseByConditions($conditions, $type)
     {
         $conditions['status'] = 'published';
-        $conditions['type']   = 'normal';
+        if(empty($type)){
+            unset($conditions['type']);
+        }else{
+            $conditions['type']   = 'normal';
+        }
         
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
@@ -1162,6 +1175,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 77e7262c5894a48c06015d841e1aaa98a45bc75b
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
@@ -1186,7 +1203,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'status' => 'published',
             'type' => 'live'
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> 77e7262c5894a48c06015d841e1aaa98a45bc75b
         $total = $this->controller->getCourseService()->searchCourseCount($condition);  
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
         

@@ -235,8 +235,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
-        $user['following'] = $this->controller->getUserService()->findUserFollowingCount($userId);
-        $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         return $this->controller->filterUser($user);
     }
 
@@ -335,13 +333,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $site = $this->controller->getSettingService()->get('site', array());
 
+        if($user != null){
+            $userProfile = $this->controller->getUserService()->getUserProfile($token['userId']);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+        }
+
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version)
         );
-        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $this->log("user_login", "用户二维码登录",  array(
                 "userToken" => $token)
             );
@@ -364,14 +366,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         
         $token = $this->controller->createToken($user, $this->request);
+
+        $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
+        $userProfile = $this->filterUserProfile($userProfile);
+        $user = array_merge($user, $userProfile);
         
         $result = array(
             'token' => $token,
             'user' => $this->controller->filterUser($user)
         );
-
-        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
@@ -411,8 +414,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($followingId);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($followingId);
-            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($followingId);
             $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
@@ -433,8 +434,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($followerId);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $user['following'] = $this->controller->getUserService()->findUserFollowingCount($followerId);
-            $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($followerId);
             $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
@@ -499,7 +498,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
-        //问答数量
+
         $conditions = array(
             'userId' => $user['id'],
             'type' => 'question'
@@ -515,7 +514,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        //话题数量
         $conditions = array(
             'userId' => $user['id'],
             'type' => 'discussion'
@@ -550,7 +548,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         settype($noteSum, "string");
 
-        //考试数量
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
         return array('thread' => $threadSum,
@@ -571,22 +568,23 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 array('title' => '私信','data' => null));
         }
         $index = 0;
-
+        $dataLiveCourse = null;
         $liveCourse = $this->controller->filterOneLiveCourseByDESC($user);
         if(sizeof($liveCourse) == 0){
+            $dataLiveCourse = null;
+        }else{
             $liveCourse = reset($liveCourse);
-        }
-        var_dump($liveCourse);
-        exit();
-        $result[$index++] = array(
-            'title' => '在学直播',
-            'data' => array(
+            $dataLiveCourse = array(
                 'content' => $liveCourse['title'],
                 'id' => $liveCourse['id'],
                 'courseId' => $liveCourse['id'],
                 'lessonId' => null,
                 'time' => $liveCourse['liveStartTime']
-                )
+                );
+        }
+        $result[$index++] = array(
+            'title' => '在学直播',
+            'data' => $dataLiveCourse
         );
         
         $courseConditions = array(
@@ -612,7 +610,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         if ($courseInfo != null) {
             $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
-            //$lesson = $this->controller->getCourseService()->getCourseLesson($allLearnCourse['courseId'], $allLearnCourse['lessonId']);
+            
             $data       = array(
                 'content' => $courseInfo['title'],
                 'id' => $resultCourse['id'],
@@ -640,7 +638,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $threadData = null;
         $discussionData = null;
         if(sizeof($courseIds) > 0){
-            //----问答
             $conditions     = array(
                 'courseIds' => $courseIds,
                 'type' => 'question'
@@ -660,7 +657,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 );
             }
 
-            //----讨论
             $conditions['type'] = 'discussion';
             $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
             $resultDiscussion   = reset($resultDiscussion);
@@ -687,9 +683,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result[$index++] = array(
             'title' => '讨论',
             'data' => $discussionData
-        ); //讨论
+        );
 
-        //笔记
         $conditions = array(
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0
