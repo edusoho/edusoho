@@ -29,6 +29,9 @@
             <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
             <input type="hidden" name="shouldPayMoney" value=""/>
 
+            <input type="hidden" name="sms_code" value=""/>
+            <input type="hidden" name="mobile" value="{{ verifiedMobile }}"/>
+
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
             {% if targetType == "course" and courses|default(null) %}
@@ -77,9 +80,14 @@
 
             <div class="form-group pay">
               <div class="pull-right controls">
-                <button class="btn btn-fat btn-primary" id="order-create-btn" type="submit">提交订单</button>
+                {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %} 
+                  <span class="btn btn-fat btn-primary" id="order-create-btn" data-toggle="modal" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" > 提交订单{# 短信验证码 #} </span>
+                {% else %}  
+                  <button class="btn btn-fat btn-primary" id="order-create-btn" type="submit">提交订单</button>
+                {% endif %}                
               </div>
             </div>
+
           </form>
         </div>
       </div>

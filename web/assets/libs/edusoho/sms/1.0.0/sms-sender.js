@@ -47,11 +47,13 @@ define(function(require, exports, module) {
 		        });
 	    	}
 
-	    	validator.addItem({
-	            element: '[name="sms_code"]',
-	            required: true,
-	            rule: 'integer constLength{len:6}'            
-	        });
+	    	if (('object' == typeof validator)&&("undefined" != typeof validator.addItem)) {
+		    	validator.addItem({
+		            element: '[name="sms_code"]',
+		            required: true,
+		            rule: 'integer constLength{len:6}'            
+		        });
+		    }
 
 	    	refreshTimeLeft = function() { 
 	        	var leftTime = $('#js-time-left').html();
@@ -67,9 +69,9 @@ define(function(require, exports, module) {
 	        postData = function(){
 	        	var url = $('.js-sms-send').data('url');
 	        	var data = {};
-	        	if(hasMobile){
-	        		data.to = $('[name="mobile"]').val();
-	        	}
+	        	
+	        	data.to = $('[name="mobile"]').val();
+	        	
 	        	if(hasNickname){
 	        		data.nickname = $('[name="nickname"]').val();
 	        	}

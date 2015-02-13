@@ -1534,3 +1534,7 @@ password_reset_by_sms:
 settings_find_pay_password_by_sms:
     pattern:  /settings/find_pay_password_by_sms 
     defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
+
+order_pay_sms_verification:
+    pattern:  /order/sms-verification
+    defaults: { _controller: TopxiaWebBundle:Order:smsVerification }

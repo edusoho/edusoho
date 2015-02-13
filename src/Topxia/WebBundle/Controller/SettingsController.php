@@ -429,8 +429,7 @@ class SettingsController extends BaseController
 		$scenario = "sms_forget_pay_password";
 		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
-        }
-		
+        }		
 
 		$currentUser = $this->getCurrentUser();
 		if (!(isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0))){

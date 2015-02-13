@@ -52,13 +52,46 @@ class OrderController extends BaseController
             $orderInfo["showCoupon"] = true;
         }
 
+        $verifiedMobile = '';
+        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile'])>0) ){
+            $verifiedMobile = $currentUser['verifiedMobile'];
+        }
+        $orderInfo['verifiedMobile'] = $verifiedMobile;
+
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
 
     }
 
+    public function smsVerificationAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $verifiedMobile = '';
+        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile'])>0) ){
+            $verifiedMobile = $currentUser['verifiedMobile'];
+        }
+        return $this->render('TopxiaWebBundle:Order:order-sms-modal.html.twig', array(
+            'verifiedMobile' => $verifiedMobile,
+        ));
+    }
+
     public function createAction(Request $request)
     {
-        $fields = $request->request->all();
+        $fields = $request->request->all(); 
+
+        if ($fields['coinPayAmount']>0){
+            $eduCloudService = $this->getEduCloudService();
+            $scenario = "sms_user_pay";
+            if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
+                list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+                $result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
+                $eduCloudService->clearSmsSession($request);
+                if (!$result) {
+                    return $this->createMessageResponse('error', '短信验证失败。');
+                }
+            }
+        }
+
+        var_dump($fields);exit;
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -179,4 +212,8 @@ class OrderController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 }
