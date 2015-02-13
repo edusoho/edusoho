@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         rule: 'chinese_alphanumeric byte_minlength{min:2} byte_maxlength{max:8}'
 	});
 
-	validatSchoolName = function () {
+	validateSchoolName = function () {
     	validator.destroy();
 		validator = new Validator({
 	        element: '#apply-sms-form',
@@ -39,7 +39,7 @@ define(function(require, exports, module) {
 	}
 
     $('#modal').on('shown.bs.modal', function () {
-		setTimeout('validatSchoolName()',500); 
+		setTimeout('validateSchoolName()',500); 
     });
 
     $('#modal').on('hidden.bs.modal', function () {
