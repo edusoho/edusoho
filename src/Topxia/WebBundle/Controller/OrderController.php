@@ -28,7 +28,7 @@ class OrderController extends BaseController
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
-        if ($orderInfo["totalPrice"] == 0) {
+        if (((float)$orderInfo["totalPrice"]) == 0) {
             $formData = array();
             $formData['userId'] = $currentUser["id"];
             $formData["targetId"] = $fields["targetId"];

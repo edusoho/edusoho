@@ -69,7 +69,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function getTarget($id)
     {
-        return $this->getCourseService()->getClassroom($id);
+        return $this->getCourseService()->getCourse($id);
     }
 
     public function applyRefundOrder($orderId, $amount, $reason, $container)
