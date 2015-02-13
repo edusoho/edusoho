@@ -1175,10 +1175,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-<<<<<<< HEAD
-=======
-        
->>>>>>> 77e7262c5894a48c06015d841e1aaa98a45bc75b
+
         $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
         $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
 
@@ -1203,10 +1200,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'status' => 'published',
             'type' => 'live'
         );
-<<<<<<< HEAD
-
-=======
->>>>>>> 77e7262c5894a48c06015d841e1aaa98a45bc75b
+        
         $total = $this->controller->getCourseService()->searchCourseCount($condition);  
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
         
