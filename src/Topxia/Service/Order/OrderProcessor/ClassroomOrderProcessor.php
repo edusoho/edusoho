@@ -34,7 +34,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $courseIds = ArrayToolKit::column($courses, "id");
 
         $currentUser = $this->getUserService()->getCurrentUser();
-        $paidCourses = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+
+        $courseIds = ArrayToolkit::column($courseMembers, "courseId");
+        $paidCourses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        foreach ($paidCourses as $key => $paidCourse) {
+            $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
+            $paidCourses[$key]["deadline"] = $courseMembers[$paidCourse["id"]]["deadline"];
+            $paidCourses[$key]["deadlineDate"] = date('Y-m-d H:i', $courseMembers[$paidCourse["id"]]["deadline"]*1000);
+        }
 
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
         $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, $priceType);
@@ -108,6 +118,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             'coinPayAmount' => $coinPayAmount,
         );
 	}
+
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return $percent;
+    }
 
 	public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
 	{

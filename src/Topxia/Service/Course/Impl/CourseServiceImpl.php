@@ -2320,10 +2320,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if(empty($courseIds) || count($courseIds) == 0) {
 			return array();
 		}
-		$courses = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
-		$courseIds = ArrayToolkit::column($courses, "courseId");
-		$courses = $this->findCoursesByIds($courseIds);
-		return $courses;
+		$courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+		return $courseMembers;
 	}
 
 	private function getCourseLessonReplayDao()

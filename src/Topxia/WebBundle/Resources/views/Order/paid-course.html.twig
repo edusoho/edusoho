@@ -6,14 +6,44 @@
     </i>
     <h4 class="title">已购买的课程可折价抵扣</h4>
   </div>
-  <div class="order-item-detail">
+  <div class="paid-courses">
     <span class="label label-info">抵扣以所含课程当前的正常价格为准。抵扣金额=课程单价 ×（课程包总价÷课程包原价）</span>
     {% for paidCourse in paidCourses %}
-    <div>
-      <h4>{{paidCourse.title}}</h4>
-      <span role="course-price">现价：{{paidCourse.price}}</span>
-      折价：- <span role="course-discount-price">{{paidCourse.afterDiscountPrice}}</span>
-      
+    <div class="">
+      <div class="row">
+        <div class="col-xs-6">
+          <h4>{{paidCourse.title}}</h4>
+        </div>
+        <div class="col-xs-3 ">
+          <div role="course-price" class="mts ">现价：{{paidCourse.price}}
+            {% if priceType|default('RMB') == "RMB" %}
+              元
+            {% elseif priceType|default('RMB') == "Coin" %}
+              {{setting("coin.coin_name")}}
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="price_r">
+            <span class="price_r_mark">-</span>
+            <span class="order-price" role="course-discount-price">{{paidCourse.afterDiscountPrice}}</span>
+            <span> {% if priceType|default('RMB') == "RMB" %}
+                元
+              {% elseif priceType|default('RMB') == "Coin" %}
+                {{setting("coin.coin_name")}}
+              {% endif %} </span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 text-muted">
+          <span style="margin-right:20px">教师：{{users[paidCourse.teacherIds|first].nickname}}</span>
+          <span style="margin-right:20px">已学：{{paidCourse.percent}}</span>
+          {% if paidCourse.deadline > 0 %}
+          <span>有效期至：{{paidCourse.deadlineDate}}</span>
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endfor %}
   </div>
