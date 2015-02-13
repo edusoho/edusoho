@@ -11,8 +11,6 @@
     {% endblock %}
     {% block body %}
 
-
-
     {{ web_macro.flash_messages() }} 
 
   {%  if not hasSecurityQuestions  %}
@@ -24,6 +22,21 @@
     </ul>
 
     <div class="alert alert-warning"> <span class="glyphicon glyphicon-info-sign"></span> 安全问题一经设置，不可再次修改。</div>
+    
+      <ul class="nav nav-tabs mbl">
+
+        <li class="active js-find-by-question">
+          <a href="{{ path('settings_find_pay_password') }}" style="cursor: pointer;">通过安全问题找回
+          </a>
+        </li>
+        {% if (setting('cloud_sms.sms_forget_pay_password')|default('')) == 'on' %}
+          <li class="js-find-by-mobile">
+            <a href="{{ path('settings_find_pay_password_by_sms') }}" style="cursor: pointer;">通过手机找回
+            </a>
+          </li>
+        {% endif %}
+
+      </ul>
 
     <form id="settings-security-questions-form" class="form-horizontal" autocomplete="off" method="post" {# {% if not app.user.password %} style="display:none;"{% endif %} #}> 
       
