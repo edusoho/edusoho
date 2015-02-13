@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}所在班级 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-classroom' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    所在班级
+  </div>
+
+  <div class="panel-body">
+       <ul class="course-wide-list">
+            {% if classrooms %}
+            {% for classroom in classrooms %}
+            <li class="course-item clearfix">
+              <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                <img class="course-picture" src="{{ default_path('classroomPicture',classroom.middlePicture, 'large') }}" alt="{{ classroom.title }}">
+              </a>
+              <div class="course-body">
+                {% if members[classroom.id].role == "headerTeacher"  or is_granted('ROLE_ADMIN') %}
+                  <div style="float:right;" class="text-muted mrm mls">
+                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">管理班级</a>
+                  </div>
+                {% endif %}
+                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a></h4>
+                
+                <span class="text-muted">共{{classroom.coursesCount}}课
+                <i class="fa fa-users mll" ></i> {{classroom.studentNum + classroom.auditorNum}}</span>
+                <div class="course-footer clearfix mtl">
+                  <strong class="mrl">今日新增</strong>
+                   
+                   学员 {{classroom.allCount}} &nbsp;&nbsp;问题 333&nbsp;&nbsp;  
+
+                   话题 44 &nbsp;&nbsp; 课时完成学习 {{classroom.todayFinishedLessonNum}}
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+            {% else %}
+            <div class="empty">找不到所在班级！</div>
+            {% endif %}
+          </ul>
+  </div>
+</div>
+
+{% endblock %}

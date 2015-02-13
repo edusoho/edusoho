@@ -39,8 +39,8 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
 	private function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
-        if (empty($classroom)) {
+        $course = $this->getCourseService()->getCourse($order['targetId']);
+        if (empty($course)) {
             return false;
         }
 
@@ -54,9 +54,9 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
             return false;
         }
 
-        $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
+        $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
         $variables = array(
-            'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
+            'course' => "<a href='{$courseUrl}'>{$course['title']}</a>",
             'amount' => $amount,
             'note' => $note,
         );
@@ -65,6 +65,26 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
 
         return true;
+    }
+
+    public function getTarget($id)
+    {
+        return $this->getCourseService()->getCourse($id);
+    }
+
+    public function applyRefundOrder($orderId, $amount, $reason, $container)
+    {
+        return $this->getCourseOrderService()->applyRefundOrder($orderId, $amount, $reason, $container);
+    }
+
+    public function getTargetMember($targetId, $userId)
+    {
+        return $this->getCourseService()->getCourseMember($targetId, $userId);
+    }
+
+    protected function getCourseOrderService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseOrderService');
     }
 
 	protected function getCourseService()

@@ -261,13 +261,13 @@ course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
 
-course_order_refund:
-    pattern:  /course/{id}/order/refund
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:refund }
+order_refund:
+    pattern:  /target/{id}/order/refund
+    defaults: { _controller: TopxiaWebBundle:OrderRefund:refund }
 
-course_order_cancel_refund:
-    pattern:  /course/{id}/order/cancel_refund
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:cancelRefund }
+order_cancel_refund:
+    pattern:  /target/{id}/order/cancel_refund
+    defaults: { _controller: TopxiaWebBundle:OrderRefund:cancelRefund }
     methods: [POST]
 
 course_set_expiryday:
@@ -1030,6 +1030,10 @@ my_teaching_courses:
 my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
+
+my_teaching_classrooms:
+    pattern: /my/teaching/classrooms
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }
 
 my_live_courses_learning:
     pattern: /my/livecourses/learing
