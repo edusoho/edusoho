@@ -732,10 +732,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $messageConditions = array(
             'toId' => $user['id']
         );
-        $sort              = array(
-            'createTime',
-            'DESC'
-        );
+        $sort              = array();
         
         $msgCount      = $this->getMessageService()->getUserConversationCount($user['id']);
         $conversations = $this->getMessageService()->findUserConversations($user['id'], 0, $msgCount);
