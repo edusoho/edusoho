@@ -19,9 +19,14 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 	public function auditRefundOrder($id, $pass, $data)
 	{
 		$order = $this->getOrderService()->getOrder($id);
-		if ($pass) {
+
+        if ($pass) {
             if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
                 $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);
+            }
+        } else {
+            if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
+                $this->getClassroomService()->unlockStudent($order['targetId'], $order['userId']);
             }
         }
 
@@ -36,8 +41,8 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 
 	private function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
-        $course = $this->getCourseService()->getCourse($order['targetId']);
-        if (empty($course)) {
+        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
+        if (empty($classroom)) {
             return false;
         }
 
@@ -51,9 +56,9 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
             return false;
         }
 
-        $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
+        $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
         $variables = array(
-            'course' => "<a href='{$courseUrl}'>{$course['title']}</a>",
+            'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
             'amount' => $amount,
             'note' => $note,
         );
