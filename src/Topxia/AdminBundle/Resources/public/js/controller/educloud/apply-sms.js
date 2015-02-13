@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 
     });
 
-	reflesh = function () {
+	refresh = function () {
 		validator.destroy();
 		validator = new Validator({
 	        element: '#apply-sms-form',
@@ -67,9 +67,9 @@ define(function(require, exports, module) {
 	}
 
     $('#modal').on('shown.bs.modal', function () {
-		setTimeout('reflesh()',500); 
+		setTimeout('refresh()',500); 
     });
 
-    reflesh();
+    refresh();
 
 });
