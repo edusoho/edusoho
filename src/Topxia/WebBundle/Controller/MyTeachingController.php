@@ -38,6 +38,49 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    public function classroomsAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $classrooms=array();
+        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+        $headerTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headerTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($teacherClassrooms,$headerTeacherClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        $members=$this->getClassroomService()->findMembersByClassroomIds($classroomIds);
+        
+        foreach ($classrooms as $key => $classroom) {
+            
+            $courses=$this->getClassroomService()->getAllCourses($classroom['id']);
+            $courseIds=ArrayToolkit::column($courses,'courseId');
+
+            $coursesCount=count($courses);
+
+            $classrooms[$key]['coursesCount']=$coursesCount;
+
+            $studentCount=$this->getClassroomService()->searchMemberCount(array('role'=>'student','classroomId'=>$classroom['id'],'startTimeGreaterThan'=>strtotime(date('Y-m-d'))));
+            $auditorCount=$this->getClassroomService()->searchMemberCount(array('role'=>'auditor','classroomId'=>$classroom['id'],'startTimeGreaterThan'=>strtotime(date('Y-m-d'))));
+            
+            $allCount=$studentCount+$auditorCount;
+
+            $classrooms[$key]['allCount']=$allCount;
+        }
+
+        return $this->render('TopxiaWebBundle:MyTeaching:classroom.html.twig', array(
+            'classrooms'=>$classrooms,
+            'members'=>$members,
+            ));
+    }
+
 	public function threadsAction(Request $request, $type)
 	{
 		$user = $this->getCurrentUser();
@@ -108,4 +151,8 @@ class MyTeachingController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
 }
