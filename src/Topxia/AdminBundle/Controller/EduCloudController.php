@@ -114,7 +114,7 @@ class EduCloudController extends BaseController
                 if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
                     $auth['registerSort'][] = 'mobile';
                 }
-                if (unset($auth['registerSort'])){
+                if (!isset($auth['registerSort'])){
                     $auth['registerSort'] = array(0 => "email", 1 => "nickname", 2 => "password", 3 => "mobile");
                 }
             } else {
