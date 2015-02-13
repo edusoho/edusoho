@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EduCloudController extends BaseController
 {
-    private $debug = true;
+    private $debug = false;
 
     public function smsSendAction(Request $request)
     {

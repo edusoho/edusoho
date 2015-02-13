@@ -9,7 +9,7 @@ class EduCloudController extends BaseController
 {
     private $cloudOptions = null;
     private $cloudApi = null;
-    private $debug = true;
+    private $debug = false;
 
     public function indexAction(Request $request)
     {
