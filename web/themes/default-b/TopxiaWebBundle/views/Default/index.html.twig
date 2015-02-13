@@ -29,7 +29,7 @@
 <div class="es-box">
               <div class="es-box-heading">
                 <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-                <h2>精选班级</h2>
+                <h2>最新班级</h2>
               </div>
               <div class="es-box-body">
                 <ul class="home-class-list">
@@ -58,9 +58,17 @@
                         <span class="class-student hidden-md"><i class="fa fa-users"></i>{{ classroom.studentNum }}</span>
                         <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                             {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% if classroom.price > 0 %}
+                               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                免费
+                              {% endif %}
                           {% else %}
-                              {{ classroom.price }}元
+                              {% if classroom.price > 0 %}
+                                {{ classroom.price }}元
+                              {% else %}
+                                免费
+                              {% endif %}
                           {% endif %}
 
                         </span>

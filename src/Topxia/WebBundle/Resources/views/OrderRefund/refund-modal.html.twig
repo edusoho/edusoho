@@ -3,7 +3,7 @@
 {% block title %}退出学习{% endblock %}
 {% block body %}
 
-  <form id="course-refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {id:target.id, targetType:targetType}) }}" data-goto="{{ path(targetType ~ '_show', {id:target.id}) }}">
+  <form id="refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {id:target.id, targetType:targetType}) }}" data-goto="{{ path(targetType ~ '_show', {id:target.id}) }}">
 
     <div class="form-group">
       <div class="col-md-3 control-label">退学原因</div>
@@ -42,6 +42,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button class="btn btn-danger" type="submit" data-toggle="form-submit" data-target="#course-refund-form" data-loading-text="正在退出...">退出学习</button>
-  <script>app.load('course/order-refund-modal')</script>
+  <button class="btn btn-danger" type="submit" data-toggle="form-submit" data-target="#refund-form" data-loading-text="正在退出...">退出学习</button>
+  <script>app.load('order-refund/order-refund-modal')</script>
 {% endblock %}
