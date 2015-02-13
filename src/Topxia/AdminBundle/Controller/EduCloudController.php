@@ -102,21 +102,6 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud:apply-sms-form.html.twig', array());
     }
 
-    public function smsUsageAction(Request $request)
-    {
-        //8888888888
-    }
-
-    public function smsSwitchAction(Request $request, $open)
-    {
-        //8888888888
-    }
-
-    public function smsCaptchaAction(Request $request)
-    {
-        //8888888888
-    }
-
     private function handleSmsSetting(Request $request)
     {
         if ($request->getMethod() == 'POST') {

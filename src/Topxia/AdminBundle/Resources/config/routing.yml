@@ -1098,10 +1098,3 @@ admin_edu_cloud_apply_for_sms:
     pattern:  /edu-cloud/apply-for-sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
 
-admin_edu_cloud_sms_switch:
-    pattern:  /edu-cloud/sms/{switch}
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsSwitch }
-
-admin_edu_cloud_sms_usage:
-    pattern:  /edu-cloud/sms-usage
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsUsage }
