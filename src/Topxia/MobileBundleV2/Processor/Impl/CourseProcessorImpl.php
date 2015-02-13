@@ -906,6 +906,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $search              = $this->getParam("search", '');
         $tagId               = $this->getParam("tagId", '');
+        $type                = $this->getParam("type", 'normal');
         $conditions['title'] = $search;
         
         if (empty($tagId)) {
@@ -913,20 +914,24 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $conditions['tagId'] = $tagId;
         }
-        return $this->findCourseByConditions($conditions);
+        return $this->findCourseByConditions($conditions,"");
     }
     
     public function getCourses()
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
         $conditions['categoryId'] = $categoryId;
-        return $this->findCourseByConditions($conditions);
+        return $this->findCourseByConditions($conditions,"normal");
     }
     
-    private function findCourseByConditions($conditions)
+    private function findCourseByConditions($conditions, $type)
     {
         $conditions['status'] = 'published';
-        $conditions['type']   = 'normal';
+        if(empty($type)){
+            unset($conditions['type']);
+        }else{
+            $conditions['type']   = 'normal';
+        }
         
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
