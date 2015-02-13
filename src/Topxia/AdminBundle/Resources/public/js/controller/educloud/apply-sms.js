@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
 	require('common/validator-rules').inject(Validator);
 
-	var validator = new Validator({
+	validator = new Validator({
         element: '#apply-sms-form',
         autoSubmit: false,
         onFormValidated: function(error, results, $form) {
@@ -13,10 +13,39 @@ define(function(require, exports, module) {
 
     });
 
-    validator.addItem({
+	validator.addItem({
         element: '[name="name"]',
         required: true,
         rule: 'chinese_alphanumeric byte_minlength{min:2} byte_maxlength{max:8}'
+	});
+
+	validatSchoolName = function () {
+    	validator.destroy();
+		validator = new Validator({
+	        element: '#apply-sms-form',
+	        autoSubmit: false,
+	        onFormValidated: function(error, results, $form) {
+	            if (error) {
+	                return false;
+	            }
+	        }
+
+	    });
+    	validator.addItem({
+	        element: '[name="name"]',
+	        required: true,
+	        rule: 'chinese_alphanumeric byte_minlength{min:2} byte_maxlength{max:8}'
+    	});
+	}
+
+    $('#modal').on('shown.bs.modal', function () {
+		setTimeout('validatSchoolName()',500); 
+    });
+
+    $('#modal').on('hidden.bs.modal', function () {
+    	validator.removeItem({
+	        element: '[name="name"]'
+    	});
     });
 
 	$('#js-submit').click(function(){
