@@ -78,6 +78,11 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
             $builder = $builder->andWhere('targetType = :targetType')->andStaticWhere("targetId IN {$courseIdsRange}");
         }
 
+        if (isset($conditions['targetIds'])) {
+            $targetIds = '('.implode(', ',$conditions['targetIds']).')';
+            $builder->andStaticWhere("targetId IN ($targetIds)");
+        }
+
         return $builder;           
     }
     public function findRefundsByIds(array $ids)

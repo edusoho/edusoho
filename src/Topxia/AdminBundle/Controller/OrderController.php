@@ -15,9 +15,12 @@ class OrderController extends BaseController
 
     public function manageAction(Request $request, $type, $layout)
     {
+
         $conditions = $request->query->all();
         $conditions['targetType'] = $type;
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'title') {$conditions['keyword'] = '%' . trim($conditions['keyword']) . '%';}
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
 
         $paginator = new Paginator(
             $request,

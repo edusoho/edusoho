@@ -13,7 +13,15 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 
 	public function findByLikeTitle($title)
 	{
-		return $this->getClassroomService()->findClassroomsByLikeTitle($title);
+        $conditions = array(
+            'title' => $title
+        );
+		return $this->getClassroomService()->searchClassrooms(
+            $conditions, 
+            array('createdTime','desc'),
+            0,
+            100
+        );
 	}
 
 	public function auditRefundOrder($id, $pass, $data)

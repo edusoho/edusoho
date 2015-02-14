@@ -20,7 +20,7 @@
                 <img class="course-picture" src="{{ default_path('classroomPicture',classroom.middlePicture, 'large') }}" alt="{{ classroom.title }}">
               </a>
               <div class="course-body">
-                {% if members[classroom.id].role == "headerTeacher"  or is_granted('ROLE_ADMIN') %}
+                {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
                   <div style="float:right;" class="text-muted mrm mls">
                   <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">管理班级</a>
                   </div>
