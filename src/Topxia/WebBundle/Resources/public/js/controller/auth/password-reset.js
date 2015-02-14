@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
-    var SmsSender = require('edusoho.smsSender');
+    var SmsSender = require('../widget/sms-sender');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
 
