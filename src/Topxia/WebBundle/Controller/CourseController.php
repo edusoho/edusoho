@@ -875,9 +875,8 @@ class CourseController extends BaseController
         foreach ($courseIds as $key => $value) {
         	
         	$course=$this->getCourseService()->getCourse($value);
-
-        	if($course && $course['useInClassroom'] =="more" && !$this->getClassroomService()->isCourseInClassroom($value, $classroomId)){
-
+        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
+        	if($course && ($course['useInClassroom'] =="more" || count($classrooms) == 0)){
         		unset($courseIds[$key]);
         	}
 
