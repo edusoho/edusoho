@@ -830,7 +830,7 @@ class CourseController extends BaseController
 			'status' => 'published'
 		);
 
-		$conditions =$this->filterCondition($conditions,$request);
+		$unEnabledCourseIds =$this->getClassroomCourseIds($request);
 
 		$paginator = new Paginator(
 			$this->get('request'),
@@ -857,16 +857,17 @@ class CourseController extends BaseController
 			'url'=>$url,
 			'courses'=>$courses,
 			'type'=>$type,
+			'unEnabledCourseIds'=>$unEnabledCourseIds,
 			'classroomId'=>$classroomId,
 			'paginator'=>$paginator
 		));
 	}
 
-	private function filterCondition($conditions,$request)
+	private function getClassroomCourseIds($request)
 	{	
 		$courseIds=array();
 		if($request->query->get('type') !="classroom")
-			return $conditions;
+			return $courseIds;
 
 		$classroomId=$request->query->get('classroomId');
 
@@ -883,9 +884,7 @@ class CourseController extends BaseController
 
         }
 
-        $conditions=array_merge($conditions,array('courseIds'=>$courseIds));
-
-        return $conditions;
+        return $courseIds;
 	}
 
     public function searchAction(Request $request)
@@ -895,7 +894,7 @@ class CourseController extends BaseController
         $conditions = array( "title"=>$key );
         $conditions['status'] = 'published';
 
-        $conditions =$this->filterCondition($conditions,$request);
+        $unEnabledCourseIds =$this->getClassroomCourseIds($request);
 
         $paginator = new Paginator(
 			$this->get('request'),
@@ -920,6 +919,7 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
 			'users'=>$users,
 			'courses'=>$courses,
+			'unEnabledCourseIds'=>$unEnabledCourseIds,
 			'paginator'=>$paginator
 		));
     }
