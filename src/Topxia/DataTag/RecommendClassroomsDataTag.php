@@ -52,7 +52,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         $coursesNum = array();
 
         foreach ($classroomIds as $key => $value) {
-            $classroomCourses=$this->getClassroomService()->getAllCourses($value);
+            $classroomCourses=$this->getClassroomService()->findCoursesByClassroomId($value);
             $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
 
             $courses=$this->getCourseService()->findCoursesByIds($courseIds);
