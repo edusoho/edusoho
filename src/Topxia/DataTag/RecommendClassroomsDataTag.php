@@ -41,7 +41,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
             }else{
-                $classroomTeacherIds=json_decode($classroom['teacherIds']);
+                $classroomTeacherIds=$classroom['teacherIds'];
             }
 
             $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);

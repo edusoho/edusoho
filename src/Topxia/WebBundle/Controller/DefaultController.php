@@ -57,7 +57,7 @@ class DefaultController extends BaseController
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
             }else{
-                $classroomTeacherIds=json_decode($classroom['teacherIds']);
+                $classroomTeacherIds=$classroom['teacherIds'];
             }
 
             $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
