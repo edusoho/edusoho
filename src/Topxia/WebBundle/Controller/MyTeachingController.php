@@ -48,9 +48,9 @@ class MyTeachingController extends BaseController
 
         $classrooms=array();
         $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
-        $headerTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headerTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
 
-        $classrooms=array_merge($teacherClassrooms,$headerTeacherClassrooms);
+        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 

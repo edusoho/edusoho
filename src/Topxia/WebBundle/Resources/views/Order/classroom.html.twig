@@ -15,9 +15,9 @@
 	        授课老师：<a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
 	      </span>
 	    {% endif %}
-	    {% if headerTeacher %}
+	    {% if headTeacher %}
 	    <span class="course-text">
-	        班主任：<a href="{{ path('user_show', {id:headerTeacher.id}) }}">{{ headerTeacher.nickname }}</a>
+	        班主任：<a href="{{ path('user_show', {id:headTeacher.id}) }}">{{ headTeacher.nickname }}</a>
 	    </span>
 	    {% endif %}
 	</div>
