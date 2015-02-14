@@ -236,7 +236,6 @@ define(function(require, exports, module) {
 	
  		$('#order-create-btn').click(function(){
  			var coinToPay = $('#coinPayAmount').val();
- 			console.log(coinToPay);
  			if ((coinToPay.length > 0)&&(!isNaN(coinToPay))&&(coinToPay > 0)){
  				$("#js-order-create-sms-btn").trigger("click");
  				return false;
