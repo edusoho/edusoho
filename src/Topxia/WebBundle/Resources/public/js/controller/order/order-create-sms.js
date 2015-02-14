@@ -6,13 +6,18 @@ define(function(require, exports, module) {
 
     exports.run = function() {
     	var mobile = $('[name="mobile"]').val();
-    	var smsModalCodeValidator;
-    	
+
     	if (mobile.length > 0) {
 		    var smsSender = new SmsSender({
 		        smsType:'sms_user_pay'  
 		    });
 		    smsSender.takeEffect();
+
+	    	var smsModalCodeValidator = new Validator({
+	            element: '#js-sms-modal-form',
+	            // triggerType: 'change',
+	            autoSubmit: false
+	        });
 
 		    var refresh = function () {
 		    	smsModalCodeValidator = new Validator({
