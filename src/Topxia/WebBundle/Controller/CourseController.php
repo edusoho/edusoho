@@ -830,8 +830,6 @@ class CourseController extends BaseController
 			'status' => 'published'
 		);
 
-		$unEnabledCourseIds =$this->getClassroomCourseIds($request);
-
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions)
@@ -843,6 +841,9 @@ class CourseController extends BaseController
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+
+		$courseIds=ArrayToolkit::column($courses, 'id');
+		$unEnabledCourseIds =$this->getClassroomCourseIds($request,$courseIds);
 
 		$userIds = array();
 		foreach ($courses as &$course) {
@@ -863,28 +864,28 @@ class CourseController extends BaseController
 		));
 	}
 
-	private function getClassroomCourseIds($request)
+	private function getClassroomCourseIds($request,$courseIds)
 	{	
-		$courseIds=array();
+		$unEnabledCourseIds=array();
 		if($request->query->get('type') !="classroom")
-			return $courseIds;
+			return $unEnabledCourseIds;
 
 		$classroomId=$request->query->get('classroomId');
 
-	 	$courseIds=$this->getClassroomService()->findAllDistinctCourseIds();
-		$courseIds = ArrayToolkit::column($courseIds, "courseId");
         foreach ($courseIds as $key => $value) {
         	
         	$course=$this->getCourseService()->getCourse($value);
 
-        	if($course && $course['useInClassroom'] =="more" && !$this->getClassroomService()->getCourseByClassroomIdAndCourseId($classroomId,$value)){
+        	if($course && $course['useInClassroom'] =="more" && !$this->getClassroomService()->isCourseInClassroom($value, $classroomId)){
 
         		unset($courseIds[$key]);
         	}
 
         }
 
-        return $courseIds;
+        $unEnabledCourseIds=$courseIds;
+
+        return $unEnabledCourseIds;
 	}
 
     public function searchAction(Request $request)
@@ -893,8 +894,6 @@ class CourseController extends BaseController
         
         $conditions = array( "title"=>$key );
         $conditions['status'] = 'published';
-
-        $unEnabledCourseIds =$this->getClassroomCourseIds($request);
 
         $paginator = new Paginator(
 			$this->get('request'),
@@ -907,6 +906,9 @@ class CourseController extends BaseController
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+
+		$courseIds=ArrayToolkit::column($courses, 'id');
+		$unEnabledCourseIds =$this->getClassroomCourseIds($request,$courseIds);
 
 		$userIds = array();
 		foreach ($courses as &$course) {
