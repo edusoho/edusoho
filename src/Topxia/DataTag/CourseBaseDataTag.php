@@ -153,8 +153,8 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             $courseRelation['User'] = $user;
 
             $courseId = $courseRelation['courseId'];
-            // $course = $courses[$courseId];
-            // $courseRelation['course'] = $course;
+            $course = $courses[$courseId];
+            $courseRelation['course'] = $course;
         }
 
         return $courseRelations;
