@@ -320,9 +320,9 @@ class CourseManageController extends BaseController
         $classroomApp = $this->getAppService()->findInstallApp('Classroom');
         if(!empty($classroomApp)){
 
-            $findClassroomIds =  ArrayToolkit::column($this->getClassroomService()->findClassroomIds($course['id']),'classroomId');
+            $findClassroomsByCourseId =  ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($course['id']),'classroomId');
 
-            foreach ($findClassroomIds as $key => $value) 
+            foreach ($findClassroomsByCourseId as $key => $value) 
             {
                        $this->getClassroomService()->updateClassroomTeachers($value);
             }
