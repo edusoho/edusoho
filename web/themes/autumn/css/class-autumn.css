@@ -370,6 +370,9 @@ a:focus {
   right: 0;
   top: 0;
 }
+.class-join-header-bottom {
+  margin-top: -10px;
+}
 .class-join-header-bottom .class-freebuy {
   padding: 5px 30px;
   text-align: center;
@@ -417,6 +420,7 @@ a:focus {
 .class-header-bottom {
   color: #999;
   text-align: center;
+  margin-top: -10px;
 }
 .class-header-bottom .class-course ul {
   float: left;
@@ -831,9 +835,14 @@ a:focus {
   font-size: 18px;
   margin: 5px 0;
 }
-.class-dashbord-sidebar .teacher-name .fa {
+.class-dashbord-sidebar .teacher-name .icon {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
   margin-left: 10px;
-  color: #999;
+  width: 13px;
+  height: 18px;
+  background: url("../img/class_teacher.png") no-repeat;
 }
 .class-dashbord-sidebar .teacher-position {
   line-height: 24px;
