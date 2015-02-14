@@ -5,8 +5,9 @@
 
 {% block body %}
 {% if showSms %}  
-      <div class="form-group">
-        <div class="controls row" >
+    <form id = "js-sms-modal-form">
+      <div class = "form-group">
+        <div class = "controls row" >
           <div class = "col-md-5 col-md-offset-2" >
             <label class="control-label">已绑定手机号码 {{ verifiedMobile }}</label>
           </div>
@@ -17,7 +18,7 @@
         <br>
         <div class="controls row" >
           <div class = "col-md-5 col-md-offset-2" >
-            <input type="text" class="form-control" id="sms_code_modal" name="sms_code_modal" data-explain="输入短信验证码" required="required" placeholder="输入短信验证码">
+            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal" {# data-explain="输入短信验证码" #} required="required" placeholder="输入短信验证码">
           </div>
           <div class="col-md-5">
             <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
@@ -25,7 +26,13 @@
               <span id="js-fetch-btn-text">获取短信验证码{# 秒后重新获取 #}</span>
            </span> 
           </div>
+          <div class="col-md-12 col-md-offset-2">
+            <div class="help-block"></div> 
+          </div>
         </div>
+
+      </div>
+    </form>
 {% else %}
     <h3 style="">&nbsp;&nbsp;您还未绑定手机号，<a class="text-success" href="{{path('settings_bind_mobile')}}" target="_blank">去绑定</a></h3>  
 {% endif %}

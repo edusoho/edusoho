@@ -81,10 +81,9 @@
             <div class="form-group pay">
               <div class="pull-right controls">
                 {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %} 
-                  <span class="btn btn-fat btn-primary" id="order-create-btn" data-toggle="modal" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" > 提交订单{# 短信验证码 #} </span>
-                {% else %}  
-                  <button class="btn btn-fat btn-primary" id="order-create-btn" type="submit">提交订单</button>
-                {% endif %}                
+                  <span class="btn btn-fat btn-primary" id="js-order-create-sms-btn" data-toggle="modal" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" style="display: none;">提交订单</span>
+                {% endif %} 
+                <button class="btn btn-fat btn-primary" id="order-create-btn" type="submit">提交订单</button>          
               </div>
             </div>
 

@@ -233,5 +233,15 @@ define(function(require, exports, module) {
  			$('[role="cash-discount"]').text("0.00");
  		}
  		shouldPay(totalPrice);
+	
+ 		$('#order-create-btn').click(function(){
+ 			var coinToPay = $('#coinPayAmount').val();
+ 			console.log(coinToPay);
+ 			if ((coinToPay.length > 0)&&(!isNaN(coinToPay))&&(coinToPay > 0)){
+ 				$("#js-order-create-sms-btn").trigger("click");
+ 				return false;
+ 			}
+ 			return true;
+ 		});
 	}
 });
