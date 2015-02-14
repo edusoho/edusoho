@@ -510,7 +510,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
-
+        
         return $conditions;
     }
 
