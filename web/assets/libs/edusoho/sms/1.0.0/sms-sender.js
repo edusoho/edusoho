@@ -51,7 +51,8 @@ define(function(require, exports, module) {
 		    	validator.addItem({
 		            element: '[name="sms_code"]',
 		            required: true,
-		            rule: 'integer constLength{len:6}'            
+		            rule: 'integer constLength{len:6}',
+		            display: '短信验证码'           
 		        });
 		    }
 
