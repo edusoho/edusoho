@@ -3,8 +3,8 @@ define(function(require, exports, module) {
     var SmsSender = require('../widget/sms-sender');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-
-        makeValidator = function(type) {
+        var validator;
+        var makeValidator = function(type) {
             if (("undefined" != typeof validator)&&("undefined" != typeof validator.destroy)){
                 validator.destroy();
             }

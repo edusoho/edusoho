@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 	var Validator = require('bootstrap.validator');
 	require('common/validator-rules').inject(Validator);
 
-	validator = new Validator({
+	var validator = new Validator({
         element: '#apply-sms-form',
         autoSubmit: false,
         onFormValidated: function(error, results, $form) {
@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 
     });
 
-	refresh = function () {
+	var refresh = function () {
 		validator.destroy();
 		validator = new Validator({
 	        element: '#apply-sms-form',
@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 	}
 
     $('#modal').on('shown.bs.modal', function () {
-		setTimeout('refresh()',500); 
+		setTimeout(refresh,500); 
     });
 
     refresh();

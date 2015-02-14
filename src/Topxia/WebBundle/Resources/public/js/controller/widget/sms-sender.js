@@ -27,10 +27,10 @@ define(function(require, exports, module) {
     		return this;
     	},
     	takeEffect: function () {
-    		validator = this.get("validator");
-    		smsType = this.get("smsType");
-    		hasMobile = this.get("hasMobile");
-    		hasNickname = this.get("hasNickname");
+    		var validator = this.get("validator");
+    		var smsType = this.get("smsType");
+    		var hasMobile = this.get("hasMobile");
+    		var hasNickname = this.get("hasNickname");
 
 	    	if (hasMobile){	
 	    		validator.addItem({
@@ -56,18 +56,18 @@ define(function(require, exports, module) {
 		        });
 		    }
 
-	    	refreshTimeLeft = function() { 
+	    	var refreshTimeLeft = function() { 
 	        	var leftTime = $('#js-time-left').html();
 	        	$('#js-time-left').html(leftTime-1);
 	        	if (leftTime-1 > 0) {
-	        		setTimeout("refreshTimeLeft()", 1000);
+	        		setTimeout(refreshTimeLeft, 1000);
 	        	}else{
 	        		$('#js-time-left').html('');
 			        $('#js-fetch-btn-text').html('获取短信验证码');
 	        	}
 	        }
 
-	        postData = function(){
+	        var postData = function(){
 	        	var url = $('.js-sms-send').data('url');
 	        	var data = {};
 	        	
