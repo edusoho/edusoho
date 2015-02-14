@@ -349,7 +349,7 @@ class CourseController extends BaseController
 		$classroom = $this->getAppService()->findInstallApp('Classroom');
 		$classrooms=array();
 		if ($classroom) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomIds($id),'classroomId');
+			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
 		}
 		foreach ($classroomIds as $key => $value) {
 			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
@@ -781,7 +781,7 @@ class CourseController extends BaseController
 		foreach ($courses as $key => $course) {
 			$userIds = array_merge($userIds, $course['teacherIds']);
 
-			$classrooms=$this->getClassroomService()->findClassroomIds($course['id']);
+			$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
 
 			$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 
