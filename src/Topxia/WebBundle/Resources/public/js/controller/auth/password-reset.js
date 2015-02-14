@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         makeValidator = function(type) {
-            if ("undefined" != typeof validator){
+            if (("undefined" != typeof validator)&&("undefined" != typeof validator.destroy)){
                 validator.destroy();
             }
 
