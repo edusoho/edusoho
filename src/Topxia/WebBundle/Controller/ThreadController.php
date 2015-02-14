@@ -78,18 +78,22 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function subpostsAction(Request $request, $target, $thread, $parentId)
+    public function subpostsAction(Request $request, $threadId, $postId)
     {
+        $thread = $this->getThreadService()->getThread($threadId);
+
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->findPostsCountByParentId($parentId),
-            2
+            $this->getThreadService()->findPostsCountByParentId($postId),
+            10
         );
-        $posts = $this->getThreadService()->findPostsByParentId($parentId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $thread['id'], 'postId' => $postId)));
+
+        $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         return $this->render("TopxiaWebBundle:Thread:subposts.html.twig", array(
-            'target' => $target,
             'thread' => $thread,
             'posts' => $posts,
             'users' => $users,

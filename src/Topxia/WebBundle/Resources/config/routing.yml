@@ -1520,8 +1520,12 @@ course_buy_modify_user_info:
 
 thread_post_reply:
     pattern:  /thread/{threadId}/post/{postId}/
-    defaults: { _controller: TopxiaWebBundle:Order:create }
+    defaults: { _controller: TopxiaWebBundle:Thread:postReply }
     methods: [POST]
+
+thread_post_subposts:
+    pattern:  /thread/{threadId}/post/{postId}/subposts
+    defaults: { _controller: TopxiaWebBundle:Thread:subposts }
 
 #占位
 vip:

@@ -4,7 +4,7 @@
   <ul class="media-list thread-post-list thread-subpost-list">
     {% for post in posts  %}
       {% set author = users[post.userId] %}
-      <li id="post-{{ post.id }}" class="thread-post thread-subpost media">
+      <li id="post-{{ post.id }}" class="thread-post thread-subpost media {% if loop.index > 5 %}{%  %}">
         <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
           <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
         </a>

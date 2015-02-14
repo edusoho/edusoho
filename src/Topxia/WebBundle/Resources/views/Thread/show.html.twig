@@ -58,7 +58,7 @@
               {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
             </div>
             {% if post.subposts %}
-              {{ render(controller('TopxiaWebBundle:Thread:subposts', {request:app.request, target:target, thread:thread, parentId:post.id})) }}
+              {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId, postId:post.id})) }}
             {% endif %}
           </div>
         </li>
