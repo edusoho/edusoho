@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}课程学员{% endblock %}
+{% block title %}{{'课程学员'|trans}}{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
 
@@ -15,9 +15,9 @@
 
         {% if app.user.id != user.id %}
           <div class="pull-right">
-            <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
-            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-            <button class="btn btn-default btn-sm send-message-btn" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+            <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>{{'关注'|trans}}</button>
+            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>{{'已关注'|trans}}</button>
+            <button class="btn btn-default btn-sm send-message-btn" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
           </div>
         {% endif %}
 
@@ -27,7 +27,7 @@
           <p class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(8) }})</p>
         {% endif %}
         {% if canManage %}
-          <div class="progress" title="已学{{ progress.number }}课时">
+          <div class="progress" title="{{'已学'|trans}}{{ progress.number }}{{'课时'|trans}}">
             <div class="progress-bar" style="width: {{ progress.percent }}">
             </div>
           </div>
@@ -35,7 +35,7 @@
       </div>
     </li>
   {% else  %}
-    <li>本课程暂时还没有学生</li>
+    <li>{{'本课程暂时还没有学生'|trans}}</li>
   {% endfor %}
 </ul>
 

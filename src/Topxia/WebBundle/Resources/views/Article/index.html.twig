@@ -5,7 +5,7 @@
   {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
 
   {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
-    <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
+    <div class="alert alert-warning">{{'头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性'|trans}}<a href="{{ path('admin_article') }}">{{'前往设置'|trans}}</a></div>
   {% endif %}
   
   {% if featuredArticles %}
@@ -34,7 +34,7 @@
           </div>
           {% if article.thumb %}
             <a class="pull-right article-picture-link hidden-xs" href="{{ path('article_detail', { id:article.id }) }}">
-              <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="资讯缩略图">
+              <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="{{'资讯缩略图'|trans}}">
             </a>
           {% endif %}
           <div class="media-body">
@@ -45,7 +45,7 @@
       {% endfor %}
     </ul>
   {% else %}
-    <div class="empty tac text-muted mvl">还没有任何资讯</div>
+    <div class="empty tac text-muted mvl">{{'还没有任何资讯'|trans}}</div>
   {% endif %}
   {{ web_macro.paginator(paginator) }}
 

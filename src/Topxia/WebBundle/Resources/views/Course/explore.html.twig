@@ -2,24 +2,24 @@
 
 {% set siteNav = 'course/explore' %}
 
-{% block title %}{% if not category.id %}全部课程{% else %}{{ category.name }} 课程{% endif %} 第{{ app.request.get('page', 1)}}页- {{ parent() }}{% endblock %}
+{% block title %}{% if not category.id %}{{'全部课程'|trans}}{% else %}{{ category.name }} {{'课程'|trans}}{% endif %} {{'第'|trans}}{{ app.request.get('page', 1)}}{{'页'|trans}}- {{ parent() }}{% endblock %}
 
 {% block keywords %}{% if category.id %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
-{% block description %}{% if category.id %}{{category.name}}的{% endif %}课程列表，第{{ app.request.get('page', 1)}}页。{% endblock %}
+{% block description %}{% if category.id %}{{category.name}}{{'的'|trans}}{% endif %}{{'课程列表，第'|trans}}{{ app.request.get('page', 1)}}{{'页。'|trans}}{% endblock %}
 
 {% block content %}
 
 <div class="es-row-wrap container-gap">
   <div class="row">
     <div class="col-md-12">
-      <div class="page-header"><h1>课程</h1></div>
+      <div class="page-header"><h1>{{'课程'|trans}}</h1></div>
     </div>
   </div>
 
   <div class="row row-3-9">
     <div class="col-md-3">
       <ul class="nav nav-pills nav-stacked">
-        <li {% if not category.id %}class="active"{% endif %}><a href="{{ path('course_explore') }}">全部</a></li>
+        <li {% if not category.id %}class="active"{% endif %}><a href="{{ path('course_explore') }}">{{'全部'|trans}}</a></li>
         {% for cat in categories %}
           <li {% if category.id == cat.id %}class="active"{% endif %}>
             <a href="{{ path('course_explore', {category:cat.code|default(cat.id)}) }}">
@@ -38,16 +38,16 @@
         </div>
       {% endif %}
       <div class="category-filters">
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="selected"{% endif %}>最新</a>        
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}" {% if sort == 'popular' %}class="selected"{% endif %}>热门</a>
-        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommendedSeq'}) }}" {% if sort == 'recommendedSeq' %}class="selected"{% endif %}>推荐</a>
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}" {% if sort == 'latest' %}class="selected"{% endif %}>{{'最新'|trans}}</a>        
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}" {% if sort == 'popular' %}class="selected"{% endif %}>{{'热门'|trans}}</a>
+        <a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommendedSeq'}) }}" {% if sort == 'recommendedSeq' %}class="selected"{% endif %}>{{'推荐'|trans}}</a>
       </div>
 
       {% if courses %}
         {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
         {{ web_macro.paginator(paginator) }} 
       {% else %}
-        <div class="empty">该分类下无课程</div>
+        <div class="empty">{{'该分类下无课程'|trans}}</div>
       {% endif %}
     </div>
   </div>

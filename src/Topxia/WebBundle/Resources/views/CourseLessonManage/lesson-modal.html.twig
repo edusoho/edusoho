@@ -5,7 +5,7 @@
 
 
 {% block title %}
-  {% if lesson %}编辑课时{{ lesson.number }}{% else %}添加课时{% endif %}
+  {% if lesson %}{{'编辑课时'|trans}}{{ lesson.number }}{% else %}{{'添加课时'|trans}}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -20,7 +20,7 @@
   >
 
   <div class="form-group" {% if lesson %}style="display:none;"{% endif %}>
-    <div class="col-md-2 control-label"><label>类型</label></div>
+    <div class="col-md-2 control-label"><label>{{'类型'|trans}}</label></div>
     <div class="col-md-9 controls">
       <div class="radios">
         {{ radios('type', dict('lessonType'), field_value(lesson, 'type')|default('video')) }}
@@ -29,7 +29,7 @@
   </div>
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}" >
-    <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
     <div class="col-md-9 controls">
       <div class="row">
         <div class="col-md-10">
@@ -37,7 +37,7 @@
         </div>
         <div class="col-md-2">
           <div class="checkbox">
-            <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> 免费课时</label>
+            <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}</label>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
   </div>
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
-    <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-summary-field">{{'摘要'|trans}}</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
 
     </div>
@@ -55,13 +55,13 @@
 
 
 
-    <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">{{'内容'|trans}}</label></div>
     <div class="col-md-9 controls">
       
       {% if draft|default(false) %}
       <a id ="see-draft-btn" class="btn btn-link" data-url="{{path('course_draft_view')}}" >
         <small>
-        您有一段自动保存内容，继续编辑请点击
+        {{'您有一段自动保存内容，继续编辑请点击'|trans}}
         </small>
       </a>
       {% endif %}
@@ -71,8 +71,8 @@
   </div>
 
   <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type{% endif %}">
-    <div class="col-md-2 control-label for-video-type"><label>视频</label></div>
-    <div class="col-md-2 control-label for-audio-type"><label>音频</label></div>
+    <div class="col-md-2 control-label for-video-type"><label>{{'视频'|trans}}</label></div>
+    <div class="col-md-2 control-label for-audio-type"><label>{{'音频'|trans}}</label></div>
     <div class="col-md-2 control-label for-ppt-type"><label>PPT</label></div>
     <div class="col-md-9 controls">
       {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" %}
@@ -83,29 +83,29 @@
   <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-ppt-type{% endif %}">
     <div class="col-md-offset-2 col-md-9">
       <div class="alert alert-info">
-        <p>PPT文档需要EduSoho云转换后才能在浏览器中显示，请先开启EduSoho云。</p>
-        <p>如尚未购买EduSoho云服务，请联系<a href="http://www.edusoho.com/service" target="_blank"><strong>EduSoho官方</strong></a>购买。</p>
+        <p>{{'PPT文档需要EduSoho云转换后才能在浏览器中显示，请先开启EduSoho云。'|trans}}</p>
+        <p>{{'如尚未购买EduSoho云服务，请联系'|trans}}<a href="http://www.edusoho.com/service" target="_blank"><strong>{{'EduSoho官方'|trans}}</strong></a>{{'购买。'|trans}}</p>
         </div>
     </div>
   </div>
 
   <div class="form-group for-video-type for-audio-type" id="lesson-length-form-group">
-      <div class="col-md-2 control-label for-video-type"><label>视频时长</label></div>
-      <div class="hide"><label for="lesson-length-field">视频时长或</label></div>
-      <div class="col-md-2 control-label for-audio-type"><label for="lesson-length-field">音频时长</label></div>
+      <div class="col-md-2 control-label for-video-type"><label>{{'视频时长'|trans}}</label></div>
+      <div class="hide"><label for="lesson-length-field">{{'视频时长或'|trans}}</label></div>
+      <div class="col-md-2 control-label for-audio-type"><label for="lesson-length-field">{{'音频时长'|trans}}</label></div>
     <div class="col-md-9 controls">
-      <input class="form-control width-input width-input-small" id="lesson-minute-field" type="text" name="minute" value="{{ field_value(lesson, 'minute') }}">分
-      <input class="form-control width-input width-input-small" id="lesson-second-field" type="text" name="second" value="{{ field_value(lesson, 'second') }}">秒
-      <div class="help-block">时长必须为整数。</div>
+      <input class="form-control width-input width-input-small" id="lesson-minute-field" type="text" name="minute" value="{{ field_value(lesson, 'minute') }}">{{'分'|trans}}
+      <input class="form-control width-input width-input-small" id="lesson-second-field" type="text" name="second" value="{{ field_value(lesson, 'second') }}">{{'秒'|trans}}
+      <div class="help-block">{{'时长必须为整数。'|trans}}</div>
     </div>
   </div>
 
   {% if 'lesson_credit' in features %}
   <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
-    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">学分</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">{{'学分'|trans}}</label></div>
     <div class="col-md-9 controls">
-      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> 分
-      <div class="help-block">学完此课时，可获得的学分</div>
+      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> {{'分'|trans}}
+      <div class="help-block">{{'学完此课时，可获得的学分'|trans}}</div>
     </div>
   </div>
   {% endif %}
@@ -121,8 +121,8 @@
 
 {% endblock %}
 {% block footer %}
-    <button type="button" class="btn btn-link" data-dismiss="modal" id="cancel-btn">取消</button>
-    <button id="course-lesson-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal" id="cancel-btn">{{'取消'|trans}}</button>
+    <button id="course-lesson-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}{{'保存'|trans}}{% else %}{{'添加'|trans}}{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

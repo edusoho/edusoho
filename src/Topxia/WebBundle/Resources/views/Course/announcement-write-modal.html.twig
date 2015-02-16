@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{% if announcement.id %}编辑{% else %}添加{% endif %}公告{% endblock %}
+{% block title %}{% if announcement.id %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{{'公告'|trans}}{% endblock %}
 
 {% block body %}
 	<form id="announcement-write-form" method="post"
@@ -13,13 +13,13 @@
 
 		<div class="form-group">
 			<div class="controls">
-				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容">{{ announcement.content }}</textarea>
+				<textarea class="form-control" id="announcement-content-field" name="content" data-display="{{'公告内容'|trans}}">{{ announcement.content }}</textarea>
 			</div>
 		</div>
 		{% if not announcement.id %}
 		<div class="checkbox">
     		<label>
-      			<input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的学员
+      			<input type="checkbox" name="notify" value="notify"> {{'发送系统通知给该课程的学员'|trans}}
     		</label>
 		</div>
 		{% endif %}
@@ -33,6 +33,6 @@
 
 {% endblock %}
 {% block footer %}
-	<button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-	<button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">保存</button>
+	<button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+	<button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">{{'保存'|trans}}</button>
 {% endblock %}

@@ -8,7 +8,7 @@
   {% if user %}
     <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
   {% else %}
-    <span class="text-muted">用户已删除</span>
+    <span class="text-muted">{{'用户已删除'|trans}}</span>
   {% endif %}
 {% endmacro %}
 
@@ -47,18 +47,18 @@
   {% if paginator.lastPage > 1 %}
     <ul  class="pagination">
       {% if paginator.currentPage == paginator.firstPage %}
-        <li class="disabled"><span>上一页</span></li>
+        <li class="disabled"><span>{{'上一页'|trans}}</span></li>
       {% else %}
-        <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">上一页</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">{{'上一页'|trans}}</a></li>
       {% endif %}
       {% for page in paginator.pages %}
         <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
       {% endfor %}
 
       {% if paginator.currentPage == paginator.lastPage %}
-        <li class="disabled"><span>下一页</span></li>
+        <li class="disabled"><span>{{'下一页'|trans}}</span></li>
       {% else %}
-        <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">下一页</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">{{'下一页'|trans}}</a></li>
       {% endif %}
     </ul>
   {% endif %}

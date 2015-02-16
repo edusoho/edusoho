@@ -7,16 +7,16 @@
     <div class="course-body">
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
       {% if course.serializeMode=='serialize' %}
-        <span class="label label-success ">更新中</span>
+        <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode=='finished' %}
-        <span class="label label-warning ">已完结</span>
+        <span class="label label-warning ">{{'已完结'|trans}}</span>
       {% endif %}
       {% if course.type == 'live' %}
           {% set lesson = course['lesson']|default(null) %}
           {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-            <span class="label label-warning series-mode-label">正在直播中</span>
+            <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
           {% else %}
-            <span class="label label-success series-mode-label">直播</span>
+            <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
           {% endif %}
       {% endif %}
       </h4>
@@ -25,8 +25,8 @@
         {% set lesson = course.lesson|default(null) %}
         {% if lesson %}
           <div class="live-course-lesson mbm">
-            <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+            <span class="text-success fsm mrm">{{ lesson.startTime|date('n{{'月'|trans}}j{{'日'|trans}} H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted fsm mrm">{{'第{{ lesson.number }}课时'|trans}}</span>
           </div>
         {% endif %}
       {% else %}
@@ -46,7 +46,7 @@
           <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
           <span class="divider"></span>
           {% if course.showStudentNumType == 'opened' %}
-          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{'学员'|trans}}</span>
           {% endif %}
           {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
             <span class="free-money-text"><del>{{ course.price }}</del></span>
@@ -54,21 +54,21 @@
           <span class="course-price">
             {% if course.price > 0 %}
               {% if free_limit_type(course) == 'free_now' %}
-                0.00 元
+                0.00 {{'元'|trans}}
               {% else %}
-               价格： {{ course.price }}元
+               {{'价格：'|trans}} {{ course.price }}{{'元'|trans}}
               {% endif %}  
-            {% else %}免费{% endif %}
+            {% else %}{{'免费'|trans}}{% endif %}
           </span>
           <div class="countdown-list">
             {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
           </div>
           {% if free_limit_type(course) == 'free_now' %}
            <span class="text-muted text-sm">
-            到期时间
-            <span>{{course.freeEndTime|date('n')}}</span>月
-            <span>{{course.freeEndTime|date('d')}}</span>日
-            <span>{{course.freeEndTime|date('H')}}</span>时
+            {{'到期时间'|trans}}
+            <span>{{course.freeEndTime|date('n')}}</span>{{'月'|trans}}
+            <span>{{course.freeEndTime|date('d')}}</span>{{'日'|trans}}
+            <span>{{course.freeEndTime|date('H')}}</span>{{'时'|trans}}
           </span>
            {% endif %}
 

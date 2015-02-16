@@ -8,7 +8,7 @@
 	</td>
 	<td>
 		{{ web_macro.user_link(student) }} <br>
-		<small class="text-muted">{{ paperResult.endTime|date("Y年n月d日 H:i") }} {{ '交卷'|trans }}</small>
+		<small class="text-muted">{{ paperResult.endTime|date("Y{{'年'|trans}}n{{'月'|trans}}d{{'日'|trans}} H:i") }} {{ '交卷'|trans }}</small>
 	</td>
 	<td>
 		{% if status == 'reviewing' %}
@@ -19,7 +19,7 @@
 		  <div>
 		  	<div class="text-warning">{{ '总分'|trans }} <strong>{{ paperResult.score }}</strong> {{ '分'|trans }}</div>
 				<div class="text-muted"><small>{{ '客观题'|trans }}{{ paperResult.objectiveScore }}{{ '分'|trans }} / {{ '主观题'|trans }}{{ paperResult.subjectiveScore }}{{ '分'|trans }}</small></div>
-				<div class="text-success"><small>{{ teacher.nickname|default('系统') }} {{ '批于'|trans }}{{ paperResult.checkedTime|date("Y年n月d日 H:i") }}</small></div>
+				<div class="text-success"><small>{{ teacher.nickname|default('系统') }} {{ '批于'|trans }}{{ paperResult.checkedTime|date("Y{{'年'|trans}}n{{'月'|trans}}d{{'日'|trans}} H:i") }}</small></div>
 		  </div>
 		{% endif %}
 	</td>

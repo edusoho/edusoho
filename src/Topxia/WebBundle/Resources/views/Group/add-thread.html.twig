@@ -79,7 +79,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">插入隐藏内容</h4>
+        <h4 class="modal-title" id="myModalLabel">{{'插入隐藏内容'|trans}}</h4>
       </div>
       <div class="modal-body">
           
@@ -87,7 +87,7 @@
 
         <div class="row form-group">
           <div class="col-md-4 control">
-            <label class="control-label"> 请输入要隐藏的内容:</label>
+            <label class="control-label"> {{'请输入要隐藏的内容'|trans}}:</label>
           </div>
           <div class="col-md-7 controls">
             <textarea class="form-control" rows="3" id="text"> </textarea>
@@ -97,7 +97,7 @@
 
         <div class="row form-group">
           <div class="col-md-4 control">
-            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name}}:</label>
+            <label for="amount" class="control-label"> {{'查看所需'|trans}}{{setting('coin').coin_name}}:</label>
           </div>
           <div class="col-md-3 controls">
              <input name="amount" class="form-control" tyoe="text" id="amount"/>
@@ -108,10 +108,10 @@
       </form>
       </div>
       <div class="modal-footer">
-          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name}}会在扣除80%之后添加到您的账户
+          <div class="pull-left text-muted">{{'隐藏话题获得的{{setting('coin').coin_name}}会在扣除80%之后添加到您的账户'|trans}}
           </div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" id="insert">插入</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</button>
+        <button type="button" class="btn btn-primary" id="insert">{{'插入'|trans}}</button>
       </div>
     </div>
   </div>

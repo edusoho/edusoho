@@ -7,31 +7,31 @@
   {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'info'} %}
 
   <dl class="course-infos" style="width:100%">
-    <dt>简介</dt>
+    <dt>{{'简介'|trans}}</dt>
     <dd >{{ course.about|raw }}</dd>
 
     {% if category %}
-    <dt>分类</dt>
+    <dt>{{'分类'|trans}}</dt>
     <dd>
       <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
     </dd>
     {% endif %}
 
     {% if course.tags %}
-      <dt>标签</dt>
+      <dt>{{'标签'|trans}}</dt>
       <dd>
         <ul class="list-inline">
           {% for tag in tags %}
             <li><a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a></li>
           {% else %}
-            <li>暂无标签</li>
+            <li>{{'暂无标签'|trans}}</li>
           {% endfor %}
         </ul>
       </dd>
     {% endif %}
 
     {% if course.goals %}
-      <dt>课程目标</dt>
+      <dt>{{'课程目标'|trans}}</dt>
       <dd>
         <ul>
           {% for goal in course.goals %}
@@ -42,7 +42,7 @@
     {% endif %}
 
     {% if course.audiences %}
-      <dt>适合人群</dt>
+      <dt>{{'适合人群'|trans}}</dt>
       <dd>
         <ul>
           {% for audience in course.audiences %}

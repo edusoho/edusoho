@@ -33,15 +33,15 @@
 
       {% if is_feature_enabled('group_reward') %}
         {% if threadMain.type == 'reward' and threadMain.rewardCoin > 0 %}
-          <span class="label label-danger">奖</span>
-          <span style="color:#d9534f;" class="mll"> 悬赏:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
+          <span class="label label-danger">{{'奖'|trans}}</span>
+          <span style="color:#d9534f;" class="mll"> {{'悬赏'|trans}}:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
         {% endif %}
       {% endif %}
       </h2>
       <div class="actions thread-list" id="thread-list" >
             {% if threadMain.userId != user.id %}
-              <a class="btn btn-link uncollect-btn" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> 已收藏</a>
-              <a class="btn btn-link  collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
+              <a class="btn btn-link uncollect-btn" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> {{'已收藏'|trans}}</a>
+              <a class="btn btn-link  collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>{{'收藏'|trans}}</a>
             {% endif %}
       </div>
       <div class="metas">
@@ -54,11 +54,11 @@
       {{threadMain.content|raw}}
       {% if attachs %}
           <hr>
-          <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+          <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
           <div class="row clearfix mtm">
           {% for attach in attachs %}
 
-                  <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
+                  <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：'|trans}}{{attach.description}}{% endif %}  {{'上传于'|trans}} {{files[attach.fileId].createdTime|smart_time}}">
                     {% if attach.coin > 0  and   user.id != attach.userId and app.user %}
                       <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
                     {% else %}
@@ -77,11 +77,11 @@
                         <div class="content" style="color: #999;font-size:11px;">
                           {{files[attach.fileId].size|file_size}}
                           {% if attach.coin > 0 %}
-                            <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                            <span class="mls">{{'售价'|trans}}:{{attach.coin}}{{setting('coin').coin_name}}</span>
                             {% else %}
-                            <span class="mls">免费</span>
+                            <span class="mls">{{'免费'|trans}}</span>
                           {% endif %}
-                          <br>下载次数：{{attach.hitNum}}
+                          <br>{{'下载次数：'|trans}}{{attach.hitNum}}
                         </div>
                     </div>
                   </div> 
@@ -106,7 +106,7 @@
           {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
           {% else %}
             {% if app.user %}
-            <a class="btn btn-link" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_hide',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-eye-open"></span> 查看隐藏内容</a>
+            <a class="btn btn-link" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_hide',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-eye-open"></span> {{'查看隐藏内容'|trans}}</a>
             {% endif %}
           {% endif %}
           
@@ -138,13 +138,13 @@
             {% if is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
               {% if threadMain.type == 'reward' and  threadMain.rewardCoin > 0 %}
                   {% if not isAdopt %}
-                  <a id="cancelReward" title="取消悬赏" class="btn btn-link"
-                href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> 取消悬赏</a>
+                  <a id="cancelReward" title="{{'取消悬赏'|trans}}" class="btn btn-link"
+                href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> {{'取消悬赏'|trans}}</a>
                   {% endif %}
               {% else %}
                   {% if threadMain.type == 'default' %}
-                  <a id="rewardCoin"  title="悬赏" class="btn btn-link"
-                  href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  悬赏</a>
+                  <a id="rewardCoin"  title="{{'悬赏'|trans}}" class="btn btn-link"
+                  href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  {{'悬赏'|trans}}</a>
                 {% endif %}
               {% endif %}
             {% endif %}
@@ -164,7 +164,7 @@
       {% if isAdopt %}
       <div class="panel panel-default group-post-list">
         <div class="panel-heading" style="color:#d9534f;">
-          最佳回答
+          {{'最佳回答'|trans}}
         </div>
         <div class="panel-body">
             <ul class="media-list">
@@ -223,7 +223,7 @@
                 {% if is_feature_enabled('group_reward') %}
                   {% if not isAdopt and threadMain.type == "reward" %}
                     {% if is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="确定采纳这条回复" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">采纳</a>
+                      <a title="{{'确定采纳这条回复'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'采纳'|trans}}</a>
                     {% endif %}
                   {% endif %}
                 {% endif %}
@@ -261,12 +261,12 @@
             </div>
           {% if postAttachs[post.id] %}
           <hr>
-          <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+          <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
           <div class="row clearfix mtm">
           {% for attach in postAttachs[post.id] %}
 
                   {% set postFile = postFiles[post.id] %}
-                  <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{postFile[attach.fileId].createdTime|smart_time}}">
+                  <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：'|trans}}{{attach.description}}{% endif %}  {{'上传于'|trans}} {{postFile[attach.fileId].createdTime|smart_time}}">
                     {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
                       <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
                     {% else %}
@@ -284,14 +284,14 @@
                         <div class="content" style="color: #999;font-size:11px;">
                           {{postFile[attach.fileId].size|file_size}}
                           {% if attach.coin > 0 %}
-                            <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                            <span class="mls">{{'售价'|trans}}:{{attach.coin}}{{setting('coin').coin_name}}</span>
                             {% else %}
-                            <span class="mls">免费</span>
+                            <span class="mls">{{'免费'|trans}}</span>
                           {% endif %}
-                          <br>下载次数：{{attach.hitNum}}
+                          <br>{{'下载次数：'|trans}}{{attach.hitNum}}
                         </div>
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                  <a title="确定删除此附件" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">删除</a>
+                  <a title="{{'确定删除此附件'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'删除'|trans}}</a>
                 {% endif %}
                     </div>
                   </div> 
