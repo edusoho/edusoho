@@ -1044,7 +1044,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
-        $total = count($tempCourses);
+        $total = $total - count($tempCourses);
         $result = array(
             "start" => $start,
             "limit" => $limit,
