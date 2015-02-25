@@ -1019,8 +1019,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
         
         $count = $this->controller->getCourseService()->searchLearnCount(array(
-            "userId" => $user["id"],
-            "endTime"=>0
+            "userId" => $user["id"]
         ));
         $learnStatusArray = $this->controller->getCourseService()->searchLearns(array(
             "userId" => $user["id"]
@@ -1031,27 +1030,26 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
         
-        $tempCourse = array();
+        $tempCourses = array();
         foreach ($courses as $key => $course) {
-            $tempCourse[$course["id"]] = $course;
-        }
-        
-        $resultCourse = array();
-        foreach ($lessons as $key => $lesson) {
-            $courseId = $lesson["courseId"];
-            if (isset($tempCourse[$courseId])) {
-                $tempCourse[$courseId]["lastLessonTitle"] = $lesson["title"];
-                if($tempCourse[$courseId]['type'] != "live"){
-                    $resultCourse[$courseId] = $tempCourse[$courseId];
-                }
+            if ($course['type'] != "live") {
+                $tempCourses[$course["id"]] = $course;
             }
         }
-        unset($tempCourse);
+        
+        foreach ($lessons as $key => $lesson) {
+            $courseId = $lesson["courseId"];
+            if (isset($tempCourses[$courseId])) {
+                $tempCourses[$courseId]["lastLessonTitle"] = $lesson["title"];
+            }
+        }
+
+        $total = count($tempCourses);
         $result = array(
             "start" => $start,
             "limit" => $limit,
             "total" => $total,
-            "data" => $this->controller->filterCourses(array_values($resultCourse))
+            "data" => $this->controller->filterCourses(array_values($tempCourses))
         );
 
         return $result;
