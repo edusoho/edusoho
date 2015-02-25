@@ -16,15 +16,12 @@ class EduCloudController extends BaseController
         $loginToken = $this->getAppService()->getLoginToken();
         $hasAccount = isset($loginToken["token"]);
 
-        $money = '--';
         try {
-            $result = $this->getAccounts();
+            $account = $this->getAccount();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
         }
-        if (isset($result['cash'])) {
-            $money = $result['cash'];
-        }
+        $money = isset($account['cash']) ? $account['cash'] : '--';
 
         $smsStatus = array();
         try {
@@ -176,9 +173,9 @@ class EduCloudController extends BaseController
         return null;
     }
 
-    private function getAccounts()
+    private function getAccount()
     {
-        return $this->getEduCloudService()->getAccounts();
+        return $this->getEduCloudService()->getAccount();
     }
 
     private function applyForSms($name = 'smsHead')

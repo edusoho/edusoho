@@ -82,12 +82,11 @@ class EduCloudController extends BaseController
             try {
                 $result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
                 if (isset($result['error'])) {
-                    $serializedResult = serialize($result);
-                    return $this->createJsonResponse(array('error' => "发送失败|{$serializedResult}"));
+                    return $this->createJsonResponse(array('error' => "发送失败, {$result['error']}"));
                 }
             } catch (\RuntimeException $e) {
-                $serializedResult = serialize($result);
-                return $this->createJsonResponse(array('error' => "发送失败|{$serializedResult}"));
+                $message = $e->getMessage();
+                return $this->createJsonResponse(array('error' => "发送失败, {$message}"));
             }
 
             $this->getLogService()->info('sms', 'sms', "对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);

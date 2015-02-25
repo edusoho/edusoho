@@ -3,7 +3,7 @@ namespace Topxia\Service\EduCloud;
 
 interface EduCloudService
 {
-    public function getAccounts();
+    public function getAccount();
 
     public function applyForSms($name = 'smsHead');
 
