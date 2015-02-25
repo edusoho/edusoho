@@ -258,7 +258,7 @@ define(function(require, exports, module) {
             },"有效期必须大于等于当前日期"
         ],
         [
-            'constLength',
+            'fixedLength',
             function(options) {
                 var element = options.element;
                 var l = element.val().length;
