@@ -238,8 +238,8 @@ class ThreadController extends BaseController
             case 'question':
                 $conditions['type'] = 'question';
                 break;
-            case 'elite':
-                $conditions['isElite'] = 1;
+            case 'nice':
+                $conditions['nice'] = 1;
                 break;
             default:
                 break;

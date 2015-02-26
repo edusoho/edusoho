@@ -24,7 +24,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function findEliteThreadsByType($type, $status, $start, $limit)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE type = ? AND isElite = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+		$sql = "SELECT * FROM {$this->table} WHERE type = ? AND nice = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($type, $status)) ? : array();
 	}
 
@@ -112,7 +112,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			->andWhere('userId = :userId')
 			->andWhere('type = :type')
 			->andWhere('sticky = :isStick')
-			->andWhere('nice = :isElite')
+			->andWhere('nice = :nice')
 		            ->andWhere('postNum = :postNum')
 		            ->andWhere('postNum > :postNumLargerThan')
 			->andWhere('title LIKE :title')
