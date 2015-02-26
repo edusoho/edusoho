@@ -1,41 +1,14 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div class="thread-subpost-container clearfix">
-  <ul class="media-list thread-post-list thread-subpost-list">
-    {% for post in posts  %}
-      {% set author = users[post.userId] %}
-      <li id="post-{{ post.id }}" class="thread-post thread-subpost media {% if loop.index > 5 %}{%  %}">
-        <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
-          <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
-        </a>
-        <div class="media-body">
-          <div class="metas">
-            {% include 'TopxiaWebBundle:Thread:post-manage-menu.html.twig' %}
-            <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
-            <span class="bullet">•</span>
-            <span class="text-muted">{{post.createdTime|smart_time}} </span>
-          </div>
-          <div class="thread-post-content">{{ post.content|raw }}</div>
-          {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
+<ul class="media-list thread-post-list thread-subpost-list">
+  {% for post in posts  %}
+    {% set author = users[post.userId] %}
+    {% include 'TopxiaWebBundle:Thread:subpost-item.html.twig' %}
+  {% endfor %}
+</ul>
 
+{% if less %}
+  {{ web_macro.paginator(paginator, 'pagination-sm hide') }}
+{% else %}
   {{ web_macro.paginator(paginator, 'pagination-sm') }}
-
-  <div class="thread-subpost-morebar clearfix">
-    <button class="btn btn-default btn-xs pull-right">我也要说</button>
-    <span class="text-muted">还有5条回复，</span><a href="#">点击查看</a>
-  </div>
-
-  <form method="post" action="" class="thread-subpost-form hide">
-    <div class="form-group">
-      <textarea class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-      <button class="btn btn-primary btn-sm pull-right">发表</button>
-    </div>
-  </form>
-
-</div>
+{% endif %}

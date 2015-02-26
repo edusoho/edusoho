@@ -1,17 +1,14 @@
 {% if app.user %}
-  <form id="post-thread-form" class="post-thread-form thread-form" method="post" post-url="{{path(target.type ~ '_thread_post', {(target.type ~ 'Id'): target.id, threadId:thread.id})}}">
-    <div class="form-group">
-        <label class="control-label hide" for="post_content">回复内容</label>
-        <div class="controls">
-        <textarea name="content" value="" rows="10" id="post_content" class="form-control"></textarea>
-        </div>
-    </div>
+  <form class="thread-post-form" method="post" action="{{path('thread_post', {threadId:threadId})}}">
     <div class="form-group">
       <div class="controls">
-      <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
+        <textarea id="thread-{{ threadId }}-post-form" name="content" value="" rows="10" id="post_content" class="form-control" data-display="回复内容"></textarea>
       </div>
     </div>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group clearfix">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <button class="btn btn-primary pull-right" type="submit" data-loading-text="正在回复">发表</button>
+    </div>
   </form>
 {% else %}
   <div class="empty">

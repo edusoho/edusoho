@@ -27,7 +27,11 @@ interface ThreadPostDao
 
 	public function updatePost($id, array $fields);
 
+	public function wavePost($id, $field, $diff);
+
 	public function deletePost($id);
 
 	public function deletePostsByThreadId($threadId);
+
+	public function deletePostsByParentId($parentId);
 }

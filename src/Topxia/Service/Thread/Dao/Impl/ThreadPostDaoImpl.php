@@ -85,6 +85,16 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getPost($id);
 	}
 
+    public function wavePost($id, $field, $diff)
+    {
+        $fields = array('subposts', 'ups');
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+        }
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+    }
+
 	public function deletePost($id)
 	{
 		return $this->getConnection()->delete($this->table, array('id' => $id));
@@ -95,6 +105,12 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $sql ="DELETE FROM {$this->table} WHERE threadId = ?";
         return $this->getConnection()->executeUpdate($sql, array($threadId));
 	}
+
+    public function deletePostsByParentId($parentId)
+    {
+        $sql ="DELETE FROM {$this->table} WHERE parentId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($parentId));
+    }
 
 	public function searchPosts($conditions,$orderBy,$start,$limit)
 	{

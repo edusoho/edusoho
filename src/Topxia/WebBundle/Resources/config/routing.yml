@@ -1518,6 +1518,10 @@ course_buy_modify_user_info:
     pattern: /course/buy/modify_user_info
     defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
 
+thread_post:
+    pattern:  /thread/{threadId}/post
+    defaults: { _controller: TopxiaWebBundle:Thread:post }
+
 thread_post_reply:
     pattern:  /thread/{threadId}/post/{postId}/
     defaults: { _controller: TopxiaWebBundle:Thread:postReply }
@@ -1526,6 +1530,36 @@ thread_post_reply:
 thread_post_subposts:
     pattern:  /thread/{threadId}/post/{postId}/subposts
     defaults: { _controller: TopxiaWebBundle:Thread:subposts }
+
+thread_post_delete:
+    pattern:  /thread/{threadId}/post/{postId}/delete
+    defaults: { _controller: TopxiaWebBundle:Thread:postDelete }
+    methods: [POST]
+
+thread_delete:
+    pattern: /thread/{threadId}/delete
+    defaults: { _controller: TopxiaWebBundle:Thread:delete }
+    methods: [POST]
+
+thread_set_sticky:
+    pattern: /thread/{threadId}/set_sticky
+    defaults: { _controller: TopxiaWebBundle:Thread:setSticky }
+    methods: [POST]
+
+thread_cancel_sticky:
+    pattern: /thread/{threadId}/cancel_sticky
+    defaults: { _controller: TopxiaWebBundle:Thread:cancelSticky }
+    methods: [POST]
+
+thread_set_nice:
+    pattern: /thread/{threadId}/set_nice
+    defaults: { _controller: TopxiaWebBundle:Thread:setNice }
+    methods: [POST]
+
+thread_cancel_nice:
+    pattern: /thread/{threadId}/cancel_nice
+    defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
+    methods: [POST]
 
 #占位
 vip:

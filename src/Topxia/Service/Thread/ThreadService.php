@@ -86,11 +86,9 @@ interface ThreadService
 
 	public function findPostsCountByParentId($parentId);
 
-	public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0);
+	public function createPost($fields);
 
-	public function updatePost($id, $fields);
-
-	public function deletePost($postId,$threadId);
+	public function deletePost($postId);
 
 	public function searchPostsCount($conditions);
 

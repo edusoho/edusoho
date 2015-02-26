@@ -897,11 +897,12 @@ body {
 
 .thread-subpost-morebar {
 	margin-top: 10px;
-	padding-bottom: 10px;
+	margin-bottom: 10px;
 	font-size: 13px;
 }
 
 .thread-subpost-form {
+	margin-top: 10px;
 }
 
 .thread-subpost-list {

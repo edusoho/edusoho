@@ -27,7 +27,7 @@
               by {{ web_macro.user_link(author, 'link-muted') }}
 
               {% if thread.postNum > 0 %}
-                {% set poster = users[thread.lastPostMemberId] %}
+                {% set poster = users[thread.lastPostUserId] %}
                 <span class="bullet">•</span>
                 <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
               {% endif %}

@@ -30,7 +30,7 @@ class ThreadController extends BaseController
 
         $userIds = array_merge(
             ArrayToolkit::column($threads, 'userId'),
-            ArrayToolkit::column($threads, 'lastPostMemberId')
+            ArrayToolkit::column($threads, 'lastPostUserId')
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -78,7 +78,7 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function subpostsAction(Request $request, $threadId, $postId)
+    public function subpostsAction(Request $request, $threadId, $postId, $less = false)
     {
         $thread = $this->getThreadService()->getThread($threadId);
 
@@ -93,11 +93,13 @@ class ThreadController extends BaseController
         $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        return $this->render("TopxiaWebBundle:Thread:subposts.html.twig", array(
+        return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
+            'parentId' => $postId,
             'thread' => $thread,
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,
+            'less' => $less
         ));
     }
 
@@ -146,230 +148,82 @@ class ThreadController extends BaseController
     public function deleteAction(Request $request, $target, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
-
         $this->getThreadService()->deleteThread($threadId);
-
-        $user = $this->getCurrentUser();
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='#' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除");
 
         return $this->createJsonResponse(true);
     }
 
-    public function setStickyAction(Request $request, $target, $threadId)
+    public function setStickyAction(Request $request, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->setThreadSticky($threadId);
-        $user = $this->getCurrentUser();
-
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
-        
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>设为置顶");
 
         return $this->createJsonResponse(true);
     }
 
-    public function cancelStickyAction(Request $request, $target, $threadId)
+    public function cancelStickyAction(Request $request, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->cancelThreadSticky($threadId);
-        $user = $this->getCurrentUser();
-
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
-
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>取消置顶");
-
 
         return $this->createJsonResponse(true);
     }
 
-    public function niceAction(Request $request, $target, $threadId)
+    public function setNiceAction(Request $request, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->setThreadNice($threadId);
-        $user = $this->getCurrentUser();
-
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
-
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>加精");
-
 
         return $this->createJsonResponse(true);
     }
 
-    public function cancelNiceAction(Request $request, $target, $threadId)
+    public function cancelNiceAction(Request $request, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->cancelThreadNice($threadId);
-        $user = $this->getCurrentUser();
-
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
-
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>取消加精");
-
 
         return $this->createJsonResponse(true);
     }
 
-    public function postAction(Request $request, $target, $thread)
+    public function postAction(Request $request, $threadId)
     {
         $user = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
-            $postContent=$request->request->all();
+            $fields = $request->request->all();
+            $fields['threadId'] = $threadId;
 
-            $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
-            $content=array(
-            'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
+            $post = $this->getThreadService()->createPost($fields);
 
-            if(isset($postContent['parentId'])){
-                 $post=$this->getThreadService()->createPost($content,$target['type'], $target['id'], $user['id'], $thread['id'], $postContent['parentId']);
-            }else{
-                $post=$this->getThreadService()->createPost($content,$target['type'], $target['id'], $user['id'],$thread['id']);
-            }
-
-            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id"=> $target['id'],  'threadId' => $thread['id']), true);
-            $url=$this->getPost($target['type'] ,$post['id'],$thread['id'],$target['id']);
-
-
-            if ($thread['userId'] != $user->id) {
-                $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
-            }
-
-            if (empty($fromUserId) && !empty($postContent['postId'])) {
-                $post = $this->getThreadService()->getPost($postContent['postId']);
-                    if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
-                        $this->getNotifiactionService()->notify($post['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
-                    }
-            }
-
-            if (!empty($fromUserId) && $fromUserId != $user->id && $fromUserId != $thread['userId']) {
-                $this->getNotifiactionService()->notify($postContent['fromUserId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$url}' target='_blank'>点击查看</a>");
-            }
-
-            return new Response($url);
+            return $this->render('TopxiaWebBundle:Thread:post-item.html.twig' , array(
+                'post' => $post,
+                'author' => $this->getCurrentUser(),
+            ));
         }
 
         return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
-            'target' => $target,
-            'thread' => $thread,
+            'threadId' => $threadId,
         ));
 
     }
 
-    private function getPost($targetType,$parentId,$threadId,$id)
-    {   
-        $post=$this->getThreadService()->getPost($id,$parentId);
-
-        if($post['parentId']!=0)$parentId=$post['parentId'];
-        $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$parentId,'parentId'=>0));
-
-        $page=floor(($count)/30)+1;
-
-        $url=$this->generateUrl( $targetType . '_thread_show',array("{$targetType}Id" => $id, 'threadId'=>$threadId));
-
-        $url=$url."?page=$page#post-$parentId";
-        return $url;
-    }
-
-
-    public function postReplyAction(Request $request,$targetType,$parentId)
-    {   
-        $postReplyAll=array();
-
-        $replyCount=$this->getThreadService()->searchPostsCount(array('parentId'=>$parentId));
-
-        $postReplyPaginator = new Paginator(
-                $this->get('request'),
-                $replyCount,
-                10  
-            );
-
-        $postReply=$this->getThreadService()->searchPosts(array('parentId'=>$parentId),array('createdTime','asc'),
-                $postReplyPaginator->getOffsetCount(),
-                $postReplyPaginator->getPerPageCount());
-
-        if($postReply){
-                $postReplyAll=array_merge($postReplyAll,ArrayToolkit::column($postReply, 'userId'));
-        }
-        $postReplyMembers=$this->getUserService()->findUsersByIds($postReplyAll);
-        return $this->render('TopxiaWebBundle:Thread:thread-reply-list.html.twig',array(
-            'postMain' => array('id'=>$parentId),
-            'postReply'=>$postReply,
-            'postReplyMembers'=>$postReplyMembers,
-            'postReplyCount'=>$replyCount,
-            'postReplyPaginator'=>$postReplyPaginator,
-            'targetType' =>$targetType,
-            ));
-    }
-
-    public function postUpdateAction(Request $request, $target, $thread, $post)
+    public function postReplyAction(Request $request, $threadId, $postId)
     {
-        $user = $this->getCurrentUser();
+        $fields = $request->request->all();
+        $fields['content'] = $this->autoParagraph($fields['content']);
+        $fields['threadId'] = $threadId;
+        $fields['parentId'] = $postId;
+        $post = $this->getThreadService()->createPost($fields);
 
-        if ($request->getMethod() == 'POST') {
-
-            $post = $this->getThreadService()->updatePost($post['id'], $request->request->all());
-
-            // $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
-            // $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
-
-            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
-                "{$target['type']}Id" => $target['id'],
-                'threadId' => $post['threadId'],
-            )));
-        }
-
-        return $this->render('TopxiaWebBundle:Thread:post-update.html.twig', array(
-            'target' => $target,
-            'thread' => $thread,
+        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig',array(
             'post' => $post,
+            'author' => $this->getCurrentUser(),
         ));
-
     }
 
-    public function postDeleteAction(Request $request, $target, $thread, $post)
+    public function postDeleteAction(Request $request, $threadId, $postId)
     {
-        $this->getThreadService()->deletePost($post['id'],$thread['id']);
-        $user = $this->getCurrentUser();
-
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-        $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
-
-        $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除。");
-        $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除。");
-
+        $this->getThreadService()->deletePost($postId);
         return $this->createJsonResponse(true);
-    }
-
-    public function questionBlockAction(Request $request, $course)
-    {
-        $threads = $this->getThreadService()->searchThreads(
-            array('courseId' => $course['id'], 'type'=> 'question'),
-            'createdNotStick',
-            0,
-            8
-        );
-
-        return $this->render('TopxiaWebBundle:CourseThread:question-block.html.twig', array(
-            'course' => $course,
-            'threads' => $threads,
-        ));
-    }
-
-    private function createPostForm($data = array())
-    {
-        return $this->createNamedFormBuilder('post', $data)
-            ->add('content', 'textarea')
-            ->add('targetId', 'hidden')
-            ->add('threadId', 'hidden')
-            ->add('targetType', 'hidden')
-            ->add('parentId', 'hidden')
-            ->getForm();
     }
 
     protected function getThreadService()
@@ -393,23 +247,28 @@ class ThreadController extends BaseController
         return $conditions;
     }
 
+
+    /**
+     * This function is from Cakephp TextHelper Class
+     */
+    private function autoParagraph($text)
+    {
+        if (trim($text) !== '') {
+            $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
+            $text = '';
+            foreach ($texts as $txt) {
+                $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
+            }
+            $text = preg_replace('|<p>\s*</p>|', '', $text);
+        }
+        return $text;
+    }
+
     private function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    protected function getVipService()
-    {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-    } 
-
-    protected function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom.ClassroomService');
-    }
-
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
 }

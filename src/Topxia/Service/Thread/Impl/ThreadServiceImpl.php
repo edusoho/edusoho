@@ -316,105 +316,58 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->findPostsCountByParentId($parentId);
     }
 
-    public function createPost($threadContent,$targetType,$targetId,$memberId,$threadId,$parentId=0)
-    {          
-                        // $targetId = empty($threadContent['targetId']) ? $targsetId : $threadContent['targetId'];
-                        $thread = $this->getThread($targetId, $threadId);
+    public function createPost($fields)
+    {
+        $user = $this->getCurrentUser();
+        $thread = $this->getThread($fields['threadId']);
 
-                        if (empty($threadContent['content'])) {
-                            throw $this->createServiceException("回复内容不能为空！");
-                        }
-                        $threadContent['content']=$this->purifyHtml($threadContent['content']);
-                        $threadContent['userId']=$memberId;
-                        $threadContent['fromUserId']=$threadContent['fromUserId'];
-                        $threadContent['createdTime']=time();
-                        $threadContent['threadId']=$threadId;
-                        $threadContent['parentId']=$parentId;
-                        $threadContent['targetType']=$targetType;
-                        $threadContent['targetId']=$targetId;
-                        $post=$this->getThreadPostDao()->addPost($threadContent);  
-                        
-                        // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
-                        $threadFields = array(
-                            'postNum' => $thread['postNum'] + 1,
-                            'lastPostMemberId' => $threadContent['userId'],
-                            'lastPostTime' => $threadContent['createdTime'],
-                            'updateTime' => time(),
-                        );
-                        $this->getThreadDao()->updateThread($thread['id'], $threadFields);
-                        
-                        return $post;
+        $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['userId'] = $user['id'];
+        $fields['createdTime'] = time();
+        $fields['targetType'] = $thread['targetType'];
+        $fields['targetId'] = $thread['targetId'];
+        $fields['parentId'] = empty($fields['parentId']) ? 0 : intval($fields['parentId']);
+        if ($fields['parentId'] > 0) {
+            $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
+            if (empty($parent) or ($parent['threadId'] != $fields['threadId'])) {
+                throw $this->createServiceException("parentId参数不正确！");
+            }
 
-
-
-
-        $requiredKeys = array('targetId', 'threadId', 'content');
-        if (!ArrayToolkit::requireds($post, $requiredKeys)) {
-            throw $this->createServiceException('参数缺失');
+            $this->getThreadPostDao()->wavePost($parent['id'], 'subposts', 1);
         }
 
-        $thread = $this->getThread($post['targetId'], $post['threadId']);
-        if (empty($thread)) {
-            throw $this->createServiceException(sprintf('课程(ID: %s)话题(ID: %s)不存在。', $post['courseId'], $post['threadId']));
+        $post = $this->getThreadPostDao()->addPost($fields);
+
+        if ($post['parentId'] == 0) {
+            $threadFields = array(
+                'postNum' => $thread['postNum'] + 1,
+                'lastPostUserId' => $post['userId'],
+                'lastPostTime' => $post['createdTime'],
+            );
+            $this->getThreadDao()->updateThread($thread['id'], $threadFields);
         }
-
-        // list($course, $member) = $this->getCourseService()->tryTakeCourse($post['targetId']);
-
-        $post['userId'] = $this->getCurrentUser()->id;
-        // $post['isElite'] = $this->getCourseService()->isCourseTeacher($post['targetId'], $post['userId']) ? 1 : 0;
-        $post['createdTime'] = time();
-
-        //创建post过滤html
-        $post['content'] = $this->purifyHtml($post['content']);
-        $post['parentId']=$parentId;
-        $post = $this->getThreadPostDao()->addPost($post);
-
-        // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
-        $threadFields = array(
-            'postNum' => $thread['postNum'] + 1,
-            'lastPostMemberId' => $post['userId'],
-            'lastPostTime' => $post['createdTime'],
-            'updateTime' => time(),
-        );
-        $this->getThreadDao()->updateThread($thread['id'], $threadFields);
 
         return $post;
     }
 
-    public function updatePost($id, $fields)
-    {                        
-        $post = $this->getPost($id);
-        if (empty($post)) {
-            throw $this->createServiceException("回帖#{$id}不存在。");
-        }
-
-        $user = $this->getCurrentUser();
-
-        $fields  = ArrayToolkit::parts($fields, array('content'));
-        if (empty($fields)) {
-            throw $this->createServiceException('参数缺失。');
-        }
-
-        //更新post过滤html
-        $fields['content'] = $this->purifyHtml($fields['content']);
-
-        return $this->getThreadPostDao()->updatePost($id, $fields);
-    }
-
-    public function deletePost($postId,$threadId)
+    public function deletePost($postId)
     {
         $post = $this->getPost($postId);
         if (empty($post)) {
-            throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $id));
+            throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $postId));
         }
 
-        $this->getThreadPostDao()->deletePost($post['id']);
-        $this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
+        $thread = $this->getThread($post['threadId']);
+        if (!empty($thread)) {
+        }
 
-         $threadFields = array(
-                            'updateTime' => time(),
-        );
-        $this->getThreadDao()->updateThread($threadId, $threadFields);
+        $this->getThreadPostDao()->deletePostsByParentId($post['id']);
+        $this->getThreadPostDao()->deletePost($post['id']);
+        if ($post['parentId'] > 0) {
+            $this->getThreadPostDao()->wavePost($post['parentId'], 'subposts', -1);
+        } else {
+            $this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
+        }
     }
 
     public function searchPostsCount($conditions)

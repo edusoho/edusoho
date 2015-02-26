@@ -1,4 +1,11 @@
 <div class="thread-post-interaction">
-  <a href="javascript:;" class="js-thumbs-up interaction text-muted"><span class="glyphicon glyphicon-thumbs-up"></span> ({{ post.ups }})</a>
-  <a href="javascript:;" class="js-reply interaction text-muted"><span class="glyphicon glyphicon-comment"></span> 回复{% if post.subposts %}({{ post.subposts }}){% endif %}</a>
+  <a href="javascript:;" class="js-thumbs-up interaction text-muted">
+    <span class="glyphicon glyphicon-thumbs-up"></span> ({{ post.ups }})
+  </a>
+  <a href="javascript:;" class="js-reply interaction text-muted"><span class="glyphicon glyphicon-comment hide"></span>
+    回复
+    {% if not post.parentId %}
+      <span class="subposts-num-wrap {% if not post.subposts %}hide{% endif %}">(<span class="subposts-num">{{ post.subposts }}</span>)</span>
+    {% endif %}
+  </a>
 </div>
