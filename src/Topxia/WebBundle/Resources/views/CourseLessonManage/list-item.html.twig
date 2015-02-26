@@ -3,7 +3,7 @@
 	<div class="item-content">
 	  {% set mediaStatus = lesson.mediaStatus|default(null) %}
 
-		{% if lesson.type in ['video', 'live'] %}
+		{% if lesson.type == 'video' %}
 		  {% if mediaStatus == 'waiting' %}
 			<i class="fa fa-file-video-o text-warning"></i>
 		  {% elseif mediaStatus == 'doing' %}
@@ -13,14 +13,26 @@
 		  {% else %}
 			<i class="fa fa-file-video-o text-success"></i>
 		  {% endif %}
-			{% elseif lesson.type == 'audio' %}
+		{% elseif lesson.type == 'live' %}
+		  {% if mediaStatus == 'waiting' %}
+			<i class="fa fa-video-camera text-warning"></i>
+		  {% elseif mediaStatus == 'doing' %}
+			<i class="fa fa-video-camera text-info"></i>
+		  {% elseif mediaStatus == 'error' %}
+			<i class="fa fa-video-camera text-danger"></i>
+		  {% else %}
+			<i class="fa fa-video-camera text-success"></i>
+		  {% endif %}
+		{% elseif lesson.type == 'audio' %}
 			<i class="fa fa-file-audio-o text-success"></i>
-			{% elseif lesson.type == 'testpaper' %}
+		{% elseif lesson.type == 'testpaper' %}
 			<i class="fa fa-file-text-o text-success"></i>
-			{% elseif lesson.type == 'text' %}
+		{% elseif lesson.type == 'text' %}
 			<i class="fa fa-file-photo-o text-success"></i>
-			{% elseif lesson.type == 'courseware' %}
+		{% elseif lesson.type == 'document' %}
 			<i class="fa fa-files-o text-success"></i>
+		{% elseif lesson.type == 'flash' %}
+			<i class="fa fa-film text-success"></i>
 		{% else %}
 			<i class="fa fa-file-powerpoint-o text-success"></i>
 		{% endif %}

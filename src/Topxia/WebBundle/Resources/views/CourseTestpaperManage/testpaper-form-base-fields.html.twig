@@ -8,7 +8,7 @@
 <div class="form-group">
   <div class="col-md-2 control-label"><label for="testpaper-description-field">试卷说明</label></div>
   <div class="col-md-8 controls">
-    <textarea class="form-control" id="testpaper-description-field" name="description">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
+    <textarea class="form-control" id="testpaper-description-field" name="description" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
   </div>
 </div>
 

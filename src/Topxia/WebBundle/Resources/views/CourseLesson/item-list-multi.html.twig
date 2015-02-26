@@ -25,6 +25,10 @@
 							<i class="fa fa-file-text-o"></i>
 						{% elseif item.type == 'document' %}
 							<i class="fa fa-files-o"></i>
+						{% elseif item.type == 'flash' %}
+							<i class="fa fa-film"></i>
+						{% elseif item.type == 'live' %}
+						<i class="fa fa-video-camera"></i>
 						{% endif %}
 						{% if item.status == 'published' %}
 							<span class="item-length">
@@ -38,6 +42,8 @@
 									PPT
 								{% elseif item.type == 'document' %}
 									文档
+								{% elseif item.type == 'flash' %}
+									Flash
 								{% else %}
 									{{ item.length|duration }}
 								{% endif %}

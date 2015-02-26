@@ -147,7 +147,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label">自我介绍</label>
 						<div class="col-md-7 controls">
-							<textarea name="profile[about]" rows="10" id="profile_about" class="form-control">{{ profile.about|default('') }}</textarea>
+							<textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ profile.about|default('') }}</textarea>
 						</div>
 					</div>
 

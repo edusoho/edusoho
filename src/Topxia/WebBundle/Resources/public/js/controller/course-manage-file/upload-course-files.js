@@ -28,12 +28,12 @@ define(function(require, exports, module) {
 		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
-				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx,doc,docx,pdf';
+				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx,doc,docx,pdf,swf';
 			} else {
 				extensions = 'mp3,mp4';
 			}
 		} else if (targetType == 'coursematerial') {
-			extensions = 'jpg,jpeg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx,pps,ods,odp,mp4,mp3,avi,flv,wmv,wma,zip,rar,gz,tar,7z';
+			extensions = 'jpg,jpeg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx,pps,ods,odp,mp4,mp3,avi,flv,wmv,wma,zip,rar,gz,tar,7z,swf';
 		}
 
 		var filters = [];
@@ -94,7 +94,9 @@ define(function(require, exports, module) {
 						if(targetType == 'courselesson' || targetType == 'materiallib' ){
 							if (file.type == 'audio/mpeg') {
 								data.convertor = '';
-							} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
+							} else if (file.type == 'application/x-shockwave-flash') {
+                				data.convertor = '';
+            				} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
 								data.convertor = 'ppt';
 								data.lazyConvert = 1;
 							} else if ( (file.type == 'application/msword') || (file.type == 'application/pdf') || (file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
