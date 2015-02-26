@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}你 - {{ parent() }}{% endblock %}
+
+{% set bodyClass = 'course-dashboard-page' %}
+
+
+{% block content %}
+
+<div class="container-gap course-dashboard-container">
+
+  <div class="row row-8-4">
+    <div class="col-md-8 course-dashboard-main">
+      {% block dashboard_main %}{% endblock %}
+    </div>
+    <div class="col-md-4 course-dashboard-side">
+      {% block dashboard_side %}{% endblock %}
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block bottom %}
+  <div id="course-modal" class="modal"></div>
+{% endblock %}
