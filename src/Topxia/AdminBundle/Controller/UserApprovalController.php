@@ -13,14 +13,16 @@ class UserApprovalController extends BaseController
 
     public function approvingAction(Request $request)
     {
+        $nickname = $request->query->get('nickname');
     	$paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->getUserCountByApprovalStatus('approving'),
+            $this->getUserService()->getUserCountByApprovalStatus('approving', $nickname),
             20
         );
 
     	$users = $this->getUserService()->getUsersByApprovalStatus(
             'approving',
+            $nickname,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -37,14 +39,16 @@ class UserApprovalController extends BaseController
     
     public function approvedAction(Request $request)
     {
+        $nickname = $request->query->get('nickname');
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->getUserCountByApprovalStatus('approved'),
+            $this->getUserService()->getUserCountByApprovalStatus('approved', $nickname),
             20
         );
 
         $users = $this->getUserService()->getUsersByApprovalStatus(
             'approved',
+            $nickname,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
