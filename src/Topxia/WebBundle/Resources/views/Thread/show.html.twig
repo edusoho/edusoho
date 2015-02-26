@@ -43,7 +43,9 @@
       <ul class="media-list thread-post-list thread-pripost-list">
         {% for post in posts %}
           {% set author = users[post.userId] %}
-            {% include 'TopxiaWebBundle:Thread:post-item.html.twig' %}
+          {% include 'TopxiaWebBundle:Thread:post-item.html.twig' %}
+        {% else %}
+          <li class="empty">一个回复都没有！</li>
         {% endfor %}
       </ul>
     </div>

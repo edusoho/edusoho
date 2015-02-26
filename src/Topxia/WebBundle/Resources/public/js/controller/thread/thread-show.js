@@ -174,7 +174,7 @@ define(function(require, exports, module) {
                         var pos = $list.find('li:last-child').offset();
                         $('body').scrollTop(pos.top);
                         that.$('.thread-post-num').text(parseInt(that.$('.thread-post-num').text()) + 1);
-
+                        $list.find('li.empty').remove();
                     }).error(function(){
                         $btn.button('reset');
                         Notify.danger('发表回复失败，请重试');
