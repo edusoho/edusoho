@@ -3053,6 +3053,10 @@ body {
 	margin: 15px 15px 0px 245px;
 }
 
+.courses-selected .course-body {
+	margin: 15px 15px 0px 300px;
+}
+
 @media (max-width: 600px) {
 	.course-wide-list .course-picture-link {
 		float: none;
