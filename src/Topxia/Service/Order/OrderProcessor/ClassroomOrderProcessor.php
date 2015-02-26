@@ -155,7 +155,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $courseIds = ArrayToolKit::column($courses, "id");
 
         $currentUser = $this->getUserService()->getCurrentUser();
-        $paidCourses = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+
+        $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+        $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
         $discountRate = $totalPrice/$coursesTotalPrice;
         foreach ($paidCourses as $key => $paidCourse) {
