@@ -205,14 +205,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', 0);
 	}
 
-	public function findUserLeaningCourseCount($userId)
+	public function findUserLeaningCourseCount($userId, $filters = array())
 	{
+		if (isset($conditions["type"])) {
+			return $this->getMemberDao()->findMemberCountByUserIdAndTypeAndIsLearned($userId, 'student', $conditions["type"], 0);
+		}
 		return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
 	}
 
-	public function findUserLeaningCourses($userId, $start, $limit)
+	public function findUserLeaningCourses($userId, $start, $limit, $filters = array())
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+		if (isset($conditions["type"])) {
+			$members = $this->getMemberDao()->findMembersByUserIdAndTypeAndIsLearned($userId, 'student', $conditions["type"], '0', $start, $limit);
+		} else {
+			$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+		}
 
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
@@ -229,14 +236,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $sortedCourses;
 	}
 
-	public function findUserLeanedCourseCount($userId)
+	public function findUserLeanedCourseCount($userId, $filters = array())
 	{
+		if (isset($conditions["type"])) {
+			return $this->getMemberDao()->findMemberCountByUserIdAndTypeAndIsLearned($userId, $conditions["type"], 1);
+		}
 		return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
 	}
 
-	public function findUserLeanedCourses($userId, $start, $limit)
+	public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '1', $start, $limit);
+		if (isset($conditions["type"])) {
+			$members = $this->getMemberDao()->findMembersByUserIdAndTypeAndIsLearned($userId, $conditions["type"], '1', $start, $limit);
+		} else {
+			$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '1', $start, $limit);
+		}
+
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 
 		$sortedCourses = array();
