@@ -65,7 +65,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchColumn($sql,array($userId, $role));
     }
 
-    public function findMemberCountByUserIdAndTypeAndIsLearned($userId, $role, $type, $isLearned)
+    public function findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
@@ -74,7 +74,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchColumn($sql,array($userId, $type, $isLearned, $role));
     }
 
-    public function findMembersByUserIdAndTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
+    public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
 
