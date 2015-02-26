@@ -123,7 +123,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     private function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+            return 0;
         }
 
         $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
