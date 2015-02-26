@@ -42,13 +42,13 @@ interface CourseService
 
 	public function findUserLearnCourseCount($userId);
  
-	public function findUserLeaningCourses($userId, $start, $limit);
+	public function findUserLeaningCourses($userId, $start, $limit, $conditions = array());
 
-	public function findUserLeaningCourseCount($userId);
+	public function findUserLeaningCourseCount($userId, $conditions = array());
 
-	public function findUserLeanedCourseCount($userId);
+	public function findUserLeanedCourseCount($userId, $conditions = array());
 
-	public function findUserLeanedCourses($userId, $start, $limit);
+	public function findUserLeanedCourses($userId, $start, $limit, $conditions = array());
 
 	public function findUserTeachCourseCount($userId, $onlyPublished = true);
 	
