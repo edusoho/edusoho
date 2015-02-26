@@ -384,6 +384,31 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     }
 
+    public function voteUpPost($id)
+    {
+        $user = $this->getCurrentUser();
+        $post = $this->getThreadPostDao()->getPost($id);
+
+        $existVote = $this->getThreadVoteDao()->getVoteByThreadIdAndPostIdAndUserId($post['threadId'], $post['id'], $user['id']);
+        if ($existVote) {
+            return array('status' => 'votedError');
+        }
+
+        $fields = array(
+            'threadId' => $post['threadId'],
+            'postId' => $post['id'],
+            'action' => 'up',
+            'userId' => $user['id'],
+            'createdTime' => time(),
+        );
+
+        $vote = $this->getThreadVoteDao()->addVote($fields);
+
+        $this->getThreadPostDao()->wavePost($post['id'], 'ups', 1);
+
+        return array('status' => 'ok');
+    }
+
     public function canAccess($permision, $resource)
     {
         $permisions = array(
@@ -435,6 +460,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     private function getThreadPostDao()
     {
         return $this->createDao('Thread.ThreadPostDao');
+    }
+
+    private function getThreadVoteDao()
+    {
+        return $this->createDao('Thread.ThreadVoteDao');
     }
 
     private function getUserService()

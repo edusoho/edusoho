@@ -1536,6 +1536,11 @@ thread_post_delete:
     defaults: { _controller: TopxiaWebBundle:Thread:postDelete }
     methods: [POST]
 
+thread_post_up:
+    pattern:  /thread/{threadId}/post/{postId}/up
+    defaults: { _controller: TopxiaWebBundle:Thread:postUp }
+    methods: [POST]
+
 thread_delete:
     pattern: /thread/{threadId}/delete
     defaults: { _controller: TopxiaWebBundle:Thread:delete }

@@ -226,6 +226,12 @@ class ThreadController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function postUpAction(Request $request, $threadId, $postId)
+    {
+        $result = $this->getThreadService()->voteUpPost($postId);
+        return $this->createJsonResponse($result);
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');

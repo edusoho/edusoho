@@ -92,5 +92,8 @@ interface ThreadService
 
 	public function searchPostsCount($conditions);
 
-	public function searchPosts($conditions,$orderBy,$start,$limit);
+	public function searchPosts($conditions, $orderBy, $start, $limit);
+
+	public function voteUpPost($id);
+
 }

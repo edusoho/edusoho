@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     require('ckeditor');
     var Widget = require('widget');
+    var Notify = require('common/bootstrap-notify');
 
     var ThreadShow = Widget.extend({
 
@@ -15,10 +16,10 @@ define(function(require, exports, module) {
             'click .js-post-more': 'onClickPostMore',
             'click .js-reply': 'onClickReply',
             'click .js-post-delete': 'onPostDelete',
+            'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
             'click .pagination a': 'onClickPagination',
-            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
-            'submit .thread-subpost-form': 'onSubmitSubpostForm',
+            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm'
         },
 
         setup:function() {
@@ -50,6 +51,20 @@ define(function(require, exports, module) {
                 }
                 $($btn.data('for')).remove();
             });
+        },
+
+        onPostUp: function(e) {
+            var $btn = $(e.currentTarget);
+            $.post($btn.data('url'), function(response) {
+                if (response.status == 'ok') {
+                    $btn.find(".post-up-num").text(parseInt($btn.find(".post-up-num").text()) + 1);
+                } else if (response.status == 'votedError') {
+                    Notify.danger('您已投过票了！');
+                } else {
+                    alert('投票失败，请重试！');
+                }
+            }, 'json');
+
         },
 
         onConfirmBtn: function(e) {
