@@ -1,12 +1,5 @@
 <div class="page-header"><h1>实名认证</h1>
 </div>
-<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
-    <div class="form-group">
-      <input type="text" id="nickname" name="nickname" class="form-control" value="{{app.request.query.get('nickname')}}" placeholder="用户名">
-    </div>
-
-    <button class="btn btn-primary">搜索</button>  
-</form>
 <ul class="nav nav-tabs">
   <li {% if submenu == 'approving' %} class="active" {% endif %} >
     <a  href="{{ path('admin_approval_approving') }}">审核中</a>
@@ -15,3 +8,11 @@
     <a  href="{{ path('admin_approval_approved') }}">审核成功</a>
   </li>
 </ul>
+<br>
+<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate="">
+    <div class="form-group">
+      <input type="text" id="nickname" name="nickname" class="form-control" value="{{app.request.query.get('nickname')}}" placeholder="用户名">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>  
+</form>
