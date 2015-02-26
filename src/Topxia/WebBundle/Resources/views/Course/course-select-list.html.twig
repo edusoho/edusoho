@@ -2,7 +2,7 @@
 <ul class="course-wide-list">
   {% if courses %}
   {% for course in courses %}
-  <li class="course-item clearfix" data-id="{{course.id}}">
+  <li class="course-item clearfix {% if course.id in unEnabledCourseIds %}enabled{% endif %}" data-id="{{course.id}}" >
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
       <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
     </a>
@@ -98,9 +98,15 @@
           </div>
         {% endif %}
 
+        {% if course.id in unEnabledCourseIds %}
+        <div class="course-metas unenabed-{{course.id}}">      
+          <span class="glyphicon glyphicon-remove pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
+        </div>
+        {% else %}
         <div class="course-metas-{{course.id}}" style="display:none;">        
           <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
         </div>
+        {% endif %}
       </div>
     </div>
   </li>

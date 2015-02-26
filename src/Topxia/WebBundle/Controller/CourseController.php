@@ -830,8 +830,6 @@ class CourseController extends BaseController
 			'status' => 'published'
 		);
 
-		$conditions =$this->filterCondition($conditions,$request);
-
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions)
@@ -843,6 +841,9 @@ class CourseController extends BaseController
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+
+		$courseIds=ArrayToolkit::column($courses, 'id');
+		$unEnabledCourseIds =$this->getClassroomCourseIds($request,$courseIds);
 
 		$userIds = array();
 		foreach ($courses as &$course) {
@@ -857,35 +858,33 @@ class CourseController extends BaseController
 			'url'=>$url,
 			'courses'=>$courses,
 			'type'=>$type,
+			'unEnabledCourseIds'=>$unEnabledCourseIds,
 			'classroomId'=>$classroomId,
 			'paginator'=>$paginator
 		));
 	}
 
-	private function filterCondition($conditions,$request)
+	private function getClassroomCourseIds($request,$courseIds)
 	{	
-		$courseIds=array();
+		$unEnabledCourseIds=array();
 		if($request->query->get('type') !="classroom")
-			return $conditions;
+			return $unEnabledCourseIds;
 
 		$classroomId=$request->query->get('classroomId');
 
-	 	$courseIds=$this->getClassroomService()->findAllDistinctCourseIds();
-		$courseIds = ArrayToolkit::column($courseIds, "courseId");
         foreach ($courseIds as $key => $value) {
         	
         	$course=$this->getCourseService()->getCourse($value);
-
-        	if($course && $course['useInClassroom'] =="more" && !$this->getClassroomService()->getCourseByClassroomIdAndCourseId($classroomId,$value)){
-
+        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
+        	if($course && ($course['useInClassroom'] =="more" || count($classrooms) == 0)){
         		unset($courseIds[$key]);
         	}
 
         }
 
-        $conditions=array_merge($conditions,array('courseIds'=>$courseIds));
+        $unEnabledCourseIds=$courseIds;
 
-        return $conditions;
+        return $unEnabledCourseIds;
 	}
 
     public function searchAction(Request $request)
@@ -894,8 +893,6 @@ class CourseController extends BaseController
         
         $conditions = array( "title"=>$key );
         $conditions['status'] = 'published';
-
-        $conditions =$this->filterCondition($conditions,$request);
 
         $paginator = new Paginator(
 			$this->get('request'),
@@ -909,6 +906,9 @@ class CourseController extends BaseController
 			$paginator->getPerPageCount()
 		);
 
+		$courseIds=ArrayToolkit::column($courses, 'id');
+		$unEnabledCourseIds =$this->getClassroomCourseIds($request,$courseIds);
+
 		$userIds = array();
 		foreach ($courses as &$course) {
 			$course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
@@ -920,6 +920,7 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
 			'users'=>$users,
 			'courses'=>$courses,
+			'unEnabledCourseIds'=>$unEnabledCourseIds,
 			'paginator'=>$paginator
 		));
     }

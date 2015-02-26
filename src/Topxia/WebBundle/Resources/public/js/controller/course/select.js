@@ -37,6 +37,10 @@ define(function(require, exports, module) {
 
             var id=$(this).data('id');
 
+            if($(this).hasClass('enabled')){
+                return;
+            }
+
             if($(this).hasClass('select')){
 
                 $(this).removeClass('select');

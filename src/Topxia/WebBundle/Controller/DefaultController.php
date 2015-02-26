@@ -57,7 +57,7 @@ class DefaultController extends BaseController
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
             }else{
-                $classroomTeacherIds=json_decode($classroom['teacherIds']);
+                $classroomTeacherIds=$classroom['teacherIds'];
             }
 
             $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
@@ -68,7 +68,7 @@ class DefaultController extends BaseController
         $coursesNum = array();
 
         foreach ($classroomIds as $key => $value) {
-            $classroomCourses=$this->getClassroomService()->getAllCourses($value);
+            $classroomCourses=$this->getClassroomService()->findCoursesByClassroomId($value);
             $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
 
             $courses=$this->getCourseService()->findCoursesByIds($courseIds);
