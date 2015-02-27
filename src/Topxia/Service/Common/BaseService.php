@@ -40,9 +40,9 @@ abstract class BaseService
         return ServiceKernel::dispatcher();
     }
 
-    protected function eventDispatch($eventName, $context)
+    protected function dispatchEvent($eventName, $subject)
     {
-        $event = new ServiceEvent($context);
+        $event = new ServiceEvent($subject);
         $this->getDispatcher()->dispatch($eventName, $event);
     }
 

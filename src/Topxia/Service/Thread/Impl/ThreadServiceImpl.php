@@ -179,6 +179,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->addThread($thread);
 
+        $this->dispatchEvent("thread.create", $thread);
+
         return $thread;
     }
 
@@ -216,6 +218,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
+
+        $this->dispatchEvent("thread.delete", $thread);
 
         $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
     }
@@ -360,6 +364,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getThreadDao()->updateThread($thread['id'], $threadFields);
         }
 
+        $this->dispatchEvent("thread.post.create", $post);
+
         return $post;
     }
 
@@ -383,6 +389,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         } else {
             $this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
         }
+
+        $this->dispatchEvent("thread.post.delete", $post);
     }
 
     public function searchPostsCount($conditions)

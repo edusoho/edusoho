@@ -147,7 +147,7 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function deleteAction(Request $request, $target, $threadId)
+    public function deleteAction(Request $request, $threadId)
     {
         $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->deleteThread($threadId);
