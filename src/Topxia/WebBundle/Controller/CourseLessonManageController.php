@@ -138,20 +138,11 @@ class CourseLessonManageController extends BaseController
 							  //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();                        
 						//else
 			$lessonId =0;
-        			$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
-		
-			$classroom = $this->getAppService()->findInstallApp('Classroom');
-			$classrooms=array();
-			if ($classroom) {
-				$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-			}
-			foreach ($classroomIds as $key => $value) {
-				$classroom=$this->getClassroomService()->getClassroom($value);
-				$lessonNum=$classroom['lessonNum']+1;
-				$this->getClassroomService()->updateClassroom($value,array("lessonNum"=>$lessonNum));
-			}
+        	$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
+			
+			$this->eventDispatch("course.lesson.create", array("courseId"=>$id, "lessonId"=>$lessonId));
 
-			  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
 				'file' => $file
@@ -453,16 +444,7 @@ class CourseLessonManageController extends BaseController
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 		
-		$classroom = $this->getAppService()->findInstallApp('Classroom');
-		$classrooms=array();
-		if ($classroom) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($courseId),'classroomId');
-		}
-		foreach ($classroomIds as $key => $value) {
-			$classroom=$this->getClassroomService()->getClassroom($value);
-			$lessonNum=$classroom['lessonNum']-1;
-			$this->getClassroomService()->updateClassroom($value,array("lessonNum"=>$lessonNum));
-		}
+		$this->eventDispatch("course.lesson.delete", array("courseId"=>$courseId, "lessonId"=>$lessonId));
 
 		return $this->createJsonResponse(true);
 	}
