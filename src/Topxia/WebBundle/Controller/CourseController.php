@@ -350,9 +350,9 @@ class CourseController extends BaseController
 		$classrooms=array();
 		if ($classroom) {
 			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-		}
-		foreach ($classroomIds as $key => $value) {
-			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
+			foreach ($classroomIds as $key => $value) {
+				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
+			}
 		}
 
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
