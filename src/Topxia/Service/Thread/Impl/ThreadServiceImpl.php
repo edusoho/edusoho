@@ -453,7 +453,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     private function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) or empty($resource['targetId'])) {
-            throw new InvalidArgumentException("Resource  targetType or targetId argument missing."); 
+            throw new \InvalidArgumentException("Resource  targetType or targetId argument missing."); 
         }
 
         $class = __NAMESPACE__ . "\\" . ucfirst($resource['targetType']) . 'ThreadFirewall';
