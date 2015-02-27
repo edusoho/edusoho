@@ -846,6 +846,29 @@ body {
 /**
  * <Thread模块样式>
  */
+
+.thread-show {
+
+}
+
+.thread-show .thread-breadcrumb {
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+
+.thread-show .thread-title {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 18px;
+	color: inherit;
+	font-weight: bold;
+	line-height: 1;
+}
+
+.thread-show .thread-metas {
+	margin-top: 6px;
+}
+
 .thread-post-list {
 
 }
