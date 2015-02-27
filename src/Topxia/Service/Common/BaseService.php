@@ -42,7 +42,12 @@ abstract class BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        $event = new ServiceEvent($subject);
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
+
         $this->getDispatcher()->dispatch($eventName, $event);
     }
 

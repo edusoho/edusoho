@@ -13,7 +13,7 @@ class ServiceKernel
 
     protected $_moduleDirectories = array();
 
-    protected $_moduleConfigs = array();
+    protected $_moduleConfig = array();
 
     protected $environment;
     protected $debug;
@@ -78,14 +78,14 @@ class ServiceKernel
         foreach ($finder as $dir) {
             $filepath = $dir->getRealPath() . '/module_config.php';
             if (file_exists($filepath)) {
-                $this->_moduleConfigs[] = include $filepath;
+                $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
             }
         }
 
-        foreach ($this->_moduleConfigs as $config) {
-            foreach (empty($config['event_subscriber']) ? array() : $config['event_subscriber'] as $class) {
-                $this->dispatcher()->addSubscriber(new $class());
-            }
+        $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
+
+        foreach ($subscribers as $subscriber) {
+            $this->dispatcher()->addSubscriber(new $subscriber());
         }
 
     }
@@ -193,9 +193,12 @@ class ServiceKernel
         $this->_moduleDirectories[] = $dir;
     }
 
-    public function getModuleConfigs()
+    public function getModuleConfig($key, $default = null)
     {
-        return $this->_moduleConfigs;
+        if (!isset($this->_moduleConfig[$key])) {
+            return $default;
+        }
+        return $this->_moduleConfig[$key];
     }
 
     private function getClassName($type, $name)
