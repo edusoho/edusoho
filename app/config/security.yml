@@ -34,6 +34,11 @@ services:
         arguments: ['@service_container']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
+    course.lesson.handler:
+        class: Topxia\WebBundle\Handler\CourseLessonHandler
+        arguments: ['@security.context']
+        tags: [{ name: kernel.event_listener, event: course.lesson.create }, { name: kernel.event_listener, event: course.lesson.delete }]
+
 
 security:
     encoders:
