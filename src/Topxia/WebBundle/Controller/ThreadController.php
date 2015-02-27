@@ -75,6 +75,7 @@ class ThreadController extends BaseController
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,
+            'service' => $this->getThreadService(),
         ));
     }
 
@@ -99,7 +100,8 @@ class ThreadController extends BaseController
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,
-            'less' => $less
+            'less' => $less,
+            'service' => $this->getThreadService(),
         ));
     }
 
@@ -197,12 +199,14 @@ class ThreadController extends BaseController
             return $this->render('TopxiaWebBundle:Thread:post-item.html.twig' , array(
                 'post' => $post,
                 'author' => $this->getCurrentUser(),
+                'service' => $this->getThreadService(),
             ));
         }
 
         return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
-            'threadId' => $threadId,
-        ));
+            'thread' => $this->getThreadService()->getThread($threadId),
+            'service' => $this->getThreadService(),
+       ));
 
     }
 
@@ -217,6 +221,7 @@ class ThreadController extends BaseController
         return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig',array(
             'post' => $post,
             'author' => $this->getCurrentUser(),
+            'service' => $this->getThreadService(),
         ));
     }
 

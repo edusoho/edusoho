@@ -321,12 +321,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $user = $this->getCurrentUser();
         $thread = $this->getThread($fields['threadId']);
 
+        $fields['targetType'] = $thread['targetType'];
+        $fields['targetId'] = $thread['targetId'];
+        $this->tryAccess('post.create', $fields);
+
         $fields['content'] = $this->purifyHtml($fields['content']);
         $fields['userId'] = $user['id'];
         $fields['createdTime'] = time();
-        $fields['targetType'] = $thread['targetType'];
-        $fields['targetId'] = $thread['targetId'];
         $fields['parentId'] = empty($fields['parentId']) ? 0 : intval($fields['parentId']);
+
         if ($fields['parentId'] > 0) {
             $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
             if (empty($parent) or ($parent['threadId'] != $fields['threadId'])) {
@@ -356,6 +359,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($post)) {
             throw $this->createServiceException(sprintf('帖子(#%s)不存在，删除失败。', $postId));
         }
+
+        $this->tryAccess('post.delete', $post);
 
         $thread = $this->getThread($post['threadId']);
         if (!empty($thread)) {
@@ -389,6 +394,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $user = $this->getCurrentUser();
         $post = $this->getThreadPostDao()->getPost($id);
 
+
+        $this->tryAccess('post.vote', $post);
+
         $existVote = $this->getThreadVoteDao()->getVoteByThreadIdAndPostIdAndUserId($post['threadId'], $post['id'], $user['id']);
         if ($existVote) {
             return array('status' => 'votedError');
@@ -421,6 +429,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'post.create' => 'accessPostCreate',
             'post.update' => 'accessPostUpdate',
             'post.delete' => 'accessPostDelete',
+            'post.vote' => 'accessPostVote',
         );
 
         if (!array_key_exists($permision, $permisions)) {
@@ -444,7 +453,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     private function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) or empty($resource['targetId'])) {
-            throw new InvalidArgumentException("Resource  targetType or targetId argument missing."); 
+            throw new \InvalidArgumentException("Resource  targetType or targetId argument missing."); 
         }
 
         $class = __NAMESPACE__ . "\\" . ucfirst($resource['targetType']) . 'ThreadFirewall';
