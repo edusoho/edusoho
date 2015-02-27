@@ -49,8 +49,6 @@ class DefaultController extends BaseController
                 $paginator->getPerPageCount()
         );
 
-        $classroomIds = ArrayToolkit::column($classrooms,'id');
-
         $users = array();
 
         foreach ($classrooms as &$classroom) {
@@ -64,18 +62,7 @@ class DefaultController extends BaseController
 
         }
 
-        $coursesOfClassroom = array();
-        $coursesNum = array();
-
-        foreach ($classroomIds as $key => $value) {
-            $classroomCourses=$this->getClassroomService()->findCoursesByClassroomId($value);
-            $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
-
-            $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-            $coursesOfClassroom[$value] = $courses;
-            $coursesNum[$value] = count($coursesOfClassroom[$value]);
-
-        }
+        $allClassrooms = ArrayToolkit::index($classrooms,'id');
 
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
@@ -86,8 +73,7 @@ class DefaultController extends BaseController
             'cashRate' => $cashRate,
             'classrooms' => $classrooms,
             'users' => $users,
-            'coursesOfClassroom' => $coursesOfClassroom,
-            'coursesNum' => $coursesNum,
+            'allClassrooms' => $allClassrooms,
         ));
     }
 
