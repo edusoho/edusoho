@@ -23,8 +23,17 @@ define(function(require, exports, module) {
         },
 
         setup:function() {
-            this._initPostForm();
+            if ($('[name=pageCanView]').length > 0) {
+                $.get($('[name=pageCanView]').val(), function(response) {
+                    if (response) {
+                        return ;
+                    }
 
+                    $('#page-can-view-modal').modal('show');
+
+                }, 'json');
+            }
+            this._initPostForm();
         },
 
         onClickPostMore: function(e) {
