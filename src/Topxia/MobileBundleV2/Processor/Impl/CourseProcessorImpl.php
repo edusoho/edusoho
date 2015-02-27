@@ -1015,8 +1015,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+
+        $filter = array("type"=>"normal");
+        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id'], $filter);
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit, $filter);
         
         $count = $this->controller->getCourseService()->searchLearnCount(array(
             "userId" => $user["id"]
@@ -1032,9 +1034,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $tempCourses = array();
         foreach ($courses as $key => $course) {
-            if ($course['type'] != "live") {
-                $tempCourses[$course["id"]] = $course;
-            }
+            $tempCourses[$course["id"]] = $course;
         }
         
         foreach ($lessons as $key => $lesson) {
@@ -1044,7 +1044,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
-        $total = $total - count($tempCourses);
         $result = array(
             "start" => $start,
             "limit" => $limit,
