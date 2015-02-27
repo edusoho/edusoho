@@ -165,7 +165,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $discountRate = $totalPrice/$coursesTotalPrice;
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
-            $amount -= NumberToolkit::roundUp($afterDiscountPrice);
+            $amount -= $afterDiscountPrice;
         }
 
         if($amount<0){
