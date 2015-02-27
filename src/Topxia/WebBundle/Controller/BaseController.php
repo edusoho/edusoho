@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\AccessDeniedException;
-use Topxia\Event\InteractiveEvent;
 
 abstract class BaseController extends Controller
 {
@@ -91,12 +90,6 @@ abstract class BaseController extends Controller
 
         $sessionId = $this->container->get('request')->getSession()->getId();
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
-    }
-
-    protected function eventDispatch($eventName, $context)
-    {
-        $event = new InteractiveEvent($this->getRequest(), $context);
-        $this->get('event_dispatcher')->dispatch($eventName, $event);
     }
 
     protected function setFlashMessage ($level, $message)

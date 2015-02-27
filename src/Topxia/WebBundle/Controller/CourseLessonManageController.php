@@ -140,8 +140,6 @@ class CourseLessonManageController extends BaseController
 			$lessonId =0;
         	$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
 			
-			$this->eventDispatch("course.lesson.create", array("courseId"=>$id, "lessonId"=>$lessonId));
-
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
@@ -444,8 +442,6 @@ class CourseLessonManageController extends BaseController
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 		
-		$this->eventDispatch("course.lesson.delete", array("courseId"=>$courseId, "lessonId"=>$lessonId));
-
 		return $this->createJsonResponse(true);
 	}
 

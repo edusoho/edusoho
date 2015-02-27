@@ -2,7 +2,7 @@
  
 namespace Topxia\WebBundle\Handler;
  
-use Topxia\Event\InteractiveEvent;
+use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\Security\Core\SecurityContext;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -17,9 +17,9 @@ class CourseLessonHandler
 		$this->securityContext = $securityContext;
 	}
 	
-	public function onCourseLessonCreate(InteractiveEvent $event)
+	public function onCourseLessonCreate(ServiceEvent $event)
 	{
-		$context = $event->getContext();
+		$context = $event->getSubject();
 
 		$id = $context["courseId"];
 
@@ -35,9 +35,9 @@ class CourseLessonHandler
 		}
 	}
 
-	public function onCourseLessonDelete(InteractiveEvent $event)
+	public function onCourseLessonDelete(ServiceEvent $event)
 	{
-		$context = $event->getContext();
+		$context = $event->getSubject();
 
 		$courseId = $context["courseId"];
 
