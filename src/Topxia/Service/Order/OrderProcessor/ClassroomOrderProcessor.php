@@ -142,7 +142,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $classroom["price"] * $cashRate;
         }
 
-        if($totalPrice != $fields['totalPrice']) {
+        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
             throw new Exception("实际价格不匹配，不能创建订单!");
         }
 
@@ -163,12 +163,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
         $discountRate = $totalPrice/$coursesTotalPrice;
+
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
-            $amount -= NumberToolkit::roundUp($afterDiscountPrice);
+            $amount -= $afterDiscountPrice;
         }
 
-        if($amount<0){
+        if($amount<0.001){
             $amount=0;
         }
 

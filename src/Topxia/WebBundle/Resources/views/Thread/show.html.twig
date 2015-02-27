@@ -3,7 +3,10 @@
 <div class="thread-show">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h1 class="panel-title">{{ thread.title }}</h1>
+      <div class="thread-breadcrumb">
+        <a href="{{ path(thread.targetType ~ '_threads', {(thread.targetType~'Id'): thread.targetId}) }}" class="text-muted">话题</a> <span class="text-muted">&raquo; 正文</span>
+      </div>
+      <h1 class="thread-title">{{ thread.title }}</h1>
       <div class="thread-metas">
         {{  web_macro.user_link(author, 'link-muted') }}
         <span class="bullet mhs">•</span>
