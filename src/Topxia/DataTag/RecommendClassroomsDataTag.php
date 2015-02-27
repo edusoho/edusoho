@@ -33,8 +33,6 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
                 $arguments['count']
         );
 
-        $classroomIds = ArrayToolkit::column($classrooms,'id');
-
         $users = array();
 
         foreach ($classrooms as &$classroom) {
@@ -48,21 +46,11 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         }
 
-        $coursesOfClassroom = array();
-        $coursesNum = array();
-
-        foreach ($classroomIds as $key => $value) {
-            $classroomCourses=$this->getClassroomService()->findCoursesByClassroomId($value);
-            $courseIds=ArrayToolkit::column($classroomCourses,'courseId');
-
-            $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-            $coursesOfClassroom[$value] = $courses;
-            $coursesNum[$value] = count($coursesOfClassroom[$value]);
-        }
+        $allClassrooms = ArrayToolkit::index($classrooms,'id');
 
         return array('classrooms'=>$classrooms,
             'users'=>$users,
-            'coursesNum'=>$coursesNum
+            'allClassrooms'=>$allClassrooms
             );
     }
 
