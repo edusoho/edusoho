@@ -204,8 +204,9 @@ class ThreadController extends BaseController
         }
 
         return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
-            'threadId' => $threadId,
-        ));
+            'thread' => $this->getThreadService()->getThread($threadId),
+            'service' => $this->getThreadService(),
+       ));
 
     }
 

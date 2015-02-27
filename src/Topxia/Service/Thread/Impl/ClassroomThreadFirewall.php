@@ -14,7 +14,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     public function accessThreadCreate($thread)
     {
-        return $this->getClassroomService()->canLookClassroom($post['targetId']);
+        return $this->getClassroomService()->canLookClassroom($thread['targetId']);
     }
 
     public function accessThreadDelete($thread)
