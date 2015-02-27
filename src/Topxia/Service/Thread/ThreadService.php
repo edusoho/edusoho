@@ -22,6 +22,12 @@ interface ThreadService
 
 	public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
 
+	public function findThreadsByTargetAndUserId($target, $userId, $start, $limit);
+
+	public function findZeroPostThreadsByTarget($target, $start, $limit);
+
+
+
 	/**
 	 * 创建话题
 	 */

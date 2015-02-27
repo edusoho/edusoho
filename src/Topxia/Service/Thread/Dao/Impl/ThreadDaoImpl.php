@@ -46,11 +46,24 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 	public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
 	{
         $this->filterStartLimit($start, $limit);
-        // @todo: fixed me.
 		$orderBy = join (' ', $orderBy);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($courseId, $type)) ? : array();
 	}
+
+    public function findThreadsByTargetAndUserId($target, $userId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ? AND userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($target['type'], $target['id'], $userId)) ? : array();
+    }
+
+    public function findThreadsByTargetAndPostNum($target, $postNum, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ? AND postNum = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($target['type'], $target['id'], $postNum)) ? : array();
+    }
 
 	public function searchThreads($conditions, $orderBys, $start, $limit)
 	{
