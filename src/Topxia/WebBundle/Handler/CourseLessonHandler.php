@@ -11,12 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
  
-/**
- * Custom login listener.
- */
 class CourseLessonHandler
 {
-	/** @var \Symfony\Component\Security\Core\SecurityContext */
 	private $securityContext;
 	
 	public function __construct(SecurityContext $securityContext)
