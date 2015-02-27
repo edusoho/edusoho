@@ -4,10 +4,7 @@ namespace Topxia\WebBundle\Handler;
  
 use Topxia\Event\InteractiveEvent;
 use Symfony\Component\Security\Core\SecurityContext;
-use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
  
