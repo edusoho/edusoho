@@ -529,6 +529,10 @@ class CourseController extends BaseController
 			throw $this->createAccessDeniedException('您不是课程的学员。');
 		}
 
+		if ($member["joinedType"] != "course") {
+			throw $this->createAccessDeniedException('课程不能退出。');
+		}
+
 		if (!empty($member['orderId'])) {
 			throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
 		}
