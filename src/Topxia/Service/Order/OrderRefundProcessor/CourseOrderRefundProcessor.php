@@ -3,6 +3,7 @@ namespace Topxia\Service\Order\OrderRefundProcessor;
 
 use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessor;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\ServiceException;
 
 class CourseOrderRefundProcessor implements OrderRefundProcessor
 {
@@ -79,7 +80,11 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function getTargetMember($targetId, $userId)
     {
-        return $this->getCourseService()->getCourseMember($targetId, $userId);
+        $member = $this->getCourseService()->getCourseMember($targetId, $userId);
+        if ($member["joinedType"] != "course") {
+            throw new ServiceException('课程不能退出。', 0);
+        }
+        return $member;
     }
 
     protected function getCourseOrderService()
