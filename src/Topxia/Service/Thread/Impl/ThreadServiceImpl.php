@@ -69,6 +69,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $conditions = $this->prepareThreadSearchConditions($conditions);
         return $this->getThreadDao()->searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
     }
+
+    public function findThreadsByTargetAndUserId($target, $userId, $start, $limit)
+    {
+        return $this->getThreadDao()->findThreadsByTargetAndUserId($target, $userId, $start, $limit);
+    }
+
+    public function findZeroPostThreadsByTarget($target, $start, $limit)
+    {
+        return $this->getThreadDao()->findThreadsByTargetAndPostNum($target, 0, $start, $limit);
+    }
     
     private function filterSort($sort)
     {

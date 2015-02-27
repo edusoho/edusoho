@@ -237,6 +237,25 @@ class ThreadController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function userOtherThreadsBlockAction(Request $request, $thread, $userId)
+    {
+        $threads = $this->getThreadService()->findThreadsByTargetAndUserId(array('type' => $thread['targetType'], 'id' => $thread['targetId']), $userId, 0, 11);
+        return $this->render('TopxiaWebBundle:Thread:user-threads-block.html.twig' , array(
+            'currentThread' => $thread,
+            'threads' => $threads,
+        ));
+    }
+
+    public function zeroPostThreadsBlockAction(Request $request, $thread)
+    {
+        $target = array('type' => $thread['targetType'], 'id' => $thread['targetId']);
+        $threads = $this->getThreadService()->findZeroPostThreadsByTarget($target, 0, 11);
+        return $this->render('TopxiaWebBundle:Thread:zero-post-threads-block.html.twig' , array(
+            'currentThread' => $thread,
+            'threads' => $threads,
+        ));
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');

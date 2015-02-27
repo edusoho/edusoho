@@ -16,6 +16,10 @@ interface ThreadDao
 
 	public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit);
 
+	public function findThreadsByTargetAndUserId($target, $userId, $start, $limit);
+
+	public function findThreadsByTargetAndPostNum($target, $postNum, $start, $limit);
+
 	public function searchThreads($conditions, $orderBys, $start, $limit);
 
 	public function searchThreadCount($conditions);
