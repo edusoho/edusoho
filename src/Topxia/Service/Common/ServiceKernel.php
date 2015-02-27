@@ -2,6 +2,7 @@
 namespace Topxia\Service\Common;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Finder\Finder;
 
 class ServiceKernel
 {
@@ -9,6 +10,10 @@ class ServiceKernel
     private static $_instance;
 
     private static $_dispatcher;
+
+    protected $_moduleDirectories = array();
+
+    protected $_moduleConfigs = array();
 
     protected $environment;
     protected $debug;
@@ -29,6 +34,7 @@ class ServiceKernel
         $instance = new self();
         $instance->environment = $environment;
         $instance->debug = (Boolean) $debug;
+        $instance->registerModuleDirectory(realpath(__DIR__ . '/../../../'));
 
         self::$_instance = $instance;
 
@@ -60,6 +66,28 @@ class ServiceKernel
         if (true === $this->booted) {
             return;
         }
+        $this->booted = true;
+
+        $finder = new Finder();
+        $finder->directories()->depth('== 0');
+
+        foreach ($this->_moduleDirectories as $dir) {
+            $finder->in($dir . '/*/Service');
+        }
+
+        foreach ($finder as $dir) {
+            $filepath = $dir->getRealPath() . '/module_config.php';
+            if (file_exists($filepath)) {
+                $this->_moduleConfigs[] = include $filepath;
+            }
+        }
+
+        foreach ($this->_moduleConfigs as $config) {
+            foreach (empty($config['event_subscriber']) ? array() : $config['event_subscriber'] as $class) {
+                $this->dispatcher()->addSubscriber(new $class());
+            }
+        }
+
     }
 
     public function setParameterBag($parameterBag)
@@ -158,6 +186,16 @@ class ServiceKernel
     public function isDebug()
     {
         return $this->debug;
+    }
+
+    public function registerModuleDirectory($dir)
+    {
+        $this->_moduleDirectories[] = $dir;
+    }
+
+    public function getModuleConfigs()
+    {
+        return $this->_moduleConfigs;
     }
 
     private function getClassName($type, $name)
