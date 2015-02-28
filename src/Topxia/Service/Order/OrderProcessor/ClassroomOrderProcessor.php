@@ -151,6 +151,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+        if(empty($courses) || count($courses) == 0){
+            throw new Exception("班级中还未设置课程，请联系管理员!");
+        }
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
 
         $courseIds = ArrayToolKit::column($courses, "id");
