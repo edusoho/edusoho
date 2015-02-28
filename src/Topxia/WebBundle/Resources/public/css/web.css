@@ -862,6 +862,8 @@ body {
 	margin-bottom: 6px;
 }
 
+
+
 .thread-show .thread-title {
 	margin-top: 0;
 	margin-bottom: 0;
@@ -869,6 +871,7 @@ body {
 	color: inherit;
 	font-weight: bold;
 	line-height: 1;
+	display: inline;
 }
 
 .thread-show .thread-metas {
