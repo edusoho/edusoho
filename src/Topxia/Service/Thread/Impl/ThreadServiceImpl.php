@@ -14,33 +14,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->getThread($threadId);
     }
 
-    public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit)
-    {
-        if ($sort == 'latestPosted') {
-            $orderBy = array('latestPosted', 'DESC');
-        } else {
-            $orderBy = array('createdTime', 'DESC');
-        }
-
-        if (!in_array($type, array('question', 'discussion'))) {
-            $type = 'all';
-        }
-
-        if ($type == 'all') {
-            return $this->getThreadDao()->findThreadsByCourseId($courseId, $orderBy, $start, $limit);
-        }
-
-        return $this->getThreadDao()->findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit);
-    }
-
     public function findLatestThreadsByType($type, $start, $limit)
     {
         return $this->getThreadDao()->findLatestThreadsByType($type, $start, $limit);
-    }
-
-    public function findEliteThreadsByType($type, $status, $start, $limit)
-    {
-        return $this->getThreadDao()->findEliteThreadsByType($type, $status, $start, $limit);
     }
 
     public function searchThreads($conditions, $sort, $start, $limit)
@@ -56,19 +32,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {    
         $conditions = $this->prepareThreadSearchConditions($conditions);
         return $this->getThreadDao()->searchThreadCount($conditions);
-    }
-
-    public function searchThreadCountInCourseIds($conditions)
-    {
-        $conditions = $this->prepareThreadSearchConditions($conditions);
-        return $this->getThreadDao()->searchThreadCountInCourseIds($conditions);
-    }
-
-    public function searchThreadInCourseIds($conditions, $sort, $start, $limit)
-    {
-        $orderBys = $this->filterSort($sort);
-        $conditions = $this->prepareThreadSearchConditions($conditions);
-        return $this->getThreadDao()->searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
     }
 
     public function findThreadsByTargetAndUserId($target, $userId, $start, $limit)
@@ -305,21 +268,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     }
 
     public function getThreadPostCount($targetId, $threadId)
-    {
-        return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
-    }
-
-    public function findThreadElitePosts($targetId, $threadId, $start, $limit)
-    {
-        return $this->getThreadPostDao()->findPostsByThreadIdAndIsElite($threadId, 1, $start, $limit);
-    }
-
-    public function getPostCountByuserIdAndThreadId($userId,$threadId)
-    {
-        return $this->getThreadPostDao()->getPostCountByuserIdAndThreadId($userId,$threadId);
-    }
-
-    public function getThreadPostCountByThreadId($threadId)
     {
         return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
     }
