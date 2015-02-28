@@ -8,8 +8,6 @@ interface ThreadService
 {
 	public function getThread($threadId);
 
-	public function findLatestThreadsByType($type, $start, $limit);
-
 	public function searchThreads($conditions, $sort, $start, $limit);
 
 	public function searchThreadCount($conditions);
