@@ -317,17 +317,6 @@ class CourseManageController extends BaseController
     		);
         }
 
-        $classroomApp = $this->getAppService()->findInstallApp('Classroom');
-        if(!empty($classroomApp)){
-
-            $findClassroomsByCourseId =  ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($course['id']),'classroomId');
-
-            foreach ($findClassroomsByCourseId as $key => $value) 
-            {
-                       $this->getClassroomService()->updateClassroomTeachers($value);
-            }
-        }
-
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers

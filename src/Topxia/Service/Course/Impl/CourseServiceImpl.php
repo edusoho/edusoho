@@ -1759,6 +1759,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		// 更新课程的teacherIds，该字段为课程可见教师的ID列表
 		$fields = array('teacherIds' => $visibleTeacherIds);
 		$this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
+		
+        $this->dispatchEvent("course.teacher.update", array(
+            "courseId"=>$courseId
+        ));
 	}
 
 	/**

@@ -126,11 +126,14 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			->andWhere('type = :type')
 			->andWhere('sticky = :isStick')
 			->andWhere('nice = :nice')
-		            ->andWhere('postNum = :postNum')
-		            ->andWhere('postNum > :postNumLargerThan')
+		            	->andWhere('postNum = :postNum')
+		            	->andWhere('postNum > :postNumLargerThan')
 			->andWhere('title LIKE :title')
-			->andWhere('content LIKE :content');
-
+			->andWhere('content LIKE :content')
+		            ->andWhere("targetType = :targetType")
+		            ->andWhere("status = :status")
+		            ->andWhere("createdTime >= :startTime")
+		            ->andWhere("createdTime <= :endTime");
 		return $builder;
 	}
 
