@@ -9,9 +9,11 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 {
 
 	protected $table = 'thread_post';
+
     private $serializeFields = array(
         'tagIds' => 'json',
     );
+
 	public function getPost($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -33,19 +35,6 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->fetchColumn($sql, array($threadId));
 	}
 
-	public function getPostCountByuserIdAndThreadId($userId,$threadId)
-	{
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND threadId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId,$threadId));
-	}
-
-	public function findPostsByThreadIdAndIsElite($threadId, $isElite, $start, $limit)
-	{
-        $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE threadId = ? AND isElite = ? ORDER BY createdTime ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($threadId,  $isElite)) ? : array();
-	}
-
     public function findPostsByParentId($parentId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -57,6 +46,19 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE parentId = ?";
         return $this->getConnection()->fetchColumn($sql, array($parentId));
+    }
+
+    public function searchPosts($conditions,$orderBy,$start,$limit)
+    {
+        $this->filterStartLimit($start,$limit);
+
+        $builder=$this->_createThreadSearchBuilder($conditions)
+        ->select('*')
+        ->setFirstResult($start)
+        ->setMaxResults($limit)
+        ->orderBy($orderBy[0],$orderBy[1]);
+        
+        return $builder->execute()->fetchAll() ? : array(); 
     }
 
 	public function searchPostsCount($conditions)
@@ -111,19 +113,6 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $sql ="DELETE FROM {$this->table} WHERE parentId = ?";
         return $this->getConnection()->executeUpdate($sql, array($parentId));
     }
-
-	public function searchPosts($conditions,$orderBy,$start,$limit)
-	{
-	    $this->filterStartLimit($start,$limit);
-
-	    $builder=$this->_createThreadSearchBuilder($conditions)
-	    ->select('*')
-	    ->setFirstResult($start)
-	    ->setMaxResults($limit)
-	    ->orderBy($orderBy[0],$orderBy[1]);
-	    
-	    return $builder->execute()->fetchAll() ? : array(); 
-	}
 
 	private function _createThreadSearchBuilder($conditions)
 	{

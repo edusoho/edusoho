@@ -1,6 +1,6 @@
   {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-  <ul class="media-list">
+  <ul class="media-list thread-list-default">
     {% for thread in threads %}
       {% set author = users[thread.userId] %}
       <li class="media">
@@ -16,7 +16,7 @@
               {% if thread.type == 'question' %}
                 <span class="label label-info" title="问答帖">问</span>
               {% endif  %}
-              <a class="js-nav" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+              <a class="thread-item-title" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 
               {% if thread.nice %}
                 <span class="label label-warning" title="精华帖">精</span>

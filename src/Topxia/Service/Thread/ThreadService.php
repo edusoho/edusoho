@@ -8,25 +8,13 @@ interface ThreadService
 {
 	public function getThread($threadId);
 
-	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit);
-
-	public function findLatestThreadsByType($type, $start, $limit);
-
-	public function findEliteThreadsByType($type, $status, $start, $limit);
-
 	public function searchThreads($conditions, $sort, $start, $limit);
 
 	public function searchThreadCount($conditions);
 
-	public function searchThreadCountInCourseIds($conditions);
-
-	public function searchThreadInCourseIds($conditions, $sort, $start, $limit);
-
 	public function findThreadsByTargetAndUserId($target, $userId, $start, $limit);
 
 	public function findZeroPostThreadsByTarget($target, $start, $limit);
-
-
 
 	/**
 	 * 创建话题
@@ -69,10 +57,6 @@ interface ThreadService
 	 */
 	public function findThreadPosts($targetId, $threadId, $sort = 'default', $start, $limit);
 
-	public function getPostCountByuserIdAndThreadId($userId,$threadId);
-
-	public function getThreadPostCountByThreadId($threadId);
-
 	/**
 	 * 获得话题回帖的数量
 	 * @param  integer  $courseId 话题的课程ID
@@ -80,8 +64,6 @@ interface ThreadService
 	 * @return integer  话题回帖的数量
 	 */
 	public function getThreadPostCount($targetId, $threadId);
-
-	public function findThreadElitePosts($targetId, $threadId, $start, $limit);
 
 	/**
 	 * 回复话题

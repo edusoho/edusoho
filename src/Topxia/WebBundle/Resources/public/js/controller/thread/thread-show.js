@@ -23,13 +23,13 @@ define(function(require, exports, module) {
         },
 
         setup:function() {
-            if ($('[name=pageCanView]').length > 0) {
-                $.get($('[name=pageCanView]').val(), function(response) {
+            if ($('[name=access-intercept-check]').length > 0) {
+                $.get($('[name=access-intercept-check]').val(), function(response) {
                     if (response) {
                         return ;
                     }
 
-                    $('#page-can-view-modal').modal('show');
+                    $('.access-intercept-modal').modal('show');
 
                 }, 'json');
             }

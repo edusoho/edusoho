@@ -16,41 +16,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
-	public function findLatestThreadsByType($type, $start, $limit)
-	{
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchAll($sql, array($type)) ? : array();
-	}
-
-	public function findEliteThreadsByType($type, $status, $start, $limit)
-	{
-		$sql = "SELECT * FROM {$this->table} WHERE type = ? AND nice = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($type, $status)) ? : array();
-	}
-
-    public function findThreadsByUserIdAndType($userId, $type)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = ? ORDER BY createdTime DESC";
-        return $this->getConnection()->fetchAll($sql, array($userId, $type));
-    }
-
-	public function findThreadsByCourseId($courseId, $orderBy, $start, $limit)
-	{
-        $this->filterStartLimit($start, $limit);
-        // @todo: fixed me.
-		$orderBy = join (' ', $orderBy);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
-	}
-
-	public function findThreadsByCourseIdAndType($courseId, $type, $orderBy, $start, $limit)
-	{
-        $this->filterStartLimit($start, $limit);
-		$orderBy = join (' ', $orderBy);
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND type = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId, $type)) ? : array();
-	}
-
     public function findThreadsByTargetAndUserId($target, $userId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -86,28 +51,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		return $builder->execute()->fetchColumn(0);
 	}
 
-	public function searchThreadCountInCourseIds($conditions)
-	{
-		$builder = $this->createThreadSearchQueryBuilder($conditions)
-			->select('COUNT(id)');
-
-		return $builder->execute()->fetchColumn(0);
-	}
-
-	public function searchThreadInCourseIds($conditions, $orderBys, $start, $limit)
-	{
-		$this->filterStartLimit($start, $limit);
-		$builder = $this->createThreadSearchQueryBuilder($conditions)
-			->select('*')
-			->setFirstResult($start)
-			->setMaxResults($limit);
-		foreach ($orderBys as $orderBy) {
-			$builder->addOrderBy($orderBy[0], $orderBy[1]);
-		}
-		
-		return $builder->execute()->fetchAll() ? : array();
-	}
-
 	private function createThreadSearchQueryBuilder($conditions)
 	{
 		if (isset($conditions['title'])) {
@@ -120,20 +63,19 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		
 		$builder = $this->createDynamicQueryBuilder($conditions)
 			->from($this->table, $this->table)
-			->andWhere('targetId = :targetId')
-			->andWhere('lessonId = :lessonId')
-			->andWhere('userId = :userId')
-			->andWhere('type = :type')
-			->andWhere('sticky = :isStick')
-			->andWhere('nice = :nice')
-		            	->andWhere('postNum = :postNum')
-		            	->andWhere('postNum > :postNumLargerThan')
-			->andWhere('title LIKE :title')
-			->andWhere('content LIKE :content')
-		            ->andWhere("targetType = :targetType")
-		            ->andWhere("status = :status")
-		            ->andWhere("createdTime >= :startTime")
-		            ->andWhere("createdTime <= :endTime");
+            ->andWhere("targetType = :targetType")
+            ->andWhere('targetId = :targetId')
+            ->andWhere('userId = :userId')
+            ->andWhere('type = :type')
+            ->andWhere('sticky = :isStick')
+            ->andWhere('nice = :nice')
+            ->andWhere('postNum = :postNum')
+            ->andWhere('postNum > :postNumLargerThan')
+            ->andWhere("status = :status")
+            ->andWhere("createdTime >= :startTime")
+            ->andWhere("createdTime <= :endTime")
+            ->andWhere('title LIKE :title')
+            ->andWhere('content LIKE :content');
 		return $builder;
 	}
 
