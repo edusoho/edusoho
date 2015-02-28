@@ -10,22 +10,6 @@ define(function(require, exports, module) {
         	hasMobile:false,
         	hasNickname:false
         },
-    	setValidator: function (validator) {
-    		this.set("validator", validator);
-    		return this;
-    	},
-    	setSmsType: function (smsType) {
-    		this.set("smsType", smsType);
-    		return this;
-    	},
-    	sethasMobile: function (hasMobile) {
-    		this.set("hasMobile", hasMobile);
-    		return this;
-    	},
-    	sethasNickname: function (hasNickname) {
-    		this.set("hasNickname", hasNickname);
-    		return this;
-    	},
     	takeEffect: function () {
     		var validator = this.get("validator");
     		var smsType = this.get("smsType");
