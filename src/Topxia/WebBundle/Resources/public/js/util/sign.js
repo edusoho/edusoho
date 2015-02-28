@@ -52,7 +52,12 @@ define(function(require, exports, module) {
                 url:this.get('signUrl'),
                 dataType: 'json',
                 success: function(data){
-                    window.location.reload();
+
+                $('#sign').html('<div  class="sign-area" data-role="signed" onclick="return false;" ><a class="btn btn-info btn-lg btn-block disabled" >已签到 <br>连续'+data.keepDays+'天</a></div>');
+                    self.showSignTable();
+                    self.initTable(true);
+                    self.element.find('.d-' + today).addClass('signed_anime_day');
+                   // window.location.reload();
                 },
                 error: function(xhr){
                 }
