@@ -12,6 +12,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
     public function getVersion()
     {
+        var_dump($this->request->get("name"));
         return $this->formData;
     }
     
