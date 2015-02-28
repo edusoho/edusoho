@@ -57,6 +57,9 @@ a:focus {
     height: 40px;
   }
 }
+.label-primary {
+  background-color: #428bca;
+}
 /* =========================== main =========================== */
 .es-class-wrap {
   padding: 25px;
@@ -313,6 +316,11 @@ a:focus {
   float: left;
   margin-right: 25px;
 }
+@media (min-width: 768px) and (max-width: 991px) {
+  .class-join-header .class-picture {
+    margin-right: 15px;
+  }
+}
 @media (max-width: 767px) {
   .class-join-header .class-picture {
     display: block;
@@ -322,19 +330,26 @@ a:focus {
   }
 }
 .class-join-header .class-picture img {
-  width: 100%;
+  width: 180px;
+}
+@media (max-width: 767px) {
+  .class-join-header .class-picture img {
+    width: 100%;
+  }
 }
 .class-join-header .title {
-  height: 72px;
-  line-height: 36px;
-  font-size: 22px;
-  overflow: hidden;
-  margin-top: 0px;
-  margin-right: 180px;
+  margin: 0 100px 20px 0;
+  font-size: 24px;
+}
+@media (min-width: 992px) {
+  .class-join-header .title {
+    height: 36px;
+    line-height: 36px;
+  }
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .class-join-header .title {
-    height: 60px;
+    height: 30px;
     line-height: 30px;
     font-size: 18px;
   }
@@ -343,12 +358,16 @@ a:focus {
   .class-join-header .title {
     margin-right: 0;
     font-size: 18px;
-    height: 60px;
-    line-height: 30px;
   }
+}
+.class-join-header .title .label {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
 }
 .class-join-header .class-metas {
   color: #999;
+  font-size: 16px;
 }
 .class-join-header .class-metas .course-num {
   margin-right: 40px;
@@ -370,11 +389,8 @@ a:focus {
   right: 0;
   top: 0;
 }
-.class-join-header-bottom {
-  margin-top: -10px;
-}
 .class-join-header-bottom .class-freebuy {
-  padding: 5px 30px;
+  padding: 5px 0;
   text-align: center;
 }
 .class-join-header-bottom .class-freebuy a {
@@ -394,23 +410,24 @@ a:focus {
   padding: 10px 15px;
 }
 .class-join-header-bottom .hint {
+  margin-bottom: 20px;
   font-size: 16px;
   line-height: 30px;
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .class-join-header-bottom .hint {
+    text-align: center;
+  }
 }
 .class-join-header-bottom .hint span {
   color: #e57259;
   margin: 0 3px;
 }
 .class-join-header-bottom .class-price {
+  margin-bottom: 20px;
   color: #e57259;
   font-size: 22px;
   text-align: center;
-  line-height: 62px;
-}
-@media (max-width: 767px) {
-  .class-join-header-bottom .class-price {
-    line-height: 40px;
-  }
 }
 .class-join-header-bottom .class-price del {
   font-size: 14px;
