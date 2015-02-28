@@ -41,6 +41,7 @@ $serviceKernel->setEnvVariable(array(
     'basePath' => $request->getBasePath(),
     'baseUrl' =>  $request->getSchemeAndHttpHost() . $request->getBasePath(),
 ));
+$serviceKernel->registerModuleDirectory(dirname(__DIR__). '/plugins');
 
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));

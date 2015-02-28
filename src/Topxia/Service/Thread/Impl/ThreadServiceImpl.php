@@ -3,6 +3,7 @@ namespace Topxia\Service\Thread\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Thread\ThreadService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -179,6 +180,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->addThread($thread);
 
+        $this->dispatchEvent('thread.create', $thread);
+
         return $thread;
     }
 
@@ -217,6 +220,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
 
+        $this->dispatchEvent('thread.delete', $thread);
+
         $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
@@ -230,6 +235,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('thread.sticky', $thread);
 
         $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 1,'updateTime' => time()));
+
+        $this->dispatchEvent('thread.sticky', new ServiceEvent($thread, array('sticky' => 'set')));
     }
 
     public function cancelThreadSticky($threadId)
@@ -243,6 +250,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->updateThread($thread['id'], array('sticky' => 0,'updateTime' => time()));
 
+        $this->dispatchEvent('thread.sticky', new ServiceEvent($thread, array('sticky' => 'cancel')));
+
     }
 
     public function setThreadNice($threadId)
@@ -255,6 +264,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('thread.nice', $thread);
 
         $this->getThreadDao()->updateThread($thread['id'], array('nice' => 1,'updateTime' => time()));
+
+        $this->dispatchEvent('thread.nice', new ServiceEvent($thread, array('nice' => 'set')));
     }
 
     public function cancelThreadNice($threadId)
@@ -267,6 +278,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('thread.nice', $thread);
 
         $this->getThreadDao()->updateThread($thread['id'], array('nice' => 0,'updateTime' => time()));
+
+        $this->dispatchEvent('thread.nice', new ServiceEvent($thread, array('nice' => 'cancel')));
     }
 
     public function hitThread($targetId, $threadId)
@@ -351,14 +364,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $post = $this->getThreadPostDao()->addPost($fields);
 
-        if ($post['parentId'] == 0) {
-            $threadFields = array(
-                'postNum' => $thread['postNum'] + 1,
-                'lastPostUserId' => $post['userId'],
-                'lastPostTime' => $post['createdTime'],
-            );
-            $this->getThreadDao()->updateThread($thread['id'], $threadFields);
-        }
+        $this->getThreadDao()->updateThread($thread['id'], array(
+            'lastPostUserId' => $post['userId'],
+            'lastPostTime' => $post['createdTime'],
+        ));
+
+        $this->getThreadDao()->waveThread($thread['id'], 'postNum', +1);
+
+        $this->dispatchEvent('thread.post_create', $post);
 
         return $post;
     }
@@ -376,13 +389,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (!empty($thread)) {
         }
 
-        $this->getThreadPostDao()->deletePostsByParentId($post['id']);
+        $totalDeleted = 1;
+        if ($post['parentId'] == 0) {
+            $totalDeleted += $this->getThreadPostDao()->deletePostsByParentId($post['id']);
+        }
         $this->getThreadPostDao()->deletePost($post['id']);
+
         if ($post['parentId'] > 0) {
             $this->getThreadPostDao()->wavePost($post['parentId'], 'subposts', -1);
-        } else {
-            $this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
         }
+
+        $this->getThreadDao()->waveThread($post['threadId'], 'postNum', $totalDeleted);
+
+        $this->dispatchEvent("thread.post_delete", new ServiceEvent($post, array('deleted' => $totalDeleted)));
     }
 
     public function searchPostsCount($conditions)

@@ -13,7 +13,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
     }
 
     public function accessThreadCreate($thread)
-    {
+    {   
         return $this->getClassroomService()->canLookClassroom($thread['targetId']);
     }
 

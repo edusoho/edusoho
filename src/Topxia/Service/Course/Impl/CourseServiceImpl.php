@@ -846,6 +846,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 
+		$this->dispatchEvent("course.lesson.create", array(
+			"courseId"=>$lesson["courseId"], 
+			"lessonId"=>$lesson["id"]
+		));
+
 		return $lesson;
 	}
 
@@ -1042,6 +1047,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
 
+		$this->dispatchEvent("course.lesson.delete", array(
+			"courseId"=>$courseId, 
+			"lessonId"=>$lessonId
+		));
 		// $this->autosetCourseFields($courseId);
 	}
 
