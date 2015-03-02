@@ -165,7 +165,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
-        $discountRate = $totalPrice/$coursesTotalPrice;
+        if($coursesTotalPrice>0){
+            $discountRate = $totalPrice/$coursesTotalPrice;
+        } else {
+            $discountRate = 1;
+        }
 
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
@@ -174,6 +178,24 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if($amount<0.001){
             $amount=0;
+        }
+
+        //优惠码优惠价格
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        $couponSetting = $this->getSettingService()->get("coupon");
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+            $couponResult = $this->afterCouponPay(
+                $fields["couponCode"], 
+                'classroom',
+                $targetId, 
+                $amount, 
+                $priceType, 
+                $cashRate
+            );
+
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+                $amount = $couponResult["afterAmount"];
+            }
         }
 
         //虚拟币优惠价格
