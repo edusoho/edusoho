@@ -894,20 +894,20 @@ class CourseController extends BaseController
     public function searchAction(Request $request)
     {	
         $key = $request->request->get("key");
-        
+        $classroomId=0;
+
         $conditions = array( "title"=>$key );
         $conditions['status'] = 'published';
 
-        $paginator = new Paginator(
-			$this->get('request'),
-			$this->getCourseService()->searchCourseCount($conditions)
-			, 5
-		);
+		if($request->query->get('classroomId')){
+
+			$classroomId=$request->query->get('classroomId');
+		}
 
 		$courses = $this->getCourseService()->searchCourses(
 			$conditions, 'latest',
-			$paginator->getOffsetCount(),
-			$paginator->getPerPageCount()
+			0,
+			5
 		);
 
 		$courseIds=ArrayToolkit::column($courses, 'id');
@@ -924,8 +924,7 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
 			'users'=>$users,
 			'courses'=>$courses,
-			'unEnabledCourseIds'=>$unEnabledCourseIds,
-			'paginator'=>$paginator
+			'unEnabledCourseIds'=>$unEnabledCourseIds
 		));
     }
 

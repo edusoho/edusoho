@@ -26,11 +26,25 @@ define(function(require, exports, module) {
 
         $('#search').on('click',function(){
 
+            
+            if($('[name=key]').val() != "" ){
+
+                $.post($(this).data('url'),$('.form-search').serialize(),function(data){
+
+                    $('.courses-list').html(data);
+                });
+            }
+
+        });
+
+        $('#all-courses').on('click',function(){
+
             $.post($(this).data('url'),$('.form-search').serialize(),function(data){
 
-                $('.courses-list').html(data);
+                $('#modal').html(data);
             });
 
+            
         });
 
         $('.row').on('click',".course-item ",function(){

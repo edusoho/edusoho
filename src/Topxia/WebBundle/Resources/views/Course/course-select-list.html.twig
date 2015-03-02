@@ -115,7 +115,7 @@
         {% if course.id in unEnabledCourseIds %}
 
           <div class="pull-right">
-          <span class="text-muted">
+          <span class="text-muted ">
           本课程已加入到班级
           {% set classrooms = getClassroomsByCourseId(course.id) %}
           {% for classroom in classrooms%}
@@ -138,4 +138,3 @@
   <div class="empty">找不到相关课程！</div>
   {% endif %}
 </ul>
-{{ web_macro.paginator(paginator) }}
