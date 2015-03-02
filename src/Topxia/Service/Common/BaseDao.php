@@ -12,7 +12,9 @@ abstract class BaseDao
 
     protected $primaryKey = 'id';
 
-    private static $cachedObjects = array();
+    private static $cachedSerializer = array();
+
+    protected $dataCache = array();
 
     protected function wave ($id, $fields) 
     {
@@ -47,6 +49,22 @@ abstract class BaseDao
         $this->connection = $connection;
     }
 
+    protected function fetchCached()
+    {
+        $args = func_get_args();
+        $callback = array_pop($args);
+
+        $key = implode(':', $args);
+        if (isset($this->dataCached[$key])) {
+            return $this->dataCached[$key];
+        }
+
+        array_shift($args);
+        $this->dataCached[$key] = call_user_func_array($callback, $args);
+
+        return $this->dataCached[$key];
+    }
+
     protected function createDaoException($message = null, $code = 0) 
     {
         return new DaoException($message, $code);
@@ -59,10 +77,10 @@ abstract class BaseDao
 
     protected function createSerializer()
     {
-        if (!isset(self::$cachedObjects['field_serializer'])) {
-            self::$cachedObjects['field_serializer'] = new FieldSerializer();
+        if (!isset(self::$cachedSerializer['field_serializer'])) {
+            self::$cachedSerializer['field_serializer'] = new FieldSerializer();
         }
-        return self::$cachedObjects['field_serializer'];
+        return self::$cachedSerializer['field_serializer'];
     }
 
     protected function filterStartLimit(&$start, &$limit)
