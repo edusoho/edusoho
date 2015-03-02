@@ -1208,10 +1208,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
         $teachers = $this->controller->getUserService()->findUsersByIds($teacherIds);
         $teachers = $this->controller->simplifyUsers($teachers);
-        var_dump($teachers);
-        exit();
 
-        $liveCourses = array_map(function($liveCourse){
+        $liveCourses = array_map(function($liveCourse, $teachers){
             $liveCourse['createdTime'] = Date('c',$liveCourse['createdTime']);
             $liveCourse['teachers'] = array();
             foreach ($liveCourse['teacherIds'] as $teacherId) {
