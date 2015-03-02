@@ -734,18 +734,9 @@ class CourseController extends BaseController
 			$vipChecked = 'ok';
 		}
 
-		$memberRoles = $this->getClassroomMembersByCourseId($course["id"]);
-		if(($member["role"] == 'student' && $member["joinedType"] == 'course') 
-			|| ($member["joinedType"] == 'classroom' && (empty($memberRoles) || count($memberRoles) == 0))) {
-			$canExit = true;
-		} else {
-			$canExit = false;
-		}
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
-			'canExit' => $canExit,
 			'member' => $member,
 			'users' => $users,
 			'manage' => $manage,
