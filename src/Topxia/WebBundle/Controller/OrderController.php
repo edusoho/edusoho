@@ -142,7 +142,7 @@ class OrderController extends BaseController
         if ($request->getMethod() == 'POST') {
             $code = $request->request->get('code');
 
-            if ($type != 'course' && $type != 'vip') {
+            if (!in_array($type, array('course', 'vip', 'classroom'))) {
                 throw new \RuntimeException('优惠码不支持的购买项目。');
             }
 
