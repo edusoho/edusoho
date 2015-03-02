@@ -1902,7 +1902,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $member;
 	}
 
-	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info)
+	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
 	{
 		$fields = array(
 			'courseId' => $courseId,

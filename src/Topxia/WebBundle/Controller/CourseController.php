@@ -297,6 +297,18 @@ class CourseController extends BaseController
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
 		}
 
+		if($this->isPluginInstalled("Classroom") && empty($member)) {
+			$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
+			$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
+			$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user["id"], $classroomIds);
+			foreach ($members as $classroomMember) {
+				if(in_array($classroomMember["role"], array("student"))) {
+					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
+				}
+			}
+		}
+		//TODO
+
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
