@@ -49,6 +49,62 @@ class UserController extends BaseController
         return $this->_teachAction($user);
     }
 
+    public function learningAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        $classrooms=array();
+
+        $studentClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'student','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+        $auditorClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'auditor','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        foreach ($classrooms as $key => $classroom) {
+            $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
+            $classrooms[$key]['headTeacher']=$headTeacher;
+        }
+
+        $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
+
+        return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig",array(
+            'classrooms'=>$classrooms,
+            'members'=>$members,
+            'user'=>$user,
+        )); 
+    }
+
+    public function teachingAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+
+        $classrooms=array();
+        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
+        
+        foreach ($classrooms as $key => $classroom) {
+            $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
+            $classrooms[$key]['headTeacher']=$headTeacher;
+        }
+
+        return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
+            'classrooms'=>$classrooms,
+            'members'=>$members,
+            'user'=>$user,
+            ));
+    }
+
     public function favoritedAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
@@ -273,6 +329,11 @@ class UserController extends BaseController
     private function getGroupService() 
     {   
         return $this->getServiceKernel()->createService('Group.GroupService');
+    }
+
+    protected function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
 }
