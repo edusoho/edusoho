@@ -1215,8 +1215,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             foreach ($liveCourse['teacherIds'] as $teacherId) {
                 $liveCourse['teachers'][] = $teachers[$teacherId];
             }
-            unset($course['teacherIds']);
-
+            unset($liveCourse['teacherIds']);
             return $liveCourse;
         },$liveCourses);
 
