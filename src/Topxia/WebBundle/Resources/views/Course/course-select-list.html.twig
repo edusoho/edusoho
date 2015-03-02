@@ -1,8 +1,22 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<style>
+.course-wide-list .enabled:hover{
+
+    background: #e6e6fa;
+    border-color: #ddd;
+}
+
+.course-wide-list .enabled{
+
+    cursor: default;
+    background: #e6e6fa;
+}
+
+</style>
 <ul class="course-wide-list">
   {% if courses %}
   {% for course in courses %}
-  <li class="course-item clearfix {% if course.id in unEnabledCourseIds %}enabled{% endif %}" data-id="{{course.id}}" >
+  <li class=" {% if course.id in unEnabledCourseIds %} enabled {% endif %}course-item clearfix"   data-id="{{course.id}}" >
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
       <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
     </a>
@@ -99,9 +113,18 @@
         {% endif %}
 
         {% if course.id in unEnabledCourseIds %}
-        <div class="course-metas unenabed-{{course.id}}">      
-          <span class="glyphicon glyphicon-remove pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
-        </div>
+
+          <div class="pull-right">
+          <span class="text-muted ">
+          本课程已加入到班级
+          {% set classrooms = getClassroomsByCourseId(course.id) %}
+          {% for classroom in classrooms%}
+          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
+          "{{classroom.title}}"
+          </a>
+          {% endfor %}
+          </span>
+          </div>
         {% else %}
         <div class="course-metas-{{course.id}}" style="display:none;">        
           <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
@@ -115,4 +138,3 @@
   <div class="empty">找不到相关课程！</div>
   {% endif %}
 </ul>
-{{ web_macro.paginator(paginator) }}
