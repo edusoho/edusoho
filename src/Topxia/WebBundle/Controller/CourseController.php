@@ -296,9 +296,11 @@ class CourseController extends BaseController
 		}
 
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
-			$memberRoles = $this->getClassroomMembersByCourseId($id);
-			if(in_array("student", $memberRoles)) {
-				$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
+			$classroomMembers = $this->getClassroomMembersByCourseId($id);
+			foreach ($classroomMembers as $classroomMember) {
+				if(in_array($classroomMember["role"], array("student"))) {
+					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
+				}
 			}
 		}
 
@@ -734,9 +736,10 @@ class CourseController extends BaseController
 			$vipChecked = 'ok';
 		}
 
-		$memberRoles = $this->getClassroomMembersByCourseId($course["id"]);
+		$classroomMembers = $this->getClassroomMembersByCourseId($course["id"]);
+		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
 		if(($member["role"] == 'student' && $member["joinedType"] == 'course') 
-			|| ($member["joinedType"] == 'classroom' && (empty($memberRoles) || count($memberRoles) == 0))) {
+			|| ($member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0))) {
 			$canExit = true;
 		} else {
 			$canExit = false;
@@ -967,8 +970,7 @@ class CourseController extends BaseController
 		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
 		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
 		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($this->getCurrentUser()["id"], $classroomIds);
-		$memberRoles = ArrayToolkit::column($members, "role");
-		return $memberRoles;
+		return $members;
 	}
 
 	private function createCourseForm()
