@@ -52,7 +52,6 @@ class UserController extends BaseController
     public function learningAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $progresses = array();
         $classrooms=array();
 
         $studentClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'student','userId'=>$user['id']),array('createdTime','desc'),0,9999);
@@ -65,17 +64,8 @@ class UserController extends BaseController
         $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($classrooms as $key => $classroom) {
-            
-            $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
-            $coursesCount=count($courses);
-
-            $classrooms[$key]['coursesCount']=$coursesCount;
-
-            $time=time()-$classroom['createdTime'];
-            $day=intval($time/(3600*24));
-
-            $classrooms[$key]['day']=$day;
-
+            $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
+            $classrooms[$key]['headTeacher']=$headTeacher;
         }
 
         $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
@@ -83,7 +73,6 @@ class UserController extends BaseController
         return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig",array(
             'classrooms'=>$classrooms,
             'members'=>$members,
-            'progresses'=>$progresses,
             'user'=>$user,
         )); 
     }
@@ -105,31 +94,8 @@ class UserController extends BaseController
         $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
         
         foreach ($classrooms as $key => $classroom) {
-            
-            $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
-            $courseIds=ArrayToolkit::column($courses,'courseId');
-
-            $coursesCount=count($courses);
-
-            $classrooms[$key]['coursesCount']=$coursesCount;
-
-            $studentCount=$this->getClassroomService()->searchMemberCount(array('role'=>'student','classroomId'=>$classroom['id'],'startTimeGreaterThan'=>strtotime(date('Y-m-d'))));
-            $auditorCount=$this->getClassroomService()->searchMemberCount(array('role'=>'auditor','classroomId'=>$classroom['id'],'startTimeGreaterThan'=>strtotime(date('Y-m-d'))));
-            
-
-            $allCount=$studentCount+$auditorCount;
-
-            $classrooms[$key]['allCount']=$allCount;
-
-            $todayTimeStart=strtotime(date("Y-m-d",time()));
-            $todayTimeEnd=strtotime(date("Y-m-d",time()+24*3600));
-            $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("targetType"=>"classroom","courseIds"=>$courseIds,"startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
-
-            $threadCount=$this->getThreadService()->searchThreadCount(array('targetType'=>'classroom','targetId'=>$classroom['id'],'type'=>'discussion',"startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"open"));
-
-            $classrooms[$key]['threadCount']=$threadCount;
-
-            $classrooms[$key]['todayFinishedLessonNum']=$todayFinishedLessonNum;
+            $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
+            $classrooms[$key]['headTeacher']=$headTeacher;
         }
 
         return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(

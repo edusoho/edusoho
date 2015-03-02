@@ -18,6 +18,10 @@
               <div class="course-body">
                 <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a></h4>
 
+<!--              <div class="teacher-body">
+                <div class="teacher-name"><i class="icon icon-teacher" title="班主任"></i>{{ classrooms[classroom.id]['headTeacher'].nickname|default('') }}</div>
+              </div> -->
+
               <div class="class-student"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }} &nbsp;&nbsp;
                 <span class="stars-{{ classroom.rating|number_format }}">&nbsp;</span>
                 <span class="rating-num">{{ classroom.rating|number_format(1) }}分</span>
