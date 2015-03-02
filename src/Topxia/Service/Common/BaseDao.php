@@ -75,7 +75,7 @@ abstract class BaseDao
         return new DynamicQueryBuilder($this->getConnection(), $conditions);
     }
 
-    protected function createSerializer()
+    public function createSerializer()
     {
         if (!isset(self::$cachedSerializer['field_serializer'])) {
             self::$cachedSerializer['field_serializer'] = new FieldSerializer();
