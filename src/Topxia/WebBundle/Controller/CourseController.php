@@ -284,11 +284,9 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 
-        $homeworkPlugin = $this->getAppService()->findInstallApp('Homework');
 		$homeworkLessonIds =array();
 		$exercisesLessonIds =array();
-
-		if($homeworkPlugin) {
+		if($this->isPluginInstalled("Homework")) {
             $lessons = $this->getCourseService()->getCourseLessons($course['id']);
             $lessonIds = ArrayToolkit::column($lessons, 'id');
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
@@ -298,16 +296,11 @@ class CourseController extends BaseController
 		}
 
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
-			$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-			$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
-			$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user["id"], $classroomIds);
-			foreach ($members as $classroomMember) {
-				if(in_array($classroomMember["role"], array("student"))) {
-					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
-				}
+			$memberRoles = $this->getClassroomMembersByCourseId($id);
+			if(in_array("student", $memberRoles)) {
+				$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
 			}
 		}
-		//TODO
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -319,6 +312,7 @@ class CourseController extends BaseController
 				$course['price'] =0;
 				$course['coinPrice'] =0;
 			}
+
 			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 				'course' => $course,
 				'type' => $course['type'],
@@ -740,9 +734,18 @@ class CourseController extends BaseController
 			$vipChecked = 'ok';
 		}
 
+		$memberRoles = $this->getClassroomMembersByCourseId($course["id"]);
+		if(($member["role"] == 'student' && $member["joinedType"] == 'course') 
+			|| ($member["joinedType"] == 'classroom' && (empty($memberRoles) || count($memberRoles) == 0))) {
+			$canExit = true;
+		} else {
+			$canExit = false;
+		}
+
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
+			'canExit' => $canExit,
 			'member' => $member,
 			'users' => $users,
 			'manage' => $manage,
@@ -958,6 +961,14 @@ class CourseController extends BaseController
 		$this->getCourseService()->removeStudent($courseId, $user['id']);
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
+	}
+
+	private function getClassroomMembersByCourseId($id) {
+		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
+		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
+		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($this->getCurrentUser()["id"], $classroomIds);
+		$memberRoles = ArrayToolkit::column($members, "role");
+		return $memberRoles;
 	}
 
 	private function createCourseForm()
