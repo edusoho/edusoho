@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
         $('#sure').on('click',function(){
             $('#sure').button('submiting').addClass('disabled');
-
+       
             $.ajax({
                 type : "post",
                 url : $('#sure').data('url'),
