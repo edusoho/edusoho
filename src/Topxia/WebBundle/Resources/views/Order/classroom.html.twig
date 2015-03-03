@@ -23,3 +23,22 @@
 	</div>
 
 </div>
+
+{% if paidCourses|length > 0 %}
+<div class="order-item clearfix" >
+  <div class="pull-right order-count">
+    总金额：
+    {% if priceType|default('RMB') == "RMB" %}
+    <span class="order-price">{{classroom.price}}</span>
+      元
+    {% elseif priceType|default('RMB') == "Coin" %}
+    <span class="order-price">{{classroom.price * cashRate}}</span>
+      {{setting("coin.coin_name")}}
+    {% endif %}
+  </div>
+</div>
+
+{% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
+
+{% endif %}
+
