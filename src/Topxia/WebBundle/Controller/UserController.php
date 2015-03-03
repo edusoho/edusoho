@@ -64,8 +64,14 @@ class UserController extends BaseController
         $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         foreach ($classrooms as $key => $classroom) {
-            $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
-            $classrooms[$key]['headTeacher']=$headTeacher;
+            if (empty($classroom['teacherIds'])) {
+                $classroomTeacherIds=array();
+            }else{
+                $classroomTeacherIds=$classroom['teacherIds'];
+            }
+
+            $teachers = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+            $classrooms[$key]['teachers']=$teachers;
         }
 
         $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
@@ -94,8 +100,14 @@ class UserController extends BaseController
         $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
         
         foreach ($classrooms as $key => $classroom) {
-            $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
-            $classrooms[$key]['headTeacher']=$headTeacher;
+            if (empty($classroom['teacherIds'])) {
+                $classroomTeacherIds=array();
+            }else{
+                $classroomTeacherIds=$classroom['teacherIds'];
+            }
+
+            $teachers = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+            $classrooms[$key]['teachers']=$teachers;
         }
 
         return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
