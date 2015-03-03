@@ -65,6 +65,11 @@ abstract class BaseDao
         return $this->dataCached[$key];
     }
 
+    protected function clearCached()
+    {
+        $this->dataCached = array();
+    }
+
     protected function createDaoException($message = null, $code = 0) 
     {
         return new DaoException($message, $code);

@@ -80,11 +80,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function getTargetMember($targetId, $userId)
     {
-        $member = $this->getCourseService()->getCourseMember($targetId, $userId);
-        if ($member["joinedType"] != "course") {
-            throw new ServiceException('课程不能退出。', 0);
-        }
-        return $member;
+        return $this->getCourseService()->getCourseMember($targetId, $userId);
     }
 
     protected function getCourseOrderService()
