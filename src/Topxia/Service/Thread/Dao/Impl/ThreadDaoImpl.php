@@ -93,17 +93,20 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function updateThread($id, $fields)
 	{
+        $this->clearCached();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getThread($id);
 	}
 
 	public function deleteThread($id)
 	{
+        $this->clearCached();
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
 	public function waveThread($id, $field, $diff)
 	{
+        $this->clearCached();
 		$fields = array('postNum', 'hitNum');
 		if (!in_array($field, $fields)) {
 			throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
