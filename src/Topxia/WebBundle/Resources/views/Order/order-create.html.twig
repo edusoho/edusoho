@@ -43,10 +43,6 @@
               {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
             {% endif %}
 
-            {% if targetType == "classroom" and is_plugin_installed("Classroom") and paidCourses|length > 0 %}
-              {% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
-            {% endif %}
-
             <div class="order-item clearfix" >
               <div class="pull-right order-count">
                 订单金额：
