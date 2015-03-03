@@ -12,13 +12,15 @@
     <div class="">
       <div class="row">
         <div class="col-xs-6">
-          <h4>{{paidCourse.title}}</h4>
+          <h4><a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</h4>
         </div>
         <div class="col-xs-3 ">
-          <div role="course-price" class="mts ">现价：{{paidCourse.price}}
+          <div role="course-price" class="mts ">现价：
             {% if priceType|default('RMB') == "RMB" %}
+            {{paidCourse.price}}
               元
             {% elseif priceType|default('RMB') == "Coin" %}
+            {{paidCourse.coinPrice}}
               {{setting("coin.coin_name")}}
             {% endif %}
           </div>
