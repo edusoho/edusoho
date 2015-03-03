@@ -164,9 +164,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $classroom["price"] * $cashRate;
         }
 
-        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
-            throw new Exception("实际价格不匹配，不能创建订单!");
-        }
 
         $totalPrice = (float)$totalPrice;
         $amount = $totalPrice;
@@ -200,6 +197,10 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
+
+        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
+            throw new Exception("实际价格不匹配，不能创建订单!");
+        }
 
         if($totalPrice < 0){
             $totalPrice = 0;
