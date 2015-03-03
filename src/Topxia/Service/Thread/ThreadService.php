@@ -70,6 +70,8 @@ interface ThreadService
 	 **/
 	public function getPost($id);
 
+	public function getPostPostionInThread($id);
+
 	public function findPostsByParentId($parentId, $start, $limit);
 
 	public function findPostsCountByParentId($parentId);

@@ -4,6 +4,7 @@ namespace Topxia\Service\Thread\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Thread\ThreadService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Util\TextHelper;
 use Topxia\Common\ArrayToolkit;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -272,6 +273,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->getPost($id);
     }
 
+    public function getPostPostionInThread($id)
+    {
+        $post = $this->getPost($id);
+        if (empty($post)) {
+            return 0;
+        }
+        $count = $this->getThreadPostDao()->findPostsCountByThreadIdAndParentIdAndIdLessThan($post['threadId'], 0, $post['id']);
+        return $count + 1;
+    }
+
     public function findPostsByParentId($parentId, $start, $limit)
     {
         return $this->getThreadPostDao()->findPostsByParentId($parentId, $start, $limit);
@@ -296,6 +307,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['createdTime'] = time();
         $fields['parentId'] = empty($fields['parentId']) ? 0 : intval($fields['parentId']);
 
+        $parent = null;
         if ($fields['parentId'] > 0) {
             $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
             if (empty($parent) or ($parent['threadId'] != $fields['threadId'])) {
@@ -314,9 +326,29 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->waveThread($thread['id'], 'postNum', +1);
 
+        $notifyData = $this->getPostNotifyData($post, $thread, $user);
+
+        if ($post['parentId'] == 0 and ($thread['userId'] != $post['userId'])) {
+            $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
+        }
+
+        if ($post['parentId'] > 0 and ($parent['userId'] != $post['userId'])) {
+            $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
+        }
+
         $this->dispatchEvent('thread.post_create', $post);
 
         return $post;
+    }
+
+    private function getPostNotifyData($post, $thread, $user)
+    {
+        return array(
+            'id' => $post['id'],
+            'content' => TextHelper::truncate($post['content'], 50),
+            'thread' => array('id' => $thread['id'], 'title' => $thread['title']),
+            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+        );
     }
 
     public function deletePost($postId)

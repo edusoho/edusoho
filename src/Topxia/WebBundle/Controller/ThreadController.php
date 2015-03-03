@@ -237,6 +237,49 @@ class ThreadController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function jumpAction(Request $request, $threadId)
+    {
+        $thread = $this->getThreadService()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
+            "{$thread['targetType']}Id" => $thread['targetId'],
+            'threadId' => $thread['id'],
+        )));
+    }
+
+    public function postJumpAction(Request $request, $threadId, $postId)
+    {
+        $thread = $this->getThreadService()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createNotFoundException();
+        }
+
+        $post = $this->getThreadService()->getPost($postId);
+        if ($post and $post['parentId']) {
+            $post = $this->getThreadService()->getPost($post['parentId']);
+        }
+
+        if (empty($post)) {
+            return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
+                "{$thread['targetType']}Id" => $thread['targetId'],
+                'threadId' => $thread['id'],
+            )));
+        }
+
+        $position = $this->getThreadService()->getPostPostionInThread($post['id']);
+
+        $page = ceil($position / 20);
+
+        return $this->redirect($this->generateUrl("{$thread['targetType']}_thread_show", array(
+            "{$thread['targetType']}Id" => $thread['targetId'],
+            'threadId' => $thread['id'],
+            'page' => $page,
+        )) . "#post-{$post['id']}");
+    }
+
     public function userOtherThreadsBlockAction(Request $request, $thread, $userId)
     {
         $threads = $this->getThreadService()->findThreadsByTargetAndUserId(array('type' => $thread['targetType'], 'id' => $thread['targetId']), $userId, 0, 11);
