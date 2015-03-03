@@ -58,7 +58,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
             foreach ($paidCourses as $key => $paidCourse) {
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
-                $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
+                if($paidCourses[$key]["afterDiscountPrice"]>0) {
+                    $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
+                } else {
+                    unset($paidCourses[$key]);
+                }
             }
 
             $totalPrice = NumberToolkit::roundUp($totalPrice);
@@ -97,8 +101,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
             $paidCourses[$key]["afterDiscountPrice"] = $afterDiscountPrice;
-            $afterCourseDiscountPrice -= $paidCourses[$key]["afterDiscountPrice"];
-            $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
+            if ($paidCourses[$key]["afterDiscountPrice"] > 0) {
+                $afterCourseDiscountPrice -= $paidCourses[$key]["afterDiscountPrice"];
+                $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
+            } else {
+                unset($paidCourses[$key]);
+            }
         }
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
