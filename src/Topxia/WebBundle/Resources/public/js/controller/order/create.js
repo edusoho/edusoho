@@ -102,7 +102,7 @@ define(function(require, exports, module) {
 
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
-			totalPrice = afterDiscountCourses(totalPrice);
+			//totalPrice = afterDiscountCourses(totalPrice);
 			totalPrice = afterCouponPay(totalPrice);
 			if(totalPrice <= 0){
 				totalPrice = 0;
@@ -210,7 +210,7 @@ define(function(require, exports, module) {
 			data.targetId = $(this).data("targetId");
 
 			var totalPrice = parseFloat($('[role="total-price"]').text());
-			totalPrice = afterDiscountCourses(totalPrice);
+			//totalPrice = afterDiscountCourses(totalPrice);
 			
 			data.amount = totalPrice;
 			
@@ -248,7 +248,7 @@ define(function(require, exports, module) {
  		} else {
  			$('[role="cash-discount"]').text("0.00");
  		}
- 		totalPrice = afterDiscountCourses(totalPrice);
+ 		//totalPrice = afterDiscountCourses(totalPrice);
  		shouldPay(totalPrice);
 	}
 });

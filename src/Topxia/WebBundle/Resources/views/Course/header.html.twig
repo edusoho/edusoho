@@ -60,7 +60,7 @@
                 ></div>
             </div>
             {% if canExit %}
-              {% if member.orderId %}
+              {% if member.joinedType == 'course' and member.orderId %}
               <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
               <i class="esicon esicon-exit"></i></a>
               {% else %}

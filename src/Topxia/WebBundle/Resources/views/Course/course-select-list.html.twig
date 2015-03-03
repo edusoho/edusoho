@@ -2,14 +2,14 @@
 <style>
 .course-wide-list .enabled:hover{
 
-    background: #e6e6fa;
+    background: #eee;
     border-color: #ddd;
 }
 
 .course-wide-list .enabled{
 
     cursor: default;
-    background: #e6e6fa;
+    background: #eee;
 }
 
 </style>
@@ -116,7 +116,7 @@
 
           <div class="pull-right">
           <span class="text-muted ">
-          本课程已加入到班级
+          <i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 本课程已加入到班级
           {% set classrooms = getClassroomsByCourseId(course.id) %}
           {% for classroom in classrooms%}
           <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>

@@ -58,6 +58,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
             foreach ($paidCourses as $key => $paidCourse) {
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
+                if($paidCourses[$key]["afterDiscountPrice"]>0) {
+                    $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
+                } else {
+                    unset($paidCourses[$key]);
+                }
+            }
+
+            $totalPrice = NumberToolkit::roundUp($totalPrice);
+
+            if($totalPrice < 0){
+                $totalPrice = 0;
             }
 
         	return array(
@@ -90,7 +101,18 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
             $paidCourses[$key]["afterDiscountPrice"] = $afterDiscountPrice;
-            $afterCourseDiscountPrice -= $paidCourses[$key]["afterDiscountPrice"];
+            if ($paidCourses[$key]["afterDiscountPrice"] > 0) {
+                $afterCourseDiscountPrice -= $paidCourses[$key]["afterDiscountPrice"];
+                $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
+            } else {
+                unset($paidCourses[$key]);
+            }
+        }
+
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
+
+        if($totalPrice < 0){
+            $totalPrice = 0;
         }
 
         if($afterCourseDiscountPrice<0){
@@ -142,9 +164,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $classroom["price"] * $cashRate;
         }
 
-        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
-            throw new Exception("实际价格不匹配，不能创建订单!");
-        }
 
         $totalPrice = (float)$totalPrice;
         $amount = $totalPrice;
@@ -174,6 +193,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
             $amount -= $afterDiscountPrice;
+            $totalPrice -= $afterDiscountPrice;
+        }
+
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
+
+        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
+            throw new Exception("实际价格不匹配，不能创建订单!");
+        }
+
+        if($totalPrice < 0){
+            $totalPrice = 0;
         }
 
         if($amount<0.001){
