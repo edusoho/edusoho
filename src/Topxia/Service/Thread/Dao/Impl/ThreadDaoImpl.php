@@ -12,8 +12,11 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function getThread($id)
 	{
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+        return $this->fetchCached('id', $id, function($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
 	}
 
     public function findThreadsByTargetAndUserId($target, $userId, $start, $limit)
@@ -108,5 +111,10 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		$sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
 	}
+
+    public function getTable()
+    {
+        return $this->table;
+    }
 
 }

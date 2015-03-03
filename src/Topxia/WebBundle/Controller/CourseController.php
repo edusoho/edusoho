@@ -969,7 +969,9 @@ class CourseController extends BaseController
 	private function getClassroomMembersByCourseId($id) {
 		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
 		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
-		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($this->getCurrentUser()["id"], $classroomIds);
+		$user=$this->getCurrentUser();
+
+		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
 		return $members;
 	}
 
