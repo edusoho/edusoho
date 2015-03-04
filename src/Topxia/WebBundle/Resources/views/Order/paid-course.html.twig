@@ -1,52 +1,40 @@
-
-<div class="order-item clearfix" >
-  <div class="order-item-title">
-    <i class="order-item-title-icon">
-      <img src="/bundles/topxiaweb/img/order-pay/course-discount.png" width="25px">
-    </i>
-    <h4 class="title">已购买的课程可折价抵扣</h4>
-  </div>
-  <div class="paid-courses">
-    <span class="label label-info">抵扣以所含课程当前的正常价格为准。抵扣金额=课程单价 ×（课程包总价÷课程包原价）</span>
-    {% for paidCourse in paidCourses %}
-      <div class="">
-        <div class="row">
-          <div class="col-xs-6">
-            <h4><a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
-          </div>
-          <div class="col-xs-3 ">
-            <div role="course-price" class="mts ">现价：
-              {% if priceType|default('RMB') == "RMB" %}
-              {{paidCourse.price}}
-                元
-              {% elseif priceType|default('RMB') == "Coin" %}
-              {{paidCourse.coinPrice}}
-                {{setting("coin.coin_name")}}
-              {% endif %}
-            </div>
-          </div>
-          <div class="col-xs-3">
-            <div class="price_r">
-              <span class="price_r_mark">-</span>
-              <span class="order-price" role="course-discount-price">{{paidCourse.afterDiscountPrice}}</span>
-              <span> {% if priceType|default('RMB') == "RMB" %}
-                  元
-                {% elseif priceType|default('RMB') == "Coin" %}
-                  {{setting("coin.coin_name")}}
-                {% endif %} </span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 text-muted">
-            <span style="margin-right:20px">教师：{{users[paidCourse.teacherIds|first].nickname}}</span>
-            <span style="margin-right:20px">已学：{{paidCourse.percent}}</span>
-            {% if paidCourse.deadline > 0 %}
-            <span>有效期至：{{paidCourse.deadlineDate}}</span>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
+                      <div class="order-item clearfix">
+                        <div class="order-item-title">
+                          <i class="order-item-title-icon">
+                            <img src="/bundles/topxiaweb/img/order-pay/course-discount.png" width="25px">
+                          </i>
+    
+                          <h4 class="title">您已购买过：</h4>
+                        </div>
+                        <div class="paid-courses" >
+                          {% for paidCourse in paidCourses %}
+                          <div class="course-item clearfix">
+                            <div class="course-img">
+                              <a href=""><img  src="{{ default_path('coursePicture',paidCourse.middlePicture, 'large') }}" alt=""></a>
+                            </div>
+                            <div class="course-title">
+                              <h4><a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
+                            </div>
+                            <div class="course-info">
+                              将会节省：{{paidCourse.afterDiscountPrice}}               
+                              <span> {% if priceType|default('RMB') == "RMB" %}
+                                元
+                              {% elseif priceType|default('RMB') == "Coin" %}
+                                {{setting("coin.coin_name")}}
+                              {% endif %} </span> 
+                              <span class="more">
+                                <img src="{{ default_path('icon_info_more.png') }}" alt="">
+                                <div class="more-info">
+                                  {{paidCourse.afterDiscountPrice}}={% if priceType|default('RMB') == "RMB" %}
+                                  {{paidCourse.price}}(本课程现价)×{{classroom.price}}(课程包总价)÷{{price}}课程包原价格
+                                  {% elseif priceType|default('RMB') == "Coin" %}
+                                  {{paidCourse.coinPrice}}(本课程现价)×{{classroom.price * cashRate}}(课程包总价)÷{{coinPrice}}课程包原价格
+                                  {% endif %}
+                                  
+                                </div>
+                              </span>
+                            </div>
+                          </div>
+                          {% endfor %} 
+                        </div>
+                      </div>

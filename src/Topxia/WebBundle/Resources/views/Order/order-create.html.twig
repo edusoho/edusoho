@@ -31,6 +31,7 @@
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
+            <div class="order-detail-bg">
             {% if targetType == "course" and courses|default(null) %}
               {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
             {% endif %}
@@ -43,18 +44,19 @@
               {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
             {% endif %}
 
-            <div class="order-item clearfix" >
-              <div class="pull-right order-count">
-                订单金额：
-                <span role="total-price" class="order-price">{{totalPrice}}</span>
-                {% if priceType|default('RMB') == "RMB" %}
-                  元
-                {% elseif priceType|default('RMB') == "Coin" %}
-                  {{setting("coin.coin_name")}}
-                {% endif %}
+              <div class="order-item clearfix" >
+                <div class="pull-right order-count">
+                  订单金额：
+                  <span role="total-price" class="order-price">{{totalPrice}}</span>
+                  {% if priceType|default('RMB') == "RMB" %}
+                    元
+                  {% elseif priceType|default('RMB') == "Coin" %}
+                    {{setting("coin.coin_name")}}
+                  {% endif %}
+                </div>
               </div>
             </div>
-            
+            <div class="order-detail-bg">
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
@@ -62,6 +64,7 @@
             {% if setting('coin.coin_enabled') %}
             	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
+            </div>
 
             <div class="order-item clearfix">
               <div class="total-price">
