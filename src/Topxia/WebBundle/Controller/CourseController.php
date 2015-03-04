@@ -303,12 +303,19 @@ class CourseController extends BaseController
 				}
 			}
 		}
-		
+
 		$classrooms=array();
+		$isLearnInClassrooms=array();
 		if ($this->isPluginInstalled("Classroom")) {
 			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
 			foreach ($classroomIds as $key => $value) {
 				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
+
+				if ($this->getClassroomService()->isClassroomStudent($value, $user->id)) {
+
+					$isLearnInClassrooms[] = $classrooms[$value];
+
+				}
 			}
 		}
 
@@ -335,7 +342,7 @@ class CourseController extends BaseController
 				'ChargeCoin'=> $ChargeCoin,
 				'homeworkLessonIds' => $homeworkLessonIds,
 				'exercisesLessonIds' => $exercisesLessonIds,
-				'classrooms'=> $classrooms
+				'isLearnInClassrooms'=> $isLearnInClassrooms
 			));
 		}
 		
