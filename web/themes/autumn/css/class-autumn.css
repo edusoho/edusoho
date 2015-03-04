@@ -439,9 +439,6 @@ a:focus {
   text-align: center;
   margin-top: -10px;
 }
-.class-header-bottom .class-course {
-  border-right: 1px solid #eee;
-}
 .class-header-bottom .class-course ul {
   float: left;
   margin: 0;
@@ -481,7 +478,7 @@ a:focus {
 }
 .class-header-bottom .class-buy a {
   font-size: 16px;
-  line-height: 60px;
+  line-height: 65px;
   vertical-align: middle;
   color: #83bb36;
 }
