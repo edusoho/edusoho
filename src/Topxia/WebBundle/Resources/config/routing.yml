@@ -1526,6 +1526,14 @@ course_buy_modify_user_info:
     pattern: /course/buy/modify_user_info
     defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
 
+thread_jump:
+    pattern:  /thread/{threadId}/jump
+    defaults: { _controller: TopxiaWebBundle:Thread:jump }
+
+thread_post_jump:
+    pattern:  /thread/{threadId}/post/{postId}/jump
+    defaults: { _controller: TopxiaWebBundle:Thread:postJump }
+
 thread_post:
     pattern:  /thread/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:Thread:post }

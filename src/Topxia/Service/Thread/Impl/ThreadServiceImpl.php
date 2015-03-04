@@ -4,6 +4,7 @@ namespace Topxia\Service\Thread\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Thread\ThreadService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Util\TextHelper;
 use Topxia\Common\ArrayToolkit;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
@@ -122,6 +123,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException("话题内容不能为空！");
         }
         $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
+        $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         if (empty($thread['targetId'])) {
             throw $this->createServiceException(' Id不能为空！');
@@ -130,13 +132,28 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
 
-        $thread['userId'] = $this->getCurrentUser()->id;
+        $user = $this->getCurrentUser();
+        $thread['userId'] = $user['id'];
 
         $thread['createdTime'] = time();
         $thread['updateTime'] = time();
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->addThread($thread);
+
+        if (!empty($thread['ats'])) {
+            foreach ($thread['ats'] as $userId) {
+                if ($thread['userId'] == $userId) {
+                    continue;
+                }
+                $this->getNotifiactionService()->notify($userId, 'thread.at', array(
+                    'id' => $thread['id'],
+                    'title' => $thread['title'],
+                    'content' => TextHelper::truncate($thread['content'], 50),
+                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                ));
+            }
+        }
 
         $this->dispatchEvent('thread.create', $thread);
 
@@ -272,6 +289,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->getPost($id);
     }
 
+    public function getPostPostionInThread($id)
+    {
+        $post = $this->getPost($id);
+        if (empty($post)) {
+            return 0;
+        }
+        $count = $this->getThreadPostDao()->findPostsCountByThreadIdAndParentIdAndIdLessThan($post['threadId'], 0, $post['id']);
+        return $count + 1;
+    }
+
     public function findPostsByParentId($parentId, $start, $limit)
     {
         return $this->getThreadPostDao()->findPostsByParentId($parentId, $start, $limit);
@@ -292,10 +319,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('post.create', $fields);
 
         $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['ats'] = $this->getUserService()->parseAts($fields['content']);
         $fields['userId'] = $user['id'];
         $fields['createdTime'] = time();
         $fields['parentId'] = empty($fields['parentId']) ? 0 : intval($fields['parentId']);
 
+        $parent = null;
         if ($fields['parentId'] > 0) {
             $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
             if (empty($parent) or ($parent['threadId'] != $fields['threadId'])) {
@@ -314,9 +343,39 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->waveThread($thread['id'], 'postNum', +1);
 
+        $notifyData = $this->getPostNotifyData($post, $thread, $user);
+
+        if (!empty($post['ats'])) {
+            foreach ($post['ats'] as $userId) {
+                if ($user['id'] == $userId) {
+                    continue;
+                }
+                $this->getNotifiactionService()->notify($userId, 'thread.post_at', $notifyData);
+            }
+        }
+
+        $atUserIds = array_values($post['ats']);
+        if ($post['parentId'] == 0 and ($thread['userId'] != $post['userId']) and (!in_array($thread['userId'], $atUserIds))) {
+            $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
+        }
+
+        if ($post['parentId'] > 0 and ($parent['userId'] != $post['userId']) and (!in_array($parent['userId'], $atUserIds))) {
+            $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
+        }
+
         $this->dispatchEvent('thread.post_create', $post);
 
         return $post;
+    }
+
+    private function getPostNotifyData($post, $thread, $user)
+    {
+        return array(
+            'id' => $post['id'],
+            'content' => TextHelper::truncate($post['content'], 50),
+            'thread' => array('id' => $thread['id'], 'title' => $thread['title']),
+            'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+        );
     }
 
     public function deletePost($postId)

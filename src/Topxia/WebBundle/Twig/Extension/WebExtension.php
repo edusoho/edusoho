@@ -44,6 +44,7 @@ class WebExtension extends \Twig_Extension
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
             'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
+            'at' => new \Twig_Filter_Method($this, 'atFilter'),
         );
     }
 
@@ -806,6 +807,24 @@ class WebExtension extends \Twig_Extension
         $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);
+    }
+
+    public function atFilter($text, $ats = array())
+    {
+        if (empty($ats) || !is_array($ats)) {
+            return $text;
+        }
+
+        $router = $this->container->get('router');
+
+        foreach ($ats as $nickname => $userId) {
+            $path = $router->generate('user_show', array('id' => $userId));
+            $html = "<a href=\"{$path}\" data-uid=\"{$userId}\" target=\"_blank\">@{$nickname}</a>";
+
+            $text = preg_replace("/@{$nickname}/ui", $html, $text);
+        }
+
+        return $text;
     }
 
     public function getSetting($name, $default = null)

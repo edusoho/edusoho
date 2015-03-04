@@ -11,13 +11,14 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 	protected $table = 'thread_post';
 
     private $serializeFields = array(
-        'tagIds' => 'json',
+        'ats' => 'json',
     );
 
 	public function getPost($id)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $post = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $post ? $this->createSerializer()->unserialize($post, $this->serializeFields) : null;
 	}
 
 	public function findPostsByThreadId($threadId, $orderBy, $start, $limit)
@@ -26,7 +27,8 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         //@todo: fixed me.
 		$orderBy = join (' ', $orderBy);
         $sql = "SELECT * FROM {$this->table} WHERE threadId = ? ORDER BY {$orderBy} LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($threadId)) ? : array();
+        $posts = $this->getConnection()->fetchAll($sql, array($threadId)) ? : array();
+        return $this->createSerializer()->unserializes($posts, $this->serializeFields);
 	}
 
 	public function getPostCountByThreadId($threadId)
@@ -39,13 +41,20 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY createdTime ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($parentId)) ? : array();
+        $posts = $this->getConnection()->fetchAll($sql, array($parentId)) ? : array();
+        return $this->createSerializer()->unserializes($posts, $this->serializeFields);
     }
 
     public function findPostsCountByParentId($parentId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE parentId = ?";
         return $this->getConnection()->fetchColumn($sql, array($parentId));
+    }
+
+    public function findPostsCountByThreadIdAndParentIdAndIdLessThan($threadId, $parentId, $id)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE threadId = ? AND parentId = ? AND id < ?";
+        return $this->getConnection()->fetchColumn($sql, array($threadId, $parentId, $id));
     }
 
     public function searchPosts($conditions,$orderBy,$start,$limit)
@@ -58,7 +67,8 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         ->setMaxResults($limit)
         ->orderBy($orderBy[0],$orderBy[1]);
         
-        return $builder->execute()->fetchAll() ? : array(); 
+        $posts = $builder->execute()->fetchAll() ? : array(); 
+        return $this->createSerializer()->unserializes($posts, $this->serializeFields);
     }
 
 	public function searchPostsCount($conditions)
@@ -83,6 +93,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 
 	public function updatePost($id, array $fields)
 	{
+        $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getPost($id);
 	}

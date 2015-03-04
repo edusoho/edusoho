@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="panel-body">
-      {{ thread.content|raw }}
+      {{ thread.content|at(thread.ats)|raw }}
     </div>
 
     <div class="panel-footer clearfix">

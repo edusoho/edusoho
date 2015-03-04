@@ -2599,6 +2599,13 @@ body {
 	color: #999;
 }
 
+.notification-list blockquote {
+	font-size: 13px;
+	padding: 5px 10px;
+	margin: 5px 0;
+	color: #666;
+}
+
 .notebook-list .media {
 	cursor: pointer;
 }

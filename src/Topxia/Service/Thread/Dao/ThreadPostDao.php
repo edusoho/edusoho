@@ -15,9 +15,11 @@ interface ThreadPostDao
 
 	public function findPostsCountByParentId($parentId);
 
+	public function findPostsCountByThreadIdAndParentIdAndIdLessThan($threadId, $parentId, $id);
+
 	public function searchPostsCount($conditions);
 
-	public function searchPosts($conditions,$orderBy,$start,$limit);
+	public function searchPosts($conditions, $orderBy, $start, $limit);
 
 	public function addPost($fields);
 
