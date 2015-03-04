@@ -30,9 +30,10 @@
   <div class="row">
     <div class="col-md-8">
 
-<div class="panel panel-autumn panel-autumn-primary">
+      {% if setting('classroom.enabled') %}
+        <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最新班级 / <small>RecommendClasses</small></h2>
+              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>RecommendClasses</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
@@ -86,7 +87,7 @@
               </ul>
             </div>
           </div>
-
+          {% endif %}
 
 
       {# 推荐课程 #}
@@ -577,7 +578,7 @@
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                    成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
                   </div>
                 </li>
                 {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
@@ -587,7 +588,7 @@
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+                    成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
                   </div>
                 </li>
 
