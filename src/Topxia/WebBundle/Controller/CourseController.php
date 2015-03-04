@@ -303,6 +303,14 @@ class CourseController extends BaseController
 				}
 			}
 		}
+		
+		$classrooms=array();
+		if ($this->isPluginInstalled("Classroom")) {
+			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
+			foreach ($classroomIds as $key => $value) {
+				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
+			}
+		}
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
@@ -327,6 +335,7 @@ class CourseController extends BaseController
 				'ChargeCoin'=> $ChargeCoin,
 				'homeworkLessonIds' => $homeworkLessonIds,
 				'exercisesLessonIds' => $exercisesLessonIds,
+				'classrooms'=> $classrooms
 			));
 		}
 		
@@ -352,14 +361,6 @@ class CourseController extends BaseController
 		if($coursesPrice == 1){
 			$course['price'] =0;
 			$course['coinPrice'] =0;
-		}
-
-		$classrooms=array();
-		if ($this->isPluginInstalled("Classroom")) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-			foreach ($classroomIds as $key => $value) {
-				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
-			}
 		}
 
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(

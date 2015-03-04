@@ -21,12 +21,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         if(empty($classroom)) {
             throw new Exception("找不到要购买的班级!");
         }
+        $coinPrice = 0;
+        $price = 0;
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
         $users = array();
         foreach ($courses as $key => $course) {
+            $price += $course['price'];
+            $coinPrice += $course['coinPrice'];
             $users = array_merge($this->getUserService()->findUsersByIds($course['teacherIds']), $users);
         }
+
         $users = ArrayToolkit::index($users, "id");
         $headTeacher = $this->getUserService()->getUser($classroom["headTeacherId"]);
 
@@ -83,6 +88,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
                 'courses' => $courses,
                 'paidCourses' => $paidCourses,
                 'users' => $users,
+                'price'=>$price,
+                'coinPrice' => $coinPrice,
                 'headTeacher' => $headTeacher
         	);
         }
@@ -137,6 +144,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             'cashRate' => $cashRate,
             'priceType' => $priceType,
             'account' => $account,
+            'coinPrice' => $coinPrice,
+            'price' => $price,
             'hasPayPassword' => $hasPayPassword,
             'coinPayAmount' => $coinPayAmount,
         );
