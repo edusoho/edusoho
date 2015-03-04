@@ -460,7 +460,6 @@ a:focus {
 .class-header-bottom .class-course .course-num {
   float: left;
   padding: 6px 45px;
-  border-right: 1px solid #eee;
   font-size: 16px;
   line-height: 25px;
 }
@@ -475,21 +474,26 @@ a:focus {
   }
 }
 .class-header-bottom .class-buy {
-  padding: 5px 30px;
+  padding: 0 10px;
 }
 .class-header-bottom .class-buy a {
   font-size: 16px;
-  line-height: 25px;
+  line-height: 65px;
   vertical-align: middle;
-  color: #999;
-}
-.class-header-bottom .class-buy a:hover {
   color: #428bca;
 }
-@media (min-width: 768px) {
-  .class-header-bottom .class-buy .line-height50 {
-    line-height: 50px;
-  }
+.class-header-bottom .class-buy .class-buy-left {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  padding: 0 20px;
+  border-right: 1px solid #eee;
+}
+.class-header-bottom .class-buy .class-buy-right {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  padding: 0 20px;
 }
 .class-header-bottom .class-view {
   padding: 10px 15px;
@@ -929,6 +933,87 @@ a:focus {
 }
 .go-class .go-class-link a {
   color: #428bca;
+}
+.order-detail-bg {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 3px;
+  margin-bottom: 20px;
+}
+.order-detail-bg .order-detail {
+  position: relative;
+}
+@media (max-width: 767px) {
+  .order-detail-bg .order-detail .img-responsive {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.order-detail-bg .class-count {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  padding: 0;
+  font-size: 16px;
+  color: #666;
+}
+.order-detail-bg .class-count .class-price {
+  font-size: 24px;
+}
+.order-detail-bg .order-item {
+  border-bottom: 0;
+  padding: 25px 30px;
+}
+.order-detail-bg .order-count {
+  padding: 0;
+}
+.order-detail-bg .order-count .order-price {
+  color: #ff7e00;
+}
+.paid-courses .course-item {
+  padding: 5px;
+}
+.paid-courses .course-item:nth-child(odd) {
+  background-color: #fafafa;
+}
+.paid-courses .course-item .course-img {
+  float: left;
+}
+.paid-courses .course-item .course-img img {
+  width: 112px;
+  height: auto;
+}
+.paid-courses .course-item .course-title {
+  float: left;
+  padding: 10px 20px;
+}
+.paid-courses .course-item .course-title h4 {
+  font-size: 16px;
+}
+.paid-courses .course-item .course-info {
+  padding: 16px 20px;
+  float: right;
+}
+.paid-courses .course-item .more {
+  position: relative;
+}
+.paid-courses .course-item .more:hover {
+  cursor: pointer;
+}
+.paid-courses .course-item .more:hover .more-info {
+  display: block;
+}
+.paid-courses .course-item .more .more-info {
+  position: absolute;
+  display: none;
+  z-index: 1;
+  top: 100%;
+  right: 0;
+  background-color: #fef7ed;
+  border: 1px solid #ffd183;
+  padding: 5px 10px;
+  white-space: nowrap;
+  border-radius: 2px;
 }
 /* =========================== rewrite =========================== */
 .es-box-heading a {

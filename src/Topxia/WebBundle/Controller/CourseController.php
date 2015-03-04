@@ -304,6 +304,21 @@ class CourseController extends BaseController
 			}
 		}
 
+		$classrooms=array();
+		$isLearnInClassrooms=array();
+		if ($this->isPluginInstalled("Classroom")) {
+			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
+			foreach ($classroomIds as $key => $value) {
+				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
+
+				if ($this->getClassroomService()->isClassroomStudent($value, $user->id)) {
+
+					$isLearnInClassrooms[] = $classrooms[$value];
+
+				}
+			}
+		}
+
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
@@ -327,6 +342,7 @@ class CourseController extends BaseController
 				'ChargeCoin'=> $ChargeCoin,
 				'homeworkLessonIds' => $homeworkLessonIds,
 				'exercisesLessonIds' => $exercisesLessonIds,
+				'isLearnInClassrooms'=> $isLearnInClassrooms
 			));
 		}
 		
@@ -352,14 +368,6 @@ class CourseController extends BaseController
 		if($coursesPrice == 1){
 			$course['price'] =0;
 			$course['coinPrice'] =0;
-		}
-
-		$classrooms=array();
-		if ($this->isPluginInstalled("Classroom")) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-			foreach ($classroomIds as $key => $value) {
-				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
-			}
 		}
 
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
