@@ -26,10 +26,11 @@
     <div class="row row-9-3">
       <div class="col-md-9">
 
-<div class="es-box">
+        {% if setting('classroom.enabled') %}
+          <div class="es-box">
               <div class="es-box-heading">
                 <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-                <h2>最新班级</h2>
+                <h2>最新{{ setting('classroom.name')|default("班级") }}</h2>
               </div>
               <div class="es-box-body">
                 <ul class="home-class-list">
@@ -81,7 +82,7 @@
                 </ul>
               </div>
             </div>
-
+            {% endif %}
 
 
 
@@ -384,9 +385,9 @@
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
                      
                      {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
-                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
                       {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
-                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
 
 
                       {% elseif learn.type == "learned_lesson" %}
