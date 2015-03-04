@@ -26,9 +26,9 @@
                                 <img src="{{ default_path('icon_info_more.png') }}" alt="">
                                 <div class="more-info">
                                   {{paidCourse.afterDiscountPrice}}={% if priceType|default('RMB') == "RMB" %}
-                                  {{paidCourse.price}}(本课程现价)×{{classroom.price}}(课程包总价)÷{{price}}课程包原价格
+                                  {{paidCourse.price}}(本课程现价)×{{classroom.price}}(课程包总价)÷{{coursesTotalPrice}}课程包原价格
                                   {% elseif priceType|default('RMB') == "Coin" %}
-                                  {{paidCourse.coinPrice}}(本课程现价)×{{classroom.price * cashRate}}(课程包总价)÷{{coinPrice}}课程包原价格
+                                  {{paidCourse.coinPrice}}(本课程现价)×{{classroom.price * cashRate}}(课程包总价)÷{{coursesTotalPrice}}课程包原价格
                                   {% endif %}
                                   
                                 </div>
