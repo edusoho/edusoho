@@ -59,7 +59,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $classroom["price"];
             $discountRate = 0;
             if($coursesTotalPrice>0)
-                $discountRate = $totalPrice/$coursesTotalPrice;
+                $discountRate = $coursesTotalPrice/$totalPrice;
 
             foreach ($paidCourses as $key => $paidCourse) {
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
@@ -103,7 +103,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $afterCourseDiscountPrice = $totalPrice;
         $discountRate = 0;
         if($coursesTotalPrice>0)
-            $discountRate = $totalPrice/$coursesTotalPrice;
+            $discountRate = $coursesTotalPrice/$totalPrice;
 
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
@@ -194,7 +194,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
         if($coursesTotalPrice>0){
-            $discountRate = $totalPrice/$coursesTotalPrice;
+            $discountRate = $coursesTotalPrice/$totalPrice;
         } else {
             $discountRate = 1;
         }
