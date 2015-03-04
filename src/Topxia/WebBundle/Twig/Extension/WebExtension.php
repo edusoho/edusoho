@@ -819,7 +819,7 @@ class WebExtension extends \Twig_Extension
 
         foreach ($ats as $nickname => $userId) {
             $path = $router->generate('user_show', array('id' => $userId));
-            $html = "<a href=\"{$path}\" data-uid=\"{$userId}\">@{$nickname}</a>";
+            $html = "<a href=\"{$path}\" data-uid=\"{$userId}\" target=\"_blank\">@{$nickname}</a>";
 
             $text = preg_replace("/@{$nickname}/ui", $html, $text);
         }
