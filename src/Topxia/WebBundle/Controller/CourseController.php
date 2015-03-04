@@ -354,9 +354,8 @@ class CourseController extends BaseController
 			$course['coinPrice'] =0;
 		}
 
-		$classroom = $this->getAppService()->findInstallApp('Classroom');
 		$classrooms=array();
-		if ($classroom) {
+		if ($this->isPluginInstalled("Classroom")) {
 			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
 			foreach ($classroomIds as $key => $value) {
 				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
