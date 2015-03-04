@@ -68,17 +68,28 @@ class ServiceKernel
         }
         $this->booted = true;
 
-        $finder = new Finder();
-        $finder->directories()->depth('== 0');
+        $moduleConfigCacheFile = $this->getParameter('kernel.root_dir') . '/cache/' . $this->environment . '/modules_config.php';
 
-        foreach ($this->_moduleDirectories as $dir) {
-            $finder->in($dir . '/*/Service');
-        }
+        if (file_exists($moduleConfigCacheFile)) {
+            $this->_moduleConfig = include $moduleConfigCacheFile;
+        } else {
+            $finder = new Finder();
+            $finder->directories()->depth('== 0');
 
-        foreach ($finder as $dir) {
-            $filepath = $dir->getRealPath() . '/module_config.php';
-            if (file_exists($filepath)) {
-                $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
+            foreach ($this->_moduleDirectories as $dir) {
+                $finder->in($dir . '/*/Service');
+            }
+
+            foreach ($finder as $dir) {
+                $filepath = $dir->getRealPath() . '/module_config.php';
+                if (file_exists($filepath)) {
+                    $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
+                }
+            }
+
+            if (!$this->debug) {
+                $cache = "<?php \nreturn " . var_export($this->_moduleConfig, true) . ';';
+                file_put_contents($moduleConfigCacheFile, $cache);
             }
         }
 
