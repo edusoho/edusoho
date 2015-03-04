@@ -110,7 +110,7 @@ define(function(require, exports, module) {
             var $form = $container.find('.thread-subpost-form');
             if (inSubpost) {
                 $form.removeClass('hide');
-                var text = '回复 ' + $btn.parents('.thread-post').data('authorName') + '： ';
+                var text = '回复 @' + $btn.parents('.thread-post').data('authorName') + '： ';
                 $form.find('textarea').val(text).trigger('focus');
 
             } else {

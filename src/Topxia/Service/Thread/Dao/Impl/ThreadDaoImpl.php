@@ -10,12 +10,17 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	protected $table = 'thread';
 
+    private $serializeFields = array(
+        'ats' => 'json',
+    );
+
 	public function getThread($id)
 	{
         $that = $this;
         return $this->fetchCached('id', $id, function($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            $thread = $that->getConnection()->fetchAssoc($sql, array($id));
+            return $thread ? $this->createSerializer()->unserialize($thread, $this->serializeFields) : null;
         });
 	}
 
@@ -23,14 +28,16 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ? AND userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($target['type'], $target['id'], $userId)) ? : array();
+        $threads = $this->getConnection()->fetchAll($sql, array($target['type'], $target['id'], $userId)) ? : array();
+        return $this->createSerializer()->unserializes($threads, $this->serializeFields);
     }
 
     public function findThreadsByTargetAndPostNum($target, $postNum, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ? AND postNum = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($target['type'], $target['id'], $postNum)) ? : array();
+        $threads = $this->getConnection()->fetchAll($sql, array($target['type'], $target['id'], $postNum)) ? : array();
+        return $this->createSerializer()->unserializes($threads, $this->serializeFields);
     }
 
 	public function searchThreads($conditions, $orderBys, $start, $limit)
@@ -44,7 +51,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			$builder->addOrderBy($orderBy[0], $orderBy[1]);
 		}
 
-		return $builder->execute()->fetchAll() ? : array();
+		$threads = $builder->execute()->fetchAll() ? : array();
+        return $this->createSerializer()->unserializes($threads, $this->serializeFields);
 	}
 
 	public function searchThreadCount($conditions)
@@ -84,6 +92,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
 	public function addThread($fields)
 	{
+        $this->createSerializer()->serialize($fields, $this->serializeFields);
+
         $affected = $this->getConnection()->insert($this->table, $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course thread error.');
@@ -94,6 +104,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 	public function updateThread($id, $fields)
 	{
         $this->clearCached();
+        $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getThread($id);
 	}

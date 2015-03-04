@@ -123,6 +123,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException("话题内容不能为空！");
         }
         $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
+        $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         if (empty($thread['targetId'])) {
             throw $this->createServiceException(' Id不能为空！');
@@ -131,13 +132,28 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
 
-        $thread['userId'] = $this->getCurrentUser()->id;
+        $user = $this->getCurrentUser();
+        $thread['userId'] = $user['id'];
 
         $thread['createdTime'] = time();
         $thread['updateTime'] = time();
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->addThread($thread);
+
+        if (!empty($thread['ats'])) {
+            foreach ($thread['ats'] as $userId) {
+                if ($thread['userId'] == $userId) {
+                    continue;
+                }
+                $this->getNotifiactionService()->notify($userId, 'thread.at', array(
+                    'id' => $thread['id'],
+                    'title' => $thread['title'],
+                    'content' => TextHelper::truncate($thread['content'], 50),
+                    'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
+                ));
+            }
+        }
 
         $this->dispatchEvent('thread.create', $thread);
 
@@ -303,6 +319,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('post.create', $fields);
 
         $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['ats'] = $this->getUserService()->parseAts($fields['content']);
         $fields['userId'] = $user['id'];
         $fields['createdTime'] = time();
         $fields['parentId'] = empty($fields['parentId']) ? 0 : intval($fields['parentId']);
@@ -328,11 +345,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $notifyData = $this->getPostNotifyData($post, $thread, $user);
 
-        if ($post['parentId'] == 0 and ($thread['userId'] != $post['userId'])) {
+        if (!empty($post['ats'])) {
+            foreach ($post['ats'] as $userId) {
+                if ($user['id'] == $userId) {
+                    continue;
+                }
+                $this->getNotifiactionService()->notify($userId, 'thread.post_at', $notifyData);
+            }
+        }
+
+        $atUserIds = array_values($post['ats']);
+        if ($post['parentId'] == 0 and ($thread['userId'] != $post['userId']) and (!in_array($thread['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
-        if ($post['parentId'] > 0 and ($parent['userId'] != $post['userId'])) {
+        if ($post['parentId'] > 0 and ($parent['userId'] != $post['userId']) and (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
 
