@@ -55,7 +55,7 @@
 
 	    {% if verifiedMobile | length > 0 %}
 		    <div class="alert alert-info">
-		    	<p>用户已经绑定了手机&nbsp;<span class="js-binded-mobile">{{verifiedMobile}}</span></p>
+		    	<p>您已经绑定了手机&nbsp;{{blur_phone_number(verifiedMobile)}}</p>
 			</div>
 		{% endif %}
 

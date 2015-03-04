@@ -469,7 +469,8 @@ class SettingsController extends BaseController
 
 		return $this->render('TopxiaWebBundle:Settings:find-pay-password-by-sms.html.twig', array(
 			'hasSecurityQuestions' => $hasSecurityQuestions,
-			'hasVerifiedMobile' => $hasVerifiedMobile
+			'hasVerifiedMobile' => $hasVerifiedMobile,
+			'verifiedMobile' => $verifiedMobile
 		));
 	}
 
