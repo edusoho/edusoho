@@ -194,7 +194,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
         if($coursesTotalPrice>0){
-            $discountRate = $totalPrice/$coursesTotalPrice;
+            $discountRate = $coursesTotalPrice/$totalPrice;
         } else {
             $discountRate = 1;
         }
