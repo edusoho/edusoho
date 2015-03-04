@@ -64,6 +64,8 @@ class DefaultController extends BaseController
 
         $allClassrooms = ArrayToolkit::index($classrooms,'id');
 
+        // $enabled = $this->setting('classroom.enabled');
+        // var_dump($enabled);
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
@@ -74,6 +76,7 @@ class DefaultController extends BaseController
             'classrooms' => $classrooms,
             'users' => $users,
             'allClassrooms' => $allClassrooms,
+            // 'enabled' => $enabled,
         ));
     }
 

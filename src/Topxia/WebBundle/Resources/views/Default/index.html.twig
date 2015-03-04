@@ -21,10 +21,10 @@
 
     <div class="col-md-9">
 
-
-<div class="es-box">
+      {% if setting('classroom.enabled') %}
+          <div class="es-box">
               <div class="es-box-heading">
-                <h2>班级</h2>
+                <h2>{{ setting('classroom.name')|default("班级") }}</h2>
                 <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
               </div>
               <div class="es-box-body">
@@ -78,7 +78,7 @@
                 </ul>
               </div>
             </div>
-
+            {% endif %}
 
 
       {% if courses %}
@@ -281,7 +281,7 @@
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
                     </div>
                   </li>
 
@@ -292,7 +292,7 @@
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
                     </div>
                   </li>
  
