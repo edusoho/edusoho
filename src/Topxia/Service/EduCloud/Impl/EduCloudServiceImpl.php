@@ -39,7 +39,6 @@ class EduCloudServiceImpl extends BaseService
     public function getAccount()
     {
         $api = $this->getCloudApi();
-        $options = $this->getCloudOptions();
         return $api->get('/accounts');
     }
 
