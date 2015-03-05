@@ -22,13 +22,13 @@ use Symfony\Component\Filesystem\Filesystem;
         $connection = $this->getConnection();
         $connection->exec("CREATE TABLE IF NOT EXISTS `thread` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-              `targetaType` varchar(255) NOT NULL DEFAULT 'classroom_thread' COMMENT '所属 类型',
+              `targetType` varchar(255) NOT NULL DEFAULT 'classroom_thread' COMMENT '所属 类型',
               `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属类型 ID',
               `title` varchar(255) NOT NULL COMMENT '标题',
               `content` text COMMENT '内容',
-              `isElite` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加精',
-              `isStick` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '置顶',
-              `lastPostMemberId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复人ID',
+              `nice` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加精',
+              `sticky` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '置顶',
+              `lastPostUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复人ID',
               `lastPostTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
               `type` varchar(255) NOT NULL DEFAULT '' COMMENT '话题类型',
@@ -46,22 +46,29 @@ use Symfony\Component\Filesystem\Filesystem;
               `threadId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题ID',
               `content` text NOT NULL COMMENT '内容',
               `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
-              `postId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父ID',
+              `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父ID',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;"
                 );
 
-        $connection->exec("ALTER TABLE `thread` CHANGE `targetaType` `targetType` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'classroom' COMMENT '所属 类型';");
+        $connection->exec("ALTER TABLE `thread` CHANGE `targetType` `targetType` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'classroom' COMMENT '所属 类型';");
         
+        if (!$this->isFieldExist('thread_post', 'targetType' ))
         $connection->exec("
         ALTER TABLE `thread_post` ADD `targetType` VARCHAR(255) NOT NULL DEFAULT 'classroom' COMMENT '所属 类型', ADD `targetId` INT(10) UNSIGNED NOT NULL COMMENT '所属 类型ID';   ");
+        
+        if (!$this->isFieldExist('thread', 'relationId' ))
         $connection->exec("
         ALTER TABLE `thread` ADD `relationId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '从属ID' AFTER `targetId` , ADD `categoryId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '分类ID' AFTER `relationId` ; ");
-        $connection->exec("ALTER TABLE `thread_post` CHANGE `postId` `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父ID';");
+
+        if (!$this->isFieldExist('course', 'useInClassroom' ))
         $connection->exec("ALTER TABLE `course` ADD `useInClassroom` ENUM('single','more') NOT NULL DEFAULT 'single' COMMENT '课程能否用于多个班级' AFTER `vipLevelId`, ADD `singleBuy` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '加入班级后课程能否单独购买' AFTER `useInClassroom`;");
+        
+        if (!$this->isFieldExist('course_member', 'classroomId' ))
         $connection->exec("ALTER TABLE `course_member` ADD `classroomId` INT(10) NOT NULL DEFAULT '0'  COMMENT '班级ID' AFTER `courseId`; ");
 
+        if (!$this->isFieldExist('course_member', 'joinedType' ))
         $connection->exec("ALTER TABLE `course_member` ADD `joinedType` ENUM('course','classroom') NOT NULL DEFAULT 'course' COMMENT '购买班级或者课程加入学习' AFTER `classroomId`; ");
         $connection->exec("CREATE TABLE IF NOT EXISTS `sign_target_statistics` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统id',
@@ -97,13 +104,12 @@ use Symfony\Component\Filesystem\Filesystem;
               `useTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
-        $connection->exec("ALTER TABLE  `thread` CHANGE  `isStick`  `sticky` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '置顶';");
-        $connection->exec("ALTER TABLE  `thread` CHANGE  `isElite`  `nice` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '加精'");
+        
+        if (!$this->isFieldExist('thread_post', 'subposts' ))
         $connection->exec("ALTER TABLE  `thread_post` ADD  `subposts` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '子话题数量' AFTER  `parentId`;");
-        $connection->exec("ALTER TABLE  `thread` CHANGE  `lastPostMemberId`  `lastPostUserId` INT( 10 ) UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '最后回复人ID'");
-        $connection->exec("ALTER TABLE `thread_post` DROP `fromUserId`");
+    
         $connection->exec("
-            CREATE TABLE `thread_vote` (
+            CREATE TABLE IF NOT EXISTS `thread_vote` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `threadId` int(10) unsigned NOT NULL COMMENT '话题ID',
               `postId` int(10) unsigned NOT NULL COMMENT '回帖ID',
@@ -114,8 +120,13 @@ use Symfony\Component\Filesystem\Filesystem;
               UNIQUE KEY `postId` (`threadId`,`postId`,`userId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='话题投票表';
         ");
+        if (!$this->isFieldExist('thread_post', 'ups' ))
         $connection->exec("ALTER TABLE  `thread_post` ADD  `ups` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '投票数' AFTER  `subposts`");
+        
+        if (!$this->isFieldExist('thread', 'ats' ))
         $connection->exec("ALTER TABLE  `thread` ADD  `ats` TEXT NULL DEFAULT NULL COMMENT  '@(提)到的人' AFTER  `content`");
+        
+        if (!$this->isFieldExist('thread_post', 'ats' ))
         $connection->exec("ALTER TABLE  `thread_post` ADD  `ats` TEXT NULL DEFAULT NULL COMMENT  '@(提)到的人' AFTER  `content`");
     }
 
