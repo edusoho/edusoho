@@ -202,7 +202,7 @@ define(function(require, exports, module) {
 				if(data.useable == "no") {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
-					$('[role="code-notify"]').css("color","green").text("优惠码可用");
+					$('[role="code-notify"]').css("color","green").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 				}
 				conculatePrice();

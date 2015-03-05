@@ -119,7 +119,7 @@ class OrderController extends BaseController
                 'payment' => 'alipay',
                 'targetId' => $targetId,
                 'coupon' => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
+                'couponDiscount' => empty($couponDiscount) ? 0 : ( ($priceType == 'RMB') ? ($couponDiscount) : ($couponDiscount / ((float)$cashRate))),
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
