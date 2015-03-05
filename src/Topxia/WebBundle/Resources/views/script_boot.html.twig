@@ -86,6 +86,8 @@
   app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
+  var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+
   app.config = {{
     {
       api:{

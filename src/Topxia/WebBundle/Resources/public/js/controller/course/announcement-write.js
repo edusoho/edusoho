@@ -15,9 +15,13 @@ define(function(require, exports, module) {
         });
 
         // group: 'course'
-        CKEDITOR.replace('announcement-content-field', {
+        var editor = CKEDITOR.replace('announcement-content-field', {
             toolbar: 'Simple',
             filebrowserImageUploadUrl: $('#announcement-content-field').data('imageUploadUrl')
+        });
+
+        validator.on('formValidate', function(elemetn, event) {
+            editor.updateElement();
         });
 
         validator.on('formValidated', function(error, msg, $form) {

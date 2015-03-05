@@ -118,8 +118,8 @@ class OrderController extends BaseController
                 'userId' => $user["id"],
                 'payment' => 'alipay',
                 'targetId' => $targetId,
-                'coupon' => empty($coupon) ? null : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? null : $couponDiscount,
+                'coupon' => empty($coupon) ? '' : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
