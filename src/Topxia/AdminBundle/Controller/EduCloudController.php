@@ -33,11 +33,6 @@ class EduCloudController extends BaseController
             $smsStatus['message'] = $result['error'];
         }
 
-        if ($this->container->get('kernel')->isDebug()) {
-            $hasAccount = true;
-            $loginToken["token"] = '8888';
-        }
-
         return $this->render('TopxiaAdminBundle:EduCloud:edu-cloud.html.twig', array(
             'money' => $money,
             'hasAccount' => $hasAccount,
