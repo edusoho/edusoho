@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle:User:layout.html.twig' %}
+
+{% block title %}在学{{ setting('classroom.name')|default("班级") }} - {{ parent() }}{% endblock %}
+
+{% set pageNav = 'learning' %}
+
+{% block main %}
+
+{% if classrooms %}
+<div class="class-join-header row">
+  <div class="col-md-12">
+       <ul class="course-wide-list">
+            {% for classroom in classrooms %}
+            {% set teachers = classroom['teachers']|default(null) %}
+            <li class="course-item clearfix">
+              <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                <img class="course-picture" src="{{ default_path('classroomPicture',classroom.middlePicture, 'large') }}" alt="{{ classroom.title }}">
+              </a>
+              <div class="course-body">
+                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a></h4>
+
+              <div class="class-student"><i class="fa fa-user" title="任课老师"></i>             
+                 {% for teacher in teachers %}
+                    {% if loop.index <= 3%}
+                          {{ teacher.nickname }}                           
+                    {% endif %}
+                {% endfor %}&nbsp;&nbsp;
+                <i class="fa fa-users" title="学员数"></i>{{classroom.studentNum + classroom.auditorNum }} &nbsp;&nbsp;
+                <span class="stars-{{ classroom.rating|number_format }}">&nbsp;</span>
+                <span class="rating-num">{{ classroom.rating|number_format(1) }}分</span>
+                ({{classroom.ratingNum}}评价)
+              </div>
+
+              <div class="class-metas">
+                <span class="course-num">课程总数:{{classroom.courseNum}}</span>
+                <span class="period-num">课时总数:{{classroom.lessonNum}}</span>
+              </div>
+
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+</div>
+</div>
+{% else %}
+<div class="empty">无在学的{{ setting('classroom.name')|default("班级") }}！</div>
+{% endif %}
+
+{% endblock %}

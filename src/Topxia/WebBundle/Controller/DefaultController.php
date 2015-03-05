@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
+use Topxia\Common\Paginator;
 
 class DefaultController extends BaseController
 {
@@ -34,6 +35,37 @@ class DefaultController extends BaseController
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->searchClassroomsCount(array('status' => 'published'))
+            , 6
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+                array('status' => 'published'),
+                array('createdTime','desc'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+        );
+
+        $users = array();
+
+        foreach ($classrooms as &$classroom) {
+            if (empty($classroom['teacherIds'])) {
+                $classroomTeacherIds=array();
+            }else{
+                $classroomTeacherIds=$classroom['teacherIds'] ? : array() ;
+            }
+
+            $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+
+        }
+
+        $allClassrooms = ArrayToolkit::index($classrooms,'id');
+
+        // $enabled = $this->setting('classroom.enabled');
+        // var_dump($enabled);
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
@@ -41,6 +73,10 @@ class DefaultController extends BaseController
             'recentLiveCourses' => $recentLiveCourses,
             'consultDisplay' => true,
             'cashRate' => $cashRate,
+            'classrooms' => $classrooms,
+            'users' => $users,
+            'allClassrooms' => $allClassrooms,
+            // 'enabled' => $enabled,
         ));
     }
 
@@ -237,5 +273,10 @@ class DefaultController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }

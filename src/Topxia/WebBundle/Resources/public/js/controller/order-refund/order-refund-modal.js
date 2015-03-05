@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var $form = $('#course-refund-form');
+        var $form = $('#refund-form');
         var $modal = $form.parents('.modal');
 
         $form.find('[name="reason[type]"]').on('change', function() {
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         $form.on('submit', function() {
             $modal.find('[type=submit]').button('loading');
             $.post($form.attr('action'), $form.serialize(), function(response) {
-                window.location.href = $form.data('goto');
+                window.location.reload();
             }, 'json');
             return false;
         });

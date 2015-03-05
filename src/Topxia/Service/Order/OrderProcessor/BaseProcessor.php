@@ -44,7 +44,7 @@ class BaseProcessor {
         }
 
         $priceType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
+        if($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
             $priceType = $coinSetting["price_type"];
         }
 
