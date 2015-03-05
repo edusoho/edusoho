@@ -32,7 +32,7 @@ class EduCloudController extends BaseController
 
         return $this->render('TopxiaAdminBundle:EduCloud:edu-cloud.html.twig', array(
             'account' => $account,
-            'token' => isset($loginToken) ? $loginToken["token"] : '',
+            'token' => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
             'smsStatus' => isset($smsStatus) ? $smsStatus : null,
         ));
     }
