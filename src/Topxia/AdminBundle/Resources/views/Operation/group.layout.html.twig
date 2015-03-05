@@ -1,0 +1,24 @@
+{% extends 'TopxiaAdminBundle:Operation:layout.html.twig' %}
+
+{% block title %}小组 - {{ parent() }}{% endblock %}
+
+{% set menu = 'group' %}
+
+{% block main %}
+<ul class="nav nav-tabs mbl">
+
+  <li class="{% if submenu == 'group' %}active{% endif %}">
+    <a href="{{ url('admin_operation_group') }}">小组管理
+    </a>
+  </li>
+
+    <li class="{% if submenu == 'thread' %}active{% endif %}">
+    <a href="{{ url('admin_operation_groupThread') }}">话题
+    </a>
+  </li>
+
+</ul>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

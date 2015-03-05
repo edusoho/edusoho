@@ -1,0 +1,24 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'operation' %}
+
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+
+      <div class="panel panel-default">
+        <div class="list-group">
+          <a href="{{ url('admin_operation') }}" class="list-group-item {% if menu == 'article' %}active{% endif %}">资讯</a>
+          <a href="{{ path('admin_operation_group') }}" class="list-group-item {% if menu == 'group' %}active{% endif %}">小组</a>
+          <a href="{{ path('admin_operation_block') }}" class="list-group-item {% if menu == 'block' %}active{% endif %}">编辑区</a>
+          <a class="list-group-item" href="{{ path('article_show') }}" target="_blank">资讯频道首页</a>
+        </div>
+      </div>
+
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

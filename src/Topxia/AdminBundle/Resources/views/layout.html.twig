@@ -51,6 +51,9 @@
           <li {% if nav == 'app' %}class="active"{% endif %}>
             <a href="{{ path('admin_app_installed') }}">应用</a>
           </li>
+          <li {% if nav == 'operation' %}class="active"{% endif %}>
+            <a href="{{ path('admin_operation') }}">运营</a>
+          </li>
         {% endif %}
 
           {% if is_granted('ROLE_SUPER_ADMIN') %}
