@@ -11,9 +11,8 @@ class EduCloudController extends BaseController
     {
         try {
             $account = $this->getAccount();
-            $hasAccount = empty($account);
 
-            if($hasAccount) {
+            if(!empty($account)) {
                 $money = isset($account['cash']) ? $account['cash'] : '--';
 
                 $loginToken = $this->getAppService()->getLoginToken();
@@ -32,8 +31,7 @@ class EduCloudController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:edu-cloud.html.twig', array(
-            'money' => isset($money) ? $money : 0,
-            'hasAccount' => $hasAccount,
+            'account' => $account,
             'token' => isset($loginToken) ? $loginToken["token"] : '',
             'smsStatus' => isset($smsStatus) ? $smsStatus : null,
         ));
