@@ -84,7 +84,6 @@ class EduCloudController extends BaseController
                 $result = $this->applyForSms($dataUserPosted['name']);
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
                     $this->setCloudSmsKey('sms_school_name_candidate', $dataUserPosted['name']);
-                    // $this->setCloudSmsKey('sms_school_name', $dataUserPosted['name']);
                     return $this->createJsonResponse(array('ACK' => 'ok'));
                 }
             }
