@@ -3,6 +3,8 @@ namespace Topxia\MobileBundleV2\Processor;
 
 interface OrderProcessor
 {
+	public function validateIAPReceipt();
+
 	public function payCourse();
 
 	/*

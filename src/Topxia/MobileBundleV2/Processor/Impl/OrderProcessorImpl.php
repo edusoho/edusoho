@@ -8,6 +8,60 @@ use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
 class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
 
+    public function validateIAPReceipt()
+    {
+        $receipt = $this->getParam("receipt");
+        return $this->requestReceiptData($receipt, false);
+    }
+
+    private function requestReceiptData($receipt, $isSandbox = false)     
+    {     
+        if ($isSandbox) {     
+            $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
+        }     
+        else {     
+            $endpoint = 'https://buy.itunes.apple.com/verifyReceipt';     
+        }     
+      
+        $postData = json_encode(     
+            array('receipt-data' => $receipt)     
+        );     
+      
+        $ch = curl_init($endpoint);     
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);     
+        curl_setopt($ch, CURLOPT_POST, true);     
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);     
+        curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);  
+        curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);   
+  
+  
+        $response = curl_exec($ch);     
+        $errno    = curl_errno($ch);     
+        $errmsg   = curl_error($ch);     
+        curl_close($ch);
+
+        if ($errno != 0) {     
+            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+        }     
+                  
+        $data = json_decode($response); 
+        if (!is_object($data)) {
+            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+        } 
+        if (!isset($data->status) || $data->status != 0) {
+            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+        }               
+        return array(     
+            'quantity'       =>  $data->receipt->quantity,     
+            'product_id'     =>  $data->receipt->product_id,     
+            'transaction_id' =>  $data->receipt->transaction_id,     
+            'purchase_date'  =>  $data->receipt->purchase_date,     
+            'app_item_id'    =>  $data->receipt->app_item_id,     
+            'bid'            =>  $data->receipt->bid,     
+            'bvrs'           =>  $data->receipt->bvrs     
+        );     
+    } 
+
     public function coinPayNotify()
     {
         $payType = $this->getParam("payType");
@@ -138,6 +192,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         list($success, $order)= $this->processorOrder($order);
         if ($success && $order['status'] == 'paid') {
             $result['status'] = 'ok';
+            $result['paid'] = true;
         } else {
             $result['message'] = '支付失败!';
         }
