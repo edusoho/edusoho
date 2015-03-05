@@ -38,7 +38,7 @@
   
 </div>
 
-{% if paidCourses|length > 0 %}
+{% if paidCourses|length > 0 and setting('classroom.discount_buy')|default(1) == 1 %}
 
 {% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
 

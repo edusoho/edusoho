@@ -5,7 +5,7 @@ namespace Topxia\DataTag;
 use Topxia\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
-class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag  
+class ClassroomsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取最新课程列表
@@ -17,7 +17,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
      * @return array 班级列表
      */
     public function getData(array $arguments)
-    {	
+    {   
         $this->checkCount($arguments);
         
         $conditions = array(
@@ -35,22 +35,19 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         $users = array();
 
-        foreach ($classrooms as &$classroom) {
+        foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
             }else{
                 $classroomTeacherIds=$classroom['teacherIds'];
             }
-
+            $
             $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
 
+            $classrooms[$key]['teachers'] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
         }
 
-        $allClassrooms = ArrayToolkit::index($classrooms,'id');
-
-        return array('classrooms'=>$classrooms,
-            'users'=>$users,
-            'allClassrooms'=>$allClassrooms
+        return array('classrooms'=>$classrooms
             );
     }
 
