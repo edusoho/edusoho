@@ -9,35 +9,33 @@ class EduCloudController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        $hasAccount = isset($loginToken["token"]);
-
         try {
             $account = $this->getAccount();
-        } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
-        }
-        $money = isset($account['cash']) ? $account['cash'] : '--';
+            $hasAccount = empty($account);
 
-        $smsStatus = array();
-        try {
-            $result = $this->getSmsOpenStatus();
+            if($hasAccount) {
+                $money = isset($account['cash']) ? $account['cash'] : '--';
+
+                $loginToken = $this->getAppService()->getLoginToken();
+
+                $result = $this->getSmsOpenStatus();
+                if (isset($result['apply']) && isset($result['apply']['status'])) {
+                    $smsStatus['status'] = $result['apply']['status'];
+                    $smsStatus['message'] = $result['apply']['message'];
+                } else if (isset($result['error'])) {
+                    $smsStatus['status'] = 'error';
+                    $smsStatus['message'] = $result['error'];
+                }
+            }
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
-        }
-        if (isset($result['apply']) && isset($result['apply']['status'])) {
-            $smsStatus['status'] = $result['apply']['status'];
-            $smsStatus['message'] = $result['apply']['message'];
-        } else if (isset($result['error'])) {
-            $smsStatus['status'] = 'error';
-            $smsStatus['message'] = $result['error'];
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:edu-cloud.html.twig', array(
-            'money' => $money,
+            'money' => isset($money) ? $money : 0,
             'hasAccount' => $hasAccount,
-            'token' => $hasAccount ? $loginToken["token"] : '',
-            'smsStatus' => $smsStatus,
+            'token' => isset($loginToken) ? $loginToken["token"] : '',
+            'smsStatus' => isset($smsStatus) ? $smsStatus : null,
         ));
     }
 
