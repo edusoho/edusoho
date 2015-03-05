@@ -35,20 +35,27 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $courseIds = ArrayToolKit::column($courses, "id");
 
         $currentUser = $this->getUserService()->getCurrentUser();
-        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+        
+        $classroomSetting = $this->getSettingService()->get("classroom");
+        $paidCoursesTotalPrice = 0;
+        $paidCourses = array();
+        if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
+            $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+            $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
-        $courseIds = ArrayToolkit::column($courseMembers, "courseId");
-        $paidCourses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courseIds = ArrayToolkit::column($courseMembers, "courseId");
+            $paidCourses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        foreach ($paidCourses as $key => $paidCourse) {
-            $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
-            $paidCourses[$key]["deadline"] = $courseMembers[$paidCourse["id"]]["deadline"];
-            $paidCourses[$key]["deadlineDate"] = date('Y-m-d H:i', $courseMembers[$paidCourse["id"]]["deadline"]*1000);
+            foreach ($paidCourses as $key => $paidCourse) {
+                $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
+                $paidCourses[$key]["deadline"] = $courseMembers[$paidCourse["id"]]["deadline"];
+                $paidCourses[$key]["deadlineDate"] = date('Y-m-d H:i', $courseMembers[$paidCourse["id"]]["deadline"]*1000);
+            }
+            $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, $priceType);
         }
 
+
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
-        $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, $priceType);
 
         if(!$coinEnable) {
             $totalPrice = $classroom["price"];
@@ -178,11 +185,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $courseIds = ArrayToolKit::column($courses, "id");
 
         $currentUser = $this->getUserService()->getCurrentUser();
-        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
-        $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
-        $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
+        $classroomSetting = $this->getSettingService()->get("classroom");
+        $paidCoursesTotalPrice = 0;
+        $paidCourses = array();
+        if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
+            $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+            $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+
+            $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+            $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
+        }
 
         if($coursesTotalPrice>0){
             $discountRate = $totalPrice/$coursesTotalPrice;
