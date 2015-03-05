@@ -1223,7 +1223,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "start" => $start,
             "limit" => $limit,
             "total" => $total,
-            "data" => $liveCourses);
+            "data" => $this->controller->filterCourses($liveCourses));
         return $result;
     }
 }
