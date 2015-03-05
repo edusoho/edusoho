@@ -1201,21 +1201,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $total = $this->controller->getCourseService()->searchCourseCount($condition);  
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
-        
-        $teacherIds = array();
-        foreach ($liveCourses as $course) {
-            $teacherIds = array_merge($teacherIds, $course['teacherIds']);
-        }
-        $teachers = $this->controller->getUserService()->findUsersByIds($teacherIds);
-        $teachers = $this->controller->simplifyUsers($teachers);
 
-        $liveCourses = array_map(function($liveCourse) use ($teachers){
+        $liveCourses = array_map(function($liveCourse){
             $liveCourse['createdTime'] = Date('c',$liveCourse['createdTime']);
-            $liveCourse['teachers'] = array();
-            foreach ($liveCourse['teacherIds'] as $teacherId) {
-                $liveCourse['teachers'][] = $teachers[$teacherId];
-            }
-            unset($liveCourse['teacherIds']);
             return $liveCourse;
         },$liveCourses);
 
