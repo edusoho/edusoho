@@ -1,0 +1,19 @@
+{% extends 'TopxiaAdminBundle:Operation:layout.html.twig' %}
+
+{% block title %}自定义页面 - {{ parent() }}{% endblock %}
+
+{% set menu = 'content' %}
+
+{% block main %}
+<ul class="nav nav-tabs mbl">
+
+  <li class="{% if submenu == 'content' %}active{% endif %}">
+    <a href="{{ url('admin_operation_content', {type:'page'}) }}">管理
+    </a>
+  </li>
+
+</ul>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

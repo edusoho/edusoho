@@ -1247,3 +1247,7 @@ admin_operation_block_delete:
 admin_operation_blockhistory_preview:
     pattern:  /operation/blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Operation:preview }
+
+admin_operation_content:
+    pattern:  /operation/content
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentIndex }

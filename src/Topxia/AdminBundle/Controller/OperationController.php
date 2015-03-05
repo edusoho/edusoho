@@ -728,6 +728,37 @@ class OperationController extends BaseController
         }
     }
 
+    public function contentIndexAction(Request $request)
+    {
+        $conditions = array_filter($request->query->all());
+
+        $paginator = new Paginator(
+            $request,
+            $this->getContentService()->searchContentCount($conditions),
+            20
+        );
+
+        $contents = $this->getContentService()->searchContents(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($contents, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $categoryIds = ArrayToolkit::column($contents, 'categoryId');
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+
+        return $this->render('TopxiaAdminBundle:Operation:content.index.html.twig',array(
+            'contents' => $contents,
+            'users' => $users,
+            'categories' => $categories,
+            'paginator' => $paginator,
+        ));
+    }
+
     public function blockDeleteAction(Request $request, $id)
     {
         try {
@@ -820,6 +851,11 @@ class OperationController extends BaseController
     protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');
+    }
+
+    private function getContentService()
+    {
+        return $this->getServiceKernel()->createService('Content.ContentService');
     }
 
 }
