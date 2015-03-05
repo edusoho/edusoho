@@ -1201,7 +1201,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $total = $this->controller->getCourseService()->searchCourseCount($condition);  
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
-        
+
         $liveCourses = array_map(function($liveCourse){
             $liveCourse['createdTime'] = Date('c',$liveCourse['createdTime']);
             return $liveCourse;
@@ -1211,7 +1211,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "start" => $start,
             "limit" => $limit,
             "total" => $total,
-            "data" => $liveCourses);
+            "data" => $this->controller->filterCourses($liveCourses));
         return $result;
     }
 }
