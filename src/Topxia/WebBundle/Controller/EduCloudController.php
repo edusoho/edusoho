@@ -93,7 +93,7 @@ class EduCloudController extends BaseController
                 return $this->createJsonResponse(array('error' => "发送失败, {$message}"));
             }
 
-            $this->getLogService()->info('sms', $smsType, "对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
+            $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
 
             $request->getSession()->set('to', $to);
             $request->getSession()->set('sms_code', $smsCode);
