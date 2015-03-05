@@ -1087,14 +1087,14 @@ admin_coin_model_save:
     defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }
 
 admin_edu_cloud:
-    pattern:  /edu-cloud
+    pattern:  /edu_cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /edu-cloud/sms
+    pattern:  /edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
 
 admin_edu_cloud_apply_for_sms:
-    pattern:  /edu-cloud/apply-for-sms
+    pattern:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
 
