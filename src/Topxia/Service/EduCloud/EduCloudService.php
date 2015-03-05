@@ -7,7 +7,7 @@ interface EduCloudService
 
     public function applyForSms($name = 'smsHead');
 
-    public function lookForStatus();
+    public function getSmsOpenStatus();
 
     public function sendSms($to, $captcha, $category = 'captcha');
 

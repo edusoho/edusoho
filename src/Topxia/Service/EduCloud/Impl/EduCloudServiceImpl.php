@@ -55,7 +55,7 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-    public function lookForStatus()
+    public function getSmsOpenStatus()
     {
         $api = $this->getCloudApi();
         $options = $this->getCloudOptions();

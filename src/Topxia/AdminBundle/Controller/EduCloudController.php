@@ -21,7 +21,7 @@ class EduCloudController extends BaseController
 
         $smsStatus = array();
         try {
-            $result = $this->lookForStatus();
+            $result = $this->getSmsOpenStatus();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
         }
@@ -47,7 +47,7 @@ class EduCloudController extends BaseController
         $smsStatus = array();
 
         try {
-            $result = $this->lookForStatus();
+            $result = $this->getSmsOpenStatus();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
         }
@@ -174,9 +174,9 @@ class EduCloudController extends BaseController
         return $this->getEduCloudService()->applyForSms($name);
     }
 
-    private function lookForStatus()
+    private function getSmsOpenStatus()
     {
-        return $this->getEduCloudService()->lookForStatus();
+        return $this->getEduCloudService()->getSmsOpenStatus();
     }
 
     private function sendSms($to, $verify, $category = 'verify')
