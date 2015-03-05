@@ -6,8 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EduCloudController extends BaseController
 {
-    private $debug = false;
-
     public function smsSendAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -19,12 +17,8 @@ class EduCloudController extends BaseController
             $currentTime = time();
 
             $smsLastTime = $request->getSession()->get('sms_last_time');
-
-            if ($this->debug){
-                $allowedTime = 0;
-            }else{
-                $allowedTime = 120;
-            }
+            $allowedTime = 120;
+            
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
                 return $this->createJsonResponse(array('error' => '请等待120秒再申请'));
             }
@@ -71,15 +65,6 @@ class EduCloudController extends BaseController
 
             if (!$this->checkPhoneNum($to)){
                 return $this->createJsonResponse(array('error' => "手机号错误:{$to}"));
-            }
-
-            if ($this->debug) {
-                $request->getSession()->set('to', '13758129341');
-                $request->getSession()->set('sms_code', '357212');
-                $request->getSession()->set('sms_last_time', time());
-                $request->getSession()->set('sms_type', $smsType);
-
-                return $this->createJsonResponse(array('ACK' => 'ok', 'debug' => 'true'));
             }
 
             $smsCode = $this->generateSmsCode();

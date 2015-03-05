@@ -9,7 +9,6 @@ class EduCloudController extends BaseController
 {
     private $cloudOptions = null;
     private $cloudApi = null;
-    private $debug = true;
 
     public function indexAction(Request $request)
     {
@@ -37,7 +36,7 @@ class EduCloudController extends BaseController
             $smsStatus['message'] = $result['error'];
         }
 
-        if ($this->debug) {
+        if ($this->container->get('kernel')->isDebug()) {
             $hasAccount = true;
             $loginToken["token"] = '8888';
         }
