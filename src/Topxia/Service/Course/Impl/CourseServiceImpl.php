@@ -1933,6 +1933,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$member = $this->getMemberDao()->addMember($fields);
+		return $member;
 
 	}
 

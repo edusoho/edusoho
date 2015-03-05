@@ -209,7 +209,6 @@ class CourseController extends BaseController
 	 */
 	public function showAction(Request $request, $id)
 	{
-
 		$course = $this->getCourseService()->getCourse($id);
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
