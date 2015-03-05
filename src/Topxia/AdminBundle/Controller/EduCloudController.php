@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EduCloudController extends BaseController
 {
-    private $cloudOptions = null;
-    private $cloudApi = null;
-
     public function indexAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
