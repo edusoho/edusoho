@@ -311,7 +311,7 @@ class CourseController extends BaseController
 			foreach ($classroomIds as $key => $value) {
 				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 
-				if ($this->getClassroomService()->isClassroomStudent($value, $user->id)) {
+				if ($this->getClassroomService()->isClassroomStudent($value, $user->id) or $this->getClassroomService()->isClassroomTeacher($value, $user->id)) {
 
 					$isLearnInClassrooms[] = $classrooms[$value];
 
