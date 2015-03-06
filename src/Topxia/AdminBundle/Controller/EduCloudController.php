@@ -51,11 +51,9 @@ class EduCloudController extends BaseController
         if (isset($result['apply']) && isset($result['apply']['status'])) {
             $smsStatus['status'] = $result['apply']['status'];
             $newSchoolName = $this->getCloudSmsKey('sms_school_name_candidate');
-            if ($smsStatus['status'] == 'passed') {
-                if (strlen($newSchoolName) > 0){
-                    $this->setCloudSmsKey('sms_school_name', $newSchoolName);
-                    $this->setCloudSmsKey('sms_school_name_candidate', '');
-                }
+            if (($smsStatus['status'] == 'passed')&&(strlen($newSchoolName) > 0)) {
+                $this->setCloudSmsKey('sms_school_name', $newSchoolName);
+                $this->setCloudSmsKey('sms_school_name_candidate', '');
             }
             if ($smsStatus['status'] == 'failed') {
                 $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$newSchoolName}”未通过审核");
