@@ -805,16 +805,19 @@ class CourseController extends BaseController
 		foreach ($courses as $key => $course) {
 			$userIds = array_merge($userIds, $course['teacherIds']);
 
-			$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
+			$classrooms = array();
+			if ($this->isPluginInstalled("Classroom")) {
+				$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
 
-			$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+				$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 
-			$courses[$key]['classroomCount']=count($classroomIds);
+				$courses[$key]['classroomCount']=count($classroomIds);
 
-			if(count($classroomIds)>0){
+				if(count($classroomIds)>0){
 
-				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
-				$courses[$key]['classroom']=$classroom;
+					$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
+					$courses[$key]['classroom']=$classroom;
+				}
 			}
 		}
 		
