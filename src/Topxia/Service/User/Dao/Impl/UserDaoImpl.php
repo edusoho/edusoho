@@ -32,6 +32,18 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
 
+    public function findUsersByNicknames(array $nicknames)
+    {
+        if(empty($nicknames)) { 
+            return array(); 
+        }
+
+        $marks = str_repeat('?,', count($nicknames) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE nickname IN ({$marks});";
+        
+        return $this->getConnection()->fetchAll($sql, $nicknames);
+    }
+
     public function findUsersByIds(array $ids)
     {
         if(empty($ids)){ return array(); }

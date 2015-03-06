@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class= "modal-lg" %}
+
+{% block title %}选择课程{% endblock %}
+{% block body %}
+<style>
+.course-item:hover {
+    cursor: pointer;
+}
+.course-wide-list .course-item .select{
+
+    
+}
+</style>
+<form class="form-inline form-search" role="search-form">
+      <div class="form-group ">
+        <input type="text" class="form-control" name="key" value="" placeholder="课程名称">
+      </div>
+      <button type="button" class="btn btn-primary"  id="search"  data-url="{{path('course_search',{type:type,classroomId:classroomId})}}">搜索</button>
+      <a class="btn btn-primary" id="all-courses" data-url="{{path('course_select',{url:url,type:type,classroomId:classroomId})}}">全部课程</a>
+</form>
+
+<div class="row mtl">
+    <div class="col-md-12">
+      <div class="courses-list">
+        {% include('TopxiaWebBundle:Course:course-select-list.html.twig') %}
+        {{ web_macro.paginator(paginator) }}
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{url}}" >添加</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+
+    <script>app.load('course/select')</script>
+{% endblock %}
