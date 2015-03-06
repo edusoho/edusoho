@@ -39,33 +39,16 @@ class EduCloudController extends BaseController
 
     public function smsAction(Request $request)
     {
-        $this->handleSmsSetting($request);
-        $smsStatus = array();
-
         try {
-            $result = $this->getSmsOpenStatus();
+            $smsStatus = $this->handleSmsSetting($request);
+
+            return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
+                'smsStatus' => $smsStatus,
+            ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
         }
 
-        if (isset($result['apply']) && isset($result['apply']['status'])) {
-            $smsStatus['status'] = $result['apply']['status'];
-            $newSchoolName = $this->getCloudSmsKey('sms_school_name_candidate');
-            if (($smsStatus['status'] == 'passed')&&(strlen($newSchoolName) > 0)) {
-                $this->setCloudSmsKey('sms_school_name', $newSchoolName);
-                $this->setCloudSmsKey('sms_school_name_candidate', '');
-            }
-            if ($smsStatus['status'] == 'failed') {
-                $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$newSchoolName}”未通过审核");
-            }
-        } else if (isset($result['error'])) {
-            $smsStatus['status'] = 'error';
-            $smsStatus['message'] = $result['error'];
-        }
-
-        return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
-            'smsStatus' => $smsStatus,
-        ));
     }
 
     public function applyForSmsAction(Request $request)
@@ -81,7 +64,7 @@ class EduCloudController extends BaseController
             ) {
                 $result = $this->applyForSms($dataUserPosted['name']);
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
-                    $this->setCloudSmsKey('sms_school_name_candidate', $dataUserPosted['name']);
+                    $this->setCloudSmsKey('sms_school_candidate_name', $dataUserPosted['name']);
                     return $this->createJsonResponse(array('ACK' => 'ok'));
                 }
             }
@@ -98,53 +81,80 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
-            $this->setCloudSmsKey('sms_enabled', $dataUserPosted['sms_enabled']);
 
-            $auth = $this->getSettingService()->get('auth', array());
-            if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
-                $this->setCloudSmsKey('sms_registration', 'on');
-                if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
-                    $auth['registerSort'][] = 'mobile';
-                }
-                if (!isset($auth['registerSort'])){
-                    $auth['registerSort'] = array(0 => "email", 1 => "nickname", 2 => "password", 3 => "mobile");
-                }
-            } else {
-                $this->setCloudSmsKey('sms_registration', 'off');
-                if (isset($auth['registerSort'])&&(in_array('mobile', $auth['registerSort']))) {
-                    $index = array_search('mobile',$auth['registerSort']);
-                    unset($auth['registerSort'][$index]);
-                }
-            }
-            $this->getSettingService()->set('auth', $auth);
+            $defaultSetting = array(
+                'sms_enabled' => '0',
+                'sms_registration' => 'off',
+                'sms_forget_password' => 'off',
+                'sms_user_pay' => 'off',
+                'sms_forget_pay_password' => 'off',
+                'sms_bind' => 'off',
+            );
+            $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
-            if (isset($dataUserPosted['sms_forget_password']) && ($dataUserPosted['sms_forget_password'] == 'on')) {
-                $this->setCloudSmsKey('sms_forget_password', 'on');
-            } else {
-                $this->setCloudSmsKey('sms_forget_password', 'off');
-            }
-            if (isset($dataUserPosted['sms_user_pay']) && ($dataUserPosted['sms_user_pay'] == 'on')) {
-                $this->setCloudSmsKey('sms_user_pay', 'on');
-            } else {
-                $this->setCloudSmsKey('sms_user_pay', 'off');
-            }
-            if (isset($dataUserPosted['sms_forget_pay_password']) && ($dataUserPosted['sms_forget_pay_password'] == 'on')) {
-                $this->setCloudSmsKey('sms_forget_pay_password', 'on');
-            } else {
-                $this->setCloudSmsKey('sms_forget_pay_password', 'off');
-            }
-            if (isset($dataUserPosted['sms_bind']) && ($dataUserPosted['sms_bind'] == 'on')) {
-                $this->setCloudSmsKey('sms_bind', 'on');
-            } else {
-                $this->setCloudSmsKey('sms_bind', 'off');
-            }
+            list($smsStatus, $schoolNames) = $this->getSchoolName();
+            $dataUserPosted = array_merge($dataUserPosted, $schoolNames);
+
+            $this->getSettingService()->set('cloud_sms', $dataUserPosted);
+            
+            $this->saveAuthRegisterSort($dataUserPosted);
 
             if ('1' == $dataUserPosted['sms_enabled']) {
                 $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');
             } else {
                 $this->setFlashMessage('success', '设置成功。');
             }
+            return $smsStatus;
+        } 
+        return array();
+    }
+
+    private function getSchoolName()
+    {
+        $schoolName = $this->getCloudSmsKey('sms_school_name');
+        $schoolCandidateName = $this->getCloudSmsKey('sms_school_candidate_name');
+        $result = $this->getSmsOpenStatus();
+        $smsStatus = array();
+        if (isset($result['apply']) && isset($result['apply']['status'])) {
+            $smsStatus['status'] = $result['apply']['status'];
+            if (($smsStatus['status'] == 'passed')&&(strlen($schoolCandidateName) > 0)) {
+                $schoolName = $schoolCandidateName;
+                $schoolCandidateName = '';
+            }
+            if ($smsStatus['status'] == 'failed') {
+                $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$newSchoolName}”未通过审核");
+            }
+        } else if (isset($result['error'])) {
+            $smsStatus['status'] = 'error';
+            $smsStatus['message'] = $result['error'];
         }
+
+        return array(
+            $smsStatus, 
+            array(
+                'sms_school_name' => $schoolName,
+                'sms_school_candidate_name' => $schoolCandidateName,
+            )
+        );
+    }
+
+    private function saveAuthRegisterSort($dataUserPosted) 
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
+            if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
+                $auth['registerSort'][] = 'mobile';
+            }
+            if (!isset($auth['registerSort'])){
+                $auth['registerSort'] = array(0 => "email", 1 => "nickname", 2 => "password", 3 => "mobile");
+            }
+        } else {
+            if (isset($auth['registerSort'])&&(in_array('mobile', $auth['registerSort']))) {
+                $index = array_search('mobile',$auth['registerSort']);
+                unset($auth['registerSort'][$index]);
+            }
+        }
+        $this->getSettingService()->set('auth', $auth);
     }
 
     private function calStrlen($str)
