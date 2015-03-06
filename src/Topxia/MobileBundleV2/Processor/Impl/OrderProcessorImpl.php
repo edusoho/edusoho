@@ -47,7 +47,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         curl_close($ch);
 
         if ($errno != 0) {     
-            return $this->createErrorResponse('error', "充值失败！");
+            return $this->createErrorResponse('error', "充值失败！" . $errno);
         }     
                   
         $data = json_decode($response); 
