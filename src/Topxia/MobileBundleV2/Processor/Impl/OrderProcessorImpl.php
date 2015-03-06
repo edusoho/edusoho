@@ -12,21 +12,16 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+            return $this->createErrorResponse('not_login', "您尚未登录");
         }
 
         $receipt = $this->getParam("receipt");
-        return $this->requestReceiptData($receipt, false);
+        $amout = $this->getParam("amout", 0);
+        return $this->requestReceiptData($amout, $receipt, true);
     }
 
-    private function requestReceiptData($receipt, $isSandbox = false)     
+    private function requestReceiptData($amout, $receipt, $isSandbox = false)     
     {
-        $amout = $this->getParam("amout", 0);
-        $user = $this->controller->getUserByToken($this->request);
-        if (empty($user)) {
-            return $this->createErrorResponse('not_login', "您尚未登录！");
-        }
-
         if ($isSandbox) {     
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
         }     
