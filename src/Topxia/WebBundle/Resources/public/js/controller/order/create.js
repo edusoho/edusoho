@@ -70,6 +70,7 @@ define(function(require, exports, module) {
 		function afterCoinPay(coinNum){
 			var accountCash = $('[role="accountCash"]').text();
 			if(accountCash == "" || isNaN(accountCash) || parseFloat(accountCash) == 0) {
+				coinPriceZero();
 				return 0;
 			}
 			var coin = Math.round(accountCash*1000)>Math.round(coinNum*1000) ? coinNum : accountCash;
