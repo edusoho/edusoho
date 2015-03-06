@@ -1,0 +1,129 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}生成学习卡{% endblock %}
+{% block body %}
+
+<form id="money-card-create-form" class="form-horizontal" method="post" action="{{ path('admin_money_card_create')}}">
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="batchName">学习卡批次名称</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="batchNameModel" name="batchName" class="form-control">
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">如: 100学习币充值卡</p>  
+    </div>    
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+    <label for="note">批次说明</label>
+  </div>
+    <div class="col-md-4 controls">
+      <textarea class="form-control" rows="1" name="note"></textarea>
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">用于说明本批次学习卡，内容可选填</p>  
+    </div>    
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="coin">{{setting('coin.coin_name')}}</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="coin" data-url="" name="coin" class="form-control" >
+      {# <p class="help-block">学习卡可充值获得的{{setting('coin.coin_name')}}数量</p>  #}     
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">学习卡可充值获得的{{setting('coin.coin_name')}}数量</p>  
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+    <label for="number">生成数量</label>
+  </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="number" name="number" class="form-control">
+      {# <p class="help-block">生成数量必须在1——1000之间</p> #}
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">生成数量必须在1——1000之间</p>  
+    </div>    
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="cardPrefix">学习卡前缀</label>
+    </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="cardPrefix" name="cardPrefix" data-url="{{ path('admin_money_card_batch_card_prefix_check') }}" class="form-control" >
+      {# <p class="help-block">学习卡前缀不可重复，不占用学习卡位数</p> #}
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">学习卡前缀用于区分学习卡，不可重复</p>  
+    </div>     
+  </div>
+
+   <div class="row form-group" style="display:none;">   
+    <div class="col-md-3 control-label">
+      <label for="cardLength">学习卡位数</label>
+    </div>
+      <div class="col-md-4 controls">
+        <input type="text" id="cardLength" name="cardLength" class="form-control" value="16">
+      {# <p class="help-block">学习卡位数最少6——32位之间</p> #}
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">学习卡位数必须在6—32位之间</p>  
+    </div>       
+  </div>
+
+  <div class="row form-group" style="display:none;" >         
+    <div class="col-md-3 control-label">
+    <label for="passwordLength">密码位数</label>
+  </div>
+    <div class="col-md-4 controls">
+      <input type="text" id="passwordLength" name="passwordLength" class="form-control" value="16"> 
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">密码位数必须在6—32位之间</p>  
+    </div>  
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+    <label for="deadlineCreate">有效期</label>
+  </div>
+    <div class="col-md-4 controls" style="z-index:2000;">
+      <input type="text" id="deadlineCreate" name="deadline" class="form-control" value="">
+    </div>
+    <div class="col-md-5 controls">
+      <p class="help-block">学习卡到期日期</p>  
+    </div>      
+  </div>
+
+  <div class="alert alert-info">
+    <ul>     
+        <li>  学习卡为16位数字卡号</li>           
+        <li>  密码为16位字母数字组合</li>           
+        <li>  学员使用时只需要输入密码即可</li>           
+    </ul>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-primary pull-right" data-loading-text="正在生成，请稍后" data-toggle="form-submit" data-target="#money-card-create-form" id="batch-create">生成学习卡</button>
+
+  <script>app.load('moneycardbundle/controller/create-money-card-model')</script>
+{% endblock %}

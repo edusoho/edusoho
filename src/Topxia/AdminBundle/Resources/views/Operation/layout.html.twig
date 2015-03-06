@@ -14,10 +14,10 @@
           <a href="{{ path('admin_operation_block') }}" class="list-group-item {% if menu == 'block' %}active{% endif %}">编辑区</a>
           <a href="{{ path('admin_operation_content', {type:'page'}) }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">自定义页面</a>
          {% if is_plugin_installed('Coupon') %}
-          <a href="{{ path('admin_operation_block') }}" class="list-group-item {% if menu == 'coupon' %}active{% endif %}">优惠码</a>
+          <a href="{{ path('admin_operation_coupon') }}" class="list-group-item {% if menu == 'coupon_batch' %}active{% endif %}">优惠码</a>
          {% endif %}
           {% if is_plugin_installed('MoneyCard') %}
-          <a href="{{ path('admin_operation_block') }}" class="list-group-item {% if menu == 'moneyCard' %}active{% endif %}">学习卡</a>
+          <a href="{{ path('admin_money_card_homepage') }}" class="list-group-item {% if menu == 'money_card_homepage' %}active{% endif %}">学习卡</a>
          {% endif %}
         </div>
       </div>

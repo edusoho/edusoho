@@ -1,0 +1,24 @@
+{% extends 'TopxiaAdminBundle:Operation:layout.html.twig' %}
+
+{% block title %}优惠码 - {{ parent() }}{% endblock %}
+
+{% set menu = 'coupon_batch' %}
+
+{% block main %}
+<ul class="nav nav-tabs mbl">
+
+  <li class="{% if submenu == 'coupon_batch' %}active{% endif %}">
+    <a href="{{ url('admin_operation_coupon') }}">管理
+    </a>
+  </li>
+
+ <li class="{% if submenu == 'coupon_query' %}active{% endif %}">
+    <a href="{{ url('admin_operation_coupon_query') }}">查询
+    </a>
+  </li>
+
+</ul>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

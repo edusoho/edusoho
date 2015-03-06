@@ -906,6 +906,390 @@ class OperationController extends BaseController
         return $content;
     }
 
+    public function couponIndexAction (Request $request)
+    {   
+        $conditions = $request->query->all();
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCouponService()->searchBatchsCount($conditions),
+            20
+        );
+
+        $batchs = $this->getCouponService()->searchBatchs(
+            $conditions, 
+            array('createdTime', 'DESC'), 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        return $this->render('TopxiaAdminBundle:Operation:coupon.index.html.twig', array(
+           'batchs' => $batchs,
+           'paginator' =>$paginator
+        ));
+    }
+
+    public function couponGenerateAction (Request $request)
+    {   
+        if ('POST' == $request->getMethod()) {
+            $couponData = $request->request->all();
+            if ($couponData['type'] == 'minus') {
+                $couponData['rate'] = $couponData['minus-rate'];
+                unset($couponData['minus-rate']);
+                unset($couponData['discount-rate']);
+            } else {
+                $couponData['rate'] = $couponData['discount-rate'];
+                unset($couponData['minus-rate']);
+                unset($couponData['discount-rate']);
+            }
+
+            if ($couponData['targetType'] == 'course')
+            {
+                $couponData['targetId'] = $couponData['courseId'];
+                unset($couponData['courseId']);
+            }
+
+            $batch = $this->getCouponService()->generateCoupon($couponData);
+
+            return $this->redirect($this->generateUrl('admin_operation_coupon'));
+        }
+        return $this->render('TopxiaAdminBundle:Operation:generate.html.twig');
+    }
+
+    public function couponCheckPrefixAction(Request $request)
+    {
+        $prefix = $request->query->get('value');
+        $result = $this->getCouponService()->checkBatchPrefix($prefix);
+        if ($result == true) {
+            $response = array('success' => true, 'message' => '该前缀可以使用');
+        } else {
+            $response = array('success' => false, 'message' => '该前缀已存在');
+        }
+        return $this->createJsonResponse($response);
+    }
+
+    public function couponDetailAction(Request $request, $batchId)
+    {   
+        $count = $this->getCouponService()->searchCouponsCount(array('batchId' => $batchId));
+
+        $batch = $this->getCouponService()->getBatch($batchId);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $coupons = $this->getCouponService()->searchCoupons(
+            array('batchId' => $batchId),
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),  
+            $paginator->getPerPageCount()
+        );
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
+
+        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
+
+        return $this->render('TopxiaAdminBundle:Operation:coupon-modal.html.twig', array(
+            'coupons' => $coupons,
+            'batch' => $batch,
+            'paginator' => $paginator,
+            'users' => $users,
+            'orders' => $orders,
+        ));
+    }
+
+    public function couponExportCsvAction(Request $request,$batchId)
+    {
+        $batch = $this->getCouponService()->getBatch($batchId);
+
+        $coupons = $this->getCouponService()->findCouponsByBatchId(
+            $batchId,
+            0,
+            $batch['generatedNum']
+        );
+
+        $coupons = array_map(function($coupon) {
+            $export_coupon['batchId']  = $coupon['batchId'];
+            $export_coupon['deadline'] = date('Y-m-d',$coupon['deadline']);
+            $export_coupon['code']   = $coupon['code'];
+            if ($coupon['status'] == 'unused') {
+                $export_coupon['status'] = '未使用';
+            } else {
+                $export_coupon['status'] = '已使用'; 
+            }
+            return implode(',', $export_coupon);
+        }, $coupons);
+
+        $exportFilename = "couponBatch-".$batchId."-".date("YmdHi").".csv";
+
+        $titles = array("批次","有效期至","优惠码","状态");
+
+        $exportFile = $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
+
+        return $exportFile;
+    }
+
+    private function createExporteCSVResponse(array $header, array $data, $outputFilename)
+    {   
+        $header = implode(',', $header);
+
+        $str = $header."\r\n";
+
+        $str .= implode("\r\n", $data);
+
+        $str = chr(239) . chr(187) . chr(191) . $str;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$outputFilename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
+
+    public function couponDeleteAction (Request $request,$id)
+    {
+        $result = $this->getCouponService()->deleteBatch($id);
+        return $this->createJsonResponse(true);
+    }
+
+    public function queryIndexAction (Request $request)
+    {   
+        $conditions = $request->query->all();
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCouponService()->searchCouponsCount($conditions),
+            20
+        );
+
+        $coupons = $this->getCouponService()->searchCoupons(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),  
+            $paginator->getPerPageCount()
+        );
+        $batchs = $this->getCouponService()->findBatchsbyIds(ArrayToolkit::column($coupons, 'batchId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($coupons, 'targetId'));
+
+        return $this->render('TopxiaAdminBundle:Operation:query.html.twig', array(
+            'coupons' => $coupons,
+            'paginator' => $paginator,
+            'batchs' => $batchs,
+            'users' => $users,
+            'courses' =>$courses  
+        ));
+    }
+
+    public function moneycardIndexAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        if (isset($conditions['batchName'])) {
+            $conditions['batchName'] = "%".$conditions['batchName']."%";
+        }
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getMoneyCardService()->searchBatchsCount($conditions),
+            20
+        );
+
+        $batchs = $this->getMoneyCardService()->searchBatchs(
+            $conditions,
+            array('id', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($batchs as $index => $batch) {
+            $batchs[$index]['user'] = $this->getUserService()->getUser($batchs[$index]['userId']);
+        }
+
+        return $this->render('TopxiaAdminBundle:Operation:card.index.html.twig', array(
+            'batchs'    => $batchs,
+            'paginator' => $paginator
+            ));
+    }
+
+    public function cardCreateAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $moneyCardData = $request->request->all();
+            if ($moneyCardData['passwordLength']<6 || $moneyCardData['passwordLength']>32 ){
+                throw new \RuntimeException('Bad passwordLength');
+            }            
+            if ($moneyCardData['cardLength']<6 || $moneyCardData['cardLength']>32 ){
+                throw new \RuntimeException('Bad cardLength');
+            }
+            
+            $batch = $this->getMoneyCardService()->createMoneyCard($moneyCardData);
+            return $this->redirect($this->generateUrl('money_card_homepage'));
+        }
+        return $this->render('TopxiaAdminBundle:Operation:create-money-card-modal.html.twig');
+    }
+
+    public function cardPrefixCheckAction(Request $request)
+    {
+        $cardPrefixFilledByUser = strtolower($request->query->get('value')); 
+        $response =  array('success' => true, 'message' => 'Allowed card prefix');
+        $conditions = array('cardPrefix' => $cardPrefixFilledByUser);
+        $cardPrefixCount = $this->getMoneyCardService()->searchBatchsCount($conditions);
+
+        if  ($cardPrefixCount>0) {
+            $response = array('success' => false, 'message' => '前缀已经存在');
+        }else{
+            $response = array('success' => true, 'message' => 'Good Prefix');
+        }
+        return $this->createJsonResponse($response);
+    }
+
+    public function cardExportCsvAction (Request $request, $batchId)
+    {
+        $batch = $this->getMoneyCardService()->getBatch($batchId);
+
+        $moneyCards = $this->getMoneyCardService()->searchMoneyCards(
+            array('batchId' => $batchId),
+            array('id', 'DESC'),
+            0,
+            $batch['number']
+        );
+       
+        $str = "卡号,密码,批次id,批次,有效期,状态,使用状态,使用者id,使用者,使用时间"."\r\n"; 
+
+        $strMoneyCards = array();
+        foreach ($moneyCards as $key => $moneyCard) {
+            $card['cardId']   = $moneyCard['cardId'];
+            $card['password'] = $moneyCard['password']; 
+            $card['batchId']  = $moneyCard['batchId'];
+
+            $cardBatch = $this->getMoneyCardService()->getBatch($moneyCard['batchId']);            
+            $card['batchName']  = $cardBatch['batchName'];
+
+            $card['deadline']  = $moneyCard['deadline'];
+            $card['cardStatus'] = $moneyCard['cardStatus'] == 'normal'?'未作废':'已作废';
+            $card['rechargeStatus'] = $moneyCard['rechargeUserId']==0?'未使用':'已使用';
+            $card['rechargeUserId'] = $moneyCard['rechargeUserId']!=0?$moneyCard['rechargeUserId']:'--';
+            $rechargeUser = $this->getUserService()->getUser($moneyCard['rechargeUserId']);
+            $card['rechargeUserNickName'] = $moneyCard['rechargeUserId']==0?'--':$rechargeUser['nickname'];
+            $card['rechargeTime'] = $moneyCard['rechargeUserId']==0?'--':date('Y-m-d H:i:s', $moneyCard['rechargeTime']);
+            $strMoneyCards[] = implode(',',$card);
+        }
+
+        $str .= implode("\r\n",$strMoneyCards);
+        $str=iconv('UTF-8','gb2312',$str);// utf-8(this file format) --> gb2312 (target format)
+
+        $filename = "cards-".$batchId."-".date("YmdHi").".csv";
+
+        $userId = $this->getCurrentUser()->id;
+        $this->getLogService()->info('money_card_export', 'export', "导出了批次为{$batchId}的充值卡");
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
+
+    public function deleteBatchAction (Request $request, $id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $this->getMoneyCardService()->deleteBatch($id);
+        }
+
+        return $this->redirect($this->generateUrl('admin_money_card_homepage'));
+    }
+
+    public function allCardsAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getMoneyCardService()->searchMoneyCardsCount($conditions),
+            20
+        );
+
+        $moneyCards = $this->getMoneyCardService()->searchMoneyCards(
+            $conditions,
+            array('id', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach($moneyCards as $index => $moneyCard){
+            $moneyCards[$index]['rechargeUser'] = $this->getUserService()->getUser($moneyCards[$index]['rechargeUserId']);
+            $moneyCards[$index]['batch'] = $this->getMoneyCardService()->getBatch($moneyCards[$index]['batchId']);
+        }
+        return $this->render('TopxiaAdminBundle:Operation:all_cards.html.twig', array(
+            'moneyCards'      => $moneyCards ,
+            'paginator'  => $paginator
+            ));
+
+    }
+
+    public function getPasswordAction (Request $request, $id)
+    {
+        $moneyCard = $this->getMoneyCardService()->getMoneyCard($id);
+
+        $this->getLogService()->info('money_card', 'show_password', "查询了卡号为{$moneyCard['cardId']}密码");
+
+        return $this->render('TopxiaAdminBundle:Operation:show-password-modal.html.twig', array(
+            'moneyCardPassword' => $moneyCard['password']
+        ));
+    }
+
+    public function cardDeleteAction (Request $request,$id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $moneyCard = $this->getMoneyCardService()->getMoneyCard($id);
+
+            $this->getMoneyCardService()->deleteMoneyCard($id);
+        }
+
+        return $this->redirect($this->generateUrl('admin_money_card_all_cards'));
+    }
+
+    public function lockAction ($id)
+    {
+        $moneyCard = $this->getMoneyCardService()->lockMoneyCard($id);
+
+        $moneyCard['rechargeUser'] = $this->getUserService()->getUser($moneyCard['rechargeUserId']);
+        $moneyCard['batch'] = $this->getMoneyCardService()->getBatch($moneyCard['batchId']);
+
+        return $this->render('TopxiaAdminBundle:Operation:money-card-table-tr.html.twig', array(
+            'moneyCard' => $moneyCard,
+        ));
+    }
+
+    public function unlockAction ($id)
+    {
+        $moneyCard = $this->getMoneyCardService()->unlockMoneyCard($id);
+        $moneyCard['rechargeUser'] = $this->getUserService()->getUser($moneyCard['rechargeUserId']);
+        $moneyCard['batch'] = $this->getMoneyCardService()->getBatch($moneyCard['batchId']);
+        return $this->render('TopxiaAdminBundle:Operation:money-card-table-tr.html.twig', array(
+            'moneyCard' => $moneyCard,
+        ));
+    }
+
+    public function lockBatchAction ($id)
+    {
+        $batch = $this->getMoneyCardService()->lockBatch($id);
+        $batch['user'] = $this->getUserService()->getUser($batch['userId']);
+
+        return $this->render('TopxiaAdminBundle:Operation:batch-table-tr.html.twig', array(
+            'batch' => $batch,
+        ));
+    }
+
+    public function unlockBatchAction ($id)
+    {
+        $batch = $this->getMoneyCardService()->unlockBatch($id);
+        $batch['user'] = $this->getUserService()->getUser($batch['userId']);
+
+        return $this->render('TopxiaAdminBundle:Operation:batch-table-tr.html.twig', array(
+            'batch' => $batch,
+        ));
+    }
+
+
     private function filterSort($sort)
     {
         switch ($sort) {
@@ -993,6 +1377,41 @@ class OperationController extends BaseController
     private function getContentService()
     {
         return $this->getServiceKernel()->createService('Content.ContentService');
+    }
+
+    private function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getMoneyCardService()
+    {
+        return $this->getServiceKernel()->createService('MoneyCard.MoneyCardService');
+    }
+
+    protected function getLogService ()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getCashService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
 }
