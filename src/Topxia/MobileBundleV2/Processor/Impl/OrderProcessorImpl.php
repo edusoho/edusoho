@@ -52,10 +52,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                   
         $data = json_decode($response); 
         if (!is_object($data)) {
-            return $this->createErrorResponse('error', "充值失败！");
+            return $this->createErrorResponse('error', "充值验证失败");
         } 
         if (!isset($data->status) || $data->status != 0) {
-            return $this->createErrorResponse('error', "充值失败！");
+            return $this->createErrorResponse('error', "充值失败！状态码 :" . $data->status);
         }
 
         if ($data->receipt->status == 0) {
