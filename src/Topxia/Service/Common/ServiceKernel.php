@@ -77,7 +77,12 @@ class ServiceKernel
             $finder->directories()->depth('== 0');
 
             foreach ($this->_moduleDirectories as $dir) {
-                $finder->in($dir . '/*/Service');
+
+                if(glob($dir . '/*/Service', GLOB_ONLYDIR)){
+
+                    $finder->in($dir . '/*/Service');
+                }       
+                
             }
 
             foreach ($finder as $dir) {
