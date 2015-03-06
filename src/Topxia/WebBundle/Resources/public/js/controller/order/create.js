@@ -70,10 +70,9 @@ define(function(require, exports, module) {
 		function afterCoinPay(coinNum){
 			var accountCash = $('[role="accountCash"]').text();
 			if(accountCash == "" || isNaN(accountCash) || parseFloat(accountCash) == 0) {
-				return;
+				return 0;
 			}
 			var coin = Math.round(accountCash*1000)>Math.round(coinNum*1000) ? coinNum : accountCash;
-
 			if(cashRateElement.data("priceType") == "RMB"){
 				var totalPrice = parseFloat($('[role="total-price"]').text());
 				var cashDiscount = Math.round(moneyFormatFloor(divition(coin, cashRate))*100)/100;
@@ -84,7 +83,7 @@ define(function(require, exports, module) {
 			}else{
 				$('[role="cash-discount"]').text(moneyFormatFloor(coin));
 			}
-			$('[role="coinNum"]').val(coin);
+			return coin;
 			
 		}
 
@@ -122,7 +121,7 @@ define(function(require, exports, module) {
 					if(coinNum <= parseFloat(coinNumPay)){
 						coinNumPay = coinNum;
 					}
-					afterCoinPay(coinNumPay);
+					coinNumPay = afterCoinPay(coinNumPay);
 					$('[role="coinNum"]').val(coinNumPay);
 					var cashDiscount = $('[role="cash-discount"]').text();
 					totalPrice = subtract(totalPrice, cashDiscount);
