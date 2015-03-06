@@ -1251,3 +1251,30 @@ admin_operation_blockhistory_preview:
 admin_operation_content:
     pattern:  /operation/content
     defaults: { _controller: TopxiaAdminBundle:Operation:contentIndex }
+
+admin_operation_content_create:
+    pattern:  /content/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentCreate }
+
+admin_operation_content_edit:
+    pattern:  /operation/content/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentEdit }
+
+admin_operation_content_publish:
+    pattern:  /operation/content/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentPublish }
+    methods:  [POST]
+
+admin_operation_content_trash:
+    pattern:  /operation/content/{id}/trash
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentTrash }
+    methods:  [POST]
+
+admin_operation_content_delete:
+    pattern:  /operation/content/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentDelete }
+    methods:  [POST]
+
+admin_operation_content_alias_check:
+    pattern:  /operation/content/alias/check
+    defaults: { _controller: TopxiaAdminBundle:Operation:contentAliasCheck }

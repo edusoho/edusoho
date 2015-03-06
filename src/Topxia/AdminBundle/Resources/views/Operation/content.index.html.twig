@@ -13,7 +13,7 @@
 
 
 <div class="page-header clearfix">
-  <button class="btn btn-info btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type: type}) }}"><span class="glyphicon glyphicon-plus"></span> 添加{{ typeName }}</button>
+  <button class="btn btn-info btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_operation_content_create', {type: type}) }}"><span class="glyphicon glyphicon-plus"></span> 添加{{ typeName }}</button>
   <h1 class="pull-left">{{ typeName }}管理</h1>
 </div>
 
@@ -45,7 +45,7 @@
 			{% for content in contents %}
 			  {% set user = users[content.userId] %}
 			  {% set category = categories[content.categoryId]|default(null) %}
-			  {% include 'TopxiaAdminBundle:Content:content-tr.html.twig' %}
+			  {% include 'TopxiaAdminBundle:Operation:content-tr.html.twig' %}
 			{% endfor %}
 		{% else %}
 			<tr><td colspan="20"><div class="empty">暂无页面记录</div></td></tr>
