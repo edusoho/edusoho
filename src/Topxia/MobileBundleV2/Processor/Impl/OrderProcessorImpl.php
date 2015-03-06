@@ -10,6 +10,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     public function validateIAPReceipt()
     {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能查看笔记！");
+        }
+
         $receipt = $this->getParam("receipt");
         return $this->requestReceiptData($receipt, false);
     }
@@ -83,7 +88,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             );
             try {
                 list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-                return true;
+                return $success;
             } catch (\Exception $e) {
                 return $this->createErrorResponse('error', $e->getMessage());
             }
@@ -92,6 +97,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return false;
     }
 
+    //payType is enum (none, alipay)
     public function buyCoin()
     {
         $user = $this->controller->getUserByToken($this->request);
