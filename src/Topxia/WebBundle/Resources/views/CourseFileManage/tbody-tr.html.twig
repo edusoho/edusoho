@@ -16,7 +16,6 @@
       {% if ( now - uploadFile.updatedTime ) > 28800 %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
       {% endif %}
-
     {% elseif uploadFile.convertStatus == 'doing' %}
       <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
       <br><span class="text-info text-sm">正在文件格式转换</span>
@@ -43,6 +42,15 @@
     {% if uploadFile.useNum == 0 %}
     <br>
     <span class="label label-danger tip">未使用</span>
+    {% else %}
+    <br>
+    {% endif %}
+    {% if uploadFile.convertStatus == 'none' and uploadFile.type != 'flash' %}
+      <span class="label label-default tip">未转码</span>
+    {% endif %}
+    {% if uploadFile.convertStatus == 'success' %}
+
+      <span class="label label-success tip">已转码</span>
     {% endif %}
 
     {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}

@@ -55,8 +55,7 @@ define(function(require, exports, module) {
 	        return moneyFormatFloor(parseFloat(value) + 0.01);
 	    }
 
-		function afterCouponPay(){
-			var totalPrice = parseFloat($('[role="total-price"]').text());
+		function afterCouponPay(totalPrice){
 			var couponTotalPrice = $('[role="coupon-price"]').find("[role='price']").text();
 			if($.trim(couponTotalPrice) == "" || isNaN(couponTotalPrice)){
 				couponTotalPrice = 0;
@@ -71,10 +70,10 @@ define(function(require, exports, module) {
 		function afterCoinPay(coinNum){
 			var accountCash = $('[role="accountCash"]').text();
 			if(accountCash == "" || isNaN(accountCash) || parseFloat(accountCash) == 0) {
-				return;
+				coinPriceZero();
+				return 0;
 			}
 			var coin = Math.round(accountCash*1000)>Math.round(coinNum*1000) ? coinNum : accountCash;
-
 			if(cashRateElement.data("priceType") == "RMB"){
 				var totalPrice = parseFloat($('[role="total-price"]').text());
 				var cashDiscount = Math.round(moneyFormatFloor(divition(coin, cashRate))*100)/100;
@@ -85,12 +84,26 @@ define(function(require, exports, module) {
 			}else{
 				$('[role="cash-discount"]').text(moneyFormatFloor(coin));
 			}
-			$('[role="coinNum"]').val(coin);
+			return coin;
 			
 		}
 
+		function afterDiscountCourses(totalPrice){
+			var courseDiscountPrices = $("[role='course-discount-price']");
+			for (var i = 0; i < courseDiscountPrices.length; i++) {
+				courseDiscountPrice = courseDiscountPrices[i];
+				totalPrice -= parseFloat($(courseDiscountPrice).text());
+			};
+			if(totalPrice < 0 ) {
+				totalPrice = 0;
+			}
+			return totalPrice;
+		}
+
 		function conculatePrice(){
-			var totalPrice = afterCouponPay();
+			var totalPrice = parseFloat($('[role="total-price"]').text());
+			//totalPrice = afterDiscountCourses(totalPrice);
+			totalPrice = afterCouponPay(totalPrice);
 			if(totalPrice <= 0){
 				totalPrice = 0;
 				coinPriceZero();
@@ -109,7 +122,7 @@ define(function(require, exports, module) {
 					if(coinNum <= parseFloat(coinNumPay)){
 						coinNumPay = coinNum;
 					}
-					afterCoinPay(coinNumPay);
+					coinNumPay = afterCoinPay(coinNumPay);
 					$('[role="coinNum"]').val(coinNumPay);
 					var cashDiscount = $('[role="cash-discount"]').text();
 					totalPrice = subtract(totalPrice, cashDiscount);
@@ -144,6 +157,16 @@ define(function(require, exports, module) {
 			validator.removeItem('[name="payPassword"]');
 		}
 
+		function showPayPassword(){
+			$(".pay-password div[role='password-input']").show();
+			validator.addItem({
+				element: '[name="payPassword"]',
+				required: true,
+				display: '支付密码',
+    			rule: 'remote'
+			});
+		}
+
 		$('[role="coinNum"]').blur(function(e){
 			var coinNum = $(this).val();
 			coinNum = Math.round(coinNum*100)/100;
@@ -152,13 +175,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				$(".pay-password div[role='password-input']").show();
-				validator.addItem({
-					element: '[name="payPassword"]',
-					required: true,
-					display: '支付密码',
-        			rule: 'remote'
-				});
+				showPayPassword();
 			}
 			conculatePrice();
 		});
@@ -189,11 +206,15 @@ define(function(require, exports, module) {
 			if(data.code == ""){
 				return;
 			}
-			data.targetType = "course";
+			data.targetType = $(this).data("targetType");
 			data.targetId = $(this).data("targetId");
-			data.amount = $(this).data("amount");
+
+			var totalPrice = parseFloat($('[role="total-price"]').text());
+			//totalPrice = afterDiscountCourses(totalPrice);
 			
-			$.post('/course/'+data.targetId+'/coupon/check', data, function(data){
+			data.amount = totalPrice;
+			
+			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				if(data.useable == "no") {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
@@ -211,13 +232,7 @@ define(function(require, exports, module) {
 				$(this).val("0.00");
 				coinPriceZero();
 			} else {
-				$(".pay-password div[role='password-input']").show();
-				validator.addItem({
-					element: '[name="payPassword"]',
-					required: true,
-					display: '支付密码',
-        			rule: 'remote'
-				});
+				showPayPassword();
 			}
 			if(cashRateElement.data("priceType") == "RMB") {
 	 			var discount = divition(coinNum, cashRate);
@@ -233,6 +248,7 @@ define(function(require, exports, module) {
  		} else {
  			$('[role="cash-discount"]').text("0.00");
  		}
+ 		//totalPrice = afterDiscountCourses(totalPrice);
  		shouldPay(totalPrice);
 	}
 });

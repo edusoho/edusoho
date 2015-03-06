@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
-    var EditorFactory = require('common/kindeditor-factory');
+    require('ckeditor');
 
     exports.run = function() {
 
@@ -479,9 +479,11 @@ define(function(require, exports, module) {
             }
         });
 
-        var editor = EditorFactory.create('#mobile_about', 'simple', {extraFileUploadParams:{group:'default'}});
-        editor.sync();
-
+       // group: 'default'
+        CKEDITOR.replace('mobile_about', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#mobile_about').data('imageUploadUrl')
+        });
 
     };
 

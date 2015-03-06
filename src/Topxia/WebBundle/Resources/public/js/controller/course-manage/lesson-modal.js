@@ -1,17 +1,19 @@
 define(function(require, exports, module) {
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var VideoChooser = require('../widget/media-chooser/video-chooser7');
     var AudioChooser = require('../widget/media-chooser/audio-chooser8');
     var PPTChooser = require('../widget/media-chooser/ppt-chooser7');
+    var DocumentChooser = require('../widget/media-chooser/document-chooser7');
+    var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
+    require('ckeditor');
 
     function getEditorContent(editor){
-        editor.sync();
-        var z = editor.html();
-        var x = editor.html().match(/<embed[\s\S]*?\/>/g);
+        editor.updateElement();
+        var z = editor.getData();
+        var x = editor.getData().match(/<embed[\s\S]*?\/>/g);
         if (x) {
             for (var i = x.length - 1; i >= 0; i--) {
                var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");
@@ -25,7 +27,6 @@ define(function(require, exports, module) {
         if($.isEmptyObject(tmp)){
             return false;
         }
-        console.log(local);
         for(var key in tmp){
             if(key!="courseId" 
                 && key!="lessonId" 
@@ -221,6 +222,14 @@ define(function(require, exports, module) {
                     display: 'PPT'
                 });
                 break;
+            case 'document':
+                validator.addItem({
+                    element: '#lesson-media-field',
+                    required: true,
+                    rule: 'mediaValueEmpty',
+                    display: '文档'
+                });
+                break;
         }
 
     }
@@ -292,6 +301,15 @@ define(function(require, exports, module) {
             choosed: choosedMedia,
         });
 
+        var documentChooser = new DocumentChooser({
+            element: '#document-chooser',
+            choosed: choosedMedia,
+        });
+        var flashChooser = new FlashChooser({
+            element: '#flash-chooser',
+            choosed: choosedMedia,
+        });
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
@@ -309,19 +327,31 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
         });
 
+        documentChooser.on('change', function(item) {
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
+        });
+
+        flashChooser.on('change', function(item) {
+            var value = item ? JSON.stringify(item) : '';
+            $form.find('[name="media"]').val(value);
+        });
+
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
             videoChooser.destroy();
             audioChooser.destroy();
             pptChooser.destroy();
+            documentChooser.destroy();
+            flashChooser.destroy();
         });
 
-        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser]);
+        var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);
        
         $form.on('change', '[name=type]', function(e) {
             var type = $(this).val();
 
-            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt")
+            $form.removeClass('lesson-form-video').removeClass("lesson-form-audio").removeClass("lesson-form-text").removeClass("lesson-form-ppt").removeClass("lesson-form-document").removeClass("lesson-form-flash")
             $form.addClass("lesson-form-" + type);
             
             if (type == 'text'){
@@ -332,14 +362,34 @@ define(function(require, exports, module) {
                 videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
+                documentChooser.hide();
+                flashChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'audio') {
                 audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
+                documentChooser.hide();
+                flashChooser.hide();
                 clearInterval(Timer);
             } else if (type == 'ppt') {
                 pptChooser.show();
+                videoChooser.hide();
+                audioChooser.hide();
+                documentChooser.hide();
+                flashChooser.hide();
+                clearInterval(Timer);
+            } else if (type == 'document') {
+                documentChooser.show();
+                pptChooser.hide();
+                videoChooser.hide();
+                audioChooser.hide();
+                flashChooser.hide();
+                clearInterval(Timer);
+            } else if (type == 'flash') {
+                flashChooser.show();
+                documentChooser.hide();
+                pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
                 clearInterval(Timer);
@@ -356,7 +406,15 @@ define(function(require, exports, module) {
 
         $form.find('[name="type"]:checked').trigger('change');
 
-        editor = EditorFactory.create('#lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
+        // course
+        editor = CKEDITOR.replace('lesson-content-field', {
+            toolbar: 'Full',
+            filebrowserImageUploadUrl: $('#lesson-content-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#lesson-content-field').data('flashUploadUrl'),
+            height: 300
+        });
+
+
         
         validator.on('formValidate', function(elemetn, event) {
             var content = getEditorContent(editor);
@@ -382,9 +440,9 @@ define(function(require, exports, module) {
             $.get($(this).data("url"), {courseId: courseId, lessonId:lessonId}, function(response){  
                 $("#lesson-title-field").val(response.title); 
                 $("#lesson-summary-field").val(response.summary); 
-                editor.sync();
-                var content = editor.html(response.content);
-                $("#lesson-content-field").val(content);        
+                editor.updateElement();
+                editor.setData(response.content);
+                $("#lesson-content-field").val(response.content);        
             });
             $("#see-draft-btn").hide();
         });

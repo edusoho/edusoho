@@ -7,13 +7,13 @@
 {% block body %}
 
 <div style="margin-bottom:18px">
-	<div style="margin-bottom:5px">学员回答:</div>
+	<div style="margin-bottom:5px">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:</div>
 	<strong class="">{{ itemResult.answer|raw }}</strong>
 
 </div>
 <div style="margin-bottom:18px">
  {% for rightAnswer in question.answer %}
-	   <div style="margin-bottom:5px">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+	   <div style="margin-bottom:5px">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</strong>
 	{% endfor %}
 </div>
 {% if itemResult.teacherSay|default(null) %}

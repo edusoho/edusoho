@@ -55,7 +55,7 @@
     <div class="form-group">
       <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
       <div class="controls">
-      <textarea id="reply-content-{{post.id}}" class="form-control"></textarea>
+      <textarea id="reply-content-{{post.id}}" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
       </div>
     <div id="fromUserIdDiv"></div>
     </div>

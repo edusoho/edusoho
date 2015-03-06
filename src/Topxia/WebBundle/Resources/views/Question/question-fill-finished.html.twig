@@ -8,6 +8,7 @@
 
 {% set fileItemResultAnswer = itemResult.answer|split(',') %}
 
+
 {% if itemResult.status == 'right' %}
   
   {% set itemResultStatus = '你答对了' %}
@@ -45,12 +46,14 @@
 
               {% if itemResult.status == 'right' %}
                   <span class="glyphicon glyphicon-ok question-text-success">
+
               {% else %}
                   <span class="glyphicon glyphicon-remove question-text-danger">
               {% endif %}
             </li>
 
           {% endfor %}
+
          </ul>
       </div>
     </div>

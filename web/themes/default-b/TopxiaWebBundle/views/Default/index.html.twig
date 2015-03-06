@@ -1,5 +1,10 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/class-defaultb.css') }}" />
+{% endblock %}
+
 {% block content %}
 
   <div class="es-row-wrap container-gap">
@@ -20,12 +25,75 @@
 
     <div class="row row-9-3">
       <div class="col-md-9">
+
+        {% if is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+        {% set items = data('RecommendClassrooms',{'count':6}) %}
+          <div class="es-box">
+              <div class="es-box-heading">
+                <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
+                <h2>最新{{ setting('classroom.name')|default("班级") }}</h2>
+              </div>
+              <div class="es-box-body">
+                <ul class="home-class-list">
+                  {% for classroom in items.classrooms %}
+                 {% set teachers = items.users[classroom.id]|default(null) %}
+                 {% if loop.index <= 5%}
+                  <li class="class-item">
+                    <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                      <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                    </a>
+                    <div class="class-body">
+                      <h3 class="class-title">
+                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                      </h3>
+                      <div class="class-metas">
+                        {% if teachers %}
+                      <span class="class-teacher">
+                        <i class="fa fa-user"></i>
+                        {% for teacher in teachers %}
+                          {% if loop.index <= 5%}
+                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                           {% endif %}
+                        {% endfor %}
+                      </span>
+                    {% endif %}
+                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
+                        <span class="class-price">
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if classroom.price > 0 %}
+                               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                免费
+                              {% endif %}
+                          {% else %}
+                              {% if classroom.price > 0 %}
+                                {{ classroom.price }}元
+                              {% else %}
+                                免费
+                              {% endif %}
+                          {% endif %}
+
+                        </span>
+                      </div>
+                      <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
+                    </div>
+                  </li>
+                   {% endif %}
+                 {% endfor %}
+                </ul>
+              </div>
+            </div>
+            {% endif %}
+
+
+
         {# 推荐课程 #}
         {% set recommendCourses = data('RecommendCourses', {count:3}) %}
         {% if recommendCourses %}
           <div class="es-box">
-            <div class="es-box-heading"><h2>推荐课程</h2>
+            <div class="es-box-heading">
               <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
+              <h2>推荐课程</h2>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}            
@@ -37,8 +105,9 @@
         {% set latestCourses = data('LatestCourses', {count:6}) %}
         {% if latestCourses %}
           <div class="es-box">
-            <div class="es-box-heading"><h2>最新课程</h2>
+            <div class="es-box-heading">
               <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
+              <h2>最新课程</h2>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
@@ -52,8 +121,8 @@
           {% if recentLiveCourses %}
             <div class="es-box">
               <div class="es-box-heading">
-                <h2>最新直播</h2>
                 <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
+                <h2>最新直播</h2>
               </div>
               <div class="es-box-body">
                 {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
@@ -67,8 +136,8 @@
         {% if articles %}
           <div class="es-box news">
             <div class="es-box-heading">
-              <h2>最新资讯</h2>
               <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
+              <h2>最新资讯</h2>
             </div>
             <div class="es-box-body">
               <ul class="row">
@@ -159,8 +228,8 @@
           {% if levels %}
             <div class="es-box vip">
               <div class="es-box-heading">
-                <h2>会员专区</h2>
                 <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
+                <h2>会员专区</h2>
               </div>
               <div class="es-box-body">
                 <ul class="row vip-lists">
@@ -202,7 +271,7 @@
           {% set groups = data('HotGroup', {'count':15}) %}
           {% if groups %}
             <div class="es-box hot-group">
-              <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
+              <div class="es-box-heading"><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a><h2>最热小组</h2></div>
               <div class="es-box-body">
                  <ul class="list-unstyled">
                   {% for group in groups %}
@@ -293,7 +362,7 @@
         {% if learns %}
           <div class="es-box status-side">
             <div class="es-box-heading">
-              <h2>学员动态</h2>
+              <h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态</h2>
             </div>
             <div class="es-box-body">
               <ul class="media-list">
@@ -313,8 +382,15 @@
                       {% elseif learn.type == "finished_exercise" %}
                       完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
 
-                      {% elseif learn.type == "become_student" %}
+                      {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                     
+                     {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                      {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+
+
                       {% elseif learn.type == "learned_lesson" %}
                       完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
                       {% elseif learn.type == "favorite_course" %}

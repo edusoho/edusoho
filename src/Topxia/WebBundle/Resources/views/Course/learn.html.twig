@@ -18,7 +18,7 @@
 {% set script_controller = 'course/learn' %}
 {% set bodyClass = 'lesson-dashboard-page' %}
 
-{% block content %}
+{% block content %}       
     <div class="container lesson-dashboard" id="lesson-dashboard"
          data-course-id="{{ course.id }}"
          data-course-uri="{{ path('course_show', {id:course.id}) }}"
@@ -31,9 +31,9 @@
 
         <div class="dashboard-header">
           <div class="pull-left title-group">
-            <span class="chapter-label">第<span data-role="chapter-number"></span>章</span>
+            <span class="chapter-label">第<span data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}</span>
             <span class="divider">&raquo;</span>
-            <span class="chapter-label">第<span data-role="unit-number"></span>节</span>
+            <span class="chapter-label">第<span data-role="unit-number"></span>{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}</span>
             <span class="divider">&raquo;</span>
             <span class="item-label">课时<span data-role="lesson-number">正在加载...</span></span>
             <span class="item-title" data-role="lesson-title"></span>
@@ -59,6 +59,11 @@
           {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
             <div class="lesson-content-text-body"></div>
           </div>
+
+          <div class="lesson-content lesson-content-document" id="lesson-document-content" data-role="lesson-content" style="display:none;">
+            <div class="lesson-content-document-body"></div>
+          </div>   
+
           <div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
           </div>

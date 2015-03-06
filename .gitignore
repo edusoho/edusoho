@@ -23,6 +23,7 @@
 /etc/sublimetext2/edusoho.sublime-workspace
 /etc/UpgradeScripts
 /web/files/*
+/web/files2/*
 !/web/files/.gitkeep
 /web/customize/*
 /web/windid_client_old
@@ -45,3 +46,5 @@ composer.sublime-workspace
 web/assets/img/default/video.png
 .publish
 .buildpath
+.phpintel*
+.phpintel/*
