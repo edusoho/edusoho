@@ -16,11 +16,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         $receipt = $this->getParam("receipt");
-        $amout = $this->getParam("amout", 0);
-        return $this->requestReceiptData($amout, $receipt, true);
+        $amount = $this->getParam("amount", 0);
+        return $this->requestReceiptData($amount, $receipt, true);
     }
 
-    private function requestReceiptData($amout, $receipt, $isSandbox = false)     
+    private function requestReceiptData($amount, $receipt, $isSandbox = false)     
     {
         if ($isSandbox) {     
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
@@ -47,20 +47,20 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         curl_close($ch);
 
         if ($errno != 0) {     
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+            return $this->createErrorResponse('error', "充值失败！");
         }     
                   
         $data = json_decode($response); 
         if (!is_object($data)) {
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+            return $this->createErrorResponse('error', "充值失败！");
         } 
         if (!isset($data->status) || $data->status != 0) {
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+            return $this->createErrorResponse('error', "充值失败！");
         }
 
         if ($data->receipt->status == 0) {
             return array(
-                "status"=>$this->buyCoinByIAP($user["id"], $amout, "none")
+                "status"=>$this->buyCoinByIAP($user["id"], $amount, "none")
                 );
         }        
         return array(
