@@ -50,7 +50,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('error', "充值失败！" . $errno);
         }     
                   
-        $data = json_decode($response); 
+        $data = json_decode($response);
         if (!is_object($data)) {
             return $this->createErrorResponse('error', "充值验证失败");
         } 
@@ -58,7 +58,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('error', "充值失败！状态码 :" . $data->status);
         }
 
-        if ($data->receipt->status == 0) {
+        if ($data->status == 0) {
             return array(
                 "status"=>$this->buyCoinByIAP($user["id"], $amount, "none")
                 );
