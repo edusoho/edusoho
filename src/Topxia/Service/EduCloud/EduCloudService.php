@@ -13,7 +13,7 @@ interface EduCloudService
 
     public function verifyKeys();
 
-    public function checkSms($request, $smsUserPosted, $scenario);
+    public function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800);
 
     public function paramForSmsCheck($request);
 
