@@ -1008,6 +1008,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     
     public function getLearningCourse()
     {
+
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', "您尚未登录！");
@@ -1015,8 +1016,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
+        $type    = $this->getParam("type","");
 
-        $filter = array("type"=>"normal");
+        $filter = array();
+        if(empty($type)){
+            $filter = array("type"=>"normal");
+        }
         $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id'], $filter);
         $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit, $filter);
         
