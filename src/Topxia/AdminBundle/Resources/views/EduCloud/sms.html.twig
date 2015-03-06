@@ -37,30 +37,33 @@
 		<form class="form-horizontal" method="post" id="sms-form" novalidate="">
 			<fieldset>
 				<legend>短信设置</legend>
-				<div class="form-group">
-	      			<div class="col-md-3 control-label">
-	        			<label class="pull-right">短信功能</label>
-	      			</div>
+				{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
+				{% if hasSchoolName %}
+					<div class="form-group">
+		      			<div class="col-md-3 control-label">
+		        			<label class="pull-right">短信功能</label>
+		      			</div>
 
-	      			<div class="controls col-md-8 radios">
-	        			<label>
-	        				<input type="radio" name="sms_enabled" value="1"
-	        				{% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
-	        					checked="checked"
-	        				{% endif %}
-	        				> 
-	        				开启
-	        			</label>
-	        			<label>
-	        				<input type="radio" name="sms_enabled" value="0" 
-	        				{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
-	        					checked="checked"
-	        				{% endif %}
-	        				> 
-	        				关闭
-	        			</label>
-	      			</div>
-	    		</div>
+		      			<div class="controls col-md-8 radios">
+		        			<label>
+		        				<input type="radio" name="sms_enabled" value="1"
+		        				{% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
+		        					checked="checked"
+		        				{% endif %}
+		        				> 
+		        				开启
+		        			</label>
+		        			<label>
+		        				<input type="radio" name="sms_enabled" value="0" 
+		        				{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
+		        					checked="checked"
+		        				{% endif %}
+		        				> 
+		        				关闭
+		        			</label>
+		      			</div>
+		    		</div>
+		    	{% endif %}
 
 	    		{% if smsStatus.status in ['passed','failed'] %}
 		    		<div class="form-group">
@@ -125,66 +128,70 @@
 
 		    	{% endif %}
 
-	    		<div class="js-usage" 
-	    		{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
-	    			style="display:none;" 
-	    		{% endif %}
-	    		>
-		    		<legend>短信验证</legend>
-		    		<div class="form-group">
-		      			<div class="col-md-3 control-label">
-		        			<label class="pull-right">使用场景</label>
-		      			</div>
+		    	{% if hasSchoolName %}
+		    		<div class="js-usage" 
+		    		{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
+		    			style="display:none;" 
+		    		{% endif %}
+		    		>
+			    		<legend>短信验证</legend>
+			    		<div class="form-group">
+			      			<div class="col-md-3 control-label">
+			        			<label class="pull-right">使用场景</label>
+			      			</div>
 
-		      			<div class="controls col-md-8 radios checkboxes">	 
-						    <label>
-						    	<input name="sms_user_pay" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> 账户支付时
-						    </label>
-						    <br>
-						    <label>
-						    	<input name="sms_forget_pay_password" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_forget_pay_password')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> 忘记支付密码时
-						    </label>
-						    <br>
-						    <label>
-						    	<input name="sms_registration" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> <span>新用户注册时</span><span class="text-xs">(会有被恶意攻击来消耗您短信的风险)</span>
-						    </label>
-						    <br>
-						    <label>
-						    	<input name="sms_bind" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> <span>老用户绑定手机时</span>
-						    </label>
-						    <br>
-						    <label>
-						    	<input name="sms_forget_password" type="checkbox"
-						    	{% if (setting('cloud_sms.sms_forget_password')|default('')) == 'on' %}
-						    		checked
-						    	{% endif %}
-						    	> <span>忘记登陆密码时</span>
-						    </label>
-		      			</div>
+			      			<div class="controls col-md-8 radios checkboxes">	 
+							    <label>
+							    	<input name="sms_user_pay" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> 账户支付时
+							    </label>
+							    <br>
+							    <label>
+							    	<input name="sms_forget_pay_password" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_forget_pay_password')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> 忘记支付密码时
+							    </label>
+							    <br>
+							    <label>
+							    	<input name="sms_registration" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> <span>新用户注册时</span><span class="text-xs">(会有被恶意攻击来消耗您短信的风险)</span>
+							    </label>
+							    <br>
+							    <label>
+							    	<input name="sms_bind" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> <span>老用户绑定手机时</span>
+							    </label>
+							    <br>
+							    <label>
+							    	<input name="sms_forget_password" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_forget_password')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> <span>忘记登陆密码时</span>
+							    </label>
+			      			</div>
+			    		</div>
+		    		</div>
+		    	{% endif %}
+			</fieldset>
+			{% if hasSchoolName %}
+				<div class="form-group">
+					<div class="controls col-md-offset-3 col-md-8">
+		      			<button type="submit" class="btn btn-primary">提交</button>
 		    		</div>
 	    		</div>
-			</fieldset>
-			<div class="form-group">
-				<div class="controls col-md-offset-3 col-md-8">
-	      			<button type="submit" class="btn btn-primary">提交</button>
-	    		</div>
-    		</div>
+	    	{% endif %}
     		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		</form>
 		{{ web_macro.flash_messages() }}
