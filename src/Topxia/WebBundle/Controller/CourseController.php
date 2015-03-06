@@ -897,17 +897,20 @@ class CourseController extends BaseController
 		if($request->query->get('type') !="classroom")
 			return $unEnabledCourseIds;
 
-		$classroomId=$request->query->get('classroomId');
+		if ($this->isPluginInstalled("Classroom")) {
+			
+			$classroomId=$request->query->get('classroomId');
 
-        foreach ($courseIds as $key => $value) {
-        	
-        	$course=$this->getCourseService()->getCourse($value);
-        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
-        	if($course && ($course['useInClassroom'] =="more" || count($classrooms) == 0)){
-        		unset($courseIds[$key]);
-        	}
+	        foreach ($courseIds as $key => $value) {
+	        	
+	        	$course=$this->getCourseService()->getCourse($value);
+	        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
+	        	if($course && ($course['useInClassroom'] =="more" || count($classrooms) == 0)){
+	        		unset($courseIds[$key]);
+	        	}
 
-        }
+	        }
+	    }
 
         $unEnabledCourseIds=$courseIds;
 
@@ -972,12 +975,16 @@ class CourseController extends BaseController
 	}
 
 	private function getClassroomMembersByCourseId($id) {
-		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
-		$user=$this->getCurrentUser();
 
-		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-		return $members;
+		if ($this->isPluginInstalled("Classroom")) {
+			$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
+			$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
+			$user=$this->getCurrentUser();
+
+			$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
+			return $members;
+		}
+		return array();
 	}
 
 	private function createCourseForm()
