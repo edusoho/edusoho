@@ -22,6 +22,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     private function requestReceiptData($receipt, $isSandbox = false)     
     {
         $amout = $this->getParam("amout", 0);
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
         if ($isSandbox) {     
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
         }     
@@ -59,7 +64,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         if ($data->receipt->status == 0) {
-            return $this->coinPayNotify("iap", $amout);
+            return $this->buyCoinByIAP($user["id"], $amout, "none");
         }        
         return array(     
             'quantity'       =>  $data->receipt->quantity,     
@@ -96,6 +101,20 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return false;
     }
 
+    private function buyCoinByIAP($userId, $amount, $payment)
+    {
+        $formData['payment'] = $payment;
+        $formData['userId'] = $userId;
+        $formData['amount'] = $amount;
+
+        $order = $this->getCashOrdersService()->addOrder($formData);
+        if (empty($order)) {
+            return $this->createErrorResponse('error', "充值失败！"); 
+        }
+        $this->coinPayNotify("iap", $amount, $order["sn"], "success");
+        return $order;
+    }
+
     //payType is enum (none, alipay)
     public function buyCoin()
     {
@@ -115,7 +134,6 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         if (empty($order)) {
             return $this->createErrorResponse('error', "充值失败！"); 
         }
-        $this->coinPayNotify("iap", $amout, $order["sn"], "success");
         return $order;
     }
 
