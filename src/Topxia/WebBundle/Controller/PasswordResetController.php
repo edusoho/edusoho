@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\SmsToolkit;
 
 class PasswordResetController extends BaseController
 {
@@ -109,9 +110,9 @@ class PasswordResetController extends BaseController
             $data = $request->request->all();
 
             $eduCloudService = $this->getEduCloudService();
-            list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+            list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
             $result = $eduCloudService->checkSms($sessionField, $requestField, $scenario = 'sms_forget_password');
-            $eduCloudService->clearSmsSession($request);
+            SmsToolkit::clearSmsSession($request);
             if ($result){
                 $nickname = $data['nickname'];
                 if (strlen($nickname) == 0){

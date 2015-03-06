@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Topxia\Common\SmsToolkit;
 
 class OrderController extends BaseController
 {
@@ -82,9 +83,9 @@ class OrderController extends BaseController
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
             if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
-                list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+                list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
                 $result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
-                $eduCloudService->clearSmsSession($request);
+                SmsToolkit::clearSmsSession($request);
                 if (!$result) {
                     return $this->createMessageResponse('error', '短信验证失败。');
                 }

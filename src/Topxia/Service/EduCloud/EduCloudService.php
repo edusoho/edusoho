@@ -15,9 +15,5 @@ interface EduCloudService
 
     public function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800);
 
-    public function paramForSmsCheck($request);
-
-    public function clearSmsSession($request);
-
     public function getCloudSmsKey($key);
 }

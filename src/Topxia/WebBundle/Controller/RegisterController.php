@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\RegisterType;
 use Gregwar\Captcha\CaptchaBuilder;
+use Topxia\Common\SmsToolkit;
 
 class RegisterController extends BaseController
 {
@@ -42,9 +43,9 @@ class RegisterController extends BaseController
             $registration['verifiedMobile'] = '';
             if (in_array('mobile', $authSettings['registerSort'])){
                 $eduCloudService = $this->getEduCloudService();
-                list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+                list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
                 $result = $eduCloudService->checkSms($sessionField, $requestField, $scenario = 'sms_registration');
-                $eduCloudService->clearSmsSession($request);
+                SmsToolkit::clearSmsSession($request);
                 if ($result){
                    $registration['verifiedMobile'] = $sessionField['to'];
                 }else{

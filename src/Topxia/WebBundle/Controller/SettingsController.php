@@ -8,6 +8,7 @@ use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SmsToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -455,9 +456,9 @@ class SettingsController extends BaseController
 			if ($currentUser['verifiedMobile'] != $request->request->get('mobile')){
 				$this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
 			}
-			list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+			list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
-			$eduCloudService->clearSmsSession($request);
+			SmsToolkit::clearSmsSession($request);
 			if ($result) {
 				$this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
  				return $this->setPayPasswordPage($request, $currentUser['id']);
@@ -561,9 +562,9 @@ class SettingsController extends BaseController
 				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 			}
 
-	        list($sessionField, $requestField) = $eduCloudService->paramForSmsCheck($request);
+	        list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
 			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
-			$eduCloudService->clearSmsSession($request);
+			SmsToolkit::clearSmsSession($request);
 			if ($result) {
 				$verifiedMobile = $sessionField['to'];
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
