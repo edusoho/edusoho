@@ -36,47 +36,13 @@ class DefaultController extends BaseController
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getClassroomService()->searchClassroomsCount(array('status' => 'published'))
-            , 6
-        );
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-                array('status' => 'published'),
-                array('createdTime','desc'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-        );
-
-        $users = array();
-
-        foreach ($classrooms as &$classroom) {
-            if (empty($classroom['teacherIds'])) {
-                $classroomTeacherIds=array();
-            }else{
-                $classroomTeacherIds=$classroom['teacherIds'] ? : array() ;
-            }
-
-            $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
-
-        }
-
-        $allClassrooms = ArrayToolkit::index($classrooms,'id');
-
-        // $enabled = $this->setting('classroom.enabled');
-        // var_dump($enabled);
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
             'recentLiveCourses' => $recentLiveCourses,
             'consultDisplay' => true,
-            'cashRate' => $cashRate,
-            'classrooms' => $classrooms,
-            'users' => $users,
-            'allClassrooms' => $allClassrooms,
-            // 'enabled' => $enabled,
+            'cashRate' => $cashRate
         ));
     }
 

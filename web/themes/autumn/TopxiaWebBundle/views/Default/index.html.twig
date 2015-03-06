@@ -30,7 +30,8 @@
   <div class="row">
     <div class="col-md-8">
 
-      {% if setting('classroom.enabled') %}
+      {% if  is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+      {% set items = data('RecommendClassrooms',{'count':6}) %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
               <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>RecommendClasses</small></h2>
@@ -38,8 +39,8 @@
             </div>
             <div class="panel-body">
               <ul class="home-class-list">
-                {% for classroom in classrooms %}
-                 {% set teachers = users[classroom.id]|default(null) %}
+                {% for classroom in items.classrooms %}
+                 {% set teachers = items.users[classroom.id]|default(null) %}
                  {% if loop.index <= 5%}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
@@ -79,7 +80,7 @@
 
                       </span>
                     </div>
-                    <div class="course-num">共{{allClassrooms[classroom.id].courseNum}}课程</div>
+                    <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
                   </div>
                 </li>
                    {% endif %}
