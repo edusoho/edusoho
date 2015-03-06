@@ -115,12 +115,15 @@
             href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
             {% endif %}
             >
+          {% if course.singleBuy == 1 %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+                  {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>                
             {% else %}
-              {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+                  {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
             {% endif %}
-            
+          {% endif %}
+        <i class="glyphicon glyphicon-info-sign">sdsds</i> 
+
             {% if courseMemberLevel %}
               {% if checkMemberLevelResult == 'not_login' %}
                 <a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  

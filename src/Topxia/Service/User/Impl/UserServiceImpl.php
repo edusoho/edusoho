@@ -994,6 +994,23 @@ class UserServiceImpl extends BaseService implements UserService
         return $dayUserTotals;
     }
 
+    public function parseAts($text)
+    {
+        preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $text, $matches);
+
+        $users = $this->getUserDao()->findUsersByNicknames(array_unique($matches[1]));
+        if (empty($users)) {
+            return array();
+        }
+
+        $ats = array();
+        foreach ($users as $user) {
+            $ats[$user['nickname']] = $user['id'];
+        }
+
+        return $ats;
+    }
+
     private function getFriendDao()
     {
         return $this->createDao("User.FriendDao");

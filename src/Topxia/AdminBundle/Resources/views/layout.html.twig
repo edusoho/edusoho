@@ -48,6 +48,9 @@
           <li {% if nav == 'user' %}class="active"{% endif %}><a href="{{ path('admin_user') }}">用户</a></li>
           <li {% if nav == 'content' %}class="active"{% endif %}><a href="{{ path('admin_navigation') }}">内容</a></li>          
           <li {% if nav == 'group' %}class="active"{% endif %}><a href="{{ path('admin_group') }}">小组</a></li>
+          {% if is_plugin_installed('Classroom') %}
+            <li {% if nav == 'classroom' %}class="active"{% endif %}><a href="{{ path('admin_classroom') }}">班级</a></li>
+          {% endif %}
           <li {% if nav == 'app' %}class="active"{% endif %}>
             <a href="{{ path('admin_app_installed') }}">应用</a>
           </li>
@@ -57,6 +60,7 @@
             <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
             <li {% if nav == 'edu-cloud' %}class="active"{% endif %}><a href="{{ path('admin_edu_cloud') }}">教育云</a></li>
           {% endif %}
+
         </ul>
 
         <ul class="nav navbar-nav navbar-right">

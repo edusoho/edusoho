@@ -14,6 +14,8 @@ class WebExtension extends \Twig_Extension
 {
     protected $container;
 
+    protected $pageScripts;
+
     public function __construct ($container)
     {
         $this->container = $container;
@@ -42,6 +44,7 @@ class WebExtension extends \Twig_Extension
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
             'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
+            'at' => new \Twig_Filter_Method($this, 'atFilter'),
         );
     }
 
@@ -81,7 +84,22 @@ class WebExtension extends \Twig_Extension
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
             'blur_phone_number' => new \Twig_Function_Method($this, 'blur_phone_number'),
+            'sub_str' => new \Twig_Function_Method($this, 'subStr'),
+            'load_script' => new \Twig_Function_Method($this, 'loadScript'),
+            'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
+            'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
         );
+    }
+
+    public function subStr($text, $start, $length)
+    {
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text) > $length) )  {
+            $text = mb_substr($text, $start, $length, 'UTF-8');
+        }
+        return $text;
     }
 
     public function getOutCash($userId,$timeType="oneWeek")
@@ -140,6 +158,17 @@ class WebExtension extends \Twig_Extension
         return $user['nickname'];
     }
     
+    public function getClassroomsByCourseId($courseId)
+    {   
+        $classrooms=array();
+        $classroomIds=ArrayToolkit::column(ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->findClassroomsByCourseId($courseId),'classroomId');
+        foreach ($classroomIds as $key => $value) {
+            $classrooms[$value]=ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->getClassroom($value);
+        }
+
+        return $classrooms;
+    }
+
     private function getUserById($userId)
     {
         return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
@@ -574,6 +603,22 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
+    public  function loadScript($js)
+    {
+        $js = is_array($js) ? $js : array($js);
+        
+        if($this->pageScripts) {
+            $this->pageScripts = array_merge($this->pageScripts, $js);
+        } else {
+            $this->pageScripts = $js;
+        }
+    }
+
+    public function exportScripts()
+    {
+        return $this->pageScripts;
+    }
+
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
@@ -763,6 +808,24 @@ class WebExtension extends \Twig_Extension
         $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);
+    }
+
+    public function atFilter($text, $ats = array())
+    {
+        if (empty($ats) || !is_array($ats)) {
+            return $text;
+        }
+
+        $router = $this->container->get('router');
+
+        foreach ($ats as $nickname => $userId) {
+            $path = $router->generate('user_show', array('id' => $userId));
+            $html = "<a href=\"{$path}\" data-uid=\"{$userId}\" target=\"_blank\">@{$nickname}</a>";
+
+            $text = preg_replace("/@{$nickname}/ui", $html, $text);
+        }
+
+        return $text;
     }
 
     public function getSetting($name, $default = null)

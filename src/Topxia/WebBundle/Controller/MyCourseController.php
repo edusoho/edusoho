@@ -108,4 +108,9 @@ class MyCourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
 }
