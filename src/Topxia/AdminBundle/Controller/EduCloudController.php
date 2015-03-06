@@ -121,7 +121,7 @@ class EduCloudController extends BaseController
                 $schoolCandidateName = '';
             }
             if ($smsStatus['status'] == 'failed') {
-                $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$newSchoolName}”未通过审核");
+                $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$schoolCandidateName}”未通过审核");
             }
         } else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';
