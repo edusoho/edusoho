@@ -19,5 +19,5 @@ interface OrderProcessor
 	* (String) status success 表示成功
 	* (String)  payType  iap, alipay
 	*/
-	public function coinPayNotify();
+	private function coinPayNotify();
 }

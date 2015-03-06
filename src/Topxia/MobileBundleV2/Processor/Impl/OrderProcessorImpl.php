@@ -20,7 +20,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     }
 
     private function requestReceiptData($receipt, $isSandbox = false)     
-    {     
+    {
+        $amout = $this->getParam("amout", 0);
         if ($isSandbox) {     
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
         }     
@@ -55,7 +56,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         } 
         if (!isset($data->status) || $data->status != 0) {
             return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
-        }               
+        }
+
+        if ($data->receipt->status == 0) {
+            return $this->coinPayNotify("iap", $amout);
+        }        
         return array(     
             'quantity'       =>  $data->receipt->quantity,     
             'product_id'     =>  $data->receipt->product_id,     
@@ -67,14 +72,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         );     
     } 
 
-    public function coinPayNotify()
+    private function coinPayNotify($payType, $amount, $sn, $status)
     {
-        $payType = $this->getParam("payType");
-        $amount = $this->getParam("amount", 0);
-        $paidTime = $this->getParam("paidTime", 0);
-        $sn = $this->getParam("sn");
-        $status = $this->getParam("status");
-
         if (empty($sn) || empty($status)) {
             return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
         }
@@ -84,7 +83,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 "amount"=>$amount,
                 "sn"=>$sn,
                 "status"=>$status,
-                "paidTime"=>$paidTime
+                "paidTime"=>0
             );
             try {
                 list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
@@ -113,11 +112,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $formData['amount'] = $amount;
 
         $order = $this->getCashOrdersService()->addOrder($formData);
-
         if (empty($order)) {
             return $this->createErrorResponse('error', "充值失败！"); 
         }
-
+        $this->coinPayNotify("iap", $amout, $order["sn"], "success");
         return $order;
     }
 
