@@ -17,10 +17,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam("receipt-data");
         $amount = $this->getParam("amount", 0);
-        return $this->requestReceiptData($amount, $receipt, true);
+        return $this->requestReceiptData($user["id"], $amount, $receipt, true);
     }
 
-    private function requestReceiptData($amount, $receipt, $isSandbox = false)     
+    private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)     
     {
         if ($isSandbox) {     
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
@@ -60,7 +60,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         if ($data->status == 0) {
             return array(
-                "status"=>$this->buyCoinByIAP($user["id"], $amount, "none")
+                "status"=>$this->buyCoinByIAP($userId, $amount, "none")
                 );
         }        
         return array(
