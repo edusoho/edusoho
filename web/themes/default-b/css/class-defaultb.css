@@ -25,19 +25,9 @@
   transform: scale(1.1, 1.1);
 }
 /* =========================== common =========================== */
-a {
-  -webkit-transition: all .3s ease;
-  -moz-transition: all .3s ease;
-  -o-transition: all .3s ease;
-  transition: all .3s ease;
-}
 a:hover,
 a:focus {
   color: #428bca;
-  -webkit-transition: all .3s ease;
-  -moz-transition: all .3s ease;
-  -o-transition: all .3s ease;
-  transition: all .3s ease;
 }
 /* =========================== rewrite =========================== */
 @media (max-width: 767px) {
