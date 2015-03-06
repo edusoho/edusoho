@@ -12,12 +12,4 @@ interface OrderProcessor
 	* (String)  payType  iap, alipay
 	*/
 	public function buyCoin();
-
-	/*
-	* (float) amount 金额
-	* (String) sn 订单流水号
-	* (String) status success 表示成功
-	* (String)  payType  iap, alipay
-	*/
-	public function coinPayNotify();
 }

@@ -10,12 +10,18 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     public function validateIAPReceipt()
     {
-        $receipt = $this->getParam("receipt");
-        return $this->requestReceiptData($receipt, false);
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录");
+        }
+
+        $receipt = $this->getParam("receipt-data");
+        $amount = $this->getParam("amount", 0);
+        return $this->requestReceiptData($user["id"], $amount, $receipt, true);
     }
 
-    private function requestReceiptData($receipt, $isSandbox = false)     
-    {     
+    private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)     
+    {
         if ($isSandbox) {     
             $endpoint = 'https://sandbox.itunes.apple.com/verifyReceipt';     
         }     
@@ -41,35 +47,29 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         curl_close($ch);
 
         if ($errno != 0) {     
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+            return $this->createErrorResponse('error', "充值失败！" . $errno);
         }     
                   
-        $data = json_decode($response); 
+        $data = json_decode($response);
         if (!is_object($data)) {
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
+            return $this->createErrorResponse('error', "充值验证失败");
         } 
         if (!isset($data->status) || $data->status != 0) {
-            return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
-        }               
-        return array(     
-            'quantity'       =>  $data->receipt->quantity,     
-            'product_id'     =>  $data->receipt->product_id,     
-            'transaction_id' =>  $data->receipt->transaction_id,     
-            'purchase_date'  =>  $data->receipt->purchase_date,     
-            'app_item_id'    =>  $data->receipt->app_item_id,     
-            'bid'            =>  $data->receipt->bid,     
-            'bvrs'           =>  $data->receipt->bvrs     
+            return $this->createErrorResponse('error', "充值失败！状态码 :" . $data->status);
+        }
+
+        if ($data->status == 0) {
+            return array(
+                "status"=>$this->buyCoinByIAP($userId, $amount, "none")
+                );
+        }        
+        return array(
+            'status' => false   
         );     
     } 
 
-    public function coinPayNotify()
+    private function coinPayNotify($payType, $amount, $sn, $status)
     {
-        $payType = $this->getParam("payType");
-        $amount = $this->getParam("amount", 0);
-        $paidTime = $this->getParam("paidTime", 0);
-        $sn = $this->getParam("sn");
-        $status = $this->getParam("status");
-
         if (empty($sn) || empty($status)) {
             return $this->createErrorResponse('error', "订单数据缺失，充值失败！");
         }
@@ -79,11 +79,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 "amount"=>$amount,
                 "sn"=>$sn,
                 "status"=>$status,
-                "paidTime"=>$paidTime
+                "paidTime"=>0
             );
             try {
                 list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-                return true;
+                return $success;
             } catch (\Exception $e) {
                 return $this->createErrorResponse('error', $e->getMessage());
             }
@@ -92,6 +92,21 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return false;
     }
 
+    private function buyCoinByIAP($userId, $amount, $payment)
+    {
+        $formData['payment'] = $payment;
+        $formData['userId'] = $userId;
+        $formData['amount'] = $amount;
+
+        $order = $this->getCashOrdersService()->addOrder($formData);
+        if (empty($order)) {
+            return $this->createErrorResponse('error', "充值失败！"); 
+        }
+        $this->coinPayNotify("iap", $amount, $order["sn"], "success");
+        return $order;
+    }
+
+    //payType is enum (none, alipay)
     public function buyCoin()
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -107,11 +122,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $formData['amount'] = $amount;
 
         $order = $this->getCashOrdersService()->addOrder($formData);
-
         if (empty($order)) {
             return $this->createErrorResponse('error', "充值失败！"); 
         }
-
         return $order;
     }
 
