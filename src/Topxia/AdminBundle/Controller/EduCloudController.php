@@ -79,6 +79,7 @@ class EduCloudController extends BaseController
 
     private function handleSmsSetting(Request $request)
     {
+        list($smsStatus, $schoolNames) = $this->getSchoolName();
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
 
@@ -92,7 +93,6 @@ class EduCloudController extends BaseController
             );
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
-            list($smsStatus, $schoolNames) = $this->getSchoolName();
             $dataUserPosted = array_merge($dataUserPosted, $schoolNames);
 
             $this->getSettingService()->set('cloud_sms', $dataUserPosted);
@@ -104,9 +104,8 @@ class EduCloudController extends BaseController
             } else {
                 $this->setFlashMessage('success', '设置成功。');
             }
-            return $smsStatus;
         } 
-        return array();
+        return $smsStatus;
     }
 
     private function getSchoolName()
