@@ -15,7 +15,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', "您尚未登录");
         }
 
-        $receipt = $this->getParam("eceipt-data");
+        $receipt = $this->getParam("receipt-data");
         $amount = $this->getParam("amount", 0);
         return $this->requestReceiptData($amount, $receipt, true);
     }
