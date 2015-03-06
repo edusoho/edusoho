@@ -59,16 +59,12 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         if ($data->receipt->status == 0) {
-            return $this->buyCoinByIAP($user["id"], $amout, "none");
+            return array(
+                "status"=>$this->buyCoinByIAP($user["id"], $amout, "none")
+                );
         }        
-        return array(     
-            'quantity'       =>  $data->receipt->quantity,     
-            'product_id'     =>  $data->receipt->product_id,     
-            'transaction_id' =>  $data->receipt->transaction_id,     
-            'purchase_date'  =>  $data->receipt->purchase_date,     
-            'app_item_id'    =>  $data->receipt->app_item_id,     
-            'bid'            =>  $data->receipt->bid,     
-            'bvrs'           =>  $data->receipt->bvrs     
+        return array(
+            'status' => false   
         );     
     } 
 
