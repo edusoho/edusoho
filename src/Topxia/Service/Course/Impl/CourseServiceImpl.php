@@ -215,16 +215,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findUserLeaningCourseCount($userId, $filters = array())
 	{
-		if (isset($conditions["type"])) {
-			return $this->getMemberDao()->findMemberCountByUserIdAndTypeAndIsLearned($userId, 'student', $conditions["type"], 0);
+		if (isset($filters["type"])) {
+			return $this->getMemberDao()->findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 0);
 		}
 		return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
 	}
 
 	public function findUserLeaningCourses($userId, $start, $limit, $filters = array())
 	{
-		if (isset($conditions["type"])) {
-			$members = $this->getMemberDao()->findMembersByUserIdAndTypeAndIsLearned($userId, 'student', $conditions["type"], '0', $start, $limit);
+		if (isset($filters["type"])) {
+			$members = $this->getMemberDao()->findMembersByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], '0', $start, $limit);
 		} else {
 			$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
 		}
@@ -246,16 +246,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findUserLeanedCourseCount($userId, $filters = array())
 	{
-		if (isset($conditions["type"])) {
-			return $this->getMemberDao()->findMemberCountByUserIdAndTypeAndIsLearned($userId, $conditions["type"], 1);
+		if (isset($filters["type"])) {
+			return $this->getMemberDao()->findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 1);
 		}
 		return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
 	}
 
 	public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
 	{
-		if (isset($conditions["type"])) {
-			$members = $this->getMemberDao()->findMembersByUserIdAndTypeAndIsLearned($userId, $conditions["type"], '1', $start, $limit);
+		if (isset($filters["type"])) {
+			$members = $this->getMemberDao()->findMembersByUserIdAndTypeAndIsLearned($userId, 'student', $filters["type"], '1', $start, $limit);
 		} else {
 			$members = $this->getMemberDao()->findMembersByUserIdAndRoleAndIsLearned($userId, 'student', '1', $start, $limit);
 		}

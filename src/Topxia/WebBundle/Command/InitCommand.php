@@ -120,7 +120,8 @@ class InitCommand extends BaseCommand
 		);
 		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
 
-		$user = $this->getUserService()->getUserByEmail('test@edusoho.com');
+        $user = $this->getUserService()->getUserByEmail('test@edusoho.com');
+
 		if (!$user) {
 			$user = $this->getUserService()->register($fields);
 		}
@@ -373,6 +374,8 @@ EOD;
 	private function initServiceKernel()
 	{
 		$serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+
 		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
 		$currentUser = new CurrentUser();
 		$currentUser->fromArray(array(
