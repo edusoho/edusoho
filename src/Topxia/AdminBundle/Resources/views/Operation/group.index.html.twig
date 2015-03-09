@@ -3,9 +3,8 @@
 {% block title %}小组管理{% endblock %}
 {% set script_controller='group/group' %}
 {% block maincontent %}
-  <div class="page-header">
-    <a href="{{url('group_add')}}" class="btn btn-info btn-sm pull-right" target="_blank">创建小组</a>
-    <h1>小组管理</h1>
+  <div class="clearfix">
+    <a href="{{url('group_add')}}" class="btn btn-info btn-sm pull-right" target="_blank" style="margin-bottom:15px;">创建小组</a>
   </div>
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

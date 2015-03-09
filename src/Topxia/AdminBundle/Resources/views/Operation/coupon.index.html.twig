@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Operation:coupon.layout.html.twig' %}
 
-{% block title %}优惠码 - {{ parent() }}{% endblock %}
+{% block title %}优惠码批次管理{% endblock %}
 
 {% set submenu = 'coupon_batch' %}
 
@@ -8,9 +8,8 @@
 
 {% block maincontent %}
   {{ web_macro.flash_messages() }}
-  <div class="page-header clearfix">
-    <a href="{{ path('admin_operation_coupon_generate') }}" class="btn btn-info btn-sm pull-right" id="generate-coupon-btn">生成优惠码</a>
-    <h1 class="pull-left">优惠码批次管理</h1>
+  <div class="clearfix">
+    <a href="{{ path('admin_operation_coupon_generate') }}" class="btn btn-info btn-sm pull-right" id="generate-coupon-btn" style="margin-bottom:15px;">生成优惠码</a>
   </div>
 
   <form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

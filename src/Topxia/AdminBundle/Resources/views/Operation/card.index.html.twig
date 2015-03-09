@@ -1,14 +1,13 @@
 {% extends 'TopxiaAdminBundle:Operation:card.layout.html.twig' %}
-{% block title %}学习卡 - {{ parent() }}{% endblock %}
+{% block title %}学习卡批次管理{% endblock %}
 
 {% set submenu = 'money_card_homepage' %} 
 {% set script_controller = 'moneycardbundle/controller/batch-list' %}
 
 {% block maincontent %}
   		
-  <div class="page-header clearfix">
-     <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_money_card_create')}}">生成学习卡</button>
-    <h1 class="pull-left">学习卡批次管理</h1>
+  <div class="clearfix">
+     <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_money_card_create')}}" style="margin-bottom:15px;">生成学习卡</button>
   </div>
 
     <form id="money-card-batch-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Operation:coupon.layout.html.twig' %}
 
-{% block title %}优惠码 - {{ parent() }}{% endblock %}
+{% block title %}优惠码使用查询{% endblock %}
 
 {% set submenu = 'coupon_query' %}
 
@@ -8,9 +8,6 @@
 
 {% block maincontent %}
   {{ web_macro.flash_messages() }}
-  <div class="page-header clearfix">
-    <h1 class="pull-left">优惠码使用查询</h1>
-  </div>
 
   <form id="coupon-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 	<div class="form-group">
