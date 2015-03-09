@@ -13,7 +13,9 @@ define(function(require, exports, module) {
                 };
 
             }
-        });;
+        });
+
+        var smsSender;
         
         var makeValidator = function(type) {
             if (("undefined" != typeof validator)&&("undefined" != typeof validator.destroy)){
@@ -52,7 +54,9 @@ define(function(require, exports, module) {
 
                     }
                 });
-                
+                if (('undefined' != typeof smsSender)&&("undefined" != typeof smsSender.destroy)){
+                    smsSender.destroy();
+                }
             }
         }
 
@@ -71,7 +75,7 @@ define(function(require, exports, module) {
             $('.js-find-by-mobile').addClass('active');
 
             makeValidator('mobile');
-            var smsSender = new SmsSender({
+            smsSender = new SmsSender({
                 element: '.js-sms-send',
                 validator: validator,
                 url: $('.js-sms-send').data('url'),
