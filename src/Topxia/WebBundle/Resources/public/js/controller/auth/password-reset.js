@@ -75,11 +75,9 @@ define(function(require, exports, module) {
                 element: '.js-sms-send',
                 validator: validator,
                 url: $('.js-sms-send').data('url'),
-                smsType:'sms_forget_password',
-                hasMobile:true,
-                hasNickname:true           
+                smsType:'sms_forget_password'         
             });
-            
+
             $('#password-reset-form').hide();
             $('#password-reset-by-mobile-form').show();
 

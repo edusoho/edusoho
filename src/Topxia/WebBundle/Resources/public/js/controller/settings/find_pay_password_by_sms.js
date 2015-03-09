@@ -18,8 +18,7 @@ define(function(require, exports, module) {
                 element: '.js-sms-send',
                 validator: validator,
                 url: $('.js-sms-send').data('url'),
-                smsType:'sms_forget_pay_password',
-                hasMobile:true            
+                smsType:'sms_forget_pay_password'       
             });
         
     };
