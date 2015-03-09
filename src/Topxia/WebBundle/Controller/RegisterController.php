@@ -42,7 +42,6 @@ class RegisterController extends BaseController
             
             $registration['verifiedMobile'] = '';
             if (in_array('mobile', $authSettings['registerSort'])){
-                $eduCloudService = $this->getEduCloudService();
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
                 if ($result){
                    $registration['verifiedMobile'] = $sessionField['to'];
@@ -373,11 +372,6 @@ class RegisterController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }   
 
     protected function getAuthService()
     {
