@@ -6,12 +6,14 @@ define(function(require, exports, module) {
     var SmsSender = Widget.extend({
         attrs: {
         	validator: 0,
+        	url:'',
         	smsType:'',
         	hasMobile:false,
         	hasNickname:false
         },
     	takeEffect: function () {
     		var validator = this.get("validator");
+    		var url = this.get("url");
     		var smsType = this.get("smsType");
     		var hasMobile = this.get("hasMobile");
     		var hasNickname = this.get("hasNickname");
@@ -52,7 +54,6 @@ define(function(require, exports, module) {
 	        }
 
 	        var postData = function(){
-	        	var url = $('.js-sms-send').data('url');
 	        	var data = {};
 	        	
 	        	data.to = $('[name="mobile"]').val();

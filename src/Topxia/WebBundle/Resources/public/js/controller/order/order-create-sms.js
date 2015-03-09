@@ -9,20 +9,19 @@ define(function(require, exports, module) {
 
     	if (mobile.length > 0) {
 		    var smsSender = new SmsSender({
+		    	url: $('.js-sms-send').data('url'),
 		        smsType:'sms_user_pay'  
 		    });
 		    smsSender.takeEffect();
 
 	    	var smsModalCodeValidator = new Validator({
 	            element: '#js-sms-modal-form',
-	            // triggerType: 'change',
 	            autoSubmit: false
 	        });
 
 		    var refresh = function () {
 		    	smsModalCodeValidator = new Validator({
 		            element: '#js-sms-modal-form',
-		            // triggerType: 'change',
 		            autoSubmit: false
 		        });
 
@@ -37,7 +36,6 @@ define(function(require, exports, module) {
 		    $('.js-confirm').unbind('click');
 		    $('.js-confirm').click(function(){
 			    refresh();
-			    // $('[name="sms_code_modal"]').trigger('blur');
 		    	smsModalCodeValidator.execute(function(error, results, element) {
 	                if (error) {
 	                    return false;

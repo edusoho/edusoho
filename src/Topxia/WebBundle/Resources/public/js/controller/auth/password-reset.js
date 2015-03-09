@@ -73,6 +73,7 @@ define(function(require, exports, module) {
             makeValidator('mobile');
             var smsSender = new SmsSender({
                 validator: validator,
+                url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_password',
                 hasMobile:true,
                 hasNickname:true           

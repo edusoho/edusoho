@@ -22,8 +22,9 @@ define(function(require, exports, module) {
 
 		var smsSender = new SmsSender({
             validator: validator,
-            smsType:'sms_bind',
-            hasMobile:true            
+            url: $('.js-sms-send').data('url'),
+            smsType: 'sms_bind',
+            hasMobile: true            
         });
         smsSender.takeEffect();
 

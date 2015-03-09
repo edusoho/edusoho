@@ -16,6 +16,7 @@ define(function(require, exports, module) {
             
             var smsSender = new SmsSender({
                 validator: validator,
+                url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_pay_password',
                 hasMobile:true            
             });
