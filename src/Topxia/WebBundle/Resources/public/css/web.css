@@ -2,6 +2,10 @@
  * Bootstrap Modify
  */
 
+html {
+	overflow-y: scroll;
+}
+
 a.link-muted {
 	color: #9AB2CF;
 }
