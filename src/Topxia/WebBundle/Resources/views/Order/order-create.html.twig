@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class="container order-pay">
+<div class="order-pay">
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
       <div class="panel panel-default">
@@ -31,6 +31,7 @@
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
+            <div class="order-detail-bg">
             {% if targetType == "course" and courses|default(null) %}
               {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
             {% endif %}
@@ -39,29 +40,31 @@
               {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
             {% endif %}
 
-            <div class="order-item clearfix" 
-            {% if not ((is_plugin_installed("Coupon") and setting('coupon.enabled') and targetType in ['course','vip']) or setting('coin.coin_enabled')) %}
-            style="display:none"
+            {% if targetType == "classroom" and is_plugin_installed("Classroom") %}
+              {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
             {% endif %}
-            >
-              <div class="pull-right order-count">
-                订单金额：
-                <span role="total-price" class="order-price">{{totalPrice}}</span>
-                {% if priceType|default('RMB') == "RMB" %}
-                  元
-                {% elseif priceType|default('RMB') == "Coin" %}
-                  {{setting("coin.coin_name")}}
-                {% endif %}
+
+              <div class="order-item clearfix" >
+                <div class="pull-right order-count">
+                  订单金额：
+                  <span role="total-price" class="order-price">{{totalPrice}}</span>
+                  {% if priceType|default('RMB') == "RMB" %}
+                    元
+                  {% elseif priceType|default('RMB') == "Coin" %}
+                    {{setting("coin.coin_name")}}
+                  {% endif %}
+                </div>
               </div>
             </div>
-            
-            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip']) and showCoupon|default(false) %}
+            <div class="order-detail-bg">
+            {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) %}
             	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}
             	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
+            </div>
 
             <div class="order-item clearfix">
               <div class="total-price">

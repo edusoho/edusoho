@@ -210,4 +210,9 @@ interface UserService
 
     public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
 
+    /**
+     * 解析文本中@(提)到的用户
+     */
+    public function parseAts($text);
+
 }

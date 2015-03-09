@@ -164,16 +164,17 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     {
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
-            throw $this->createServiceException('订单不存在，不嫩申请退款。');
+            throw $this->createServiceException('订单不存在，不能申请退款。');
         }
-
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
+
         if ($refund['status'] == 'created') {
             $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting = $this->getSettingService()->get('refund');
             $message = empty($setting) or empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
             if ($message) {
+                $course = $this->getCourseService()->getCourse($order["targetId"]);
                 $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
                 $variables = array(
                     'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"

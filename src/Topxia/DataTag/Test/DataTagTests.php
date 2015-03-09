@@ -47,6 +47,7 @@ use Topxia\DataTag\UserDataTag;
 use Topxia\DataTag\UserLatestLearnCoursesDataTag;
 use Topxia\DataTag\UserandProfilesDataTag;
 use Topxia\DataTag\VipLevelsDataTag;
+use Topxia\DataTag\ClassroomsDataTag;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
@@ -223,7 +224,7 @@ class DataTagTests extends PHPUnit_Framework_TestCase
 
         $groups = $Group->getData(array('count'=>5));
 
-    /*        print_r($groups);*/
+/*            print_r($groups);*/
 
     }
 
@@ -232,8 +233,8 @@ class DataTagTests extends PHPUnit_Framework_TestCase
         $Threads = new HotThreadsDataTag();
 
         $data = $Threads->getData(array('count'=>5));
-/*
-            print_r($data);*/
+
+/*            print_r($data);*/
 
     }
 
@@ -374,9 +375,9 @@ class DataTagTests extends PHPUnit_Framework_TestCase
         $PersonDynamic = new PersonDynamicDataTag();
 
         $data = $PersonDynamic->getData(array('count'=>'5'));
-
-/*            print_r($data);*/
-
+/*
+            print_r($data);
+*/
     }
 
     public function testPopularCoursesByCategoryDataTag()
@@ -519,6 +520,14 @@ class DataTagTests extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testRecommendClassroomsDataTag()
+    {
+        $Classroom = new ClassroomsDataTag();
+
+        $data = $Classroom->getData(array('count'=>5));
+
+/*        print_r($data);*/
+    }
 
 
     public function __construct()
