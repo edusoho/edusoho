@@ -16,15 +16,17 @@ class EduCloudController extends BaseController
             $currentUser = $this->getCurrentUser();
             $currentTime = time();
 
-            $smsLastTime = $request->getSession()->get('sms_last_time');
+
+            $smsType = $request->request->get('sms_type');
+            $this->checkSmsType($smsType, $currentUser);
+
+            $targetSession = $request->getSession()->get($smsType);
+            $smsLastTime = $targetSession['sms_last_time'];
             $allowedTime = 120;
             
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
                 return $this->createJsonResponse(array('error' => '请等待120秒再申请'));
             }
-
-            $smsType = $request->request->get('sms_type');
-            $this->checkSmsType($smsType, $currentUser);
 
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
