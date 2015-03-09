@@ -199,7 +199,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function sumOrderPriceByTarget($targetType, $targetId)
     {
-        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'cancelled'));
+        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid'));
     }
 
     public function sumCouponDiscountByOrderIds($orderIds)
@@ -283,7 +283,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'updatedTime' => time(),
             'createdTime' => time(),
         ));
-        
+
         $this->getOrderDao()->updateOrder($order['id'], array(
             'status' => ($refund['status'] == 'success') ? 'cancelled' : 'refunding',
             'refundId' => $refund['id'],
@@ -510,7 +510,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
-
+        
         return $conditions;
     }
 

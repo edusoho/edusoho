@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="coupon-detail" >
-    {% if app.request.query.get('targetType') in ['course','vip'] %}
+    {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
       <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
 
        {{ totalPrice }}  {# {{courses[0]['price']}} #}
