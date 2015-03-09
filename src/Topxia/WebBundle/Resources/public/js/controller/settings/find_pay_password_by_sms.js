@@ -15,12 +15,12 @@ define(function(require, exports, module) {
             });
             
             var smsSender = new SmsSender({
+                element: '.js-sms-send',
                 validator: validator,
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_pay_password',
                 hasMobile:true            
             });
-            smsSender.takeEffect();
         
     };
 

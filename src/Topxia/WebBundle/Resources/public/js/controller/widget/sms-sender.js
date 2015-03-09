@@ -11,11 +11,16 @@ define(function(require, exports, module) {
         	hasMobile:false,
         	hasNickname:false
         },
+        setup: function() {
+            this.takeEffect();
+        },
     	takeEffect: function () {
     		var validator = this.get("validator");
     		var url = this.get("url");
     		var smsType = this.get("smsType");
+    		// var hasMobile = ($('[name="mobile"]').length > 0);
     		var hasMobile = this.get("hasMobile");
+    		// var hasNickname = ($('[name="nickname"]').length > 0);
     		var hasNickname = this.get("hasNickname");
 
 	    	if (hasMobile){	
@@ -78,8 +83,8 @@ define(function(require, exports, module) {
 	        	});
 	        }
 
-	        $('.js-sms-send').unbind("click");
-	        $('.js-sms-send').click(function() {
+	        this.element.unbind("click");
+	        this.element.click(function() {
         		var leftTime = $('#js-time-left').html();
         		if (leftTime.length > 0){
         			return false;

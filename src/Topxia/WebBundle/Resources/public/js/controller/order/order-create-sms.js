@@ -9,10 +9,10 @@ define(function(require, exports, module) {
 
     	if (mobile.length > 0) {
 		    var smsSender = new SmsSender({
+		    	element: '.js-sms-send',
 		    	url: $('.js-sms-send').data('url'),
 		        smsType:'sms_user_pay'  
 		    });
-		    smsSender.takeEffect();
 
 	    	var smsModalCodeValidator = new Validator({
 	            element: '#js-sms-modal-form',
