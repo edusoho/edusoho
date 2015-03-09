@@ -86,48 +86,6 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-    /**
-     * @param  array $sessionField 必须包含元素：'sms_type' 'sms_last_time' 'sms_code' 'to'
-     * @param  array $requestField 必须包含元素：'sms_code' 'mobile'
-     * @return boolean
-     */
-    public function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
-    {
-        $smsType = $sessionField['sms_type'];
-        if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
-            return false;
-        }
-        if ($smsType != $scenario) {
-            return false;
-        }
-
-        $currentTime = time();
-        $smsLastTime = $sessionField['sms_last_time'];
-        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
-            return false;
-        }
-
-        $smsCode = $sessionField['sms_code'];
-        $smsCodePosted = $requestField['sms_code'];
-        if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
-            return false;
-        }
-        if ($smsCode != $smsCodePosted){
-            return false;
-        }
-
-        $to = $sessionField['to'];
-        $mobile = $requestField['mobile'];
-        if ((strlen($to) == 0) || (strlen($mobile) == 0)) {
-            return false;
-        }
-        if ($to != $mobile){
-            return false;
-        }        
-
-        return true;
-    }
-
     public function getCloudSmsKey($key)
     {
         $setting = $this->createService('System.SettingService')->get('cloud_sms', array());

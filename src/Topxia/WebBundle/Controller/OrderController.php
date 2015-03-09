@@ -83,9 +83,7 @@ class OrderController extends BaseController
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
             if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
-                list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
-                $result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
-                SmsToolkit::clearSmsSession($request);
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
                 if (!$result) {
                     return $this->createMessageResponse('error', '短信验证失败。');
                 }

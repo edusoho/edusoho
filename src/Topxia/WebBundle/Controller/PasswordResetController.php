@@ -110,9 +110,7 @@ class PasswordResetController extends BaseController
             $data = $request->request->all();
 
             $eduCloudService = $this->getEduCloudService();
-            list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
-            $result = $eduCloudService->checkSms($sessionField, $requestField, $scenario = 'sms_forget_password');
-            SmsToolkit::clearSmsSession($request);
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
             if ($result){
                 $nickname = $data['nickname'];
                 if (strlen($nickname) == 0){

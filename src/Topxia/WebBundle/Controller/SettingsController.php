@@ -455,10 +455,8 @@ class SettingsController extends BaseController
 		if ($request->getMethod() == 'POST'){
 			if ($currentUser['verifiedMobile'] != $request->request->get('mobile')){
 				$this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
-			}
-			list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
-			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
-			SmsToolkit::clearSmsSession($request);
+			}			
+			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 			if ($result) {
 				$this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
  				return $this->setPayPasswordPage($request, $currentUser['id']);
@@ -562,9 +560,7 @@ class SettingsController extends BaseController
 				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 			}
 
-	        list($sessionField, $requestField) = SmsToolkit::paramForSmsCheck($request);
-			$result = $this->getEduCloudService()->checkSms($sessionField, $requestField, $scenario);
-			SmsToolkit::clearSmsSession($request);
+			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 			if ($result) {
 				$verifiedMobile = $sessionField['to'];
 				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);

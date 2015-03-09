@@ -3,7 +3,15 @@ namespace Topxia\Common;
 
 class SmsToolkit
 {
-	public static function paramForSmsCheck($request)
+    public static function smsCheck($request, $scenario)
+    {
+        list($sessionField, $requestField) = self::paramForSmsCheck($request);
+        $result = self::checkSms($sessionField, $requestField, $scenario);
+        self::clearSmsSession($request);
+        return array($result, $sessionField, $requestField);
+    }
+
+	private static function paramForSmsCheck($request)
     {
         $sessionField['sms_type'] = $request->getSession()->get('sms_type');
         $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
@@ -16,7 +24,49 @@ class SmsToolkit
         return array($sessionField, $requestField);
     }
 
-    public static function clearSmsSession($request)
+    /**
+     * @param  array $sessionField 必须包含元素：'sms_type' 'sms_last_time' 'sms_code' 'to'
+     * @param  array $requestField 必须包含元素：'sms_code' 'mobile'
+     * @return boolean
+     */
+    private static function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
+    {
+        $smsType = $sessionField['sms_type'];
+        if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
+            return false;
+        }
+        if ($smsType != $scenario) {
+            return false;
+        }
+
+        $currentTime = time();
+        $smsLastTime = $sessionField['sms_last_time'];
+        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
+            return false;
+        }
+
+        $smsCode = $sessionField['sms_code'];
+        $smsCodePosted = $requestField['sms_code'];
+        if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
+            return false;
+        }
+        if ($smsCode != $smsCodePosted){
+            return false;
+        }
+
+        $to = $sessionField['to'];
+        $mobile = $requestField['mobile'];
+        if ((strlen($to) == 0) || (strlen($mobile) == 0)) {
+            return false;
+        }
+        if ($to != $mobile){
+            return false;
+        }        
+
+        return true;
+    }    
+
+    private static function clearSmsSession($request)
     {
         $request->getSession()->set('to',rand(0,999999));
         $request->getSession()->set('sms_code',rand(0,999999));
