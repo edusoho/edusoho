@@ -5,7 +5,7 @@ class SmsToolkit
 {
     public static function smsCheck($request, $scenario)
     {
-        list($sessionField, $requestField) = self::paramForSmsCheck($reques, $scenario);
+        list($sessionField, $requestField) = self::paramForSmsCheck($request, $scenario);
         $result = self::checkSms($sessionField, $requestField, $scenario);
         self::clearSmsSession($request, $scenario);
         return array($result, $sessionField, $requestField);
