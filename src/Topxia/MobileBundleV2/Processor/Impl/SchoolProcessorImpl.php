@@ -36,7 +36,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "description"=>"EduSoho官方应用，网校资讯。",
             "author"=>"官方",
             "version"=>"1.0.0",
-            "supprot_version"=>"2.4.0+",
+            "support_version"=>"2.4.0+",
             "action"=>array(),
             "url"=>"articleApp"
         );
@@ -48,7 +48,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "description"=>"网校小组社区",
             "author"=>"官方",
             "version"=>"1.0.0",
-            "supprot_version"=>"2.4.0+",
+            "support_version"=>"2.4.0+",
             "action"=>array(),
             "url"=>""
         );
