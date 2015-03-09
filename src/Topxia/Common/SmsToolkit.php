@@ -5,18 +5,16 @@ class SmsToolkit
 {
     public static function smsCheck($request, $scenario)
     {
-        list($sessionField, $requestField) = self::paramForSmsCheck($request);
+        list($sessionField, $requestField) = self::paramForSmsCheck($reques, $scenario);
         $result = self::checkSms($sessionField, $requestField, $scenario);
-        self::clearSmsSession($request);
+        self::clearSmsSession($request, $scenario);
         return array($result, $sessionField, $requestField);
     }
 
-	private static function paramForSmsCheck($request)
+	private static function paramForSmsCheck($request, $scenario)
     {
-        $sessionField['sms_type'] = $request->getSession()->get('sms_type');
-        $sessionField['sms_last_time'] = $request->getSession()->get('sms_last_time');
-        $sessionField['sms_code'] = $request->getSession()->get('sms_code');
-        $sessionField['to'] = $request->getSession()->get('to');
+        $sessionField = $request->getSession()->get($scenario);
+        $sessionField['sms_type'] = $scenario;
 
         $requestField['sms_code'] = $request->request->get('sms_code');
         $requestField['mobile'] = $request->request->get('mobile');
@@ -66,12 +64,9 @@ class SmsToolkit
         return true;
     }    
 
-    private static function clearSmsSession($request)
+    private static function clearSmsSession($request, $scenario)
     {
-        $request->getSession()->set('to',rand(0,999999));
-        $request->getSession()->set('sms_code',rand(0,999999));
-        $request->getSession()->set('sms_last_time','');
-        $request->getSession()->set('sms_type', rand(0,999999));
+        $request->getSession()->set($scenario,rand(0,999999));
     }
  
 }

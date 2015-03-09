@@ -86,10 +86,11 @@ class EduCloudController extends BaseController
             }
             $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
 
-            $request->getSession()->set('to', $to);
-            $request->getSession()->set('sms_code', $smsCode);
-            $request->getSession()->set('sms_last_time', $currentTime);
-            $request->getSession()->set('sms_type', $smsType);
+            $request->getSession()->set($smsType, array(
+                'to' => $to,
+                'sms_code' => $smsCode,
+                'sms_last_time' => $currentTime
+            ));            
 
             return $this->createJsonResponse(array('ACK' => 'ok'));
         }
