@@ -8,7 +8,18 @@ define(function(require, exports, module) {
     	var mobile = $('[name="mobile"]').val();
 
     	if (mobile.length > 0) {
+    		var validator = new Validator({
+	            element: '#js-sms-modal-form',
+	            autoSubmit: true,
+	            onFormValidated: function(error){
+	                if (error) {
+	                    return false;
+	                }
+	            }
+	        });
+
 		    var smsSender = new SmsSender({
+		    	validator:validator,
 		    	element: '.js-sms-send',
 		    	url: $('.js-sms-send').data('url'),
 		        smsType:'sms_user_pay'  

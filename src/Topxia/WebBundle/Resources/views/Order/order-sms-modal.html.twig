@@ -6,6 +6,7 @@
 {% block body %}
 {% if showSms %}  
     <form id = "js-sms-modal-form">
+      <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
       <div class = "form-group">
         <div class = "controls row" >
           <div class = "col-md-5 col-md-offset-2" >
