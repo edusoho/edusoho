@@ -107,7 +107,13 @@
 									      		<th style="text-align: center;" width="30%">短信内容</th><td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此短信30分钟内有效</td> 
 									      	</tr>
 									      	<tr> 
-									      		<th style="text-align: center;" width="30%">审核时间</th><td>审核需24小时，期间短信验证功能仍可以正常使用</td> 
+									      		<th style="text-align: center;" width="30%">审核时间</th>
+									      		<td>
+									      			审核需24小时
+									      			{% if '' != (setting('cloud_sms.sms_school_name')|default('')) %}
+									      			  ，期间短信验证功能仍可以正常使用
+									      			{% endif %}
+									      		</td> 
 									      	</tr>
 									      	<tr> 
 									      		<th style="text-align: center;" width="30%">短信价格</th> <td>0.07元/条</td> 
