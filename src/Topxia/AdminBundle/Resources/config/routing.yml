@@ -1098,3 +1098,7 @@ admin_edu_cloud_apply_for_sms:
     pattern:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
 
+admin_edu_cloud_sms_bill:
+    pattern:  /edu_cloud/sms_bill
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
+

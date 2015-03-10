@@ -13,5 +13,7 @@ interface EduCloudService
 
     public function verifyKeys();
 
+	public function getBills($type, $page, $limit);
+
     public function getCloudSmsKey($key);
 }
