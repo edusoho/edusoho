@@ -126,7 +126,7 @@ class WebExtension extends \Twig_Extension
     {   
         $permissions = $this->getPermissions();
         $result = array();
-
+        
         foreach ($permissions as $key => $value) {
             
             if ($value['parent'] == $parent) {
@@ -181,7 +181,46 @@ class WebExtension extends \Twig_Extension
          
 /*        }*/
 
+        $permissions = $this->sort($permissions);
         return $permissions;
+    }
+
+    private function sort($permissions)
+    {   
+        $i = 1;
+
+        foreach ($permissions as $key => $value) {
+            
+            $permissions[$key]['weight'] = $i * 100;
+
+            $i++;
+        }
+
+        foreach ($permissions as $key => $value) {
+            
+            if (isset($value['before'])) {
+
+                $weight = $permissions[$value['before']]['weight'];
+
+                $permissions[$key]['weight'] = $weight - 1;
+            }
+
+            if (isset($value['after'])) {
+
+                $weight = $permissions[$value['after']]['weight'];
+
+                $permissions[$key]['weight'] = $weight + 1;
+            }
+
+        }
+        
+        $permissions = ArrayToolkit::index($permissions, 'weight');
+
+        ksort($permissions);
+
+
+        return $permissions;
+        
     }
 
     private function loadPermissionYml($permissions, $fullpath)
