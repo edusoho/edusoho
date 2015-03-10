@@ -44,7 +44,7 @@
   
         
           {% set menus = permissions('admin') %}
-          {{ admin_macro.header_menu(menus) }}
+          {{ admin_macro.header_menu(menus,nav) }}
 
   {#     {% if is_granted('ROLE_ADMIN') %} #}
 {#           <li {% if nav == 'course' %}class="active"{% endif %}><a href="{{ path('admin_course') }}">课程</a></li>

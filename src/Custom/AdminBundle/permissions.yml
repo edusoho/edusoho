@@ -1,3 +1,4 @@
 permissions:
   - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page'}
-  - { name: '运营1111', code: 'admin.operation', parent: 'admin', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page'}
+  - { name: 'axxxa1', code: 'admin.operatxion1', parent: 'admin', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page', before: 'admin.operation1'}
+  - { name: '运营11121', code: 'admin.operationx', parent: 'admin', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page', before: 'admin.operatxion1'}
