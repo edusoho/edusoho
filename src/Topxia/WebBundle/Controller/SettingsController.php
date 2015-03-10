@@ -455,6 +455,7 @@ class SettingsController extends BaseController
 		if ($request->getMethod() == 'POST'){
 			if ($currentUser['verifiedMobile'] != $request->request->get('mobile')){
 				$this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
+				SmsToolkit::clearSmsSession($request, $scenario);
 				goto response;
 			}			
 			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
