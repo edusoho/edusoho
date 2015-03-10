@@ -5,14 +5,29 @@ define(function(require, exports, module) {
     
     exports.run = function() {
         var validator = new Validator({
-            element: '#settings-find-pay-password-form',
-            onFormValidated: function(error){
-                if (error) {
-                    return false;
-                }
-                    $('#password-save-btn').button('submiting').addClass('disabled');
-                }
+                element: '#settings-find-pay-password-form',
+                onFormValidated: function(error){
+                    if (error) {
+                        return false;
+                    }
+                        $('#password-save-btn').button('submiting').addClass('disabled');
+                    }
             });
+
+            validator.addItem({
+                element: '[name="mobile"]',
+                required: true,
+                rule: 'phone'            
+            });
+
+            if($('input[name="sms_code"]').length>0){
+                validator.addItem({
+                    element: '[name="sms_code"]',
+                    required: true,
+                    rule: 'integer fixedLength{len:6}',
+                    display: '短信验证码'           
+                });
+            }
             
             var smsSender = new SmsSender({
                 element: '.js-sms-send',
