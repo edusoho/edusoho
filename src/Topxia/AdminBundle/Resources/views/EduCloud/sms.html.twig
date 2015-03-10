@@ -35,9 +35,9 @@
 		{{ web_macro.flash_messages() }}
 		<form class="form-horizontal" method="post" id="sms-form" novalidate="">
 			<fieldset>
-				<legend>短信设置</legend>
 				{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
 				{% if hasSchoolName %}
+				<legend>短信设置</legend>
 					<div class="form-group">
 		      			<div class="col-md-3 control-label">
 		        			<label class="pull-right">短信功能</label>
