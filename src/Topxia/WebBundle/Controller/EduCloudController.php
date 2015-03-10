@@ -100,6 +100,20 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('error' => 'GET method'));
     }
 
+    public function smsCheckAction(Request $request, $type)
+    {
+        $targetSession = $request->getSession()->get($type);
+        if (strlen($request->query->get('value'))==0||strlen($targetSession['sms_code'])==0) {
+            $response = array('success' => false, 'message' => '验证码错误');
+        }
+        if ($targetSession['sms_code'] == $request->query->get('value')) {
+            $response = array('success' => true, 'message' => '验证码正确');
+        } else {
+            $response = array('success' => false, 'message' => '验证码错误');
+        }        
+        return $this->createJsonResponse($response);
+    }
+
     private function generateSmsCode($length = 6)
     {
         $code = rand(0, 9);

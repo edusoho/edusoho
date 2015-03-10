@@ -1600,6 +1600,10 @@ edu_cloud_sms_send:
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
     methods: [POST]
 
+edu_cloud_sms_check:
+    pattern:  /edu_cloud/sms_check/{type}
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
+
 settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }

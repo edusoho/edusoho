@@ -108,7 +108,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="sms_code"]',
                 required: true,
-                rule: 'integer fixedLength{len:6}',
+                rule: 'integer fixedLength{len:6} remote',
                 display: '短信验证码'           
             });
         }
@@ -166,6 +166,8 @@ define(function(require, exports, module) {
                 return couldSender;
             }      
         });
+
+
 
     };
 
