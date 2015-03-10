@@ -1,12 +1,11 @@
-{% extends 'TopxiaAdminBundle:EduCloud:edu-cloud-layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
 
-{% block title %}云短信 - 教育云 - {{ parent() }}{% endblock %}
+{% block title %}云短信 - {{ parent() }}{% endblock %}
 
-{% set menu = 'sms' %}
-{# {% set menu = '' %} #}
+{% set submenu = 'sms' %} 
 {% set script_controller = 'educloud/sms-setting' %}
 
-{% block main %}
+{% block maincontent %}
   <div class="page-header"><h1>云短信</h1></div>
 
     {% if smsStatus.status == 'error' %}
