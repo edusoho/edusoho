@@ -18,6 +18,11 @@ define(function(require, exports, module) {
 	            }
 	        });
 
+    		validator.addItem({
+                element: '[name="mobile"]',
+                required: true,
+                rule: 'phone'            
+            });
 	        if($('input[name="sms_code"]').length>0){
 	            validator.addItem({
 	                element: '[name="sms_code"]',
