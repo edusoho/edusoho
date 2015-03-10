@@ -66,7 +66,12 @@ class SmsToolkit
 
     private static function clearSmsSession($request, $scenario)
     {
-        $request->getSession()->set($scenario,rand(0,999999));
+        $request->getSession()->set($scenario,array(
+            'to' => '',
+            'sms_code' => '',
+            'sms_last_time' => '',
+            'sms_type' => ''
+        ));
     }
  
 }
