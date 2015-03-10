@@ -15,6 +15,12 @@ define(function(require, exports, module) {
             }
         });
 
+        
+        validator.addItem({
+            element: '[name="nickname"]',
+            required: true
+        });
+
         var smsSender;
         
         var makeValidator = function(type) {
@@ -47,13 +53,27 @@ define(function(require, exports, module) {
                     element: '#password-reset-by-mobile-form',
                     onFormValidated: function(err, results, form) {
                         if (err == false) {
-                    $('#password-reset-by-monile-form').find("[type=submit]").button('loading');
+                            $('#password-reset-by-monile-form').find("[type=submit]").button('loading');
                         }else{
                             $('#alertxx').hide();                    
                         };
 
                     }
                 });
+
+                validator.addItem({
+                    element: '[name="mobile"]',
+                    required: true,
+                    rule: 'phone'            
+                });
+
+                validator.addItem({
+                    element: '[name="sms_code"]',
+                    required: true,
+                    rule: 'integer fixedLength{len:6}',
+                    display: '短信验证码'           
+                });
+
                 if (('undefined' != typeof smsSender)&&("undefined" != typeof smsSender.destroy)){
                     smsSender.destroy();
                 }
@@ -77,9 +97,31 @@ define(function(require, exports, module) {
             makeValidator('mobile');
             smsSender = new SmsSender({
                 element: '.js-sms-send',
-                validator: validator,
                 url: $('.js-sms-send').data('url'),
-                smsType:'sms_forget_password'         
+                smsType:'sms_forget_password',
+                getPostData: function(data){
+                    data.nickname = $('[name="nickname"]').val();
+                    return data;
+                },
+                preSmsSend: function(){
+                    var couldSender = true;
+
+                    validator.query('[name="mobile"]').execute(function(error, results, element) {
+                        if (error) {
+                            couldSender = false;
+                            return;
+                        }
+                        validator.query('[name="nickname"]').execute(function(error, results, element) {
+                            if (error) {
+                                couldSender = false;
+                                return ;
+                            }
+                            couldSender = true;
+                        });
+                    });
+
+                    return couldSender;
+                }
             });
 
             $('#password-reset-form').hide();

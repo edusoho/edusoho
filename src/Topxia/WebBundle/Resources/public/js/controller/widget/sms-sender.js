@@ -8,41 +8,20 @@ define(function(require, exports, module) {
         	validator: 0,
         	url:'',
         	smsType:'',
-        	hasMobile: ($("[data-role=mobile]").length > 0),
-        	hasNickname:($("[data-role=nickname]").length > 0)
+        	getPostData: function(data){
+	        	return data;
+        	},
+        	preSmsSend: function(){
+				return true;
+        	}
         },
         events: {
         	"click" : "smsSend"
         },
         setup: function() {
-            var validator = this.get("validator");
-    		var hasMobile = this.get("hasMobile");
-    		var hasNickname = this.get("hasNickname");
-
-	    	if (hasMobile){	
-	    		validator.addItem({
-		            element: '[name="mobile"]',
-		            required: true,
-		            rule: 'phone'            
-		        });
-	    	}
-
-	    	if (hasNickname){	
-	    		validator.addItem({
-		            element: '[name="nickname"]',
-		            required: true          
-		        });
-	    	}
-
-	    	validator.addItem({
-	            element: '[name="sms_code"]',
-	            required: true,
-	            rule: 'integer fixedLength{len:6}',
-	            display: '短信验证码'           
-	        });
 
         },
-        postData: function(url, smsType, hasNickname) {
+        postData: function(url, data) {
 
 	        var refreshTimeLeft = function(){
 	        	var leftTime = $('#js-time-left').html();
@@ -55,12 +34,6 @@ define(function(require, exports, module) {
 	        	}
 	        };
 
-        	var data = {};	        	
-        	data.to = $('[name="mobile"]').val();        	
-        	if(hasNickname){
-        		data.nickname = $('[name="nickname"]').val();
-        	}
-        	data.sms_type = smsType;
         	$.post(url,data,function(response){
         		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
 	        		$('#js-time-left').html('120');
@@ -78,39 +51,22 @@ define(function(require, exports, module) {
         	return this;
         },
         smsSend: function(){
-        	var leftTime = $('#js-time-left').html();
+
+    		var leftTime = $('#js-time-left').html();
     		if (leftTime.length > 0){
     			return false;
     		}
 
-        	var validator = this.get("validator");
-    		var hasMobile = this.get("hasMobile");
-    		var hasNickname = this.get("hasNickname");
-    		var postData = this.postData;
 			var url = this.get("url");
-    		var smsType = this.get("smsType");
+			var data = {};
+	        data.to = $('[name="mobile"]').val();        	
+	        data.sms_type = this.get("smsType");
 
-    		var send = function(){
-    			if (hasMobile){
-					validator.query('[name="mobile"]').execute(function(error, results, element) {
-						if (error){
-							return false;
-						}
-					    postData(url, smsType, hasNickname);
-					});
-				}
-    		}
-        	
-    		if (hasNickname){
-    			validator.query('[name="nickname"]').execute(function(error, results, element) {
-					if (error){
-						return false;
-					}
-					send();
-				});
-    		} else {
-    			send();
-    		}
+			data = $.extend(data, this.get("getPostData")(data));
+
+			if(this.get("preSmsSend")()) {
+				this.postData(url, data);
+			}
     		
 			return this;
         }

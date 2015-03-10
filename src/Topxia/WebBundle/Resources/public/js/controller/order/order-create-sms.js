@@ -18,11 +18,33 @@ define(function(require, exports, module) {
 	            }
 	        });
 
+	        if($('input[name="sms_code"]').length>0){
+	            validator.addItem({
+	                element: '[name="sms_code"]',
+	                required: true,
+	                rule: 'integer fixedLength{len:6}',
+	                display: '短信验证码'           
+	            });
+	        }
+
 		    var smsSender = new SmsSender({
-		    	validator:validator,
 		    	element: '.js-sms-send',
 		    	url: $('.js-sms-send').data('url'),
-		        smsType:'sms_user_pay'  
+		        smsType:'sms_user_pay',
+		        preSmsSend: function(){
+	                var couldSender = true;
+
+	                validator.query('[name="mobile"]').execute(function(error, results, element) {
+	                    if (error) {
+	                        couldSender = false;
+	                        return;
+	                    }
+	                    couldSender = true;
+	                    return;
+	                });
+
+	                return couldSender;
+	            }  
 		    });
 
 	    	var smsModalCodeValidator = new Validator({
