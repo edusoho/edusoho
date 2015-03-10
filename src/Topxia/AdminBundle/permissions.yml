@@ -1,6 +1,5 @@
 permissions:
   - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page'}
   - { name: '运营', code: 'admin.operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page'}
-  - { name: '资讯', code: 'admin.article', parent: 'admin.operation', router_name: 'admin_operation', router_params: null, mode: 'page'}
-  - { name: '资讯管理', code: 'admin.article.manage', parent: 'admin.article', router_name: 'admin_operation', router_params: null, mode: 'page'}
+
 
