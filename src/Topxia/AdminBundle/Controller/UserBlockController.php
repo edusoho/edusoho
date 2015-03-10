@@ -17,10 +17,10 @@ use Imagine\Image\ImageInterface;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 
-class UserController extends BaseController 
+class UserBlockController extends BaseController 
 {
 
-    public function indexAction (Request $request)
+    public function userIndexAction (Request $request)
     {
         $fields = $request->query->all();
 
@@ -55,7 +55,7 @@ class UserController extends BaseController
             $showUserExport = version_compare($app['version'], "1.0.2", ">=");
         }
 
-        return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
+        return $this->render('TopxiaAdminBundle:UserBlock:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
             'showUserExport' => $showUserExport
@@ -87,7 +87,7 @@ class UserController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function createAction(Request $request)
+    public function useCreateAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -108,7 +108,7 @@ class UserController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
-        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
+        return $this->render('TopxiaAdminBundle:UserBlock:User:create-modal.html.twig');
     }
 
     public function editAction(Request $request, $id)
@@ -143,7 +143,7 @@ class UserController extends BaseController
         $profile['title'] = $user['title'];
 
         $fields=$this->getFields();
-            
+
         return $this->render('TopxiaAdminBundle:User:show-modal.html.twig', array(
             'user' => $user,
             'profile' => $profile,
