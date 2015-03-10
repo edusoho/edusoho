@@ -112,9 +112,20 @@ class EduCloudController extends BaseController
     public function smsBillAction(Request $request)
     {
         try {
+
+
             $loginToken = $this->getAppService()->getLoginToken();
             $account = $this->getAccount();
-            $result = $this->getBills($type='sms', $page=0, $limit=9999);
+
+            $result = $this->getBills($type='sms', 1, 20);
+
+            $paginator = new Paginator(
+                $this->get('request'),
+                $result["total"],
+                20
+            );
+
+            $result = $this->getBills($type='sms', $paginator->getCurrentPage(), $paginator->getPerPageCount());
             $bills = $result['items'];
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
@@ -123,7 +134,8 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud:sms-bill.html.twig', array(
             'account' => $account,
             'token' => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
-            'bills' => $bills
+            'bills' => $bills,
+            'paginator' => $paginator,
         ));
     }
 
