@@ -740,8 +740,8 @@ class CourseController extends BaseController
 
 		$classroomMembers = $this->getClassroomMembersByCourseId($course["id"]);
 		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
-		if(($member["role"] == 'student' && $member["joinedType"] == 'course') 
-			|| ($member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0))) {
+		if((isset($member["role"]) && isset($member["joinedType"]) && $member["role"] == 'student' && $member["joinedType"] == 'course') 
+			|| (isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0))) {
 			$canExit = true;
 		} else {
 			$canExit = false;
