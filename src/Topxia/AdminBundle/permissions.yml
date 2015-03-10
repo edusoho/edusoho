@@ -1,0 +1,3 @@
+permission:
+  - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page'}
+  - { name: '运营1', code: 'admin.operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page'}
