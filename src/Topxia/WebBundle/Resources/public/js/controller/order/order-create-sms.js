@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 					element: '[name="sms_code_modal"]',
 					required: true,
 					display: '短信验证码',
-					rule: 'integer fixedLength{len:6}'  
+					rule: 'integer fixedLength{len:6} remote'  
 				});
 		    }		    
 

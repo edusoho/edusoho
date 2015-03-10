@@ -19,7 +19,7 @@
         <br>
         <div class="controls row" >
           <div class = "col-md-5 col-md-offset-2" >
-            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal" {# data-explain="输入短信验证码" #} required="required" placeholder="输入短信验证码">
+            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal" {# data-explain="输入短信验证码" #} required="required" placeholder="输入短信验证码" data-url="{{path('edu_cloud_sms_check',{type:'sms_user_pay'})}}">
           </div>
           <div class="col-md-5">
             <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
