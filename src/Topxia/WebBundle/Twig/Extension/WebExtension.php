@@ -9,6 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
+use Symfony\Component\Yaml\Yaml;
 
 class WebExtension extends \Twig_Extension
 {
@@ -87,6 +88,8 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
+            'permissions' => new \Twig_Function_Method($this, 'permissions'),
+            'setItem' => new \Twig_Function_Method($this, 'setItem'),
         );
     }
 
@@ -101,7 +104,12 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId,$timeType="oneWeek")
+    public function setItem($key, $value)
+    {
+        return array($key=>$value);
+    }
+
+    public function getOutCash($userId, $timeType="oneWeek")
     {   
         $time=$this->filterTime($timeType);
         $condition=array(
@@ -112,6 +120,68 @@ class WebExtension extends \Twig_Extension
             );
 
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+    }
+
+    public function permissions($parent='', $group=null)
+    {   
+        $permissions = $this->getPermissions();
+        $result = array();
+
+        foreach ($permissions as $key => $value) {
+            
+            if ($value['parent'] == $parent) {
+
+                $result[] = $value;
+            }
+        }
+   
+        return $result;
+    }
+
+    private function getPermissions($permissions=array()) 
+    {
+        foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
+            
+            $dir = "../src/".$value;
+   
+            if (file_exists($dir."/permissions.yml")) {
+
+                $permissions = $this->loadPermissionYml($permissions, $dir."/permissions.yml");
+            }
+      
+        }
+
+        $dir = "../plugins";
+        $dh = opendir($dir);
+
+        while ($file = readdir($dh)) {
+
+            if ($file != "." && $file != "..") {
+
+              $fullpath = $dir."/".$file."/$file"."Bundle"."/permissions.yml";
+
+              $permissions = $this->loadPermissionYml($permissions, $fullpath);
+            }
+        }
+
+        closedir($dh);
+
+        return $permissions;
+    }
+
+    private function loadPermissionYml($permissions, $fullpath)
+    {
+        if (file_exists($fullpath)) {
+
+            $permission = Yaml::parse($fullpath);
+       
+            if (isset($permission['permission'])) {
+
+                $permissions = array_merge($permissions, ArrayToolkit::index($permission['permission'], 'code') );
+            }
+            
+        }
+        return $permissions;
     }
 
     public function getInCash($userId,$timeType="oneWeek")
