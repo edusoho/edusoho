@@ -64,7 +64,7 @@ class SmsToolkit
         return true;
     }    
 
-    private static function clearSmsSession($request, $scenario)
+    public static function clearSmsSession($request, $scenario)
     {
         $request->getSession()->set($scenario,array(
             'to' => '',

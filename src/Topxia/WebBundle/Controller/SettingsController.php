@@ -455,6 +455,7 @@ class SettingsController extends BaseController
 		if ($request->getMethod() == 'POST'){
 			if ($currentUser['verifiedMobile'] != $request->request->get('mobile')){
 				$this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
+				goto response;
 			}			
 			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 			if ($result) {
@@ -465,7 +466,7 @@ class SettingsController extends BaseController
 			}
 			
 		}
-
+		response:
 		return $this->render('TopxiaWebBundle:Settings:find-pay-password-by-sms.html.twig', array(
 			'hasSecurityQuestions' => $hasSecurityQuestions,
 			'hasVerifiedMobile' => $hasVerifiedMobile,
@@ -557,6 +558,7 @@ class SettingsController extends BaseController
         	$password = $request->request->get('password');
         	if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
 				$this->setFlashMessage('danger', '您的登陆密码错误');
+				SmsToolkit::clearSmsSession($request, $scenario);
 				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 			}
 
