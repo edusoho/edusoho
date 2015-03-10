@@ -25,7 +25,7 @@ class EduCloudController extends BaseController
             $allowedTime = 120;
             
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-                return $this->createJsonResponse(array('error' => '请等待120秒再申请'));
+                return $this->createJsonResponse(array('error' => '请等待120秒再申请', 'message' => "{$smsLastTime}|{$currentTime}"));
             }
 
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
