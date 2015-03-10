@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class EduCloudController extends BaseController
 {
@@ -112,8 +113,7 @@ class EduCloudController extends BaseController
     public function smsBillAction(Request $request)
     {
         try {
-
-
+            
             $loginToken = $this->getAppService()->getLoginToken();
             $account = $this->getAccount();
 
