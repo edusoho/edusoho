@@ -111,7 +111,20 @@ class EduCloudController extends BaseController
 
     public function smsBillAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud:sms-bill.html.twig', array());
+        try {
+            $loginToken = $this->getAppService()->getLoginToken();
+            $account = $this->getAccount();
+            $result = $this->getBills($type='sms', $page=0, $limit=9999);
+            $bills = $result['items'];
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+        }
+           
+        return $this->render('TopxiaAdminBundle:EduCloud:sms-bill.html.twig', array(
+            'account' => $account,
+            'token' => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
+            'bills' => $bills
+        ));
     }
 
     private function getSchoolName()
@@ -198,6 +211,11 @@ class EduCloudController extends BaseController
     private function getSmsOpenStatus()
     {
         return $this->getEduCloudService()->getSmsOpenStatus();
+    }
+
+    private function getBills($type = 'sms', $page=1, $limit=20)
+    {
+        return $this->getEduCloudService()->getBills($type, $page, $limit);
     }
 
     private function sendSms($to, $verify, $category = 'verify')

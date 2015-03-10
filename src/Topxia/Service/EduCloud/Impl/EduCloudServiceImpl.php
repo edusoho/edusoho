@@ -86,6 +86,16 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
+    public function getBills($type, $page, $limit)
+    {
+        $api = $this->getCloudApi();
+        $options = $this->getCloudOptions();
+        $result = $api->get(
+            sprintf('/bills', $params = array('type' => $type, 'page' => $page, 'limit' => $limit))
+        );
+        return $result;
+    }
+
     public function getCloudSmsKey($key)
     {
         $setting = $this->createService('System.SettingService')->get('cloud_sms', array());
