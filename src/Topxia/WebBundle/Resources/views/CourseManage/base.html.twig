@@ -115,10 +115,10 @@
 			</div>
 
 			{% if is_plugin_installed('Classroom') %}
-			<div class="form-group">
+			<div class="form-group" style="display:none;">
 				<label class="col-md-2 control-label">本课程只能用于一个{{ setting('classroom.name')|default("班级") }}</label>
 				<div class="col-md-8 controls radios">
-					{{ radios('useInClassroom', {'single':'是', 'more':'否'}, course.useInClassroom ) }}
+					{{ radios('useInClassroom', {'single':'是', 'more':'否'}, 'single' ) }}
 				</div>
 			</div>
 
