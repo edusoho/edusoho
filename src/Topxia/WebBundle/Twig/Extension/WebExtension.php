@@ -139,32 +139,47 @@ class WebExtension extends \Twig_Extension
     }
 
     private function getPermissions($permissions=array()) 
-    {
-        foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
-            
-            $dir = "../src/".$value;
-   
-            if (file_exists($dir."/permissions.yml")) {
+    {   
+        $kernel = new ServiceKernel();
+        $kernel->instance();
+       
+        $environment = $kernel->getEnvironment();
 
-                $permissions = $this->loadPermissionYml($permissions, $dir."/permissions.yml");
+        $permissionsCacheFile = "../app/cache/".$environment."permissions.yml";
+        if (file_exists($permissionsCacheFile)) {
+
+            return Yaml::parse($permissionsCacheFile);
+
+        }else {
+
+            foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
+                
+                $dir = "../src/".$value;
+       
+                if (file_exists($dir."/permissions.yml")) {
+
+                    $permissions = $this->loadPermissionYml($permissions, $dir."/permissions.yml");
+                }
+          
             }
-      
-        }
 
-        $dir = "../plugins";
-        $dh = opendir($dir);
+            $dir = "../plugins";
+            $dh = opendir($dir);
 
-        while ($file = readdir($dh)) {
+            while ($file = readdir($dh)) {
 
-            if ($file != "." && $file != "..") {
+                if ($file != "." && $file != "..") {
 
-              $fullpath = $dir."/".$file."/$file"."Bundle"."/permissions.yml";
+                  $fullpath = $dir."/".$file."/$file"."Bundle"."/permissions.yml";
 
-              $permissions = $this->loadPermissionYml($permissions, $fullpath);
+                  $permissions = $this->loadPermissionYml($permissions, $fullpath);
+                }
             }
-        }
+            closedir($dh);
 
-        closedir($dh);
+            file_put_contents($permissionsCacheFile, Yaml::dump($permissions));
+         
+        }
 
         return $permissions;
     }
@@ -175,9 +190,9 @@ class WebExtension extends \Twig_Extension
 
             $permission = Yaml::parse($fullpath);
        
-            if (isset($permission['permission'])) {
+            if (isset($permission['permissions'])) {
 
-                $permissions = array_merge($permissions, ArrayToolkit::index($permission['permission'], 'code') );
+                $permissions = array_merge($permissions, ArrayToolkit::index($permission['permissions'], 'code') );
             }
             
         }
