@@ -104,23 +104,27 @@ define(function(require, exports, module) {
                     return data;
                 },
                 preSmsSend: function(){
-                    var couldSender = true;
 
+                    var mobileValidateResult = true;
+                    var nicknameValidateResult = true;
                     validator.query('[name="mobile"]').execute(function(error, results, element) {
                         if (error) {
-                            couldSender = false;
+                            mobileValidateResult = false;
                             return;
                         }
-                        validator.query('[name="nickname"]').execute(function(error, results, element) {
-                            if (error) {
-                                couldSender = false;
-                                return ;
-                            }
-                            couldSender = true;
-                        });
+                    });
+                    validator.query('[name="nickname"]').execute(function(error, results, element) {
+                        if (error) {
+                            nicknameValidateResult = false;
+                            return ;
+                        }
                     });
 
-                    return couldSender;
+                    if(mobileValidateResult && nicknameValidateResult) {
+                        return true;
+                    }
+
+                    return false;
                 }
             });
 
