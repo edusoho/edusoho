@@ -64,10 +64,28 @@
             {% elseif field == 'mobile' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">手机号码</label>
-                <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
+                <div class="controls row" >
+                  <div class = "col-md-8" >
+                    <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" data-role="mobile">
+                    <p class="help-block">输入手机号码</p>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="pull-right btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+                      <span id="js-time-left"></span>
+                      <span id="js-fetch-btn-text">获取短信验证码{# 秒后重新获取 #}</span>
+                   </span> 
+                  </div>
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="control-label required" for="sms_code">短信验证码</label>
+                <div class="controls" >
+                  <input type="text" class="form-control" id="sms-code" name="sms_code" data-explain="输入短信验证码" required="required">
+                  <p class="help-block">输入短信验证码</p> 
+                </div>
+              </div>
+
             {% elseif field == 'idcard' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">身份证号</label>

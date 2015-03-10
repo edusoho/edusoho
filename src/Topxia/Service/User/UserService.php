@@ -45,6 +45,8 @@ interface UserService
     public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers);
 
     public function verifyInSaltOut($in,$salt,$out);
+
+    public function changeMobile($id, $mobile);
     
     /**
      * 变更密码

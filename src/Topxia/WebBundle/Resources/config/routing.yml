@@ -907,7 +907,7 @@ settings_find_pay_password:
 
 settings_update_pay_password:
     pattern:  /settings/update_pay_password 
-    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions }
+    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPassword }
 
 settings_security_questions:
     pattern:  /settings/security_questions
@@ -1595,3 +1595,24 @@ vip_renew:
 vip_upgrade:
     pattern: /vip/upgrade
 
+edu_cloud_sms_send:
+    pattern:  /edu_cloud/sms_send
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
+    methods: [POST]
+
+settings_bind_mobile:
+    pattern:  /settings/bind_mobile
+    defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
+
+password_reset_by_sms:
+    pattern:  /password/reset/by_sms
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
+    methods: [POST]
+
+settings_find_pay_password_by_sms:
+    pattern:  /settings/find_pay_password_by_sms 
+    defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
+
+order_pay_sms_verification:
+    pattern:  /order/sms_verification
+    defaults: { _controller: TopxiaWebBundle:Order:smsVerification }
