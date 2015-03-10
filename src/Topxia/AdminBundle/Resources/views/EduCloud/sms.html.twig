@@ -79,16 +79,18 @@
 			      		</div>
 		    		</div>	
 		    	{% elseif  smsStatus.status == 'auditing' %}
-		    		<div class="form-group">
-						<div class="col-md-3 control-label">
-		        			<label for="name" class="pull-right">网校名称</label>
-		      			</div>
-			      		<div class="col-md-5 controls">
-			        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
-			        		<p class="help-block"></p>
-			        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此短信30分钟内有效”</p>
-			      		</div>
-		    		</div>
+		    		{% if hasSchoolName %}
+			    		<div class="form-group">
+							<div class="col-md-3 control-label">
+			        			<label for="name" class="pull-right">网校名称</label>
+			      			</div>
+				      		<div class="col-md-5 controls">
+				        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
+				        		<p class="help-block"></p>
+				        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此短信30分钟内有效”</p>
+				      		</div>
+			    		</div>
+			    	{% endif %}
 		    		<div class="alert alert-warning">
 		    			<span>网校名称【{{setting('cloud_sms.sms_school_candidate_name')|default('')}}】正在审核中 <a href="#js-apply-details" class="btn btn-default btn-sm" data-toggle="modal">详情</a></span>
 		    		</div>
