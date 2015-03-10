@@ -1,5 +1,11 @@
 permissions:
   - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page'}
+  - { name: '课程', code: 'admin.course', parent: 'admin', router_name: 'admin_course', router_params: null, mode: 'page',active:'course'}
   - { name: '用户', code: 'admin.user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user'}
+  - { name: '内容', code: 'admin.navigation', parent: 'admin', router_name: 'admin_navigation', router_params: null, mode: 'page',active:'content'}
+  - { name: '小组', code: 'admin.group', parent: 'admin', router_name: 'admin_group', router_params: null, mode: 'page',active:'group'}
+  - { name: '班级', code: 'admin.classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom'}
+  - { name: '应用', code: 'admin.app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app'}
+  - { name: '系统', code: 'admin.system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system'}
   - { name: '运营', code: 'admin.operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
 
