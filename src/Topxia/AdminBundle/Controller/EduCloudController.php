@@ -109,6 +109,11 @@ class EduCloudController extends BaseController
         return $smsStatus;
     }
 
+    public function smsBillAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud:sms-bill.html.twig', array());
+    }
+
     private function getSchoolName()
     {
         $schoolName = $this->getCloudSmsKey('sms_school_name');
