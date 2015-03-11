@@ -166,7 +166,7 @@ class EduCloudController extends BaseController
                     $smsStatus['message'] = $smsStatus['message'];
                 }
             }
-            if (($smsStatus['status'] == 'failed') && ($this->getCloudSmsKey('show_message') == 'off') {
+            if (($smsStatus['status'] == 'failed') && ($this->getCloudSmsKey('show_message') == 'off')) {
                 $info = '您新申请的网校名称“'.$schoolCandidateName.'”未通过审核，原因是：';
                 if(isset($smsStatus['message']) && $smsStatus['message']) {
                     $info .= $smsStatus['message'];
