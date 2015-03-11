@@ -34,7 +34,7 @@
 		{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
 		{% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('on')) %}
 			<div class="alert alert-danger">
-					<a href="{{path("admin_edu_cloud_sms", {showMessage:'off'})}}" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+					<a href="{{path("admin_edu_cloud_sms_no_message")}}" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
 				{{ smsStatus.schoolNameError }}
 			</div>
 		{% endif %}
