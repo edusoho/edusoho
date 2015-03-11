@@ -166,8 +166,7 @@ class EduCloudController extends BaseController
                 } else {
                     $info .= '网校名称不符合规范';
                 }
-
-                $this->setFlashMessage("danger", $info);
+                $smsStatus['schoolNameError'] = $info;
             }
         } else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';

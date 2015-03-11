@@ -33,7 +33,9 @@
 	{% else %}
 		{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
 		{% if smsStatus.status == "failed" and hasSchoolName %}
-			{{ web_macro.flash_messages() }}
+			<div class="alert alert-danger">
+				{{ smsStatus.schoolNameError }}
+			</div>
 		{% endif %}
 		<form class="form-horizontal" method="post" id="sms-form" novalidate="">
 			<fieldset>
