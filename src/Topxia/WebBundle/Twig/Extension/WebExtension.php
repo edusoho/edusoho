@@ -127,14 +127,29 @@ class WebExtension extends \Twig_Extension
         $permissions = $this->getPermissions();
         $result = array();
         
+        ServiceKernel::instance()->createService('System.SettingService')->set('permissions_debug',$permissions['debug']);
+
         foreach ($permissions as $key => $value) {
-            
+
             if ($value['parent'] == $parent) {
+
+                if ($group) {
+
+                    if (isset($value['group']) && $value['group'] == $group ) {
+
+                        $result[] = $value;
+                        continue;
+
+                    }
+
+                    continue;
+                    
+                }
 
                 $result[] = $value;
             }
         }
-   
+  
         return $result;
     }
 
@@ -180,8 +195,18 @@ class WebExtension extends \Twig_Extension
             file_put_contents($permissionsCacheFile, Yaml::dump($permissions));
          
 /*        }*/
+        
+        $debug = 0;
+        if (isset($permissions['debug'])) {
+
+            $debug = $permissions['debug']; 
+            unset($permissions['debug']);
+        }
 
         $permissions = $this->sort($permissions);
+
+        $permissions['debug'] =$debug;
+
         return $permissions;
     }
 
@@ -227,7 +252,12 @@ class WebExtension extends \Twig_Extension
         if (file_exists($fullpath)) {
 
             $permission = Yaml::parse($fullpath);
-       
+            
+            if (isset($permission['debug']) && $permission['debug']) {
+
+                $permissions['debug'] = 1;
+            }
+
             if (isset($permission['permissions'])) {
 
                 $permissions = array_merge($permissions, ArrayToolkit::index($permission['permissions'], 'code') );
