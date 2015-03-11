@@ -81,7 +81,13 @@ class EduCloudController extends BaseController
 
     private function handleSmsSetting(Request $request)
     {
+        if ((strlen($request->query->get('showMessage')) > 0)&&($request->query->get('showMessage') == 'off')) {
+            $this->setCloudSmsKey('show_message', 'off');
+            $this->setCloudSmsKey('sms_school_candidate_name', '');
+        }
+
         list($smsStatus, $schoolNames) = $this->getSchoolName();
+
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
 
@@ -159,7 +165,7 @@ class EduCloudController extends BaseController
                     $smsStatus['message'] = $smsStatus['message'];
                 }
             }
-            if ($smsStatus['status'] == 'failed') {
+            if (($smsStatus['status'] == 'failed') && (strlen($schoolCandidateName) > 0)) {
                 $info = '您新申请的网校名称“'.$schoolCandidateName.'”未通过审核，原因是：';
                 if(isset($smsStatus['message']) && $smsStatus['message']) {
                     $info .= $smsStatus['message'];
@@ -167,6 +173,9 @@ class EduCloudController extends BaseController
                     $info .= '网校名称不符合规范';
                 }
                 $smsStatus['schoolNameError'] = $info;
+                if (strlen($this->getCloudSmsKey('sms_school_name')) > 0) {
+                    $this->setCloudSmsKey('show_message', 'on');
+                }
             }
         } else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';
