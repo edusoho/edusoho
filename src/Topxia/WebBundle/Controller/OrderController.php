@@ -79,7 +79,7 @@ class OrderController extends BaseController
     {
         $fields = $request->request->all(); 
 
-        if ($fields['coinPayAmount']>0){
+        if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
             if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
