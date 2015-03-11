@@ -7,7 +7,6 @@
 
 {% block maincontent %}
   <div class="page-header"><h1>云短信</h1></div>
-
     {% if smsStatus.status == 'error' %}
     	<div class="panel panel-default">
 			<table class="table table-striped table-hover" style="word-break:break-all;">
@@ -32,7 +31,7 @@
 
 	{% else %}
 		{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
-		{% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('on')) %}
+		{% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('off')) %}
 			<div class="alert alert-danger">
 					<a href="{{path("admin_edu_cloud_sms_no_message")}}" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
 				{{ smsStatus.schoolNameError }}
@@ -215,7 +214,7 @@
 	    	{% endif %}
     		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		</form>
-
 	{% endif %}
+	{{ web_macro.flash_messages() }}
 
 {% endblock %}
