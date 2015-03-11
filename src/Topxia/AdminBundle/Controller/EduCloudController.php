@@ -156,11 +156,11 @@ class EduCloudController extends BaseController
             if (isset($result['apply']['message'])) {
                 $smsStatus['message'] = $result['apply']['message'];
                 if (strlen($smsStatus['message']) > 0){
-                    $smsStatus['message'] = "(".$smsStatus['message'].")";
+                    $smsStatus['message'] = $smsStatus['message'];
                 }
             }
             if ($smsStatus['status'] == 'failed') {
-                $info = '您新申请的网校名称“{$schoolCandidateName}”未通过审核，原因是：';
+                $info = '您新申请的网校名称“'.{$schoolCandidateName}.'”未通过审核，原因是：';
                 if(isset($smsStatus['message'])) {
                     $info .= $smsStatus['message'];
                 } else {
