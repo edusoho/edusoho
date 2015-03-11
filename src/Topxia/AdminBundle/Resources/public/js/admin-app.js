@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
 
+ 	$('[data-toggle="tooltip"]').tooltip();
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
 			name = window.app.basePath + '/bundles/topxiaadmin/js/controller/' + name;

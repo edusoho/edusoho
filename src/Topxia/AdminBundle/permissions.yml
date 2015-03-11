@@ -1,11 +1,23 @@
+debug: true
 permissions:
   - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page'}
-  - { name: '课程', code: 'admin_course', parent: 'admin', router_name: 'admin_course', router_params: null, mode: 'page',active:'course'}
-  - { name: '用户', code: 'admin_user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user'}
-  - { name: '内容', code: 'admin_navigation', parent: 'admin', router_name: 'admin_navigation', router_params: null, mode: 'page',active:'content'}
-  - { name: '小组', code: 'admin_group', parent: 'admin', router_name: 'admin_group', router_params: null, mode: 'page',active:'group'}
-  - { name: '班级', code: 'admin_classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom'}
-  - { name: '应用', code: 'admin_app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app'}
-  - { name: '系统', code: 'admin_system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system'}
-  - { name: '运营', code: 'admin_operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
+
+  # - { name: '课程', code: 'admin_course', parent: 'admin', router_name: 'admin_course', router_params: null, mode: 'page',active:'course'}
+  # - { name: '用户', code: 'admin_user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user'}
+  # - { name: '内容', code: 'admin_navigation', parent: 'admin', router_name: 'admin_navigation', router_params: null, mode: 'page',active:'content'}
+  # - { name: '小组', code: 'admin_group', parent: 'admin', router_name: 'admin_group', router_params: null, mode: 'page',active:'group'}
+  # - { name: '班级', code: 'admin_classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom'}
+  # - { name: '应用', code: 'admin_app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app'}
+  # - { name: '系统', code: 'admin_system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system'}
+  # - { name: '运营', code: 'admin_operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
+
+
+  - { name: '课程', code: 'admin_course', parent: 'admin', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page',active:'operation'}
+  - { name: 'aa1', code: 'admin_operation1', parent: 'admin', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page'}
+  - { name: 'aa1', code: 'admin_operation1', parent: 'admin', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page'}
+  - { name: '课程管理', code: 'admin_course_manage', parent: 'admin_course', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page',active:'course'}
+  - { name: '创建课程', code: 'admin_course_manage_create', parent: 'admin_course_manage', router_name: 'admin_user_create', router_params: null,router_params_context: false, mode: 'modal', group:'button'}
+  - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
+  - { name: '未回复', code: 'admin_course_question_tab1', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'tab',blank:true, icon:glyphicon glyphicon-plus,active:unPosted}
+
 
