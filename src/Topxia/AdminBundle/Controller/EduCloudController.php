@@ -153,8 +153,14 @@ class EduCloudController extends BaseController
                 $this->setCloudSmsKey('sms_school_name', $schoolName);
                 $this->setCloudSmsKey('sms_school_candidate_name', '');
             }
+            if (isset($result['apply']['message'])) {
+                $smsStatus['message'] = $result['apply']['message'];
+                if (strlen($smsStatus['message']) > 0){
+                    $smsStatus['message'] = "(".$smsStatus['message'].")";
+                }
+            }
             if ($smsStatus['status'] == 'failed') {
-                $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$schoolCandidateName}”未通过审核");
+                $this->setFlashMessage("danger","因为申请的网校名称不符合规范{$smsStatus['message']}，您新申请的网校名称“{$schoolCandidateName}”未通过审核");
             }
         } else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';

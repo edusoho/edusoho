@@ -31,11 +31,12 @@
 		</div>
 
 	{% else %}
-	
-		{{ web_macro.flash_messages() }}
+		{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
+		{% if smsStatus.status == "failed" and hasSchoolName %}
+			{{ web_macro.flash_messages() }}
+		{% endif %}
 		<form class="form-horizontal" method="post" id="sms-form" novalidate="">
 			<fieldset>
-				{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
 				{% if hasSchoolName %}
 				<legend>短信设置</legend>
 					<div class="form-group">
@@ -65,19 +66,30 @@
 		    	{% endif %}
 
 	    		{% if smsStatus.status in ['passed','failed'] %}
-		    		<div class="form-group">
-		      			<div class="col-md-3 control-label">
-		        			<label for="name" class="pull-right">网校名称</label>
-		      			</div>
-			      		<div class="col-md-5 controls">
-			        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
-			        		<p class="help-block"></p>
-			        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此短信30分钟内有效”</p>
-			      		</div>
-			      		<div class="col-md-2">
-			      			<span class="btn btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
-			      		</div>
-		    		</div>	
+	    			{% if ( not hasSchoolName ) and (smsStatus.status == 'failed') %}
+	    				
+	    				<div class="alert alert-danger">
+	    					因为申请的网校名称不符合规范{{ smsStatus.message|default('') }}，您新申请的网校名称【{{setting('cloud_sms.sms_school_candidate_name')|default('')}}
+	    					】未通过审核
+
+	    					<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
+			    		</div>
+
+	    			{% else %}
+			    		<div class="form-group">
+			      			<div class="col-md-3 control-label">
+			        			<label for="name" class="pull-right">网校名称</label>
+			      			</div>
+				      		<div class="col-md-5 controls">
+				        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
+				        		<p class="help-block"></p>
+				        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此短信30分钟内有效”</p>
+				      		</div>
+				      		<div class="col-md-2">
+				      			<span class="btn btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
+				      		</div>
+			    		</div>	
+			    	{% endif %}
 		    	{% elseif  smsStatus.status == 'auditing' %}
 		    		{% if hasSchoolName %}
 			    		<div class="form-group">
