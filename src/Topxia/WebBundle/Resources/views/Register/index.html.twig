@@ -61,7 +61,7 @@
                   <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
                 </div>
               </div>
-            {% elseif field == 'mobile' %}
+            {% elseif field == 'mobile' and ((setting('cloud_sms.sms_enabled')|default('')) == '1') %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">手机号码</label>
                 <div class="controls row" >
