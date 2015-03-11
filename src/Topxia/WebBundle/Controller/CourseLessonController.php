@@ -125,6 +125,7 @@ class CourseLessonController extends BaseController
         $json['id'] = $lesson['id'];
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
+        $json['liveProvider'] = $lesson["liveProvider"];
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if(!empty($app)){

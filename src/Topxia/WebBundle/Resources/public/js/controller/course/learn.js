@@ -411,14 +411,24 @@ define(function(require, exports, module) {
                             var seconds = modulo % 60;
                             var $replayGuid = "老师们：";
                             $replayGuid += "<br>";
-                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
-                            $replayGuid += "<span style='color:red'>录制面板</span>";
-                            $replayGuid += "”，录制完成后点击“";
-                            $replayGuid += "<span style='color:red'>暂停</span>";
-                            $replayGuid += "”结束录播，录播结束后在“";
-                            $replayGuid += "<span style='color:red'>录播管理</span>";
-                            $replayGuid += "”界面生成回放。";
-                            $replayGuid += "<br>";
+
+                            if(lesson.liveProvider == 1) {
+                                $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
+                                $replayGuid += "<span style='color:red'>录制面板</span>";
+                                $replayGuid += "”，录制完成后点击“";
+                                $replayGuid += "<span style='color:red'>暂停</span>”";
+                                $replayGuid += "结束录播，录播结束后在“";
+                                $replayGuid += "<span style='color:red'>录播管理</span>";
+                                $replayGuid += "”界面生成回放。";
+                                $replayGuid += "<br>";
+                            } else {
+                                $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                                $replayGuid += "直播结束后在“";
+                                $replayGuid += "<span style='color:red'>录播管理</span>";
+                                $replayGuid += "”界面生成回放。";
+                                $replayGuid += "<br>";
+                            }
+
 
                             $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
 
