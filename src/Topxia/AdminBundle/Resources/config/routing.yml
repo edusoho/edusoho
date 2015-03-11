@@ -1279,55 +1279,6 @@ admin_operation_content_alias_check:
     pattern:  /operation/content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Contents:contentAliasCheck }
 
-
-admin_money_card_homepage:
-    path:     /operation/moneycard/index
-    defaults: { _controller: TopxiaAdminBundle:Operation:moneycardIndex }
-
-admin_money_card_all_cards:
-    path:     /operation/moneycard/all_cards
-    defaults: { _controller: TopxiaAdminBundle:Operation:allCards }
-
-admin_money_card_create:
-    path:     /operation/moneycard/create
-    defaults: { _controller: TopxiaAdminBundle:Operation:cardCreate }
-
-admin_money_card_batch_card_prefix_check:
-    path:     /operation/moneycard/card_prefix_check
-    defaults: { _controller: TopxiaAdminBundle:Operation:cardPrefixCheck }
-
-admin_money_card_get_password:
-    pattern: /operation/moneycard/get_password/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:getPassword }
-
-admin_money_card_lock:
-    pattern: /operation/moneycard/lock/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:lock }
-
-admin_money_card_unlock:
-    pattern: /operation/moneycard/unlock/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:unlock }
-
-admin_money_card_delete:
-    pattern: /operation/moneycard/delete/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:cardDelete }
-
-admin_money_card_lock_batch:
-    pattern: /operation/moneycard/batch/lock/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:lockBatch }
-
-admin_money_card_unlock_batch:
-    pattern: /operation/moneycard/batch/unlock/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:unlockBatch }
-
-admin_money_card_batch_delete:
-    pattern: /operation/moneycard/batch/delete/{id}
-    defaults: {_controller: TopxiaAdminBundle:Operation:deleteBatch }
-
-admin_money_card_batch_export_csv:
-    pattern: /operation/moneycard/batch/export/csv/{batchId}
-    defaults: {_controller: TopxiaAdminBundle:Operation:cardExportCsv }
-
 admin_user_block:
     pattern:  /user/index
     defaults: { _controller: TopxiaAdminBundle:UserBlock:userIndex }
