@@ -5,14 +5,10 @@
 {% set menu = 'block' %}
 
 {% block main %}
-<ul class="nav nav-tabs mbl">
-
-  <li class="{% if submenu == 'block' %}active{% endif %}">
-    <a href="{{ url('admin_operation_block') }}">管理
-    </a>
-  </li>
-
-</ul>
+<div class = "mbl">
+{% set menus = permissions("admin_operation_block","tab")%}
+{{admin_macro.tab_group(menus,submenu)}}
+</div>
 
 
   {% block maincontent %}{% endblock %}

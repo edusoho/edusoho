@@ -5,20 +5,10 @@
 {% set menu = 'group' %}
 
 {% block main %}
-<ul class="nav nav-tabs mbl">
-
-  <li class="{% if submenu == 'group' %}active{% endif %}">
-    <a href="{{ url('admin_operation_group') }}">小组管理
-    </a>
-  </li>
-
-    <li class="{% if submenu == 'thread' %}active{% endif %}">
-    <a href="{{ url('admin_operation_groupThread') }}">话题
-    </a>
-  </li>
-
-</ul>
-
+<div class = "mbl">
+{% set menus = permissions("admin_operation_group","tab")%}
+{{admin_macro.tab_group(menus,submenu)}}
+</div>
 
   {% block maincontent %}{% endblock %}
 {% endblock %}

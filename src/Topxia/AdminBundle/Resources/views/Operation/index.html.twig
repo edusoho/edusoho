@@ -8,8 +8,10 @@
 
 {% block maincontent %}
 
-<div class="clearfix">
-  <a class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" href="{{ path('admin_operation_article_create') }}" style="margin-bottom:15px;"><span class="glyphicon glyphicon-plus" ></span> 添加资讯</a>
+<div class="clearfix mbs">
+
+	{% set menus = permissions("admin_operation_article","button") %}
+	          {{ admin_macro.btn_group(menus) }} 
 </div>
 
 <form class="well well-sm form-inline" action="{{ path('admin_operation') }}">
