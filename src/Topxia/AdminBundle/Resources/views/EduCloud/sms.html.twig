@@ -156,11 +156,22 @@
 		    		>
 			    		<legend>短信验证</legend>
 			    		<div class="form-group">
+		    				
+							<div class="alert alert-info">手机绑定功能已开启</div>
 			      			<div class="col-md-3 control-label">
 			        			<label class="pull-right">使用场景</label>
 			      			</div>
 
-			      			<div class="controls col-md-8 radios checkboxes">	 
+			      			<div class="controls col-md-8 radios checkboxes">			      				
+							    <input type="hidden" name="sms_bind" value="on">
+								<label>
+							    	<input name="sms_registration" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> <span>新用户注册时</span>
+							    </label>
+							    <br>		      			 
 							    <label>
 							    	<input name="sms_user_pay" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
@@ -175,22 +186,6 @@
 							    		checked
 							    	{% endif %}
 							    	> 忘记支付密码时
-							    </label>
-							    <br>
-							    <label>
-							    	<input name="sms_registration" type="checkbox"
-							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
-							    		checked
-							    	{% endif %}
-							    	> <span>新用户注册时</span>
-							    </label>
-							    <br>
-							    <label>
-							    	<input name="sms_bind" type="checkbox"
-							    	{% if (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
-							    		checked
-							    	{% endif %}
-							    	> <span>老用户绑定手机时</span>
 							    </label>
 							    <br>
 							    <label>
