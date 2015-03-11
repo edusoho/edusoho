@@ -68,7 +68,6 @@ class EduCloudController extends BaseController
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
                     $this->setCloudSmsKey('sms_school_candidate_name', $dataUserPosted['name']);
                     $this->setCloudSmsKey('show_message', 'on');
-                    $this->setCloudSmsKey('not_show_name', '');
                     return $this->createJsonResponse(array('ACK' => 'ok'));
                 }
             }
@@ -116,7 +115,6 @@ class EduCloudController extends BaseController
     public function smsNoMessageAction(Request $request)
     {
         $this->setCloudSmsKey('show_message', 'off');
-        $this->setCloudSmsKey('not_show_name', $this->getCloudSmsKey('sms_school_candidate_name'));
         return $this->redirect($this->generateUrl('admin_edu_cloud_sms', array()));
     }
 
@@ -177,13 +175,7 @@ class EduCloudController extends BaseController
                     $info .= '网校名称不符合规范';
                 }
                 $smsStatus['schoolNameError'] = $info;
-                if (
-                    strlen($this->getCloudSmsKey('sms_school_name')) > 0 &&
-                    $this->getCloudSmsKey('show_message') == 'off' &&
-                    $result['apply']['name'] == $this->getCloudSmsKey('not_show_name')
-                ) {
-                    $this->setCloudSmsKey('show_message', 'on');
-                }
+                
             }
         } else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';
