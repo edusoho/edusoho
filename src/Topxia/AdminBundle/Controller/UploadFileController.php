@@ -15,7 +15,8 @@ class UploadFileController extends BaseController
         $params = $request->query->all();
 
         $params['user'] = $user->id;
-        $params['key'] = "headLeader";
+        $params['targetType'] = "headLeader";
+        $params['targetId'] = "0";
         $params['convertor'] = "HLSEncryptedVideo";
         $params['videoQuality'] = "normal";
         $params['audioQuality'] = "normal";
