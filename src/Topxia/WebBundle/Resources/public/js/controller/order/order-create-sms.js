@@ -5,10 +5,11 @@ define(function(require, exports, module) {
     var SmsSender = require('../widget/sms-sender');
 
     exports.run = function() {
+
     	var mobile = $('[name="mobile"]').val();
 
     	if (mobile.length > 0) {
-    		var validator = new Validator({
+    		var smsValidator = new Validator({
 	            element: '#js-sms-modal-form',
 	            autoSubmit: true,
 	            onFormValidated: function(error){
@@ -18,16 +19,12 @@ define(function(require, exports, module) {
 	            }
 	        });
 
-    		validator.addItem({
-                element: '[name="mobile"]',
-                required: true,
-                rule: 'phone'            
-            });
-	        if($('input[name="sms_code"]').length>0){
-	            validator.addItem({
-	                element: '[name="sms_code"]',
+    		
+	        if($('input[name="sms_code_modal"]').length>0){
+	            smsValidator.addItem({
+	                element: '[name="sms_code_modal"]',
 	                required: true,
-	                rule: 'integer fixedLength{len:6}',
+	                rule: 'integer fixedLength{len:6} remote',
 	                display: '短信验证码'           
 	            });
 	        }
@@ -35,46 +32,12 @@ define(function(require, exports, module) {
 		    var smsSender = new SmsSender({
 		    	element: '.js-sms-send',
 		    	url: $('.js-sms-send').data('url'),
-		        smsType:'sms_user_pay',
-		        preSmsSend: function(){
-	                var couldSender = true;
-
-	                validator.query('[name="mobile"]').execute(function(error, results, element) {
-	                    if (error) {
-	                        couldSender = false;
-	                        return;
-	                    }
-	                    couldSender = true;
-	                    return;
-	                });
-
-	                return couldSender;
-	            }  
+		        smsType:'sms_user_pay' 
 		    });
 
-	    	var smsModalCodeValidator = new Validator({
-	            element: '#js-sms-modal-form',
-	            autoSubmit: false
-	        });
-
-		    var refresh = function () {
-		    	smsModalCodeValidator = new Validator({
-		            element: '#js-sms-modal-form',
-		            autoSubmit: false
-		        });
-
-		        smsModalCodeValidator.addItem({
-					element: '[name="sms_code_modal"]',
-					required: true,
-					display: '短信验证码',
-					rule: 'integer fixedLength{len:6} remote'  
-				});
-		    }		    
-
-		    $('.js-confirm').unbind('click');
-		    $('.js-confirm').click(function(){
-			    refresh();
-		    	smsModalCodeValidator.execute(function(error, results, element) {
+	    	
+		    $('.js-confirm').click(function(e){
+		    	smsValidator.execute(function(error, results, element) {
 	                if (error) {
 	                    return false;
 	                }
@@ -83,18 +46,9 @@ define(function(require, exports, module) {
 			    	$('#modal').modal('hide');
 			    	$('#order-create-form').submit();
 	            });	            
-		    	
+		    	return false;
 		    });
 
-	        $('#modal').on('shown.bs.modal', function () {
-				setTimeout(refresh,500); 
-		    });
-		    refresh();
-		}else{
-			$('.js-confirm').unbind('click');
-		    $('.js-confirm').click(function(){
-		    	$('#modal').modal('hide');
-		    });
 		}
 	}
 
