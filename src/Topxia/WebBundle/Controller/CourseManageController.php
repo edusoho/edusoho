@@ -299,6 +299,7 @@ class CourseManageController extends BaseController
             		'isVisible' => empty($data['visible_' . $teacherId]) ? 0 : 1
         		);
             }
+
             $this->getCourseService()->setCourseTeachers($id, $teachers);
             $this->setFlashMessage('success', '教师设置成功！');
 
@@ -320,6 +321,7 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
+
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers
@@ -439,7 +441,14 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    protected function getDiscountActivityService() {
+    protected function getDiscountActivityService() 
+    {
         return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
     }    
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
 }

@@ -45,6 +45,8 @@ interface UserService
     public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers);
 
     public function verifyInSaltOut($in,$salt,$out);
+
+    public function changeMobile($id, $mobile);
     
     /**
      * 变更密码
@@ -209,5 +211,10 @@ interface UserService
     public function isUserTemporaryLockedOrLocked($user);
 
     public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
+
+    /**
+     * 解析文本中@(提)到的用户
+     */
+    public function parseAts($text);
 
 }

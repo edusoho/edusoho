@@ -138,8 +138,9 @@ class CourseLessonManageController extends BaseController
 							  //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();                        
 						//else
 			$lessonId =0;
-        			$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
-			  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+        	$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
+			
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
 				'file' => $file
@@ -212,6 +213,13 @@ class CourseLessonManageController extends BaseController
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 				$lesson['mediaStatus'] = $file['convertStatus'];
+				if($file['type']=="document" && $file['convertStatus'] == "none" ){
+
+		            $convertHash = $this->getUploadFileService()->reconvertFile(
+		                $file['id'],
+		                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+		            );
+				}
 			}
 			
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
@@ -433,6 +441,7 @@ class CourseLessonManageController extends BaseController
 		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+		
 		return $this->createJsonResponse(true);
 	}
 
@@ -485,6 +494,11 @@ class CourseLessonManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
 }

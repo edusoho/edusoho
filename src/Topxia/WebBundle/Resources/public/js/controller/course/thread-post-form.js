@@ -1,11 +1,16 @@
 define(function(require, exports, module) {
 
-    var EditorFactory = require('common/kindeditor-factory');
 	var Validator = require('bootstrap.validator');
+    require('ckeditor');
 
     exports.run = function() {
 
-        var editor = EditorFactory.create('#post_content', 'simple', {extraFileUploadParams:{group:'course'}});
+        // group: 'course'
+        var editor = CKEDITOR.replace('post_content', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl'),
+            height: 300
+        });
 
         var validator = new Validator({
             element: '#thread-post-form',
@@ -17,7 +22,7 @@ define(function(require, exports, module) {
         });
 
         Validator.query('#thread-post-form').on('formValidate', function(elemetn, event) {
-            editor.sync();
+            editor.updateElement();
         });
 
     };

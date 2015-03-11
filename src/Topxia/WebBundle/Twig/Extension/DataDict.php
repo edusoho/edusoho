@@ -10,6 +10,12 @@ class DataDict
 			'closed' => '已关闭'
 		),
 
+		'classroomStatus' => array(
+			'draft' => '未发布',
+			'published' => '已发布',
+			'closed' => '已关闭'
+		),
+
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -29,6 +35,7 @@ class DataDict
 			'document' => '文档',
 			'image' => '图片',
             'ppt' => 'PPT',
+            'flash' => 'Flash',
 			'other' => '其他'
 		),
 		'fileType:html' => array(
@@ -123,9 +130,10 @@ class DataDict
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
+            'flash' => 'Flash',
     		'text' => '图文',
             'ppt' => 'PPT',
-            'document' => '文档',
+            'document' => '文档'
 		),
 		'videoStorageType' =>array(
 			'local'=>'本地视频',
@@ -216,7 +224,8 @@ class DataDict
         ),
         'targetName' => array(
         	'course' => '课程',
-        	'vip' => '会员'
+        	'vip' => '会员',
+        	'classroom' => '班级'
     	),
     	'groupstatus'=>array(
     		'open'=>'开启',

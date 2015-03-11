@@ -36,6 +36,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByCourseIds(array $ids, $start, $limit)
+    {
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function findCoursesByLikeTitle($title)
     {
         if(empty($title)){
@@ -215,11 +225,24 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         if (isset($conditions['notFree']) && $conditions['notFree'] == true){
+
         	if (isset($conditions['chargeCoin'])&&$conditions['chargeCoin'] == true){
         		$builder->andStaticWhere('originCoinPrice > 0');
         	}else{
         		$builder->andStaticWhere('originPrice > 0');
         	}
+        }
+
+        if (isset($conditions['courseIds'])) {
+
+            $courseIds=$conditions['courseIds'];
+
+            if(!empty($courseIds)){
+
+                $courseIds = join(',', $courseIds);
+                
+                $builder->andStaticWhere("id NOT IN ($courseIds)");
+            }
         }
 
         return $builder;
