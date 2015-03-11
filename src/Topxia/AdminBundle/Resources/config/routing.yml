@@ -1165,55 +1165,55 @@ admin_operation_article_category_delete:
 
 admin_operation_group:
     pattern:  /operation/group/
-    defaults: { _controller: TopxiaAdminBundle:Operation:groupIndex }
+    defaults: { _controller: TopxiaAdminBundle:Groups:groupIndex }
 
 admin_operation_group_close:
     pattern:  /operation/group/{id}/close
-    defaults: { _controller: TopxiaAdminBundle:Operation:closeGroup }
+    defaults: { _controller: TopxiaAdminBundle:Groups:closeGroup }
 
 admin_operation_group_open:
     pattern:  /operation/group/{id}/open
-    defaults: { _controller: TopxiaAdminBundle:Operation:openGroup }
+    defaults: { _controller: TopxiaAdminBundle:Groups:openGroup }
 
 admin_operation_group_transfer:
     pattern:  /operation/group/transfer/{groupId}
-    defaults: { _controller: TopxiaAdminBundle:Operation:transferGroup }
+    defaults: { _controller: TopxiaAdminBundle:Groups:transferGroup }
 
 admin_operation_groupThread:
     pattern:  /operation/group/thread
-    defaults: { _controller: TopxiaAdminBundle:Operation:groupThread }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:groupThread }
 
 admin_operation_groupThread_batch_delete:
     pattern:  /operation/group/batchDeleteThread
-    defaults: { _controller: TopxiaAdminBundle:Operation:batchDeleteThread }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:batchDeleteThread }
 
 admin_operation_groupThread_removeElite:
     pattern:  /operation/group/thread/{threadId}/removeElite
-    defaults: { _controller: TopxiaAdminBundle:Operation:removeElite }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:removeElite }
 
 admin_operation_groupThread_setElite:
     pattern:  /operation/group/thread/{threadId}/setElite
-    defaults: { _controller: TopxiaAdminBundle:Operation:setElite }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:setElite }
 
 admin_operation_groupThread_removeStick:
     pattern:  /operation/group/thread/{threadId}/removeStick
-    defaults: { _controller: TopxiaAdminBundle:Operation:removeStick }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:removeStick }
 
 admin_operation_groupThread_setStick:
     pattern:  /operation/group/thread/{threadId}/setStick
-    defaults: { _controller: TopxiaAdminBundle:Operation:setStick }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:setStick }
 
 admin_operation_groupThread_close:
     pattern:  /operation/group/thread/{threadId}/closeThread
-    defaults: { _controller: TopxiaAdminBundle:Operation:closeThread }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:closeThread }
 
 admin_operation_groupThread_open:
     pattern:  /operation/group/thread/{threadId}/openThread
-    defaults: { _controller: TopxiaAdminBundle:Operation:openThread }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:openThread }
 
 admin_operation_groupThread_delete:
     pattern:  /operation/group/thread/{threadId}/deleteThread
-    defaults: { _controller: TopxiaAdminBundle:Operation:deleteThread }
+    defaults: { _controller: TopxiaAdminBundle:GroupThreads:deleteThread }
 
 admin_operation_block:
     pattern:  /operation/block
