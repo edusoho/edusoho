@@ -1088,79 +1088,79 @@ admin_coin_model_save:
 
 admin_operation:
     pattern:  /operation
-    defaults: { _controller: TopxiaAdminBundle:Operation:index }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:index }
 
 admin_operation_article_create:
     pattern:  /operation/article/create
-    defaults: { _controller: TopxiaAdminBundle:Operation:articleCreate }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:articleCreate }
 
 admin_operation_article_edit:
     pattern:  /operation/article/{id}/edit
-    defaults: { _controller: TopxiaAdminBundle:Operation:articleEdit }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:articleEdit }
 
 admin_operation_article_show_upload:
     pattern:  /operation/article/show/upload
-    defaults: { _controller: TopxiaAdminBundle:Operation:showUpload }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:showUpload }
 
 admin_operation_article_picture_crop:
     pattern:  /operation/article/picture/crop
-    defaults: { _controller: TopxiaAdminBundle:Operation:pictureCrop }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:pictureCrop }
 
 admin_operation_article_delete:
     pattern:  /operation/article/delete
-    defaults: { _controller: TopxiaAdminBundle:Operation:articleDelete }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:articleDelete }
     methods:  [POST]
 
 admin_operation_article_trash:
     pattern:  /operation/article/{id}/trash
-    defaults: { _controller: TopxiaAdminBundle:Operation:articleTrash }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:articleTrash }
     methods:  [POST]
 
 admin_operation_article_set_property:
     pattern:  /operation/article/set/property/{id}/{property}
-    defaults: { _controller: TopxiaAdminBundle:Operation:setArticleProperty }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:setArticleProperty }
 
 admin_operation_article_cancel_property:
     pattern:  /operation/article/cancel/property/{id}/{property}
-    defaults: { _controller: TopxiaAdminBundle:Operation:cancelArticleProperty }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:cancelArticleProperty }
 
 admin_operation_article_publish:
     pattern:  /operation/article/{id}/publish
-    defaults: { _controller: TopxiaAdminBundle:Operation:articlePublish }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:articlePublish }
     methods:  [POST]
 
 admin_operation_article_unpublish:
     pattern:  /operation/article/{id}/unpublish
-    defaults: { _controller: TopxiaAdminBundle:Operation:articleUnpublish }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:articleUnpublish }
     methods:  [POST]
 
 admin_operation_article_thumb_remove:
     pattern:  /operation/article/thumb/{id}/remove
-    defaults: { _controller: TopxiaAdminBundle:Operation:thumbRemove }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:thumbRemove }
 
 admin_operation_article_category:
     pattern: /operation/article/category
-    defaults: { _controller: TopxiaAdminBundle:Operation:categoryIndex }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:categoryIndex }
 
 admin_operation_article_category_create:
     pattern:  /operation/article/category/create
-    defaults: { _controller: TopxiaAdminBundle:Operation:categoryCreate }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:categoryCreate }
 
 admin_operation_article_category_edit:
     pattern:  /operation/article/category/{id}/edit
-    defaults: { _controller: TopxiaAdminBundle:Operation:categoryEdit }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:categoryEdit }
 
 admin_operation_article_category_checkcode:
     pattern:  /operation/article/category/checkcode
-    defaults: { _controller: TopxiaAdminBundle:Operation:checkCode }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:checkCode }
 
 admin_operation_article_category_checkparentid:
     pattern:  /operation/article/category/checkparentid
-    defaults: { _controller: TopxiaAdminBundle:Operation:checkParentId }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:checkParentId }
 
 admin_operation_article_category_delete:
     pattern:  /operation/article/category/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Operation:categoryDelete }
+    defaults: { _controller: TopxiaAdminBundle:ArticleCategotys:categoryDelete }
     methods: [POST]
 
 admin_operation_group:

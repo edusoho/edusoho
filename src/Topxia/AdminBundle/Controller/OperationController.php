@@ -278,6 +278,15 @@ class OperationController extends BaseController
         ));
     }
 
+    private function renderTbody()
+    {
+        $categories = $this->getCategoryService()->getCategoryTree();
+        return $this->render('TopxiaAdminBundle:ArticleCategory:tbody.html.twig', array(
+            'categories' => $categories,
+            'categoryTree'  => $categories
+        ));
+    }
+
     public function checkCodeAction(Request $request)
     {
         $code = $request->query->get('value');
