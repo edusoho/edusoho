@@ -407,7 +407,7 @@ class SettingsController extends BaseController
         			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
         			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
 
-		if ((!$hasSecurityQuestions)&&(!$canSmsFind)) {
+		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
 			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
 		}
 
