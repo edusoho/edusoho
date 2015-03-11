@@ -254,7 +254,6 @@ define(function(require, exports, module) {
 		if($('#js-order-create-sms-btn').length > 0){
 	 		$('#js-order-create-sms-btn').click(function(e){
 	 			var coinToPay = $('#coinPayAmount').val();
-	 			alert(coinToPay);
 	 			if (coinToPay && (coinToPay.length > 0)&&(!isNaN(coinToPay))&&(coinToPay > 0)&&($("#js-order-create-sms-btn").length>0)){
 	 				$("#payPassword").trigger("change");
 	 				if ($('span[class="text-danger"]').length > 0) {
