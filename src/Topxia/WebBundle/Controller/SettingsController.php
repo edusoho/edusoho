@@ -242,6 +242,11 @@ class SettingsController extends BaseController
 		$hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 		$hasVerifiedMobile = (isset($user['verifiedMobile'])&&(strlen($user['verifiedMobile'])>0));
 
+		$cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
+		$showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1') 
+							&& (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+
+		$itemScore = floor(100.0/(3.0 + ($showBindMobile && $hasVerifiedMobile)?1.0:0));
 		$progressScore = 1 + ($hasLoginPassword? 25:0 ) + ($hasPayPassword? 25:0 ) + ($hasFindPayPasswordQuestion? 25:0 ) + ($hasVerifiedMobile? 25:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
 
