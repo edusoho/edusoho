@@ -1217,96 +1217,68 @@ admin_operation_groupThread_delete:
 
 admin_operation_block:
     pattern:  /operation/block
-    defaults: { _controller: TopxiaAdminBundle:Operation:blockIndex }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:blockIndex }
 
 admin_operation_block_create:
     pattern:  /operation/block/create
-    defaults: { _controller: TopxiaAdminBundle:Operation:blockCreate }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:blockCreate }
 
 admin_operation_block_update:
     pattern:  /operation/block/{block}/update
-    defaults: { _controller: TopxiaAdminBundle:Operation:blockUpdate }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:blockUpdate }
 
 admin_operation_block_edit:
     pattern:  /operation/block/{block}/edit
-    defaults: { _controller: TopxiaAdminBundle:Operation:blockEdit }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:blockEdit }
 
 admin_operation_block_code_check_forcreate:
     pattern:  /operation/block/code/check/forcreate
-    defaults: { _controller: TopxiaAdminBundle:Operation:checkBlockCodeForCreate }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:checkBlockCodeForCreate }
 
 admin_operation_block_code_check_foredit:
     pattern:  /operation/block/code/{id}/check/foredit
-    defaults: { _controller: TopxiaAdminBundle:Operation:checkBlockCodeForEdit }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:checkBlockCodeForEdit }
 
 admin_operation_block_delete:
     pattern:  /operation/block/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Operation:blockDelete }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:blockDelete }
     methods:  [POST]
 
 admin_operation_blockhistory_preview:
     pattern:  /operation/blockhistory/{id}/preview
-    defaults: { _controller: TopxiaAdminBundle:Operation:preview }
+    defaults: { _controller: TopxiaAdminBundle:Blocks:preview }
 
 admin_operation_content:
     pattern:  /operation/content
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentIndex }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentIndex }
 
 admin_operation_content_create:
     pattern:  /content/create/{type}
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentCreate }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentCreate }
 
 admin_operation_content_edit:
     pattern:  /operation/content/{id}/edit
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentEdit }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentEdit }
 
 admin_operation_content_publish:
     pattern:  /operation/content/{id}/publish
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentPublish }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentPublish }
     methods:  [POST]
 
 admin_operation_content_trash:
     pattern:  /operation/content/{id}/trash
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentTrash }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentTrash }
     methods:  [POST]
 
 admin_operation_content_delete:
     pattern:  /operation/content/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentDelete }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentDelete }
     methods:  [POST]
 
 admin_operation_content_alias_check:
     pattern:  /operation/content/alias/check
-    defaults: { _controller: TopxiaAdminBundle:Operation:contentAliasCheck }
+    defaults: { _controller: TopxiaAdminBundle:Contents:contentAliasCheck }
 
-admin_operation_coupon:
-    pattern: /operation/coupon
-    defaults: { _controller: TopxiaAdminBundle:Operation:couponIndex }
-
-admin_operation_coupon_generate:
-    pattern: /operation/coupon/generate
-    defaults: { _controller: TopxiaAdminBundle:Operation:couponGenerate }
-
-admin_operation_coupon_checkprefix:
-    pattern: /operation/coupon/checkprefix
-    defaults: { _controller: TopxiaAdminBundle:Operation:couponCheckPrefix }
-
-admin_operation_coupon_delete:
-    pattern: /operation/coupon/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Operation:couponDelete }
-    methods: [POST]
-
-admin_operation_coupon_query:
-    pattern: /operation/coupon/index
-    defaults: { _controller: TopxiaAdminBundle:Operation:queryIndex }
-
-admin_operation_coupon_batch_export:
-    pattern: /operation/coupon/export/csv/{batchId}
-    defaults: { _controller: TopxiaAdminBundle:Operation:couponExportCsv }
-
-admin_operation_coupon_show:
-    pattern: /operation/coupon/show/{batchId}
-    defaults: { _controller: TopxiaAdminBundle:Operation:couponDetail }
 
 admin_money_card_homepage:
     path:     /operation/moneycard/index
