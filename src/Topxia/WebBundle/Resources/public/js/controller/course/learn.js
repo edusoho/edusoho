@@ -423,9 +423,9 @@ define(function(require, exports, module) {
                                 $replayGuid += "<br>";
                             } else {
                                 $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                                $replayGuid += "直播结束后在“";
+                                $replayGuid += "直播平台“<span style='color:red'>下课后</span>”且“<span style='color:red'>直播时间</span>”结束后，在课时管理的“";
                                 $replayGuid += "<span style='color:red'>录播管理</span>";
-                                $replayGuid += "”界面生成回放。";
+                                $replayGuid += "”点击生成回放。";
                                 $replayGuid += "<br>";
                             }
 
