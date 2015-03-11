@@ -403,11 +403,13 @@ class SettingsController extends BaseController
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
+        $canSmsFind = ($hasVerifiedMobile) && 
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
 
-		// if (((!$hasSecurityQuestions)&&$hasVerifiedMobile)||(!$hasSecurityQuestions)&&(!$hasVerifiedMobile)){
-			// return $this->forward('TopxiaWebBundle:Settings:findPayPasswordBySms');
-		// 	return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
-		// }
+		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
+			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
+		}
 
 		if (!$hasSecurityQuestions) {
 			$this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
