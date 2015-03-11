@@ -69,10 +69,9 @@
 	    			{% if ( not hasSchoolName ) and (smsStatus.status == 'failed') %}
 	    				
 	    				<div class="alert alert-danger">
-	    					因为申请的网校名称不符合规范{{ smsStatus.message|default('') }}，您新申请的网校名称【{{setting('cloud_sms.sms_school_candidate_name')|default('')}}
-	    					】未通过审核
+	    					您新申请的网校名称“{{setting('cloud_sms.sms_school_candidate_name')|default('')}}”未通过审核，原因是：{{ smsStatus.message|default('网校名称不符合规范') }}
 
-	    					<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
+	    					<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 重新申请 </span>
 			    		</div>
 
 	    			{% else %}
