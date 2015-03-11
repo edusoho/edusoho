@@ -88,13 +88,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
     }
 
-    protected function checkCategoryId(array $arguments)
-    {
-        if (empty($arguments['categoryId'])) {
-            throw new \InvalidArgumentException("categoryId参数缺失");
-        }
-    }
-
     protected function checkGroupId(array $arguments)
     {
         if (empty($arguments['group'])) {
