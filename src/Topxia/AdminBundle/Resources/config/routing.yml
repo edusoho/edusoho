@@ -1102,3 +1102,7 @@ admin_edu_cloud_sms_bill:
     pattern:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
 
+admin_edu_cloud_sms_no_message:
+    pattern: /edu_cloud/admin_edu_cloud_sms_no_message
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
+    
