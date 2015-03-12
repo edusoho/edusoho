@@ -146,11 +146,6 @@ hls_clef:
     pattern: /hls/{id}/clef/{token}
     defaults: { _controller: TopxiaWebBundle:HLS:clef}
 
-kindeditor_upload:
-    pattern:  /kindeditor/upload
-    defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
-    methods: [POST]
-
 editor_upload:
     pattern:  /editor/upload
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
