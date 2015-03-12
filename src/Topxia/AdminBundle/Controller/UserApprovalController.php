@@ -22,7 +22,7 @@ class UserApprovalController extends BaseController
             'approvalStatus' => 'approving'
         );
 
-        if(!empty($fields)){
+        if(empty($fields)){
             $fields = array();
         }
 
@@ -62,7 +62,7 @@ class UserApprovalController extends BaseController
             'approvalStatus' => 'approved'
         );
 
-        if(!empty($fields)){
+        if(empty($fields)){
             $fields = array();
         }
 

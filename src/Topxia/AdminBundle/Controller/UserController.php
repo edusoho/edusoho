@@ -30,7 +30,7 @@ class UserController extends BaseController
             'keyword'=>''
         );
 
-        if(!empty($fields)){
+        if(empty($fields)){
             $fields = array();
         }
 
