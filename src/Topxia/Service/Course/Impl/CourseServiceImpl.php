@@ -390,11 +390,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
-			'freeEndTime' => 0,
-			'deadlineNotify' => 'none',
-			'useInClassroom'=>'single',
-			'singleBuy'=>0,
-			'daysOfNotifyBeforeDeadline' => 0
+			'freeEndTime' => 0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -1644,12 +1640,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		
 		$currentTime = time();
 		foreach ($courses as $key => $course) {
-			if($course['deadlineNotify'] == "active") {
-				$courseMember = $courseMembers[$course["id"]];
-				if($currentTime < $courseMember["deadline"]  && ($course["daysOfNotifyBeforeDeadline"]*24*60*60+$currentTime) > $courseMember["deadline"]){
-					$shouldNotifyCourses[] = $course;
-					$shouldNotifyCourseMembers[] = $courseMember;
-				}
+			$courseMember = $courseMembers[$course["id"]];
+			if($course["expiryDay"]>0 && $currentTime < $courseMember["deadline"]  && (10*24*60*60+$currentTime) > $courseMember["deadline"]){
+				$shouldNotifyCourses[] = $course;
+				$shouldNotifyCourseMembers[] = $courseMember;
 			}
 		}
 		return array($shouldNotifyCourses, $shouldNotifyCourseMembers);
