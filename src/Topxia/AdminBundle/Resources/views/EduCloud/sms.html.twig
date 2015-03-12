@@ -7,7 +7,6 @@
 
 {% block maincontent %}
   <div class="page-header"><h1>云短信</h1></div>
-
     {% if smsStatus.status == 'error' %}
     	<div class="panel panel-default">
 			<table class="table table-striped table-hover" style="word-break:break-all;">
@@ -32,7 +31,7 @@
 
 	{% else %}
 		{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
-		{% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('on')) %}
+		{% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('off')) %}
 			<div class="alert alert-danger">
 					<a href="{{path("admin_edu_cloud_sms_no_message")}}" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
 				{{ smsStatus.schoolNameError }}
@@ -157,11 +156,26 @@
 		    		>
 			    		<legend>短信验证</legend>
 			    		<div class="form-group">
+		    				
+							
 			      			<div class="col-md-3 control-label">
 			        			<label class="pull-right">使用场景</label>
 			      			</div>
 
-			      			<div class="controls col-md-8 radios checkboxes">	 
+			      			<div class="controls col-md-8 radios checkboxes">
+			      				<label>
+									<div class="text-info">手机绑定功能已开启</div>
+			      				</label>
+			      				<br>			      				
+							    <input type="hidden" name="sms_bind" value="on">
+								<label>
+							    	<input name="sms_registration" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}
+							    	> <span>新用户注册时</span>
+							    </label>
+							    <br>		      			 
 							    <label>
 							    	<input name="sms_user_pay" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
@@ -176,22 +190,6 @@
 							    		checked
 							    	{% endif %}
 							    	> 忘记支付密码时
-							    </label>
-							    <br>
-							    <label>
-							    	<input name="sms_registration" type="checkbox"
-							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
-							    		checked
-							    	{% endif %}
-							    	> <span>新用户注册时</span>
-							    </label>
-							    <br>
-							    <label>
-							    	<input name="sms_bind" type="checkbox"
-							    	{% if (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
-							    		checked
-							    	{% endif %}
-							    	> <span>老用户绑定手机时</span>
 							    </label>
 							    <br>
 							    <label>
@@ -215,7 +213,7 @@
 	    	{% endif %}
     		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		</form>
-
 	{% endif %}
+	{{ web_macro.flash_messages() }}
 
 {% endblock %}

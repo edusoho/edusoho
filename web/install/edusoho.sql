@@ -942,6 +942,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `email` varchar(128) NOT NULL COMMENT '用户邮箱',
+  `verifiedMobile` varchar(32) NOT NULL DEFAULT  '',
   `password` varchar(64) NOT NULL COMMENT '用户密码',
   `salt` varchar(32) NOT NULL COMMENT '密码SALT',
   `payPassword` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码',

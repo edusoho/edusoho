@@ -242,6 +242,11 @@ class SettingsController extends BaseController
 		$hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 		$hasVerifiedMobile = (isset($user['verifiedMobile'])&&(strlen($user['verifiedMobile'])>0));
 
+		$cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
+		$showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1') 
+							&& (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+
+		$itemScore = floor(100.0/(3.0 + ($showBindMobile && $hasVerifiedMobile)?1.0:0));
 		$progressScore = 1 + ($hasLoginPassword? 25:0 ) + ($hasPayPassword? 25:0 ) + ($hasFindPayPasswordQuestion? 25:0 ) + ($hasVerifiedMobile? 25:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
 
@@ -398,9 +403,11 @@ class SettingsController extends BaseController
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
+        $canSmsFind = ($hasVerifiedMobile) && 
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
 
-		if (((!$hasSecurityQuestions)&&$hasVerifiedMobile)||(!$hasSecurityQuestions)&&(!$hasVerifiedMobile)){
-			// return $this->forward('TopxiaWebBundle:Settings:findPayPasswordBySms');
+		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
 			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
 		}
 

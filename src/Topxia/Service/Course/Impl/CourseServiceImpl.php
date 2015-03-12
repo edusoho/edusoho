@@ -1909,6 +1909,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'type' => 'become_student',
 				'objectType' => 'course',
 				'objectId' => $courseId,
+				'userId' => $member["userId"],
 				'properties' => array(
 					'course' => $this->simplifyCousrse($course),
 				)
