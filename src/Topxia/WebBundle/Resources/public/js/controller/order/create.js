@@ -204,6 +204,7 @@ define(function(require, exports, module) {
 			var data={};
 			data.code = $(this).val();
 			if(data.code == ""){
+				$('[role="coupon-price"]').find("[role='price']").text("0.00");
 				return;
 			}
 			data.targetType = $(this).data("targetType");
