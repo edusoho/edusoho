@@ -114,6 +114,22 @@
 				</div>
 			</div>
 
+			{% if is_plugin_installed('Classroom') %}
+			<div class="form-group" style="display:none;">
+				<label class="col-md-2 control-label">本课程只能用于一个{{ setting('classroom.name')|default("班级") }}</label>
+				<div class="col-md-8 controls radios">
+					{{ radios('useInClassroom', {'single':'是', 'more':'否'}, 'single' ) }}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-2 control-label">课程加入{{ setting('classroom.name')|default("班级") }}后可以单独购买</label>
+				<div class="col-md-8 controls radios">
+					{{ radios('singleBuy', {'1':'是', '0':'否'}, course.singleBuy ) }}
+				</div>
+			</div>
+			{% endif %}
+
 			<div class="form-group">
 			  <label class="col-md-2 control-label">分类</label>
 			  <div class="col-md-8 controls">

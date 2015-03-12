@@ -10,6 +10,12 @@ class DataDict
 			'closed' => '已关闭'
 		),
 
+		'classroomStatus' => array(
+			'draft' => '未发布',
+			'published' => '已发布',
+			'closed' => '已关闭'
+		),
+
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -218,7 +224,8 @@ class DataDict
         ),
         'targetName' => array(
         	'course' => '课程',
-        	'vip' => '会员'
+        	'vip' => '会员',
+        	'classroom' => '班级'
     	),
     	'groupstatus'=>array(
     		'open'=>'开启',

@@ -17,6 +17,11 @@
     </a>
   </li>
 
+  <li class="{% if submenu == 'sms' %}active{% endif %}">
+    <a href="{{ url('admin_edu_cloud_sms') }}">云短信设置
+    </a>
+  </li>
+
 </ul>
 
   {% block maincontent %}{% endblock %}

@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Topxia\Common\SmsToolkit;
 
 class OrderController extends BaseController
 {
@@ -19,7 +20,7 @@ class OrderController extends BaseController
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
 
-        if (empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip"))) {
+        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 
@@ -28,7 +29,7 @@ class OrderController extends BaseController
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
-        if ($orderInfo["totalPrice"] == 0) {
+        if (((float)$orderInfo["totalPrice"]) == 0) {
             $formData = array();
             $formData['userId'] = $currentUser["id"];
             $formData["targetId"] = $fields["targetId"];
@@ -52,13 +53,42 @@ class OrderController extends BaseController
             $orderInfo["showCoupon"] = true;
         }
 
+        $verifiedMobile = '';
+        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile'])>0) ){
+            $verifiedMobile = $currentUser['verifiedMobile'];
+        }
+        $orderInfo['verifiedMobile'] = $verifiedMobile;
+
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
 
     }
 
+    public function smsVerificationAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $verifiedMobile = '';
+        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile'])>0) ){
+            $verifiedMobile = $currentUser['verifiedMobile'];
+        }
+        return $this->render('TopxiaWebBundle:Order:order-sms-modal.html.twig', array(
+            'verifiedMobile' => $verifiedMobile,
+        ));
+    }
+
     public function createAction(Request $request)
     {
-        $fields = $request->request->all();
+        $fields = $request->request->all(); 
+
+        if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
+            $eduCloudService = $this->getEduCloudService();
+            $scenario = "sms_user_pay";
+            if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+                if (!$result) {
+                    return $this->createMessageResponse('error', '短信验证失败。');
+                }
+            }
+        }
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -95,12 +125,12 @@ class OrderController extends BaseController
             $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
 
             //价格比较
-            if($totalPrice != $fields["totalPrice"]) {
+            if(intval($totalPrice*100) != intval($fields["totalPrice"]*100)) {
                 $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
             }
 
             //价格比较
-            if($amount != $shouldPayMoney) {
+            if(intval($amount*100) != intval($shouldPayMoney*100)) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
@@ -124,6 +154,10 @@ class OrderController extends BaseController
 
             $order = $processor->createOrder($orderFileds, $fields);
 
+            if($order["status"] == "paid") {
+                return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order["targetId"])));
+            }
+
             return $this->redirect($this->generateUrl('pay_center_show', array(
                 'sn' => $order['sn']
             )));
@@ -138,7 +172,7 @@ class OrderController extends BaseController
         if ($request->getMethod() == 'POST') {
             $code = $request->request->get('code');
 
-            if ($type != 'course' && $type != 'vip') {
+            if (!in_array($type, array('course', 'vip', 'classroom'))) {
                 throw new \RuntimeException('优惠码不支持的购买项目。');
             }
 
@@ -179,4 +213,8 @@ class OrderController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 }
