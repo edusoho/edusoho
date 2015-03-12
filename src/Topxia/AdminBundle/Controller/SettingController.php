@@ -5,20 +5,11 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Common\Paginator;
-use Topxia\Service\Util\PluginUtil;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
-
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Imagine\Image\ImageInterface;
 
 class SettingController extends BaseController
 {
@@ -27,19 +18,19 @@ class SettingController extends BaseController
         $site = $this->getSettingService()->get('site', array());
 
         $default = array(
-            'name'=>'',
-            'slogan'=>'',
-            'url'=>'',
-            'logo'=>'',
-            'seo_keywords'=>'',
-            'seo_description'=>'',
-            'master_email'=>'',
-            'icp'=>'',
-            'analytics'=>'',
-            'status'=>'open',
-            'closed_note'=>'',
-            'favicon'=>'',
-            'copyright'=>'',
+            'name' => '',
+            'slogan' => '',
+            'url' => '',
+            'logo' => '',
+            'seo_keywords' => '',
+            'seo_description' => '',
+            'master_email' => '',
+            'icp' => '',
+            'analytics' => '',
+            'status' => 'open',
+            'closed_note' => '',
+            'favicon' => '',
+            'copyright' => '',
         );
 
         $site = array_merge($default, $site);
@@ -52,7 +43,7 @@ class SettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:site.html.twig', array(
-            'site'=>$site
+            'site' => $site,
         ));
     }
 
@@ -61,9 +52,9 @@ class SettingController extends BaseController
         $mobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled'=> 0,   // 网校状态
-            'about'=>'',     // 网校简介
-            'logo' => '',    // 网校Logo
+            'enabled' => 0, // 网校状态
+            'about' => '', // 网校简介
+            'logo' => '', // 网校Logo
             'splash1' => '', // 启动图1
             'splash2' => '', // 启动图2
             'splash3' => '', // 启动图3
@@ -90,7 +81,7 @@ class SettingController extends BaseController
             'bannerJumpToCourseId4' => ' ',
             'bannerJumpToCourseId5' => ' ',
             'notice' => '', //公告
-            'courseIds' => '' //每周精品课
+            'courseIds' => '', //每周精品课
         );
 
         $mobile = array_merge($default, $mobile);
@@ -104,23 +95,24 @@ class SettingController extends BaseController
 
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses = ArrayToolkit::index($courses,'id');
+        $courses = ArrayToolkit::index($courses, 'id');
         $sortedCourses = array();
-        foreach ( $courseIds as $value){
-            if(!empty($value))
+        foreach ($courseIds as $value) {
+            if (!empty($value)) {
                 $sortedCourses[] = $courses[$value];
+            }
+
         }
 
-
-        $bannerCourse1 = ($mobile['bannerJumpToCourseId1']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']):null;
-        $bannerCourse2 = ($mobile['bannerJumpToCourseId2']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']):null;
-        $bannerCourse3 = ($mobile['bannerJumpToCourseId3']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']):null;
-        $bannerCourse4 = ($mobile['bannerJumpToCourseId4']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']):null;
-        $bannerCourse5 = ($mobile['bannerJumpToCourseId5']!=" ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']):null;
+        $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
+        $bannerCourse2 = ($mobile['bannerJumpToCourseId2'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']) : null;
+        $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
+        $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
+        $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
 
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
-            'mobile'=>$mobile,
-            'courses'=>$sortedCourses,
+            'mobile' => $mobile,
+            'courses' => $sortedCourses,
             "bannerCourse1" => $bannerCourse1,
             "bannerCourse2" => $bannerCourse2,
             "bannerCourse3" => $bannerCourse3,
@@ -140,7 +132,7 @@ class SettingController extends BaseController
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
-        $mobile = $this->getSettingService()->get('mobile', array()); 
+        $mobile = $this->getSettingService()->get('mobile', array());
         $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
         $mobile[$type] = ltrim($mobile[$type], '/');
 
@@ -150,7 +142,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $mobile[$type],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+            'url' => $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
         );
 
         return new Response(json_encode($response));
@@ -176,7 +168,7 @@ class SettingController extends BaseController
         }
 
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-        
+
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
@@ -191,7 +183,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['logo'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['logo']),
+            'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo']),
         );
 
         return new Response(json_encode($response));
@@ -218,7 +210,7 @@ class SettingController extends BaseController
         }
 
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-        
+
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
@@ -233,7 +225,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $courseSetting['live_logo'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($courseSetting['live_logo']),
+            'url' => $this->container->get('templating.helper.assets')->getUrl($courseSetting['live_logo']),
         );
 
         return new Response(json_encode($response));
@@ -259,7 +251,7 @@ class SettingController extends BaseController
             throw $this->createAccessDeniedException('图标格式不正确！');
         }
         $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
-        
+
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
@@ -274,7 +266,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['favicon'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
+            'url' => $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
         );
 
         return new Response(json_encode($response));
@@ -297,9 +289,9 @@ class SettingController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
 
         $default = array(
-            'register_mode'=>'closed',
-            'email_enabled'=>'closed',
-            'setting_time'=> -1,
+            'register_mode' => 'closed',
+            'email_enabled' => 'closed',
+            'setting_time' => -1,
             'email_activation_title' => '',
             'email_activation_body' => '',
             'welcome_enabled' => 'closed',
@@ -309,81 +301,93 @@ class SettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'registerFieldNameArray'=>array(),
-            'registerSort'=>array(0=>"email",1=>"nickname",2=>"password"),
+            'registerFieldNameArray' => array(),
+            'registerSort' => array(0 => "email", 1 => "nickname", 2 => "password"),
             'captcha_enabled' => 0,
-            'register_protective'=>'none',
+            'register_protective' => 'none',
         );
 
-        if(isset($auth['captcha_enabled']) && $auth['captcha_enabled'] ){
+        if (isset($auth['captcha_enabled']) && $auth['captcha_enabled']) {
 
-            if(!isset($auth['register_protective'])){
+            if (!isset($auth['register_protective'])) {
 
-                $auth['register_protective']="low";
+                $auth['register_protective'] = "low";
             }
-            
+
         }
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
 
-         	if (isset($auth['setting_time']) && $auth['setting_time'] > 0 ) {
-         		$firstSettingTime =  $auth['setting_time'];
-         		$auth = $request->request->all(); 
-         		$auth['setting_time'] = $firstSettingTime;
-        	}else{
-        		$auth = $request->request->all(); 
-        		$auth['setting_time'] = time();
-       	}     
+            if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
+                $firstSettingTime = $auth['setting_time'];
+                $auth = $request->request->all();
+                $auth['setting_time'] = $firstSettingTime;
+            } else {
+                $auth = $request->request->all();
+                $auth['setting_time'] = time();
+            }
 
             if (empty($auth['welcome_methods'])) {
                 $auth['welcome_methods'] = array();
             }
 
-            if($auth['register_protective']=="none"){
+            if ($auth['register_protective'] == "none") {
 
-                $auth['captcha_enabled']=0;
+                $auth['captcha_enabled'] = 0;
 
-            }else{
+            } else {
 
-                $auth['captcha_enabled']=1;  
+                $auth['captcha_enabled'] = 1;
             }
 
             $this->getSettingService()->set('auth', $auth);
+            if (in_array('mobile',$auth['registerSort'])){
+                $this->setCloudSmsKey('sms_registration', 'on');
+            }else{
+                $this->setCloudSmsKey('sms_registration', 'off');
+            }
 
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
-            $this->setFlashMessage('success','注册设置已保存！');
+            $this->setFlashMessage('success', '注册设置已保存！');
         }
 
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        if($auth['registerFieldNameArray']){
+        if ($auth['registerFieldNameArray']) {
             foreach ($userFields as $key => $fieldValue) {
-                if(!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])){
-                    $auth['registerFieldNameArray'][]=$fieldValue['fieldName'];
+                if (!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] = $fieldValue['fieldName'];
                 }
             }
-         
+
         }
 
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
             'auth' => $auth,
-            'userFields'=>$userFields,
+            'userFields' => $userFields,
         ));
+    }
+    
+    private function setCloudSmsKey($key, $val)
+    {
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting[$key] = $val;
+        $this->getSettingService()->set('cloud_sms', $setting);
     }
 
     public function mailerAction(Request $request)
     {
         $mailer = $this->getSettingService()->get('mailer', array());
         $default = array(
-            'enabled'=>0,
-            'host'=>'',
-            'port'=>'',
-            'username'=>'',
-            'password'=>'',
-            'from'=>'',
-            'name'=>'',
-            );
+            'enabled' => 0,
+            'host' => '',
+            'port' => '',
+            'username' => '',
+            'password' => '',
+            'from' => '',
+            'name' => '',
+        );
         $mailer = array_merge($default, $mailer);
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
@@ -402,15 +406,15 @@ class SettingController extends BaseController
         $loginConnect = $this->getSettingService()->get('login_bind', array());
 
         $default = array(
-            'login_limit'=>0,
-            'enabled'=>0,
+            'login_limit' => 0,
+            'enabled' => 0,
             'verify_code' => '',
-            'captcha_enabled'=>0,
+            'captcha_enabled' => 0,
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
             'temporary_lock_minutes' => 20,
         );
-        
+
         $clients = OAuthClientFactory::clients();
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"] = 0;
@@ -424,7 +428,7 @@ class SettingController extends BaseController
             $loginConnect = $request->request->all();
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
-            $this->setFlashMessage('success','登录设置已保存！');
+            $this->setFlashMessage('success', '登录设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
@@ -437,17 +441,17 @@ class SettingController extends BaseController
     {
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
-            'enabled'=>0,
+            'enabled' => 0,
             'disabled_message' => '尚未开启支付模块，无法购买课程。',
-            'bank_gateway'=>'none',
-            'alipay_enabled'=>0,
-            'alipay_key'=>'',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
             'alipay_secret' => '',
             'alipay_account' => '',
             'alipay_type' => 'direct',
-            'tenpay_enabled'=>0,
-            'tenpay_key'=>'',
-            'tenpay_secret'=>''
+            'tenpay_enabled' => 0,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
         );
 
         $payment = array_merge($default, $payment);
@@ -455,7 +459,7 @@ class SettingController extends BaseController
             $payment = $request->request->all();
             $payment['alipay_key'] = trim($payment['alipay_key']);
             $payment['alipay_secret'] = trim($payment['alipay_secret']);
-            
+
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
@@ -493,10 +497,10 @@ class SettingController extends BaseController
     public function defaultAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
-        $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
+        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
 
         $default = $this->getDefaultSet();
-        
+
         $defaultSetting = array_merge($default, $defaultSetting);
 
         if ($request->getMethod() == 'POST') {
@@ -504,20 +508,20 @@ class SettingController extends BaseController
 
             if (isset($defaultSetting['user_name'])) {
                 $defaultSetting['user_name'] = $defaultSetting['user_name'];
-            }else{
-                $defaultSetting['user_name'] ='学员';
+            } else {
+                $defaultSetting['user_name'] = '学员';
             }
 
             if (isset($defaultSetting['chapter_name'])) {
                 $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
-            }else{
-                $defaultSetting['chapter_name'] ='章';
+            } else {
+                $defaultSetting['chapter_name'] = '章';
             }
 
             if (isset($defaultSetting['part_name'])) {
                 $defaultSetting['part_name'] = $defaultSetting['part_name'];
-            }else{
-                $defaultSetting['part_name'] ='节';
+            } else {
+                $defaultSetting['part_name'] = '节';
             }
 
             $default = $this->getSettingService()->get('default', array());
@@ -534,8 +538,8 @@ class SettingController extends BaseController
         ));
     }
 
-    public function shareAction (Request $request)
-    {   
+    public function shareAction(Request $request)
+    {
         $defaultSetting = $this->getSettingService()->get('default', array());
         $default = $this->getDefaultSet();
 
@@ -566,9 +570,10 @@ class SettingController extends BaseController
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
             'user_name' => '学员',
             'chapter_name' => '章',
-            'part_name' =>'节',
+            'part_name' => '节',
         );
 
         return $default;
@@ -578,25 +583,25 @@ class SettingController extends BaseController
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());
 
-        if(!empty($ips)){
-            $default['ips'] =  join("\n", $ips['ips']);
+        if (!empty($ips)) {
+            $default['ips'] = join("\n", $ips['ips']);
             $ips = array_merge($ips, $default);
         }
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r")," ",$data['ips'])));
+            $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
             $this->getSettingService()->set('blacklist_ip', $ips);
             $this->getLogService()->info('system', 'update_settings', "更新IP黑名单", $ips);
 
             $ips = $this->getSettingService()->get('blacklist_ip', array());
-            $ips['ips'] =  join("\n", $ips['ips']);
+            $ips['ips'] = join("\n", $ips['ips']);
 
-            $this->setFlashMessage('success','保存成功！');
+            $this->setFlashMessage('success', '保存成功！');
         }
 
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
-            'ips' => $ips
+            'ips' => $ips,
         ));
     }
 
@@ -608,7 +613,7 @@ class SettingController extends BaseController
             'customer_service_mode' => 'closed',
             'customer_of_qq' => '',
             'customer_of_mail' => '',
-            'customer_of_phone' => ''
+            'customer_of_phone' => '',
         );
 
         $customerServiceSetting = array_merge($default, $customerServiceSetting);
@@ -621,7 +626,7 @@ class SettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
-            'customerServiceSetting'=>$customerServiceSetting
+            'customerServiceSetting' => $customerServiceSetting,
         ));
     }
 
@@ -633,9 +638,9 @@ class SettingController extends BaseController
             'mode' => 'default',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
-            'email_filter' => ''
+            'email_filter' => '',
         );
-        
+
         $setting = array_merge($default, $setting);
 
         $configDirectory = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/';
@@ -646,9 +651,9 @@ class SettingController extends BaseController
             $data = $request->request->all();
             $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting = array('mode' => $data['mode'],
-                            'nickname_enabled' => $data['nickname_enabled'],
-                            'avatar_alert' => $data['avatar_alert'],
-                            'email_filter' => $data['email_filter']
+                'nickname_enabled' => $data['nickname_enabled'],
+                'avatar_alert' => $data['avatar_alert'],
+                'email_filter' => $data['email_filter'],
             );
             $this->getSettingService()->set('user_partner', $setting);
 
@@ -696,7 +701,7 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
-        
+
         $client = LiveClientFactory::createClient();
         $capacity = $client->getCapacity();
 
@@ -706,17 +711,17 @@ class SettingController extends BaseController
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
             'teacher_manage_student' => '0',
-            'teacher_export_student'=>'0',
+            'teacher_export_student' => '0',
             'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'live_course_enabled' => '0',
-            'userinfoFields'=>array(),
-            "userinfoFieldNameArray"=>array(),
-            "copy_enabled"=>'0',
-            "picturePreview_enabled"=>'0'
+            'userinfoFields' => array(),
+            "userinfoFieldNameArray" => array(),
+            "copy_enabled" => '0',
+            "picturePreview_enabled" => '0',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -725,32 +730,37 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $courseSetting = $request->request->all();
 
-            if(!isset($courseSetting['userinfoFields']))$courseSetting['userinfoFields']=array();
-            if(!isset($courseSetting['userinfoFieldNameArray']))$courseSetting['userinfoFieldNameArray']=array();
+            if (!isset($courseSetting['userinfoFields'])) {
+                $courseSetting['userinfoFields'] = array();
+            }
+
+            if (!isset($courseSetting['userinfoFieldNameArray'])) {
+                $courseSetting['userinfoFieldNameArray'] = array();
+            }
 
             $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
-            $this->setFlashMessage('success','课程设置已保存！');
+            $this->setFlashMessage('success', '课程设置已保存！');
         }
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-        
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        if($courseSetting['userinfoFieldNameArray']){
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        if ($courseSetting['userinfoFieldNameArray']) {
             foreach ($userFields as $key => $fieldValue) {
-                if(!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldNameArray'])){
-                    $courseSetting['userinfoFieldNameArray'][]=$fieldValue['fieldName'];
+                if (!in_array($fieldValue['fieldName'], $courseSetting['userinfoFieldNameArray'])) {
+                    $courseSetting['userinfoFieldNameArray'][] = $fieldValue['fieldName'];
                 }
             }
-         
+
         }
 
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
-            'userFields'=>$userFields,
+            'userFields' => $userFields,
         ));
     }
 
@@ -768,7 +778,7 @@ class SettingController extends BaseController
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
             $this->getLogService()->info('system', 'questions_settings', "更新题库设置", $questionsSetting);
-            $this->setFlashMessage('success','题库设置已保存！');
+            $this->setFlashMessage('success', '题库设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
@@ -825,7 +835,7 @@ class SettingController extends BaseController
             'debug' => '0',
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'hls_encrypted' => '1'
+            'hls_encrypted' => '1',
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -837,11 +847,11 @@ class SettingController extends BaseController
             $this->getSettingService()->set('developer', $developerSetting);
 
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
-            $this->setFlashMessage('success','开发者已保存！');
+            $this->setFlashMessage('success', '开发者已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
-            'developerSetting' => $developerSetting
+            'developerSetting' => $developerSetting,
         ));
     }
 
@@ -856,46 +866,61 @@ class SettingController extends BaseController
         }
 
         $appCount = $this->getAppservice()->findAppCount();
-        $apps = $this->getAppservice()->findApps(0,$appCount);
-        $appsCodes = ArrayToolkit::column($apps,'code');
+        $apps = $this->getAppservice()->findApps(0, $appCount);
+        $appsCodes = ArrayToolkit::column($apps, 'code');
 
         if (!in_array($code, $appsCodes)) {
-           exit('code 填写有问题！请检查!');
+            exit('code 填写有问题！请检查!');
         }
 
         $fromVersionArray['fromVersion'] = $fromVersion;
         $versionArray['version'] = $version;
-        $this->getAppservice()->updateAppVersion($code,$fromVersionArray,$versionArray);
+        $this->getAppservice()->updateAppVersion($code, $fromVersionArray, $versionArray);
 
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
     public function userFieldsAction()
-    {   
+    {
 
-       $textCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'textField'));
-       $intCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'intField'));
-       $floatCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'floatField'));
-       $dateCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'dateField'));
-       $varcharCount=$this->getUserFieldService()->searchFieldCount(array('fieldName'=>'varcharField'));
+        $textCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'textField'));
+        $intCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'intField'));
+        $floatCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'floatField'));
+        $dateCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'dateField'));
+        $varcharCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'varcharField'));
 
-       $fields=$this->getUserFieldService()->getAllFieldsOrderBySeq();
-       for($i=0;$i<count($fields);$i++){
-           if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['fieldName']="多行文本";
-           if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['fieldName']="文本";
-           if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['fieldName']="整数";
-           if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['fieldName']="小数";
-           if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['fieldName']="日期";
-       }
+        $fields = $this->getUserFieldService()->getAllFieldsOrderBySeq();
+        for ($i = 0; $i < count($fields); $i++) {
+            if (strstr($fields[$i]['fieldName'], "textField")) {
+                $fields[$i]['fieldName'] = "多行文本";
+            }
 
-       return $this->render('TopxiaAdminBundle:System:user-fields.html.twig',array(
-            'textCount'=>$textCount,
-            'intCount'=>$intCount,
-            'floatCount'=>$floatCount,
-            'dateCount'=>$dateCount,
-            'varcharCount'=>$varcharCount,
-            'fields'=>$fields,
-        )); 
+            if (strstr($fields[$i]['fieldName'], "varcharField")) {
+                $fields[$i]['fieldName'] = "文本";
+            }
+
+            if (strstr($fields[$i]['fieldName'], "intField")) {
+                $fields[$i]['fieldName'] = "整数";
+            }
+
+            if (strstr($fields[$i]['fieldName'], "floatField")) {
+                $fields[$i]['fieldName'] = "小数";
+            }
+
+            if (strstr($fields[$i]['fieldName'], "dateField")) {
+                $fields[$i]['fieldName'] = "日期";
+            }
+
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-fields.html.twig', array(
+            'textCount' => $textCount,
+            'intCount' => $intCount,
+            'floatCount' => $floatCount,
+            'dateCount' => $dateCount,
+            'varcharCount' => $varcharCount,
+            'fields' => $fields,
+        ));
     }
 
     public function editUserFieldsAction(Request $request, $id)
@@ -906,23 +931,37 @@ class SettingController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if(strstr($field['fieldName'], "textField")) $field['fieldName']="多行文本";
-        if(strstr($field['fieldName'], "varcharField")) $field['fieldName']="文本";
-        if(strstr($field['fieldName'], "intField")) $field['fieldName']="整数";
-        if(strstr($field['fieldName'], "floatField")) $field['fieldName']="小数";
-        if(strstr($field['fieldName'], "dateField")) $field['fieldName']="日期";
+        if (strstr($field['fieldName'], "textField")) {
+            $field['fieldName'] = "多行文本";
+        }
+
+        if (strstr($field['fieldName'], "varcharField")) {
+            $field['fieldName'] = "文本";
+        }
+
+        if (strstr($field['fieldName'], "intField")) {
+            $field['fieldName'] = "整数";
+        }
+
+        if (strstr($field['fieldName'], "floatField")) {
+            $field['fieldName'] = "小数";
+        }
+
+        if (strstr($field['fieldName'], "dateField")) {
+            $field['fieldName'] = "日期";
+        }
 
         if ($request->getMethod() == 'POST') {
-            $fields=$request->request->all();
+            $fields = $request->request->all();
 
-            if(isset($fields['enabled'])){
-                $fields['enabled']=1;
-            }else{
-                $fields['enabled']=0;
+            if (isset($fields['enabled'])) {
+                $fields['enabled'] = 1;
+            } else {
+                $fields['enabled'] = 0;
             }
-            
+
             $field = $this->getUserFieldService()->updateField($id, $fields);
-            
+
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));
         }
 
@@ -945,14 +984,20 @@ class SettingController extends BaseController
 
             $courseSetting = $this->getSettingService()->get('course', array());
 
-            if(isset($auth['registerFieldNameArray'])){
+            if (isset($auth['registerFieldNameArray'])) {
                 foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                if($value==$field['fieldName']) unset( $auth['registerFieldNameArray'][$key]);
+                    if ($value == $field['fieldName']) {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+
                 }
             }
-            if(isset($courseSetting['userinfoFieldNameArray'])){
+            if (isset($courseSetting['userinfoFieldNameArray'])) {
                 foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
-                if($value==$field['fieldName']) unset( $courseSetting['userinfoFieldNameArray'][$key]);
+                    if ($value == $field['fieldName']) {
+                        unset($courseSetting['userinfoFieldNameArray'][$key]);
+                    }
+
                 }
             }
             $this->getSettingService()->set('auth', $auth);
@@ -971,40 +1016,40 @@ class SettingController extends BaseController
 
     public function addUserFieldsAction(Request $request)
     {
-        $field=$request->request->all();
-        if(isset($field['field_title']) 
-            && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信' ))){
+        $field = $request->request->all();
+        if (isset($field['field_title'])
+            && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信'))) {
             throw $this->createAccessDeniedException('请勿添加与默认字段相同的自定义字段！');
         }
 
-        $field=$this->getUserFieldService()->addUserField($field);
+        $field = $this->getUserFieldService()->addUserField($field);
 
-        if($field==false){
-           $this->setFlashMessage('danger', '已经没有可以添加的字段了!'); 
+        if ($field == false) {
+            $this->setFlashMessage('danger', '已经没有可以添加的字段了!');
         }
 
-        return $this->redirect($this->generateUrl('admin_setting_user_fields')); 
+        return $this->redirect($this->generateUrl('admin_setting_user_fields'));
     }
 
     public function consultSettingAction(Request $request)
-    { 
+    {
         $consult = $this->getSettingService()->get('consult', array());
         $default = array(
             'enabled' => 0,
             'worktime' => '9:00 - 17:00',
             'qq' => array(
-                array('name' => '','number' => ''),
-                ),
+                array('name' => '', 'number' => ''),
+            ),
             'qqgroup' => array(
-                array('name' => '','number' => ''),
-                ),
+                array('name' => '', 'number' => ''),
+            ),
             'phone' => array(
-                array('name' => '','number' => ''),
-                ),
+                array('name' => '', 'number' => ''),
+            ),
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',
-            );
+        );
 
         $consult = array_merge($default, $consult);
         if ($request->getMethod() == 'POST') {
@@ -1029,7 +1074,7 @@ class SettingController extends BaseController
         }
 
         $filename = 'webchat.' . $file->getClientOriginalExtension();
-        
+
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
@@ -1044,7 +1089,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $consult['webchatURI'],
-            'url' =>  $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
+            'url' => $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
         );
 
         return new Response(json_encode($response));
@@ -1060,7 +1105,7 @@ class SettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
-    
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');

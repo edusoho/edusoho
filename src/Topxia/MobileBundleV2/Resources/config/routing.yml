@@ -3,6 +3,10 @@ mapi_order_submit_pay_request:
     defaults: { _controller: TopxiaMobileBundleV2:MobileOrder:submitPayRequest }
     methods: [GET, POST]
 
+mapi_mobile_teacher_app:
+    pattern:  /teacherApp
+    defaults: { _controller: TopxiaMobileBundleV2:TeacherApp:index }
+
 mapi_mobile_group_app:
     pattern:  /groupApp
     defaults: { _controller: TopxiaMobileBundleV2:GroupApp:index }

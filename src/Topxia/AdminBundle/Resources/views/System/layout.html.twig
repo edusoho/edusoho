@@ -9,6 +9,11 @@
         <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置</a>
         <a href="{{ path('admin_setting_course_setting') }}" class="list-group-item {% if menu == 'operation' %}active{% endif %}">全局设置</a>
         <a href="{{ path('admin_setting_cloud') }}" class="list-group-item {% if menu == 'cloud' %}active{% endif %}">云平台设置</a>
+
+        {% if setting('storage.upload_mode') == 'cloud' %}
+        <a href="{{ url('admin_cloud_bill') }}" class="list-group-item {% if menu == 'bill' %}active{% endif %}">云账单</a>
+        {% endif %}
+
         <a href="{{ path('admin_setting_payment') }}" class="list-group-item {% if menu == 'paymentGlobal' %}active{% endif %}">支付设置</a>
         <a href="{{ path('admin_coin_settings') }}" class="list-group-item {% if menu == 'coin' %}active{% endif %}">虚拟币管理</a>
 
@@ -20,9 +25,6 @@
 
         <a href="{{ url('admin_optimize') }}" class="list-group-item {% if menu == 'optimize' %}active{% endif %}">优化和备份</a>   
 
-       {% if setting('storage.upload_mode') == 'cloud' %}
-        <a href="{{ url('admin_cloud_bill') }}" class="list-group-item {% if menu == 'bill' %}active{% endif %}">云视频账单</a>
-       {% endif %}
         <a href="{{ url('admin_operation_analysis_register',{tab:"trend",analysisDateType:"register"}) }}" class="list-group-item {% if menu == 'analysis' %}active{% endif %}">数据统计</a>
         <a href="{{ url('admin_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">系统日志</a>
 

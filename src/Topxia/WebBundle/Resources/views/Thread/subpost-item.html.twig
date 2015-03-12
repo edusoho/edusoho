@@ -1,0 +1,16 @@
+<li id="post-{{ post.id }}" class="thread-post thread-subpost media {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
+  data-author-name="{{ author.nickname }}">
+  <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
+    <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
+  </a>
+  <div class="media-body">
+    <div class="metas">
+      {% include 'TopxiaWebBundle:Thread:post-manage-menu.html.twig' %}
+      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+      <span class="bullet">•</span>
+      <span class="text-muted">{{post.createdTime|smart_time}} </span>
+    </div>
+    <div class="thread-post-content">{{ post.content|at(post.ats)|raw }}</div>
+    {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
+  </div>
+</li>

@@ -1,3 +1,10 @@
+<style>
+.classroomPicture{
+
+  width: 24px;
+  height: 24px;
+}
+</style>
 {% set mode = mode|default('default') %}
 <ul class="course-grids">
   {% for course in courses %}
@@ -87,6 +94,20 @@
 
         {% if mode in ['learn'] %}
           <div class="learn-status">
+
+            {% if is_plugin_installed('Classroom') and setting('classroom.enabled')|default(0) %}
+              <div class="mbm"> 
+              {% if course.classroomCount > 0 %}
+                {% set classroom = course.classroom %}
+                <img class="classroomPicture" src="{{ default_path('classroomPicture',classroom.smallPicture, '') }}"> <span class="text-muted">{{classroom.title}}
+                {% if course.classroomCount > 1 %}
+                等
+                {% endif %}</span>
+              {% endif %}
+              </div>
+            {% endif %}
+
+
             {% if course.memberIsLearned %}
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: 100%;"></div>

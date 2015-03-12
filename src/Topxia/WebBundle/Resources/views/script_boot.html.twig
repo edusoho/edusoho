@@ -113,6 +113,9 @@
   {% if script_arguments is defined %}
     app.arguments = {{ script_arguments|json_encode|raw }};
   {% endif %}
+  
+  app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+
   app.mainScript = '{{ script_main }}';
 </script>
 {% if setting('cdn.enabled') %} {% set cdnUrl = setting('cdn.url') %} {% else %} {% set cdnUrl = '' %} {% endif %}

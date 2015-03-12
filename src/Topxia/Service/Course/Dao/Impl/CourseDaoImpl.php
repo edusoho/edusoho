@@ -36,6 +36,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByCourseIds(array $ids, $start, $limit)
+    {
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function findCoursesByLikeTitle($title)
     {
         if(empty($title)){
@@ -185,6 +195,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
+            ->andWhere('categoryId = :categoryId')
             ->andWhere('smallPicture = :smallPicture');
 
         if (isset($conditions['categoryIds'])) {
@@ -212,6 +223,19 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 $vipLevelIds = join(',', $vipLevelIds);
                 $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
             }
+        }
+
+        if (isset($conditions['courseIds'])) {
+
+            $courseIds=$conditions['courseIds'];
+
+            if(!empty($courseIds)){
+
+                $courseIds = join(',', $courseIds);
+                
+                $builder->andStaticWhere("id NOT IN ($courseIds)");
+            }
+
         }
 
         return $builder;

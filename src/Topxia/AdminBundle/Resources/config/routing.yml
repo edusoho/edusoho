@@ -339,17 +339,17 @@ admin_order_detail:
     defaults: { _controller: TopxiaAdminBundle:Order:detail }
 
 admin_order_refunds:
-    pattern: /order/refunds
-    defaults: { _controller: TopxiaAdminBundle:CourseOrder:refunds }
+    pattern: /order/refunds/{targetType}
+    defaults: { _controller: TopxiaAdminBundle:OrderRefund:refunds }
 
 admin_order_cancel_refund:
     pattern: /order/{id}/cancel_refund
-    defaults: { _controller: TopxiaAdminBundle:CourseOrder:cancelRefund }
+    defaults: { _controller: TopxiaAdminBundle:OrderRefund:cancelRefund }
     methods: [POST]
 
 admin_order_audit_refund:
     pattern: /order/{id}/audit_refund
-    defaults: { _controller: TopxiaAdminBundle:CourseOrder:auditRefund }
+    defaults: { _controller: TopxiaAdminBundle:OrderRefund:auditRefund }
 
 admin_setting_site:
     pattern:  /setting/site
@@ -1086,3 +1086,23 @@ admin_coin_model_save:
     path:     /coin/model/save
     defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }
 
+admin_edu_cloud:
+    pattern:  /edu_cloud
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
+
+admin_edu_cloud_sms:
+    pattern:  /edu_cloud/sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
+
+admin_edu_cloud_apply_for_sms:
+    pattern:  /edu_cloud/apply_for_sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
+
+admin_edu_cloud_sms_bill:
+    pattern:  /edu_cloud/sms_bill
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
+
+admin_edu_cloud_sms_no_message:
+    pattern: /edu_cloud/admin_edu_cloud_sms_no_message
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
+    
