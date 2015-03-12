@@ -54,10 +54,11 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
     public function addGroup($user,$group)
     {   
-        $title=trim($group['title']);
-        if (empty($title)) {
+        if (!isset($group['title']) or empty($group['title'])) {
             throw $this->createServiceException("小组名称不能为空！");
         }
+        $title=trim($group['title']);
+
         if(isset($group['about'])){
             $group['about']=$this->purifyHtml($group['about']);
         }

@@ -106,6 +106,25 @@
         <div class="pull-left">
           {% if course.status != 'published' or course.studentNum >= course.maxStudentNum %}
           {% else %}
+
+        {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) and course.singleBuy == 0 %}
+        <br>
+        <div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
+          <span>
+          本课程已加入到
+          {% for classroom in classrooms%}
+          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
+          {{classroom.title}}
+                     </a>
+          {% endfor %}
+          </span></br>
+          <span style="margin-left:16px;font-size:13px;">
+          请进入相应{{ setting('classroom.name')|default("班级") }}加入学习
+          </span>
+        </div>
+      {% endif %}
+
+            {% if course.singleBuy == 1 %}
             <a class="btn btn-primary btn-fat" id="course-buy-btn" 
             {% if setting("course.buy_fill_userinfo")|default(false) %}
             href="#modal" 
@@ -115,12 +134,13 @@
             href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
             {% endif %}
             >
-            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
-            {% else %}
-              {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
-            {% endif %}
-            
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>                
+              {% else %}
+                    {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+              {% endif %}
+            </a>
+
             {% if courseMemberLevel %}
               {% if checkMemberLevelResult == 'not_login' %}
                 <a href="{{ path('login') }}" class="btn btn-warning mll">{{ courseMemberLevel.name }}，免费学</a>  
@@ -131,10 +151,11 @@
               {% elseif checkMemberLevelResult == 'ok' %}
                 <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn btn-warning mll become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
               {% endif %}
-
+            {% endif %}
             {% endif %}
           {% endif %}
         </div>
+
         <div class="pull-right">
           <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
             免费体验
@@ -153,6 +174,23 @@
           </a>
         </div>
       </div>
+
+      {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) and course.singleBuy == 1 %}
+        <br>
+        <div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
+          <span>
+          本课程已加入到
+          {% for classroom in classrooms%}
+          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
+          {{classroom.title}}
+                     </a>
+          {% endfor %}
+          </span></br>
+          <span style="margin-left:16px;font-size:13px;">
+          请进入相应{{ setting('classroom.name')|default("班级") }}加入学习
+          </span>
+        </div>
+      {% endif %}
 
     </div>
   </div>

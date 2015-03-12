@@ -92,7 +92,6 @@ abstract class BaseController extends Controller
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
     }
 
-
     protected function setFlashMessage ($level, $message)
     {
         $this->get('session')->getFlashBag()->add($level, $message);

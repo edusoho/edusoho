@@ -1,0 +1,17 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      <a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> 在话题 <a href="{{ path('thread_post_jump', {threadId:data.thread.id, postId:data.id}) }}" target="_blank">{{ data.thread.title }}</a> 回复了你。
+      <blockquote>
+        {{ data.content }}
+      </blockquote>
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime | date('Y-n-d H:i:s') }}
+    </div>
+  </div>
+</li>

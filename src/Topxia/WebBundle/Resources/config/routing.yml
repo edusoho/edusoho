@@ -220,6 +220,14 @@ course_create:
     pattern:  /course/create
     defaults: { _controller: TopxiaWebBundle:Course:create }
 
+course_select:
+    pattern:  /course/select
+    defaults: { _controller: TopxiaWebBundle:Course:select }
+
+course_search:
+    pattern:  /course/search
+    defaults: { _controller: TopxiaWebBundle:Course:search }
+
 course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
@@ -253,13 +261,13 @@ course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
 
-course_order_refund:
-    pattern:  /course/{id}/order/refund
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:refund }
+order_refund:
+    pattern:  /target/{id}/order/refund
+    defaults: { _controller: TopxiaWebBundle:OrderRefund:refund }
 
-course_order_cancel_refund:
-    pattern:  /course/{id}/order/cancel_refund
-    defaults: { _controller: TopxiaWebBundle:CourseOrder:cancelRefund }
+order_cancel_refund:
+    pattern:  /target/{id}/order/cancel_refund
+    defaults: { _controller: TopxiaWebBundle:OrderRefund:cancelRefund }
     methods: [POST]
 
 course_set_expiryday:
@@ -899,7 +907,7 @@ settings_find_pay_password:
 
 settings_update_pay_password:
     pattern:  /settings/update_pay_password 
-    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions }
+    defaults: { _controller: TopxiaWebBundle:Settings:updatePayPassword }
 
 settings_security_questions:
     pattern:  /settings/security_questions
@@ -1022,6 +1030,10 @@ my_teaching_courses:
 my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
+
+my_teaching_classrooms:
+    pattern: /my/teaching/classrooms
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }
 
 my_live_courses_learning:
     pattern: /my/livecourses/learing
@@ -1155,6 +1167,14 @@ user_unfollow:
 user_remind_counter:
     pattern:  /user_remind_counter
     defaults: { _controller: TopxiaWebBundle:User:remindCounter }
+
+user_teaching_classrooms: 
+    pattern:  /user/{id}/teaching/classrooms
+    defaults: { _controller: TopxiaWebBundle:User:teaching }
+
+user_learning_classrooms: 
+    pattern:  /user/{id}/learning/classrooms
+    defaults: { _controller: TopxiaWebBundle:User:learning }
 
 message_create:
     pattern: /message/create/{toId}
@@ -1506,6 +1526,62 @@ course_buy_modify_user_info:
     pattern: /course/buy/modify_user_info
     defaults: { _controller: TopxiaWebBundle:CourseOrder:modifyUserInfo }
 
+thread_jump:
+    pattern:  /thread/{threadId}/jump
+    defaults: { _controller: TopxiaWebBundle:Thread:jump }
+
+thread_post_jump:
+    pattern:  /thread/{threadId}/post/{postId}/jump
+    defaults: { _controller: TopxiaWebBundle:Thread:postJump }
+
+thread_post:
+    pattern:  /thread/{threadId}/post
+    defaults: { _controller: TopxiaWebBundle:Thread:post }
+
+thread_post_reply:
+    pattern:  /thread/{threadId}/post/{postId}/
+    defaults: { _controller: TopxiaWebBundle:Thread:postReply }
+    methods: [POST]
+
+thread_post_subposts:
+    pattern:  /thread/{threadId}/post/{postId}/subposts
+    defaults: { _controller: TopxiaWebBundle:Thread:subposts }
+
+thread_post_delete:
+    pattern:  /thread/{threadId}/post/{postId}/delete
+    defaults: { _controller: TopxiaWebBundle:Thread:postDelete }
+    methods: [POST]
+
+thread_post_up:
+    pattern:  /thread/{threadId}/post/{postId}/up
+    defaults: { _controller: TopxiaWebBundle:Thread:postUp }
+    methods: [POST]
+
+thread_delete:
+    pattern: /thread/{threadId}/delete
+    defaults: { _controller: TopxiaWebBundle:Thread:delete }
+    methods: [POST]
+
+thread_set_sticky:
+    pattern: /thread/{threadId}/set_sticky
+    defaults: { _controller: TopxiaWebBundle:Thread:setSticky }
+    methods: [POST]
+
+thread_cancel_sticky:
+    pattern: /thread/{threadId}/cancel_sticky
+    defaults: { _controller: TopxiaWebBundle:Thread:cancelSticky }
+    methods: [POST]
+
+thread_set_nice:
+    pattern: /thread/{threadId}/set_nice
+    defaults: { _controller: TopxiaWebBundle:Thread:setNice }
+    methods: [POST]
+
+thread_cancel_nice:
+    pattern: /thread/{threadId}/cancel_nice
+    defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
+    methods: [POST]
+
 #占位
 vip:
     pattern: /vip/
@@ -1518,3 +1594,29 @@ vip_renew:
 
 vip_upgrade:
     pattern: /vip/upgrade
+
+edu_cloud_sms_send:
+    pattern:  /edu_cloud/sms_send
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsSend }
+    methods: [POST]
+
+edu_cloud_sms_check:
+    pattern:  /edu_cloud/sms_check/{type}
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
+
+settings_bind_mobile:
+    pattern:  /settings/bind_mobile
+    defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
+
+password_reset_by_sms:
+    pattern:  /password/reset/by_sms
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
+    methods: [POST]
+
+settings_find_pay_password_by_sms:
+    pattern:  /settings/find_pay_password_by_sms 
+    defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
+
+order_pay_sms_verification:
+    pattern:  /order/sms_verification
+    defaults: { _controller: TopxiaWebBundle:Order:smsVerification }

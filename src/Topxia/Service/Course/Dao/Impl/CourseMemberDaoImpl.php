@@ -30,6 +30,12 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ? : null;
     }
 
+    public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND userId = ? AND isLearned = 1";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $userId));
+    }
+
     public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $this->filterStartLimit($start, $limit);
@@ -63,6 +69,27 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             $sql.= " AND c.status = 'published' ";
         }
         return $this->getConnection()->fetchColumn($sql,array($userId, $role));
+    }
+
+    public function findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
+        $sql.= " AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?";
+
+        return $this->getConnection()->fetchColumn($sql,array($userId, $type, $isLearned, $role));
+    }
+
+    public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+
+        $sql  = "SELECT m.* FROM {$this->table} m ";
+        $sql.= ' JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
+        $sql .= " AND c.type =  ? AND m.courseId = c.id AND m.isLearned = ? AND m.role = ?";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($userId, $type, $isLearned, $role));
     }
 
     public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true)
@@ -187,6 +214,13 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
         return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    {
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
+        return $this->getConnection()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
     private function _createSearchQueryBuilder($conditions)

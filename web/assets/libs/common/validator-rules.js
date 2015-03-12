@@ -256,6 +256,14 @@ define(function(require, exports, module) {
                 }
                 return true;
             },"有效期必须大于等于当前日期"
+        ],
+        [
+            'fixedLength',
+            function(options) {
+                var element = options.element;
+                var l = element.val().length;
+                return l == Number(options.len);
+            },"{{display}}的长度必须等于{{len}}"
         ]        
     ];
 
