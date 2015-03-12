@@ -1,0 +1,18 @@
+{% extends 'TopxiaMobileBundleV2::article.layout.html.twig' %}
+{% block html %}<html>{% endblock %}
+{% block title %}资讯{% endblock %}
+
+{% block content %}
+	<div ng-view></div>
+{% block bottom_scripts %}
+
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-route.min.js') }}"></script>
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-sanitize.min.js') }}"></script>
+
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/zepto.js') }}"></script>
+  <script src="{{ asset('bundles/topxiamobilebundlev2/js/forzen/frozen.js') }}"></script>
+    {{ parent() }}
+{% endblock %}
+
+{% endblock %}
