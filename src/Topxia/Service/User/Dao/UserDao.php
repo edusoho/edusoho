@@ -10,6 +10,8 @@ interface UserDao
 
 	public function findUserByNickname($nickname);
 
+	public function findUsersByNicknames(array $nicknames);
+
 	public function findUsersByIds(array $ids);
 
 	public function searchUsers($conditions, $orderBy, $start, $limit);

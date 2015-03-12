@@ -742,6 +742,7 @@ body {
 
 .thread-body img,.thread-post-content img{
 	max-width: 100%;
+	height: auto;
 }
 
 .thread-footer {
@@ -842,6 +843,141 @@ body {
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+/**
+ * <Thread模块样式>
+ */
+
+.thread-list-default {
+
+}
+
+
+
+.thread-show {
+
+}
+
+.thread-show .thread-breadcrumb {
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+
+
+
+.thread-show .thread-title {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 18px;
+	color: inherit;
+	font-weight: bold;
+	line-height: 1;
+	display: inline;
+}
+
+.thread-show .thread-metas {
+	margin-top: 6px;
+}
+
+.thread-post-list {
+
+}
+
+.thread-post-list .metas {
+	font-size: 13px;
+}
+
+.thread-post-list .metas .nickname {
+	font-weight: bold;
+}
+
+.thread-post-list .user-avatar img {
+	width: 48px;
+	height: 48px;
+}
+
+.thread-post-list .thread-post-interaction {
+	font-size: 13px;
+}
+
+.thread-post-list .thread-post-interaction .interaction {
+	margin-right: 10px;
+	/*color: #999;*/
+}
+
+.thread-subpost-list .user-avatar img {
+	width: 32px;
+	height: 32px;
+}
+
+.thread-subpost-container {
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #fdfdfd;
+	border-radius: 3px;
+	border: 1px solid #fdfdfd;
+}
+
+.thread-subpost-container .pagination {
+	margin: 15px 0 10px;
+}
+
+.thread-subpost-container .pagination > li > a,
+.thread-subpost-container .pagination > li > span {
+  padding: 1px 6px;
+  font-size: 12px;
+}
+
+.thread-subpost-morebar {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 13px;
+}
+
+.thread-subpost-form {
+	margin-top: 10px;
+}
+
+.thread-subpost-list {
+
+}
+
+.thread-subpost-list .thread-subpost {
+	margin-top: 10px;
+	padding-bottom: 10px;
+	border-color: #f6f6f6;
+}
+
+.thread-subpost-list .thread-subpost:first-child {
+	margin-top: 0px;
+}
+
+.thread-subpost-list .thread-subpost:last-child {
+	padding-bottom: 0px;
+
+}
+
+
+
+.thread-post-list .thread-post .thread-post-manage-dropdown {
+	visibility: hidden;
+}
+
+.thread-post-list .thread-post:hover .thread-post-manage-dropdown {
+	visibility: visible;
+}
+
+.thread-post-list .thread-post:hover .thread-subpost .thread-post-manage-dropdown {
+	visibility: hidden;
+}
+
+.thread-post-list .thread-subpost:hover .thread-post-manage-dropdown {
+	visibility: visible !important;
+}
+
+/**
+ * </Thread模块样式>
+ */
 
 #lesson-question-plugin-form {
 	padding: 15px 10px 0 10px;
@@ -2344,6 +2480,8 @@ body {
 	margin: 8px 1%;
 	font-size: 12px;
 	vertical-align:top;
+	height: 80px;
+	overflow: hidden;
 }
 
 .user-grids li p {
@@ -2461,6 +2599,13 @@ body {
 .notification-list .notification-footer {
 	font-size: 12px;
 	color: #999;
+}
+
+.notification-list blockquote {
+	font-size: 13px;
+	padding: 5px 10px;
+	margin: 5px 0;
+	color: #666;
 }
 
 .notebook-list .media {
@@ -2948,6 +3093,10 @@ body {
 
 .course-wide-list .course-body {
 	margin: 15px 15px 0px 245px;
+}
+
+.courses-selected .course-body {
+	margin: 15px 15px 0px 300px;
 }
 
 @media (max-width: 600px) {
@@ -4715,6 +4864,7 @@ a.homework-essay-textarea-pack-up{
 .order-item .order-item-detail{
 	padding: 0px 56px 17px 56px;
 }
+
 .order-item .coin-detail {
 	margin-left: 15px;
 	font-size: 14px;
@@ -4855,3 +5005,10 @@ a.homework-essay-textarea-pack-up{
 	display:inline-block;
 	width: 25px;
 }
+
+.text-success-large {
+	color: #449d44;
+	font-size: 22px;
+}
+
+
