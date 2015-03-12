@@ -31,8 +31,10 @@ class UserController extends BaseController
         );
 
         if(!empty($fields)){
-            $conditions =$fields;
+            $fields = array();
         }
+
+        $conditions = array_merge($conditions, $fields);
 
         $paginator = new Paginator(
             $this->get('request'),
