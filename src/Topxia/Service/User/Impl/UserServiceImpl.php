@@ -233,6 +233,24 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function changeMobile($id, $mobile)
+    {
+        $user = $this->getUser($id);
+        if (empty($user) or empty($mobile)) {
+            throw $this->createServiceException('参数不正确，更改失败。');
+        }
+
+        $fields = array(
+            'verifiedMobile' => $mobile
+        );
+
+        $this->getUserDao()->updateUser($id, $fields);
+
+        $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
+
+        return true;
+    }
+
     public function getUserSecureQuestionsByUserId($userId)
     {
         return $this->getUserSecureQuestionDao()->getUserSecureQuestionsByUserId($userId);
@@ -302,6 +320,11 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = array();
         $user['email'] = $registration['email'];
+        if (isset($registration['verifiedMobile'])) {
+            $user['verifiedMobile'] = $registration['verifiedMobile'];
+        }else{
+            $user['verifiedMobile'] = '';
+        }
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
@@ -975,6 +998,23 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }
         return $dayUserTotals;
+    }
+
+    public function parseAts($text)
+    {
+        preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $text, $matches);
+
+        $users = $this->getUserDao()->findUsersByNicknames(array_unique($matches[1]));
+        if (empty($users)) {
+            return array();
+        }
+
+        $ats = array();
+        foreach ($users as $user) {
+            $ats[$user['nickname']] = $user['id'];
+        }
+
+        return $ats;
     }
 
     private function getFriendDao()

@@ -54,6 +54,23 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="course_share_content">班级分享内容</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="classroomShareContent" name="classroomShareContent" class="form-control" rows="5">{{ defaultSetting.classroomShareContent }}</textarea>
+          <div class="help-block">
+            {% verbatim %}
+            <div>变量说明：</div>
+            <ul>
+              <li>{{classroom}} 为班级名称</li>
+            </ul>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+
     </fieldset>
   </div>
   <div class="form-group">

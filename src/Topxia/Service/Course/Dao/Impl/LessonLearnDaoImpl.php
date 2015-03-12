@@ -117,7 +117,14 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
     private function _createSearchQueryBuilder($conditions)
     {
-        $builder=$this->createDynamicQueryBuilder($conditions)
+        if (isset($conditions['targetType'])) {
+            $builder=$this->createDynamicQueryBuilder($conditions)
+            ->from($this->table,$this->table)
+            ->andWhere("status = :status")
+            ->andWhere("finishedTime >= :startTime")
+            ->andWhere("finishedTime <= :endTime");
+        }else{
+             $builder=$this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)
             ->andWhere("status = :status")
             ->andWhere("userId = :userId")
@@ -125,6 +132,21 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
             ->andWhere("courseId = :courseId")
             ->andWhere("finishedTime >= :startTime")
             ->andWhere("finishedTime <= :endTime");
+        }
+
+        if (isset($conditions['courseIds'])) {
+            $courseIds = array();
+            foreach ($conditions['courseIds'] as $courseId) {
+                if (ctype_digit($courseId)) {
+                    $courseIds[] = $courseId;
+                }
+            }
+            if ($courseIds) {
+                $courseIds = join(',', $courseIds);
+                $builder->andStaticWhere("courseId IN ($courseIds)");
+            }
+        }
+
         return $builder;
     }
 

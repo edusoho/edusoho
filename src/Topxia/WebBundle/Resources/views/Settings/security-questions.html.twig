@@ -11,12 +11,9 @@
     {% endblock %}
     {% block body %}
 
-
-
     {{ web_macro.flash_messages() }} 
 
   {%  if not hasSecurityQuestions  %}
-
 
     <ul class="breadcrumb">
       <li><a href="{{ path('settings_security') }}">安全设置</a></li>
