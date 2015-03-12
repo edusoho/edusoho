@@ -905,7 +905,7 @@ class CourseController extends BaseController
 	        	
 	        	$course=$this->getCourseService()->getCourse($value);
 	        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
-	        	if($course && ($course['useInClassroom'] =="more" || count($classrooms) == 0)){
+	        	if($course && count($classrooms)){
 	        		unset($courseIds[$key]);
 	        	}
 
