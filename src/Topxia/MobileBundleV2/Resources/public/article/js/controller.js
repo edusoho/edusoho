@@ -35,8 +35,24 @@ function ListController($scope, $http)
   	}
 
   	queryArticelList();
-}
 
+  	$scope.showCategory = function(){
+  		el2=Zepto.tips({
+	                content:'温馨提示内容',
+	                stayTime:2000,
+	                type:"info"
+	            })
+  	};
+  	var menu = {
+	      "name" : "分类",
+	      "icon" : "lesson_menu_list",
+	      "action" : "showCategory()",
+	      "item" : []
+	  };
+
+	  navigator.cordovaUtil.createMenu(menu);
+	  console.log("createMenu");
+}
 
 function DetailController($scope, $http, $routeParams, $sce)
 {
