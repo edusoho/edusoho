@@ -950,17 +950,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getProfileDao()->dropFieldData($fieldName);
     }
 
-    public function getUserCountByApprovalStatus($approvalStatus)
-    {
-        return $this->getUserDao()->searchUserCount(array('approvalStatus' => $approvalStatus));
-    }
-
-    public function getUsersByApprovalStatus($approvalStatus, $start, $limit)
-    {
-        return $this->getUserDao()->searchUsers(array('approvalStatus' => $approvalStatus), 
-            array('approvalTime', 'DESC'), $start, $limit);
-    }
-
     private function getUserApprovalDao()
     {
         return $this->createDao("User.UserApprovalDao");
