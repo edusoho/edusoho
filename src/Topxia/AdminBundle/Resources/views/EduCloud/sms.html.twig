@@ -84,7 +84,7 @@
 				      		<div class="col-md-5 controls">
 				        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
 				        		<p class="help-block"></p>
-				        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此短信30分钟内有效”</p>
+				        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
 				      		</div>
 				      		<div class="col-md-2">
 				      			<span class="btn btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
@@ -100,7 +100,7 @@
 				      		<div class="col-md-5 controls">
 				        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
 				        		<p class="help-block"></p>
-				        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此短信30分钟内有效”</p>
+				        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
 				      		</div>
 			    		</div>
 			    	{% endif %}
@@ -118,7 +118,7 @@
 									<table class="table table-striped order-table">
 									      <tbody>
 									      	<tr> 
-									      		<th style="text-align: center;" width="30%">短信内容</th><td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此短信30分钟内有效</td> 
+									      		<th style="text-align: center;" width="30%">短信内容</th><td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效</td> 
 									      	</tr>
 									      	<tr> 
 									      		<th style="text-align: center;" width="30%">审核时间</th>
