@@ -266,7 +266,8 @@ class SettingsController extends BaseController
 		$hasPayPassword = strlen($user['payPassword']) > 0;
 
 		if ($hasPayPassword){
-			throw new \RuntimeException('用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+			$this->setFlashMessage('danger', '用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+			return $this->redirect($this->generateUrl('settings_reset_pay_password'));
 		}
 
 		$form = $this->createFormBuilder()
