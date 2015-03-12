@@ -23,7 +23,7 @@ class BaseProcessor {
         return $processorDelegator;
     }
     protected function getParam($name, $default = null) {
-        $result = $this->request->request->get($name, $default);
+        $result = $this->request->get($name, $default);
         return $result;
     }
 

@@ -107,6 +107,9 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     private function _createSearchQueryBuilder($conditions)
     {
+        if(isset($conditions["title"])) {
+            $conditions["title"] = '%' . $conditions["title"] . "%";
+        }
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_order')
             ->andWhere('sn = :sn')

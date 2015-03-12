@@ -19,7 +19,7 @@
   <div class="col-md-12">
     <div class="mtl alert alert-warning">
       您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
-      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('course_order_cancel_refund', {id:course.id}) }}">取消退款，继续学习！</button>
+      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:course.id, targetType:"course"}) }}">取消退款，继续学习！</button>
     </div>
   </div>
 </div>
@@ -86,6 +86,7 @@
 				<div class="pull-left">
 					{% if course.status != 'published' %}
 					{% else %}
+					{% if course.singleBuy == 1 %}
 						<a class="btn btn-primary btn-fat" id="course-buy-btn" 
 						{% if setting("course.buy_fill_userinfo")|default(false) %}
 						href="#modal" 
@@ -96,7 +97,7 @@
 						{% endif %}
 						 >{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
 						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
-						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>{% endif %}
 
 						{% if courseMemberLevel %}
 							{% if checkMemberLevelResult == 'not_login' %}
@@ -112,7 +113,7 @@
 						{% endif %}
 					{% endif %}
 				</div>
-				
+
 				<div class="pull-right ">
 
 					<a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
@@ -134,6 +135,23 @@
 				</div><div class="share pull-right clearfix"  data-bdText="{{courseShareContent}}"></div>
 			</div>
 
+			  {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) %}
+			  <br>
+				<div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
+					<span>
+					本课程已加入到
+					{% for classroom in classrooms%}
+					<a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
+					{{classroom.title}}
+				             </a>
+					{% endfor %}
+					</span></br>
+					<span style="margin-left:16px;font-size:13px;">
+					请进入相应{{ setting('classroom.name')|default("班级") }}加入学习
+					</span>
+				</div>
+			{% endif %}
+		
 		</div>
 	</div>
 
@@ -164,6 +182,7 @@
 							<span class="badge">{{ course.ratingNum }}</span>
 						</a>
 					</li>
+				{% if course.singleBuy == 1 %}
 					<li class="pull-right" style="display:none;" >
 					<div>
 						<a class="btn btn-primary nav-course-buy-btn" id="course-buy-btn" 
@@ -176,9 +195,10 @@
 						{% endif %}
 						>{% if ((setting("coin.price_type")|default("RMB") == "RMB" and course.price > 0)
 						or (setting("coin.price_type")|default("RMB") == "Coin" and course.coinPrice > 0))
-						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+						 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a> 
 					</div>
 					</li>
+				{% endif %}
 				</ul>
 			</div>
 
