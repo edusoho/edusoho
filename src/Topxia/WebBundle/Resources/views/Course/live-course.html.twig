@@ -159,13 +159,10 @@
         <br>
         <div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
           <span>
-          本课程已加入到
+          本课程已加入到{{ setting('classroom.name',"班级") }}
           {% for classroom in classrooms%}
-          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
-          {{classroom.title}}
-          </a>
+          "<a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>{{classroom.title}}</a>"
           {% endfor %}
-          {{ setting('classroom.name',"班级") }}
           </span>
         </div>
       {% endif %}
