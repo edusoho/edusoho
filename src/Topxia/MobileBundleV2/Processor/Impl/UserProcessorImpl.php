@@ -212,9 +212,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             "notification"=>$notification
             ))->getContent();
 
-        $message = preg_replace_callback('/<[\\/]?li[^>]*>/', function($matches) {
-            return "";
+        $message = preg_replace_callback('/<div class=\"([\\w-]+)\">([^>]*)<\/div>/', function($matches) {
+            $content = $matches[2];
+            $className = $matches[1];
+            if ($className == "notification-footer") {
+                return "<br><br><font color=#CFCFCF><fontsize>" . $content . "</fontsize></font>";
+            }
+            
         }, $message);
+
+        $message = str_replace("div", "span", $message);
         return $message;
     }
 
@@ -228,8 +235,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
-        $user['following'] = $this->controller->getUserService()->findUserFollowingCount($userId);
-        $user['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         return $this->controller->filterUser($user);
     }
 
@@ -328,13 +333,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $site = $this->controller->getSettingService()->get('site', array());
 
+        if($user != null){
+            $userProfile = $this->controller->getUserService()->getUserProfile($token['userId']);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+        }
+
         $result = array(
             'token' => empty($token) ? '' : $token['token'],
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version)
         );
-        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         $this->log("user_login", "用户二维码登录",  array(
                 "userToken" => $token)
             );
@@ -357,14 +366,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         
         $token = $this->controller->createToken($user, $this->request);
+
+        $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
+        $userProfile = $this->filterUserProfile($userProfile);
+        $user = array_merge($user, $userProfile);
         
         $result = array(
             'token' => $token,
             'user' => $this->controller->filterUser($user)
         );
-
-        $result['user']['following'] = $this->controller->getUserService()->findUserFollowingCount($user['id']);
-        $result['user']['follower'] = $this->controller->getUserService()->findUserFollowerCount($user['id']);
         
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
@@ -396,15 +406,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('userId', "userId参数错误");
         }
         $followings = $this->controller->getUserService()->findUserFollowing($userId, $start, $limit);
+        $followIds = ArrayToolkit::column($followings, 'id');
         $result = array();
         $index = 0;
-        foreach ($followings as $key => $following) {
-            $following['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['smallAvatar'], 'course-large.png', true);
-            $following['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['mediumAvatar'], 'course-large.png', true);
-            $following['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($following['largeAvatar'], 'course-large.png', true);
-            $following['following'] = $this->controller->getUserService()->findUserFollowingCount($following['id']);
-            $following['follower'] = $this->controller->getUserService()->findUserFollowerCount($following['id']);
-            $result[$index++] = $following;
+        foreach ($followIds as $followingId) {
+            $user = $this->controller->getUserService()->getUser($followingId);
+            $userProfile = $this->controller->getUserService()->getUserProfile($followingId);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+            $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
     }
@@ -417,15 +427,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('userId', "userId参数错误");
         }
         $followers = $this->controller->getUserService()->findUserFollowers($userId, $start, $limit);
-        $result = array();
+        $followIds = ArrayToolkit::column($followers, 'id');
         $index = 0;
-        foreach ($followers as $key => $follower) {
-            $follower['smallAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['smallAvatar'], 'course-large.png', true);
-            $follower['mediumAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['mediumAvatar'], 'course-large.png', true);
-            $follower['largeAvatar'] = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($follower['largeAvatar'], 'course-large.png', true);
-            $follower['following'] = $this->controller->getUserService()->findUserFollowingCount($follower['id']);
-            $follower['follower'] = $this->controller->getUserService()->findUserFollowerCount($follower['id']);
-            $result[$index++] = $follower;
+        foreach ($followIds as $followerId) {
+            $user = $this->controller->getUserService()->getUser($followerId);
+            $userProfile = $this->controller->getUserService()->getUserProfile($followerId);
+            $userProfile = $this->filterUserProfile($userProfile);
+            $user = array_merge($user, $userProfile);
+            $result[$index++] = $this->controller->filterUser($user);
         }
         return $result;
     }
@@ -494,25 +503,33 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'userId' => $user['id'],
             'type' => 'question'
         );
-
         $total = $this->controller->getThreadService()->searchThreadCount($conditions);
-
         $threads = $this->controller->getThreadService()->searchThreads(
             $conditions,
             'createdNotStick',
             0,
             $total
         );
-
         $courses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-
         $conditions['courseIds'] = ArrayToolkit::column($courses,'id');
-
-        //问答数量
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        $conditions['type'] = 'discussion';
-        //话题数量
+        $conditions = array(
+            'userId' => $user['id'],
+            'type' => 'discussion'
+        );
+        $totalDiscussion = $this->controller->getThreadService()->searchThreadCount($conditions);
+        $discussion = $this->controller->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            0,
+            $totalDiscussion
+        );
+
+        $discussionCourses = $this->controller->getCourseService()->findCoursesByIds(ArrayToolkit::column($discussion, 'courseId'));
+
+        $conditions['courseIds'] = ArrayToolkit::column($discussionCourses,'id');
+
         $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
         $conditions = array(
@@ -531,7 +548,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         settype($noteSum, "string");
 
-        //考试数量
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
         return array('thread' => $threadSum,
@@ -543,13 +559,33 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function getSchoolRoom(){
         $user = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $result = array(array('title' => '在学课程','data' => null),
+            return $result = array(
+                array('title' => '在学直播','data' => null),
+                array('title' => '在学课程','data' => null),
                 array('title' => '问答','data' => null),
                 array('title' => '讨论','data' => null),
                 array('title' => '笔记','data' => null),
                 array('title' => '私信','data' => null));
         }
         $index = 0;
+        $dataLiveCourse = null;
+        $liveCourse = $this->controller->filterOneLiveCourseByDESC($user);
+        if(sizeof($liveCourse) == 0){
+            $dataLiveCourse = null;
+        }else{
+            $liveCourse = reset($liveCourse);
+            $dataLiveCourse = array(
+                'content' => $liveCourse['title'],
+                'id' => $liveCourse['id'],
+                'courseId' => $liveCourse['id'],
+                'lessonId' => null,
+                'time' => $liveCourse['liveStartTime']
+                );
+        }
+        $result[$index++] = array(
+            'title' => '在学直播',
+            'data' => $dataLiveCourse
+        );
         
         $courseConditions = array(
             'userId' => $user['id']
@@ -558,11 +594,23 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'startTime',
             'DESC'
         );
-        $resultCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, 1);
-        $resultCourse     = reset($resultCourse);
-        if ($resultCourse != false) {
+        $allCourseTotal = $this->controller->getCourseService()->searchLearnCount($courseConditions);
+        $allLearnCourse     = $this->controller->getCourseService()->searchLearns($courseConditions, $sort, 0, $allCourseTotal);
+        $courseInfo = null;
+        $resultCourse = null;
+        foreach ($allLearnCourse as $key => $value) {
+            $courseInfo = $this->controller->getCourseService()->getCourse($allLearnCourse[$key]['courseId']);
+            if($courseInfo['type'] == 'live'){
+                continue;
+            }
+            else{
+                $resultCourse = $value;
+                break;
+            }
+        }
+        if ($courseInfo != null) {
             $courseInfo = $this->controller->getCourseService()->getCourse($resultCourse['courseId']);
-            //$lesson = $this->controller->getCourseService()->getCourseLesson($resultCourse['courseId'], $resultCourse['lessonId']);
+            
             $data       = array(
                 'content' => $courseInfo['title'],
                 'id' => $resultCourse['id'],
@@ -586,52 +634,57 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $learnedCourses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
         $resultLearned = $this->controller->filterCourses($learnedCourses);
         $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
-        //----问答
-        $conditions     = array(
-            'courseIds' => $courseIds,
-            'type' => 'question'
-        );
 
-        $resultThread= $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultThread = reset($resultThread);
-
-        if ($resultThread != false) {
-            $data = array(
-                'content' => $resultThread['title'],
-                'id' => $resultThread['id'],
-                'courseId' => $resultThread['courseId'],
-                'lessonId' => $resultThread['lessonId'],
-                'time' => Date('c', $resultThread['latestPostTime'])
+        $threadData = null;
+        $discussionData = null;
+        if(sizeof($courseIds) > 0){
+            $conditions     = array(
+                'courseIds' => $courseIds,
+                'type' => 'question'
             );
+
+            $resultThread = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+            
+            $resultThread = reset($resultThread);
+
+            if ($resultThread != false) {
+                $threadData = array(
+                    'content' => $resultThread['title'],
+                    'id' => $resultThread['id'],
+                    'courseId' => $resultThread['courseId'],
+                    'lessonId' => $resultThread['lessonId'],
+                    'time' => Date('c', $resultThread['latestPostTime'])
+                );
+            }
+
+            $conditions['type'] = 'discussion';
+            $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
+            $resultDiscussion   = reset($resultDiscussion);
+            
+            if ($resultDiscussion != false) {
+                $discussionData = array(
+                    'content' => $resultDiscussion['title'],
+                    'id' => $resultDiscussion['id'],
+                    'courseId' => $resultDiscussion['courseId'],
+                    'lessonId' => $resultDiscussion['lessonId'],
+                    'time' => Date('c', $resultDiscussion['latestPostTime'])
+                );
+            }else{
+                $discussionData = null;
+            }
         }
+
+        
         $result[$index++] = array(
             'title' => '问答',
-            'data' => $data
+            'data' => $threadData
         ); 
-        
-
-        //----讨论
-        $conditions['type'] = 'discussion';
-        $resultDiscussion   = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', 0, 1);
-        $resultDiscussion   = reset($resultDiscussion);
-        $data               = array();
-        if ($resultDiscussion != false) {
-            $data = array(
-                'content' => $resultDiscussion['title'],
-                'id' => $resultDiscussion['id'],
-                'courseId' => $resultDiscussion['courseId'],
-                'lessonId' => $resultDiscussion['lessonId'],
-                'time' => Date('c', $resultDiscussion['latestPostTime'])
-            );
-        }else{
-            $data = null;
-        }
+               
         $result[$index++] = array(
             'title' => '讨论',
-            'data' => $data
-        ); //讨论
+            'data' => $discussionData
+        );
 
-        //笔记
         $conditions = array(
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0
@@ -679,10 +732,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $messageConditions = array(
             'toId' => $user['id']
         );
-        $sort              = array(
-            'createTime',
-            'DESC'
-        );
+        $sort              = array();
         
         $msgCount      = $this->getMessageService()->getUserConversationCount($user['id']);
         $conversations = $this->getMessageService()->findUserConversations($user['id'], 0, $msgCount);

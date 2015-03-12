@@ -8,6 +8,7 @@ use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SmsToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -99,9 +100,9 @@ class SettingsController extends BaseController
 	public function nicknameCheckAction(Request $request)
 	{
 		$nickname = $request->query->get('value');
-		$currenUser = $this->getUserService()->getCurrentUser();
+		$currentUser = $this->getUserService()->getCurrentUser();
 
-		if ($currenUser['nickname'] == $nickname){
+		if ($currentUser['nickname'] == $nickname){
 			return $this->createJsonResponse(array('success' => true, 'message' => ''));
 		}
 
@@ -228,9 +229,6 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-
-
-
 	public function securityAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
@@ -242,16 +240,22 @@ class SettingsController extends BaseController
 		$hasPayPassword = strlen($user['payPassword']) > 0;
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
 		$hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+		$hasVerifiedMobile = (isset($user['verifiedMobile'])&&(strlen($user['verifiedMobile'])>0));
 
+		$cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
+		$showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1') 
+							&& (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
-		$progressScore = 1 + ($hasLoginPassword? 33:0 ) + ($hasPayPassword? 33:0 ) + ($hasFindPayPasswordQuestion? 33:0 );
+		$itemScore = floor(100.0/(3.0 + ($showBindMobile && $hasVerifiedMobile)?1.0:0));
+		$progressScore = 1 + ($hasLoginPassword? 25:0 ) + ($hasPayPassword? 25:0 ) + ($hasFindPayPasswordQuestion? 25:0 ) + ($hasVerifiedMobile? 25:0 );
 		if ($progressScore <= 1 ) {$progressScore = 0;}
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
 			'progressScore' => $progressScore,
 			'hasLoginPassword' => $hasLoginPassword,
 			'hasPayPassword' => $hasPayPassword,
-			'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion
+			'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
+			'hasVerifiedMobile' => $hasVerifiedMobile,
 		)); 
 	} 
 
@@ -270,7 +274,6 @@ class SettingsController extends BaseController
 			->add('newPayPassword', 'password')
 			->add('confirmPayPassword', 'password')
 			->getForm();
-
 
 		if ($request->getMethod() == 'POST') {
 			$form->bind($request);
@@ -297,7 +300,6 @@ class SettingsController extends BaseController
 	{ 
 		$user = $this->getCurrentUser(); 
 
-
 		$form = $this->createFormBuilder()
 			// ->add('currentUserLoginPassword','password')
 			->add('oldPayPassword', 'password')
@@ -305,17 +307,11 @@ class SettingsController extends BaseController
 			->add('confirmPayPassword', 'password')
 			->getForm();
 
-
 		if ($request->getMethod() == 'POST') {
 			$form->bind($request);
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 		
-				// if ( !( $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])
-				// 			&& $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
-				// {
-				// 	$this->setFlashMessage('danger', '当前用户登陆密码或者支付密码不正确，请重试！');
-				// }
 				if ( !($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) 
 				{
 					$this->setFlashMessage('danger', '支付密码不正确，请重试！');
@@ -323,7 +319,6 @@ class SettingsController extends BaseController
 				else 
 				{
 					$this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-					// $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 					$this->setFlashMessage('success', '重置支付密码成功。');
 				}
 
@@ -336,33 +331,23 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	private function findPayPasswordActionReturn($userSecureQuestions)
-	{
-		$questionNum = rand(0,2);
-		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
-		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
-			'question' => $question,
-			'questionNum' => $questionNum,
-		)); 		
-	}
 	private function setPayPasswordPage($request, $userId)
 	{
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
 		$request->request->set('token',$token);
-		return $this->forward('TopxiaWebBundle:Settings:updatePayPasswordFromEmailOrSecureQuestions', array(
+		return $this->forward('TopxiaWebBundle:Settings:updatePayPassword', array(
             'request' => $request 
         ));
 	}
 
-
-	private function  updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token)
+	private function updatePayPasswordReturn($form, $token)
 	{
         return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
 	        'form' => $form->createView(),
 	        'token' => $token?:null
         ));
 	}
-	public function updatePayPasswordFromEmailOrSecureQuestionsAction(Request $request)
+	public function updatePayPasswordAction(Request $request)
 	{
 
 		$token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token')?:$request->request->get('token'));
@@ -383,7 +368,7 @@ class SettingsController extends BaseController
 
                 if ($data['payPassword'] != $data['confirmPayPassword']){
                 	$this->setFlashMessage('danger', '两次输入的支付密码不一致。');
-			        return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
+			        return $this->updatePayPasswordReturn($form, $token);
                 }
 
                 if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])){
@@ -396,17 +381,37 @@ class SettingsController extends BaseController
             }
         }
 
-        return $this->updatePayPasswordFromEmailOrSecureQuestionsActionReturn($form, $token);
+        return $this->updatePayPasswordReturn($form, $token);
+	}
+
+	private function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
+	{
+		$questionNum = rand(0,2);
+		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password.html.twig', array( 
+			'question' => $question,
+			'questionNum' => $questionNum,
+			'hasSecurityQuestions' => $hasSecurityQuestions,
+			'hasVerifiedMobile' => $hasVerifiedMobile
+		)); 		
 	}
 
 	public function findPayPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
 		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $verifiedMobile = $user['verifiedMobile'];
+        $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
+        $canSmsFind = ($hasVerifiedMobile) && 
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
 
-		if (!$hasSecurityQuestions){
+		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
+			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
+		}
+
+		if (!$hasSecurityQuestions) {
 			$this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
 			return $this->forward('TopxiaWebBundle:Settings:securityQuestions');
 		}
@@ -421,7 +426,6 @@ class SettingsController extends BaseController
  			$isAnswerRight = $this->getUserService()->verifyInSaltOut(
                                           $answer, $userSecureQuestion['securityAnswerSalt'] , $userSecureQuestion['securityAnswer'] ); 
 
-
  			if (!$isAnswerRight){
  				$this->setFlashMessage('danger', '回答错误。');
  				return $this->findPayPasswordActionReturn($userSecureQuestions);
@@ -431,8 +435,51 @@ class SettingsController extends BaseController
  			return $this->setPayPasswordPage($request, $user['id']);
 
 		}
+		return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
+	}
 
-		return $this->findPayPasswordActionReturn($userSecureQuestions);
+	public function findPayPasswordBySmsAction(Request $request)
+	{
+		$eduCloudService = $this->getEduCloudService();
+		$scenario = "sms_forget_pay_password";
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
+        }		
+
+		$currentUser = $this->getCurrentUser();
+		
+		$userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
+        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $verifiedMobile = $currentUser['verifiedMobile'];
+        $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
+
+		if (!$hasVerifiedMobile){
+			$this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
+			return $this->redirect($this->generateUrl('settings_bind_mobile', array(
+            )));
+		}
+
+		if ($request->getMethod() == 'POST'){
+			if ($currentUser['verifiedMobile'] != $request->request->get('mobile')){
+				$this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
+				SmsToolkit::clearSmsSession($request, $scenario);
+				goto response;
+			}			
+			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+			if ($result) {
+				$this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
+ 				return $this->setPayPasswordPage($request, $currentUser['id']);
+			}else{
+				$this->setFlashMessage('danger', '验证错误。');
+			}
+			
+		}
+		response:
+		return $this->render('TopxiaWebBundle:Settings:find-pay-password-by-sms.html.twig', array(
+			'hasSecurityQuestions' => $hasSecurityQuestions,
+			'hasVerifiedMobile' => $hasVerifiedMobile,
+			'verifiedMobile' => $verifiedMobile
+		));
 	}
 
 	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
@@ -443,7 +490,6 @@ class SettingsController extends BaseController
 			$question2 = $userSecureQuestions[1]['securityQuestionCode'];
 			$question3 = $userSecureQuestions[2]['securityQuestionCode'];
 		}
-
 
 		return $this->render('TopxiaWebBundle:Settings:security-questions.html.twig', array( 
 			'hasSecurityQuestions' => $hasSecurityQuestions,
@@ -489,6 +535,55 @@ class SettingsController extends BaseController
 		}		
 
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
+	}
+
+	private function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
+	{
+		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
+			'hasVerifiedMobile' => $hasVerifiedMobile,
+			'setMobileResult' => $setMobileResult,
+			'verifiedMobile' => $verifiedMobile
+		)); 
+	}
+
+	public function bindMobileAction(Request $request)
+	{
+		$eduCloudService = $this->getEduCloudService();
+		$currentUser = $this->getCurrentUser()->toArray();
+		$verifiedMobile = '';
+		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
+		if ($hasVerifiedMobile) {
+			$verifiedMobile = $currentUser['verifiedMobile'];
+		}
+		$setMobileResult = 'none';
+
+		$scenario = "sms_bind";
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
+        }
+
+        if ($request->getMethod() == 'POST') {
+        	$password = $request->request->get('password');
+        	if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
+				$this->setFlashMessage('danger', '您的登陆密码错误');
+				SmsToolkit::clearSmsSession($request, $scenario);
+				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+			}
+
+			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
+			if ($result) {
+				$verifiedMobile = $sessionField['to'];
+				$this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
+
+				$setMobileResult = 'success';
+				$this->setFlashMessage('success', '绑定成功');
+			}else{
+				$setMobileResult = 'fail';
+				$this->setFlashMessage('danger', '绑定失败，原短信失效');
+			}						
+		}
+
+		return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 	}
 
 	public function passwordAction(Request $request)
@@ -664,7 +759,6 @@ class SettingsController extends BaseController
 			goto response;
 		}
 
-
 		$callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
 		try {
 			$token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
@@ -796,5 +890,10 @@ class SettingsController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }	
 
 }

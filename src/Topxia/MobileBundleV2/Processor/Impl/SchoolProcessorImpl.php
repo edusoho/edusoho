@@ -36,7 +36,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "description"=>"EduSoho官方应用，网校资讯。",
             "author"=>"官方",
             "version"=>"1.0.0",
-            "supprot_version"=>"2.4.0+",
+            "support_version"=>"2.4.0+",
             "action"=>array(),
             "url"=>"articleApp"
         );
@@ -48,7 +48,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "description"=>"网校小组社区",
             "author"=>"官方",
             "version"=>"1.0.0",
-            "supprot_version"=>"2.4.0+",
+            "support_version"=>"2.4.0+",
             "action"=>array(),
             "url"=>""
         );
@@ -94,9 +94,17 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getDownloadUrl()
     {
-        $code = $this->request->get("code", "edusoho");
-        $client = $this->request->get("client", "android");
+        $code = $this->fixHttpHeaderInject($this->request->get("code", "edusoho"));
+        $client = $this->fixHttpHeaderInject($this->request->get("client", "android"));
         return $this->controller->redirect("http://www.edusoho.com/download/mobile?client={$client}&code=" . $code);
+    }
+
+    private function fixHttpHeaderInject($str)
+    {
+        if(empty($str)){
+            return $str;
+        }
+        return trim(strip_tags(preg_replace('/( |\t|\r|\n|\')/', '', $str)));
     }
 
     public function getClientVersion()

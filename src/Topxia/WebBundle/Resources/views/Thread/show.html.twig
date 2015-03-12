@@ -1,0 +1,83 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="thread-show">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="thread-breadcrumb">
+        <a href="{{ path(thread.targetType ~ '_threads', {(thread.targetType~'Id'): thread.targetId}) }}" class="text-muted">话题</a> <span class="text-muted">&raquo; 正文</span>
+      </div>
+
+      <div class="thread-title-bar">
+        <h1 class="thread-title">{{ thread.title }}</h1>
+        {% if thread.sticky %}
+          <span class="label label-danger" title="置顶帖">置顶</span>
+        {% endif %}
+        {% if thread.nice %}
+          <span class="label label-warning" title="精华帖">精</span>
+        {% endif %}
+      </div>
+
+      <div class="thread-metas">
+        {{  web_macro.user_link(author, 'link-muted') }}
+        <span class="bullet mhs">•</span>
+        {{ thread.createdTime|smart_time }}
+        <span class="bullet mhs">•</span>
+        {{ thread.hitNum}} 次浏览
+      </div>
+    </div>
+    <div class="panel-body">
+      {{ thread.content|at(thread.ats)|raw }}
+    </div>
+
+    <div class="panel-footer clearfix">
+      <div class="pull-right">
+        {% if service.canAccess('thread.update', thread) %}
+          <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+        {% endif %}
+        {% if service.canAccess('thread.delete', thread) %}
+          <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+        {% endif %}
+
+        {% if service.canAccess('thread.sticky', thread) %}
+          {% if thread.sticky %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_cancel_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+          {% else %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_set_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
+          {% endif %}
+        {% endif %}
+
+        {% if service.canAccess('thread.sticky', thread) %}
+          {% if thread.nice %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+          {% else %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="thread-post-num">{{ thread.postNum }}</span> 回复
+    </div>
+    <div class="panel-body">
+      <ul class="media-list thread-post-list thread-pripost-list">
+        {% for post in posts %}
+          {% set author = users[post.userId] %}
+          {% include 'TopxiaWebBundle:Thread:post-item.html.twig' %}
+        {% else %}
+          <li class="empty">一个回复都没有！</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">发表回复</div>
+    <div class="panel-body">
+      {{ render(controller('TopxiaWebBundle:Thread:post', {request:app.request, threadId:thread.id})) }}
+    </div>
+  </div>
+</div>

@@ -441,6 +441,10 @@ define(function(require, exports, module) {
 
             editor.on('blur', function(e) {
                 editor.updateElement();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
+                    $longTextarea.change();
+                }, 1);
             });
 
             editor.on('instanceReady', function(e) {
@@ -457,7 +461,10 @@ define(function(require, exports, module) {
 
             editor.on('key', function(){
                 editor.updateElement();
-                $longTextarea.change();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
+                    $longTextarea.change();
+                }, 1);
             });
 
             editor.on('insertHtml', function(e) {
