@@ -2484,6 +2484,8 @@ body {
 	margin: 8px 1%;
 	font-size: 12px;
 	vertical-align:top;
+	height: 80px;
+	overflow: hidden;
 }
 
 .user-grids li p {

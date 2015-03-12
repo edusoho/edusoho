@@ -5,10 +5,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\RegisterType;
 use Gregwar\Captcha\CaptchaBuilder;
+use Topxia\Common\SmsToolkit;
 
 class RegisterController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -24,39 +24,36 @@ class RegisterController extends BaseController
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){
-                
+            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
                 $captchaCodePostedByUser = strtolower($registration['captcha_num']);
-
-                $captchaCode = $request->getSession()->get('captcha_code');   
-                
-                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){
-   
-                    throw new \RuntimeException('验证码错误。');
-    
-                }                
-   
-                if (!isset($captchaCode)||strlen($captchaCode)<5){
-    
-                    throw new \RuntimeException('验证码错误。');
-    
+                $captchaCode = $request->getSession()->get('captcha_code');                   
+                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
+                    throw new \RuntimeException('验证码错误。');    
+                }                   
+                if (!isset($captchaCode)||strlen($captchaCode)<5){    
+                    throw new \RuntimeException('验证码错误。');    
                 }
-
                 if ($captchaCode != $captchaCodePostedByUser){ 
                     $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
                     throw new \RuntimeException('验证码错误。');
                 }
                 $request->getSession()->set('captcha_code',mt_rand(0,999999999));
             }
+            
+            $registration['verifiedMobile'] = '';
+            if (in_array('mobile', $authSettings['registerSort'])&&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')){
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
+                if ($result){
+                   $registration['verifiedMobile'] = $sessionField['to'];
+                }else{
+                    return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
+                }
+            }
 
             $registration['createdIp'] = $request->getClientIp();
-
             if(isset($authSettings['register_protective'])){
-
                 $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
-
                 if(!$status){
-
                     return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
                 }
             }
@@ -365,6 +362,11 @@ class RegisterController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 
     protected function getMessageService()
     {

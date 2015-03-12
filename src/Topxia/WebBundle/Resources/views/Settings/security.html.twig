@@ -12,15 +12,15 @@
     		<div class="col-md-2 tar">
     			<span class="esicon esicon-safety {% if progressScore > 90 %}text-success{% elseif progressScore > 60 %}text-warning{% else %}text-danger{% endif %}" style="font-size:32px"></span>
     		</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="progress" style="margin-top:10px;">
 				  <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
 				</div>
 			</div>
 			<div class="col-md-4">
-				{% if progressScore > 90 %}
+				{% if progressScore > 80 %}
 					<span class="text-success" style="display:block;margin-top:10px;">安全等级：高</span>
-				{% elseif progressScore > 60 %}
+				{% elseif progressScore > 30 %}
 				<span class="text-warning" style="display:block;margin-top:10px;">安全等级：中</span>
 				{% else %}
 					<span class="text-danger" style="display:block;margin-top:10px;">安全等级：低</span>
@@ -28,8 +28,7 @@
 			</div>
 		</div>
 		<hr>
-
-	    
+		
 		<div class="row">
 			<div class="col-md-2 tar
 				{% if hasLoginPassword %} 
@@ -53,7 +52,6 @@
 		</div>
 		<hr>
 
-	    
 		<div class="row">
 			<div class="col-md-2 tar
 				{% if hasPayPassword %} 
@@ -81,7 +79,6 @@
 			
 		</div>
 		<hr>
-
 	    
 		<div class="row">
 			<div class="col-md-2 tar
@@ -113,8 +110,39 @@
 			</a>
 		</div>
 
+		{% if (setting('cloud_sms.sms_enabled')|default('')) == '1' and (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
+			<hr>
+		    
+			<div class="row">
+				<div class="col-md-2 tar
+					{% if hasVerifiedMobile %} 
+						text-success
+					{% else %}
+						text-danger
+					{% endif %}	" 
+					style="font-size:20px">
+				
+					{% if hasVerifiedMobile %} 
+						<span class="glyphicon glyphicon-ok"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-warning-sign"></span>
+					{% endif %}
+				</div>
 
+				<span class="col-md-3 " style="margin-top: 5px;" >手机绑定</span>
 
+				<span class="col-md-4 " style="margin-top: 5px;" >增加账户登陆、购买课程时的安全性，同时还可以找回登陆密码，支付密码。</span>
+
+				<a href="{{ path('settings_bind_mobile') }}" class="col-md-offset-1 btn btn-primary" style="margin-top: -3px;" >
+				{% if hasVerifiedMobile %}
+					修改
+				{% else %}
+					绑定
+				{% endif %}
+
+				</a>
+			</div>
+		{% endif %}
 
     {% endblock %}
   {% endembed %}

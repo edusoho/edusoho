@@ -41,7 +41,7 @@ class ClassroomsDataTag extends CourseBaseDataTag implements DataTag
             }else{
                 $classroomTeacherIds=$classroom['teacherIds'];
             }
-            $
+       
             $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
 
             $classrooms[$key]['teachers'] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
