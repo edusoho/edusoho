@@ -30,9 +30,11 @@ class UserController extends BaseController
             'keyword'=>''
         );
 
-        if(!empty($fields)){
-            $conditions =$fields;
+        if(empty($fields)){
+            $fields = array();
         }
+
+        $conditions = array_merge($conditions, $fields);
 
         $paginator = new Paginator(
             $this->get('request'),
