@@ -138,16 +138,17 @@ class CoinController extends BaseController
             $coinSettings['cash_rate']=$data['cash_rate'];
             
             if($data['cash_model']=="deduction"){
-
                 $coinSettings['price_type']="RMB";
                 $coinSettings['cash_model']="deduction";
-                $this->updateCoursesPrice($data['course-rmb'],$data['cash_rate']);
-
+                if (isset($data['course-rmb'])){
+                    $this->updateCoursesPrice($data['course-rmb'],$data['cash_rate']);
+                }
             }else{
-
                 $coinSettings['price_type']="Coin";
                 $coinSettings['cash_model']="currency";
-                $this->updateCoursesCashPrice($data["course-cash"]);
+                if (isset($data['course-cash'])){
+                    $this->updateCoursesCashPrice($data["course-cash"]);
+                }
             }
 
             $this->getSettingService()->set('coin', $coinSettings);
