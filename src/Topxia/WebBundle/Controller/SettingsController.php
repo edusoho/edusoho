@@ -246,9 +246,11 @@ class SettingsController extends BaseController
 		$showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1') 
 							&& (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
-		$itemScore = floor(100.0/(3.0 + ($showBindMobile && $hasVerifiedMobile)?1.0:0));
-		$progressScore = 1 + ($hasLoginPassword? 25:0 ) + ($hasPayPassword? 25:0 ) + ($hasFindPayPasswordQuestion? 25:0 ) + ($hasVerifiedMobile? 25:0 );
-		if ($progressScore <= 1 ) {$progressScore = 0;}
+		$itemScore = floor(100.0/(3.0 + ($showBindMobile?1.0:0)));
+		$progressScore = 1 + ($hasLoginPassword? $itemScore:0 ) + ($hasPayPassword? $itemScore:0 ) + ($hasFindPayPasswordQuestion? $itemScore:0 ) + ($showBindMobile && $hasVerifiedMobile ? $itemScore:0 );
+		if ($progressScore <= 1 ) {
+			$progressScore = 0;
+		}
 
 		return $this->render('TopxiaWebBundle:Settings:security.html.twig', array( 
 			'progressScore' => $progressScore,
