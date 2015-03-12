@@ -107,13 +107,6 @@
 				</div>
 			{% endif %}
 
-			<div class="form-group">
-				<label class="col-md-2 control-label">显示{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}人数</label>
-				<div class="col-md-8 controls radios">
-					{{ radios('showStudentNumType', {'opened':'开启', 'closed':'关闭'}, course.showStudentNumType ) }}
-				</div>
-			</div>
-
 			{% if is_plugin_installed('Classroom') %}
 			<div class="form-group" style="display:none;">
 				<label class="col-md-2 control-label">本课程只能用于一个{{ setting('classroom.name')|default("班级") }}</label>
