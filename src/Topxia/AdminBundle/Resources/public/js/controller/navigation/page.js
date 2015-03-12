@@ -7,7 +7,6 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {
                 if (response.status == 'ok') {
-                    // $btn.parents('tr').remove();
                     Notify.success('删除成功!');
                     setTimeout(function(){
                         window.location.reload();
