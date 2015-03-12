@@ -62,7 +62,7 @@ class EduCloudController extends BaseController
             if (
                 isset($dataUserPosted['name'])
                 && ($this->calStrlen($dataUserPosted['name']) >= 2)
-                && ($this->calStrlen($dataUserPosted['name']) <= 8)
+                && ($this->calStrlen($dataUserPosted['name']) <= 16)
             ) {
                 $result = $this->applyForSms($dataUserPosted['name']);
                 if (isset($result['status']) && ($result['status'] == 'ok')) {

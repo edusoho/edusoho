@@ -28,7 +28,8 @@ define(function(require, exports, module) {
     	validator.addItem({
 	        element: '[name="name"]',
 	        required: true,
-	        rule: 'chinese_alphanumeric byte_minlength{min:2} byte_maxlength{max:8}'
+	        rule: 'chinese_alphanumeric byte_minlength{min:2} byte_maxlength{max:16}',
+	        errormessageByte_maxlength:"网校名称最多不能超过8个汉字"
     	});
 
 		$('#js-submit').unbind('click');	
