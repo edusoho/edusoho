@@ -1,33 +1,33 @@
 debug: true
 permissions:
-  - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page'}
+  - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page',type:'menu'}
 
-  - { name: '课程', code: 'admin_course', parent: 'admin', router_name: 'admin_course', router_params: null, mode: 'page',active:'course'}
-  - { name: '用户', code: 'admin_user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user'}
-  - { name: '内容', code: 'admin_navigation', parent: 'admin', router_name: 'admin_navigation', router_params: null, mode: 'page',active:'content'}
-  - { name: '小组', code: 'admin_group', parent: 'admin', router_name: 'admin_group', router_params: null, mode: 'page',active:'group'}
-  - { name: '班级', code: 'admin_classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom'}
-  - { name: '应用', code: 'admin_app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app'}
-  - { name: '系统', code: 'admin_system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system'}
+  - { name: '课程', code: 'admin_course', parent: 'admin', router_name: 'admin_course', router_params: null, mode: 'page',active:'course',type:'menu'}
+  - { name: '用户', code: 'admin_user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user',type:'menu'}
+  - { name: '内容', code: 'admin_navigation', parent: 'admin', router_name: 'admin_navigation', router_params: null, mode: 'page',active:'content',type:'menu'}
+  - { name: '小组', code: 'admin_group', parent: 'admin', router_name: 'admin_group', router_params: null, mode: 'page',active:'group',type:'menu'}
+  - { name: '班级', code: 'admin_classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom',type:'menu'}
+  - { name: '应用', code: 'admin_app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app',type:'menu'}
+  - { name: '系统', code: 'admin_system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system',type:'menu'}
 
   - { name: '运营', code: 'admin_operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
-  - { name: '资讯', code: 'admin_operation_article', parent: 'admin_operation', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page',active:'article'}
-  - { name: '小组', code: 'admin_operation_group', parent: 'admin_operation', router_name: 'admin_operation_group', router_params: null,router_params_context: false, mode: 'page',active:'group'}
-  - { name: '编辑区', code: 'admin_operation_block', parent: 'admin_operation', router_name: 'admin_operation_block', router_params: null,router_params_context: false, mode: 'page',active:'block'}
-  - { name: '自定义页面', code: 'admin_operation_content', parent: 'admin_operation', router_name: 'admin_operation_content', router_params: {'type':'page'},router_params_context: false, mode: 'page',active:'content'}
+  - { name: '资讯', code: 'admin_operation_article', parent: 'admin_operation', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page',active:'article',type:'menu'}
+  - { name: '小组', code: 'admin_operation_group', parent: 'admin_operation', router_name: 'admin_operation_group', router_params: null,router_params_context: false, mode: 'page',active:'group',type:'menu'}
+  - { name: '编辑区', code: 'admin_operation_block', parent: 'admin_operation', router_name: 'admin_operation_block', router_params: null,router_params_context: false, mode: 'page',active:'block',type:'menu'}
+  - { name: '自定义页面', code: 'admin_operation_content', parent: 'admin_operation', router_name: 'admin_operation_content', router_params: {'type':'page'},router_params_context: false, mode: 'page',active:'content',type:'menu'}
 
-  - { name: '添加资讯', code: 'admin_operation_article_create', parent: 'admin_operation_article', router_name: 'admin_operation_article_create', router_params: null,router_params_context: false, mode: 'page', group:'button',icon:glyphicon glyphicon-plus}
-  - { name: '管理', code: 'admin_operation_article_manage', parent: 'admin_operation_article', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page', group:'tab',active:'article'}
-  - { name: '栏目', code: 'admin_operation_article_category', parent: 'admin_operation_article', router_name: 'admin_operation_article_category', router_params: null,router_params_context: false, mode: 'page', group:'tab',active:'category'}
+  - { name: '添加资讯', code: 'admin_operation_article_create', parent: 'admin_operation_article', router_name: 'admin_operation_article_create', router_params: null,router_params_context: false, mode: 'page', type:'button',icon:glyphicon glyphicon-plus}
+  - { name: '管理', code: 'admin_operation_article_manage', parent: 'admin_operation_article', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'article'}
+  - { name: '栏目', code: 'admin_operation_article_category', parent: 'admin_operation_article', router_name: 'admin_operation_article_category', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'category'}
 
-  - { name: '创建小组', code: 'admin_operation_group_create', parent: 'admin_operation_group', router_name: 'group_add', router_params: null,router_params_context: false, mode: 'page', group:'button',icon:glyphicon glyphicon-plus}
-  - { name: '小组管理', code: 'admin_operation_group_manage', parent: 'admin_operation_group', router_name: 'admin_operation_group', router_params: null,router_params_context: false, mode: 'page', group:'tab',active:'group'}
-  - { name: '话题', code: 'admin_operation_group_thread', parent: 'admin_operation_group', router_name: 'admin_operation_groupThread', router_params: null,router_params_context: false, mode: 'page', group:'tab',active:'thread'}
+  - { name: '创建小组', code: 'admin_operation_group_create', parent: 'admin_operation_group', router_name: 'group_add', router_params: null,router_params_context: false, mode: 'page', type:'button',icon:glyphicon glyphicon-plus}
+  - { name: '小组管理', code: 'admin_operation_group_manage', parent: 'admin_operation_group', router_name: 'admin_operation_group', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'group'}
+  - { name: '话题', code: 'admin_operation_group_thread', parent: 'admin_operation_group', router_name: 'admin_operation_groupThread', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'thread'}
 
-  - { name: '新增编辑区', code: 'admin_operation_block_create', parent: 'admin_operation_block', router_name: 'admin_operation_block_create', router_params: null,router_params_context: false, mode: 'modal', group:'button'}
-  - { name: '管理', code: 'admin_operation_block_manage', parent: 'admin_operation_block', router_name: 'admin_operation_block', router_params: null,router_params_context: false, mode: 'page', group:'tab',active:'block'}
+  - { name: '新增编辑区', code: 'admin_operation_block_create', parent: 'admin_operation_block', router_name: 'admin_operation_block_create', router_params: null,router_params_context: false, mode: 'modal', type:'button'}
+  - { name: '管理', code: 'admin_operation_block_manage', parent: 'admin_operation_block', router_name: 'admin_operation_block', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'block'}
 
-  - { name: '管理', code: 'admin_operation_content_manage', parent: 'admin_operation_content', router_name: 'admin_operation_content', router_params:  {'type':'page'},router_params_context: false, mode: 'page', group:'tab',active:'content'}
+  - { name: '管理', code: 'admin_operation_content_manage', parent: 'admin_operation_content', router_name: 'admin_operation_content', router_params:  {'type':'page'},router_params_context: false, mode: 'page', type:'tab',active:'content'}
 
 
 

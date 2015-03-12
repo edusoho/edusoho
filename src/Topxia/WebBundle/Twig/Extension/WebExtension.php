@@ -122,7 +122,7 @@ class WebExtension extends \Twig_Extension
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
     }
 
-    public function permissions($parent='', $group=null)
+    public function permissions($parent='', $type=null)
     {   
         $permissions = $this->getPermissions();
         $result = array();
@@ -133,9 +133,9 @@ class WebExtension extends \Twig_Extension
 
             if ($value['parent'] == $parent) {
 
-                if ($group) {
+                if ($type) {
 
-                    if (isset($value['group']) && $value['group'] == $group ) {
+                    if (isset($value['type']) && $value['type'] == $type ) {
 
                         $result[] = $value;
                         continue;
