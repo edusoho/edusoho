@@ -188,8 +188,6 @@ interface UserService
     
     public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
 
-    public function getUsersByApprovalStatus($approvalStatus, $nickname, $start, $limit);
-
     public function findUserApprovalsByUserIds($userIds);
 
     public function passApproval($userId, $note = null);
