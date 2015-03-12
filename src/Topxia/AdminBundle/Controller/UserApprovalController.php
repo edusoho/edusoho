@@ -22,9 +22,11 @@ class UserApprovalController extends BaseController
             'approvalStatus' => 'approving'
         );
 
-        if(!empty($fields)){
-            $conditions =$fields;
+        if(empty($fields)){
+            $fields = array();
         }
+
+        $conditions = array_merge($conditions, $fields);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -60,9 +62,11 @@ class UserApprovalController extends BaseController
             'approvalStatus' => 'approved'
         );
 
-        if(!empty($fields)){
-            $conditions =$fields;
+        if(empty($fields)){
+            $fields = array();
         }
+
+        $conditions = array_merge($conditions, $fields);
 
         $paginator = new Paginator(
             $this->get('request'),
