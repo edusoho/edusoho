@@ -13,16 +13,28 @@ class UserApprovalController extends BaseController
 
     public function approvingAction(Request $request)
     {
-        $nickname = $request->query->get('nickname');
-    	$paginator = new Paginator(
+        $fields = $request->query->all();
+
+        $conditions = array(
+            'roles'=>'',
+            'keywordType'=>'',
+            'keyword'=>'',
+            'approvalStatus' => 'approving'
+        );
+
+        if(!empty($fields)){
+            $conditions =$fields;
+        }
+
+        $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->getUserCountByApprovalStatus('approving', $nickname),
+            $this->getUserService()->searchUserCount($conditions),
             20
         );
 
-    	$users = $this->getUserService()->getUsersByApprovalStatus(
-            'approving',
-            $nickname,
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -39,16 +51,28 @@ class UserApprovalController extends BaseController
     
     public function approvedAction(Request $request)
     {
-        $nickname = $request->query->get('nickname');
+        $fields = $request->query->all();
+
+        $conditions = array(
+            'roles'=>'',
+            'keywordType'=>'',
+            'keyword'=>'',
+            'approvalStatus' => 'approved'
+        );
+
+        if(!empty($fields)){
+            $conditions =$fields;
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->getUserCountByApprovalStatus('approved', $nickname),
+            $this->getUserService()->searchUserCount($conditions),
             20
         );
 
-        $users = $this->getUserService()->getUsersByApprovalStatus(
-            'approved',
-            $nickname,
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
