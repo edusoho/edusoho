@@ -92,8 +92,9 @@
 						<div class="form-group">
 							<label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
 							<div class="col-md-7 controls">
-								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ user.verifiedMobile|default('') }}" readonly="readonly">
-								<div class="help-block" style="display:none;"></div>
+								<div class="control-text">
+									{{ user.verifiedMobile|default('') }}
+								</div>
 							</div>
 						</div>
 					{% else %}
@@ -101,8 +102,16 @@
 							<label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
 							<div class="col-md-7 controls">
 								<input type="text" id="profile_mobile" name="profile[mobile]" class="form-control" data-widget-cid="widget-5" data-explain="" value="{{ profile.mobile|default('') }}">
-								<div class="help-block" style="display:none;"></div>
+								
+								<div class="help-block" style="display:none"></div>
 							</div>
+						</div>
+						<div class="help-block approval">
+							<label class="col-md-2 control-label"></label>
+							<p class="text-warning"> 
+							还没绑定手机号，<strong><a href="{{path('settings_bind_mobile')}}">前去绑定</a>。
+							</strong>
+							</p>
 						</div>
 					{% endif %}
 
