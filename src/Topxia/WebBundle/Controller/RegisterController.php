@@ -102,7 +102,13 @@ class RegisterController extends BaseController
            if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
-        
+
+        if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
+            && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
+            && !in_array('mobile', $auth['registerSort'])) {
+            $auth['registerSort'][] = "mobile";
+        }
+
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isRegisterEnabled' => $registerEnable,
             'registerSort'=>$auth['registerSort'],

@@ -101,8 +101,6 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('cloud_sms', $dataUserPosted);
             
-            $this->saveAuthRegisterSort($dataUserPosted);
-
             if ('1' == $dataUserPosted['sms_enabled']) {
                 $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');
             } else {
@@ -189,29 +187,6 @@ class EduCloudController extends BaseController
                 'sms_school_candidate_name' => $schoolCandidateName,
             )
         );
-    }
-
-    private function saveAuthRegisterSort($dataUserPosted) 
-    {
-        if ( !isset($dataUserPosted['sms_enabled']) || $dataUserPosted['sms_enabled'] == '0') {
-            return ;
-        }
-
-        $auth = $this->getSettingService()->get('auth', array());
-        if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
-            if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
-                $auth['registerSort'][] = 'mobile';
-            }
-            if (!isset($auth['registerSort'])){
-                $auth['registerSort'] = array(0 => "email", 1 => "nickname", 2 => "password", 3 => "mobile");
-            }
-        } else {
-            if (isset($auth['registerSort'])&&(in_array('mobile', $auth['registerSort']))) {
-                $index = array_search('mobile',$auth['registerSort']);
-                unset($auth['registerSort'][$index]);
-            }
-        }
-        $this->getSettingService()->set('auth', $auth);
     }
 
     private function calStrlen($str)
