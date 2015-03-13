@@ -70,6 +70,7 @@ class CourseOrderController extends OrderController
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
+            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0)?$user['verifiedMobile']:'',
             'avatarAlert' => AvatarAlert::alertJoinCourse($user),
             'courseSetting' => $courseSetting,
             'member' => $member,
@@ -112,8 +113,8 @@ class CourseOrderController extends OrderController
         ));
 
         if (
-             ((strlen($user['verifiedMobile']) == 0)&&(strlen($userInfo['mobile']) > 0))||
-             ((strlen($user['verifiedMobile']) > 0)&&(strlen($userInfo['mobile']) == 0)) 
+             ((strlen($user['verifiedMobile']) == 0)&&(isset($userInfo['mobile']))&&(strlen($userInfo['mobile']) > 0))||
+             ((strlen($user['verifiedMobile']) > 0)&&(isset($userInfo['mobile']))&&(strlen($userInfo['mobile']) == 0)) 
            ) {
             $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
         }
