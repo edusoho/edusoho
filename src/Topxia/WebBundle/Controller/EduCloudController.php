@@ -42,11 +42,6 @@ class EduCloudController extends BaseController
             }
 
             if ($smsType == 'sms_forget_password') {
-                // $nickname = $request->request->get('nickname');
-                // if (strlen($nickname) == 0){
-                //     return $this->createJsonResponse(array('error' => '不存在用户昵称'));
-                // }
-                // $targetUser = $this->getUserService()->getUserByNickname($nickname);
                 $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
                 if (empty($targetUser)){
                     return $this->createJsonResponse(array('error' => '用户不存在'));    

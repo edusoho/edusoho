@@ -56,12 +56,6 @@ define(function(require, exports, module) {
                     }
                 });
 
-                // validator.addItem({
-                //     element: '[name="nickname"]',
-                //     required: true
-                // });
-
-
                 validator.addItem({
                     element: '[name="mobile"]',
                     required: true,
