@@ -187,14 +187,6 @@ admin_user_create:
     router_name: admin_user_create
     router_params: null
     router_params_context: false
-    mode: page
-    type: button
-admin_user_create:
-    name: 添加新用户
-    parent: admin_user_show
-    router_name: admin_user_create
-    router_params: null
-    router_params_context: false
     mode: modal
     type: button
 admin_user_manage:
@@ -260,7 +252,59 @@ admin_approval_manage:
     mode: page
     type: tab
     active: approving
-
+admin_message:
+    name: 私信
+    parent: admin_user
+    router_name: admin_message
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: message
+    type: menu
+admin_message_manage:
+    name: 管理
+    parent: admin_message
+    router_name: admin_message
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: message
+admin_vip_list:
+    name: 会员
+    parent: admin_user
+    router_name: admin_vip_list
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: member
+    type: menu
+admin_vip_create:
+    name: 添加新会员
+    parent: admin_vip_list
+    router_name: admin_vip_create
+    router_params: null
+    router_params_context: false
+    mode: modal
+    type: button
+admin_vip_manage:
+    name: 管理
+    parent: admin_vip_list
+    router_name: admin_vip_list
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: member
+admin_vip_bought_list:
+    name: 操作记录
+    parent: admin_vip_list
+    router_name: admin_vip_bought_list
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: member_history
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
   # - { name: '未回复', code: 'admin_course_question_tab1', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'tab',blank:true, icon:glyphicon glyphicon-plus,active:unPosted}
