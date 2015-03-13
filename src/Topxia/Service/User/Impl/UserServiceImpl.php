@@ -233,6 +233,15 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function isMobileUnique($mobile)
+    {
+        $count = $this->searchUserCount(array('verifiedMobile' => $mobile));
+        if ($count > 0) {
+            return false;
+        }
+        return true;
+    }
+
     public function changeMobile($id, $mobile)
     {
         $user = $this->getUser($id);

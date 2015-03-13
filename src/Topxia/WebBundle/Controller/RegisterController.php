@@ -44,7 +44,7 @@ class RegisterController extends BaseController
             if (in_array('mobile', $authSettings['registerSort'])&&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')){
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
                 if ($result){
-                   $registration['verifiedMobile'] = $sessionField['to'];
+                    $registration['verifiedMobile'] = $sessionField['to'];
                 }else{
                     return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
                 }
