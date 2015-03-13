@@ -85,7 +85,13 @@
                   <p class="help-block">输入短信验证码</p> 
                 </div>
               </div>
-
+            {% elseif field == 'mobile' and ((setting('cloud_sms.sms_enabled')|default('0')) == '0') %}
+              <div class="form-group">
+                <label class="control-label required" for="register_{{ field }}">手机号码</label>
+                <div class="controls " >
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" >
+                </div>
+              </div>
             {% elseif field == 'idcard' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">身份证号</label>
