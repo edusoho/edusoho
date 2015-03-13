@@ -21,7 +21,7 @@ permissions:
   - { name: '管理', code: 'admin_teacher_manage', parent: 'admin_teacher', router_name: 'admin_teacher', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'teacher'}
 
   - { name: '实名认证', code: 'admin_approval_approving', parent: 'admin_user', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page',active:'approval',type:'menu'}
-  - { name: '管理', code: 'admin_approval_manage', parent: 'admin_approval_approving', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'approval'}
+  - { name: '管理', code: 'admin_approval_manage', parent: 'admin_approval_approving', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'approving'}
 
   - { name: '运营', code: 'admin_operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
   - { name: '资讯', code: 'admin_operation_article', parent: 'admin_operation', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page',active:'article',type:'menu'}
