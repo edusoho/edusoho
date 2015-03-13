@@ -16,6 +16,11 @@ class RegisterController extends BaseController
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
+        $registerEnable  = $this->isRegisterEnabled();
+        if (!$registerEnable) {
+            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+        }
+
         $form = $this->createForm(new RegisterType());
         
         if ($request->getMethod() == 'POST') {
@@ -88,7 +93,6 @@ class RegisterController extends BaseController
 
         if(!isset($auth['registerSort']))$auth['registerSort']="";
         
-        $loginEnable  = $this->isLoginEnabled();
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         for($i=0;$i<count($userFields);$i++){
@@ -100,7 +104,7 @@ class RegisterController extends BaseController
         }
         
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'isLoginEnabled' => $loginEnable,
+            'isRegisterEnabled' => $registerEnable,
             'registerSort'=>$auth['registerSort'],
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
@@ -451,7 +455,7 @@ class RegisterController extends BaseController
         }
     }
 
-    private function isLoginEnabled()
+    private function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
         if($auth && array_key_exists('register_mode',$auth)){
