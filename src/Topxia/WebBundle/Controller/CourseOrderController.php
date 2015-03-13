@@ -70,6 +70,7 @@ class CourseOrderController extends OrderController
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
+            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0)?$user['verifiedMobile']:'',
             'avatarAlert' => AvatarAlert::alertJoinCourse($user),
             'courseSetting' => $courseSetting,
             'member' => $member,

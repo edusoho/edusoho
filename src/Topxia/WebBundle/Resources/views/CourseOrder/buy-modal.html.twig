@@ -90,6 +90,13 @@
           <input class="form-control" id="mobile" type="text" name="mobile" value="{{ user.mobile }}">
         </div>
       </div>
+    {% elseif field == 'mobile' and (not noVerifiedMobile) %}
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="mobile">手机</label>
+        <div class="col-md-6 controls">
+          <div class="control-text">{{ verifiedMobile }}</div>
+        </div>
+      </div>
     {% endif %}
     {% if field == 'qq' %}
     <div class="form-group">
