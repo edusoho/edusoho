@@ -32,6 +32,12 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
 
+    public function findUserByVerifiedMobile($mobile)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($mobile));
+    }
+
     public function findUsersByNicknames(array $nicknames)
     {
         if(empty($nicknames)) { 

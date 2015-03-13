@@ -10,6 +10,8 @@ interface UserDao
 
 	public function findUserByNickname($nickname);
 
+	public function findUserByVerifiedMobile($mobile);
+
 	public function findUsersByNicknames(array $nicknames);
 
 	public function findUsersByIds(array $ids);

@@ -9,6 +9,8 @@ interface UserService
     public function getUser($id, $lock = false);
 
     public function getUserByNickname($nickname);
+
+    public function getUserByVerifiedMobile($mobile);
     
     public function getUserByEmail($email);
 
