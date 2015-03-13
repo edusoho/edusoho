@@ -1,47 +1,177 @@
-debug: true
-permissions:
-  - { name: '后台', code: 'admin', parent: null, router_name: 'admin', router_params: null, mode: 'page',type:'menu'}
-
-  - { name: '课程', code: 'admin_course', parent: 'admin', router_name: 'admin_course', router_params: null, mode: 'page',active:'course',type:'menu'}
-  # - { name: '用户111', code: 'admin_user111', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user',type:'menu'}
-  - { name: '内容', code: 'admin_navigation', parent: 'admin', router_name: 'admin_navigation', router_params: null, mode: 'page',active:'content',type:'menu'}
-  - { name: '小组', code: 'admin_group', parent: 'admin', router_name: 'admin_group', router_params: null, mode: 'page',active:'group',type:'menu'}
-  - { name: '班级', code: 'admin_classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom',type:'menu'}
-  - { name: '应用', code: 'admin_app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app',type:'menu'}
-  - { name: '系统', code: 'admin_system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system',type:'menu'}
-  - { name: '用户', code: 'admin_user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user',type:'menu'}
-
-  - { name: '用户', code: 'admin_user_show', parent: 'admin_user', router_name: 'admin_user', router_params: null,router_params_context: false, mode: 'page',active:'user',type:'menu'}
-  - { name: '添加新用户', code: 'admin_user_create', parent: 'admin_user_show', router_name: 'admin_user_create', router_params: null,router_params_context: false, mode: 'modal', type:'button'}
-  - { name: '管理', code: 'admin_user_manage', parent: 'admin_user_show', router_name: 'admin_user', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'user'}
-  - { name: '导入', code: 'admin_user_import', parent: 'admin_user_show', router_name: 'admin_user_import', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'user-lead'}
-  - { name: '登录日志', code: 'admin_login_record', parent: 'admin_user_show', router_name: 'admin_login_record', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'login_record'}
-
-  - { name: '教师', code: 'admin_teacher', parent: 'admin_user', router_name: 'admin_teacher', router_params: null,router_params_context: false, mode: 'page',active:'teacher',type:'menu'}
-  - { name: '管理', code: 'admin_teacher_manage', parent: 'admin_teacher', router_name: 'admin_teacher', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'teacher'}
-
-  - { name: '实名认证', code: 'admin_approval_approving', parent: 'admin_user', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page',active:'approval',type:'menu'}
-  - { name: '管理', code: 'admin_approval_manage', parent: 'admin_approval_approving', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'approving'}
-
-  - { name: '运营', code: 'admin_operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
-  - { name: '资讯', code: 'admin_operation_article', parent: 'admin_operation', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page',active:'article',type:'menu'}
-  - { name: '小组', code: 'admin_operation_group', parent: 'admin_operation', router_name: 'admin_operation_group', router_params: null,router_params_context: false, mode: 'page',active:'group',type:'menu'}
-  - { name: '编辑区', code: 'admin_operation_block', parent: 'admin_operation', router_name: 'admin_operation_block', router_params: null,router_params_context: false, mode: 'page',active:'block',type:'menu'}
-  - { name: '自定义页面', code: 'admin_operation_content', parent: 'admin_operation', router_name: 'admin_operation_content', router_params: {'type':'page'},router_params_context: false, mode: 'page',active:'content',type:'menu'}
-
-  - { name: '添加资讯', code: 'admin_operation_article_create', parent: 'admin_operation_article', router_name: 'admin_operation_article_create', router_params: null,router_params_context: false, mode: 'page', type:'button',icon:glyphicon glyphicon-plus}
-  - { name: '管理', code: 'admin_operation_article_manage', parent: 'admin_operation_article', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'article'}
-  - { name: '栏目', code: 'admin_operation_article_category', parent: 'admin_operation_article', router_name: 'admin_operation_article_category', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'category'}
-
-  - { name: '创建小组', code: 'admin_operation_group_create', parent: 'admin_operation_group', router_name: 'group_add', router_params: null,router_params_context: false, mode: 'page', type:'button',icon:glyphicon glyphicon-plus}
-  - { name: '小组管理', code: 'admin_operation_group_manage', parent: 'admin_operation_group', router_name: 'admin_operation_group', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'group'}
-  - { name: '话题', code: 'admin_operation_group_thread', parent: 'admin_operation_group', router_name: 'admin_operation_groupThread', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'thread'}
-
-  - { name: '新增编辑区', code: 'admin_operation_block_create', parent: 'admin_operation_block', router_name: 'admin_operation_block_create', router_params: null,router_params_context: false, mode: 'modal', type:'button'}
-  - { name: '管理', code: 'admin_operation_block_manage', parent: 'admin_operation_block', router_name: 'admin_operation_block', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'block'}
-
-  - { name: '管理', code: 'admin_operation_content_manage', parent: 'admin_operation_content', router_name: 'admin_operation_content', router_params:  {'type':'page'},router_params_context: false, mode: 'page', type:'tab',active:'content'}
-
+admin:
+    name: 后台
+    parent: null
+    router_name: admin
+    router_params: null
+    mode: page
+admin_course:
+    name: 课程
+    parent: admin
+    router_name: admin_course
+    router_params: null
+    mode: page
+    active: course
+admin_user:
+    name: 用户
+    parent: admin
+    router_name: admin_user
+    router_params: null
+    mode: page
+    active: user
+admin_navigation:
+    name: 内容
+    parent: admin
+    router_name: admin_navigation
+    router_params: null
+    mode: page
+    active: content
+admin_group:
+    name: 小组
+    parent: admin
+    router_name: admin_group
+    router_params: null
+    mode: page
+    active: group
+admin_classroom:
+    name: 班级
+    parent: admin
+    router_name: admin_classroom
+    router_params: null
+    mode: page
+    active: classroom
+admin_app:
+    name: 应用
+    parent: admin
+    router_name: admin_app_installed
+    router_params: null
+    mode: page
+    active: app
+admin_system:
+    name: 系统
+    parent: admin
+    router_name: admin_setting_site
+    router_params: null
+    mode: page
+    active: system
+admin_operation:
+    name: 运营
+    parent: admin
+    router_name: admin_operation
+    router_params: null
+    mode: page
+    active: operation
+admin_operation_article:
+    name: 资讯
+    parent: admin_operation
+    router_name: admin_operation
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: article
+admin_operation_group:
+    name: 小组
+    parent: admin_operation
+    router_name: admin_operation_group
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: group
+admin_operation_block:
+    name: 编辑区
+    parent: admin_operation
+    router_name: admin_operation_block
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: block
+admin_operation_content:
+    name: 自定义页面
+    parent: admin_operation
+    router_name: admin_operation_content
+    router_params: { type: page }
+    router_params_context: false
+    mode: page
+    active: content
+admin_operation_article_create:
+    name: 添加资讯
+    parent: admin_operation_article
+    router_name: admin_operation_article_create
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: button
+    icon: 'glyphicon glyphicon-plus'
+admin_operation_article_manage:
+    name: 管理
+    parent: admin_operation_article
+    router_name: admin_operation
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: tab
+    active: article
+admin_operation_article_category:
+    name: 栏目
+    parent: admin_operation_article
+    router_name: admin_operation_article_category
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: tab
+    active: category
+admin_operation_group_create:
+    name: 创建小组
+    parent: admin_operation_group
+    router_name: group_add
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: button
+    icon: 'glyphicon glyphicon-plus'
+admin_operation_group_manage:
+    name: 小组管理
+    parent: admin_operation_group
+    router_name: admin_operation_group
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: tab
+    active: group
+admin_operation_group_thread:
+    name: 话题
+    parent: admin_operation_group
+    router_name: admin_operation_groupThread
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: tab
+    active: thread
+admin_operation_block_create:
+    name: 新增编辑区
+    parent: admin_operation_block
+    router_name: admin_operation_block_create
+    router_params: null
+    router_params_context: false
+    mode: modal
+    group: button
+admin_operation_block_manage:
+    name: 管理
+    parent: admin_operation_block
+    router_name: admin_operation_block
+    router_params: null
+    router_params_context: false
+    mode: page
+    group: tab
+    active: block
+admin_operation_content_manage:
+    name: 管理
+    parent: admin_operation_content
+    router_name: admin_operation_content
+    router_params: { type: page }
+    router_params_context: false
+    mode: page
+    group: tab
+    active: content
 
 
 
