@@ -90,9 +90,7 @@ class EduCloudServiceImpl extends BaseService
     {
         $api = $this->getCloudApi();
         $options = $this->getCloudOptions();
-        $result = $api->get(
-            sprintf('/bills', $params = array('type' => $type, 'page' => $page, 'limit' => $limit))
-        );
+        $result = $api->get('/bills', $params = array('type' => $type, 'page' => $page, 'limit' => $limit));
         return $result;
     }
 
