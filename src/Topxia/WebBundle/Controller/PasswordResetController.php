@@ -116,7 +116,8 @@ class PasswordResetController extends BaseController
                 //     return $this->createMessageResponse('error', '用户名不存在，请重新找回');
                 // }
                 // $targetUser = $this->getUserService()->getUserByNickname($nickname);
-                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
+                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('mobile'));
+
                 if (empty($targetUser)){
                     return $this->createMessageResponse('error', '用户不存在，请重新找回');    
                 }
