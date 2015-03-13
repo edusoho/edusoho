@@ -49,7 +49,7 @@
           <label for="mobile">手机号码</label>
         </div>
         <div class="col-md-7 controls">
-          <div class="control-text"> {{user.verifiedMobile|default('')}} </div>
+          <div class="control-text"> {{user.verifiedMobile|default('')}}<span class="text-success">(已绑定)</span> </div>
        </div>
       </div>
     {% else %}
