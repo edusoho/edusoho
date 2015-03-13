@@ -193,6 +193,10 @@ class EduCloudController extends BaseController
 
     private function saveAuthRegisterSort($dataUserPosted) 
     {
+        if ( !isset($dataUserPosted['sms_enabled']) || $dataUserPosted['sms_enabled'] == '0') {
+            return ;
+        }
+
         $auth = $this->getSettingService()->get('auth', array());
         if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
             if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
