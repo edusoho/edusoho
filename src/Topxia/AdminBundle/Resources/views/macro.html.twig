@@ -49,14 +49,14 @@
                 
                 {% endfor %}
 
-              <li {% if setting('permissions_debug')%}data-toggle="tooltip" data-placement="bottom" title="Code:{{menu.code}}"{% endif %} {% if nav == menu.active|default('-1') %}class="active"{% endif %} ><a href="{{path(router_name,param)}}">{{menu.name}}</a></li>
+              <li  {% if nav == menu.active|default('-1') %}class="active"{% endif %} ><a href="{{path(router_name,param)}}">{{menu.name}}</a></li>
               {% else %}
-               <li {% if setting('permissions_debug')%}data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"{% endif %} {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name,router_params)}}">{{menu.name}}</a></li>
+               <li {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name,router_params)}}">{{menu.name}}</a></li>
               {% endif %}
 
            
             {% else %}
-            <li {% if setting('permissions_debug')%}data-toggle="tooltip" data-placement="bottom" title="编码 : {{menu.code}} 上级 :{{menu.parent}} 链接形式:{{menu.mode}} 路由:{{path(router_name)}} "{% endif %} {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name)}}">{{menu.name}}</a></li>
+            <li  {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name)}}">{{menu.name}}</a></li>
             {% endif %}
           
           {% endfor %}

@@ -126,8 +126,6 @@ class WebExtension extends \Twig_Extension
     {   
         $permissions = $this->getPermissions();
         $result = array();
-        
-        ServiceKernel::instance()->createService('System.SettingService')->set('permissions_debug',$permissions['debug']);
 
         foreach ($permissions as $key => $value) {
 
@@ -161,11 +159,11 @@ class WebExtension extends \Twig_Extension
         $environment = $kernel->getEnvironment();
 
         $permissionsCacheFile = "../app/cache/".$environment."permissions.yml";
-        // if (file_exists($permissionsCacheFile)) {
+        if (file_exists($permissionsCacheFile)) {
 
-        //     return Yaml::parse($permissionsCacheFile);
+            return Yaml::parse($permissionsCacheFile);
 
-        // }else {
+        }else {
 
             foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
                 
@@ -194,18 +192,9 @@ class WebExtension extends \Twig_Extension
 
             file_put_contents($permissionsCacheFile, Yaml::dump($permissions));
          
-        // }
-        
-        $debug = 0;
-        if (isset($permissions['debug'])) {
-
-            $debug = $permissions['debug']; 
-            unset($permissions['debug']);
         }
 
         $permissions = $this->sort($permissions);
-
-        $permissions['debug'] =$debug;
 
         return $permissions;
     }
@@ -253,18 +242,14 @@ class WebExtension extends \Twig_Extension
         if (file_exists($fullpath)) {
 
             $permission = Yaml::parse($fullpath);
-            
-            if (isset($permission['debug']) && $permission['debug']) {
 
-                $permissions['debug'] = 1;
-            }
-
-            if (isset($permission['permissions'])) {
-
-                $permissions = array_merge($permissions, ArrayToolkit::index($permission['permissions'], 'code') );
+            if ($permission) {
+                
+                $permissions = array_merge($permissions, $permission); 
             }
             
         }
+
         return $permissions;
     }
 
