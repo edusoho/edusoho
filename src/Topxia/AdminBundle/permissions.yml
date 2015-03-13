@@ -9,13 +9,19 @@ permissions:
   - { name: '班级', code: 'admin_classroom', parent: 'admin', router_name: 'admin_classroom', router_params: null, mode: 'page',active:'classroom',type:'menu'}
   - { name: '应用', code: 'admin_app', parent: 'admin', router_name: 'admin_app_installed', router_params: null, mode: 'page',active:'app',type:'menu'}
   - { name: '系统', code: 'admin_system', parent: 'admin', router_name: 'admin_setting_site', router_params: null, mode: 'page',active:'system',type:'menu'}
-
   - { name: '用户', code: 'admin_user', parent: 'admin', router_name: 'admin_user', router_params: null, mode: 'page',active:'user',type:'menu'}
+
   - { name: '用户', code: 'admin_user_show', parent: 'admin_user', router_name: 'admin_user', router_params: null,router_params_context: false, mode: 'page',active:'user',type:'menu'}
-  - { name: '添加新用户', code: 'admin_user_create', parent: 'admin_user_show', router_name: 'admin_user_create', router_params: null,router_params_context: false, mode: 'page', type:'button'}
+  - { name: '添加新用户', code: 'admin_user_create', parent: 'admin_user_show', router_name: 'admin_user_create', router_params: null,router_params_context: false, mode: 'modal', type:'button'}
   - { name: '管理', code: 'admin_user_manage', parent: 'admin_user_show', router_name: 'admin_user', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'user'}
   - { name: '导入', code: 'admin_user_import', parent: 'admin_user_show', router_name: 'admin_user_import', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'user-lead'}
-  - { name: '登录日志', code: 'admin_user_data', parent: 'admin_user_show', router_name: 'admin_login_record', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'login_record'}
+  - { name: '登录日志', code: 'admin_login_record', parent: 'admin_user_show', router_name: 'admin_login_record', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'login_record'}
+
+  - { name: '教师', code: 'admin_teacher', parent: 'admin_user', router_name: 'admin_teacher', router_params: null,router_params_context: false, mode: 'page',active:'teacher',type:'menu'}
+  - { name: '管理', code: 'admin_teacher_manage', parent: 'admin_teacher', router_name: 'admin_teacher', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'teacher'}
+
+  - { name: '实名认证', code: 'admin_approval_approving', parent: 'admin_user', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page',active:'approval',type:'menu'}
+  - { name: '管理', code: 'admin_approval_manage', parent: 'admin_approval_approving', router_name: 'admin_approval_approving', router_params: null,router_params_context: false, mode: 'page', type:'tab',active:'approval'}
 
   - { name: '运营', code: 'admin_operation', parent: 'admin', router_name: 'admin_operation', router_params: null, mode: 'page',active:'operation'}
   - { name: '资讯', code: 'admin_operation_article', parent: 'admin_operation', router_name: 'admin_operation', router_params: null,router_params_context: false, mode: 'page',active:'article',type:'menu'}

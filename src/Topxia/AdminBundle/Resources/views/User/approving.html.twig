@@ -1,12 +1,12 @@
-{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:User:approval.layout.html.twig' %}
 
 {% block title %}用户认证审核 - {{ parent() }}{% endblock %}
 
-{% set menu = 'approval' %}
+{% set submenu = 'approval' %}
 
 {% set submenu = 'approving' %}
 
-{% block main %}
+{% block maincontent %}
 
 {% include 'TopxiaAdminBundle:User:approval-header.html.twig' %}
 
