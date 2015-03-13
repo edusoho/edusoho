@@ -28,8 +28,12 @@ class SettingsController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			$profile = $request->request->get('profile');
-			$this->getUserService()->updateUserProfile($user['id'], $profile);
-			$this->setFlashMessage('success', '基础信息保存成功。');
+			if (!((strlen($user['verifiedMobile']) > 0) && ($profile['mobile'] != $user['verifiedMobile']))) {
+				$this->getUserService()->updateUserProfile($user['id'], $profile);
+				$this->setFlashMessage('success', '基础信息保存成功。');
+			} else {
+				$this->setFlashMessage('danger', '不能修改已绑定的手机。');
+			}
 			return $this->redirect($this->generateUrl('settings'));
 
 		}
@@ -52,7 +56,8 @@ class SettingsController extends BaseController
 		return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
 			'profile' => $profile,
 			'fields'=>$fields,
-			'fromCourse' => $fromCourse
+			'fromCourse' => $fromCourse,
+			'user' => $user
 		));
 	}
 

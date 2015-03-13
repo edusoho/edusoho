@@ -69,6 +69,7 @@ class CourseOrderController extends OrderController
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
+            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
             'avatarAlert' => AvatarAlert::alertJoinCourse($user),
             'courseSetting' => $courseSetting,
             'member' => $member,
@@ -109,7 +110,13 @@ class CourseOrderController extends OrderController
             'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
             'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
         ));
-        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        if (
+             ((strlen($user['verifiedMobile']) == 0)&&(strlen($userInfo['mobile']) > 0))||
+             ((strlen($user['verifiedMobile']) > 0)&&(strlen($userInfo['mobile']) == 0)) 
+           ) {
+            $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        }
 
         $coinSetting = $this->setting("coin");
 

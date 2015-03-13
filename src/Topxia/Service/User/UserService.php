@@ -46,6 +46,8 @@ interface UserService
 
     public function verifyInSaltOut($in,$salt,$out);
 
+    public function isMobileUnique($mobile);
+
     public function changeMobile($id, $mobile);
     
     /**

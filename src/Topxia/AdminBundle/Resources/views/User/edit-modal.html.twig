@@ -43,14 +43,25 @@
      </div>
     </div>
 
-    <div class="row form-group">
-      <div class="col-md-2 control-label"> 
-        <label for="mobile">手机号码</label>
+    {% if (user.verifiedMobile|length) > 0 %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label"> 
+          <label for="mobile">手机号码</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="mobile" name="mobile" class="form-control" value="{{user.verifiedMobile|default('')}}" readonly="readonly">
+       </div>
       </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="mobile" name="mobile" class="form-control" value="{{profile.mobile}}">
-     </div>
-    </div>
+    {% else %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label"> 
+          <label for="mobile">手机号码</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="mobile" name="mobile" class="form-control" value="{{profile.mobile|default('')}}">
+       </div>
+      </div>
+    {% endif %}
 
     <div class="row form-group">
         <div class="col-md-2 control-label"> 
