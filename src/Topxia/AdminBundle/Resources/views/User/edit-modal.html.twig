@@ -49,7 +49,7 @@
           <label for="mobile">手机号码</label>
         </div>
         <div class="col-md-7 controls">
-          <input type="text" id="mobile" name="mobile" class="form-control" value="{{user.verifiedMobile|default('')}}" readonly="readonly">
+          <div class="control-text"> {{user.verifiedMobile|default('')}} </div>
        </div>
       </div>
     {% else %}
