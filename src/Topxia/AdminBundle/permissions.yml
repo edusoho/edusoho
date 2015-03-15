@@ -10,6 +10,7 @@ admin_course:
     router_name: admin_course
     router_params: null
     mode: page
+    type: menu
     active: course
 admin_user:
     name: 用户
@@ -17,6 +18,7 @@ admin_user:
     router_name: admin_user
     router_params: null
     mode: page
+    type: menu
     active: user
 admin_navigation:
     name: 内容
@@ -24,6 +26,7 @@ admin_navigation:
     router_name: admin_navigation
     router_params: null
     mode: page
+    type: menu
     active: content
 admin_group:
     name: 小组
@@ -31,6 +34,7 @@ admin_group:
     router_name: admin_group
     router_params: null
     mode: page
+    type: menu
     active: group
 admin_classroom:
     name: 班级
@@ -38,6 +42,7 @@ admin_classroom:
     router_name: admin_classroom
     router_params: null
     mode: page
+    type: menu
     active: classroom
 admin_app:
     name: 应用
@@ -45,6 +50,7 @@ admin_app:
     router_name: admin_app_installed
     router_params: null
     mode: page
+    type: menu
     active: app
 admin_system:
     name: 系统
@@ -52,6 +58,7 @@ admin_system:
     router_name: admin_setting_site
     router_params: null
     mode: page
+    type: menu
     active: system
 admin_operation:
     name: 运营
@@ -59,6 +66,7 @@ admin_operation:
     router_name: admin_operation
     router_params: null
     mode: page
+    type: menu
     active: operation
 admin_operation_article:
     name: 资讯
@@ -67,6 +75,7 @@ admin_operation_article:
     router_params: null
     router_params_context: false
     mode: page
+    type: menu
     active: article
 admin_operation_group:
     name: 小组
@@ -75,6 +84,7 @@ admin_operation_group:
     router_params: null
     router_params_context: false
     mode: page
+    type: menu
     active: group
 admin_operation_block:
     name: 编辑区
@@ -83,6 +93,7 @@ admin_operation_block:
     router_params: null
     router_params_context: false
     mode: page
+    type: menu
     active: block
 admin_operation_content:
     name: 自定义页面
@@ -91,6 +102,7 @@ admin_operation_content:
     router_params: { type: page }
     router_params_context: false
     mode: page
+    type: menu
     active: content
 admin_operation_article_create:
     name: 添加资讯
@@ -99,7 +111,7 @@ admin_operation_article_create:
     router_params: null
     router_params_context: false
     mode: page
-    group: button
+    type: button
     icon: 'glyphicon glyphicon-plus'
 admin_operation_article_manage:
     name: 管理
@@ -108,7 +120,7 @@ admin_operation_article_manage:
     router_params: null
     router_params_context: false
     mode: page
-    group: tab
+    type: tab
     active: article
 admin_operation_article_category:
     name: 栏目
@@ -117,7 +129,7 @@ admin_operation_article_category:
     router_params: null
     router_params_context: false
     mode: page
-    group: tab
+    type: tab
     active: category
 admin_operation_group_create:
     name: 创建小组
@@ -126,7 +138,7 @@ admin_operation_group_create:
     router_params: null
     router_params_context: false
     mode: page
-    group: button
+    type: button
     icon: 'glyphicon glyphicon-plus'
 admin_operation_group_manage:
     name: 小组管理
@@ -135,7 +147,7 @@ admin_operation_group_manage:
     router_params: null
     router_params_context: false
     mode: page
-    group: tab
+    type: tab
     active: group
 admin_operation_group_thread:
     name: 话题
@@ -144,7 +156,7 @@ admin_operation_group_thread:
     router_params: null
     router_params_context: false
     mode: page
-    group: tab
+    type: tab
     active: thread
 admin_operation_block_create:
     name: 新增编辑区
@@ -153,7 +165,7 @@ admin_operation_block_create:
     router_params: null
     router_params_context: false
     mode: modal
-    group: button
+    type: button
 admin_operation_block_manage:
     name: 管理
     parent: admin_operation_block
@@ -161,7 +173,7 @@ admin_operation_block_manage:
     router_params: null
     router_params_context: false
     mode: page
-    group: tab
+    type: tab
     active: block
 admin_operation_content_manage:
     name: 管理
@@ -170,9 +182,53 @@ admin_operation_content_manage:
     router_params: { type: page }
     router_params_context: false
     mode: page
-    group: tab
+    type: tab
     active: content
-
+admin_course_show:
+    name: 课程
+    parent: admin_course
+    router_name: admin_course
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: menu
+    active: course
+# admin_live_course:
+#     name: 直播
+#     parent: admin_course
+#     router_name: admin_live_course
+#     router_params: null
+#     router_params_context: false
+#     mode: page
+#     type: menu
+#     active: live-course
+admin_course_manage:
+    name: 管理
+    parent: admin_course_show
+    router_name: admin_course
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: manage
+admin_course_recommend:
+    name: 推荐
+    parent: admin_course_show
+    router_name: admin_course_recommend_list
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: recommend
+admin_course_data:
+    name: 统计
+    parent: admin_course_show
+    router_name: admin_course_data
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: data
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
