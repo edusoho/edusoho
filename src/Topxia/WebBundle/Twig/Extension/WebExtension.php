@@ -159,11 +159,15 @@ class WebExtension extends \Twig_Extension
         $environment = $kernel->getEnvironment();
 
         $permissionsCacheFile = "../app/cache/".$environment."permissions.yml";
-/*        if (file_exists($permissionsCacheFile)) {
 
-            return Yaml::parse($permissionsCacheFile);
 
-        }else {*/
+        // if (file_exists($permissionsCacheFile)) {
+
+
+        //     return Yaml::parse($permissionsCacheFile);
+
+        // }else {
+
 
             foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
                 

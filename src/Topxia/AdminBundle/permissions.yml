@@ -206,6 +206,99 @@ admin_course_manage:
     name: 管理
     parent: admin_course_show
     router_name: admin_course
+admin_user_show:
+    name: 用户
+    parent: admin_user
+    router_name: admin_user
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: user
+    type: menu
+admin_user_create:
+    name: 添加新用户
+    parent: admin_user_show
+    router_name: admin_user_create
+    router_params: null
+    router_params_context: false
+    mode: modal
+    type: button
+admin_user_manage:
+    name: 管理
+    parent: admin_user_show
+    router_name: admin_user
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: user
+admin_user_import:
+    name: 导入
+    parent: admin_user_show
+    router_name: admin_user_import
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: user-lead
+admin_login_record:
+    name: 登录日志
+    parent: admin_user_show
+    router_name: admin_login_record
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: login_record
+admin_teacher:
+    name: 教师
+    parent: admin_user
+    router_name: admin_teacher
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: teacher
+    type: menu
+admin_teacher_manage:
+    name: 管理
+    parent: admin_teacher
+    router_name: admin_teacher
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: teacher
+admin_approval_approving:
+    name: 实名认证
+    parent: admin_user
+    router_name: admin_approval_approving
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: approval
+    type: menu
+admin_approval_manage:
+    name: 管理
+    parent: admin_approval_approving
+    router_name: admin_approval_approving
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: approving
+admin_message:
+    name: 私信
+    parent: admin_user
+    router_name: admin_message
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: message
+    type: menu
+admin_message_manage:
+    name: 管理
+    parent: admin_message
+    router_name: admin_message
     router_params: null
     router_params_context: false
     mode: page
@@ -215,6 +308,28 @@ admin_course_recommend:
     name: 推荐
     parent: admin_course_show
     router_name: admin_course_recommend_list
+    active: message
+admin_vip_list:
+    name: 会员
+    parent: admin_user
+    router_name: admin_vip_list
+    router_params: null
+    router_params_context: false
+    mode: page
+    active: member
+    type: menu
+admin_vip_create:
+    name: 添加新会员
+    parent: admin_vip_list
+    router_name: admin_vip_create
+    router_params: null
+    router_params_context: false
+    mode: modal
+    type: button
+admin_vip_manage:
+    name: 管理
+    parent: admin_vip_list
+    router_name: admin_vip_list
     router_params: null
     router_params_context: false
     mode: page
@@ -224,11 +339,16 @@ admin_course_data:
     name: 统计
     parent: admin_course_show
     router_name: admin_course_data
+    active: member
+admin_vip_bought_list:
+    name: 操作记录
+    parent: admin_vip_list
+    router_name: admin_vip_bought_list
     router_params: null
     router_params_context: false
     mode: page
     type: tab
-    active: data
+    active: member_history
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
