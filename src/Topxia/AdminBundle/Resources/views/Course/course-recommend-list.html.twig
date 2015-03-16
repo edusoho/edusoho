@@ -4,14 +4,14 @@
 
 {% set script_controller = 'course/recommend-list' %}
 
-{% set menu = 'course-recommend-list' %}
+{% set menu = 'course' %}
 
 {% block main %}
-  <div class="page-header">
-    <h1>课程推荐列表</h1>
-  </div>
+  {% set type = 'recommend'  %}
+  {% set menus = permissions('admin_course_show','tab') %}
+  {{ admin_macro.tab_group(menus,type) }}
 
-  <table class="table table-striped table-hover" id="course-recommend-table">
+  <table class="table table-striped table-hover mtl" id="course-recommend-table">
     <thead>
     <tr>
       <th>顺序号</th>
