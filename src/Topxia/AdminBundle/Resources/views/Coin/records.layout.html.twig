@@ -1,0 +1,16 @@
+{% extends 'TopxiaAdminBundle:Coin:records.html.twig' %}
+
+{% block title %}虚拟币记录{% endblock %}
+
+{% set menu = 'user-records' %}
+
+{% block main %}
+
+<div class = "mbl">
+{% set menus = permissions("admin_coin_user","tab")%}
+{{admin_macro.tab_group(menus,submenu)}}
+</div>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

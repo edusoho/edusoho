@@ -1,0 +1,22 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'user-records' %}
+
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+
+      <div class="panel panel-default">
+
+          {% set menus = permissions('admin_finance') %}
+          {{ admin_macro.side_menu(menus,menu) }} 
+
+      </div>
+
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}
