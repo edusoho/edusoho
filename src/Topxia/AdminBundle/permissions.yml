@@ -4,12 +4,14 @@ admin:
     router_name: admin
     router_params: null
     mode: page
+    type: menu
 admin_user:
     name: 用户
     parent: admin
     router_name: admin_user
     router_params: null
     mode: page
+    type: menu
     active: user
 admin_course:
     name: 课程
