@@ -1,0 +1,16 @@
+{% extends 'TopxiaAdminBundle:Course:order.html.twig' %}
+
+{% block title %}课程 - {{ parent() }}{% endblock %}
+
+{% set menu = 'course_order' %}
+
+{% block main %}
+
+<div class = "mbl">
+{% set menus = permissions("admin_course_order","tab")%}
+{{admin_macro.tab_group(menus,submenu)}}
+</div>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

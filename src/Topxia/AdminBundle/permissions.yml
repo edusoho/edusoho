@@ -28,7 +28,15 @@ admin_order:
     router_params: null
     mode: page
     type: menu
-    active: operation
+    active: order
+admin_finance:
+    name: 财务
+    parent: admin
+    router_name: admin_bill
+    router_params: null
+    mode: page
+    type: menu
+    active: finance
 admin_navigation:
     name: 内容
     parent: admin
@@ -466,7 +474,78 @@ admin_vip_bought_list:
     mode: page
     type: tab
     active: member_history
-
+admin_course_order:
+    name: 课程订单
+    parent: admin_order
+    router_name: admin_course_order_manage
+    router_params: null
+    mode: page
+    type: menu
+    active: course_order
+admin_coin_order:
+    name: 虚拟币订单
+    parent: admin_order
+    router_name: admin_coin_orders
+    router_params: null
+    mode: page
+    type: menu
+    active: coin_order
+admin_coin_order_query:
+    name: 查阅
+    parent: admin_coin_order
+    router_name: admin_coin_orders
+    router_params: null
+    mode: page
+    type: tab
+    active: coin_order_query
+admin_course_order_query:
+    name: 查阅
+    parent: admin_course_order
+    router_name: admin_course_order_manage
+    router_params: null
+    mode: page
+    type: tab
+    active: course_order_query
+admin_bills:
+    name: 账单
+    parent: admin_finance
+    router_name: admin_bill
+    router_params: null
+    mode: page
+    type: menu
+    active: bill
+admin_cash_bill:
+    name: 现金账单
+    parent: admin_bills
+    router_name: admin_bill
+    router_params: null
+    mode: page
+    type: tab
+    active: cash-bill
+admin_coin_bill:
+    name: 虚拟币账单
+    parent: admin_bills
+    router_name: admin_coin_records
+    router_params: null
+    mode: page
+    type: tab
+    active: records 
+admin_coin_user:
+    name: 虚拟币
+    parent: admin_finance
+    router_name: admin_coin_user_records
+    router_params: null
+    mode: page
+    type: menu
+    active: user-records
+admin_coin_user_records:
+    name: 记录
+    parent: admin_coin_user
+    router_name: admin_coin_user_records
+    router_params: null
+    mode: page
+    type: tab
+    active: user-records
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
