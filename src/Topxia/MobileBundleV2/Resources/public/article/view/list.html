@@ -6,7 +6,7 @@
 	        </div>
 	        <div class="ui-list-info">
 	            <h4>{{ article.title | limitTo:15}}</h4>
-	            <p>{{article.body | limitTo:80}}</p>
+	            <p ng-bind-html="article.body | limitTo:80"></p>
 	        </div>
            </a>
     </li>
