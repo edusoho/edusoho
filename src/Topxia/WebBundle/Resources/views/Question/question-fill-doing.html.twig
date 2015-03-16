@@ -7,7 +7,7 @@
 {% block body %}
 
 {% if itemResult.answer|default(null) %}
-{% set fileItemResultAnswer = itemResult.answer|split(',') %}
+{% set fileItemResultAnswer = itemResult.answer %}
 {% endif %}
   <div class="homework-question-fill question-fill-inputs">
     {% for index,answer in question.answer %}

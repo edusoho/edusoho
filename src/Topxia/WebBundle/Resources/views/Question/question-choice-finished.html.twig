@@ -12,7 +12,7 @@
   {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
 
 {% if itemResult.answer|default(null) or itemResult.answer == 0 %}
-  {% set choiceIndex = itemResult.answer|split(',') %}
+  {% set choiceIndex = itemResult.answer %}
 {% endif %}
   <div class="homework-question-result">
 
