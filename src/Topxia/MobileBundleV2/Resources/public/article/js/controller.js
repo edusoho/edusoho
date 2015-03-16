@@ -59,7 +59,7 @@ function CategoryController($scope, $timeout, $state)
 	var menu = {
 	      "name" : "分类",
 	      "icon" : "lesson_menu_list",
-	      "action" : "showCategory()",
+	      "action" : "angular.$client.showCategory()",
 	      "item" : []
 	  };
 
