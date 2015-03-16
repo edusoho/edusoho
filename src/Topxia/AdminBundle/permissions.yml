@@ -37,14 +37,22 @@ admin_course_order:
     mode: page
     type: menu
     active: course_order
-admin_course_order:
+admin_coin_order:
     name: 虚拟币订单
     parent: admin_order
-    router_name: admin_course_order_manage
+    router_name: admin_coin_orders
     router_params: null
     mode: page
     type: menu
-    active: course_order
+    active: coin_order
+admin_coin_order_query:
+    name: 查阅
+    parent: admin_coin_order
+    router_name: admin_coin_orders
+    router_params: null
+    mode: page
+    type: tab
+    active: coin_order_query
 admin_course_order_query:
     name: 查阅
     parent: admin_course_order
@@ -52,7 +60,7 @@ admin_course_order_query:
     router_params: null
     mode: page
     type: tab
-    active: course_order
+    active: course_order_query
 admin_navigation:
     name: 内容
     parent: admin

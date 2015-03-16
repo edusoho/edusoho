@@ -6,9 +6,9 @@
     {% set script_controller = 'trade/index' %}
 #}
 
-{% set menu = 'order' %}
+{% set submenu = type~'_order_query' %}
 
-{% block main %}
+{% block maincontent %}
 <!-- 
   <div class="page-header clearfix">
     <h1>{{ dict_text('targetName', type) }}订单管理</h1>
