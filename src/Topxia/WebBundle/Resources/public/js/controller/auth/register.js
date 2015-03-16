@@ -5,14 +5,6 @@ define(function(require, exports, module) {
     var SmsSender = require('../widget/sms-sender');
 
     exports.run = function() {
-        $(function(){
-            //数字验证 
-            if ($("#getcode_num").length > 0){
-                $("#getcode_num").click(function(){ 
-                    $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                }); 
-            }
-        });
 
         $(".date").datetimepicker({
             language: 'zh-CN',
@@ -33,6 +25,11 @@ define(function(require, exports, module) {
         });
 
         if ($("#getcode_num").length > 0){
+            
+            $("#getcode_num").click(function(){ 
+                $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+            }); 
+
             validator.addItem({
                 element: '[name="captcha_num"]',
                 required: true,
