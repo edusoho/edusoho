@@ -17,7 +17,9 @@
   {% if liveSetEnabled == 1 %}
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm pull-right mls" target="_blank">创建直播课程</a>
   {% endif %}
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right" target="_blank">创建课程</a>
+  {% set menus = permissions('admin_course_show','button') %}
+  {{ admin_macro.btn_group(menus,type) }}
+ 
     </div>
   </div>
 

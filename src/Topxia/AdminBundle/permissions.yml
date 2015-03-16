@@ -193,19 +193,116 @@ admin_course_show:
     mode: page
     type: menu
     active: course
-# admin_live_course:
-#     name: 直播
-#     parent: admin_course
-#     router_name: admin_live_course
-#     router_params: null
-#     router_params_context: false
-#     mode: page
-#     type: menu
-#     active: live-course
-admin_course_manage:
-    name: 管理
+admin_course_add:
+    name: 创建课程
     parent: admin_course_show
-    router_name: admin_course
+    router_name: course_create
+    mode: page
+    type: button
+admin_live_course:
+    name: 直播
+    parent: admin_course
+    router_name: admin_live_course
+    router_params: {'status': 'underway'}
+    router_params_context: false
+    mode: page
+    type: menu
+    active: live-course
+admin_live_course_manage:
+    name: 管理
+    parent: admin_live_course
+    router_name: admin_live_course
+    router_params: {'status': 'underway'}
+    router_params_context: false
+    mode: page
+    type: tab
+    active: live-course
+admin_course_thread:
+    name: 话题
+    parent: admin_course
+    router_name: admin_thread
+    mode: page
+    type: menu
+    active: thread
+admin_course_thread_manage:
+    name: 管理
+    parent: admin_course_thread
+    router_name: admin_thread
+    mode: page
+    type: tab
+    active: manage
+admin_course_question:
+    name: 问答
+    parent: admin_course
+    router_name: admin_question
+    router_params: {'postStatus': 'unPosted'}
+    router_params_context: false
+    mode: page
+    type: menu
+    active: question
+admin_course_question_manage:
+    name: 管理
+    parent: admin_course_question
+    router_name: admin_question
+    router_params: {'postStatus': 'unPosted'}
+    mode: page
+    type: tab
+    active: manage
+admin_course_note:
+    name: 笔记
+    parent: admin_course
+    router_name: admin_note
+    mode: page
+    type: menu
+    active: note
+admin_course_note_manage:
+    name: 管理
+    parent: admin_course_note
+    router_name: admin_note
+    mode: page
+    type: tab
+    active: manage
+admin_course_review:
+    name: 评价
+    parent: admin_course
+    router_name: admin_review
+    mode: page
+    type: menu
+    active: review
+admin_course_review_manage:
+    name: 管理
+    parent: admin_course_review
+    router_name: admin_review
+    mode: page
+    type: tab
+    active: manage
+admin_course_category:
+    name: 分类
+    parent: admin_course
+    router_name: admin_course_category
+    mode: page
+    type: menu
+    active: category
+admin_course_tag:
+    name: 标签
+    parent: admin_course
+    router_name: admin_tag
+    mode: page
+    type: menu
+    active: tag
+admin_course_tag_manage:
+    name: 管理
+    parent: admin_course_tag
+    router_name: admin_tag
+    mode: page
+    type: tab
+    active: manage
+admin_course_tag_add:
+    name: 新增标签
+    parent: admin_course_tag
+    router_name: admin_tag_create
+    mode: modal
+    type: button
 admin_user_show:
     name: 用户
     parent: admin_user
@@ -304,11 +401,20 @@ admin_message_manage:
     mode: page
     type: tab
     active: manage
+admin_course_manage:
+    name: 管理
+    parent: admin_course_show
+    router_name: admin_course
+    type: tab
+    mode: page
+    active: manage
 admin_course_recommend:
     name: 推荐
     parent: admin_course_show
     router_name: admin_course_recommend_list
-    active: message
+    type: tab
+    mode: page
+    active: recommend
 admin_vip_list:
     name: 会员
     parent: admin_user
@@ -339,7 +445,9 @@ admin_course_data:
     name: 统计
     parent: admin_course_show
     router_name: admin_course_data
-    active: member
+    active: data
+    type: tab
+    mode: page
 admin_vip_bought_list:
     name: 操作记录
     parent: admin_vip_list

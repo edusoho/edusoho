@@ -6,9 +6,17 @@
 {% set script_controller = 'tag/list' %}
 {% block main %}
 
+<div class="mbl">
+  {% set type = 'manage'%}
+  {% set menus = permissions('admin_course_tag','tab') %}
+  {{ admin_macro.tab_group(menus,type) }}
+</div>
+
 <div class="page-header clearfix">
-  <button class="btn btn-info btn-sm pull-right" id="add-tag-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_tag_create') }}">新增标签</button>    
-  <h1 class="pull-left">标签管理</h1>
+
+  {% set menus = permissions('admin_course_tag','button') %}
+  {{ admin_macro.btn_group(menus,type) }}   
+
 </div>
 
 <table id="tag-table" class="table table-striped">

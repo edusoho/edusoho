@@ -198,7 +198,20 @@ class WebExtension extends \Twig_Extension
          
   /*      }*/
 
+        $permissions = $this->addCode($permissions);
         $permissions = $this->sort($permissions);
+
+        return $permissions;
+    }
+
+    private function addCode($permissions)
+    {
+        foreach ($permissions as $key => $value) {
+            
+            $value['code'] = $key;
+
+            $permissions[$key] = $value;
+        }
 
         return $permissions;
     }

@@ -66,32 +66,34 @@
 {% macro side_menu(menus,nav) %}
    <div class="list-group">
       {% for menu in menus %}
-          {% set param = {} %}
-          {% set router_name = menu.router_name %}
+          {% if menu.code == "admin_live_course" and  setting('course.live_course_enabled') == 0 %}
+          {% else %}
+            {% set param = {} %}
+            {% set router_name = menu.router_name %}
 
-            {% if menu.router_params|default(null) %}
-            {% set router_params = menu.router_params %}
-          
-              {% if menu.router_params_context|default(false) %}
-                {% for key,router_param in router_params %}
+              {% if menu.router_params|default(null) %}
+              {% set router_params = menu.router_params %}
+            
+                {% if menu.router_params_context|default(false) %}
+                  {% for key,router_param in router_params %}
 
-                {% set router_param = router_param|split('.') %}
-                {% set object = router_param[0] %}
-                {% set value = router_param[1] %}
-                {% set item = setItem(key,_context[object][value]) %}
-                {% set param = param|merge(item) %}
-                
-                {% endfor %}
-              <a href="{{path(router_name,param)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+                  {% set router_param = router_param|split('.') %}
+                  {% set object = router_param[0] %}
+                  {% set value = router_param[1] %}
+                  {% set item = setItem(key,_context[object][value]) %}
+                  {% set param = param|merge(item) %}
+                  
+                  {% endfor %}
+                <a href="{{path(router_name,param)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+                {% else %}
+                 <a href="{{path(router_name,router_params)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+                {% endif %}
+
+             
               {% else %}
-               <a href="{{path(router_name,router_params)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+              <a href="{{path(router_name)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
               {% endif %}
-
-           
-            {% else %}
-            <a href="{{path(router_name)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
             {% endif %}
-          
           {% endfor %}
     </div>
 {% endmacro %}
@@ -116,17 +118,17 @@
                 {% endfor %}
 
                 {% if menu.mode == 'modal' %}
-                <a data-url="{{path(router_name,param)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <a data-url="{{path(router_name,param)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% else %}
-                <a href="{{path(router_name,param)}}" class=" {{menu.class|default(' btn btn-info btn-sm pull-right mls')}}" {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <a href="{{path(router_name,param)}}" class=" {{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}" {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% endif %}
 
               {% else %}
 
                 {% if menu.mode == 'modal' %}
-                <a data-url="{{path(router_name,router_params)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <a data-url="{{path(router_name,router_params)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% else %}
-                <a href="{{path(router_name,router_params)}}" class="{{menu.class|default(' btn btn-info btn-sm pull-right mls')}}"  {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <a href="{{path(router_name,router_params)}}" class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}"  {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% endif %}
 
               {% endif %}
@@ -134,26 +136,14 @@
            
             {% else %}
               {% if menu.mode == 'modal' %}
-              <a data-url="{{path(router_name)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+              <a data-url="{{path(router_name)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
               {% else %}
-              <a href="{{path(router_name)}}" class="{{menu.class|default(' btn btn-info btn-sm pull-right mls')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+              <a href="{{path(router_name)}}" class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
               {% endif %}
             {% endif %}
           
           {% endfor %}
 {% endmacro %}
-
-
-     
-    {% if type == 'unPosted'%}
-    class="active"
-    {% endif %}
-    ><a href="{{ url('admin_question', {postStatus: 'unPosted'}) }}">未回复</a></li>
-    <li
-    {% if type == 'all'%}
-    class="active"
-    {% endif %}
-    ><a href=" {{ url('admin_question', {postStatus: 'all'}) }}">所有</a></li>
   
 {% macro tab_group(menus,type) %}
    <div data-role="navigation">
