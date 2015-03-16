@@ -19,13 +19,6 @@ admin_course:
     mode: page
     type: menu
     active: course
-admin_operation:
-    name: 运营
-    parent: admin
-    router_name: admin_operation
-    router_params: null
-    mode: page
-    active: operation
 admin_order:
     name: 订单
     parent: admin
@@ -74,8 +67,6 @@ admin_system:
     mode: page
     type: menu
     active: system
-<<<<<<< HEAD
-=======
 admin_operation:
     name: 运营
     parent: admin
@@ -84,7 +75,6 @@ admin_operation:
     mode: page
     type: menu
     active: operation
->>>>>>> 5dea89b412dc93a22a55fc6cd37b21da1ff23565
 admin_operation_article:
     name: 资讯
     parent: admin_operation
@@ -417,11 +407,7 @@ admin_message_manage:
     router_params_context: false
     mode: page
     type: tab
-<<<<<<< HEAD
     active: message
-
-=======
-    active: manage
 admin_course_manage:
     name: 管理
     parent: admin_course_show
@@ -478,7 +464,7 @@ admin_vip_bought_list:
     mode: page
     type: tab
     active: member_history
->>>>>>> 5dea89b412dc93a22a55fc6cd37b21da1ff23565
+
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
