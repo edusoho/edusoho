@@ -1,15 +1,16 @@
 define(function(require, exports, module) {
 	require("AppControllers");
-	angular.element(document).ready(function() {
-		         angular.bootstrap(document, ['EduSohoArticleApp']);
-	});
+	require("AppServices");
+	require("zepto");
+	require("frozen");
 
 	var app = angular.module('EduSohoArticleApp', [
-		'ngRoute',
+		'ui.router',
 		'ngSanitize',
-		'AppControllers'
+		'AppControllers',
+		'AppServices'
 		]);
-	
+
 	app.config(function($httpProvider) {
 	    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
 	    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -58,15 +59,39 @@ define(function(require, exports, module) {
 	                : data;
 	    }];
 	});
+	
+	app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
+	{
+		$urlRouterProvider.when("/", "/index").
+		otherwise('/');
 
-	app.config(['$routeProvider', function($routeProvider) {
-		$routeProvider.when( '/list', {
-			templateUrl : '/bundles/topxiamobilebundlev2/article/view/list.html',
-			controller : ListController
-		}).when( '/detail/:id', {
-			templateUrl : '/bundles/topxiamobilebundlev2/article/view/detail.html',
-			controller : DetailController
+		$stateProvider.
+		state("index",{
+			url : "/index",
+			views : {
+				"categoryList" : {
+					template : '',
+					controller : CategoryController
+				},
+				"articleList" : {
+					templateUrl : '/bundles/topxiamobilebundlev2/article/view/list.html',
+					controller : ListController
+				}
+			}
 		}).
-		otherwise( { redirectTo : "/list"} );
+		state("detail", {
+			url : "/detail/:id",
+			template : function(){
+				return "<div ng-bind-html='content'></div>";
+			},
+			controller : DetailController
+		});
 	}]);
+
+	angular.element(document).ready(function() {
+		         angular.bootstrap(document, ['EduSohoArticleApp']);
+		         angular.$client = {};
+		         var $injector = angular.injector(['EduSohoArticleApp']);
+		         angular.broadCast = $injector.get("broadCast");
+	});
 });

@@ -1,11 +1,13 @@
 var appControllers = angular.module('AppControllers', []);
 
-appControllers.controller('ListController', ['$scope', '$http', ListController]);
-appControllers.controller('DetailController', ['$scope', '$http', '$routeParams', '$sce', DetailController]);
+appControllers.controller('ListController', ['$scope', '$http', '$rootScope', ListController]);
+appControllers.controller('CategoryController', ['$scope', '$timeout', '$state', CategoryController]);
+appControllers.controller('DetailController', ['$scope', '$http', '$stateParams', '$sce', DetailController]);
 
-function ListController($scope, $http)
+function ListController($scope, $http, $rootScope)
 {
 	$scope.limit = 10;
+	$scope.categoryId = 0;
 	$scope.isShowLoadMore = true;
   	$scope.loadMore = function(){
   		var el=Zepto.loading({
@@ -17,47 +19,69 @@ function ListController($scope, $http)
   	};
 
   	var queryArticelList = function(success){
-  		$http.post('/mapi_v2/articleApp/list', {start:$scope.start}).success(function(data) {
-			if (! $scope.articles) {
-				$scope.articles = [];
-			}
+  		$http.post(
+  			'/mapi_v2/articleApp/list', 
+  			{
+  				start: $scope.start,
+  				categoryId : $scope.categoryId 
+  			}).success(function(data) {
+				if (! $scope.articles) {
+					$scope.articles = [];
+				}
 
-			if (!data || data.length < $scope.limit) {
-				$scope.isShowLoadMore = false;
-			}
-			$scope.data = data;
-	    		$scope.articles = $scope.articles.concat(data);
-	    		if (success) {
-	    			success();
-	    		}
-	    		$scope.start += $scope.limit;
+				if (data.length == 0) {
+					$scope.isEmpty = true;
+				}
+				$scope.isShowLoadMore = !(!data || data.length < $scope.limit);
+				$scope.data = data;
+		    		$scope.articles = $scope.articles.concat(data);
+		    		if (success) {
+		    			success();
+		    		}
+		    		$scope.start += $scope.limit;
 	  	});
   	}
 
-  	queryArticelList();
+  	queryArticelList(); 
 
-  	$scope.showCategory = function(){
-  		el2=Zepto.tips({
-	                content:'温馨提示内容',
-	                stayTime:2000,
-	                type:"info"
-	            })
-  	};
-  	var menu = {
+  	angular.broadCast.bind("changeCategoryBroadCast", function(event, msg){
+  		console.log("changeCategoryBroadCast " + msg);
+  		$scope.start = 0;
+  		$scope.articles = [];
+  		$scope.categoryId  = msg;
+  		queryArticelList();
+  	});
+}
+
+function CategoryController($scope, $timeout, $state)
+{
+	$scope.isShowCategory = false;
+	var menu = {
 	      "name" : "分类",
 	      "icon" : "lesson_menu_list",
 	      "action" : "showCategory()",
 	      "item" : []
 	  };
 
-	  navigator.cordovaUtil.createMenu(menu);
-	  console.log("createMenu");
+	navigator.cordovaUtil.createMenu(menu);
+	console.log("createMenu");
+	
+	angular.$client.showCategory = function(){
+	  	$scope.$apply(function(){
+  			$scope.isShowCategory = !$scope.isShowCategory;
+  		});
+	};
+  	$scope.changeCategory = function(categoryId) {
+  		console.log("categoryId " + categoryId);
+  		$scope.isShowCategory = !$scope.isShowCategory;
+  		angular.broadCast.send("changeCategoryBroadCast", categoryId);
+  	};
 }
 
-function DetailController($scope, $http, $routeParams, $sce)
+function DetailController($scope, $http, $stateParams, $sce)
 {
-      var articleId = $routeParams.id;
+      var articleId = $stateParams.id;
 	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
-    		$scope.article = data.article;
+    		$scope.content = data;
   	});
 }

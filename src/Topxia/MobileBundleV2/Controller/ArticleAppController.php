@@ -18,6 +18,7 @@ class ArticleAppController extends MobileBaseController
         $categoryId = $request->query->get("categoryId", 0);
         $category = $this->getArticleCategoryService()->getCategory($categoryId);
         $categoryTree = $this->getArticleCategoryService()->getCategoryTree();
+        
         return $this->render('TopxiaMobileBundleV2:Article:index.html.twig', array(
             "categoryId"=>$categoryId,
             "category"=>$category,
@@ -93,6 +94,13 @@ class ArticleAppController extends MobileBaseController
         $articleSetting = $this->getSettingService()->get('article', array());
     
         $this->getArticleService()->hitArticle($id);
+        return $this->render('TopxiaMobileBundleV2:Article:detail.html.twig', array(
+            'articleSetting' => $articleSetting,
+            'articlePrevious' => $articlePrevious,
+            'article' => $article,
+            'articleNext' => $articleNext,
+            'articleShareContent' => $articleShareContent,
+        )); 
         return $this->createJson($request, array(
             'articleSetting' => $articleSetting,
             'articlePrevious' => $articlePrevious,

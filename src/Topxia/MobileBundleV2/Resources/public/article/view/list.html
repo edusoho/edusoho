@@ -6,7 +6,7 @@
 	        </div>
 	        <div class="ui-list-info">
 	            <h4>{{ article.title | limitTo:15}}</h4>
-	            <p ng-bind-html="{{article.body | limitTo:80}}"></p>
+	            <p>{{article.body | limitTo:80}}</p>
 	        </div>
            </a>
     </li>
@@ -14,3 +14,7 @@
 <div class="ui-center low-height" ng-show="isShowLoadMore">
     <div class="ui-btn" ng-click="loadMore()" ng-init="start=0">加载更多</div>
 </div>
+<section class="ui-notice" ng-show="isEmpty">
+      <i></i>
+      <p>没有相关资讯</p>
+</section>

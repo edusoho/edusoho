@@ -3,15 +3,29 @@
 {% block title %}资讯{% endblock %}
 
 {% block content %}
-	<div ng-view></div>
+	<div ui-view="categoryList" class="ui-poptips ui-poptips-null" ng-show="isShowCategory">
+		<div class="ui-poptips-cnt" style="text-align:left;height: inherit;"> 
+		<div>
+		            <button style="margin:10px;" ng-click="changeCategory(0)" data-transition="slide-in" class="ui-btn ui-btn-progress">全部</button>
+		</div>
+		        {% for category in categoryTree %}
+		            {% if category.parentId == 0 %}
+		                <div>
+		                </div>
+		            {% endif %}
+		                <button style="margin:10px;" ng-click="changeCategory({{ category.id }})"  data-transition="slide-in" class="ui-btn {% if category.parentId == 0 %} ui-btn-primary{% endif %} ui-btn-progress">{{ category.name }}</button>
+		          {% endfor %}
+		</div>
+	</div>
+	<div ui-view="articleList">
+	</div>
+	<div ui-view>
+	</div>
 {% block bottom_scripts %}
 
   <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
-  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-route.min.js') }}"></script>
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-ui-router.min.js') }}"></script>
   <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-sanitize.min.js') }}"></script>
-
-  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/zepto.js') }}"></script>
-  <script src="{{ asset('bundles/topxiamobilebundlev2/js/forzen/frozen.js') }}"></script>
     {{ parent() }}
 {% endblock %}
 
