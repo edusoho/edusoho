@@ -4,14 +4,7 @@ admin:
     router_name: admin
     router_params: null
     mode: page
-admin_course:
-    name: 课程
-    parent: admin
-    router_name: admin_course
-    router_params: null
-    mode: page
     type: menu
-    active: course
 admin_user:
     name: 用户
     parent: admin
@@ -20,6 +13,22 @@ admin_user:
     mode: page
     type: menu
     active: user
+admin_course:
+    name: 课程
+    parent: admin
+    router_name: admin_course
+    router_params: null
+    mode: page
+    type: menu
+    active: course
+admin_order:
+    name: 订单
+    parent: admin
+    router_name: admin_course_order_manage
+    router_params: null
+    mode: page
+    type: menu
+    active: operation
 admin_navigation:
     name: 内容
     parent: admin
@@ -400,7 +409,7 @@ admin_message_manage:
     router_params_context: false
     mode: page
     type: tab
-    active: manage
+    active: message
 admin_course_manage:
     name: 管理
     parent: admin_course_show
@@ -457,6 +466,7 @@ admin_vip_bought_list:
     mode: page
     type: tab
     active: member_history
+
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
