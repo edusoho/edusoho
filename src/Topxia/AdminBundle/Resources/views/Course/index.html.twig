@@ -1,15 +1,16 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}课程管理 - {{ parent() }}{% endblock %}
-
-{% set script_controller = 'course/manage' %}
-
+{% set menus = permissions('admin_course_show','tab') %}
 {% set menu = 'course' %}
 {% set type = 'manage'  %}
+
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
+{% set script_controller = 'course/manage' %}
+
 {% block main %}
 
 <div class="mbl">
-{% set menus = permissions('admin_course_show','tab') %}
+
 {{ admin_macro.tab_group(menus,type) }}
 </div>
   <div class="page-header">
