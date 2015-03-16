@@ -594,6 +594,24 @@ class SettingsController extends BaseController
 		return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 	}
 
+	public function passwordCheckAction(Request $request)
+	{
+		$currentUser = $this->getCurrentUser();
+		$password = $request->request->get('value');
+		if (strlen($password) > 0) {
+			$passwordRight = $this->getUserService()->verifyPassword($currentUser['id'], $password);
+			if ($passwordRight) {
+				$response = array('success' => true, 'message' => '密码正确');
+			} else {
+				$response = array('success' => false, 'message' => '密码错误');
+			}
+		} else {			
+			$response = array('success' => false, 'message' => '密码不能为空');
+		}
+      
+        return $this->createJsonResponse($response);
+	}
+
 	public function passwordAction(Request $request)
 	{
 		$user = $this->getCurrentUser();
