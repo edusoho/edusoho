@@ -41,6 +41,11 @@ class EduCloudController extends BaseController
 
     public function smsAction(Request $request)
     {
+        $settings = $this->getSettingService()->get('storage', array());
+        if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
+        
         try {
             $smsStatus = $this->handleSmsSetting($request);
 
