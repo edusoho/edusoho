@@ -739,3 +739,69 @@ admin_setting_refund:
     mode: page
     type: tab
     active: refund
+admin_optimize:
+    name: 优化和备份
+    parent: admin_system
+    router_name: admin_optimize
+    router_params: null
+    mode: page
+    type: menu
+    active: optimize
+admin_optimize_manage:
+    name: 管理
+    parent: admin_optimize
+    router_name: admin_optimize
+    router_params: null
+    mode: page
+    type: tab
+    active: optimize_manage
+admin_setting_ip_blacklist:
+    name: ＩＰ黑名单
+    parent: admin_system
+    router_name: admin_setting_ip_blacklist
+    router_params: null
+    mode: page
+    type: menu
+    active: ip_blacklist
+admin_setting_ip_blacklist_manage:
+    name: 管理
+    parent: admin_setting_ip_blacklist
+    router_name: admin_setting_ip_blacklist
+    router_params: null
+    mode: page
+    type: tab
+    active: ip_blacklist_manage
+admin_logs:
+    name: 系统日志
+    parent: admin_system
+    router_name: admin_logs
+    router_params: null
+    mode: page
+    type: menu
+    active: logs
+admin_logs_query:
+    name: 查阅
+    parent: admin_logs
+    router_name: admin_logs
+    router_params: null
+    mode: page
+    type: tab
+    active: logs_query
+# admin_operation_analysis_register:
+#     name: 数据统计
+#     parent: admin_system
+#     router_name: admin_operation_analysis_register
+#     router_params: { tab: trend , analysisDateType:register }
+#     router_params_context: false
+#     mode: page
+#     type: menu
+#     active: logs
+# admin_operation_analysis_register_query:
+#     name: 查阅
+#     parent: admin_operation_analysis_register
+#     router_name: admin_operation_analysis_register
+#     router_params: { tab: trend , analysisDateType:register }
+#     router_params_context: false
+#     mode: page
+#     type: tab
+#     active: register
