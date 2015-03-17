@@ -304,6 +304,42 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
+	public function payPasswordModalAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+		$hasPayPassword = strlen($user['payPassword']) > 0;
+
+		if ($hasPayPassword){
+			return $this->createJsonResponse('用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+		}
+
+		$form = $this->createFormBuilder()
+			->add('currentUserLoginPassword', 'password')
+			->add('newPayPassword', 'password')
+			->add('confirmPayPassword', 'password')
+			->getForm();
+
+		if ($request->getMethod() == 'POST') {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$passwords = $form->getData();
+				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
+					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
+					return $this->redirect($this->generateUrl('settings_security'));
+				} else {
+					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					$this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');
+					return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+				}
+			}
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:pay-password-modal.html.twig', array( 
+			'form' => $form->createView()
+		)); 
+	}
+
 	public function resetPayPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
