@@ -1,0 +1,14 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menus = permissions("admin_setting_course_setting","tab")%}
+{% set menu = 'course_settings' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+
+{% block main %}
+
+<div class = "mbl">
+{{admin_macro.tab_group(menus,submenu)}}
+</div>
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}
