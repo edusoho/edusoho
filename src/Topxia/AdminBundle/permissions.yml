@@ -604,6 +604,22 @@ admin_foot_navigation:
     mode: page
     type: tab
     active: 底部
+admin_setting_consult_setting:
+    name: 客服
+    parent: admin_setting
+    router_name: admin_setting_consult_setting
+    router_params: null
+    mode: page
+    type: tab
+    active: consult_setting
+admin_setting_share:
+    name: 分享
+    parent: admin_setting
+    router_name: admin_setting_share
+    router_params: null
+    mode: page
+    type: tab
+    active: share
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
