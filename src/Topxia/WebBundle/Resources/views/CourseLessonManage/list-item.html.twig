@@ -109,7 +109,6 @@
     			{% set lessonId = lesson.id %}
     			{% set exercise = exercises[lessonId]|default(null) %}
     			{% if exercise %}
-						<li><a href="{{ path('course_exercise_update', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>编辑练习</a></li>
 						<li><a href="javascript:;" class="delete-exercise-btn" data-url="{{ path('course_exercise_delete', {courseId:course.id, lessonId:lesson.id, id:exercise.id }) }}" ><span class="glyphicon glyphicon-trash prs"></span>移除练习</a></li>
 					{% else %}
 						<li><a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>新增练习</a></li>
