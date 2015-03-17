@@ -9,8 +9,8 @@
   {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
   
   {% set choiceIndex = '' %}
-  {% for index in itemResult.answer %}
-      {% set choiceIndex = choiceIndex ~ " " ~ index|chr %}
+  {% for key,choice in itemResult.answer %}
+    {% set choiceIndex = choiceIndex ~ " " ~ (65+choice)|chr %}
   {% endfor %}
 
 <div class="homework-question-result">
