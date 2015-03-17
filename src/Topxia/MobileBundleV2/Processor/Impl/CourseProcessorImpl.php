@@ -276,7 +276,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             
             $posts = array();
             foreach ($threadsByUserCourseIds as $key => $thread) {
-                $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "default", 0, 1);
+                $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "elite", 0, 1);
                 if (!empty($post)) {
                     $posts[$post[0]["threadId"]] = $post[0];
                 }
