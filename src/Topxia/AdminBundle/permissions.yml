@@ -346,15 +346,6 @@ admin_user_manage:
     mode: page
     type: tab
     active: user
-admin_user_import:
-    name: 导入
-    parent: admin_user_show
-    router_name: admin_user_import
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: user-lead
 admin_login_record:
     name: 登录日志
     parent: admin_user_show
@@ -660,6 +651,7 @@ admin_setting_user_fields:
     mode: page
     type: tab
     active: user_fields
+
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
   # - { name: '未回复', code: 'admin_course_question_tab1', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'tab',blank:true, icon:glyphicon glyphicon-plus,active:unPosted}
