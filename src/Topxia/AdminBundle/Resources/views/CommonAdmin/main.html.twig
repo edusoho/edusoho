@@ -1,0 +1,10 @@
+{% if isCollect == 0 %}
+<li class="collect" data-url="{{path('admin_common_add')}}"><a href="javascript:;"><i class="glyphicon glyphicon-plus"></i> 添加当前页面为常用功能</a></li>
+<li role="presentation" class="divider"></li>
+{% else %}
+<li ><a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a></li>
+<li role="presentation" class="divider"></li>
+{% endif %}
+{% for admin in admins %}
+{% include 'TopxiaAdminBundle:CommonAdmin:li.html.twig' %}
+{% endfor %}

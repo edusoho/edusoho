@@ -1294,3 +1294,13 @@ admin_user_block_create_email_check:
 admin_user_block_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:UserBlock:nicknameCheck }
+
+admin_common_add:
+    pattern:  /common/add
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:addCommonAdmin }
+admin_common_admin:
+    pattern:  /common/admin
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonAdmin }
+admin_common_remove:
+    pattern:  /common/remove/{id}
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonRemove }

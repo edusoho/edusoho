@@ -20,10 +20,33 @@ define(function(require, exports, module) {
 
 	};
 
-	$('.collect').on('click', function() {
-
+	$('.collapse').on('click','.collect',function() {
+		
 		var title = $(document).attr("title");
-		alert(title);
+		
+		var url = window.location.pathname;
+		
+		$.post($(this).data('url'),{title:title,url:url},function(data) {
+			
+			if (data !="error") {
+				$('.collect-list').append(data);
+			}
+
+			$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a>');
+			$('.admin-collect').addClass('open');
+
+		});
+
+	});
+
+	$('.collapse').on('click','.remove',function(){
+
+		$.post($(this).data('url'),{url:window.location.pathname},function(data) {
+
+			$('.collect-list').html(data);
+			
+			$('.admin-collect').addClass('open');
+		});
 	});
 
 	window.app.load = exports.load;
