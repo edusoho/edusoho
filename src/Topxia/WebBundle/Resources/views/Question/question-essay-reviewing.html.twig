@@ -7,13 +7,16 @@
 {% block body %}
 
 <div class="question-eassy-form-control">
-	<div class="question-eassy-answer">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:</div>
-	<strong>{% if itemResult.answer[0]|default(null) %}{{ itemResult.answer[0]|raw }}{% else %}未回答{% endif %}</strong>
+	<div class="question-eassy-answer">
+		<strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:
+		</strong>
+	</div>
+	<p>{% if itemResult.answer[0]|default(null) %}{{ itemResult.answer[0]|raw }}{% else %}未回答{% endif %}</p>
 
 </div>
 <div class="question-eassy-form-control">
 	 {% for rightAnswer in question.answer %}
-		   <div class="question-eassy-rightanswer">正确答案</div> <strong class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</strong>
+		   <div class="question-eassy-rightanswer"><strong>正确答案</strong></div> <p class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</p>
 	{% endfor %}
 
 </div>
