@@ -6,9 +6,6 @@
 
 {% block body %}
 
-{% set fileItemResultAnswer = itemResult.answer %}
-
-
 {% if itemResult.status == 'right' %}
   
   {% set itemResultStatus = '你答对了' %}
@@ -36,17 +33,16 @@
             <li>
               填空({{index+1}})： 正确答案 
               <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
-              {% if fileItemResultAnswer[index]|default("") %}
+              {% if itemResult.answer[index]|default("") %}
              回答是
 
-              <strong class="question-text-danger">{{ fileItemResultAnswer[index]|default("") }}</strong>。
+              <strong class="question-text-danger">{{ itemResult.answer[index]|default("") }}</strong>。
               {% else %}
               未回答
               {% endif %}
 
-              {% if itemResult.status == 'right' %}
+              {% if itemResult.answer[index]|default("") in rightAnswer %}
                   <span class="glyphicon glyphicon-ok question-text-success">
-
               {% else %}
                   <span class="glyphicon glyphicon-remove question-text-danger">
               {% endif %}
