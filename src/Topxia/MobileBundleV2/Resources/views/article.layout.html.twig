@@ -1,18 +1,20 @@
 <!doctype html>
-<html>
+{% block html %}<html>{% endblock %}
 <head>
 
 <title>{% block title %}{% endblock %}</title>
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 {% block stylesheets %}
-<link href="{{ asset('bundles/topxiamobilebundlev2/css/app.min.css') }}" rel="stylesheet" />
-<link href="{{ asset('bundles/topxiamobilebundlev2/css/ratchet.css') }}" rel="stylesheet" />
-<link href="{{ asset('bundles/topxiamobilebundlev2/css/ratchet-theme-ios.css') }}" rel="stylesheet" />
-<link href="{{ asset('bundles/topxiamobilebundlev2/css/style.css') }}" rel="stylesheet" />
+
+<link href="{{ asset('bundles/topxiamobilebundlev2/css/forzen/1.2.1/css/global.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/css/ui-style.css') }}" rel="stylesheet" />
+
 {% endblock %}
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova.js') }}"></script>
+{% block head_scripts %}
 
+{% endblock %}
 </head>
 
 <body unresolved  onload="onLoad()">
@@ -23,32 +25,27 @@
     	}
 
   	window.onDeviceReady = function() {
-        		navigator.cordovaUtil.createMenu();
-        		console.log("createMenu");
   	}
 </script>
 {% block content %}
 
-{% block head_scripts %}
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/zepto.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/app.min.js') }}"></script>
-<!--
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/swapper.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/clickable.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/scrollable.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/utils.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/events.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/metrics.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/dialog.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/form.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/scroll.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/scroll-fix.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/pages.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/stack.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/transitions.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/navigation.js') }}"></script>
--->
+{% block bottom_scripts %}
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/sea.js') }}"></script>
+<script type="text/javascript">
+	seajs.config({
+	  base: "/bundles/topxiamobilebundlev2/",
+	  alias: {
+	    "AppControllers": "article/js/controller.js",
+	    "AppServices": "article/js/service.js",
+	    "zepto": "libs/zepto.min.js",
+	    "frozen": "js/frozen/frozen.js",
+	    "app": "article/js/app.js"
+	  }
+	})
 
+	// 加载入口模块
+	seajs.use("app");
+</script>
 {% endblock %}
 
 {% endblock %}

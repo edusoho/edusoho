@@ -1,0 +1,20 @@
+<ul class="ui-list ui-list-link ui-border-tb">
+    <li class="ui-border-t" ng-repeat="article in articles" >
+    	<a href="#detail/{{ article.id}}">
+	        <div class="ui-list-img">
+	            <span style="background-image:url({{ article.thumb}})"></span>
+	        </div>
+	        <div class="ui-list-info">
+	            <h4>{{ article.title | limitTo:15}}</h4>
+	            <p ng-bind-html="article.body | limitTo:80"></p>
+	        </div>
+           </a>
+    </li>
+</ul>
+<div class="ui-center low-height" ng-show="isShowLoadMore">
+    <div class="ui-btn" ng-click="loadMore()" ng-init="start=0">加载更多</div>
+</div>
+<section class="ui-notice" ng-show="isEmpty">
+      <i></i>
+      <p>没有相关资讯</p>
+</section>
