@@ -4,10 +4,9 @@
 
   {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
 
-{% set itemResultAnswer = itemResult.answer|default(null)  %}
+{% set choiceIndex = (65+itemResult.answer[0]|default(-1))|chr %}
+{% if choiceIndex >= 'A' %}
 
-{% if itemResultAnswer >= 0 %}
- {% set choiceIndex = (65+itemResult.answer)|chr %}
   <div class="homework-question-result">
     {% if itemResult.status == 'right' %}
 	  <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
