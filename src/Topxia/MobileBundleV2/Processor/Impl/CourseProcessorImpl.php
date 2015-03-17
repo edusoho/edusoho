@@ -264,7 +264,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'type' => $type
             );
 
-            $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'posted', $start,  $limit);
+            $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds($conditions, 'postedNotStick', $start,  $limit);
             $controller = $this;
             $threadsByUserCourseIds = array_map(function($thread) use ($controller)
             {
@@ -323,7 +323,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $limit = (int) $this->getParam("limit", 10);
         $total = $this->controller->getThreadService()->searchThreadCount($conditions);
         
-        $threads    = $this->controller->getThreadService()->searchThreads($conditions, 'createdNotStick', $start, $limit);
+        $threads    = $this->controller->getThreadService()->searchThreads($conditions, 'postedNotStick', $start, $limit);
         $controller = $this;
         $threads = array_map(function($thread) use ($controller)
         {
@@ -335,7 +335,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $posts = array();
         foreach ($threads as $key => $thread) {
-            $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "default", 0, 1);
+            $post = $this->controller->getThreadService()->findThreadPosts($thread["courseId"], $thread["id"], "elite", 0, 1);
             if (!empty($post)) {
                 $posts[$post[0]["threadId"]] = $post[0];
             }
