@@ -1,7 +1,8 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set nav = 'user-records' %}
-
+{% set side_menus = permissions('admin_finance') %}
+{% set nav = 'finance' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(side_menus,menu) }}{% endblock %}
 
 {% block content %}
   <div class="col-md-2">
@@ -9,8 +10,8 @@
 
       <div class="panel panel-default">
 
-          {% set menus = permissions('admin_finance') %}
-          {{ admin_macro.side_menu(menus,menu) }} 
+
+          {{ admin_macro.side_menu(side_menus,menu) }} 
 
       </div>
 

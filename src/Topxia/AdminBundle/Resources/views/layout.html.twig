@@ -12,9 +12,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   {% set header_menus = permissions('admin') %}
+
   {% set nav = nav|default(null) %}
   {% set menu = menu|default(null) %}
-  <title>{% block title %} {{ admin_macro.title(header_menus,nav) }}{% if not setting('copyright.owned') %}EduSoho{% endif %}{% endblock %}</title>
+
+  <title>{% block title %} {% if not setting('copyright.owned') %}EduSoho-{% endif %}{{ admin_macro.title(header_menus,nav) }}{% endblock %}</title>
+
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}

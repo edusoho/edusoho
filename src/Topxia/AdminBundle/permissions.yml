@@ -346,15 +346,6 @@ admin_user_manage:
     mode: page
     type: tab
     active: user
-admin_user_import:
-    name: 导入
-    parent: admin_user_show
-    router_name: admin_user_import
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: user-lead
 admin_login_record:
     name: 登录日志
     parent: admin_user_show
@@ -537,7 +528,7 @@ admin_coin_user:
     router_params: null
     mode: page
     type: menu
-    active: user-records
+    active: coin-records
 admin_coin_user_records:
     name: 记录
     parent: admin_coin_user
@@ -546,6 +537,120 @@ admin_coin_user_records:
     mode: page
     type: tab
     active: user-records
+# admin_coin_user:
+#     name: 退款
+#     parent: admin_finance
+#     router_name: admin_coin_user_records
+#     router_params: null
+#     mode: page
+#     type: menu
+#     active: coin-records
+# admin_coin_user_records:
+#     name: 管理
+#     parent: admin_coin_user
+#     router_name: admin_coin_user_records
+#     router_params: null
+#     mode: page
+#     type: tab
+#     active: user-records
+admin_setting:
+    name: 站点设置
+    parent: admin_system
+    router_name: admin_setting_site
+    router_params: null
+    mode: page
+    type: menu
+    active: site
+admin_setting_massage:
+    name: 基础信息
+    parent: admin_setting
+    router_name: admin_setting_site
+    router_params: null
+    mode: page
+    type: tab
+    active: site-massage
+admin_setting_theme:
+    name: 主题
+    parent: admin_setting
+    router_name: admin_setting_theme
+    router_params: null
+    mode: page
+    type: tab
+    active: theme
+admin_top_navigation:
+    name: 顶部导航
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: top }
+    router_params_context: false
+    mode: page
+    type: tab
+    active: 顶部
+admin_foot_navigation:
+    name: 底部导航
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: foot }
+    router_params_context: false
+    mode: page
+    type: tab
+    active: 底部
+admin_setting_consult_setting:
+    name: 客服
+    parent: admin_setting
+    router_name: admin_setting_consult_setting
+    router_params: null
+    mode: page
+    type: tab
+    active: consult_setting
+admin_setting_share:
+    name: 分享
+    parent: admin_setting
+    router_name: admin_setting_share
+    router_params: null
+    mode: page
+    type: tab
+    active: share
+admin_setting_user:
+    name: 用户设置
+    parent: admin_system
+    router_name: admin_setting_auth
+    router_params: null
+    mode: page
+    type: menu
+    active: user_set
+admin_user_auth:
+    name: 注册
+    parent: admin_setting_user
+    router_name: admin_setting_auth
+    router_params: null
+    mode: page
+    type: tab
+    active: auth
+admin_setting_login_bind:
+    name: 登录
+    parent: admin_setting_user
+    router_name: admin_setting_login_bind
+    router_params: null
+    mode: page
+    type: tab
+    active: login_bind
+admin_setting_user_center:
+    name: 用户中心
+    parent: admin_setting_user
+    router_name: admin_setting_user_center
+    router_params: null
+    mode: page
+    type: tab
+    active: user_center
+admin_setting_user_fields:
+    name: 字段自定义
+    parent: admin_setting_user
+    router_name: admin_setting_user_fields
+    router_params: null
+    mode: page
+    type: tab
+    active: user_fields
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}

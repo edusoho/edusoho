@@ -1,11 +1,16 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %} 用户相关设置 - {{ parent() }}{% endblock %}
-
+{% set menus = permissions("admin_setting_user","tab")%}
 {% set menu = 'user_set' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
-<ul class="nav nav-tabs mbl">
+
+<div class = "mbl">
+{{admin_macro.tab_group(menus,submenu)}}
+</div>
+
+<!-- <ul class="nav nav-tabs mbl">
   <li class="{% if submenu == 'auth' %}active{% endif %}">
   	<a href="{{ url('admin_setting_auth') }}">注册设置
   	</a>
@@ -23,7 +28,7 @@
     </a>
   </li>
 
-</ul>
+</ul> -->
 
 
   {% block maincontent %}{% endblock %}

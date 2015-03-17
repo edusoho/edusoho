@@ -1,13 +1,12 @@
 {% extends 'TopxiaAdminBundle:Coin:finance.html.twig' %}
 
-{% block title %}账单{% endblock %}
-
+{% set menus = permissions("admin_bills","tab")%}
 {% set menu = 'bill' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 
 <div class = "mbl">
-{% set menus = permissions("admin_bills","tab")%}
 {{admin_macro.tab_group(menus,submenu)}}
 </div>
 
