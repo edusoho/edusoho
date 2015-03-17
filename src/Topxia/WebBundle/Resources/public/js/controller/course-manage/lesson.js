@@ -96,7 +96,9 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
+                $(id).find('.item-content .text-warning').remove();
+                $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
+                $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时发布成功！');
             });
@@ -106,7 +108,9 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
+                $(id).find('.item-content').append('<span class="text-warning">(未发布)</span>');
+                $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
+                $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时已取消发布！');
             });

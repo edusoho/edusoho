@@ -122,11 +122,15 @@
 					<li class="divider"></li>
 				{% endif %}
 
-				{% if lesson.status == 'unpublished' %}
-  				<li><a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle prs"></span>发布</a></li>
-				{% else %}
-          <li><a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle prs"></span>取消发布</a></li>
-				{% endif %}
+  				<li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+  					<a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle prs"></span>发布
+  					</a>
+  				</li>
+
+          		<li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
+          			<a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle prs"></span>取消发布
+          			</a>
+          		</li>
 				<li><a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a></li>
       </ul>
 		</span>
