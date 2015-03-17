@@ -32,7 +32,15 @@ define(function(require, exports, module) {
 				$('.collect-list').append(data);
 			}
 
-			$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a>');
+			if($('.divider').length> 0) {
+
+				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a>');
+				
+			}else{
+
+				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a><li role="presentation" class="divider"></li>');
+			
+			}
 			$('.admin-collect').addClass('open');
 
 		});
