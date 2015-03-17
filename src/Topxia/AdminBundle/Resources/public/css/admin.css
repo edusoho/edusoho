@@ -245,12 +245,36 @@ input.LargeInput {width: 600px;}
   color: #999;
 }
 
-.collect-list{
+.main-list, .collect-list{
 
   background-color: #101010;
 
 }
-.collect-list>li>a {
+.main-list>li>a, .collect-list>li>a {
 
   color: #fff;
+}
+.remove {
+    visibility: hidden;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+}
+.common-plus:hover .remove {
+    visibility: visible;
+}
+.dropdown-menu>li>div {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  width: 300px;
+  
+}
+.dropdown-menu>li>div a{
+  
+  color:#fff;
+  white-space: nowrap;
 }
