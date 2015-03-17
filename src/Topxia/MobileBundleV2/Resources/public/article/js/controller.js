@@ -29,9 +29,7 @@ function ListController($scope, $http, $rootScope)
 					$scope.articles = [];
 				}
 
-				if (data.length == 0) {
-					$scope.isEmpty = true;
-				}
+				$scope.isEmpty = data.length == 0;
 				$scope.isShowLoadMore = !(!data || data.length < $scope.limit);
 				$scope.data = data;
 		    		$scope.articles = $scope.articles.concat(data);
