@@ -19,24 +19,30 @@ function ListController($scope, $http, $rootScope)
   	};
 
   	var queryArticelList = function(success){
+  		var el=Zepto.loading({
+		        content:'加载中...',
+		});
   		$http.post(
   			'/mapi_v2/articleApp/list', 
-  			{
-  				start: $scope.start,
-  				categoryId : $scope.categoryId 
-  			}).success(function(data) {
-				if (! $scope.articles) {
-					$scope.articles = [];
-				}
+  		{
+  			start: $scope.start,
+  			categoryId : $scope.categoryId 
+  		}).success(function(data) {
+  			el.loading("hide");
+			if (! $scope.articles) {
+				$scope.articles = [];
+			}
 
-				$scope.isEmpty = data.length == 0;
-				$scope.isShowLoadMore = !(!data || data.length < $scope.limit);
-				$scope.data = data;
-		    		$scope.articles = $scope.articles.concat(data);
-		    		if (success) {
-		    			success();
-		    		}
-		    		$scope.start += $scope.limit;
+			$scope.isEmpty = data.length == 0;
+			$scope.isShowLoadMore = !(!data || data.length < $scope.limit);
+			$scope.data = data;
+	    		$scope.articles = $scope.articles.concat(data);
+	    		if (success) {
+	    			success();
+	    		}
+	    		$scope.start += $scope.limit;
+	  	}).error(function(){
+	  		el.loading("hide");
 	  	});
   	}
 
@@ -82,4 +88,8 @@ function DetailController($scope, $http, $stateParams, $sce)
 	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
     		$scope.content = data;
   	});
+
+  	$scope.zoomImage = function(){
+  		angular.imageUtil.zoom();
+  	};
 }

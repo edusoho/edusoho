@@ -82,7 +82,7 @@ define(function(require, exports, module) {
 		state("detail", {
 			url : "/detail/:id",
 			template : function(){
-				return "<div ng-bind-html='content'></div>";
+				return "<div ng-bind-html='content' ng-init='zoomImage()'></div>";
 			},
 			controller : DetailController
 		});
@@ -91,7 +91,9 @@ define(function(require, exports, module) {
 	angular.element(document).ready(function() {
 		         angular.bootstrap(document, ['EduSohoArticleApp']);
 		         angular.$client = {};
+
 		         var $injector = angular.injector(['EduSohoArticleApp']);
 		         angular.broadCast = $injector.get("broadCast");
+		         angular.imageUtil = $injector.get("ImageUtil");
 	});
 });
