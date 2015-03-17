@@ -537,7 +537,7 @@ admin_coin_user:
     router_params: null
     mode: page
     type: menu
-    active: user-records
+    active: coin-records
 admin_coin_user_records:
     name: 记录
     parent: admin_coin_user
