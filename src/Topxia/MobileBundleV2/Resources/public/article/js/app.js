@@ -82,7 +82,7 @@ define(function(require, exports, module) {
 		state("detail", {
 			url : "/detail/:id",
 			template : function(){
-				return "<div ng-bind-html='content' ng-init='zoomImage()'></div>";
+				return "<div ng-bind-html='content'></div>";
 			},
 			controller : DetailController
 		});

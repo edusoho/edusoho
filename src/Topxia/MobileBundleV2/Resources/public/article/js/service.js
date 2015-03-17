@@ -13,7 +13,7 @@ factory('broadCast', ['$rootScope', function($rootScope) {
 	};
 	return broadCastService;
 }]).
-factory('ImageUtil', ['$rootScope', function(){
+factory('ImageUtil', ['$rootScope', function($rootScope){
 	function getScreenWidth() {
 		var width = window.screen.width;
 		switch (window.orientation) {
@@ -35,7 +35,7 @@ factory('ImageUtil', ['$rootScope', function(){
 	}
 	function adaptationImage() {
 		var width = getScreenWidth();
-		var imgs = document.getElementsByTagName('img');
+		var imgs = angular.element(document.images);
 		for (var i = 0; i < imgs.length; i++) {
 			zoomImage(imgs[i], width)
 		}
@@ -44,7 +44,7 @@ factory('ImageUtil', ['$rootScope', function(){
 	var util = {
 		zoom : function(){
 			var imageArray = new Array();
-			var imgs = document.getElementsByTagName('img');
+			var imgs = angular.element(document.images);
 			for (var i = 0; i < imgs.length; i++) {
 				var img = imgs[i];
 				img.addEventListener('load',

@@ -89,7 +89,9 @@ function DetailController($scope, $http, $stateParams, $sce)
     		$scope.content = data;
   	});
 
-  	$scope.zoomImage = function(){
-  		angular.imageUtil.zoom();
-  	};
+	$scope.$on('$viewContentLoaded', function(event){
+		setTimeout(function(){
+			angular.imageUtil.zoom();
+		}, 500);
+	});
 }
