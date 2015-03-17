@@ -1,12 +1,12 @@
 <ul class="ui-list ui-list-link ui-border-tb">
     <li class="ui-border-t" ng-repeat="article in articles" >
     	<a href="#detail/{{ article.id}}">
-	        <div class="ui-list-img">
+	        <div class="ui-list-img" ng-show="article.thumb">
 	            <span style="background-image:url({{ article.thumb}})"></span>
 	        </div>
 	        <div class="ui-list-info">
 	            <h4>{{ article.title | limitTo:15}}</h4>
-	            <p ng-bind-html="article.body | limitTo:80"></p>
+	            <p ng-bind-html="article.body | limitTo:40"></p>
 	        </div>
            </a>
     </li>
