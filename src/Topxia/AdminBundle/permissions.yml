@@ -546,6 +546,22 @@ admin_coin_user_records:
     mode: page
     type: tab
     active: user-records
+admin_coin_user:
+    name: 退款
+    parent: admin_finance
+    router_name: admin_coin_user_records
+    router_params: null
+    mode: page
+    type: menu
+    active: coin-records
+admin_coin_user_records:
+    name: 管理
+    parent: admin_coin_user
+    router_name: admin_coin_user_records
+    router_params: null
+    mode: page
+    type: tab
+    active: user-records
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
