@@ -1,0 +1,54 @@
+h3.subtitle
+{
+	margin: 0;
+	color: #333;
+	display: block;
+	padding: 10px 0;
+	font-size: 18px;
+}
+
+h3.title
+{
+	margin: 0;
+	color: #333;
+	display: block;
+	padding: 10px 0;
+	font-size: 24px;
+}
+
+h6.title
+{
+	height: 40px;
+	line-height: 40px;
+}
+
+h6 span
+{
+	margin-right: 10px;
+}
+
+.content-body
+{
+	color: #444;
+	font-size: initial;
+}
+
+.blod
+{
+	font-weight:bold;
+}
+
+.ui-list li a
+{
+	display: inherit;
+}
+
+.ui-content
+{
+	padding:8px;
+}
+
+.ui-center.low-height
+{
+	height: 80px;
+}
