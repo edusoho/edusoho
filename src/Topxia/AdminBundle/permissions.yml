@@ -546,22 +546,64 @@ admin_coin_user_records:
     mode: page
     type: tab
     active: user-records
-admin_coin_user:
-    name: 退款
-    parent: admin_finance
-    router_name: admin_coin_user_records
+# admin_coin_user:
+#     name: 退款
+#     parent: admin_finance
+#     router_name: admin_coin_user_records
+#     router_params: null
+#     mode: page
+#     type: menu
+#     active: coin-records
+# admin_coin_user_records:
+#     name: 管理
+#     parent: admin_coin_user
+#     router_name: admin_coin_user_records
+#     router_params: null
+#     mode: page
+#     type: tab
+#     active: user-records
+admin_setting:
+    name: 站点设置
+    parent: admin_system
+    router_name: admin_setting_site
     router_params: null
     mode: page
     type: menu
-    active: coin-records
-admin_coin_user_records:
-    name: 管理
-    parent: admin_coin_user
-    router_name: admin_coin_user_records
+    active: site
+admin_setting_massage:
+    name: 基础信息
+    parent: admin_setting
+    router_name: admin_setting_site
     router_params: null
     mode: page
     type: tab
-    active: user-records
+    active: site-massage
+admin_setting_theme:
+    name: 主题
+    parent: admin_setting
+    router_name: admin_setting_theme
+    router_params: null
+    mode: page
+    type: tab
+    active: theme
+admin_top_navigation:
+    name: 顶部导航
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: top }
+    router_params_context: false
+    mode: page
+    type: tab
+    active: 顶部
+admin_foot_navigation:
+    name: 底部导航
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: foot }
+    router_params_context: false
+    mode: page
+    type: tab
+    active: 底部
 
 
   # - { name: '创建课程', code: 'admin_course_manage_delete', parent: 'admin_course_manage', router_name: 'admin_course', router_params: null,router_params_context: false, mode: 'page', group:'button',class:'btn btn-success btn-sm pull-right mls ',blank:true, icon:glyphicon glyphicon-plus}
