@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
-    
+
     require('common/validator-rules').inject(Validator);
     Validator.addRule('passwordCheck', function(options, commit) {
         var element = options.element;
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                         Notify.success(res['message']);
                         setTimeout(function() {
                             window.location.reload();
-                        },500);
+                        },1000);
                     }
 
                 });
