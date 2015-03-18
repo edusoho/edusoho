@@ -24,7 +24,7 @@ admin_course:
 admin_operation:
     name: 运营
     parent: admin
-    router_name: admin_operation
+    router_name: admin_article
     router_params: null
     mode: page
     type: menu
@@ -64,7 +64,7 @@ admin_system:
 admin_operation_article:
     name: 资讯
     parent: admin_operation
-    router_name: admin_operation
+    router_name: admin_article
     router_params: null
     router_params_context: false
     mode: page
@@ -109,7 +109,7 @@ admin_operation_article_create:
 admin_operation_article_manage:
     name: 管理
     parent: admin_operation_article
-    router_name: admin_operation
+    router_name: admin_article
     router_params: null
     router_params_context: false
     mode: page
@@ -118,7 +118,7 @@ admin_operation_article_manage:
 admin_operation_article_category:
     name: 栏目
     parent: admin_operation_article
-    router_name: admin_operation_article_category
+    router_name: admin_article_category
     router_params: null
     router_params_context: false
     mode: page
