@@ -13,6 +13,8 @@ admin_user:
     mode: page
     type: menu
     active: user
+    router_params: {'id':'class.id' }
+    router_params_context: true
 admin_course:
     name: 课程
     parent: admin
@@ -21,6 +23,14 @@ admin_course:
     mode: page
     type: menu
     active: course
+admin_operation:
+    name: 运营
+    parent: admin
+    router_name: admin_operation
+    router_params: null
+    mode: page
+    type: menu
+    active: operation
 admin_order:
     name: 订单
     parent: admin
@@ -37,30 +47,6 @@ admin_finance:
     mode: page
     type: menu
     active: finance
-admin_navigation:
-    name: 内容
-    parent: admin
-    router_name: admin_navigation
-    router_params: null
-    mode: page
-    type: menu
-    active: content
-admin_group:
-    name: 小组
-    parent: admin
-    router_name: admin_group
-    router_params: null
-    mode: page
-    type: menu
-    active: group
-admin_classroom:
-    name: 班级
-    parent: admin
-    router_name: admin_classroom
-    router_params: null
-    mode: page
-    type: menu
-    active: classroom
 admin_app:
     name: 应用
     parent: admin
@@ -77,14 +63,6 @@ admin_system:
     mode: page
     type: menu
     active: system
-admin_operation:
-    name: 运营
-    parent: admin
-    router_name: admin_operation
-    router_params: null
-    mode: page
-    type: menu
-    active: operation
 admin_operation_article:
     name: 资讯
     parent: admin_operation
