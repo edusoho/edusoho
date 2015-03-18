@@ -279,7 +279,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread=$this->getThreadService()->addThread($testThread);
 
-        $post=$this->getThreadService()->postThread(array('content'=>"xxaaaaa"),$group['id'],$user['id'],$thread['id']);
+        $post=$this->getThreadService()->postThread(array( 'fromUserId' => $user['id'], 'content'=>"xxaaaaa"),$group['id'],$user['id'],$thread['id']);
 
         $this->assertEquals('xxaaaaa',$post['content']);
 
@@ -301,7 +301,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread=$this->getThreadService()->addThread($testThread);
 
-        $post=$this->getThreadService()->postThread(array('content'=>"xxaaaaa"),$group['id'],$user['id'],$thread['id']);
+        $post=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>"xxaaaaa"),$group['id'],$user['id'],$thread['id']);
 
         $post1=$this->getThreadService()->getPost($post['id']);
 
@@ -326,8 +326,8 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread=$this->getThreadService()->addThread($testThread);
 
-        $post=$this->getThreadService()->postThread(array('content'=>'aaaaaa',),$group['id'],$user['id'],$thread['id']);
-        $post1=$this->getThreadService()->postThread(array('content'=>"test1"),$group['id'],$user['id'],$thread['id']);
+        $post=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>'aaaaaa',),$group['id'],$user['id'],$thread['id']);
+        $post1=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>"test1"),$group['id'],$user['id'],$thread['id']);
 
         $posts=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),array('createdTime','desc'),0,10);
         $this->assertCount(2,$posts);
@@ -349,7 +349,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread=$this->getThreadService()->addThread($testThread);
 
-        $post=$this->getThreadService()->postThread(array('content'=>'aaaaaa',),$group['id'],$user['id'],$thread['id']);
+        $post=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>'aaaaaa',),$group['id'],$user['id'],$thread['id']);
        
         $this->getThreadService()->deletePost($post['id']);
 
