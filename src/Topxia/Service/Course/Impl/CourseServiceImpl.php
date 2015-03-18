@@ -534,6 +534,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
 		}
 
+		$this->dispatchEvent("course.delete", array(
+            "courseId"=>$lesson["courseId"], 
+        ));
+
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
 		return true;
