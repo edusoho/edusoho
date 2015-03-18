@@ -11,7 +11,7 @@
 
 <div class="mbl">
 
-{{ admin_macro.tab_group(menus,submenu) }}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 
 <div class="clearfix mbs">

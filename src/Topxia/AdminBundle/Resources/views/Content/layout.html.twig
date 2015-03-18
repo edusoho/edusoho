@@ -7,7 +7,8 @@
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
-      {{ admin_macro.side_menu(side_menus,menu) }} 
+
+      {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
 <!--       <div class="list-group">
         <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理</a>
         <a href="{{ url('admin_content', {type:'page'}) }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">页面管理</a>

@@ -7,7 +7,7 @@
     {% block main %}
     <div class="mbl">
 
-{{ admin_macro.tab_group(menus,submenu) }}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 
       {{ web_macro.flash_messages() }}

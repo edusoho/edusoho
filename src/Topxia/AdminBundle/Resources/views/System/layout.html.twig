@@ -7,7 +7,9 @@
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
-          {{ admin_macro.side_menu(side_menus,menu) }} 
+        
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
+     
           
 <!--       <div class="list-group">
         <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置</a>
