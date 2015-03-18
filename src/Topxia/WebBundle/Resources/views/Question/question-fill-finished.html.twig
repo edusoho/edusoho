@@ -33,15 +33,15 @@
             <li>
               填空({{index+1}})： 正确答案 
               <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
-              {% if itemResult.answer[index]|default("") %}
+              {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
              回答是
 
-              <strong class="question-text-danger">{{ itemResult.answer[index]|default("") }}</strong>。
+              <strong class="question-text-danger">{{ itemResult.answer[index] }}</strong>。
               {% else %}
               未回答
               {% endif %}
 
-              {% if itemResult.answer[index]|default("") in rightAnswer %}
+              {% if itemResult.answer[index]|default(null)  in rightAnswer %}
                   <span class="glyphicon glyphicon-ok question-text-success">
               {% else %}
                   <span class="glyphicon glyphicon-remove question-text-danger">
