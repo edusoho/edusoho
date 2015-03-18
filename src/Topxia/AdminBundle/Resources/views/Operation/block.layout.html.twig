@@ -7,7 +7,7 @@
 {% block main %}
 <div class = "mbl">
 {% set menus = permissions("admin_operation_block","tab")%}
-{{admin_macro.tab_group(menus,submenu)}}
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : menus , type : submenu} %}
 </div>
 
 
