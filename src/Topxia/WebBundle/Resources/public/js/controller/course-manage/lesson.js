@@ -96,7 +96,7 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).find('.item-content .text-warning').remove();
+                $(id).find('.item-content .unpublish-warning').remove();
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.btn-link').tooltip();
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).find('.item-content').append('<span class="text-warning">(未发布)</span>');
+                $(id).find('.item-content').append('<span class="unpublish-warning text-warning">(未发布)</span>');
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.btn-link').tooltip();
