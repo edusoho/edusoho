@@ -1,13 +1,11 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}课程数据 - {{ parent() }}{% endblock %}
-
 {% set menu = 'course' %}
-
+{% set type = 'data'  %}
+{% set menus = permissions('admin_course_show','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 {% block main %}
 
-  {% set type = 'data'  %}
-  {% set menus = permissions('admin_course_show','tab') %}
   {{ admin_macro.tab_group(menus,type) }}
 
     <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
