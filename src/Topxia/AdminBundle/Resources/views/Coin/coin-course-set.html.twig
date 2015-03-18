@@ -10,7 +10,7 @@
 <!--   <div class="page-header"><h1>虚拟币管理</h1></div>
   {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %} -->
 <div class = "mbl">
-{{admin_macro.tab_group(menus,submenu)}}
+{% include 'TopxiaAdminBundle:tab.html.twig' with {menus:menus,nav:submenu} %}
 </div>
 
     <div class="well">

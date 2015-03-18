@@ -9,14 +9,14 @@
 <div class="mbl">
   {% set type = 'manage'%}
   {% set menus = permissions('admin_course_tag','tab') %}
-  {{ admin_macro.tab_group(menus,type) }}
+  {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
 </div>
 
 <div class="page-header clearfix">
 
   {% set menus = permissions('admin_course_tag','button') %}
-  {{ admin_macro.btn_group(menus,type) }}   
-
+ 
+  {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
 </div>
 
 <table id="tag-table" class="table table-striped">

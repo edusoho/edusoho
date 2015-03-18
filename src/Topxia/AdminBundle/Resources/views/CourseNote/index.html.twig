@@ -10,7 +10,8 @@
 <div class="mbl">
 {% set active = 'manage' %}
 {% set menus = permissions('admin_course_note','tab') %}
-{{ admin_macro.tab_group(menus,active) }}
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
 </div>
 
 <div class="well well-sm">
