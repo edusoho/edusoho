@@ -82,7 +82,7 @@ admin_operation_group:
 admin_operation_block:
     name: 编辑区
     parent: admin_operation
-    router_name: admin_operation_block
+    router_name: admin_block
     router_params: null
     router_params_context: false
     mode: page
@@ -91,7 +91,7 @@ admin_operation_block:
 admin_operation_content:
     name: 自定义页面
     parent: admin_operation
-    router_name: admin_operation_content
+    router_name: admin_content
     router_params: { type: page }
     router_params_context: false
     mode: page
@@ -162,7 +162,7 @@ admin_operation_group_thread:
 admin_operation_block_create:
     name: 新增编辑区
     parent: admin_operation_block
-    router_name: admin_operation_block_create
+    router_name: admin_block_create
     router_params: null
     router_params_context: false
     mode: modal
@@ -170,7 +170,7 @@ admin_operation_block_create:
 admin_operation_block_manage:
     name: 管理
     parent: admin_operation_block
-    router_name: admin_operation_block
+    router_name: admin_block
     router_params: null
     router_params_context: false
     mode: page
@@ -179,7 +179,7 @@ admin_operation_block_manage:
 admin_operation_content_manage:
     name: 管理
     parent: admin_operation_content
-    router_name: admin_operation_content
+    router_name: admin_content
     router_params: { type: page }
     router_params_context: false
     mode: page
