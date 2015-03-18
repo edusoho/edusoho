@@ -10,8 +10,7 @@
 
       <div class="panel panel-default">
 
-          {{ admin_macro.side_menu(side_menus,menu) }} 
-
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
       </div>
 
     {% endblock %}

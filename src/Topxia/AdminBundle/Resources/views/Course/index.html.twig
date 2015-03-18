@@ -11,7 +11,9 @@
 
 <div class="mbl">
 
-{{ admin_macro.tab_group(menus,type) }}
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
+
 </div>
   <div class="page-header">
     <div class="mbs clearfix">
@@ -19,8 +21,9 @@
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm pull-right mls" target="_blank">创建直播课程</a>
   {% endif %}
   {% set menus = permissions('admin_course_show','button') %}
-  {{ admin_macro.btn_group(menus,type) }}
  
+ {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
+
     </div>
   </div>
 

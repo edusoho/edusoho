@@ -6,8 +6,10 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 {% block main %}
 
-  {{ admin_macro.tab_group(menus,type) }}
+  {% set type = 'data'  %}
+  {% set menus = permissions('admin_course_show','tab') %}
 
+  {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
     <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">
         <select class="form-control" name="categoryId">

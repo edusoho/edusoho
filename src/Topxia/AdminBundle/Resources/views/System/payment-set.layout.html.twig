@@ -5,7 +5,7 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
 <div class = "mbl">
-{{admin_macro.tab_group(menus,submenu)}}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 <!-- <ul class="nav nav-tabs mbl">
   <li class="{% if submenu == 'payment' %}active{% endif %}">

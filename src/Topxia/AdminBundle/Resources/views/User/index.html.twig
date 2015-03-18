@@ -8,7 +8,9 @@
 <div class="clearfix mbs">
 
   {% set menus = permissions("admin_user_show","button") %}
-            {{ admin_macro.btn_group(menus) }} 
+
+  {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus} %}
+
 </div>
 
  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

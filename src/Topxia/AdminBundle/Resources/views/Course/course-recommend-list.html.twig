@@ -9,8 +9,8 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 
 {% block main %}
-  {{ admin_macro.tab_group(menus,type) }}
 
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
   <table class="table table-striped table-hover mtl" id="course-recommend-table">
     <thead>
     <tr>
