@@ -92,6 +92,10 @@ class PartnerPhpwindController extends BaseController
                 'token' => array('userId' => $partnerUser['uid']),
             );
 
+            if(!$this->isRegisterEnabled()){
+                return true;
+            }
+
             $user = $this->getUserService()->register($registration, 'phpwind');
         } else {
             $user = $this->getUserService()->getUser($bind['toId']);
@@ -102,6 +106,19 @@ class PartnerPhpwindController extends BaseController
 
         $this->authenticateUser($user);
 
+        return true;
+    }
+
+    private function isRegisterEnabled()
+    {
+        $auth = $this->setting('auth');
+        if($auth && array_key_exists('register_mode',$auth)){
+           if($auth['register_mode'] == 'opened'){
+               return true;
+           }else{
+               return false;
+           }
+        }
         return true;
     }
 
