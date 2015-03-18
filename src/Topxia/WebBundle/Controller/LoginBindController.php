@@ -91,6 +91,11 @@ class LoginBindController extends BaseController
             goto response;
         }
 
+        if(!$this->isRegisterEnabled()) {
+            $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
+            goto response;
+        }
+
         $user = $this->generateUser($type, $token, $oauthUser,$setData=array());
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
@@ -123,6 +128,11 @@ class LoginBindController extends BaseController
             goto response;
         }
 
+        if(!$this->isRegisterEnabled()) {
+            $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
+            goto response;
+        }
+
         $user = $this->generateUser($type, $token, $oauthUser,$setData);
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
@@ -136,6 +146,19 @@ class LoginBindController extends BaseController
 
         response:
         return $this->createJsonResponse($response);
+    }
+
+    private function isRegisterEnabled()
+    {
+        $auth = $this->setting('auth');
+        if($auth && array_key_exists('register_mode',$auth)){
+           if($auth['register_mode'] == 'opened'){
+               return true;
+           }else{
+               return false;
+           }
+        }
+        return true;
     }
 
     private function generateUser($type, $token, $oauthUser,$setData)
