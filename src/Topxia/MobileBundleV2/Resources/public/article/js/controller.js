@@ -88,10 +88,4 @@ function DetailController($scope, $http, $stateParams, $sce)
 	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
     		$scope.content = data;
   	});
-
-	$scope.$on('$viewContentLoaded', function(event){
-		setTimeout(function(){
-			angular.imageUtil.zoom();
-		}, 500);
-	});
 }

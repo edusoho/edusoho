@@ -45,6 +45,7 @@ factory('ImageUtil', ['$rootScope', function($rootScope){
 		zoom : function(){
 			var imageArray = new Array();
 			var imgs = angular.element(document.images);
+				console.log(imgs.length);
 			for (var i = 0; i < imgs.length; i++) {
 				var img = imgs[i];
 				img.addEventListener('load',

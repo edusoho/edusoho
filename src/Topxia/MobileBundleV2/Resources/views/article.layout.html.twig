@@ -8,7 +8,6 @@
 
 <link href="{{ asset('bundles/topxiamobilebundlev2/css/forzen/1.2.1/css/global.css') }}" rel="stylesheet" />
 <link href="{{ asset('bundles/topxiamobilebundlev2/css/ui-style.css') }}" rel="stylesheet" />
-
 {% endblock %}
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova.js') }}"></script>
@@ -20,31 +19,32 @@
 <body unresolved  onload="onLoad()">
 
 <script type="text/javascript">
-	window.onLoad = function() {
-        		document.addEventListener("deviceready", onDeviceReady, false);
-    	}
+    window.onLoad = function() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+        }
 
-  	window.onDeviceReady = function() {
-  	}
+    window.onDeviceReady = function() {
+    }
 </script>
 {% block content %}
 
 {% block bottom_scripts %}
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/sea.js') }}"></script>
 <script type="text/javascript">
-	seajs.config({
-	  base: "/bundles/topxiamobilebundlev2/",
-	  alias: {
-	    "AppControllers": "article/js/controller.js",
-	    "AppServices": "article/js/service.js",
-	    "zepto": "libs/zepto.min.js",
-	    "frozen": "js/frozen/frozen.js",
-	    "app": "article/js/app.js"
-	  }
-	})
+    seajs.config({
+      base: "/bundles/topxiamobilebundlev2/",
+      alias: {
+        "AppControllers": "article/js/controller.js",
+        "AppDirectives": "article/js/directive.js",
+        "AppServices": "article/js/service.js",
+        "zepto": "libs/zepto.min.js",
+        "frozen": "js/frozen/frozen.js",
+        "app": "article/js/app.js"
+      }
+    })
 
-	// 加载入口模块
-	seajs.use("app");
+    // 加载入口模块
+    seajs.use("app");
 </script>
 {% endblock %}
 
