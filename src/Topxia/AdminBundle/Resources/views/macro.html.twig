@@ -84,14 +84,14 @@
                   {% set param = param|merge(item) %}
                   
                   {% endfor %}
-                <a href="{{path(router_name,param)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+                <a href="{{path(router_name,param)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
                 {% else %}
-                 <a href="{{path(router_name,router_params)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+                 <a href="{{path(router_name,router_params)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
                 {% endif %}
 
              
               {% else %}
-              <a href="{{path(router_name)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}">{{menu.name}}</a>
+              <a href="{{path(router_name)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
               {% endif %}
             {% endif %}
           {% endfor %}
