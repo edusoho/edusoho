@@ -1,5 +1,14 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
+    Validator.addRule('passwordCheck', function(options, commit) {
+        var element = options.element;
+        var url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+
+        $.post(url, {value:element.val()}, function(response) {
+            commit(response.success, response.message);
+        }, 'json');
+    });
+
     require('common/validator-rules').inject(Validator);
     var SmsSender = require('../widget/sms-sender');
 
@@ -17,7 +26,9 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="password"]',
-            required: true          
+            required: true,
+            triggerType: 'submit',
+            rule: 'passwordCheck'          
         });
 
         validator.addItem({

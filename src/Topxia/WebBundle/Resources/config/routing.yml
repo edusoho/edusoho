@@ -1603,6 +1603,11 @@ settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
 
+settings_check_login_password:
+    pattern:  /settings/check_login_password
+    defaults: { _controller: TopxiaWebBundle:Settings:passwordCheck }
+    methods: [POST]
+
 password_reset_by_sms:
     pattern:  /password/reset/by_sms
     defaults: { _controller: TopxiaWebBundle:PasswordReset:resetBySms }
