@@ -1,13 +1,13 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% block title %}教师 - {{ parent() }}{% endblock %}
-
+{% set menus = permissions("admin_teacher","tab")%}
 {% set menu = 'teacher' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 
 <div class = "mbl">
-{% set menus = permissions("admin_teacher","tab")%}
+
 {{admin_macro.tab_group(menus,submenu)}}
 </div>
 

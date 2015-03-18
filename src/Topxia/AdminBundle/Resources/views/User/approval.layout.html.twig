@@ -1,13 +1,12 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% block title %}实名认证 - {{ parent() }}{% endblock %}
-
+{% set menus = permissions("admin_approval_approving","tab")%}
 {% set menu = 'approval' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 
 <div class = "mbl">
-{% set menus = permissions("admin_approval_approving","tab")%}
 {{admin_macro.tab_group(menus,submenu)}}
 </div>
 
