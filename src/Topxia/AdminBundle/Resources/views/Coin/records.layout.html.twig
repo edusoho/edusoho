@@ -1,13 +1,13 @@
 {% extends 'TopxiaAdminBundle:Coin:records.html.twig' %}
 
-{% set menus = permissions("admin_coin_user","tab")%}
+{% set tab_menus = permissions("admin_coin_user","tab")%}
 {% set menu = 'coin-records' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
 
 <div class = "mbl">
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus,type : submenu} %}
 </div>
 
 

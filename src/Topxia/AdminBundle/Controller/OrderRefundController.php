@@ -16,7 +16,6 @@ class OrderRefundController extends BaseController
         $processor = $this->getOrderRefundProcessor($targetType);
 
         $conditions['targetType'] = $targetType;
-
         if (!empty($conditions['title'])){
 
             $targets = $processor->findByLikeTitle(trim($conditions['title']));
@@ -27,7 +26,7 @@ class OrderRefundController extends BaseController
 		                'users' => array(),
 		                'orders' => array(),
 		                'paginator' => new Paginator($request,0,20),
-		                'layout' => $processor->getLayout(),
+		                'layout' => $processor->getRefundLayout(),
 		                'targetType' => $targetType
 		            )
                 );
@@ -56,7 +55,7 @@ class OrderRefundController extends BaseController
             'users' => $users,
             'orders' => $orders,
             'paginator' => $paginator,
-            'layout' => $processor->getLayout(),
+            'layout' => $processor->getRefundLayout(),
             'targetType' => $targetType
         ));
     }

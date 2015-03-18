@@ -4,6 +4,8 @@ namespace Topxia\Service\Order\OrderRefundProcessor;
 interface OrderRefundProcessor 
 {
 	public function getLayout();
+	
+	public function getRefundLayout();
 
 	public function findByLikeTitle($title);
 
