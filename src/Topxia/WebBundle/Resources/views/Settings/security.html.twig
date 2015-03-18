@@ -7,7 +7,8 @@
  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     {% block heading %}安全设置{% endblock %}
     {% block body %}
-
+		{{ web_macro.flash_messages() }}
+		
     	<div class="row safety-setting">
     		<div class="col-md-2 tar">
     			<span class="esicon esicon-safety {% if progressScore > 90 %}text-success{% elseif progressScore > 60 %}text-warning{% else %}text-danger{% endif %}" style="font-size:32px"></span>
@@ -27,6 +28,7 @@
 				{% endif %}
 			</div>
 		</div>
+
 		<hr>
 		
 		<div class="row">

@@ -35,7 +35,8 @@
       {% if not hasPayPassword %}
       <div>
         <span class="text-danger">为了保障账户资金安全，请先</span>
-        <a href="{{path('settings_pay_password')}}" target='_blank' class="btn-link">设置支付密码</a>
+        <a class="btn-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">设置支付密码</a>
+        {# <a href="{{path('settings_pay_password')}}" target='_blank' class="btn-link">设置支付密码</a> #}
       </div>
       {% else %}
       <div role="password-input" style="display:none">
