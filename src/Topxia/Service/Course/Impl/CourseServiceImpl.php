@@ -535,7 +535,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->dispatchEvent("course.delete", array(
-            "courseId"=>$lesson["courseId"], 
+            "id" => $id
         ));
 
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
