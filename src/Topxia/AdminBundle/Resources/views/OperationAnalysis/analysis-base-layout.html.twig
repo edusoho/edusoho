@@ -1,6 +1,8 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 {% set panel = 'dashboard' %}
 {% set nav = 'system' %}
+{% block title %}{{ parent() }}-数据统计{% endblock %}
+
 {% block content %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
 <div class="row">
