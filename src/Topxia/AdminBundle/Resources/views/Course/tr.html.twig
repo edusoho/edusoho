@@ -56,10 +56,12 @@
           <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_course_publish', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
         {% endif %}
 
+        {% if course.status == 'draft' %}
         <li class="divider"></li>
 
         <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}"
         data-chapter="{{default.chapter_name|default('章')}}" data-part="{{default.part_name|default('节')}}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
+        {% endif %}
       </ul>
     </div>
   </td>
