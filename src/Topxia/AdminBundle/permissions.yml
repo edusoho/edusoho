@@ -226,7 +226,7 @@ admin_course_thread:
     type: menu
     active: thread
 admin_course_thread_manage:
-    name: 管理
+    name: 课程话题
     parent: admin_course_thread
     router_name: admin_thread
     mode: page
@@ -521,22 +521,22 @@ admin_coin_user_records:
     mode: page
     type: tab
     active: user-records
-# admin_coin_user:
-#     name: 退款
-#     parent: admin_finance
-#     router_name: admin_coin_user_records
-#     router_params: null
-#     mode: page
-#     type: menu
-#     active: coin-records
-# admin_coin_user_records:
-#     name: 管理
-#     parent: admin_coin_user
-#     router_name: admin_coin_user_records
-#     router_params: null
-#     mode: page
-#     type: tab
-#     active: user-records
+admin_coin_user:
+    name: 课程退款
+    parent: admin_finance
+    router_name: admin_coin_user_records
+    router_params: null
+    mode: page
+    type: menu
+    active: coin-records
+admin_coin_user_records:
+    name: 管理
+    parent: admin_coin_user
+    router_name: admin_coin_user_records
+    router_params: null
+    mode: page
+    type: tab
+    active: user-records
 admin_setting:
     name: 站点设置
     parent: admin_system
