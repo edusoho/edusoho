@@ -304,7 +304,7 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	public function payPasswordModalAction(Request $request) 
+	public function setPayPasswordAction(Request $request) 
 	{ 
 		$user = $this->getCurrentUser(); 
 

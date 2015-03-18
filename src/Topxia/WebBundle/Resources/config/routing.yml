@@ -888,9 +888,9 @@ settings_security:
     pattern:  /settings/security 
     defaults: { _controller: TopxiaWebBundle:Settings:security }
 
-settings_pay_password_modal: 
-    pattern:  /settings/pay_password_modal 
-    defaults: { _controller: TopxiaWebBundle:Settings:payPasswordModal }
+settings_set_pay_password: 
+    pattern:  /settings/set_pay_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
 
 settings_pay_password: 
     pattern:  /settings/pay_password 
