@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                         img.addEventListener('click',
                         function() {
                           window.location = 'imageIndexNUrls://?' + this.alt + '.partation.' + imageArray.join('.partation.');
-                          window.jsobj.showImages(this.alt,imageArray);
+                          navigator.cordovaUtil..showImages(this.alt,imageArray);
                         })
                       }
                     }
