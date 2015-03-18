@@ -11,7 +11,8 @@
 <div class="clearfix mbs">
 
 	{% set menus = permissions("admin_operation_article","button") %}
-	          {{ admin_macro.btn_group(menus) }} 
+                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : menus} %}
+
 </div>
 
 <form class="well well-sm form-inline" action="{{ path('admin_operation') }}">

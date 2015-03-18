@@ -8,7 +8,7 @@
 <div class="clearfix mbs">
   {% if setting('developer.debug') %}
       {% set menus = permissions("admin_operation_block","button") %}
-            {{ admin_macro.btn_group(menus) }} 
+                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : menus} %}
   {% endif %}
 </div>
 
