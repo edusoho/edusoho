@@ -22,7 +22,13 @@
             <td>{{student.startTime|date('Y-m-d H:i:s')}}</td>
             <td>{% if student.finishedTime %}{{student.finishedTime|date('Y-m-d H:i:s')}}{% else %}----{% endif %}</td>
             <td>{{student.learnTime}}</td>
-            <td>{{lesson.length|default('----')}}</td>
+            <td>
+              {% if lesson.type in ['live'] %}
+              ----
+              {% else %}
+              {{lesson.length|default('----')}}
+              {% endif %}
+            </td>
             <td>{% if lesson.type == "video" or lesson.type == "audio" %}{{student.watchTime}}{% else %}----{% endif %}</td>
             <td>{% if lesson.type == "testpaper" %}{{student.result}}{% else %}----{% endif %}</td>
             </tr>

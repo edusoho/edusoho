@@ -927,8 +927,8 @@ class WebExtension extends \Twig_Extension
     public function blur_phone_number($phoneNum)
     {
         $head = substr($phoneNum,0,3);
-        $tail = substr($phoneNum,-3,3);
-        return ($head . '*****' . $tail);
+        $tail = substr($phoneNum,-4,4);
+        return ($head . '****' . $tail);
     }
 
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 

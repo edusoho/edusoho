@@ -93,7 +93,7 @@
 							<label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
 							<div class="col-md-7 controls">
 								<div class="control-text">
-									{{ user.verifiedMobile|default('') }}
+									{{ blur_phone_number(user.verifiedMobile|default('')) }}
 									<small class="text-success">(已绑定)</small>
 								</div>
 							</div>
