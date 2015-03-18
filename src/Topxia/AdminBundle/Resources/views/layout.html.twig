@@ -46,7 +46,7 @@
       </div>
       <div class="navbar-collapse collapse">
 
-          {{ admin_macro.header_menu(header_menus,nav) }} 
+        {% include 'TopxiaAdminBundle::header.html.twig' with {menus:header_menus,nav:nav} %}
 
      
         <ul class="nav navbar-nav navbar-right">

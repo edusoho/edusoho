@@ -1,0 +1,32 @@
+    <ul class="nav navbar-nav">
+      {% for menu in menus %}
+          {% set param = {} %}
+          {% set router_name = menu.router_name %}
+
+            {% if menu.router_params|default(null) %}
+            {% set router_params = menu.router_params %}
+       
+              {% if menu.router_params_context|default(false) %}
+                {% for key,router_param in router_params %}
+
+                {% set router_param = router_param|split('.') %}
+                {% set object = router_param[0] %}
+                {% set value = router_param[1] %}
+                  
+                {% set item = setItem(key,_context[object][value]) %}
+                {% set param = param|merge(item) %}
+                
+                {% endfor %}
+
+              <li  {% if nav == menu.active|default('-1') %}class="active"{% endif %} ><a href="{{path(router_name,param)}}">{{menu.name}}</a></li>
+              {% else %}
+               <li {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name,router_params)}}">{{menu.name}}</a></li>
+              {% endif %}
+
+           
+            {% else %}
+            <li  {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name)}}">{{menu.name}}</a></li>
+            {% endif %}
+          
+          {% endfor %}
+    </ul>
