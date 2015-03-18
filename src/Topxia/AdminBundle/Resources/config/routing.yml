@@ -1304,3 +1304,23 @@ admin_common_admin:
 admin_common_remove:
     pattern:  /common/remove/{id}
     defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonRemove }
+admin_edu_cloud:
+    pattern:  /edu_cloud
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
+
+admin_edu_cloud_sms:
+    pattern:  /edu_cloud/sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
+
+admin_edu_cloud_apply_for_sms:
+    pattern:  /edu_cloud/apply_for_sms
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
+
+admin_edu_cloud_sms_bill:
+    pattern:  /edu_cloud/sms_bill
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
+
+admin_edu_cloud_sms_no_message:
+    pattern: /edu_cloud/admin_edu_cloud_sms_no_message
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
+

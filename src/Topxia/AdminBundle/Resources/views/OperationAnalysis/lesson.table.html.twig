@@ -17,6 +17,8 @@
                   {% elseif data.type=="ppt" %}PPT
                   {% elseif data.type=="testpaper" %}试卷
                   {% elseif data.type=="live" %}直播
+                  {% elseif data.type=="flash" %}Flash
+                  {% elseif data.type=="document" %}文档
                   {% endif %}</td>
                    <td>{{ admin_macro.user_link(users[courses[data.courseId].userId]) }}<br>{{data.createdTime|date("Y-m-d H:i:s")}}</td>
               </tr>

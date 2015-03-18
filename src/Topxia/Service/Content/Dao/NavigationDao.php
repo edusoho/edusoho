@@ -13,6 +13,8 @@ interface NavigationDao
 
     public function deleteNavigation($id);
 
+    public function deleteNavigationByParentId($parentId);
+
     public function getNavigationsCount();
 
     public function getNavigationsCountByType($type);

@@ -62,9 +62,9 @@
           <span class="rating-num">{{ course.rating|number_format(1) }}分</span>
           <a class="rating-user-num show-course-review-pane" href="javascript:">({{ course.ratingNum }}人评价)</a>
         </p>
-        {% if course.showStudentNumType == 'opened' %}
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
         <p>
-          {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数：
+          {{setting('default.user_name', '学员')}}数：
           <span class="member-num">{{ course.studentNum }}</span>
           <span class="member-text">人</span>
           {% if course.studentNum == course.maxStudentNum %}
@@ -104,27 +104,8 @@
       </div>
       <div class="actions clearfix">
         <div class="pull-left">
-          {% if course.status != 'published' or course.studentNum >= course.maxStudentNum %}
-          {% else %}
+          {% if not (course.status != 'published' or course.studentNum >= course.maxStudentNum) %}
 
-        {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) and course.singleBuy == 0 %}
-        <br>
-        <div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
-          <span>
-          本课程已加入到
-          {% for classroom in classrooms%}
-          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
-          {{classroom.title}}
-                     </a>
-          {% endfor %}
-          </span></br>
-          <span style="margin-left:16px;font-size:13px;">
-          请进入相应{{ setting('classroom.name')|default("班级") }}加入学习
-          </span>
-        </div>
-      {% endif %}
-
-            {% if course.singleBuy == 1 %}
             <a class="btn btn-primary btn-fat" id="course-buy-btn" 
             {% if setting("course.buy_fill_userinfo")|default(false) %}
             href="#modal" 
@@ -152,7 +133,6 @@
                 <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn btn-warning mll become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
               {% endif %}
             {% endif %}
-            {% endif %}
           {% endif %}
         </div>
 
@@ -175,19 +155,14 @@
         </div>
       </div>
 
-      {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) and course.singleBuy == 1 %}
+      {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled', 0) %}
         <br>
         <div><i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
           <span>
-          本课程已加入到
+          本课程已加入到{{ setting('classroom.name',"班级") }}
           {% for classroom in classrooms%}
-          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
-          {{classroom.title}}
-                     </a>
+          "<a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>{{classroom.title}}</a>"
           {% endfor %}
-          </span></br>
-          <span style="margin-left:16px;font-size:13px;">
-          请进入相应{{ setting('classroom.name')|default("班级") }}加入学习
           </span>
         </div>
       {% endif %}

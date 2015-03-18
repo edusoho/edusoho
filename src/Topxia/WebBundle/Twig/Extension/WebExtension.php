@@ -84,6 +84,7 @@ class WebExtension extends \Twig_Extension
             'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
+            'blur_phone_number' => new \Twig_Function_Method($this, 'blur_phone_number'),
             'sub_str' => new \Twig_Function_Method($this, 'subStr'),
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
@@ -1078,7 +1079,14 @@ class WebExtension extends \Twig_Extension
             return 'no_free';
         }
     }
-    
+
+    public function blur_phone_number($phoneNum)
+    {
+        $head = substr($phoneNum,0,3);
+        $tail = substr($phoneNum,-3,3);
+        return ($head . '*****' . $tail);
+    }
+
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
     { 
         $both_ends = $ltrim && $rtrim; 

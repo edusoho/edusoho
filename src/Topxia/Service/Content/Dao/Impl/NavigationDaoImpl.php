@@ -37,7 +37,12 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function deleteNavigation($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        return ($this->getConnection()->delete($this->table, array('id' => $id))); 
+    }
+
+    public function deleteNavigationByParentId($parentId)
+    {
+        return ($this->getConnection()->delete($this->table, array('parentId' => $parentId))); 
     }
     
     public function getNavigationsCount()

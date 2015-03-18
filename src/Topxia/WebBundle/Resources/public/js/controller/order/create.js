@@ -204,6 +204,7 @@ define(function(require, exports, module) {
 			var data={};
 			data.code = $(this).val();
 			if(data.code == ""){
+				$('[role="coupon-price"]').find("[role='price']").text("0.00");
 				return;
 			}
 			data.targetType = $(this).data("targetType");
@@ -218,7 +219,7 @@ define(function(require, exports, module) {
 				if(data.useable == "no") {
 					$('[role="code-notify"]').css("color","red").text(data.message);
 				} else if(data.useable == "yes"){
-					$('[role="code-notify"]').css("color","green").text("优惠码可用");
+					$('[role="code-notify"]').css("color","green").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 				}
 				conculatePrice();
@@ -250,5 +251,20 @@ define(function(require, exports, module) {
  		}
  		//totalPrice = afterDiscountCourses(totalPrice);
  		shouldPay(totalPrice);
+		
+		if($('#js-order-create-sms-btn').length > 0){
+	 		$('#js-order-create-sms-btn').click(function(e){
+	 			var coinToPay = $('#coinPayAmount').val();
+	 			if (coinToPay && (coinToPay.length > 0)&&(!isNaN(coinToPay))&&(coinToPay > 0)&&($("#js-order-create-sms-btn").length>0)){
+	 				$("#payPassword").trigger("change");
+	 				if ( $('[role="password-input"]').find('span[class="text-danger"]').length > 0) {
+	 					e.stopPropagation();
+	 				}
+	 			} else {
+	 				e.stopPropagation();
+	 				$("#order-create-form").submit();
+	 			}
+	 		});
+		}
 	}
 });

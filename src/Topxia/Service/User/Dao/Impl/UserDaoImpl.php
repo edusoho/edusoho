@@ -32,6 +32,12 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
 
+    public function findUserByVerifiedMobile($mobile)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($mobile));
+    }
+
     public function findUsersByNicknames(array $nicknames)
     {
         if(empty($nicknames)) { 
@@ -115,7 +121,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('locked = :locked')
-            ->andWhere('level >= :greatLevel');
+            ->andWhere('level >= :greatLevel')
+            ->andWhere('verifiedMobile = :verifiedMobile');
     }
 
     public function addUser($user)
