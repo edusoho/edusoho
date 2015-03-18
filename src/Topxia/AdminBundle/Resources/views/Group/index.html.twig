@@ -1,12 +1,20 @@
 {% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
+{% set tab_menus = permissions('admin_operation_group',"tab") %}
 {% set menu = 'group' %}
-{% block title %}小组管理{% endblock %}
+{% set submenu = 'group' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+
 {% set script_controller='group/group' %}
 {% block main %}
-  <div class="page-header">
-    <a href="{{url('group_add')}}" class="btn btn-info btn-sm pull-right" target="_blank">创建小组</a>
-    <h1>小组管理</h1>
-  </div>
+<div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
+
+<div class="clearfix mbs">
+
+  {% set btn_menus = permissions("admin_operation_group_manage","button") %}
+                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+</div>
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 

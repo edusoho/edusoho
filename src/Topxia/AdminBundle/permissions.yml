@@ -73,7 +73,7 @@ admin_operation_article:
 admin_operation_group:
     name: 小组
     parent: admin_operation
-    router_name: admin_operation_group
+    router_name: admin_group
     router_params: null
     router_params_context: false
     mode: page
@@ -100,12 +100,20 @@ admin_operation_content:
 admin_operation_article_create:
     name: 添加资讯
     parent: admin_operation_article
-    router_name: admin_operation_article_create
+    router_name: admin_article_create
     router_params: null
     router_params_context: false
     mode: page
     type: button
     icon: 'glyphicon glyphicon-plus'
+admin_operation_category_create:
+    name: 新建栏目
+    parent: admin_operation_article_category
+    router_name: admin_article_category_create
+    router_params: null
+    router_params_context: false
+    mode: modal
+    type: button
 admin_operation_article_manage:
     name: 管理
     parent: admin_operation_article
@@ -116,7 +124,7 @@ admin_operation_article_manage:
     type: tab
     active: article
 admin_operation_article_category:
-    name: 栏目
+    name: 栏目管理
     parent: admin_operation_article
     router_name: admin_article_category
     router_params: null
@@ -126,7 +134,7 @@ admin_operation_article_category:
     active: category
 admin_operation_group_create:
     name: 创建小组
-    parent: admin_operation_group
+    parent: admin_operation_group_manage
     router_name: group_add
     router_params: null
     router_params_context: false
@@ -136,7 +144,7 @@ admin_operation_group_create:
 admin_operation_group_manage:
     name: 小组管理
     parent: admin_operation_group
-    router_name: admin_operation_group
+    router_name: admin_group
     router_params: null
     router_params_context: false
     mode: page
@@ -145,7 +153,7 @@ admin_operation_group_manage:
 admin_operation_group_thread:
     name: 话题
     parent: admin_operation_group
-    router_name: admin_operation_groupThread
+    router_name: admin_groupThread
     router_params: null
     router_params_context: false
     mode: page
