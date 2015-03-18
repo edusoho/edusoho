@@ -57,9 +57,9 @@
             </span>
           {% endif %}
 
-            {% if course.showStudentNumType == 'opened' %}
+            {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <span class="student-col">
-              <span class="meta-label">学生</span>
+              <span class="meta-label">{{setting('default.user_name', '学员')}}</span>
               <span class="student-num">{{ course.studentNum }}人</span>
             </span>
             {% endif %}

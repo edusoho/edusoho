@@ -763,8 +763,12 @@ class GroupController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
-       
-        $this->getGroupService()->joinGroup($user,$id);
+        
+        try{
+            $this->getGroupService()->joinGroup($user,$id);
+        }catch (\Exception $e){
+            $this->setFlashMessage("danger",$e->getMessage());
+        }
         
         return $this->redirect($this->generateUrl('group_show', array(
             'id'=>$id,

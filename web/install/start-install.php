@@ -20,6 +20,7 @@ $functionName();
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 function check_installed()
 {
@@ -146,8 +147,12 @@ function install_step3()
     $connection = _create_connection();
 
     $serviceKernel = ServiceKernel::create('prod', true);
+    $serviceKernel->setParameterBag(new ParameterBag(array(
+        'kernel' => array(
+            'root_dir' => realpath(__DIR__ . '/../../app'),
+        )
+    )));
     $serviceKernel->setConnection($connection);
-    // $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
 
     $error = null;
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
@@ -218,6 +223,13 @@ function install_step999()
 
         $connection = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);
+        $serviceKernel->setParameterBag(new ParameterBag(array(
+            'kernel' => array(
+                'root_dir' => realpath(__DIR__ . '/../../app'),
+            )
+        )));
+
+
         $serviceKernel->setConnection($connection);
 
         $init = new SystemInit();
@@ -654,7 +666,7 @@ EOD;
 
         $content = <<<'EOD'
 <br><div class="col-md-12">  
-<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" /></a>
+<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" style="width: 100%;"/></a>
 <br><br></div>
 EOD;
         $this->getBlockService()->updateContent($block['id'], $content);
