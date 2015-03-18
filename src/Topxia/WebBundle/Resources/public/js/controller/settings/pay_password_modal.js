@@ -1,7 +1,16 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
+    
     require('common/validator-rules').inject(Validator);
+    Validator.addRule('passwordCheck', function(options, commit) {
+        var element = options.element;
+        var url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+
+        $.post(url, {value:element.val()}, function(response) {
+            commit(response.success, response.message);
+        }, 'json');
+    });
 
     exports.run = function() {
         var payPasswordValidator = new Validator({
@@ -16,7 +25,9 @@ define(function(require, exports, module) {
 
         payPasswordValidator.addItem({
             element: '[name="form[currentUserLoginPassword]"]',
-            required: true
+            required: true,
+            triggerType: 'submit',
+            rule: 'passwordCheck'
         });
 
         payPasswordValidator.addItem({
