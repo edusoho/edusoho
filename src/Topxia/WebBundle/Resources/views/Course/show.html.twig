@@ -36,23 +36,28 @@
         <a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" >
           <span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span>
           <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
+          {% if course.serializeMode != 'none' %}  
+            <span class="tag-serial"></span>
+          {% endif %} 
         </a>
       {% else %}
         <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
-        <span class="tag-serial"></span>
+        {% if course.serializeMode != 'none' %}  
+          <span class="tag-serial"></span>
+        {% endif %} 
       {% endif %}
     </div>
     <div class="col-sm-7 info">
       {% if is_granted('ROLE_ADMIN') %}
       <div class="btn-group pull-right">
-        <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
+        <a class="btn btn-default btn-sm" type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理">
         <i class="esicon esicon-setting"></i>
         </a>
       </div>
       {% endif %}
-      <h1 class="title">{{ course.title }} <span class="label label-success">直播</span></h1>
+      <h1 class="title">{{ course.title }}</h1>
       <div class="subtitle">{{ course.subtitle }}</div>
-      <div class="subtitle">每天 16:30~17:30，EduSoho直播教室开放体验</div>
+      <!-- <div class="subtitle">每天 16:30~17:30，EduSoho直播教室开放体验</div> -->
       <div class="price-info">
         {% include 'TopxiaWebBundle:Course:course-index-price.html.twig' with {'course':course} %}
       </div>
@@ -66,7 +71,11 @@
           {% if setting('course.show_student_num_enabled', '1') == 1  %}
             ｜{{setting('default.user_name', '学员')}}
             <span class="member-num">{{ course.studentNum }}人</span>
-            <span class="member-text hidden-sm hidden-xs">(5000名额)</span>
+            {% if course.studentNum == course.maxStudentNum %}
+              <span class="member-text hidden-sm hidden-xs">(名额已满)</span>
+            {% else %}
+              <span class="member-text hidden-sm hidden-xs"> ({{ course.maxStudentNum }}名额)</span>
+            {% endif %}
           {% endif %}
 
           {% if not course.expiryDay == 0 %}
@@ -113,41 +122,25 @@
 
         <div class="share pull-left clearfix"  data-bdText="{{courseShareContent}}"></div>
 
-        <div class="pull-left ">
-
+        <div class="pull-left  hidden-xs">
           <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
             免费体验
           </a>
-          <a class="btn btn-link " id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+          <a class="btn btn-link" id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
             <i class="glyphicon glyphicon-star-empty"></i>
             收藏课程
           </a>
-          <a class="btn btn-link hidden-xs" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
+          <a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
             <i class="glyphicon glyphicon-star"></i>
             取消收藏
           </a>
-          <a class="btn btn-link hidden-xs" href="#" style="display:none;">
+          <a class="btn btn-link" href="#" style="display:none;">
             <i class="glyphicon glyphicon-gift"></i>
             赠送
           </a>
-
         </div>
 
       </div>
-
-        {% if is_plugin_installed('Classroom') and classrooms and setting('classroom.enabled')|default(0) %}
-          <br>
-          <div>
-            <i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 
-            <span>
-            本课程已加入到{{ setting('classroom.name',"班级") }}
-            {% for classroom in classrooms%}
-            "<a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>{{classroom.title}}</a>"
-            {% endfor %}
-            </span>
-          </div>
-        {% endif %}
-    
     </div>
   </div>
 </div>
