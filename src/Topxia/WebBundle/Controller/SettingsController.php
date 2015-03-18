@@ -325,12 +325,10 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
-					return $this->redirect($this->generateUrl('settings_security'));
+					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登陆密码不正确，请重试！'));
 				} else {
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-					$this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');
-					return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+					return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
 				}
 			}
 		}

@@ -73,16 +73,17 @@
 
 			<span class="col-md-4 " style="margin-top: 5px;" >在网校进行消费行为时需要输入的密码</span>
 
-			{# {% if hasPayPassword %} 
+			{% if hasPayPassword %} 
 				<a href="{{ path('settings_reset_pay_password') }}" class="col-md-offset-1 btn btn-primary" style="margin-top: -3px;" >重置</a>		
 			{% else %}
 				<a href="{{ path('settings_pay_password') }}" class="col-md-offset-1 btn btn-primary" style="margin-top: -3px;" >设置</a>
-			{% endif %} #}
-			{% if hasPayPassword %}
+			{% endif %}
+			
+			{# {% if hasPayPassword %}
 				<a href="{{ path('settings_reset_pay_password') }}" class="col-md-offset-1 btn btn-primary" style="margin-top: -3px;" >重置</a>	
 			{% else %}
 				<a href="javascript:;" class="col-md-offset-1 btn btn-primary" style="margin-top: -3px;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_pay_password_modal')}}" >设置</a>
-			{% endif %}
+			{% endif %} #}
 			
 		</div>
 		<hr>
