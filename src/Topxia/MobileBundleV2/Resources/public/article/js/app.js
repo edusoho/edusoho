@@ -84,9 +84,7 @@ define(function(require, exports, module) {
 		}).
 		state("detail", {
 			url : "/detail/:id",
-			template : function(){
-				return "<div on-content-loaded='content'></div>";
-			},
+			template : "<div on-content-loaded='content'></div>",
 			controller : DetailController
 		});
 	}]);

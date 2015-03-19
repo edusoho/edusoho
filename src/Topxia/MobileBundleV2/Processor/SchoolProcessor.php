@@ -30,4 +30,6 @@ interface SchoolProcessor
 	public function loginSchoolWithSite();
 
 	public function getSchoolApps();
+
+	public function WXTest();
 }

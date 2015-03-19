@@ -18,7 +18,7 @@ function ListController($scope, $http, $rootScope)
 			el.loading("hide");
 		});
   	};
-
+  	
   	var queryArticelList = function(success){
   		document.title = $scope.categoryName ? "网校资讯 - " + $scope.categoryName  : "网校资讯";
   		var el=Zepto.loading({
