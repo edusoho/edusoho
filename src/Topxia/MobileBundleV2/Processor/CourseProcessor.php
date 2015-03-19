@@ -6,9 +6,17 @@ interface CourseProcessor
 	public function getVersion();
 	public function getCourses();
 	public function getLearningCourse();
+	public function getLearningCourseWithoutToken();
 	public function getLearnedCourse();
 	public function getFavoriteCoruse();
+
+	/**
+	* tagId    	标签id 
+	* search 	搜索内容
+	* 参数只能有一个 tagId或search
+	*/
 	public function searchCourse();
+	
 	public function getCourse();
 	public function getReviews();
 
@@ -24,6 +32,11 @@ interface CourseProcessor
 	public function getCourseNotices();
 
 	public function unLearnCourse();
+
+	/**
+	* 获取用户所学课程下的所有问题或者讨论
+	*/
+	public function getThreadsByUserCourseIds();
 
 	public function getCourseThreads();
 
@@ -88,7 +101,7 @@ interface CourseProcessor
 	public function getNoteList();
 
 	/**
-	* 获取课程所有笔记
+	* 获取课程下所有笔记
 	*/
 	public function getCourseNotes();
 
@@ -103,10 +116,28 @@ interface CourseProcessor
 	 */
 	public function AddNote();
 
-
 	/**
 	 *
 	 *删除一条笔记
 	 */
 	public function DeleteNote();
+
+	public function getOneNote();
+
+	/**
+	*获取单条回复信息
+	*/
+	public function getOneThreadPost();
+
+	public function hitThread();
+
+	/**
+	*测试直播参数
+	*/
+	public function getLiveCourse();
+
+	public function getLiveCourses();
+
+	public function getAllLiveCourses();
+
 }

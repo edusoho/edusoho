@@ -51,11 +51,25 @@ class UploadFileController extends BaseController
             $conditions['currentUserId'] = $user['id'];
         }
         
-        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 1000);
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
         
         return $this->createFilesJsonResponse($files);
     }
 
+     public function browsersAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权查看此页面！');
+        }
+
+        $conditions = $request->query->all();
+
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
+        
+        return $this->createFilesJsonResponse($files);
+    }
+    
     public function paramsAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -75,7 +89,8 @@ class UploadFileController extends BaseController
         }
         
         $params = $this->getUploadFileService()->makeUploadParams($params);
-
+  
+    
         return $this->createJsonResponse($params);
     }
 
@@ -87,6 +102,7 @@ class UploadFileController extends BaseController
         }
 
         $fileInfo = $request->request->all();
+      
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
@@ -105,7 +121,8 @@ class UploadFileController extends BaseController
 
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
 
-        if ($lazyConvert) {
+        if ($lazyConvert && $file['type']!="document") {
+        
             $convertHash = $this->getUploadFileService()->reconvertFile(
                 $file['id'],
                 $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
@@ -297,6 +314,13 @@ class UploadFileController extends BaseController
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
             $file['size'] = FileToolkit::formatFileSize($file['size']);
+
+            // Delete some file attributes to redunce the json response size
+            unset($file['hashId']);
+            unset($file['convertHash']);
+            unset($file['etag']);
+            unset($file['convertParams']);
+
             unset($file);
         }
         return $this->createJsonResponse($files);

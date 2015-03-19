@@ -113,6 +113,12 @@ class MobileBaseController extends BaseController
         return $this->getUser();
     }
 
+    public function autoLogin($user)
+    {
+        $user = $this->getUserService()->getUser($user->id);
+        $this->authenticateUser($user);
+    }
+
     public function createToken($user, $request)
     {
         $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], time() + 3600 * 24 * 30);
@@ -137,12 +143,16 @@ class MobileBaseController extends BaseController
             return array();
         }
 
+        $controller = $this;
+
         $simplifyUsers = array();
         foreach ($users as $key => $user) {
             $simplifyUsers[$key] = array (
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'title' => $user['title'],
+                'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
+                'follower' => $controller->getUserService()->findUserFollowerCount($user['id']),
                 'avatar' => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
@@ -164,7 +174,7 @@ class MobileBaseController extends BaseController
 
         $self = $this;
         return array_map(function($review) use ($self, $users) {
-            $review['user'] = empty($users[$review['userId']]) ? null : $self->simpleUser($users[$review['userId']]);
+            $review['user'] = empty($users[$review['userId']]) ? null : $self->filterUser($users[$review['userId']]);
             unset($review['userId']);
 
             $review['createdTime'] = date('c', $review['createdTime']);
@@ -277,6 +287,7 @@ class MobileBaseController extends BaseController
         }
         
         $container = $this->container;
+
         $controller = $this;
         return array_map(function($user) use ($container, $controller)
         {
@@ -291,7 +302,16 @@ class MobileBaseController extends BaseController
                 $vip = $controller->getVipService()->getMemberByUserId($user['id']);
                 $user["vip"] = $vip;
             }
-            
+            $userProfile = $controller->getUserService()->getUserProfile($user['id']);
+            $user['signature'] = $userProfile['signature'];
+            if(isset($user['about']))
+            {
+                $user['about'] = $controller->convertAbsoluteUrl($controller->request, $userProfile['about']);
+            }
+
+            $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
+            $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
+
             unset($user['password']);
             unset($user['salt']);
             unset($user['createdIp']);
@@ -310,6 +330,95 @@ class MobileBaseController extends BaseController
             
             return $user;
         }, $users);
+    }
+
+    public function filterLiveCourses($user, $start, $limit){
+        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+        
+        $tempCourses = array();
+        $tempCourseIds = array();
+        foreach ($courses as $key => $course) {  
+            if(!strcmp($course["type"],"live"))
+            {
+                $tempCourses[$course["id"]] = $course;
+                $tempCourseIds[] = $course["id"];
+            }
+        }
+
+        $tempLiveLessons = array();
+        $tempCourseIdIndex = 0;
+        $tempLessons = array();
+        for($tempCourseIdIndex; $tempCourseIdIndex < sizeof($tempCourseIds); $tempCourseIdIndex++)
+        {
+            $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
+            if(isset($tempLiveLessons)){
+                $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
+                // unset($tempLiveLessons);
+            }
+        }
+
+        $nowTime = time();
+        $liveLessons = array();
+        $tempLiveLesson;
+        $recentlyLiveLessonStartTime;
+        $tempLessonIndex;
+        // $emptyLessonCourseId = array();
+        // $tempCoursesIndex = 0;
+
+        foreach($tempLessons as $key => $tempLesson){
+            if(!sizeof($tempLesson)){
+                // $emptyLessonCourseId[$key] = $tempCoursesIndex;
+                // $tempCoursesIndex++;
+                continue;
+            }
+            if($nowTime <= $tempLesson[0]["endTime"]){
+                $tempLiveLesson = $tempLesson[0];
+            }
+            if(sizeof($tempLesson) > 1){
+                $recentlyLiveLessonStartTime = 2*$nowTime;
+                for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
+                    if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
+                        if($tempLesson[$tempLessonIndex]["startTime"] < $recentlyLiveLessonStartTime){
+                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
+                            $tempLiveLesson = $tempLesson[$tempLessonIndex];
+                        }
+                    }
+                }
+            }
+            if(isset($tempLiveLesson)){
+                $liveLessons[$key] = $tempLiveLesson;
+                unset($tempLiveLesson);
+            }
+            // $tempCoursesIndex++;
+        }
+
+        foreach($tempCourses as $key => $value){
+            if(isset($liveLessons[$key])){
+                $tempCourses[$key]["liveLessonTitle"] = $liveLessons[$key]["title"];
+                $tempCourses[$key]["liveStartTime"] = date("c", $liveLessons[$key]["startTime"]);
+                $tempCourses[$key]["liveEndTime"] = date("c", $liveLessons[$key]["endTime"]);
+            }else{
+                $tempCourses[$key]["liveLessonTitle"] = "";
+                $tempCourses[$key]["liveStartTime"] = "";
+                $tempCourses[$key]["liveEndTime"] = "";
+            }
+        }
+
+        // foreach($tempCourses as $key => $value){
+        //     if(isset($emptyLessonCourseId[$key])){
+        //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
+        //     }
+        // }
+
+        return $tempCourses;
+    }
+
+    public function filterOneLiveCourseByDESC($user){
+        $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+
+        $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
+
+        return $resultLiveCourses;
     }
 
     /**

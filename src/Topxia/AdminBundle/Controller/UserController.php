@@ -30,9 +30,11 @@ class UserController extends BaseController
             'keyword'=>''
         );
 
-        if(!empty($fields)){
-            $conditions =$fields;
+        if(empty($fields)){
+            $fields = array();
         }
+
+        $conditions = array_merge($conditions, $fields);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -117,14 +119,16 @@ class UserController extends BaseController
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
-
         if ($request->getMethod() == 'POST') {
-            $profile = $this->getUserService()->updateUserProfile($user['id'], $request->request->all());
+            $profile = $request->request->all();
+            if (!( (strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']) )) {
+                $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
+                $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
+            } else {
+                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+            }
 
-            $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
-
-
-            return $this->redirect($this->generateUrl('settings'));
+            return $this->redirect($this->generateUrl('admin_user'));
         }
 
         $fields=$this->getFields();
@@ -190,9 +194,10 @@ class UserController extends BaseController
             'user' => $user,
             ));
         }
-           
+        $default = $this->getSettingService()->get('default', array());     
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
             'user' => $user,
+            'default'=> $default
         ));
     }
 
@@ -372,14 +377,29 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
+        
+        $site = $this->getSettingService()->get('site', array());
+        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
+        $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
+
+        if (!empty($emailBody)) {
+            $emailBody = $emailBody;
+        }else{
+             $emailBody = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
+                'user' => $user,  
+                'token' => $token,  
+                )) ;
+        }
+
         try {
             $this->sendEmail(
                 $user['email'],
-                "请激活你的帐号，完成注册",
-                $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                    'user' => $user,
-                    'token' => $token,
-                ))
+                '请激活你的帐号 完成注册',
+                $emailBody
             );
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch(\Exception $e) {

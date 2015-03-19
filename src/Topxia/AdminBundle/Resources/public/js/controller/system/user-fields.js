@@ -12,10 +12,23 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+
                 $('#add-btn').button('submiting').addClass('disabled');
             },
 		});
-        
+
+        $('#add-btn').on('click', function() {
+                if($('input[name="field_title"]').val() == '真实姓名'|| $('input[name="field_title"]').val() == '手机号码' 
+                    || $('input[name="field_title"]').val() == 'QQ' || $('input[name="field_title"]').val() == '所在公司'
+                    || $('input[name="field_title"]').val() == '身份证号码' 
+                    || $('input[name="field_title"]').val() == '性别' || $('input[name="field_title"]').val() == '职业'
+                    || $('input[name="field_title"]').val() == '微博' 
+                    || $('input[name="field_title"]').val() == '微信' )
+                {
+                    Notify.danger('请勿添加与默认字段相同的自定义字段！')
+                    return false;
+                }
+        });
 
         validator.addItem({
             element: '[name="field_title"]',

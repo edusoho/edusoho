@@ -12,6 +12,7 @@ define(function(require, exports, module) {
 
     var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
+    var DocumentPlayer = require('../widget/document-player');
 
     var iID = null;
     var recordWatchTimeId = null;
@@ -410,14 +411,24 @@ define(function(require, exports, module) {
                             var seconds = modulo % 60;
                             var $replayGuid = "老师们：";
                             $replayGuid += "<br>";
-                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
-                            $replayGuid += "<span style='color:red'>录制面板</span>";
-                            $replayGuid += "”，录制完成后点击“";
-                            $replayGuid += "<span style='color:red'>暂停</span>";
-                            $replayGuid += "”结束录播，录播结束后在“";
-                            $replayGuid += "<span style='color:red'>录播管理</span>";
-                            $replayGuid += "”界面生成回放。";
-                            $replayGuid += "<br>";
+
+                            if(lesson.liveProvider == 1) {
+                                $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
+                                $replayGuid += "<span style='color:red'>录制面板</span>";
+                                $replayGuid += "”，录制完成后点击“";
+                                $replayGuid += "<span style='color:red'>暂停</span>”";
+                                $replayGuid += "结束录播，录播结束后在“";
+                                $replayGuid += "<span style='color:red'>录播管理</span>";
+                                $replayGuid += "”界面生成回放。";
+                                $replayGuid += "<br>";
+                            } else {
+                                $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                                $replayGuid += "直播平台“<span style='color:red'>下课后</span>”且“<span style='color:red'>直播时间</span>”结束后，在课时管理的“";
+                                $replayGuid += "<span style='color:red'>录播管理</span>";
+                                $replayGuid += "”点击生成回放。";
+                                $replayGuid += "<br>";
+                            }
+
 
                             $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
 
@@ -433,14 +444,14 @@ define(function(require, exports, module) {
                                 $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
                             };
 
-                            if (0< startLeftSeconds && startLeftSeconds < 3600) {
+                            if (0< startLeftSeconds && startLeftSeconds < 7200) {
                                  $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
                                  var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
                                  if(lesson.isTeacher) {
                                     $countDown = $replayGuid;
-                                    $countDown += "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                    $countDown += "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                                 }else{
-                                    $countDown = "<p>还剩"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                    $countDown = "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                                 }
                             };
 
@@ -527,6 +538,37 @@ define(function(require, exports, module) {
                             });
 
                         }, 'json');
+                    }
+
+                    else if (lesson.type == 'document' ) {
+
+                        $.get(that.get('courseUri') + '/lesson/' + id + '/document', function(response) {
+                            if (response.error) {
+                                var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+                                $("#lesson-document-content").html(html).show();
+                                return ;
+                            }
+
+                            var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+                            $("#lesson-document-content").html(html).show();
+
+                            var player = new DocumentPlayer({
+                                element: '#lesson-document-content',
+                                swfFileUrl:response.swfUri,
+                                pdfFileUrl:response.pdfUri
+                            });
+
+                        }, 'json');
+                    }
+
+                    else if (lesson.type == 'flash' ) {
+                        
+                            $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+                            swfobject.embedSWF(lesson.mediaUri, 
+                                'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                                {wmode:'opaque',allowFullScreen:'true'});
+                            $("#lesson-swf-content").show();
+
                     }
                 }
 
@@ -676,6 +718,8 @@ define(function(require, exports, module) {
             setTimeout(recordLearningTime, 120000);
         }
         setTimeout(recordLearningTime, 120000);
+
+        
     };
 
 });

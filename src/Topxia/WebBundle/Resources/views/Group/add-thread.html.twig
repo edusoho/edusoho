@@ -50,9 +50,9 @@
           <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">内容</label>
           <div class="col-xs-7 controls">
             {% if is_feature_enabled('group_reward') %}
-            <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control">{{thread.content|default('')}}</textarea>
+            <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% else %}
-            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control">{{thread.content|default('')}}</textarea>
+            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% endif %}
           </div>
         </div>
@@ -90,7 +90,7 @@
             <label class="control-label"> 请输入要隐藏的内容:</label>
           </div>
           <div class="col-md-7 controls">
-            <textarea class="form-control" rows="3" id="text"> </textarea>
+            <textarea class="form-control" rows="3" id="text" > </textarea>
           </div>
 
         </div>
@@ -99,7 +99,9 @@
           <div class="controls">
             <div class="col-md-4 control">
             <input type="radio" id="type0" name="type" required="required" value="coin" checked=true>
-            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name|default("虚拟币")}}:</label>
+
+            <label for="amount" class="control-label"> 查看所需{{setting('coin').coin_name|default('')}}:</label>
+            
             </div>
             <div class="col-md-3 controls">
                <input name="amount" class="form-control" tyoe="text" id="amount"/>
@@ -118,7 +120,7 @@
       </form>
       </div>
       <div class="modal-footer">
-          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name}}会在扣除50%之后添加到您的账户
+          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name|default('')}}会在扣除50%之后添加到您的账户
           </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="button" class="btn btn-primary" id="insert">插入</button>

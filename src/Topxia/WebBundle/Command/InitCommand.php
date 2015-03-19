@@ -37,6 +37,7 @@ class InitCommand extends BaseCommand
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
 		$this->initFile($output);
+        $this->initDefaultSetting($output);
         $this->initInstallLock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
@@ -119,7 +120,8 @@ class InitCommand extends BaseCommand
 		);
 		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
 
-		$user = $this->getUserService()->getUserByEmail('test@edusoho.com');
+        $user = $this->getUserService()->getUserByEmail('test@edusoho.com');
+
 		if (!$user) {
 			$user = $this->getUserService()->register($fields);
 		}
@@ -208,6 +210,23 @@ EOD;
 
 		$output->writeln(' ...<info>成功</info>');
 	}
+
+	private function initDefaultSetting($output)
+    {
+    	$output->write('  初始化章节的默认设置');
+        $settingService = $this->getSettingService();
+
+        $defaultSetting = array();
+        $defaultSetting['user_name'] ='学员';
+        $defaultSetting['chapter_name'] ='章';
+        $defaultSetting['part_name'] ='节';
+
+        $default = $settingService->get('default', array());
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        $settingService->set('default', $defaultSetting);
+        $output->writeln(' ...<info>成功</info>');
+    }
 
 	private function initStorageSetting($output)
 	{
@@ -316,6 +335,12 @@ EOD;
 			'public' => 0,
 		));
 
+		$this->getFileService()->addFileGroup(array(
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
+        ));
+
         $directory = $this->getContainer()->getParameter('topxia.disk.local_directory');
         chmod($directory, 0777);
 
@@ -349,6 +374,8 @@ EOD;
 	private function initServiceKernel()
 	{
 		$serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+
 		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
 		$currentUser = new CurrentUser();
 		$currentUser->fromArray(array(

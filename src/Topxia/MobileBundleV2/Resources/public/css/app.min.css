@@ -1,0 +1,849 @@
+/**
+ * App.js v2.0.2
+ * Instant mobile web app creation
+ * Copyright (c) 2012 Kik Interactive, http://kik.com
+ * Released under the MIT license
+ *
+ * iScroll v4.1.6
+ * Copyright (c) 2011 Matteo Spinelli, http://cubiq.org
+ * Released under the MIT license
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+html,body,div,form,p,ul,li,span,label,img {
+	margin: 0;
+	padding: 0;
+	outline: 0
+}
+
+html,body {
+	height: 100%;
+	width: 100%
+}
+
+body {
+	position: relative;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-size-adjust: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	overflow: hidden
+}
+
+.app-android {
+	font-family: "Roboto",sans-serif
+}
+
+.app-no-scrollbar ::-webkit-scrollbar {
+	height: 0 !important;
+	width: 0 !important
+}
+
+.clear {
+	clear: both
+}
+
+.app-clickblocker {
+	z-index: 9000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #FFF;
+	opacity: 0
+}
+
+.app-page {
+	display: none;
+	position: relative;
+	height: 100%;
+	width: 100%;
+	overflow: hidden
+}
+
+.app-loaded .app-page {
+	display: block
+}
+
+.app-ios-7 .app-page {
+	box-shadow: 0 0 12px rgba(0,0,0,0.2)
+}
+
+.app-topbar {
+	z-index: 3000;
+	position: relative;
+	height: 44px;
+	width: 100%;
+	background-color: #000;
+	color: #FFF
+}
+
+.app-android .app-topbar {
+	height: 48px
+}
+
+.app-topbar .app-button {
+	position: absolute;
+	bottom: 0;
+	padding: 0 8px;
+	height: 100%;
+	line-height: 44px
+}
+
+.app-android .app-topbar .app-button {
+	line-height: 48px
+}
+
+.app-topbar .app-button.left {
+	left: 0
+}
+
+.app-topbar .app-button.right {
+	right: 0
+}
+
+.app-topbar .app-title {
+	margin: 0 auto;
+	height: 100%;
+	width: 100%;
+	line-height: 44px;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap
+}
+
+.app-android .app-topbar .app-title {
+	line-height: 48px
+}
+
+.app-ios-statusbar .app-topbar {
+	padding-top: 20px
+}
+
+.app-ios-statusbar .app-topbar .app-button {
+	height: 44px
+}
+
+.app-content {
+	z-index: 2000;
+	position: relative;
+	background-color: #FFF;
+	overflow: auto
+}
+
+.app-ios-7 .app-content {
+	box-shadow: 0 0 12px rgba(0,0,0,0.2)
+}
+
+.app-scrollhack>* {
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	-ms-transform: translate3d(0,0,0);
+	-o-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0)
+}
+
+.app-section {
+	position: relative;
+	margin: 8px;
+	border: 1px solid #AAA
+}
+
+.app-list {
+	list-style: none
+}
+
+.app-list>li,.app-list>li.app-button {
+	padding-left: 20px;
+	padding-right: 8px;
+	height: 43px;
+	border-bottom: 1px solid #AAA;
+	line-height: 43px;
+	overflow: hidden;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap
+}
+
+.app-android .app-list>li,.app-android .app-list>li.app-button {
+	padding-top: 2px;
+	padding-bottom: 2px
+}
+
+.app-section .app-list>li:last-child,.app-section .app-list>li.app-button:last-child {
+	border-bottom: 0
+}
+
+.app-list>label {
+	display: block;
+	padding-left: 12px;
+	height: 24px;
+	background-color: #000;
+	color: #FFF;
+	line-height: 24px
+}
+
+.app-list>li+label {
+	margin-top: -1px
+}
+
+.app-content .app-button {
+	margin: 0 auto;
+	height: 40px;
+	border-bottom: 1px solid #AAA;
+	line-height: 40px;
+	overflow: hidden;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap
+}
+
+.app-button:last-child {
+	border-bottom: 0
+}
+
+.app-content .app-button.green {
+	background-color: #7F7
+}
+
+.app-content .app-button.red {
+	background-color: #F77
+}
+
+.app-content .app-button.blue {
+	background-color: #77F
+}
+
+.app-input {
+	position: relative;
+	display: block;
+	padding: 10px 12px;
+	width: 100%;
+	background-color: transparent;
+	border: 0;
+	border-bottom: 1px solid #AAA;
+	outline: 0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	line-height: 20px;
+	-webkit-appearance: none
+}
+
+.app-section .app-input:last-child {
+	border-bottom: 0
+}
+
+.app-input,.app-input * {
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit
+}
+
+input.app-input {
+	height: 40px
+}
+
+textarea.app-input {
+	height: 80px;
+	resize: none
+}
+
+.app-input input,.app-input textarea {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	background-color: none;
+	border: 0;
+	outline: 0;
+	line-height: inherit;
+	resize: none;
+	-webkit-appearance: none
+}
+
+.app-input input {
+	height: 20px
+}
+
+.app-input textarea {
+	height: 60px
+}
+
+.app-dialog-container {
+	position: fixed;
+	z-index: 5000;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0,0,0,0.8);
+	opacity: 0;
+	overflow: hidden;
+	-webkit-transition: opacity .282s ease-in-out;
+	transition: opacity .282s ease-in-out
+}
+
+.app-dialog-container.fancy {
+	-webkit-transition: opacity .425s cubic-bezier(0.4,0.6,0.05,1);
+	transition: opacity .425s cubic-bezier(0.4,0.6,0.05,1)
+}
+
+.app-dialog-container.ios5 {
+	position: absolute
+}
+
+.app-dialog-container.enabled {
+	opacity: 1
+}
+
+.app-dialog-container.fancy {
+	background-color: rgba(0,0,0,0);
+	opacity: 1;
+	-webkit-transition: background .425s cubic-bezier(0.4,0.6,0.05,1);
+	transition: background .425s cubic-bezier(0.4,0.6,0.05,1)
+}
+
+.app-dialog-container.fancy.enabled {
+	background-color: rgba(0,0,0,0.8)
+}
+
+.app-dialog {
+	position: absolute;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	background-color: #f5f6f7;
+	border-top: 1px solid #FFF;
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.85);
+	box-shadow: 0 0 8px rgba(0,0,0,0.85);
+	color: #777
+}
+
+.app-android .app-dialog {
+	position: absolute;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	background-color: #f5f6f7;
+	border-top: 1px solid #FFF;
+	-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.85);
+	box-shadow: 0 0 8px rgba(0,0,0,0.85);
+	color: #777
+}
+
+.app-dialog.dark {
+	background-color: #333332;
+	border-top-color: #444;
+	color: #999
+}
+
+.app-dialog-container.fancy .app-dialog {
+	background-color: rgba(255,255,255,0.85);
+	-webkit-transform: translate3d(0,110%,0);
+	transform: translate3d(0,110%,0);
+	-webkit-transition: -webkit-transform .425s cubic-bezier(0.4,0.6,0.05,1);
+	transition: transform .425s cubic-bezier(0.4,0.6,0.05,1)
+}
+
+.app-dialog-container.fancy .app-dialog.dark {
+	background-color: rgba(51,51,50,0.9)
+}
+
+.app-dialog-container.fancy.enabled .app-dialog {
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0)
+}
+
+.app-dialog .title {
+	position: relative;
+	margin-bottom: 8px;
+	padding: 16px 20px 0;
+	font-size: 18px;
+	font-weight: 600;
+	text-align: center
+}
+
+.app-dialog .text {
+	margin-top: 8px;
+	padding: 0 20px 8px;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: center
+}
+
+.app-dialog .button {
+	height: 60px;
+	color: #17B;
+	font-size: 22px;
+	font-weight: 300;
+	line-height: 60px;
+	text-align: center
+}
+
+.app-dialog.dark .button {
+	color: #f3f4f5
+}
+
+.app-dialog .button.ok {
+	color: #3C7
+}
+
+.app-dialog .button.cancel {
+	color: #E54
+}
+
+.app-android .app-dialog .button.cancel {
+	display: none
+}
+
+.app-dialog .button.active {
+	opacity: .5
+}
+
+.app-topbar.teal {
+	background-color: #2B9;
+	-webkit-box-shadow: inset 0 -1px 0 #197,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #197,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.teal {
+	box-shadow: inset 0 -1px 0 #197
+}
+
+.app-topbar.green {
+	background-color: #3C7;
+	-webkit-box-shadow: inset 0 -1px 0 #2A6,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #2A6,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.green {
+	box-shadow: inset 0 -1px 0 #2A6
+}
+
+.app-topbar.yellow {
+	background-color: #EC1;
+	-webkit-box-shadow: inset 0 -1px 0 #DB0,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #DB0,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.yellow {
+	box-shadow: inset 0 -1px 0 #DB0
+}
+
+.app-topbar.orange {
+	background-color: #E82;
+	-webkit-box-shadow: inset 0 -1px 0 #C50,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #C50,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.orange {
+	box-shadow: inset 0 -1px 0 #C50
+}
+
+.app-topbar.red {
+	background-color: #dd4539;
+	-webkit-box-shadow: inset 0 -1px 0 #C43,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #C43,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.red {
+	box-shadow: inset 0 -1px 0 #C43
+}
+
+.app-topbar.blue {
+	background-color: #4486f0;
+	-webkit-box-shadow: inset 0 -1px 0 #4486f0,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #4486f0,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.blue {
+	box-shadow: inset 0 -1px 0 #4486f0
+}
+
+.app-topbar.dark-blue {
+	background-color: #345;
+	-webkit-box-shadow: inset 0 -1px 0 #234,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #234,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #f3f4f5
+}
+
+.app-ios-7 .app-topbar.dark-blue {
+	box-shadow: inset 0 -1px 0 #234
+}
+
+.app-topbar.white {
+	background-color: #FFF;
+	-webkit-box-shadow: inset 0 -1px 0 #f5f5f5,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: inset 0 -1px 0 #f5f5f5,0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	color: #444
+}
+
+.app-ios-7 .app-topbar.white {
+	box-shadow: inset 0 -1px 0 rgba(0,0,0,0.18)
+}
+
+.dark-page .app-topbar {
+	background-color: rgba(0,0,0,0.8);
+	-webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18);
+	box-shadow: 0 1px 0 rgba(0,0,0,0.1),0 1px 7px rgba(0,0,0,0.18)
+}
+
+.app-ios-7 .dark-page .app-topbar {
+	box-shadow: inset 0 -1px 0 rgba(0,0,0,0.1)
+}
+
+.app-topbar .app-title {
+	font-size: 18px;
+	font-weight: 500
+}
+
+.app-android .app-topbar .app-title {
+	float: left;
+	padding-left: 20px;
+	padding-right: 8px;
+	width: auto;
+	font-size: 18px;
+	font-weight: 400;
+	text-align: left
+}
+
+.app-ios-7 .app-topbar .app-title {
+	font-size: 17px
+}
+
+.app-topbar .app-title .app-icon {
+	display: none;
+	float: left;
+	margin: 12px 7px 12px -4px;
+	height: 24px;
+	width: 24px;
+	background-image: url(data:image/gif;
+	base64,R0lGODlhAQABAIAAAPj8/wAAACwAAAAAAQABAAACAkQBADs=);-webkit-background-size: 100%;
+	background-size: 100%
+}
+
+.app-android .app-topbar .app-title .app-icon {
+	display: block
+}
+
+.app-topbar .app-button {
+	padding: 0 16px;
+	font-weight: 300
+}
+
+.app-android .app-topbar .app-button {
+	padding: 0 13px
+}
+
+.app-topbar .app-button.active {
+	opacity: .65
+}
+
+.app-ios-7 .app-topbar .app-button {
+	-webkit-transition: opacity .15s ease-out;
+	transition: opacity .15s ease-out
+}
+
+.app-android .app-topbar .app-button {
+	font-weight: 400
+}
+
+.app-android .app-topbar .app-button.active {
+	opacity: 1;
+	background-color: rgba(0,0,0,0.2)
+}
+
+.app-android .dark-page .app-topbar .app-button.active {
+	background-color: rgba(0,0,0,1)
+}
+
+.app-topbar .app-button[data-back].left {
+	padding: 15px 0 15px 27px;
+	height: 14px;
+	background-image: url(data:image/png;
+	base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAoCAYAAADkDTpVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAxJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RUQxQ0FCN0VGMjJGMTFFMjg0REFDNDBBRUVBRjJBNDkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RUQxQ0FCN0RGMjJGMTFFMjg0REFDNDBBRUVBRjJBNDkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiBNYWNpbnRvc2giPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0iNTNBQzg4QkE2OTc3M0MxNDg4ODc1M0VDNzc3ODcwMDUiIHN0UmVmOmRvY3VtZW50SUQ9IjUzQUM4OEJBNjk3NzNDMTQ4ODg3NTNFQzc3Nzg3MDA1Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+dT5F6gAAAcNJREFUeNqslz8sA1Ecx+9UKi1ispkwMAgbs5XYTCJhlLB3uxrETsLGUgMbutaqJg0Jg5pqqqVCm1TaPt+X3ONp7n53fb/3kk/Su8v7fq/v3u/Pc4UQjsWRAQNg9/eONLDEtvgbnrpvS3wDdMT/4dkyWAUtETy8PuaaL4EcSIQ8T3HefBHURfg4Bq6p+Dz4JMTPQML0G8yCGiF+BZKmu2gKVAnxG5DW5/QiPg4qhPgdGOmeF1d8DJQJ8UcwGjQ3jric+ESIl/0XcEwM5F++J8TfwCSlQYkPgltC/B3MRK1A2IMUKBDiH34sOCYGcg9fE+INP4odEwMZfeeE+DdY6SV29AsXnBDibbDWa+TrFweCHlsmeUv92IsQz5hm3bj1wLxwx1yiDneJ1Ec+JUxa3I+stukFYdLkbFM90PKESZ0TaIp0RKqocVKFYggUCZMqJ9np6bpEmFQ46VovOM+EyQun4Ogl85UweeCUTMVERNEvcoq+YjqibSlw2hbFXETjdclpvBQL4IswyXFaR735bRAmR5zmV7Hs56ewsc89H+TBOmiHPG/aOkJtBhyhsjbPaJKdbnFJv8Uj7CEYBkmQVTd/BBgAAQDbZCXVLesAAAAASUVORK5CYII=);background-repeat: no-repeat;
+	-webkit-background-size: 12px 20px;
+	background-size: 12px 20px;
+	background-position: 8px center;
+	line-height: 14px
+}
+
+.app-topbar.white .app-button[data-back].left {
+	background-image: url(data:image/png;
+	base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAoCAYAAADkDTpVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBOTg5MDMxNEYyMzkxMUUyODREQUM0MEFFRUFGMkE0OSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBOTg5MDMxNUYyMzkxMUUyODREQUM0MEFFRUFGMkE0OSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkVEMUNBQjdGRjIyRjExRTI4NERBQzQwQUVFQUYyQTQ5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkVEMUNBQjgwRjIyRjExRTI4NERBQzQwQUVFQUYyQTQ5Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+A+2WYAAAAcxJREFUeNqslz1IA0EQhe9UAolKqnSp1EIL0U5rW8XOSgQtBe3TJY3YK2inTSy086eNrbFSFLRQq1jFJqIJRGLOt7IbluNu9rKzAx8kF3gvd7c7b9YLgsDjltCQOgVQVN//r7kyQG2Jj5KiUwPUOuhqBj0TFwYroBMS75kMMMUXQRkMxvye5tzBAmjG/HPBIfBtDebAFyF+Iu7K9h3MgAYhfgFStqtoEtQJ8WuQsd0HY6BGiN+CrC7ej0EevBLijyAXFk9qkANPhLgwzkeJJzHIgjtC/B1MxImbDIbBDSH+Aab1ZtePQRpUCPFPuRc8G4MUuCTEW3IXezYGoqecEuI/YDkuD0wGPjgixH/BKhU4JoM9QlywaUo0ymDHIF5IEplRJM2DgJunpkfU5T4i9ZKPCZMO9yWrZXpGmLQ5y1TfaFeESZOz0VRlDK2iwWkVqkZAlTCpc5qd3q7vCZMap13rgfNMmLxwAkePzDfC5IETmarGDaFf5YS+qinD2FLhjC2qZg2D1zln8FI1D74JkzJndNSH3xZhcsAZflUtyf4UZ7LLPR+InrUm4zSq2q6OUBsRR6iS60PgdlhcMOQ5Kojt+74/KpdoSV3/E2AAy2hZfWpsQrwAAAAASUVORK5CYII=)
+}
+
+.app-android .app-topbar .app-button[data-back].left {
+	padding: 17px 0 17px 20px;
+	background-image: url(data:image/png;
+	base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAMAAABf788oAAAATlBMVEUAAADBwcHBwcHKysrOzs7Dw8PX19fi5OTFxcXW1tbPz8/R0dHT09PU1NTV1dXGxsbHx8fMzMzNzc3Y2NjZ2dnIyMjs7u/w9PbCwsLLy8tnOIf3AAAAA3RSTlMAM5mHzooOAAAAdklEQVR4XnWRSQ7FMAhD3Z+k8zz/+1+0CgssWQq7Z5kEA7y6J1dyDsaRhibzSd7NEJx/xh0Ngwmtc2s80DCZUDmvxhsNdeYaMtNCwXgkRwmRGKIgoGdL4VH89VscMhguHR0zw0n84oLw6goRZcnAnYWGzEPpKT8fNg40KCJRswAAAABJRU5ErkJggg==);-webkit-background-size: 8px 14px;
+	background-size: 8px 14px;
+	background-position: 4px center;
+	width: 35%;
+	color: transparent
+}
+
+.app-android .app-topbar.white .app-button[data-back].left {
+	background-image: url(data:image/png;
+	base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAMAAABf788oAAAAQlBMVEUAAABPT09PT09fX19SUlJWVlZXV1dZWVlcXFxQUFBVVVVgYGBERERdXV1TU1M8PDxhYWFiYmJaWlpYWFhUVFReXl7J/HxRAAAAA3RSTlMAM5mHzooOAAAAc0lEQVR4XnWRSQ7FIAxD04ax4x/vf9UKL2LJEtk9y4BNLMaPMT04gysN2+A3+QtDDl7BTkODkIITuNHwh7AE/8CFhn3wbpLpogA+yVVKdJaYCPbhkcmlVvRZezHYJLo5y0l9/SBN56aFsnHuIWxkLkpX+QCqTAg113kiVgAAAABJRU5ErkJggg==)
+}
+
+.app-android .app-topbar .app-button[data-back].left.active,.app-android .dark-page .app-topbar .app-button[data-back].left.active {
+	background-color: transparent
+}
+
+.app-android .app-topbar .app-button[data-back].left.active ~ .app-title {
+	background-color: rgba(0,0,0,0.2)
+}
+
+.app-android .dark-page .app-topbar .app-button[data-back].left.active ~ .app-title {
+	background-color: rgba(0,0,0,1)
+}
+
+.app-android .app-topbar .app-menu {
+	width: 32px;
+	background-image: url(data:image/png;
+	base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4AQMAAACSSKldAAAABlBMVEUAAADw9PY0rbmPAAAAAXRSTlMAQObYZgAAABdJREFUGJVjYMAAzP8P0JSmFIy6DwkAAEllP0nYiqwuAAAAAElFTkSuQmCC);background-repeat: no-repeat;
+	background-position: center;
+	-webkit-background-size: 28px 28px;
+	background-size: 28px 28px;
+	color: transparent
+}
+
+.app-android .app-topbar>:last-child:after {
+	content: "";
+	clear: both
+}
+
+.app-page,.app-content {
+	background: #e8eaef
+}
+
+.dark-page.app-page,.dark-page .app-content {
+	background: #000
+}
+
+.app-section,.app-list>li,.app-list>li.app-button,.app-content .app-button,.app-input {
+	border: 0
+}
+
+.app-section {
+	margin: 16px;
+	padding: 8px;
+	background: #FFF;
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+	-webkit-border-radius: 6px;
+	border-radius: 6px
+}
+
+.app-ios-7 .app-section {
+	border-bottom: 0
+}
+
+.app-section.app-button {
+	margin: 16px;
+	padding: 0
+}
+
+p.app-section {
+	padding: 12px 16px;
+	color: #665
+}
+
+.app-content .app-section>* {
+	margin: 8px 0 0;
+	-webkit-border-radius: 4px;
+	border-radius: 4px
+}
+
+.app-content .app-section>:first-child {
+	margin-top: 0
+}
+
+.app-list>label {
+	height: 28px;
+	background-color: #d5e5e6;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #778;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 28px
+}
+
+.app-android .app-list>label {
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase
+}
+
+.app-list>li {
+	background-color: #FFF;
+	color: #444
+}
+
+.app-list>li,.app-list>li.app-button {
+	border-top: 1px solid rgba(0,0,0,0.05);
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+.app-android .app-list>li,.app-android .app-list>li.app-button {
+	padding-top: 0;
+	padding-bottom: 0;
+	height: 47px;
+	line-height: 47px
+}
+
+.app-list>li.app-button.active {
+	border-top: 1px solid rgba(0,0,0,0.0)
+}
+
+.app-list>li:first-child,.app-list>li.app-button:first-child,.app-list>label+li,.app-list>label+li.app-button,.app-list>label+li.app-button.active,.app-list>li.app-button.active+li,.app-list>li.app-button.active+li.app-button {
+	border-top-color: transparent
+}
+
+.app-content .app-button {
+	background-color: #FFF;
+	color: #17B
+}
+
+.app-content .app-button.active {
+	background-color: #DDD
+}
+
+.app-content .app-button.teal {
+	background-color: #2B9;
+	color: #f3f4f5
+}
+
+.app-content .app-button.teal.active {
+	background-color: #197
+}
+
+.app-content .app-button.green {
+	background-color: #3C7;
+	color: #f3f4f5
+}
+
+.app-content .app-button.green.active {
+	background-color: #2A6
+}
+
+.app-content .app-button.yellow {
+	background-color: #EC1;
+	color: #f3f4f5
+}
+
+.app-content .app-button.yellow.active {
+	background-color: #DB0
+}
+
+.app-content .app-button.orange {
+	background-color: #E82;
+	color: #f3f4f5
+}
+
+.app-content .app-button.orange.active {
+	background-color: #C50
+}
+
+.app-content .app-button.red {
+	background-color: #dd4539;
+	color: #f3f4f5
+}
+
+.app-content .app-button.red.active {
+	background-color: #C43
+}
+
+.app-content .app-button.blue {
+	background-color: #4486f0;
+	color: #f3f4f5
+}
+
+.app-content .app-button.blue.active {
+	background-color: #27A
+}
+
+.app-content .app-button.dark-blue {
+	background-color: #345;
+	color: #f3f4f5
+}
+
+.app-content .app-button.dark-blue.active {
+	background-color: #234
+}
+
+input.app-input {
+	height: 44px;
+	background: #FFF;
+	line-height: 24px;
+	border-bottom: 1px solid rgba(0,0,0,0.1)
+}
+
+.app-android input.app-input {
+	height: 48px;
+	line-height: 18px
+}
+
+.app-section input.app-input {
+	border-bottom: 0
+}
+
+.app-android .app-section input.app-input {
+	height: 40px;
+	line-height: 20px
+}
+
+.app-input[type="search"] {
+	padding-left: 34px;
+	background-image: url(data:image/png;
+	base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACjElEQVR42r3Wz2sTQRjG8e2maW1rTYIoaPEgHqz/gD+KFi8VRb0pVPTi2UPNQRRCEHpQkCKIp0ilQg/BVqQKUi8q1lRzERQ0x3pQVKJIxTaxpql+DzkMD+xkNo1d+NBudt5535md3VnPdmQyGfP/FrSjC+trOhDxmnxo4k70I4lxzOA18riPYRzFFolvSvJBPMU8/los4w3S8JtRRCfGUZJEK3KuKiigV4pwHzl/43gYkLSKMhZRQsVsZ7T9jN1ShFPyCCahHVbwEiM4gyM4gRQe4Tu04DnskCLqFjACTf4Vg4gHxPo4gCfQ2HyY0e/BvIziIzY7LtgIpqC37YLrLIxJ8AK2SbBLIW+ln29ordfBdryXFZ2Eh7CLuBdVo4gyTmuhGjyA30byOexq5B2CKLIyC7fqBZ6V0U8jagkJ299jtHmWVXxJAsZq1xot4DD+GP3NYqOtgJQUkFllAQMoG/3l9WnSXS4p9yy7ys3suAzoOWK2gJMS8AKJBpP7uCj9PagXtBdFI+AH+mvXwhbQjbzslFfqPYYJ5OQ23IEPD2HeA6dkXyihz6WDFJblNTpkPN+BiWHO5E8ZyCvXytfhiwRXkZa2Qf0cRBG6F+yXWGsRhwL292nsRBei8NGKDmzCZePbQL1DPMw9TGJFR1IzgxtI4yqm8Av6LaDnOfSEmYlzWNKZCKJtAtrnEJcirNvqPnwK6tTyyfbM+F2vF9DmOhPmLfmABSzJVlvBIooYRQIeJiyFFlzXhJ73YQjXMYqbSOEYuqXtBtyTxLomtjrv8a7taswiJiy3bxYxr8mHLmYfWcua6JHQ5hcCP2BN3Eb7/8yva2LSSH4XsbVKbm5413AeCePamhYRRYv52z/AKK4/BRObOQAAAABJRU5ErkJggg==);background-repeat: no-repeat;
+	background-position: 12px center;
+	-webkit-background-size: 16px 16px;
+	background-size: 16px 16px
+}
+
+.app-input[type="search"].no-icon,.app-android .app-input[type="search"].no-icon-android,.app-ios .app-input[type="search"].no-icon-ios {
+	padding-left: 12px;
+	background-image: none
+}

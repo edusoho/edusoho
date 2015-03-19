@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
@@ -24,7 +25,7 @@ class PayCenterController extends BaseController
         }
 
 		$fields = $request->query->all();
-		$order = $this->getOrderService()->getOrder($fields["id"]);
+		$order = $this->getOrderService()->getOrderBySn($fields["sn"]);
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -67,6 +68,7 @@ class PayCenterController extends BaseController
             $router = $processor->getRouter();
 
             $goto = $success && !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true):$this->generateUrl('homepage', array(), true);
+
             return $this->redirect($goto);
         }
 
@@ -108,7 +110,7 @@ class PayCenterController extends BaseController
                 'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
             );
 
-            return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
+            return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
                 'order' => $order,
                 'requestParams' => $payRequestParams,
             ));
@@ -123,7 +125,7 @@ class PayCenterController extends BaseController
         $payData = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
-            return $this->forward("TopxiaWebBundle:Order:resultNotice");
+            return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
         }
 
         list($success, $order) = $this->getPayCenterService()->pay($payData);
@@ -151,15 +153,20 @@ class PayCenterController extends BaseController
         $response = $this->createPaymentResponse($name, $request->request->all());
 
         $payData = $response->getPayData();
-
-        list($success, $order) = $this->getPayCenterService()->pay($payData);
-        $processor = OrderProcessorFactory::create($order["targetType"]);
-
-        if($success){
+        if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
-        } else {
-            return new Response('failture');
         }
+
+        if ($payData['status'] == "success") {
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
+            $processor = OrderProcessorFactory::create($order["targetType"]);
+            
+            if($success){
+                return new Response('success');
+            }
+        }
+
+        return new Response('failture');
     }
 
     public function showTargetAction(Request $request)
@@ -192,13 +199,35 @@ class PayCenterController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function createPaymentResponse($name, $params)
+    public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
-        $options = $this->getPaymentOptions($name);
-        $response = Payment::createResponse($name, $options);
-
-        return $response->setParams($params);
+        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
+        
+        return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+            'form' => $paymentRequest->form(),
+            'order' => $order,
+        ));
     }
+
+    public function resultNoticeAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:PayCenter:resultNotice.html.twig');
+    }
+
+    private function createPaymentRequest($order, $requestParams)
+    {   
+        $options = $this->getPaymentOptions($order['payment']);
+        $request = Payment::createRequest($order['payment'], $options);
+
+        $requestParams = array_merge($requestParams, array(
+            'orderSn' => $order['sn'],
+            'title' => $order['title'],
+            'summary' => '',
+            'amount' => $order['amount'],
+        ));
+        return $request->setParams($requestParams);
+    }
+
 
     private function getPaymentOptions($payment)
     {
@@ -227,6 +256,14 @@ class PayCenterController extends BaseController
         );
 
         return $options;
+    }
+
+    private function createPaymentResponse($name, $params)
+    {
+        $options = $this->getPaymentOptions($name);
+        $response = Payment::createResponse($name, $options);
+
+        return $response->setParams($params);
     }
 
 	private function getEnabledPayments()

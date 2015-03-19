@@ -5,10 +5,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Form\RegisterType;
 use Gregwar\Captcha\CaptchaBuilder;
+use Topxia\Common\SmsToolkit;
 
 class RegisterController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -16,43 +16,60 @@ class RegisterController extends BaseController
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
+        $registerEnable  = $this->isRegisterEnabled();
+        if (!$registerEnable) {
+            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+        }
+
         $form = $this->createForm(new RegisterType());
         
         if ($request->getMethod() == 'POST') {
-    
+
             $registration = $request->request->all();
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){
-                
+            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
                 $captchaCodePostedByUser = strtolower($registration['captcha_num']);
-
-                $captchaCode = $request->getSession()->get('captcha_code');   
-              
+                $captchaCode = $request->getSession()->get('captcha_code');                   
+                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
+                    throw new \RuntimeException('验证码错误。');    
+                }                   
+                if (!isset($captchaCode)||strlen($captchaCode)<5){    
+                    throw new \RuntimeException('验证码错误。');    
+                }
                 if ($captchaCode != $captchaCodePostedByUser){ 
                     $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
                     throw new \RuntimeException('验证码错误。');
                 }
                 $request->getSession()->set('captcha_code',mt_rand(0,999999999));
             }
+            
+            $registration['verifiedMobile'] = '';
+            if (in_array('mobile', $authSettings['registerSort'])&&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
+                &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
+                if ($result){
+                    $registration['verifiedMobile'] = $sessionField['to'];
+                }else{
+                    return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
+                }
+            }
 
             $registration['createdIp'] = $request->getClientIp();
-
             if(isset($authSettings['register_protective'])){
-
                 $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
-
                 if(!$status){
-
                     return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
                 }
             }
 
             $user = $this->getAuthService()->register($registration);
 
-            $this->authenticateUser($user);
-            $this->sendRegisterMessage($user);
+            if($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed')){
+                 $this->authenticateUser($user);
+                 $this->sendRegisterMessage($user);
+            }
 
             $goto = $this->generateUrl('register_submited', array(
                 'id' => $user['id'], 'hash' => $this->makeHash($user),
@@ -60,6 +77,8 @@ class RegisterController extends BaseController
             ));
 
             if ($this->getAuthService()->hasPartnerAuth()) {
+                 $this->authenticateUser($user);
+                 $this->sendRegisterMessage($user);
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
@@ -75,7 +94,6 @@ class RegisterController extends BaseController
 
         if(!isset($auth['registerSort']))$auth['registerSort']="";
         
-        $loginEnable  = $this->isLoginEnabled();
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         for($i=0;$i<count($userFields);$i++){
@@ -85,9 +103,15 @@ class RegisterController extends BaseController
            if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
-        
+
+        if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
+            && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
+            && !in_array('mobile', $auth['registerSort'])) {
+            $auth['registerSort'][] = "mobile";
+        }
+
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'isLoginEnabled' => $loginEnable,
+            'isRegisterEnabled' => $registerEnable,
             'registerSort'=>$auth['registerSort'],
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
@@ -158,16 +182,27 @@ class RegisterController extends BaseController
     public function submitedAction(Request $request, $id, $hash)
     {
         $user = $this->checkHash($id, $hash);
+
         if (empty($user)) {
             throw $this->createNotFoundException();
         }
 
-        return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
-            'user' => $user,
-            'hash' => $hash,
-            'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-            '_target_path' => $this->getTargetPath($request),
-        ));
+        $auth = $this->getSettingService()->get('auth');
+        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
+               return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
+           }else{
+                return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
+                'user' => $user,
+                'hash' => $hash,
+                'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
+                '_target_path' => $this->getTargetPath($request),
+                ));
+           }
     }
 
     private function getTargetPath($request)
@@ -201,9 +236,10 @@ class RegisterController extends BaseController
     {
 
         $token = $this->getUserService()->getToken('email-verify', $token);
+
         if (empty($token)) {
             $currentUser = $this->getCurrentUser();
-            if (empty($currentUser)) {
+            if (empty($currentUser) || $currentUser['id'] == 0) {
                 return $this->render('TopxiaWebBundle:Register:email-verify-error.html.twig');
             } else {
                 return $this->redirect($this->generateUrl('settings'));
@@ -215,11 +251,17 @@ class RegisterController extends BaseController
             return $this->createNotFoundException();
         }
 
+        $this->authenticateUser($user);
         $this->getUserService()->setEmailVerified($user['id']);
 
-        $this->getUserService()->deleteToken('email-verify', $token['token']);
+        if (strtoupper($request->getMethod()) ==  'POST') {
+            $this->getUserService()->deleteToken('email-verify', $token['token']);
+            return $this->createJsonResponse(true);
+        }
 
-        return $this->render('TopxiaWebBundle:Register:email-verify-success.html.twig');
+        return $this->render('TopxiaWebBundle:Register:email-verify-success.html.twig', array(
+            'token' => $token,
+        ));
     }
 
     private function makeHash($user)
@@ -332,6 +374,11 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
+
     protected function getMessageService()
     {
         return $this->getServiceKernel()->createService('User.MessageService');
@@ -415,7 +462,7 @@ class RegisterController extends BaseController
         }
     }
 
-    private function isLoginEnabled()
+    private function isRegisterEnabled()
     {
         $auth = $this->getSettingService()->get('auth');
         if($auth && array_key_exists('register_mode',$auth)){

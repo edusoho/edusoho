@@ -27,7 +27,7 @@
               虚拟币是可以在网校内进行支付消费的虚拟货币<br>
               <span style="color:blue;">推广建议：</span><br>
               1、 建议网校使用虚拟币对网校内课程进行标价；<br>
-              2、 网校可鼓励学员充值，可提升用户忠诚度；<br>
+              2、 网校可鼓励{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}充值，可提升用户忠诚度；<br>
               3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
             </div>
         </div>
@@ -75,7 +75,7 @@
                 <label for="coin_content">虚拟币说明</label>
               </div>
           <div class="controls col-md-8">
-            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
+            <textarea class="form-control" id="coin_content" rows="16" name="coin_content" value="{{coin_settings_posted.coin_content}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ field_value(coin_settings_posted, 'coin_content') }}</textarea>
             <p class="help-block">虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
             </p>
           </div>

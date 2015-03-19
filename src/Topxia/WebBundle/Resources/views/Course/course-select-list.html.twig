@@ -1,0 +1,140 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<style>
+.course-wide-list .enabled:hover{
+
+    background: #eee;
+    border-color: #ddd;
+}
+
+.course-wide-list .enabled{
+
+    cursor: default;
+    background: #eee;
+}
+
+</style>
+<ul class="course-wide-list">
+  {% if courses %}
+  {% for course in courses %}
+  <li class=" {% if course.id in unEnabledCourseIds %} enabled {% endif %}course-item clearfix"   data-id="{{course.id}}" >
+    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+      <img class="course-picture" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
+    </a>
+    <div class="course-body">
+     <div style="float:right;" class="text-muted mrm mls">
+         {% if setting('course.coursesPrice') == 0 %}
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
+                  <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
+                {% endif %}
+              {% else %}
+                {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
+                  <span class="free-money-text"><del>{{ course.price }}</del></span>
+                {% endif %}
+              {% endif %}
+
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                  <span class="course-price" style="display:inline">
+                    {% if course.coinPrice > 0 %}
+                      {% if free_limit_type(course) == 'free_now' %}
+                        0.00 元
+                      {% else %}
+                       价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
+                      {% endif %}  
+                    {% else %}免费{% endif %}
+                  </span>
+
+              {% else %}
+                <span class="course-price">
+                  {% if course.price > 0 %}
+                    {% if free_limit_type(course) == 'free_now' %}
+                      0.00 元
+                    {% else %}
+                     价格： {{ course.price }}元
+                    {% endif %}  
+                  {% else %}免费{% endif %}
+                  
+                </span>
+            {% endif %}
+          {% endif %}          
+    
+          {% if setting('course.show_student_num_enabled', '1') == 1 %}
+          <span class="divider"></span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员')}}</span>
+          {% endif %}
+
+          {% if free_limit_type(course) == 'free_now' %}
+           <span class="text-muted text-sm">
+            到期时间
+            <span>{{course.freeEndTime|date('n')}}</span>月
+            <span>{{course.freeEndTime|date('d')}}</span>日
+            <span>{{course.freeEndTime|date('H')}}</span>时
+          </span>
+           {% endif %}
+
+        </div>
+
+      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+      {% if course.serializeMode=='serialize' %}
+        <span class="label label-success ">更新中</span>
+      {% elseif course.serializeMode=='finished' %}
+        <span class="label label-warning ">已完结</span>
+      {% endif %}
+      {% if course.type == 'live' %}
+          {% set lesson = course['lesson']|default(null) %}
+          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+            <span class="label label-warning series-mode-label">正在直播中</span>
+          {% else %}
+            <span class="label label-success series-mode-label">直播</span>
+          {% endif %}
+      {% endif %}
+      </h4>
+
+      {% if course.type == 'live' %}
+        {% set lesson = course.lesson|default(null) %}
+        {% if lesson %}
+          <div class="live-course-lesson mbm">
+            <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="course-about ellipsis">{{ course.subtitle }}</div>
+      {% endif %}
+
+      <div class="course-footer clearfix">
+        {% set teacher = users[course.teacherIds|first]|default(null) %}
+        {% if teacher %}
+          <div class="teacher">
+            <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ default_path('avatar',teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
+            <a class="teacher-nickname ellipsis" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+            <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+          </div>
+        {% endif %}
+
+        {% if course.id in unEnabledCourseIds %}
+
+          <div class="pull-right">
+          <span class="text-muted ">
+          <i class="glyphicon glyphicon-info-sign" style="color: #F60;"></i> 本课程已加入到{{ setting('classroom.name')|default("班级") }}
+          {% set classrooms = getClassroomsByCourseId(course.id) %}
+          {% for classroom in classrooms%}
+          <a class="btn-link" href="{{path('classroom_show',{id:classroom.id})}}" target=blank>
+          "{{classroom.title}}"
+          </a>
+          {% endfor %}
+          </span>
+          </div>
+        {% else %}
+        <div class="course-metas-{{course.id}}" style="display:none;">        
+          <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+  {% else %}
+  <div class="empty">找不到相关课程！</div>
+  {% endif %}
+</ul>

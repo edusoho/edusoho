@@ -1,0 +1,37 @@
+{% set thread = thread|default(null) %}
+
+<form id="thread-form" class="form-vertical" method="post" 
+  {% if thread %}
+    action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
+  {% else %}
+    action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id}) }}"
+    {% endif %}
+  >
+
+  <div class="form-group">
+    <div class="controls">
+      <input class="form-control" type="text" placeholder="标题" data-display="标题" name= "title" value="{{ thread.title|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls">
+      <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content"
+        data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group clearfix">
+    <div class="controls pull-right">
+      {% if thread %}
+        <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link">取消</a>
+        <button type="submit" class="btn btn-primary btn-fat">保存</button>
+      {% else %}
+        <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link">取消</a>
+        <button type="submit" class="btn btn-primary">发表</button>
+      {% endif  %}
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

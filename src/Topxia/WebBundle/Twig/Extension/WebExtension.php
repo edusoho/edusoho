@@ -8,10 +8,13 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
+use Topxia\WebBundle\Util\UploadToken;
 
 class WebExtension extends \Twig_Extension
 {
     protected $container;
+
+    protected $pageScripts;
 
     public function __construct ($container)
     {
@@ -41,6 +44,7 @@ class WebExtension extends \Twig_Extension
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
             'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
+            'at' => new \Twig_Filter_Method($this, 'atFilter'),
         );
     }
 
@@ -64,10 +68,13 @@ class WebExtension extends \Twig_Extension
             'upload_max_filesize' => new \Twig_Function_Method($this, 'getUploadMaxFilesize') ,
             'js_paths' => new \Twig_Function_Method($this, 'getJsPaths'),
             'is_plugin_installed' => new \Twig_Function_Method($this, 'isPluginInstaled'),
+            'plugin_version' => new \Twig_Function_Method($this, 'getPluginVersion'),
+            'version_compare' => new \Twig_Function_Method($this, 'versionCompare'),
             'is_exist_in_subarray_by_id' => new \Twig_Function_Method($this, 'isExistInSubArrayById'),
             'context_value' => new \Twig_Function_Method($this, 'getContextValue') ,
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
+            'upload_token' => new \Twig_Function_Method($this, 'makeUpoadToken') ,
             'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
@@ -76,7 +83,23 @@ class WebExtension extends \Twig_Extension
             'userInCash'=>new \Twig_Function_Method($this, 'getInCash'),
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
+            'blur_phone_number' => new \Twig_Function_Method($this, 'blur_phone_number'),
+            'sub_str' => new \Twig_Function_Method($this, 'subStr'),
+            'load_script' => new \Twig_Function_Method($this, 'loadScript'),
+            'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
+            'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
         );
+    }
+
+    public function subStr($text, $start, $length)
+    {
+        $text = trim($text);
+
+        $length = (int) $length;
+        if ( ($length > 0) && (mb_strlen($text) > $length) )  {
+            $text = mb_substr($text, $start, $length, 'UTF-8');
+        }
+        return $text;
     }
 
     public function getOutCash($userId,$timeType="oneWeek")
@@ -135,6 +158,17 @@ class WebExtension extends \Twig_Extension
         return $user['nickname'];
     }
     
+    public function getClassroomsByCourseId($courseId)
+    {   
+        $classrooms=array();
+        $classroomIds=ArrayToolkit::column(ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->findClassroomsByCourseId($courseId),'classroomId');
+        foreach ($classroomIds as $key => $value) {
+            $classrooms[$value]=ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->getClassroom($value);
+        }
+
+        return $classrooms;
+    }
+
     private function getUserById($userId)
     {
         return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
@@ -164,11 +198,33 @@ class WebExtension extends \Twig_Extension
     {
         $plugins = $this->container->get('kernel')->getPlugins();
         foreach ($plugins as $plugin) {
-            if (strtolower($name) == strtolower($plugin)) {
-                return true;
+            if (is_array($plugin)) {
+                if (strtolower($name) == strtolower($plugin['code'])) {
+                    return true;
+                }
+            } else {
+                if (strtolower($name) == strtolower($plugin)) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    public function getPluginVersion($name)
+    {
+        $plugins = $this->container->get('kernel')->getPlugins();
+        foreach ($plugins as $plugin) {
+            if ( strtolower($plugin['code']) == strtolower($name) ) {
+                return $plugin['version'];
+            }
+        }
+        return null;
+    }
+
+    public function versionCompare($version1, $version2, $operator)
+    {
+        return version_compare($version1, $version2, $operator);
     }
 
     public function getJsPaths()
@@ -177,16 +233,27 @@ class WebExtension extends \Twig_Extension
         $theme = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();
+        $names = array();
+        foreach ($plugins as $plugin) {
+            if (is_array($plugin)) {
+                if ($plugin['type'] != 'plugin') {
+                    continue;
+                }
+                $names[] = $plugin['code'];
+            } else {
+                $names[] = $plugin;
+            }
+        }
 
-        $plugins[] = "customweb";
-        $plugins[] = "customadmin";
+        $names[] = "customweb";
+        $names[] = "customadmin";
 
         $paths = array(
             'common' => 'common',
             'theme' => "{$basePath}/themes/{$theme}/js"
         );
 
-        foreach ($plugins as $name) {
+        foreach ($names as $name) {
             $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
@@ -221,6 +288,12 @@ class WebExtension extends \Twig_Extension
             return $default;
         }
         return $this->container->getParameter($name);
+    }
+
+    public function makeUpoadToken($group, $type = 'image' , $duration = 18000)
+    {
+        $maker = new UploadToken();
+        return $maker->make($group, $type, $duration);
     }
 
     public function getConvertIP($IP)
@@ -530,6 +603,22 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
+    public  function loadScript($js)
+    {
+        $js = is_array($js) ? $js : array($js);
+        
+        if($this->pageScripts) {
+            $this->pageScripts = array_merge($this->pageScripts, $js);
+        } else {
+            $this->pageScripts = $js;
+        }
+    }
+
+    public function exportScripts()
+    {
+        return $this->pageScripts;
+    }
+
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
@@ -721,6 +810,24 @@ class WebExtension extends \Twig_Extension
         return $purifier->purify($html);
     }
 
+    public function atFilter($text, $ats = array())
+    {
+        if (empty($ats) || !is_array($ats)) {
+            return $text;
+        }
+
+        $router = $this->container->get('router');
+
+        foreach ($ats as $nickname => $userId) {
+            $path = $router->generate('user_show', array('id' => $userId));
+            $html = "<a href=\"{$path}\" data-uid=\"{$userId}\" target=\"_blank\">@{$nickname}</a>";
+
+            $text = preg_replace("/@{$nickname}/ui", $html, $text);
+        }
+
+        return $text;
+    }
+
     public function getSetting($name, $default = null)
     {
         $names = explode('.', $name);
@@ -816,7 +923,14 @@ class WebExtension extends \Twig_Extension
             return 'no_free';
         }
     }
-    
+
+    public function blur_phone_number($phoneNum)
+    {
+        $head = substr($phoneNum,0,3);
+        $tail = substr($phoneNum,-3,3);
+        return ($head . '*****' . $tail);
+    }
+
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
     { 
         $both_ends = $ltrim && $rtrim; 

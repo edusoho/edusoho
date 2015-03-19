@@ -21,12 +21,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
-        $coinSetting = $this->getSettingService()->get("coin");
+        list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
         
         $totalPrice = 0;
 
-        if(!isset($coinSetting["coin_enabled"]) 
-            || !$coinSetting["coin_enabled"]) {
+        if(!$coinEnable) {
         	$totalPrice = $course["price"];
         	return array(
 				'totalPrice' => $totalPrice,
@@ -38,40 +37,14 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         	);
         }
 
-        $cashRate = 1;
-        if(array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
-
-        $priceType = "RMB";
-        if(array_key_exists("price_type", $coinSetting)) {
-            $priceType = $coinSetting["price_type"];
-        }
-
-        $user = $this->getUserService()->getCurrentUser();
-        $account = $this->getCashAccountService()->getAccountByUserId($user["id"]);
-        $accountCash = $account["cash"];
-
-        $coinPayAmount = 0;
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
         if ($priceType == "Coin") {
             $totalPrice = $course["coinPrice"];
-            if($hasPayPassword && $totalPrice*100 > $accountCash*100) {
-                $coinPayAmount = $accountCash;
-            } else if($hasPayPassword) {
-                $coinPayAmount = $totalPrice;
-            }                
         } else if($priceType == "RMB") {
             $totalPrice = $course["price"];
-            if($totalPrice*100 > $accountCash/$cashRate*100) {
-                $coinPayAmount = $accountCash;
-            } else {
-                $coinPayAmount = $totalPrice*$cashRate;
-            }
         }
 
-        $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
+        list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
+
         return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
@@ -89,34 +62,27 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
 	public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
 	{
-        $totalPrice = 0;
-        $course = $this->getCourseService()->getCourse($targetId);
-        if($priceType == "RMB") {
-            $totalPrice = $course["price"];
-        } else if ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
-        }
+        $totalPrice = $this->getTotalPrice($targetId, $priceType);
 
-        if($totalPrice != $fields['totalPrice']) {
-            throw new Exception("实际价格不匹配，不能创建订单!");
-        }
-
-        $totalPrice = (float)$totalPrice;
         $amount = $totalPrice;
 
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         $couponSetting = $this->getSettingService()->get("coupon");
-
-        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"]) {
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"], 
+                'course',
                 $targetId, 
                 $totalPrice, 
                 $priceType, 
                 $cashRate
             );
-            $amount = $couponResult["afterAmount"];
+            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+                $amount = $couponResult["afterAmount"];
+            } else {
+                unset($couponResult);
+            }
         }
 
         //虚拟币优惠价格
@@ -137,7 +103,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if($amount<0){
             $amount = 0;
         }
+        
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
         $amount = NumberToolkit::roundUp($amount);
+
         return array(
         	$amount, 
         	$totalPrice, 
@@ -150,11 +119,18 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->getCourseOrderService()->createOrder($orderInfo);
 	}
 
-	private function afterCouponPay($couponCode, $targetId, $amount, $priceType, $cashRate)
-	{
-		$couponResult = $this->getCouponService()->checkCouponUseable($couponCode, "course", $targetId, $amount);
-        return $couponResult;
-	}
+    private function getTotalPrice($targetId, $priceType)
+    {
+        $totalPrice = 0;
+        $course = $this->getCourseService()->getCourse($targetId);
+        if($priceType == "RMB") {
+            $totalPrice = $course["price"];
+        } else if ($priceType == "Coin") {
+            $totalPrice = $course["coinPrice"];
+        }
+        $totalPrice = (float)$totalPrice;
+        return $totalPrice;
+    }
 
 	public function doPaySuccess($success, $order) {
         if (!$success) {
@@ -189,11 +165,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getCashAccountService()
-    {
-        return ServiceKernel::instance()->createService('Cash.CashAccountService');
     }
 
 	protected function getCourseOrderService() {

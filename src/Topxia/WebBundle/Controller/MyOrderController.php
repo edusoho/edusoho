@@ -64,7 +64,7 @@ class MyOrderController extends BaseController
         $waitToBePaidCount = $this->getOrderService()->searchOrderCount($waitToBePaidCountConditions);
 
         foreach ($orders as $index => $expiredOrderToBeUpdated ){
-            if ((($expiredOrderToBeUpdated["createdTime"] + 40*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                $orders[$index]['status'] = 'cancelled'; 
                $waitToBePaidCount -= 1;

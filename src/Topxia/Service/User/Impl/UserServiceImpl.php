@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\SimpleValidator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
@@ -38,7 +39,8 @@ class UserServiceImpl extends BaseService implements UserService
        return $this->getProfileDao()->getProfile($id);
     }
 
-    public function getUserByNickname($nickname){
+    public function getUserByNickname($nickname)
+    {
         $user = $this->getUserDao()->findUserByNickname($nickname);
         if(!$user){
             return null;
@@ -46,6 +48,16 @@ class UserServiceImpl extends BaseService implements UserService
             return UserSerialize::unserialize($user);
         }
     }
+
+    public function getUserByVerifiedMobile($mobile)
+    {
+        $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
+        if(!$user){
+            return null;
+        } else {
+            return UserSerialize::unserialize($user);
+        }
+    }    
 
     public function getUserByEmail($email)
     {
@@ -232,6 +244,33 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function isMobileUnique($mobile)
+    {
+        $count = $this->searchUserCount(array('verifiedMobile' => $mobile));
+        if ($count > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function changeMobile($id, $mobile)
+    {
+        $user = $this->getUser($id);
+        if (empty($user) or empty($mobile)) {
+            throw $this->createServiceException('参数不正确，更改失败。');
+        }
+
+        $fields = array(
+            'verifiedMobile' => $mobile
+        );
+
+        $this->getUserDao()->updateUser($id, $fields);
+
+        $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
+
+        return true;
+    }
+
     public function getUserSecureQuestionsByUserId($userId)
     {
         return $this->getUserSecureQuestionDao()->getUserSecureQuestionsByUserId($userId);
@@ -301,6 +340,11 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = array();
         $user['email'] = $registration['email'];
+        if (isset($registration['verifiedMobile'])) {
+            $user['verifiedMobile'] = $registration['verifiedMobile'];
+        }else{
+            $user['verifiedMobile'] = '';
+        }
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
@@ -580,9 +624,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('解除第三方绑定失败，该用户不存在');
         }
 
-        $result = in_array($type, array('qq','renren','weibo'),true);
-        if(!$result) {
-            throw $this->createServiceException('解除第三方绑定失败,当前只支持weibo,qq,renren');
+        $types = array_keys(OAuthClientFactory::clients());
+        if(!in_array($type, $types)) {
+            throw $this->createServiceException("{$type}类型不正确，解除第三方绑定失败。");
         }
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
         if($bind){
@@ -603,9 +647,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
         }
 
-        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
-        if(!$result) {
-            throw $this->createServiceException('获取第三方登录信息失败,当前只支持weibo,qq,renren');
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, array('discuz', 'phpwind'));
+
+        if(!in_array($type, $types)) {
+            throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
 
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
@@ -617,9 +663,12 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，第三方绑定失败');
         }
-        $result = in_array($type, array('qq','renren','weibo', 'discuz', 'phpwind'), true);
-        if(!$result) {
-            throw $this->createServiceException('第三方绑定失败,当前只支持weibo,qq,renren, discuz, phpwind');
+
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, array('discuz', 'phpwind'));
+
+        if(!in_array($type, $types)) {
+            throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
         }
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,
@@ -921,17 +970,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getProfileDao()->dropFieldData($fieldName);
     }
 
-    public function getUserCountByApprovalStatus($approvalStatus)
-    {
-        return $this->getUserDao()->searchUserCount(array('approvalStatus' => $approvalStatus));
-    }
-
-    public function getUsersByApprovalStatus($approvalStatus, $start, $limit)
-    {
-        return $this->getUserDao()->searchUsers(array('approvalStatus' => $approvalStatus), 
-            array('approvalTime', 'DESC'), $start, $limit);
-    }
-
     private function getUserApprovalDao()
     {
         return $this->createDao("User.UserApprovalDao");
@@ -956,7 +994,34 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function analysisUserSumByTime($endTime)
     {
-        return $this->getUserDao()->analysisUserSumByTime($endTime);
+        $perDayUserAddCount = $this->getUserDao()->analysisUserSumByTime($endTime);
+        $dayUserTotals = array();
+        foreach ($perDayUserAddCount as $key => $value) {
+            $dayUserTotals[$key] = array();
+            $dayUserTotals[$key]["date"] = $value["date"];
+            $dayUserTotals[$key]["count"] = 0;
+            for ($i=$key; $i < count($perDayUserAddCount); $i++) { 
+                $dayUserTotals[$key]["count"] += $perDayUserAddCount[$i]["count"];
+            }
+        }
+        return $dayUserTotals;
+    }
+
+    public function parseAts($text)
+    {
+        preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $text, $matches);
+
+        $users = $this->getUserDao()->findUsersByNicknames(array_unique($matches[1]));
+        if (empty($users)) {
+            return array();
+        }
+
+        $ats = array();
+        foreach ($users as $user) {
+            $ats[$user['nickname']] = $user['id'];
+        }
+
+        return $ats;
     }
 
     private function getFriendDao()

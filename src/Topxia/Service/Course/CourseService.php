@@ -21,6 +21,8 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+	
+	public function findCoursesByCourseIds(array $ids, $start, $limit);
 
 	public function findCoursesByLikeTitle($title);
 	
@@ -42,13 +44,13 @@ interface CourseService
 
 	public function findUserLearnCourseCount($userId);
  
-	public function findUserLeaningCourses($userId, $start, $limit);
+	public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
-	public function findUserLeaningCourseCount($userId);
+	public function findUserLeaningCourseCount($userId, $filters = array());
 
-	public function findUserLeanedCourseCount($userId);
+	public function findUserLeanedCourseCount($userId, $filters = array());
 
-	public function findUserLeanedCourses($userId, $start, $limit);
+	public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
 
 	public function findUserTeachCourseCount($userId, $onlyPublished = true);
 	
@@ -73,6 +75,8 @@ interface CourseService
 	public function cancelRecommendCourse($id);
 
 	public function analysisCourseDataByTime($startTime,$endTime);
+	
+	public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
 
@@ -338,4 +342,9 @@ interface CourseService
 	public function getCourseLessonReplayByLessonId($lessonId);
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
+
+	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+
+	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
 }

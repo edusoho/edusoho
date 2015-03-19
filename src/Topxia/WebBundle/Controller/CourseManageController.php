@@ -41,11 +41,13 @@ class CourseManageController extends BaseController
         } else {
             $liveCapacity = null;
         }
+        $default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
             'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
             'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code'],
+            'default'=> $default
 		));
 	}
 
@@ -292,6 +294,7 @@ class CourseManageController extends BaseController
             		'isVisible' => empty($data['visible_' . $teacherId]) ? 0 : 1
         		);
             }
+
             $this->getCourseService()->setCourseTeachers($id, $teachers);
             $this->setFlashMessage('success', '教师设置成功！');
 
@@ -313,6 +316,7 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
+
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers
@@ -431,4 +435,10 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
 }

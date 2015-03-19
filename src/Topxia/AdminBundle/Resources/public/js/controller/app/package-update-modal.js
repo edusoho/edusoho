@@ -86,8 +86,11 @@ define(function(require, exports, module) {
 
         });
 
-        $("#finish-update-btn").click(function(){
-            window.location.reload();
+        $("#finish-update-btn").click(function() {
+            $(this).button('loading').addClass('disabled');
+            setTimeout(function(){
+                window.location.reload();
+            }, 3000);
         });
 
     };
