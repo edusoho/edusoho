@@ -5128,4 +5128,26 @@ a.homework-essay-textarea-pack-up{
   font-size: 22px;
 }
 
+.classroom-block .classroom-img {
+  width: 150px;
+  float: left;
+  margin-right: 20px;
+}
+
+.classroom-block .classroom-img img {
+  border-radius: 4px;
+}
+
+.classroom-block .title {
+  font-size: 14px;
+  margin: 6px 0 6px 0;
+  overflow: hidden;
+}
+
+.classroom-block .content {
+  font-size: 14px;
+  color: #bbb;
+  margin-top: 4px;
+
+}
 
