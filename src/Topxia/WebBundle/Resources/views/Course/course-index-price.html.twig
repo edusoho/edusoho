@@ -1,4 +1,5 @@
 {% if setting('course.coursesPrice') == 0 %}
+{#
 <p>
   价　格：
   {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -35,8 +36,9 @@
     {% endif %}
   {% endif %}
 </p>
+#}
 
-
+{#
 <p class="clearfix">
   <label class="pull-left">折后价</label>
   <span class="money-num pull-left">¥75.00</span>
@@ -45,13 +47,46 @@
 
 <p>
   <label>原价</label>
-  <span class="old-price"><del>¥108</del></span>
+  <span class="old-price">
+    <del>10</del>
+  </span>
+</p>
+#}
+
+<p class="clearfix">
+  <label class="pull-left">价 格</label>
+  <span class="money-num pull-left">
+    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {% if course.coinPrice > 0 %}
+          {% if free_limit_type(course) == 'free_now' %}
+            0.00 {{setting('coin.coin_name', '虚拟币')}}
+          {% else %}
+            {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}}
+            </span>
+          {% endif %}
+        {% else %}
+          免费
+        {% endif %}
+      {% else %}
+        {% if course.price > 0 %}
+          {% if free_limit_type(course) == 'free_now' %}
+            ¥ 0.00
+          {% else %}
+            ¥ {{ course.price }}
+          </span>
+          {% endif %}
+        {% else %}
+          免费
+        {% endif %}
+      {% endif %}
+  </span>
 </p>
 
+{#
 <p>
   <label>活动</label>
   <span class="activity">双十二活动</span>
   <span><span class="glyphicon glyphicon-time"></span>22时53分44.12秒</span>
 </p>
-
+#}
 {% endif %}

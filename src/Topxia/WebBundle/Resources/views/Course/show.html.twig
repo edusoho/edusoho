@@ -29,7 +29,7 @@
   {% include 'TopxiaWebBundle:Course:live-course.html.twig' %}
 {% else %}
 
-<div class="es-row-wrap container-gap course-cover">
+<div class="es-row-wrap container-gap ">
   <div class="row course-cover-heading">
     <div class="col-sm-5 picture">
       {% if setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
@@ -71,11 +71,6 @@
           {% if setting('course.show_student_num_enabled', '1') == 1  %}
             ｜{{setting('default.user_name', '学员')}}
             <span class="member-num">{{ course.studentNum }}人</span>
-            {% if course.studentNum == course.maxStudentNum %}
-              <span class="member-text hidden-sm hidden-xs">(名额已满)</span>
-            {% else %}
-              <span class="member-text hidden-sm hidden-xs"> ({{ course.maxStudentNum }}名额)</span>
-            {% endif %}
           {% endif %}
 
           {% if not course.expiryDay == 0 %}
