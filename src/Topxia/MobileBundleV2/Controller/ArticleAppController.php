@@ -14,16 +14,14 @@ class ArticleAppController extends MobileBaseController
         if (empty($setting)) {
             $setting = array('name' => '资讯频道', 'pageNums' => 20);
         }
-
-        $categoryId = $request->query->get("categoryId", 0);
-        $category = $this->getArticleCategoryService()->getCategory($categoryId);
-        $categoryTree = $this->getArticleCategoryService()->getCategoryTree();
         
-        return $this->render('TopxiaMobileBundleV2:Article:index.html.twig', array(
-            "categoryId"=>$categoryId,
-            "category"=>$category,
-            "categoryTree"=>$categoryTree
-        ));
+        return $this->render('TopxiaMobileBundleV2:Article:index.html.twig', array());
+    }
+
+    public function categoryAction(Request $request)
+    {
+        $categoryTree = $this->getArticleCategoryService()->getCategoryTree();
+        return $this->createJson($request, $categoryTree);
     }
 
     public function listAction(Request $request)

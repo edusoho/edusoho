@@ -4,18 +4,6 @@
 
 {% block content %}
 	<div ui-view="categoryList" class="ui-poptips ui-poptips-null ng-hide" style="height:100%;z-index: 99999;" ng-show="isShowCategory">
-		<div class="ui-poptips-cnt" style="text-align:left;height: auto;margin:0;"> 
-		<div>
-		            <button style="margin:10px;" ng-click="changeCategory(0)" data-transition="slide-in" class="ui-btn ui-btn-progress">全部</button>
-		</div>
-		        {% for category in categoryTree %}
-		            {% if category.parentId == 0 %}
-		                <div>
-		                </div>
-		            {% endif %}
-		                <button style="margin:10px;" ng-click="changeCategory({{ category.id }}, '{{ category.name }}')"  data-transition="slide-in" class="ui-btn {% if category.parentId == 0 %} ui-btn-primary{% endif %} ui-btn-progress">{{ category.name }}</button>
-		          {% endfor %}
-		</div>
 	</div>
 	<div ui-view="articleList">
 	</div>

@@ -73,7 +73,7 @@ define(function(require, exports, module) {
 			url : "/index",
 			views : {
 				"categoryList" : {
-					template : '',
+					templateUrl : '/bundles/topxiamobilebundlev2/article/view/category.html',
 					controller : CategoryController
 				},
 				"articleList" : {

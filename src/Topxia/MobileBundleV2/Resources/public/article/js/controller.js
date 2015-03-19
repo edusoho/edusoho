@@ -1,7 +1,7 @@
 var appControllers = angular.module('AppControllers', []);
 
 appControllers.controller('ListController', ['$scope', '$http', '$rootScope', ListController]);
-appControllers.controller('CategoryController', ['$scope', '$timeout', '$state', CategoryController]);
+appControllers.controller('CategoryController', ['$scope', '$http', '$state', CategoryController]);
 appControllers.controller('DetailController', ['$scope', '$http', '$stateParams', DetailController]);
 
 function ListController($scope, $http, $rootScope)
@@ -60,10 +60,13 @@ function ListController($scope, $http, $rootScope)
   	});
 }
 
-function CategoryController($scope, $timeout, $state)
+function CategoryController($scope, $http, $state)
 {
 	$scope.isShowCategory = false;
-	$scope.categoryStyle = {"height":"100%","z-index": 99999};
+	$http.get('/mapi_v2/articleApp/category').success(function(data) {
+    		$scope.categoryTree = data;
+  	});
+
 	var menu = {
 	      "name" : "分类",
 	      "icon" : "lesson_menu_list",
@@ -79,6 +82,11 @@ function CategoryController($scope, $timeout, $state)
   			$scope.isShowCategory = !$scope.isShowCategory;
   		});
 	};
+
+	$scope.getCategoryBtnStyle = function(parentId){
+		return parentId == 0 ? "ui-btn  ui-btn-primary" : "ui-btn ui-btn-progress";
+	};
+
   	$scope.changeCategory = function(categoryId, categoryName) {
   		console.log("categoryId " + categoryId);
   		$scope.isShowCategory = !$scope.isShowCategory;
