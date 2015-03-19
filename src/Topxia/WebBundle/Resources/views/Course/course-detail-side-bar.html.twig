@@ -1,6 +1,6 @@
 {{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
 
-{% if is_plugin_installed("Classroom") %}
+{% if is_plugin_installed("Classroom") and version_compare(plugin_version('Classroom'),'1.0.5','>') %}
 	{{ render(controller('ClassroomBundle:Classroom:classroomBlock',{courseId:course.id})) }}
 {% endif %}
 
