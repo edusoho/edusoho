@@ -99,6 +99,7 @@ function CategoryController($scope, $http, $state)
 function DetailController($scope, $http, $stateParams)
 {
       var articleId = $stateParams.id;
+      navigator.cordovaUtil.createMenu();
 	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
     		$scope.content = data.content;
     		document.title = data.title;
