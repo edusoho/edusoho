@@ -547,13 +547,15 @@ body {
 }
 
 .course-cover-heading .price-info {
-  margin-bottom: 10px;
-  padding: 10px 10px 1px 10px;
-  background-color: #f1f1f1;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f5f5f5;
 }
 
 .course-cover-heading .price-info p {
-  line-height: 15px;
+  line-height: 22px;
+  margin-bottom: 0;
+  vertical-align: middle;
 }
 
 @media (min-width: 767px) and (max-width: 991px) {
@@ -562,8 +564,10 @@ body {
   }
 }
 
-.course-cover-heading .price-info label {
+.course-cover-heading .price-info .price-label {
   width: 60px;
+  display: inline-block;
+  color: #999;
 }
 
 .course-cover-heading .price-info .old-price {
@@ -621,13 +625,19 @@ body {
 }
 
 .course-cover-heading .stats {
-  margin-bottom: 15px;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  color: #999;
 }
 
-.course-cover-heading .stats p {
-  line-height: 16px;
-  vertical-align: middle;
+.course-cover-heading .stat-item-label {
+  margin-right: 8px;
 }
+
+.course-cover-heading .stat-divider {
+  margin: 0 8px;
+}
+
 
 .course-cover-heading .stats .stars-0,
 .course-cover-heading .stats .stars-1,
@@ -663,7 +673,7 @@ body {
 .course-cover-heading .money-num {
   margin-right: 3px;
   color: #f40;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .course-cover-heading .coin-price {

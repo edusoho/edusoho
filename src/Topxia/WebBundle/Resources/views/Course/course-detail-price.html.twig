@@ -53,9 +53,8 @@
 </p>
 #}
 
-<p class="clearfix">
-  <label class="pull-left">价 格</label>
-  <span class="money-num pull-left">
+  <span class="price-label">价格</span>
+  <span class="money-num">
     {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
         {% if course.coinPrice > 0 %}
           {% if free_limit_type(course) == 'free_now' %}
@@ -80,7 +79,6 @@
         {% endif %}
       {% endif %}
   </span>
-</p>
 
 {#
 <p>
