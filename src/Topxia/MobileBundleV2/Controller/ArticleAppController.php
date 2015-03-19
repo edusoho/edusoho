@@ -87,26 +87,17 @@ class ArticleAppController extends MobileBaseController
 
         $createdTime = $article['createdTime'];
 
-        $currentArticleId = $article['id'];
-        $articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
-        $articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
+        //$currentArticleId = $article['id'];
+        //$articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
+        //$articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
     
-        $articleSetting = $this->getSettingService()->get('article', array());
+        //$articleSetting = $this->getSettingService()->get('article', array());
     
         $this->getArticleService()->hitArticle($id);
-        return $this->render('TopxiaMobileBundleV2:Article:detail.html.twig', array(
-            'articleSetting' => $articleSetting,
-            'articlePrevious' => $articlePrevious,
-            'article' => $article,
-            'articleNext' => $articleNext,
-            'articleShareContent' => $articleShareContent,
-        )); 
         return $this->createJson($request, array(
-            'articleSetting' => $articleSetting,
-            'articlePrevious' => $articlePrevious,
-            'article' => $article,
-            'articleNext' => $articleNext,
-            'articleShareContent' => $articleShareContent,
+            "title"=>$article["title"],
+            "content"=>$this->render('TopxiaMobileBundleV2:Article:detail.html.twig', array(
+            'article' => $article))->getContent()
         ));
     }
 

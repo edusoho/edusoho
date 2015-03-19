@@ -1,6 +1,6 @@
 {% extends 'TopxiaMobileBundleV2::article.layout.html.twig' %}
 {% block html %}<html>{% endblock %}
-{% block title %}资讯{% endblock %}
+{% block title %}网校资讯{% endblock %}
 
 {% block content %}
 	<div ui-view="categoryList" class="ui-poptips ui-poptips-null" style="height:100%;z-index: 99999;" ng-show="isShowCategory">
@@ -13,7 +13,7 @@
 		                <div>
 		                </div>
 		            {% endif %}
-		                <button style="margin:10px;" ng-click="changeCategory({{ category.id }})"  data-transition="slide-in" class="ui-btn {% if category.parentId == 0 %} ui-btn-primary{% endif %} ui-btn-progress">{{ category.name }}</button>
+		                <button style="margin:10px;" ng-click="changeCategory({{ category.id }}, '{{ category.name }}')"  data-transition="slide-in" class="ui-btn {% if category.parentId == 0 %} ui-btn-primary{% endif %} ui-btn-progress">{{ category.name }}</button>
 		          {% endfor %}
 		</div>
 	</div>

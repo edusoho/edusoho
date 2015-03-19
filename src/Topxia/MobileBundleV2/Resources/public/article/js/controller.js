@@ -2,13 +2,14 @@ var appControllers = angular.module('AppControllers', []);
 
 appControllers.controller('ListController', ['$scope', '$http', '$rootScope', ListController]);
 appControllers.controller('CategoryController', ['$scope', '$timeout', '$state', CategoryController]);
-appControllers.controller('DetailController', ['$scope', '$http', '$stateParams', '$sce', DetailController]);
+appControllers.controller('DetailController', ['$scope', '$http', '$stateParams', DetailController]);
 
 function ListController($scope, $http, $rootScope)
 {
 	$scope.limit = 10;
 	$scope.categoryId = 0;
 	$scope.isShowLoadMore = true;
+
   	$scope.loadMore = function(){
   		var el=Zepto.loading({
 		        content:'加载中...',
@@ -75,17 +76,19 @@ function CategoryController($scope, $timeout, $state)
   			$scope.isShowCategory = !$scope.isShowCategory;
   		});
 	};
-  	$scope.changeCategory = function(categoryId) {
+  	$scope.changeCategory = function(categoryId, title) {
   		console.log("categoryId " + categoryId);
+  		document.title = title ? "网校资讯 - " + title : "网校资讯";
   		$scope.isShowCategory = !$scope.isShowCategory;
   		angular.broadCast.send("changeCategoryBroadCast", categoryId);
   	};
 }
 
-function DetailController($scope, $http, $stateParams, $sce)
+function DetailController($scope, $http, $stateParams)
 {
       var articleId = $stateParams.id;
 	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
-    		$scope.content = data;
+    		$scope.content = data.content;
+    		document.title = data.title;
   	});
 }

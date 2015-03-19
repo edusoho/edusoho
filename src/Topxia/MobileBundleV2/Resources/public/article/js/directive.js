@@ -22,8 +22,8 @@ define(function(require, exports, module) {
                     return { 
                         post: function postLink(scope, element, attributes) { 
 
-                            var ngBindHtmlGetter = $parse(tAttrs.onContentLoaded);
-                           var ngBindHtmlWatch = $parse(tAttrs.onContentLoaded, function getStringValue(value) {
+                          var ngBindHtmlGetter = $parse(tAttrs.onContentLoaded);
+                          var ngBindHtmlWatch = $parse(tAttrs.onContentLoaded, function getStringValue(value) {
                             return (value || '').toString();
                           });
                             scope.$watch(ngBindHtmlWatch, function() {
