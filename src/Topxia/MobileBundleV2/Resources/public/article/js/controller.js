@@ -20,6 +20,7 @@ function ListController($scope, $http, $rootScope)
   	};
 
   	var queryArticelList = function(success){
+  		document.title = $scope.categoryName ? "网校资讯 - " + $scope.categoryName  : "网校资讯";
   		var el=Zepto.loading({
 		        content:'加载中...',
 		});
@@ -53,7 +54,8 @@ function ListController($scope, $http, $rootScope)
   		console.log("changeCategoryBroadCast " + msg);
   		$scope.start = 0;
   		$scope.articles = [];
-  		$scope.categoryId  = msg;
+  		$scope.categoryId  = msg.categoryId;
+  		$scope.categoryName  = msg.categoryName;
   		queryArticelList();
   	});
 }
@@ -76,11 +78,12 @@ function CategoryController($scope, $timeout, $state)
   			$scope.isShowCategory = !$scope.isShowCategory;
   		});
 	};
-  	$scope.changeCategory = function(categoryId, title) {
+  	$scope.changeCategory = function(categoryId, categoryName) {
   		console.log("categoryId " + categoryId);
-  		document.title = title ? "网校资讯 - " + title : "网校资讯";
   		$scope.isShowCategory = !$scope.isShowCategory;
-  		angular.broadCast.send("changeCategoryBroadCast", categoryId);
+  		angular.broadCast.send("changeCategoryBroadCast", 
+  			{ "categoryId" : categoryId, "categoryName" : categoryName}
+  		);
   	};
 }
 
