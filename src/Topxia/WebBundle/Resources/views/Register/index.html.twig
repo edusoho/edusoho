@@ -64,10 +64,18 @@
             {% elseif field == 'mobile' and (setting('cloud_sms.sms_enabled', '0') == '1' and setting('cloud_sms.sms_registration', 'off') == 'on') %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">手机号码</label>
-                <div class="controls row" >
-                  <div class = "col-md-8" >
+                <div class="controls" >
                     <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" data-role="mobile">
                     <p class="help-block">输入手机号码</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label required" for="sms_code">短信验证码</label>
+                <div class="controls row" >
+                  <div class = "col-md-8" >
+                    <input type="text" class="form-control" id="sms-code" name="sms_code" data-explain="输入短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                    <p class="help-block">输入短信验证码</p> 
                   </div>
                   <div class="col-md-4">
                     <span class="pull-right btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
@@ -78,13 +86,6 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="control-label required" for="sms_code">短信验证码</label>
-                <div class="controls" >
-                  <input type="text" class="form-control" id="sms-code" name="sms_code" data-explain="输入短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
-                  <p class="help-block">输入短信验证码</p> 
-                </div>
-              </div>
             {% elseif field == 'mobile' and (setting('cloud_sms.sms_enabled', '0') == '0' or setting('cloud_sms.sms_registration', 'off') == 'off') %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">手机号码</label>
