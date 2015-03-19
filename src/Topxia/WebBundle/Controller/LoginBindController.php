@@ -196,8 +196,6 @@ class LoginBindController extends BaseController
         return $user;
     }
 
-
-
     public function existAction(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');

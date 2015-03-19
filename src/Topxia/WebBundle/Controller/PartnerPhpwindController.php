@@ -196,6 +196,6 @@ class PartnerPhpwindController extends BaseController
     private function createWindidResponse($content = 'success')
     {
         return new Response($content);
-    }
+    }  
 
 }

@@ -208,11 +208,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         $auth = $this->getSettingService()->get('auth');
         if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
+            return ($auth['register_mode'] == 'opened');
         }
         return true;
     }
