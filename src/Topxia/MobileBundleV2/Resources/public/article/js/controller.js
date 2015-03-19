@@ -63,6 +63,7 @@ function ListController($scope, $http, $rootScope)
 function CategoryController($scope, $timeout, $state)
 {
 	$scope.isShowCategory = false;
+	$scope.categoryStyle = {"height":"100%","z-index": 99999};
 	var menu = {
 	      "name" : "分类",
 	      "icon" : "lesson_menu_list",
