@@ -21,7 +21,11 @@ use Symfony\Component\Filesystem\Filesystem;
      {
         $connection = $this->getConnection();
 
-        $connection->exec("UPDATE `course` c set income=(select sum(amount) from orders where targetId=c.id and targetType='course' and status='paid');");
+        $connection->exec("UPDATE `course` c set income=(select sum(amount) from orders where targetId=c.id and targetType='course' and status='paid') where id in (select distinct targetId from orders where targetType='course' and status='paid');");
+
+        if(!$this->isFieldExist('course_lesson_learn', 'updateTime')) {
+            $connection->exec("ALTER TABLE `course_lesson_learn` ADD `updateTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' ;");
+        }
 
     }
 
