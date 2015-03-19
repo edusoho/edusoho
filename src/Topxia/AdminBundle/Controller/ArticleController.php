@@ -214,7 +214,6 @@ class ArticleController extends BaseController
             $filename = str_replace(array('..' , '/', '\\'), '', $filename);
             $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
             $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
-             var_dump(2);exit();
             return new Response(json_encode($response));
         }
     }
