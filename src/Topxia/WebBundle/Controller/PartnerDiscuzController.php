@@ -101,7 +101,7 @@ class PartnerDiscuzController extends BaseController
             );
 
             if(!$this->getAuthService()->isRegisterEnabled()){
-                return true;
+                return API_RETURN_FORBIDDEN;
             }
 
             $user = $this->getUserService()->register($registration, 'discuz');
