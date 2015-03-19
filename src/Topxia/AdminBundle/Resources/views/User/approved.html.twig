@@ -6,14 +6,12 @@
 
 {% block maincontent %}
 
-    <div class="well">
       <div>
           <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_approval_approving') }}">审核中</a>
 
           <a type="button" class="btn btn-default btn-sm btn-info" href="{{ path('admin_approval_approved') }}">审核成功</a>
 
       </div>
-    </div>
 
 {% if users %}
 <table id="user-table" class="table table-striped">
