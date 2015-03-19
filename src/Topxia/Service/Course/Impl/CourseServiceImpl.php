@@ -656,7 +656,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
+		if($learn['videoStatus']=="playing")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
 				'updateTime' => time(),
