@@ -4,7 +4,7 @@
 </div>
 	<span ng-repeat="category in categoryTree">
 		<div ng-if="category.parentId == 0"></div>
-		<button style="margin:10px;" ng-click="changeCategory(category.id, category.name)"  ng-class="getCategoryBtnStyle(category.parentId)">
+		<button style="margin:10px;" ng-click="changeCategory(category.id, category.name)"  ng-class=" category.parentId == 0 ? 'ui-btn  ui-btn-primary' : 'ui-btn' ">
 			{{ category.name }}
 		</button>
 	</span>

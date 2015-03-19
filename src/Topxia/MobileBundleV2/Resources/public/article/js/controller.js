@@ -83,10 +83,6 @@ function CategoryController($scope, $http, $state)
   		});
 	};
 
-	$scope.getCategoryBtnStyle = function(parentId){
-		return parentId == 0 ? "ui-btn  ui-btn-primary" : "ui-btn ui-btn-progress";
-	};
-
   	$scope.changeCategory = function(categoryId, categoryName) {
   		console.log("categoryId " + categoryId);
   		$scope.isShowCategory = !$scope.isShowCategory;
