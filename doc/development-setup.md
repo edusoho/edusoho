@@ -8,7 +8,7 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
 
 ## 下载EduSoho源码
 
-    git clone https://code.csdn.net/TopxiaCOM/edusoho.git /var/www/edusoho-dev
+    git clone https://gitcafe.com/Topxia/EduSoho /var/www/edusoho-dev
 
 由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。
 
