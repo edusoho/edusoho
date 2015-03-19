@@ -109,24 +109,6 @@ class PasswordResetController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
   
-            // $captchaCodePostedByUser = strtolower($data['captcha_num']);
-            // $captchaCode = $request->getSession()->get('captcha_code');    
-            // if  
-            // (
-            //     (isset($captchaCodePostedByUser))&&(strlen($captchaCodePostedByUser)>0)&&
-            //     (isset($captchaCode))&&(strlen($captchaCode)>0)
-            // ) 
-            // {
-            //     if ($captchaCode != $captchaCodePostedByUser){ 
-            //         $request->getSession()->set('captcha_code',''); 
-            //         throw new \RuntimeException('验证码错误。');
-            //     }
-
-            // } else {
-            //     throw new \RuntimeException('验证码错误。');
-            // }
-            // $request->getSession()->set('captcha_code',''); 
-
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
             if ($result){
                 $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('mobile'));

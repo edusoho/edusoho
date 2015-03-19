@@ -150,15 +150,7 @@ class LoginBindController extends BaseController
 
     private function isRegisterEnabled()
     {
-        $auth = $this->setting('auth');
-        if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
-        }
-        return true;
+        return $this->getSettingService()->isRegisterEnabled();
     }
 
     private function generateUser($type, $token, $oauthUser,$setData)
@@ -259,5 +251,10 @@ class LoginBindController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }    
 
 }

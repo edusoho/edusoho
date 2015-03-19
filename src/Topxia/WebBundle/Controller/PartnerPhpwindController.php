@@ -110,16 +110,8 @@ class PartnerPhpwindController extends BaseController
     }
 
     private function isRegisterEnabled()
-    {
-        $auth = $this->setting('auth');
-        if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
-        }
-        return true;
+    {        
+        return $this->getSettingService()->isRegisterEnabled();
     }
 
     private function doSynLogout($request, $args)
@@ -210,5 +202,10 @@ class PartnerPhpwindController extends BaseController
     {
         return new Response($content);
     }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }    
 
 }

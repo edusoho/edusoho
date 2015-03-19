@@ -4,6 +4,8 @@ namespace Topxia\Service\System;
 
 interface SettingService
 {
+	public function isRegisterEnabled();
+	
     public function set($name, $value);
 
     public function get($name, $default = NULL);

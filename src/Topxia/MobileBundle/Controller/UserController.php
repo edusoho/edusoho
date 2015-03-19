@@ -154,7 +154,7 @@ class UserController extends MobileController
         $nickname = $request->get('nickname');
         $password = $request->get('password');
 
-        if (!$this->isRegisterEnabled()) {
+        if (!$this->getSettingService()->isRegisterEnabled()) {
             return $this->createErrorResponse($request, 'register_closed', '注册已关闭，请联系管理员');
         }
 
@@ -190,19 +190,6 @@ class UserController extends MobileController
             'user' => $this->filterUser($user),
             'token' => $token
         ));
-    }
-
-    private function isRegisterEnabled()
-    {
-        $auth = $this->getSettingService()->get('auth');
-        if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
-        }
-        return true;
     }
 
     private function loadUserByUsername ($request, $username) {

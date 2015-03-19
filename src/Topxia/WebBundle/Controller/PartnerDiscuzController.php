@@ -119,15 +119,7 @@ class PartnerDiscuzController extends BaseController
 
     private function isRegisterEnabled()
     {
-        $auth = $this->setting('auth');
-        if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
-        }
-        return true;
+        return $this->getSettingService()->isRegisterEnabled();
     }
 
 
@@ -285,6 +277,11 @@ class PartnerDiscuzController extends BaseController
             $string = stripslashes($string);
         }
         return $string;
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
