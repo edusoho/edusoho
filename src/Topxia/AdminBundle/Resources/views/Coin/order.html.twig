@@ -1,17 +1,15 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set nav = 'order' %}
-
-
+{% set side_menus = permissions('admin_order') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(side_menus,menu) }}{% endblock %}
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
 
       <div class="panel panel-default">
 
-          {% set menus = permissions('admin_order') %}
-
-          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:menus,nav:menu} %}
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
       </div>
 
     {% endblock %}

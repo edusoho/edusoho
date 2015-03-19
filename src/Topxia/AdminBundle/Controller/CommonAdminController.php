@@ -33,6 +33,7 @@ class CommonAdminController extends BaseController
     {   
         $user = $this->getCurrentUser();
         $url = $_SERVER['REQUEST_URI'];
+     
         $isCollect = 0;
 
         if ($this->getUserCommonAdminService()->getCommonAdminByUserIdAndUrl($user['id'],$url)) {

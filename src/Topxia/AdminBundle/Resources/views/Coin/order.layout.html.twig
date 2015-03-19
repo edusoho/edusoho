@@ -1,13 +1,12 @@
 {% extends 'TopxiaAdminBundle:Coin:order.html.twig' %}
 
-{% block title %}虚拟币 - {{ parent() }}{% endblock %}
-
+{% set menus = permissions("admin_coin_order","tab")%}
 {% set menu = 'coin_order' %}
-
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
 
 <div class = "mbl">
-{% set menus = permissions("admin_coin_order","tab")%}
+
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 

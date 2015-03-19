@@ -25,8 +25,9 @@ define(function(require, exports, module) {
 		var title = $(document).attr("title");
 		
 		var url = window.location.pathname;
+		var param = window.location.search;
 		
-		$.post($(this).data('url'),{title:title,url:url},function(data) {
+		$.post($(this).data('url'),{title:title,url:url+param},function(data) {
 			
 			if (data !="error") {
 				$('.collect-list').append(data);

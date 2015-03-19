@@ -765,8 +765,16 @@ admin_operation_analysis_register:
     router_params_context: false
     mode: page
     type: menu
-    active: register
-    blank: true
+    active: data
+admin_operation_analysis_:
+    name: 查阅
+    parent: admin_operation_analysis_register
+    router_name: admin_operation_analysis_register
+    router_params: { tab: trend , analysisDateType:register }
+    router_params_context: false
+    mode: page
+    type: tab
+    active: data
 # admin_operation_analysis_register_query:
 #     name: 查阅
 #     parent: admin_operation_analysis_register
