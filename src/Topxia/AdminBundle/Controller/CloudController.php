@@ -33,7 +33,7 @@ class CloudController extends BaseController
     public function rechargeAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token={$loginToken}&goto=order_recharge');
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken.'&goto=order_recharge');
     }
 
     protected function getAppService()
