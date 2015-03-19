@@ -1,14 +1,16 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}课程数据 - {{ parent() }}{% endblock %}
-
-{% set menu = 'course-data' %}
-
+{% set menu = 'course' %}
+{% set type = 'data'  %}
+{% set menus = permissions('admin_course_show','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 {% block main %}
-    <div class="page-header clearfix">
-    <h1 class="pull-left">数据管理</h1>
-    </div>
-    <form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_course_data') }}" method="get" novalidate>
+
+  {% set type = 'data'  %}
+  {% set menus = permissions('admin_course_show','tab') %}
+
+  {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
+    <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">
         <select class="form-control" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}

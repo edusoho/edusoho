@@ -8,14 +8,17 @@
 
 {% block main %}
 
-<div class="page-header clearfix">
-  <h1 class="pull-left">问答管理</h1>
+<div class="mbl">
+{% set active = 'manage' %}
+{% set menus = permissions('admin_course_question','tab') %}
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
 </div>
 
 {% include 'TopxiaAdminBundle:CourseQuestion:tab.html.twig' %}
 <br>
 
-  <div class="well well-sm">
+  <div class="well well-sm mtl">
     <form class="form-inline">
 
       <div class="form-group">

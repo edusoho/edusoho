@@ -1,20 +1,22 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
-
-{% block title %}内容管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle:Content:article.layout.html.twig' %}
 
 {% set script_controller = 'content/list' %}
-
+{% set tab_menus = permissions('admin_operation_content',"tab") %}
 {% set menu = 'content' %}
+{% set submenu = 'content' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
+<div class="clearfix mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
 
 {% set type = app.request.get('type') %}
 {% set typeName = dict('contentType')[type] %}
 
 
-<div class="page-header clearfix">
+<div class="clearfix mbs">
   <button class="btn btn-info btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type: type}) }}"><span class="glyphicon glyphicon-plus"></span> 添加{{ typeName }}</button>
-  <h1 class="pull-left">{{ typeName }}管理</h1>
 </div>
 
 <form class="well well-sm form-inline">

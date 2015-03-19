@@ -1,11 +1,17 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
+{% set side_menus = permissions('admin_system') %}
 {% set nav = 'system' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(side_menus,menu) }}{% endblock %}
 
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
-      <div class="list-group">
+        
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
+     
+          
+<!--       <div class="list-group">
         <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置</a>
         <a href="{{ path('admin_setting_course_setting') }}" class="list-group-item {% if menu == 'operation' %}active{% endif %}">全局设置</a>
         <a href="{{ path('admin_setting_cloud') }}" class="list-group-item {% if menu == 'cloud' %}active{% endif %}">云平台设置</a>
@@ -28,7 +34,7 @@
         <a href="{{ url('admin_operation_analysis_register',{tab:"trend",analysisDateType:"register"}) }}" class="list-group-item {% if menu == 'analysis' %}active{% endif %}">数据统计</a>
         <a href="{{ url('admin_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">系统日志</a>
 
-      </div>
+      </div> -->
     {% endblock %}
   </div>
   <div class="col-md-10">

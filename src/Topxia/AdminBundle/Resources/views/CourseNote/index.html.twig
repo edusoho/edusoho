@@ -7,8 +7,11 @@
 {% set script_controller = 'course/note' %}
 
 {% block main %}
-<div class="page-header clearfix">
-  <h1 class="pull-left">笔记管理</h1>
+<div class="mbl">
+{% set active = 'manage' %}
+{% set menus = permissions('admin_course_note','tab') %}
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
 </div>
 
 <div class="well well-sm">

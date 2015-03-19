@@ -1,19 +1,30 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}课程管理 - {{ parent() }}{% endblock %}
-
-{% set script_controller = 'course/manage' %}
-
+{% set menus = permissions('admin_course_show','tab') %}
 {% set menu = 'course' %}
+{% set type = 'manage'  %}
+
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
+{% set script_controller = 'course/manage' %}
 
 {% block main %}
 
+<div class="mbl">
+
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
+
+</div>
   <div class="page-header">
+    <div class="mbs clearfix">
   {% if liveSetEnabled == 1 %}
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm pull-right mls" target="_blank">创建直播课程</a>
   {% endif %}
-    <a href="{{ path('course_create') }}" class="btn btn-info btn-sm pull-right" target="_blank">创建课程</a>
-    <h1>课程管理</h1>
+  {% set menus = permissions('admin_course_show','button') %}
+ 
+ {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
+
+    </div>
   </div>
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

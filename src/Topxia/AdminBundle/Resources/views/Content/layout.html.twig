@@ -1,12 +1,15 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set nav = 'content' %}
+{% set side_menus = permissions('admin_system') %}
+{% set nav = 'system' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(side_menus,menu) }}{% endblock %}
 
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
 
-      <div class="list-group">
+      {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
+<!--       <div class="list-group">
         <a href="{{ path('admin_navigation') }}" class="list-group-item {% if menu == 'navigation' %}active{% endif %}">导航管理</a>
         <a href="{{ url('admin_content', {type:'page'}) }}" class="list-group-item {% if menu == 'content' %}active{% endif %}">页面管理</a>
         <a href="{{ url('admin_block') }}" class="list-group-item {% if menu == 'admin_block' %}active{% endif %}">编辑区管理</a>
@@ -22,7 +25,7 @@
           <a href="{{ path('admin_article_setting') }}" class="list-group-item {% if menu == 'setting' %}active{% endif %}">资讯频道设置</a>
           <a class="list-group-item" href="{{ path('article_show') }}" target="_blank">资讯频道首页</a>
         </div>
-      </div>
+      </div> -->
 
     {% endblock %}
   </div>

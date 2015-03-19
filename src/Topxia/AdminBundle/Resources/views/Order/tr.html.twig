@@ -1,5 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-<tr id="order-table-{{order.id}}">
+<tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
   <td>
     {% if order.targetType == 'course' %}
       <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>

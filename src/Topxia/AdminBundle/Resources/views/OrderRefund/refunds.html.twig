@@ -1,16 +1,15 @@
 {% extends layout %}
 
-{% block title %}退款管理 - {{ parent() }}{% endblock %}
-
 {% set script_controller = 'order/refunds' %}
-
-{% set menu = 'refunds' %}
+{% set tab_menus = permissions('admin_'~targetType~'_refunds',"tab") %}
+{% set menu = targetType~'_refunds' %}
+{% set submenu = targetType~'_refunds_manage' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
-
-  <div class="page-header clearfix">
-    <h1>退款管理</h1>
-  </div>
+<div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">

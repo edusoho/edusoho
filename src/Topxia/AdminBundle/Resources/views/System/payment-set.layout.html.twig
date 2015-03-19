@@ -1,11 +1,13 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}支付设置 - {{ parent() }}{% endblock %}
-
-{% set menu = 'paymentGlobal' %}
-
+{% set menus = permissions("admin_setting_finance","tab")%}
+{% set menu = 'finance_settings' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
-<ul class="nav nav-tabs mbl">
+<div class = "mbl">
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
+</div>
+<!-- <ul class="nav nav-tabs mbl">
   <li class="{% if submenu == 'payment' %}active{% endif %}">
   	<a href="{{ url('admin_setting_payment') }}">支付方式
   	</a>
@@ -15,7 +17,7 @@
     </a>
   </li>
 
-</ul>
+</ul> -->
 
 
   {% block maincontent %}{% endblock %}

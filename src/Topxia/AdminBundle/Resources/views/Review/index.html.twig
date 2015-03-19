@@ -7,9 +7,12 @@
 {% set menu = 'review' %}
 
 {% block main %}
-  <div class="page-header clearfix">
-    <h1>评价管理</h1>
-  </div>
+<div class="mbl">
+{% set active = 'manage' %}
+{% set menus = permissions('admin_course_review','tab') %}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
+
+</div>
 
   <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
 

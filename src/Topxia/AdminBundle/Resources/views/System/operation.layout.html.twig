@@ -1,11 +1,17 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}全局设置 - {{ parent() }}{% endblock %}
-
-{% set menu = 'operation' %}
+{% set menus = permissions("admin_setting","tab")%}
+{% set menu = 'site' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
-<ul class="nav nav-tabs mbl">
+
+<div class = "mbl">
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
+</div>
+
+
+<!-- <ul class="nav nav-tabs mbl">
 
   <li class="{% if submenu == 'course_setting' %}active{% endif %}">
     <a href="{{ url('admin_setting_course_setting') }}">课程设置
@@ -43,7 +49,7 @@
     </a>
   </li>
 
-</ul>
+</ul> -->
 
 
   {% block maincontent %}{% endblock %}

@@ -1,11 +1,9 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
-
-{% block title %}课程设置 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle:System:course.setting.layout.html.twig' %}
 
 {% set submenu = 'course_setting' %}
 {% set script_controller = 'setting/course' %}
 {% block maincontent %}
-<div class="page-header"><h1>课程设置</h1></div>
+
 
 {{ web_macro.flash_messages() }}
 

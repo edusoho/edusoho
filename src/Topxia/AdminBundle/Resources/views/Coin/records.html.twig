@@ -1,0 +1,22 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set side_menus = permissions('admin_finance') %}
+{% set nav = 'finance' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(side_menus,menu) }}{% endblock %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+
+      <div class="panel panel-default">
+
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
+
+      </div>
+
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

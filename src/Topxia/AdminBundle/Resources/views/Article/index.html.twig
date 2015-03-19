@@ -1,16 +1,22 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
-
-{% block title %}资讯管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle:Content:article.layout.html.twig' %}
 
 {% set script_controller = 'article/list' %}
 
+{% set tab_menus = permissions('admin_operation_article',"tab") %}
 {% set menu = 'article' %}
+{% set submenu = 'article' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
+<div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
 
-<div class="page-header clearfix">
-  <a class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" href="{{ path('admin_article_create') }}"><span class="glyphicon glyphicon-plus"></span> 添加资讯</a>
-  <h1 class="pull-left">资讯管理</h1>
+<div class="clearfix mbs">
+
+	{% set btn_menus = permissions("admin_operation_article","button") %}
+                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+
 </div>
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">

@@ -1,15 +1,20 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Content:article.layout.html.twig' %}
+{% set tab_menus = permissions('admin_operation_block',"tab") %}
+{% set menu = 'block' %}
+{% set submenu = 'block' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
-{% block title %}编辑区管理 - {{ parent() }}{% endblock %}
-
-{% set menu = 'admin_block' %}
 {% set script_controller = 'block/list' %}
 {% block main %}
-<div class="page-header">
+<div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
+
+<div class="clearfix mbs">
   {% if setting('developer.debug') %}
-    <button class="btn btn-info btn-sm pull-right" id="add-block-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_block_create') }}">新增编辑区</button>  
+      {% set btn_menus = permissions("admin_operation_block","button") %}
+                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
   {% endif %}
-  <h1>编辑区管理</h1>
 </div>
 
 <table id="block-table" class="table table-striped">

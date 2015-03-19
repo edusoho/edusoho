@@ -8,8 +8,11 @@
 
 {% block main %}
 
-<div class="page-header clearfix">
-  <h1 class="pull-left">讨论区管理</h1>
+<div class="mbl">
+{% set type = 'manage' %}
+{% set menus = permissions('admin_course_thread','tab') %}
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
 </div>
 
 <div class="well well-sm">

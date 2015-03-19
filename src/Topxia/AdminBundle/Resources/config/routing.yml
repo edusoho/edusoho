@@ -1086,6 +1086,15 @@ admin_coin_model_save:
     path:     /coin/model/save
     defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }
 
+admin_common_add:
+    pattern:  /common/add
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:addCommonAdmin }
+admin_common_admin:
+    pattern:  /common/admin
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonAdmin }
+admin_common_remove:
+    pattern:  /common/remove/{id}
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonRemove }
 admin_edu_cloud:
     pattern:  /edu_cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
@@ -1105,4 +1114,4 @@ admin_edu_cloud_sms_bill:
 admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
-    
+
