@@ -273,9 +273,4 @@ class PartnerDiscuzController extends BaseController
         return $string;
     }
 
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
 }

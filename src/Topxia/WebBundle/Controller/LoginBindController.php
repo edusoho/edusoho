@@ -245,9 +245,4 @@ class LoginBindController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }    
-
 }
