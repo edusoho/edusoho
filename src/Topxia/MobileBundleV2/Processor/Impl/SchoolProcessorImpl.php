@@ -18,6 +18,25 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         );
     }
 
+    public function WXsign()
+    {
+        $signature = $_GET["signature"];
+        $timestamp = $_GET["timestamp"];
+        $nonce = $_GET["nonce"];    
+                
+        $token = "edusoho";
+        $tmpArr = array($token, $timestamp, $nonce);
+        sort($tmpArr, SORT_STRING);
+        $tmpStr = implode( $tmpArr );
+        $tmpStr = sha1( $tmpStr );
+        
+        if( $tmpStr == $signature ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function loginSchoolWithSite()
     {
         $version = $this->request->query->get('version', 1);
