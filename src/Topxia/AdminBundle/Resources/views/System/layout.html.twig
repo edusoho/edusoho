@@ -8,33 +8,8 @@
   <div class="col-md-2">
     {% block sidebar %}
         
-          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
+    {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
      
-          
-<!--       <div class="list-group">
-        <a href="{{ path('admin_setting_site') }}" class="list-group-item {% if menu == 'site' %}active{% endif %}">站点设置</a>
-        <a href="{{ path('admin_setting_course_setting') }}" class="list-group-item {% if menu == 'operation' %}active{% endif %}">全局设置</a>
-        <a href="{{ path('admin_setting_cloud') }}" class="list-group-item {% if menu == 'cloud' %}active{% endif %}">云平台设置</a>
-
-        {% if setting('storage.upload_mode') == 'cloud' %}
-        <a href="{{ url('admin_cloud_bill') }}" class="list-group-item {% if menu == 'bill' %}active{% endif %}">云账单</a>
-        {% endif %}
-
-        <a href="{{ path('admin_setting_payment') }}" class="list-group-item {% if menu == 'paymentGlobal' %}active{% endif %}">支付设置</a>
-        <a href="{{ path('admin_coin_settings') }}" class="list-group-item {% if menu == 'coin' %}active{% endif %}">虚拟币管理</a>
-
-        <a href="{{ url('admin_bill') }}" class="list-group-item {% if menu == 'coin-bill' %}active{% endif %}">账单管理{# 用户消费账单 #}</a>
-
-        <a href="{{ path('admin_setting_auth') }}" class="list-group-item {% if menu == 'user_set' %}active{% endif %}">用户相关设置</a>
-        <a href="{{ path('admin_setting_mobile') }}" class="list-group-item {% if menu == 'client' %}active{% endif %}">移动客户端设置</a>
-        <a href="{{ url('admin_setting_ip_blacklist') }}" class="list-group-item {% if menu == 'ip_blacklist' %}active{% endif %}">IP黑名单</a>
-
-        <a href="{{ url('admin_optimize') }}" class="list-group-item {% if menu == 'optimize' %}active{% endif %}">优化和备份</a>   
-
-        <a href="{{ url('admin_operation_analysis_register',{tab:"trend",analysisDateType:"register"}) }}" class="list-group-item {% if menu == 'analysis' %}active{% endif %}">数据统计</a>
-        <a href="{{ url('admin_logs') }}" class="list-group-item {% if menu == 'logs' %}active{% endif %}">系统日志</a>
-
-      </div> -->
     {% endblock %}
   </div>
   <div class="col-md-10">

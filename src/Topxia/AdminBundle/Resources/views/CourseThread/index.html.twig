@@ -1,7 +1,8 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+{% set type = 'manage' %}
+{% set menus = permissions('admin_course_thread','tab') %}
 
-{% block title %}讨论区管理 - {{ parent() }}{% endblock %}
-
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 {% set script_controller = 'course/threads' %}
 
 {% set menu = 'thread' %}
@@ -9,8 +10,7 @@
 {% block main %}
 
 <div class="mbl">
-{% set type = 'manage' %}
-{% set menus = permissions('admin_course_thread','tab') %}
+
 
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
 </div>
