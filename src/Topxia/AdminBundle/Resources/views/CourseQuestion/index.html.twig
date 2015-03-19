@@ -1,7 +1,8 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}问答管理 - {{ parent() }}{% endblock %}
-
+{% set active = 'manage' %}
+{% set menus = permissions('admin_course_question','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,active) }}{% endblock %}
 {% set script_controller = 'course/questions' %}
 
 {% set menu = 'question' %}
@@ -9,8 +10,7 @@
 {% block main %}
 
 <div class="mbl">
-{% set active = 'manage' %}
-{% set menus = permissions('admin_course_question','tab') %}
+
 
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
 </div>

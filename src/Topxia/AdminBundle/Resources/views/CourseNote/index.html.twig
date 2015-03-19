@@ -1,15 +1,15 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}笔记管理 - {{ parent() }}{% endblock %}
-
+{% set active = 'manage' %}
+{% set menus = permissions('admin_course_note','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,active) }}{% endblock %}
 {% set menu = 'note' %}
 
 {% set script_controller = 'course/note' %}
 
 {% block main %}
 <div class="mbl">
-{% set active = 'manage' %}
-{% set menus = permissions('admin_course_note','tab') %}
+
 
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
 </div>

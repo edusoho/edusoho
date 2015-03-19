@@ -1,21 +1,24 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 {% set panel = 'dashboard' %}
 {% set nav = 'system' %}
-{% block title %}{{ parent() }}-数据统计{% endblock %}
+{% set menu = 'data' %}
+    
+{% set menus = permissions('admin_operation_analysis_register','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,menu) }}{% endblock %}
 
-{% block content %}
+{% block main %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
 <div class="row">
 
-    {% block sidebar %}
-    {% endblock %}
 
   <div class="col-md-12">
   {% block analysisHead %}
   <div class="col-md-12">
 {{ web_macro.flash_messages() }}
-  <div class="page-header">
-    <h1>数据统计</h1>
+
+
+  <div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:menu} %}
   </div>
   <form  class="well well-sm form-inline" action="{{url("admin_operation_analysis_rount",{tab:tab})}}" method="get" id="operation-form"  role="form" >
           <div class="form-group">
@@ -33,22 +36,22 @@
         <div class="form-group">
           <a type="button"  class="btn btn-default " id="btn-lastThreeMonths" lastThreeMonthsStart="{{dataInfo.lastThreeMonthsStart}}" lastThreeMonthsEnd="{{dataInfo.lastThreeMonthsEnd}}">近三月</a>
         </div>
-
-        <div class="form-group">
+        <br>
+        <div class="form-group mtl">
           <label class="col-md-4" style="padding-top:9px;">起始日期</label>
             <div class="col-md-8 ">
             <input type="text" class="form-control" name="startTime" value="{{dataInfo.startTime}}">
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mtl">
           <label class="col-md-4" style="padding-top:9px;">截止日期</label>
              <div class="col-md-8 ">
             <input type="text" class="form-control"  name="endTime" value="{{dataInfo.endTime}}">
             </div>
         </div>
 
-        <button class="btn btn-primary pull-right" id="btn-search">查询</button>
+        <button class="btn btn-primary pull-right mtl mrl" id="btn-search">查询</button>
       </form>
 
       {% if showHelpMessage|default(null ) == 1 %}

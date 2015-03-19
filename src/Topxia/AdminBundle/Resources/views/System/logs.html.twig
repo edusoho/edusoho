@@ -4,7 +4,7 @@
 {% set submenu = 'logs_query' %}
 {% set menus = permissions('admin_logs','tab') %}
 {% set script_controller = 'log/list' %}
-
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
 <div class="mbl">
 

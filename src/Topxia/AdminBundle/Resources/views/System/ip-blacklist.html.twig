@@ -3,6 +3,7 @@
 {% set menu = 'ip_blacklist' %}
 {% set submenu = 'ip_blacklist_manage' %}
 {% set menus = permissions('admin_setting_ip_blacklist','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
 <div class="mbl">
 

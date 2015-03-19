@@ -1,14 +1,15 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}标签管理 - {{ parent() }}{% endblock %}
+{% set type = 'manage'%}
+{% set menus = permissions('admin_course_tag','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 
 {% set menu = 'tag' %}
 {% set script_controller = 'tag/list' %}
 {% block main %}
 
 <div class="mbl">
-  {% set type = 'manage'%}
-  {% set menus = permissions('admin_course_tag','tab') %}
+
   {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
 </div>
 
