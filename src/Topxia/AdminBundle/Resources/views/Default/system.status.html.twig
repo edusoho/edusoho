@@ -63,7 +63,7 @@
                 {% if (liveCourseStatus|length) > 0 %}
                   {% if liveCourseStatus.type == "normal" %}
                     (有效期至{{(liveCourseStatus.expire|default('0'))|date('Y-m-d')}} )
-                  {% else %} {# liveCourseStatus.type == "TRYOUT" #}
+                  {% else %} 
                     (体验用户)
                   {% endif %}                  
                 {% endif %}
