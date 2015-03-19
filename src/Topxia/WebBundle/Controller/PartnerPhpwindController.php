@@ -92,7 +92,7 @@ class PartnerPhpwindController extends BaseController
                 'token' => array('userId' => $partnerUser['uid']),
             );
 
-            if(!$this->isRegisterEnabled()){
+            if(!$this->getAuthService()->isRegisterEnabled()){
                 return true;
             }
 
@@ -107,11 +107,6 @@ class PartnerPhpwindController extends BaseController
         $this->authenticateUser($user);
 
         return true;
-    }
-
-    private function isRegisterEnabled()
-    {        
-        return $this->getSettingService()->isRegisterEnabled();
     }
 
     private function doSynLogout($request, $args)

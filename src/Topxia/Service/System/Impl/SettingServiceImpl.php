@@ -10,17 +10,6 @@ class SettingServiceImpl extends BaseService implements SettingService
 
     private $cached;
 
-    public function isRegisterEnabled()
-    {
-        $auth = $this->get('auth');
-        
-        if($auth && array_key_exists('register_mode',$auth)){
-            return ($auth['register_mode'] == 'opened');
-        }
-        
-        return true;
-    } 
-
     public function set($name, $value)
     {
         $this->getSettingDao()->deleteSettingByName($name);

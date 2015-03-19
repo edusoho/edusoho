@@ -16,7 +16,7 @@ class RegisterController extends BaseController
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
-        $registerEnable  = $this->isRegisterEnabled();
+        $registerEnable  = $this->getAuthService()->isRegisterEnabled();
         if (!$registerEnable) {
             return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
         }
@@ -460,11 +460,6 @@ class RegisterController extends BaseController
         } catch(\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:' . $e->getMessage());
         }
-    }
-
-    private function isRegisterEnabled()
-    {
-        return $this->getSettingService()->isRegisterEnabled();
     }
 
     private function getWebExtension()

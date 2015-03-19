@@ -154,7 +154,7 @@ class UserController extends MobileController
         $nickname = $request->get('nickname');
         $password = $request->get('password');
 
-        if (!$this->getSettingService()->isRegisterEnabled()) {
+        if (!$this->getAuthService()->isRegisterEnabled()) {
             return $this->createErrorResponse($request, 'register_closed', '注册已关闭，请联系管理员');
         }
 

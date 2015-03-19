@@ -5134,6 +5134,20 @@ a.homework-essay-textarea-pack-up{
   margin-right: 20px;
 }
 
+@media (min-width: 992px) and (max-width: 1199px) {
+  .classroom-block .classroom-img {
+    width: 120px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .classroom-block .classroom-img {
+    width: 120px;
+    margin-right: 10px;
+  }
+}
+
 .classroom-block .classroom-img img {
   border-radius: 4px;
 }
@@ -5141,13 +5155,37 @@ a.homework-essay-textarea-pack-up{
 .classroom-block .title {
   font-size: 14px;
   margin: 6px 0 6px 0;
+  height: 40px;
   overflow: hidden;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .classroom-block .title {
+    margin: 0 0 6px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .classroom-block .title {
+    margin: 0 0 6px 0;
+  }
 }
 
 .classroom-block .content {
   font-size: 14px;
   color: #bbb;
   margin-top: 4px;
+}
 
+@media (min-width: 992px) and (max-width: 1199px) {
+  .classroom-block .content {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .classroom-block .content {
+    margin-top: 0;
+  }
 }
 
