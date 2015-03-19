@@ -164,12 +164,14 @@
 			        			<label class="pull-right">使用场景</label>
 			      			</div>
 
-			      			<div class="controls col-md-8 radios checkboxes">
-			      				<label>
-									<div class="text-info">手机绑定功能已开启</div>
-			      				</label>
-			      				<br>			      				
+			      			<div class="controls col-md-8 radios checkboxes">     				
 							    <input type="hidden" name="sms_bind" value="on">
+							    <label>
+							    	<input type="checkbox"
+							    	checked	disabled readonly					    	
+							    	> <span>手机绑定功能已开启</span>
+							    </label>
+							    <br>	
 								<label>
 							    	<input name="sms_registration" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
