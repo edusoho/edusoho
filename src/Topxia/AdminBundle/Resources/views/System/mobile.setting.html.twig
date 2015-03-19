@@ -1,0 +1,81 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menu = 'mobile_settings' %}
+{% set tab_menus = permissions('admin_setting_mobile','tab') %}
+{% set submenu = 'mobile_settings' %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+
+{% set script_controller = 'setting/mobile' %}
+
+
+{% block main %}
+<style>
+#mobile-logo-container img 
+{max-width: 80%; margin-bottom: 10px;}
+</style>
+
+<div class="mbl">
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:tab_menus,type:submenu} %}
+
+</div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="mobile-form" method="post">
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label >是否开启客户端</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'开启', 0:'关闭'}, mobile.enabled) }}
+      <div class="help-block">开启后，网站首页顶部导航会出现客户端入口</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="mobile_about">网校简介</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" id="mobile_about" rows="10" name="about" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ mobile.about }}</textarea>
+      <div class="help-block">此简介将显示在移动客户端的"关于网校"</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="logo">网校LOGO</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-logo-container">{% if mobile.logo %}<img src="{{ asset(mobile.logo) }}">{% endif %}</div>
+      <button class="btn btn-default btn-sm" id="mobile-logo-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'logo'}) }}">上传</button>
+      <button class="btn btn-default btn-sm" id="mobile-logo-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'logo'}) }}" {% if not mobile.logo %}style="display:none;"{% endif %}>删除</button>
+      <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
+      <input type="hidden" name="logo" value="{{ mobile.logo }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="logo">公告</label>
+    </div>
+    <div class="col-md-8 controls">
+      <input type="text" class="form-control" name="notice" value="{{ mobile.notice }}">
+      <p class="help-block">将会在手机端banner下面显示网校的公告，建议用简练概括的语言描述，字数在20字以下。</p>
+    </div>
+  </div>
+
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  
+  <div class="row form-group">
+    <div class="controls col-md-offset-2 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}

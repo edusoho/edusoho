@@ -79,6 +79,24 @@ admin_operation_group:
     mode: page
     type: menu
     active: group
+admin_operation_mobile:
+    name: 移动端
+    parent: admin_operation
+    router_name: admin_operation_mobile
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: menu
+    active: mobile
+admin_operation_mobile_manage:
+    name: 管理
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: mobile_manage
 admin_operation_block:
     name: 编辑区
     parent: admin_operation
@@ -725,6 +743,22 @@ admin_setting_refund:
     mode: page
     type: tab
     active: refund
+admin_setting_mobile:
+    name: 移动端
+    parent: admin_system
+    router_name: admin_setting_mobile
+    router_params: null
+    mode: page
+    type: menu
+    active: mobile_settings
+admin_setting_mobile_manage:
+    name: 设置
+    parent: admin_setting_mobile
+    router_name: admin_setting_mobile
+    router_params: null
+    mode: page
+    type: tab
+    active: mobile_settings
 admin_optimize:
     name: 优化和备份
     parent: admin_system
