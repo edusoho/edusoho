@@ -273,7 +273,7 @@ class SettingsController extends BaseController
 		$hasPayPassword = strlen($user['payPassword']) > 0;
 
 		if ($hasPayPassword){
-			$this->setFlashMessage('danger', '用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+			$this->setFlashMessage('danger', '不能直接设置新支付密码。');
 			return $this->redirect($this->generateUrl('settings_reset_pay_password'));
 		}
 
@@ -311,7 +311,7 @@ class SettingsController extends BaseController
 		$hasPayPassword = strlen($user['payPassword']) > 0;
 
 		if ($hasPayPassword){
-			return $this->createJsonResponse('用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+			return $this->createJsonResponse('不能直接设置新支付密码。');
 		}
 
 		$form = $this->createFormBuilder()

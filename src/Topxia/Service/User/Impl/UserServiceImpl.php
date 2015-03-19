@@ -266,14 +266,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
-        $profile = $this->getUserProfile($id);
-        $profile['mobile'] = $mobile;
-        $this->updateUserProfile($id, $profile);
+        $this->updateUserProfile($id, array(
+            'mobile' => $mobile
+        ));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
-    }    
+    }   
 
     public function getUserSecureQuestionsByUserId($userId)
     {
