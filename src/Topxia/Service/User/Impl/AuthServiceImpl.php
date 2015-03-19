@@ -204,6 +204,19 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->getAuthProvider()->getProviderName();
     }
 
+    public function isRegisterEnabled()
+    {
+        $auth = $this->getSettingService()->get('auth');
+        if($auth && array_key_exists('register_mode',$auth)){
+           if($auth['register_mode'] == 'opened'){
+               return true;
+           }else{
+               return false;
+           }
+        }
+        return true;
+    }
+
     private function getAuthProvider()
     {
         if (!$this->partner) {

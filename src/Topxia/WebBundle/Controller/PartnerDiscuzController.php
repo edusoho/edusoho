@@ -100,7 +100,7 @@ class PartnerDiscuzController extends BaseController
                 'token' => array('userId' => $get['uid'])
             );
 
-            if(!$this->isRegisterEnabled()){
+            if(!$this->getAuthService()->isRegisterEnabled()){
                 return true;
             }
 
@@ -116,20 +116,6 @@ class PartnerDiscuzController extends BaseController
 
         return API_RETURN_SUCCEED;
     }
-
-    private function isRegisterEnabled()
-    {
-        $auth = $this->setting('auth');
-        if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
-        }
-        return true;
-    }
-
 
     private function doSynlogout($request, $get, $post)
     {
