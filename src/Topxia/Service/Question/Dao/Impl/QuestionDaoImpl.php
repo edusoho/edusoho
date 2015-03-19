@@ -70,7 +70,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target`= '{$target}' )  LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like '{$target}%' )  LIMIT {$start},{$limit} ";
         
         $questions = $this->getConnection()->fetchAll($sql, array());
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -89,7 +89,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target`= '{$target}' )";
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target` like '{$target}%' )";
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
