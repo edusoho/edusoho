@@ -31,8 +31,12 @@ class SystemDefaultSettingController extends BaseController
         $ext = $file->getClientOriginalExtension();
         $filename = $filenamePrefix . $hash . '.' . $ext;
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        $defaultSetting['defaultAvatarFileName'] = $filename;
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+
+        $userDefaultSetting['defaultAvatarFileName'] = $filename;
+        $defaultSetting = array_merge($defaultSettings,$courseDefaultSetting,$userDefaultSetting);
         $this->getSettingService()->set("default", $defaultSetting);
 
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
@@ -63,10 +67,14 @@ class SystemDefaultSettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $setting = $this->getSettingService()->get("default",array());
-        $setting['defaultAvatar'] = 1;
-        $this->getSettingService()->set("default",$setting);
-        $filename = $setting['defaultAvatarFileName'];
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $defaultSetting = array_merge($defaultSettings,$courseDefaultSetting,$userDefaultSetting);
+
+        $userDefaultSetting['defaultAvatar'] = 1;
+        $this->getSettingService()->set("default",$defaultSetting);
+        $filename = $userDefaultSetting['defaultAvatarFileName'];
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
@@ -92,7 +100,7 @@ class SystemDefaultSettingController extends BaseController
 
         $this->filesystem->copy($smallFilePath, $path.$filename);
 
-        return $this->redirect($this->generateUrl('admin_setting_default'));
+        return $this->redirect($this->generateUrl('admin_setting_auth'));
     }
 
     public function defaultCoursePictureAction(Request $request)
@@ -107,8 +115,13 @@ class SystemDefaultSettingController extends BaseController
         $ext = $file->getClientOriginalExtension();
         $filename = $filenamePrefix . $hash . '.' . $ext;
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        $defaultSetting['defaultCoursePictureFileName'] = $filename;
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+
+        $courseDefaultSetting['defaultCoursePictureFileName'] = $filename;
+        $defaultSetting = array_merge($defaultSettings,$userDefaultSetting,$courseDefaultSetting;
+        
         $this->getSettingService()->set("default", $defaultSetting);
 
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
@@ -135,10 +148,14 @@ class SystemDefaultSettingController extends BaseController
     {
         $options = $request->request->all();
 
-        $setting = $this->getSettingService()->get("default",array());
-        $setting['defaultCoursePicture'] = 1;
-        $this->getSettingService()->set("default",$setting);
-        $filename = $setting['defaultCoursePictureFileName'];
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $defaultSetting = array_merge($defaultSettings,$userDefaultSetting,$courseDefaultSetting);
+
+        $courseDefaultSetting['defaultCoursePicture'] = 1;
+        $this->getSettingService()->set("default",$defaultSetting);
+        $filename = $courseDefaultSetting['defaultCoursePictureFileName'];
 
         $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
@@ -165,7 +182,7 @@ class SystemDefaultSettingController extends BaseController
 
         $this->filesystem->copy($smallFilePath, $path.$filename);
 
-        return $this->redirect($this->generateUrl('admin_setting_default'));
+        return $this->redirect($this->generateUrl('admin_setting_course'));
     }
 
     protected function getSettingService()
