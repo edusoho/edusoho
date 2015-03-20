@@ -57,12 +57,6 @@ define(function(require, exports, module) {
                 });
 
                 validator.addItem({
-                    element: '[name="nickname"]',
-                    required: true
-                });
-
-
-                validator.addItem({
                     element: '[name="mobile"]',
                     required: true,
                     rule: 'phone'            
@@ -71,6 +65,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="sms_code"]',
                     required: true,
+                    triggerType: 'submit',
                     rule: 'integer fixedLength{len:6} remote',
                     display: '短信验证码'           
                 });
@@ -100,32 +95,20 @@ define(function(require, exports, module) {
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_password',
-                getPostData: function(data){
-                    data.nickname = $('[name="nickname"]').val();
-                    return data;
-                },
                 preSmsSend: function(){
+                    var couldSender = true;
 
-                    var mobileValidateResult = true;
-                    var nicknameValidateResult = true;
                     validator.query('[name="mobile"]').execute(function(error, results, element) {
                         if (error) {
-                            mobileValidateResult = false;
+                            couldSender = false;
                             return;
                         }
-                    });
-                    validator.query('[name="nickname"]').execute(function(error, results, element) {
-                        if (error) {
-                            nicknameValidateResult = false;
-                            return ;
-                        }
+                        couldSender = true;
+                        return;
                     });
 
-                    if(mobileValidateResult && nicknameValidateResult) {
-                        return true;
-                    }
+                    return couldSender;
 
-                    return false;
                 }
             });
 

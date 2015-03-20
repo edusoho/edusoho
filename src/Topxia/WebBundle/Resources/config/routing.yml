@@ -146,11 +146,6 @@ hls_clef:
     pattern: /hls/{id}/clef/{token}
     defaults: { _controller: TopxiaWebBundle:HLS:clef}
 
-kindeditor_upload:
-    pattern:  /kindeditor/upload
-    defaults: { _controller: TopxiaWebBundle:Kindeditor:upload }
-    methods: [POST]
-
 editor_upload:
     pattern:  /editor/upload
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
@@ -893,6 +888,10 @@ settings_security:
     pattern:  /settings/security 
     defaults: { _controller: TopxiaWebBundle:Settings:security }
 
+settings_set_pay_password: 
+    pattern:  /settings/set_pay_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
+
 settings_pay_password: 
     pattern:  /settings/pay_password 
     defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
@@ -1607,6 +1606,11 @@ edu_cloud_sms_check:
 settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
+
+settings_check_login_password:
+    pattern:  /settings/check_login_password
+    defaults: { _controller: TopxiaWebBundle:Settings:passwordCheck }
+    methods: [POST]
 
 password_reset_by_sms:
     pattern:  /password/reset/by_sms

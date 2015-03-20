@@ -497,41 +497,41 @@
               </div>
             {% endif %}
 
-              <div class="price-block">
-                {% if course.ratingNum > 0 %}
-                  <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
-                  <span class="review-rating">
-                    <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
-                  </span>
-                {% else %}
-                  <span class="meta-label">无评价</span>
-                  <span class="review-rating">
-                    <span class="stars-0">&nbsp;</span>
-                  </span>
-                {% endif %}
-                <span class="label label-danger">
-                  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                      {% if course.coinPrice > 0 %}
-                          {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-                      {% else %}
-                          免
-                      {% endif %}
-                  {% else %}
-                      {% if course.price > 0 %}
-                          {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
-                      {% else %}
-                          免
-                      {% endif %}
-                  {% endif %}
+            <div class="price-block">
+              {% if course.ratingNum > 0 %}
+                <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+                <span class="review-rating">
+                  <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
                 </span>
-              </div>
-
-              {% if course.showStudentNumType == 'opened' %}
-              <div class="price-block">
-                <span class="meta-label">学生</span>
-                <span class="student-num">{{ course.studentNum }}人</span>
-              </div>
+              {% else %}
+                <span class="meta-label">无评价</span>
+                <span class="review-rating">
+                  <span class="stars-0">&nbsp;</span>
+                </span>
               {% endif %}
+              <span class="label label-danger">
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {% if course.coinPrice > 0 %}
+                        {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
+                    {% else %}
+                        免
+                    {% endif %}
+                {% else %}
+                    {% if course.price > 0 %}
+                        {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
+                    {% else %}
+                        免
+                    {% endif %}
+                {% endif %}
+              </span>
+            </div>
+
+            {% if setting('course.show_student_num_enabled', '1') == 1 %}
+            <span class="student-col">
+              <span class="meta-label">学生</span>
+              <span class="student-num">{{ course.studentNum }}人</span>
+            </div>
+            {% endif %}
 
             </span>
           {% endif %}

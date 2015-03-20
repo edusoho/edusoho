@@ -587,6 +587,10 @@ admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
 
+admin_cloud_recharge:
+    pattern:  /cloud/recharge
+    defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
@@ -1102,3 +1106,7 @@ admin_edu_cloud_sms_bill:
     pattern:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
 
+admin_edu_cloud_sms_no_message:
+    pattern: /edu_cloud/admin_edu_cloud_sms_no_message
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
+    

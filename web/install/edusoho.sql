@@ -325,6 +325,7 @@ CREATE TABLE `course_lesson_learn` (
   `learnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时间',
   `watchTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习观看时间',
   `videoStatus` enum('paused','playing') NOT NULL DEFAULT 'paused' COMMENT '学习观看时间',
+  `updateTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId_lessonId` (`userId`,`lessonId`),
   KEY `userId_courseId` (`userId`,`courseId`)
@@ -942,6 +943,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `email` varchar(128) NOT NULL COMMENT '用户邮箱',
+  `verifiedMobile` varchar(32) NOT NULL DEFAULT  '',
   `password` varchar(64) NOT NULL COMMENT '用户密码',
   `salt` varchar(32) NOT NULL COMMENT '密码SALT',
   `payPassword` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码',

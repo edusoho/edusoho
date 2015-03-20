@@ -41,6 +41,12 @@ class EduCloudController extends BaseController
 
     public function smsAction(Request $request)
     {
+        $settings = $this->getSettingService()->get('storage', array());
+        if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+            $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
+        
         try {
             $smsStatus = $this->handleSmsSetting($request);
 
@@ -62,11 +68,12 @@ class EduCloudController extends BaseController
             if (
                 isset($dataUserPosted['name'])
                 && ($this->calStrlen($dataUserPosted['name']) >= 2)
-                && ($this->calStrlen($dataUserPosted['name']) <= 8)
+                && ($this->calStrlen($dataUserPosted['name']) <= 16)
             ) {
                 $result = $this->applyForSms($dataUserPosted['name']);
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
                     $this->setCloudSmsKey('sms_school_candidate_name', $dataUserPosted['name']);
+                    $this->setCloudSmsKey('show_message', 'on');
                     return $this->createJsonResponse(array('ACK' => 'ok'));
                 }
             }
@@ -82,6 +89,7 @@ class EduCloudController extends BaseController
     private function handleSmsSetting(Request $request)
     {
         list($smsStatus, $schoolNames) = $this->getSchoolName();
+
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
 
@@ -99,8 +107,6 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('cloud_sms', $dataUserPosted);
             
-            $this->saveAuthRegisterSort($dataUserPosted);
-
             if ('1' == $dataUserPosted['sms_enabled']) {
                 $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');
             } else {
@@ -108,6 +114,12 @@ class EduCloudController extends BaseController
             }
         } 
         return $smsStatus;
+    }
+
+    public function smsNoMessageAction(Request $request)
+    {
+        $this->setCloudSmsKey('show_message', 'off');
+        return $this->redirect($this->generateUrl('admin_edu_cloud_sms', array()));
     }
 
     public function smsBillAction(Request $request)
@@ -153,8 +165,21 @@ class EduCloudController extends BaseController
                 $this->setCloudSmsKey('sms_school_name', $schoolName);
                 $this->setCloudSmsKey('sms_school_candidate_name', '');
             }
+            if (isset($result['apply']['message'])) {
+                $smsStatus['message'] = $result['apply']['message'];
+                if (strlen($smsStatus['message']) > 0){
+                    $smsStatus['message'] = $smsStatus['message'];
+                }
+            }
             if ($smsStatus['status'] == 'failed') {
-                $this->setFlashMessage("danger","因为申请的网校名称不符合规范，您新申请的网校名称“{$schoolCandidateName}”未通过审核");
+                $info = '您新申请的网校名称“'.$schoolCandidateName.'”未通过审核，原因是：';
+                if(isset($smsStatus['message']) && $smsStatus['message']) {
+                    $info .= $smsStatus['message'];
+                } else {
+                    $info .= '网校名称不符合规范';
+                }
+                $smsStatus['schoolNameError'] = $info;
+                
             }
         } else if (isset($result['error'])) {
             $smsStatus['status'] = 'error';
@@ -168,25 +193,6 @@ class EduCloudController extends BaseController
                 'sms_school_candidate_name' => $schoolCandidateName,
             )
         );
-    }
-
-    private function saveAuthRegisterSort($dataUserPosted) 
-    {
-        $auth = $this->getSettingService()->get('auth', array());
-        if (isset($dataUserPosted['sms_registration']) && ($dataUserPosted['sms_registration'] == 'on')) {
-            if (isset($auth['registerSort'])&&(!in_array('mobile', $auth['registerSort']))) {
-                $auth['registerSort'][] = 'mobile';
-            }
-            if (!isset($auth['registerSort'])){
-                $auth['registerSort'] = array(0 => "email", 1 => "nickname", 2 => "password", 3 => "mobile");
-            }
-        } else {
-            if (isset($auth['registerSort'])&&(in_array('mobile', $auth['registerSort']))) {
-                $index = array_search('mobile',$auth['registerSort']);
-                unset($auth['registerSort'][$index]);
-            }
-        }
-        $this->getSettingService()->set('auth', $auth);
     }
 
     private function calStrlen($str)

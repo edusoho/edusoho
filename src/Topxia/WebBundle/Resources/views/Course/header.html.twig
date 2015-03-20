@@ -39,9 +39,8 @@
           <div class="btn-group">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="评价" data-placement="top" href="#modal">
               <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
-
-            {% if course.showStudentNumType == 'opened' or member.role|default('student') == 'teacher' or isAdmin %}
-              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+            {% if setting('course.show_student_num_enabled', '1') == 1 or member.role|default('student') == 'teacher' or isAdmin %}
+              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{{setting('default.user_name', '学员')}}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
               href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
             {% endif %}
 

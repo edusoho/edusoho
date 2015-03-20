@@ -907,17 +907,15 @@ class CourseController extends BaseController
 			$classroomId=$request->query->get('classroomId');
 
 	        foreach ($courseIds as $key => $value) {
-	        	
 	        	$course=$this->getCourseService()->getCourse($value);
 	        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
-	        	if($course && ($course['useInClassroom'] =="more" || count($classrooms) == 0)){
+	        	if($course && count($classrooms)==0){
 	        		unset($courseIds[$key]);
 	        	}
 
 	        }
 	    }
-
-        $unEnabledCourseIds=$courseIds;
+        $unEnabledCourseIds = $courseIds;
 
         return $unEnabledCourseIds;
 	}

@@ -108,14 +108,11 @@ class PasswordResetController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-
+  
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
             if ($result){
-                $nickname = $data['nickname'];
-                if (strlen($nickname) == 0){
-                    return $this->createMessageResponse('error', '用户名不存在，请重新找回');
-                }
-                $targetUser = $this->getUserService()->getUserByNickname($nickname);
+                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('mobile'));
+
                 if (empty($targetUser)){
                     return $this->createMessageResponse('error', '用户不存在，请重新找回');    
                 }

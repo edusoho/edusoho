@@ -67,7 +67,11 @@ define(function(require, exports, module) {
                 }else{
                     $('#help-message').removeClass("hidden");
                 }
-            }     
+            } 
+
+            if ($('.cashPrice').length == 0 || $('.rmbPrice').length == 0) {
+                $('#coin-model-form').submit();
+            }   
 
         });
 

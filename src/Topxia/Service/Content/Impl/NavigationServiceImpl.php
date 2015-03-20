@@ -128,7 +128,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function deleteNavigation($id)
     {
-        return $this->getNavigationDao()->deleteNavigation($id);
+        return ($this->getNavigationDao()->deleteNavigation($id)) + ($this->getNavigationDao()->deleteNavigationByParentId($id));
     }
 
     private function getNavigationDao()

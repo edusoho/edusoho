@@ -403,7 +403,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'subtitle' => '',
 			'about' => '',
 			'expiryDay' => 0,
-			'showStudentNumType' => 'opened',
 			'serializeMode' => 'none',
 			'categoryId' => 0,
 			'vipLevelId' => 0,
@@ -420,13 +419,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
-			'freeEndTime' => 0,
-			'deadlineNotify' => 'none',
-			'daysOfNotifyBeforeDeadline' => 0,
 			'discountActivityId'=>0,
-			'useInClassroom'=>'single',
-			'singleBuy'=>0,
-			'daysOfNotifyBeforeDeadline' => 0
+			'freeEndTime' => 0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -570,6 +564,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
 		}
 
+		$this->dispatchEvent("course.delete", array(
+            "id" => $id
+        ));
+
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
 		return true;
@@ -682,7 +680,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['status']!="finished")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'learnTime' => $learn['learnTime']+intval($time),
 		));
@@ -692,9 +689,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
+		if($learn['videoStatus']=="playing")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
+				'updateTime' => time(),
 		));
 	}
 
@@ -704,6 +702,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'videoStatus' => 'playing',
+				'updateTime' => time(),
 		));
 	}
 
@@ -711,8 +710,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
+		$time = time() - $learn['updateTime'];
+		$time = ceil($time/60);
+		$this->waveWatchingTime($userId,$lessonId,$time);
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'videoStatus' => 'paused',
+				'updateTime' => time(),
 		));
 	}
 
@@ -1676,12 +1679,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		
 		$currentTime = time();
 		foreach ($courses as $key => $course) {
-			if($course['deadlineNotify'] == "active") {
-				$courseMember = $courseMembers[$course["id"]];
-				if($currentTime < $courseMember["deadline"]  && ($course["daysOfNotifyBeforeDeadline"]*24*60*60+$currentTime) > $courseMember["deadline"]){
-					$shouldNotifyCourses[] = $course;
-					$shouldNotifyCourseMembers[] = $courseMember;
-				}
+			$courseMember = $courseMembers[$course["id"]];
+			if($course["expiryDay"]>0 && $currentTime < $courseMember["deadline"]  && (10*24*60*60+$currentTime) > $courseMember["deadline"]){
+				$shouldNotifyCourses[] = $course;
+				$shouldNotifyCourseMembers[] = $courseMember;
 			}
 		}
 		return array($shouldNotifyCourses, $shouldNotifyCourseMembers);
@@ -1940,6 +1941,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'type' => 'become_student',
 				'objectType' => 'course',
 				'objectId' => $courseId,
+				'userId' => $member["userId"],
 				'properties' => array(
 					'course' => $this->simplifyCousrse($course),
 				)

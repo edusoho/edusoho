@@ -666,7 +666,7 @@ EOD;
 
         $content = <<<'EOD'
 <br><div class="col-md-12">  
-<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" /></a>
+<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" style="width: 100%;"/></a>
 <br><br></div>
 EOD;
         $this->getBlockService()->updateContent($block['id'], $content);

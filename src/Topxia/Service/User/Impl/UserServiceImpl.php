@@ -39,7 +39,8 @@ class UserServiceImpl extends BaseService implements UserService
        return $this->getProfileDao()->getProfile($id);
     }
 
-    public function getUserByNickname($nickname){
+    public function getUserByNickname($nickname)
+    {
         $user = $this->getUserDao()->findUserByNickname($nickname);
         if(!$user){
             return null;
@@ -47,6 +48,16 @@ class UserServiceImpl extends BaseService implements UserService
             return UserSerialize::unserialize($user);
         }
     }
+
+    public function getUserByVerifiedMobile($mobile)
+    {
+        $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
+        if(!$user){
+            return null;
+        } else {
+            return UserSerialize::unserialize($user);
+        }
+    }    
 
     public function getUserByEmail($email)
     {
@@ -233,6 +244,15 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
+    public function isMobileUnique($mobile)
+    {
+        $count = $this->searchUserCount(array('verifiedMobile' => $mobile));
+        if ($count > 0) {
+            return false;
+        }
+        return true;
+    }
+
     public function changeMobile($id, $mobile)
     {
         $user = $this->getUser($id);
@@ -246,10 +266,14 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
+        $this->updateUserProfile($id, array(
+            'mobile' => $mobile
+        ));
+
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
-    }
+    }   
 
     public function getUserSecureQuestionsByUserId($userId)
     {
@@ -320,7 +344,11 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = array();
         $user['email'] = $registration['email'];
-        $user['verifiedMobile'] = $registration['verifiedMobile'];
+        if (isset($registration['verifiedMobile'])) {
+            $user['verifiedMobile'] = $registration['verifiedMobile'];
+        }else{
+            $user['verifiedMobile'] = '';
+        }
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
@@ -944,17 +972,6 @@ class UserServiceImpl extends BaseService implements UserService
     public function dropFieldData($fieldName)
     {
         $this->getProfileDao()->dropFieldData($fieldName);
-    }
-
-    public function getUserCountByApprovalStatus($approvalStatus)
-    {
-        return $this->getUserDao()->searchUserCount(array('approvalStatus' => $approvalStatus));
-    }
-
-    public function getUsersByApprovalStatus($approvalStatus, $start, $limit)
-    {
-        return $this->getUserDao()->searchUsers(array('approvalStatus' => $approvalStatus), 
-            array('approvalTime', 'DESC'), $start, $limit);
     }
 
     private function getUserApprovalDao()

@@ -9,6 +9,8 @@ interface UserService
     public function getUser($id, $lock = false);
 
     public function getUserByNickname($nickname);
+
+    public function getUserByVerifiedMobile($mobile);
     
     public function getUserByEmail($email);
 
@@ -45,6 +47,8 @@ interface UserService
     public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers);
 
     public function verifyInSaltOut($in,$salt,$out);
+
+    public function isMobileUnique($mobile);
 
     public function changeMobile($id, $mobile);
     
@@ -187,10 +191,6 @@ interface UserService
     public function getLastestApprovalByUserIdAndStatus($userId, $status);
     
     public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
-
-    public function getUsersByApprovalStatus($approvalStatus, $start, $limit);
-
-    public function getUserCountByApprovalStatus($approvalStatus);
 
     public function findUserApprovalsByUserIds($userIds);
 

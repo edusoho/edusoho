@@ -43,7 +43,7 @@
 {% endblock %}
 
 {% block footer %}
-{% if is_plugin_installed('Classroom') and course.singleBuy == 1 %}
+{% if is_plugin_installed('Classroom') %}
     {% if lesson.status == 'published' %}
         {% if course.price=='0.00'  %}
                 <a id="buy-btn" type="button" class="btn btn-primary" 

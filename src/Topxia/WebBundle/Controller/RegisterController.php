@@ -16,6 +16,11 @@ class RegisterController extends BaseController
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
         }
 
+        $registerEnable  = $this->getAuthService()->isRegisterEnabled();
+        if (!$registerEnable) {
+            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+        }
+
         $form = $this->createForm(new RegisterType());
         
         if ($request->getMethod() == 'POST') {
@@ -41,10 +46,11 @@ class RegisterController extends BaseController
             }
             
             $registration['verifiedMobile'] = '';
-            if (in_array('mobile', $authSettings['registerSort'])){
+            if (in_array('mobile', $authSettings['registerSort'])&&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
+                &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
                 if ($result){
-                   $registration['verifiedMobile'] = $sessionField['to'];
+                    $registration['verifiedMobile'] = $sessionField['to'];
                 }else{
                     return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
                 }
@@ -88,7 +94,6 @@ class RegisterController extends BaseController
 
         if(!isset($auth['registerSort']))$auth['registerSort']="";
         
-        $loginEnable  = $this->isLoginEnabled();
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         for($i=0;$i<count($userFields);$i++){
@@ -98,9 +103,15 @@ class RegisterController extends BaseController
            if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
-        
+
+        if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
+            && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
+            && !in_array('mobile', $auth['registerSort'])) {
+            $auth['registerSort'][] = "mobile";
+        }
+
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
-            'isLoginEnabled' => $loginEnable,
+            'isRegisterEnabled' => $registerEnable,
             'registerSort'=>$auth['registerSort'],
             'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
@@ -363,6 +374,11 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
+
     protected function getMessageService()
     {
         return $this->getServiceKernel()->createService('User.MessageService');
@@ -444,19 +460,6 @@ class RegisterController extends BaseController
         } catch(\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:' . $e->getMessage());
         }
-    }
-
-    private function isLoginEnabled()
-    {
-        $auth = $this->getSettingService()->get('auth');
-        if($auth && array_key_exists('register_mode',$auth)){
-           if($auth['register_mode'] == 'opened'){
-               return true;
-           }else{
-               return false;
-           }
-        }
-        return true;
     }
 
     private function getWebExtension()

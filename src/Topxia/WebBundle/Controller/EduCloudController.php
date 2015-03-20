@@ -30,18 +30,19 @@ class EduCloudController extends BaseController
 
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
+
+                if (!$this->getUserService()->isMobileUnique($to)) {
+                    return $this->createJsonResponse(array('error' => "这个手机已经被绑定"));
+                }
+
                 $hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
                 if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])){
-                    return $this->createJsonResponse(array('error' => '您已经绑定了这个手机'));
+                    return $this->createJsonResponse(array('error' => "您已经绑定了这个手机"));
                 }
             }
 
             if ($smsType == 'sms_forget_password') {
-                $nickname = $request->request->get('nickname');
-                if (strlen($nickname) == 0){
-                    return $this->createJsonResponse(array('error' => '不存在用户昵称'));
-                }
-                $targetUser = $this->getUserService()->getUserByNickname($nickname);
+                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
                 if (empty($targetUser)){
                     return $this->createJsonResponse(array('error' => '用户不存在'));    
                 }

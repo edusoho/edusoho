@@ -16,10 +16,20 @@
 	    {{ web_macro.flash_messages() }}
 
 	    <form id="bind-mobile-form" class="form-horizontal" method="post"> 
+
+	    	{% if verifiedMobile | length > 0 %}
+		    	<div class="form-group row">
+		    		<div  class="col-md-3 control-label"><label>已绑定手机号</label></div>
+		    		<div class="col-md-4 controls"> 
+		    			<div class="control-text">{{blur_phone_number(verifiedMobile)}}</div>
+		    		</div>	    		
+		    	</div>
+		    {% endif %}
+
 	    	<div class="form-group row"> 
 		        <div  class="col-md-3 control-label"><label for="password">您的登陆密码</label></div> 
 		        <div class="col-md-4 controls"> 
-		        	<input type="password" id="password" name="password" class="form-control" value=""> 
+		        	<input type="password" id="password" name="password" class="form-control" value=""  data-url="{{ path('settings_check_login_password') }}"> 
 		        </div> 
 	    	</div>
 
@@ -32,18 +42,20 @@
 	    	
 	    	<div class="form-group row"> 
 		        <div  class="col-md-3 control-label"><label for="sms_code">短信验证码</label></div> 
-		        <div class="col-md-4 controls"> 
+
+		        <div class="col-md-2 controls">
 		        	<input type="text" id="sms-code" name="sms_code" class="form-control" value="" data-url="{{path('edu_cloud_sms_check',{type:'sms_bind'})}}">
-		        </div> 
-	    	</div>
-	    	<div class="form-group row"> 
-	        	<div class="col-md-4 col-md-offset-3  controls"> 
+		        </div>
+		        
+	        	<div class="col-md-4 controls"> 
 	            	<span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
 		        		<span id="js-time-left"></span>
 		        		<span id="js-fetch-btn-text">获取短信验证码{# 秒后重新获取 #}</span>
 		        	</span>
-	        	</div> 
-	        </div> 
+		        </div>         	
+	        	
+	    	</div>
+
 	    	<div class="form-group row"> 
 	        	<div class="col-md-4 col-md-offset-3  controls"> 
 	            	<button id="submit-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary">提交</button> 
@@ -53,11 +65,6 @@
         	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"> 
 	    </form>
 
-	    {% if verifiedMobile | length > 0 %}
-		    <div class="alert alert-info">
-		    	<p>您已经绑定了手机&nbsp;{{blur_phone_number(verifiedMobile)}}</p>
-			</div>
-		{% endif %}
 
     {% endblock %}
   {% endembed %}

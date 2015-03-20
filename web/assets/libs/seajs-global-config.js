@@ -1,8 +1,8 @@
 seajs.config({
 	alias: {
-		'jquery': 'jquery/jquery/1.10.1/jquery',
-		'$': 'jquery/jquery/1.10.1/jquery',
-		'$-debug': 'jquery/jquery/1.10.1/jquery-debug',
+		'jquery': 'jquery/1.11.2/jquery',
+		'$': 'jquery/1.11.2/jquery',
+		'$-debug': 'jquery/1.11.2/jquery',
 		"jquery.form": "jquery-plugin/form/3.44.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",
@@ -21,7 +21,6 @@ seajs.config({
 		"jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
 		"mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
-		'kindeditor': 'gallery2/kindeditor/4.1.10/kindeditor',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.1.0/upload',
 		'bootstrap.validator': 'common/validator',
