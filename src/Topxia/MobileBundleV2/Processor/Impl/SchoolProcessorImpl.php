@@ -30,10 +30,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
         
-        if( $tmpStr == $signature ){
-            return true;
-        }else{
-            return false;
+        $echoStr = $_GET["echostr"];
+
+        //valid signature , option
+        if($tmpStr == $signature){
+          return new Response($echoStr);
         }
     }
 
