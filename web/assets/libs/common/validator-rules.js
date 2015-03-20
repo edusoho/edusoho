@@ -241,27 +241,14 @@ define(function(require, exports, module) {
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/,
             '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss'
         ],        
+
         [
             'date_and_time_check',
             function() {
-                var strtotimestamp = function(datestr){
-                  var new_str = datestr.replace(/:/g,"-");
-                  new_str = new_str.replace(/ /g,"-");
-                  var arr = new_str.split("-");
-                  if (arr[3] >= 16){
-                       arr[2] -= 1;
-                  }                  
-                  var datum = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3],arr[4],arr[5]));
-                  return (datum.getTime()/1000);  //为PHP所用
-                }
-                var startTime = strtotimestamp($('[name=startTime]').val());
-                var endTime = strtotimestamp($('[name=endTime]').val());
-                if (endTime > startTime) {
-                    return true;
-                }else{
-                    return false;
-                }
-            },"开始时间必须小于结束时间"
+                var startTime = $('[name=startTime]').val();
+                var endTime = $('[name=endTime]').val();
+                return (startTime < endTime);
+            },"结束时间不能早于或等于开始时间"
         ],        
 
         [
