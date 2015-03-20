@@ -20,6 +20,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function WXsign()
     {
+        $this->controller->getLogService()->info("WX_message", "message", "params", array(
+            "get"=>$_GET,
+            "post"=>$_POST
+        ));
+
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];    
@@ -36,11 +41,6 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         if($tmpStr == $signature){
           return new Response($echoStr);
         }
-
-        $this->controller->getLogService()->info("WX_message", "message", "params", array(
-            "get"=>$_GET,
-            "post"=>$_POST
-        ));
 
         return $this->responseMsg();
     }
