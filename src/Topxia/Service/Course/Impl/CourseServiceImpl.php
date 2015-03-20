@@ -370,10 +370,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 				}				
 			}
 
-	        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
-			if (!empty($plugin))	{
-				$this->getDiscountActivityService()->createDiscountActivityTask(time(), $isUnixTimeStamp = true);
-			}	
 		}	
 
 		$fields = $this->_filterCourseFields($fields);
@@ -382,9 +378,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$fields = CourseSerialize::serialize($fields);
 
-		return CourseSerialize::unserialize(
-			$this->getCourseDao()->updateCourse($id, $fields)
-		);
+		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
+
+		if (!$isTaskUpdate){
+	        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
+			if (!empty($plugin))	{
+				$this->getDiscountActivityService()->createDiscountActivityTask(time(), $isUnixTimeStamp = true);
+			}
+		}	
+
+		return CourseSerialize::unserialize($updatedCourse);
 	}
 
 	public function updateCourseCounter($id, $counter)
