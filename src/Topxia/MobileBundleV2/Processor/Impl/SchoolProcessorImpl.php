@@ -41,6 +41,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "get"=>$_GET,
             "post"=>$_POST
         ));
+
+        return "hello test";
     }
 
     public function loginSchoolWithSite()
