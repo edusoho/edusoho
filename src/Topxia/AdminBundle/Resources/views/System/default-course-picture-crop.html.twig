@@ -1,8 +1,6 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:course.setting.layout.html.twig' %}
+{% set submenu = 'course_setting' %}
 
-{% block title %}系统默认设置 - {{ parent() }}{% endblock %}
-
-{% set submenu = 'default' %}
 {% set script_controller = 'setting/default-course-picture-crop' %}
 
 {% block maincontent %}
