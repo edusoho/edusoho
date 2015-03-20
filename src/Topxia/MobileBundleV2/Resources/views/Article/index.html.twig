@@ -7,7 +7,7 @@
 	</div>
 	<div ui-view="articleList">
 	</div>
-	<div ui-view>
+	<div ui-view="detail" ng-class="showMode" ng-style="{ height : detailContentHeight }">
 	</div>
 {% block bottom_scripts %}
 
