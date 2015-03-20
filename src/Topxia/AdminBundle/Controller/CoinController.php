@@ -175,9 +175,25 @@ class CoinController extends BaseController
 
     private function updateCoursesCashPrice($data)
     {
+        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
+
         foreach ($data as $key => $value) {
-           
+            $course = $course = $this->getCourseService()->getCourse($key);
             $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
+
+            if (!empty($plugin)) {
+                $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($key, $currentTime=time());
+                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountActivityId'])) {
+                    $this->getCourseService()->setCoursePrice(
+                        $course['id'], 
+                        array(
+                            'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
+                            'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
+                            'discountActivityId' => intval($maxDiscountItem['activityId'])
+                        )
+                    );                    
+                }
+            }
         }
     }
 

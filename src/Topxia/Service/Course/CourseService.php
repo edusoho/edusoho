@@ -62,6 +62,8 @@ interface CourseService
 
 	public function createCourse($course);
 
+	public function setCoursePrice($courseId, $courseFields);
+
 	public function updateCourse($id, $fields);
 
 	public function updateCourseCounter($id, $counter);

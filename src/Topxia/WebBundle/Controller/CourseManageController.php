@@ -203,6 +203,20 @@ class CourseManageController extends BaseController
             }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
+            $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
+            if (!empty($plugin)) {
+                $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($id, $currentTime=time());
+                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountActivityId'])) {
+                    $this->getCourseService()->setCoursePrice(
+                        $course['id'], 
+                        array(
+                            'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
+                            'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
+                            'discountActivityId' => intval($maxDiscountItem['activityId'])
+                        )
+                    );                    
+                }
+            }
 
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }

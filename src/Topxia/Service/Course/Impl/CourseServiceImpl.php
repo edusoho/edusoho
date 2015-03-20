@@ -343,34 +343,54 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $course;
 	}
 
-	public function updateCourse($id, $fields, $isTaskUpdate = false)
+	public function setCoursePrice($id, $courseFields)
 	{
 		$course = $this->getCourseDao()->getCourse($id);
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
-		if (!$isTaskUpdate){
+
+		$fields = $this->_filterCourseFields(array(
+			'price' => (isset($courseFields['price'])) ? $courseFields['price'] : $course['originPrice'],
+			'coinPrice' => (isset($courseFields['coinPrice'])) ? $courseFields['coinPrice'] : $course['originCoinPrice'],
+			'discountActivityId' => (isset($courseFields['discountActivityId'])) ? $courseFields['discountActivityId'] : 0
+		));
+
+		$this->getLogService()->info('course', 'update', "打折活动 更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
+
+		$fields = CourseSerialize::serialize($fields);
+
+		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
+
+		return CourseSerialize::unserialize($updatedCourse);
+	}
+
+	public function updateCourse($id, $fields)
+	{
+		$course = $this->getCourseDao()->getCourse($id);
+		if (empty($course)) {
+			throw $this->createServiceException('课程不存在，更新失败！');
+		}
+
+		if (isset($fields['price'])){
+			$fields['originPrice'] = $fields['price'];
+		}
+		if (isset($fields['coinPrice'])){
+			$fields['originCoinPrice'] = $fields['coinPrice'];
+		}
+
+		if ($course['discountActivityId']>0){
 			if (isset($fields['price'])){
-				$fields['originPrice'] = $fields['price'];
+				if($course['originPrice'] != 0){
+					$fields['price'] = $fields['price']*($course['price']/$course['originPrice']);
+				}
 			}
 			if (isset($fields['coinPrice'])){
-				$fields['originCoinPrice'] = $fields['coinPrice'];
-			}
-
-			if ($course['discountActivityId']>0){
-				if (isset($fields['price'])){
-					if($course['originPrice'] != 0){
-						$fields['price'] = $fields['price']*($course['price']/$course['originPrice']);
-					}
+				if($course['originCoinPrice'] != 0){
+					$fields['coinPrice'] = $fields['coinPrice']*($course['coinPrice']/$course['originCoinPrice']);
 				}
-				if (isset($fields['coinPrice'])){
-					if($course['originCoinPrice'] != 0){
-						$fields['coinPrice'] = $fields['coinPrice']*($course['coinPrice']/$course['originCoinPrice']);
-					}
-				}				
-			}
-
-		}	
+			}				
+		}		
 
 		$fields = $this->_filterCourseFields($fields);
 
@@ -379,13 +399,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = CourseSerialize::serialize($fields);
 
 		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
-
-		if (!$isTaskUpdate){
-	        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
-			if (!empty($plugin))	{
-				$this->getDiscountActivityService()->createDiscountActivityTask(time(), $isUnixTimeStamp = true);
-			}
-		}	
 
 		return CourseSerialize::unserialize($updatedCourse);
 	}
@@ -2566,11 +2579,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('Course.MaterialService');
     }
-
-	protected function getDiscountActivityService() 
-	{
-		return $this->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
-	}    
 
     protected function getAppService()
     {
