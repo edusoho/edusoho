@@ -1,16 +1,16 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% set script_controller = "coin/model" %}
-{% set menus = permissions("admin_setting_finance","tab")%}
+{% set tab_menus = permissions("admin_setting_finance","tab")%}
 {% set menu = 'finance_settings' %}
 {% set submenu = 'coin_settings' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
 <!--   <div class="page-header"><h1>虚拟币管理</h1></div>
     {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %} -->
 <div class = "mbl">
-{{admin_macro.tab_group(menus,submenu)}}
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
 </div>
 
     <div class="well">
