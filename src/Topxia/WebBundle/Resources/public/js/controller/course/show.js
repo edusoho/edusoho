@@ -126,7 +126,7 @@ define(function(require, exports, module) {
 
 
         refreshAvtivityTimeLeft = function() {
-            var activityEndTime = $("#price-after-discount").data("activityendtime");
+            var activityEndTime = $("#activity-left-time").data("activityEndtime");
             if (null != activityEndTime) {
                 var now = Math.round($.now()/1000);
                 var hoursLeft = Math.floor((activityEndTime - now) / 3600.0);
@@ -138,7 +138,7 @@ define(function(require, exports, module) {
                 $("#seconds-left").html(secondsLeft);
 
                 if (now < activityEndTime) {
-                    setTimeout("refreshAvtivityTimeLeft()", 500);
+                    setTimeout(refreshAvtivityTimeLeft, 500);
                 } else {
 
                 }

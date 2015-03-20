@@ -38,53 +38,76 @@
 </p>
 #}
 
-{#
-<p class="clearfix">
-  <label class="pull-left">折后价</label>
-  <span class="money-num pull-left">¥75.00</span>
-  <span class="discount-tag">8折</span>
-</p>
-
-<p>
-  <label>原价</label>
-  <span class="old-price">
-    <del>10</del>
-  </span>
-</p>
-#}
-
-  <span class="price-label">价格</span>
-  <span class="money-num">
-    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-        {% if course.coinPrice > 0 %}
-          {% if free_limit_type(course) == 'free_now' %}
-            0.00 {{setting('coin.coin_name', '虚拟币')}}
+{% if course.discountActivityId == 0 %}
+  <p>
+    <span class="price-label">价格</span>
+    <span class="money-num">
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+          {% if course.coinPrice > 0 %}
+            {% if free_limit_type(course) == 'free_now' %}
+              0.00 {{setting('coin.coin_name', '虚拟币')}}
+            {% else %}
+              {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}}
+              </span>
+            {% endif %}
           {% else %}
-            {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}}
+            免费
+          {% endif %}
+        {% else %}
+          {% if course.price > 0 %}
+            {% if free_limit_type(course) == 'free_now' %}
+              ¥ 0.00
+            {% else %}
+              ¥ {{ course.price }}
             </span>
-          {% endif %}
-        {% else %}
-          免费
-        {% endif %}
-      {% else %}
-        {% if course.price > 0 %}
-          {% if free_limit_type(course) == 'free_now' %}
-            ¥ 0.00
+            {% endif %}
           {% else %}
-            ¥ {{ course.price }}
-          </span>
+            免费
           {% endif %}
-        {% else %}
-          免费
         {% endif %}
-      {% endif %}
-  </span>
+    </span>
+  </p>
+{% endif %}
 
-{#
-<p>
-  <label>活动</label>
-  <span class="activity">双十二活动</span>
-  <span><span class="glyphicon glyphicon-time"></span>22时53分44.12秒</span>
-</p>
-#}
+{% if course.discountActivityId > 0 %}
+  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+    {% set newPrice = course.coinPrice %}
+    {% set oldPrice = course.originCoinPrice %}  
+    <p class="clearfix">
+      <label class="pull-left">折后价</label>
+      <span class="money-num pull-left">¥<span id="price-after-discount">{{ course.coinPrice }}</span></span>
+      <span class="discount-tag">{{ (newPrice/oldPrice*10)|round(2,'common') }}折</span>
+    </p>
+
+    <p>
+      <label>原价</label>
+      <span class="old-price">
+        <del>{{course.originCoinPrice}}</del>
+      </span>
+    </p>  
+
+  {% else %}  
+    {% set newPrice = course.price %}
+    {% set oldPrice = course.originPrice %}  
+    <p class="clearfix">
+      <label class="pull-left">折后价</label>
+      <span class="money-num pull-left">¥<span id="price-after-discount">{{ course.price }}</span></span>
+      <span class="discount-tag">{{ (newPrice/oldPrice*10)|round(2,'common') }}折</span>
+    </p>
+
+    <p>
+      <label>原价</label>
+      <span class="old-price">
+        <del>{{course.originPrice}}</del>
+      </span>
+    </p>
+  {% endif %}
+
+  <p>
+    <label>活动</label>
+    <span class="activity">{{ course.discountActivity.activityName }}</span>
+    <span id="activity-left-time" data-activity-endtime="{{ course.discountActivity.endTime }}"><span class="glyphicon glyphicon-time"></span><span id="hours-left"></span>时<span id="minutes-left"></span>分<span id="seconds-left"></span>秒</span>
+  </p>
+{% endif %}
+
 {% endif %}
