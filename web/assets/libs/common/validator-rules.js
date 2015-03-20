@@ -248,7 +248,7 @@ define(function(require, exports, module) {
                 var startTime = $('[name=startTime]').val();
                 var endTime = $('[name=endTime]').val();
                 return (startTime < endTime);
-            },"结束时间不能早于开始时间"
+            },"结束时间不能早于或等于开始时间"
         ],        
 
         [
