@@ -22,7 +22,8 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     {
         $this->controller->getLogService()->info("WX_message", "message", "params", array(
             "get"=>$_GET,
-            "post"=>$_POST
+            "post"=>$_POST,
+            $GLOBALS["HTTP_RAW_POST_DATA"]
         ));
 
         $signature = $_GET["signature"];
