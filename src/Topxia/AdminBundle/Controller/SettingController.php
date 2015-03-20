@@ -242,12 +242,12 @@ class SettingController extends BaseController
     public function authAction(Request $request)
     {
         $auth = $this->getSettingService()->get('auth', array());
-        // $defaultSetting = $this->getSettingService()->get('default', array());
-        // $userDefaultSetting = $this->getSettingService()->get('user_default', array());
-        // $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
-        // $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
-        // $defaultSets = $this->getDefaultSet();
-        // $defaultSetting = array_merge($defaultSets, $defaultSetting);
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        $userDefaultSet = $this->getUserDefaultSet();
+        $defaultSetting = array_merge($userDefaultSet, $userDefaultSetting);
 
         $default = array(
             'register_mode' => 'closed',
@@ -279,18 +279,22 @@ class SettingController extends BaseController
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
-            // $defaultSetting = $request->request->all();
+            $defaultSetting = $request->request->all();
 
-            // if (isset($defaultSetting['user_name'])) {
-            //     $defaultSetting['user_name'] = $defaultSetting['user_name'];
-            // } else {
-            //     $defaultSetting['user_name'] = '学员';
-            // }
+            if (isset($defaultSetting['user_name'])) {
+                $defaultSetting['user_name'] = $defaultSetting['user_name'];
+            } else {
+                $defaultSetting['user_name'] = '学员';
+            }
+            $userDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+                'defaultAvatar','user_name'
+            ));
 
-            // $default = $this->getSettingService()->get('default', array());
-            // $defaultSetting = array_merge($default, $defaultSetting);
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default,$defaultSettings,$courseDefaultSetting,$userDefaultSetting);
 
-            // $this->getSettingService()->set('default', $defaultSetting);
+            $this->getSettingService()->set('user_default', $userDefaultSetting);
+            $this->getSettingService()->set('default', $defaultSetting);
 
             if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
                 $firstSettingTime = $auth['setting_time'];
@@ -334,6 +338,8 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
             'auth' => $auth,
             'userFields' => $userFields,
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
         ));
     }
     
@@ -547,39 +553,36 @@ class SettingController extends BaseController
         return $default;
     }
 
-    // private function getUserDefaultSet()
-    // {
-    //     $default = array(
-    //         'defaultAvatar' => 0,
-    //         'defaultAvatarFileName' => 'avatar',
-    //         'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-    //         'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-    //         'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-    //         'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-    //         'user_name' => '学员',
-    //     );
+    private function getUserDefaultSet()
+    {
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'user_name' => '学员',
+        );
 
-    //     return $default;
-    // }
+        return $default;
+    }
 
-    // private function getDefaultSet()
-    // {
-    //     $default = array(
-    //         'defaultAvatar' => 0,
-    //         'defaultCoursePicture' => 0,
-    //         'defaultAvatarFileName' => 'avatar',
-    //         'defaultCoursePictureFileName' => 'coursePicture',
-    //         'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-    //         'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-    //         'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
-    //         'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-    //         'user_name' => '学员',
-    //         'chapter_name' => '章',
-    //         'part_name' => '节',
-    //     );
+    private function getCourseDefaultSet()
+    {
+        $default = array(
+            'defaultCoursePicture' => 0,
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'chapter_name' => '章',
+            'part_name' => '节',
+        );
 
-    //     return $default;
-    // }
+        return $default;
+    }
 
     public function ipBlacklistAction(Request $request)
     {
@@ -704,6 +707,12 @@ class SettingController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
         $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        $courseDefaultSet = $this->getCourseDefaultSet();
+        $defaultSetting = array_merge($courseDefaultSet, $courseDefaultSetting);
 
         $default = array(
             'welcome_message_enabled' => '0',
@@ -728,6 +737,32 @@ class SettingController extends BaseController
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
+
+            $defaultSetting = $request->request->all();
+
+            if (isset($defaultSetting['chapter_name'])) {
+                $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
+            } else {
+                $defaultSetting['chapter_name'] = '章';
+            }
+
+            if (isset($defaultSetting['part_name'])) {
+                $defaultSetting['part_name'] = $defaultSetting['part_name'];
+            } else {
+                $defaultSetting['part_name'] = '节';
+            }
+
+            $userDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+                'defaultCoursePicture','chapter_name',
+                'part_name'
+            ));
+
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default,$defaultSettings,$userDefaultSetting,$courseDefaultSetting);
+
+            $this->getSettingService()->set('course_default', $userDefaultSetting);
+            $this->getSettingService()->set('default', $defaultSetting);
+
             $courseSetting = $request->request->all();
 
             if (!isset($courseSetting['userinfoFields'])) {
@@ -759,6 +794,8 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'userFields' => $userFields,
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
         ));
     }
 

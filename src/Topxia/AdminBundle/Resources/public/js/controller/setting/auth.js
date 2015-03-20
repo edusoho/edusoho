@@ -28,8 +28,7 @@ define(function(require, exports, module) {
       $("#show-register-list").show();
       $("#show-list").hide();
     });
-  };
-
+  
   $("input[name=register_protective]").change(function() {
 
     var type = $('input[name=register_protective]:checked').val();
@@ -40,47 +39,50 @@ define(function(require, exports, module) {
 
   });
 
-  var $avatarForm = $("#avatar-form");
+  // var $avatarForm = $("#avatar-form");
 
-  avatarValidator = new Validator({
-    element: $avatarForm
-  })
+  // avatarValidator = new Validator({
+  //   element: $avatarForm
+  // })
 
-  avatarValidator.addItem({
-    element: '#avatar-field',
-    required: true,
-    rule: 'maxsize_image',
-    errormessageRequired: '请选择要上传的默认头像文件'
-  });
+  // avatarValidator.addItem({
+  //   element: '#avatar-field',
+  //   required: true,
+  //   rule: 'maxsize_image',
+  //   errormessageRequired: '请选择要上传的默认头像文件'
+  // });
 
 
-  var $defaultAvatar = $("[name=defaultAvatar]");
+  // var $defaultAvatar = $("[name=defaultAvatar]");
 
-  $("[name=avatar]").change(function() {
-    $defaultAvatar.val($("[name=avatar]:checked").val());
-  });
+  // $("[name=avatar]").change(function() {
+  //   $defaultAvatar.val($("[name=avatar]:checked").val());
+  // });
 
-  if ($('[name=avatar]:checked').val() == 0) $('#avatar-class').hide();
-  if ($('[name=avatar]:checked').val() == 1) $('#system-avatar-class').hide();
+  // if ($('[name=avatar]:checked').val() == 0) $('#avatar-class').hide();
+  // if ($('[name=avatar]:checked').val() == 1) $('#system-avatar-class').hide();
 
-  $("[name=avatar]").on("click", function() {
-    if ($("[name=avatar]:checked").val() == 0) {
-      $('#system-avatar-class').show();
-      $('#avatar-class').hide();
-    }
-    if ($("[name=avatar]:checked").val() == 1) {
-      $('#system-avatar-class').hide();
-      $('#avatar-class').show();
-    }
-  });
+  // $("[name=avatar]").on("click", function() {
+  //   if ($("[name=avatar]:checked").val() == 0) {
+  //     $('#system-avatar-class').show();
+  //     $('#avatar-class').hide();
+  //   }
+  //   if ($("[name=avatar]:checked").val() == 1) {
+  //     $('#system-avatar-class').hide();
+  //     $('#avatar-class').show();
+  //   }
+  // });
 
-  var validator = new Validator({
-    element: '#auth-form'
-  });
+  // var validator = new Validator({
+  //   element: '#auth-form'
+  // });
 
-  validator.addItem({
-    element: '[name="user_name"]',
-    required: true
-  });
+  // validator.addItem({
+  //   element: '[name="user_name"]',
+  //   required: true
+  // });
+  
+  };
+
 
 });
