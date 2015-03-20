@@ -242,6 +242,12 @@ class SettingController extends BaseController
     public function authAction(Request $request)
     {
         $auth = $this->getSettingService()->get('auth', array());
+        // $defaultSetting = $this->getSettingService()->get('default', array());
+        // $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        // $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        // $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        // $defaultSets = $this->getDefaultSet();
+        // $defaultSetting = array_merge($defaultSets, $defaultSetting);
 
         $default = array(
             'register_mode' => 'closed',
@@ -273,6 +279,18 @@ class SettingController extends BaseController
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
+            // $defaultSetting = $request->request->all();
+
+            // if (isset($defaultSetting['user_name'])) {
+            //     $defaultSetting['user_name'] = $defaultSetting['user_name'];
+            // } else {
+            //     $defaultSetting['user_name'] = '学员';
+            // }
+
+            // $default = $this->getSettingService()->get('default', array());
+            // $defaultSetting = array_merge($default, $defaultSetting);
+
+            // $this->getSettingService()->set('default', $defaultSetting);
 
             if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
                 $firstSettingTime = $auth['setting_time'];
@@ -528,6 +546,40 @@ class SettingController extends BaseController
 
         return $default;
     }
+
+    // private function getUserDefaultSet()
+    // {
+    //     $default = array(
+    //         'defaultAvatar' => 0,
+    //         'defaultAvatarFileName' => 'avatar',
+    //         'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+    //         'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+    //         'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+    //         'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+    //         'user_name' => '学员',
+    //     );
+
+    //     return $default;
+    // }
+
+    // private function getDefaultSet()
+    // {
+    //     $default = array(
+    //         'defaultAvatar' => 0,
+    //         'defaultCoursePicture' => 0,
+    //         'defaultAvatarFileName' => 'avatar',
+    //         'defaultCoursePictureFileName' => 'coursePicture',
+    //         'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+    //         'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+    //         'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+    //         'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+    //         'user_name' => '学员',
+    //         'chapter_name' => '章',
+    //         'part_name' => '节',
+    //     );
+
+    //     return $default;
+    // }
 
     public function ipBlacklistAction(Request $request)
     {
