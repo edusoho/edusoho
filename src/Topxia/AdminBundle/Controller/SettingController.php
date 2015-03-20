@@ -791,6 +791,7 @@ class SettingController extends BaseController
             }
 
         }
+        var_dump($this->getSettingService()->get('default', array()));
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'userFields' => $userFields,
