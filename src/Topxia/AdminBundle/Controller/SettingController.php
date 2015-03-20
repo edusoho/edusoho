@@ -651,9 +651,7 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
-
-        $client = LiveClientFactory::createClient();
-        $capacity = $client->getCapacity();
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
 
         $default = array(
             'welcome_message_enabled' => '0',
@@ -667,7 +665,6 @@ class SettingController extends BaseController
             'relatedCourses' => '0',
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
-            'live_course_enabled' => '0',
             'userinfoFields' => array(),
             "userinfoFieldNameArray" => array(),
             "copy_enabled" => '0',
@@ -675,6 +672,7 @@ class SettingController extends BaseController
         );
 
         $this->getSettingService()->set('course', $courseSetting);
+        $this->getSettingService()->set('live-course', $liveCourseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
@@ -688,14 +686,13 @@ class SettingController extends BaseController
                 $courseSetting['userinfoFieldNameArray'] = array();
             }
 
-            $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $courseSetting = array_merge($courseSetting,$liveCourseSetting);
 
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success', '课程设置已保存！');
         }
-
-        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -707,10 +704,41 @@ class SettingController extends BaseController
             }
 
         }
-
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'userFields' => $userFields,
+        ));
+    }
+
+    public function liveCourseSettingAction(Request $request)
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $client = LiveClientFactory::createClient();
+        $capacity = $client->getCapacity();
+
+        $default = array(
+            'live_course_enabled' => '0',
+        );
+
+        $this->getSettingService()->set('course', $courseSetting);
+        $this->getSettingService()->set('live-course', $liveCourseSetting);
+        $setting = array_merge($default, $liveCourseSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $liveCourseSetting = $request->request->all();
+            $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $setting = array_merge($courseSetting,$liveCourseSetting);
+
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
+            $this->getSettingService()->set('course', $setting);
+            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $setting);
+            $this->setFlashMessage('success', '课程设置已保存！');
+        }
+
+        $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+        return $this->render('TopxiaAdminBundle:System:live-course-setting.html.twig', array(
+            'courseSetting' => $setting,
         ));
     }
 

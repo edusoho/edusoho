@@ -671,14 +671,14 @@ admin_setting_course:
     mode: page
     type: tab
     active: course_setting
-# admin_setting_live_course:
-#     name: 直播
-#     parent: admin_setting_course_setting
-#     router_name: admin_setting_theme
-#     router_params: null
-#     mode: page
-#     type: tab
-#     active: theme
+admin_setting_live_course:
+    name: 直播
+    parent: admin_setting_course_setting
+    router_name: admin_setting_live_course_setting
+    router_params: null
+    mode: page
+    type: tab
+    active: live_course_setting
 admin_setting_questions_setting:
     name: 题库
     parent: admin_setting_course_setting
