@@ -172,7 +172,6 @@ class OrderController extends BaseController
         if ($request->getMethod() == 'POST') {
             $code = $request->request->get('code');
 
-
             //判断coupon是否合法，是否存在跟是否过期跟是否可用于当前课程
             $course = $this->getCourseService()->getCourse($id);
             $coinSetting = $this->setting("coin");
@@ -217,7 +216,8 @@ class OrderController extends BaseController
             list($success, $order) = $this->getOrderService()->payOrder($payData);
             if ($order['status'] == 'paid' and $successCallback) {
                 $successCallback($success, $order);
-
+            }
+            
             if (!in_array($type, array('course', 'vip', 'classroom'))) {
                 throw new \RuntimeException('优惠码不支持的购买项目。');
 
