@@ -752,15 +752,14 @@ class SettingController extends BaseController
                 $defaultSetting['part_name'] = '节';
             }
 
-            $userDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+            $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
                 'defaultCoursePicture','chapter_name',
                 'part_name'
             ));
+            $this->getSettingService()->set('course_default', $courseDefaultSetting);
 
             $default = $this->getSettingService()->get('default', array());
-            $defaultSetting = array_merge($default,$defaultSettings,$userDefaultSetting,$courseDefaultSetting);
-
-            $this->getSettingService()->set('course_default', $userDefaultSetting);
+            $defaultSetting = array_merge($default,$userDefaultSetting,$courseDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
 
             $courseSetting = $request->request->all();
@@ -791,7 +790,6 @@ class SettingController extends BaseController
             }
 
         }
-        var_dump($this->getSettingService()->get('default', array()));
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'userFields' => $userFields,
