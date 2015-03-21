@@ -203,8 +203,7 @@ class CourseManageController extends BaseController
             }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
-            $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
-            if (!empty($plugin)) {
+            if ($this->isPluginInstalled("DiscountActivity")) {
                 $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($id, $currentTime=time());
                 if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountActivityId'])) {
                     $this->getCourseService()->setCoursePrice(
@@ -448,11 +447,6 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getDiscountActivityService() 
