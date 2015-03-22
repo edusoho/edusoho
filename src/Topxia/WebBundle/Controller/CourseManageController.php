@@ -224,7 +224,7 @@ class CourseManageController extends BaseController
 
         response:
 
-        if ($course['discountActivityId'] > 0){
+        if (($course['discountActivityId'] > 0)&&($this->isPluginInstalled("DiscountActivity"))){
             $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountActivityId']);
         }
 

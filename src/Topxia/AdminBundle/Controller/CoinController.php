@@ -178,7 +178,7 @@ class CoinController extends BaseController
         $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
 
         foreach ($data as $key => $value) {
-            $course = $course = $this->getCourseService()->getCourse($key);
+            $course = $this->getCourseService()->getCourse($key);
             $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
 
             if (!empty($plugin)) {

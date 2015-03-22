@@ -27,7 +27,7 @@
                                                             {% if course.discountActivityId > 0 and course.status == 'published' %}
                                                                 <br>
                                                                 <span class="text-muted" style="white-space: normal;">                    
-                                                                    当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                                                                    当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             {% if course.coinPrice > 0 %}
                                 {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
                             {% else %}
@@ -58,7 +58,7 @@
                                                             {% if course.discountActivityId > 0 and course.status == 'published'  %}
                                                                 <br>
                                                                 <span class="text-muted" style="white-space: normal;">
-                                                                    当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                                                                    当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             {% if course.coinPrice > 0 %}
                                 {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
                             {% else %}
@@ -90,7 +90,7 @@
                                                                 {% if course.discountActivityId > 0 and course.status == 'published' %}
                                                                     <br>
                                                                     <span class="text-muted" style="white-space: normal;">
-                                                                        当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                                                                        当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             {% if course.coinPrice > 0 %}
                                 {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
                             {% else %}
@@ -120,7 +120,7 @@
                                                     <div class="help-block" >
                                                         {% if course.discountActivityId > 0  and course.status == 'published' %}
                                                             <span class="text-muted" style="white-space: normal;">
-                                                                当前课程处于活动“{{ course.discountActivity.activityName }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                                                                当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             {% if course.coinPrice > 0 %}
                                 {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
                             {% else %}

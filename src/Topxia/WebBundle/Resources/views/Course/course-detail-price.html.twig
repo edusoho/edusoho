@@ -105,8 +105,8 @@
 
   <p>
     <label>活动</label>
-    <span class="activity">{{ course.discountActivity.activityName }}</span>
-    <span id="activity-left-time" data-activity-endtime="{{ course.discountActivity.endTime }}"><span class="glyphicon glyphicon-time"></span><span id="hours-left"></span>时<span id="minutes-left"></span>分<span id="seconds-left"></span>秒</span>
+    <span class="activity">{{ (course.discountActivity.activityName)|default('') }}</span>
+    <span id="activity-left-time" data-activity-endtime="{{ (course.discountActivity.endTime)|default(0) }}"><span class="glyphicon glyphicon-time"></span><span id="hours-left"></span>时<span id="minutes-left"></span>分<span id="seconds-left"></span>秒</span>
   </p>
 {% endif %}
 
