@@ -25,6 +25,10 @@ class OrderController extends BaseController
         }
 
         $processor = OrderProcessorFactory::create($targetType);
+        $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
+        if (array_key_exists('error', $checkInfo)) {
+            return $this->createMessageResponse('error', $checkInfo['error']);
+        }
 
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
@@ -41,12 +45,7 @@ class OrderController extends BaseController
             $formData['coinRate'] = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
             $formData['payment'] = 'alipay';
-
-            try {
-                $order = $processor->createOrder($formData, $fields);
-            } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage());
-            }
+            $order = $processor->createOrder($formData, $fields);
 
             if ($order['status'] == 'paid') {
                 return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order['targetId'])));
