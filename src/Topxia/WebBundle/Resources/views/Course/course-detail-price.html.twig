@@ -76,7 +76,15 @@
     <p class="clearfix">
       <label class="pull-left">折后价</label>
       <span class="money-num pull-left"><span id="price-after-discount">{{ course.coinPrice }}</span> {{setting('coin.coin_name', '虚拟币')}}</span>
-      <span class="discount-tag">{{ (newPrice/oldPrice*10)|round(2,'common') }}折</span>
+      <span class="discount-tag">
+        {% if newPrice != 0 %}
+          {% if oldPrice != 0 %}
+            {{ (newPrice/oldPrice*10)|round(2,'common') }}折
+          {% endif %}
+        {% else %}
+          免费
+        {% endif %}
+      </span>
     </p>
 
     <p>
@@ -92,7 +100,15 @@
     <p class="clearfix">
       <label class="pull-left">折后价</label>
       <span class="money-num pull-left">¥<span id="price-after-discount">{{ course.price }}</span></span>
-      <span class="discount-tag">{{ (newPrice/oldPrice*10)|round(2,'common') }}折</span>
+      <span class="discount-tag">
+        {% if newPrice != 0 %}
+          {% if oldPrice != 0 %}
+            {{ (newPrice/oldPrice*10)|round(2,'common') }}折
+          {% endif %}
+        {% else %}
+          免费
+        {% endif %}
+      </span>
     </p>
 
     <p>
