@@ -19,12 +19,6 @@ function ListController($scope, $http, $state, $stateParams)
 		});
   	};
 
-  	$scope.showDetail = function(id){
-  		angular.broadCast.send("showDetailBroadCast", 
-  			{ "id" : id}
-  		);
-  	};
-
   	var queryArticelList = function(success){
   		document.title = $scope.categoryName ? "网校资讯 - " + $scope.categoryName  : "网校资讯";
   		var el=Zepto.loading({
@@ -100,17 +94,10 @@ function CategoryController($scope, $http, $state)
 
 function DetailController($scope, $http, $stateParams)
 {
-	$scope.showMode = "";
-	$scope.detailContentHeight = "0px";
-	angular.broadCast.bind("showDetailBroadCast", function(event, msg){
-  		console.log("showDetailBroadCast " + msg);
-  		var articleId = msg.id;
-	      navigator.cordovaUtil.createMenu();
-	      $scope.showMode = "ng-enter";
-		$scope.detailContentHeight = document.body.clientHeight + "px";
-		$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
-	    		$scope.content = data.content;
-	    		document.title = data.title;
-	  	});
+	var articleId = $stateParams.id;
+      navigator.cordovaUtil.createMenu();
+	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
+    		$scope.content = data.content;
+    		document.title = data.title;
   	});
 }

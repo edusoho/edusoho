@@ -63,8 +63,10 @@ img{
 .ng-enter, .ng-leave      { 
 	position:absolute; 
 	background-color: white;
-	top: 5px;
+	top: 0px;
 	z-index: 10000;
+	height: 100%;
+	width: 100%;
 	transition:0.5s all ease; 
 	-moz-transition:0.5s all ease; 
 	-webkit-transition:0.5s all ease; 

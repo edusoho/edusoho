@@ -79,12 +79,13 @@ define(function(require, exports, module) {
 				"articleList" : {
 					templateUrl : '/bundles/topxiamobilebundlev2/article/view/list.html',
 					controller : ListController
-				},
-				"detail" : {
-					template : "<div on-content-loaded='content'></div>",
-					controller : DetailController
 				}
 			}
+		}).
+		state("detail", {
+			url : "/detail/:id",
+			template : "<div on-content-loaded='content'></div>",
+			controller : DetailController
 		});
 	}]);
 

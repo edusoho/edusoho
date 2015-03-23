@@ -1,6 +1,6 @@
 <ul class="ui-list ui-list-link ui-border-tb">
     <li class="ui-border-t" ng-repeat="article in articles" >
-    	<a ng-click="showDetail(article.id)">
+    	<a ui-sref="detail({ id : article.id })">
 	        <div class="ui-list-img" ng-style="{ 'width' : article.thumb ? auto : 0}">
 	            <span style="background-image:url({{ article.thumb}})"></span>
 	        </div>
