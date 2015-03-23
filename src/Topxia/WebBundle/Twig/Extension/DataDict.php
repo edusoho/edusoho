@@ -232,7 +232,7 @@ class DataDict
     		'close'=>'关闭',
     	),
     	'secureQuestion' => array(
-    		'parents' => '你的父母名字', 
+    		'parents' => '你的父/母名字', 
     		'teacher' => '你的老师名字', 
     		'lover' => '你的爱人的名字', 
     		'schoolName' => '你的母校名字', 
