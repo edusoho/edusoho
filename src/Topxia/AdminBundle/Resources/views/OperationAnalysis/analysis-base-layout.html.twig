@@ -36,22 +36,18 @@
         <div class="form-group">
           <a type="button"  class="btn btn-default " id="btn-lastThreeMonths" lastThreeMonthsStart="{{dataInfo.lastThreeMonthsStart}}" lastThreeMonthsEnd="{{dataInfo.lastThreeMonthsEnd}}">近三月</a>
         </div>
-        <br>
-        <div class="form-group mtl">
-          <label class="col-md-4" style="padding-top:9px;">起始日期</label>
-            <div class="col-md-8 ">
-            <input type="text" class="form-control" name="startTime" value="{{dataInfo.startTime}}">
-          </div>
+
+        <div class="form-group mll">
+          <label class="ptm" >起始日期</label>
+            <input type="text" class="form-control analysis-input mls" name="startTime" value="{{dataInfo.startTime}}">
         </div>
 
-        <div class="form-group mtl">
-          <label class="col-md-4" style="padding-top:9px;">截止日期</label>
-             <div class="col-md-8 ">
-            <input type="text" class="form-control"  name="endTime" value="{{dataInfo.endTime}}">
-            </div>
+        <div class="form-group mls">
+          <label class="ptm" >截止日期</label>
+            <input type="text" class="form-control analysis-input mls"  name="endTime" value="{{dataInfo.endTime}}">
         </div>
 
-        <button class="btn btn-primary pull-right mtl mrl" id="btn-search">查询</button>
+        <button class="btn btn-primary pull-right" id="btn-search">查询</button>
       </form>
 
       {% if showHelpMessage|default(null ) == 1 %}

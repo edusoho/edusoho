@@ -1,15 +1,13 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}直播管理 - {{ parent() }}{% endblock %}
-
 {% set menu = 'live-course' %}
-
+{% set type = 'live-course'%}
+{% set tab_menus = permissions('admin_live_course','tab') %}
+{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,type) }}{% endblock %}
 {% block main %}
 
   <div class="mbl">
-  {% set type = 'live-course'%}
-  {% set menus = permissions('admin_live_course','tab') %}
-  {{ admin_macro.tab_group(menus,type) }}
+      {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : type} %}
   </div>
   
   {% include 'TopxiaAdminBundle:LiveCourse:tab.html.twig' %}

@@ -242,6 +242,12 @@ class SettingController extends BaseController
     public function authAction(Request $request)
     {
         $auth = $this->getSettingService()->get('auth', array());
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        $userDefaultSet = $this->getUserDefaultSet();
+        $defaultSetting = array_merge($userDefaultSet, $userDefaultSetting);
 
         $default = array(
             'register_mode' => 'closed',
@@ -273,6 +279,22 @@ class SettingController extends BaseController
 
         $auth = array_merge($default, $auth);
         if ($request->getMethod() == 'POST') {
+            $defaultSetting = $request->request->all();
+
+            if (isset($defaultSetting['user_name'])) {
+                $defaultSetting['user_name'] = $defaultSetting['user_name'];
+            } else {
+                $defaultSetting['user_name'] = '学员';
+            }
+            $userDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+                'defaultAvatar','user_name'
+            ));
+
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default,$defaultSettings,$courseDefaultSetting,$userDefaultSetting);
+
+            $this->getSettingService()->set('user_default', $userDefaultSetting);
+            $this->getSettingService()->set('default', $defaultSetting);
 
             if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
                 $firstSettingTime = $auth['setting_time'];
@@ -316,6 +338,8 @@ class SettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
             'auth' => $auth,
             'userFields' => $userFields,
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
         ));
     }
     
@@ -529,6 +553,37 @@ class SettingController extends BaseController
         return $default;
     }
 
+    private function getUserDefaultSet()
+    {
+        $default = array(
+            'defaultAvatar' => 0,
+            'defaultAvatarFileName' => 'avatar',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'user_name' => '学员',
+        );
+
+        return $default;
+    }
+
+    private function getCourseDefaultSet()
+    {
+        $default = array(
+            'defaultCoursePicture' => 0,
+            'defaultCoursePictureFileName' => 'coursePicture',
+            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'chapter_name' => '章',
+            'part_name' => '节',
+        );
+
+        return $default;
+    }
+
     public function ipBlacklistAction(Request $request)
     {
         $ips = $this->getSettingService()->get('blacklist_ip', array());
@@ -651,9 +706,13 @@ class SettingController extends BaseController
     public function courseSettingAction(Request $request)
     {
         $courseSetting = $this->getSettingService()->get('course', array());
-
-        $client = LiveClientFactory::createClient();
-        $capacity = $client->getCapacity();
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $defaultSettings = $this->getSettingService()->get('default', array());
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        $courseDefaultSet = $this->getCourseDefaultSet();
+        $defaultSetting = array_merge($courseDefaultSet, $courseDefaultSetting);
 
         $default = array(
             'welcome_message_enabled' => '0',
@@ -667,7 +726,6 @@ class SettingController extends BaseController
             'relatedCourses' => '0',
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
-            'live_course_enabled' => '0',
             'userinfoFields' => array(),
             "userinfoFieldNameArray" => array(),
             "copy_enabled" => '0',
@@ -675,9 +733,35 @@ class SettingController extends BaseController
         );
 
         $this->getSettingService()->set('course', $courseSetting);
+        $this->getSettingService()->set('live-course', $liveCourseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
         if ($request->getMethod() == 'POST') {
+
+            $defaultSetting = $request->request->all();
+
+            if (isset($defaultSetting['chapter_name'])) {
+                $defaultSetting['chapter_name'] = $defaultSetting['chapter_name'];
+            } else {
+                $defaultSetting['chapter_name'] = '章';
+            }
+
+            if (isset($defaultSetting['part_name'])) {
+                $defaultSetting['part_name'] = $defaultSetting['part_name'];
+            } else {
+                $defaultSetting['part_name'] = '节';
+            }
+
+            $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+                'defaultCoursePicture','chapter_name',
+                'part_name'
+            ));
+            $this->getSettingService()->set('course_default', $courseDefaultSetting);
+
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default,$userDefaultSetting,$courseDefaultSetting);
+            $this->getSettingService()->set('default', $defaultSetting);
+
             $courseSetting = $request->request->all();
 
             if (!isset($courseSetting['userinfoFields'])) {
@@ -688,14 +772,13 @@ class SettingController extends BaseController
                 $courseSetting['userinfoFieldNameArray'] = array();
             }
 
-            $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $courseSetting = array_merge($courseSetting,$liveCourseSetting);
 
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', "更新课程设置", $courseSetting);
             $this->setFlashMessage('success', '课程设置已保存！');
         }
-
-        $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
@@ -707,10 +790,43 @@ class SettingController extends BaseController
             }
 
         }
-
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'userFields' => $userFields,
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
+        ));
+    }
+
+    public function liveCourseSettingAction(Request $request)
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $liveCourseSetting = $this->getSettingService()->get('live-course', array());
+        $client = LiveClientFactory::createClient();
+        $capacity = $client->getCapacity();
+
+        $default = array(
+            'live_course_enabled' => '0',
+        );
+
+        $this->getSettingService()->set('course', $courseSetting);
+        $this->getSettingService()->set('live-course', $liveCourseSetting);
+        $setting = array_merge($default, $liveCourseSetting);
+
+        if ($request->getMethod() == 'POST') {
+            $liveCourseSetting = $request->request->all();
+            $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+            $setting = array_merge($courseSetting,$liveCourseSetting);
+
+            $this->getSettingService()->set('live-course', $liveCourseSetting);
+            $this->getSettingService()->set('course', $setting);
+            $this->getLogService()->info('system', 'update_settings', "更新课程设置", $setting);
+            $this->setFlashMessage('success', '课程设置已保存！');
+        }
+
+        $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
+        return $this->render('TopxiaAdminBundle:System:live-course-setting.html.twig', array(
+            'courseSetting' => $setting,
         ));
     }
 
