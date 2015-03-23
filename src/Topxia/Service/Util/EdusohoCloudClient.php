@@ -12,7 +12,7 @@ class EdusohoCloudClient implements CloudClient
 
 	protected $secretKey;
 
-	protected $userAgent = 'Edusoho Cloud Client 1.0';
+	protected $userAgent = 'EduSoho Cloud Client 1.0';
 
 	protected $connectTimeout = 10;
 
