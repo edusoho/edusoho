@@ -3,7 +3,7 @@
   <div class="form-group">
     <div class="col-md-6 col-md-offset-3">
       <div class="alert alert-danger key-error-alert">
-        授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。
+        {{ '授权码不正确，请重新设置！如您是商业用户，请联系EduSoho官方。'|remove_copyright }}
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
         <p class="form-control-static text-success">{{ info.licenseDomains }} <span class="text-success">(已绑定)</span></p>
         {% if currentHost not in info.licenseDomains|split(';') %}
           <div class="alert alert-danger">
-            当前域名{{ currentHost }} 与授权域名不符，将会影响EduSoho系统功能的使用；请使用授权域名访问此系统。
+            当前域名{{ currentHost }} 与授权域名不符，将会影响{{ EduSoho|remove_copyright }}系统功能的使用；请使用授权域名访问此系统。
           </div>
         {% endif %}
       </div>

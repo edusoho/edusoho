@@ -45,6 +45,7 @@ class WebExtension extends \Twig_Extension
             'purify_html' => new \Twig_Filter_Method($this, 'getPurifyHtml'),
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
+            'remove_copyright' => new \Twig_Filter_Method($this, 'removeCopyright'),
         );
     }
 
@@ -826,6 +827,14 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function removeCopyright($source)
+    {
+        if ($this->getSetting('copyright.owned', false)) {
+            $source = str_ireplace('edusoho', '', $source);
+        }
+        return $source;
     }
 
     public function getSetting($name, $default = null)
