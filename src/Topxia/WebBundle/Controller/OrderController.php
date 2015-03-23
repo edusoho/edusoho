@@ -41,7 +41,12 @@ class OrderController extends BaseController
             $formData['coinRate'] = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
             $formData['payment'] = 'alipay';
-            $order = $processor->createOrder($formData, $fields);
+
+            try {
+                $order = $processor->createOrder($formData, $fields);
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage());
+            }
 
             if ($order['status'] == 'paid') {
                 return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order['targetId'])));
