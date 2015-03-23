@@ -26,7 +26,7 @@ class OrderController extends BaseController
 
         $processor = OrderProcessorFactory::create($targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
-        if (array_key_exists('error', $checkInfo)) {
+        if (isset($checkInfo['error'])) {
             return $this->createMessageResponse('error', $checkInfo['error']);
         }
 
