@@ -3905,6 +3905,10 @@ body {
   margin-bottom: 18px;
 }
 
+.question-eassy-form-control img {
+  max-width: 100%;
+}
+
 .testpaper-status .label {
   padding: 5px 25px;
   border-radius: 3px;
@@ -4160,6 +4164,14 @@ body {
 
 .testpaper-question-essay .testpaper-question-result {
   float: none;
+}
+
+.testpaper-question-essay .testpaper-question-result img {
+  max-width: 100%;
+}
+
+.question-essay .question-body img {
+  max-width: 100%;
 }
 
 .testpaper-question-result {
