@@ -297,7 +297,7 @@ class CourseController extends BaseController
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
-				if(in_array($classroomMember["role"], array("student"))) {
+				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
 					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
 				}
 			}
