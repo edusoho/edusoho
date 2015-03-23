@@ -77,7 +77,7 @@ class DefaultController extends BaseController
 
     public function getCloudNoticesAction(Request $request)
     {
-        $userAgent = 'Open Edusoho App Client 1.0';
+        $userAgent = 'Open EduSoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
         $url = "http://open.edusoho.com/api/v1/context/notice";
