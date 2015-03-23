@@ -144,7 +144,11 @@ class GroupController extends BaseController
 
         $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
 
+        $this->getNotifiactionService()->notify($group['ownerId'],'default',"您的小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a> 被管理员转移给了用户 <a href=\"/user/{$user['id']}\">'{$user['nickname']}'</a>");
+
         $this->getGroupService()->updateGroup($groupId,array('ownerId'=>$user['id']));
+
+        $this->getNotifiactionService()->notify($user['id'],'default',"您获得了小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a>的管理权限");
 
         $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$user['id']);
 
