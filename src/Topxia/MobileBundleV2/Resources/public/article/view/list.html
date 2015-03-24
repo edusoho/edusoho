@@ -1,7 +1,7 @@
 <ion-content>
-	<ul class="ui-list ui-list-link ui-border-tb">
-	    <li class="ui-border-t" ng-repeat="article in articles" >
-	    	<a href="#/detail/{{ article.id}}">
+	<ion-list>
+	  <ion-item ng-repeat="article in articles">
+	    <a href="#/detail/{{ article.id}}">
 		        <div class="ui-list-img" ng-style="{ 'width' : article.thumb ? auto : 0}">
 		            <span style="background-image:url({{ article.thumb}})"></span>
 		        </div>
@@ -10,8 +10,9 @@
 		            <p ng-bind-html="article.body | limitTo:40"></p>
 		        </div>
 	           </a>
-	    </li>
-	</ul>
+	  </ion-item>
+	</ion-list>
+	
 	<div class="ui-center low-height" ng-show="isShowLoadMore">
 	    <div class="ui-btn" ng-click="loadMore()">加载更多</div>
 	</div>
