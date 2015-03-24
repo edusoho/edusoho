@@ -32,7 +32,6 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
         return $this->getGoods($this->getConnection()->lastInsertId());
     }
 
-    //@sqlbug
     public function waveGoods($id, $field, $diff)
     {
         $fields = array('hitNum');
