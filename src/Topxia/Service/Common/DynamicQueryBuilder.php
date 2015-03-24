@@ -29,11 +29,10 @@ class DynamicQueryBuilder extends QueryBuilder
     	}
 
         if($this->isInCondition($where)) {
-            $conditionName = $this->getConditionName($where);
-            return $this->addWhereIn($where, $conditionName, $this->conditions[$conditionName]);
-        } else {
-            return parent::andWhere($where);
+            return $this->addWhereIn($where);
         }
+
+        return parent::andWhere($where);
 
     }
 
@@ -42,24 +41,20 @@ class DynamicQueryBuilder extends QueryBuilder
     	return parent::andWhere($where);
     }
 
-    private function addWhereIn($where, $conditionName, $params)
+    private function addWhereIn($where)
     {
-        if(count($params) == 0) {
+        $conditionName = $this->getConditionName($where);
+        if (empty($this->conditions[$conditionName]) or !is_array($this->conditions[$conditionName])) {
             return $this;
         }
-        $sqlWhere = "";
-        foreach ($params as $index => $param) {
-            if(count($params) == ($index+1)) {
-                $sqlWhere .= ":{$conditionName}_".$index;
-            } else {
-                $sqlWhere .= ":{$conditionName}_".$index.",";
-            }
 
-            $this->conditions[$conditionName."_".$index] = $param;
+        $marks = array();
+        foreach (array_values($this->conditions[$conditionName]) as $index => $value) {
+            $marks[] = ":{$conditionName}_{$index}";
+             $this->conditions["{$conditionName}_{$index}"] = $value;
         }
-        $sqlWhere .= "";
         
-        $where = str_replace(":".$conditionName, $sqlWhere, $where);
+        $where = str_replace(":{$conditionName}", join(',', $marks), $where);
 
         return parent::andWhere($where);
     }
@@ -74,7 +69,7 @@ class DynamicQueryBuilder extends QueryBuilder
 
     private function isInCondition($where)
     {
-        $matched = preg_match('/ (IN) /', $where, $matches);
+        $matched = preg_match('/\s+(IN)\s+/', $where, $matches);
         if (empty($matched)) {
             return false;
         } else {
