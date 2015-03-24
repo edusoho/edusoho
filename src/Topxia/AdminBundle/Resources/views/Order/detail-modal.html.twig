@@ -32,7 +32,7 @@
       </tr>
       <tr> <th width="25%">购买者</th> 
         <td width="75%">
-          <strong>{{ admin_macro.user_link(user) }}</strong>
+          <strong>{{ user.nickname }}</strong>
         </td>
       </tr>
       <tr> <th width="25%">订单价格</th> 
@@ -100,7 +100,7 @@
                 </td>
                 <td>
                   {% if logUser %}
-                    {{ admin_macro.user_link(logUser) }}
+                    {{ logUser.nickname }}
                   {% else %}
                     --
                   {% endif %}
