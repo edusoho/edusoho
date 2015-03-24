@@ -32,8 +32,7 @@
       </tr>
       <tr> <th width="25%">购买者</th> 
         <td width="75%">
-            <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">
-                      <strong>{{ user.nickname }}</strong></a>
+          <strong>{{ admin_macro.user_link(user) }}</strong>
         </td>
       </tr>
       <tr> <th width="25%">订单价格</th> 
@@ -101,8 +100,7 @@
                 </td>
                 <td>
                   {% if logUser %}
-                              <a target="_blank" href="{{ path('user_show', {id:logUser.id}) }}">
-                      <strong>{{ logUser.nickname }}</strong></a>
+                    {{ admin_macro.user_link(logUser) }}
                   {% else %}
                     --
                   {% endif %}
