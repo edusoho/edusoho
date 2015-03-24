@@ -39,11 +39,14 @@ function ListController($scope, $http, broadCast)
 			$scope.isEmpty = data.length == 0;
 			$scope.isShowLoadMore = !(!data || data.length < $scope.limit);
 			$scope.data = data;
-	    		$scope.articles = $scope.articles.concat(data);
+			for (item in data) {
+	    			$scope.articles.push(data[item]);
+			}
 	    		if (success) {
 	    			success();
 	    		}
 	    		$scope.start += $scope.limit;
+	    		console.log($scope.articles);
 	  	}).error(function(){
 	  		el.loading("hide");
 	  	});
