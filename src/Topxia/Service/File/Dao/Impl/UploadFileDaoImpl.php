@@ -115,6 +115,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->andWhere('storage = :storage')
             ->andWhere('filename LIKE :filenameLike');
          
+         //@xxxbug
 		if (isset ( $conditions ['createdUserIds'] )) {
 			$builder->andStaticWhere ( 'createdUserId in (' . $conditions ['createdUserIds'] . ')' );
 		}
