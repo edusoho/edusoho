@@ -84,7 +84,7 @@ define(function(require, exports, module) {
 		state("detail", {
 			url : "/detail/:id",
 			views : {
-				"articleContent" : {
+				"articleContent" :{
 					template : "<ion-content><div on-content-loaded='content'></div></ion-content>",
 					controller : DetailController
 				}
