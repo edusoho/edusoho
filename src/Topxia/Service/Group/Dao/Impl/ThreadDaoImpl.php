@@ -48,7 +48,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $builder->execute()->fetchColumn(0); 
     }
     
-    //@sqlbug
     public function waveThread($id, $field, $diff) 
     {
         $fields = array('postNum','hitNum');
