@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
+    require('jquery.sortable');
     exports.run = function() {
 
         $('tbody').on('click', '.delete-btn', function() {
@@ -16,6 +17,14 @@ define(function(require, exports, module) {
                 }
             }, 'json');
 
+        });
+
+        var $list = $("#navigation-table").sortable({
+            distance: 20,
+            onDrop: function (item, container, _super) {
+                _super(item, container);
+                //sortList($list);
+            }
         });
     };
 
