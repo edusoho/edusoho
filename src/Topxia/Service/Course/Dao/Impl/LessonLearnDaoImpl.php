@@ -135,6 +135,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
             ->andWhere("finishedTime <= :endTime");
         }
 
+        //@xxxbug
         if (isset($conditions['courseIds'])) {
             $courseIds = array();
             foreach ($conditions['courseIds'] as $courseId) {

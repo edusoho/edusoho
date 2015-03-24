@@ -119,6 +119,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 			->andWhere('title LIKE :title')
 			->andWhere('content LIKE :content');
 
+        //@xxxbug
 		if (isset($conditions['courseIds'])) {
 			$courseIds = array();
 			foreach ($conditions['courseIds'] as $courseId) {

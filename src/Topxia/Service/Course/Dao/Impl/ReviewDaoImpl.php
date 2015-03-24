@@ -80,6 +80,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
     }
 
     //@sqlbug
+    //@xxxbug
     private function createReviewSearchBuilder($conditions)
     {
         if (isset($conditions['content'])) {

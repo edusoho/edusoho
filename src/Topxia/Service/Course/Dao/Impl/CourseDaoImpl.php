@@ -56,6 +56,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     }
 
     //@sqlbug
+    //@xxxbug
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
     {
 
@@ -71,6 +72,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     }
 
     //@sqlbug
+    //@xxxbug
     public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         if(empty($tagIds)){
@@ -148,6 +150,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     }
 
     //@sqlbug
+    // @xxxbug
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
@@ -205,10 +208,11 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['categoryIds'])) {
             $categoryIds = array();
             foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit((string)abs($categoryId))) {
-                    $categoryIds[] = $categoryId;
+                if (ctype_digit((string)$categoryId)) {
+                    $categoryIds[] = int($categoryId);
                 }
             }
+
             if ($categoryIds) {
                 $categoryIds = join(',', $categoryIds);
                 $builder->andStaticWhere("categoryId IN ($categoryIds)");
@@ -220,7 +224,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $vipLevelIds = array();
             foreach ($conditions['vipLevelIds'] as $vipLevelId) {
                 if (ctype_digit((string)$vipLevelId)) {
-                    $vipLevelIds[] = $vipLevelId;
+                    $vipLevelIds[] = int($vipLevelId);
                 }
             }
             if ($vipLevelIds) {
