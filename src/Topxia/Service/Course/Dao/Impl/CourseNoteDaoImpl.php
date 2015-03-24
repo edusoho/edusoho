@@ -78,7 +78,6 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $this->getConnection()->fetchColumn($sql, array($userId, $courseId));
 	}
 
-	//@sqlbug
 	private function createSearchNoteQueryBuilder($conditions)
 	{
 		if (isset($conditions['content'])) {
@@ -92,7 +91,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
 			->andWhere('lessonId = :lessonId')
 			->andWhere('status = :status')
             ->andWhere('content LIKE :content')
-			->andWhere('courseId IN {:courseIds}');
+			->andWhere('courseId IN (:courseIds)');
 
 		return $builder;
 	}

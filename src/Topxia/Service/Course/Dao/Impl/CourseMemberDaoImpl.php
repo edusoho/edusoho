@@ -223,7 +223,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
-    //@sqlbug
     private function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)

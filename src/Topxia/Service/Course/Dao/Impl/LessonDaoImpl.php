@@ -83,7 +83,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
-    //@sqlbug
+    //@todo:sql
     public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
@@ -97,7 +97,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
     }
 
-    //@sqlbug
+    //@todo:sql
     public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
