@@ -1,12 +1,15 @@
 <ion-content>
-	<div ng-repeat="article in articles">
-		<a class="item item-thumbnail-left" href="#/detail/{{ article.id}}">
-      			<img ng-src="{{article.thumb}}" ng-style="{ 'width' : article.thumb ? auto : 0}">
-      			<h2>{{ article.title | limitTo:15}}</h2>
-      			<p ng-bind-html="article.body | limitTo:40"></p>
-    		</a>
-	</div>
+	<ion-list>
+  <div collection-repeat="article in articles" >
 
+	    <a class="item item-thumbnail-left" href="#/detail/{{ article.id}}" ng-style="{ 'padding-left' : article.thumb ? auto : '10px'}">
+	      <img ng-src="{{ article.thumb }}" ng-style="{ 'width' : article.thumb ? auto : 0}">
+	      <h2>{{ article.title | limitTo:15}}</h2>
+		 <p ng-bind-html="article.body | limitTo:40"></p>
+	    </a>
+  </div>
+</ion-list>
+	
 	<div class="ui-center low-height" ng-show="isShowLoadMore">
 	    <div class="ui-btn" ng-click="loadMore()" ng-init="start=0">加载更多</div>
 	</div>
@@ -14,4 +17,4 @@
 	      <i></i>
 	      <p>没有相关资讯</p>
 	</section>
-<ion-content>
+</ion-content>
