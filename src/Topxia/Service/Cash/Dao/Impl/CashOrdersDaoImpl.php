@@ -35,7 +35,7 @@ class CashOrdersDaoImpl extends BaseDao implements CashOrdersDao
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getOrder($id);
     }
-
+    //@xxxbug
     public function closeOrders($time)
     {
         $sql = "UPDATE {$this->table} set status ='cancelled' WHERE status = 'created' and createdTime < {$time}";
