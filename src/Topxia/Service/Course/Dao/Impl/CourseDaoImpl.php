@@ -132,7 +132,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
     }
 
-    //@sqlbug
     public function waveCourse($id,$field,$diff)
     {
         $fields = array('hitNum');
@@ -145,8 +144,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
-    //@sqlbug
-    // @xxxbug
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
@@ -202,7 +199,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('smallPicture = :smallPicture')
             ->andWhere('categoryId IN ( :categoryIds )')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
-            // @todosql
             ->andWhere('id NOT IN ( :courseIds )');
 
         return $builder;
