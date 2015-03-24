@@ -117,21 +117,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('postNum = :postNum')
             ->andWhere('postNum > :postNumLargerThan')
 			->andWhere('title LIKE :title')
-			->andWhere('content LIKE :content');
-
-        //@xxxbug
-		if (isset($conditions['courseIds'])) {
-			$courseIds = array();
-			foreach ($conditions['courseIds'] as $courseId) {
-				if (ctype_digit($courseId)) {
-					$courseIds[] = $courseId;
-				}
-			}
-			if ($courseIds) {
-				$courseIds = join(',', $courseIds);
-				$builder->andStaticWhere("courseId IN ($courseIds)");
-			}
-		}
+            ->andWhere('content LIKE :content')
+			->andWhere('courseId IN (:courseIds)');
 
 		return $builder;
 	}

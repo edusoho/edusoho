@@ -234,21 +234,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')
-            ->andWhere('createdTime < :startTimeLessThan');
-
-        //@xxxbug
-        if (isset($conditions['courseIds'])) {
-            $courseIds = array();
-            foreach ($conditions['courseIds'] as $courseId) {
-                if (ctype_digit($courseId)) {
-                    $courseIds[] = $courseId;
-                }
-            }
-            if ($courseIds) {
-                $courseIds = join(',', $courseIds);
-                $builder->andStaticWhere("courseId IN ($courseIds)");
-            }
-        }
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('courseId IN (:courseIds)');
 
         return $builder;
     }
