@@ -12,7 +12,7 @@
   {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
 
 {% if itemResult.answer|default(null) or itemResult.answer == 0 %}
-  {% set choiceIndex = itemResult.answer|split(',') %}
+  {% set choiceIndex = itemResult.answer %}
 {% endif %}
   <div class="homework-question-result">
 
@@ -35,7 +35,7 @@
         {% endfor %}
        </strong>
     {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>你未答题
+　　　  <span class="glyphicon glyphicon-remove question-text-danger pull-left">你未答题</span>
     {% endif %}
 </div>
 

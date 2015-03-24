@@ -534,6 +534,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
 		}
 
+		$this->dispatchEvent("course.delete", array(
+            "id" => $id
+        ));
+
 		$this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
 		return true;
@@ -646,7 +650,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['status']!="finished")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'learnTime' => $learn['learnTime']+intval($time),
 		));
@@ -656,9 +659,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['status']!="finished" && $learn['videoStatus']=="playing")
+		if($learn['videoStatus']=="playing")
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
+				'updateTime' => time(),
 		));
 	}
 
@@ -668,6 +672,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'videoStatus' => 'playing',
+				'updateTime' => time(),
 		));
 	}
 
@@ -675,8 +680,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
+		$time = time() - $learn['updateTime'];
+		$time = ceil($time/60);
+		$this->waveWatchingTime($userId,$lessonId,$time);
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'videoStatus' => 'paused',
+				'updateTime' => time(),
 		));
 	}
 

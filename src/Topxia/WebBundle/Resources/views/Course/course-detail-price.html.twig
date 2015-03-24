@@ -1,0 +1,90 @@
+{% if setting('course.coursesPrice') == 0 %}
+{#
+<p>
+  价　格：
+  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+    {% if course.coinPrice > 0 %}
+      {% if free_limit_type(course) == 'free_now' %}
+        <span class="money-num">0.00</span>
+        <span class="money-text">{{setting('coin.coin_name')}}</span>
+        <span class="text-muted">(原价：<del>{{ course.coinPrice }}</del> {{setting('coin.coin_name')}})</span>
+        <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
+      {% else %}
+        <span class="course-price">
+          <span class="money-num">{{ course.coinPrice }}</span>
+          <span class="money-text" > {{setting('coin.coin_name')}}</span>
+        </span>
+      {% endif %}
+    {% else %}
+      <span class="money-num" style="font-size:16px;">免费</span>
+    {% endif %}
+  {% else %}
+    {% if course.price > 0 %}
+      {% if free_limit_type(course) == 'free_now' %}
+        <span class="money-num">0.00</span>
+        <span class="money-text">元</span>
+        <span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
+        <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
+      {% else %}
+      <span class="course-price" >
+        <span class="money-num">{{ course.price }}</span>
+        <span class="money-text">元</span>
+      </span>
+      {% endif %}
+    {% else %}
+      <span class="money-num" style="font-size:16px;">免费</span>
+    {% endif %}
+  {% endif %}
+</p>
+#}
+
+{#
+<p class="clearfix">
+  <label class="pull-left">折后价</label>
+  <span class="money-num pull-left">¥75.00</span>
+  <span class="discount-tag">8折</span>
+</p>
+
+<p>
+  <label>原价</label>
+  <span class="old-price">
+    <del>10</del>
+  </span>
+</p>
+#}
+
+  <span class="price-label">价格</span>
+  <span class="money-num">
+    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {% if course.coinPrice > 0 %}
+          {% if free_limit_type(course) == 'free_now' %}
+            0.00 {{setting('coin.coin_name', '虚拟币')}}
+          {% else %}
+            {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}}
+            </span>
+          {% endif %}
+        {% else %}
+          免费
+        {% endif %}
+      {% else %}
+        {% if course.price > 0 %}
+          {% if free_limit_type(course) == 'free_now' %}
+            ¥ 0.00
+          {% else %}
+            ¥ {{ course.price }}
+          </span>
+          {% endif %}
+        {% else %}
+          免费
+        {% endif %}
+      {% endif %}
+  </span>
+
+{#
+<p>
+  <label>活动</label>
+  <span class="activity">双十二活动</span>
+  <span><span class="glyphicon glyphicon-time"></span>22时53分44.12秒</span>
+</p>
+#}
+{% endif %}

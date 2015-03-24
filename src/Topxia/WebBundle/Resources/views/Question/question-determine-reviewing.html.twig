@@ -6,7 +6,7 @@
 
 {% block body %}
 
- {% set rightAnswerIndex = question.answer %}
+ {% set rightAnswerIndex = question.answer[0]|default(null) %}
 
   <div class="homework-question-result">
     {% if itemResult.status == 'right' %}
