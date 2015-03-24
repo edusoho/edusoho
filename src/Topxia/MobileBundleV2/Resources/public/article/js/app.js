@@ -5,8 +5,7 @@ define(function(require, exports, module) {
 	require("frozen");
 
 	var app = angular.module('EduSohoArticleApp', [
-		'ui.router',
-		'ngSanitize',
+		'ionic',
 		'AppControllers',
 		'AppServices'
 		]);
@@ -76,7 +75,7 @@ define(function(require, exports, module) {
 					templateUrl : '/bundles/topxiamobilebundlev2/article/view/category.html',
 					controller : CategoryController
 				},
-				"articleList" : {
+				"articleContent" : {
 					templateUrl : '/bundles/topxiamobilebundlev2/article/view/list.html',
 					controller : ListController
 				}
@@ -84,17 +83,17 @@ define(function(require, exports, module) {
 		}).
 		state("detail", {
 			url : "/detail/:id",
-			template : "<div on-content-loaded='content'></div>",
-			controller : DetailController
+			views : {
+				"articleContent" : {
+					template : "<ion-content><div on-content-loaded='content'></div></ion-content>",
+					controller : DetailController
+				}
+			}
 		});
 	}]);
 
 	angular.element(document).ready(function() {
 		         angular.bootstrap(document, ['EduSohoArticleApp']);
 		         angular.$client = {};
-
-		         var $injector = angular.injector(['EduSohoArticleApp']);
-		         angular.broadCast = $injector.get("broadCast");
-		         angular.imageUtil = $injector.get("ImageUtil");
 	});
 });

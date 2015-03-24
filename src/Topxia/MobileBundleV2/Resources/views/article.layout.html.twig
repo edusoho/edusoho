@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 {% block stylesheets %}
 
-<link href="{{ asset('bundles/topxiamobilebundlev2/css/forzen/1.2.1/css/global.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/libs/ionic/1.0.0/css/ionic.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.2.1/css/global.css') }}" rel="stylesheet" />
 <link href="{{ asset('bundles/topxiamobilebundlev2/css/ui-style.css') }}" rel="stylesheet" />
 {% endblock %}
 
@@ -38,7 +39,7 @@
         "AppDirectives": "article/js/directive.js",
         "AppServices": "article/js/service.js",
         "zepto": "libs/zepto.min.js",
-        "frozen": "js/frozen/frozen.js",
+        "frozen": "libs/frozen/1.2.1/js/frozen.js",
         "app": "article/js/app.js"
       }
     })

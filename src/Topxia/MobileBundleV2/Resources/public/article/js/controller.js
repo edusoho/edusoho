@@ -1,10 +1,10 @@
 var appControllers = angular.module('AppControllers', []);
 
-appControllers.controller('ListController', ['$scope', '$http', '$state', '$stateParams', ListController]);
-appControllers.controller('CategoryController', ['$scope', '$http', '$state', CategoryController]);
+appControllers.controller('ListController', ['$scope', '$http', 'broadCast', ListController]);
+appControllers.controller('CategoryController', ['$scope', '$http', '$state', 'broadCast', CategoryController]);
 appControllers.controller('DetailController', ['$scope', '$http', '$stateParams', DetailController]);
 
-function ListController($scope, $http, $state, $stateParams)
+function ListController($scope, $http, broadCast)
 {
 	$scope.limit = 10;
 	$scope.categoryId = 0;
@@ -50,7 +50,7 @@ function ListController($scope, $http, $state, $stateParams)
 
   	queryArticelList(); 
 
-  	angular.broadCast.bind("changeCategoryBroadCast", function(event, msg){
+  	broadCast.bind("changeCategoryBroadCast", function(event, msg){
   		console.log("changeCategoryBroadCast " + msg);
   		$scope.start = 0;
   		$scope.articles = [];
@@ -60,7 +60,7 @@ function ListController($scope, $http, $state, $stateParams)
   	});
 }
 
-function CategoryController($scope, $http, $state)
+function CategoryController($scope, $http, $state, broadCast)
 {
 	$scope.isShowCategory = false;
 	$http.get('/mapi_v2/articleApp/category').success(function(data) {
@@ -86,7 +86,7 @@ function CategoryController($scope, $http, $state)
   	$scope.changeCategory = function(categoryId, categoryName) {
   		console.log("categoryId " + categoryId);
   		$scope.isShowCategory = !$scope.isShowCategory;
-  		angular.broadCast.send("changeCategoryBroadCast", 
+  		broadCast.send("changeCategoryBroadCast", 
   			{ "categoryId" : categoryId, "categoryName" : categoryName}
   		);
   	};
