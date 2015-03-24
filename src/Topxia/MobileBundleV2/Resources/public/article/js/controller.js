@@ -8,6 +8,7 @@ function ListController($scope, $http, broadCast)
 {
 	$scope.limit = 10;
 	$scope.categoryId = 0;
+	$scope.start = $scope.start | 0;
 	$scope.isShowLoadMore = true;
 
   	$scope.loadMore = function(){
@@ -43,6 +44,7 @@ function ListController($scope, $http, broadCast)
 	    			success();
 	    		}
 	    		$scope.start += $scope.limit;
+	    		console.log($scope.start);
 	  	}).error(function(){
 	  		el.loading("hide");
 	  	});
