@@ -31,17 +31,15 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 		return $this->getConnection()->delete($this->table, array('session_user_id' => $userId));
 	}
 
-	//@sqlbug
 	public function getOnlineCount($retentionTime)
 	{
-		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now())-{$retentionTime}) AND (unix_timestamp(now()));";
-		return $this->getConnection()->fetchColumn($sql) ? : null;
+		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now()) - ?) AND (unix_timestamp(now()));";
+		return $this->getConnection()->fetchColumn($sql, array($retentionTime)) ? : null;
 	}
 
-	//@sqlbug
 	public function getLoginCount($retentionTime)
 	{
-		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now())-{$retentionTime}) AND (unix_timestamp(now())) AND `user_id` > 0";
-		return $this->getConnection()->fetchColumn($sql) ? : null;	
+		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now())-?) AND (unix_timestamp(now())) AND `user_id` > 0";
+		return $this->getConnection()->fetchColumn($sql, array($retentionTime)) ? : null;	
 	}
 }
