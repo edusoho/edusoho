@@ -44,7 +44,6 @@ function ListController($scope, $http, broadCast)
 	    			success();
 	    		}
 	    		$scope.start += $scope.limit;
-	    		console.log($scope.start);
 	  	}).error(function(){
 	  		el.loading("hide");
 	  	});
