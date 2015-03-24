@@ -177,21 +177,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('endTime > :endTimeGreaterThan')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
-
-        // @xxxbug
-        if (isset($conditions['courseIds'])) {
-            $courseIds = array();
-            foreach ($conditions['courseIds'] as $courseId) {
-                if (ctype_digit((string)abs($courseId))) {
-                    $courseIds[] = $courseId;
-                }
-            }
-            if ($courseIds) {
-                $courseIds = join(',', $courseIds);
-                $builder->andStaticWhere("courseId IN ($courseIds)");
-            }
-        }
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('courseId IN ( :courseIds )');;
 
         return $builder;
     }
