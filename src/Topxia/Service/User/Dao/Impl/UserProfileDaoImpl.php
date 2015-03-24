@@ -38,7 +38,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    //@sqlbug
+    //@todo:sql
     public function dropFieldData($fieldName)
     {   
         $sql="UPDATE {$this->table} set {$fieldName} =null ";
