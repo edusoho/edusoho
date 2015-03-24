@@ -57,6 +57,7 @@ class ContentDaoImpl extends BaseDao implements ContentDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+	//@sqlbug
 	private function _createSearchQueryBuilder($conditions)
 	{
 		if (isset($conditions['keywords'])) {

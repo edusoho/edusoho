@@ -38,6 +38,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@sqlbug
     public function findQuestionsbyTypes($types, $start, $limit)
     {
         if (empty($types)) {
@@ -49,6 +50,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@sqlbug
     public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
     {
         if (empty($types)) {
@@ -60,6 +62,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@sqlbug
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         if (empty($types)) {
@@ -76,12 +79,14 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@sqlbug
     public function findQuestionsCountbyTypes($types)
     {
         $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
         return $this->getConnection()->fetchColumn($sql, array($types));
     }
 
+    //@sqlbug
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
     {
         if ($questionSource == 'course'){
@@ -162,6 +167,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
+    //@sqlbug
     public function updateQuestionCountByIds($ids, $status)
     {
         if(empty($ids)){ 
@@ -172,6 +178,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeQuery($sql, $ids);
     }
 
+    //@sqlbug
     public function getQuestionCountGroupByTypes($conditions)
     {   
         $sqlConditions = array();
@@ -193,6 +200,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchAll($sql, $sqlConditions);
     }
 
+    //@sqlbug
     private function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function($value) {

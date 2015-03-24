@@ -61,6 +61,7 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
         return $this->getRefund($id);
     }
 
+    //@sqlbug
     private function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)

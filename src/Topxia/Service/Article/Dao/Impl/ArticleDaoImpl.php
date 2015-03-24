@@ -171,7 +171,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('title LIKE :keywords')
 			->andWhere('picture != :pictureNull')
 			->andWhere('categoryId = :categoryId');
-
+		//@sqlbug
         if (isset($conditions['categoryIds'])) {
             $categoryIds = array();
             foreach ($conditions['categoryIds'] as $categoryId) {

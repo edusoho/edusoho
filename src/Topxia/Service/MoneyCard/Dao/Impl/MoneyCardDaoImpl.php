@@ -68,6 +68,7 @@ class MoneyCardDaoImpl extends BaseDao
         return $this->getConnection()->executeUpdate($sql, $moneyCardsForSQL);
     }
 
+    //@sqlbug
     public function isCardIdAvaliable ($moneyCardIds)
     {
         $str = implode(',', array_map(function($value){ return "'".$value."'"; },

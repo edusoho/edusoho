@@ -37,6 +37,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 		return $builder->execute()->fetchColumn(0);
 	}
 
+	//@sqlbug
 	protected function createLogQueryBuilder($conditions)
 	{
 		$conditions = array_filter($conditions);
@@ -58,6 +59,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 		return $builder;
 	}
 
+	//@sqlbug
 	public function analysisLoginNumByTime($startTime,$endTime)
 	{
 	              $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' and  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
@@ -65,6 +67,7 @@ class LogDaoImpl extends BaseDao implements LogDao
         		return $this->getConnection()->fetchColumn($sql);
 	}
 
+	//@sqlbug
 	public function analysisLoginDataByTime($startTime,$endTime)
 	{
 	              $sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' and `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";

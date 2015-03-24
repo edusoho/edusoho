@@ -31,6 +31,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $builder->execute()->fetchColumn(0);
 	}
 
+    //@sqlbug
     public function getAnalysisLessonMinTime($type)
     {
         $condition = $this->_filterTypeCondition($type);
@@ -50,6 +51,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+    //@sqlbug
 	public function searchLessonViewGroupByTime($startTime,$endTime,$conditions)
 	{
         $conditions = $this->_filterConditions($conditions);
@@ -68,6 +70,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $builder;
     }
 
+    //@sqlbug
     private function _filterTypeCondition($type)
     {
         if (in_array($type, array('net','local','cloud'))) {
@@ -77,6 +80,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return "";
     }
 
+    //@sqlbug
     private function _filterConditions($conditions)
     {
         $conditionStr = "";

@@ -83,6 +83,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
+    //@sqlbug
     public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
@@ -96,6 +97,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
     }
 
+    //@sqlbug
     public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
@@ -157,6 +159,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, $lessonIds);
     }
 
+    //@sqlbug
     private function _createSearchQueryBuilder($conditions)
     {
 
@@ -192,6 +195,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $builder;
     }
 
+    //@sqlbug
     public function analysisLessonNumByTime($startTime,$endTime)
     {
               $sql="SELECT count( id)  as num FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
@@ -199,6 +203,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
               return $this->getConnection()->fetchColumn($sql);
     }
 
+    //@sqlbug
     public function analysisLessonDataByTime($startTime,$endTime)
     {
              $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";

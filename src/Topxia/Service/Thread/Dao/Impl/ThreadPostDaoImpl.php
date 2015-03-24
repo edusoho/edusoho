@@ -98,6 +98,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getPost($id);
 	}
 
+    //@sqlbug
     public function wavePost($id, $field, $diff)
     {
         $fields = array('subposts', 'ups');

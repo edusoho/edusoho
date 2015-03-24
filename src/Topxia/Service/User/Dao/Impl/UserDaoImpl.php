@@ -140,6 +140,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getUser($id);
     }
 
+    //@sqlbug
     public function waveCounterById($id, $name, $number)
     {
         $names = array('newMessageNum', 'newNotificationNum');
@@ -150,6 +151,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->executeQuery($sql, array($number, $id));
     }
 
+    //@sqlbug
     public function clearCounterById($id, $name)
     {
         $names = array('newMessageNum', 'newNotificationNum');
@@ -160,19 +162,22 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->executeQuery($sql, array($id));
     }
 
+    //@sqlbug
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
         $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql);
     }
 
+    //@sqlbug
     public function analysisUserSumByTime($endTime)
     {
          $sql="select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
          return $this->getConnection()->fetchAll($sql,array($endTime));
     }
 
-        public function findUsersCountByLessThanCreatedTime($endTime)
+    //@sqlbug
+    public function findUsersCountByLessThanCreatedTime($endTime)
     {
          
         $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";

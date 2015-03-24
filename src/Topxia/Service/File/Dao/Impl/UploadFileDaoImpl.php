@@ -85,6 +85,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getFile($id);
     }
 
+    //@sqlbug
     public function updateFileUsedCount($fileIds, $offset){
         $fileIdsCollection = "'" . implode("', '", $fileIds) . "'";
         $sql = "UPDATE {$this->table} SET usedCount = usedCount + ? where id in ({$fileIdsCollection})";
@@ -98,6 +99,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAssoc($sql, array($targetType));
     }
 
+    //@sqlbug
     private function createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
