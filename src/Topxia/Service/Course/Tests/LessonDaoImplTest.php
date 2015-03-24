@@ -5,7 +5,7 @@ use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Common\ServiceException;
 
 
-class CashOrdersDaoImplTest extends BaseTestCase
+class LessonDaoImplTest extends BaseTestCase
 {
 
     public function testSearchLessons()
