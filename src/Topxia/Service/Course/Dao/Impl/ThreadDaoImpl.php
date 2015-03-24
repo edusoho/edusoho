@@ -95,7 +95,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		return $builder->execute()->fetchAll() ? : array();
 	}
 
-	//@sqlbug
 	private function createThreadSearchQueryBuilder($conditions)
 	{
 		if (isset($conditions['title'])) {
@@ -143,7 +142,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
-	//@sqlbug
 	public function waveThread($id, $field, $diff)
 	{
 		$fields = array('postNum', 'hitNum', 'followNum');

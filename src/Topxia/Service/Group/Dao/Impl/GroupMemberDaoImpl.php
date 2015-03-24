@@ -37,7 +37,6 @@ class GroupMemberDaoImpl extends BaseDao implements GroupMemberDao
 
     }
 
-    //@sqlbug
     public function waveMember($id, $field, $diff)
     {
         $fields = array('postNum', 'threadNum');
