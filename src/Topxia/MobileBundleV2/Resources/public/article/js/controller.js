@@ -9,7 +9,7 @@ function ListController($scope, $http, $ionicLoading, broadCast)
 	$scope.limit = 10;
 	$scope.categoryId = 0;
 	$scope.start = $scope.start | 0;
-	$scope.isShowLoadMore = true;
+	$scope.isShowLoadMore = false;
 
   	$scope.loadMore = function(){
   		$ionicLoading.show({
