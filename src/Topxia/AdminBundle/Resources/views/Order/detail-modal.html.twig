@@ -101,7 +101,8 @@
                 </td>
                 <td>
                   {% if logUser %}
-                    {{ admin_macro.user_link(logUser) }}
+                              <a target="_blank" href="{{ path('user_show', {id:logUser.id}) }}">
+                      <strong>{{ logUser.nickname }}</strong></a>
                   {% else %}
                     --
                   {% endif %}
