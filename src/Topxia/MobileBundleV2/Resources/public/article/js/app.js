@@ -1,13 +1,14 @@
 define(function(require, exports, module) {
 	require("AppControllers");
 	require("AppServices");
-	require("zepto");
+	require("AppFilters");
 	require("frozen");
 
 	var app = angular.module('EduSohoArticleApp', [
 		'ionic',
 		'AppControllers',
-		'AppServices'
+		'AppServices',
+		'AppFilters'
 		]);
 
 	var AppDirectives = require("AppDirectives");

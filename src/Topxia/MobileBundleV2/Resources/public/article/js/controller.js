@@ -1,10 +1,10 @@
 var appControllers = angular.module('AppControllers', []);
 
-appControllers.controller('ListController', ['$scope', '$http', 'broadCast', ListController]);
-appControllers.controller('CategoryController', ['$scope', '$http', '$state', 'broadCast', CategoryController]);
+appControllers.controller('ListController', ['$scope', '$http', '$ionicLoading', 'broadCast', ListController]);
+appControllers.controller('CategoryController', ['$scope', '$http', 'broadCast', CategoryController]);
 appControllers.controller('DetailController', ['$scope', '$http', '$stateParams', DetailController]);
 
-function ListController($scope, $http, broadCast)
+function ListController($scope, $http, $ionicLoading, broadCast)
 {
 	$scope.limit = 10;
 	$scope.categoryId = 0;
@@ -12,18 +12,18 @@ function ListController($scope, $http, broadCast)
 	$scope.isShowLoadMore = true;
 
   	$scope.loadMore = function(){
-  		var el=Zepto.loading({
-		        content:'加载中...',
+  		$ionicLoading.show({
+		        template:'加载中...',
 		});
 		queryArticelList(function(){
-			el.loading("hide");
+			$ionicLoading.hide();
 		});
   	};
 
   	var queryArticelList = function(success){
   		document.title = $scope.categoryName ? "网校资讯 - " + $scope.categoryName  : "网校资讯";
-  		var el=Zepto.loading({
-		        content:'加载中...',
+  		$ionicLoading.show({
+		        template:'加载中...',
 		});
   		$http.post(
   			'/mapi_v2/articleApp/list', 
@@ -31,7 +31,7 @@ function ListController($scope, $http, broadCast)
   			start: $scope.start,
   			categoryId : $scope.categoryId 
   		}).success(function(data) {
-  			el.loading("hide");
+			$ionicLoading.hide();
 			if (! $scope.articles) {
 				$scope.articles = [];
 			}
@@ -45,7 +45,7 @@ function ListController($scope, $http, broadCast)
 	    		}
 	    		$scope.start += $scope.limit;
 	  	}).error(function(){
-	  		el.loading("hide");
+			$ionicLoading.hide();
 	  	});
   	}
 
@@ -61,7 +61,7 @@ function ListController($scope, $http, broadCast)
   	});
 }
 
-function CategoryController($scope, $http, $state, broadCast)
+function CategoryController($scope, $http, broadCast)
 {
 	$scope.isShowCategory = false;
 	$http.get('/mapi_v2/articleApp/category').success(function(data) {

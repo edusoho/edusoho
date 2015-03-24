@@ -70,3 +70,13 @@ img{
 .article-list-item>img:first-child {
 	max-width: 120px;
 }
+
+.ui-more-content {
+	padding : 8px;
+	text-align: center;
+}
+
+.ui-more-content button {
+	min-height: none;
+
+}
