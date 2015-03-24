@@ -159,7 +159,6 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, $lessonIds);
     }
 
-    //@sqlbug
     private function _createSearchQueryBuilder($conditions)
     {
 
@@ -183,7 +182,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $builder;
     }
 
-    //@sqlbug
+    //@todo:sql
     public function analysisLessonNumByTime($startTime,$endTime)
     {
               $sql="SELECT count( id)  as num FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
@@ -191,7 +190,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
               return $this->getConnection()->fetchColumn($sql);
     }
 
-    //@sqlbug
+    //@todo:sql
     public function analysisLessonDataByTime($startTime,$endTime)
     {
              $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
