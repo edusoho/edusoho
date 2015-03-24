@@ -181,7 +181,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['notFree'])) {
             $conditions['notFree'] = 0;
         }
-        
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
@@ -203,21 +203,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('categoryId = :categoryId')
-            ->andWhere('smallPicture = :smallPicture');
-
-        if (isset($conditions['categoryIds'])) {
-            $categoryIds = array();
-            foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit((string)$categoryId)) {
-                    $categoryIds[] = int($categoryId);
-                }
-            }
-
-            if ($categoryIds) {
-                $categoryIds = join(',', $categoryIds);
-                $builder->andStaticWhere("categoryId IN ($categoryIds)");
-            }
-        }
+            ->andWhere('smallPicture = :smallPicture')
+            ->andWhere('categoryId IN ( :categoryIds )');
 
         if (isset($conditions['vipLevelIds'])) {
 
