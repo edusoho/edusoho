@@ -2,7 +2,7 @@
 	<ion-list>
   <div collection-repeat="article in articles" >
 
-	    <a class="item item-thumbnail-left" href="#/detail/{{ article.id}}" ng-style="{ 'padding-left' : article.thumb ? auto : '10px'}">
+	    <a class="item item-thumbnail-left article-list-item" href="#/detail/{{ article.id}}" ng-style="{ 'padding-left' : article.thumb ? auto : '10px'}">
 	      <img ng-src="{{ article.thumb }}" ng-style="{ 'width' : article.thumb ? auto : 0}">
 	      <h2>{{ article.title | limitTo:15}}</h2>
 		 <p ng-bind-html="article.body | limitTo:40"></p>
