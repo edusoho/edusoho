@@ -5,13 +5,13 @@
       <a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" >
         <span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span>
         <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
-        {% if course.serializeMode != 'none' %}  
+        {% if course.serializeMode == 'serialize' %}  
           <span class="tag-serial"></span>
         {% endif %} 
       </a>
     {% else %}
       <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
-      {% if course.serializeMode != 'none' %}  
+      {% if course.serializeMode == 'serialize' %}  
         <span class="tag-serial"></span>
       {% endif %} 
     {% endif %}
