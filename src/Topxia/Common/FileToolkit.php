@@ -3,6 +3,7 @@ namespace Topxia\Common;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Topxia\Service\Common\ServiceKernel;
 
 class FileToolkit
 {
@@ -939,6 +940,19 @@ class FileToolkit
         }
 
         return 0;
+    }
+
+    public static function moveFile($originFile, $targetGroup, $targetFilenamePrefix)
+    {
+        $hash = substr(md5($targetFilenamePrefix . time()), -8);
+        $ext = $originFile->getClientOriginalExtension();
+        $filename = $targetFilenamePrefix . $hash . '.' . $ext;
+
+        $directory = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/'.$targetGroup;
+        $file = $originFile->move($directory, $filename);
+
+        $fileName = str_replace('.', '!', $file->getFilename());
+        return $fileName;
     }
 
 }

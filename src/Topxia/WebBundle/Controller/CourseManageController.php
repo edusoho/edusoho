@@ -106,15 +106,8 @@ class CourseManageController extends BaseController
             }
 
             $filenamePrefix = "course_{$course['id']}_";
-            $hash = substr(md5($filenamePrefix . time()), -8);
-            $ext = $file->getClientOriginalExtension();
-            $filename = $filenamePrefix . $hash . '.' . $ext;
-
-            $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-            $file = $file->move($directory, $filename);
-
-            $fileName = str_replace('.', '!', $file->getFilename());
-
+            $fileName = FileToolkit::moveFile($file, 'tmp', $filenamePrefix);
+            
             return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
                 'id' => $course['id'],
                 'file' => $fileName)

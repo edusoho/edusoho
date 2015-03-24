@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
+    var Widget = require('widget');
     require('webuploader');
 
     var WebUploader = Widget.extend({
@@ -7,13 +8,14 @@ define(function(require, exports, module) {
             maxSize:2*1024*1024,
             type: '',
             fileInput: '',
-            title: '',
+            title: '上传',
             formData: {},
             accept: {
 	            title: 'Images',
 	            extensions: 'gif,jpg,jpeg,png',
 	            mimeTypes: 'image/*'
-	        }
+	        },
+	        uploader: null
         },
 
         events: {
@@ -21,7 +23,7 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-
+			alert(11);
 		    var uploader = WebUploader.create({
 		        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
 		        server: this.element.data('uploadUrl'),
@@ -46,7 +48,16 @@ define(function(require, exports, module) {
 		        Notify.danger('上传失败，请重试！');
 		    });
 
+		    this.set("uploader", uploader);
+		},
+
+		upload: function(){
+			alert(11);
+			this.get("uploader").upload();
 		}
+
     });
+
+	module.exports = WebUploader;
 
 });
