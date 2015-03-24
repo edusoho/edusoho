@@ -32,7 +32,10 @@
       </tr>
       <tr> <th width="25%">购买者</th> 
         <td width="75%">
+
           <strong>{{ user.nickname }}</strong>
+
+
         </td>
       </tr>
       <tr> <th width="25%">订单价格</th> 
@@ -100,7 +103,9 @@
                 </td>
                 <td>
                   {% if logUser %}
+
                     {{ logUser.nickname }}
+
                   {% else %}
                     --
                   {% endif %}
