@@ -119,7 +119,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	{
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
-
+    //@xxxbug
 	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count)
 	{
 		$sql ="SELECT * FROM {$this->table} WHERE status = 'published'";
