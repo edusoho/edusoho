@@ -119,7 +119,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	{
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
-    //@xxxbug
+    
+    //@todo:sql
 	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count)
 	{
 		$sql ="SELECT * FROM {$this->table} WHERE status = 'published'";
@@ -170,20 +171,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('sticky = :sticky')
 			->andWhere('title LIKE :keywords')
 			->andWhere('picture != :pictureNull')
-			->andWhere('categoryId = :categoryId');
-		//@sqlbug
-        if (isset($conditions['categoryIds'])) {
-            $categoryIds = array();
-            foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit((string)abs($categoryId))) {
-                    $categoryIds[] = $categoryId;
-                }
-            }
-            if ($categoryIds) {
-                $categoryIds = join(',', $categoryIds);
-                $builder->andStaticWhere("categoryId IN ($categoryIds)");
-            }
-        }
+			->andWhere('categoryId = :categoryId')
+			->andWhere('categoryId IN (:categoryIds)');
 
 		return $builder;
 	}
