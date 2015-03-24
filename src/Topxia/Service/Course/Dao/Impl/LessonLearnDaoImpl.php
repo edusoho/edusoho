@@ -115,7 +115,6 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    //@sqlbug
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetType'])) {
@@ -140,7 +139,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder;
     }
 
-    //@sqlbug
+    //@todo:sql
     public function analysisLessonFinishedDataByTime($startTime,$endTime)
     {
         $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>={$startTime} and `finishedTime`<={$endTime} and `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
