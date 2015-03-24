@@ -37,7 +37,6 @@ class LogDaoImpl extends BaseDao implements LogDao
 		return $builder->execute()->fetchColumn(0);
 	}
 
-	//@sqlbug
 	protected function createLogQueryBuilder($conditions)
 	{
 		$conditions = array_filter($conditions);
@@ -49,29 +48,21 @@ class LogDaoImpl extends BaseDao implements LogDao
 			->andWhere('level = :level')
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
-			->andWhere('createdTime < :endDateTime');
-
-		if (isset($conditions['userIds'])) {
-		    $userIds = join(',', $conditions['userIds']);
-	        $builder->andStaticWhere("userId IN ($userIds)");
-		}
+			->andWhere('createdTime < :endDateTime')
+			->andWhere('userId IN ( :userIds )');
 
 		return $builder;
 	}
 
-	//@sqlbug
 	public function analysisLoginNumByTime($startTime,$endTime)
 	{
-	              $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' and  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
-
-        		return $this->getConnection()->fetchColumn($sql);
+        $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' and  `createdTime`>= ? and `createdTime`<= ?  ";
+		return $this->getConnection()->fetchColumn($sql, array($startTime, $endTime));
 	}
 
-	//@sqlbug
 	public function analysisLoginDataByTime($startTime,$endTime)
 	{
-	              $sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' and `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-
-     		return $this->getConnection()->fetchAll($sql);
+		$sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' and `createdTime`>= ? and `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+		return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
 	}
 }
