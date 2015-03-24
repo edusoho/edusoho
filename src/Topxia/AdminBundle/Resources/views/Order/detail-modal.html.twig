@@ -32,7 +32,8 @@
       </tr>
       <tr> <th width="25%">购买者</th> 
         <td width="75%">
-          <strong>{{ admin_macro.user_link(user) }}</strong>
+            <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">
+                      <strong>{{ user.nickname }}</strong></a>
         </td>
       </tr>
       <tr> <th width="25%">订单价格</th> 
