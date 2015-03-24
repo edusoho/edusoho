@@ -29,11 +29,11 @@
             </a>
 
           </div>
-          <div class="">{{ app.description|plain_text(100)|remove_copyright }}</div>
+          <div class="">{{ app.description|plain_text(100)|copyright_less }}</div>
           <div class="text-muted"><small>最后更新： {{ app.updatedTime|date('Y-m-d') }}</small></div>
         </td>
         <td>
-          {{ app.developerName|remove_copyright }}
+          {{ app.developerName|copyright_less }}
         </td>
         <td>
           {% if app.code|lower == 'vip' %}
