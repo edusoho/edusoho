@@ -997,4 +997,29 @@ class FileToolkit
 
     }
 
+    public static function getImgProperties($filename, $width, $height)
+    {
+        $filename = str_replace('!', '.', $filename);
+        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
+
+        $pictureFilePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
+
+        try {
+            $imagine = new Imagine();
+            $image = $imagine->open($pictureFilePath);
+        } catch (\Exception $e) {
+            @unlink($pictureFilePath);
+            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+        }
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen($width)->heighten($height);
+
+        // @todo fix it.
+        $pictureUrl = ServiceKernel::instance()->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = ltrim($pictureUrl, ' /');
+
+        return array($pictureUrl, $naturalSize, $scaledSize);
+    }
+
 }

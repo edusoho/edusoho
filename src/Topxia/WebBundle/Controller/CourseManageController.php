@@ -114,28 +114,10 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        //@todo 文件名的过滤
         $filename = $request->query->get('file');
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        try {
-            $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(480)->heighten(270);
-
-        // @todo fix it.
+        
+        list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getImgProperties($filename, 480, 270);
         $assets = $this->container->get('templating.helper.assets');
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
-        $pictureUrl = ltrim($pictureUrl, ' /');
         $pictureUrl = $assets->getUrl($pictureUrl);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
