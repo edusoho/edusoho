@@ -5211,3 +5211,9 @@ a.homework-essay-textarea-pack-up{
   }
 }
 
+.vip-total-price {
+  display: block;
+  margin-top: 7px;
+  font-weight: 700;
+  color: #F50;
+}
