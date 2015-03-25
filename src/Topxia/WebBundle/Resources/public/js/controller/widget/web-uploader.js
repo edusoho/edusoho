@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     require('webuploader');
 
-    var WebUploader = Widget.extend({
+    var Uploader = Widget.extend({
         attrs: {
             maxSize:2*1024*1024,
             type: '',
@@ -23,11 +23,11 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
-			alert(11);
 		    var uploader = WebUploader.create({
 		        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
 		        server: this.element.data('uploadUrl'),
 		        pick: this.element,
+		        title:'aaa',
 		        formData: $.extend(this.formData, {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
 		        accept: this.accept
 		    });
@@ -58,6 +58,6 @@ define(function(require, exports, module) {
 
     });
 
-	module.exports = WebUploader;
+	module.exports = Uploader;
 
 });
