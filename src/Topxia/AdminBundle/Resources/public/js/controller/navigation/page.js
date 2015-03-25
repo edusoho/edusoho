@@ -19,31 +19,25 @@ define(function(require, exports, module) {
 
         });
 
-        var indentation = '<span class="indentation">&nbsp;&nbsp;&nbsp;&nbsp; └─</span>';
-        var navigation = $('.navigation-table tbody');
         var group = $('.navigation-table tbody').sortable({
             group: 'serialization',
             containerPath: '> tr',
-            itemSelector: 'tr',
+            itemSelector: 'tr.has-subItems',
             placeholder: '<tr class="placeholder"/>',
             onDrop: function (item, container, _super) {
                 _super(item, container);
-                refreshSeq(item);
-
+                var $tbody = $(item).parent();
+                $tbody.find('tr.has-subItems').each(function() {
+                    var $tr = $(this);
+                    $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+                });
+                var data = group.sortable("serialize").get();
+                var jsonString = JSON.stringify(data, null, ' ');
+                $.post($tbody.data('updateSeqsUrl'), {data:data}, function(response){
+                });
             }
         });
 
-        function refreshSeq(item) {
-            var $prev = $(item).prev();
-            if($prev.length > 0) {
-
-            } else {
-                if($(item).data('parentId') > 0) {
-                    $(item).data('parentId', 0);
-                    $(item).find('.indentation').remove();
-                }
-            }
-        }
 
     };
 
