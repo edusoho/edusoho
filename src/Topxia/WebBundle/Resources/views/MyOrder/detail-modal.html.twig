@@ -86,7 +86,8 @@
     <tr> <th width="25%">支付方式</th> 
            <td width="75%">
             {# {% if order.payment == 'none' %} 暂无 #}
-            {% if order.payment == 'none' or  order.payment == 'coin' %} 余额支付
+            {% if order.payment == 'none' %} 无
+            {% elseif order.payment == 'coin' %} 余额支付
             {% elseif order.payment == 'alipay' %} 支付宝
             {% elseif order.payment == 'tenpay' %} 财付通
             {% endif %}
