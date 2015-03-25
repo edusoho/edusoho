@@ -66,7 +66,7 @@ interface CourseService
 
 	public function updateCourseCounter($id, $counter);
 
-	public function changeCoursePicture ($courseId, $filePath, array $options);
+	public function changeCoursePicture ($courseId, $files);
 
 	public function recommendCourse($id, $number);
 

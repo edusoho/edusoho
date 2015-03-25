@@ -99,21 +99,6 @@ class CourseManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 
-        if($request->getMethod() == 'POST'){
-            $file = $request->files->get('picture');
-            if (!FileToolkit::isImageFile($file)) {
-                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-            }
-
-            $filenamePrefix = "course_{$course['id']}_";
-            $fileName = FileToolkit::moveFile($file, 'tmp', $filenamePrefix);
-            
-            return $this->createJsonResponse(array(
-                'id' => $course['id'],
-                'file' => $fileName
-            ));
-        }
-
 		return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
 			'course' => $course,
 		));
@@ -132,7 +117,8 @@ class CourseManageController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $c = $request->request->all();
-            $this->getCourseService()->changeCoursePicture($course['id'], $pictureFilePath, $c);
+
+            $this->getCourseService()->changeCoursePicture($course['id'], $c["imgs"]);
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 

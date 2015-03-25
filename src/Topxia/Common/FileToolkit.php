@@ -946,8 +946,9 @@ class FileToolkit
         return 0;
     }
 
-    public static function moveFile($originFile, $targetGroup, $targetFilenamePrefix)
+    public static function moveFile($originFile, $targetGroup)
     {
+        $targetFilenamePrefix = rand(10000,99999);
         $hash = substr(md5($targetFilenamePrefix . time()), -8);
         $ext = $originFile->getClientOriginalExtension();
         $filename = $targetFilenamePrefix . $hash . '.' . $ext;

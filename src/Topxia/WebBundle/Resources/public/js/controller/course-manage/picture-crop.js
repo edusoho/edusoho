@@ -9,13 +9,40 @@ define(function(require, exports, module) {
 
         var $form = $("#course-picture-crop-form");
 
-        new ImageCrop({
-            element: "#course-picture-crop",
-            x: $form.find("[name=x]"),
-            y: $form.find("[name=y]"),
-            width: $form.find("[name=width]"),
-            height: $form.find("[name=height]")
+        var imageCrop = new ImageCrop({
+            element: "#course-picture-crop"
         });
+
+        imageCrop.on("select", function(c){
+            $form.find("[name=x]").val(c.x);
+            $form.find("[name=y]").val(c.y);
+            $form.find("[name=width]").val(c.w);
+            $form.find("[name=height]").val(c.h);
+        });
+
+        $("#upload-picture-btn").click(function(e){
+            e.stopPropagation();
+
+            var cropImgUrl = $(this).data("cropImgUrl");
+            var postData = {
+                x: $form.find("[name=x]").val(),
+                y: $form.find("[name=y]").val(),
+                width: $form.find("[name=width]").val(),
+                height: $form.find("[name=height]").val(),
+                file: $form.find("[name=file]").val(),
+                imgs: {
+                    large: "480,270",
+                    middle: "304, 171",
+                    small: "96, 54",
+                }
+            };
+            $.post(cropImgUrl, postData ,function(response){
+                var url = $("#upload-picture-btn").data("url");
+                $.post(url, {imgs: response}, function(){
+                    history.go(-1);
+                });
+            })
+        })
 
         $('.go-back').click(function(){
             history.go(-1);

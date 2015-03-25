@@ -408,30 +408,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-    public function changeCoursePicture($courseId, $filePath, array $options)
+    public function changeCoursePicture($courseId, $files)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，图标更新失败！');
         }
 
-        $filePaths = FileToolKit::cropImages($filePath, $options, array(
-        	"large" => array(480, 270),
-        	"middle" => array(304, 171),
-        	"small" => array(96, 54),
-        ));
-
-        $files = array();
-        foreach ($filePaths as $key => $value) {
-        	$files[$key] = $this->getFileService()->uploadFile('course', new File($value));
-        }
-
-    	@unlink($filePath);
-
         $fields = array(
-        	'smallPicture' => $files["small"]['uri'],
-        	'middlePicture' => $files["middle"]['uri'],
-        	'largePicture' => $files["large"]['uri'],
+        	'smallPicture' => $files["small"],
+        	'middlePicture' => $files["middle"],
+        	'largePicture' => $files["large"]
     	);
 
     	$oldPictures = array(

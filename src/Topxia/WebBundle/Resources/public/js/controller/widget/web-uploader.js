@@ -27,14 +27,13 @@ define(function(require, exports, module) {
         	var self = this;
 		    var uploader = WebUploader.create({
 		        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-		        server: this.element.data('uploadUrl'),
+		        server: '../../../uploadfile/img',
 		        pick: {
 		        	id:this.element,
 		        	multiple:false
 		        },
 		        formData: $.extend(this.formData, {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
 		        accept: this.get("accept"),
-		        fileVal: this.get("fileVal"),
 				auto: true,
 				fileNumLimit: 1,
 				fileSizeLimit: this.get("fileSizeLimit")

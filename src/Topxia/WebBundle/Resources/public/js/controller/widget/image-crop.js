@@ -8,10 +8,6 @@ define(function(require, exports, module) {
     	attrs: {
     		cropedWidth: 480,
 	        cropedHeight: 270,
-	        x: null,
-	        x: null,
-	        width: null,
-	        height: null
         },
 
         events: {
@@ -26,21 +22,18 @@ define(function(require, exports, module) {
 	            scaledHeight = $picture.attr('height'),
 	            naturalWidth = $picture.data('naturalWidth'),
 	            naturalHeight = $picture.data('naturalHeight'),
-	            cropedWidth = 480,
-	            cropedHeight = 270,
+	            cropedWidth = this.get("cropedWidth"),
+	            cropedHeight = this.get("cropedHeight"),
 	            ratio = cropedWidth / cropedHeight,
-	            selectWidth = 360 * (naturalWidth/scaledWidth),
-	            selectHeight = 202.5 * (naturalHeight/scaledHeight);
+	            selectWidth = (cropedWidth*3/4) * (naturalWidth/scaledWidth),
+	            selectHeight = (cropedHeight*3/4) * (naturalHeight/scaledHeight);
 
 	        $picture.Jcrop({
 	            trueSize: [naturalWidth, naturalHeight],
 	            setSelect: [0, 0, selectWidth, selectHeight],
 	            aspectRatio: ratio,
 	            onSelect: function(c) {
-	                self.get('x').val(c.x);
-	                self.get('y').val(c.y);
-	                self.get('width').val(c.w);
-	                self.get('height').val(c.h);
+	                self.trigger("select", c);
 	            }
 	        });
         }
