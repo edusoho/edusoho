@@ -1,3 +1,8 @@
 admin_group_sign_set:
     pattern:  /group/sign/set
     defaults: { _controller: CustomAdminBundle:Group:signSet }
+
+admin_coin_Consumptionfull_settings:
+    path:     /coin/Consumptionfullsettings
+    defaults: { _controller: CustomAdminBundle:CoinAdmin:Consumptionfullsettings }
+
