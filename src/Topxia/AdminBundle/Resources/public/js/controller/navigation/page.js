@@ -19,13 +19,32 @@ define(function(require, exports, module) {
 
         });
 
-        var $list = $("#navigation-table").sortable({
-            distance: 20,
+        var indentation = '<span class="indentation">&nbsp;&nbsp;&nbsp;&nbsp; └─</span>';
+        var navigation = $('.navigation-table tbody');
+        var group = $('.navigation-table tbody').sortable({
+            group: 'serialization',
+            containerPath: '> tr',
+            itemSelector: 'tr',
+            placeholder: '<tr class="placeholder"/>',
             onDrop: function (item, container, _super) {
                 _super(item, container);
-                //sortList($list);
+                refreshSeq(item);
+
             }
         });
+
+        function refreshSeq(item) {
+            var $prev = $(item).prev();
+            if($prev.length > 0) {
+
+            } else {
+                if($(item).data('parentId') > 0) {
+                    $(item).data('parentId', 0);
+                    $(item).find('.indentation').remove();
+                }
+            }
+        }
+
     };
 
 });
