@@ -108,19 +108,18 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        if($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $this->getCourseService()->changeCoursePicture($course['id'], $fields["imgs"]);
+            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
+        }
+
         //@todo 文件名的过滤
         $filename = $request->query->get('file');
         $filename = str_replace('!', '.', $filename);
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
 
         $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        if($request->getMethod() == 'POST') {
-            $c = $request->request->all();
-
-            $this->getCourseService()->changeCoursePicture($course['id'], $c["imgs"]);
-            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
-        }
 
         try {
             $imagine = new Imagine();
