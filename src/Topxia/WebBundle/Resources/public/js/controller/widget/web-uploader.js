@@ -41,15 +41,10 @@ define(function(require, exports, module) {
 		    });
 
 		    uploader.on( 'fileQueued', function( file ) {
-		        //Notify.info('正在上传，请稍等！', 0);
-		        //uploader.upload();
+		    	
 		    });
 
 		    uploader.on( 'uploadSuccess', function( file, response ) {
-		        // var result = '[image]' + response.hashId + '[/image]';
-		        // var $input = $($('#item-upload-' + model.id).data('target'));
-		        // $input.val($input.val() + result);
-		        // Notify.success('上传成功！', 1);
 		        self.trigger("uploadSuccess", file, response);
 		    });
 
