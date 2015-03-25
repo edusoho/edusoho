@@ -9,7 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
-use Symfony\Component\Yaml\Yaml;
+use Topxia\WebBundle\Util\Permission;
 
 class WebExtension extends \Twig_Extension
 {
@@ -125,7 +125,8 @@ class WebExtension extends \Twig_Extension
 
     public function permissions($parent='', $type=null)
     {   
-        $permissions = $this->getPermissions();
+        $permission = new Permission();
+        $permissions = $permission->getPermissions();
         $result = array();
 
         foreach ($permissions as $key => $value) {
@@ -150,125 +151,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $result;
-    }
-
-    private function getPermissions($permissions=array()) 
-    {   
-        $kernel = new ServiceKernel();
-        $kernel->instance();
-       
-        $environment = $kernel->getEnvironment();
-
-        $permissionsCacheFile = "../app/cache/".$environment."permissions.yml";
-
-
-        // if (file_exists($permissionsCacheFile)) {
-
-
-        //     return Yaml::parse($permissionsCacheFile);
-
-        // }else {
-
-
-            foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
-                
-                $dir = "../src/".$value;
-       
-                if (file_exists($dir."/permissions.yml")) {
-
-                    $permissions = $this->loadPermissionYml($permissions, $dir."/permissions.yml");
-                }
-          
-            }
-
-            $dir = "../plugins";
-            $dh = opendir($dir);
-
-            while ($file = readdir($dh)) {
-
-                if ($file != "." && $file != "..") {
-
-                  $fullpath = $dir."/".$file."/$file"."Bundle"."/permissions.yml";
-
-                  $permissions = $this->loadPermissionYml($permissions, $fullpath);
-                }
-            }
-            closedir($dh);
-
-            file_put_contents($permissionsCacheFile, Yaml::dump($permissions));
-         
-  /*      }*/
-
-        $permissions = $this->addCode($permissions);
-        $permissions = $this->sort($permissions);
-
-        return $permissions;
-    }
-
-    private function addCode($permissions)
-    {
-        foreach ($permissions as $key => $value) {
-            
-            $value['code'] = $key;
-
-            $permissions[$key] = $value;
-        }
-
-        return $permissions;
-    }
-
-    private function sort($permissions)
-    {   
-        $i = 1;
-
-        foreach ($permissions as $key => $value) {
-            
-            $permissions[$key]['weight'] = $i * 100;
-
-            $i++;
-        }
-
-        foreach ($permissions as $key => $value) {
-            
-            if (isset($value['before'])) {
-
-                $weight = $permissions[$value['before']]['weight'];
-
-                $permissions[$key]['weight'] = $weight - 1;
-            }
-
-            if (isset($value['after'])) {
-
-                $weight = $permissions[$value['after']]['weight'];
-
-                $permissions[$key]['weight'] = $weight + 1;
-            }
-
-        }
-        
-        $permissions = ArrayToolkit::index($permissions, 'weight');
-
-        ksort($permissions);
-
-
-        return $permissions;
-        
-    }
-
-    private function loadPermissionYml($permissions, $fullpath)
-    {
-        if (file_exists($fullpath)) {
-
-            $permission = Yaml::parse($fullpath);
-
-            if ($permission) {
-                
-                $permissions = array_merge($permissions, $permission); 
-            }
-            
-        }
-
-        return $permissions;
     }
 
     public function getInCash($userId,$timeType="oneWeek")
