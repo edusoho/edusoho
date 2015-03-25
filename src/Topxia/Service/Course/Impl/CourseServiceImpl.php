@@ -6,6 +6,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Common\FileToolKit;
 use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
@@ -407,41 +408,31 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-    public function changeCoursePicture ($courseId, $filePath, array $options)
+    public function changeCoursePicture($courseId, $filePath, array $options)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，图标更新失败！');
         }
 
-        $pathinfo = pathinfo($filePath);
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
+        $filePaths = FileToolKit::cropImages($filePath, $options, array(
+        	"large" => array(480, 270),
+        	"middle" => array(304, 171),
+        	"small" => array(96, 54),
+        ));
 
-        $largeImage = $rawImage->copy();
-        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(480, 270));
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
-        $largeFileRecord = $this->getFileService()->uploadFile('course', new File($largeFilePath));
-
-        $largeImage->resize(new Box(304, 171));
-        $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
-        $largeImage->save($middleFilePath, array('quality' => 90));
-        $middleFileRecord = $this->getFileService()->uploadFile('course', new File($middleFilePath));
-
-        $largeImage->resize(new Box(96, 54));
-        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        $largeImage->save($smallFilePath, array('quality' => 90));
-        $smallFileRecord = $this->getFileService()->uploadFile('course', new File($smallFilePath));
-
-        $fields = array(
-        	'smallPicture' => $smallFileRecord['uri'],
-        	'middlePicture' => $middleFileRecord['uri'],
-        	'largePicture' => $largeFileRecord['uri'],
-    	);
+        $files = array();
+        foreach ($filePaths as $key => $value) {
+        	$files[$key] = $this->getFileService()->uploadFile('course', new File($value));
+        }
 
     	@unlink($filePath);
+
+        $fields = array(
+        	'smallPicture' => $files["small"]['uri'],
+        	'middlePicture' => $files["middle"]['uri'],
+        	'largePicture' => $files["large"]['uri'],
+    	);
 
     	$oldPictures = array(
             'smallPicture' => $course['smallPicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['smallPicture']) : null,

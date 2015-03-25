@@ -5,6 +5,10 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Service\Common\ServiceKernel;
 
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+
 class FileToolkit
 {
 
@@ -953,6 +957,43 @@ class FileToolkit
 
         $fileName = str_replace('.', '!', $file->getFilename());
         return $fileName;
+    }
+
+    public static function crop($rawImage, $targetPath, $x, $y, $width, $height, $resizeWidth=0, $resizeHeight=0)
+    {
+        $image = $rawImage->copy();
+        $image->crop(new Point($x, $y), new Box($width, $height));
+        if($resizeWidth>0 && $resizeHeight>0){
+            $image->resize(new Box($resizeWidth, $resizeHeight));
+        }
+        $image->save($targetPath, array('quality' => 90));
+
+        return $image;
+    }
+
+    public static function resize($image, $targetPath, $resizeWidth=0, $resizeHeight=0)
+    {
+        $image->resize(new Box($resizeWidth, $resizeHeight));
+        $image->save($targetPath, array('quality' => 90));
+        return $image;
+    }
+
+
+    public static function cropImages($filePath, $cropPptions, $resizeArray)
+    {
+        $pathinfo = pathinfo($filePath);
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($filePath);
+
+        $filePaths = array();
+        foreach ($resizeArray as $key => $value) {
+            $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+            $image = self::crop($rawImage, $savedFilePath, $cropPptions['x'], $cropPptions['y'], $cropPptions['width'], $cropPptions['height'], $value[0], $value[1]);
+            $filePaths[$key] = $savedFilePath;
+        }
+
+        return $filePaths;
+
     }
 
 }

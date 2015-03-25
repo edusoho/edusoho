@@ -108,9 +108,9 @@ class CourseManageController extends BaseController
             $filenamePrefix = "course_{$course['id']}_";
             $fileName = FileToolkit::moveFile($file, 'tmp', $filenamePrefix);
             
-            return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
+            return $this->createJsonResponse(array(
                 'id' => $course['id'],
-                'file' => $fileName)
+                'file' => $fileName
             ));
         }
 
@@ -137,7 +137,7 @@ class CourseManageController extends BaseController
         }
 
         try {
-        $imagine = new Imagine();
+            $imagine = new Imagine();
             $image = $imagine->open($pictureFilePath);
         } catch (\Exception $e) {
             @unlink($pictureFilePath);

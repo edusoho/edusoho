@@ -2,33 +2,19 @@ define(function(require, exports, module) {
     require("jquery.jcrop-css");
     require("jquery.jcrop");
     var Notify = require('common/bootstrap-notify');
+    var ImageCrop = require('../widget/image-crop');
 
     exports.run = function() {
       	require('./header').run();
 
-        var $form = $("#course-picture-crop-form"),
-            $picture = $("#course-picture-crop");
+        var $form = $("#course-picture-crop-form");
 
-        var scaledWidth = $picture.attr('width'),
-            scaledHeight = $picture.attr('height'),
-            naturalWidth = $picture.data('naturalWidth'),
-            naturalHeight = $picture.data('naturalHeight'),
-            cropedWidth = 480,
-            cropedHeight = 270,
-            ratio = cropedWidth / cropedHeight,
-            selectWidth = 360 * (naturalWidth/scaledWidth),
-            selectHeight = 202.5 * (naturalHeight/scaledHeight);
-
-        $picture.Jcrop({
-            trueSize: [naturalWidth, naturalHeight],
-            setSelect: [0, 0, selectWidth, selectHeight],
-            aspectRatio: ratio,
-            onSelect: function(c) {
-                $form.find('[name=x]').val(c.x);
-                $form.find('[name=y]').val(c.y);
-                $form.find('[name=width]').val(c.w);
-                $form.find('[name=height]').val(c.h);
-            }
+        new ImageCrop({
+            element: "#course-picture-crop",
+            x: $form.find("[name=x]"),
+            y: $form.find("[name=y]"),
+            width: $form.find("[name=width]"),
+            height: $form.find("[name=height]")
         });
 
         $('.go-back').click(function(){
