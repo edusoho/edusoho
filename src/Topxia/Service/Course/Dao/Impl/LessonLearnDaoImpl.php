@@ -134,22 +134,12 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
             ->andWhere("finishedTime <= :endTime");
         }
 
-        if (isset($conditions['courseIds'])) {
-            $courseIds = array();
-            foreach ($conditions['courseIds'] as $courseId) {
-                if (ctype_digit($courseId)) {
-                    $courseIds[] = $courseId;
-                }
-            }
-            if ($courseIds) {
-                $courseIds = join(',', $courseIds);
-                $builder->andStaticWhere("courseId IN ($courseIds)");
-            }
-        }
+        $builder->andWhere("courseId IN (:courseIds)");
 
         return $builder;
     }
 
+    //@todo:sql
     public function analysisLessonFinishedDataByTime($startTime,$endTime)
     {
         $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>={$startTime} and `finishedTime`<={$endTime} and `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";

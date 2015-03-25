@@ -174,7 +174,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         if (isset($conditions['notFree'])) {
             $conditions['notFree'] = 0;
         }
-        
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
@@ -196,53 +196,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('categoryId = :categoryId')
-            ->andWhere('smallPicture = :smallPicture');
+            ->andWhere('smallPicture = :smallPicture')
+            ->andWhere('categoryId IN ( :categoryIds )')
+            ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('id NOT IN ( :courseIds )');
 
-        if (isset($conditions['categoryIds'])) {
-            $categoryIds = array();
-            foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit((string)abs($categoryId))) {
-                    $categoryIds[] = $categoryId;
-                }
-            }
-            if ($categoryIds) {
-                $categoryIds = join(',', $categoryIds);
-                $builder->andStaticWhere("categoryId IN ($categoryIds)");
-            }
-        }
-
-        if (isset($conditions['vipLevelIds'])) {
-
-            $vipLevelIds = array();
-            foreach ($conditions['vipLevelIds'] as $vipLevelId) {
-                if (ctype_digit((string)$vipLevelId)) {
-                    $vipLevelIds[] = $vipLevelId;
-                }
-            }
-            if ($vipLevelIds) {
-                $vipLevelIds = join(',', $vipLevelIds);
-                $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
-            }
-        }
 
         if (isset($conditions['notFree']) && ($conditions['notFree'] == true)){
 
-        	if (isset($conditions['chargeCoin']) && ($conditions['chargeCoin'] == true)){
-        		$builder->andStaticWhere('originCoinPrice > 0');
-        	}else{
-        		$builder->andStaticWhere('originPrice > 0');
-        	}
-        }
-
-        if (isset($conditions['courseIds'])) {
-
-            $courseIds=$conditions['courseIds'];
-
-            if(!empty($courseIds)){
-
-                $courseIds = join(',', $courseIds);
-                
-                $builder->andStaticWhere("id NOT IN ($courseIds)");
+            if (isset($conditions['chargeCoin']) && ($conditions['chargeCoin'] == true)){
+                $builder->andStaticWhere('originCoinPrice > 0');
+            }else{
+                $builder->andStaticWhere('originPrice > 0');
             }
         }
 

@@ -48,6 +48,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->getConnection()->fetchAll($sql, array($groupId)) ? : array();
     }
 
+    //@todo:sql.
 	public function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit) 
     {
         $this->filterStartLimit($start, $limit);
