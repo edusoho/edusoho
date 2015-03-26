@@ -1,6 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set nav = 'app' %}
+{% set side_menus = permissions('admin_app') %}
 
 {% block content %}
   <div class="col-md-2">
@@ -16,7 +17,8 @@
         </div>
 
       </div>
-
+      
+      {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
 
     {% endblock %}
   </div>

@@ -3,11 +3,15 @@
 {% block title %}应用中心 - {{ parent() }}{% endblock %}
 
 {% set menu = 'center' %}
+{% set tab_menus = permissions('admin_app_center_show',"tab") %}
+{% set submenu = 'center' %}
 
 {% block main %}
-  <div class="page-header">
-    <h1>应用中心</h1>
+
+  <div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
   </div>
+
   {% if status|default(null) == 'error' %}
     <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
   {% elseif  status|default(null) == 'unlink' %}
