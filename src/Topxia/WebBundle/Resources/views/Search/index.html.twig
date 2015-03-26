@@ -21,7 +21,7 @@
               </select>
             </div>
             <div class="input-group input-group-lg">
-              <input type="text" class="form-control" name="q" value="{{ keywords }}" id="searchText"  placeholder="请输入课程名">
+              <input type="text" class="form-control" name="q" value="{{ keywords }}" id="searchText"  placeholder="请输入感兴趣的课程名">
               <span class="input-group-btn">
               <button class="btn btn-primary" type="submit">搜索</button>
               </span>
@@ -57,7 +57,7 @@
           <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
         {% endif %}
       {% else %}
-        <div class="empty">请输入感兴趣的课程名!</div>
+        <div class="empty"></div>
       {% endif %}
     </div>
     <div class="col-md-3">
