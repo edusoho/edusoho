@@ -46,7 +46,7 @@ admin_finance:
     type: menu
     active: finance
 admin_app:
-    name: 应用
+    name: 教育云
     parent: admin
     router_name: admin_app_installed
     router_params: null
@@ -530,6 +530,7 @@ admin_setting:
     mode: page
     type: menu
     active: site
+    group: 2
 admin_setting_massage:
     name: 基础信息
     parent: admin_setting
@@ -799,4 +800,52 @@ admin_logs_query:
     mode: page
     type: tab
     active: logs_query
+admin_app_center_show:
+    name: ES应用
+    parent: admin_app
+    router_name: admin_app_center
+    router_params: null
+    mode: page
+    type: menu
+    active: center
+admin_setting_cloud:
+    name: 授权码
+    parent: admin_app
+    router_name: admin_setting_cloud
+    router_params: null
+    mode: page
+    type: menu
+    active: app
+admin_app_center:
+    name: 应用中心
+    parent: admin_app_center_show
+    router_name: admin_app_center
+    router_params: null
+    mode: page
+    type: tab
+    active: center
+admin_app_installed:
+    name: 已购项目
+    parent: admin_app_center_show
+    router_name: admin_app_installed
+    router_params: null
+    mode: page
+    type: tab
+    active: installed
+admin_app_upgrades:
+    name: 更新
+    parent: admin_app_center_show
+    router_name: admin_app_upgrades
+    router_params: null
+    mode: page
+    type: tab
+    active: upgrades
+admin_app_logs:
+    name: 更新日志
+    parent: admin_app_center_show
+    router_name: admin_app_logs
+    router_params: null
+    mode: page
+    type: tab
+    active: logs
 
