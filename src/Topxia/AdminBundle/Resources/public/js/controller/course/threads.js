@@ -7,20 +7,28 @@ define(function(require, exports, module) {
         require('../../util/batch-delete')($element);
         require('../../util/item-delete')($element);
 
-        $('[data-role=confirm-btn]').click(function(){
-            var $btn = $(this);
-            if (!confirm($btn.data('confirmMessage'))) {
-                return false;
-            }
-            $.post($btn.data('url'), function(){
-                var url = $btn.data('afterUrl');
-                if (url) {
-                    window.location.href = url;
-                } else {
-                    window.location.reload();
-                }
-            });
-        });
+        $(".promoted-label").on('click', function(){
+
+			var $self = $(this);
+			var span = $self.find('span');
+			var spanClass = span.attr('class');
+			var postUrl = "";
+
+			if(spanClass == "label label-default"){
+				postUrl = $self.data('setUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-success";
+					span.attr('class',labelStatus)
+				});
+			}else{
+				postUrl = $self.data('cancelUrl');
+				$.post(postUrl, function(response) {
+					var labelStatus = "label label-default";
+					span.attr('class',labelStatus)
+				});
+			}
+
+		});		
     };
 
   });
