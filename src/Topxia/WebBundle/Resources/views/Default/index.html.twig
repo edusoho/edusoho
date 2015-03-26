@@ -367,125 +367,13 @@
   {% set mode = mode|default('default') %}
   <ul class="course-wide-list">
     {% for course in courses %}
-    {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
         <img class="course-picture" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
-        <div style="float:right;" class="text-muted mrm mls">
-          {% if setting('course.coursesPrice') == 0 %}
-            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              {% if course.discountActivityId > 0 %}
-                <span class="course-price">
-                  折后价：
-                  {% if course.coinPrice > 0 %}
-                    {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                  {% else %}
-                    免费
-                  {% endif %}
-                </span>
-                <span class="origin-price">
-                  <del>原价：{{ course.originCoinPrice }}{{setting('coin.coin_name')}}</del>
-                </span>
-                <span class="label label-danger">
-                  {% if course.coinPrice > 0 %}
-                      {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-                  {% else %}
-                      免
-                  {% endif %}
-                </span>
-              {% else %}
-                <span class="course-price" style="display:inline">
-                  {% if course.coinPrice > 0 %}
-                    {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                  {% else %}
-                    免费
-                  {% endif %}
-                </span>
-              {% endif %}
-            {% else %}
-              {% if course.discountActivityId > 0 %}
-                <div class="course-price">
-                  折后价：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</div>
-                <span class="origin-price"><del>原价：{{ course.originPrice }}元</del></span>
-                <span class="label label-danger">
-                    {% if course.price > 0 %}
-                        {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
-                    {% else %}
-                        免
-                    {% endif %}
-                </span>
-              {% else %}
-                <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-        </div>
-        <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
-          {% if course.serializeMode=='serialize' %}
-            <span class="label label-success ">更新中</span>
-          {% elseif course.serializeMode=='finished' %}
-            <span class="label label-warning ">已完结</span>
-          {% endif %}
-          {% if course.type == 'live' %}
-              {% set lesson = course['lesson']|default(null) %}
-              {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                <span class="label label-warning series-mode-label">正在直播中</span>
-              {% else %}
-                <span class="label label-success series-mode-label">直播</span>
-              {% endif %}
-          {% endif %}
-        </h4>
-
-        {% if course.type == 'live' %}
-          {% set lesson = course.lesson|default(null) %}
-          {% if lesson %}
-            <div class="live-course-lesson mbm">
-              <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-              <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
-            </div>
-          {% endif %}
-        {% else %}
-          <div class="course-about ellipsis">{{ course.subtitle }}</div>
-        {% endif %}
-
-        <div class="course-footer clearfix">
-
-          {% set teacher = course.teachers|first|default(null) %}
-          {% if teacher %}
-            <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar', teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
-              <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-              <span class="teacher-title ellipsis">{{ teacher.title }}</span>
-            </div>
-          {% endif %}
-          <div class="course-metas">
-            <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
-            <span class="divider"></span>
-            {% if course.showStudentNumType == 'opened' %}
-            <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>学员</span>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </li>
-    {% else %}
-    <li class="course-item clearfix">
-      <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}">
-      </a>
-      <div class="course-body">
-        <div style="float:right;" class="text-muted mrm mls">
-          {% if setting('course.coursesPrice') == 0 %}
-            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              <span class="course-price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-              </span>
-            {% else %}
-              <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
-              </span>
-            {% endif %}
-          {% endif %}
+        <div class="course-price-info">
+          {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
         </div>
         <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
         {% if course.serializeMode=='serialize' %}
@@ -535,7 +423,6 @@
         </div>
       </div>
     </li>
-    {% endif %}
     {% endfor %}
   </ul>
 {% endmacro %}
