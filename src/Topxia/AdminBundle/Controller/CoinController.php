@@ -108,6 +108,12 @@ class CoinController extends BaseController
 
             $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
 
+            foreach ($courses as $courseIndex => $course) {              
+                if ($courses[$courseIndex]['discountActivityId'] > 0){
+                    $courses[$courseIndex]['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($courses[$courseIndex]['discountActivityId']);
+                }
+            }
+            
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
             'set' => $set,
             'courses'=>$courses
@@ -169,9 +175,25 @@ class CoinController extends BaseController
 
     private function updateCoursesCashPrice($data)
     {
+        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
+
         foreach ($data as $key => $value) {
-           
+            $course = $this->getCourseService()->getCourse($key);
             $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
+
+            if (!empty($plugin)) {
+                $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($key, $currentTime=time());
+                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountActivityId'])) {
+                    $this->getCourseService()->setCoursePrice(
+                        $course['id'], 
+                        array(
+                            'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
+                            'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
+                            'discountActivityId' => intval($maxDiscountItem['activityId'])
+                        )
+                    );                    
+                }
+            }
         }
     }
 
@@ -932,7 +954,10 @@ class CoinController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-
+    protected function getDiscountActivityService() 
+    {
+        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
+    }
 
 
 }

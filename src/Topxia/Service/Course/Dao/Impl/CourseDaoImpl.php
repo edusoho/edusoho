@@ -201,6 +201,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('id NOT IN ( :courseIds )');
 
+
+        if (isset($conditions['notFree']) && ($conditions['notFree'] == true)){
+
+            if (isset($conditions['chargeCoin']) && ($conditions['chargeCoin'] == true)){
+                $builder->andStaticWhere('originCoinPrice > 0');
+            }else{
+                $builder->andStaticWhere('originPrice > 0');
+            }
+        }
+
         return $builder;
     }
 

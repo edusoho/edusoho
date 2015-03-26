@@ -203,6 +203,19 @@ class CourseManageController extends BaseController
             }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
+            if ($this->isPluginInstalled("DiscountActivity")) {
+                $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($id, $currentTime=time());
+                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountActivityId'])) {
+                    $this->getCourseService()->setCoursePrice(
+                        $course['id'], 
+                        array(
+                            'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
+                            'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
+                            'discountActivityId' => intval($maxDiscountItem['activityId'])
+                        )
+                    );                    
+                }
+            }
 
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
@@ -210,6 +223,11 @@ class CourseManageController extends BaseController
 
 
         response:
+
+        if (($course['discountActivityId'] > 0)&&($this->isPluginInstalled("DiscountActivity"))){
+            $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountActivityId']);
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
@@ -431,10 +449,10 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getAppService()
+    protected function getDiscountActivityService() 
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }
+        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
+    }    
 
     protected function getClassroomService()
     {

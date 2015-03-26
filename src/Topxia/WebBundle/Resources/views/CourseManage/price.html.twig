@@ -22,8 +22,28 @@
         						<label for="coinPrice"> {{setting('coin.coin_name')}}价格</label>
         					</div>
         					<div class="col-md-8 controls">
-        						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.coinPrice}}" data-cashrate="{{cashRate}}">
-        						<div class="help-block" style="display:none;"></div>
+        						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.originCoinPrice}}" data-cashrate="{{cashRate}}">
+                                                        <div class="help-block" {#style="display:none;"#}>
+                                                            {% if course.discountActivityId > 0 and course.status == 'published' %}
+                                                                <br>
+                                                                <span class="text-muted" style="white-space: normal;">                    
+                                                                    当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            {% if course.coinPrice > 0 %}
+                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% else %}
+                            {% if course.price > 0 %}
+                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% endif %} )下，现价{{ course.coinPrice }}{{setting('coin.coin_name')}}， 活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                    
+                                                                </span>
+                                                            {% endif %}                                                             
+                                                        </div>
         					</div>
         				</div>
         				
@@ -32,8 +52,28 @@
         						<label for="price">手机端价格</label>
         					</div>
         					<div class="col-md-8 controls">
-        						<input type="text" id="price" name="price" class="form-control" value="{{course.price}}" data-cashrate="{{cashRate}}">
-        						<div class="help-block">因手机端不支持虚拟币支付，价格仍显示为人民币价格
+        						<input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
+        						<div class="help-block">
+                                                            因手机端不支持虚拟币支付，价格仍显示为人民币价格
+                                                            {% if course.discountActivityId > 0 and course.status == 'published'  %}
+                                                                <br>
+                                                                <span class="text-muted" style="white-space: normal;">
+                                                                    当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            {% if course.coinPrice > 0 %}
+                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% else %}
+                            {% if course.price > 0 %}
+                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% endif %} )下，现价{{ course.price }}元，活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                     
+                                                                </span>
+                                                            {% endif %}                                                            
         						</div>
         					</div>
         				</div>
@@ -44,9 +84,28 @@
         						<label for="price">价格</label>
         					</div>
         					<div class="col-md-8 controls">
-        						<input type="text" id="price" name="price" class="form-control" value="{{course.price}}" data-cashrate="{{cashRate}}">
+        						<input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
         						<div class="help-block" >
         							<span class="text-muted">{{cashRate}}{{setting('coin.coin_name')}}可抵扣１元</span>
+                                                                {% if course.discountActivityId > 0 and course.status == 'published' %}
+                                                                    <br>
+                                                                    <span class="text-muted" style="white-space: normal;">
+                                                                        当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            {% if course.coinPrice > 0 %}
+                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% else %}
+                            {% if course.price > 0 %}
+                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% endif %} )下，现价{{ course.price }}元，活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                         
+                                                                    </span>
+                                                                {% endif %}                                                                
         						</div>
         					</div>
         				</div>
@@ -56,8 +115,29 @@
         						<label for="price">价格</label>
         					</div>
         					<div class="col-md-8 controls">
-        						<input type="text" id="price" name="price" class="form-control" value="{{course.price}}" data-cashrate="{{cashRate}}">
-        					</div>
+                                                    <input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
+        					
+                                                    <div class="help-block" >
+                                                        {% if course.discountActivityId > 0  and course.status == 'published' %}
+                                                            <span class="text-muted" style="white-space: normal;">
+                                                                当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            {% if course.coinPrice > 0 %}
+                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% else %}
+                            {% if course.price > 0 %}
+                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
+                            {% else %}
+                                免费
+                            {% endif %}
+                        {% endif %} )下，现价{{ course.price }}元，活动中修改的价格都将有活动折扣，请谨慎修改
+                                                                 
+                                                            </span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
         				</div>
         			{% endif %}
 			{% endif %}

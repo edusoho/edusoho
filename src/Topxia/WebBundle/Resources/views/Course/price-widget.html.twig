@@ -1,0 +1,69 @@
+{# 
+  mode的取值有：
+    full：该模式下显示折扣价、原价、打折
+    price: 该模式下如有打折活动则显示折扣价，没有打折活动就显示为原价
+    originPrice：该模式下只显示原价
+    discount：该模式下只显示折扣
+#}
+
+{% set shows = shows|default(['full']) %}
+{% set priceType = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default'  %}
+
+<span class="course-price-widget">
+  {% if course.discountActivityId %}
+
+    {% if 'full' in shows or 'price' in shows %}
+      {% if priceType == 'coin' %}
+        <span class="price">{{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}}</span>
+      {% else %}
+        <span class="price">{{ course.price }} 元</span>
+      {% endif %}
+    {% endif %}
+
+    {% if 'full' in shows or 'originPrice' in shows %}
+      {% if priceType == 'coin' %}
+        <span class="origin-price"><del>{{course.originCoinPrice}}</del></span>
+      {% else %}
+        <span class="origin-price"><del>{{course.originPrice}}</del></span>
+      {% endif %}
+    {% endif %}
+
+    {% if 'full' in shows or 'discount' in shows %}
+
+      {% if priceType == 'coin' %}
+        <span class="discount">
+          {% if course.coinPrice != 0 %}
+            {% if course.originCoinPrice != 0 %}
+              {{ (course.coinPrice / course.originCoinPrice*10)|round(2,'common') }}折
+            {% endif %}
+          {% else %}
+            限免
+          {% endif %}
+        </span>
+      {% else %}
+        <span class="discount">
+          {% if course.price != 0 %}
+            {% if course.originPrice != 0 %}
+              {{ (course.price / course.originPrice*10)|round(2,'common') }}折
+            {% endif %}
+          {% else %}
+            限免
+          {% endif %}
+        </span>
+      {% endif %}
+    {% endif %}
+
+  {% else %}
+
+    {% if 'full' in shows or 'price' in shows %}
+      <span class="price">
+        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+          {% if course.coinPrice > 0 %} {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}} {% else %} 免费 {% endif %}
+        {% else %}
+          {% if course.price > 0 %}{{ course.price }} 元{% else %} 免费 {% endif %}
+        {% endif %}
+      </span>
+    {% endif %}
+
+  {% endif %}
+</span>

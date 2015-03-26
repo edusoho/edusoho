@@ -1,0 +1,90 @@
+<?php
+namespace Topxia\Service\Task\Impl;
+
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Task\TaskService;
+
+class TaskServiceImpl extends BaseService implements TaskService
+{
+
+    public function createTask($type = "single", $startTime, $taskClassName)
+    {
+        $task = array(
+            'type' => $type,
+            'startTime' => $startTime,
+            'taskName' => $taskClassName);
+
+        $task = $this->getTaskDao()->createTask($task);
+
+        return $task;
+    }
+
+    public function cancelTaskByClassName($taskClassName)
+    {
+
+    }
+
+    public function getTask($id)
+    {
+        return $this->getTaskDao()->getTask($id);
+    }
+
+    public function findActiveTasks($time, $lock = false)
+    {
+        return $this->getTaskDao()->findActiveTasks($time, $lock);
+    }
+
+    public function run()
+    {
+        $currentTime = time();
+        try {
+            $this->getTaskDao()->getConnection()->beginTransaction();
+            $tasks = $this->findActiveTasks($currentTime, true);
+
+            if ($tasks) {
+
+                foreach ($tasks as $task) {
+
+                    $this->updateTask($task['id'], array('status' => 'close'));
+                    $this->init($task['taskName'], $currentTime);
+
+                }
+            }
+
+            $this->getTaskDao()->getConnection()->commit();
+
+        } catch (\Exception $e) {
+
+            $this->getTaskDao()->getConnection()->rollback();
+
+            throw $e;
+        }
+    }
+
+    private function init($taskClassName, $currentTime)
+    {
+        if (substr($taskClassName, 0, 6) == "Plugin") {
+
+            $class = "DiscountActivity\\DiscountActivityBundle\\Task\\" . $taskClassName;
+
+        } else {
+
+            $class = "Topxia\\Service\\Task\\Activity\\" . $taskClassName;
+        }
+
+        $task = new $class;
+
+        $task->run($currentTime);
+    }
+
+    public function updateTask($id, $fields)
+    {
+        return $this->getTaskDao()->updateTask($id, $fields);
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->createDao('Task.TaskDao');
+    }
+
+}

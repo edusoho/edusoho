@@ -1,4 +1,5 @@
 <ul class="course-wide-list">
+
   {% for course in courses %}
   <li class="course-item clearfix">
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
@@ -8,6 +9,8 @@
     <div class="course-body">
      
      <div style="float:right;" class="text-muted mrm mls">
+
+
          {% if setting('course.coursesPrice') == 0 %}
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                 {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
@@ -40,6 +43,52 @@
                   {% else %}免费{% endif %}
                 </span>
             {% endif %}
+            {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') 
+                                and setting('coin.price_type') == 'Coin' 
+                                and course.originCoinPrice > 0) 
+                                or (setting('coin.coin_enabled') 
+                                and setting('coin.price_type') != 'Coin' 
+                                and course.originPrice > 0) 
+                                or (not setting('coin.coin_enabled') 
+                                and course.originPrice > 0))
+
+              %}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <label class="label label-danger label-discount pull-right">
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {% if course.coinPrice > 0 %}
+                        {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
+                    {% else %}
+                        免
+                    {% endif %}
+                {% else %}
+                    {% if course.price > 0 %}
+                        {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
+                    {% else %}
+                        免
+                    {% endif %}
+                {% endif %}                      
+              </label>              
+            {% endif %}
+ 
+            {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') 
+                                and setting('coin.price_type') == 'Coin' 
+                                and course.originCoinPrice > 0) 
+                                or (setting('coin.coin_enabled') 
+                                and setting('coin.price_type') != 'Coin' 
+                                and course.originPrice > 0) 
+                                or (not setting('coin.coin_enabled') 
+                                and course.originPrice > 0))
+
+              %}
+                <br>
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                <span class="text-sm" style="display: inline;">原价：<del>{{course.originCoinPrice}}{{setting('coin.coin_name')}}</del></span>
+              {% else %}
+                <span class="text-sm" style="display: inline;">原价：<del>{{course.originPrice}}元</del></span>
+              {% endif %}
+            {% endif %}
+
           {% endif %}
         </div>
 
