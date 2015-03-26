@@ -57,6 +57,7 @@ class CourseOrder1Controller extends CourseOrderController
                 'createdTimeGreaterThan' => strtotime('-40 hours'),
             ), array('createdTime', 'DESC'), 0, 1
         );
+var_dump('$oldOrders=>',$oldOrders);
 
         $order = current($oldOrders);
 
@@ -69,7 +70,7 @@ class CourseOrder1Controller extends CourseOrderController
             $level=$this->getLevelService()->getLevel($vip['levelId']);
 
             if($level && $this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId'])=="ok"){
-                
+               
                 $status=$this->getVipService()->checkUserInMemberLevel($user->id,$vip['levelId']);
                 $vipPrice=$course['price']*0.1*$level['courseDiscount'];
                 $vipPrice=sprintf("%.2f", $vipPrice);
@@ -93,7 +94,7 @@ class CourseOrder1Controller extends CourseOrderController
             ));
         }
 
-        $account=$this->getCashService()->getAccountByUserId($user['id'],false);
+        $account=$this->getCashAccountService()->getAccountByUserId($user['id'],false);
         
         if(empty($account)){
             $this->getCashService()->createAccount($user['id']);
@@ -211,7 +212,11 @@ class CourseOrder1Controller extends CourseOrderController
 
     protected function getCashService(){
       
-        return $this->getServiceKernel()->createService('Coin:Cash.CashService');
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService(){
+        return $this->getServicekernel()->createService('Cash.CashAccountService');
     }
 
 

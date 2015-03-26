@@ -1,6 +1,12 @@
-course_buy:
-    pattern:  /course/{id}/buy
-    defaults: { _controller: CustomWebBundle:CourseOrder1:buy }
+order_create:
+    pattern:  /order/create
+    defaults: { _controller: CustomWebBundle:CustomOrder:create }
+    methods: [POST]
+
+order_show:
+    pattern:  /order/show
+    defaults: { _controller: CustomWebBundle:CustomOrder:show }
+    
 course_order_pay:
     pattern:  /course/order/pay
     defaults: { _controller: CustomWebBundle:CourseOrder1:pay }
@@ -8,7 +14,7 @@ course_order_pay:
 
 coupon_check:
     pattern:  /{type}/{id}/coupon/check
-    defaults: { _controller: CustomWebBundle:Order1:couponCheck }
+    defaults: { _controller: CustomWebBundle:CustomOrder:couponCheck }
 
 course_order_pay_return:
     pattern:  /course/order/pay/{name}/return
