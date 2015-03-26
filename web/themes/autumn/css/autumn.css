@@ -142,24 +142,9 @@ a:hover {
     margin:10px 20px 20px;
 }
 
-.autumn-course-grid .price {
-    float: right;
-    color: #f78a4b;
-    font-weight: bold;
+.autumn-course-grid .course-price-info {
+    margin:10px 20px;
 }
-
-.autumn-course-grid .price-show {
-    display:inline;
-    color: #f78a4b;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.autumn-course-grid .origin-price {
-    color: #aaa;
-    font-size: 14px;
-}
-
 
 .autumn-course-list {
 
