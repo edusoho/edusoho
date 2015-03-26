@@ -48,3 +48,22 @@ signed_records:
 sign_repair:
     pattern:  /sign/{groupId}/repair
     defaults: { _controller: CustomWebBundle:Sign:signRepair }
+
+my_coin:
+     path:     /my/coin
+     defaults: { _controller: CustomWebBundle:CoinWeb:index }
+# my_coin_buy:
+#     path:     /my/coin/buy
+#     defaults: { _controller: CustomWebBundle:CoinWeb:buy }
+# coin_pay:
+#     path:     /coin/pay
+#     defaults: { _controller: CustomWebBundle:CoinWeb:pay }
+# coin_order_pay_return:
+#     path:     /coin/pay/return/{name}
+#     defaults: { _controller: CustomWebBundle:CoinWeb:payReturn }
+# coin_order_pay_notify:
+#     path:     /coin/order/notify/{name}
+#     defaults: { _controller: CustomWebBundle:CoinWeb:payNotify }
+# coin_change:
+#     path:     /coin/change
+#     defaults: { _controller: CustomWebBundle:CoinWeb:change }
