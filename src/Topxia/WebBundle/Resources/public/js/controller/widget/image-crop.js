@@ -38,9 +38,15 @@ define(function(require, exports, module) {
 	        self.set("img", img);
         },
 
-        triggerSelect: function(){
-        	var self = this;
-        	self.trigger("select", this.get("img").tellScaled());
+        crop: function(postData){
+        	var cropImgUrl = this.element.data("cropImgUrl");
+
+        	postData = $.extend(this.get("img").tellScaled(), postData);
+            
+            var self = this;
+            $.post(cropImgUrl, postData ,function(response){
+                self.trigger("afterCrop", response);
+            })
         }
 
     });

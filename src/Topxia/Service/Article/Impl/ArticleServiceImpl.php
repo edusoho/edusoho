@@ -179,8 +179,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 			throw $this->createServiceException("文章不存在，操作失败。");
 		}
 
-		$this->getArticleDao()->updateArticle($id, $fields = array('thumb' => ''));
-		$this->getArticleDao()->updateArticle($id, $fields = array('originalThumb' => ''));
+		$this->getArticleDao()->updateArticle($id, $fields = array('thumb' => '', 'originalThumb' => ''));
+
+		$this->getFileService()->deleteFileByUri($checkArticle["thumb"]);
+		$this->getFileService()->deleteFileByUri($checkArticle["originalThumb"]);
+
 		$this->getLogService()->info('Article', 'removeThumb', "文章#{$id}removeThumb");
 	}
 
@@ -220,42 +223,26 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		$this->getLogService()->info('Article', 'unpublish', "文章#{$id}未发布");
 	}
 
-	public function changeIndexPicture($filePath, $options)
+	public function changeIndexPicture($data)
 	{
-        $pathinfo = pathinfo($filePath);
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
-        $largeImage = $rawImage->copy();
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
 
-        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(216, 120));
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
+        $data = ArrayToolkit::index($data, "type");
+        $files = ArrayToolkit::index($files, "id");
+        foreach ($data as $key => $value) {
+        	if($key == "origin"){
+        		$file = $this->getFileService()->getFileObject($value["id"]);
+        		$file = $this->getFileService()->uploadFile("article", $file);
+        		$data[$key]["file"] = $file;
 
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeFileRecord = $this->getFileService()->uploadFile('article', new File($largeFilePath));
+        		$this->getFileService()->deleteFileByUri($files[$value["id"]]["uri"]);
+        	} else {
+        		$data[$key]["file"] = $files[$value["id"]];
+        	}
+        }
 
-		$uri = $largeFileRecord['uri'];
-		$fileOriginalName = basename($uri);
-		$fileOriginalExtension = pathinfo($uri,PATHINFO_EXTENSION);
-		$fileOriginalNameNew = str_replace(".{$fileOriginalExtension}", "_orig.{$fileOriginalExtension}", $fileOriginalName);
-
-		$fileOriginalPath = str_replace(array('public://',"{$fileOriginalName}"),'', $uri);
-		$fileOriginalDirectory =$pathinfo['dirname'] . '/' . $fileOriginalPath;
-		$fileOriginalDirectory = str_replace(array("/tmp", '\tmp'), "", $fileOriginalDirectory);
-		$fileOriginalDirectory = substr($fileOriginalDirectory, 0,-1);
-		
-		$new_file = new File($filePath);
-		$file_res = $new_file->move($fileOriginalDirectory, $fileOriginalNameNew);
-
-        @unlink($filePath);
-
-        $webPath = realpath($this->getKernel()->getParameter('topxia.upload.public_directory'))."/";
-		return array(
-				'fileOriginalName'=>$fileOriginalName,
-				'fileOriginalNameNew'=>$fileOriginalNameNew,
-				'fileOriginalPath'=>str_replace($webPath, "", $fileOriginalDirectory)
-			);
+        return $data;
 	}
 
 

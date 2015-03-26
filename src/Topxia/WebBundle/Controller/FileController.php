@@ -68,24 +68,17 @@ class FileController extends BaseController
             );
         }
 
-        $this->getFileService()->deleteFileByUri($record["uri"]);
+        if(isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+            $fields[] = array(
+                "type" => "origin",
+                "id" => $record['id']
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record["uri"]);
+        }
 
         return $this->createJsonResponse($fields);
     }
-
-    // public function uploadAction (Request $request)
-    // {
-    //     $group = $request->query->get('group');
-    //     $file = $this->get('request')->files->get('file');
-
-    //     $record = $this->getFileService()->uploadFile($group, $file);
-
-    //     $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-
-    //     return new Response(json_encode($record));
-
-    //     return $this->createJsonResponse($record);
-    // }
 
     protected function getFileService()
     {

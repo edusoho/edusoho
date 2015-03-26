@@ -988,7 +988,7 @@ class FileToolkit
         $filePaths = array();
         foreach ($resizeArray as $key => $value) {
             $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
-            $image = self::crop($rawImage, $savedFilePath, $cropOptions['x'], $cropOptions['y'], $cropOptions['width'], $cropOptions['height'], $value[0], $value[1]);
+            $image = self::crop($rawImage, $savedFilePath, $cropOptions['x'], $cropOptions['y'], $cropOptions['w'], $cropOptions['h'], $value[0], $value[1]);
             $filePaths[$key] = $savedFilePath;
         }
 

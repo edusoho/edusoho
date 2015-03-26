@@ -16,10 +16,6 @@ define(function(require, exports, module) {
             document.location.href = url;
         });
 
-        $('#upload-picture-btn').click(function(){
-            uploader.upload();
-        })
-
         $('.use-partner-avatar').on('click', function(){
             var goto = $(this).data('goto');
             $.post($(this).data('url'), function(){

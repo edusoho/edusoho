@@ -20,7 +20,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            
+            'click' : "onClick"
         },
 
         setup: function() {
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
 		    this.set("uploader", uploader);
 		},
 
-		upload: function(){
+		onClick: function(){
 			this.get("uploader").upload();
 		}
 

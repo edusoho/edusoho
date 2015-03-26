@@ -18,10 +18,6 @@ define(function(require, exports, module) {
 			document.location.href = url;
 		});
 
-		$('#upload-picture-btn').click(function(){
-			uploader.upload();
-		})
-
 	};
 
 });
