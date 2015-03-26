@@ -106,7 +106,7 @@ class CustomOrderController extends OrderController
     public function createAction(Request $request)
     {
         $fields = $request->request->all(); 
-        var_dump( $fields);
+
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
@@ -151,8 +151,6 @@ class CustomOrderController extends OrderController
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount = (string) ((float) $amount);
             $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
-
-             var_dump($amount, $totalPrice);
 
              //如果是课程，则根据用户是否是VIP重新教研支付金额
             if($targetType  =='course' ){

@@ -31,17 +31,17 @@
 
             {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
               {% if priceType|default('RMB') =='Coin' %}
-                <input type="text" name="totalPrice" value="{{course.vipCoinPrice}}"/>
+                <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
               {% else %}
-                  <input type="text" name="totalPrice" value="{{course.vipPrice}}"/>
+                  <input type="hidden" name="totalPrice" value="{{course.vipPrice}}"/>
               {% endif %}
             {% else %}
-               <input type="text" name="totalPrice" value="{{totalPrice}}"/>
+               <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
             {% endif %}   
 
 
 
-            <input type="text" name="shouldPayMoney" value=""/>
+            <input type="hidden" name="shouldPayMoney" value=""/>
 
             <input type="hidden" name="sms_code" value=""/>
             <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
