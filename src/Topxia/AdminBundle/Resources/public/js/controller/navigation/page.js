@@ -32,7 +32,6 @@ define(function(require, exports, module) {
                     $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
                 });
                 var data = group.sortable("serialize").get();
-                var jsonString = JSON.stringify(data, null, ' ');
                 $.post($tbody.data('updateSeqsUrl'), {data:data}, function(response){
                 });
             }
