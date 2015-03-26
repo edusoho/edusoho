@@ -6,8 +6,8 @@
 
  
 {% block maincontent %}
-<!--     <div class="page-header"><h1>虚拟币管理</h1></div>
-    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %} -->
+
+  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -72,4 +72,12 @@
     </div>
  {{ web_macro.paginator(paginator) }}
 
+{% else %}
+<div class="well" style="text-align:center;">
+
+
+虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-帐务设置-虚拟币-使用方式  </a>中设置开启
+
+</div>
+{% endif %}
 {% endblock %}

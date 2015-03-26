@@ -77,6 +77,7 @@
 }
 
 </style>
+{% if setting("mobile.enabled") == 1 %}
 
 <div class="mbl">
 
@@ -448,5 +449,14 @@
   </div>
 
 </form>
+
+{% else %}
+<div class="well" style="text-align:center;">
+
+
+移动端未开启，请先在<a href="{{ path('admin_setting_mobile') }}"> 系统-课程设置-移动端设置 </a>中设置开启
+
+</div>
+{% endif %}
 
 {% endblock %}
