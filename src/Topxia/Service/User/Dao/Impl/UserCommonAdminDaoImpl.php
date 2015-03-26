@@ -22,7 +22,7 @@ class UserCommonAdminDaoImpl extends BaseDao implements UserCommonAdminDao
     {   
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? order by id asc Limit 10 ";
         
-        return $this->getConnection()->fetchAll($sql, array($userId));
+        return $this->getConnection()->fetchAll($sql, array($userId)) ? :null;
 
     }
 

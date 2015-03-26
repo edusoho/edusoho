@@ -16,7 +16,7 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
     {   
         if(!$userId) {
 
-            return array();
+            return null;
         }
 
         $admins = $this->getCommonAdminDao()->findCommonAdminByUserId($userId);
