@@ -54,7 +54,7 @@ class GroupController extends BaseController
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
 
-            $course = $this->getCourseService()->recommendCourse($id, $number);
+            $course = $this->getGroupService()->recommendGroup($id, $number);
 
             //$user = $this->getUserService()->getUser($course['userId']);
 
@@ -78,7 +78,7 @@ class GroupController extends BaseController
 
 	  protected function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Custom:Group.GroupService');
     }
 
 
