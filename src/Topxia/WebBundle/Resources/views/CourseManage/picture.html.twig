@@ -31,7 +31,7 @@
           <button 
           id="upload-picture-btn"
           class="btn btn-fat btn-primary" 
-          data-upload-url="{{ path('course_manage_picture', {id:course.id}) }}"
+          data-upload-token="{{ upload_token('tmp', 'image') }}"
           data-goto-url="{{path('course_manage_picture_crop', {id:course.id})}}"
           >选择要上传的图片</button>
         </div>

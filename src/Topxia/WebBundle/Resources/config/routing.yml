@@ -97,6 +97,11 @@ file_upload:
     defaults: { _controller: TopxiaWebBundle:File:upload }
     methods: [POST]
 
+file_img_crop:
+    pattern:  /file/img/crop
+    defaults: { _controller: TopxiaWebBundle:File:cropImg }
+    methods: [POST]
+
 uploadfile_upload:
     pattern:  /uploadfile/upload
     defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
@@ -133,15 +138,6 @@ uploadfile_cloud_convert_callback3:
 uploadfile_cloud_get_media_info:
     pattern:  /uploadfile/get_media_info/{type}
     defaults: { _controller: TopxiaWebBundle:UploadFile:getMediaInfo }
-
-uploadfile_img:
-    pattern:  /uploadfile/img
-    defaults: { _controller: TopxiaWebBundle:UploadFile:uploadImg }
-    methods: [POST]
-
-uploadfile_img_crop:
-    pattern:  /uploadfile/{group}/img/crop
-    defaults: { _controller: TopxiaWebBundle:UploadFile:cropImg }
 
 hls_playlist:
     pattern: /hls/{id}/playlist/{token}.m3u8

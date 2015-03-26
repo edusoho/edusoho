@@ -956,8 +956,7 @@ class FileToolkit
         $directory = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/'.$targetGroup;
         $file = $originFile->move($directory, $filename);
 
-        $fileName = str_replace('.', '!', $file->getFilename());
-        return $fileName;
+        return $file;
     }
 
     public static function crop($rawImage, $targetPath, $x, $y, $width, $height, $resizeWidth=0, $resizeHeight=0)

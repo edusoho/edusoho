@@ -25,14 +25,16 @@ define(function(require, exports, module) {
 
         setup: function() {
         	var self = this;
+        	var formData = $.extend(self.get("formData"), {token: self.element.data("uploadToken")});
+
 		    var uploader = WebUploader.create({
 		        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-		        server: '../../../uploadfile/img',
+		        server: '../../../file/upload',
 		        pick: {
 		        	id:this.element,
 		        	multiple:false
 		        },
-		        formData: $.extend(this.formData, {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
+		        formData: $.extend(formData, {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
 		        accept: this.get("accept"),
 				auto: true,
 				fileNumLimit: 1,

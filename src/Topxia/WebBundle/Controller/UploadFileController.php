@@ -12,52 +12,6 @@ use Topxia\Service\User\CurrentUser;
 class UploadFileController extends BaseController
 {
 
-    public function uploadImgAction(Request $request)
-    {
-        $file = $request->files->get('file');
-        if (!FileToolkit::isImageFile($file)) {
-            return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-        }
-
-        $group = $request->request->get('group');
-        if(empty($group)){
-            $group = "tmp";
-        }
-        $fileName = FileToolkit::moveFile($file, $group);
-        
-        return $this->createJsonResponse(array(
-            'file' => $fileName
-        ));
-    }
-
-    public function cropImgAction(Request $request, $group)
-    {
-        $options = $request->request->all();
-        $filename = $options['file'];
-        
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        $imgs = $options["imgs"];
-        $cropImages = array();
-        foreach ($imgs as $key => $value) {
-            $cropImages[$key] = explode(",",$value);
-        }
-
-        $filePaths = FileToolKit::cropImages($pictureFilePath, $options, $cropImages);
-
-        $fields = array();
-        foreach ($filePaths as $key => $value) {
-            $file = $this->getFileService()->uploadFile($group, new File($value));
-            $fields[$key] = $file['uri'];
-        }
-
-        @unlink($filePath);
-
-        return $this->createJsonResponse($fields);
-    }
-
     public function uploadAction(Request $request)
     {
         $token = $request->request->get('token');

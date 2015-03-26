@@ -114,8 +114,10 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        $filename = $request->query->get('file');
+        $fileId = $request->query->get('fileId');
         
+
+
         list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getScaledImgProperties($filename, 480, 270);
         $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $assets->getUrl($pictureUrl);

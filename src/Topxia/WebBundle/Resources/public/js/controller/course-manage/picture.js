@@ -10,13 +10,12 @@ define(function(require, exports, module) {
 
 		var uploader = new WebUploader({
 			element: '#upload-picture-btn',
-			fileVal: 'picture'
 		});
 
 		uploader.on('uploadSuccess', function(file, response ) {
 			var url = $("#upload-picture-btn").data("gotoUrl");
 			Notify.success('上传成功！', 1);
-			document.location.href = url+"?file="+response.file;
+			//document.location.href = url+"?fileId="+response.id;
 		});
 
 		$('#upload-picture-btn').click(function(){
