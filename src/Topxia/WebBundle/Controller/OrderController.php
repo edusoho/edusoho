@@ -25,6 +25,10 @@ class OrderController extends BaseController
         }
 
         $processor = OrderProcessorFactory::create($targetType);
+        $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
+        if (isset($checkInfo['error'])) {
+            return $this->createMessageResponse('error', $checkInfo['error']);
+        }
 
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);

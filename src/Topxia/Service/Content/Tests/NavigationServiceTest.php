@@ -14,6 +14,27 @@ class NavigationServiceTest extends BaseTestCase
         $this->assertNull(null);
     }
 
+    public function testCreateNavigation()
+    {
+        $fileds = array(
+            'name' => '测试导航',
+            'parentId' => 0,
+            'url' => 'http://baidu.com',
+            'isOpen' => 0,
+            'isNewWin' => 0,
+            'type' => 'top'
+        );
+
+        $navigation = $this->getNavigationService()->createNavigation($fileds);
+        $this->assertNotNull($navigation);
+    }
+
+    public function testUpdateNavigationsSequenceByIds()
+    {
+        $ids = array('1', '2', '3');
+        $this->getNavigationService()->updateNavigationsSequenceByIds($ids);
+    }
+
     private function getNavigationService()
     {
         return $this->getServiceKernel()->createService('Content.NavigationService');

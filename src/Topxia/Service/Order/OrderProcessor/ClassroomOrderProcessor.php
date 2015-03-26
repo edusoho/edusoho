@@ -14,6 +14,15 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->router;
 	}
 
+    public function preCheck($targetId, $userId)
+    {
+        if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
+            return array('error' => '已经是班级的学员了!');
+        }
+
+        return array();
+    }
+
 	public function getOrderInfo($targetId, $fields)
 	{
         $classroom = $this->getClassroomService()->getClassroom($targetId);
