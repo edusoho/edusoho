@@ -408,36 +408,48 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-    public function changeCoursePicture($courseId, $files)
+    public function changeCoursePicture($courseId, $data)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，图标更新失败！');
         }
 
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
+
+        $files = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
+
         $fields = array(
-        	'smallPicture' => $files["small"],
-        	'middlePicture' => $files["middle"],
-        	'largePicture' => $files["large"]
+        	'smallPicture' => $files[$fileIds["small"]["id"]]["uri"],
+        	'middlePicture' => $files[$fileIds["middle"]["id"]]["uri"],
+        	'largePicture' => $files[$fileIds["large"]["id"]]["uri"]
     	);
 
+    	$this->deleteNotUsedPictures($course);
+
+		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+        
+        return $this->getCourseDao()->updateCourse($courseId, $fields);
+    }
+
+    private function deleteNotUsedPictures($course)
+    {
     	$oldPictures = array(
-            'smallPicture' => $course['smallPicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['smallPicture']) : null,
-            'middlePicture' => $course['middlePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['middlePicture']) : null,
-            'largePicture' => $course['largePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['largePicture']) : null
+            'smallPicture' => $course['smallPicture'] ? $course['smallPicture'] : null,
+            'middlePicture' => $course['middlePicture'] ? $course['middlePicture'] : null,
+            'largePicture' => $course['largePicture'] ? $course['largePicture'] : null
         );
 
     	$courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
     	if ($courseCount <= 1) {
     		array_map(function($oldPicture){
                 	if (!empty($oldPicture)){
-        	            @unlink($oldPicture);
+                		$this->getFileService()->deleteFileByUri($oldPicture);
                 	}
                 }, $oldPictures);
         }
-		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
-        
-        return $this->getCourseDao()->updateCourse($courseId, $fields);
     }
 
 	public function recommendCourse($id, $number)

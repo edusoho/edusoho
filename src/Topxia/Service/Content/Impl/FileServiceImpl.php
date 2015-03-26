@@ -126,6 +126,13 @@ class FileServiceImpl extends BaseService implements FileService
 		$this->getFileDao()->deleteFile($id);
 	}
 
+	public function deleteFileByUri($uri)
+	{
+		$this->getFileDao()->deleteFileByUri($uri);
+		$parsed = $this->parseFileUri($uri);
+		@unlink($parsed["fullpath"]);
+	}
+
     public function getFile($id)
     {
         return $this->getFileDao()->getFile($id);

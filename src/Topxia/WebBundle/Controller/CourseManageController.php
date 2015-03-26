@@ -109,8 +109,8 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         if($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-            $this->getCourseService()->changeCoursePicture($course['id'], $fields["imgs"]);
+            $data = $request->request->all();
+            $this->getCourseService()->changeCoursePicture($course['id'], $data["images"]);
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
@@ -118,7 +118,10 @@ class CourseManageController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
-        list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getScaledImgProperties($parsed, 480, 270);
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], 480, 270);
+
+        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') ."/". $parsed['path'];
+        $pictureUrl = ltrim($pictureUrl, ' /');
         $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $assets->getUrl($pictureUrl);
 

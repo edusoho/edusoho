@@ -996,11 +996,11 @@ class FileToolkit
 
     }
 
-    public static function getScaledImgProperties($parsed, $width, $height)
+    public static function getImgInfo($fullPath, $width, $height)
     {
         try {
             $imagine = new Imagine();
-            $image = $imagine->open($parsed['fullpath']);
+            $image = $imagine->open($fullPath);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
         }
@@ -1008,10 +1008,7 @@ class FileToolkit
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen($width)->heighten($height);
 
-        $pictureUrl = ServiceKernel::instance()->getParameter('topxia.upload.public_url_path') ."/". $parsed['path'];
-        $pictureUrl = ltrim($pictureUrl, ' /');
-
-        return array($pictureUrl, $naturalSize, $scaledSize);
+        return array($naturalSize, $scaledSize);
     }
 
 }

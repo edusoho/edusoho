@@ -38,7 +38,7 @@ define(function(require, exports, module) {
             };
             $.post(cropImgUrl, postData ,function(response){
                 var url = $("#upload-picture-btn").data("url");
-                $.post(url, {imgs: response}, function(){
+                $.post(url, {images: response}, function(){
                     history.go(-1);
                 });
             })

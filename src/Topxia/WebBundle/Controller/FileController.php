@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Util\UploadToken;
@@ -45,18 +46,21 @@ class FileController extends BaseController
         $options = $request->request->all();
 
         $record = $this->getFileService()->getFile($options["fileId"]);
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
 
-        $pictureFilePath = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
-        $filePaths = FileToolKit::cropImages($pictureFilePath, $options, $options["imgs"]);
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options, $options["imgs"]);
 
         $fields = array();
         foreach ($filePaths as $key => $value) {
             $file = $this->getFileService()->uploadFile($group, new File($value));
-            $fields[$key] = $file['id'];
+            $fields[] = array(
+                "type" => $key,
+                "id" => $file['id']
+            );
         }
 
-        @unlink($filePath);
+        $this->getFileService()->deleteFileByUri($record["uri"]);
 
         return $this->createJsonResponse($fields);
     }

@@ -56,6 +56,8 @@ interface FileService
 	 */
 	public function deleteFile($id);
 
+	public function deleteFileByUri($uri);
+
 	/**
 	 * 绑定文件到目标对象
 	 * 
