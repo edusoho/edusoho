@@ -16,10 +16,11 @@ define(function(require, exports, module) {
             display: ''
         });
 
-        $('input:radio[name="coursesTypeChoices"]').on("change", function () {
+
+        $('input:checkbox[name="coursesTypeChoices"]').on("change", function () {
            
             $(this).siblings('input').prop('checked',false);
-            
+ 
             $(this).parents("form").submit();
         });
 
