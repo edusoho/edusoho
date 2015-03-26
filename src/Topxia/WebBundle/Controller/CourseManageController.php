@@ -116,7 +116,7 @@ class CourseManageController extends BaseController
 
         $filename = $request->query->get('file');
         
-        list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getImgProperties($filename, 480, 270);
+        list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getScaledImgProperties($filename, 480, 270);
         $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $assets->getUrl($pictureUrl);
 

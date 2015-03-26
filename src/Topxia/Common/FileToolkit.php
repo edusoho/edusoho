@@ -997,7 +997,7 @@ class FileToolkit
 
     }
 
-    public static function getImgProperties($filename, $width, $height)
+    public static function getScaledImgProperties($filename, $width, $height)
     {
         $filename = str_replace('!', '.', $filename);
         $filename = str_replace(array('..' , '/', '\\'), '', $filename);
