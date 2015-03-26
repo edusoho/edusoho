@@ -610,78 +610,29 @@ body {
   margin-bottom: 15px;
   padding: 10px;
   background-color: #f5f5f5;
+  list-style: none;
 }
 
-.course-cover-heading .price-info p {
+.course-cover-heading .price-info > li {
   line-height: 22px;
-  margin-bottom: 0;
+  margin: 3px 0;
   vertical-align: middle;
 }
 
-@media (min-width: 767px) and (max-width: 991px) {
-  .course-cover-heading .price-info p {
-    margin-bottom: 5px;
-  }
-}
-
-.course-cover-heading .price-info .price-label {
+.course-cover-heading .price-info-label {
   width: 60px;
   display: inline-block;
   color: #999;
 }
 
-.course-cover-heading .price-info .old-price {
-  font-size: 16px;
-  color: #999;
+.course-cover-heading .course-price-widget .price {
+  font-size: 18px;
+  /*font-weight: bold;*/
 }
 
 .course-cover-heading .price-info .activity {
-  color: #f40;
+  color: #f50;
   margin-right: 10px;
-}
-
-.course-cover-heading .price-info .discount-tag {
-  margin-top: -3px;
-  margin-left: 20px;
-  padding: 0 15px;
-  background: #f4511e;
-  color: #fff;
-  text-decoration: none;
-  float: left;
-  height: 24px;
-  line-height: 24px;
-  position: relative;
-  font-size: 14px;
-}
-
-.course-cover-heading .price-info .discount-tag:before {
-  content: "";
-  float: left;
-  position: absolute;
-  top: 0;
-  left: -12px;
-  width: 0;
-  height: 0;
-  border-color: transparent #f4511e transparent transparent;
-  border-style: solid;
-  border-width: 12px 12px 12px 0;
-}
-
-.course-cover-heading .price-info .discount-tag:after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 2px;
-  float: left;
-  width: 4px;
-  height: 4px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  background: #fff;
-  -moz-box-shadow: -1px -1px 2px #8e0000;
-  -webkit-box-shadow: -1px -1px 2px #8e0000;
-  box-shadow: -1px -1px 2px #8e0000;
 }
 
 .course-cover-heading .stats {

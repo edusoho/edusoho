@@ -33,9 +33,7 @@
       {% endif %}
     </h1>
     <div class="subtitle">{{ course.subtitle }}</div>
-    <div class="price-info">
-      {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
-    </div>
+    {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
 
     <div class="stats">
       <span class="stat-item">

@@ -1,129 +1,35 @@
 {% if setting('course.coursesPrice') == 0 %}
-{#
-<p>
-  价　格：
-  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-    {% if course.coinPrice > 0 %}
-      {% if free_limit_type(course) == 'free_now' %}
-        <span class="money-num">0.00</span>
-        <span class="money-text">{{setting('coin.coin_name')}}</span>
-        <span class="text-muted">(原价：<del>{{ course.coinPrice }}</del> {{setting('coin.coin_name')}})</span>
-        <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-      {% else %}
-        <span class="course-price">
-          <span class="money-num">{{ course.coinPrice }}</span>
-          <span class="money-text" > {{setting('coin.coin_name')}}</span>
+
+  <ul class="price-info">
+    <li>
+      {% if course.discountActivityId == 0 %}
+        <span class="price-info-label">价格</span>
+      {% else  %}
+        <span class="price-info-label">折后价</span>
+      {% endif %}
+      <span class="price-info-content">
+        {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows: ['price', 'discount']} %}
+      </span>
+    </li>
+    {% if course.discountActivityId > 0 %}
+      <li>
+        <span class="price-info-label">原价</span>
+        <span class="price-info-content">
+          {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows: ['originPrice']} %}
         </span>
-      {% endif %}
-    {% else %}
-      <span class="money-num" style="font-size:16px;">免费</span>
+      </li>
+      <li>
+        <span class="price-info-label">活动</span>
+        <span class="price-info-content">
+          <span class="activity">{{ (course.discountActivity.activityName)|default('') }}</span>
+          <span id="activity-left-time" data-activity-endtime="{{ (course.discountActivity.endTime)|default(0) }}">
+            <span class="glyphicon glyphicon-time"></span>
+            <span id="hours-left"></span>时
+            <span id="minutes-left"></span>分
+            <span id="seconds-left"></span>秒</span>
+        </span>
+      </li>
     {% endif %}
-  {% else %}
-    {% if course.price > 0 %}
-      {% if free_limit_type(course) == 'free_now' %}
-        <span class="money-num">0.00</span>
-        <span class="money-text">元</span>
-        <span class="text-muted">(原价：<del>{{ course.price }}</del> 元)</span>
-        <span class="mll">{% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}</span>
-      {% else %}
-      <span class="course-price" >
-        <span class="money-num">{{ course.price }}</span>
-        <span class="money-text">元</span>
-      </span>
-      {% endif %}
-    {% else %}
-      <span class="money-num" style="font-size:16px;">免费</span>
-    {% endif %}
-  {% endif %}
-</p>
-#}
-
-{% if course.discountActivityId == 0 %}
-  <p>
-    <span class="price-label">价格</span>
-    <span class="money-num">
-      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-          {% if course.coinPrice > 0 %}
-            {% if free_limit_type(course) == 'free_now' %}
-              0.00 {{setting('coin.coin_name', '虚拟币')}}
-            {% else %}
-              {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币')}}
-              </span>
-            {% endif %}
-          {% else %}
-            免费
-          {% endif %}
-        {% else %}
-          {% if course.price > 0 %}
-            {% if free_limit_type(course) == 'free_now' %}
-              ¥ 0.00
-            {% else %}
-              ¥ {{ course.price }}
-            </span>
-            {% endif %}
-          {% else %}
-            免费
-          {% endif %}
-        {% endif %}
-    </span>
-  </p>
-{% endif %}
-
-{% if course.discountActivityId > 0 %}
-  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-    {% set newPrice = course.coinPrice %}
-    {% set oldPrice = course.originCoinPrice %}  
-    <p class="clearfix">
-      <label class="pull-left">折后价</label>
-      <span class="money-num pull-left"><span id="price-after-discount">{{ course.coinPrice }}</span> {{setting('coin.coin_name', '虚拟币')}}</span>
-      <span class="discount-tag">
-        {% if newPrice != 0 %}
-          {% if oldPrice != 0 %}
-            {{ (newPrice/oldPrice*10)|round(2,'common') }}折
-          {% endif %}
-        {% else %}
-          免费
-        {% endif %}
-      </span>
-    </p>
-
-    <p>
-      <label>原价</label>
-      <span class="old-price">
-        <del>{{course.originCoinPrice}}</del>
-      </span>
-    </p>  
-
-  {% else %}  
-    {% set newPrice = course.price %}
-    {% set oldPrice = course.originPrice %}  
-    <p class="clearfix">
-      <label class="pull-left">折后价</label>
-      <span class="money-num pull-left">¥<span id="price-after-discount">{{ course.price }}</span></span>
-      <span class="discount-tag">
-        {% if newPrice != 0 %}
-          {% if oldPrice != 0 %}
-            {{ (newPrice/oldPrice*10)|round(2,'common') }}折
-          {% endif %}
-        {% else %}
-          免费
-        {% endif %}
-      </span>
-    </p>
-
-    <p>
-      <label>原价</label>
-      <span class="old-price">
-        <del>{{course.originPrice}}</del>
-      </span>
-    </p>
-  {% endif %}
-
-  <p>
-    <label>活动</label>
-    <span class="activity">{{ (course.discountActivity.activityName)|default('') }}</span>
-    <span id="activity-left-time" data-activity-endtime="{{ (course.discountActivity.endTime)|default(0) }}"><span class="glyphicon glyphicon-time"></span><span id="hours-left"></span>时<span id="minutes-left"></span>分<span id="seconds-left"></span>秒</span>
-  </p>
-{% endif %}
+  </ul>
 
 {% endif %}
