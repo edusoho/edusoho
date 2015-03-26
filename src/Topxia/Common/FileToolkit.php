@@ -979,7 +979,7 @@ class FileToolkit
     }
 
 
-    public static function cropImages($filePath, $cropPptions, $resizeArray)
+    public static function cropImages($filePath, $cropOptions, $resizeArray)
     {
         $pathinfo = pathinfo($filePath);
         $imagine = new Imagine();
@@ -988,7 +988,7 @@ class FileToolkit
         $filePaths = array();
         foreach ($resizeArray as $key => $value) {
             $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
-            $image = self::crop($rawImage, $savedFilePath, $cropPptions['x'], $cropPptions['y'], $cropPptions['width'], $cropPptions['height'], $value[0], $value[1]);
+            $image = self::crop($rawImage, $savedFilePath, $cropOptions['x'], $cropOptions['y'], $cropOptions['width'], $cropOptions['height'], $value[0], $value[1]);
             $filePaths[$key] = $savedFilePath;
         }
 
@@ -996,26 +996,19 @@ class FileToolkit
 
     }
 
-    public static function getScaledImgProperties($filename, $width, $height)
+    public static function getScaledImgProperties($parsed, $width, $height)
     {
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
         try {
             $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
+            $image = $imagine->open($parsed['fullpath']);
         } catch (\Exception $e) {
-            @unlink($pictureFilePath);
             return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
         }
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen($width)->heighten($height);
 
-        // @todo fix it.
-        $pictureUrl = ServiceKernel::instance()->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
+        $pictureUrl = ServiceKernel::instance()->getParameter('topxia.upload.public_url_path') ."/". $parsed['path'];
         $pictureUrl = ltrim($pictureUrl, ' /');
 
         return array($pictureUrl, $naturalSize, $scaledSize);

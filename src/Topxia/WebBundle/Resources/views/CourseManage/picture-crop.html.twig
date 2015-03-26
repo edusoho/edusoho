@@ -27,12 +27,12 @@
       <input type="hidden" name="y">
       <input type="hidden" name="width">
       <input type="hidden" name="height">
-      <input type="hidden" name="file" value="{{app.request.query.get('file')}}">
+      <input type="hidden" name="fileId" value="{{app.request.query.get('fileId')}}">
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
           <button class="btn btn-fat btn-primary" 
-          data-crop-img-url="{{path('uploadfile_img_crop', {group:'course'})}}"
+          data-crop-img-url="{{path('file_img_crop', {group: 'course'})}}"
           data-url="{{path('course_manage_picture_crop', {id: course.id})}}"
           id="upload-picture-btn">保存</button>
           <a href="javascript:;" class="go-back btn btn-link">重新选择图片</a>

@@ -115,10 +115,10 @@ class CourseManageController extends BaseController
         }
 
         $fileId = $request->query->get('fileId');
-        
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
-
-        list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getScaledImgProperties($filename, 480, 270);
+        list($pictureUrl, $naturalSize, $scaledSize) = FileToolkit::getScaledImgProperties($parsed, 480, 270);
         $assets = $this->container->get('templating.helper.assets');
         $pictureUrl = $assets->getUrl($pictureUrl);
 

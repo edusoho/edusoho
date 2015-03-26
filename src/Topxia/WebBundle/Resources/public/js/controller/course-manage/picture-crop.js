@@ -29,11 +29,11 @@ define(function(require, exports, module) {
                 y: $form.find("[name=y]").val(),
                 width: $form.find("[name=width]").val(),
                 height: $form.find("[name=height]").val(),
-                file: $form.find("[name=file]").val(),
+                fileId: $form.find("[name=fileId]").val(),
                 imgs: {
-                    large: "480,270",
-                    middle: "304, 171",
-                    small: "96, 54",
+                    large: [480, 270],
+                    middle: [304, 171],
+                    small: [96, 54],
                 }
             };
             $.post(cropImgUrl, postData ,function(response){

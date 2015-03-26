@@ -34,7 +34,7 @@ class FileController extends BaseController
             $groupCode = "default";
         }
         
-        $record = $this->getFileService()->uploadFile($group, $file);
+        $record = $this->getFileService()->uploadFile($groupCode, $file);
         $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
         return $this->createJsonResponse($record);
@@ -45,20 +45,15 @@ class FileController extends BaseController
         $options = $request->request->all();
 
         $record = $this->getFileService()->getFile($options["fileId"]);
+
         $pictureFilePath = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
-        $imgs = $options["imgs"];
-        $cropImages = array();
-        foreach ($imgs as $key => $value) {
-            $cropImages[$key] = explode(",",$value);
-        }
-
-        $filePaths = FileToolKit::cropImages($pictureFilePath, $options, $cropImages);
+        $filePaths = FileToolKit::cropImages($pictureFilePath, $options, $options["imgs"]);
 
         $fields = array();
         foreach ($filePaths as $key => $value) {
             $file = $this->getFileService()->uploadFile($group, new File($value));
-            $fields[$key] = $file['uri'];
+            $fields[$key] = $file['id'];
         }
 
         @unlink($filePath);
