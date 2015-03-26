@@ -112,12 +112,7 @@ class CourseOrderController extends OrderController
             'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
         ));
 
-        if (
-             ((strlen($user['verifiedMobile']) == 0)&&(isset($userInfo['mobile']))&&(strlen($userInfo['mobile']) > 0))||
-             ((strlen($user['verifiedMobile']) > 0)&&(isset($userInfo['mobile']))&&(strlen($userInfo['mobile']) == 0)) 
-           ) {
-            $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
-        }
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $coinSetting = $this->setting("coin");
 
