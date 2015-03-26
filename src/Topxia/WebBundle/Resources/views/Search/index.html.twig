@@ -15,7 +15,6 @@
     <div class="col-md-9" style="min-height:300px;">
         <form class="well well-sm" action="{{ path('search') }}" id="search_box">
 
-
             <div style="float:left;">
               <select  class="form-control searchSelect " name="categoryIds">
                 {{ select_options(categoryIds, app.request.query.get('categoryIds'), '课程分类') }}
@@ -28,21 +27,20 @@
               </span>
             </div>
 
-
             <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices">
               <div class="sortedCourses">
                 <label >筛选课程:</label>
-                {#% if isShowVipSearch  %}
-                  {% if currentUserVipLevel  %#}
-                    <input type="checkbox" name="coursesTypeChoices" id="vipCourses" 
+                {% if isShowVipSearch  %}
+                  {% if currentUserVipLevel  %}
+                    <input type="radio" name="coursesTypeChoices" id="vipCourses" 
                        value="vipCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'vipCourses' %} checked{% endif %} > 仅显示会员课程
-                 {#% endif %}
-                {% endif %#}
-                <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
+                 {% endif %}
+                {% endif %}
+                <input type="radio" name="coursesTypeChoices" id="liveCourses" 
                    value="liveCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} >
                    仅显示直播课程
                 
-                <input type="checkbox" name="coursesTypeChoices" id="freeCourses" 
+                <input type="radio" name="coursesTypeChoices" id="freeCourses" 
                    value="freeCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'freeCourses' %} checked{% endif %} >
                    仅显示免费课程
               </div>

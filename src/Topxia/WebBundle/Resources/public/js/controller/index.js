@@ -16,17 +16,10 @@ define(function(require, exports, module) {
             display: ''
         });
 
-        $('input:checkbox[name="coursesTypeChoices"]').on("change", function () {
-            var element = $(this);alert(element.attr("id"));
-            if(element.attr("id") == "liveCourses" && element.prop('checked')){
-                $("#vipCourses").prop('checked', false);
-            }
-            if(element.attr("id") == "vipCourses" && element.prop('checked')){
-                $("#liveCourses").prop('checked', false);
-            }
-            if(element.attr("id") == "freeCourses" && element.prop('checked')){
-                $("#freeCourses").prop('checked', false);
-            }
+        $('input:radio[name="coursesTypeChoices"]').on("change", function () {
+           
+            $(this).siblings('input').prop('checked',false);
+            
             $(this).parents("form").submit();
         });
 
