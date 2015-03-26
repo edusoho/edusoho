@@ -565,6 +565,7 @@ admin_setting:
     mode: page
     type: menu
     active: site
+    group: 2
 admin_setting_massage:
     name: 基础信息
     parent: admin_setting
