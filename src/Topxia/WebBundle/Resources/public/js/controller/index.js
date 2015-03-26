@@ -17,12 +17,15 @@ define(function(require, exports, module) {
         });
 
         $('input:checkbox[name="coursesTypeChoices"]').on("change", function () {
-            var element = $(this);
+            var element = $(this);alert(element.attr("id"));
             if(element.attr("id") == "liveCourses" && element.prop('checked')){
                 $("#vipCourses").prop('checked', false);
             }
             if(element.attr("id") == "vipCourses" && element.prop('checked')){
                 $("#liveCourses").prop('checked', false);
+            }
+            if(element.attr("id") == "freeCourses" && element.prop('checked')){
+                $("#freeCourses").prop('checked', false);
             }
             $(this).parents("form").submit();
         });

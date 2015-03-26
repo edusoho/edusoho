@@ -10,14 +10,13 @@ class SearchController extends BaseController
     public function indexAction(Request $request)
     {
         $courses = $paginator = null;
-        $code = 'Vip';
 
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
         $keywords=trim($keywords);
         
-        $vip = $this->getAppService()->findInstallApp($code);
+        $vip = $this->getAppService()->findInstallApp('Vip');
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
         
@@ -47,26 +46,17 @@ class SearchController extends BaseController
             goto response;
         }
 
-        if($coursesTypeChoices == 'vipCourses'){
-            $conditions = array(
-                'status' => 'published',
-                'title' => $keywords,
-                'categoryId' => $categoryId,
-                'vipLevelIds' =>  $vipLevelIds
-            );
-        }elseif($coursesTypeChoices == 'liveCourses'){
-            $conditions = array(
-                'status' => 'published',
-                'title' => $keywords,
-                'categoryId' => $categoryId,
-                'type' => 'live'
-            );
-        }else{
-            $conditions = array(
-                'status' => 'published',
-                'title' => $keywords,
-                'categoryId' => $categoryId
-            );
+        $conditions = array(
+            'status' => 'published',
+            'title' => $keywords,
+            'categoryId' => $categoryId
+        );
+        if ($coursesTypeChoices == 'vipCourses') {
+            $conditions['vipLevelIds'] = $vipLevelIds;
+        } else if ($coursesTypeChoices == 'liveCourses') {
+            $conditions['type'] = 'live';
+        } else if ($coursesTypeChoices == 'freeCourses'){
+            $conditions['price'] = '0.00';
         }
 
         $paginator = new Paginator(
