@@ -5,3 +5,10 @@ custom_admin_homepage:
 admin_teacher_tag:
     pattern:  /teacher/tag
     defaults: { _controller: CustomAdminBundle:TeacherTag:index }
+
+admin_group:
+    pattern:  /group/
+    defaults: { _controller: CustomAdminBundle:Group:index }
+admin_group_recommend:
+    pattern: /group/{id}/recommend
+    defaults: { _controller: CustomAdminBundle:Group:recommend }
