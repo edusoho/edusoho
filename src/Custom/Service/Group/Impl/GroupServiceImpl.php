@@ -1,8 +1,8 @@
 <?php
-namespace Custom\Service\Course\Impl;
+namespace Custom\Service\Group\Impl;
 
-use Topxia\Service\User\Impl\GroupServiceImpl as BaseService;
-use Custom\Service\Course\CourseService;
+use Topxia\Service\Group\Impl\GroupServiceImpl as BaseService;
+use Custom\Service\Group\GroupService;
 
 class GroupServiceImpl extends BaseService implements GroupService
 {
