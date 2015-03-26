@@ -13,7 +13,7 @@ class Version20150326233143 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-    	$this->addSql("update article set thumb='public://'+`thumb`, originalThumb='public://'+`originalThumb` where thumb is not null and thumb<>'';");
+    	$this->addSql("update article set thumb=concat('public://', `thumb`), originalThumb=concat('public://', `originalThumb`) where thumb is not null and thumb<>'';");
     }
 
     public function down(Schema $schema)
