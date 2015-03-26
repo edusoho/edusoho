@@ -22,6 +22,8 @@ define(function(require, exports, module) {
             $form.find("[name=height]").val(c.h);
         });
 
+        imageCrop.triggerSelect();
+
         $("#upload-avatar-btn").click(function(e){
             e.stopPropagation();
 

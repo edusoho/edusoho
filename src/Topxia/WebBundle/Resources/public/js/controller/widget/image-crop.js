@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 	            selectWidth = (cropedWidth) * (naturalWidth/scaledWidth),
 	            selectHeight = (cropedHeight) * (naturalHeight/scaledHeight);
 
-	        $picture.Jcrop({
+	        var img = $.Jcrop($picture, {
 	            trueSize: [naturalWidth, naturalHeight],
 	            setSelect: [0, 0, selectWidth, selectHeight],
 	            aspectRatio: ratio,
@@ -35,6 +35,12 @@ define(function(require, exports, module) {
 	                self.trigger("select", c);
 	            }
 	        });
+	        self.set("img", img);
+        },
+
+        triggerSelect: function(){
+        	var self = this;
+        	self.trigger("select", this.get("img").tellScaled());
         }
 
     });
