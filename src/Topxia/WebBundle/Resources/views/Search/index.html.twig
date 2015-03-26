@@ -34,17 +34,17 @@
                   {% if currentUserVipLevel  %}
                     <input type="checkbox" name="coursesTypeChoices" id="vipCourses" 
                        value="vipCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'vipCourses' %} checked{% endif %} /> 
-                    <label for="vipCourses">仅显示会员课程</label>
+                    <label class="course-checkbox-label" for="vipCourses">仅显示会员课程</label>
                  {% endif %}
                 {% endif %}
                 
                 <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
                    value="liveCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} />
-                <label for="liveCourses">仅显示直播课程</label>
+                <label class="course-checkbox-label" for="liveCourses">仅显示直播课程</label>
                 
                 <input type="checkbox" name="coursesTypeChoices" id="freeCourses" 
                    value="freeCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'freeCourses' %} checked{% endif %} />
-                <label for="freeCourses">仅显示免费课程</label>
+                <label class="course-checkbox-label" for="freeCourses">仅显示免费课程</label>
               </div>
             </div>
         </form>

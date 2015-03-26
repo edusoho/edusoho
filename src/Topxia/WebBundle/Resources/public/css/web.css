@@ -5168,3 +5168,7 @@ a.homework-essay-textarea-pack-up{
     margin-top: 0;
   }
 }
+
+.course-checkbox-label {
+  font-weight: normal;
+}
