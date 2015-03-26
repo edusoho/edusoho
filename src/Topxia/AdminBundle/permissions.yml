@@ -366,15 +366,6 @@ admin_teacher:
     mode: page
     active: teacher
     type: menu
-admin_teacher_manage:
-    name: 管理
-    parent: admin_teacher
-    router_name: admin_teacher
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: teacher
 admin_approval_approving:
     name: 实名认证管理
     parent: admin_user
@@ -384,15 +375,6 @@ admin_approval_approving:
     mode: page
     active: approval
     type: menu
-admin_approval_manage:
-    name: 管理
-    parent: admin_approval_approving
-    router_name: admin_approval_approving
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: approving
 admin_message:
     name: 私信管理
     parent: admin_user
@@ -402,15 +384,6 @@ admin_message:
     mode: page
     active: message
     type: menu
-admin_message_manage:
-    name: 管理
-    parent: admin_message
-    router_name: admin_message
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: message
 admin_course_manage:
     name: 管理
     parent: admin_course_show
