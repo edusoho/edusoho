@@ -104,23 +104,25 @@
             <td>
               <div class="btn-group">
                 <a href="javascript:;" data-role="item-delete" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}" class="btn btn-default btn-sm">删除</a>
-                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  {% if thread.isElite %}
-                    <li><a href="javascript:;" data-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？">取消加精</a></li>
-                  {% else %}
-                    <li><a href="javascript:;" data-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？">加精</a></li>
-                  {% endif %}
+                {% if course %}
+                  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if thread.isElite %}
+                      <li><a href="javascript:;" data-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？">取消加精</a></li>
+                    {% else %}
+                      <li><a href="javascript:;" data-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？">加精</a></li>
+                    {% endif %}
+                    
+                    {% if thread.isStick %}
+                      <li><a href="javascript:;" data-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？">取消置顶</a></li>
+                    {% else %}
+                      <li><a href="javascript:;" data-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？">置顶</a></li>
+                    {% endif %}
                   
-                  {% if thread.isStick %}
-                    <li><a href="javascript:;" data-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？">取消置顶</a></li>
-                  {% else %}
-                    <li><a href="javascript:;" data-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？">置顶</a></li>
-                  {% endif %}
-                  
-                </ul>
+                  </ul>
+                {% endif %}
               </div>
             </td>
           </tr>
