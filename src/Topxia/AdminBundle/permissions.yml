@@ -323,7 +323,7 @@ admin_course_tag_add:
     mode: modal
     type: button
 admin_user_show:
-    name: 用户
+    name: 用户管理
     parent: admin_user
     router_name: admin_user
     router_params: null
@@ -358,7 +358,7 @@ admin_login_record:
     type: tab
     active: login_record
 admin_teacher:
-    name: 教师
+    name: 教师管理
     parent: admin_user
     router_name: admin_teacher
     router_params: null
@@ -376,7 +376,7 @@ admin_teacher_manage:
     type: tab
     active: teacher
 admin_approval_approving:
-    name: 实名认证
+    name: 实名认证管理
     parent: admin_user
     router_name: admin_approval_approving
     router_params: null
@@ -394,7 +394,7 @@ admin_approval_manage:
     type: tab
     active: approving
 admin_message:
-    name: 私信
+    name: 私信管理
     parent: admin_user
     router_name: admin_message
     router_params: null
@@ -425,32 +425,6 @@ admin_course_recommend:
     type: tab
     mode: page
     active: recommend
-admin_vip_list:
-    name: 会员
-    parent: admin_user
-    router_name: admin_vip_list
-    router_params: null
-    router_params_context: false
-    mode: page
-    active: member
-    type: menu
-admin_vip_create:
-    name: 添加新会员
-    parent: admin_vip_list
-    router_name: admin_vip_create
-    router_params: null
-    router_params_context: false
-    mode: modal
-    type: button
-admin_vip_manage:
-    name: 管理
-    parent: admin_vip_list
-    router_name: admin_vip_list
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: recommend
 admin_course_data:
     name: 统计
     parent: admin_course_show
@@ -458,15 +432,6 @@ admin_course_data:
     active: data
     type: tab
     mode: page
-admin_vip_bought_list:
-    name: 操作记录
-    parent: admin_vip_list
-    router_name: admin_vip_bought_list
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: member_history
 admin_course_order:
     name: 课程订单
     parent: admin_order
