@@ -35,6 +35,7 @@ class CourseController extends BaseController
 			'type' => 'normal',
 			'categoryId' => $category['id'],
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
+			'price' => ($sort == 'free') ? '0.00' : null
 		);
 
 		$paginator = new Paginator(
