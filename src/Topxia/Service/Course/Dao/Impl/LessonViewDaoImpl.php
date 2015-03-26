@@ -77,6 +77,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return "";
     }
 
+    //@todo:sql
     private function _filterConditions($conditions)
     {
         $conditionStr = "";

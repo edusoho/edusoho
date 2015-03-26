@@ -74,7 +74,6 @@ class SearchController extends BaseController
             $this->getCourseService()->searchCourseCount($conditions)
             , 10
         );
-
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
             'latest',
