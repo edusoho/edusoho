@@ -114,20 +114,24 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        $fileId = $request->query->get('fileId');
+        $fileId = $request->getSession()->get("fileId");
+        if(empty($fileId)) {
+            return $this->createMessageResponse("error", "参数不正确");
+        }
+
         $file = $this->getFileService()->getFile($fileId);
+        if(empty($file)) {
+            return $this->createMessageResponse("error", "文件不存在");
+        }
+        
         $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], 480, 270);
 
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') ."/". $parsed['path'];
-        $pictureUrl = ltrim($pictureUrl, ' /');
-        $assets = $this->container->get('templating.helper.assets');
-        $pictureUrl = $assets->getUrl($pictureUrl);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
             'course' => $course,
-            'pictureUrl' => $pictureUrl,
+            'pictureUrl' => $parsed["path"],
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
         ));

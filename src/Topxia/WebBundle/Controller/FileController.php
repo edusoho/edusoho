@@ -38,6 +38,7 @@ class FileController extends BaseController
         $record = $this->getFileService()->uploadFile($groupCode, $file);
         $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
+        $request->getSession()->set("fileId", $record["id"]);
         return $this->createJsonResponse($record);
     }
 
@@ -45,9 +46,16 @@ class FileController extends BaseController
     {
         $options = $request->request->all();
 
-        $record = $this->getFileService()->getFile($options["fileId"]);
-        $parsed = $this->getFileService()->parseFileUri($record['uri']);
+        $fileId = $request->getSession()->get("fileId");
+        if(empty($fileId)) {
+            return $this->createMessageResponse("error", "参数不正确");
+        }
 
+        $record = $this->getFileService()->getFile($fileId);
+        if(empty($record)) {
+            return $this->createMessageResponse("error", "文件不存在");
+        }
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
 
         $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options, $options["imgs"]);
 

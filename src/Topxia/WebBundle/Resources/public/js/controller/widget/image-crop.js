@@ -6,8 +6,7 @@ define(function(require, exports, module) {
 
     var ImageCrop = Widget.extend({
     	attrs: {
-    		cropedWidth: 480,
-	        cropedHeight: 270,
+    		
         },
 
         events: {
@@ -25,8 +24,8 @@ define(function(require, exports, module) {
 	            cropedWidth = this.get("cropedWidth"),
 	            cropedHeight = this.get("cropedHeight"),
 	            ratio = cropedWidth / cropedHeight,
-	            selectWidth = (cropedWidth*3/4) * (naturalWidth/scaledWidth),
-	            selectHeight = (cropedHeight*3/4) * (naturalHeight/scaledHeight);
+	            selectWidth = (cropedWidth) * (naturalWidth/scaledWidth),
+	            selectHeight = (cropedHeight) * (naturalHeight/scaledHeight);
 
 	        $picture.Jcrop({
 	            trueSize: [naturalWidth, naturalHeight],

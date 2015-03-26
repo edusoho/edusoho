@@ -10,7 +10,9 @@ define(function(require, exports, module) {
         var $form = $("#course-picture-crop-form");
 
         var imageCrop = new ImageCrop({
-            element: "#course-picture-crop"
+            element: "#course-picture-crop",
+            cropedWidth: 480,
+            cropedHeight: 270
         });
 
         imageCrop.on("select", function(c){

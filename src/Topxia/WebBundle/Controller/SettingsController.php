@@ -129,32 +129,6 @@ class SettingsController extends BaseController
 			->add('avatar', 'file')
 			->getForm();
 
-		if ($request->getMethod() == 'POST') {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$data = $form->getData();
-				$file = $data['avatar'];
-
-				if (!FileToolkit::isImageFile($file)) {
-					return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-				}
-
-				$filenamePrefix = "user_{$user['id']}_";
-				$hash = substr(md5($filenamePrefix . time()), -8);
-				$ext = $file->getClientOriginalExtension();
-				$filename = $filenamePrefix . $hash . '.' . $ext;
-
-				$directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-				$file = $file->move($directory, $filename);
-
-				$fileName = str_replace('.', '!', $file->getFilename());
-
-				return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-					'file' => $fileName)
-				));
-			}
-		}
-
 		$hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
 		if ($hasPartnerAuth) {
 			$partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
@@ -175,32 +149,29 @@ class SettingsController extends BaseController
 	public function avatarCropAction(Request $request)
 	{
 		$currentUser = $this->getCurrentUser();
-		$filename = $request->query->get('file');
-		$filename = str_replace('!', '.', $filename);
-		$filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-		$pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
 
 		if($request->getMethod() == 'POST') {
 			$options = $request->request->all();
-			$this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
+			$this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
 			return $this->redirect($this->generateUrl('settings_avatar'));
 		}
 
-		try {
-			$imagine = new Imagine();
-			$image = $imagine->open($pictureFilePath);
-		} catch (\Exception $e) {
-			@unlink($pictureFilePath);
-			return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-		}
+		$fileId = $request->getSession()->get("fileId");
+        if(empty($fileId)) {
+            return $this->createMessageResponse("error", "参数不正确");
+        }
 
-		$naturalSize = $image->getSize();
-		$scaledSize = $naturalSize->widen(270)->heighten(270);
-		$pictureUrl = 'tmp/' . $filename;
+        $file = $this->getFileService()->getFile($fileId);
+        if(empty($file)) {
+            return $this->createMessageResponse("error", "文件不存在");
+        }
+        
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
+
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], 270, 270);
 
 		return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
-			'pictureUrl' => $pictureUrl,
+			'pictureUrl' => $parsed['path'],
 			'naturalSize' => $naturalSize,
 			'scaledSize' => $scaledSize,
 		));
