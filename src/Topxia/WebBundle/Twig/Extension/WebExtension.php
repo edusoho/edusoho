@@ -88,6 +88,7 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
+            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
         );
     }
 
@@ -855,6 +856,36 @@ class WebExtension extends \Twig_Extension
         }
 
         return $result;
+    }
+
+   public function getOrderPayment($order, $default = null)
+    {
+        $coinSettings = ServiceKernel::instance()->createService('System.SettingService')->get('coin',array());
+
+        if($coinSettings['coin_enabled'] == 1 and $coinSettings['price_type'] == 'coin'){
+                if ($order['amount'] == 0  and $order['coinAmount'] == 0 ){
+                    $default = "无";
+                }
+                else{
+                    $default = "余额支付";
+                }
+        }
+
+        if ($coinSettings['coin_enabled'] != 1 or $coinSettings['price_type'] != 'coin') {
+                if ($order['coinAmount'] > 0) {
+                    $default = "余额支付";
+                }
+                else{
+                    if ($order['amount'] == 0 ){
+                        $default = "无";
+                    }
+                    else{
+                        $default = "支付宝";
+                    }
+                }
+            }
+
+        return $default;
     }
 
     public function calculatePercent($number, $total)
