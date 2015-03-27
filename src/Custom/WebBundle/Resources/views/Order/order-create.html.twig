@@ -69,7 +69,7 @@
               <div class="order-item clearfix" >
                 <div class="order-count pull-right">
                   订单金额：
-                  <span   {%if not vip %} role="total-price" {% endif %}
+                  <span   {%if not vip|default(false) %} role="total-price" {% endif %}
                       {% if vip|default(false) %}
                           {% if course.status=="ok" and level.courseDiscount|default(10) < 10 %}
                                      class="price old-price " 
@@ -85,7 +85,7 @@
                   {% elseif priceType|default('RMB') == "Coin" %}
                     {{setting("coin.coin_name")}}
                   {% endif %}
-                    {%if  vip %}      &nbsp;&nbsp;&nbsp; {% endif %}
+                    {% if  vip |default(false) %}      &nbsp;&nbsp;&nbsp; {% endif %}
              
             {% if vip |default(false) %}
                  会员折扣价：
