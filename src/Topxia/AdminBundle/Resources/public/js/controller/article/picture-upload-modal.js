@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('jquery.form');
-    var WebUploader = require('../../../../topxiaweb/js/controller/widget/web-uploader');
+    var WebUploader = require('edusoho.webuploader');
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
