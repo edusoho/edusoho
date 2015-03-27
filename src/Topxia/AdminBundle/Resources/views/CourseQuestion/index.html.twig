@@ -8,12 +8,10 @@
 {% set menu = 'question' %}
 
 {% block main %}
+<h4>
+问答管理
 
-<div class="mbl">
-
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
-</div>
+</h4>
 
 {% include 'TopxiaAdminBundle:CourseQuestion:tab.html.twig' %}
 <br>

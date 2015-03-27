@@ -6,9 +6,7 @@
 
 {% set script_controller = 'block/list' %}
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
+
 
 <div class="clearfix mbs">
   {% if setting('developer.debug') %}

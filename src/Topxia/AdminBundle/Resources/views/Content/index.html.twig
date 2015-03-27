@@ -7,9 +7,6 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
-<div class="clearfix mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
 
 {% set type = app.request.get('type') %}
 {% set typeName = dict('contentType')[type] %}

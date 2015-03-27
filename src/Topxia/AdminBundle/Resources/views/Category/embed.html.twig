@@ -5,8 +5,11 @@
 {% set menu = 'category' %}
 
 {% block main %}
+<h4>
+分类管理
 
-<div class="mbl">
+</h4>
+<!-- <div class="mbl">
    <div data-role="navigation">
     <ul class="nav nav-tabs">                 
     <li class="active"><a href="{{ url('admin_course_category') }}"> 管理</a>
@@ -14,7 +17,7 @@
     </ul>
       </div>
 
-</div>
+</div> -->
 <div class="page-header clearfix">
   
   <button class="btn btn-sm btn-info pull-right add-category mbs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_category_create', {groupId:group.id}) }}">添加分类</button>
