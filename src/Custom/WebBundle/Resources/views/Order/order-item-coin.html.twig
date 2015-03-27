@@ -26,12 +26,15 @@
 
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
 
+{% if vip |default(false) %}
      {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
             <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{course.vipCoinPrice|default(0)}}" maxlength="">
       {% else %}
           <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
      {% endif %} 
-
+{% else  %}
+       <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
+{% endif %}
 
       {{setting("coin.coin_name")}}
       {% endif %}
