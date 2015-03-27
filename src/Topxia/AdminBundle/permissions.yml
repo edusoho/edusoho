@@ -124,6 +124,16 @@ admin_operation_content:
     mode: page
     type: menu
     active: content
+admin_operation_analysis_register:
+    name: 数据统计
+    parent: admin_operation
+    router_name: admin_operation_analysis_register
+    router_params: { tab: trend , analysisDateType:register }
+    router_params_context: false
+    mode: page
+    type: menu
+    active: data
+    after: admin_operation_content
 admin_operation_article_create:
     name: 添加资讯
     parent: admin_operation_article
@@ -691,15 +701,6 @@ admin_setting_ip_blacklist_manage:
     mode: page
     type: tab
     active: ip_blacklist_manage
-admin_operation_analysis_register:
-    name: 数据统计
-    parent: admin_system
-    router_name: admin_operation_analysis_register
-    router_params: { tab: trend , analysisDateType:register }
-    router_params_context: false
-    mode: page
-    type: menu
-    active: data
 admin_operation_analysis_:
     name: 查阅
     parent: admin_operation_analysis_register
