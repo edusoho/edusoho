@@ -22,5 +22,4 @@ interface SignService
     public function getSignCardByUserId($userId);
 
     public function getSignByUserId($userId);
-
 }
