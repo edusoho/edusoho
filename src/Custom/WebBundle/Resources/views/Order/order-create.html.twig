@@ -29,7 +29,7 @@
             
          
              {% if vip |default(false) %} 
-                 {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
+                 {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
                         <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
                       {% else %}
@@ -46,7 +46,7 @@
 
 
 
-            <input type="hidden" name="shouldPayMoney" value=""/>
+            <input type="text" name="shouldPayMoney" value=""/>
 
             <input type="hidden" name="sms_code" value=""/>
             <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
@@ -71,7 +71,7 @@
                   订单金额：
                   <span   {%if not vip|default(false) %} role="total-price" {% endif %}
                       {% if vip|default(false) %}
-                          {% if course.status=="ok" and level.courseDiscount|default(10) < 10 %}
+                          {% if course.status=="ok" and level.courseDiscount|default(10) <= 10 %}
                                      class="price old-price " 
                           {% endif %}
                       {% else %}  
@@ -90,7 +90,7 @@
             {% if vip |default(false) %}
                  会员折扣价：
                    <span role="total-price" class="now-price">
-                   {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
+                   {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
                           {{course.vipCoinPrice}}
                       {% else %}
