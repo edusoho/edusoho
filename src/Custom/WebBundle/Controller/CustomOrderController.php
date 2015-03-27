@@ -154,7 +154,7 @@ class CustomOrderController extends OrderController
 
              //如果是课程，则根据用户是否是VIP重新教研支付金额
             if($targetType  =='course' ){
-               list($amount, $totalPrice) = $this-> setPayVipDiscount($user, $fields, $totalPrice);
+               list($amount, $totalPrice) = $this-> setPayVipDiscount($user, $fields, $amount, $totalPrice);
             }
 
 
@@ -203,7 +203,7 @@ class CustomOrderController extends OrderController
     }
 
 
-    protected function setPayVipDiscount($user, $fields, $totalPrice){
+    protected function setPayVipDiscount($user, $fields, $amount, $totalPrice){
          $vip=$this->getVipService()->getMemberByUserId($user["id"]);
          $vipPrice= "";
 
@@ -217,20 +217,22 @@ class CustomOrderController extends OrderController
                 $vipPrice=$totalPrice*0.1*$level['courseDiscount'];
                 $vipPrice=sprintf("%.2f", $vipPrice);
                 $totalPrice = $vipPrice;
+                $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000;
             }
         }
-        $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000;
-
         return array( $amount,   $totalPrice );
     }
 
     protected function setShowVipDiscount($orderInfo,$currentUser){
         $vip=$this->getVipService()->getMemberByUserId($currentUser["id"]);
+          $orderInfo['vip'] = $vip;
+
         $course =$orderInfo['courses'][0];
         $level=array();
         $vipPrice=$course['price'];
         $status="false";
-
+        var_dump($vip);
+     //   die();
         if($vip){
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);

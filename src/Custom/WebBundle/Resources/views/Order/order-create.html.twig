@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %} 订单确认werwerw - {{ parent() }}{% endblock %}
+{% block title %} 订单确认 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'order/create' %}
 
@@ -10,7 +10,7 @@
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
       <div class="panel panel-default">
-        <div class="panel-heading"><h4>订单确认werwer</h4></div>
+        <div class="panel-heading"><h4>订单确认</h4></div>
         <div class="panel-body order-panel">
           <form id="order-create-form" method="post" action="{{path('order_create')}}">
 
@@ -27,17 +27,21 @@
             <input type="hidden" name="targetId" value="{{targetId}}"/>
             
          
-
-
-            {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
-              {% if priceType|default('RMB') =='Coin' %}
-                <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
+             {% if vip %} 
+                 {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
+                      {% if priceType|default('RMB') =='Coin' %}
+                        <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
+                      {% else %}
+                          <input type="hidden" name="totalPrice" value="{{course.vipPrice}}"/>
+                      {% endif %}
+                 {% else %}
+                      <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
+                 {% endif %}  
               {% else %}
-                  <input type="hidden" name="totalPrice" value="{{course.vipPrice}}"/>
-              {% endif %}
-            {% else %}
-               <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
-            {% endif %}   
+                   <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>  
+             {% endif %}
+
+            
 
 
 
@@ -64,10 +68,16 @@
               <div class="order-item clearfix" >
                 <div class="pull-right order-count">
                   订单金额：
-                  <span  class="order-price " {% if course.status=="ok" and level.courseDiscount|default(10) < 10 %}style="text-decoration: line-through;"{% endif %}>
+                  <span  class="order-price "  {%if not vip %} role="total-price" {% endif %}
+                      {% if vip %}
+                          {% if course.status=="ok" and level.courseDiscount|default(10) < 10 %}
+                            style="text-decoration: line-through;"
+                          {% endif %}
+                      {% endif %}   >
                     {{totalPrice}}
                   </span>
 
+            {% if vip %}
                    <span role="total-price">
                    {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
@@ -77,12 +87,15 @@
                       {% endif %}
                    {% endif %}   
                  </span>
+               {% endif %}
                   {% if priceType|default('RMB') == "RMB" %}
                     元
                   {% elseif priceType|default('RMB') == "Coin" %}
                     {{setting("coin.coin_name")}}
                   {% endif %}
+             {% if vip %}
                    <div>(VIP折扣价 {{level.courseDiscount}}折)</div>
+            {% endif %}
                 </div>
               </div>
             </div>
