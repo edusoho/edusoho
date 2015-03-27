@@ -1,6 +1,7 @@
-<div data-role="navigation">
+{% for sub_menus in menus %}
+  <div data-role="navigation">
     <ul class="nav nav-tabs">
-      {% for menu in menus %}
+      {% for menu in sub_menus %}
 
           {% set param = {} %}
           {% set router_name = menu.router_name %}
@@ -34,3 +35,4 @@
       {% endfor %}
     </ul>
 </div>
+{% endfor %}

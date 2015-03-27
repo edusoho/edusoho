@@ -657,6 +657,7 @@ admin_optimize:
     mode: page
     type: menu
     active: optimize
+    group: 2
 admin_optimize_manage:
     name: 管理
     parent: admin_optimize
@@ -673,6 +674,7 @@ admin_setting_ip_blacklist:
     mode: page
     type: menu
     active: ip_blacklist
+    group: 2
 admin_setting_ip_blacklist_manage:
     name: 管理
     parent: admin_setting_ip_blacklist

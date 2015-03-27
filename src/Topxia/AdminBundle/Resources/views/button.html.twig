@@ -1,4 +1,5 @@
-{% for menu in menus %}
+{% for sub_menus in menus %}
+  {% for menu in sub_menus %}
           {% set param = {} %}
           {% set router_name = menu.router_name %}
 
@@ -42,3 +43,4 @@
             {% endif %}
           
           {% endfor %}
+{% endfor %}
