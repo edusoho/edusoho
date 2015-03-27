@@ -231,8 +231,6 @@ class CustomOrderController extends OrderController
         $level=array();
         $vipPrice=$course['price'];
         $status="false";
-        var_dump($vip);
-     //   die();
         if($vip){
 
             $level=$this->getLevelService()->getLevel($vip['levelId']);
