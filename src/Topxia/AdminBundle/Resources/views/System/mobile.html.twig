@@ -2,7 +2,7 @@
 
 {% set menu = 'mobile' %}
 {% set tab_menus = permissions('admin_operation_mobile','tab') %}
-{% set submenu = 'mobile_manage' %}
+{% set submenu = 'mobile_banner_manage' %}
 {% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% set script_controller = 'operation/mobile' %}
@@ -10,11 +10,7 @@
 
 {% block main %}
 <style>
-#mobile-splash1-container img , 
-#mobile-splash2-container img , 
-#mobile-splash3-container img , 
-#mobile-splash4-container img , 
-#mobile-splash5-container img ,
+
 #mobile-banner1-container img , 
 #mobile-banner2-container img , 
 #mobile-banner3-container img , 
@@ -22,58 +18,9 @@
 #mobile-banner5-container img 
 {max-width: 80%; margin-bottom: 10px;}
 
-.course-grids {
-  margin:0 -15px 0 0;
-  padding:0;
-  list-style: none;
-}
-
-.course-grid {
-  display: inline-block;
-  vertical-align: top;
-  margin: 15px 15px 15px 0;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-}
-
 .banner-course .course-grid {
   margin: 0 0 0 0;
   margin-left: 10px;
-}
-
-.course-grid .series-mode-label {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 12px;
-}
-
-.course-grid .grid-body {
-  position: relative;
-  width: 170px;
-  display: block;
-  overflow: hidden;
-  border-radius: 4px;
-  color: #353535;
-}
-
-.grid-body a{
-  text-decoration: none;
-}
-
-.course-grid .title {
-  display: block;
-  padding: 10px;
-  min-height: 52px;
-  color: #555;
-  font-weight: bold;
-}
-
-.course-grid .add-course {
-  font-size: 80px;
-  height: 148px;
-  text-align: center;
-  padding-top: 30px;
 }
 
 </style>
@@ -338,106 +285,6 @@
     </div>
 
     
-  </fieldset>
-
-
-  <fieldset>
-  <legend>设置启动图</legend>
-  <div class="help-block">最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。</div>
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash1">启动图1</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash1-container">{% if mobile.splash1 %}<img src="{{ asset(mobile.splash1) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash1-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'splash1'}) }}">上传</button>
-      <button class="btn btn-default btn-sm" id="mobile-splash1-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'splash1'}) }}" {% if not mobile.splash1 %}style="display:none;"{% endif %}>删除</button>
-      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
-      <input type="hidden" name="splash1" value="{{ mobile.splash1 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash2">启动图2</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash2-container">{% if mobile.splash2 %}<img src="{{ asset(mobile.splash2) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash2-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'splash2'}) }}">上传</button>
-      <button class="btn btn-default btn-sm" id="mobile-splash2-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'splash2'}) }}" {% if not mobile.splash2 %}style="display:none;"{% endif %}>删除</button>
-      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
-      <input type="hidden" name="splash2" value="{{ mobile.splash2 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash3">启动图3</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash3-container">{% if mobile.splash3 %}<img src="{{ asset(mobile.splash3) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash3-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'splash3'}) }}">上传</button>
-      <button class="btn btn-default btn-sm" id="mobile-splash3-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'splash3'}) }}" {% if not mobile.splash3 %}style="display:none;"{% endif %}>删除</button>
-      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
-      <input type="hidden" name="splash3" value="{{ mobile.splash3 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash4">启动图4</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash4-container">{% if mobile.splash4 %}<img src="{{ asset(mobile.splash4) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash4-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'splash4'}) }}">上传</button>
-      <button class="btn btn-default btn-sm" id="mobile-splash4-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'splash4'}) }}" {% if not mobile.splash4 %}style="display:none;"{% endif %}>删除</button>
-      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
-      <input type="hidden" name="splash4" value="{{ mobile.splash4 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash5">启动图5</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash5-container">{% if mobile.splash5 %}<img src="{{ asset(mobile.splash5) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash5-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'splash5'}) }}">上传</button>
-      <button class="btn btn-default btn-sm" id="mobile-splash5-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'splash5'}) }}" {% if not mobile.splash5 %}style="display:none;"{% endif %}>删除</button>
-      <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
-      <input type="hidden" name="splash5" value="{{ mobile.splash5 }}">
-    </div>
-  </div>
-
-  </fieldset>
-
-
-  <fieldset>
-    <legend>每周精选课程</legend>
-    <div class="help-block">所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。<br>
-    客户端【每周精选】栏目中默认显示的是网站中{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数最多的课程，最多显示三门。
-    </div>
-    <div class="form-group">
-      <input type='hidden' name="courseIds" value="{{mobile.courseIds}}"/>
-      <div class="col-md-12" role="course-item-container">
-        <ul class="course-grids">
-          {% for course in courses|default(null) %}
-          {% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course, showDelBtn:true} %}
-          {% endfor %}
-          <li class="course-grid related-course-grid" role="add-course" 
-          style="cursor:pointer
-          {% if courses|length >= 3 %}
-          ;display:none
-          {% endif %}
-          "
-          data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">
-            <div class="add-course grid-body glyphicon glyphicon-plus">
-              
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
   </fieldset>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

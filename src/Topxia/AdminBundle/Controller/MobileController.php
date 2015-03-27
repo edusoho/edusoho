@@ -16,14 +16,10 @@ class MobileController extends BaseController
     public function mobileAction(Request $request)
     {
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'splash1' => '', // 启动图1
-            'splash2' => '', // 启动图2
-            'splash3' => '', // 启动图3
-            'splash4' => '', // 启动图4
-            'splash5' => '', // 启动图5
             'banner1' => '', // 轮播图1
             'banner2' => '', // 轮播图2
             'banner3' => '', // 轮播图3
@@ -44,16 +40,55 @@ class MobileController extends BaseController
             'bannerJumpToCourseId3' => ' ',
             'bannerJumpToCourseId4' => ' ',
             'bannerJumpToCourseId5' => ' ',
-            'courseIds' => '', //每周精品课
         );
 
         $mobile = array_merge($default, $operationMobile);
 
         if ($request->getMethod() == 'POST') {
             $operationMobile = $request->request->all();
-            $mobile = array_merge($operationMobile,$settingMobile);
+            $mobile = array_merge($operationMobile,$courseGrids,$settingMobile);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
+            $this->getSettingService()->set('operation_course_grids', $courseGrids);
+            $this->getSettingService()->set('mobile', $mobile);
+            $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
+            $this->setFlashMessage('success', '移动客户端设置已保存！');
+        }
+
+        $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
+        $bannerCourse2 = ($mobile['bannerJumpToCourseId2'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']) : null;
+        $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
+        $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
+        $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
+var_dump($this->getSettingService()->get('mobile', array()));
+        return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
+            'mobile' => $mobile,
+            "bannerCourse1" => $bannerCourse1,
+            "bannerCourse2" => $bannerCourse2,
+            "bannerCourse3" => $bannerCourse3,
+            "bannerCourse4" => $bannerCourse4,
+            "bannerCourse5" => $bannerCourse5,
+        ));
+    }
+
+    public function mobileSelectAction(Request $request)
+    {
+        $operationMobile = $this->getSettingService()->get('operation_mobile', array());
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
+        $settingMobile = $this->getSettingService()->get('mobile', array());
+
+        $default = array(
+            'courseIds' => '', //每周精品课
+        );
+
+        $mobile = array_merge($default, $courseGrids);
+
+        if ($request->getMethod() == 'POST') {
+            $courseGrids = $request->request->all();
+            $mobile = array_merge($courseGrids,$operationMobile,$settingMobile);
+
+            $this->getSettingService()->set('operation_mobile', $operationMobile);
+            $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
@@ -67,23 +102,11 @@ class MobileController extends BaseController
             if (!empty($value)) {
                 $sortedCourses[] = $courses[$value];
             }
-
         }
-
-        $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
-        $bannerCourse2 = ($mobile['bannerJumpToCourseId2'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']) : null;
-        $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
-        $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
-        $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
-
-        return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
+var_dump($this->getSettingService()->get('mobile', array()));
+        return $this->render('TopxiaAdminBundle:System:course-select.html.twig', array(
             'mobile' => $mobile,
             'courses' => $sortedCourses,
-            "bannerCourse1" => $bannerCourse1,
-            "bannerCourse2" => $bannerCourse2,
-            "bannerCourse3" => $bannerCourse3,
-            "bannerCourse4" => $bannerCourse4,
-            "bannerCourse5" => $bannerCourse5,
         ));
     }
 

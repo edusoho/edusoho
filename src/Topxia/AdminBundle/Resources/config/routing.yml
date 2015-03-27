@@ -359,6 +359,10 @@ admin_operation_mobile:
     pattern:  /operation/mobile
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobile }
 
+admin_operation_mobile_select:
+    pattern:  /operation/mobile/select
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
+
 admin_setting_mobile:
     pattern:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
