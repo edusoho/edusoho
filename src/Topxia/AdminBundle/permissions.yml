@@ -389,7 +389,7 @@ admin_course_order_query:
     type: tab
     active: course_order_query
 admin_bills:
-    name: 账单
+    name: 账单管理
     parent: admin_finance
     router_name: admin_bill
     router_params: null
@@ -413,7 +413,7 @@ admin_coin_bill:
     type: tab
     active: records 
 admin_coin_user:
-    name: 虚拟币
+    name: 虚拟币管理
     parent: admin_finance
     router_name: admin_coin_user_records
     router_params: null
@@ -429,7 +429,7 @@ admin_coin_user_records:
     type: tab
     active: user-records
 admin_course_refunds:
-    name: 课程退款
+    name: 课程退款管理
     parent: admin_finance
     router_name: admin_order_refunds
     router_params: {targetType:course,status:created}
