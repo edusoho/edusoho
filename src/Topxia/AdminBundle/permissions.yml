@@ -88,15 +88,24 @@ admin_operation_mobile:
     mode: page
     type: menu
     active: mobile
-admin_operation_mobile_manage:
-    name: 管理
+admin_operation_mobile_banner_manage:
+    name: 轮播图设置
     parent: admin_operation_mobile
     router_name: admin_operation_mobile
     router_params: null
     router_params_context: false
     mode: page
     type: tab
-    active: mobile_manage
+    active: mobile_banner_manage
+admin_operation_mobile_select_manage:
+    name: 每周精选设置
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile_select
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: mobile_select_manage
 admin_operation_block:
     name: 编辑区管理
     parent: admin_operation
@@ -115,6 +124,16 @@ admin_operation_content:
     mode: page
     type: menu
     active: content
+admin_operation_analysis_register:
+    name: 数据统计
+    parent: admin_operation
+    router_name: admin_operation_analysis_register
+    router_params: { tab: trend , analysisDateType:register }
+    router_params_context: false
+    mode: page
+    type: menu
+    active: data
+    after: admin_operation_content
 admin_operation_article_create:
     name: 添加资讯
     parent: admin_operation_article
@@ -389,7 +408,7 @@ admin_course_order_query:
     type: tab
     active: course_order_query
 admin_bills:
-    name: 账单
+    name: 账单管理
     parent: admin_finance
     router_name: admin_bill
     router_params: null
@@ -413,7 +432,7 @@ admin_coin_bill:
     type: tab
     active: records 
 admin_coin_user:
-    name: 虚拟币
+    name: 虚拟币管理
     parent: admin_finance
     router_name: admin_coin_user_records
     router_params: null
@@ -429,7 +448,7 @@ admin_coin_user_records:
     type: tab
     active: user-records
 admin_course_refunds:
-    name: 课程退款
+    name: 课程退款管理
     parent: admin_finance
     router_name: admin_order_refunds
     router_params: {targetType:course,status:created}
@@ -682,15 +701,6 @@ admin_setting_ip_blacklist_manage:
     mode: page
     type: tab
     active: ip_blacklist_manage
-admin_operation_analysis_register:
-    name: 数据统计
-    parent: admin_system
-    router_name: admin_operation_analysis_register
-    router_params: { tab: trend , analysisDateType:register }
-    router_params_context: false
-    mode: page
-    type: menu
-    active: data
 admin_operation_analysis_:
     name: 查阅
     parent: admin_operation_analysis_register

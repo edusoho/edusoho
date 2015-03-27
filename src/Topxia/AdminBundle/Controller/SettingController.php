@@ -50,6 +50,7 @@ class SettingController extends BaseController
     public function mobileAction(Request $request)
     {
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
+        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
         $settingMobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
@@ -57,20 +58,27 @@ class SettingController extends BaseController
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
             'notice' => '', //公告
+            'splash1' => '', // 启动图1
+            'splash2' => '', // 启动图2
+            'splash3' => '', // 启动图3
+            'splash4' => '', // 启动图4
+            'splash5' => '', // 启动图5
         );
 
         $mobile = array_merge($default, $settingMobile);
         if ($request->getMethod() == 'POST') {
             $settingMobile = $request->request->all();
-            $mobile = array_merge($settingMobile,$operationMobile);
+            $mobile = array_merge($settingMobile,$operationMobile,$courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
+            $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
 
 
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
+
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
         ));
