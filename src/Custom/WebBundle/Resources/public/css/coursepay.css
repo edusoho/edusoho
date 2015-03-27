@@ -1,0 +1,48 @@
+      .vip-tip{
+        position: relative;
+        top: 0;
+        float: right;
+        color: #aaa;
+        padding-top: 5px;
+        margin-left: 5px;
+        margin-top: -2px;
+        cursor: pointer;
+      }
+      .price{
+        color: #ff7e00;
+        font-size: 24px;
+      }
+      .old-price{
+        color: #333;
+        font-size: 14px;
+        text-decoration: line-through;
+      }
+      .vip-tip:hover{
+        color:#589a90;
+        border-color: #589a90;
+      }
+      .vip-tip:hover .tip-content{
+        height: 30px;
+        top: -25px;
+        opacity: 1;
+      }
+      .tip-content{
+        display: block;
+        position: absolute;
+        width: 120px;
+        opacity: 0;
+        top: 0;
+        right: -120px;
+        color:#589a90;
+        background: #ffffc8;
+        text-align: center;
+        line-height: 30px;
+        -webkit-transition: all .3s ease;
+         -moz-transition: all .3s ease;
+           -o-transition: all .3s ease;
+              transition: all .3s ease;
+      }
+      .now-price{
+        font-size: 24px;
+        color: #ff7e00;
+      }

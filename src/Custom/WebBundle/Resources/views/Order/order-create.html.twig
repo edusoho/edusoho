@@ -5,7 +5,8 @@
 {% set script_controller = 'order/create' %}
 
 {% block content %}
- 
+   
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/customweb/css/coursepay.css') }}" />
 <div class="order-pay">
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
@@ -66,19 +67,29 @@
             {% endif %}
 
               <div class="order-item clearfix" >
-                <div class="pull-right order-count">
+                <div class="order-count pull-right">
                   订单金额：
-                  <span  class="order-price "  {%if not vip %} role="total-price" {% endif %}
+                  <span   {%if not vip %} role="total-price" {% endif %}
                       {% if vip|default(false) %}
                           {% if course.status=="ok" and level.courseDiscount|default(10) < 10 %}
-                            style="text-decoration: line-through;"
+                                     class="price old-price " 
                           {% endif %}
-                      {% endif %}   >
+                      {% else %}  
+                                   class="price " 
+                     {% endif %}
+                       >
                     {{totalPrice}}
                   </span>
-
+                   {% if priceType|default('RMB') == "RMB" %}
+                    元
+                  {% elseif priceType|default('RMB') == "Coin" %}
+                    {{setting("coin.coin_name")}}
+                  {% endif %}
+                    {%if  vip %}      &nbsp;&nbsp;&nbsp; {% endif %}
+             
             {% if vip |default(false) %}
-                   <span role="total-price">
+                 会员折扣价：
+                   <span role="total-price" class="now-price">
                    {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
                           {{course.vipCoinPrice}}
@@ -87,14 +98,16 @@
                       {% endif %}
                    {% endif %}   
                  </span>
-               {% endif %}
-                  {% if priceType|default('RMB') == "RMB" %}
+                   {% if priceType|default('RMB') == "RMB" %}
                     元
                   {% elseif priceType|default('RMB') == "Coin" %}
                     {{setting("coin.coin_name")}}
                   {% endif %}
+               {% endif %}
+                 
              {% if vip |default(false) %}
-                   <div>(VIP折扣价 {{level.courseDiscount}}折)</div>
+                <div class="vip-tip">？<span class="tip-content">您是{{level.name}}，享{{level.courseDiscount}}折</span></div>
+                  {#  <div>(VIP折扣价 {{level.courseDiscount}}折)</div> #}
             {% endif %}
                 </div>
               </div>

@@ -225,18 +225,15 @@ class CustomOrderController extends OrderController
 
     protected function setShowVipDiscount($orderInfo,$currentUser){
         $vip=$this->getVipService()->getMemberByUserId($currentUser["id"]);
-          $orderInfo['vip'] = $vip;
-
+        $orderInfo['vip'] = $vip;
         $course =$orderInfo['courses'][0];
         $level=array();
         $vipPrice=$course['price'];
         $status="false";
         if($vip){
-
             $level=$this->getLevelService()->getLevel($vip['levelId']);
              $orderInfo['level'] = $level;
             if($level && $this->getVipService()->checkUserInMemberLevel($currentUser["id"],$vip['levelId'])=="ok"){
-               
                 $status=$this->getVipService()->checkUserInMemberLevel($currentUser["id"],$vip['levelId']);
                 $course['status'] = $status;
 
