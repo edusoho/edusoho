@@ -27,7 +27,7 @@
             <input type="hidden" name="targetId" value="{{targetId}}"/>
             
          
-             {% if vip %} 
+             {% if vip |default(false) %} 
                  {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
                         <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
@@ -69,7 +69,7 @@
                 <div class="pull-right order-count">
                   订单金额：
                   <span  class="order-price "  {%if not vip %} role="total-price" {% endif %}
-                      {% if vip %}
+                      {% if vip|default(false) %}
                           {% if course.status=="ok" and level.courseDiscount|default(10) < 10 %}
                             style="text-decoration: line-through;"
                           {% endif %}
@@ -77,7 +77,7 @@
                     {{totalPrice}}
                   </span>
 
-            {% if vip %}
+            {% if vip |default(false) %}
                    <span role="total-price">
                    {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
@@ -93,7 +93,7 @@
                   {% elseif priceType|default('RMB') == "Coin" %}
                     {{setting("coin.coin_name")}}
                   {% endif %}
-             {% if vip %}
+             {% if vip |default(false) %}
                    <div>(VIP折扣价 {{level.courseDiscount}}折)</div>
             {% endif %}
                 </div>
