@@ -57,7 +57,6 @@ class CourseOrder1Controller extends CourseOrderController
                 'createdTimeGreaterThan' => strtotime('-40 hours'),
             ), array('createdTime', 'DESC'), 0, 1
         );
-var_dump('$oldOrders=>',$oldOrders);
 
         $order = current($oldOrders);
 
