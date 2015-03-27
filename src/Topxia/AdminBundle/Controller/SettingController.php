@@ -78,7 +78,7 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
-        var_dump($this->getSettingService()->get('mobile', array()));
+
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
         ));

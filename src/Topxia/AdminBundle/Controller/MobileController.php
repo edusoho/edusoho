@@ -60,7 +60,7 @@ class MobileController extends BaseController
         $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
         $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
         $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
-var_dump($this->getSettingService()->get('mobile', array()));
+
         return $this->render('TopxiaAdminBundle:System:mobile.html.twig', array(
             'mobile' => $mobile,
             "bannerCourse1" => $bannerCourse1,
@@ -103,7 +103,7 @@ var_dump($this->getSettingService()->get('mobile', array()));
                 $sortedCourses[] = $courses[$value];
             }
         }
-var_dump($this->getSettingService()->get('mobile', array()));
+
         return $this->render('TopxiaAdminBundle:System:course-select.html.twig', array(
             'mobile' => $mobile,
             'courses' => $sortedCourses,
