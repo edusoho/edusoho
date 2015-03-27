@@ -10,7 +10,7 @@ use Topxia\Common\Paginator;
 class Group1Controller extends GroupController
 {
     public function index1Action(Request $request) 
-    {   
+    {  
         $mycreatedGroup = array();
         $myJoinGroup = array();
 
@@ -30,11 +30,10 @@ class Group1Controller extends GroupController
             $sort=$this->filterSort('byCreatedTimeOnly');
 
         }
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getThreadService()->searchThreadsCount(array(
-                'createdTime'=>time()-30*24*60*60,
+                'createdTime'=>0,
                 'status'=>'open'
                 )),
             20 
@@ -42,7 +41,7 @@ class Group1Controller extends GroupController
 
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
-                'createdTime'=>time()-30*24*60*60,
+                'createdTime'=>0,
                 'status'=>'open'
                 ),
             $sort,
@@ -96,11 +95,11 @@ class Group1Controller extends GroupController
 
         $newGroups=$this->getGroupService()->searchGroups(array('status'=>'open',),
             array('createdTime','DESC'),0,8);
-
+    
         $sign=$this->getSignService()->getSignByUserId($user['id']);
-
+    
         $groupId=$sign ? $sign['targetId'] : 1;
-  
+ 
         return $this->render("CustomWebBundle:Group:index.html.twig", array(
             'activeGroup' => $activeGroup,
             'myJoinGroup' => $myJoinGroup,
