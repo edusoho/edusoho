@@ -2,7 +2,7 @@
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    var EditorFactory = require('common/kindeditor-factory');
+    var EditorFactory = require('ckeditor/4.6.7/ckeditor');
     var Share=require('../../../../topxiaweb/js/util/share.js');
     var UserSign = require('../group/sign.js');
 
