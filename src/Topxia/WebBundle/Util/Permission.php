@@ -7,8 +7,58 @@ use Topxia\Service\Common\ServiceKernel;
 
 Class Permission
 {   
+    public function getPermissions($parent, $type) 
+    {   
+        $permissions = $this->parsePermissions();
 
-    public function getPermissions($permissions=array()) 
+        $result = array();
+
+        foreach ($permissions as $key => $value) {
+
+            if ($value['parent'] == $parent) {
+
+                if ($type) {
+
+                    if (isset($value['type']) && $value['type'] == $type ) {
+
+                        $result[] = $value;
+                        continue;
+
+                    }
+
+                    continue;
+                    
+                }
+
+                $result[] = $value;
+            }
+        }
+        
+        $result = $this->group($result);
+       
+        return $result;
+    }
+
+    private function group($result)
+    {   
+        $permissions = array();
+
+        foreach ($result as $key => $value) {
+            
+            if(!isset($value['group'])) {
+
+                $permissions[1][] = $value;
+
+            }else {
+
+                $permissions[$value['group']][] = $value;
+            }
+        }
+        
+        return $permissions;
+    }
+
+    private function parsePermissions($permissions=array()) 
     {   
         $kernel = new ServiceKernel();
         $kernel->instance();

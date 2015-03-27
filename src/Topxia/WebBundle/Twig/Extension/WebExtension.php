@@ -126,31 +126,9 @@ class WebExtension extends \Twig_Extension
     public function permissions($parent='', $type=null)
     {   
         $permission = new Permission();
-        $permissions = $permission->getPermissions();
-        $result = array();
+        $permissions = $permission->getPermissions($parent, $type);
 
-        foreach ($permissions as $key => $value) {
-
-            if ($value['parent'] == $parent) {
-
-                if ($type) {
-
-                    if (isset($value['type']) && $value['type'] == $type ) {
-
-                        $result[] = $value;
-                        continue;
-
-                    }
-
-                    continue;
-                    
-                }
-
-                $result[] = $value;
-            }
-        }
-
-        return $result;
+        return $permissions;
     }
 
     public function getInCash($userId,$timeType="oneWeek")
