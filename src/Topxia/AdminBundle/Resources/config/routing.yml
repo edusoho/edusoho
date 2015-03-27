@@ -218,16 +218,16 @@ admin_navigation_delete:
 
 admin_review:
     pattern:  /review
-    defaults: { _controller: TopxiaAdminBundle:Review:index }
+    defaults: { _controller: TopxiaAdminBundle:CourseReview:index }
 
 admin_review_delete:
     pattern: /review/{id}/delete
-    defaults: {_controller: TopxiaAdminBundle:Review:delete }
+    defaults: {_controller: TopxiaAdminBundle:CourseReview:delete }
     methods: [POST]
 
 admin_review_batch_delete:
     pattern: /review/batch_delete
-    defaults: {_controller: TopxiaAdminBundle:Review:batchDelete }
+    defaults: {_controller: TopxiaAdminBundle:CourseReview:batchDelete }
     methods: [POST]
 
 admin_note:
@@ -1065,10 +1065,10 @@ admin_coin_records:
     defaults: { _controller: TopxiaAdminBundle:Coin:records }
 admin_coin_orders:
     path:     /coin/orders
-    defaults: { _controller: TopxiaAdminBundle:Coin:orders }
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:orders }
 admin_coin_orders_log:
     path:     /coin/orders/log/{id}
-    defaults: { _controller: TopxiaAdminBundle:Coin:logs }
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:logs }
 # admin_coin_admin:
 #     path:     /coin/admin
 #     defaults: { _controller: TopxiaAdminBundle:Coin:admin }

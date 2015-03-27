@@ -13,7 +13,8 @@
     {% endblock %}
   </div>
   <div class="col-md-10">
-      {% block main %}
-      {% endblock %}
+        <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
+        {% block main %}
+        {% endblock %}
   </div>
 {% endblock %}
