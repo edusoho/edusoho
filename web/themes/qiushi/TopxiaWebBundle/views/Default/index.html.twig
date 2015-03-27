@@ -1,0 +1,136 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% block topbanner %}
+	<!--首页幻灯片开始-->
+	<div class="jumbotron">
+	  <div class="container">
+	    <div class="row">
+	      <div class="com-xs-12 col-sm-12 col-md-9 col-lg-9">
+	        <img class="img-responsive" src="{{ asset('themes/qiushi/img/carousel.png') }}" alt="">
+	      </div>
+	      <div class="com-xs-12 col-sm-12 col-md-3 col-lg-3">
+	        <div class="panel newcourse-list">
+	          <div class="panel-heading">最新课程列表</div>
+	          <div class="panel-body">
+	            <ul class="list-group">
+	            {% set lastestCourses = data('LatestCourses',{'count':5}) %}
+	            	 {% for lastcourses in lastestCourses %}
+			              <li class="list-group-item">
+			                <span class="badge pull-left">{{ loop.index }}</span>
+			                <a href="" class="pull-left">{{ lastcourses.title }}</a>
+						        {% if lastcourses.teachers %}
+			                        {% for teacher in lastcourses.teachers %}
+			                          {% if loop.index <= 5%}
+			                             <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ teacher.nickname }}</a>
+			                           {% endif %}
+			                        {% endfor %}
+			                    {% endif %}
+			                
+			              </li>
+	              	{% endfor %}
+	            </ul>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!--首页幻灯片结束-->
+
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/autumn/css/class-autumn.css') }}" />
+{% endblock %}
+
+{% block content %}
+  <!--老师推荐开始-->
+  <div class="es-teacher">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">老师推荐</h3>
+        <a class="more" href="">更多&gt;</a>
+      </div>
+      <div class="panel-body">
+        <ul class="row">
+        {% set recommendTeachers = data('RecommendTeachers',{'count':4}) %}
+        	{% for perTeacher in recommendTeachers %}
+	          <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-teacher-list text-center">
+	            <a href="">
+	              <img src="{{ file_path(perTeacher.mediumAvatar, 'avatar.png') }}" class="img-circle">
+	
+	              <h3>{{ perTeacher.nickname }}</h3>
+	
+	              <p>{{ perTeacher.about|plain_text(100) }}</p>
+	            </a>
+	          </li>
+	        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!--老师推荐结束-->
+
+    <!--精品课程开始-->
+
+    <div class="es-course">
+      <div class="panel">
+        <div class="panel-heading">
+          <h3 class="panel-title">精品课程</h3>
+          <a class="more" href="">更多&gt;</a>
+        </div>
+        <div class="panel-body row">
+          <ul id="myTab" class="nav nav-tabs" role="tablist">
+		{% for firstCat in firstCategories %}
+			{% if firstCat.parentId == 0 %}
+            <li role="presentation" {% if loop.index == 1 %} class="active" {% endif %}><a href="#category-{{firstCat.id}}"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">{{ firstCat.name }}</a></li>
+            {% endif %}
+		{% endfor %}
+          </ul>
+          
+          <div id="myTabContent" class="tab-content">
+        {% for firstCat in firstCategories %}
+			{% if firstCat.parentId == 0 %}
+            <div role="tabpanel" class="tab-pane fade {% if loop.index == 1 %}active in{% endif %}" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
+              <ul class="row">
+              {% set recommendCourses = data('RecommendCourses',{ categoryId: firstCat.id,count:8}) %}
+              {% for courses in recommendCourses %}
+                <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-course-list">
+                  <div class="lessonimg-box">
+                    <img src="{{ default_path('coursePicture', courses.middlePicture, 'large') }}" class="img-responsive lessonimg" alt="">
+
+                    <div class="lessonplay" style="opacity: 0;">
+                      <a class="btn btn-default course-button" href="{{ path('course_show', {id:courses.id}) }}" role="button">点击查看</a>
+                    </div>
+                  </div>
+                  <div class="lesson-infor" style="height: 100px;">
+                    <h3>{{ courses.title }}</h3>
+
+                    <p style="opacity: 0; height: 0px; display: none;">{{ courses.about|plain_text(60) }}</p>
+                    <span class="student-num pull-right"><i class="fa fa-users"></i>{{ courses.studentNum }}</span>
+                    <span class="nickname clearfix">
+                        {% for teacher in courses.teachers %}
+                          {% if loop.index <= 1%}
+                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ teacher.nickname }}</a>
+                           {% endif %}
+                        {% endfor %}
+                      
+                    </span>
+                  </div>
+                </li>
+              {% endfor %}
+                
+              </ul>
+            </div>
+            
+            {% endif %}
+		{% endfor %}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--精品课程结束-->
+
+{% endblock %}

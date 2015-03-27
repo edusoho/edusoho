@@ -13,16 +13,26 @@ class GroupServiceImpl extends BaseService implements GroupService
 			throw $this->createAccessDeniedException('推荐小组序号只能为数字！');
 		}
 
-		$course = $this->getCourseDao()->updateCourse($id, array(
-			'recommended' => 1,
-			'recommendedSeq' => (int)$number,
-			'recommendedTime' => time(),
+		$group = $this->getGroupRecommendDao()->addGroupRecommend(array(
+			'groupID' => (int)$id,
+			'seq' => (int)$number,
+			'createdTime' => time(),
 		));
 
-		$this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+		$this->getLogService()->info('group', 'recommend', "推荐课程《{$group['title']}》(#{$group['id']}),序号为{$number}");
 
-		return $course;
+		return $group;
 	}
+
+    private function getLogService() 
+    {
+        return $this->createService('System.LogService');
+    }
+    
+    private function getGroupRecommendDao() 
+    {
+        return $this->createDao('Custom:Group.GroupRecommendDao');
+    }
 
 	
 }

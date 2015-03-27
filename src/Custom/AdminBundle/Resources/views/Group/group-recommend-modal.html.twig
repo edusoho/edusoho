@@ -5,7 +5,7 @@
 {% block title %}设置推荐小组{% endblock %}
 {% block body %}
 
-<form id="course-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_group_recommend', {id:group.id, ref:ref}) }}">
+<form id="group-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_group_recommend', {id:group.id, ref:ref}) }}">
   
 
   <div class="row form-group">
@@ -22,7 +22,7 @@
 
 
 {% block footer %}
-  <button id = "course-recommend-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#course-recommend-form">保存</button>
+  <button id = "group-recommend-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#group-recommend-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('course/recommend-modal')</script>
+  <script>app.load('customadminbundle/controller/group/recommend-modal')</script>
 {% endblock %}

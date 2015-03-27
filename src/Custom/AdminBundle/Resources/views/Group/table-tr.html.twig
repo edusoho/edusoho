@@ -55,7 +55,7 @@
        <li><a href="javascript:" class="open-group" title="开启小组({{group.title}})" data-url="{{path('admin_group_open',{id:group.id})}}"><span class="glyphicon glyphicon-ok"></span>开启小组</a></li>
 
        {% endif %}
-       <li  ><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_group_recommend',{id:group.id}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐小组</a></li>
+       <li  ><a class="recommend-group" href="#modal" data-toggle="modal" data-url="{{ path('admin_group_recommend',{id:group.id, ref:'groupList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐小组</a></li>
        
        <li  ><a href="javascript:" class="transfer-group" data-url="{{path('admin_group_transfer',{groupId:group.id})}}"><span class="glyphicon glyphicon-refresh"></span> 转移小组</a></li>
        

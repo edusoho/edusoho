@@ -1,0 +1,180 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    {%- block title -%}
+      {{ setting('site.name', 'EDUSOHO') }}
+      {% if setting('site.slogan') %} - {{ setting('site.slogan') }} {% endif %}
+      {% if not setting('copyright.owned') %} - Powered by EDUSOHO {% endif %}
+    {%- endblock -%}
+  </title>
+  <meta name="keywords" content="{% block keywords %}{% endblock %}" />
+  <meta name="description" content="{% block description %}{% endblock %}" />
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  {{ setting('login_bind.verify_code', '')|raw }}
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
+  {% block stylesheets %}
+    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('themes/qiushi/css/main.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
+    <!--[if lt IE 8]>
+      <link href="{{ asset('assets/css/oldie.css') }}" rel="stylesheet">
+    <![endif]-->
+  {% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+  <![endif]-->
+
+  <!--[if IE 8]>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
+<script src="{{ asset('themes/qiushi/js/main.js') }}"></script>
+  {% block head_scripts %}{% endblock %}
+
+</head>
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+
+{% block body %}
+<div class="navbar site-navbar one-nav">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="container">
+    <div class="container-gap">
+      <div class="navbar-header clearfix">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="fa fa-navicon"></span>
+        </button>
+                  {% if setting('site.logo') %}
+            <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
+          {% else %}
+            <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+          {% endif %}
+		  
+		  {% set firstCategories = data('Categories',{ group:'course'}) %}
+
+		  
+		        <ul class="nav navbar-nav hidden-sm hidden-xs">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+               ><span class="fa fa-navicon"></span>课程快速导航菜单</a>
+            <ul class="dropdown-menu course-expoler" role="menu">
+                {% for firstCat in firstCategories %}
+					{% if firstCat.parentId == 0 %}
+						<li><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id)}) }}">{{ firstCat.name }}</a>
+							<ul class="sec-cate">
+								{% set secCategories = data('Categories',{ group:'course',parentId:firstCat.id}) %}
+									{% for secCat in secCategories %}
+									<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id)}) }}">{{ secCat.name }}</a></li>
+									{% endfor %}
+							</ul>
+						</li>
+            		{% endif %}
+				{% endfor %}             
+            </ul>
+          </li>
+        </ul>
+        
+        <form class="navbar-form navbar-left hidden-sm hidden-xs clearfix" role="search" action="/search">
+          <div class="form-group">
+            <input type="search" class="form-control" placeholder="搜索课程，名师" name="q">
+            <button type="submit" class="btn"><span class="fa fa-search"></span></button>
+          </div>
+        </form>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <ul class="nav navbar-nav navbar-right user-menu hidden-sm hidden-xs">
+      	{% if app.user %}
+	        <li><a href="{{ path('my') }}">我的课程</a></li>
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img
+	            class="img-circle" src="{{ file_path(app.user.smallAvatar, 'avatar.png') }}" alt=""/></a>
+	          <ul class="dropdown-menu text-center" role="menu">
+	            <li><a href="{{ path('settings') }}">个人中心</a></li>
+	            <li><a href="{{ path('message') }}">消息</a></li>
+	            <li><a href="{{ path('notification') }}">通知</a></li>
+	            <li><a href="{{ path('logout') }}">退出</a></li>
+	          </ul>
+	        </li>
+	    {% else %}
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+        {% endif %}
+      </ul>
+      <!-- /.navbar-collapse -->
+    </div>
+  </div>
+  <div class="menu-sec" style="overflow: hidden;">
+    <div class="container">
+      <div class="collapse navbar-collapse">
+        {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+        <ul class="nav navbar-nav navbar-right">
+        {% if setting('mobile.enabled') %}
+          <li>
+            <a href="{{ path('mobile') }}" class=""><span class="fa fa-mobile hidden-sm hidden-xs"></span>手机版</a>
+          </li>
+        {% endif %}
+
+          <li>
+            <a href="javascript:void(0);" onclick="AddFavorite('{{ setting("site.name", "EDUSOHO") }}',location.href)" class=""><span class="fa fa-heart hidden-sm hidden-xs"></span>收藏本站</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- /.container -->
+  <!--主题顶部导航条结束-->
+</div>
+
+
+  {% block topbanner %}{% endblock %}
+
+  <div id="content-container" class="container">
+    {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
+        <a href="{{ path('settings_setup') }}">现在就去设置</a>
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div><!-- /container -->
+
+
+  <div class="footer-autumn">
+    <div class="container">
+
+      <div class="footer-links">
+        {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+      </div>
+
+      <div class="footer-copyright">
+        {% include "TopxiaWebBundle::powered-by.html.twig" %}
+        {{ setting('site.analytics')|raw }} 
+        <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
+        <div class="mts">{% if setting('site.copyright') %}课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
+      </div>
+
+    </div>
+  </div>
+
+  {% block bottom %}{% endblock %}
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+{% endblock %}
+
+{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+</body>
+</html>

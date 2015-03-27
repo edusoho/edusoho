@@ -25,7 +25,7 @@ class GroupRecommendDaoImpl extends BaseDao implements GroupRecommendDao
             throw $this->createDaoException('Insert Group error.');
         }
 
-        return $this->getGroup($this->getConnection()->lastInsertId());
+        return $this->getGroupRecommend($this->getConnection()->lastInsertId());
     }
 
      

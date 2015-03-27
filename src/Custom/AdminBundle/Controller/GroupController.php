@@ -52,27 +52,32 @@ class GroupController extends BaseController
         $ref = $request->query->get('ref');
 
         if ($request->getMethod() == 'POST') {
+
             $number = $request->request->get('number');
 
             $course = $this->getGroupService()->recommendGroup($id, $number);
 
             //$user = $this->getUserService()->getUser($course['userId']);
 
-            if ($ref == 'recommendList') {
-                return $this->render('TopxiaAdminBundle:Course:course-recommend-tr.html.twig', array(
-                    'course' => $course,
-                    'user' => $user
-                ));
-            }
-
-
-            return $this->renderCourseTr($id);
+           // return $this->renderCourseTr($id);
         }
 
 
         return $this->render('CustomAdminBundle:Group:group-recommend-modal.html.twig', array(
             'group' => $group,
             'ref' => $ref
+        ));
+    }
+
+    private function renderCourseTr($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
+            'user' => $this->getUserService()->getUser($course['userId']),
+            'category' => $this->getCategoryService()->getCategory($course['categoryId']),
+            'course' => $course ,
+            'default'=>$default
         ));
     }
 
