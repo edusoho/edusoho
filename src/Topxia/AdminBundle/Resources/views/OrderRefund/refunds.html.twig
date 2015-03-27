@@ -7,9 +7,6 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
