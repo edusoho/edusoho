@@ -1,0 +1,84 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}师资介绍 - {{ parent() }}{% endblock %}
+
+{% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ setting('site.name') }}的师资介绍。{% endblock %}
+
+
+
+{% block content %}
+<!--二级页面路径导航开始-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 crumbs">
+      <ol class="breadcrumb">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">求是名师</a></li>
+        <li class="active"><span>一年级<i class="fa fa-times"></i></span></li>
+      </ol>
+    </div>
+    <!--二级页面路径导航结束-->
+    <!--课程筛选开始-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav-stacked">
+      <ul class="list-inline">
+        年级：
+        <li class="active"><a href="">一年级</a></li>
+        <li><a href="">二年级</a></li>
+        <li><a href="">三年级</a></li>
+        <li><a href="">四年纪</a></li>
+        <li><a href="">五年级</a></li>
+        <li><a href="">初一</a></li>
+        <li><a href="">初二</a></li>
+        <li><a href="">初三</a></li>
+        <li><a href="">高一</a></li>
+        <li><a href="">高二</a></li>
+        <li><a href="">高三</a></li>
+        <li><a href="">高复</a></li>
+      </ul>
+      <ul class="list-inline">
+        学科：
+        <li><a href="">语文</a></li>
+        <li><a href="">数学</a></li>
+        <li><a href="">英语</a></li>
+        <li><a href="">地理</a></li>
+        <li><a href="">政治</a></li>
+        <li><a href="">历史</a></li>
+        <li><a href="">物理</a></li>
+        <li><a href="">生物</a></li>
+        <li><a href="">化学</a></li>
+      </ul>
+    </div>
+  <div class="teacher-box">
+    <ul class="row">
+    {% for teacher in teachers %}
+          {% set profile = profiles[teacher.id] %}
+      <li class="col-xs-12 col-sm-12 col-md-6 col-lg-6 es-teacher-list">
+        <a href="{{ path('user_show', {id:teacher.id}) }}">
+        <div class="media">
+          <div class="media-left">
+              <img class="media-object" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}r" alt="...">
+            <span class="teacher-link">点击查看</span>
+          </div>
+          <div class="media-body">
+            <span class="com-author-link">{{ teacher.nickname }}</span>
+
+            <span class="course-title">
+                            {% if teacher.title %}
+                  {{ teacher.title }}
+                {% else %}
+                  请设置头衔
+                {% endif %}
+            </span>
+            <p class="teacher-info">
+              {{ profile.about|raw }}
+            </p>
+            <span class="pull-left course-num">在教课程：11</span>
+          </div>
+        </div>
+        </a>
+      </li>
+              {% endfor %}
+      </ul>
+      {{ web_macro.paginator(paginator) }}
+        </div>
+
+{% endblock %}
