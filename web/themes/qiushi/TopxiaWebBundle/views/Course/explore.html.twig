@@ -1,0 +1,103 @@
+{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+
+{% set siteNav = 'course/explore' %}
+
+{% block title %}{% if not category.id %}全部课程{% else %}{{ category.name }} 课程{% endif %} 第{{ app.request.get('page', 1)}}页- {{ parent() }}{% endblock %}
+
+{% block keywords %}{% if category.id %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
+{% block description %}{% if category.id %}{{category.name}}的{% endif %}课程列表，第{{ app.request.get('page', 1)}}页。{% endblock %}
+
+{% block content %}
+
+    <!--二级页面路径导航开始-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 crumbs">
+      <ol class="breadcrumb">
+        <li><a href="{{ path('homepage') }}">首页</a></li>
+        <li><a href="{{ path('course_explore') }}">课程库</a></li>
+      </ol>
+    </div>
+    <!--二级页面路径导航结束-->
+    <!--课程筛选开始-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav-stacked">
+      <ul class="list-inline">
+        年级：
+        <li ><a href="">一年级</a></li>
+        <li><a href="">二年级</a></li>
+        <li><a href="">三年级</a></li>
+        <li><a href="">四年纪</a></li>
+        <li><a href="">五年级</a></li>
+        <li><a href="">初一</a></li>
+        <li><a href="">初二</a></li>
+        <li><a href="">初三</a></li>
+        <li><a href="">高一</a></li>
+        <li><a href="">高二</a></li>
+        <li><a href="">高三</a></li>
+        <li><a href="">高复</a></li>
+      </ul>
+      <ul class="list-inline">
+        学科：
+        <li><a href="">语文</a></li>
+        <li><a href="">数学</a></li>
+        <li><a href="">英语</a></li>
+        <li><a href="">地理</a></li>
+        <li><a href="">政治</a></li>
+        <li><a href="">历史</a></li>
+        <li><a href="">物理</a></li>
+        <li><a href="">生物</a></li>
+        <li><a href="">化学</a></li>
+      </ul>
+      <ul class="list-inline">
+        类别：
+        <li><a href="">类别1</a></li>
+        <li><a href="">类别2</a></li>
+        <li><a href="">类别3</a></li>
+        <li><a href="">类别4</a></li>
+      </ul>
+      <ul class="list-inline">
+        教材：
+        <li><a href="">人教版</a></li>
+        <li><a href="">浙教版</a></li>
+        <li><a href="">苏教版</a></li>
+      </ul>
+      <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 teacher">
+        教师：
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="搜索教师" aria-label="Text input with segmented button dropdown">
+          <div class="input-group-btn">
+
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--课程筛选结束-->
+    <!--课程排序列表开始-->
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 es-course">
+        <ul  class="nav nav-tabs" >
+          <li {% if sort == 'latest' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}">最新</a></li>
+          <li  {% if sort == 'popular' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}">热门</a></li>
+          <li {% if sort == 'recommendedSeq' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommendedSeq'}) }}">推荐</a></li>
+
+        </ul>
+        <div  class="tab-content">
+          <div class="tab-pane fade active in">
+                   {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+				   {{ web_macro.paginator(paginator) }} 
+          </div>
+      
+        </div>
+      </div>
+    <!--课程排序列表结束-->
+
+
+
+{% endblock %}

@@ -150,25 +150,32 @@
     {% endif %}
     {% block content %}{% endblock %}
   </div><!-- /container -->
+</div>
 
+  
+<!--页面底部开始-->
+<div class="footer-sec">
+  <div class="container clearfix">
+    <div class="copyright hidden-sm hidden-xs">
+      {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+      <span class="">客服热线：400-889-9712</span>
 
-  <div class="footer-autumn">
-    <div class="container">
+      <p>关注求是微信公众号</p>
+      <img src="images/weixin.png" alt="" class="img-responsive"/>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="site-footer-links">
+      
+        <p class="text-center">Powered by <a href="">Edusoho v5.1.3</a></p>
 
-      <div class="footer-links">
-        {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+        <p class="text-center">湖州求是教育集团地址：<a href="">德清县武康镇府前港44号</a></p>
+
+        <p class="text-center">copyright ©2015-2015 <a href="">http://www.hzqsjy.com</a> all right</p>
       </div>
-
-      <div class="footer-copyright">
-        {% include "TopxiaWebBundle::powered-by.html.twig" %}
-        {{ setting('site.analytics')|raw }} 
-        <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
-        <div class="mts">{% if setting('site.copyright') %}课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
-      </div>
-
     </div>
   </div>
-
+</div>
+<!--页面底部结束-->
   {% block bottom %}{% endblock %}
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>

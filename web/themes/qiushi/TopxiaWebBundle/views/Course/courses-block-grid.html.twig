@@ -1,0 +1,37 @@
+<style>
+.classroomPicture{
+
+  width: 24px;
+  height: 24px;
+}
+</style>
+{% set mode = mode|default('default') %}
+ <ul class="row es-course-box">
+   {% for course in courses %}
+              <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-course-list">
+                <div class="lessonimg-box">
+                  
+                  <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}" class="img-responsive lessonimg" alt="">
+
+                  <div class="lessonplay" style="opacity: 0;">
+                    <a class="btn btn-default course-button" href="{{ path('course_show', {id:course.id}) }}" role="button">点击查看</a>
+                  </div>
+                </div>
+                <div class="lesson-infor" style="height: 100px;">
+                  <h3>{{ course.title }}</h3>
+
+                  <p style="opacity: 0; height: 0px; display: none;">{{ course.about|plain_text(60) }}</p>
+                  <span class="student-num pull-right"><i class="fa fa-users"></i>{{ course.studentNum }}</span>
+                    <span class="nickname clearfix">
+                      <a class="text-muted" href=""><i class="fa fa-user"></i>                        
+                        {% set user = users[course.teacherIds|first]|default(null) %}
+				          {% if user %}
+						  {{ user.nickname }}
+				          {% endif %}
+          			  </a>
+                    </span>
+                </div>
+              </li>
+              {% endfor %}
+             
+            </ul>

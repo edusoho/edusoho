@@ -132,5 +132,53 @@
       </div>
     </div>
     <!--精品课程结束-->
+    
+    <!--直播课开始-->
+    
+    {% set recentLiveCourses = data('RecentLiveCourses',{ count:4 }) %}
+  <div class="es-course live-lesson">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">直播课</h3>
+        <a class="more" href="">更多&gt;</a>
+      </div>
+      <div class="panel-body">
+        <ul class="row">
+        {% for liveCourses in recentLiveCourses %}
+          <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-course-list">
+            <div class="lessonimg-box">
+            {% set lesson = liveCourses['lesson']|default(null) %}
+                                    {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                          <span class="liveicon">正在直播</span>
+                        {% else %}
+                         <span class="liveicon">直播</span>
+                        {% endif %}
+              
+              <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}" class="img-responsive lessonimg" alt="">
 
+              <div class="lessonplay" style="opacity: 0;">
+                <a class="btn btn-default course-button" href="{{ path('course_show', {id:course.id}) }}" role="button">点击查看</a>
+              </div>
+            </div>
+            <div class="lesson-infor" style="height: 100px;">
+              <h3>{{ liveCourses.title }}</h3>
+
+              <p style="opacity: 0; height: 0px; display: none;">{{ liveCourses.about|plain_text(60) }}</p>
+              <span class="livetime pull-left">{{ liveCourses.startTime|date('n月j日 H:i') }} 开课</span>
+                <span class="nickname pull-right clearfix">
+                  <a class="text-muted" href=""><i class="fa fa-user"></i>
+                        {% for teacher in liveCourses.teachers %}
+                         {{ web_macro.user_link(teacher, 'text-muted') }}
+                        {% endfor %}
+                  </a>
+                </span>
+            </div>
+          </li>
+         {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!--直播课结束-->
+ {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
 {% endblock %}
