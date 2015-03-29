@@ -13,7 +13,6 @@ define(function(require, exports, module) {
                         imageArray.push(img.src);
                         img.addEventListener('click',
                         function() {
-                          window.location = 'imageIndexNUrls://?' + this.alt + '.partation.' + imageArray.join('.partation.');
                           navigator.cordovaUtil.showImages(this.alt,imageArray);
                         })
                       }
