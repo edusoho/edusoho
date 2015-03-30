@@ -234,6 +234,7 @@ course_info:
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
+    methods: [POST]
 
 course_become_use_member:
     pattern:  /course/{id}/become_use_member
@@ -1124,11 +1125,6 @@ my_favorite_question_preview:
 user_show: 
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
-
-user_exit_course:
-    pattern:  /user/{userId}/course/{courseId}
-    defaults: { _controller: TopxiaWebBundle:User:exitCourse }
-    methods: [POST]
 
 user_teach: 
     pattern:  /user/{id}/teach
