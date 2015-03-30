@@ -109,8 +109,8 @@ class CoinController extends BaseController
             $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
 
             foreach ($courses as $courseIndex => $course) {              
-                if ($courses[$courseIndex]['discountActivityId'] > 0){
-                    $courses[$courseIndex]['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($courses[$courseIndex]['discountActivityId']);
+                if ($courses[$courseIndex]['discountId'] > 0){
+                    $courses[$courseIndex]['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($courses[$courseIndex]['discountId']);
                 }
             }
             
@@ -183,13 +183,13 @@ class CoinController extends BaseController
 
             if (!empty($plugin)) {
                 $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($key, $currentTime=time());
-                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountActivityId'])) {
+                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountId'])) {
                     $this->getCourseService()->setCoursePrice(
                         $course['id'], 
                         array(
                             'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
                             'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
-                            'discountActivityId' => intval($maxDiscountItem['activityId'])
+                            'discountId' => intval($maxDiscountItem['activityId'])
                         )
                     );                    
                 }

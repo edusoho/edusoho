@@ -2,7 +2,7 @@
 
   <ul class="price-info">
     <li>
-      {% if course.discountActivityId == 0 %}
+      {% if course.discountId == 0 %}
         <span class="price-info-label">价格</span>
       {% else  %}
         <span class="price-info-label">折后价</span>
@@ -11,7 +11,7 @@
         {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows: ['price', 'discount']} %}
       </span>
     </li>
-    {% if course.discountActivityId > 0 %}
+    {% if course.discountId > 0 %}
       <li>
         <span class="price-info-label">原价</span>
         <span class="price-info-content">

@@ -10,7 +10,7 @@
 {% set priceType = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default'  %}
 
 <span class="course-price-widget">
-  {% if course.discountActivityId %}
+  {% if course.discountId %}
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}

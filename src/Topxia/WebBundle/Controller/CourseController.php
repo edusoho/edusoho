@@ -212,8 +212,8 @@ class CourseController extends BaseController
 	{
 		$course = $this->getCourseService()->getCourse($id);
 
-        if (($course['discountActivityId'] > 0)&&($this->isPluginInstalled("DiscountActivity"))){
-            $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountActivityId']);
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("DiscountActivity"))){
+            $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountId']);
         }
 
         $code = 'ChargeCoin';

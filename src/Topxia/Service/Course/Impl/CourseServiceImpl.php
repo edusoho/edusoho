@@ -353,7 +353,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = $this->_filterCourseFields(array(
 			'price' => (isset($courseFields['price'])) ? $courseFields['price'] : $course['originPrice'],
 			'coinPrice' => (isset($courseFields['coinPrice'])) ? $courseFields['coinPrice'] : $course['originCoinPrice'],
-			'discountActivityId' => (isset($courseFields['discountActivityId'])) ? $courseFields['discountActivityId'] : 0
+			'discountId' => (isset($courseFields['discountId'])) ? $courseFields['discountId'] : 0
 		));
 
 		$this->getLogService()->info('course', 'update', "打折活动 更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
@@ -379,7 +379,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fields['originCoinPrice'] = $fields['coinPrice'];
 		}
 
-		if ($course['discountActivityId']>0){
+		if ($course['discountId']>0){
 			if (isset($fields['price'])){
 				if($course['originPrice'] != 0){
 					$fields['price'] = $fields['price']*($course['price']/$course['originPrice']);
@@ -435,7 +435,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'address' => '',
 			'maxStudentNum' => 0,
 			'freeStartTime' => 0,
-			'discountActivityId'=>0,
+			'discountId'=>0,
 			'freeEndTime' => 0
 		));
 		

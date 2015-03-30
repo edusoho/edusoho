@@ -43,7 +43,7 @@
                   {% else %}免费{% endif %}
                 </span>
             {% endif %}
-            {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') 
+            {% if course.discountId > 0 and ((setting('coin.coin_enabled') 
                                 and setting('coin.price_type') == 'Coin' 
                                 and course.originCoinPrice > 0) 
                                 or (setting('coin.coin_enabled') 
@@ -71,7 +71,7 @@
               </label>              
             {% endif %}
  
-            {% if course.discountActivityId > 0 and ((setting('coin.coin_enabled') 
+            {% if course.discountId > 0 and ((setting('coin.coin_enabled') 
                                 and setting('coin.price_type') == 'Coin' 
                                 and course.originCoinPrice > 0) 
                                 or (setting('coin.coin_enabled') 
