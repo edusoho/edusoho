@@ -7,7 +7,7 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
-
+  <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="status">

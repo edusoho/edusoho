@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class ReviewController extends BaseController {
+class CourseReviewController extends BaseController {
 
     public function indexAction (Request $request)
     {   
@@ -16,7 +16,7 @@ class ReviewController extends BaseController {
             $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             if (count($conditions['courseIds']) == 0){
-                return $this->render('TopxiaAdminBundle:Review:index.html.twig', array(
+                return $this->render('TopxiaAdminBundle:CourseReview:index.html.twig', array(
                 'reviews' => array(),
                 'users'=>array(),
                 'courses'=>array(),
@@ -41,7 +41,7 @@ class ReviewController extends BaseController {
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
-        return $this->render('TopxiaAdminBundle:Review:index.html.twig',array(
+        return $this->render('TopxiaAdminBundle:CourseReview:index.html.twig',array(
             'reviews' => $reviews,
             'users'=>$users,
             'courses'=>$courses,
