@@ -181,7 +181,8 @@ define(function(require, exports, module) {
 		});
 
 		$("#coupon-code-btn").click(function(e){
-			$('[role="coupon-code"]').show().focus();
+			$('[role="coupon-code"]').show();
+			$('[role="coupon-code-input"]').focus();
 			$('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
 			$('[role="code-notify"]').show();
@@ -197,18 +198,21 @@ define(function(require, exports, module) {
 			$('[role="code-notify"]').text("");
 			$('[role="coupon-code"]').val("");
 			$(this).hide();
+			$('[role="coupon-code-verified"]').val("");
+			$('[role="coupon-code-input"]').val("");
 			conculatePrice();
 		});
 
-		$('[role="coupon-code"]').blur(function(e){
+		$('button[role="coupon-use"]').click(function(e){
 			var data={};
-			data.code = $(this).val();
+			var couponCode = $('[role="coupon-code-input"]');
+			data.code = couponCode.val();
 			if(data.code == ""){
-				$('[role="coupon-price"]').find("[role='price']").text("0.00");
+				$('[role="coupon-price-input"]').find("[role='price']").text("0.00");
 				return;
 			}
-			data.targetType = $(this).data("targetType");
-			data.targetId = $(this).data("targetId");
+			data.targetType = couponCode.data("targetType");
+			data.targetId = couponCode.data("targetId");
 
 			var totalPrice = parseFloat($('[role="total-price"]').text());
 			//totalPrice = afterDiscountCourses(totalPrice);
@@ -221,6 +225,7 @@ define(function(require, exports, module) {
 				} else if(data.useable == "yes"){
 					$('[role="code-notify"]').css("color","green").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
+					$('[role="coupon-code-verified"]').val(couponCode.val());
 				}
 				conculatePrice();
 			})
