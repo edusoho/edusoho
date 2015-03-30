@@ -106,9 +106,9 @@
         {% if vipChecked == 'not_member' %}
           您已经不是会员，不能学习此课程！
           {% if course.price > 0 %}
-            请重新<a class="btn-link" href="{{ path('vip') }}" target="_blank">开通会员</a>，或<a class="btn-link" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}" target="_blank">购买课程</a>
+            请重新<a class="btn-link" href="{{ path('vip') }}" target="_blank">开通会员</a>
           {% else %}
-            <a class="btn-link" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">点击加入课程</a>
+            <a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}">返回课程首页</a>
           {% endif %}！
         {% elseif vipChecked == 'member_expired' %}
           您的会员已过期，不能学习此课程，请先<a class="btn-link" href="{{ path('vip_renew') }}" target="_blank">续费</a>。
