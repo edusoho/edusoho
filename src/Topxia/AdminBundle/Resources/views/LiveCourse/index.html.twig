@@ -5,10 +5,7 @@
 {% set tab_menus = permissions('admin_live_course','tab') %}
 {% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,type) }}{% endblock %}
 {% block main %}
-<h4>
-直播管理
 
-</h4>
 {% if setting("course.live_course_enabled") == 1 %}
 
   
