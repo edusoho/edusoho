@@ -1,10 +1,10 @@
-    define(function(require, exports, module) {
-    var Notify = require('common/bootstrap-notify');
-    var Validator = require('bootstrap.validator');
-    require('common/validator-rules').inject(Validator);
-    var EditorFactory = require('ckeditor/4.6.7/ckeditor');
-    var Share=require('../../../../topxiaweb/js/util/share.js');
-    var UserSign = require('../group/sign.js');
+define(function(require, exports, module) {
+        var Notify = require('common/bootstrap-notify');
+        var Validator = require('bootstrap.validator');
+        require('common/validator-rules').inject(Validator);
+        require('ckeditor');
+        var Share=require('../../../../topxiaweb/js/util/share.js');
+        var UserSign = require('../group/sign.js');
 
     function checkUrl (url){
         var hrefArray=new Array();
@@ -14,6 +14,7 @@
     }
     exports.run = function() {
 
+        require('./upload.js');
         if($('#group-sign').length>0){
             var userSign = new UserSign({
             element: '#group-sign',
@@ -103,18 +104,57 @@
             });
         }
 
-        if($('#thread_content').length>0){
-            var editor_thread = EditorFactory.create('#thread_content', 'simpleHaveEmoticons', {extraFileUploadParams:{group:'user'}});
-            var validator_thread = new Validator({
-            element: '#user-thread-form',
-            failSilently: true,
-            onFormValidated: function(error){
-                if (error) {
-                    return false;
+            var add_btn_clicked = false;
+
+            $('#add-btn').click(function() {
+                if (!add_btn_clicked) {
+                    $('#add-btn').button('loading').addClass('disabled');
+                    add_btn_clicked = true;
                 }
-                $('#groupthread-save-btn').button('submiting').addClass('disabled');
+                return true;
+            });
+
+            $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function() {
+                var $this = $(this);
+
+                $.post($this.data('url'), function() {
+                    $this.hide();
+                    if ($this.hasClass('collect-btn')) {
+                        $this.parent().find('.uncollect-btn').show();
+                    } else {
+                        $this.parent().find('.collect-btn').show();
+                    }
+                });
+            });
+
+            $('.attach').tooltip();
+
+            if ($('#custom_thread_content').length > 0) {
+              
+                var editor_thread = CKEDITOR.replace('custom_thread_content', {
+                    toolbar: 'GroupWithHidden',
+                    filebrowserImageUploadUrl: $('#custom_thread_content').data('imageUploadUrl')
+                });
             }
-        });
+
+
+       if ($('#thread_content').length > 0) {
+                // group: group
+                var editor_thread = CKEDITOR.replace('thread_content', {
+                    toolbar: 'Group',
+                    filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
+                });
+
+                var validator_thread = new Validator({
+                    element: '#user-thread-form',
+                    failSilently: true,
+                    onFormValidated: function(error) {
+                        if (error) {
+                            return false;
+                        }
+                        $('#groupthread-save-btn').button('submiting').addClass('disabled');
+                    }
+                });
         
         validator_thread.addItem({
             element: '[name="thread[title]"]',
