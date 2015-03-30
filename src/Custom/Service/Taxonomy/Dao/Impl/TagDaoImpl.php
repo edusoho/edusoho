@@ -50,6 +50,12 @@ class TagDaoImpl extends BaseDao implements TagDao
         $sql ="SELECT * FROM {$this->table} WHERE name IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $names);
     }
+    
+    public function getAllTagsByType($type)
+    {
+	    $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY createdTime DESC ";
+        return $this->getConnection()->fetchAll($sql, array($type));
+    }
 
     public function findAllTags($start, $limit)
     {

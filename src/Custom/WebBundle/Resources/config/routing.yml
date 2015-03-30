@@ -5,3 +5,8 @@ settings:
 teacher_tag_match:
     pattern: /teacher/tag/match_jsonp
     defaults: { _controller: CustomWebBundle:TagTeacher:match }
+    
+course_explore:
+    pattern:  /course/explore/{category}
+    defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }
+

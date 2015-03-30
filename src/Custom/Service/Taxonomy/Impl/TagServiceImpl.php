@@ -86,6 +86,12 @@ class TagServiceImpl extends BaseService implements TagService
 
         return $tag;
     }
+    
+    public function getAllTagsByType($type)
+    {
+	    return $this->getTagDao()->getAllTagsByType($type);
+    }
+
 
     public function updateTag($id, array $fields)
     {

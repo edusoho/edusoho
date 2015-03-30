@@ -26,6 +26,8 @@ interface TagService
     public function deleteTag($id);
     
     public function findAllTagsByType($start,$limit,$type);
+
+	public function getAllTagsByType($type);
     
     public function getTagCountByType($type);
 }

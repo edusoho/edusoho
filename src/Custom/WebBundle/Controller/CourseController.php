@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace Custom\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;

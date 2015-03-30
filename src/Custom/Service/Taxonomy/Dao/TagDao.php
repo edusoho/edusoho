@@ -27,5 +27,5 @@ interface TagDao
     
     public function getTagCountByType($type);
     
-
+	public function getAllTagsByType($type);
 }

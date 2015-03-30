@@ -21,18 +21,11 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav-stacked">
       <ul class="list-inline">
         年级：
-        <li ><a href="">一年级</a></li>
-        <li><a href="">二年级</a></li>
-        <li><a href="">三年级</a></li>
-        <li><a href="">四年纪</a></li>
-        <li><a href="">五年级</a></li>
-        <li><a href="">初一</a></li>
-        <li><a href="">初二</a></li>
-        <li><a href="">初三</a></li>
-        <li><a href="">高一</a></li>
-        <li><a href="">高二</a></li>
-        <li><a href="">高三</a></li>
-        <li><a href="">高复</a></li>
+        {% for firstCat in firstCategories %}
+		{% if firstCat.parentId == 0 %}
+        <li ><a href="">{{ firstCat.name }}</a></li>
+        {% endif %}
+        {% endfor %}
       </ul>
       <ul class="list-inline">
         学科：
