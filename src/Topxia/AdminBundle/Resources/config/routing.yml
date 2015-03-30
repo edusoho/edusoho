@@ -353,7 +353,7 @@ admin_order_audit_refund:
 
 admin_setting_site:
     pattern:  /setting/site
-    defaults: { _controller: TopxiaAdminBundle:Setting:site }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:site }
 
 admin_operation_mobile:
     pattern:  /operation/mobile
@@ -419,7 +419,7 @@ admin_setting_favicon_remove:
 
 admin_setting_auth:
     pattern:  /setting/auth
-    defaults: { _controller: TopxiaAdminBundle:Setting:auth }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:auth }
 
 admin_setting_mailer:
     pattern:  /setting/mailer
@@ -427,11 +427,11 @@ admin_setting_mailer:
 
 admin_setting_login_bind:
     pattern:  /setting/login-connect
-    defaults: { _controller: TopxiaAdminBundle:Setting:loginConnect }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:loginConnect }
 
 admin_setting_payment:
     pattern:  /setting/payment
-    defaults: { _controller: TopxiaAdminBundle:Setting:payment }
+    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
 
 admin_setting_cloud_video:
     pattern:  /setting/cloud/video
@@ -489,7 +489,7 @@ admin_setting_cloud_video_embed_watermark_remove:
 
 admin_setting_refund:
     pattern:  /setting/refund
-    defaults: { _controller: TopxiaAdminBundle:Setting:refund }
+    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:refund }
 
 admin_setting_default:
     pattern:  /setting/default
@@ -497,7 +497,7 @@ admin_setting_default:
 
 admin_setting_share:
     pattern:  /setting/share
-    defaults: { _controller: TopxiaAdminBundle:Setting:share }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:share }
 
 admin_setting_default_avatar:
     pattern:  /setting/default/avatar
@@ -530,31 +530,31 @@ admin_setting_theme_change:
 
 admin_setting_user_center:
     pattern:  /setting/user-center
-    defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:userCenter }
 
 admin_setting_user_fields:
     pattern:  /setting/user-fields
-    defaults: { _controller: TopxiaAdminBundle:Setting:userFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:userFields }
 
 admin_setting_course_setting:
     pattern:  /setting/course-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseSetting }
 
 admin_setting_live_course_setting:
     pattern:  /setting/live-course-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:liveCourseSetting }
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:liveCourseSetting }
 
 admin_setting_questions_setting:
     pattern: /setting/questions-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:questionsSetting }
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:questionsSetting }
 
 admin_setting_consult_setting:
     pattern:  /setting/consult-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:consultSetting }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultSetting }
 
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
-    defaults: { _controller: TopxiaAdminBundle:Setting:consultUpload }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
 
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
@@ -858,7 +858,7 @@ admin_article_category_delete:
 
 admin_article_setting:
     pattern: /article/setting
-    defaults: { _controller: TopxiaAdminBundle:Article:setting }
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:articleSet }
 
 admin_article:
     pattern:  /article
@@ -921,7 +921,7 @@ admin_group:
     defaults: { _controller: TopxiaAdminBundle:Group:index }
 admin_group_set:
     pattern:  /group/set
-    defaults: { _controller: TopxiaAdminBundle:Group:set }
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:groupSet }
 admin_groupThread:
     pattern:  /group/thread
     defaults: { _controller: TopxiaAdminBundle:Group:thread }
@@ -1029,15 +1029,15 @@ admin_operation_analysis_lesson_exit:
 
 admin_user_fields_add:
     pattern:  /user_fields/add
-    defaults: { _controller: TopxiaAdminBundle:Setting:addUserFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:addUserFields }
 
 admin_user_fields_edit:
     pattern:  /user_fields/edit/{id}
-    defaults: { _controller: TopxiaAdminBundle:Setting:editUserFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:editUserFields }
 
 admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
-    defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:deleteUserFields }
 
 admin_system_status:
     pattern:  /system/status
