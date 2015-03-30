@@ -6,16 +6,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceException;
 
-class TeacherTagController extends BaseController
+class TagController extends BaseController
 {
 
 	public function indexAction(Request $request)
 	{
-		$type = $request->query->get('type','grade');
+		$type = $request->query->get('type','kind');
 		$total = $this->getTagService()->getTagCountByType($type);
 		$paginator = new Paginator($request, $total, 20);
 		$tags = $this->getTagService()->findAllTagsByType($paginator->getOffsetCount(), $paginator->getPerPageCount(),$type);
-		return $this->render('CustomAdminBundle:TeacherTag:index.html.twig', array(
+		return $this->render('CustomAdminBundle:Tag:index.html.twig', array(
 			'tags' => $tags,
 			'paginator' => $paginator,
 			'type'	=> $type
@@ -27,10 +27,10 @@ class TeacherTagController extends BaseController
 		
 		if ('POST' == $request->getMethod()) {
 			$tag = $this->getTagService()->addTag($request->request->all());
-			return $this->render('CustomAdminBundle:TeacherTag:list-tr.html.twig', array('tag' => $tag));
+			return $this->render('CustomAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
 		}
 		$type = $request->query->get('type','grade');
-		return $this->render('CustomAdminBundle:TeacherTag:tag-modal.html.twig', array(
+		return $this->render('CustomAdminBundle:Tag:tag-modal.html.twig', array(
 			'tag' => array('id' => 0, 'name' => '','type' => $type)
 		));
 	}
@@ -44,12 +44,12 @@ class TeacherTagController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$tag = $this->getTagService()->updateTag($id, $request->request->all());
-			return $this->render('CustomAdminBundle:TeacherTag:list-tr.html.twig', array(
+			return $this->render('CustomAdminBundle:Tag:list-tr.html.twig', array(
 				'tag' => $tag
 			));
 		}
 
-		return $this->render('CustomAdminBundle:TeacherTag:tag-modal.html.twig', array(
+		return $this->render('CustomAdminBundle:Tag:tag-modal.html.twig', array(
 			'tag' => $tag
 		));
 	}
@@ -78,7 +78,7 @@ class TeacherTagController extends BaseController
 
 	private function getTagService()
 	{
-        return $this->getServiceKernel()->createService('Custom:Taxonomy.TagTeacherService');
+        return $this->getServiceKernel()->createService('Custom:Taxonomy.TagService');
 	}
 
 	private function getTagWithException($tagId)

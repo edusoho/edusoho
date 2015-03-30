@@ -31,3 +31,25 @@ admin_group_recommend:
     pattern: /group/{id}/recommend
     defaults: { _controller: CustomAdminBundle:Group:recommend }
     
+admin_tag:
+    pattern:  /tag
+    defaults: { _controller: CustomAdminBundle:Tag:index }
+
+admin_tag_create:
+    pattern:  /tag/create
+    defaults: { _controller: CustomAdminBundle:Tag:create }
+
+admin_tag_checkname:
+    pattern:  /tag/checkname
+    defaults: { _controller: CustomAdminBundle:Tag:checkName}
+
+admin_tag_update:
+    pattern:  /tag/{id}/update
+    defaults: { _controller: CustomAdminBundle:Tag:update }
+
+admin_tag_delete:
+    pattern:  /tag/{id}/delete
+    defaults: { _controller: CustomAdminBundle:Tag:delete }
+    methods:  [POST]
+
+

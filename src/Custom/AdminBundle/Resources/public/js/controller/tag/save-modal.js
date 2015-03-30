@@ -13,7 +13,9 @@ define(function(require, exports, module) {
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
+	                alert(1);
                     return ;
+                    
                 }
 
                 $('#tag-create-btn').button('submiting').addClass('disabled');

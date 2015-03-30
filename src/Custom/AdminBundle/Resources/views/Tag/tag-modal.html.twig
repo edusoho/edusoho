@@ -5,23 +5,23 @@
 {% if tag.id %}编辑{% else %}新增{% endif %}标签
 {% endblock %}
 {% block body %}
-  <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_teacher_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_teacher_tag_create') }}{% endif %}" method="post">
+  <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_tag_create') }}{% endif %}" method="post">
     <div class="form-group">
       <label class="col-md-3 control-label" for="tag-name-field">标签名称</label>
       <div class="col-md-6 controls">
-        <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_teacher_tag_checkname', {exclude:tag.name}) }}">
-        <input type="hidden" id="tag-type-field" name="type" value="{{ tag.type }}">
-
+        <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_tag_checkname', {exclude:tag.name}) }}">
+        
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden"  name="type" value="{{ tag.type }}">
   </form>
-  <script type="text/javascript">app.load('customadminbundle/controller/teacher-tag/save-modal')</script>
+  <script type="text/javascript">app.load('customadminbundle/controller/tag/save-modal')</script>
 {% endblock %}
 
 {% block footer %}
   {% if tag.id %}
-    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_teacher_tag_delete', {id:tag.id}) }}" data-target="{{ tag.id }}" data-tag-id="{{ tag.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}" data-target="{{ tag.id }}" data-tag-id="{{ tag.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</button>
   {% endif %}
 
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>

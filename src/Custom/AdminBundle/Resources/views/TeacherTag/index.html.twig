@@ -4,13 +4,21 @@
 
 {% set menu = 'teacher-tag' %}
 {% set script_controller = 'customadminbundle/controller/teacher-tag/list' %}
+{% set types = {grade:'年级', subject:'学科'} %}
+
 {% block main %}
 
 <div class="page-header clearfix">
-  <button class="btn btn-info btn-sm pull-right" id="add-tag-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_teacher_tag_create') }}">新增教师标签</button>    
+  <button class="btn btn-info btn-sm pull-right" id="add-tag-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_teacher_tag_create', {type:type}) }}">新增教师标签</button>    
   <h1 class="pull-left">教师标签管理</h1>
 </div>
-
+<div data-role="teacher-tag">
+  <ul class="nav nav-tabs">
+  	{% for key, name in types %}
+	<li {% if type == key %} class="active"{% endif %}><a href="{{ url('admin_teacher_tag', {type:key}) }}">{{ name }}标签</a></li>
+  	{% endfor %}
+  </ul>
+</div>
 <table id="tag-table" class="table table-striped">
     <thead>
         <th width="10%">ID</th>

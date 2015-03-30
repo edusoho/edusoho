@@ -1,7 +1,7 @@
 <?php
 namespace Custom\Service\Taxonomy;
 
-interface TagTeacherService
+interface TagService
 {
 	public function getTag($id);
 
