@@ -23,6 +23,12 @@ define(function(require, exports, module) {
             window.location.href = $(this).find('.title').attr('href');
         });
 
+        $('.js-exit-course').on('click', function(){
+            $.post($(this).data('url'),{}, function(){
+                window.location.reload();
+            });
+        });
+
         function checkWidth(){
                 if($(this).width()<400){
                 $('.name').hide();         
