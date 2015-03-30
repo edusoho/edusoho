@@ -4947,7 +4947,6 @@ a.homework-essay-textarea-pack-up{
 .order-item-title .cancel {
   margin-left: 20px;
   float: left;
-  margin-top: 6px;
   text-decoration: none;
   color: #1071b5;
   cursor: pointer;
@@ -5054,14 +5053,6 @@ a.homework-essay-textarea-pack-up{
   
 }
 
-
-.coupon-detail input {
-  height: 27px;
-  line-height: 27px;
-  border: 1px solid #b5b5b5;
-  font-size: 14px;
-}
-
 .order-item .order-item-detail{
   padding: 0px 56px 17px 56px;
 }
@@ -5105,10 +5096,6 @@ a.homework-essay-textarea-pack-up{
   margin-left: 15px;
   font-size: 12px;
   padding-top: 10px;
-}
-
-.order-item-detail .pay-password input {
-  width: 150px;
 }
 
 .pay-center .uncheck {
