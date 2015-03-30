@@ -20,7 +20,9 @@
                         data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
                     {% endif %}
 
-                ></div>
+                >
+                <input type="hidden" id="videoWatermarkEmbedded" value="1">
+                </div>
             {% else %}
                 <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
             {% endif %}
