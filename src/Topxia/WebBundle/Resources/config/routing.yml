@@ -1125,6 +1125,11 @@ user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
+user_exit_course:
+    pattern:  /user/{userId}/course/{courseId}
+    defaults: { _controller: TopxiaWebBundle:User:exitCourse }
+    methods: [POST]
+
 user_teach: 
     pattern:  /user/{id}/teach
     defaults: { _controller: TopxiaWebBundle:User:teach }
