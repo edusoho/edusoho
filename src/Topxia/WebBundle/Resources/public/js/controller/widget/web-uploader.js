@@ -29,7 +29,7 @@ define(function(require, exports, module) {
 
 		    var uploader = WebUploader.create({
 		        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-		        server: '../../../file/upload',
+		        server: '/file/upload',
 		        pick: {
 		        	id:this.element,
 		        	multiple:false
