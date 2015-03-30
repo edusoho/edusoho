@@ -1,7 +1,7 @@
 <?php
 namespace Custom\Service\Taxonomy\Dao;
 
-interface TeacherTagDao
+interface TagTeacherDao
 {
 	public function addTag(array $tag);
 

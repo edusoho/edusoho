@@ -1,11 +1,11 @@
 <?php
 namespace Custom\Service\Taxonomy\Impl;
 
-use Custom\Service\Taxonomy\TeacherTagService;
+use Custom\Service\Taxonomy\TagTeacherService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 
-class TeacherTagServiceImpl extends BaseService implements TeacherTagService
+class TagTeacherServiceImpl extends BaseService implements TagTeacherService
 {
 
     public function getTag($id)
@@ -117,7 +117,7 @@ class TeacherTagServiceImpl extends BaseService implements TeacherTagService
 
 	private function getTagDao()
 	{
-        return $this->createDao('Taxonomy.TagDao');
+        return $this->createDao('Custom:Taxonomy.TagTeacherDao');
 	}
 
     private function getLogService()

@@ -5,10 +5,29 @@ custom_admin_homepage:
 admin_teacher_tag:
     pattern:  /teacher/tag
     defaults: { _controller: CustomAdminBundle:TeacherTag:index }
+    
+admin_teacher_tag_create:
+    pattern:  /teacher/tag/create
+    defaults: { _controller: CustomAdminBundle:TeacherTag:create }
+    
+admin_teacher_tag_checkname:
+    pattern:  /teacher/tag/checkname
+    defaults: { _controller: CustomAdminBundle:TeacherTag:checkName}
 
+admin_teacher_tag_update:
+    pattern:  /teacher/tag/{id}/update
+    defaults: { _controller: CustomAdminBundle:TeacherTag:update }
+
+admin_teacher_tag_delete:
+    pattern:  /teacher/tag/{id}/delete
+    defaults: { _controller: CustomAdminBundle:TeacherTag:delete }
+    methods:  [POST]
+    
 admin_group:
     pattern:  /group/
     defaults: { _controller: CustomAdminBundle:Group:index }
+    
 admin_group_recommend:
     pattern: /group/{id}/recommend
     defaults: { _controller: CustomAdminBundle:Group:recommend }
+    

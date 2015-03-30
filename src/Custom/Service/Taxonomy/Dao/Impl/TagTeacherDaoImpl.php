@@ -3,9 +3,9 @@
 namespace Custom\Service\Taxonomy\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Custom\Service\Taxonomy\Dao\TeacherTagDao;
+use Custom\Service\Taxonomy\Dao\TagTeacherDao;
 
-class TeacherTagDaoImpl extends BaseDao implements TeacherTagDao
+class TagTeacherDaoImpl extends BaseDao implements TagTeacherDao
 {
     protected $table = 'tag_teacher';
 

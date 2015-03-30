@@ -3,11 +3,11 @@
 {% block title %}教师标签管理 - {{ parent() }}{% endblock %}
 
 {% set menu = 'teacher-tag' %}
-{% set script_controller = 'tag/list' %}
+{% set script_controller = 'customadminbundle/controller/teacher-tag/list' %}
 {% block main %}
 
 <div class="page-header clearfix">
-  <button class="btn btn-info btn-sm pull-right" id="add-tag-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_tag_create') }}">新增教师标签</button>    
+  <button class="btn btn-info btn-sm pull-right" id="add-tag-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_teacher_tag_create') }}">新增教师标签</button>    
   <h1 class="pull-left">教师标签管理</h1>
 </div>
 

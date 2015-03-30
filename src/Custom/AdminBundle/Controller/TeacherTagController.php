@@ -24,10 +24,10 @@ class TeacherTagController extends BaseController
 	{
 		if ('POST' == $request->getMethod()) {
 			$tag = $this->getTagService()->addTag($request->request->all());
-			return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
+			return $this->render('CustomAdminBundle:TeacherTag:list-tr.html.twig', array('tag' => $tag));
 		}
 
-		return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
+		return $this->render('CustomAdminBundle:TeacherTag:tag-modal.html.twig', array(
 			'tag' => array('id' => 0, 'name' => '')
 		));
 	}
@@ -41,12 +41,12 @@ class TeacherTagController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$tag = $this->getTagService()->updateTag($id, $request->request->all());
-			return $this->render('TopxiaAdminBundle:Tag:list-tr.html.twig', array(
+			return $this->render('CustomAdminBundle:TeacherTag:list-tr.html.twig', array(
 				'tag' => $tag
 			));
 		}
 
-		return $this->render('TopxiaAdminBundle:Tag:tag-modal.html.twig', array(
+		return $this->render('CustomAdminBundle:TeacherTag:tag-modal.html.twig', array(
 			'tag' => $tag
 		));
 	}
@@ -75,7 +75,7 @@ class TeacherTagController extends BaseController
 
 	private function getTagService()
 	{
-        return $this->getServiceKernel()->createService('Custom:Taxonomy.TeacherTagService');
+        return $this->getServiceKernel()->createService('Custom:Taxonomy.TagTeacherService');
 	}
 
 	private function getTagWithException($tagId)
