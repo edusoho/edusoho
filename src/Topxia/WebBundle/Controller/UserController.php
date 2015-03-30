@@ -260,15 +260,6 @@ class UserController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exitCourseAction(Request $request, $userId, $courseId)
-    {
-        $user = $this->getCurrentUser();
-        if ($request->getMethod() == 'POST') {
-            $this->getCourseService()->removeStudent($courseId, $user['id']);
-        }
-        return $this->createJsonResponse(true);
-    }
-
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
