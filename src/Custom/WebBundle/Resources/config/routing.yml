@@ -1,0 +1,7 @@
+settings:
+    pattern:  /settings/
+    defaults: { _controller: CustomWebBundle:Settings:profile }
+    
+teacher_tag_match:
+    pattern: /teacher/tag/match_jsonp
+    defaults: { _controller: CustomWebBundle:TagTeacher:match }
