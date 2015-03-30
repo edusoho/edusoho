@@ -107,6 +107,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             }
         }
         $fields['createdTime'] = $fields['updateTime'] = time();
+        $fields['sequence'] = $this->getNavigationDao()->getNavigationsCountByType($fields['type']) + 1;
         $result = $this->getNavigationDao()->addNavigation($fields);
 
         $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}");
@@ -126,9 +127,17 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->updateNavigation($id, $fields);
     }
 
+    public function updateNavigationsSequenceByIds($ids)
+    {
+        $index = 1;
+        foreach ($ids as $key => $id) {
+            $this->updateNavigation($id, array('sequence' => $index++));
+        }
+    }
+
     public function deleteNavigation($id)
     {
-        return ($this->getNavigationDao()->deleteNavigation($id)) && ($this->getNavigationDao()->deleteNavigationByParentId($id));
+        return ($this->getNavigationDao()->deleteNavigation($id)) + ($this->getNavigationDao()->deleteNavigationByParentId($id));
     }
 
     private function getNavigationDao()

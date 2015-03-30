@@ -83,6 +83,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
+    //@todo:sql
     public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
@@ -96,6 +97,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
     }
 
+    //@todo:sql
     public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
@@ -174,24 +176,13 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('endTime > :endTimeGreaterThan')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
-
-        if (isset($conditions['courseIds'])) {
-            $courseIds = array();
-            foreach ($conditions['courseIds'] as $courseId) {
-                if (ctype_digit((string)abs($courseId))) {
-                    $courseIds[] = $courseId;
-                }
-            }
-            if ($courseIds) {
-                $courseIds = join(',', $courseIds);
-                $builder->andStaticWhere("courseId IN ($courseIds)");
-            }
-        }
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('courseId IN ( :courseIds )');;
 
         return $builder;
     }
 
+    //@todo:sql
     public function analysisLessonNumByTime($startTime,$endTime)
     {
               $sql="SELECT count( id)  as num FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
@@ -199,6 +190,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
               return $this->getConnection()->fetchColumn($sql);
     }
 
+    //@todo:sql
     public function analysisLessonDataByTime($startTime,$endTime)
     {
              $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";

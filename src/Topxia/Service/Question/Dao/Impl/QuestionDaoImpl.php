@@ -38,6 +38,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsbyTypes($types, $start, $limit)
     {
         if (empty($types)) {
@@ -49,6 +50,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
     {
         if (empty($types)) {
@@ -60,6 +62,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         if (empty($types)) {
@@ -70,18 +73,20 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target`= '{$target}' )  LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
         
         $questions = $this->getConnection()->fetchAll($sql, array());
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsCountbyTypes($types)
     {
         $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
         return $this->getConnection()->fetchColumn($sql, array($types));
     }
 
+    //@todo:sql
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
     {
         if ($questionSource == 'course'){
@@ -89,7 +94,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target`= '{$target}' )";
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target` like '{$target}/%' OR `target` = '{$target}')";
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
@@ -167,11 +172,18 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         if(empty($ids)){ 
             return array(); 
         }
+
+        $fields = array('finishedTimes', 'passedTimes');
+        if(!in_array($status, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $status, implode(',', $fields)));
+        }
+
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql = "UPDATE {$this->table} SET {$status} = {$status}+1 WHERE id IN ({$marks})";
         return $this->getConnection()->executeQuery($sql, $ids);
     }
 
+    //@todo:sql
     public function getQuestionCountGroupByTypes($conditions)
     {   
         $sqlConditions = array();
@@ -193,6 +205,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchAll($sql, $sqlConditions);
     }
 
+    //@todo:sql
     private function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function($value) {

@@ -58,7 +58,7 @@ define(function(require, exports, module) {
         initPDFJSViewer: function(thiz){
             self=this;
             $("html").attr('dir','ltr');
-            $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v1/viewer.html#'+self.attrs.pdfFileUrl.value);
+            $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v2/viewer.html#'+self.attrs.pdfFileUrl.value);
         },
 
         initSwfViewer: function(thiz){

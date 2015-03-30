@@ -203,6 +203,10 @@ admin_navigation:
     pattern:  /navigation
     defaults: { _controller: TopxiaAdminBundle:Navigation:index }
 
+admin_navigation_seqs_update:
+    pattern:  /navigation/seqs/update
+    defaults: { _controller: TopxiaAdminBundle:Navigation:updateSeqs }
+
 admin_navigation_create:
     pattern:  /navigation/create
     defaults: { _controller: TopxiaAdminBundle:Navigation:create }
@@ -586,6 +590,10 @@ admin_logs:
 admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
+
+admin_cloud_recharge:
+    pattern:  /cloud/recharge
+    defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
 
 admin_customer_service:
     pattern: /customer/service

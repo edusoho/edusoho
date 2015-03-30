@@ -44,7 +44,7 @@
 		"symfony/monolog-bundle" : "2.3.*",
 		"symfony/swiftmailer-bundle" : "2.3.*",
 		"symfony/symfony" : "v2.3.18",
-		"twig/extensions" : "1.0.*"
+		"twig/extensions" : "1.2.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [

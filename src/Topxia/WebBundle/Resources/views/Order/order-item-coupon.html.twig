@@ -14,11 +14,19 @@
   </div>
   <div class="coupon-detail" >
     {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
-      <input role="coupon-code" type="text" name="couponCode" placeholder="请输入优惠码" style="display: none;" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
-
-       {{ totalPrice }}  {# {{courses[0]['price']}} #}
-
-      "/> 
+    <div class="row">
+      <div class="col-sm-4">
+        <div role="coupon-code" class="input-group" style="display: none;">
+          <input role="coupon-code-verified" name="couponCode" type="hidden"/>
+          <input role="coupon-code-input" type="text" class="form-control input-sm" placeholder="请输入优惠码" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+           {{ totalPrice }}  {# {{courses[0]['price']}} #}
+          "/> 
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-sm" type="button" role="coupon-use">使用</button>
+          </span>
+        </div>
+      </div>
+    </div>
     {% endif %}
     <span role="code-notify" class="code-notify"></span>
     <div role="no-use-coupon-code" style="display: block;">没有使用优惠码</div>
