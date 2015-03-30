@@ -46,19 +46,8 @@ class GroupController extends BaseController
 
     public function threadAction(Request $request)
     {
-        $fields = $request->query->all();
+        $conditions = $request->query->all();
 
-        $conditions = array(
-            'status'=>'',
-            'title'=>'',
-            'groupName'=>'',
-            'userName'=>'',
-        );
-
-        if(!empty($fields)){
-            $conditions =$fields;
-        }
-        
         $paginator = new Paginator(
             $this->get('request'),
             $this->getThreadService()->searchThreadsCount($conditions),

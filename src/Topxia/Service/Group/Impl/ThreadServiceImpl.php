@@ -434,30 +434,48 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
      private function prepareThreadConditions($conditions)
      {
-        if(isset($conditions['groupName'])&&$conditions['groupName']!==""){
+        if (empty($conditions['title'])) {
+            unset($conditions['title']);
+        }
+
+        if (empty($conditions['threadType'])) {
+            unset($conditions['threadType']);
+        }
+
+        if (isset($conditions['threadType'])) {
+            $conditions[$conditions['threadType']] = 1;
+            unset($conditions['threadType']);
+        }
+
+        if (isset($conditions['groupName']) && $conditions['groupName'] !== "") {
             $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
-            if(!empty($group)){
+            if (!empty($group)) {
               $conditions['groupId']=$group[0]['id'];  
-            }else{
+            } else {
               $conditions['groupId']=0;  
-            }   
+            }
+        } else {
+            unset($conditions['groupName']);
         }
+        
 
-        if(isset($conditions['userName'])&&$conditions['userName']!==""){
+        if (isset($conditions['userName']) && $conditions['userName'] !== "") {
             $user=$this->getUserService()->getUserByNickname($conditions['userName']);
-            if(!empty($user)){
+            if (!empty($user)) {
               $conditions['userId']=$user['id'];  
-            }else{
+            } else {
               $conditions['userId']=0;  
-            }   
+            } 
+        } else {
+            unset($conditions['userName']);
         }
-
-         if(isset($conditions['status']))
-        {
-            if($conditions['status']==""){
+        
+        if (isset($conditions['status'])) {
+            if ($conditions['status'] =="") {
                unset( $conditions['status']);
             }
-        }   
+        }
+
         return $conditions;
     }
 
