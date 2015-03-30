@@ -4,9 +4,9 @@
  */
 
 CKEDITOR.editorConfig = function( config ) {
-	// Define changes to default configuration here. For example:
-	config.language = 'zh-cn';
-	// config.uiColor = '#AADC6E';
+    // Define changes to default configuration here. For example:
+    config.language = 'zh-cn';
+    // config.uiColor = '#AADC6E';
 
     config.toolbar_Minimal = [
         { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source'] }
@@ -24,6 +24,14 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source'] }
     ];
 
+    config.toolbar_GroupWithHidden = [
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source', '-','Accessory','Hidden'] }
+    ];
+
+    config.toolbar_GroupWithUpload = [
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source', '-','Accessory'] }
+    ];
+
     config.toolbar_Full = [
         { items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat', 'Format' ] },
         { items: [ 'Link', 'Unlink' ] },
@@ -37,7 +45,6 @@ CKEDITOR.editorConfig = function( config ) {
     config.resize_enabled = false;
     config.title = false;
 
-    config.extraPlugins = 'questionblank,smiley,table,font';
+    config.extraPlugins = 'questionblank,smiley,table,font,accessory,hidden';
 
 };
-
