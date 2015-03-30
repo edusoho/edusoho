@@ -40,11 +40,15 @@
       </div>
       {% else %}
       <div role="password-input" style="display:none">
-        <div class="controls">
-          <input id="payPassword" class="form-control input-sm" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
-        </div>
-        <div>
-          <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="controls">
+              <input id="payPassword" class="form-control input-sm" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
+            </div>
+            <div>
+              <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
+            </div>
+          </div>
         </div>
       </div>
       {% endif %}
