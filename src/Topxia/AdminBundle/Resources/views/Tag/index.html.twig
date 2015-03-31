@@ -2,7 +2,7 @@
 
 {% set type = 'manage'%}
 {% set menus = permissions('admin_course_tag','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
+{% block title %}{{ getTitle('admin_course_tag')}}{% endblock %}
 
 {% set menu = 'tag' %}
 {% set script_controller = 'tag/list' %}
