@@ -68,7 +68,8 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     private function _createSearchQueryBuilder($conditions)
     {
         return  $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table);
+            ->from($this->table, $this->table)
+            ->andWhere('isHidden = :isHidden');
     }
 
     public function addStatus($fields)
