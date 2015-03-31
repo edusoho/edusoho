@@ -13,8 +13,23 @@
       <ol class="breadcrumb">
         <li><a href="/">首页</a></li>
         <li><a href="/teacher">求是名师</a></li>
-        {% if gradeTag|default(0) %}<li class="active"><span>{{ gradeTag.name}}<i class="fa fa-times"></i></span></li> {% endif %}
-        {% if subjectTag|default(0) %}<li class="active"><span>{{ subjectTag.name}}<i class="fa fa-times"></i></span></li> {% endif %}
+        {% if gradeTag|default(0) %}
+        <li class="active">
+          <span style="display: inline-block">
+          <a href="{{ path('teacher_search',{ subjectTagId:subjectTag.id|default() }) }}"> 
+            {{ gradeTag.name}}
+            <i class="fa fa-times"></i>
+          </a>
+          
+          </span></li> 
+        {% endif %}
+        {% if subjectTag|default(0) %}<li class="active">
+        <span style="display: inline-block">
+         <a href="{{ path('teacher_search',{ gradeTagId:gradeTag.id|default() }) }}"> 
+           {{ subjectTag.name}}
+            <i class="fa fa-times"></i>
+        </a>
+       </span></li> {% endif %}
         
       </ol>
     </div>

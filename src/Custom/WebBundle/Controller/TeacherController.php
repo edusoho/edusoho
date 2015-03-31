@@ -37,8 +37,8 @@ class TeacherController extends BaseController
         }
   
         // var_dump($conditions);
-        // var_dump($gradeTag);
-        // var_dump($subjectTag);
+        // // var_dump($gradeTag);
+        // // var_dump($subjectTag);
         // exit();
         $paginator = new Paginator(
             $this->get('request'),
@@ -53,7 +53,7 @@ class TeacherController extends BaseController
             $paginator->getPerPageCount()
         );
 
-
+      
         $profiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($teachers, 'id'));
 
         return $this->render('TopxiaWebBundle:Teacher:index.html.twig', array(

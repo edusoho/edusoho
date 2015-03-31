@@ -45,31 +45,34 @@ class CustomUserDaoImpl extends BaseDao implements CustomUserDao
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
 
-        $conditions['tagsLike']="";
+       
         if (isset($conditions['gradeTag'])) {
             $tagId = $conditions['gradeTag'];
-            $conditions['tagsLike'] .= '%|';
+            $conditions['gradeTagLike'] = '%|';
             if (!empty($tagId)) {
-                $conditions['tagsLike'] .= "{$tagId}|";
+                $conditions['gradeTagLike'] .= "{$tagId}|";
             }
-            $conditions['tagsLike'] .= '%';
+            $conditions['gradeTagLike'] .= '%';
             unset($conditions['gradeTag']);
         }
+    
 
-         if (isset($conditions['subjectTag'])) {
+        if (isset($conditions['subjectTag'])) {
             $tagId = $conditions['subjectTag'];
-            $conditions['tagsLike'] = '%|';
+            $conditions['subjectTagLike'] = '%|';
             if (!empty($tagId)) {
-                $conditions['tagsLike'] .= "{$tagId}|";
+                $conditions['subjectTagLike'] .= "{$tagId}|";
             }
-            $conditions['tagsLike'] .= '%';
+            $conditions['subjectTagLike'] .= '%';
             unset($conditions['subjectTag']);
         }
+     
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
-            ->andWhere('tags LIKE :tagsLike')
+            ->andWhere('tags LIKE :gradeTagLike')
+            ->andWhere('tags LIKE :subjectTagLike')
             ->andWhere('roles = :role')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel');
