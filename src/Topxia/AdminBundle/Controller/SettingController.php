@@ -173,10 +173,16 @@ class SettingController extends BaseController
 
         $site = $this->getSettingService()->get('site', array());
 
+        $oldFileId = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
+        $site['logo_file_id'] = $fileId;
         $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $site['logo'] = ltrim($site['logo'], '/');
 
         $this->getSettingService()->set('site', $site);
+
+        if($oldFileId) {
+            $this->getFileService()->deleteFile($oldFileId);
+        }
 
         $this->getLogService()->info('system', 'update_settings', "更新站点LOGO", array('logo' => $site['logo']));
 
@@ -194,7 +200,13 @@ class SettingController extends BaseController
         $setting = $this->getSettingService()->get("site");
         $setting['logo'] = '';
 
+        $fileId = empty($setting['logo_file_id']) ? null : $setting['logo_file_id'];
+        $setting['logo_file_id'] = '';
+
         $this->getSettingService()->set('site', $setting);
+        if($fileId){
+            $this->getFileService()->deleteFile($fileId);
+        }
 
         $this->getLogService()->info('system', 'update_settings', "移除站点LOGO");
 
@@ -212,12 +224,18 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
-        $site = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('course', array());
 
+        $oldFileId = empty($site['live_logo_file_id']) ? null : $site['live_logo_file_id'];
+        $site['live_logo_file_id'] = $fileId;
         $site['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $site['live_logo'] = ltrim($site['live_logo'], '/');
 
-        $this->getSettingService()->set('site', $site);
+        $this->getSettingService()->set('course', $site);
+
+        if($oldFileId) {
+            $this->getFileService()->deleteFile($oldFileId);
+        }
 
         $this->getLogService()->info('system', 'update_settings', "更新直播LOGO", array('live_logo' => $site['live_logo']));
 
@@ -234,7 +252,13 @@ class SettingController extends BaseController
         $setting = $this->getSettingService()->get("course");
         $setting['live_logo'] = '';
 
+        $fileId = empty($setting['live_logo_file_id']) ? null : $setting['live_logo_file_id'];
+        $setting['live_logo_file_id'] = '';
+        
         $this->getSettingService()->set('course', $setting);
+        if($fileId) {
+            $this->getFileService()->deleteFile($fileId);
+        }
 
         $this->getLogService()->info('system', 'update_settings', "移除直播LOGO");
 
@@ -254,10 +278,16 @@ class SettingController extends BaseController
 
         $site = $this->getSettingService()->get('site', array());
 
+        $oldFileId = empty($site['favicon_file_id']) ? null : $site['favicon_file_id'];
+        $site['favicon_file_id'] = $fileId;
         $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $site['favicon'] = ltrim($site['favicon'], '/');
 
         $this->getSettingService()->set('site', $site);
+
+        if($oldFileId) {
+            $this->getFileService()->deleteFile($oldFileId);
+        }
 
         $this->getLogService()->info('system', 'update_settings', "更新浏览器图标", array('favicon' => $site['favicon']));
 
@@ -274,7 +304,14 @@ class SettingController extends BaseController
         $setting = $this->getSettingService()->get("site");
         $setting['favicon'] = '';
 
+        $fileId = empty($setting['favicon_file_id']) ? null : $setting['favicon_file_id'];
+        $setting['favicon_file_id'] = '';
+
         $this->getSettingService()->set('site', $setting);
+
+        if($fileId) {
+            $this->getFileService()->deleteFile($fileId);
+        }
 
         $this->getLogService()->info('system', 'update_settings', "移除站点浏览器图标");
 
