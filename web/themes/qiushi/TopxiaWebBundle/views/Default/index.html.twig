@@ -80,7 +80,7 @@
       <div class="panel">
         <div class="panel-heading">
           <h3 class="panel-title">精品课程</h3>
-          <a class="more" href="">更多&gt;</a>
+          <a class="more" href="{{ path('course_explore',{sort:'recommendedSeq'}) }}">更多&gt;</a>
         </div>
         <div class="panel-body row">
           <ul id="myTab" class="nav nav-tabs" role="tablist">
@@ -142,7 +142,7 @@
     <div class="panel">
       <div class="panel-heading">
         <h3 class="panel-title">直播课</h3>
-        <a class="more" href="">更多&gt;</a>
+        <a class="more" href="{{ path('live_course_explore') }}">更多&gt;</a>
       </div>
       <div class="panel-body">
         <ul class="row">
