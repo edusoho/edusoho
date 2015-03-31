@@ -3,7 +3,8 @@
 {% set menu = 'mobile_settings' %}
 {% set tab_menus = permissions('admin_setting_mobile','tab') %}
 {% set submenu = 'mobile_settings' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+
+{% block title %}{{ getTitle('admin_setting_mobile')}}{% endblock %}
 
 {% set script_controller = 'setting/mobile' %}
 

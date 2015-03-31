@@ -4,7 +4,7 @@
 {% set submenu = 'article_setting' %}
 
 {% set menus = permissions('admin_setting_operation','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_article_setting')}}{% endblock %}
 
 {% block main %}
 <div class="mbl">

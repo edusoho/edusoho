@@ -4,7 +4,7 @@
 {% set menu = 'site' %}
 {% set submenu = 'site-massage' %}
 {% set script_controller = 'setting/site' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_setting_massage')}}{% endblock %}
 
 {% block main %}
 

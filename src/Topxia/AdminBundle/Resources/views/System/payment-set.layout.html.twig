@@ -2,11 +2,10 @@
 
 {% set menus = permissions("admin_setting_finance","tab")%}
 {% set menu = 'finance_settings' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
 <div class = "mbl">
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 
-  {% block maincontent %}{% endblock %}
+  {% block main_content %}{% endblock %}
 {% endblock %}

@@ -1,8 +1,9 @@
 {% extends 'TopxiaAdminBundle:Coin:records.layout.html.twig' %}
 
 {% set submenu = 'user-records' %}
+{% block title %}{{ getTitle('admin_coin_user')}}{% endblock %}
 
-{% block maincontent %}
+{% block main_content %}
 
   {% if setting('coin.coin_enabled')  %}
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>

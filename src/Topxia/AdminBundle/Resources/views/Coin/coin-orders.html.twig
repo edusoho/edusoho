@@ -1,11 +1,9 @@
 {% extends 'TopxiaAdminBundle:Coin:order.layout.html.twig' %}
 
-{% block title %}{{ parent() }}{% endblock %}
-
 {% set submenu = 'coin_order_query' %}
 
- 
-{% block maincontent %}
+ {% block title %}{{ getTitle('admin_coin_order')}}{% endblock %}
+{% block main_content %}
 
   {% if setting('coin.coin_enabled') %}
 

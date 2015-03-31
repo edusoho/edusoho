@@ -2,7 +2,6 @@
 
 {% set side_menus = permissions('admin_system') %}
 {% set nav = 'system' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(side_menus,menu) }}{% endblock %}
 
 {% block content %}
   <div class="col-md-2">

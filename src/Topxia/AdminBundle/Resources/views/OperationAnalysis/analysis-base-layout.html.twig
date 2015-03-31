@@ -4,7 +4,7 @@
 {% set menu = 'data' %}
     
 {% set menus = permissions('admin_operation_analysis_register','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,menu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_analysis_')}}{% endblock %}
 
 {% block main %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />

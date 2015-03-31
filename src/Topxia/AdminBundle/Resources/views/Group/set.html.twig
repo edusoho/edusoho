@@ -2,7 +2,7 @@
 {% set menu = 'operation_settings' %}
 {% set submenu = 'group_set' %}
 {% set menus = permissions('admin_setting_operation','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_group_set')}}{% endblock %}
 
     {% block main %}
     <div class="mbl">

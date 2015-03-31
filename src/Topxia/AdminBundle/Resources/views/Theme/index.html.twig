@@ -3,8 +3,9 @@
 {% set script_controller = 'setting/theme' %}
 
 {% set submenu = 'theme' %}
+{% block title %}{{ getTitle('admin_setting_theme')}}{% endblock %}
 
-{% block maincontent %}
+{% block main_content %}
 
   <table class="table table-striped table-hover" id="theme-table">
     <thead>

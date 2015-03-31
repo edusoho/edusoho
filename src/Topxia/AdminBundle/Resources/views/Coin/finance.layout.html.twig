@@ -2,7 +2,6 @@
 
 {% set menus = permissions("admin_bills","tab")%}
 {% set menu = 'bill' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 
@@ -11,5 +10,5 @@
 </div>
 
 
-  {% block maincontent %}{% endblock %}
+  {% block main_content %}{% endblock %}
 {% endblock %}

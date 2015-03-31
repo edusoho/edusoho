@@ -4,7 +4,7 @@
 {% set tab_menus = permissions('admin_operation_content',"tab") %}
 {% set menu = 'content' %}
 {% set submenu = 'content' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_content')}}{% endblock %}
 
 {% block main %}
 

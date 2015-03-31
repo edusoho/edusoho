@@ -1,7 +1,6 @@
 {% extends 'TopxiaAdminBundle:CourseOrder:layout.html.twig' %}
 
 {% set menus = permissions("admin_course_order","tab")%}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% set menu = 'course_order' %}
 
 {% block main %}

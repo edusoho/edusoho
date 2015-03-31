@@ -3,8 +3,9 @@
 {% set submenu = 'consult_setting' %}
 
 {% set script_controller = 'setting/consult-setting' %}
+{% block title %}{{ getTitle('admin_setting_consult_setting')}}{% endblock %}
 
-{% block maincontent %}
+{% block main_content %}
 
 {{ web_macro.flash_messages() }}
 
