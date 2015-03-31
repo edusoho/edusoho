@@ -1,12 +1,11 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
-
+{% block title %}{{ getTitle('admin_course_recommend')}}{% endblock %}
 
 {% set script_controller = 'course/recommend-list' %}
 
   {% set menu = 'course' %}
   {% set type = 'recommend'  %}
   {% set menus = permissions('admin_course_show','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 
 {% block main %}
 

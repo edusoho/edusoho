@@ -3,7 +3,7 @@
 {% set menu = 'course' %}
 {% set type = 'data'  %}
 {% set menus = permissions('admin_course_show','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
+{% block title %}{{ getTitle('admin_course_data')}}{% endblock %}
 {% block main %}
 
   {% set type = 'data'  %}

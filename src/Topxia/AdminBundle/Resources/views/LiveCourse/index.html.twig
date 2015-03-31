@@ -3,7 +3,8 @@
 {% set menu = 'live-course' %}
 {% set type = 'live-course'%}
 {% set tab_menus = permissions('admin_live_course','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,type) }}{% endblock %}
+{% block title %}{{ getTitle('admin_live_course')}}{% endblock %}
+
 {% block main %}
 
 {% if setting("course.live_course_enabled") == 1 %}
