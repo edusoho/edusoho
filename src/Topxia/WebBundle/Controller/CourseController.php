@@ -14,6 +14,7 @@ class CourseController extends BaseController
 {
 	public function exploreAction(Request $request, $category)
 	{
+
 		if (!empty($category)) {
 			if (ctype_digit((string) $category)) {
 				$category = $this->getCategoryService()->getCategory($category);
@@ -32,6 +33,7 @@ class CourseController extends BaseController
 		$tagKind = $this->getTagService()->getTagByName($kind);
 		$tagMaterial =$this->getTagService()->getTagByName($material);
 		$sort = $request->query->get('sort', 'latest');
+		$first = $request->query->get('first');
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
@@ -62,6 +64,7 @@ class CourseController extends BaseController
 		}
 		$tagKind= $this->getTagService()->getAllTagsByType('kind');
 		$tagMaterial= $this->getTagService()->getAllTagsByType('material');
+
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -73,6 +76,7 @@ class CourseController extends BaseController
 			'tagMaterial'	=>	$tagMaterial,
 			'kind'	=>$kind,
 			'material' =>$material,
+			'first' => $first
 		));
 	}
 
