@@ -2,7 +2,9 @@
 
 {% set submenu = 'course_setting' %}
 {% set script_controller = 'setting/course' %}
-{% block maincontent %}
+{% block title %}{{ getTitle('admin_setting_course')}}{% endblock %}
+
+{% block main_content %}
 
 
 {{ web_macro.flash_messages() }}

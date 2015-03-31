@@ -2,7 +2,6 @@
 
 {% set menus = permissions("admin_setting_user","tab")%}
 {% set menu = 'user_set' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 
@@ -10,5 +9,5 @@
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 
-  {% block maincontent %}{% endblock %}
+  {% block main_content %}{% endblock %}
 {% endblock %}

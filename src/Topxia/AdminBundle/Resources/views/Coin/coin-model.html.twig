@@ -4,7 +4,7 @@
 {% set tab_menus = permissions("admin_setting_finance","tab")%}
 {% set menu = 'finance_settings' %}
 {% set submenu = 'coin_settings' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_coin_settings')}}{% endblock %}
 
 {% block main %}
 <div class = "mbl">

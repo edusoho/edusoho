@@ -2,8 +2,8 @@
 
 {% set script_controller = 'setting/user-center' %}
 {% set submenu = 'user_center' %}
-
-{% block maincontent %}
+{% block title %}{{ getTitle('admin_setting_user_center')}}{% endblock %}
+{% block main_content %}
 
 <div class="page-header">
   {% if setting.mode !='default' %}<a href="{{ path('admin_setting_admin_sync') }}" class="pull-right btn btn-link">管理员帐号同步</a>{% endif %}

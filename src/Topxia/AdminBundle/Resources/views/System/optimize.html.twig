@@ -3,7 +3,9 @@
 {% set menu = 'optimize' %}
 {% set submenu = 'optimize_manage' %}
 {% set menus = permissions('admin_optimize','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+
+{% block title %}{{ getTitle('admin_optimize_manage')}}{% endblock %}
+
 {% set script_controller = 'optimize/optimize' %}
 
 {% block main %}

@@ -3,8 +3,9 @@
 {% set script_controller = 'system/payment' %}
 
 {% set submenu = 'payment' %}
+{% block title %}{{ getTitle('admin_payment')}}{% endblock %}
 
-{% block maincontent %}
+{% block main_content %}
 
 {{ web_macro.flash_messages() }}
 
