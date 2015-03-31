@@ -1,5 +1,8 @@
 {% extends 'TopxiaAdminBundle:User:user.layout.html.twig' %}
 
+{% block title %}{{ getTitle('admin_user_manage')}}{% endblock %}
+
+
 {% set submenu = 'user' %}
 
 {% set script_controller = 'user/list' %}

@@ -90,6 +90,7 @@ class WebExtension extends \Twig_Extension
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
             'permissions' => new \Twig_Function_Method($this, 'permissions'),
+            'getTitle' => new \Twig_Function_Method($this, 'getTitle'),
             'setItem' => new \Twig_Function_Method($this, 'setItem'),
         );
     }
@@ -103,6 +104,13 @@ class WebExtension extends \Twig_Extension
             $text = mb_substr($text, $start, $length, 'UTF-8');
         }
         return $text;
+    }
+
+    public function getTitle($code)
+    {
+        $permission = new Permission();
+
+        return $permission->getTitle($code);
     }
 
     public function setItem($key, $value)

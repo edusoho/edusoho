@@ -1,5 +1,7 @@
 {% extends 'TopxiaAdminBundle:User:teacher.layout.html.twig' %}
 
+{% block title %}{{ getTitle('admin_teacher')}}{% endblock %}
+  
 {% set submenu = 'teacher' %}
 {% set script_controller = 'user/teacher-list' %}
 

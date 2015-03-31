@@ -1,5 +1,7 @@
 {% extends 'TopxiaAdminBundle:User:user.layout.html.twig' %}
 
+{% block title %}{{ getTitle('admin_login_record')}}{% endblock %}
+  
 {% set submenu = 'login_record' %}
 {% set script_controller = 'login-record/list' %}
 

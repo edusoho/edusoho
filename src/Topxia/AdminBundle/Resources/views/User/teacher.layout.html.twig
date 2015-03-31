@@ -2,7 +2,6 @@
 
 {% set menus = permissions("admin_teacher","tab")%}
 {% set menu = 'teacher' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 

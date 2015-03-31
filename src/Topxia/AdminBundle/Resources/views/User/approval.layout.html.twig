@@ -2,7 +2,6 @@
 
 {% set menus = permissions("admin_approval_approving","tab")%}
 {% set menu = 'approval' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 

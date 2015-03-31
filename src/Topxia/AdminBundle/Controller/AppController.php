@@ -1,17 +1,15 @@
 <?php
+
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Util\PluginUtil;
 
 class AppController extends BaseController
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-
     }
 
     public function oldUpgradeCheckAction()
@@ -19,13 +17,17 @@ class AppController extends BaseController
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
-    public function centerAction(Request $request)
+    public function centerAction()
     {
         $apps = $this->getAppService()->getCenterApps();
 
-        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'error',));
-        
-        if(!$apps) return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status'=>'unlink',));
+        if (isset($apps['error'])) {
+            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error'));
+        }
+
+        if (!$apps) {
+            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'unlink'));
+        }
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
@@ -36,9 +38,10 @@ class AppController extends BaseController
         ));
     }
 
-    public function installedAction(Request $request)
+    public function installedAction()
     {
         $apps = $this->getAppService()->findApps(0, 100);
+
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
         ));
@@ -48,29 +51,33 @@ class AppController extends BaseController
     {
         $code = $request->get('code');
         $this->getAppService()->uninstallApp($code);
+
         return $this->createJsonResponse(true);
     }
 
-    public function upgradesAction(Request $request)
+    public function upgradesAction()
     {
         $apps = $this->getAppService()->checkAppUpgrades();
 
-        if(isset($apps['error'])) return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status'=>'error',));
-        $version=$this->getAppService()->getMainVersion();
+        if (isset($apps['error'])) {
+            return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
+        }
+        $version = $this->getAppService()->getMainVersion();
 
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
-            'version'=>$version,
+            'version' => $version,
         ));
     }
 
-    public function upgradesCountAction(Request $request)
+    public function upgradesCountAction()
     {
         $apps = $this->getAppService()->checkAppUpgrades();
+
         return $this->createJsonResponse(count($apps));
     }
 
-    public function logsAction(Request $request)
+    public function logsAction()
     {
         $paginator = new Paginator(
             $this->get('request'),
@@ -79,7 +86,7 @@ class AppController extends BaseController
         );
 
         $logs = $this->getAppService()->findLogs(
-            $paginator->getOffsetCount(), 
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
@@ -105,5 +112,4 @@ class AppController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-
 }
