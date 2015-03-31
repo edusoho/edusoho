@@ -40,6 +40,7 @@ a {
   position: relative;
   height: 240px;
   list-style-type: none;
+  overflow:visible !important;
 }
 .es-course-list .freeicon,
 .es-course-list .liveicon {
@@ -133,4 +134,12 @@ a {
 }
 .live-lesson .panel .panel-body {
   margin-top: 15px!important;
+}
+
+
+.list-group-item{
+	font-size: 14px!important;
+}
+.lesson-dashboard{
+	z-index:999;
 }
