@@ -78,8 +78,8 @@
             <ul class="dropdown-menu course-expoler" role="menu" style="padding: 5px 10px;">
                 {% for firstCat in firstCategories %}
 					{% if firstCat.parentId == 0 %}
-						<li><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id)}) }}">{{ firstCat.name }}</a>
-							<ul class="sec-cate">
+						<li><a class="list" href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id)}) }}">{{ firstCat.name }}</a>
+							<ul class="sec-list">
 								{% set secCategories = data('Categories',{ group:'course',parentId:firstCat.id}) %}
 									{% for secCat in secCategories %}
 									<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id)}) }}">{{ secCat.name }}</a></li>
