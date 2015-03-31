@@ -17,7 +17,7 @@
 	            	 {% for lastcourses in lastestCourses %}
 			              <li class="list-group-item">
 			                <span class="badge pull-left">{{ loop.index }}</span>
-			                <a href="" class="pull-left">{{ lastcourses.title }}</a>
+			                <a href="" class="pull-left">{{ lastcourses.title | plain_text(6) }}</a>
 						        {% if lastcourses.teachers %}
 			                        {% for teacher in lastcourses.teachers %}
 			                          {% if loop.index <= 5%}
