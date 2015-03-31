@@ -72,7 +72,7 @@ class CourseController extends BaseController
 			'tagKind'	=>	$tagKind,
 			'tagMaterial'	=>	$tagMaterial,
 			'kind'	=>$kind,
-			'material' =>$material
+			'material' =>$material,
 		));
 	}
 

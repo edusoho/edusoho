@@ -48,6 +48,7 @@
       </ul>
       <ul class="list-inline">
         类别：
+        
         {% for perTag in tagKind %}
         <li><a href="{{ path('course_explore', {category:category.code|default(category.id),kind:perTag.name,material:material}) }}">{{ perTag.name }}</a></li>
         {% endfor %}
