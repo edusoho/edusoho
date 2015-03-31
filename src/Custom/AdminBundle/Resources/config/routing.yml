@@ -51,5 +51,11 @@ admin_tag_delete:
     pattern:  /tag/{id}/delete
     defaults: { _controller: CustomAdminBundle:Tag:delete }
     methods:  [POST]
-
-
+    
+admin_user:
+    pattern:  /user
+    defaults: { _controller: TopxiaAdminBundle:User:index }
+    
+admin_user_edit:
+    pattern:  /user/{id}/edit
+    defaults: { _controller: CustomAdminBundle:User:edit }
