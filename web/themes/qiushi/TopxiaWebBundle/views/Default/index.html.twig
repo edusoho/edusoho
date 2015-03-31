@@ -137,7 +137,7 @@
     
     <!--直播课开始-->
     
-    {% set recentLiveCourses = data('RecentLiveCourses',{ count:4 }) %}
+ {% set recentLiveCourses = data('RecentLiveCourses',{ count:4 }) %}
   <div class="es-course live-lesson">
     <div class="panel">
       <div class="panel-heading">
@@ -156,10 +156,10 @@
                          <span class="liveicon">直播</span>
                         {% endif %}
               
-              <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}" class="img-responsive lessonimg" alt="">
+              <img src="{{ default_path('coursePicture',liveCourses.largePicture, 'large') }}" class="img-responsive lessonimg" alt="">
 
               <div class="lessonplay" style="opacity: 0;">
-                <a class="btn btn-default course-button" href="{{ path('course_show', {id:course.id}) }}" role="button">点击查看</a>
+                <a class="btn btn-default course-button" href="{{ path('course_show', {id:liveCourses.id}) }}" role="button">点击查看</a>
               </div>
             </div>
             <div class="lesson-infor" style="height: 100px;">
