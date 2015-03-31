@@ -2,9 +2,8 @@
 
 {% set tab_menus = permissions("admin_coin_user","tab")%}
 {% set menu = 'coin-records' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
 
 {% block main %}
 
-  {% block maincontent %}{% endblock %}
+  {% block main_content %}{% endblock %}
 {% endblock %}

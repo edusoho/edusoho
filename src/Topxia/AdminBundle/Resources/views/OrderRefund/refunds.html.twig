@@ -4,7 +4,7 @@
 {% set tab_menus = permissions('admin_'~targetType~'_refunds',"tab") %}
 {% set menu = targetType~'_refunds' %}
 {% set submenu = targetType~'_refunds_manage' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_'~targetType~'_refunds')}}{% endblock %}
 
 {% block main %}
   <h4>{{ admin_macro.title(side_menus,menu) }}</h4>

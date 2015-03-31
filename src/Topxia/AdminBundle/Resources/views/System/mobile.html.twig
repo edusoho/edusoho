@@ -3,7 +3,7 @@
 {% set menu = 'mobile' %}
 {% set tab_menus = permissions('admin_operation_mobile','tab') %}
 {% set submenu = 'mobile_banner_manage' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_mobile_banner_manage')}}{% endblock %}
 
 {% set script_controller = 'operation/mobile' %}
 

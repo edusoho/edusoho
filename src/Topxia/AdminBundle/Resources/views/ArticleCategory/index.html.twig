@@ -3,7 +3,7 @@
 {% set tab_menus = permissions('admin_operation_article',"tab") %}
 {% set menu = 'article' %}
 {% set submenu = 'category' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_article_category')}}{% endblock %}
 
 {% block main %}
 <div class="mbl">

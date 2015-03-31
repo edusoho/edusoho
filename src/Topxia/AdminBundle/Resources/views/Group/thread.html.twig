@@ -3,7 +3,7 @@
 {% set tab_menus = permissions('admin_operation_group',"tab") %}
 {% set menu = 'group' %}
 {% set submenu = 'thread' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_group_thread')}}{% endblock %}
 
 {% set script_controller='group/thread' %}
 {% block main %}
