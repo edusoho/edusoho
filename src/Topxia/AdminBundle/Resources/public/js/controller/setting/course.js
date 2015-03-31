@@ -39,33 +39,35 @@ define(function(require, exports, module) {
 
         var $form = $("#course-form");
 
-        var uploader = new WebUploader({
-            element: '#live-course-logo-upload'
-        });
-
-        uploader.on('uploadSuccess', function(file, response ) {
-            var url = $("#live-course-logo-upload").data("gotoUrl");
-
-            $.post(url, response ,function(data){
-                $("#live-course-logo-container").html('<img src="' + data.url + '">');
-                $form.find('[name=live_logo]').val(data.path);
-                $("#live-course-logo-remove").show();
-                Notify.success('上传直播课程的LOGO成功！');
+        if($('#live-course-logo-upload').length>0) {
+            var uploader = new WebUploader({
+                element: '#live-course-logo-upload'
             });
-        });
 
-        $("#live-course-logo-remove").on('click', function(){
-            if (!confirm('确认要删除吗？')) return false;
-            var $btn = $(this);
-            $.post($btn.data('url'), function(){
-                $("#live-course-logo-container").html('');
-                $form.find('[name=live_logo]').val('');
-                $btn.hide();
-                Notify.success('删除直播课程LOGO成功！');
-            }).error(function(){
-                Notify.danger('删除直播课程LOGO失败！');
+            uploader.on('uploadSuccess', function(file, response ) {
+                var url = $("#live-course-logo-upload").data("gotoUrl");
+
+                $.post(url, response ,function(data){
+                    $("#live-course-logo-container").html('<img src="' + data.url + '">');
+                    $form.find('[name=live_logo]').val(data.path);
+                    $("#live-course-logo-remove").show();
+                    Notify.success('上传直播课程的LOGO成功！');
+                });
             });
-        });
+
+            $("#live-course-logo-remove").on('click', function(){
+                if (!confirm('确认要删除吗？')) return false;
+                var $btn = $(this);
+                $.post($btn.data('url'), function(){
+                    $("#live-course-logo-container").html('');
+                    $form.find('[name=live_logo]').val('');
+                    $btn.hide();
+                    Notify.success('删除直播课程LOGO成功！');
+                }).error(function(){
+                    Notify.danger('删除直播课程LOGO失败！');
+                });
+            });
+        }
     };
 
 });
