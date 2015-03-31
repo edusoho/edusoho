@@ -98,30 +98,30 @@
               <ul class="row">
               {% set recommendCourses = data('RecommendCourses',{ categoryId: firstCat.id,count:8}) %}
               {% for courses in recommendCourses %}
-                <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-course-list">
-                  <div class="lessonimg-box">
-                    <img src="{{ default_path('coursePicture', courses.middlePicture, 'large') }}" class="img-responsive lessonimg" alt="">
+              <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-course-list">
+                <div class="lessonimg-box">
+                  <img src="{{ default_path('coursePicture', courses.middlePicture, 'large') }}" class="img-responsive lessonimg" alt="">
 
-                    <div class="lessonplay" style="opacity: 0;">
-                      <a class="btn btn-default course-button" href="{{ path('course_show', {id:courses.id}) }}" role="button">点击查看</a>
-                    </div>
+                  <div class="lessonplay" >
+                    <a class="btn btn-default course-button" href="{{ path('course_show', {id:courses.id}) }}" role="button">点击查看</a>
                   </div>
-                  <div class="lesson-infor" style="height: 100px;">
-                    <h3>{{ courses.title }}</h3>
+                </div>
+                <div class="lesson-infor" >
+                  <h3><a href="{{ path('course_show', {id:courses.id}) }}">{{ courses.title }}</a></h3>
 
-                    <p style="opacity: 0; height: 0px; display: none;">{{ courses.about|plain_text(60) }}</p>
-                    <span class="student-num pull-right"><i class="fa fa-users"></i>{{ courses.studentNum }}</span>
+                  <p >{{ courses.about|plain_text(60) }}</p>
+                  <span class="student-num pull-right"><i class="fa fa-users"></i>{{ courses.studentNum }}</span>
                     <span class="nickname clearfix">
-                        {% for teacher in courses.teachers %}
+                                             {% for teacher in courses.teachers %}
                           {% if loop.index <= 1%}
-                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ teacher.nickname }}</a>
+                          {% set profile = profiles[teacher.id] %}
+                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ profile.truename }}</a>
                            {% endif %}
                         {% endfor %}
-                      
                     </span>
-                  </div>
-                </li>
-              {% endfor %}
+                </div>
+              </li>
+             {% endfor %}
                 
               </ul>
             </div>

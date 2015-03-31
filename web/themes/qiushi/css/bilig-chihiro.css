@@ -1,0 +1,94 @@
+/* =========================== common =========================== */
+/* .shadow(@x:1px,@y:1px,@width:1px,@color:#f1f1f1){
+  box-shadow: @x @y @width @color;
+} */
+.inline-block {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.es-transform {
+  -webkit-transform: scale(1.1, 1.1);
+  -moz-transform: scale(1.1, 1.1);
+  -ms-transform: scale(1.1, 1.1);
+  -o-transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);
+}
+a {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.lesson-infor {
+  left: 0px;
+  top: 0px;
+  height: 100px;
+  z-index: 999;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+.es-course-list {
+  position: relative;
+  height: 240px;
+  list-style-type: none;
+}
+.es-course-list:hover h3,
+.es-course-list:hover h3 a {
+  color: #F59200!important;
+}
+.es-course-list:hover .lessonplay {
+  opacity: 1 !important;
+  filter: alpha(opacity=100) !important;
+}
+.es-course-list:hover .lesson-infor {
+  height: 150px!important;
+}
+.es-course-list:hover .lesson-infor p {
+  opacity: 1 !important;
+  filter: alpha(opacity=100) !important;
+}
+.es-course-list .nickname {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+.es-course-list .student-num {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.es-course-list p {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #999;
+  max-height: 52px;
+  overflow: hidden;
+  opacity: 0 !important;
+  filter: alpha(opacity=0) !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-course-list h3 {
+  height: 50px!important;
+  overflow: hidden;
+}
+.es-course-list h3 a {
+  color: #222;
+}
+.es-course .es-course-list{
+	overflow: visible;
+}
+a{
+	text-decoration: none!important;
+}
