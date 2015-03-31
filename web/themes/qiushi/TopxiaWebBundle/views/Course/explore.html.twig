@@ -15,13 +15,32 @@
         <li><a href="{{ path('homepage') }}">首页</a></li>
         <li><a href="{{ path('course_explore') }}">课程库</a></li>
         {% if category.id %}
-        <li class="active"><span>{{ category.name }}<i class="fa fa-times"></i></span></li>
+        <li class="active">
+            <span style="display: inline-block"> 
+              <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort}) }}">{{ category.name }}<i class="fa fa-times"></i> 
+              </a>
+            </span>
+         
+        </li>
 		{% endif %}	
         {% if kind %}
-        <li class="active"><span>{{ kind }}<i class="fa fa-times"></i></span></li>
+        <li class="active">
+        <span style="display: inline-block">
+          <a href="{{ path('course_explore', {category:category.id,material:material,sort:sort}) }}">{{ kind }}
+          <i class="fa fa-times"></i>
+          </a>
+        </span> </li>
 		{% endif %}
         {% if material %}
-        <li class="active"><span>{{ material }}<i class="fa fa-times"></i></span></li>
+      
+      <li class="active">
+        <span style="display: inline-block">
+          <a href="{{ path('course_explore', {category:category.id,kind:kind,sort:sort}) }}">{{ material }}
+            <i class="fa fa-times"></i>
+          </a>
+        </span>
+      </li>
+        
 		{% endif %}
       </ol>
     </div>
@@ -31,8 +50,8 @@
       <ul class="list-inline">
         年级：
         {% for firstCat in firstCategories %}
-		{% if firstCat.parentId == 0 %}
-        <li ><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),kind:kind,material:material}) }}">{{ firstCat.name }}</a></li>
+		    {% if firstCat.parentId == 0 %}
+        <li {% if firstCat.code == category.id %}class="active" {% endif %}><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),kind:kind,material:material,sort:sort}) }}">{{ firstCat.name }}</a></li>
         {% endif %}
         {% endfor %}
       </ul>
@@ -41,7 +60,7 @@
         {% if category.id %}
         {% set secCategories = data('Categories',{ group:'course',parentId:category.id}) %}
 		{% for secCat in secCategories %}
-		<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),kind:kind,material:material}) }}">{{ secCat.name }}</a></li>
+		<li {% if secCat.code == category.code %} class="active"{% endif %}><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),kind:kind,material:material,sort:sort }) }}">{{ secCat.name }}</a></li>
 		{% endfor %}
 		{% endif %}	
 		
@@ -50,13 +69,13 @@
         类别：
         
         {% for perTag in tagKind %}
-        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),kind:perTag.name,material:material}) }}">{{ perTag.name }}</a></li>
+        <li {% if perTag.name == kind %}class="active"{% endif %}><a href="{{ path('course_explore', {category:category.code|default(category.id),kind:perTag.name,material:material,sort:sort}) }}">{{ perTag.name }}</a></li>
         {% endfor %}
       </ul>
       <ul class="list-inline">
         教材：
         {% for perTag in tagMaterial %}
-        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),material:perTag.name,kind:kind}) }}">{{ perTag.name }}</a></li>
+        <li {% if perTag.name == material %}class="active"{% endif %}><a href="{{ path('course_explore', {category:category.code|default(category.id),material:perTag.name,kind:kind,sort:sort}) }}">{{ perTag.name }}</a></li>
         {% endfor %}
       </ul>
 
@@ -65,9 +84,9 @@
     <!--课程排序列表开始-->
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 es-course">
         <ul  class="nav nav-tabs" >
-          <li {% if sort == 'latest' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'latest'}) }}">最新</a></li>
-          <li  {% if sort == 'popular' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'popular'}) }}">热门</a></li>
-          <li {% if sort == 'recommendedSeq' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id), sort:'recommendedSeq'}) }}">推荐</a></li>
+          <li {% if sort == 'latest' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id),material:material,kind:kind, sort:'latest'}) }}">最新</a></li>
+          <li  {% if sort == 'popular' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id),material:material,kind:kind, sort:'popular'}) }}">热门</a></li>
+          <li {% if sort == 'recommendedSeq' %}class="active"{% endif %} ><a href="{{ path('course_explore', {category:category.code|default(category.id),material:material,kind:kind,sort:'recommendedSeq'}) }}">推荐</a></li>
 
         </ul>
         <div  class="tab-content">
