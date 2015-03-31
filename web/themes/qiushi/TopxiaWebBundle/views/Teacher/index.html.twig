@@ -69,7 +69,7 @@
                 {% endif %}
             </span>
             <p class="teacher-info">
-              {{ profile.about|raw }}
+              {{ profile.about|plain_text(40)| raw}}
             </p>
             <span class="pull-left course-num">在教课程：11</span>
           </div>
