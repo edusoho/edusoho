@@ -234,12 +234,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
          return $this->getConnection()->fetchAll($sql);
     }
 
-    public function updateCoinPrice($cashRate)
-    {
-        $sql="UPDATE `{$this->getTablename()}` SET coinPrice = price*? WHERE coinPrice=0 ;";
-        $this->getConnection()->executeUpdate($sql, array($cashRate));
-    }
-
     private function getTablename()
     {
         return self::TABLENAME;

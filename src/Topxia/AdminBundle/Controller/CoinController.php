@@ -864,15 +864,6 @@ class CoinController extends BaseController
         return $condition;
     }
 
-    private function processPrice($priceType, $cashRate)
-    {
-        if($priceType=="RMB") {
-            $this->getCourseService()->updatePrice($cashRate);
-        } else if($priceType=="Coin" ) {
-            $this->getCourseService()->updateCoinPrice($cashRate);
-        }
-    }
-
     private function filterCondition($conditions)
     {
         if  (isset($conditions['keywordType'])) {
