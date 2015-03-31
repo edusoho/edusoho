@@ -7,7 +7,6 @@ define(function(require, exports, module) {
 		var $form = $('#tag-form');
 		var $modal = $form.parents('.modal');
         var $table = $('#tag-table');
-
 		var validator = new Validator({
             element: $form,
             autoSubmit: false,

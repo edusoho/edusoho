@@ -21,7 +21,8 @@
 						        {% if lastcourses.teachers %}
 			                        {% for teacher in lastcourses.teachers %}
 			                          {% if loop.index <= 5%}
-			                             <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ teacher.nickname }}</a>
+			                          {% set profile = profiles[teacher.id] %}
+			                             <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ profile.truename }}</a>
 			                           {% endif %}
 			                        {% endfor %}
 			                    {% endif %}

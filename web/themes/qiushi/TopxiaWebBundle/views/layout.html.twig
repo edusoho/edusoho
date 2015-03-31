@@ -48,7 +48,11 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-<div class="navbar site-navbar one-nav">
+
+
+
+
+<div class="navbar site-navbar one-nav" data-counter-url="{{ path('user_remind_counter') }}">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="container">
     <div class="container-gap">
@@ -136,6 +140,7 @@
             <a href="javascript:void(0);" onclick="AddFavorite('{{ setting("site.name", "EDUSOHO") }}',location.href)" class=""><span class="fa fa-heart hidden-sm hidden-xs"></span>收藏本站</a>
           </li>
         </ul>
+        
       </div>
     </div>
   </div>
@@ -158,13 +163,18 @@
 </div>
 
 
-
   {% block bottom %}
+
   <!--页面底部开始-->
 <div class="footer-sec">
   <div class="container clearfix">
     <div class="copyright hidden-sm hidden-xs">
-      {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
+      <ul class="list-inline">
+        <li><a href="">关于我们</a></li>
+        <li><a href="">网站帮助</a></li>
+        <li><a href="">个人中心</a></li>
+        <li><a href="">课程库</a></li>
+      </ul>
       <span class="">客服热线：400-889-9712</span>
 
       <p>关注求是微信公众号</p>
@@ -172,7 +182,6 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="site-footer-links">
-      
         <p class="text-center">Powered by <a href="">Edusoho v5.1.3</a></p>
 
         <p class="text-center">湖州求是教育集团地址：<a href="">德清县武康镇府前港44号</a></p>
@@ -182,8 +191,7 @@
     </div>
   </div>
 </div>
-<!--页面底部结束-->  
-  
+<!--页面底部结束--> 
   {% endblock %}
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>

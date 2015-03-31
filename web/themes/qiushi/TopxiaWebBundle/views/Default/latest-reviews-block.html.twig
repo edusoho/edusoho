@@ -27,8 +27,8 @@
                   <p class="user-comment">
                     {{ review.content|plain_text(50) }}
                   </p>
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-title"> 《 {{ course.title }} 》</a>
-                  <span class="pull-right comment-time">2015-03-17 15:30</span>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-title">{{ course.title }}</a>
+                  <span class="pull-right comment-time">{{ course.createdTime|date('Y-m-d H:i') }}</span>
                 </div>
               </div>
             </li>
