@@ -22,7 +22,7 @@
 
                 >
                 </div>
-                <input type="hidden" id="videoWatermarkEmbedded" value="1">
+                <input type="hidden" id="videoWatermarkEmbedded" value="{{ hasVideoWatermarkEmbedded }}">
             {% else %}
                 <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
             {% endif %}
