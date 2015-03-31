@@ -7,8 +7,6 @@
 {% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
-<!--   <div class="page-header"><h1>虚拟币管理</h1></div>
-  {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %} -->
 <div class = "mbl">
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
