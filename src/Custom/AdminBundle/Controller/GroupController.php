@@ -38,11 +38,24 @@ class GroupController extends BaseController
 
         $ownerIds =  ArrayToolkit::column($groupinfo, 'ownerId');
         $owners = $this->getUserService()->findUsersByIds($ownerIds);
+        $recommends = $this->getGroupService()->getRecommendByGroupId( ArrayToolkit::column($groupinfo, 'id'));
+        
+        $recommends = ArrayToolkit::index($recommends,'groupID');
+        foreach ($groupinfo as $key => &$value) {
+            if(isset($recommends[$value['id']])){
+                $value['recommend'] = $recommends[$value['id']];
+            }else{
+                 $value['recommend'] = "";
+            }
+        }
+
+      
 
 		return $this->render('CustomAdminBundle:Group:index.html.twig',array(
 			'groupinfo'=>$groupinfo,
             'owners'=>$owners,
-			'paginator' => $paginator));
+			'paginator' => $paginator,
+            'recommends' => $recommends ));
 	}
 
     public function recommendAction(Request $request, $id)
@@ -68,6 +81,15 @@ class GroupController extends BaseController
             'ref' => $ref
         ));
     }
+    public function deleteAction(Request $request, $id)
+    {
+        $group = $this->getGroupService()->getGroup($id);
+
+        $this->getGroupService()->deleteGroupRecommend($id);
+
+        return $this->redirect($this->generateUrl('admin_group'));
+    }
+
 
     private function renderCourseTr($courseId)
     {

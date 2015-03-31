@@ -19,9 +19,19 @@ class GroupServiceImpl extends BaseService implements GroupService
 			'createdTime' => time(),
 		));
 
-		$this->getLogService()->info('group', 'recommend', "推荐课程《{$group['title']}》(#{$group['id']}),序号为{$number}");
+		$this->getLogService()->info('group', 'recommend', "推荐课程《{$group['groupID']}》(#{$group['id']}),序号为{$number}");
 
 		return $group;
+	}
+
+
+	public function deleteGroupRecommend($groupId){
+		 $this->getGroupRecommendDao()->deleteGroupRecommend($groupId);
+		 return true;
+	}
+
+	public function getRecommendByGroupId(array $groupIds){
+		 return $this->getGroupRecommendDao()->getRecommendByGroupId($groupIds);
 	}
 
     private function getLogService() 

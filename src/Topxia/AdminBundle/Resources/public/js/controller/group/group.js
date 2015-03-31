@@ -29,6 +29,16 @@ define(function(require, exports, module) {
 
         });
 
+        $table.on('click', '.recommend-delete-group', function(){
+            $.post($(this).data('url'), function(html){
+                // var $tr = $(html);
+                // $table.find('#' + $tr.attr('id')).replaceWith(html);
+                Notify.success('小组推荐已取消！');
+                window.location.reload();
+            });
+        });
+
+
         var validator = new Validator({
             element: '#transfer-group-form',
             autoSubmit: false,

@@ -15,10 +15,14 @@ class GroupRecommendDaoImpl extends BaseDao implements GroupRecommendDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+
+    public function deleteGroupRecommend($id){
+        $sql = " DELETE FROM  {$this->table}   where groupID=? ";
+        return $this->getConnection()->executeQuery($sql, array($id));
+    }
+
     public function addGroupRecommend($group)
     {
-        $group = $this->createSerializer()->serialize($group, $this->serializeFields);
-
         $affected = $this->getConnection()->insert($this->table, $group);
         if ($affected <= 0) {
 
@@ -26,6 +30,16 @@ class GroupRecommendDaoImpl extends BaseDao implements GroupRecommendDao
         }
 
         return $this->getGroupRecommend($this->getConnection()->lastInsertId());
+    }
+
+   public function getRecommendByGroupId(array $groupIds){
+        if(empty($groupIds)){ return array(); }
+        $marks = str_repeat('?,', count($groupIds) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE groupID IN ({$marks});";
+        
+        // var_dump($this->getConnection()->fetchAll($sql, $groupIds));
+        // exit();
+        return $this->getConnection()->fetchAll($sql, $groupIds);
     }
 
      
