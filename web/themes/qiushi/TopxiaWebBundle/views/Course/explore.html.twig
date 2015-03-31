@@ -60,16 +60,15 @@
         {% endif %}
         {% endfor %}
       </ul>
-       {% if category.id %}
-      <ul class="list-inline">
-        学科：
-       
-        {% set secCategories = data('Categories',{ group:'course',parentId:first}) %}
-		{% for secCat in secCategories %}
-		<li {% if secCat.code == category.code %} class="active"{% endif %}><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),kind:kind,material:material,sort:sort,first:first }) }}">{{ secCat.name }}</a></li>
-		{% endfor %}
-      </ul>
-        {% endif %} 
+      {% if category.id %}
+        <ul class="list-inline">
+          学科：
+          {% set secCategories = data('Categories',{ group:'course',parentId:first}) %}
+      		{% for secCat in secCategories %}
+      		<li {% if secCat.code == category.code %} class="active"{% endif %}><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),kind:kind,material:material,sort:sort,first:first }) }}">{{ secCat.name }}</a></li>
+      		{% endfor %}
+        </ul>
+      {% endif %} 
       <ul class="list-inline">
         类别：
         
