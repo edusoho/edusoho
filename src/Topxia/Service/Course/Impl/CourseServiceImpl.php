@@ -1216,17 +1216,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->getCurrentUser();
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
-		if($course['status'] == 'published' ){
-			$this->getStatusService()->publishStatus(array(
-				'type' => 'start_learn_lesson',
-				'objectType' => 'lesson',
-				'objectId' => $lessonId,
-				'properties' => array(
-					'course' => $this->simplifyCousrse($course),
-					'lesson' => $this->simplifyLesson($lesson),
-				)
-			));
-		}
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'start_learn_lesson',
+			'objectType' => 'lesson',
+			'objectId' => $lessonId,
+			'isHidden' => $course['status'] == 'published' ? 0 : 1,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+				'lesson' => $this->simplifyLesson($lesson),
+			)
+		));
 		if (!empty($lesson) && $lesson['type'] != 'video') {
 
 			$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
@@ -1327,21 +1326,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$memberFields = array();
 		$memberFields['learnedNum'] = count($learns);
 		$course = $this->getCourseDao()->getCourse($courseId);
-                          if ($course['serializeMode'] != 'serialize' ) {
-                            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
-                          }
+	    if ($course['serializeMode'] != 'serialize' ) {
+	    	$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+	    }
 		$memberFields['credit'] = $totalCredits;
-		if($course['status'] == 'published' ){
-			$this->getStatusService()->publishStatus(array(
-				'type' => 'learned_lesson',
-				'objectType' => 'lesson',
-				'objectId' => $lessonId,
-				'properties' => array(
-					'course' => $this->simplifyCousrse($course),
-					'lesson' => $this->simplifyLesson($lesson),
-				)
-			));
-		}
+		$this->getStatusService()->publishStatus(array(
+			'type' => 'learned_lesson',
+			'objectType' => 'lesson',
+			'objectId' => $lessonId,
+			'isHidden' => $course['status'] == 'published' ? 0 : 1,
+			'properties' => array(
+				'course' => $this->simplifyCousrse($course),
+				'lesson' => $this->simplifyLesson($lesson),
+			)
+		));
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
