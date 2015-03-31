@@ -27,10 +27,10 @@ class CourseController extends BaseController
 		} else {
 			$category = array('id' => null);
 		}
-		$grade = $request->query->get('grade');
 		$kind = $request->query->get('kind');
-		$tagGrade = $this->getTagService()->getTagByName($grade);
-		$tagKind =$this->getTagService()->getTagByName($kind);
+		$material = $request->query->get('material');
+		$tagKind = $this->getTagService()->getTagByName($kind);
+		$tagMaterial =$this->getTagService()->getTagByName($material);
 		$sort = $request->query->get('sort', 'latest');
 		$conditions = array(
 			'status' => 'published',
@@ -38,8 +38,8 @@ class CourseController extends BaseController
 			'categoryId' => $category['id'],
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
 			'price' => ($sort == 'free') ? '0.00' : null,
-			'tagId' => $tagGrade['id'],
-			'tagId'	=>	$tagKind['id'],
+			'tagId' => $tagKind['id'],
+			'tagId'	=>	$tagMaterial['id'],
 		);
 
 		$paginator = new Paginator(
@@ -60,8 +60,8 @@ class CourseController extends BaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-		$tagGrade= $this->getTagService()->getAllTagsByType('grade');
 		$tagKind= $this->getTagService()->getAllTagsByType('kind');
+		$tagMaterial= $this->getTagService()->getAllTagsByType('material');
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -69,10 +69,10 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'tagGrade'	=>	$tagGrade,
 			'tagKind'	=>	$tagKind,
+			'tagMaterial'	=>	$tagMaterial,
 			'kind'	=>$kind,
-			'grade' =>$grade
+			'material' =>$material
 		));
 	}
 

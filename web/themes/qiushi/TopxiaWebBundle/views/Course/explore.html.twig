@@ -20,8 +20,8 @@
         {% if kind %}
         <li class="active"><span>{{ kind }}<i class="fa fa-times"></i></span></li>
 		{% endif %}
-        {% if grade %}
-        <li class="active"><span>{{ grade }}<i class="fa fa-times"></i></span></li>
+        {% if material %}
+        <li class="active"><span>{{ material }}<i class="fa fa-times"></i></span></li>
 		{% endif %}
       </ol>
     </div>
@@ -32,7 +32,7 @@
         年级：
         {% for firstCat in firstCategories %}
 		{% if firstCat.parentId == 0 %}
-        <li ><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),kind:kind,grade:grade}) }}">{{ firstCat.name }}</a></li>
+        <li ><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),kind:kind,material:material}) }}">{{ firstCat.name }}</a></li>
         {% endif %}
         {% endfor %}
       </ul>
@@ -41,21 +41,21 @@
         {% if category.id %}
         {% set secCategories = data('Categories',{ group:'course',parentId:category.id}) %}
 		{% for secCat in secCategories %}
-		<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),grade:perTag.name,kind:kind}) }}">{{ secCat.name }}</a></li>
+		<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),kind:kind,material:material}) }}">{{ secCat.name }}</a></li>
 		{% endfor %}
 		{% endif %}	
 		
       </ul>
       <ul class="list-inline">
         类别：
-        {% for perTag in tagGrade %}
-        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),grade:perTag.name,kind:kind}) }}">{{ perTag.name }}</a></li>
+        {% for perTag in tagKind %}
+        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),kind:perTag.name,material:material}) }}">{{ perTag.name }}</a></li>
         {% endfor %}
       </ul>
       <ul class="list-inline">
         教材：
-        {% for perTag in tagKind %}
-        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),kind:perTag.name,grade:grade}) }}">{{ perTag.name }}</a></li>
+        {% for perTag in tagMaterial %}
+        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),material:perTag.name,kind:kind}) }}">{{ perTag.name }}</a></li>
         {% endfor %}
       </ul>
 

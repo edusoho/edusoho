@@ -50,17 +50,18 @@
     <div class="panel">
       <div class="panel-heading">
         <h3 class="panel-title">老师推荐</h3>
-        <a class="more" href="">更多&gt;</a>
+        <a class="more" href="{{ path('teacher') }}">更多&gt;</a>
       </div>
       <div class="panel-body">
         <ul class="row">
         {% set recommendTeachers = data('RecommendTeachers',{'count':4}) %}
         	{% for perTeacher in recommendTeachers %}
+        	{% set profile = profiles[perTeacher.id] %}
 	          <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-teacher-list text-center">
-	            <a href="">
+	            <a href="{{ path('user_show', {id:perTeacher.id}) }}">
 	              <img src="{{ file_path(perTeacher.mediumAvatar, 'avatar.png') }}" class="img-circle">
 	
-	              <h3>{{ perTeacher.nickname }}</h3>
+	              <h3>{{ profile.truename }}</h3>
 	
 	              <p>{{ perTeacher.about|plain_text(100) }}</p>
 	            </a>
