@@ -55,7 +55,7 @@ a {
 .es-course-list:hover h3 a {
   color: #F59200!important;
 }
-#myTabContent .es-course-list:hover .lessonplay {
+.es-course-list:hover .lessonplay {
   opacity: 1 !important;
   filter: alpha(opacity=100) !important;
 }

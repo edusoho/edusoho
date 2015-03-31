@@ -168,7 +168,7 @@
 
               <p style="opacity: 0; height: 0px; display: none;">{{ liveCourses.about|plain_text(60) }}</p>
               <span class="livetime pull-left">{{ liveCourses.freeStartTime|date('n月j日 H:i') }} 开课</span>
-                <span class="nickname pull-right clearfix">
+                <span class="nickname pull-right clearfix" style="position:static!important;">
                   <a class="text-muted" href=""><i class="fa fa-user"></i>
                         {% for teacher in liveCourses.teachers %}
                          {{ web_macro.user_link(teacher, 'text-muted') }}
