@@ -2,7 +2,8 @@
 
 {% set active = 'manage' %}
 {% set menus = permissions('admin_course_note','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,active) }}{% endblock %}
+{% block title %}{{ getTitle('admin_course_note')}}{% endblock %}
+
 {% set menu = 'note' %}
 
 {% set script_controller = 'course/note' %}
