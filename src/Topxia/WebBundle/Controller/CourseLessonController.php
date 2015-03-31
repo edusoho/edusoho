@@ -42,6 +42,7 @@ class CourseLessonController extends BaseController
         $hasVideoWatermarkEmbedded = 0;
         if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -62,9 +63,8 @@ class CourseLessonController extends BaseController
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
             }
-
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $videoWatermarkEmbedded = 1;
+                $hasVideoWatermarkEmbedded = 1;
             }
 
         } else if ($lesson['mediaSource'] == 'youku') {
