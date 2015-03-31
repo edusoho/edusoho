@@ -59,10 +59,6 @@ CKEDITOR.lang['zh-cn'] = {
     {
         toolbar : '源码'
     },
-    accessory : 
-    {
-        toolbar : '隐藏内容'
-    },
     removeformat : 
     {
         toolbar : '清除格式'
