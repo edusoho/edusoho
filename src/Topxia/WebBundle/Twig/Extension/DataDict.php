@@ -248,6 +248,11 @@ class DataDict
         'coinOrderType'=>array(
             'userName'=>'用户名',
         ),
+        'discountType' => array(
+            'limit' => '限时打折',
+            'free' => '限时免费',
+            'global' => '全站打折',
+        ),
         'discountStatus' => array(
             'unstart' => '未开始',
             'running' => '进行中',

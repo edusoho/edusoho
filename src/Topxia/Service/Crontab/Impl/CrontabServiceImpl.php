@@ -15,6 +15,12 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     public function createJob($job)
     {
         $user = $this->getCurrentUser();
+
+        if ($job['cycle'] == 'once') {
+            $job['nextExcutedTime'] = time();
+            unset($job['time']);
+        }
+
         $job['creatorId'] = $user['id'];
         $job['createdTime'] = time();
 
@@ -27,12 +33,12 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
 
-        $jobInstance = new $job['jobClass']($job['jobParams']);
-        $jobInstance->execute();
+        $jobInstance = new $job['jobClass']();
+        $jobInstance->execute($job['jobParams']);
 
-        if ($job['cycle'] == 'once') {
-            $this->deleteJob($job['id']);
-        }
+        // if ($job['cycle'] == 'once') {
+        //     $this->deleteJob($job['id']);
+        // }
     }
 
     public function deleteJob($id)

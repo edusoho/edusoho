@@ -9,10 +9,15 @@ class JobDaoImpl extends BaseDao implements JobDao
 {
     protected $table = 'crontab_job';
 
+    private $serializeFields = array(
+        'jobParams' => 'json',
+    );
+
     public function getJob($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $job = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $job ? $this->createSerializer()->unserialize($job, $this->getSerializeFields()) : null;
     }
 
     public function searchJobs($conditions, $orderBy, $start, $limit)
@@ -35,17 +40,20 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addJob($task)
+    public function addJob($job)
     {
-        $affected = $this->getConnection()->insert($this->table, $task);
+        $this->createSerializer()->serialize($job, $this->serializeFields);
+
+        $affected = $this->getConnection()->insert($this->table, $job);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert task error.');
+            throw $this->createDaoException('Insert job error.');
         }
         return $this->getJob($this->getConnection()->lastInsertId());
     }
 
     public function updateJob($id, $fields)
     {
+        $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getJob($id);
     }
@@ -60,6 +68,11 @@ class JobDaoImpl extends BaseDao implements JobDao
             ->andWhere('nextExcutedTime <= :nextExcutedTime')
             ->andWhere('creatorId = :creatorId');
         return $builder;
+    }
+
+    private function getSerializeFields()
+    {
+        return $this->serializeFields;
     }
 
 }

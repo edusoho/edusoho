@@ -4,5 +4,5 @@ use Topxia\Service\Common\ServiceKernel;
 
 interface Job
 {   
-    public function execute();
+    public function execute($params);
 }
