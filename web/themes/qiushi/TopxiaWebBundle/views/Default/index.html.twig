@@ -17,7 +17,7 @@
 	            	 {% for lastcourses in lastestCourses %}
 			              <li class="list-group-item" style="font-size:14px;">
 			                <span class="badge pull-left">{{ loop.index }}</span>
-			                <a href="" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
+			                <a href="{{ path('course_show', {id:lastcourses.id}) }}" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
 						        {% if lastcourses.teachers %}
 			                        {% for teacher in lastcourses.teachers %}
 			                          {% if loop.index <= 5%}
@@ -146,6 +146,7 @@
       </div>
       <div class="panel-body">
         <ul class="row">
+        {% if recentLiveCourses %}
         {% for liveCourses in recentLiveCourses %}
           <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-course-list">
             <div class="lessonimg-box">
@@ -177,10 +178,14 @@
             </div>
           </li>
          {% endfor %}
+         
+         {% else %}
+         <div class="empty">直播课已全部结束，敬请期待更新！</div>
+         {% endif %}
         </ul>
       </div>
     </div>
 
     <!--直播课结束-->
- {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
+ {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:6})) }}
 {% endblock %}
