@@ -202,33 +202,31 @@ class SettingController extends BaseController
     }
 
     public function liveLogoUploadAction(Request $request)
-    {
-        $file = $request->files->get('logo');
-        if (!FileToolkit::isImageFile($file)) {
+    {   
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+        if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
+        $site = $this->getSettingService()->get('site', array());
 
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $site['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['live_logo'] = ltrim($site['live_logo'], '/');
 
-        $courseSetting['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
-        $courseSetting['live_logo'] = ltrim($courseSetting['live_logo'], '/');
+        $this->getSettingService()->set('site', $site);
 
-        $this->getSettingService()->set('course', $courseSetting);
-
-        $this->getLogService()->info('system', 'update_settings', "更新站点LOGO", array('live_logo' => $courseSetting['live_logo']));
+        $this->getLogService()->info('system', 'update_settings', "更新直播LOGO", array('live_logo' => $site['live_logo']));
 
         $response = array(
-            'path' => $courseSetting['live_logo'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($courseSetting['live_logo']),
+            'path' => $site['live_logo'],
+            'url' => $this->container->get('templating.helper.assets')->getUrl($site['live_logo']),
         );
 
-        return new Response(json_encode($response));
-
+        return $this->createJsonResponse($response);
     }
 
     public function liveLogoRemoveAction(Request $request)

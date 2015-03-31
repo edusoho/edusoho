@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     require('jquery.sortable');
     var Notify = require('common/bootstrap-notify');
-    var Uploader = require('upload');
+    var WebUploader = require('edusoho.webuploader');
 
     exports.run = function() {
 
@@ -38,22 +38,20 @@ define(function(require, exports, module) {
        	 });
 
         var $form = $("#course-form");
-        var uploader = new Uploader({
-            trigger: '#live-course-logo-upload',
-            name: 'logo',
-            action: $('#live-course-logo-upload').data('url'),
-            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
-            error: function(file) {
-                Notify.danger('上传直播课程LOGO失败，请重试！')
-            },
-            success: function(response) {
-                response = $.parseJSON(response);
-                $("#live-course-logo-container").html('<img src="' + response.url + '">');
-                $form.find('[name=live_logo]').val(response.path);
+
+        var uploader = new WebUploader({
+            element: '#live-course-logo-upload'
+        });
+
+        uploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#live-course-logo-upload").data("gotoUrl");
+
+            $.post(url, response ,function(data){
+                $("#live-course-logo-container").html('<img src="' + data.url + '">');
+                $form.find('[name=live_logo]').val(data.path);
                 $("#live-course-logo-remove").show();
                 Notify.success('上传直播课程的LOGO成功！');
-            }
+            });
         });
 
         $("#live-course-logo-remove").on('click', function(){
