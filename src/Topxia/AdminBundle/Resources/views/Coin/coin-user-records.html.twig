@@ -4,7 +4,7 @@
 
 {% block maincontent %}
 
-  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+  {% if setting('coin.coin_enabled')  %}
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
         <input value="{{condition.type}}" name="flowType" type="hidden"/>
