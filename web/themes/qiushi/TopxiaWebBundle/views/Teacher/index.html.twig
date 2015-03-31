@@ -11,9 +11,11 @@
 <!--二级页面路径导航开始-->
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 crumbs">
       <ol class="breadcrumb">
-        <li><a href="#">首页</a></li>
-        <li><a href="#">求是名师</a></li>
-        <li class="active"><span>一年级<i class="fa fa-times"></i></span></li>
+        <li><a href="/">首页</a></li>
+        <li><a href="/teacher">求是名师</a></li>
+        {% if gradeTag|default(0) %}<li class="active"><span>{{ gradeTag.name}}<i class="fa fa-times"></i></span></li> {% endif %}
+        {% if subjectTag|default(0) %}<li class="active"><span>{{ subjectTag.name}}<i class="fa fa-times"></i></span></li> {% endif %}
+        
       </ol>
     </div>
     <!--二级页面路径导航结束-->
@@ -21,30 +23,18 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav-stacked">
       <ul class="list-inline">
         年级：
-        <li class="active"><a href="">一年级</a></li>
-        <li><a href="">二年级</a></li>
-        <li><a href="">三年级</a></li>
-        <li><a href="">四年纪</a></li>
-        <li><a href="">五年级</a></li>
-        <li><a href="">初一</a></li>
-        <li><a href="">初二</a></li>
-        <li><a href="">初三</a></li>
-        <li><a href="">高一</a></li>
-        <li><a href="">高二</a></li>
-        <li><a href="">高三</a></li>
-        <li><a href="">高复</a></li>
+        {% set teacherTags = data('TeacherTag',{ type:'grade' }) %}
+        {% for tag in teacherTags %}
+          <li><a href="{{ path('teacher_search',{ gradeTagId:tag.id,subjectTagId:subjectTag.id|default(0) }) }}">{{ tag.name }}</a></li>
+        {% endfor %}
+
       </ul>
       <ul class="list-inline">
         学科：
-        <li><a href="">语文</a></li>
-        <li><a href="">数学</a></li>
-        <li><a href="">英语</a></li>
-        <li><a href="">地理</a></li>
-        <li><a href="">政治</a></li>
-        <li><a href="">历史</a></li>
-        <li><a href="">物理</a></li>
-        <li><a href="">生物</a></li>
-        <li><a href="">化学</a></li>
+        {% set teacherTags = data('TeacherTag',{ type:'subject' }) %}
+        {% for tag in teacherTags %}
+          <li><a href="{{ path('teacher_search',{subjectTagId:tag.id,gradeTagId:gradeTag.id|default(0) }) }}">{{ tag.name }}</a></li>
+        {% endfor %}
       </ul>
     </div>
   <div class="teacher-box">

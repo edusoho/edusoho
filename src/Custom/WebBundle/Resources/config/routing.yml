@@ -10,6 +10,10 @@ settings:
 teacher_tag_match:
     pattern: /teacher/tag/match_jsonp
     defaults: { _controller: CustomWebBundle:TagTeacher:match }
+teacher_search:
+    pattern: /teacher/search
+    defaults: { _controller: CustomWebBundle:Teacher:search }
+
     
 
 
