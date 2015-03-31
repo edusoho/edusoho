@@ -47,6 +47,7 @@ class GroupController extends BaseController
     public function threadAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions = $this->prepareThreadConditions($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -311,6 +312,37 @@ class GroupController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function prepareThreadConditions($conditions)
+    {
+
+        if (isset($conditions['threadType']) && !empty($conditions['threadType'])) {
+            $conditions[$conditions['threadType']] = 1;
+            unset($conditions['threadType']);
+        }
+
+        if (isset($conditions['groupName']) && $conditions['groupName'] !== "") {
+            $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
+            if (!empty($group)) {
+              $conditions['groupId']=$group[0]['id'];  
+            } else {
+              $conditions['groupId']=0;  
+            }
+        }
+        
+
+        if (isset($conditions['userName']) && $conditions['userName'] !== "") {
+            $user=$this->getUserService()->getUserByNickname($conditions['userName']);
+            if (!empty($user)) {
+              $conditions['userId']=$user['id'];  
+            } else {
+              $conditions['userId']=0;  
+            } 
+        }
+        
+
+        return $conditions;
     }
 
 }

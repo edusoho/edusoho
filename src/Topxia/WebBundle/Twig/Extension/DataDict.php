@@ -248,6 +248,10 @@ class DataDict
         'coinOrderType'=>array(
             'userName'=>'用户名',
         ),
+        'threadProperty' => array(
+            'isStick' => '置顶',
+            'isElite' => '加精',
+        ),
 	);
 
 	public static function dict($type)

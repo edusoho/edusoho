@@ -6,8 +6,8 @@ define(function(require, exports, module) {
 		var $table = $('#thread-table');
 		require('../../util/batch-select')($('#thread-table'));
 
-		$('#deleteThread').on('click', function() {
-			if ($(":checkbox:checked").length < 1) {
+		$('#thread-delete-btn').on('click', function() {
+			if ($table.find(":checkbox:checked").length < 1) {
 				alert("请选择要删除的话题！");
 				return false;
 			}
@@ -47,21 +47,8 @@ define(function(require, exports, module) {
 		$table.on('click', ".promoted-label", function() {
 
 			var $self = $(this);
-			var span = $self.find('span');
-			var spanClass = span.attr('class');
-			var postUrl = "";
-			var labelStatus = "";
-
-			if (spanClass == "label label-default") {
-				postUrl = $self.data('setUrl');
-				labelStatus = "label label-success";
-
-			} else {
-				postUrl = $self.data('cancelUrl');
-				labelStatus = "label label-default";
-
-			}
-
+			var postUrl = $self.data('url');
+			
 			$.post(postUrl, function(html) {
 				var $tr = $(html);
 				$('#' + $tr.attr('id')).replaceWith(html);

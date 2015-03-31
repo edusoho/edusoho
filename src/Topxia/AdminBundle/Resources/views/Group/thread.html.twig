@@ -18,7 +18,7 @@
     
     <div class="form-group">
       <select class="form-control" name="threadType">
-        {{ select_options({isStick:'置顶', isElite: '加精'}, app.request.get('threadType'), '属性') }}
+        {{ select_options(dict('threadProperty'), app.request.get('threadType'), '属性') }}
       </select>
     </div>
 
@@ -68,7 +68,7 @@
           <td>   
            <input type="hidden" id="batchDeleteThread" value="{{path('admin_groupThread_batch_delete')}}">
            
-           <button id="deleteThread" data-submiting-text="正在删除" type="button" class="btn btn-default btn-sm"
+           <button id="thread-delete-btn" data-submiting-text="正在删除" type="button" class="btn btn-default btn-sm"
            >删除话题</button>
  
           </td>
