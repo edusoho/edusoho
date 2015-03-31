@@ -61,11 +61,10 @@ class CourseLessonController extends BaseController
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
+            }
 
-                if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                    $videoWatermarkEmbedded = 1;
-                }
-
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $videoWatermarkEmbedded = 1;
             }
 
         } else if ($lesson['mediaSource'] == 'youku') {
