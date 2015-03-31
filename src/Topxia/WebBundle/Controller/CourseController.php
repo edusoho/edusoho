@@ -27,15 +27,19 @@ class CourseController extends BaseController
 		} else {
 			$category = array('id' => null);
 		}
-		
-
+		$grade = $request->query->get('grade');
+		$kind = $request->query->get('kind');
+		$tagGrade = $this->getTagService()->getTagByName($grade);
+		$tagKind =$this->getTagService()->getTagByName($kind);
 		$sort = $request->query->get('sort', 'latest');
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
 			'categoryId' => $category['id'],
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
-			'price' => ($sort == 'free') ? '0.00' : null
+			'price' => ($sort == 'free') ? '0.00' : null,
+			'tagId' => $tagGrade['id'],
+			'tagId'	=>	$tagKind['id'],
 		);
 
 		$paginator = new Paginator(
@@ -56,6 +60,8 @@ class CourseController extends BaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
+		$tagGrade= $this->getTagService()->getAllTagsByType('grade');
+		$tagKind= $this->getTagService()->getAllTagsByType('kind');
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -63,8 +69,10 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			
-
+			'tagGrade'	=>	$tagGrade,
+			'tagKind'	=>	$tagKind,
+			'kind'	=>$kind,
+			'grade' =>$grade
 		));
 	}
 
@@ -1024,7 +1032,7 @@ class CourseController extends BaseController
 
 	private function getTagService()
 	{
-		return $this->getServiceKernel()->createService('Taxonomy.TagService');
+		return $this->getServiceKernel()->createService('Custom:Taxonomy.TagService');
 	}
 
 	private function getReviewService()

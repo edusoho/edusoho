@@ -14,6 +14,15 @@
       <ol class="breadcrumb">
         <li><a href="{{ path('homepage') }}">首页</a></li>
         <li><a href="{{ path('course_explore') }}">课程库</a></li>
+        {% if category.id %}
+        <li class="active"><span>{{ category.name }}<i class="fa fa-times"></i></span></li>
+		{% endif %}	
+        {% if kind %}
+        <li class="active"><span>{{ kind }}<i class="fa fa-times"></i></span></li>
+		{% endif %}
+        {% if grade %}
+        <li class="active"><span>{{ grade }}<i class="fa fa-times"></i></span></li>
+		{% endif %}
       </ol>
     </div>
     <!--二级页面路径导航结束-->
@@ -23,54 +32,33 @@
         年级：
         {% for firstCat in firstCategories %}
 		{% if firstCat.parentId == 0 %}
-        <li ><a href="">{{ firstCat.name }}</a></li>
+        <li ><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),kind:kind,grade:grade}) }}">{{ firstCat.name }}</a></li>
         {% endif %}
         {% endfor %}
       </ul>
       <ul class="list-inline">
         学科：
-        <li><a href="">语文</a></li>
-        <li><a href="">数学</a></li>
-        <li><a href="">英语</a></li>
-        <li><a href="">地理</a></li>
-        <li><a href="">政治</a></li>
-        <li><a href="">历史</a></li>
-        <li><a href="">物理</a></li>
-        <li><a href="">生物</a></li>
-        <li><a href="">化学</a></li>
+        {% if category.id %}
+        {% set secCategories = data('Categories',{ group:'course',parentId:category.id}) %}
+		{% for secCat in secCategories %}
+		<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),grade:perTag.name,kind:kind}) }}">{{ secCat.name }}</a></li>
+		{% endfor %}
+		{% endif %}	
+		
       </ul>
       <ul class="list-inline">
         类别：
-        <li><a href="">类别1</a></li>
-        <li><a href="">类别2</a></li>
-        <li><a href="">类别3</a></li>
-        <li><a href="">类别4</a></li>
+        {% for perTag in tagGrade %}
+        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),grade:perTag.name,kind:kind}) }}">{{ perTag.name }}</a></li>
+        {% endfor %}
       </ul>
       <ul class="list-inline">
         教材：
-        <li><a href="">人教版</a></li>
-        <li><a href="">浙教版</a></li>
-        <li><a href="">苏教版</a></li>
+        {% for perTag in tagKind %}
+        <li><a href="{{ path('course_explore', {category:category.code|default(category.id),kind:perTag.name,grade:grade}) }}">{{ perTag.name }}</a></li>
+        {% endfor %}
       </ul>
-      <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 teacher">
-        教师：
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="搜索教师" aria-label="Text input with segmented button dropdown">
-          <div class="input-group-btn">
 
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              <span class="caret"></span>
-              <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
     <!--课程筛选结束-->
     <!--课程排序列表开始-->
@@ -83,10 +71,14 @@
         </ul>
         <div  class="tab-content">
           <div class="tab-pane fade active in">
+           {% if courses %}
                    {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
 				   {{ web_macro.paginator(paginator) }} 
+                {% else %}
+        <div class="empty">该分类下无课程</div>
+      {% endif %}
           </div>
-      
+
         </div>
       </div>
     <!--课程排序列表结束-->
