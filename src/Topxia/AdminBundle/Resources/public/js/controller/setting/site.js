@@ -10,14 +10,14 @@ define(function(require, exports, module) {
         
 
         var uploader = new WebUploader({
-            element: '#site-logo-upload',
+            element: '#site-logo-upload'
         });
 
         uploader.on('uploadSuccess', function(file, response ) {
             var url = $("#site-logo-upload").data("gotoUrl");
-            // console.log(url);
+
             $.post(url, response ,function(data){
-                // $("#site-logo-container").html('<img src="' + data.url + '">');
+                $("#site-logo-container").html('<img src="' + data.url + '">');
                 $form.find('[name=logo]').val(data.path);
                 $("#site-logo-remove").show();
                 Notify.success('上传网站LOGO成功！');
@@ -37,22 +37,19 @@ define(function(require, exports, module) {
             });
         });
 
-        var uploader1 = new Uploader({
-            trigger: '#site-favicon-upload',
-            name: 'favicon',
-            action: $('#site-favicon-upload').data('url'),
-            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'ico',
-            error: function(file) {
-                Notify.danger('上传网站浏览器图标失败，请重试！')
-            },
-            success: function(response) {
-                response = $.parseJSON(response);
-                $("#site-favicon-container").html('<img src="' + response.url + '" style="margin-bottom: 10px;">');
-                $form.find('[name=favicon]').val(response.path);
+        var uploader1 = new WebUploader({
+            element: '#site-favicon-upload'
+        });
+
+        uploader1.on('uploadSuccess', function(file, response ) {
+            var url = $("#site-favicon-upload").data("gotoUrl");
+
+            $.post(url, response ,function(data){
+                $("#site-favicon-container").html('<img src="' + data.url + '" style="margin-bottom: 10px;">');
+                $form.find('[name=favicon]').val(data.path);
                 $("#site-favicon-remove").show();
                 Notify.success('上传网站浏览器图标成功！');
-            }
+            });
         });
 
         $("#site-favicon-remove").on('click', function(){

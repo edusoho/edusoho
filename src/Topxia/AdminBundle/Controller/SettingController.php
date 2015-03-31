@@ -162,19 +162,18 @@ class SettingController extends BaseController
 
     public function logoUploadAction(Request $request)
     {
-        $file = $request->files->get('logo');
-        if (!FileToolkit::isImageFile($file)) {
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+        if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $site = $this->getSettingService()->get('site', array());
 
-        $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $site['logo'] = ltrim($site['logo'], '/');
 
         $this->getSettingService()->set('site', $site);
@@ -186,7 +185,7 @@ class SettingController extends BaseController
             'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo']),
         );
 
-        return new Response(json_encode($response));
+        return $this->createJsonResponse($response);
 
     }
 
@@ -246,18 +245,18 @@ class SettingController extends BaseController
 
     public function faviconUploadAction(Request $request)
     {
-        $file = $request->files->get('favicon');
-        if (!FileToolkit::isIcoFile($file)) {
-            throw $this->createAccessDeniedException('图标格式不正确！');
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+        if (!FileToolkit::isImageFile($objectFile)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
         }
-        $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
 
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $site = $this->getSettingService()->get('site', array());
 
-        $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $site['favicon'] = ltrim($site['favicon'], '/');
 
         $this->getSettingService()->set('site', $site);
@@ -269,7 +268,7 @@ class SettingController extends BaseController
             'url' => $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
         );
 
-        return new Response(json_encode($response));
+        return $this->createJsonResponse($response);
     }
 
     public function faviconRemoveAction(Request $request)
@@ -1096,9 +1095,9 @@ class SettingController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getUploadFileService()
+    protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     protected function getAppService()
