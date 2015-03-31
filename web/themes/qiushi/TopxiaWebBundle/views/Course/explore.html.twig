@@ -17,8 +17,13 @@
         {% if category.id %}
         <li class="active">
             <span style="display: inline-block"> 
-              <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort,first:first }) }}">{{ category.name }}<i class="fa fa-times"></i> 
+            {% if category.parentId == 0 %}
+              <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort }) }}">{{ category.name }}<i class="fa fa-times"></i> 
               </a>
+              {% elseif  category.parentId != 0 %}
+                <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort,first:first,category:category.parentId }) }}">{{ category.name }}<i class="fa fa-times"></i> 
+                </a>
+              {% endif %}
             </span>
          
         </li>
