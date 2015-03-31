@@ -166,7 +166,7 @@
               <h3>{{ liveCourses.title }}</h3>
 
               <p style="opacity: 0; height: 0px; display: none;">{{ liveCourses.about|plain_text(60) }}</p>
-              <span class="livetime pull-left">{{ liveCourses.startTime|date('n月j日 H:i') }} 开课</span>
+              <span class="livetime pull-left">{{ liveCourses.freeStartTime|date('n月j日 H:i') }} 开课</span>
                 <span class="nickname pull-right clearfix">
                   <a class="text-muted" href=""><i class="fa fa-user"></i>
                         {% for teacher in liveCourses.teachers %}
