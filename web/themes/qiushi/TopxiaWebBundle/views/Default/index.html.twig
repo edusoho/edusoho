@@ -15,9 +15,9 @@
 	            <ul class="list-group">
 	            {% set lastestCourses = data('LatestCourses',{'count':5}) %}
 	            	 {% for lastcourses in lastestCourses %}
-			              <li class="list-group-item">
+			              <li class="list-group-item" style="font-size:14px;">
 			                <span class="badge pull-left">{{ loop.index }}</span>
-			                <a href="" class="pull-left">{{ lastcourses.title | plain_text(6) }}</a>
+			                <a href="" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
 						        {% if lastcourses.teachers %}
 			                        {% for teacher in lastcourses.teachers %}
 			                          {% if loop.index <= 5%}
@@ -64,7 +64,7 @@
 	
 	              <h3>{{ profile.truename }}</h3>
 	
-	              <p>{{ perTeacher.about|plain_text(100) }}</p>
+	              <p>{{ perTeacher.about|plain_text(65) }}</p>
 	            </a>
 	          </li>
 	        {% endfor %}
