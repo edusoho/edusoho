@@ -76,7 +76,9 @@
             <p class="teacher-info">
               {{ profile.about|plain_text(40)| raw}}
             </p>
-            <span class="pull-left course-num">在教课程：11</span>
+             {% set teacherCourses = data('TeacherCourses',{ userId:teacher.id,count:100 }) %}
+           
+            <span class="pull-left course-num">在教课程：{{ teacherCourses|length }}</span>
           </div>
         </div>
         </a>
