@@ -30,7 +30,9 @@ admin_group:
 admin_group_recommend:
     pattern: /group/{id}/recommend
     defaults: { _controller: CustomAdminBundle:Group:recommend }
-    
+admin_group_recommend_delete:
+    pattern: /group/{id}/recommend/delete
+    defaults: { _controller: CustomAdminBundle:Group:delete }
 admin_tag:
     pattern:  /tag
     defaults: { _controller: CustomAdminBundle:Tag:index }
@@ -51,5 +53,7 @@ admin_tag_delete:
     pattern:  /tag/{id}/delete
     defaults: { _controller: CustomAdminBundle:Tag:delete }
     methods:  [POST]
+
+    
 
 
