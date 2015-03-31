@@ -8,14 +8,14 @@
 	      <div class="com-xs-12 col-sm-12 col-md-9 col-lg-9">
 	        <img class="img-responsive" src="{{ asset('themes/qiushi/img/carousel.png') }}" alt="">
 	      </div>
-	      <div class="com-xs-12 col-sm-12 col-md-3 col-lg-3">
+	      <div class="com-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-left:-20px;">
 	        <div class="panel newcourse-list">
 	          <div class="panel-heading">最新课程列表</div>
 	          <div class="panel-body">
 	            <ul class="list-group">
 	            {% set lastestCourses = data('LatestCourses',{'count':5}) %}
 	            	 {% for lastcourses in lastestCourses %}
-			              <li class="list-group-item" style="font-size:14px;">
+			              <li class="list-group-item">
 			                <span class="badge pull-left">{{ loop.index }}</span>
 			                <a href="{{ path('course_show', {id:lastcourses.id}) }}" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
 						        {% if lastcourses.teachers %}
@@ -62,7 +62,7 @@
 	            <a href="{{ path('user_show', {id:perTeacher.id}) }}">
 	              <img src="{{ file_path(perTeacher.mediumAvatar, 'avatar.png') }}" class="img-circle">
 	
-	              <h2 class="recommend-teacher-name">{{ profile.truename }}</h2>
+	              <h2 style="font-size: 18px; margin-top: 15px" class="recommend-teacher-name">{{ profile.truename }}</h2>
 	
 	              <p>{{ perTeacher.about|plain_text(65) }}</p>
 	            </a>

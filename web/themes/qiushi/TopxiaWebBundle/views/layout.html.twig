@@ -71,11 +71,11 @@
 		  {% set firstCategories = data('Categories',{ group:'course'}) %}
 
 		  
-		        <ul class="nav navbar-nav hidden-sm hidden-xs">
-          <li class="dropdown">
+		 <div class="nav navbar-nav hidden-sm hidden-xs">
+          <div class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                ><span class="fa fa-navicon"></span>课程快速导航菜单</a>
-            <ul class="dropdown-menu course-expoler" role="menu">
+            <ul class="dropdown-menu course-expoler" role="menu" style="padding: 5px 10px;">
                 {% for firstCat in firstCategories %}
 					{% if firstCat.parentId == 0 %}
 						<li><a href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id)}) }}">{{ firstCat.name }}</a>
@@ -89,8 +89,8 @@
             		{% endif %}
 				{% endfor %}             
             </ul>
-          </li>
-        </ul>
+          </div>
+		 </div>
         
         <form class="navbar-form navbar-left hidden-sm hidden-xs clearfix" role="search" action="/search">
           <div class="form-group">
@@ -131,15 +131,15 @@
     <div class="container">
       <div class="collapse navbar-collapse">
         {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" sytle="font-size: 14px;">
         {% if setting('mobile.enabled') %}
           <li>
-            <a href="{{ path('mobile') }}" class=""><span class="fa fa-mobile hidden-sm hidden-xs"></span>手机版</a>
+            <a style="font-size: 14px" href="{{ path('mobile') }}" class=""><span class="fa fa-mobile hidden-sm hidden-xs"></span>手机版</a>
           </li>
         {% endif %}
 
           <li>
-            <a href="javascript:void(0);" onclick="AddFavorite('{{ setting("site.name", "EDUSOHO") }}',location.href)" class=""><span class="fa fa-heart hidden-sm hidden-xs"></span>收藏本站</a>
+            <a style="font-size: 14px" href="javascript:void(0);" onclick="AddFavorite('{{ setting("site.name", "EDUSOHO") }}',location.href)" class=""><span class="fa fa-heart hidden-sm hidden-xs"></span>收藏本站</a>
           </li>
         </ul>
         
@@ -182,8 +182,8 @@
       <p>关注求是微信公众号</p>
       <img src="images/weixin.png" alt="" class="img-responsive"/>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="site-footer-links">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
+      <div class="site-footer-links" >
         <p class="text-center">Powered by <a href="">Edusoho v5.1.3</a></p>
 
         <p class="text-center">湖州求是教育集团地址：<a href="">德清县武康镇府前港44号</a></p>

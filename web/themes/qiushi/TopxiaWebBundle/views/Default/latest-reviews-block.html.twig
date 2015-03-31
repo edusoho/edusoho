@@ -6,7 +6,7 @@
           <h3 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}评价</h3>
           
         </div>
-        <div class="panel-body">
+        <div class="panel-body" style ="margin-top:-13px!important;">
           <ul class="row">
 {% for review in reviews %}
         {% set author = users[review.userId]|default(null) %}
