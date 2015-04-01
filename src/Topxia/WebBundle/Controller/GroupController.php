@@ -581,7 +581,7 @@ class GroupController extends BaseController
             if($request->query->get('page')=="backGroundLogoCrop"){
                $this->getGroupService()->changeGroupBackgroundLogo($id, $pictureFilePath, $options);
             }else{
-               $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
+               $this->getGroupService()->changeGroupLogo($id, $options["images"]);
             }
           
             return $this->redirect($this->generateUrl('group_show', array(

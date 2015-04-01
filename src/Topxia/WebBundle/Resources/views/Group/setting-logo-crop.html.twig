@@ -14,10 +14,12 @@
 
 {% block group_setting_body %}
 
-<form id="avatar-crop-form" method="post" enctype="multipart/form-data">
   <div class="form-group clearfix">
     <div class="col-md-offset-2 col-md-8 controls">
-      <img src="{{ file_url(pictureUrl) }}" id="logo-crop" width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" style="max-width:100%"/>
+      <img src="{{ file_url(pictureUrl) }}" 
+      id="logo-crop" 
+      data-crop-img-url="{{path('file_img_crop', {group: 'group'})}}"
+      width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" style="max-width:100%"/>
       <div class="help-block">提示：请选择图片裁剪区域。</div>
     </div>
   </div>
@@ -30,6 +32,5 @@
     </div>
   </div>
   
-</form>
 
 {% endblock %}

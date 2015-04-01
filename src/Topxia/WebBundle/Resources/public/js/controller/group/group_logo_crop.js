@@ -29,7 +29,7 @@ define(function(require, exports, module) {
 
             imageCrop.crop({
                 imgs: {
-                    middle: [220, 220]
+                    logo: [200, 200]
                 }
             });
 
