@@ -24,7 +24,7 @@ class GroupController extends BaseController
 		$recommendList = $this->getGroupService()->getRecommendList(12);
 		
 		$recommendGroup=$this->getGroupService()->getGroupsByIds(ArrayToolkit::column($recommendList, 'id'));
-		var_dump($recommendGroup);die;
+		var_dump(ArrayToolkit::column($recommendList, 'id'));die;
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime'=>time()-30*24*60*60,
