@@ -15,11 +15,11 @@
 
   <div class="mbl">
 
-      <a href="{{ url('admin_app_center', {postStatus: 'all' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-info{% endif %}">全部</a>
+      <a href="{{ url('admin_app_center', {postStatus: 'all' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'all' %} btn-info{% endif %}">全部</a>
 
-      <a href=" {{ url('admin_app_center', {postStatus: 'theme' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-info{% endif %}">主题</a>
+      <a href=" {{ url('admin_app_center', {postStatus: 'theme' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme' %}btn-info{% endif %}">主题</a>
 
-      <a href=" {{ url('admin_app_center', {postStatus: 'app' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-info{% endif %}">应用</a>
+      <a href=" {{ url('admin_app_center', {postStatus: 'app' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'app' %}btn-info{% endif %}">应用</a>
   </div>
 
 
@@ -28,6 +28,7 @@
       <input type="checkbox" name="appTypeChoices" id="installedApps" 
          value="installedApps" data-url="{{path('admin_app_center_hidden',{postStatus: type })}}" {% if appTypeChoices  == 'installedApps' %} checked{% endif %} >
          隐藏已购应用
+       <input type="hidden" name="type" value= '{{type}}' id="type">
       </div>
   </div>
 
