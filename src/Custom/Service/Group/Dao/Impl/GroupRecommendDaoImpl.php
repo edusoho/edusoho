@@ -41,6 +41,13 @@ class GroupRecommendDaoImpl extends BaseDao implements GroupRecommendDao
         // exit();
         return $this->getConnection()->fetchAll($sql, $groupIds);
     }
+    
+	public function getRecommendList($count)
+	{
+		$sql = "SELECT * FROM {$this->table} ORDER BY seq ASC limit {$count}";
+		return $this->getConnection()->fetchAll($sql);
+	}
+
 
      
 

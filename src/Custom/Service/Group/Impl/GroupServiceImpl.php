@@ -34,6 +34,12 @@ class GroupServiceImpl extends BaseService implements GroupService
 		 return $this->getGroupRecommendDao()->getRecommendByGroupId($groupIds);
 	}
 
+	public function getRecommendList($count)
+	{
+		 return $this->getGroupRecommendDao()->getRecommendList($count);
+	}
+
+
     private function getLogService() 
     {
         return $this->createService('System.LogService');

@@ -16,5 +16,7 @@ interface GroupRecommendDao
 
     public function getRecommendByGroupId(array $groupIds);
     
+	public function getRecommendList($count);
+
 
 }

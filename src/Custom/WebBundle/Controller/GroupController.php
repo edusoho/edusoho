@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Controller;
+namespace Custom\WebBundle\Controller;
 use Topxia\Common\FileToolkit;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\WebBundle\Controller\BaseController;
+
 
 class GroupController extends BaseController 
 {
@@ -19,7 +21,8 @@ class GroupController extends BaseController
         $myJoinGroup = array();
 
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
-		
+		$recomendList = $this->getGroupService()->getRecommendList(12);
+		$recomendGroup=$this->getGroupService()->getGroupsByIds(ArrayToolkit::column($recomendList, 'id'));
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime'=>time()-30*24*60*60,
@@ -67,6 +70,8 @@ class GroupController extends BaseController
             'groupinfo'=>$groups,
             'user'=>$user,  
             'recentlyThread'=>$recentlyThread,
+            'recomendList'=>$recomendList,
+            'recomendGroup'=>$recomendGroup,
         ));
     }
 
@@ -816,7 +821,7 @@ class GroupController extends BaseController
     }
     private function getGroupService() 
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Custom:Group.GroupService');
     }
 
     private function getNotifiactionService()
@@ -887,6 +892,9 @@ class GroupController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
+    
+
+
     
     private function convertFiltersToConditions($id, $filters)
     {
