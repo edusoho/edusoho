@@ -36,9 +36,9 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $jobInstance = new $job['jobClass']();
         $jobInstance->execute($job['jobParams']);
 
-        // if ($job['cycle'] == 'once') {
-        //     $this->deleteJob($job['id']);
-        // }
+        if ($job['cycle'] == 'once') {
+            $this->deleteJob($job['id']);
+        }
     }
 
     public function deleteJob($id)
