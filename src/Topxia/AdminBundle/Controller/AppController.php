@@ -20,7 +20,7 @@ class AppController extends BaseController
     public function centerAction()
     {
         $apps = $this->getAppService()->getCenterApps();
-
+      
         if (isset($apps['error'])) {
             return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error'));
         }

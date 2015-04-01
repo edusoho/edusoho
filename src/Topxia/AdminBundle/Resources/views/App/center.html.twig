@@ -19,27 +19,37 @@
   {% else %}
   <table class="table table-striped table-hover">
     <thead>
-      <tr>
-        <th>应用描述</th>
-        <th>开发者</th>
-        <th>操作</th>
-      </tr>
+
     </thead>
     <tbody>
       {% for app in apps %}
         {% set installedApp = installedApps[app.code]|default(null) %}
       <tr>
         <td>
+          <img src="http://115.29.78.158:99/files/product/{{ app.icon }}" class="app-img pull-left mrl"/>
           <div>
             <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}"><strong class="text-primary">{{ app.name }}</strong></a>
              - 
             <span class="text-info">{{ app.latestVersion }}</span>
             {% if app.licensed %}
-              <span class="label label-warning">商业版应用</span>
+              <span class="label label-success mls">商业版</span>
             {% endif %}
           </div>
-          <div class="">{{ app.description|plain_text(100) }}</div>
-          <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div>
+          <div class="mtl app-info text-muted">作者： {{ app.developerName }}</div>
+          <div class="mts app-info text-muted">{% if app.type == "theme" %}主题{% else %}应用{% endif %}
+          </div>
+          <div class="class-rating mts">
+            {% if app.comment|default(null) %}
+              {% set comment = app.comment%}
+              <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
+              <span class="app-info text-muted">{{ comment.commenters }}个评价</span>
+            {% else %}
+              <span class="stars-0">&nbsp;</span>
+              <span class="app-info text-muted">0个评价</span>
+            {% endif %}
+          </div>
+         <!--  <div class="mtl">{{ app.description|plain_text(100) }}</div>
+         <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div> -->
         </td>
         <td>
           {{ app.developerName }}
