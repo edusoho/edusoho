@@ -12,28 +12,27 @@
     {{ web_macro.flash_messages() }}
 
     {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+    {% set coinRate = setting('coin.cash_rate', 1) %}
 
     {% if canModifyPrice %}
       <form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{setting('coin.cash_rate', 1)}}">
         {% if currency == 'coin' %}
           <div class="form-group">
-            <label class="col-md-2 control-label"> {{setting('coin.coin_name')}}价格</label>
+            <label class="col-md-2 control-label">{{setting('coin.coin_name')}}价格</label>
             <div class="col-md-8 controls">
-              <input type="text" name="coinPrice" class="form-control" value="{{course.originCoinPrice}}">
+              <input type="text" name="coinPrice" class="form-control course-current-price" value="{{course.originCoinPrice}}">
+              <div class="help-block">
+                <span class="text-muted">{{ coinRate }}{{setting('coin.coin_name')}} = １元</span>
+              </div>
+              {% if discount %}
+                <div class="alert alert-warning">
+                  <small>当前课程正处于「{{ discount.name }}」打折活动中。
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>  
+                </div>
+              {% endif %}
             </div>
           </div>
-
-          {% if discount %}
-            <div class="form-group">
-              <div class="col-md-8 col-md-offset-2">
-                <div class="alert alert-warning">
-                  当前课程正处于「{{ discount.name }}」打折活动中。<br>
-                  折扣： <strong>{{ course.discount }} 折</strong>，
-                  折后价：<strong>{{ course.coinPrice }} {{setting('coin.coin_name')}}</strong>。
-                </div>
-              </div>
-            </div>
-          {% endif %}
 
           <div class="form-group">
             <label class="col-md-2 control-label">手机端价格</label>
@@ -47,21 +46,19 @@
           <div class="form-group">
             <label class="col-md-2 control-label">价格</label>
             <div class="col-md-8 controls">
-              <input type="text" name="price" class="form-control" value="{{course.originPrice}}">
-            </div>
-          </div>
-
-          {% if discount %}
-            <div class="form-group">
-              <div class="col-md-8 col-md-offset-2">
+              <input type="text" name="price" class="form-control course-current-price" value="{{course.originPrice}}">
+              <div class="help-block">
+              </div>
+              {% if discount %}
                 <div class="alert alert-warning">
                   当前课程正处于「{{ discount.name }}」打折活动中。<br>
                   折扣： <strong>{{ course.discount }} 折</strong>，
-                  折后价：<strong>{{ course.price }} 元</strong>。
+                  折后价：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> 元</strong>。
                 </div>
-              </div>
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
+
 
         {% endif %}
 
