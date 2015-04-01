@@ -564,6 +564,7 @@ class WebExtension extends \Twig_Extension
     private function parseUri($uri, $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
+        $request = $this->container->get('request');
         $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
         $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
         
@@ -596,7 +597,7 @@ class WebExtension extends \Twig_Extension
             if (array_key_exists($fileName, $defaultSetting)) {
                 $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
             }else if(isset($defaultSetting["default".ucfirst($category)]) && $defaultSetting["defaultAvatar"] && array_key_exists("smallDefault".ucfirst($category)."Uri", $defaultSetting)){
-                $uri = $defaultSetting["smallDefault".ucfirst($category)."Uri"];
+                $uri = $defaultSetting["largeDefault".ucfirst($category)."Uri"];
                 $url = $this->parseUri($uri);
             } else {
                 $url = $assets->getUrl($publicUrlpath . $category);

@@ -8,6 +8,7 @@ define(function(require, exports, module) {
 
         var imageCrop = new ImageCrop({
             element: "#logo-crop",
+            group: 'group',
             cropedWidth: 200,
             cropedHeight: 200
         });

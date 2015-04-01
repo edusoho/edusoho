@@ -6,6 +6,7 @@ define(function(require, exports, module) {
 
         var imageCrop = new ImageCrop({
             element: "#default-avatar-crop",
+            group: 'system',
             cropedWidth: 200,
             cropedHeight: 200
         });

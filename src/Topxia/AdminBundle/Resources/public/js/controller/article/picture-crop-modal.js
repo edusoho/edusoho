@@ -9,6 +9,7 @@ define(function(require, exports, module) {
         var $modal = $("#modal");
         var imageCrop = new ImageCrop({
             element: "#article-pic-crop",
+            group: 'article',
             cropedWidth: 216,
             cropedHeight: 120
         });

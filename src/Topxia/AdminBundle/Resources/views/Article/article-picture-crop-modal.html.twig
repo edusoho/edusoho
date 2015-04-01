@@ -6,12 +6,11 @@
     </div>
     <div class="modal-body">
 
-    <form id="article-pic-crop-form" method="post" action="{{ path('admin_article_picture_crop') }}" enctype="multipart/form-data">
+    <form id="article-pic-crop-form" method="post" >
      
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
           <img src="{{ file_url(pictureUrl) }}" id="article-pic-crop"
-           data-crop-img-url="{{path('file_img_crop', {group: 'article'})}}"
            width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
           <div class="help-block">提示：请选择图片裁剪区域。</div>
         </div>
@@ -26,8 +25,6 @@
         </div>
       </div>
 
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      
     </form>
 </div>
           <div class="modal-footer">  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>

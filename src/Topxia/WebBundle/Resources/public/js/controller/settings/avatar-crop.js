@@ -11,6 +11,7 @@ define(function(require, exports, module) {
 
         var imageCrop = new ImageCrop({
             element: "#avatar-crop",
+            group: "user",
             cropedWidth: 200,
             cropedHeight: 200,
         });

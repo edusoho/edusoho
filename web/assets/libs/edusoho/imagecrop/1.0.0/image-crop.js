@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     var ImageCrop = Widget.extend({
     	attrs: {
-    		
+    		group: 'default'
         },
 
         events: {
@@ -40,11 +40,11 @@ define(function(require, exports, module) {
 
         crop: function(postData){
             var self = this;
-        	var cropImgUrl = this.element.data("cropImgUrl");
+        	var cropImgUrl = '/file/img/crop';
         	if(!postData) {
         		postData = {};
         	}
-        	postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height()});
+        	postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height(), group: self.element.data("token")});
             
             $.post(cropImgUrl, postData ,function(response){
                 self.trigger("afterCrop", response);

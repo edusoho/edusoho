@@ -98,7 +98,7 @@ file_upload:
     methods: [POST]
 
 file_img_crop:
-    pattern:  /file/{group}/img/crop
+    pattern:  /file/img/crop
     defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 

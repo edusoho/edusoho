@@ -11,6 +11,7 @@ define(function(require, exports, module) {
 
         var imageCrop = new ImageCrop({
             element: "#course-picture-crop",
+            group: "course",
             cropedWidth: 480,
             cropedHeight: 270
         });

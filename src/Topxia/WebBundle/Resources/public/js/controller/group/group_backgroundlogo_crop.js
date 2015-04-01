@@ -5,8 +5,9 @@ define(function(require, exports, module) {
 
         var imageCrop = new ImageCrop({
             element: "#logo-crop",
-            cropedWidth: 1070,
-            cropedHeight: 340
+            group: 'group',
+            cropedWidth: 1140,
+            cropedHeight: 150
         });
 
         imageCrop.on("afterCrop", function(response){
@@ -21,7 +22,7 @@ define(function(require, exports, module) {
 
             imageCrop.crop({
                 imgs: {
-                    backgroundLogo: [1140,279]
+                    backgroundLogo: [1140,150]
                 }
             });
 
