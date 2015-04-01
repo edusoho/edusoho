@@ -95,7 +95,6 @@ class CustomOrderController extends OrderController
         #如果是课程结算，需要判断该用户是否是会员，是否可以享受课程打折
         if($targetType  =='course' ){
             $orderInfo = $this->setShowVipDiscount($orderInfo,$currentUser);
-          
         }
 
 
@@ -106,7 +105,6 @@ class CustomOrderController extends OrderController
     public function createAction(Request $request)
     {
         $fields = $request->request->all(); 
-
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
@@ -209,7 +207,7 @@ class CustomOrderController extends OrderController
 
          if($vip){
             $level=$this->getLevelService()->getLevel($vip['levelId']);
-           
+      
             if($level && $this->getVipService()->checkUserInMemberLevel($user["id"],$vip['levelId'])=="ok"){
                
                 $status=$this->getVipService()->checkUserInMemberLevel($user["id"],$vip['levelId']);
@@ -217,7 +215,14 @@ class CustomOrderController extends OrderController
                 $vipPrice=$totalPrice*0.1*$level['courseDiscount'];
                 $vipPrice=sprintf("%.2f", $vipPrice);
                 $totalPrice = $vipPrice;
-                $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000;
+
+                $coinSetting = $this->setting("coin");
+                if ($coinSetting['coin_enabled']) {
+                     $cash_rate = empty($coinSetting["cash_rate"]) ? 1 : $coinSetting["cash_rate"]; 
+                    $amount = round($totalPrice*1000 - $fields['coinPayAmount']/ $cash_rate*1000)/1000;//出去汇率，以人民币计算
+                }else{
+                    $amount =  $vipPrice;
+                }
             }
         }
         return array( $amount,   $totalPrice );
