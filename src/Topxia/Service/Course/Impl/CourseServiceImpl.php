@@ -725,6 +725,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function setCoursesPriceWithDiscount($discountId)
 	{
+
+		$setting = $this->getSettingService()->get('coin');
+		if (!empty($setting['coin_enabled']) && !empty($setting['price_type']) && strtolower($setting['price_type']) == 'coin' ) {
+			$currency = 'coin';
+		} else {
+			$currency = 'default';
+		}
+
 		$discount = $this->getDiscountService()->getDiscount($discountId);
 		if (empty($discount)) {
 			throw $this->createServiceException("折扣活动#{#discountId}不存在！");
@@ -735,11 +743,20 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$count = $this->searchCourseCount($conditions);
 			$courses = $this->searchCourses($conditions, 'latest', 0, $count);
 			foreach ($courses as $course) {
-				$fields = array(
-					'price' => $course['originPrice'] * $discount['globalDiscount'] /10,
-					'discountId' => $discount['id'],
-					'discount' => $discount['globalDiscount'],
-				);
+				$fields = array();
+				if ($currency == 'coin') {
+					$fields = array(
+						'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] /10,
+					);
+				} else {
+					$fields = array(
+						'price' => $course['originPrice'] * $discount['globalDiscount'] /10,
+					);
+				}
+
+				$fields['discountId'] = $discount['id'];
+				$fields['discount'] = $discount['globalDiscount'];
+
 				$this->getCourseDao()->updateCourse($course['id'], $fields);
 			}
 		} else {
@@ -752,11 +769,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 					continue;
 				}
 				$course = $courses[$item['targetId']];
-				$fields = array(
-					'price' => $course['originPrice'] * $item['discount'] / 10,
-					'discountId' => $discount['id'],
-					'discount' => $item['discount'],
-				);
+				if ($currency == 'coin') {
+					$fields = array(
+						'coinPrice' => $course['originCoinPrice'] * $item['discount'] /10,
+					);
+				} else {
+					$fields = array(
+						'price' => $course['originPrice'] * $item['discount'] /10,
+					);
+				}
+
+				$fields['discountId'] = $discount['id'];
+				$fields['discount'] = $item['discount'];
+
 				$this->getCourseDao()->updateCourse($course['id'], $fields);
 			}
 		}
