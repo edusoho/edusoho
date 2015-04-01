@@ -979,17 +979,30 @@ class FileToolkit
     }
 
 
-    public static function cropImages($filePath, $cropOptions, $resizeArray)
+    public static function cropImages($filePath, $options)
     {
         $pathinfo = pathinfo($filePath);
         $imagine = new Imagine();
         $rawImage = $imagine->open($filePath);
 
+        $naturalSize = $rawImage->getSize();
+        $rate = $naturalSize->getWidth()/$options["width"];
+        $options["w"] = $rate*$options["w"];
+        $options["h"] = $rate*$options["h"];
+        $options["x"] = $rate*$options["x"];
+        $options["y"] = $rate*$options["y"];
+
         $filePaths = array();
-        foreach ($resizeArray as $key => $value) {
-            $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
-            $image = self::crop($rawImage, $savedFilePath, $cropOptions['x'], $cropOptions['y'], $cropOptions['w'], $cropOptions['h'], $value[0], $value[1]);
-            $filePaths[$key] = $savedFilePath;
+        if(!empty($options["imgs"]) && count($options["imgs"])>0) {
+            foreach ($options["imgs"] as $key => $value) {
+                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                $image = self::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
+                $filePaths[$key] = $savedFilePath;
+            }
+        } else {
+            $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}.{$pathinfo['extension']}";
+            $image = self::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h']);
+            $filePaths[] = $savedFilePath;
         }
 
         return $filePaths;

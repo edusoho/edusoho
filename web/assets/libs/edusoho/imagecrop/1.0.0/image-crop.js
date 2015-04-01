@@ -39,11 +39,13 @@ define(function(require, exports, module) {
         },
 
         crop: function(postData){
-        	var cropImgUrl = this.element.data("cropImgUrl");
-
-        	postData = $.extend(this.get("img").tellScaled(), postData);
-            
             var self = this;
+        	var cropImgUrl = this.element.data("cropImgUrl");
+        	if(!postData) {
+        		postData = {};
+        	}
+        	postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height()});
+            
             $.post(cropImgUrl, postData ,function(response){
                 self.trigger("afterCrop", response);
             })

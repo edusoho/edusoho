@@ -57,7 +57,7 @@ class FileController extends BaseController
         }
         $parsed = $this->getFileService()->parseFileUri($record['uri']);
 
-        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options, $options["imgs"]);
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
 
         $fields = array();
         foreach ($filePaths as $key => $value) {
