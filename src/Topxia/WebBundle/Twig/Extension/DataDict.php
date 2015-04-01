@@ -257,13 +257,11 @@ class DataDict
             'unstart' => '未开始',
             'running' => '进行中',
             'finished' => '已结束',
-            'closed' => '已关闭',
         ),
         'discountStatus:html' => array(
             'unstart' => '<span class="text-muted">未开始</span>',
             'running' => '<span class="text-success">进行中</span>',
             'finished' => '<span class="text-muted">已结束</span>',
-            'closed' => '<span class="text-muted">已关闭</span>',
         ),
 
 	);

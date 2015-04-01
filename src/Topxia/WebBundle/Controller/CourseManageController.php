@@ -206,10 +206,17 @@ class CourseManageController extends BaseController
             $levels = array();
         }
 
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))) {
+            $discount = $this->getDiscountService()->getDiscount($course['discountId']);
+        } else {
+            $discount = null;
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
+            'discount' => $discount,
         ));
     }
 
@@ -430,5 +437,10 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+    protected function getDiscountService()
+    {
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+    }
+
 
 }

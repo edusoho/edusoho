@@ -15,21 +15,6 @@ define(function(require, exports, module) {
     
         require('./header').run();
 
-        if ($("div .coin-price-modify").length > 0) {
-            $("input[name='coinPrice']").on('input',function(){
-                var element = $(this);
-                var cash_rate= element.data("cashrate");
-                var price = element.val();
-                var payRmb = parseFloat(price)/parseFloat(cash_rate);
-                if(price == ""){
-                    $("input[name='price']").attr('value',"0.00");
-                }else{
-                    $("input[name='price']").attr('value',roundUp(payRmb));
-                }
-            });
-        }
-    
-
         var validator = new Validator({
             element: '#price-form',
             failSilently: true,
@@ -45,6 +30,24 @@ define(function(require, exports, module) {
             element: '[name="coinPrice"]',
             rule: 'currency'
         });
+
+
+        if ($("div .coin-price-modify").length > 0) {
+            $("input[name='coinPrice']").on('input',function(){
+                var element = $(this);
+                var cash_rate= element.data("cashrate");
+                var price = element.val();
+                var payRmb = parseFloat(price)/parseFloat(cash_rate);
+                if(price == ""){
+                    $("input[name='price']").attr('value',"0.00");
+                }else{
+                    $("input[name='price']").attr('value',roundUp(payRmb));
+                }
+            });
+        }
+    
+
+
 
     };
 

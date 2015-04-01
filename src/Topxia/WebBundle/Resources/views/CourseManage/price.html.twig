@@ -23,6 +23,18 @@
             </div>
           </div>
 
+          {% if discount %}
+            <div class="form-group">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="alert alert-warning">
+                  当前课程正处于「{{ discount.name }}」打折活动中。<br>
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong>{{ course.coinPrice }} {{setting('coin.coin_name')}}</strong>。
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
           <div class="form-group">
             <label class="col-md-2 control-label">手机端价格</label>
             <div class="col-md-8 controls">
@@ -30,6 +42,7 @@
               <div class="help-block">因手机端不支持虚拟币支付，价格仍显示为人民币价格。</div>
             </div>
           </div>
+
         {% else %}
           <div class="form-group">
             <label class="col-md-2 control-label">价格</label>
@@ -37,6 +50,19 @@
               <input type="text" name="price" class="form-control" value="{{course.originPrice}}">
             </div>
           </div>
+
+          {% if discount %}
+            <div class="form-group">
+              <div class="col-md-8 col-md-offset-2">
+                <div class="alert alert-warning">
+                  当前课程正处于「{{ discount.name }}」打折活动中。<br>
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong>{{ course.price }} 元</strong>。
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
         {% endif %}
 
         {% if setting('vip.enabled') %}
