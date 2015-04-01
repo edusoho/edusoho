@@ -290,3 +290,28 @@ input.LargeInput {width: 600px;}
   width: 100px;
   height: 100px;
 }
+.info .left-info {
+
+  width: 20%;
+}
+.info .middle-info {
+
+  width: 48%;
+}
+.info .right-info {
+
+  width: 15%;
+  margin-top: -25px;
+  margin-left: 30px;
+}
+.info .right-info .price {
+
+  color: #f0ad4e;
+
+}
+
+.app-btn {
+
+  padding-left: 30px;
+  padding-right: 30px;
+}
