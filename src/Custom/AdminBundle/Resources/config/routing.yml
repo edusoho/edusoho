@@ -62,4 +62,7 @@ admin_user:
 admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: CustomAdminBundle:User:edit }
-
+    
+admin_teacher_tag_match:
+    pattern: /teacher/tag/match_jsonp
+    defaults: { _controller: CustomAdminBundle:TagTeacher:match }

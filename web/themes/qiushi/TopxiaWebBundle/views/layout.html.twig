@@ -78,11 +78,11 @@
             <ul class="dropdown-menu course-expoler" role="menu" style="padding: 5px 10px;">
                 {% for firstCat in firstCategories %}
 					{% if firstCat.parentId == 0 %}
-						<li><a class="list" href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),first:firstCat.id }) }}">{{ firstCat.name }}</a>
+						<li><a class="list" href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id)}) }}">{{ firstCat.name }}</a>
 							<ul class="sec-list">
 								{% set secCategories = data('Categories',{ group:'course',parentId:firstCat.id}) %}
 									{% for secCat in secCategories %}
-									<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),first:firstCat.id}) }}">{{ secCat.name }}</a></li>
+									<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id)}) }}">{{ secCat.name }}</a></li>
 									{% endfor %}
 							</ul>
 						</li>
@@ -112,7 +112,6 @@
 	            <li><a href="{{ path('message') }}">消息</a></li>
 	            <li><a href="{{ path('notification') }}">通知</a></li>
 	            	            {% if is_granted('ROLE_BACKEND') %}
-	            	 <li class="divider"></li>
                     <li><a href="{{ path('admin') }}">管理后台</a></li>
                    
                 {% endif %}
@@ -180,7 +179,7 @@
       <span class="">客服热线：400-889-9712</span>
 
       <p>关注求是微信公众号</p>
-      <img src="images/weixin.png" alt="" class="img-responsive"/>
+      <img src="{{ asset('themes/qiushi/img/weixin.png') }}" alt="" class="img-responsive"/>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
       <div class="site-footer-links" >

@@ -3,8 +3,16 @@
 {% set modalSize = 'large' %}
 
 {% block title %}编辑用户信息{% endblock %}
-{% block body %}
 
+
+
+
+{% block body %}
+{% 
+	set script_arguments = {
+	  tagMatchUrl: path('admin_teacher_tag_match')
+	  } 
+%}
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
 
   <div class="row form-group">
@@ -90,6 +98,15 @@
         <input type="text" id="title" name="title" class="form-control" value="{{profile.title}}">
      </div>
     </div>
+     <p></p>
+
+	<div class="row form-group">
+  <label class="col-md-2 control-label">标签</label>
+  <div class="col-md-7 controls">
+  	<input type="text" id="course_tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tags|join(',') }}" data-explain="将会应用于按标签搜索课程、相关课程的提取等">
+  	<div class="help-block" style="display:none;"></div>
+  </div>
+</div>
     <p></p>
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
@@ -201,4 +218,5 @@
   <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
   <script>app.load('customadminbundle/controller/user/edit-modal')</script>
+
 {% endblock %}

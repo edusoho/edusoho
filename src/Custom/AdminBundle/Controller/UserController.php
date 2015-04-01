@@ -106,11 +106,13 @@ class UserController extends BaseController
                 array_push($roles, 'ROLE_USER');
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
+			$formData = $request->request->all();
 
             $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
+
         return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
     }
 
@@ -120,10 +122,24 @@ class UserController extends BaseController
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
+        
         if ($request->getMethod() == 'POST') {
+	        $tags	= $request->request->get('tags');
+			$exlodeTags= explode(',', $tags);
+			$exlodeTags = $this->getTagService()->findTagsByNames($exlodeTags);
+			array_walk($exlodeTags, function(&$item, $key) {
+				$item = (int) $item['id'];
+			});
+			if (is_array($exlodeTags) and !empty($exlodeTags)) {
+    			$tags = '|' . implode('|', $exlodeTags) . '|';
+    		} else {
+    			$tags = '';
+    		}
+    		$tagsField['tags']= $tags;
             $profile = $request->request->all();
             if (!( (strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']) )) {
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
+                $this->getUserService()->updateUser($user['id'],$tagsField);
                 $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
                 $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
@@ -133,11 +149,13 @@ class UserController extends BaseController
         }
 
         $fields=$this->getFields();
-
+        $exlodeTags = empty($user['tags']) ? array() : explode('|', trim($user['tags'], '|'));
+		$tags = $this->getTagService()->findTagsByIds($exlodeTags);
         return $this->render('CustomAdminBundle:User:edit-modal.html.twig', array(
             'user' => $user,
             'profile'=>$profile,
             'fields'=>$fields,
+            'tags' => ArrayToolkit::column($tags, 'name')
         ));
     }
 
@@ -446,6 +464,11 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+	private function getTagService()
+	{
+        return $this->getServiceKernel()->createService('Custom:Taxonomy.TagTeacherService');
+	}
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -465,6 +488,10 @@ class UserController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
+    	protected function getUserService()
+	{
+		return $this->getServiceKernel()->createService('Custom:User.UserService');
+	}
 
     protected function getNotifiactionService()
     {
