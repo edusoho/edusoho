@@ -57,7 +57,7 @@ class AppServiceImpl extends BaseService implements AppService
             throw $this->createServiceException('参数缺失,注册APP失败!');
         }
 
-        $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version'));
+        $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version', 'type'));
 
         $app['fromVersion'] = $app['version'];
         $app['description'] = empty($app['description']) ? '' : $app['description'] ;
