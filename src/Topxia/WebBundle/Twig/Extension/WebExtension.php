@@ -531,12 +531,9 @@ class WebExtension extends \Twig_Extension
 
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
     {
-        $assets = $this->container->get('templating.helper.assets');
+        
         $request = $this->container->get('request');
 
-        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
-        
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
@@ -555,14 +552,24 @@ class WebExtension extends \Twig_Extension
                     }
                    return $url;
                 }
+            } else if($defaultSetting["defaultAvatar"] && array_key_exists($category."DefaultAvatarUri", $defaultSetting)){
+                $uri = $defaultSetting[$category."DefaultAvatarUri"];
             } else {
                 return $url;
             }
         }
 
+        return $this->parseUri($uri, $absolute);
+    }
+
+    private function parseUri($uri, $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        
         $uri = $this->parseFileUri($uri);
         if ($uri['access'] == 'public') {
-            
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
             $url = ltrim($url, ' /');
             $url = $assets->getUrl($url);
@@ -576,10 +583,7 @@ class WebExtension extends \Twig_Extension
             }
 
             return $url;
-        }else{
-
         }
-
     }
 
     public function getSystemDefaultPath($category,$systemDefault = false)
@@ -588,13 +592,15 @@ class WebExtension extends \Twig_Extension
         $publicUrlpath = 'assets/img/default/';
 
         $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
-
         if($systemDefault && isset($defaultSetting)){
             $fileName = 'default'.ucfirst($category).'FileName';
             if (array_key_exists($fileName, $defaultSetting)) {
                 $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
+            }else if(isset($defaultSetting["default".ucfirst($category)]) && $defaultSetting["defaultAvatar"] && array_key_exists("smallDefault".ucfirst($category)."Uri", $defaultSetting)){
+                $uri = $defaultSetting["smallDefault".ucfirst($category)."Uri"];
+                $url = $this->parseUri($uri);
             } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+                $url = $assets->getUrl($publicUrlpath . $category);
             }
         } else {
             $url = $assets->getUrl($publicUrlpath . $category);

@@ -23,35 +23,33 @@ class SystemDefaultSettingController extends BaseController
     {
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
+            $data = $options["images"];
+
+            $fileIds = ArrayToolkit::column($data, "id");
+            $files = $this->getFileService()->getFilesByIds($fileIds);
+
+            $files = ArrayToolkit::index($files, "id");
+            $fileIds = ArrayToolkit::index($data, "type");
 
             $setting = $this->getSettingService()->get("default",array());
+
+            $oldAvatars = array(
+                'smallAvatar' => !empty($setting['smallDefaultAvatarUri']) ? $setting['smallDefaultAvatarUri'] : null,
+                'largeAvatar' => !empty($setting['largeDefaultAvatarUri']) ? $setting['largeDefaultAvatarUri'] : null,
+            );
+            
             $setting['defaultAvatar'] = 1;
+            unset($setting['defaultAvatarFileName']);
+            $setting['smallDefaultAvatarUri'] = $files[$fileIds["small"]["id"]]["uri"];
+            $setting['largeDefaultAvatarUri'] = $files[$fileIds["large"]["id"]]["uri"];
+
             $this->getSettingService()->set("default",$setting);
-            $filename = $setting['defaultAvatarFileName'];
-            $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-            $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
-            $pictureFilePath = $directory.'/'.$filename;
-            $pathinfo = pathinfo($pictureFilePath);
-
-            $imagine = new Imagine();
-            $rawImage = $imagine->open($pictureFilePath);
-
-            $largeImage = $rawImage->copy();
-            $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-            $largeImage->resize(new Box(220, 220));
-            $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-            $largeImage->save($largeFilePath, array('quality' => 90));
-
-            $this->filesystem = new Filesystem();
-            $this->filesystem->copy($largeFilePath, $path.'large'.$filename);
-
-            $smallImage = $largeImage->copy();
-            $smallImage->resize(new Box(120, 120));
-            $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-            $smallImage->save($smallFilePath, array('quality' => 90));
-
-            $this->filesystem->copy($smallFilePath, $path.$filename);
+            array_map(function($oldAvatar){
+                if (!empty($oldAvatar)) {
+                    $this->getFileService()->deleteFileByUri($oldAvatar);
+                }
+            }, $oldAvatars);
 
             return $this->redirect($this->generateUrl('admin_setting_default'));
         }
