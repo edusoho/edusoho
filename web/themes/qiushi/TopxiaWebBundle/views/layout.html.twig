@@ -136,7 +136,7 @@
     <div class="container">
       <div class="collapse navbar-collapse">
         {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
-              <ul class="nav navbar-nav navbar-right" sytle="font-size: 14px;">
+              <ul class="nav navbar-nav navbar-right hidden-xs" sytle="font-size: 14px;">
         {% if setting('mobile.enabled') %}
           <li>
             <a style="font-size: 14px" href="{{ path('mobile') }}" class=""><span class="fa fa-mobile hidden-sm hidden-xs"></span>手机版</a>
