@@ -580,7 +580,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 		//添加动态
 		$this->dispatchEvent(
-		    'status.course_favorite', 
+		    'course.course_favorite', 
 		    new ServiceEvent($course)
 		);
 
@@ -1213,7 +1213,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 		$this->dispatchEvent(
-			'status.lesson_start', 
+			'course.lesson_start', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
 
@@ -1322,7 +1322,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    }
 		$memberFields['credit'] = $totalCredits;
 		$this->dispatchEvent(
-			'status.lesson_finish', 
+			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
 
@@ -1890,7 +1890,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
 		$this->dispatchEvent(
-		    'status.course_join', 
+		    'course.course_join', 
 		    new ServiceEvent($course, array('userId' => $member['userId']))
 		);
 		return $member;
