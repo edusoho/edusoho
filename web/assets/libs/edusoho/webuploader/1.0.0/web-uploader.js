@@ -72,6 +72,10 @@ define(function(require, exports, module) {
 
 		onClick: function(){
 			this.get("uploader").upload();
+		},
+
+		enable: function(){
+		    this.get("uploader").enable();
 		}
 
     });
