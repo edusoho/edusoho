@@ -49,7 +49,7 @@ admin_app:
     name: 教育云
     parent: admin
     router_name: admin_app_installed
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: menu
     active: app
@@ -731,7 +731,7 @@ admin_app_center_show:
     name: ES应用
     parent: admin_app
     router_name: admin_app_center
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: menu
     active: center
@@ -747,7 +747,7 @@ admin_app_center:
     name: 应用中心
     parent: admin_app_center_show
     router_name: admin_app_center
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: tab
     active: center
@@ -755,7 +755,7 @@ admin_app_installed:
     name: 已购项目
     parent: admin_app_center_show
     router_name: admin_app_installed
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: tab
     active: installed

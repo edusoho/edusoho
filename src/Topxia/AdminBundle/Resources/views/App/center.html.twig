@@ -10,6 +10,15 @@
 
   <div class="mbl">
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+  </div >
+
+  <div class="mbl">
+
+      <a href="{{ url('admin_app_center', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-info{% endif %}">全部</a>
+
+      <a href=" {{ url('admin_app_center', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-info{% endif %}">主题</a>
+
+      <a href=" {{ url('admin_app_center', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-info{% endif %}">应用</a>
   </div>
 
   {% if status|default(null) == 'error' %}
@@ -22,6 +31,15 @@
 
     </thead>
     <tbody>
+
+      {% if type == 'all' %}
+      {% set apps = apps %}
+      {% elseif type == 'theme'%}
+      {% set apps = theme %}
+      {% elseif type == 'app' %}
+      {% set apps = allApp %}
+      {% endif  %}
+
       {% for app in apps %}
         {% set installedApp = installedApps[app.code]|default(null) %}
       <tr>

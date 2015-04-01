@@ -17,33 +17,60 @@ class AppController extends BaseController
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
-    public function centerAction()
+    public function centerAction(Request $request, $postStatus)
     {
         $apps = $this->getAppService()->getCenterApps();
-      
+        $theme = array();
+        $app = array();
+        foreach ($apps as $key => $value) {
+            if ($value['type'] == 'theme') {
+                $theme[] = $value;
+            }elseif ($value['type'] == 'app') {
+                $app[] = $value;
+            }
+        }
+
         if (isset($apps['error'])) {
-            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error'));
+            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error','type' => $postStatus));
         }
 
         if (!$apps) {
-            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'unlink'));
+            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'unlink','type' => $postStatus));
         }
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
+
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
-            'apps' => $apps,
-            'installedApps' => $installedApps,
-        ));
+        'apps' => $apps,
+        'theme' => $theme,
+        'allApp' => $app,
+        'installedApps' => $installedApps,
+        'type' => $postStatus,
+    ));
+
     }
 
-    public function installedAction()
+    public function installedAction(Request $request, $postStatus)
     {
         $apps = $this->getAppService()->findApps(0, 100);
 
+        $theme = array();
+        $plugin = array();
+        foreach ($apps as $key => $value) {
+            if ($value['type'] == 'theme') {
+                $theme[] = $value;
+            }elseif ($value['type'] == 'plugin') {
+                $plugin[] = $value;
+            }
+        }
+
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
+            'theme' => $theme,
+            'plugin' => $plugin,
+            'type' => $postStatus,
         ));
     }
 
