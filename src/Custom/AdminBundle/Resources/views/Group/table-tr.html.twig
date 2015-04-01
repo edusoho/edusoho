@@ -9,6 +9,10 @@
     {% if group.status=='close' %}
           <label class="label label-danger">关闭</label>
     {% endif %}
+        {% if group.recommend %}
+        <br>
+      <span class="label label-default">荐:{{ group.recommend.createdTime|date('Y-m-d') }} / 序号:{{ group.recommend.seq }}</span>
+    {% endif %}
     </td>
 
     <td>
