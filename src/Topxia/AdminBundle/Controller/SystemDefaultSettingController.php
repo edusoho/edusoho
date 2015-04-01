@@ -35,6 +35,7 @@ class SystemDefaultSettingController extends BaseController
 
             $oldAvatars = array(
                 'smallAvatar' => !empty($setting['smallDefaultAvatarUri']) ? $setting['smallDefaultAvatarUri'] : null,
+                'smallAvatar' => !empty($setting['smallDefaultAvatarUri']) ? $setting['smallDefaultAvatarUri'] : null,
                 'largeAvatar' => !empty($setting['largeDefaultAvatarUri']) ? $setting['largeDefaultAvatarUri'] : null,
             );
             
@@ -91,12 +92,14 @@ class SystemDefaultSettingController extends BaseController
 
             $oldAvatars = array(
                 'smallCoursePicture' => !empty($setting['smallDefaultCoursePictureUri']) ? $setting['smallDefaultCoursePictureUri'] : null,
+                'middleCoursePicture' => !empty($setting['middleDefaultCoursePictureUri']) ? $setting['middleDefaultCoursePictureUri'] : null,
                 'largeCoursePicture' => !empty($setting['largeDefaultCoursePictureUri']) ? $setting['largeDefaultCoursePictureUri'] : null,
             );
             
             $setting['defaultCoursePicture'] = 1;
             unset($setting['defaultCoursePictureFileName']);
             $setting['smallDefaultCoursePictureUri'] = $files[$fileIds["small"]["id"]]["uri"];
+            $setting['middleDefaultCoursePictureUri'] = $files[$fileIds["middle"]["id"]]["uri"];
             $setting['largeDefaultCoursePictureUri'] = $files[$fileIds["large"]["id"]]["uri"];
 
             $this->getSettingService()->set("default",$setting);

@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         var imageCrop = new ImageCrop({
             element: "#default-course-picture-crop",
             cropedWidth: 480,
-            cropedHeight: 270,
+            cropedHeight: 270
         });
 
         imageCrop.on("afterCrop", function(response){

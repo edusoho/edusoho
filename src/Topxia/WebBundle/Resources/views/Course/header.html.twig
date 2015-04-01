@@ -7,7 +7,7 @@
     <div class="panel panel-default  course-header">
       <div class="panel-body clearfix">
         <a href="{{ path('course_show', {id:course.id}) }}">
-            <img class="picture" src="{{ default_path('coursePicture',course.largePicture, 'small') }}" />
+            <img class="picture" src="{{ default_path('coursePicture',course.largePicture, 'large') }}" />
         </a>
 
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 

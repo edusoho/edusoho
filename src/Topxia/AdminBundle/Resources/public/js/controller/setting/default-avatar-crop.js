@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         var imageCrop = new ImageCrop({
             element: "#default-avatar-crop",
             cropedWidth: 200,
-            cropedHeight: 200,
+            cropedHeight: 200
         });
 
         imageCrop.on("afterCrop", function(response){
@@ -23,7 +23,8 @@ define(function(require, exports, module) {
             imageCrop.crop({
                 imgs: {
                     large: [200, 200],
-                    small: [120, 120]
+                    medium: [120, 120],
+                    small: [48, 48]
                 }
             });
 

@@ -10,7 +10,7 @@
                           {% for paidCourse in paidCourses %}
                           <div class="course-item clearfix">
                             <div class="course-img">
-                              <a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank"><img  src="{{ default_path('coursePicture',paidCourse.middlePicture, 'large') }}" alt=""></a>
+                              <a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank"><img  src="{{ default_path('coursePicture',paidCourse.middlePicture, 'middle') }}" alt=""></a>
                             </div>
                             <div class="course-title">
                               <h4><a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>

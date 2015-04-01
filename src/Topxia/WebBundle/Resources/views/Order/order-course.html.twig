@@ -2,7 +2,7 @@
   {% for course in courses %}
   <div class="col-md-4">
     <a href="{{ path('course_show', {id:course.id}) }}">
-      <img class="img-responsive" src="{{ default_path('coursePicture',course.middlePicture, 'large') }}" alt="{{ course.title }}">
+      <img class="img-responsive" src="{{ default_path('coursePicture',course.middlePicture, 'middle') }}" alt="{{ course.title }}">
     </a>
   </div>
   <div class="col-md-8">

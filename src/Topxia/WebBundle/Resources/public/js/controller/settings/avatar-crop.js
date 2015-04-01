@@ -29,7 +29,7 @@ define(function(require, exports, module) {
                 imgs: {
                     large: [200, 200],
                     medium: [120, 120],
-                    small: [48, 48],
+                    small: [48, 48]
                 }
             });
 
