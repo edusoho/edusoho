@@ -12,8 +12,8 @@
       </div>
       <div class="panel-body">
         <div class="row group-grids">
-          {% for recomend in recomendList %}
-		  	{% set group = recomendGroup[recomend.groupID] %}
+          {% for recommend in recommendList %}
+		  	{% set group = recommendGroup[recommend.groupID] %}
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
               <p>
                 <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">

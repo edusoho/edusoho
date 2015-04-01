@@ -21,8 +21,8 @@ class GroupController extends BaseController
         $myJoinGroup = array();
 
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
-		$recomendList = $this->getGroupService()->getRecommendList(12);
-		$recomendGroup=$this->getGroupService()->getGroupsByIds(ArrayToolkit::column($recomendList, 'id'));
+		$recommendList = $this->getGroupService()->getRecommendList(12);
+		$recommendGroup=$this->getGroupService()->getGroupsByIds(ArrayToolkit::column($recommendList, 'id'));
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime'=>time()-30*24*60*60,
@@ -70,8 +70,8 @@ class GroupController extends BaseController
             'groupinfo'=>$groups,
             'user'=>$user,  
             'recentlyThread'=>$recentlyThread,
-            'recomendList'=>$recomendList,
-            'recomendGroup'=>$recomendGroup,
+            'recommendList'=>$recommendList,
+            'recommendGroup'=>$recommendGroup,
         ));
     }
 
