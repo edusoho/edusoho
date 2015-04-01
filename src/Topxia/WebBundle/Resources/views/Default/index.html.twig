@@ -416,7 +416,7 @@
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar', teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
+              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar', teacher.smallAvatar, 'small') }}" class="teacher-avatar"></a>
               <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               <span class="teacher-title ellipsis">{{ teacher.title }}</span>
             </div>

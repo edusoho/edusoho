@@ -35,13 +35,14 @@ class SystemDefaultSettingController extends BaseController
 
             $oldAvatars = array(
                 'smallAvatar' => !empty($setting['smallDefaultAvatarUri']) ? $setting['smallDefaultAvatarUri'] : null,
-                'smallAvatar' => !empty($setting['smallDefaultAvatarUri']) ? $setting['smallDefaultAvatarUri'] : null,
+                'mediumAvatar' => !empty($setting['mediumDefaultAvatarUri']) ? $setting['mediumDefaultAvatarUri'] : null,
                 'largeAvatar' => !empty($setting['largeDefaultAvatarUri']) ? $setting['largeDefaultAvatarUri'] : null,
             );
             
             $setting['defaultAvatar'] = 1;
             unset($setting['defaultAvatarFileName']);
             $setting['smallDefaultAvatarUri'] = $files[$fileIds["small"]["id"]]["uri"];
+            $setting['mediumDefaultAvatarUri'] = $files[$fileIds["medium"]["id"]]["uri"];
             $setting['largeDefaultAvatarUri'] = $files[$fileIds["large"]["id"]]["uri"];
 
             $this->getSettingService()->set("default",$setting);
