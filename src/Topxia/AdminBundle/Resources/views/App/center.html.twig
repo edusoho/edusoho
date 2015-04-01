@@ -22,6 +22,16 @@
       <a href=" {{ url('admin_app_center', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-info{% endif %}">应用</a>
   </div>
 
+
+  <div class="checkbox-group appTypeChoices" RepeatDirection="Horizontal" id="appTypeChoices" name="appTypeChoices" style="float:right;margin-top:-45px;">
+      <div class="sortedCourses">
+      <input type="checkbox" name="appTypeChoices" id="installedApps" 
+         value="installedApps" data-url="{{path('search')}}" {% if appTypeChoices  == 'installedApps' %} checked{% endif %} >
+         隐藏已购应用
+      </div>
+  </div>
+
+
   {% if status|default(null) == 'error' %}
     <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
   {% elseif  status|default(null) == 'unlink' %}

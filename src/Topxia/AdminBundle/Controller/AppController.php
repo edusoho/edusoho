@@ -19,6 +19,8 @@ class AppController extends BaseController
 
     public function centerAction(Request $request, $postStatus)
     {
+        $appTypeChoices = $request->query->get('appTypeChoices');       
+
         $apps = $this->getAppService()->getCenterApps();
         $theme = array();
         $app = array();
@@ -41,6 +43,18 @@ class AppController extends BaseController
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
+        if($appTypeChoices == 'installedApps'){
+            $conditions = array(
+                'status' => 'published',
+                'type' => 'live'
+            );
+        }else{
+            $conditions = array(
+                'status' => 'published',
+                'title' => $keywords,
+                'categoryId' => $categoryId
+            );
+        }
 
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
         'apps' => $apps,
