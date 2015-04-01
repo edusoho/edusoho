@@ -61,21 +61,25 @@ class AppController extends BaseController
         $appsInstalled = $this->getAppService()->findApps(0, 100);
         $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
 
-        $theme = array();
-        $plugin = array();
         foreach ($appsInstalled as $key => $value) {
 
             $appsInstalled[$key]['installed'] = 1;
 
+        }
+
+        $apps = array_merge($apps, $appsInstalled);
+        $theme = array();
+        $plugin = array();
+        
+        foreach ($apps as $key => $value) {
+
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
-            }elseif ($value['type'] == 'plugin') {
+            }elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {
                 $plugin[] = $value;
             }
         }
 
-        $apps = array_merge($apps, $appsInstalled);
-      
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
