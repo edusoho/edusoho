@@ -53,12 +53,20 @@ class AppController extends BaseController
     }
 
     public function installedAction(Request $request, $postStatus)
-    {
-        $apps = $this->getAppService()->findApps(0, 100);
+    {   
+        $apps = $this->getAppService()->getCenterApps();
+
+        $apps = ArrayToolkit::index($apps, 'code');
+
+        $appsInstalled = $this->getAppService()->findApps(0, 100);
+        $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
 
         $theme = array();
         $plugin = array();
-        foreach ($apps as $key => $value) {
+        foreach ($appsInstalled as $key => $value) {
+
+            $appsInstalled[$key]['installed'] = 1;
+
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
             }elseif ($value['type'] == 'plugin') {
@@ -66,6 +74,8 @@ class AppController extends BaseController
             }
         }
 
+        $apps = array_merge($apps, $appsInstalled);
+      
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
