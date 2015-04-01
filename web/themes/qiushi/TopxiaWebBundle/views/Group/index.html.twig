@@ -12,6 +12,7 @@
       </div>
       <div class="panel-body">
         <div class="row group-grids">
+        {% if recommendList %}
           {% for recommend in recommendList %}
 		  	{% set group = recommendGroup[recommend.groupID] %}
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
@@ -23,9 +24,11 @@
               <p class="title"><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
             </div>
 
-          {% else %}
-            <div class="empty">暂无小组信息！</div>
           {% endfor %}
+          
+           {% else %}
+           <div class="empty">暂无小组信息！</div>
+           {% endif %}
         </div>
       </div>
     </div>
