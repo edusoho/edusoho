@@ -986,8 +986,11 @@ class FileToolkit
         $rawImage = $imagine->open($filePath);
 
         $naturalSize = $rawImage->getSize();
-        $options["w"] = $naturalSize->getWidth()/$options["width"]*$options["w"];
-        $options["h"] = $naturalSize->getHeight()/$options["height"]*$options["h"];
+        $rate = $naturalSize->getWidth()/$options["width"];
+        $options["w"] = $rate*$options["w"];
+        $options["h"] = $rate*$options["h"];
+        $options["x"] = $rate*$options["x"];
+        $options["y"] = $rate*$options["y"];
 
         $filePaths = array();
         if(!empty($options["imgs"]) && count($options["imgs"])>0) {
