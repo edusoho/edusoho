@@ -579,16 +579,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("该收藏已经存在，请不要重复收藏!");
 		}
 		//添加动态
-		if($course['status'] == 'published' ){
-			$this->getStatusService()->publishStatus(array(
-				'type' => 'favorite_course',
-				'objectType' => 'course',
-				'objectId' => $courseId,
-				'properties' => array(
-					'course' => $this->simplifyCousrse($course),
-				)
-			));
-		}
+		$this->dispatchEvent(
+		    'status.course_favorite', 
+		    new ServiceEvent($course)
+		);
+
 		$this->getFavoriteDao()->addFavorite(array(
 			'courseId'=>$course['id'],
 			'userId'=>$user['id'], 
@@ -1894,17 +1889,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
 	    }
 		$this->getCourseDao()->updateCourse($courseId, $fields);
-		if($course['status'] == 'published' ){
-			$this->getStatusService()->publishStatus(array(
-				'type' => 'become_student',
-				'objectType' => 'course',
-				'objectId' => $courseId,
-				'userId' => $member["userId"],
-				'properties' => array(
-					'course' => $this->simplifyCousrse($course),
-				)
-			));
-		}
+		$this->dispatchEvent(
+		    'status.course_join', 
+		    new ServiceEvent($course, array('userId' => $member['userId']))
+		);
 		return $member;
 	}
 
@@ -2366,30 +2354,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		return false;
-	}
-
-	private function simplifyCousrse($course)
-	{
-		return array(
-			'id' => $course['id'],
-			'title' => $course['title'],
-			'picture' => $course['middlePicture'],
-			'type' => $course['type'],
-			'rating' => $course['rating'],
-			'about' => StringToolkit::plain($course['about'], 100),
-			'price' => $course['price'],
-		);
-	}
-
-	private function simplifyLesson($lesson)
-	{
-		return array(
-			'id' => $lesson['id'],
-			'number' => $lesson['number'],
-			'type' => $lesson['type'],
-			'title' => $lesson['title'],
-			'summary' => StringToolkit::plain($lesson['summary'], 100),
-		);
 	}
 
     private function getCourseDao ()
