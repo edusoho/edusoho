@@ -67,15 +67,29 @@ class AppController extends BaseController
     }
 
     public function installedAction(Request $request, $postStatus)
-    {
-        $apps = $this->getAppService()->findApps(0, 100);
+    {   
+        $apps = $this->getAppService()->getCenterApps();
 
+        $apps = ArrayToolkit::index($apps, 'code');
+
+        $appsInstalled = $this->getAppService()->findApps(0, 100);
+        $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
+
+        foreach ($appsInstalled as $key => $value) {
+
+            $appsInstalled[$key]['installed'] = 1;
+
+        }
+
+        $apps = array_merge($apps, $appsInstalled);
         $theme = array();
         $plugin = array();
+        
         foreach ($apps as $key => $value) {
+
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
-            }elseif ($value['type'] == 'plugin') {
+            }elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {
                 $plugin[] = $value;
             }
         }

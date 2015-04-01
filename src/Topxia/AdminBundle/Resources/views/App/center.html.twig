@@ -57,29 +57,32 @@
         <td>
           <img src="http://115.29.78.158:99/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
           <div class="mtm">
-            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}"><strong class="text-primary">{{ app.name }}</strong></a>
-    
-            {% if app.licensed %}
+            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
+              <h4><strong class="text-primary">{{ app.name }}</strong>            
+              {% if app.licensed %}
               <span class="label label-success mls">商业版</span>
-            {% endif %}
+              {% endif %}
+              </h4>
+            </a>
+  
           </div>
           
           <div class="info mtm mbm clearfix">
             <div class="left-info pull-left">
 
-              <div class="app-info text-muted">作者： {{ app.developerName }}</div>
-              <div class="mts app-info text-muted">{% if app.type == "theme" %}主题{% else %}应用{% endif %}
+              <div class="text-muted">作者： {{ app.developerName }}</div>
+              <div class="mts text-muted">{% if app.type == "theme" %}主题{% else %}应用{% endif %}
               </div>
-              <div class="class-rating mtm">
-                {% if app.comment|default(null) %}
-                  {% set comment = app.comment%}
-                  <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
-                  <span class="app-info text-muted">{{ comment.commenters }}个评价</span>
-                {% else %}
-                  <span class="stars-0">&nbsp;</span>
-                  <span class="app-info text-muted">0个评价</span>
-                {% endif %}
-              </div>
+<!--               <div class="class-rating mtm">
+  {% if app.comment|default(null) %}
+    {% set comment = app.comment%}
+    <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
+    <span class="text-muted">{{ comment.commenters }}个评价</span>
+  {% else %}
+    <span class="stars-0">&nbsp;</span>
+    <span class="text-muted">0个评价</span>
+  {% endif %}
+</div> -->
             </div>
 
             <div class="middle-info pull-left short-long-text">
@@ -88,22 +91,18 @@
             </div>
 
             <div class="right-info pull-right">
-               {% if installedApp %}
-                  <a href="javascript:;" class="btn btn-default disabled app-btn">已安装</a>
+
+               {% if app.userAccess == 'ok' or installedApp %}
+                <a href="javascript:;" class="btn btn-default disabled app-btn">已购买</a>
                 {% else %}
-                  {% if app.userAccess == 'ok' %}
-                    <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'}) }}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
-                  {% else %}
                     <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
-                  {% endif %}
-                {% endif %}
+               {% endif %}
+               
+
+
                 <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
             </div>
-          </div>
-
-
-
-           
+          </div> 
           
          <!--  
          <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div> -->
