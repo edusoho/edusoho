@@ -343,28 +343,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $course;
 	}
 
-	public function setCoursePrice($id, $courseFields)
-	{
-		$course = $this->getCourseDao()->getCourse($id);
-		if (empty($course)) {
-			throw $this->createServiceException('课程不存在，更新失败！');
-		}
-
-		$fields = $this->_filterCourseFields(array(
-			'price' => (isset($courseFields['price'])) ? $courseFields['price'] : $course['originPrice'],
-			'coinPrice' => (isset($courseFields['coinPrice'])) ? $courseFields['coinPrice'] : $course['originCoinPrice'],
-			'discountId' => (isset($courseFields['discountId'])) ? $courseFields['discountId'] : 0
-		));
-
-		$this->getLogService()->info('course', 'update', "打折活动 更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
-
-		$fields = CourseSerialize::serialize($fields);
-
-		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
-
-		return CourseSerialize::unserialize($updatedCourse);
-	}
-
 	public function updateCourse($id, $fields)
 	{
 		$course = $this->getCourseDao()->getCourse($id);
@@ -740,6 +718,60 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
 	}
 
+	public function setCoursePrice($courseId, $currency, $price)
+	{
+
+	}
+
+	public function setCoursesPriceWithDiscount($discountId)
+	{
+		$discount = $this->getDiscountService()->getDiscount($discountId);
+		if (empty($discount)) {
+			throw $this->createServiceException("折扣活动#{#discountId}不存在！");
+		}
+
+		if ($discount['type'] == 'global') {
+			$conditions = array('notFree' => true);
+			$count = $this->searchCourseCount($conditions);
+			$courses = $this->searchCourses($conditions, 'latest', 0, $count);
+			foreach ($courses as $course) {
+				$fields = array(
+					'price' => $course['originPrice'] * $discount['globalDiscount'] /10,
+					'discountId' => $discount['id'],
+					'discount' => $discount['globalDiscount'],
+				);
+				$this->getCourseDao()->updateCourse($course['id'], $fields);
+			}
+		} else {
+			$count = $this->getDiscountService()->findItemsCountByDiscountId($discountId);
+			$items = $this->getDiscountService()->findItemsByDiscountId($discountId, 0, $count);
+			$courseIds = ArrayToolkit::column($items, 'targetId');
+			$courses = $this->findCoursesByIds($courseIds);
+			foreach ($items as $item) {
+				if (empty($courses[$item['targetId']])) {
+					continue;
+				}
+				$course = $courses[$item['targetId']];
+				$fields = array(
+					'price' => $course['originPrice'] * $item['discount'] / 10,
+					'discountId' => $discount['id'],
+					'discount' => $item['discount'],
+				);
+				$this->getCourseDao()->updateCourse($course['id'], $fields);
+			}
+		}
+
+	}
+
+	public function revertCoursesPriceWithDiscount($discountId)
+	{
+		$discount = $this->getDiscountService()->getDiscount($discountId);
+		if (empty($discount)) {
+			throw $this->createServiceException("折扣活动#{#discountId}不存在！");
+		}
+
+		$this->getCourseDao()->clearCourseDiscountPrice($discountId);
+	}
 
 	private function autosetCourseFields($courseId)
 	{
@@ -2569,7 +2601,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->createDao('Course.CourseNoteDao');
     }
 
-
     private function getCourseMaterialService()
     {
         return $this->createService('Course.MaterialService');
@@ -2578,7 +2609,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getAppService()
     {
         return $this->createService('CloudPlatform.AppService');
-    }	
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('Discount:Discount.DiscountService');
+    }
 
 }
 

@@ -212,8 +212,8 @@ class CourseController extends BaseController
 	{
 		$course = $this->getCourseService()->getCourse($id);
 
-        if (($course['discountId'] > 0)&&($this->isPluginInstalled("DiscountActivity"))){
-            $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountId']);
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
+            $course['discount'] = $this->getDiscountService()->getDiscount($course['discountId']);
         }
 
         $code = 'ChargeCoin';
@@ -1068,9 +1068,9 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    protected function getDiscountActivityService() 
+    protected function getDiscountService() 
     {
-        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }    
 
     protected function getClassroomService()

@@ -144,6 +144,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
+    public function clearCourseDiscountPrice($discountId)
+    {
+        $sql = "UPDATE course SET price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
+        return $this->getConnection()->executeQuery($sql, array($discountId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

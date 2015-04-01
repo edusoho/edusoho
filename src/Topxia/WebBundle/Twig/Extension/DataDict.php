@@ -249,7 +249,7 @@ class DataDict
             'userName'=>'用户名',
         ),
         'discountType' => array(
-            'limit' => '限时打折',
+            'discount' => '限时打折',
             'free' => '限时免费',
             'global' => '全站打折',
         ),

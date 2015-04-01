@@ -203,30 +203,11 @@ class CourseManageController extends BaseController
             }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
-            if ($this->isPluginInstalled("DiscountActivity")) {
-                $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($id, $currentTime=time());
-                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountId'])) {
-                    $this->getCourseService()->setCoursePrice(
-                        $course['id'], 
-                        array(
-                            'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
-                            'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
-                            'discountId' => intval($maxDiscountItem['activityId'])
-                        )
-                    );                    
-                }
-            }
 
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-
-
         response:
-
-        if (($course['discountId'] > 0)&&($this->isPluginInstalled("DiscountActivity"))){
-            $course['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($course['discountId']);
-        }
 
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
@@ -447,12 +428,7 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getDiscountActivityService() 
-    {
-        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
-    }    
+    } 
 
     protected function getClassroomService()
     {

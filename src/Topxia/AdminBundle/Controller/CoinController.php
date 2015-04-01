@@ -105,14 +105,6 @@ class CoinController extends BaseController
                 goto response;
 
             }
-
-            $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
-
-            foreach ($courses as $courseIndex => $course) {              
-                if ($courses[$courseIndex]['discountId'] > 0){
-                    $courses[$courseIndex]['discountActivity'] = $this->getDiscountActivityService()->getDiscountActivity($courses[$courseIndex]['discountId']);
-                }
-            }
             
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
             'set' => $set,
@@ -168,32 +160,14 @@ class CoinController extends BaseController
     private function updateCoursesPrice($data,$rate)
     {   
         foreach ($data as $key => $value) {
-            
             $this->getCourseService()->updateCourse($key,array('price'=>$value,'coinPrice'=>$value*$rate));
         }
     }
 
     private function updateCoursesCashPrice($data)
     {
-        $plugin = $this->getAppService()->findInstallApp($pluginCode="DiscountActivity");
-
         foreach ($data as $key => $value) {
-            $course = $this->getCourseService()->getCourse($key);
             $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
-
-            if (!empty($plugin)) {
-                $maxDiscountItem = $this->getDiscountActivityService()->getMaxDiscountByCourseId($key, $currentTime=time());
-                if (($maxDiscountItem['discount'] > 0)&&($maxDiscountItem['activityId'] != $course['discountId'])) {
-                    $this->getCourseService()->setCoursePrice(
-                        $course['id'], 
-                        array(
-                            'price' => round($course['originPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0, 
-                            'coinPrice' => round($course['originCoinPrice'] * (100.0 - $maxDiscountItem['discount'])) / 100.0,
-                            'discountId' => intval($maxDiscountItem['activityId'])
-                        )
-                    );                    
-                }
-            }
         }
     }
 
@@ -944,11 +918,4 @@ class CoinController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-
-    protected function getDiscountActivityService() 
-    {
-        return $this->getServiceKernel()->createService('DiscountActivity:DiscountActivity.DiscountActivityService');
-    }
-
-
 }

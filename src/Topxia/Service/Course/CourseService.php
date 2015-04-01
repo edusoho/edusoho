@@ -62,8 +62,6 @@ interface CourseService
 
 	public function createCourse($course);
 
-	public function setCoursePrice($courseId, $courseFields);
-
 	public function updateCourse($id, $fields);
 
 	public function updateCourseCounter($id, $counter);
@@ -81,6 +79,12 @@ interface CourseService
 	public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
+
+	public function setCoursePrice($courseId, $currency, $price);
+
+	public function setCoursesPriceWithDiscount($discountId);
+
+	public function revertCoursesPriceWithDiscount($discountId);
 
 	/**
 	 * 删除课程
