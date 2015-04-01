@@ -20,9 +20,7 @@ interface GroupService
 
     public function openGroup($id);
 
-    public function changeGroupLogo($id, $data);
-
-    public function changeGroupBackgroundLogo($id, $pictureFilePath, $options);
+    public function changeGroupImg($id, $field, $data);
 
     public function joinGroup($user,$id);
 

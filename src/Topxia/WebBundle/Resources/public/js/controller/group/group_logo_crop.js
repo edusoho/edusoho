@@ -1,9 +1,4 @@
 define(function(require, exports, module) {
-    require("jquery.jcrop-css");
-    require("jquery.jcrop");
-    var Notify = require('common/bootstrap-notify');
-    var Validator = require('bootstrap.validator');
-    require('common/validator-rules').inject(Validator);
     var ImageCrop = require('edusoho.imagecrop');
 
     exports.run = function() {

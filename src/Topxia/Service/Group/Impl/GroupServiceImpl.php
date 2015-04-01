@@ -105,11 +105,15 @@ class GroupServiceImpl extends BaseService implements GroupService {
         ));
     }
 
-    public function changeGroupLogo($id, $data)
+    public function changeGroupImg($id, $field, $data)
     {
+        if(!in_array($field, array("logo", "backgroundLogo"))) {
+            throw $this->createServiceException('更新的字段错误！');
+        }
+
         $group=$this->getGroup($id);
         if (empty($group)) {
-            throw $this->createServiceException('小组不存在，logo更新失败！');
+            throw $this->createServiceException('小组不存在，更新失败！');
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
@@ -119,11 +123,11 @@ class GroupServiceImpl extends BaseService implements GroupService {
         $fileIds = ArrayToolkit::index($data, "type");
 
         $fields = array(
-            'logo' => $files[$fileIds["logo"]["id"]]["uri"],
+            $field => $files[$fileIds[$field]["id"]]["uri"],
         );
 
         $oldAvatars = array(
-            'logo' => $group['logo'] ? $group['logo'] : null,
+            $field => $group[$field] ? $group[$field] : null,
         );
 
         array_map(function($oldAvatar){
@@ -135,18 +139,6 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return  $this->getGroupDao()->updateGroup($id, $fields);
 
     }
-
-    public function changeGroupBackgroundLogo($id, $filePath, $options)
-    {
-        
-        $group=$this->getGroup($id);
-        $mediumFileRecord=$this->changeLogo($filePath,1140,279,$options,$group['backgroundLogo']);
-
-        return  $this->getGroupDao()->updateGroup($id, array(
-            'backgroundlogo' => $mediumFileRecord['uri'],
-        ));
-    }
-
 
     public function joinGroup($user,$groupId) 
     {
