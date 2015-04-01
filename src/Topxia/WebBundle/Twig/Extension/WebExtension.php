@@ -531,9 +531,8 @@ class WebExtension extends \Twig_Extension
 
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
     {
-        
+        $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
-
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
@@ -552,8 +551,8 @@ class WebExtension extends \Twig_Extension
                     }
                    return $url;
                 }
-            } else if($defaultSetting["defaultAvatar"] && array_key_exists($category."DefaultAvatarUri", $defaultSetting)){
-                $uri = $defaultSetting[$category."DefaultAvatarUri"];
+            } else if(array_key_exists($key, $defaultSetting) && $defaultSetting[$key]){
+                $uri = $defaultSetting[$size."Default".ucfirst($category)."Uri"];
             } else {
                 return $url;
             }
