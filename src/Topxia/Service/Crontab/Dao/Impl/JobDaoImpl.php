@@ -58,6 +58,11 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $this->getJob($id);
     }
 
+    public function deleteJob($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
     private function createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)

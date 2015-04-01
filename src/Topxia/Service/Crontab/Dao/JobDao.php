@@ -10,7 +10,9 @@ interface JobDao
 
     public function searchJobsCount($conditions, $orderBy, $start, $limit);
 
-    public function addJob($task);
+    public function addJob($job);
 
     public function updateJob($id, $fields);
+
+    public function deleteJob($id);
 }
