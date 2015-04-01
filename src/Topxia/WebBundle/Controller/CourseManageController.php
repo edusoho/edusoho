@@ -171,22 +171,9 @@ class CourseManageController extends BaseController
     public function priceAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        
-
-        $coinSetting=$this->getSettingService()->get('coin',array());
-        if(isset($coinSetting['cash_rate'])){
-            $cashRate=$coinSetting['cash_rate'];
-        }else{
-            $cashRate=1;
-        }
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
-        if ($this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -196,19 +183,33 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            
-            $course = $this->getCourseService()->updateCourse($id, $fields);
 
+            if (isset($fields['coinPrice'])) {
+                $this->getCourseService()->setCoursePrice($course['id'], 'coin', $fields['coinPrice']);
+                unset($fields['coinPrice']);
+            }
+
+            if (isset($fields['price'])) {
+                $this->getCourseService()->setCoursePrice($course['id'], 'default', $fields['price']);
+                unset($fields['price']);
+            }
+
+            $course = $this->getCourseService()->updateCourse($id, $fields);
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
         response:
 
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
-            'cashRate'=> empty($cashRate)? 1 : $cashRate
         ));
     }
 

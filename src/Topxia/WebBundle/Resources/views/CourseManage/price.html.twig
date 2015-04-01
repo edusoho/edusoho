@@ -7,170 +7,62 @@
 {% block main %}
 
 <div class="panel panel-default panel-col">
-	<div class="panel-heading">价格设置
-	</div>
-	<div class="panel-body">
-		{{ web_macro.flash_messages() }}
+  <div class="panel-heading">价格设置</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
 
-		{% if canModifyPrice %}
-		
-			<form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{cashRate}}">
-   			{% if setting('course.coursesPrice') == 0 %}
-   				{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-        				<div class="form-group">
-        					<div class="col-md-2 control-label">
-        						<label for="coinPrice"> {{setting('coin.coin_name')}}价格</label>
-        					</div>
-        					<div class="col-md-8 controls">
-        						<input type="text" id="coinPrice" name="coinPrice" class="form-control" value="{{course.originCoinPrice}}" data-cashrate="{{cashRate}}">
-                                                        <div class="help-block" {#style="display:none;"#}>
-                                                            {% if course.discountId > 0 and course.status == 'published' %}
-                                                                <br>
-                                                                <span class="text-muted" style="white-space: normal;">                    
-                                                                    当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            {% if course.coinPrice > 0 %}
-                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% else %}
-                            {% if course.price > 0 %}
-                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% endif %} )下，现价{{ course.coinPrice }}{{setting('coin.coin_name')}}， 活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                    
-                                                                </span>
-                                                            {% endif %}                                                             
-                                                        </div>
-        					</div>
-        				</div>
-        				
-        				<div class="form-group" >
-        					<div class="col-md-2 control-label">
-        						<label for="price">手机端价格</label>
-        					</div>
-        					<div class="col-md-8 controls">
-        						<input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
-        						<div class="help-block">
-                                                            因手机端不支持虚拟币支付，价格仍显示为人民币价格
-                                                            {% if course.discountId > 0 and course.status == 'published'  %}
-                                                                <br>
-                                                                <span class="text-muted" style="white-space: normal;">
-                                                                    当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            {% if course.coinPrice > 0 %}
-                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% else %}
-                            {% if course.price > 0 %}
-                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% endif %} )下，现价{{ course.price }}元，活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                     
-                                                                </span>
-                                                            {% endif %}                                                            
-        						</div>
-        					</div>
-        				</div>
-        				<div class="coin-price-modify"></div>
-        			{% elseif setting('coin.coin_enabled') and setting('coin.price_type') == 'RMB' %}
-        				<div class="form-group" >
-        					<div class="col-md-2 control-label">
-        						<label for="price">价格</label>
-        					</div>
-        					<div class="col-md-8 controls">
-        						<input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
-        						<div class="help-block" >
-        							<span class="text-muted">{{cashRate}}{{setting('coin.coin_name')}}可抵扣１元</span>
-                                                                {% if course.discountId > 0 and course.status == 'published' %}
-                                                                    <br>
-                                                                    <span class="text-muted" style="white-space: normal;">
-                                                                        当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            {% if course.coinPrice > 0 %}
-                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% else %}
-                            {% if course.price > 0 %}
-                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% endif %} )下，现价{{ course.price }}元，活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                         
-                                                                    </span>
-                                                                {% endif %}                                                                
-        						</div>
-        					</div>
-        				</div>
-        			{% else %}
-	        			<div class="form-group" >
-        					<div class="col-md-2 control-label">
-        						<label for="price">价格</label>
-        					</div>
-        					<div class="col-md-8 controls">
-                                                    <input type="text" id="price" name="price" class="form-control" value="{{course.originPrice}}" data-cashrate="{{cashRate}}">
-        					
-                                                    <div class="help-block" >
-                                                        {% if course.discountId > 0  and course.status == 'published' %}
-                                                            <span class="text-muted" style="white-space: normal;">
-                                                                当前课程处于活动“{{ (course.discountActivity.activityName)|default('') }}”({% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            {% if course.coinPrice > 0 %}
-                                {{ (course.coinPrice/course.originCoinPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% else %}
-                            {% if course.price > 0 %}
-                                {{ (course.price/course.originPrice * 10)|round(1, 'common') }}折
-                            {% else %}
-                                免费
-                            {% endif %}
-                        {% endif %} )下，现价{{ course.price }}元，活动中修改的价格都将有活动折扣，请谨慎修改
-                                                                 
-                                                            </span>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-        				</div>
-        			{% endif %}
-			{% endif %}
+    {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
 
-				{% if setting('vip.enabled') %}
+    {% if canModifyPrice %}
+      <form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{setting('coin.cash_rate', 1)}}">
+        {% if currency == 'coin' %}
+          <div class="form-group">
+            <label class="col-md-2 control-label"> {{setting('coin.coin_name')}}价格</label>
+            <div class="col-md-8 controls">
+              <input type="text" name="coinPrice" class="form-control" value="{{course.originCoinPrice}}">
+            </div>
+          </div>
 
-				<div class="form-group">
-					<div class="col-md-2 control-label">
-						<label for="price">会员课程设置</label>
-					</div>
-					<div class="col-md-8 controls">
-					  <select name="vipLevelId" class="form-control width-input width-input-large">
-					  	{{ select_options(levels, course.vipLevelId, '无') }}
-					  </select>
-						<div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
-					</div>
-				</div>
-				{% endif %}
+          <div class="form-group">
+            <label class="col-md-2 control-label">手机端价格</label>
+            <div class="col-md-8 controls">
+              <input type="text" name="price" class="form-control" value="{{course.originPrice}}">
+              <div class="help-block">因手机端不支持虚拟币支付，价格仍显示为人民币价格。</div>
+            </div>
+          </div>
+        {% else %}
+          <div class="form-group">
+            <label class="col-md-2 control-label">价格</label>
+            <div class="col-md-8 controls">
+              <input type="text" name="price" class="form-control" value="{{course.originPrice}}">
+            </div>
+          </div>
+        {% endif %}
 
+        {% if setting('vip.enabled') %}
+          <div class="form-group">
+            <label class="col-md-2 control-label">会员课程设置</label>
+            <div class="col-md-8 controls">
+              <select name="vipLevelId" class="form-control width-input width-input-large">
+                {{ select_options(levels, course.vipLevelId, '无') }}
+              </select>
+              <div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
+            </div>
+          </div>
+        {% endif %}
 
-				<div class="form-group">
-					<div class="col-md-offset-2 col-md-8 controls">
-						<button class="btn btn-fat btn-primary" id="price-save-btn" type="submit"  >保存</button>
-					</div>
-				</div>
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <button class="btn btn-fat btn-primary" id="price-save-btn" type="submit">保存</button>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          </div>
+        </div>
 
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    {% else %}
+      <div class="alert alert-danger">抱歉，您无权设置课程价格，如有需要请联系网站管理员！</div>
+    {% endif %}
 
-			</form>
-		{% else %}
-		  <div class="alert alert-danger">抱歉，您无权设置课程价格，如有需要请联系网站管理员！</div>
-		{% endif %}
-	</div>
+  </div>
 </div>
-
 {% endblock %}

@@ -714,7 +714,31 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function setCoursePrice($courseId, $currency, $price)
 	{
+		if (!in_array($currency, array('coin', 'default'))) {
+			throw $this->createServiceException("货币类型不正确");
+		}
 
+		$course = $this->getCourse($courseId);
+		if (empty($course)) {
+			throw $this->createServiceException("课程不存在");
+		}
+
+		if (($course['discountId'] > 0) && (intval($course['discount'] * 100) < 1000)) {
+			$discount = $course['discount'];
+		} else {
+			$discount = 10;
+		}
+
+		$fields = array();
+		if ($currency == 'coin') {
+			$fields['originCoinPrice'] = $price;
+			$fields['coinPrice'] = $price * ($discount / 10);
+		} else {
+			$fields['originPrice'] = $price;
+			$fields['price'] = $price * ($discount / 10);
+		}
+
+		return $this->getCourseDao()->updateCourse($course['id'], $fields);
 	}
 
 	public function setCoursesPriceWithDiscount($discountId)
