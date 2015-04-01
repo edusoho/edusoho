@@ -565,7 +565,7 @@ class GroupController extends BaseController
 
     }
 
-    public function groupSetLogoCropAction(Request $request,$file,$id)
+    public function logoCropAction(Request $request,$id)
     {
 
         $group = $this->getGroupService()->getGroup($id);
@@ -575,12 +575,6 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        $filename = $file;
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-        
         if($request->getMethod() == 'POST') {
 
             $options = $request->request->all();
@@ -590,32 +584,30 @@ class GroupController extends BaseController
                $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
             }
           
-        return $this->redirect($this->generateUrl('group_show', array(
-                    'id'=>$id,
-                    )));
+            return $this->redirect($this->generateUrl('group_show', array(
+                'id'=>$id,
+            )));
         }
-        try {
-
-            $imagine = new Imagine(); 
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {          
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('info', '该文件为非图片格式文件，请重新上传。');
+        
+        $fileId = $request->getSession()->get("fileId");
+        if(empty($fileId)) {
+            return $this->createMessageResponse("error", "参数不正确");
         }
 
-        $naturalSize = $image->getSize();
-        if($request->query->get('page')=="backGroundLogoCrop"){
-              $scaledSize = $naturalSize->widen(1070)->heighten(240);
-        }else{
-              $scaledSize = $naturalSize->widen(270)->heighten(270);
+        $file = $this->getFileService()->getFile($fileId);
+        if(empty($file)) {
+            return $this->createMessageResponse("error", "文件不存在");
         }
-      
-        $pictureUrl = 'tmp/' . $filename;
+        
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
+
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], 270, 270);
+
 
         return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'pictureUrl' => $pictureUrl,
+            'pictureUrl' => $parsed["path"],
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,));
 
@@ -886,6 +878,11 @@ class GroupController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
     
     private function convertFiltersToConditions($id, $filters)

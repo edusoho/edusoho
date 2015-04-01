@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-
+alert(22);
         var $form = $("#avatar-crop-form"),
             $picture = $("#avatar-crop");
 
