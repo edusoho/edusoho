@@ -22,7 +22,9 @@ class GroupController extends BaseController
 
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
 		$recommendList = $this->getGroupService()->getRecommendList(12);
+		
 		$recommendGroup=$this->getGroupService()->getGroupsByIds(ArrayToolkit::column($recommendList, 'id'));
+		var_dump($recommendGroup);die;
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime'=>time()-30*24*60*60,
