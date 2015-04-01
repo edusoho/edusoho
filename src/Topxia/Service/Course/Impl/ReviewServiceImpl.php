@@ -94,7 +94,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 				'userId' => $fields['userId'],
 				'courseId' => $fields['courseId'],
 				'rating' => $fields['rating'],
-				'isHidden' => $course['status'] == 'published' ? 0 : 1,
+				'private' => $course['status'] == 'published' ? 0 : 1,
 				'content' => empty($fields['content']) ? '' : $fields['content'],
 				'createdTime' => time(),
 			));

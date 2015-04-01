@@ -92,7 +92,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
                 ->andWhere('rating = :rating')
                 ->andWhere('content LIKE :content')
                 ->andWhere('courseId IN (:courseIds)')
-                ->andWhere('isHidden = :isHidden');     
+                ->andWhere('private = :private');     
 
         return $builder;
     }

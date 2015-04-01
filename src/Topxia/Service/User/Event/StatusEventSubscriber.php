@@ -34,7 +34,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'start_learn_lesson',
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -50,7 +50,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'learned_lesson',
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -69,7 +69,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'finished_testpaper',
             'objectType' => 'testpaper',
             'objectId' => $testpaper['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'testpaper' => $this->simplifyTestpaper($testpaper),
                 'result' => $this->simplifyTestpaperResult($testpaperResult),
@@ -86,7 +86,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'finished_homework',
             'objectType' => 'homework',
             'objectId' => $homework['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -104,7 +104,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'finished_exercise',
             'objectType' => 'exercise',
             'objectId' => $exercise['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -120,7 +120,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'favorite_course',
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
             )
@@ -135,7 +135,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'become_student',
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $course['status'] == 'published' ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
@@ -151,7 +151,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'become_student',
             'objectType' => 'classroom',
             'objectId' => $classroom['id'],
-            'isHidden' => $classroom['status'] == 'published' ? 0 : 1,
+            'private' => $classroom['status'] == 'published' ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'classroom' => $this->simplifyClassroom($classroom),
@@ -167,7 +167,7 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'type' => 'become_auditor',
             'objectType' => 'classroom',
             'objectId' => $classroom['id'],
-            'isHidden' => $classroom['status'] == 'published' ? 0 : 1,
+            'private' => $classroom['status'] == 'published' ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'classroom' => $this->simplifyClassroom($classroom),
