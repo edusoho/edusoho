@@ -485,10 +485,6 @@ admin_setting_default_avatar_crop:
     pattern:  /setting/default/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultAvatarCrop }
 
-admin_setting_default_course_picture:
-    pattern:  /setting/default/course/picture
-    defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePicture }
-
 admin_setting_default_course_picture_crop:
     pattern:  /setting/default/course/picture/crop
     defaults: { _controller: TopxiaAdminBundle:SystemDefaultSetting:defaultCoursePictureCrop }
