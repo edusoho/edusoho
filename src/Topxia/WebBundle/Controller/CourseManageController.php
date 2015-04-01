@@ -194,7 +194,12 @@ class CourseManageController extends BaseController
                 unset($fields['price']);
             }
 
-            $course = $this->getCourseService()->updateCourse($id, $fields);
+            if (!empty($fields)) {
+                $course = $this->getCourseService()->updateCourse($id, $fields);
+            } else {
+                $course = $this->getCourseService()->getCourse($id);
+            }
+
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
