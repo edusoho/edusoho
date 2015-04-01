@@ -613,8 +613,13 @@ admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
+admin_app_center_hidden:
+    pattern:  /app/center/{postStatus}/hidden
+    defaults: { _controller: TopxiaAdminBundle:App:centerHidden }
+
+
 admin_app_center:
-    pattern:  /app/center/{postStatus}
+    pattern:  /app/center/{postStatus}/unhidden
     defaults: { _controller: TopxiaAdminBundle:App:center }
 
 admin_app_installed:
