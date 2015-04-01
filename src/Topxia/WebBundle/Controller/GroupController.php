@@ -609,7 +609,8 @@ class GroupController extends BaseController
             'is_groupmember' => $this->getGroupMemberRole($id),
             'pictureUrl' => $parsed["path"],
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,));
+            'scaledSize' => $scaledSize,
+        ));
 
     }
 
@@ -648,19 +649,6 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        if ($request->getMethod() == 'POST') {
-
-            $fileName=$this->setLogo($request,$user);
-            
-            return $this->redirect($this->generateUrl('group_setLogoCrop', array(
-                'file' => $fileName,
-                'id'=>$id,
-                'page'=>'logoCrop',
-                'type'=>'logo'
-                )
-            ));
-        }
-
         return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
                 'groupinfo' => $group,
                 'is_groupmember' => $this->getGroupMemberRole($id),
@@ -677,18 +665,6 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
-        }
-        if ($request->getMethod() == 'POST') {
-
-            $fileName=$this->setLogo($request,$user);
-
-            return $this->redirect($this->generateUrl('group_setLogoCrop', array(
-                'file' => $fileName,
-                'id'=>$id,
-                'page'=>'backGroundLogoCrop',
-                'type'=>'background',
-                )
-            ));       
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
