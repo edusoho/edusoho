@@ -162,14 +162,14 @@ class CoinController extends BaseController
     private function updateCoursesPrice($data,$rate)
     {   
         foreach ($data as $key => $value) {
-            $this->getCourseService()->updateCourse($key,array('price'=>$value,'coinPrice'=>$value*$rate));
+            $this->getCourseService()->setCoursePrice($key, 'default', $value);
         }
     }
 
     private function updateCoursesCashPrice($data)
     {
         foreach ($data as $key => $value) {
-            $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
+            $this->getCourseService()->setCoursePrice($key, 'coin', $value);
         }
     }
 

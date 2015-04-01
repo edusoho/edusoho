@@ -346,26 +346,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
 
-		if (isset($fields['price'])){
-			$fields['originPrice'] = $fields['price'];
-		}
-		if (isset($fields['coinPrice'])){
-			$fields['originCoinPrice'] = $fields['coinPrice'];
-		}
-
-		if ($course['discountId']>0){
-			if (isset($fields['price'])){
-				if($course['originPrice'] != 0){
-					$fields['price'] = $fields['price']*($course['price']/$course['originPrice']);
-				}
-			}
-			if (isset($fields['coinPrice'])){
-				if($course['originCoinPrice'] != 0){
-					$fields['coinPrice'] = $fields['coinPrice']*($course['coinPrice']/$course['originCoinPrice']);
-				}
-			}				
-		}		
-
 		$fields = $this->_filterCourseFields($fields);
 
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
@@ -399,16 +379,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'goals' => array(),
 			'audiences' => array(),
 			'tags' => '',
-			'price' => 0.00,
-			'originPrice' => 0.00,
-			'coinPrice'=>0.00,
-			'originCoinPrice'=>0.00,
 			'startTime' => 0,
 			'endTime'  => 0,
 			'locationId' => 0,
 			'address' => '',
 			'maxStudentNum' => 0,
-			'discountId'=>0,
 		));
 		
 		if (!empty($fields['about'])) {
