@@ -30,27 +30,14 @@
 
     {% if 'full' in shows or 'discount' in shows %}
 
-      {% if priceType == 'coin' %}
-        <span class="discount">
-          {% if course.coinPrice != 0 %}
-            {% if course.originCoinPrice != 0 %}
-              {{ (course.coinPrice / course.originCoinPrice*10)|round(2,'common') }}折
-            {% endif %}
-          {% else %}
-            限免
-          {% endif %}
-        </span>
-      {% else %}
-        <span class="discount">
-          {% if course.price != 0 %}
-            {% if course.originPrice != 0 %}
-              {{ (course.price / course.originPrice*10)|round(2,'common') }}折
-            {% endif %}
-          {% else %}
-            限免
-          {% endif %}
-        </span>
-      {% endif %}
+      <span class="discount">
+        {% if (course.discount == 0) or (priceType == 'coin' and course.originCoinPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
+          限免
+        {% else  %}
+          {{ course.discount }} 折
+        {% endif %}
+      </span>
+
     {% endif %}
 
   {% else %}

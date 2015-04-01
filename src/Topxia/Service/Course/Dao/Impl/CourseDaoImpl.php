@@ -176,17 +176,16 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['tagsLike'] .= '%';
             unset($conditions['tagIds']);
         }
-        
-        if (isset($conditions['notFree'])) {
-            $conditions['notFree'] = 0;
-        }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
             ->andWhere('type = :type')
             ->andWhere('price = :price')
-            ->andWhere('price > :notFree')
+            ->andWhere('price > :price_GT')
+            ->andWhere('originPrice > :originPrice_GT')
+            ->andWhere('coinPrice > :coinPrice_GT')
+            ->andWhere('originCoinPrice > :originCoinPrice_GT')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
@@ -203,16 +202,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('categoryId IN ( :categoryIds )')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('id NOT IN ( :courseIds )');
-
-
-        if (isset($conditions['notFree']) && ($conditions['notFree'] == true)){
-
-            if (isset($conditions['chargeCoin']) && ($conditions['chargeCoin'] == true)){
-                $builder->andStaticWhere('originCoinPrice > 0');
-            }else{
-                $builder->andStaticWhere('originPrice > 0');
-            }
-        }
 
         return $builder;
     }

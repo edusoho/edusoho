@@ -732,7 +732,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if ($discount['type'] == 'global') {
-			$conditions = array('notFree' => true);
+			if ($currency == 'coin') {
+				$conditions = array('originCoinPrice_GT' => '0.00');
+			} else {
+				$conditions = array('originPrice_GT' => '0.00');
+			}
 			$count = $this->searchCourseCount($conditions);
 			$courses = $this->searchCourses($conditions, 'latest', 0, $count);
 			foreach ($courses as $course) {
