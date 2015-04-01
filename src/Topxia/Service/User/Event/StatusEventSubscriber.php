@@ -2,6 +2,8 @@
 namespace Topxia\Service\User\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Common\StringToolkit;
+
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -15,15 +17,43 @@ class StatusEventSubscriber implements EventSubscriberInterface
             'status.lesson_finish' => 'onLessonFinish',
             'status.testpaper_finish' => 'onTestpaperFinish',
             'status.homework_finish' => 'onHomeworkFinish',
-            'status.post_create' => 'onPostCreate',
-            'status.post_delete' => 'onPostDelete',
-            'status.post_vote' => 'onPostVote',
+            'status.exercise_finish' => 'onExerciseFinish',
+            'status.course_join' => 'onCourseJoin',
+            'status.course_favorite' => 'onCourseFavorite',
+            'status.classroom_join' => 'onClassroomJoin',
         );
     }
 
-    public function onThreadDelete(ServiceEvent $event)
+    public function onLessonStart(ServiceEvent $event)
     {
-        $this->callTargetEventProcessor('onThreadDelete', $event);
+        $lesson = $event->getSubject();
+        $course = $event->getArgument('course');
+        $this->getStatusService()->publishStatus(array(
+            'type' => 'start_learn_lesson',
+            'objectType' => 'lesson',
+            'objectId' => $lesson['id'],
+            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'properties' => array(
+                'course' => $this->simplifyCousrse($course),
+                'lesson' => $this->simplifyLesson($lesson),
+            )
+        ));
+    }
+
+    public function onLessonFinish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $course = $event->getArgument('course');
+        $this->getStatusService()->publishStatus(array(
+            'type' => 'learned_lesson',
+            'objectType' => 'lesson',
+            'objectId' => $lesson['id'],
+            'isHidden' => $course['status'] == 'published' ? 0 : 1,
+            'properties' => array(
+                'course' => $this->simplifyCousrse($course),
+                'lesson' => $this->simplifyLesson($lesson),
+            )
+        ));
     }
 
     public function onThreadCreate(ServiceEvent $event)
@@ -56,22 +86,37 @@ class StatusEventSubscriber implements EventSubscriberInterface
         $this->callTargetEventProcessor('onPostVote', $event);
     }
 
-    private function callTargetEventProcessor($method, $event)
+    private function simplifyCousrse($course)
     {
-        $subject = $event->getSubject();
+        return array(
+            'id' => $course['id'],
+            'title' => $course['title'],
+            'picture' => $course['middlePicture'],
+            'type' => $course['type'],
+            'rating' => $course['rating'],
+            'about' => StringToolkit::plain($course['about'], 100),
+            'price' => $course['price'],
+        );
+    }
 
-        $processors = ServiceKernel::instance()->getModuleConfig('thread.event_processor');
-        if (!isset($processors[$subject['targetType']])) {
-            return ;
-        }
+    private function simplifyLesson($lesson)
+    {
+        return array(
+            'id' => $lesson['id'],
+            'number' => $lesson['number'],
+            'type' => $lesson['type'],
+            'title' => $lesson['title'],
+            'summary' => StringToolkit::plain($lesson['summary'], 100),
+        );
+    }
 
-        $processors = (array) $processors[$subject['targetType']];
-        foreach ($processors as $processor) {
-            $processor = new $processor();
-            if (!method_exists($processor, $method)) {
-                break;
-            }
-            $processor->$method($event);
-        }
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    private function getStatusService()
+    {
+        return ServiceKernel::instance()->createService('User.StatusService');
     }
 }

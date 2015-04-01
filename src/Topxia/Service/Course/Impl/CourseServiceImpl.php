@@ -6,6 +6,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
@@ -1216,16 +1217,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$user = $this->getCurrentUser();
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
-		$this->getStatusService()->publishStatus(array(
-			'type' => 'start_learn_lesson',
-			'objectType' => 'lesson',
-			'objectId' => $lessonId,
-			'isHidden' => $course['status'] == 'published' ? 0 : 1,
-			'properties' => array(
-				'course' => $this->simplifyCousrse($course),
-				'lesson' => $this->simplifyLesson($lesson),
-			)
-		));
+		$this->dispatchEvent(
+			'status.lesson_start', 
+			new ServiceEvent($lesson, array('course' => $course))
+		);
+
 		if (!empty($lesson) && $lesson['type'] != 'video') {
 
 			$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
@@ -1330,16 +1326,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
 	    }
 		$memberFields['credit'] = $totalCredits;
-		$this->getStatusService()->publishStatus(array(
-			'type' => 'learned_lesson',
-			'objectType' => 'lesson',
-			'objectId' => $lessonId,
-			'isHidden' => $course['status'] == 'published' ? 0 : 1,
-			'properties' => array(
-				'course' => $this->simplifyCousrse($course),
-				'lesson' => $this->simplifyLesson($lesson),
-			)
-		));
+		$this->dispatchEvent(
+			'status.lesson_finish', 
+			new ServiceEvent($lesson, array('course' => $course))
+		);
 
 		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
