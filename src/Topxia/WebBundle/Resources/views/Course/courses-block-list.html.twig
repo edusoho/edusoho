@@ -13,34 +13,20 @@
 
          {% if setting('course.coursesPrice') == 0 %}
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
-                  <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
-                {% endif %}
-              {% else %}
-                {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
-                  <span class="free-money-text"><del>{{ course.price }}</del></span>
-                {% endif %}
-              {% endif %}
-
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                   <span class="course-price" style="display:inline">
                     {% if course.coinPrice > 0 %}
-                      {% if free_limit_type(course) == 'free_now' %}
-                        0.00 元
-                      {% else %}
                        价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                      {% endif %}  
-                    {% else %}免费{% endif %}
+                    {% else %}
+                      免费
+                    {% endif %}
                   </span>
               {% else %}
                 <span class="course-price">
                   {% if course.price > 0 %}
-                    {% if free_limit_type(course) == 'free_now' %}
-                      0.00 元
-                    {% else %}
                      价格： {{ course.price }}元
-                    {% endif %}  
-                  {% else %}免费{% endif %}
+                  {% else %}
+                    免费
+                  {% endif %}
                 </span>
             {% endif %}
             {% if course.discountId > 0 and ((setting('coin.coin_enabled') 
@@ -136,18 +122,6 @@
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员')}}</span>
           {% endif %}
-
-          <div class="countdown-list">
-            {% include 'TopxiaWebBundle:Course:countdown.html.twig' with {'course':course} %}
-          </div>
-          {% if free_limit_type(course) == 'free_now' %}
-           <span class="text-muted text-sm">
-            到期时间
-            <span>{{course.freeEndTime|date('n')}}</span>月
-            <span>{{course.freeEndTime|date('d')}}</span>日
-            <span>{{course.freeEndTime|date('H')}}</span>时
-          </span>
-           {% endif %}
 
         </div>
       </div>

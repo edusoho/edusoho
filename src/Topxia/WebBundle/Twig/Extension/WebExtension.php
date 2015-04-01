@@ -76,7 +76,6 @@ class WebExtension extends \Twig_Extension
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'upload_token' => new \Twig_Function_Method($this, 'makeUpoadToken') ,
-            'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
@@ -942,26 +941,6 @@ class WebExtension extends \Twig_Extension
     public function getName ()
     {
         return 'topxia_web_twig';
-    }
-
-    public function getFreeLimitType($course){
-        if(!empty($course['freeStartTime']) && !empty($course['freeEndTime'])) {
-            $startTime = $course['freeStartTime'];
-            $endTime = $course['freeEndTime'];
-            $now = time();
-
-            if($startTime > $now) {
-                return 'free_coming';//即将限免
-            } elseif ($endTime >= $now){
-                return 'free_now';//正在限免
-            } elseif ($endTime < $now){
-                return 'free_end';//限免结束
-            } else {
-                return 'no_free';
-            }
-        } else {
-            return 'no_free';
-        }
     }
 
     public function blur_phone_number($phoneNum)

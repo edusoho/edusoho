@@ -91,14 +91,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $order['totalPrice'] = 0;
             }
 
-            if($order['amount'] > 0){
-                //如果是限时打折，判断是否在限免期，如果是，则Amout为0
-                if($course['freeStartTime'] < time() &&  $course['freeEndTime'] > time() ){
-                    $order['amount'] = 0;
-                    $order['totalPrice'] = 0;
-                }
-            }
-
             $order['snPrefix'] = 'C';
 
             if (!empty($info['coupon'])) {

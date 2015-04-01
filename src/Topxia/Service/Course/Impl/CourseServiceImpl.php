@@ -109,10 +109,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$orderBy = array('recommendedSeq', 'ASC');
 		}elseif ($sort == 'createdTimeByAsc') {
 			$orderBy = array('createdTime', 'ASC');
-		}elseif($sort == 'freeNow'){
-			$orderBy =array('freeEndTime','ASC');
-		}elseif($sort == 'freeComing'){
-			$orderBy =array('freeStartTime','ASC');
 		}else {
 			$orderBy = array('createdTime', 'DESC');
 		}
@@ -412,9 +408,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'locationId' => 0,
 			'address' => '',
 			'maxStudentNum' => 0,
-			'freeStartTime' => 0,
 			'discountId'=>0,
-			'freeEndTime' => 0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -1948,20 +1942,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		if ($course['expiryDay'] > 0) {
-			//如果处在限免期，则deadline为限免结束时间 减 当前时间
 			$deadline = $course['expiryDay']*24*60*60 + time();
-
-			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time()){
-				if($course['freeEndTime'] < $deadline){
-					$deadline = $course['freeEndTime'];
-				}	
-			}
 		} else {
 			$deadline = 0;
-			//如果处在限免期，则deadline为限免结束时间 减 当前时间
-			if($course['freeStartTime'] <= time() && $course['freeEndTime'] > time() && $levelChecked != 'ok'){
-				$deadline = $course['freeEndTime'];
-			}
 		}
 
 		if (!empty($info['orderId'])) {

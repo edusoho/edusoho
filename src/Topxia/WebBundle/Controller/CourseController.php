@@ -326,10 +326,7 @@ class CourseController extends BaseController
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
-			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
-				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
-			}
+
 			if($coursesPrice ==1){
 				$course['price'] =0;
 				$course['coinPrice'] =0;

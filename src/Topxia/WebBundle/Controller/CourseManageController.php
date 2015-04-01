@@ -196,11 +196,6 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-
-            if(isset($fields['freeStartTime'])){
-                $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
-                $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
-            }
             
             $course = $this->getCourseService()->updateCourse($id, $fields);
 
