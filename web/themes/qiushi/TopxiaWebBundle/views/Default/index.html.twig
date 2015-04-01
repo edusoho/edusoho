@@ -153,8 +153,6 @@
             {% set lesson = liveCourses['lesson']|default(null) %}
                                     {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                           <span class="liveicon">正在直播</span>
-                        {% else %}
-                         <span class="liveicon">直播</span>
                         {% endif %}
               
               <img src="{{ default_path('coursePicture',liveCourses.largePicture, 'large') }}" class="img-responsive lessonimg" alt="">
@@ -167,13 +165,15 @@
               <h3>{{ liveCourses.title }}</h3>
 
               <p style="opacity: 0; height: 0px; display: none;">{{ liveCourses.about|plain_text(60) }}</p>
-              <span class="livetime pull-left">{{ liveCourses.freeStartTime|date('n月j日 H:i') }} 开课</span>
+              <span class="livetime pull-left">{{ lesson.startTime|date('n月j日 H:i') }} 开课</span>
                 <span class="nickname pull-right clearfix" style="position:static!important;">
-                  <a class="text-muted" href=""><i class="fa fa-user"></i>
-                        {% for teacher in liveCourses.teachers %}
-                         {{ web_macro.user_link(teacher, 'text-muted') }}
+
+                              {% for teacher in liveCourses.teachers %}
+                          {% if loop.index <= 1%}
+                          {% set profile = profiles[teacher.id] %}
+                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ profile.truename }}</a>
+                           {% endif %}
                         {% endfor %}
-                  </a>
                 </span>
             </div>
           </li>
