@@ -21,8 +21,8 @@
       <li>
         <span class="price-info-label">活动</span>
         <span class="price-info-content">
-          <span class="activity">{{ (course.discountActivity.activityName)|default('') }}</span>
-          <span id="activity-left-time" data-activity-endtime="{{ (course.discountActivity.endTime)|default(0) }}">
+          <span class="activity">{{ (course.discount.name)|default('') }}</span>
+          <span id="activity-left-time" data-activity-endtime="{{ (course.discount.endTime)|default(0) }}">
             <span class="glyphicon glyphicon-time"></span>
             <span id="hours-left"></span>时
             <span id="minutes-left"></span>分

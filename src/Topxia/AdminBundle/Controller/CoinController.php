@@ -105,6 +105,8 @@ class CoinController extends BaseController
                 goto response;
 
             }
+
+            $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
             
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
             'set' => $set,
