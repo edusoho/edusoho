@@ -341,6 +341,9 @@ class GroupController extends BaseController
             } 
         }
         
+        if (empty($conditions['status'])) {
+            unset($conditions['status']);
+        }
 
         return $conditions;
     }
