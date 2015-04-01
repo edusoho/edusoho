@@ -142,6 +142,12 @@ define(function(require, exports, module) {
 
 
 		$('#modal').on('hide.bs.modal', function(e) {
+			var uploader = $div.pluploadQueue();
+			
+			if (uploader.files.length > 0 && (uploader.total.uploaded != (uploader.files.length - uploader.total.failed))) {
+				alert("当前正在上传的视频将停止上传，确定关闭？");
+			}
+			
 			window.location.reload();
 		});
 
