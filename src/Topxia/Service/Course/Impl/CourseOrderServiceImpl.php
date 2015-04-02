@@ -71,6 +71,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['title'] = "购买课程《{$course['title']}》";
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
+            if(!empty($course['discountId'])){
+                $order['discountId'] = $course['discountId'];
+                $order['discount'] = $course['discount'];
+            }
+
             $order['payment'] = $info['payment'];
             $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
             $order['priceType'] = $info['priceType'];
