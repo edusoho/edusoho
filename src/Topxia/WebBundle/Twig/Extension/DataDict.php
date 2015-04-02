@@ -263,6 +263,12 @@ class DataDict
             'running' => '<span class="text-success">进行中</span>',
             'finished' => '<span class="text-muted">已结束</span>',
         ),
+        'discountAuditStatus' => array(
+            'passed' => '已通过',
+            'rejected' => '未通过',
+            'pending' => '待审核',
+            'creation' => '编辑中',
+        ),
 
 	);
 

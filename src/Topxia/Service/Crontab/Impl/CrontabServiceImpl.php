@@ -29,16 +29,29 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function executeJob($id)
     {
-        $job = $this->getJob($id);
+        try {
 
-        $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
+            $this->getJobDao()->getConnection()->beginTransaction();
+            
+            $job = $this->getJob($id, true);
 
-        $jobInstance = new $job['jobClass']();
-        $jobInstance->execute($job['jobParams']);
+            $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
 
-        if ($job['cycle'] == 'once') {
-            $this->getJobDao()->deleteJob($job['id']);
+            $jobInstance = new $job['jobClass']();
+            $jobInstance->execute($job['jobParams']);
+
+            if ($job['cycle'] == 'once') {
+                $this->getJobDao()->deleteJob($job['id']);
+            }
+
+            $this->getJobDao()->getConnection()->commit();
+
+        } catch(Exception $e) {
+            $this->getJobDao()->getConnection()->rollback();
+            $message = $e->getMessage();
+            $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}");
         }
+
     }
 
     public function deleteJob($id)

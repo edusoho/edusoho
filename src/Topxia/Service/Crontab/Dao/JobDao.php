@@ -4,7 +4,7 @@ namespace Topxia\Service\Crontab\Dao;
 
 interface JobDao
 {
-    public function getJob($id);
+    public function getJob($id, $lock = false);
 
     public function searchJobs($conditions, $orderBy, $start, $limit);
 
