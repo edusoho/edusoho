@@ -23,6 +23,14 @@
     <span class="divider"></span>
 
     <div class="form-group">
+      <select class="form-control" name="threadType">
+        {{ select_options({isStick:'置顶', isElite: '加精'}, app.request.get('threadType'), '属性') }}
+      </select>
+    </div>
+
+    <span class="divider"></span>
+
+    <div class="form-group">
       <select class="form-control" name="keywordType">
         {{ select_options({title:'标题', content: '内容', courseId:'课程编号', courseTitle:'课程名'}, app.request.get('keywordType')) }}
       </select>
@@ -45,8 +53,9 @@
       <thead>
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
-          <th width="60%">帖子</th>
+          <th width="50%">帖子</th>
           <th width="10%">回复/查看</th>
+          <th width="10%">属性</th>
           <th width="15%">作者</th>
           <th width="10%">操作</th>
         </tr>
@@ -62,6 +71,7 @@
               {% if thread.type == 'question' %}
                 <span class="label label-info">问</span>
               {% endif %}
+
               <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
 
               <div class="short-long-text">
@@ -81,10 +91,26 @@
             </td>
             <td><span class="text-sm">{{ thread.postNum }} / {{ thread.hitNum }}</span></td>
             <td>
+              {% if course %}
+                <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}" class="promoted-label">
+                  <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">精</span>
+                </a>
+              
+                <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" class="promoted-label">
+                  <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">顶</span>
+                </a>
+              {% endif %}
+            </td>
+            <td>
               {{ admin_macro.user_link(author) }} <br />
               <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
             </td>
-            <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="帖子" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}">删除</button></td>
+            <td>
+              <div class="btn-group">
+                <a href="javascript:;" data-role="item-delete" data-url="{{ path('admin_thread_delete', {id:thread.id}) }}" class="btn btn-default btn-sm" 
+                data-name="帖子" >删除</a>
+              </div>
+            </td>
           </tr>
         {% else %}
           <tr><td colspan="20"><div class="empty">暂无帖子记录</div></td></tr>

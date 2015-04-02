@@ -55,12 +55,12 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getCourseService()->isCourseStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException('已经是课程学员，创建课程订单失败。');
+                throw $this->createServiceException('已经是课程学员，操作失败。');
             }
 
             $course = $this->getCourseService()->getCourse($info['targetId']);
             if (empty($course)) {
-                throw $this->createServiceException('课程不存在，创建课程订单失败。');
+                throw $this->createServiceException('课程不存在，操作失败。');
             }
 
             $this->cancelOldOrders($course, $user);

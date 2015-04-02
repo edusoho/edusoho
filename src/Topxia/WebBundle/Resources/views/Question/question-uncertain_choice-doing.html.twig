@@ -9,7 +9,7 @@
  {% include 'TopxiaWebBundle:Question:question-choice-options.html.twig' %}
 
 {% if itemResult.answer|default(null) %}
-  {% set answerChoiceIndex = itemResult.answer|split(',') %}
+  {% set answerChoiceIndex = itemResult.answer %}
 {% endif %}
 
 <div class="question-choices-inputs">

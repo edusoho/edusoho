@@ -273,7 +273,7 @@ class SettingsController extends BaseController
 		$hasPayPassword = strlen($user['payPassword']) > 0;
 
 		if ($hasPayPassword){
-			$this->setFlashMessage('danger', '用户没有权限不通过旧支付密码，就直接设置新支付密码。');
+			$this->setFlashMessage('danger', '不能直接设置新支付密码。');
 			return $this->redirect($this->generateUrl('settings_reset_pay_password'));
 		}
 
@@ -303,6 +303,40 @@ class SettingsController extends BaseController
 			'form' => $form->createView()
 		)); 
 	} 
+
+	public function setPayPasswordAction(Request $request) 
+	{ 
+		$user = $this->getCurrentUser(); 
+
+		$hasPayPassword = strlen($user['payPassword']) > 0;
+
+		if ($hasPayPassword){
+			return $this->createJsonResponse('不能直接设置新支付密码。');
+		}
+
+		$form = $this->createFormBuilder()
+			->add('currentUserLoginPassword', 'password')
+			->add('newPayPassword', 'password')
+			->add('confirmPayPassword', 'password')
+			->getForm();
+
+		if ($request->getMethod() == 'POST') {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$passwords = $form->getData();
+				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
+					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登陆密码不正确，请重试！'));
+				} else {
+					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+					return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
+				}
+			}
+		}
+
+		return $this->render('TopxiaWebBundle:Settings:pay-password-modal.html.twig', array( 
+			'form' => $form->createView()
+		)); 
+	}
 
 	public function resetPayPasswordAction(Request $request) 
 	{ 
@@ -592,6 +626,24 @@ class SettingsController extends BaseController
 		}
 
 		return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+	}
+
+	public function passwordCheckAction(Request $request)
+	{
+		$currentUser = $this->getCurrentUser();
+		$password = $request->request->get('value');
+		if (strlen($password) > 0) {
+			$passwordRight = $this->getUserService()->verifyPassword($currentUser['id'], $password);
+			if ($passwordRight) {
+				$response = array('success' => true, 'message' => '密码正确');
+			} else {
+				$response = array('success' => false, 'message' => '密码错误');
+			}
+		} else {			
+			$response = array('success' => false, 'message' => '密码不能为空');
+		}
+      
+        return $this->createJsonResponse($response);
 	}
 
 	public function passwordAction(Request $request)

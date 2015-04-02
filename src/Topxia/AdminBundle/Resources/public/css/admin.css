@@ -235,3 +235,7 @@ input.LargeInput {width: 600px;}
   font-weight: normal;
   font-size: 14px;
 }
+
+.navigation-table tr{
+  cursor: pointer;
+}

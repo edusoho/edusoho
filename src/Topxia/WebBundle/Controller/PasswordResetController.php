@@ -108,7 +108,7 @@ class PasswordResetController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-
+  
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
             if ($result){
                 $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('mobile'));

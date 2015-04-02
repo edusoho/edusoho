@@ -94,7 +94,7 @@
       <div class="form-group">
         <label class="col-md-3 control-label" for="mobile">手机</label>
         <div class="col-md-6 controls">
-          <div class="control-text">{{ verifiedMobile }}<small class="text-success">(已绑定)</small></div>
+          <div class="control-text">{{ blur_phone_number(verifiedMobile) }}<small class="text-success">(已绑定)</small></div>
         </div>
       </div>
     {% endif %}
@@ -221,10 +221,8 @@
         {% endif %}
       {% else %}
 
-      {% if is_plugin_installed('Classroom') %}
         <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
-      {% endif %}
-
+   
       {% endif %}
     {% endif %}
   {% else %}

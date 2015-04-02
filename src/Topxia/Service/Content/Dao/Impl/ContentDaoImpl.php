@@ -67,20 +67,8 @@ class ContentDaoImpl extends BaseDao implements ContentDao
 			->from($this->table, 'content')
 			->andWhere('type = :type')
 			->andWhere('status = :status')
-			->andWhere('title LIKE :keywords');
-
-		if (isset($conditions['categoryIds'])) {
-			$categoryIds = array();
-			foreach ($conditions['categoryIds'] as $categoryId) {
-				if (ctype_digit($categoryId)) {
-					$categoryIds[] = $categoryId;
-				}
-			}
-			if ($categoryIds) {
-				$categoryIds = join(',', $categoryIds);
-				$builder->andStaticWhere("categoryId IN ($categoryIds)");
-			}
-		}
+			->andWhere('title LIKE :keywords')
+			->andWhere('categoryId IN (:categoryIds)');
 
 		return $builder;
 	}

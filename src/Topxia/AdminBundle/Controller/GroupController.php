@@ -133,6 +133,7 @@ class GroupController extends BaseController
     public function transferGroupAction(Request $request,$groupId)
     {
         $data=$request->request->all();
+        $currentUser = $this->getCurrentUser();
 
         $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
 
@@ -144,7 +145,19 @@ class GroupController extends BaseController
 
         $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
 
+        if ($currentUser['id'] != $group['ownerId'] ) {
+
+            $this->getNotifiactionService()->notify($group['ownerId'],'default',"您的小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a> 被管理员转移给了用户 <a href=\"/user/{$user['id']}\">'{$user['nickname']}'</a>");
+            
+        }
+
         $this->getGroupService()->updateGroup($groupId,array('ownerId'=>$user['id']));
+
+        if ($currentUser['id'] != $user['id']) {
+
+            $this->getNotifiactionService()->notify($user['id'],'default',"您获得了小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a>的管理权限");
+            
+        }
 
         $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$user['id']);
 

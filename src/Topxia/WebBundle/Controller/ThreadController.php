@@ -133,7 +133,9 @@ class ThreadController extends BaseController
             $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
             $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
+            if ($thread['userId'] != $user['id']) {
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
+            }
 
             return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
                 "{$target['type']}Id" => $target['id'],
@@ -151,6 +153,12 @@ class ThreadController extends BaseController
     {
         $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->deleteThread($threadId);
+
+        $user = $this->getCurrentUser();
+        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+        if ($thread['userId'] != $user['id']) {
+            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<strong>“{$thread['title']}”</strong>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除");
+        }
 
         return $this->createJsonResponse(true);
     }

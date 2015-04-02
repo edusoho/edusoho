@@ -18,11 +18,11 @@ class BaseTestCase extends WebTestCase
 {
     protected static $isDatabaseCreated = false;
 
-    protected $serviceKernel = null;
+    protected static $serviceKernel = null;
 
     protected function getCurrentUser()
     {
-        return $this->serviceKernel->getCurrentUser();;
+        return static::$serviceKernel->getCurrentUser();;
     }
 
 
@@ -40,6 +40,10 @@ class BaseTestCase extends WebTestCase
 
     private function setServiceKernel()
     {
+        if (static::$serviceKernel) {
+            return ;
+        }
+
         $kernel = new \AppKernel('test', false);
         $kernel->loadClassCache();
         $kernel->boot();
@@ -48,7 +52,8 @@ class BaseTestCase extends WebTestCase
 
         $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
-        $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
+        $connection = $kernel->getContainer()->get('database_connection');
+        $serviceKernel->setConnection(new TestCaseConnection($connection));
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 1,
@@ -58,13 +63,14 @@ class BaseTestCase extends WebTestCase
             'currentIp' => '127.0.0.1',
             'roles' => array('ROLE_USER','ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER')
         ));
-        $serviceKernel->setCurrentUser($currentUser);      
-        $this->serviceKernel = $serviceKernel;
+        $serviceKernel->setCurrentUser($currentUser);
+
+        static::$serviceKernel = $serviceKernel;
     }
 
     public function getServiceKernel()
     {
-        return $this->serviceKernel;
+        return static::$serviceKernel;
     }
 
     public function setUp()
@@ -74,11 +80,13 @@ class BaseTestCase extends WebTestCase
         if (!static::$isDatabaseCreated) {
             $this->createAppDatabase();
             static::$isDatabaseCreated = true;
+            $this->emptyAppDatabase(true);
+        } else {
+            $this->emptyAppDatabase(false);
         }
         
-        $this->emptyAppDatabase();
 
-        $this->serviceKernel->createService('User.UserService')->register(array(
+        static::$serviceKernel->createService('User.UserService')->register(array(
             'nickname' => 'admin',
             'email' => 'admin@admin.com',
             'password'=>'admin',
@@ -110,10 +118,16 @@ class BaseTestCase extends WebTestCase
         );
     }
 
-    private function emptyAppDatabase()
+    private function emptyAppDatabase($emptyAll = true)
     {
-        $connection = static::getContainer()->get('database_connection');
-        $tableNames = $connection->getSchemaManager()->listTableNames();
+        $connection = static::$serviceKernel->getConnection();
+
+        if ($emptyAll) {
+            $tableNames = $connection->getSchemaManager()->listTableNames();
+        } else {
+            $tableNames = $connection->getInsertedTables();
+            $tableNames = array_unique($tableNames);
+        }
 
         $sql = '';
         foreach ($tableNames as $tableName) {
@@ -122,7 +136,11 @@ class BaseTestCase extends WebTestCase
             }
             $sql .= "TRUNCATE {$tableName};";
         }
-        $connection->exec($sql);
+        if (!empty($sql)) {
+            $connection->exec($sql);
+            $connection->resetInsertedTables();
+        }
+
     }
 
     protected function assertArrayEquals(Array $ary1,Array $ary2,Array $keyAry=array())

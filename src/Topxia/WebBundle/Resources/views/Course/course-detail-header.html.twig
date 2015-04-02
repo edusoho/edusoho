@@ -1,0 +1,125 @@
+<div class="row course-cover-heading">
+  <div class="col-sm-5 picture">
+
+    {% if course.type != 'live' and setting('course.picturePreview_enabled')|default(0) > 0  and freeLesson %}
+      <a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" >
+        <span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span>
+        <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
+        {% if course.serializeMode == 'serialize' %}  
+          <span class="tag-serial"></span>
+        {% endif %} 
+      </a>
+    {% else %}
+      <img src="{{ default_path('coursePicture', course.largePicture, '') }}" class="img-responsive" />
+      {% if course.serializeMode == 'serialize' %}  
+        <span class="tag-serial"></span>
+      {% endif %} 
+    {% endif %}
+
+  </div>
+  <div class="col-sm-7 info">
+
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="btn-group pull-right">
+      <a class="btn btn-default btn-sm" type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理">
+      <i class="esicon esicon-setting"></i>
+      </a>
+    </div>
+    {% endif %}
+
+    <h1 class="title">{{ course.title }}
+      {% if course.type == 'live' %}
+      <span class="label label-success">直播</span>
+      {% endif %}
+    </h1>
+    <div class="subtitle">{{ course.subtitle }}</div>
+    <div class="price-info">
+      {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
+    </div>
+
+    <div class="stats">
+      <span class="stat-item">
+        <span class="stat-item-label">评价</span>
+        <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
+        <span>({{ course.ratingNum }}人)</span>
+      </span>
+
+      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+        <span class="stat-divider">|</span>
+        <span class="stat-item">
+          <span class="stat-item-label">{{setting('default.user_name', '学员')}}</span>
+          <span class="member-num">{{ course.studentNum }}人</span>
+          {% if course.type == 'live' %}
+            {% if course.studentNum == course.maxStudentNum %}
+              <span class="member-text hidden-sm hidden-xs">(名额已满)</span>
+            {% else %}
+              <span class="member-text hidden-sm hidden-xs"> ({{ course.maxStudentNum }}名额)</span>
+            {% endif %}
+          {% endif %}
+        </span>
+      {% endif %}
+
+      {% if not course.expiryDay == 0 %}
+        <span class="stat-divider">|</span>
+        <span class="stat-item">
+          <span class="stat-item-label">有效期</span>
+          <span class="member-num">{{ course.expiryDay }} 天</span>
+        </span>
+      {% endif %}
+    </div>
+
+
+    <div class="actions clearfix">
+      <div class="pull-left">
+        <a class="btn btn-primary btn-fat " id="course-buy-btn" 
+        {% if setting("course.buy_fill_userinfo")|default(false) %}
+          href="#modal" 
+          data-toggle="modal" 
+          data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+        {% else %}
+          href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+        {% endif %}
+        {% if course.status != 'published' or (course.type == 'live' and course.studentNum >= course.maxStudentNum) %}
+        disabled="disabled"
+        {% endif %}
+        >
+          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>                
+          {% else %}
+            {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+          {% endif %}
+        </a>
+
+        {% if courseMemberLevel %}
+          {% if checkMemberLevelResult == 'not_login' %}
+            <a href="{{ path('login') }}" class="btn btn-link btn-link-warning">{{ courseMemberLevel.name }}，免费学</a>  
+          {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
+            <a href="{{ path('vip_buy') }}" class="btn btn-link btn-link-warning">{{ courseMemberLevel.name }}，免费学</a>  
+          {% elseif checkMemberLevelResult == 'level_low' %}
+            <a href="{{ path('vip_upgrade', {level:courseMemberLevel.id}) }}" class="btn btn-link btn-link-warning">{{ courseMemberLevel.name }}，免费学</a>
+          {% elseif checkMemberLevelResult == 'ok' %}
+            <a href="javascript:;" data-url="{{ path('course_become_use_member', {id:course.id}) }}" class="btn btn-link btn-link-warning become-use-member-btn">{{ courseMemberLevel.name }}，免费学</a>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <div class="share pull-left clearfix"  data-bdText="{{courseShareContent}}"></div>
+
+        <div class="pull-left hidden-xs">
+          <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>
+            免费体验
+          </a>
+          <a class="btn btn-link" id="favorite-btn" href="javascript:" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+            <i class="glyphicon glyphicon-bookmark"></i>
+            收藏课程
+          </a>
+          <a class="btn btn-link" id="unfavorite-btn" href="javascript:" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
+            <i class="glyphicon glyphicon-bookmark"></i>
+            已收藏
+          </a>
+        </div>
+      
+      </div>
+
+  </div>
+</div>

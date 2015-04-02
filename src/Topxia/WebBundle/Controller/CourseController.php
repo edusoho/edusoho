@@ -35,6 +35,7 @@ class CourseController extends BaseController
 			'type' => 'normal',
 			'categoryId' => $category['id'],
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
+			'price' => ($sort == 'free') ? '0.00' : null
 		);
 
 		$paginator = new Paginator(
@@ -297,7 +298,7 @@ class CourseController extends BaseController
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
-				if(in_array($classroomMember["role"], array("student"))) {
+				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
 					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
 				}
 			}
