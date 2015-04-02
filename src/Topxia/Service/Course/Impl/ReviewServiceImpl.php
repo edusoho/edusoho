@@ -57,9 +57,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 	{
 		$conditions = array_filter($conditions, function($value){
 			if (ctype_digit((string)$value)) {
-				return false;
+				return true;
 			}
-			return empty($value);
+			return !empty($value);
 		});
 
         if (isset($conditions['author'])) {
