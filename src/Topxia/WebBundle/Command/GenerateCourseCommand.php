@@ -18,7 +18,8 @@ class GenerateCourseCommand extends BaseCommand
     {
         $this->setName ( 'generate:course' )
         ->addArgument('count',InputArgument::OPTIONAL)
-        ->addArgument('price', InputArgument::OPTIONAL);
+        ->addArgument('price', InputArgument::OPTIONAL)
+        ->setDescription('第一个参数为创建课程数量(默认为50),第二个参数为价格(默认为随即)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -39,14 +40,14 @@ class GenerateCourseCommand extends BaseCommand
                 $course['price'] = $price == 'random' ? rand(0,100) : $price;
                 $course = $this->getCourseDao()->addCourse($course);
 
-                // $member = array(
-                //     'courseId' => $course['id'],
-                //     'userId' => $course['userId'],
-                //     'role' => 'teacher',
-                //     'createdTime' => time(),
-                // );
+                $member = array(
+                    'courseId' => $course['id'],
+                    'userId' => $course['userId'],
+                    'role' => 'teacher',
+                    'createdTime' => time(),
+                );
 
-                // $this->getMemberDao()->addMember($member);
+                $this->getMemberDao()->addMember($member);
                 unset($course);
                 $output->writeln('<info>第'.($i+1).'个课程添加</info>');
             }
@@ -81,5 +82,10 @@ class GenerateCourseCommand extends BaseCommand
     private function getCourseDao ()
     {
         return $this->getServiceKernel()->createDao('Course.CourseDao');
+    }
+
+    private function getMemberDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
     }
 }
