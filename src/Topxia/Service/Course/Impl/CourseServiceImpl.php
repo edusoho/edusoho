@@ -698,13 +698,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课程不存在");
 		}
 
+		$fields = array();
+
 		if (($course['discountId'] > 0) && (intval($course['discount'] * 100) < 1000)) {
 			$discount = $course['discount'];
 		} else {
 			$discount = 10;
+			if ($price > 0) {
+				$nowDiscount = $this->getDiscountService()->getNowGlobalDiscount();
+				if ($nowDiscount) {
+					$fields['discountId'] = $nowDiscount['id'];
+					$fields['discount'] = $nowDiscount['globalDiscount'];
+				}
+				$discount = $nowDiscount['globalDiscount'];
+			}
 		}
 
-		$fields = array();
 		if ($currency == 'coin') {
 			$fields['originCoinPrice'] = $price;
 			$fields['coinPrice'] = $price * ($discount / 10);

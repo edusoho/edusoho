@@ -140,7 +140,9 @@ define(function(require, exports, module) {
                 if (now < activityEndTime) {
                     setTimeout(refreshAvtivityTimeLeft, 500);
                 } else {
-
+                    setTimeout(function(){
+                        window.location.reload();
+                    }, 1000);
                 }
             }
         }

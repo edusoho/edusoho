@@ -53,15 +53,22 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             'nextExcutedTime' => time(),
         );
         $job = $this->getJobDao()->searchJobs($conditions, array('nextExcutedTime', 'ASC'), 0, 1);
-        // var_dump($job);
         if (!empty($job)) {
-            $this->executeJob($job[0]['id']);
+            $job = $job[0];
+            $this->getLogService()->info('crontab', 'job_start', "定时任务(#{$job['id']})开始执行！", $job);
+            $this->executeJob($job['id']);
+            $this->getLogService()->info('crontab', 'job_start', "定时任务(#{$job['id']})执行结束！", $job);
         }
     }
 
     protected function getJobDao()
     {
         return $this->createDao('Crontab.JobDao');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }
