@@ -6,28 +6,10 @@ order_create:
 order_show:
     pattern:  /order/show
     defaults: { _controller: CustomWebBundle:CustomOrder:show }
-    
-# course_order_pay:
-#     pattern:  /course/order/pay
-#     defaults: { _controller: CustomWebBundle:CustomCourseOrder:pay }
-#     methods: [POST]
 
 coupon_check:
     pattern:  /{type}/{id}/coupon/check
     defaults: { _controller: CustomWebBundle:CustomOrder:couponCheck }
-
-# course_order_pay_return:
-#     pattern:  /course/order/pay/{name}/return
-#     defaults: { _controller: CustomWebBundle:CustomCourseOrder:payReturn }
-
-# course_order_pay_notify:
-#     pattern:  /course/order/pay/{name}/notify
-#     defaults: { _controller: CustomWebBundle:CustomCourseOrder:payNotify }
-
-# course_order_repay:
-#     pattern:  /course/order/repay
-#     defaults: { _controller: CustomWebBundle:CustomCourseOrder:repay }
-#     methods: [POST]
 
 group:
     pattern:  /group
