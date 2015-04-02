@@ -13,7 +13,7 @@ class EduSohoAppClient implements AppClient
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://open.edusoho.com/app_api';
+    private $apiUrl = 'http://115.29.78.158:99/app_api';
 
     private $debug = false;
 
@@ -33,7 +33,7 @@ class EduSohoAppClient implements AppClient
     {
         $args = array();
         //GetAppCenter
-        return $this->callRemoteApi('GET', 'GetApps', $args);
+        return $this->callRemoteApi('GET', 'GetAppCenter', $args);
     }
 
     public function getMessages()

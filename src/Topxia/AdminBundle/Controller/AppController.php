@@ -18,7 +18,7 @@ class AppController extends BaseController
     }
 
     public function centerAction(Request $request, $postStatus)
-    {
+    {   
         $apps = $this->getAppService()->getCenterApps();
         $theme = array();
         $app = array();
