@@ -54,11 +54,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
-        $discountApp = $this->getAppService()->findInstallApp("Discount");
-        if(!empty($course["discountId"]) && $discountApp){
-            $discount = $this->getDiscountService()->getDiscount($course["discountId"]);
-        }
-
         return array(
             'courses' => empty($course) ? null : array($course),
             'users' => empty($users) ? null : $users,
@@ -71,7 +66,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             'account' => $account,
             'hasPayPassword' => $hasPayPassword,
             'coinPayAmount' => $coinPayAmount,
-            'discount' => empty($discount) ? null : $discount
         );
 	}
 
@@ -180,11 +174,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getDiscountService()
-    {
-        return ServiceKernel::instance()->createService('Discount:Discount.DiscountService');
     }
 
 	protected function getCourseOrderService() {
