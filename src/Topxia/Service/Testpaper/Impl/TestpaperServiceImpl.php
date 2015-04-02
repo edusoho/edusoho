@@ -568,7 +568,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
 
         $this->dispatchEvent(
-            'testpaper.testpaper_finish', 
+            'testpaper.finish', 
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
 

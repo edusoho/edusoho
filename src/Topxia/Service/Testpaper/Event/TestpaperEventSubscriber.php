@@ -14,7 +14,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.testpaper_finish' => 'onTestpaperFinish',
+            'testpaper.finish' => 'onTestpaperFinish',
         );
     }
 
