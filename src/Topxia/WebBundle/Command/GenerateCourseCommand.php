@@ -26,11 +26,11 @@ class GenerateCourseCommand extends BaseCommand
     {
         $output->writeln('<info>开始初始化课程数据</info>');
         $this->initServiceKernel();
-        $count = empty($input->getArgument('count')) ? 50 : $input->getArgument('count');
+        $count = $input->getArgument('count', 50);
         $this->getCourseDao()->getConnection()->beginTransaction();
         try {
             for ($i=0; $i < $count; $i++) {
-                $price = empty($input->getArgument('price')) ? rand(0,100) : $input->getArgument('price');
+                $price = $input->getArgument('price', raund(0, 100));
                 $course['title'] = '课程-'.$price.'元-'.time().'-'.$i;
                 $course['status'] = 'published';
                 $course['about'] = '';
