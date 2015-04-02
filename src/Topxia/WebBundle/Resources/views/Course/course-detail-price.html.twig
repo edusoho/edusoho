@@ -22,11 +22,8 @@
         <span class="price-info-label">活动</span>
         <span class="price-info-content">
           <span class="activity">{{ (course.discountObj.name)|default('') }}</span>
-          <span id="activity-left-time" data-activity-endtime="{{ (course.discountObj.endTime)|default(0) }}">
-            <span class="glyphicon glyphicon-time"></span>
-            <span id="hours-left"></span>时
-            <span id="minutes-left"></span>分
-            <span id="seconds-left"></span>秒</span>
+          <span class="glyphicon glyphicon-time text-muted"></span>
+          <span id="discount-endtime-countdown" class="text-muted" data-endtime="{{ course.discountObj.endTime|date('Y/m/d H:i:s') }}"></span>
         </span>
       </li>
     {% endif %}

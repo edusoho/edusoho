@@ -1,7 +1,8 @@
 define(function(require, exports, module) {
 
+    require('jquery.countdown');
+
     exports.run = function() {
-        require('./timeleft').run();
         $('#teacher-carousel').carousel({
             interval: 0
         });
@@ -124,29 +125,17 @@ define(function(require, exports, module) {
             $('#modal').removeClass('in');
         });
 
+        var time = $('#discount-endtime-countdown').data('endtime');
+        $('#discount-endtime-countdown').countdown(time, function(event) {
+           var $this = $(this).html(event.strftime('剩余 '
+             + '<span>%D</span> 天 '
+             + '<span>%H</span> 时 '
+             + '<span>%M</span> 分 '
+             + '<span>%S</span> 秒'));
+         }).on('finish', function(){
+            window.location.reload();
+         });
 
-        refreshAvtivityTimeLeft = function() {
-            var activityEndTime = $("#activity-left-time").data("activityEndtime");
-            if (null != activityEndTime) {
-                var now = Math.round($.now()/1000);
-                var hoursLeft = Math.floor((activityEndTime - now) / 3600.0);
-                var minutesLeft = Math.floor((activityEndTime - now) % 3600.0 / 60.0);
-                var secondsLeft = Math.floor((activityEndTime - now) % 3600.0 % 60.0);
-
-                $("#hours-left").html(hoursLeft);
-                $("#minutes-left").html(minutesLeft);
-                $("#seconds-left").html(secondsLeft);
-
-                if (now < activityEndTime) {
-                    setTimeout(refreshAvtivityTimeLeft, 500);
-                } else {
-                    setTimeout(function(){
-                        window.location.reload();
-                    }, 1000);
-                }
-            }
-        }
-        refreshAvtivityTimeLeft();
     };
 
 });
