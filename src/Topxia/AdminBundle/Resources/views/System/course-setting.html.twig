@@ -324,8 +324,8 @@ glyphicon glyphicon-chevron-up"></span></a></div>
         {{ radios('live_course_enabled', {1:'开启', 0:'关闭'}, courseSetting.live_course_enabled) }}
       </div>
     </div>
-    
-    {% if capacity.code|default(0) == 1 %}
+
+    {% if capacity.code|default(0) == 2 %}
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="logo">直播LOGO</label>
