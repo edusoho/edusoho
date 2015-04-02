@@ -677,7 +677,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
 		$time = time() - $learn['updateTime'];
-		$time = ceil($time/60);
 		$this->waveWatchingTime($userId,$lessonId,$time);
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'videoStatus' => 'paused',
