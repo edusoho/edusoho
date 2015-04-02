@@ -68,15 +68,11 @@ class MoneyCardDaoImpl extends BaseDao
         return $this->getConnection()->executeUpdate($sql, $moneyCardsForSQL);
     }
 
-    //@todo:sql
-    public function isCardIdAvaliable ($moneyCardIds)
+    public function isCardIdAvaliable($moneyCardIds)
     {
-        $str = implode(',', array_map(function($value){ return "'".$value."'"; },
-            array_keys($moneyCardIds)));
-
-        $sql = "select COUNT(id) from ".$this->table." where cardId in (".$str.")";
-
-        $result = $this->getConnection()->fetchAll($sql);
+        $marks = str_repeat('?,', count($moneyCardIds) - 1) . '?';
+        $sql = "select COUNT(id) from ".$this->table." where cardId in (".$marks.")";
+        $result = $this->getConnection()->fetchAll($sql, $moneyCardIds);
 
         return $result[0]["COUNT(id)"] == 0 ? true : false;
     }
