@@ -73,6 +73,11 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	        if($lock){
 	        	$connection->commit();
 	    	}
+
+	    	$this->dispatchEvent("order.pay.success", array(
+				'order' => $order
+			));
+
 	        return array($success, $order);
         }catch (\Exception $e) {
         	if($lock){
