@@ -291,6 +291,23 @@ class FileServiceImpl extends BaseService implements FileService
         return ArrayToolkit::index($files, 'id');
     }
 
+    public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight)
+    {
+        if(empty($fileId)) {
+            throw $this->createServiceException("参数不正确");
+        }
+
+        $file = $this->getFile($fileId);
+        if(empty($file)) {
+            throw $this->createServiceException("文件不存在");
+        }
+        
+        $parsed = $this->parseFileUri($file["uri"]);
+
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], $scaledWidth, $scaledHeight);
+        return array($parsed["path"], $naturalSize, $scaledSize);
+    }
+
     private function getSettingService()
     {
     	return $this->createService('System.SettingService');

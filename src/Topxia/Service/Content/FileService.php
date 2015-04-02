@@ -157,4 +157,6 @@ interface FileService
 	public function getFile($id);
 
 	public function getFilesByIds($ids);
+
+	public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight);
 }

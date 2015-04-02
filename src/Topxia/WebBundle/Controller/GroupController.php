@@ -590,24 +590,12 @@ class GroupController extends BaseController
         }
         
         $fileId = $request->getSession()->get("fileId");
-        if(empty($fileId)) {
-            return $this->createMessageResponse("error", "参数不正确");
-        }
-
-        $file = $this->getFileService()->getFile($fileId);
-        if(empty($file)) {
-            return $this->createMessageResponse("error", "文件不存在");
-        }
-        
-        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
-
-        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], 270, 270);
-
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'pictureUrl' => $parsed["path"],
+            'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,
         ));
