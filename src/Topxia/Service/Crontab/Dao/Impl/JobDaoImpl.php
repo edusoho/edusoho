@@ -13,9 +13,10 @@ class JobDaoImpl extends BaseDao implements JobDao
         'jobParams' => 'json',
     );
 
-    public function getJob($id)
+    public function getJob($id, $lock = false)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $forUpdate = $lock ? "FOR UPDATE" : "";
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1 {$forUpdate}";
         $job = $this->getConnection()->fetchAssoc($sql, array($id));
         return $job ? $this->createSerializer()->unserialize($job, $this->getSerializeFields()) : null;
     }
