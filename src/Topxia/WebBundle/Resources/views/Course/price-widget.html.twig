@@ -34,7 +34,7 @@
         {% if (course.discount == 0) or (priceType == 'coin' and course.originCoinPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
           限免
         {% else  %}
-          {{ course.discount }} 折
+          {{ course.discount|round(2, 'common') }} 折
         {% endif %}
       </span>
 
