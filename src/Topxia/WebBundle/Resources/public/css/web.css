@@ -4899,8 +4899,11 @@ a.homework-essay-textarea-pack-up{
 }
 
 .order-pay .order-item {
-  border-bottom: 1px solid #E5E5E5;
   padding-top: 30px;
+}
+
+.order-pay .order-item-clear {
+  border-bottom: 1px solid #E5E5E5;
 }
 
 .order-item {
