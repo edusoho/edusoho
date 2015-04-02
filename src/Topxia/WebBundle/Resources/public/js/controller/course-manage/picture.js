@@ -1,7 +1,5 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
-	var Validator = require('bootstrap.validator');
-	require('common/validator-rules').inject(Validator);
 	var WebUploader = require('edusoho.webuploader');
 
 	exports.run = function() {

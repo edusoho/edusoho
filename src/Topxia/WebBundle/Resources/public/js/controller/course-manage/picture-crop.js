@@ -7,8 +7,6 @@ define(function(require, exports, module) {
     exports.run = function() {
       	require('./header').run();
 
-        var $form = $("#course-picture-crop-form");
-
         var imageCrop = new ImageCrop({
             element: "#course-picture-crop",
             group: "course",

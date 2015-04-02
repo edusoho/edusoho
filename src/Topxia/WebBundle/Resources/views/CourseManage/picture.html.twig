@@ -28,12 +28,12 @@
 
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
-          <button 
+          <a 
           id="upload-picture-btn"
           class="btn btn-fat btn-primary" 
           data-upload-token="{{ upload_token('tmp', 'image') }}"
           data-goto-url="{{path('course_manage_picture_crop', {id:course.id})}}"
-          >选择要上传的图片</button>
+          >选择要上传的图片</a>
         </div>
       </div>
 
