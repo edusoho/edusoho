@@ -325,6 +325,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
       </div>
     </div>
     
+    {% if capacity.code|default(0) == 1 %}
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="logo">直播LOGO</label>
@@ -339,6 +340,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
         <input type="hidden" name="live_logo" value="{{ courseSetting.live_logo|default("") }}">
       </div>
     </div>
+    {% endif %}
 
     <div class="form-group">
       <div class="col-md-3 control-label">
