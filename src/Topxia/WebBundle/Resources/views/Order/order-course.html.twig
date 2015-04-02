@@ -6,13 +6,22 @@
     </a>
   </div>
   <div class="col-md-8">
-    <h3><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
+    <h3>
+      <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+      {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows:"discount"}%}
+    </h3>
     <span class="course-text">课时数：{{ course.lessonNum }}</span>
     {% set teacher = users[course.teacherIds|first]|default(null) %}
     {% if teacher %}
       <span class="course-text">
         教&nbsp;&nbsp;&nbsp;&nbsp;师：<a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
       </span>
+    {% endif %}
+    {% if course.discountId %}
+    <span class="course-text">
+        原&nbsp;&nbsp;&nbsp;&nbsp;价：
+        {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows:"originPrice"}%}
+    </span>
     {% endif %}
   </div>
   {% endfor %}
