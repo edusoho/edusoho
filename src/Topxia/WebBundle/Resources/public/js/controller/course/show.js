@@ -132,7 +132,7 @@ define(function(require, exports, module) {
              + '<span>%H</span> 时 '
              + '<span>%M</span> 分 '
              + '<span>%S</span> 秒'));
-         }).on('finish', function(){
+         }).on('finish.countdown', function() {
             window.location.reload();
          });
 
