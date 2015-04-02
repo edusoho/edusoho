@@ -14,10 +14,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson_start' => 'onLessonStart',
-            'course.lesson_finish' => 'onLessonFinish',
-            'course.course_join' => 'onCourseJoin',
-            'course.course_favorite' => 'onCourseFavorite',
+            'course.lesson.start' => 'onLessonStart',
+            'course.lesson.finish' => 'onLessonFinish',
+            'course.join' => 'onCourseJoin',
+            'course.favorite' => 'onCourseFavorite',
         );
     }
 
