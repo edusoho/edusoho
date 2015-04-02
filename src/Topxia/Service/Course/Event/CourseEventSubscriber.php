@@ -14,8 +14,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.start' => 'onLessonStart',
-            'course.lesson.finish' => 'onLessonFinish',
+            'course.lesson_start' => 'onLessonStart',
+            'course.lesson_finish' => 'onLessonFinish',
             'course.join' => 'onCourseJoin',
             'course.favorite' => 'onCourseFavorite',
         );

@@ -1213,7 +1213,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$lesson = $this->getCourseLesson($courseId, $lessonId);
 		$this->dispatchEvent(
-			'course.lesson.start', 
+			'course.lesson_start', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
 
@@ -1322,7 +1322,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    }
 		$memberFields['credit'] = $totalCredits;
 		$this->dispatchEvent(
-			'course.lesson.finish', 
+			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
 
