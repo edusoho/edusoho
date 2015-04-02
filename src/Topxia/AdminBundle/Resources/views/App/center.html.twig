@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %}应用中心 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_app_center')}}{% endblock %}
 
 {% set menu = 'center' %}
 {% set tab_menus = permissions('admin_app_center_show',"tab") %}

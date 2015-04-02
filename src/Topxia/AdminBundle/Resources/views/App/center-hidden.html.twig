@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %}应用中心 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_app_center')}}{% endblock %}
 
 {% set menu = 'center' %}
 {% set tab_menus = permissions('admin_app_center_show',"tab") %}
@@ -55,7 +55,9 @@
 
       {% for app in apps %}
         {% set installedApp = installedApps[app.code]|default(null) %}
-              {% if app.userAccess != 'ok' and not installedApp %}
+              {% if app.userAccess == 'ok' or installedApp %}
+              
+              {% else %}
       <tr>
         <td>
           <img src="http://115.29.78.158:99/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
