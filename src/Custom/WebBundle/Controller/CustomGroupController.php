@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class Group1Controller extends GroupController
+class CustomGroupController extends GroupController
 {
-    public function index1Action(Request $request) 
+    public function customIndexAction(Request $request) 
     {  
         $mycreatedGroup = array();
         $myJoinGroup = array();

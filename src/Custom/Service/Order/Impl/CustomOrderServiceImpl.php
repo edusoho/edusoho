@@ -1,12 +1,12 @@
 <?php
 namespace Custom\Service\Order\Impl;
 
-use Custom\Service\Order\Order1Service;
+use Custom\Service\Order\CustomOrderService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Order\Impl\OrderServiceImpl;
 use Topxia\Common\ArrayToolkit;
 
-class Order1ServiceImpl extends OrderServiceImpl implements Order1Service
+class CustomOrderServiceImpl extends OrderServiceImpl implements CustomOrderService
 {
     public function createOrder($order)
     {   

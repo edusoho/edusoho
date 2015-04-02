@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class GroupThread1Controller extends GroupThreadController
+class CustomGroupThreadController extends GroupThreadController
 {
     
 

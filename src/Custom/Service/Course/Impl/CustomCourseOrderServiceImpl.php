@@ -1,15 +1,15 @@
 <?php
 namespace Custom\Service\Course\Impl;
 
-use Custom\Service\Course\CourseOrder1Service;
+use Custom\Service\Course\CustomCourseOrderService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\Impl\CourseOrderServiceImpl;
 
-class CourseOrder1ServiceImpl extends CourseOrderServiceImpl implements CourseOrder1Service
+class CustomCourseOrderServiceImpl extends CourseOrderServiceImpl implements CustomCourseOrderService
 {   
     protected function getOrderService()
     {
-        return $this->createService('Custom:Order.Order1Service');
+        return $this->createService('Custom:Order.CustomOrderService');
     }
 
     public function doSuccessPayOrder($id)

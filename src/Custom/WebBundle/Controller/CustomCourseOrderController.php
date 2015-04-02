@@ -7,7 +7,7 @@ use Topxia\WebBundle\Controller\CourseOrderController;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Util\AvatarAlert;
 
-class CourseOrder1Controller extends CourseOrderController
+class CustomCourseOrderController extends CourseOrderController
 {
     public function buyAction(Request $request, $id)
     {   
@@ -319,11 +319,11 @@ class CourseOrder1Controller extends CourseOrderController
     
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Custom:Course.CourseOrder1Service');
+        return $this->getServiceKernel()->createService('Custom:Course.CustomCourseOrderService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Custom:Order.Order1Service');
+        return $this->getServiceKernel()->createService('Custom:Order.CustomOrderService');
     }
 }
