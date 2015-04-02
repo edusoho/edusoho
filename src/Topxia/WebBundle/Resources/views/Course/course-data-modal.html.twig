@@ -10,7 +10,7 @@
             <td>加入课程时间</td>
             <td>完成课程时间</td>
             <td>课程学习天数</td>
-            <td>课程学习时长（秒）</td>
+            <td>课程学习时长（分）</td>
             <td>提问数</td>
             <td>笔记数</td>
           </tr>
@@ -22,7 +22,7 @@
             <td>{{student.createdTime|date('Y-m-d H:i:s')}}</td>
             <td>{% if student.fininshTime|default(null) %}{{student.fininshTime|date('Y-m-d H:i:s')}}{% else %}----{% endif %}</td>
             <td>{{student.fininshDay}}</td>
-            <td>{{student.learnTime|default(0)}}</td>
+            <td>{{(student.learnTime|default(0)/60)|round(0, 'floor')}}</td>
             <td>{{student.questionCount}}</td>
             <td>{{student.noteNum}}</td>
             </tr>
