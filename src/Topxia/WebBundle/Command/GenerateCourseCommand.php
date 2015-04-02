@@ -38,6 +38,7 @@ class GenerateCourseCommand extends BaseCommand
                 $course['createdTime'] = time();
                 $course['teacherIds'] = '|1|';
                 $course['price'] = $price;
+                $course['originPrice'] = $price;
                 $course = $this->getCourseDao()->addCourse($course);
 
                 $member = array(
