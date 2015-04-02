@@ -55,7 +55,7 @@
 
       {% for app in apps %}
         {% set installedApp = installedApps[app.code]|default(null) %}
-              {% if app.userAccess == 'ok' or installedApp %}
+           {% if app.purchased|default(false) == true or installedApp %}
               
               {% else %}
       <tr>
@@ -86,7 +86,11 @@
             </div>
 
             <div class="right-info pull-right">
-              <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
+              {% if app.price == 0 and not app.licensed %}
+                 <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
+              {% else %}
+                 <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
+              {% endif %}
                 <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
             </div>
 
