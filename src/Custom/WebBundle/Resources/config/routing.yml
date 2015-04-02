@@ -13,7 +13,7 @@ coupon_check:
 
 group:
     pattern:  /group
-    defaults: { _controller: CustomWebBundle:CustomGroup: customIndex }
+    defaults: { _controller: CustomWebBundle:CustomGroup:customIndex }
 group_show:
     pattern:  /group/{id}
     defaults: { _controller: CustomWebBundle:CustomGroup:groupIndex }
@@ -48,3 +48,20 @@ my_coin:
 # coin_change:
 #     path:     /coin/change
 #     defaults: { _controller: CustomWebBundle:CoinWeb:change }
+
+pay_center_show:
+    path:   /pay/center
+    defaults: { _controller: CustomWebBundle:PayCenter:show }
+
+pay_center_pay:
+    path:   /pay/center/pay
+    defaults: { _controller: CustomWebBundle:PayCenter:pay }
+    methods: [POST]
+
+pay_return:
+    pattern:  /pay/center/pay/{name}/return
+    defaults: { _controller: CustomWebBundle:PayCenter:payReturn }
+
+pay_notify:
+    pattern:  /pay/center/pay/{name}/notify
+    defaults: { _controller: CustomWebBundle:PayCenter:payNotify }
