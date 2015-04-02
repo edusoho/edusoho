@@ -1,0 +1,49 @@
+
+<div class="order-detail">
+  <div class="row">
+    <div class="col-md-4 col-sm-5">
+      <a href="{{path('classroom_show',{id:classroom.id})}}">
+        <img class="img-responsive" src="{{ default_path('classroom-default-213-142.png', classroom.middlePicture, '')|default(asset('assets/img/default/classroom-default-213-142.png')) }}" alt="" width="213" height="142">
+      </a>
+    </div>
+
+    <div class="col-md-8 col-sm-7">
+      <h3><a href="{{path('classroom_show',{id:classroom.id})}}">{{ classroom.title}}</a></h3>
+      <span class="course-text">总课程数：{{ classroom.courseNum}} </span>
+      {% set teacher = users|first|default(null) %}
+      {% if teacher %}
+        <span class="course-text">
+          授课老师：<a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+        </span>
+      {% endif %}
+      {% if headTeacher %}
+      <span class="course-text">
+          班主任：<a href="{{ path('user_show', {id:headTeacher.id}) }}">{{ headTeacher.nickname }}</a>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+  <div class="class-count hidden-xs">
+    班级金额：
+     
+    {% if priceType|default('RMB') == "RMB" %}
+    <span class="order-price">{{classroom.price}}</span>
+      元
+    {% elseif priceType|default('RMB') == "Coin" %}
+    <span class="order-price">{{classroom.price * cashRate}}</span>
+      {{setting("coin.coin_name")}}
+    {% endif %}
+    
+  </div>
+  
+</div>
+
+{% if paidCourses|length > 0 and setting('classroom.discount_buy')|default(1) == 1 %}
+
+{% include 'TopxiaWebBundle:Order:paid-course.html.twig' %}
+
+{% endif %}
+
+
+
+

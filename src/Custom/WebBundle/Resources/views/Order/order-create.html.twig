@@ -5,8 +5,7 @@
 {% set script_controller = 'order/create' %}
 
 {% block content %}
-   
-<link rel="stylesheet" media="screen" href="{{ asset('bundles/customweb/css/coursepay.css') }}" />
+
 <div class="order-pay">
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
@@ -26,9 +25,8 @@
 
             <input type="hidden" name="targetType" value="{{targetType}}"/>
             <input type="hidden" name="targetId" value="{{targetId}}"/>
-            
-         
-             {% if vip |default(false) %} 
+
+            {% if vip |default(false) %} 
                  {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
                       {% if priceType|default('RMB') =='Coin' %}
                         <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
@@ -41,8 +39,6 @@
               {% else %}
                    <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>  
              {% endif %}
-
-            
 
 
 
@@ -67,58 +63,57 @@
             {% endif %}
 
               <div class="order-item clearfix" >
-                <div class="order-count pull-right">
+                <div class="pull-right order-count">
                   订单金额：
-                  <span   {%if not vip|default(false) %} role="total-price" {% endif %}
+                  <span  {%if not vip|default(false) %} role="total-price" {% endif %}
                       {% if vip|default(false) %}
                           {% if course.status=="ok" and level.courseDiscount|default(10) <= 10 %}
                                      class="price old-price " 
                           {% endif %}
                       {% else %}  
                                    class="price " 
-                     {% endif %}
-                       >
-                    {{totalPrice}}
-                  </span>
-                   {% if priceType|default('RMB') == "RMB" %}
+                      {% endif %}>{{totalPrice}}  </span>
+
+               {#    <span role="total-price" class="order-price">{{totalPrice}}</span> #}
+                  {% if priceType|default('RMB') == "RMB" %}
                     元
                   {% elseif priceType|default('RMB') == "Coin" %}
                     {{setting("coin.coin_name")}}
                   {% endif %}
-                    {% if  vip |default(false) %}      &nbsp;&nbsp;&nbsp; {% endif %}
+
+                  {% if  vip |default(false) %}      &nbsp;&nbsp;&nbsp; {% endif %}
              
-            {% if vip |default(false) %}
-                 会员折扣价：
-                   <span role="total-price" class="now-price">
-                   {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
-                      {% if priceType|default('RMB') =='Coin' %}
-                          {{course.vipCoinPrice}}
-                      {% else %}
-                          {{course.vipPrice}}
-                      {% endif %}
-                   {% endif %}   
-                 </span>
-                   {% if priceType|default('RMB') == "RMB" %}
-                    元
-                  {% elseif priceType|default('RMB') == "Coin" %}
-                    {{setting("coin.coin_name")}}
+                  {% if vip |default(false) %}
+                     会员折扣价：
+                    <span role="total-price" class="now-price">
+                       {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
+                          {% if priceType|default('RMB') =='Coin' %}
+                              {{course.vipCoinPrice}}
+                          {% else %}
+                              {{course.vipPrice}}
+                          {% endif %}
+                       {% endif %}   
+                    </span>
+                    {% if priceType|default('RMB') == "RMB" %}
+                        元
+                    {% elseif priceType|default('RMB') == "Coin" %}
+                        {{setting("coin.coin_name")}}
+                    {% endif %}
                   {% endif %}
-               {% endif %}
-                 
-             {% if vip |default(false) %}
-                <div class="vip-tip">？<span class="tip-content">您是{{level.name}}，享{{level.courseDiscount}}折</span></div>
-                  {#  <div>(VIP折扣价 {{level.courseDiscount}}折)</div> #}
-            {% endif %}
+       
+                 {% if vip |default(false) %}
+                  <div class="vip-tip">？<span class="tip-content">您是{{level.name}}，享{{level.courseDiscount}}折</span></div>
+                 {% endif %}
                 </div>
               </div>
             </div>
             <div class="order-detail-bg">
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) %}
-            	{% include 'CustomWebBundle:Order:order-item-coupon.html.twig' %}
+            	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}
-            	{% include 'CustomWebBundle:Order:order-item-coin.html.twig' %}
+            	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
             </div>
 
