@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %} 已购项目 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_app_installed')}}{% endblock %}
 
 {% set script_controller = 'app/installed' %}
 {% set menu = 'center' %}

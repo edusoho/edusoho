@@ -20,6 +20,15 @@ class AppController extends BaseController
     public function centerAction(Request $request, $postStatus)
     {   
         $apps = $this->getAppService()->getCenterApps();
+
+        if (isset($apps['error'])) {
+            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error','type' => $postStatus));
+        }
+
+        if (!$apps) {
+            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'unlink','type' => $postStatus));
+        }
+
         $theme = array();
         $app = array();
         foreach ($apps as $key => $value) {
@@ -30,17 +39,9 @@ class AppController extends BaseController
             }
         }
 
-        if (isset($apps['error'])) {
-            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'error','type' => $postStatus));
-        }
-
-        if (!$apps) {
-            return $this->render('TopxiaAdminBundle:App:center.html.twig', array('status' => 'unlink','type' => $postStatus));
-        }
         $codes = ArrayToolkit::column($apps, 'code');
 
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
-
 
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
         'apps' => $apps,
@@ -48,6 +49,44 @@ class AppController extends BaseController
         'allApp' => $app,
         'installedApps' => $installedApps,
         'type' => $postStatus,
+
+    ));
+
+    }
+
+    public function centerHiddenAction(Request $request, $postStatus)
+    {
+        $apps = $this->getAppService()->getCenterApps();
+
+        if (isset($apps['error'])) {
+            return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array('status' => 'error','type' => $postStatus));
+        }
+
+        if (!$apps) {
+            return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array('status' => 'unlink','type' => $postStatus));
+        }
+        
+        $theme = array();
+        $app = array();
+        foreach ($apps as $key => $value) {
+            if ($value['type'] == 'theme') {
+                $theme[] = $value;
+            }elseif ($value['type'] == 'app') {
+                $app[] = $value;
+            }
+        }
+
+        $codes = ArrayToolkit::column($apps, 'code');
+
+        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+
+        return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array(
+        'apps' => $apps,
+        'theme' => $theme,
+        'allApp' => $app,
+        'installedApps' => $installedApps,
+        'type' => $postStatus,
+        'appTypeChoices' => 'installedApps',
     ));
 
     }

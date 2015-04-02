@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %}更新日志 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_app_logs')}}{% endblock %}
 
 {% set script_controller = 'app/logs' %}
 {% set menu = 'center' %}
