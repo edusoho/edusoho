@@ -50,32 +50,41 @@ class DefaultController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $courses = $this->getCourseService()->findUserLearnCourses($user->id, 0, 1);
+        $conditions = array(
+            'userId'=>$user->id,
+            'type'=>'"become_student","learned_lesson","start_learn_lesson"'
+        );
 
-        if (!empty($courses)) {
-            foreach ($courses as $course) {
+        $status = $this->getStatusService()->searchStatuses($conditions,array('createdTime','DESC'),0,1);
+        
+        $course = array();
+        $nextLearnLesson = array();
+        $progress = array();
+        $teachers = array();
+
+        if ($status) {
+            $course = $this->getCourseService()->getCourse($status[0]['properties']['course']['id']);
+
+            if ($course && $course['status'] == 'published'){
                 $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
-
                 $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
+                $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
+
+                $progress = $this->calculateUserLearnProgress($course, $member);
+            } else {
+                $course = array();
             }
-
-            $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
-
-            $progress = $this->calculateUserLearnProgress($course, $member);
-        } else {
-            $course = array();
-            $nextLearnLesson = array();
-            $progress = array();
-            $teachers = array();
+            
         }
 
         return $this->render('TopxiaWebBundle:Default:user-learning.html.twig', array(
-                'user' => $user,
-                'course' => $course,
-                'nextLearnLesson' => $nextLearnLesson,
-                'progress'  => $progress,
-                'teachers' => $teachers
-            ));
+            'user' => $user,
+            'course' => $course,
+            'nextLearnLesson' => $nextLearnLesson,
+            'progress'  => $progress,
+            'teachers' => $teachers
+        ));
     }
 
     private function getRecentLiveCourses()
@@ -244,5 +253,9 @@ class DefaultController extends BaseController
     private function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getStatusService(){
+        return $this->getServiceKernel()->createService('User.StatusService');
     }
 }
