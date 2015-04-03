@@ -131,8 +131,14 @@
             });
 
             $('.attach').tooltip();
-            var formvalidate = function(){
-                  var validator_thread = new Validator({
+
+            if ($('#custom_thread_content').length > 0) {
+              
+                var editor_thread = CKEDITOR.replace('custom_thread_content', {
+                    toolbar: 'GroupWithHidden',
+                    filebrowserImageUploadUrl: $('#custom_thread_content').data('imageUploadUrl')
+                });
+                var validator_thread = new Validator({
                                     element: '#user-thread-form',
                                     failSilently: true,
                                     onFormValidated: function(error) {
@@ -149,36 +155,13 @@
                             rule: 'minlength{min:2} maxlength{max:200}',
                             errormessageUrl: '长度为2-200位' 
                         });
-                
-                        validator_thread.addItem({
-                            element: '[name="thread[content]"]',
-                            required: true,
-                            rule: 'minlength{min:2}'
-                            
-                        });
-
-                        validator_thread.on('formValidate', function(elemetn, event) {
-                            editor_thread.sync();
-                        });
-
-             }
-
-            if ($('#custom_thread_content').length > 0) {
-              
-                var editor_thread = CKEDITOR.replace('custom_thread_content', {
-                    toolbar: 'GroupWithHidden',
-                    filebrowserImageUploadUrl: $('#custom_thread_content').data('imageUploadUrl')
-                });
-                formvalidate();
             }
 
             if ($('#thread_content').length > 0) {
-                // group: group
                 var editor_thread = CKEDITOR.replace('thread_content', {
                     toolbar: 'Group',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
                 });
-                formvalidate();
             }
 
             if ($('#post-thread-form').length > 0) {
