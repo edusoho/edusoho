@@ -31,5 +31,9 @@ sign_repair:
     defaults: { _controller: CustomWebBundle:Sign:signRepair }
 
 my_coin:
-     path:     /my/coin
+     path:  /my/coin
      defaults: { _controller: CustomWebBundle:CoinWeb:index }
+
+my_changetest:
+    path:  /my/changetest/{startnum}
+    defaults: {_controller: CustomWebBundle:ChangeTestWeb:index }
