@@ -1,0 +1,21 @@
+{% if type == 'course' %}
+  {% set title = course.title %}
+  {% set message = setting('default.courseShareContent')|default('我正在学习{{course}}，收获巨大哦，一起来学习吧！')|simple_template({course:course.title}) %}
+  {% set url = url('course_show', {id:course.id}) %}
+  {% set picture = default_path('coursePicture', course.largePicture, '', true) %}
+{% elseif type == 'classroom' %}
+
+{% elseif type ==  'article' %}
+
+{% elseif type == 'group_thread' %}
+
+{% endif %}
+
+<ul class="dropdown-menu js-social-share-params" data-title="{{ title }}" data-summary="{{ course.about|plain_text(50) }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture }}">
+  <li><a class="js-social-share" href="javascript:;" title="分享到微博" data-share="weibo"><span class="social-share-icon-weibo"></span> 微博</a></li>
+  <li><a class="js-social-share" href="javascript:;" title="分享到QQ好友" data-share="qq"><span class="social-share-icon-qq"></span> QQ好友</a></li>
+  <li><a class="js-social-share" href="javascript:;" title="分享到QQ空间" data-share="qzone"><span class="social-share-icon-qzone"></span> QQ空间</a></li>
+  <li><a class="js-social-share" href="javascript:;" title="分享到微信" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><span class="social-share-icon-weixin"></span> 微信</a></li>
+</ul>
+
+{{ load_script('common/share-dropdown') }}

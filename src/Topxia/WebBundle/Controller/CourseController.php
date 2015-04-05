@@ -224,17 +224,6 @@ class CourseController extends BaseController
 
         $defaultSetting = $this->getSettingService()->get('default', array());
 
-        if (isset($defaultSetting['courseShareContent'])){
-            $courseShareContent = $defaultSetting['courseShareContent'];
-        } else {
-        	$courseShareContent = "";
-        }
-
-        $valuesToBeReplace = array('{{course}}');
-        $valuesToReplace = array($course['title']);
-        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
-
-
 
 		$nextLiveLesson = null;
 
@@ -385,7 +374,6 @@ class CourseController extends BaseController
 			'currentTime' => $currentTime,
 			'courseReviews' => $courseReviews,
 			'weeks' => $weeks,
-			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
 			'ChargeCoin'=> $ChargeCoin,
 			'classrooms'=> $classrooms
