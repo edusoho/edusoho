@@ -48,7 +48,7 @@
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <i class="esicon esicon-share"></i>
               </button>
-              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course', right: true} %}
             </div>
             {% if canExit %}
               {% if member.joinedType == 'course' and member.orderId %}

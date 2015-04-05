@@ -73,19 +73,6 @@ class ArticleAppController extends BaseController
             'status' => 'published'
         );
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        $site = $this->getSettingService()->get('site', array());
-
-        if (empty($defaultSetting)){
-            $articleShareContent = '';
-        } else {
-            $articleShareContent = $defaultSetting['articleShareContent'];
-        }
-
-        $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
-        $valuesToReplace = array($article['title'], $site['name']);
-        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $articleShareContent);
-
         $createdTime = $article['createdTime'];
 
         $currentArticleId = $article['id'];
@@ -101,7 +88,6 @@ class ArticleAppController extends BaseController
             'articlePrevious' => $articlePrevious,
             'article' => $article,
             'articleNext' => $articleNext,
-            'articleShareContent' => $articleShareContent,
         ));
     }
 
