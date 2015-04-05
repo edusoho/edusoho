@@ -24,7 +24,6 @@ class CommonController extends BaseController
             'Content-Type' => 'image/png',
             'Content-Disposition' => 'inline; filename="qrcode.png"'
         );
-        sleep(2);
         return new Response($img, 200, $headers);
     }
 
