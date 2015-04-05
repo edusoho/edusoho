@@ -5159,3 +5159,19 @@ a.homework-essay-textarea-pack-up{
 .course-checkbox-label {
   font-weight: normal;
 }
+
+.my-wallet-panel img{
+  width: 100%;
+}
+
+.table-striped .sort-handle{
+  padding: 5px;
+  cursor: pointer;
+  color: #ccc;
+  display: inline-block;
+  font-size:18px;
+}
+
+.table-striped .sort-handle:hover{
+  color:#999;
+};

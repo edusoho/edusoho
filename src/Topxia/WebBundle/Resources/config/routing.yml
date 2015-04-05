@@ -238,6 +238,7 @@ course_info:
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
+    methods: [POST]
 
 course_become_use_member:
     pattern:  /course/{id}/become_use_member
