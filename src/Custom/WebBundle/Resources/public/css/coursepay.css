@@ -29,7 +29,7 @@
       .tip-content{
         display: block;
         position: absolute;
-        width: 120px;
+        top: 0 3px;
         opacity: 0;
         top: 0;
         right: -120px;

@@ -5,7 +5,7 @@
 {% set script_controller = 'order/create' %}
 
 {% block content %}
-
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/customweb/css/coursepay.css') }}" />
 <div class="order-pay">
   <div class="row">
     <div class="col-md-10 col-md-offset-1 ptl">
@@ -113,7 +113,7 @@
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}
-            	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
+            	{% include 'CustomWebBundle:Order:order-item-coin.html.twig' %}
             {% endif %}
             </div>
 
