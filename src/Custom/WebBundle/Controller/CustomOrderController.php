@@ -105,6 +105,7 @@ class CustomOrderController extends OrderController
     public function createAction(Request $request)
     {
         $fields = $request->request->all(); 
+
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
@@ -154,7 +155,6 @@ class CustomOrderController extends OrderController
             if($targetType  =='course' ){
                list($amount, $totalPrice) = $this-> setPayVipDiscount($user, $fields, $amount, $totalPrice);
             }
-
 
             //价格比较
             if(intval($totalPrice*100) != intval($fields["totalPrice"]*100)) {
@@ -215,11 +215,15 @@ class CustomOrderController extends OrderController
                 $vipPrice=$totalPrice*0.1*$level['courseDiscount'];
                 $vipPrice=sprintf("%.2f", $vipPrice);
                 $totalPrice = $vipPrice;
-
                 $coinSetting = $this->setting("coin");
+                //如果使用的是人民币 totalPrice 单位是人民币
                 if ($coinSetting['coin_enabled']) {
-                     $cash_rate = empty($coinSetting["cash_rate"]) ? 1 : $coinSetting["cash_rate"]; 
-                    $amount = round($totalPrice*1000 - $fields['coinPayAmount']/ $cash_rate*1000)/1000;//出去汇率，以人民币计算
+                    if ($coinSetting['price_type']=='RMB') {
+                        $cash_rate = empty($coinSetting["cash_rate"]) ? 1 : $coinSetting["cash_rate"]; 
+                        $amount = round($totalPrice*1000 - $fields['coinPayAmount']/ $cash_rate*1000)/1000;//出去汇率，以人民币计算
+                    }else{
+                        $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000;//出去汇率，以人民币计算
+                    }    
                 }else{
                     $amount =  $vipPrice;
                 }
