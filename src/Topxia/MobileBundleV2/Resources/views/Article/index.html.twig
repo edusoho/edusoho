@@ -1,0 +1,22 @@
+{% extends 'TopxiaMobileBundleV2::article.layout.html.twig' %}
+{% block html %}<html>{% endblock %}
+{% block title %}网校资讯{% endblock %}
+
+{% block content %}
+
+	<div ui-view="categoryList" class="ui-poptips ui-poptips-null ng-hide" style="height:100%;z-index: 99999;" ng-show="isShowCategory">
+	</div>
+
+	<ion-nav-view name="articleContent"></ion-nav-view>
+{% block bottom_scripts %}
+  
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/ionic/1.0.0/js/ionic.bundle.min.js') }}"></script>
+  <!--
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-ui-router.min.js') }}"></script>
+  <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-sanitize.min.js') }}"></script>
+  -->
+    {{ parent() }}
+{% endblock %}
+
+{% endblock %}

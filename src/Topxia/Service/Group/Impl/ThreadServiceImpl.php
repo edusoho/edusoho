@@ -76,7 +76,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function searchThreadsCount($conditions)
     {
-        $conditions=$this->prepareThreadConditions($conditions);
         $count=$this->getThreadDao()->searchThreadsCount($conditions);
         return $count;
     }
@@ -314,7 +313,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function searchThreads($conditions,$orderBy,$start, $limit)
     {
-        $conditions=$this->prepareThreadConditions($conditions);
         return $this->getThreadDao()->searchThreads($conditions,$orderBy,$start,$limit);
     }
 
@@ -340,14 +338,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function searchPosts($conditions,$orderBy,$start,$limit)
     {
-        $conditions = $this->prepareThreadConditions($conditions);
         return $this->getThreadPostDao()->searchPosts($conditions,$orderBy,$start,$limit);
 
     }
 
     public function searchPostsCount($conditions)
     {
-        $conditions = $this->prepareThreadConditions($conditions);
         $count= $this->getThreadPostDao()->searchPostsCount($conditions);
         return $count;
     }
@@ -430,35 +426,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     private function getLogService() 
     {
         return $this->createService('System.LogService');
-    }
-
-     private function prepareThreadConditions($conditions)
-     {
-        if(isset($conditions['groupName'])&&$conditions['groupName']!==""){
-            $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
-            if(!empty($group)){
-              $conditions['groupId']=$group[0]['id'];  
-            }else{
-              $conditions['groupId']=0;  
-            }   
-        }
-
-        if(isset($conditions['userName'])&&$conditions['userName']!==""){
-            $user=$this->getUserService()->getUserByNickname($conditions['userName']);
-            if(!empty($user)){
-              $conditions['userId']=$user['id'];  
-            }else{
-              $conditions['userId']=0;  
-            }   
-        }
-
-         if(isset($conditions['status']))
-        {
-            if($conditions['status']==""){
-               unset( $conditions['status']);
-            }
-        }   
-        return $conditions;
     }
 
     public function getTradeByUserIdAndThreadId($userId,$threadId)
