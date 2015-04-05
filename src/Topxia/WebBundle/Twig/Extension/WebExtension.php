@@ -775,7 +775,7 @@ class WebExtension extends \Twig_Extension
     public function simpleTemplateFilter($text, $variables)
     {
         foreach ($variables as $key => $value) {
-            $text = str_replace('{{' . $key . '}}' , '《' . $value . '》', $text);
+            $text = str_replace('{{' . $key . '}}', $value, $text);
         }
         return $text;
     }
