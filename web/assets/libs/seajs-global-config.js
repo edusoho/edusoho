@@ -15,6 +15,7 @@ seajs.config({
 		"jquery.nouislider": "jquery-plugin/nouislider/5.0.0/nouislider",
 		"jquery.nouislider-css": "jquery-plugin/nouislider/5.0.0/nouislider.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
+		"jquery.colorbox": "jquery.colorbox/1.6.0/index",
 		"plupload": "jquery-plugin/plupload-queue/2.0.0/plupload",
 		"jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
 		"jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
