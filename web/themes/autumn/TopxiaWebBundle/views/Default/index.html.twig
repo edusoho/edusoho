@@ -468,7 +468,7 @@
     <div class="col-md-4">
       {# 在学课程 #}
       {% if app.user %}
-        {% set course = data('MemberRecentlyLearned',{'count':1,'user':app.user}) %}
+        {% set course = data('MemberRecentlyLearned',{'user':app.user}) %}
         
         {% if course %}
           <div class="panel panel-autumn panel-autumn-primary">
@@ -500,7 +500,7 @@
               </div>
             </div>
           </div>
-          {% endif %}
+        {% endif %}
       {% endif %}
       
       {# 热门标签 #}

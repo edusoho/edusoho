@@ -52,18 +52,17 @@ class DefaultController extends BaseController
 
         $conditions = array(
             'userId' => $user->id,
-            'objectType' => array('course', 'lesson')
         );
 
-        $status = $this->getStatusService()->searchStatuses($conditions,array('createdTime','DESC'),0,1);
+        $lesson = $this->getCourseService()->searchLearns($conditions,array('startTime','DESC'),0,1);
 
         $course = array();
         $nextLearnLesson = array();
         $progress = array();
         $teachers = array();
 
-        if ($status) {
-            $course = $this->getCourseService()->getCourse($status[0]['properties']['course']['id']);
+        if ($lesson) {
+            $course = $this->getCourseService()->getCourse($lesson[0]['courseId']);
 
             if ($course && $course['status'] == 'published'){
                 $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);

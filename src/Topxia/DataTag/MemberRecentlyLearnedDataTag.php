@@ -9,8 +9,7 @@ class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取个人正在学习课程
-     *
-     *   count    必需 
+     * 
      *   user     必须
      * @param  array $arguments 参数
      * @return array 个人动态
@@ -21,18 +20,17 @@ class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag
 
         $conditions = array(
             'userId' => $user->id,
-            'objectType' => array('course', 'lesson')
         );
 
-        $status = $this->getStatusService()->searchStatuses($conditions,array('createdTime','DESC'),0,1);
+        $lesson = $this->getCourseService()->searchLearns($conditions,array('startTime','DESC'),0,1);
 
         $course = array();
         $nextLearnLesson = array();
         $progress = array();
         $teachers = array();
 
-        if ($status) {
-            $course = $this->getCourseService()->getCourse($status[0]['properties']['course']['id']);
+        if ($lesson) {
+            $course = $this->getCourseService()->getCourse($lesson[0]['courseId']);
 
             if ($course && $course['status'] == 'published'){
                 $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
@@ -53,10 +51,6 @@ class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
-    private function getStatusService() 
-    {
-        return $this->getServiceKernel()->createService('User.StatusService');
     }
 
     protected function getCourseService()
