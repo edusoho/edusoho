@@ -39,6 +39,7 @@ class WebExtension extends \Twig_Extension
             'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
             'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter'),
             'score_text' => new \Twig_Filter_Method($this, 'scoreTextFilter'),
+            'simple_template' => new \Twig_Filter_Method($this, 'simpleTemplateFilter'),
             'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
@@ -549,16 +550,14 @@ class WebExtension extends \Twig_Extension
             if (array_key_exists($key, $defaultSetting) && array_key_exists($fileName, $defaultSetting)){
                 if ($defaultSetting[$key] == 1) {
                     $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
-                    return $url;
-                } else {
-                    if ($absolute) {
-                        $url = $request->getSchemeAndHttpHost() . $url;
-                    }
-                   return $url;
                 }
-            } else {
-                return $url;
             }
+
+            if ($absolute) {
+                $url = $request->getSchemeAndHttpHost() . $url;
+            }
+
+            return $url;
         }
 
         $uri = $this->parseFileUri($uri);
@@ -768,6 +767,14 @@ class WebExtension extends \Twig_Extension
 
         if (intval($text) == $text) {
             return (string) intval($text);
+        }
+        return $text;
+    }
+
+    public function simpleTemplateFilter($text, $variables)
+    {
+        foreach ($variables as $key => $value) {
+            $text = str_replace('{{' . $key . '}}', $value, $text);
         }
         return $text;
     }

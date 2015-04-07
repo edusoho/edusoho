@@ -51,6 +51,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+common_qrcode:
+    pattern:  /common/qrcode
+    defaults: { _controller: TopxiaWebBundle:Common:qrcode }
+
 user_terms:
     pattern:  /userterms
     defaults: { _controller: TopxiaWebBundle:Register:userTerms }
@@ -234,6 +238,7 @@ course_info:
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
+    methods: [POST]
 
 course_become_use_member:
     pattern:  /course/{id}/become_use_member

@@ -5322,3 +5322,19 @@ a.homework-essay-textarea-pack-up{
   -webkit-box-shadow: -1px -1px 2px #8e0000;
   box-shadow: -1px -1px 2px #8e0000;
 }
+
+.my-wallet-panel img{
+  width: 100%;
+}
+
+.table-striped .sort-handle{
+  padding: 5px;
+  cursor: pointer;
+  color: #ccc;
+  display: inline-block;
+  font-size:18px;
+}
+
+.table-striped .sort-handle:hover{
+  color:#999;
+};

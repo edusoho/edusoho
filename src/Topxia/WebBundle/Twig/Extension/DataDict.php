@@ -269,7 +269,10 @@ class DataDict
             'pending' => '待审核',
             'creation' => '编辑中',
         ),
-
+        'threadProperty' => array(
+            'isStick' => '置顶',
+            'isElite' => '加精',
+        ),
 	);
 
 	public static function dict($type)

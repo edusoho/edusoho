@@ -422,6 +422,7 @@ CREATE TABLE `course_review` (
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '评价标题',
   `content` text NOT NULL COMMENT '评论内容',
   `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评分',
+  `private` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
   `createdTime` int(10) unsigned NOT NULL COMMENT '评价创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -436,6 +437,7 @@ CREATE TABLE `course_thread` (
   `isStick` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否置顶',
   `isElite` tinyint(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否精华',
   `isClosed` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否关闭',
+  `private` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
   `title` varchar(255) NOT NULL COMMENT '话题标题',
   `content` text COMMENT '话题内容',
   `postNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复数',
@@ -787,6 +789,7 @@ CREATE TABLE `status` (
   `properties` text NOT NULL COMMENT '动态的属性',
   `commentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
   `likeNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '被赞的数量',
+  `private` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '动态发布时间',
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),

@@ -15,6 +15,12 @@
         {{ select_options(dict('groupstatus'), app.request.query.get('status'), '话题状态') }}
       </select>
     </div>
+    
+    <div class="form-group">
+      <select class="form-control" name="threadType">
+        {{ select_options(dict('threadProperty'), app.request.get('threadType'), '属性') }}
+      </select>
+    </div>
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="所属小组" name="groupName" value="{{ app.request.get('groupName') }}">
@@ -38,12 +44,13 @@
         <thead>
         <tr>
           <th width="7%"><input type="checkbox"  data-role="batch-select"/> 编号</th>
-          <th width="43%">名称</th>
-          <th>创建者</th>
-          <th>所属小组</th>
-          <th>回复数</th>
-          <th>状态</th>
-          <th>操作</th>
+          <th width="30%">名称</th>
+          <th width="10%">属性</th>
+          <th width="10%">创建者</th>
+          <th width="16%">所属小组</th>
+          <th width="7%">回复数</th>
+          <th width="10%">状态</th>
+          <th width="10%">操作</th>
         </tr>
         </thead>
 
@@ -61,7 +68,7 @@
           <td>   
            <input type="hidden" id="batchDeleteThread" value="{{path('admin_groupThread_batch_delete')}}">
            
-           <button id="deleteThread" data-submiting-text="正在删除" type="button" class="btn btn-default btn-sm"
+           <button id="thread-delete-btn" data-submiting-text="正在删除" type="button" class="btn btn-default btn-sm"
            >删除话题</button>
  
           </td>

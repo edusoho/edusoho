@@ -135,19 +135,6 @@ class ArticleController extends BaseController
             'status' => 'published'
         );
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        $site = $this->getSettingService()->get('site', array());
-
-        if (empty($defaultSetting) || !isset($defaultSetting['articleShareContent'])){
-            $articleShareContent = '';
-        } else {
-            $articleShareContent = $defaultSetting['articleShareContent'];
-        }
-
-        $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
-        $valuesToReplace = array($article['title'], $site['name']);
-        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $articleShareContent);
-
         $createdTime = $article['createdTime'];
 
         $currentArticleId = $article['id'];
@@ -186,7 +173,6 @@ class ArticleController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'categoryName' => $category['name'],
             'categoryCode' => $category['code'],
-            'articleShareContent' => $articleShareContent,
         ));
     }
 
