@@ -83,11 +83,11 @@
             <ul class="dropdown-menu course-expoler" role="menu" style="padding: 5px 10px;">
                 {% for firstCat in firstCategories %}
 					{% if firstCat.parentId == 0 %}
-						<li><a class="list" href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id)}) }}">{{ firstCat.name }}</a>
+						<li><a class="list" href="{{ path('course_explore', {category:firstCat.code|default(firstCat.id),first:firstCat.id}) }}">{{ firstCat.name }}</a>
 							<ul class="sec-list">
 								{% set secCategories = data('Categories',{ group:'course',parentId:firstCat.id}) %}
 									{% for secCat in secCategories %}
-									<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id)}) }}">{{ secCat.name }}</a></li>
+									<li><a href="{{ path('course_explore', {category:secCat.code|default(secCat.id),first:firstCat.id}) }}">{{ secCat.name }}</a></li>
 									{% endfor %}
 							</ul>
 						</li>
@@ -194,12 +194,8 @@
 <div class="footer-sec">
   <div class="container clearfix">
     <div class="copyright hidden-sm hidden-xs">
-      <ul class="list-inline">
-        <li><a href="">关于我们</a></li>
-        <li><a href="">网站帮助</a></li>
-        <li><a href="">个人中心</a></li>
-        <li><a href="">课程库</a></li>
-      </ul>
+
+      {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
       <span class="">客服热线：400-889-9712</span>
 
       <p>关注求是微信公众号</p>
