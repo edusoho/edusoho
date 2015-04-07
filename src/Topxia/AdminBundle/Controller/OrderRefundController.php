@@ -95,8 +95,14 @@ class OrderRefundController extends BaseController
             $data = $request->request->all();
 
             $pass = $data['result'] == 'pass' ? true : false;
-            $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
 
+            if ($pass == true) {
+                $this->getNotifiactionService()->notify($order['userId'],'default',"您的退款申请已通过管理员审核");
+            }else{
+                $this->getNotifiactionService()->notify($order['userId'],'default',"您的退款申请因{$data['note']}未通过审核");
+            }
+
+            $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
             $this->getOrderRefundProcessor($order["targetType"])->auditRefundOrder($id, $pass, $data);
 
             return $this->createJsonResponse(true);
@@ -116,5 +122,10 @@ class OrderRefundController extends BaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getNotifiactionService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 }
