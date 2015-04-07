@@ -50,40 +50,32 @@ class DefaultController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $conditions = array(
-            'userId' => $user->id,
-        );
+        $courses = $this->getCourseService()->findUserLearnCourses($user->id, 0, 1);
 
-        $lesson = $this->getCourseService()->searchLearns($conditions,array('startTime','DESC'),0,1);
-
-        $course = array();
-        $nextLearnLesson = array();
-        $progress = array();
-        $teachers = array();
-
-        if ($lesson) {
-            $course = $this->getCourseService()->getCourse($lesson[0]['courseId']);
-
-            if ($course && $course['status'] == 'published'){
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
                 $member = $this->getCourseService()->getCourseMember($course['id'], $user->id);
+
                 $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-                $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
-
-                $progress = $this->calculateUserLearnProgress($course, $member);
-            } else {
-                $course = array();
             }
-            
+
+            $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user->id, $course['id']);
+
+            $progress = $this->calculateUserLearnProgress($course, $member);
+        } else {
+            $course = array();
+            $nextLearnLesson = array();
+            $progress = array();
+            $teachers = array();
         }
 
         return $this->render('TopxiaWebBundle:Default:user-learning.html.twig', array(
-            'user' => $user,
-            'course' => $course,
-            'nextLearnLesson' => $nextLearnLesson,
-            'progress'  => $progress,
-            'teachers' => $teachers
-        ));
+                'user' => $user,
+                'course' => $course,
+                'nextLearnLesson' => $nextLearnLesson,
+                'progress'  => $progress,
+                'teachers' => $teachers
+            ));
     }
 
     private function getRecentLiveCourses()
@@ -155,12 +147,12 @@ class DefaultController extends BaseController
 
     public function topNavigationAction($siteNav = null)
     {
-    	$navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
+        $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
-    	return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
-    		'navigations' => $navigations,
+        return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
+            'navigations' => $navigations,
             'siteNav' => $siteNav
-		));
+        ));
     }
 
 
@@ -252,9 +244,5 @@ class DefaultController extends BaseController
     private function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    private function getStatusService(){
-        return $this->getServiceKernel()->createService('User.StatusService');
     }
 }

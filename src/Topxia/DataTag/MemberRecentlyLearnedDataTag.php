@@ -12,7 +12,7 @@ class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag
      * 
      *   user     必须
      * @param  array $arguments 参数
-     * @return array 个人动态
+     * @return array 个人正在学习课程相关信息
      */
     public function getData(array $arguments)
     {   
