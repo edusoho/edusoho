@@ -70,8 +70,8 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere("userId = :userId")
-            ->andWhere("type IN (:type)");
-            ->andWhere('private = :private');
+            ->andWhere('private = :private')
+            ->andWhere("objectType IN (:objectType)");
     }
 
     public function addStatus($fields)

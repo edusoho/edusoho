@@ -51,12 +51,12 @@ class DefaultController extends BaseController
         $user = $this->getCurrentUser();
 
         $conditions = array(
-            'userId'=>$user->id,
-            'type'=>'"become_student","learned_lesson","start_learn_lesson"'
+            'userId' => $user->id,
+            'objectType' => array('course', 'lesson')
         );
 
         $status = $this->getStatusService()->searchStatuses($conditions,array('createdTime','DESC'),0,1);
-        
+
         $course = array();
         $nextLearnLesson = array();
         $progress = array();
