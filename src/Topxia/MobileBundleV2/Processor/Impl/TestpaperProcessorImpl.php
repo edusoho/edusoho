@@ -8,7 +8,6 @@ use Topxia\Common\ArrayToolkit;
 
 class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 {
-
 	public function reDoTestpaper()
 	{
 		$testId = $this->getParam("testId");
@@ -85,52 +84,62 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	public function myTestpaper()	
 	{
 		$user = $this->controller->getUserByToken($this->request);
-                        if (!$user->isLogin()) {
-                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
-                        }
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
 
-                       	$start = (int) $this->getParam("start", 0);
+        $start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
-                        $total = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
+        $total = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
-                        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
-		            $user['id'],
-		            $start,
-		            $limit
+        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
+	        $user['id'],
+	        $start,
+	        $limit
 		);
 
-                        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
+        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
 
-        		$testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
-        		$testpapers = ArrayToolkit::index($testpapers, 'id');
+		$testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
+		$testpapers = ArrayToolkit::index($testpapers, 'id');
 
-        		$targets = ArrayToolkit::column($testpapers, 'target');
-        		$courseIds = array_map(function($target){
-            		$course = explode('/', $target);
-            		$course = explode('-', $course[0]);
-            		return $course[1];
-        		}, $targets);
+		$targets = ArrayToolkit::column($testpapers, 'target');
+		$courseIds = array_map(function($target){
+    		$course = explode('/', $target);
+    		$course = explode('-', $course[0]);
+    		return $course[1];
+		}, $targets);
 
-        		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        		$data = array(
-        			'myTestpaperResults' => $this->filterMyTestpaperResults($testpaperResults),
-            		'myTestpapers' => $this->filterMyTestpaper($testpapers),
-            		'courses' => $this->filterMyTestpaperCourses($courses),
-        		);
-        		return array(
-        			"start"=>$start,
-        			"total"=>$total,
-        			"limit"=>$limit,
-        			"data"=>$data
-        			);
+		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
+		$data = array(
+			'myTestpaperResults' => $this->filterMyTestpaperResults($testpaperResults, $testpapersIds),
+    		'myTestpapers' => $this->filterMyTestpaper($testpapers),
+    		'courses' => $this->filterMyTestpaperCourses($courses),
+		);
+		return array(
+			"start"=>$start,
+			"total"=>$total,
+			"limit"=>$limit,
+			"data"=>$data
+		);
 	}
 
-	private function filterMyTestpaperResults($testpaperResults)
+	private function filterMyTestpaperResults($testpaperResults, $testIds)
 	{
-		return array_map(function($testpaperResult){
-			$testpaperResult['beginTime'] = date('Y-m-d H:i:s', $testpaperResult['beginTime']);
-			return $testpaperResult;
-		}, $testpaperResults);
+		$results = $testpaperResults;
+		foreach ($testpaperResults as $key => $value) {
+			if(!in_array($value['testId'], $testIds)){
+				unset($results[$key]);
+			}else{
+				$results[$key]['beginTime'] = date('Y-m-d H:i:s', $value['beginTime']);
+				$results[$key]['endTime'] = date('Y-m-d H:i:s', $value['endTime']);
+				if($results[$key]['updateTime'] != 0){
+					$results[$key]['updateTime'] = date('Y-m-d H:i:s', $value['updateTime']);
+				}
+				$results[$key]['checkedTime'] = date('Y-m-d H:i:s', $value['checkedTime']);
+			}
+		}
+		return $results;
 	}
 
 	private function filterMyTestpaper($testpapers)
