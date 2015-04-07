@@ -28,6 +28,7 @@
         </div>
 
       <button class="btn btn-primary">搜索</button>
+       <a href="javascript:;" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_give')}}">发放虚拟币</a>
     </form>
     
     <div class="well">
@@ -84,8 +85,11 @@
               <td style="color:#ff7b0e;">{{userOutCash(userId,condition.timeType)|default("0.00")}}
               </td>
               <td style="color:blue;">{{userAccount(userId).cash|default(0)}}</td>
-              <td><a class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType})}}" href="javascript:;">查看</a>
+              <td>
+              {% if userAccount(userId) %}
+                <a class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType})}}" href="javascript:;">查看</a>
               <a href="javascript:;" class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_admin_edit',{id:userAccount(userId).id})}}">修改</a>  
+            {% endif %}
               </td>
             </tr>
           {% endfor %}
