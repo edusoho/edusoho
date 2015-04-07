@@ -71,6 +71,7 @@ class StatusDaoImpl extends BaseDao implements StatusDao
             ->from($this->table, $this->table)
             ->andWhere("userId = :userId")
             ->andWhere("type IN (:type)");
+            ->andWhere('private = :private');
     }
 
     public function addStatus($fields)

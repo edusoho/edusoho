@@ -144,7 +144,7 @@ class DefaultController extends BaseController
 
     public function latestReviewsBlockAction($number)
     {
-        $reviews = $this->getReviewService()->searchReviews(array(), 'latest', 0, $number);
+        $reviews = $this->getReviewService()->searchReviews(array('private' => 0), 'latest', 0, $number);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
         return $this->render('TopxiaWebBundle:Default:latest-reviews-block.html.twig', array(

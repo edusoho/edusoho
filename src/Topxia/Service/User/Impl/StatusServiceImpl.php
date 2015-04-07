@@ -24,7 +24,7 @@ class StatusServiceImpl extends BaseService implements StatusService
         if($deleteOld){
             $this->deleteOldStatus($status);
         }
-
+        
         return $this->getStatusDao()->addStatus($status);
     }
 
