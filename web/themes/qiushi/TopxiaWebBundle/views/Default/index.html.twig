@@ -2,13 +2,15 @@
 
 {% block topbanner %}
 	<!--首页幻灯片开始-->
-	<div class="jumbotron">
-	  <div class="container">
-	    <div class="row">
-	      <div class="com-xs-12 col-sm-12 col-md-9 col-lg-9">
-	        <img class="img-responsive" src="{{ asset('themes/qiushi/img/carousel.png') }}" alt="">
-	      </div>
-	      <div class="com-xs-12 col-sm-12 col-md-3 col-lg-3" style="margin-left:-20px;">
+
+	
+	
+
+		    	  {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
+  {% if blocks['qiushi:home_top_banner'] %}
+	    <div id="carousel" class="carousel slide jumbotron" data-ride="carousel">
+<div class="carousel-inner" role="listbox">{{ blocks['qiushi:home_top_banner']|raw }}</div>
+<div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:150px;">
 	        <div class="panel newcourse-list">
 	          <div class="panel-heading">最新课程列表</div>
 	          <div class="panel-body">
@@ -33,10 +35,11 @@
 	          </div>
 	        </div>
 	      </div>
-	    </div>
-	  </div>
-	</div>
-	<!--首页幻灯片结束-->
+
+    </div>
+
+  {% endif %}
+        		 	<!--首页幻灯片结束-->
 
 {% endblock %}
 
