@@ -1063,6 +1063,10 @@ my_discussions:
     pattern: /my/discussions
     defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
 
+my_classroom_discussions:
+    pattern: /my/classroom/discussions
+    defaults: { _controller: TopxiaWebBundle:MyThread:classroomDiscussions }
+
 my_notebooks:
     pattern: /my/notebooks
     defaults: { _controller: TopxiaWebBundle:MyNotebook:index }

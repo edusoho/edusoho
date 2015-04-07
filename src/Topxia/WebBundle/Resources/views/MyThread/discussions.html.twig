@@ -12,6 +12,11 @@
   <div class="panel-body">
 
     {% if threads %}
+		<ul class="nav nav-tabs">
+			<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{ path('my_discussions') }}">课程话题</a></li>
+			<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{ path('my_classroom_discussions') }}">班级话题</a></li>
+		</ul>
+		<br>
 	    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: 'discussion'} %}
 	  {% else %}
 	    <div class="empty">你还没有发表过话题</div>
