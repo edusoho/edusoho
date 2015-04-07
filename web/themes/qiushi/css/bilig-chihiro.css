@@ -138,8 +138,21 @@ a {
 
 
 .list-group-item{
-	font-size: 14px!important;
+  font-size: 14px!important;
 }
 .lesson-dashboard{
-	z-index:999;
+  z-index:999;
+}
+.carousel-indicators li{
+  border:1px solid #F59200;
+}
+.carousel-indicators .active{
+  background-color: #F59200;
+}
+.carousel-indicators{
+    left:inherit;
+    margin-left:auto;
+    text-align: left;
+    margin-left: 20px;
+    bottom: 0px;
 }

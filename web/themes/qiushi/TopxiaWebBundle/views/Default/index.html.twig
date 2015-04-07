@@ -1,14 +1,11 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block topbanner %}
-	<!--首页幻灯片开始-->
+  <!--首页幻灯片开始-->
 
-	
-	
-
-		    	  {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
+            {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
   {% if blocks['qiushi:home_top_banner'] %}
-    <div class="container jumbotron" style="position: relative">
+  <div class="container jumbotron" style="position: relative">
 <div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:15px; z-index:999;">
           <div class="panel newcourse-list">
             <div class="panel-heading">最新课程列表</div>
@@ -35,14 +32,21 @@
           </div>
         </div>
 </div>
-	    <div id="carousel" class="carousel slide jumbotron" data-ride="carousel">
-<div class="carousel-inner" role="listbox">{{ blocks['qiushi:home_top_banner']|raw }}</div>
 
+      <div id="carousel" class="carousel slide " data-ride="carousel">
+      <!-- Indicators -->
+<div class="container">
+  <ol class="carousel-indicators">
+    <li data-target="#carousel" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel" data-slide-to="1"></li>
+  </ol>
+</div>
+<div class="carousel-inner" role="listbox">{{ blocks['qiushi:home_top_banner']|raw }}</div>
 
     </div>
 
   {% endif %}
-        		 	<!--首页幻灯片结束-->
+              <!--首页幻灯片结束-->
 
 {% endblock %}
 
@@ -62,18 +66,18 @@
       <div class="panel-body">
         <ul class="row">
         {% set recommendTeachers = data('RecommendTeachers',{'count':4}) %}
-        	{% for perTeacher in recommendTeachers %}
-        	{% set profile = profiles[perTeacher.id] %}
-	          <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-teacher-list text-center">
-	            <a href="{{ path('user_show', {id:perTeacher.id}) }}">
-	              <img src="{{ file_path(perTeacher.mediumAvatar, 'avatar.png') }}" class="img-circle">
-	
-	              <h2 style="font-size: 18px; margin-top: 15px" class="recommend-teacher-name">{{ profile.truename }}</h2>
-	
-	              <p>{{ perTeacher.about|plain_text(65) }}</p>
-	            </a>
-	          </li>
-	        {% endfor %}
+          {% for perTeacher in recommendTeachers %}
+          {% set profile = profiles[perTeacher.id] %}
+            <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-teacher-list text-center">
+              <a href="{{ path('user_show', {id:perTeacher.id}) }}">
+                <img src="{{ file_path(perTeacher.mediumAvatar, 'avatar.png') }}" class="img-circle">
+  
+                <h2 style="font-size: 18px; margin-top: 15px" class="recommend-teacher-name">{{ profile.truename }}</h2>
+  
+                <p>{{ perTeacher.about|plain_text(65) }}</p>
+              </a>
+            </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
@@ -90,16 +94,16 @@
         </div>
         <div class="panel-body row">
           <ul id="myTab" class="nav nav-tabs" role="tablist">
-		{% for firstCat in firstCategories %}
-			{% if firstCat.parentId == 0 %}
+    {% for firstCat in firstCategories %}
+      {% if firstCat.parentId == 0 %}
             <li role="presentation" {% if loop.index == 1 %} class="active" {% endif %}><a href="#category-{{firstCat.id}}"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">{{ firstCat.name }}</a></li>
             {% endif %}
-		{% endfor %}
+    {% endfor %}
           </ul>
           
           <div id="myTabContent" class="tab-content">
         {% for firstCat in firstCategories %}
-			{% if firstCat.parentId == 0 %}
+      {% if firstCat.parentId == 0 %}
             <div role="tabpanel" class="tab-pane fade {% if loop.index == 1 %}active in{% endif %}" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
               <ul class="row">
               {% set recommendCourses = data('RecommendCourses',{ categoryId: firstCat.id,count:8}) %}
@@ -133,7 +137,7 @@
             </div>
             
             {% endif %}
-		{% endfor %}
+    {% endfor %}
             
           </div>
         </div>
