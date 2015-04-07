@@ -51,6 +51,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+common_qrcode:
+    pattern:  /common/qrcode
+    defaults: { _controller: TopxiaWebBundle:Common:qrcode }
+
 user_terms:
     pattern:  /userterms
     defaults: { _controller: TopxiaWebBundle:Register:userTerms }
