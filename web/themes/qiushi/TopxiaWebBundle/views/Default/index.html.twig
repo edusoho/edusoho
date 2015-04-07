@@ -14,7 +14,7 @@
             <div class="panel-heading">最新课程列表</div>
             <div class="panel-body">
               <ul class="list-group">
-              {% set lastestCourses = data('LatestCourses',{'count':5}) %}
+              {% set lastestCourses = data('LatestCourses',{'count':7}) %}
                  {% for lastcourses in lastestCourses %}
                     <li class="list-group-item">
                       <span class="badge pull-left">{{ loop.index }}</span>
