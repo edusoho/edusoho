@@ -468,7 +468,7 @@
     <div class="col-md-4">
       {# 在学课程 #}
       {% if app.user %}
-        {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+        {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
       {% endif %}
       
       {# 热门标签 #}
