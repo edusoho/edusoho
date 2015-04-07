@@ -8,33 +8,36 @@
 
 		    	  {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
   {% if blocks['qiushi:home_top_banner'] %}
+    <div class="container jumbotron" style="position: relative">
+<div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:15px; z-index:999;">
+          <div class="panel newcourse-list">
+            <div class="panel-heading">最新课程列表</div>
+            <div class="panel-body">
+              <ul class="list-group">
+              {% set lastestCourses = data('LatestCourses',{'count':5}) %}
+                 {% for lastcourses in lastestCourses %}
+                    <li class="list-group-item">
+                      <span class="badge pull-left">{{ loop.index }}</span>
+                      <a href="{{ path('course_show', {id:lastcourses.id}) }}" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
+                    {% if lastcourses.teachers %}
+                              {% for teacher in lastcourses.teachers %}
+                                {% if loop.index <= 5%}
+                                {% set profile = profiles[teacher.id] %}
+                                   <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ profile.truename }}</a>
+                                 {% endif %}
+                              {% endfor %}
+                          {% endif %}
+                      
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+</div>
 	    <div id="carousel" class="carousel slide jumbotron" data-ride="carousel">
 <div class="carousel-inner" role="listbox">{{ blocks['qiushi:home_top_banner']|raw }}</div>
-<div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:150px;">
-	        <div class="panel newcourse-list">
-	          <div class="panel-heading">最新课程列表</div>
-	          <div class="panel-body">
-	            <ul class="list-group">
-	            {% set lastestCourses = data('LatestCourses',{'count':5}) %}
-	            	 {% for lastcourses in lastestCourses %}
-			              <li class="list-group-item">
-			                <span class="badge pull-left">{{ loop.index }}</span>
-			                <a href="{{ path('course_show', {id:lastcourses.id}) }}" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
-						        {% if lastcourses.teachers %}
-			                        {% for teacher in lastcourses.teachers %}
-			                          {% if loop.index <= 5%}
-			                          {% set profile = profiles[teacher.id] %}
-			                             <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ profile.truename }}</a>
-			                           {% endif %}
-			                        {% endfor %}
-			                    {% endif %}
-			                
-			              </li>
-	              	{% endfor %}
-	            </ul>
-	          </div>
-	        </div>
-	      </div>
+
 
     </div>
 
