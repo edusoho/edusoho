@@ -31,10 +31,10 @@ define(function(require, exports, module) {
 			}
 			if(lesson.materialNum>0){
 				$('.glyphicon-download-alt').addClass('text-success');
-				$('.toolbar-nav .glyphicon-download-alt').html('<span class="showNumber" style="display: inline-block;min-width: 10px;padding: 3px 7px;font-size: 12px;font-weight: 700;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;background-color: #999;border-radius: 10px;padding: 1px 5px;position:absolute;font-style: normal;background-color: #f9534f;">'+lesson.materialNum+'</span>');
+				$('.toolbar-nav .glyphicon-download-alt').html('<span class="badge">'+lesson.materialNum+'</span>');
 			}else{
 				$('.glyphicon-download-alt').removeClass('text-success');
-				$('.showNumber').remove();
+				$('.badge').remove();
 			}
 		}
 	});

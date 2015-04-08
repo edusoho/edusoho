@@ -274,6 +274,12 @@ textarea {
   border-radius: 12px;
 }
 
+.toolbar-nav .glyphicon-download-alt .badge {
+padding: 1px 5px;
+position:absolute;
+font-style: normal;
+}
+
 .site-navbar .mobile-badge-container .badge {
   position: absolute;
   top: 5px;
