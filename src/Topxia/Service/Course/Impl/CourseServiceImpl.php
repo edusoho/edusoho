@@ -128,8 +128,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	private function _prepareCourseConditions($conditions)
-	{
-		$conditions = array_filter($conditions);
+	{        
 		if (isset($conditions['date'])) {
 			$dates = array(
 				'yesterday'=>array(
