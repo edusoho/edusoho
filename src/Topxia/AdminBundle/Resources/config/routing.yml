@@ -1142,3 +1142,14 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
 
+admin_announcement:
+    pattern:  /announcement
+    defaults: { _controller: TopxiaAdminBundle:Announcement:index }
+admin_announcement_create:
+    pattern:  /announcement/create
+    defaults: { _controller: TopxiaAdminBundle:Announcement:create }
+admin_announcement_delete:
+    pattern:  /announcement/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Announcement:delete }
+    methods: [POST]
+
