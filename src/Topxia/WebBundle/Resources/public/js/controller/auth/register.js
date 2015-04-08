@@ -75,12 +75,12 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="company"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({
             element: '[name="job"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({
