@@ -13,7 +13,6 @@
     <ul class="media-list notebook-list" id="notebook-list">
       {% for member in courseMembers %}
         {% set course = courses[member.courseId] %}
-          {% if member.noteNum > 0 %}
               <div class="media">
                 <img class="pull-left media-object" src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
                 <div class="media-body">
@@ -29,7 +28,6 @@
                   </div>
                 </div>
               </div>
-          {% endif %}
       {% else %}
         <li class="empty">你还没有写过笔记</li>
       {% endfor %}
