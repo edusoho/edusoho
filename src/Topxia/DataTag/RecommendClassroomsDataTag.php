@@ -27,7 +27,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
-                $conditions,
+                array('status' => 'published','openJoin' => 1),
                 array('createdTime','desc'),
                 0,
                 $arguments['count']
