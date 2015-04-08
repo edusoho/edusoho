@@ -65,7 +65,7 @@
           {% set profile = profiles[perTeacher.id] %}
             <li class="col-xs-12 col-sm-6 col-md-3 col-lg-3 es-teacher-list text-center">
               <a href="{{ path('user_show', {id:perTeacher.id}) }}">
-                <img src="{{ file_path(perTeacher.mediumAvatar, 'avatar.png') }}" class="img-circle">
+                <img src="{{ file_path(perTeacher.largeAvatar, 'avatar.png') }}" class="img-circle">
   
                 <h2 style="font-size: 18px; margin-top: 15px" class="recommend-teacher-name">{{ profile.truename }}</h2>
   
