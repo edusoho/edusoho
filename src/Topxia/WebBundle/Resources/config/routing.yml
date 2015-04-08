@@ -1035,10 +1035,6 @@ my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
 
-my_teaching_classroom_threads:
-    pattern: /my/teaching/classroom/threads/{type}
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:classroomThreads }
-
 my_teaching_classrooms:
     pattern: /my/teaching/classrooms
     defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }
@@ -1066,10 +1062,6 @@ my_questions:
 my_discussions:
     pattern: /my/discussions
     defaults: { _controller: TopxiaWebBundle:MyThread:discussions }
-
-my_classroom_discussions:
-    pattern: /my/classroom/discussions
-    defaults: { _controller: TopxiaWebBundle:MyThread:classroomDiscussions }
 
 my_notebooks:
     pattern: /my/notebooks

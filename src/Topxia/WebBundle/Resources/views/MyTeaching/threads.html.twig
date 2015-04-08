@@ -35,13 +35,14 @@
 	</div>
 
   <div class="panel-body">
-
-    {% if threads %}
+{% if is_plugin_installed('Classroom') %}
 	<ul class="nav nav-tabs">
 	<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{path('my_teaching_threads', {type:'discussion'}) }}">课程{{setting('default.user_name')|default('学员')}}话题</a></li>
-	<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{path('my_teaching_classroom_threads', {type:'discussion'}) }}">班级{{setting('default.user_name')|default('学员')}}话题</a></li>
+	<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{path('my_teaching_classroom_threads', {type:'discussion'}) }}">{{ setting('classroom.name')|default("班级") }}{{setting('default.user_name')|default('学员')}}话题</a></li>
 	</ul>
 	<br>
+{% endif %}
+    {% if threads %}
 		
 	    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: type} %}
 	  {% else %}

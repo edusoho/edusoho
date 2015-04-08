@@ -41,39 +41,6 @@ class MyThreadController extends BaseController
             'paginator' => $paginator));
     }
 
-    public function classroomDiscussionsAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $conditions = array(
-            'userId'=>$user['id'],
-            'type'=>'discussion'
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getClassroomThreadService()->searchThreadCount($conditions),
-            20
-        );
-        $threads = $this->getClassroomThreadService()->searchThreads(
-            $conditions,
-            'createdNotStick',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
-
-        return $this->render('TopxiaWebBundle:MyThread:classroom-discussions.html.twig',array(
-            'threadType' => 'classroom',
-            'paginator' => $paginator,
-            'threads' => $threads,
-            'users'=> $users,
-            'classrooms' => $classrooms,
-            ));
-    }
-
     public function questionsAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -114,11 +81,6 @@ class MyThreadController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getClassroomThreadService()
-    {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
     protected function getClassroomService()
