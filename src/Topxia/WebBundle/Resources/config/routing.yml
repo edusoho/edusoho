@@ -1035,6 +1035,10 @@ my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }
 
+my_teaching_classroom_threads:
+    pattern: /my/teaching/classroom/threads/{type}
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:classroomThreads }
+
 my_teaching_classrooms:
     pattern: /my/teaching/classrooms
     defaults: { _controller: TopxiaWebBundle:MyTeaching:classrooms }

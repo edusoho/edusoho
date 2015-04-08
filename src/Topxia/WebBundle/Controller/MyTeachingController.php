@@ -138,9 +138,65 @@ class MyTeachingController extends BaseController
             'users'=> $users,
             'courses' => $courses,
             'lessons' => $lessons,
-            'type'=>$type
+            'type'=>$type,
+            'threadType' => 'course',
     	));
 	}
+
+    public function classroomThreadsAction(Request $request, $type)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $classrooms=array();
+        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        if (empty($classrooms)) {
+            return $this->render('TopxiaWebBundle:MyTeaching:classroom-threads.html.twig', array(
+                'type'=>$type,
+                'threadType' => 'classroom',
+                'threads' => array()
+            ));
+        }
+
+        $conditions = array(
+            'targetIds' => $classroomIds,
+            'type' => $type
+            );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchThreadCount($conditions),
+            20
+        );
+        $threads = $this->getThreadService()->searchThreads(
+            $conditions,
+            'createdNotStick',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
+
+        return $this->render('TopxiaWebBundle:MyTeaching:classroom-threads.html.twig', array(
+            'paginator' => $paginator,
+            'threads' => $threads,
+            'users'=> $users,
+            'classrooms' => $classrooms,
+            'type'=>$type,
+            'threadType' => 'classroom',
+        ));
+    }
 
     protected function getCourseThreadService()
     {
