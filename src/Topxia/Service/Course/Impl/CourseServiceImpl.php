@@ -648,8 +648,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['videoStatus']=="playing")
-		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+		if($learn['videoStatus']=="playing" && $time<=120)
+			$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
 				'updateTime' => time(),
 		));
@@ -671,9 +671,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$time = time() - $learn['updateTime'];
 		$this->waveWatchingTime($userId,$lessonId,$time);
+		
 		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-				'videoStatus' => 'paused',
-				'updateTime' => time(),
+			'videoStatus' => 'paused',
+			'updateTime' => time(),
 		));
 	}
 

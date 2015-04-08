@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="weixin"]',
-            required: true,
+            required: true
         });
         for(var i=1;i<=5;i++){
              validator.addItem({

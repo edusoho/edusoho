@@ -14,9 +14,9 @@ define(function(require, exports, module) {
                       element: 'line-data',
                       data: data,
                       xkey: 'date',
-                      ykeys: ['count',],
+                      ykeys: ['count'],
                       labels: ['营收额'],
-                      xLabels:"day",
+                      xLabels:"day"
                     });
         }
 
