@@ -169,6 +169,7 @@ a {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: -999;
   filter:alpha(opacity=60); /*IE滤镜，透明度50%*/
   -moz-opacity:0.6; /*Firefox私有，透明度50%*/
   opacity:0.6;/*其他，透明度50%*/
