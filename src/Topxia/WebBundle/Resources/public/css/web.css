@@ -808,6 +808,19 @@ body {
 
 }
 
+.thread-activity-title {
+  font-size: 20px;
+  line-height: 36px;
+  margin: 0;
+  padding: 0;
+  word-wrap:break-word;
+  overflow:hidden;
+}
+
+.thread-activity-title-bar {
+  margin-top: 10px;
+}
+
 .thread-metas {
   color: #999;
   font-size: 12px;

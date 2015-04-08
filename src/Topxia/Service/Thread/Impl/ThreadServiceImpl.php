@@ -113,7 +113,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createThread($thread)
     {   
         $this->tryAccess('thread.create', $thread);
-
         if (empty($thread['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
         }
@@ -128,15 +127,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['targetId'])) {
             throw $this->createServiceException(' Id不能为空！');
         }
-        if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question'))) {
+        if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question', 'activity'))) {
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
 
         $user = $this->getCurrentUser();
         $thread['userId'] = $user['id'];
 
+        $thread['startTime'] = strtotime($thread['startTime']);
         $thread['createdTime'] = time();
         $thread['updateTime'] = time();
+        $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->addThread($thread);
@@ -481,6 +482,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
     }
 
+    public function findActivityMembersByThreadId($threadId)
+    {
+        return ArrayToolkit::index($this->getThreadMemberDao()->findActivityMembersByThreadId($threadId), 'userId');
+    }
+
     private function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) or empty($resource['targetId'])) {
@@ -505,6 +511,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     private function getThreadVoteDao()
     {
         return $this->createDao('Thread.ThreadVoteDao');
+    }
+
+    private function getThreadMemberDao()
+    {
+        return $this->createDao('Thread.ThreadMemberDao');
     }
 
     private function getUserService()

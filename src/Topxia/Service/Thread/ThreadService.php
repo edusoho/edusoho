@@ -86,4 +86,8 @@ interface ThreadService
 
 	public function voteUpPost($id);
 
+	/**
+	* 话题成员
+	**/
+	public function findActivityMembersByThreadId($threadId);
 }
