@@ -315,3 +315,172 @@ input.LargeInput {width: 600px;}
   padding-left: 30px;
   padding-right: 30px;
 }
+
+.es-poster{
+  position:relative;
+}
+.es-poster a.btn{
+  position:absolute;
+  bottom:70px;
+  right:60px;
+  padding:10px 30px;
+  z-index: 999;
+  border-radius: 0;
+  background:#f8ae64;
+  border:0;
+  box-shadow: 0 3px 0 #e59545;
+  font-size:18px;
+}
+
+.es-poster a.btn:hover{
+
+}
+.es-poster b{
+  color: #FFF;
+  position: absolute;
+  bottom: 120px;
+  right: 102px;
+  font-size: 12px;
+}
+.es-poster span{
+  margin-left:10px;
+}
+
+.es-eduyun-ad .carousel-control.left,
+.es-eduyun-ad .carousel-control.right{
+  background:none;
+}
+.es-eduyun-ad .es-row{
+  margin-top:30px;
+}
+.es-eduyun-ad .es-ad-title{
+  color:#428bca;
+  font-size:18px;
+  line-height:50px;
+  border-bottom:1px solid #f8f8f8;
+}
+.es-eduyun-ad .es-ad-info{
+  min-height:100px;
+}
+.es-eduyun-ad .es-ad-info a,
+.es-eduyun-ad .es-ad-info p,
+.es-eduyun-ad .media-body,
+.es-eduyun-ad .media-body a{
+  color:#999;
+}
+.es-eduyun-ad .es-ad-info p{
+  margin:0;
+  line-height:22px;
+}
+.es-eduyun-ad .media{
+  padding:11px 15px;
+  background:#f9f9f9;
+  border:1px solid #f8f8f8;
+}
+.es-eduyun-ad .media-body{
+  font-size:14px;
+  color:#999;
+}
+.es-eduyun-ad .media-heading{
+  color:#5595ce;
+  font-size:18px;
+  margin:0;
+  line-height:35px;
+}
+.es-eduyun-ad .media-heading a{
+  color:#5595ce;
+}
+
+
+/*common*/
+.eduyun-title {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+.eduyun-title i {
+  margin-left: 10px;
+  color: #999;
+}
+
+.eduyun-title > a {
+  float: right;
+  font-size: 14px;
+  padding-left: 14px;
+}
+
+.alert.alert-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 0;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.alert-sm i {
+  margin-right: 5px;
+}
+
+.edu-user .name {
+  color: #333;
+  font-size: 18px;
+}
+
+.edu-notice {
+  border-left: 1px solid #ccc;
+  padding-left: 30px;
+}
+
+.edu-notice .title {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+.edu-notice ul {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.edu-notice li {
+  list-style-type: none;
+  margin-top: 8px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.edu-notice li a {
+  color: #777;
+}
+
+.edu-notice li.active a { 
+  color: #ff842e;
+}
+
+.edu-notice .date {
+  float: right;
+  color: #777;
+}
+
+.edu-balance .btn-recharge {
+  margin-left: 50px;
+}
+
+.edu-balance .balance {
+  font-size: 24px;
+  padding-right: 10px;
+}
+
+.edu-service .panel-bottom {
+  margin-top: 15px;
+  margin-bottom: 0;
+  padding-top: 15px;
+  color: #428bca;
+  border-top: 1px solid #ccc;
+  text-align: center;
+}

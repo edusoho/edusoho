@@ -5,6 +5,11 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Util\CloudClientFactory;
+
+use Topxia\Service\CloudPlatform\KeyApplier;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
 
 class AppController extends BaseController
 {
@@ -15,6 +20,97 @@ class AppController extends BaseController
     public function oldUpgradeCheckAction()
     {
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
+    }
+
+    public function myCloudAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $api = $this->createAPIClient();
+        $info = $api->get('/me');
+
+        if (!empty($info['accessKey'])) {
+            $settings = $this->getSettingService()->get('storage', array());
+            if (empty($settings['cloud_key_applied'])) {
+                $settings['cloud_key_applied'] = 1;
+                $this->getSettingService()->set('storage', $settings);
+            }
+            $this->refreshCopyright($info);
+        } else {
+            $settings = $this->getSettingService()->get('storage', array());
+            $settings['cloud_key_applied'] = 0;
+            $this->getSettingService()->set('storage', $settings);
+        }
+
+        $currentHost = $request->server->get('HTTP_HOST');
+
+        if(isset($info['licenseDomains'])) {
+            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+        }
+
+        $userAgent = 'Open Edusoho App Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+        $url = "http://open.edusoho.com/api/v1/context/notice";
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $notices = curl_exec($curl);
+        curl_close($curl);
+        $notices = json_decode($notices, true);
+
+        // $factory = new CloudClientFactory();
+        // $client = $factory->createClient();
+
+        // $result = $client->getBills($client->getBucket());
+
+        // $loginToken = $this->getAppService()->getLoginToken();
+
+        if ($info['levelName'] == '1商业授权') {
+                return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
+                    'user'=>$user,
+                    "notices"=>$notices,
+                    // 'money' => $result['money'],
+                    // 'bills' => $result['bills'],
+                    // 'token' => $loginToken["token"],
+                    'info' => $info,
+                    'currentHost' => $currentHost,
+                    'isLocalAddress' => $this->isLocalAddress($currentHost),
+                ));
+        }else{
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'user'=>$user,
+                    "notices"=>$notices,
+                    // 'money' => $result['money'],
+                    // 'bills' => $result['bills'],
+                    // 'token' => $loginToken["token"],
+                    'info' => $info,
+                    'currentHost' => $currentHost,
+                    'isLocalAddress' => $this->isLocalAddress($currentHost),
+                ));
+        }
+
+
+    }
+
+    private function isLocalAddress($address)
+    {
+        if (in_array($address, array('localhost', '127.0.0.1'))) {
+            return true;
+        }
+
+        if (strpos($address, '192.168.') === 0) {
+            return true;
+        }
+
+        if (strpos($address, '10.') === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     public function centerAction(Request $request, $postStatus)

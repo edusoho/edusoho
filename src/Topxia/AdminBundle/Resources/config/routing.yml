@@ -617,6 +617,13 @@ admin_app_center_hidden:
     pattern:  /app/center/{postStatus}/hidden
     defaults: { _controller: TopxiaAdminBundle:App:centerHidden }
 
+admin_app_my_cloud:
+    pattern:  /app/center/my/cloud
+    defaults: { _controller: TopxiaAdminBundle:App:myCloud }
+
+# admin_app_cloud:
+#     pattern:  /app/center/cloud
+#     defaults: { _controller: TopxiaAdminBundle:App:cloud }
 
 admin_app_center:
     pattern:  /app/center/{postStatus}/unhidden
