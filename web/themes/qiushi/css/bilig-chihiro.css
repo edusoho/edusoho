@@ -152,3 +152,24 @@ a {
 .carousel-indicators{
     bottom: 0px;
 }
+.newcourse-list{
+  position: relative;
+  background: none;
+}
+.jumbotron .newcourse-list .panel-body{
+  background: none;
+}
+.jumbotron .newcourse-list .panel-body .list-group .list-group-item{
+  background: none;
+}
+.newcourse-list .cover{
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  filter:alpha(opacity=60); /*IE滤镜，透明度50%*/
+  -moz-opacity:0.6; /*Firefox私有，透明度50%*/
+  opacity:0.6;/*其他，透明度50%*/
+}
