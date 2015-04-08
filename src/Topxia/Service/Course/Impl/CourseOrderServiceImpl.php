@@ -14,28 +14,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $this->getOrderService()->cancelOrder($id);
     }
 
-    private function cancelOldOrders($course, $user)
-    {
-        $conditions = array(
-            'userId' => $user['id'],
-            'status' => 'created',
-            'targetType' => 'course',
-            'targetId' => $course['id'],
-        );
-        $count = $this->getOrderService()->searchOrderCount($conditions);
-
-        if ($count == 0) {
-            return ;
-        }
-
-        $oldOrders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, $count);
-
-        foreach ($oldOrders as $order) {
-            $this->getOrderService()->cancelOrder($order['id'], '系统自动取消');
-        }
-
-    }
-
     public function createOrder($info)
     {
         $connection = ServiceKernel::instance()->getConnection();
@@ -62,8 +40,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if (empty($course)) {
                 throw $this->createServiceException('课程不存在，操作失败。');
             }
-
-            $this->cancelOldOrders($course, $user);
 
             $order = array();
 
