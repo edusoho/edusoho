@@ -12,14 +12,14 @@
     <div class="controls">
       <div>
         <select name="type">
-          {{ select_options(dict('threadType', type)) }}
+          {{ select_options(dict('threadType'), type) }}
         </select>
       </div>
       <input class="form-control" type="text" placeholder="标题" data-display="标题" name= "title" value="{{ thread.title|default('') }}">
     </div>
   </div>
 
-  <div class="js-activity-content" style="display:none;">
+  <div class="js-activity-content" {% if type != 'activity' %}style="display:none;" {% endif %}>
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label for="startTime">活动时间</label>

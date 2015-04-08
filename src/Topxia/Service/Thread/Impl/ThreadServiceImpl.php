@@ -134,10 +134,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $user = $this->getCurrentUser();
         $thread['userId'] = $user['id'];
 
-        $thread['startTime'] = strtotime($thread['startTime']);
+        if ($thread['type'] == 'activity') {
+            $thread['startTime'] = strtotime($thread['startTime']);
+            $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
+        } else {
+            unset($thread['startTime']);
+            unset($thread['maxUsers']);
+            unset($thread['location']);
+        }
+        
         $thread['createdTime'] = time();
         $thread['updateTime'] = time();
-        $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->addThread($thread);

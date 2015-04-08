@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var Share = require('../../util/share.js');
     var Widget = require('widget');
     require('common/validator-rules').inject(Validator);
+    require("jquery.bootstrap-datetimepicker");
 
     exports.run = function() {
         var ThreadForm = Widget.extend({
@@ -14,6 +15,7 @@ define(function(require, exports, module) {
 
             setup: function() {
                 this._initValidator();
+                this._initDatetimepicker();
             },
             onChangesTypeSelect: function(e) {
                 var $currentTarget = $(e.currentTarget);
@@ -59,6 +61,14 @@ define(function(require, exports, module) {
                 });
 
                 this.validator = validator;
+            },
+            _initDatetimepicker: function() {
+                this.$("#startTime").datetimepicker({
+                    language: 'zh-CN',
+                    autoclose: true,
+                    format: 'yyyy-mm-dd HH:mm:ss',
+                    minView: 'hour'
+                }); 
             }
         });
         
