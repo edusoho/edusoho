@@ -31,8 +31,10 @@ define(function(require, exports, module) {
 			}
 			if(lesson.homeworkOrExerciseNum>0){
 				$('.glyphicon-list-alt').addClass('text-success');
+				$('.toolbar-nav .glyphicon-list-alt').html('<span class="badge" style="padding: 1px 5px;position:absolute;font-style: normal;background-color: #f9534f;">'+lesson.homeworkOrExerciseNum+'</span>');
 			}else{
 				$('.glyphicon-list-alt').removeClass('text-success');
+				$('.badge').remove();
 			}
 		}
 		
