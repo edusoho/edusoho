@@ -106,7 +106,7 @@ class ThreadController extends BaseController
     }
 
 
-    public function createAction(Request $request, $target, $thread = null)
+    public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -122,7 +122,8 @@ class ThreadController extends BaseController
 
         return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
             'target' => $target,
-            'thread' => $thread
+            'thread' => $thread,
+            'type' => $type
         ));
     }
 

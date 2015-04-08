@@ -41,7 +41,7 @@
     <div class="panel-footer clearfix">
       <div class="pull-right">
         {% if service.canAccess('thread.update', thread) %}
-          <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+          <a href="{{ path( target.type ~ '_thread_activity_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
         {% endif %}
         {% if service.canAccess('thread.delete', thread) %}
           <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>

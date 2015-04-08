@@ -40,7 +40,7 @@ define(function(require, exports, module) {
         });
 
         validator.on('formValidated', function(err, msg, $form) {
-            if (err == true) {
+            if (err === true) {
                 return ;
             }
 

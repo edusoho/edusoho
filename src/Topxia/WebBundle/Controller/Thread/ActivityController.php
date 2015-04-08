@@ -81,9 +81,9 @@ class ActivityController extends BaseController
             $user = $this->getCurrentUser();
             $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
             $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
+            $threadUrl = $this->generateUrl("{$target['type']}_thread_activity_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
             if ($thread['userId'] != $user['id']) {
-                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
+                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的活动<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
             }
 
             return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
@@ -121,31 +121,10 @@ class ActivityController extends BaseController
             'excludeIds' => array($threadId)
         );
         $threads = $this->getThreadService()->searchThreads($conditions, 'created', 0, 5);
-        
+
         return $this->render('TopxiaWebBundle:Thread/Activity:other-activities-block.html.twig' , array(
             'threads' => $threads
         ));
-    }
-
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
-    }
-
-    private function convertFiltersToConditions($id, $filters)
-    {
-        $conditions = array('targetId' => $id);
-        switch ($filters['type']) {
-            case 'question':
-                $conditions['type'] = 'question';
-                break;
-            case 'nice':
-                $conditions['nice'] = 1;
-                break;
-            default:
-                break;
-        }
-        return $conditions;
     }
 
     private function _findMyJoindedFriends($activityMembers)
@@ -161,23 +140,9 @@ class ActivityController extends BaseController
         return $newFrinds;
     }
 
-
-    /**
-     * This function is from Cakephp TextHelper Class
-     */
-    private function autoParagraph($text)
+    protected function getThreadService()
     {
-        if (trim($text) !== '') {
-            $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
-            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
-            $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
-            $text = '';
-            foreach ($texts as $txt) {
-                $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
-            }
-            $text = preg_replace('|<p>\s*</p>|', '', $text);
-        }
-        return $text;
+        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
     private function getNotifiactionService()

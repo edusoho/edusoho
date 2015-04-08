@@ -1,6 +1,6 @@
 {% set thread = thread|default(null) %}
 
-<form id="thread-form" class="form-vertical" method="post" 
+<form id="thread-form" class="form-horizontal" method="post" 
   {% if thread %}
     action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
   {% else %}
@@ -10,7 +10,41 @@
 
   <div class="form-group">
     <div class="controls">
+      <div>
+        <select name="type">
+          {{ select_options(dict('threadType', type)) }}
+        </select>
+      </div>
       <input class="form-control" type="text" placeholder="标题" data-display="标题" name= "title" value="{{ thread.title|default('') }}">
+    </div>
+  </div>
+
+  <div class="js-activity-content" style="display:none;">
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="startTime">活动时间</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name= "startTime" value="{{ thread.startTime|default('') }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="location">活动地点</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="maxUsers">最大人数</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
+        </div>
     </div>
   </div>
 

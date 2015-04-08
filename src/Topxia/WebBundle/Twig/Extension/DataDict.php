@@ -83,6 +83,7 @@ class DataDict
 		'threadType' => array(
 			'discussion'=> '话题',
 			'question' => '问答',
+            'activity' => '活动',
 		),
 		'contentType' => array(
             'article' => '文章',
