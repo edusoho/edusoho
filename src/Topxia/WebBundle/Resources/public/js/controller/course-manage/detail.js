@@ -14,11 +14,11 @@ define(function(require, exports, module) {
         });
 
         var goalDynamicCollection = new DynamicCollection({
-            element: '#course-goals-form-group',
+            element: '#course-goals-form-group'
         });
 
         var audiencesDynamicCollection = new DynamicCollection({
-            element: '#course-audiences-form-group',
+            element: '#course-audiences-form-group'
         });
 
         $(".sortable-list").sortable({
