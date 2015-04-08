@@ -150,9 +150,5 @@ a {
   background-color: #F59200;
 }
 .carousel-indicators{
-    left:inherit;
-    margin-left:auto;
-    text-align: left;
-    margin-left: 20px;
     bottom: 0px;
 }
