@@ -44,7 +44,7 @@
                  {% if loop.index <= 5%}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                    <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                    <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
                   </a>
                   <div class="class-body">
                     <h3 class="class-title">
