@@ -58,6 +58,7 @@ class WebExtension extends \Twig_Extension
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
+            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
@@ -601,6 +602,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public function makeLazyImg($src, $class='', $alt = '')
+    {
+        return sprintf('<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="%s" class="%s" data-echo="%s" />', $alt, $class, $src);
     }
 
     public  function loadScript($js)

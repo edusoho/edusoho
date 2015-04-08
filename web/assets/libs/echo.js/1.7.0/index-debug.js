@@ -1,7 +1,7 @@
 define("echo.js/1.7.0/index-debug", [], function(require, exports, module){
 'use strict';
 
-var root = this;
+var root = window;
 
 var echo = {};
 
