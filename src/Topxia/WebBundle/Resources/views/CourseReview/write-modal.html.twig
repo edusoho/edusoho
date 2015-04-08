@@ -6,12 +6,12 @@
       {{ web_macro.flash_messages() }}
 
     <div class="form-group clearfix">
-      <div class="controls pull-left">
+      <a id="list_reviews" class="btn btn-sm btn-link pull-right" data-url="{{ path('course_review_list', {id:course.id, isModal:true}) }}">查看全部评价</a>
+      <div class="controls">
         请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('course_review_create', {id: course.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
         {{ form_widget(form.rating) }}
       </div>
 
-      <a id="list_reviews" class="btn btn-sm btn-link pull-right" data-url="{{ path('course_review_list', {id:course.id, isModal:true}) }}">查看全部评价</a>
 
     </div>
 
