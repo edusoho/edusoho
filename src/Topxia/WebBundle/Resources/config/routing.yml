@@ -1629,3 +1629,9 @@ settings_find_pay_password_by_sms:
 order_pay_sms_verification:
     pattern:  /order/sms_verification
     defaults: { _controller: TopxiaWebBundle:Order:smsVerification }
+
+edu_cloud_sms_callback:
+    pattern:  /edu_cloud/sms_callback
+    defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
+    methods: [POST]
+
