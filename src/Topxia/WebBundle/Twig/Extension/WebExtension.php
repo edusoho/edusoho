@@ -39,6 +39,7 @@ class WebExtension extends \Twig_Extension
             'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
             'bbCode2Html' => new \Twig_Filter_Method($this, 'bbCode2HtmlFilter'),
             'score_text' => new \Twig_Filter_Method($this, 'scoreTextFilter'),
+            'simple_template' => new \Twig_Filter_Method($this, 'simpleTemplateFilter'),
             'fill_question_stem_text' =>new \Twig_Filter_Method($this, 'fillQuestionStemTextFilter'),
             'fill_question_stem_html' =>new \Twig_Filter_Method($this, 'fillQuestionStemHtmlFilter'),
             'get_course_id' => new \Twig_Filter_Method($this, 'getCourseidFilter'),
@@ -57,6 +58,7 @@ class WebExtension extends \Twig_Extension
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
+            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
@@ -76,7 +78,6 @@ class WebExtension extends \Twig_Extension
             'is_feature_enabled' => new \Twig_Function_Method($this, 'isFeatureEnabled') ,
             'parameter' => new \Twig_Function_Method($this, 'getParameter') ,
             'upload_token' => new \Twig_Function_Method($this, 'makeUpoadToken') ,
-            'free_limit_type' => new \Twig_Function_Method($this, 'getFreeLimitType') ,
             'countdown_time' =>  new \Twig_Function_Method($this, 'getCountdownTime'),
             'convertIP' => new \Twig_Function_Method($this, 'getConvertIP'),
             'isHide'=>new \Twig_Function_Method($this, 'isHideThread'),
@@ -550,16 +551,14 @@ class WebExtension extends \Twig_Extension
             if (array_key_exists($key, $defaultSetting) && array_key_exists($fileName, $defaultSetting)){
                 if ($defaultSetting[$key] == 1) {
                     $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
-                    return $url;
-                } else {
-                    if ($absolute) {
-                        $url = $request->getSchemeAndHttpHost() . $url;
-                    }
-                   return $url;
                 }
-            } else {
-                return $url;
             }
+
+            if ($absolute) {
+                $url = $request->getSchemeAndHttpHost() . $url;
+            }
+
+            return $url;
         }
 
         $uri = $this->parseFileUri($uri);
@@ -603,6 +602,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public function makeLazyImg($src, $class='', $alt = '')
+    {
+        return sprintf('<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="%s" class="%s" data-echo="%s" />', $alt, $class, $src);
     }
 
     public  function loadScript($js)
@@ -769,6 +773,14 @@ class WebExtension extends \Twig_Extension
 
         if (intval($text) == $text) {
             return (string) intval($text);
+        }
+        return $text;
+    }
+
+    public function simpleTemplateFilter($text, $variables)
+    {
+        foreach ($variables as $key => $value) {
+            $text = str_replace('{{' . $key . '}}', $value, $text);
         }
         return $text;
     }
@@ -942,26 +954,6 @@ class WebExtension extends \Twig_Extension
     public function getName ()
     {
         return 'topxia_web_twig';
-    }
-
-    public function getFreeLimitType($course){
-        if(!empty($course['freeStartTime']) && !empty($course['freeEndTime'])) {
-            $startTime = $course['freeStartTime'];
-            $endTime = $course['freeEndTime'];
-            $now = time();
-
-            if($startTime > $now) {
-                return 'free_coming';//即将限免
-            } elseif ($endTime >= $now){
-                return 'free_now';//正在限免
-            } elseif ($endTime < $now){
-                return 'free_end';//限免结束
-            } else {
-                return 'no_free';
-            }
-        } else {
-            return 'no_free';
-        }
     }
 
     public function blur_phone_number($phoneNum)

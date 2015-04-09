@@ -51,6 +51,14 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+common_qrcode:
+    pattern:  /common/qrcode
+    defaults: { _controller: TopxiaWebBundle:Common:qrcode }
+
+common_crontab:
+    pattern:  /common/crontab
+    defaults: { _controller: TopxiaWebBundle:Common:crontab }
+
 user_terms:
     pattern:  /userterms
     defaults: { _controller: TopxiaWebBundle:Register:userTerms }
@@ -234,6 +242,7 @@ course_info:
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
+    methods: [POST]
 
 course_become_use_member:
     pattern:  /course/{id}/become_use_member
@@ -281,17 +290,9 @@ course_watch_time:
     pattern:  /course/{lessonId}/watch/time/{time}
     defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
 
-course_watch_play:
-    pattern:  /course/{lessonId}/watch/play
-    defaults: { _controller: TopxiaWebBundle:Course:watchPlay }
-
 course_detail_data:
     pattern:  /course/detail/data/{id}
     defaults: { _controller: TopxiaWebBundle:Course:detailData }
-
-course_watch_paused:
-    pattern:  /course/{lessonId}/watch/paused
-    defaults: { _controller: TopxiaWebBundle:Course:watchPaused }
 
 course_lesson_detail_data:
     pattern:  /course/lesson/detail/data/{courseId}/{lessonId}
@@ -1624,3 +1625,9 @@ settings_find_pay_password_by_sms:
 order_pay_sms_verification:
     pattern:  /order/sms_verification
     defaults: { _controller: TopxiaWebBundle:Order:smsVerification }
+
+edu_cloud_sms_callback:
+    pattern:  /edu_cloud/sms_callback
+    defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
+    methods: [POST]
+

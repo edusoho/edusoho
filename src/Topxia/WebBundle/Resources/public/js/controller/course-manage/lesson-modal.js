@@ -288,26 +288,26 @@ define(function(require, exports, module) {
         
         var videoChooser = new VideoChooser({
             element: '#video-chooser',
-            choosed: choosedMedia,
+            choosed: choosedMedia
         });
 
         var audioChooser = new AudioChooser({
             element: '#audio-chooser',
-            choosed: choosedMedia,
+            choosed: choosedMedia
         });
 
         var pptChooser = new PPTChooser({
             element: '#ppt-chooser',
-            choosed: choosedMedia,
+            choosed: choosedMedia
         });
 
         var documentChooser = new DocumentChooser({
             element: '#document-chooser',
-            choosed: choosedMedia,
+            choosed: choosedMedia
         });
         var flashChooser = new FlashChooser({
             element: '#flash-chooser',
-            choosed: choosedMedia,
+            choosed: choosedMedia
         });
 
         videoChooser.on('change', function(item) {
