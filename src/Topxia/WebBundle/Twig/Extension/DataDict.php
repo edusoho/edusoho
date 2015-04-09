@@ -252,6 +252,14 @@ class DataDict
             'isStick' => '置顶',
             'isElite' => '加精',
         ),
+        'classroomService' => array(
+        	'studyPlan' => '学习计划',
+        	'homeworkReview' => '作业快速批改',
+        	'testpaperReview' => '试卷阅卷',
+        	'teacherAnswer' => '教师答疑',
+        	'event' => '活动组织',
+        	'liveAnswer' => '直播答疑'
+        ),
 	);
 
 	public static function dict($type)
