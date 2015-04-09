@@ -18,11 +18,6 @@ class KernelRequestListener
     {
     	$request = $event->getRequest();
 
-        if (!$request->isXmlHttpRequest()) {
-            ServiceKernel::instance()->createService('Crontab.CrontabService')->scheduleJobs();
-        }
-
-
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
 
             if (stripos($request->getPathInfo(), '/mapi') === 0) {

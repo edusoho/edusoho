@@ -27,4 +27,10 @@ class CommonController extends BaseController
         return new Response($img, 200, $headers);
     }
 
+    public function crontabAction(Request $request)
+    {
+        $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
+        return $this->createJsonResponse(true);
+    }
+
 }
