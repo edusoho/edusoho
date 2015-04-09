@@ -1,0 +1,31 @@
+{% if myFriends|default(null) %}
+  <div class="joined-frineds">
+    <p>好友在参加</p>
+    <ul class="user-grids">
+      {% for  friend in myFriends %}
+        <li style="width:20%;">
+          {{ web_macro.user_avatar(friend , 'pull-left media-object media-object-small ')}}
+            <p>
+            {{ web_macro.user_link(friend , 'link-muted') }}
+            </p>
+        </li>  
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+{% if members|default(null) %}
+  <div class="joined-users">
+    <p>活动成员（{{ members|length }}）</p>
+    <ul class="user-grids">
+      {% for  member in members %}
+        <li style="width:20%;">
+          {{ web_macro.user_avatar(merber , 'pull-left media-object media-object-small ')}}
+            <p>
+            {{ web_macro.user_link(merber , 'link-muted') }}
+            </p>
+        </li>  
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
