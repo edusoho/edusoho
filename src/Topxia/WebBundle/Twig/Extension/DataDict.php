@@ -254,10 +254,10 @@ class DataDict
         ),
         'classroomService' => array(
         	'studyPlan' => '学习计划',
-        	'workCorrection' => '作业快速批改',
-        	'markingTests' => '试卷阅卷',
+        	'homeworkReview' => '作业快速批改',
+        	'testpaperReview' => '试卷阅卷',
         	'teacherAnswer' => '教师答疑',
-        	'activities' => '活动组织',
+        	'event' => '活动组织',
         	'liveAnswer' => '直播答疑'
         ),
 	);
