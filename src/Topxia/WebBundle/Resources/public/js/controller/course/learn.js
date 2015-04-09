@@ -704,7 +704,7 @@ define(function(require, exports, module) {
 
         addLearningCounter: function() {
             var learningCounter = Store.get("lesson_id_"+this.lessonId+"_learning_counter");
-            if("undefined" == learningCounter){
+            if(!learningCounter){
                 learningCounter = 0;
             }
             learningCounter++;
@@ -720,7 +720,7 @@ define(function(require, exports, module) {
 
         addMediaPlayingCounter: function() {
             var learningCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
-            if("undefined" == learningCounter){
+            if(!learningCounter){
                 learningCounter = 0;
             }
 
