@@ -23,9 +23,12 @@ class Version20150408093736 extends AbstractMigration
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统Id',
             `threadId` int(10) unsigned NOT NULL COMMENT '话题Id',
             `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
+            `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
+            `truename` varchar(255) DEFAULT NULL COMMENT '真实姓名',
+            `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
             `createdTIme` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
             PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='话题成员表';
+            ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
         ");
     }
 
