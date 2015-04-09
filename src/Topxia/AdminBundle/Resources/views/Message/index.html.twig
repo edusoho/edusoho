@@ -1,5 +1,7 @@
 {% extends 'TopxiaAdminBundle:Message:message.layout.html.twig' %}
 
+{% block title %}{{ getTitle('admin_message')}}{% endblock %}
+  
 {% set script_controller = 'message/list' %}
 
 {% set submenu = 'message' %}

@@ -5,12 +5,9 @@
 #}
 
 {% set submenu = type~'_order_query' %}
+{% block title %}{{ getTitle('admin_'~type~'_order')}}{% endblock %}
 
 {% block maincontent %}
-<!-- 
-  <div class="page-header clearfix">
-    <h1>{{ dict_text('targetName', type) }}订单管理</h1>
-  </div> -->
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">

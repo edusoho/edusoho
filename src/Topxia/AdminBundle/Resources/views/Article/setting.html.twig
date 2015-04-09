@@ -1,10 +1,10 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% set menu = 'operation_settings' %}
 {% set submenu = 'article_setting' %}
 
 {% set menus = permissions('admin_setting_operation','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_article_setting')}}{% endblock %}
 
 {% block main %}
 <div class="mbl">

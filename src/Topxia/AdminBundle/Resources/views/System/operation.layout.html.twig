@@ -2,7 +2,6 @@
 
 {% set menus = permissions("admin_setting","tab")%}
 {% set menu = 'site' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
 
@@ -10,47 +9,5 @@
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 
-
-<!-- <ul class="nav nav-tabs mbl">
-
-  <li class="{% if submenu == 'course_setting' %}active{% endif %}">
-    <a href="{{ url('admin_setting_course_setting') }}">课程设置
-    </a>
-  </li>
-
-  <li class="{% if submenu == 'questions_setting' %}active{% endif %}">
-    <a href="{{ url('admin_setting_questions_setting') }}">题库设置
-    </a>
-  </li>
-
-  <li class="{% if submenu == 'consult_setting' %}active{% endif %}">
-    <a href="{{ url('admin_setting_consult_setting') }}">客服设置
-    </a>
-  </li>
-
-  <li class="{% if submenu == 'mailer' %}active{% endif %}">
-  	<a href="{{ url('admin_setting_mailer') }}">邮件服务器设置
-  	</a>
-  </li>
-  <li class="{% if submenu == 'theme' %}active{% endif %}">
-       <a href="{{ path('admin_setting_theme') }}">主题设置</a>
-  </li>
-
-   <li class="{% if submenu == 'default' %}active{% endif %}">
-    <a href="{{ url('admin_setting_default') }}">系统默认设置
-    </a>
-  </li>
-  <li class="{% if submenu == 'share' %}active{% endif %}">
-    <a href="{{ url('admin_setting_share') }}">分享设置
-    </a>
-  </li>
-  <li class="{% if submenu == 'customer_service' %}active{% endif %}" style="display:none;">
-    <a href="{{ url('admin_customer_service') }}">在线客户服务
-    </a>
-  </li>
-
-</ul> -->
-
-
-  {% block maincontent %}{% endblock %}
+  {% block main_content %}{% endblock %}
 {% endblock %}

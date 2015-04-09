@@ -2,7 +2,7 @@
 {% set tab_menus = permissions('admin_operation_group',"tab") %}
 {% set menu = 'group' %}
 {% set submenu = 'group' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_group_manage')}}{% endblock %}
 
 {% set script_controller='group/group' %}
 {% block main %}

@@ -1,15 +1,12 @@
-{% extends 'TopxiaAdminBundle:Content:article.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
 
 {% set script_controller = 'content/list' %}
 {% set tab_menus = permissions('admin_operation_content',"tab") %}
 {% set menu = 'content' %}
 {% set submenu = 'content' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_content')}}{% endblock %}
 
 {% block main %}
-<div class="clearfix mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
 
 {% set type = app.request.get('type') %}
 {% set typeName = dict('contentType')[type] %}

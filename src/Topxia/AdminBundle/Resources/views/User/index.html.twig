@@ -1,10 +1,15 @@
 {% extends 'TopxiaAdminBundle:User:user.layout.html.twig' %}
 
+{% block title %}{{ getTitle('admin_user_manage')}}{% endblock %}
+
+
 {% set submenu = 'user' %}
 
 {% set script_controller = 'user/list' %}
 
 {% block maincontent %}
+  
+
 <div class="clearfix mbs">
 
   {% set menus = permissions("admin_user_show","button") %}

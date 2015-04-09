@@ -3,12 +3,12 @@
 {% set menu = 'live-course' %}
 {% set type = 'live-course'%}
 {% set tab_menus = permissions('admin_live_course','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,type) }}{% endblock %}
+{% block title %}{{ getTitle('admin_live_course')}}{% endblock %}
+
 {% block main %}
 
-  <div class="mbl">
-      {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : type} %}
-  </div>
+{% if setting("course.live_course_enabled") == 1 %}
+
   
   {% include 'TopxiaAdminBundle:LiveCourse:tab.html.twig' %}
   <br>
@@ -33,5 +33,12 @@
   </table>
 
   {{ web_macro.paginator(paginator) }}
+{% else %}
+<div class="well" style="text-align:center;">
 
+
+直播功能未开启，请先在<a href="{{ path('admin_setting_live_course_setting') }}"> 系统-课程设置-直播 </a>中设置开启
+
+</div>
+{% endif %}
 {% endblock %}

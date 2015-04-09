@@ -2,16 +2,8 @@
 
 {% set menus = permissions("admin_message","tab")%}
 {% set menu = 'message' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 
 {% block main %}
-
-<div class = "mbl">
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-
-</div>
-
 
   {% block maincontent %}{% endblock %}
 {% endblock %}

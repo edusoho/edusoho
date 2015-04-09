@@ -1,14 +1,14 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
+{% block title %}{{ getTitle('admin_course_manage')}}{% endblock %}
+
 {% set menus = permissions('admin_course_show','tab') %}
 {% set menu = 'course' %}
 {% set type = 'manage'  %}
 
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,type) }}{% endblock %}
 {% set script_controller = 'course/manage' %}
 
 {% block main %}
-
 <div class="mbl">
 
 

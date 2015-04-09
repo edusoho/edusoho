@@ -2,17 +2,13 @@
 
 {% set active = 'manage' %}
 {% set menus = permissions('admin_course_note','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,active) }}{% endblock %}
+{% block title %}{{ getTitle('admin_course_note')}}{% endblock %}
+
 {% set menu = 'note' %}
 
 {% set script_controller = 'course/note' %}
 
 {% block main %}
-<div class="mbl">
-
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
-</div>
 
 <div class="well well-sm">
   <form class="form-inline">

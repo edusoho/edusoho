@@ -3,8 +3,8 @@
 {% set script_controller = 'system/user-fields' %}
 
 {% set submenu = 'user_fields' %}
-
-{% block maincontent %}
+{% block title %}{{ getTitle('admin_setting_user_fields')}}{% endblock %}
+{% block main_content %}
 <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#myModal">添加字段</button>
 <div class="page-header"><br><h1>用户字段自定义</h1></div>
 	<table class="table table-striped table-hover" id="course-table">

@@ -2,8 +2,9 @@
 
 {% set submenu = 'auth' %}
 {% set script_controller = 'setting/auth' %}
+{% block title %}{{ getTitle('admin_user_auth')}}{% endblock %}
 
-{% block maincontent %}
+{% block main_content %}
 <div class="page-header"><h1>注册设置</h1></div>
 
 {{ web_macro.flash_messages() }}

@@ -2,23 +2,10 @@
 
 {% set menus = permissions("admin_setting_finance","tab")%}
 {% set menu = 'finance_settings' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,submenu) }}{% endblock %}
 {% block main %}
 <div class = "mbl">
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
-<!-- <ul class="nav nav-tabs mbl">
-  <li class="{% if submenu == 'payment' %}active{% endif %}">
-  	<a href="{{ url('admin_setting_payment') }}">支付方式
-  	</a>
-  </li>
-  <li class="{% if submenu == 'refund' %}active{% endif %}">
-    <a href="{{ url('admin_setting_refund') }}">退款设置
-    </a>
-  </li>
 
-</ul> -->
-
-
-  {% block maincontent %}{% endblock %}
+  {% block main_content %}{% endblock %}
 {% endblock %}

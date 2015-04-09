@@ -4,13 +4,10 @@
 {% set tab_menus = permissions('admin_'~targetType~'_refunds',"tab") %}
 {% set menu = targetType~'_refunds' %}
 {% set submenu = targetType~'_refunds_manage' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_'~targetType~'_refunds')}}{% endblock %}
 
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
-
+  <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="status">

@@ -2,18 +2,13 @@
 
 {% set active = 'manage' %}
 {% set menus = permissions('admin_course_question','tab') %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(menus,active) }}{% endblock %}
+{% block title %}{{ getTitle('admin_course_question')}}{% endblock %}
+
 {% set script_controller = 'course/questions' %}
 
 {% set menu = 'question' %}
 
 {% block main %}
-
-<div class="mbl">
-
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:active} %}
-</div>
 
 {% include 'TopxiaAdminBundle:CourseQuestion:tab.html.twig' %}
 <br>

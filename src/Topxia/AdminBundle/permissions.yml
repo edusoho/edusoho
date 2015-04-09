@@ -38,7 +38,7 @@ admin_order:
     type: menu
     active: order
 admin_finance:
-    name: 财务
+    name: 帐务
     parent: admin
     router_name: admin_bill
     router_params: null
@@ -49,7 +49,7 @@ admin_app:
     name: 教育云
     parent: admin
     router_name: admin_app_installed
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: menu
     active: app
@@ -62,7 +62,7 @@ admin_system:
     type: menu
     active: system
 admin_operation_article:
-    name: 资讯
+    name: 资讯管理
     parent: admin_operation
     router_name: admin_article
     router_params: null
@@ -71,7 +71,7 @@ admin_operation_article:
     type: menu
     active: article
 admin_operation_group:
-    name: 小组
+    name: 小组管理
     parent: admin_operation
     router_name: admin_group
     router_params: null
@@ -80,7 +80,7 @@ admin_operation_group:
     type: menu
     active: group
 admin_operation_mobile:
-    name: 移动端
+    name: 移动端内容管理
     parent: admin_operation
     router_name: admin_operation_mobile
     router_params: null
@@ -88,17 +88,26 @@ admin_operation_mobile:
     mode: page
     type: menu
     active: mobile
-admin_operation_mobile_manage:
-    name: 管理
+admin_operation_mobile_banner_manage:
+    name: 轮播图设置
     parent: admin_operation_mobile
     router_name: admin_operation_mobile
     router_params: null
     router_params_context: false
     mode: page
     type: tab
-    active: mobile_manage
+    active: mobile_banner_manage
+admin_operation_mobile_select_manage:
+    name: 每周精选设置
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile_select
+    router_params: null
+    router_params_context: false
+    mode: page
+    type: tab
+    active: mobile_select_manage
 admin_operation_block:
-    name: 编辑区
+    name: 编辑区管理
     parent: admin_operation
     router_name: admin_block
     router_params: null
@@ -107,7 +116,7 @@ admin_operation_block:
     type: menu
     active: block
 admin_operation_content:
-    name: 自定义页面
+    name: 自定义页面管理
     parent: admin_operation
     router_name: admin_content
     router_params: { type: page }
@@ -115,6 +124,16 @@ admin_operation_content:
     mode: page
     type: menu
     active: content
+admin_operation_analysis_register:
+    name: 数据统计
+    parent: admin_operation
+    router_name: admin_operation_analysis_register
+    router_params: { tab: trend , analysisDateType:register }
+    router_params_context: false
+    mode: page
+    type: menu
+    active: data
+    after: admin_operation_content
 admin_operation_article_create:
     name: 添加资讯
     parent: admin_operation_article
@@ -160,7 +179,7 @@ admin_operation_group_create:
     type: button
     icon: 'glyphicon glyphicon-plus'
 admin_operation_group_manage:
-    name: 小组管理
+    name: 组管理
     parent: admin_operation_group
     router_name: admin_group
     router_params: null
@@ -169,7 +188,7 @@ admin_operation_group_manage:
     type: tab
     active: group
 admin_operation_group_thread:
-    name: 话题
+    name: 话题管理
     parent: admin_operation_group
     router_name: admin_groupThread
     router_params: null
@@ -185,26 +204,8 @@ admin_operation_block_create:
     router_params_context: false
     mode: modal
     type: button
-admin_operation_block_manage:
-    name: 管理
-    parent: admin_operation_block
-    router_name: admin_block
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: block
-admin_operation_content_manage:
-    name: 管理
-    parent: admin_operation_content
-    router_name: admin_content
-    router_params: { type: page }
-    router_params_context: false
-    mode: page
-    type: tab
-    active: content
 admin_course_show:
-    name: 课程
+    name: 课程管理
     parent: admin_course
     router_name: admin_course
     router_params: null
@@ -219,7 +220,7 @@ admin_course_add:
     mode: page
     type: button
 admin_live_course:
-    name: 直播
+    name: 直播管理
     parent: admin_course
     router_name: admin_live_course
     router_params: {'status': 'underway'}
@@ -227,17 +228,8 @@ admin_live_course:
     mode: page
     type: menu
     active: live-course
-admin_live_course_manage:
-    name: 管理
-    parent: admin_live_course
-    router_name: admin_live_course
-    router_params: {'status': 'underway'}
-    router_params_context: false
-    mode: page
-    type: tab
-    active: live-course
 admin_course_thread:
-    name: 话题
+    name: 话题管理
     parent: admin_course
     router_name: admin_thread
     mode: page
@@ -251,7 +243,7 @@ admin_course_thread_manage:
     type: tab
     active: manage
 admin_course_question:
-    name: 问答
+    name: 问答管理
     parent: admin_course
     router_name: admin_question
     router_params: {'postStatus': 'unPosted'}
@@ -259,51 +251,29 @@ admin_course_question:
     mode: page
     type: menu
     active: question
-admin_course_question_manage:
-    name: 管理
-    parent: admin_course_question
-    router_name: admin_question
-    router_params: {'postStatus': 'unPosted'}
-    mode: page
-    type: tab
-    active: manage
 admin_course_note:
-    name: 笔记
+    name: 笔记管理
     parent: admin_course
     router_name: admin_note
     mode: page
     type: menu
     active: note
-admin_course_note_manage:
-    name: 管理
-    parent: admin_course_note
-    router_name: admin_note
-    mode: page
-    type: tab
-    active: manage
 admin_course_review:
-    name: 评价
+    name: 评价管理
     parent: admin_course
     router_name: admin_review
     mode: page
     type: menu
     active: review
-admin_course_review_manage:
-    name: 管理
-    parent: admin_course_review
-    router_name: admin_review
-    mode: page
-    type: tab
-    active: manage
 admin_course_category:
-    name: 分类
+    name: 分类管理
     parent: admin_course
     router_name: admin_course_category
     mode: page
     type: menu
     active: category
 admin_course_tag:
-    name: 标签
+    name: 标签管理
     parent: admin_course
     router_name: admin_tag
     mode: page
@@ -323,7 +293,7 @@ admin_course_tag_add:
     mode: modal
     type: button
 admin_user_show:
-    name: 用户
+    name: 用户管理
     parent: admin_user
     router_name: admin_user
     router_params: null
@@ -358,7 +328,7 @@ admin_login_record:
     type: tab
     active: login_record
 admin_teacher:
-    name: 教师
+    name: 教师管理
     parent: admin_user
     router_name: admin_teacher
     router_params: null
@@ -366,17 +336,8 @@ admin_teacher:
     mode: page
     active: teacher
     type: menu
-admin_teacher_manage:
-    name: 管理
-    parent: admin_teacher
-    router_name: admin_teacher
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: teacher
 admin_approval_approving:
-    name: 实名认证
+    name: 实名认证管理
     parent: admin_user
     router_name: admin_approval_approving
     router_params: null
@@ -384,17 +345,8 @@ admin_approval_approving:
     mode: page
     active: approval
     type: menu
-admin_approval_manage:
-    name: 管理
-    parent: admin_approval_approving
-    router_name: admin_approval_approving
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: approving
 admin_message:
-    name: 私信
+    name: 私信管理
     parent: admin_user
     router_name: admin_message
     router_params: null
@@ -402,15 +354,6 @@ admin_message:
     mode: page
     active: message
     type: menu
-admin_message_manage:
-    name: 管理
-    parent: admin_message
-    router_name: admin_message
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: message
 admin_course_manage:
     name: 管理
     parent: admin_course_show
@@ -425,32 +368,6 @@ admin_course_recommend:
     type: tab
     mode: page
     active: recommend
-admin_vip_list:
-    name: 会员
-    parent: admin_user
-    router_name: admin_vip_list
-    router_params: null
-    router_params_context: false
-    mode: page
-    active: member
-    type: menu
-admin_vip_create:
-    name: 添加新会员
-    parent: admin_vip_list
-    router_name: admin_vip_create
-    router_params: null
-    router_params_context: false
-    mode: modal
-    type: button
-admin_vip_manage:
-    name: 管理
-    parent: admin_vip_list
-    router_name: admin_vip_list
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: recommend
 admin_course_data:
     name: 统计
     parent: admin_course_show
@@ -458,15 +375,6 @@ admin_course_data:
     active: data
     type: tab
     mode: page
-admin_vip_bought_list:
-    name: 操作记录
-    parent: admin_vip_list
-    router_name: admin_vip_bought_list
-    router_params: null
-    router_params_context: false
-    mode: page
-    type: tab
-    active: member_history
 admin_course_order:
     name: 课程订单
     parent: admin_order
@@ -500,7 +408,7 @@ admin_course_order_query:
     type: tab
     active: course_order_query
 admin_bills:
-    name: 账单
+    name: 账单管理
     parent: admin_finance
     router_name: admin_bill
     router_params: null
@@ -524,7 +432,7 @@ admin_coin_bill:
     type: tab
     active: records 
 admin_coin_user:
-    name: 虚拟币
+    name: 虚拟币管理
     parent: admin_finance
     router_name: admin_coin_user_records
     router_params: null
@@ -540,7 +448,7 @@ admin_coin_user_records:
     type: tab
     active: user-records
 admin_course_refunds:
-    name: 课程退款
+    name: 课程退款管理
     parent: admin_finance
     router_name: admin_order_refunds
     router_params: {targetType:course,status:created}
@@ -712,7 +620,7 @@ admin_group_set:
     type: tab
     active: group_set
 admin_setting_finance:
-    name: 财务设置
+    name: 帐务设置
     parent: admin_system
     router_name: admin_setting_payment
     router_params: null
@@ -793,15 +701,6 @@ admin_setting_ip_blacklist_manage:
     mode: page
     type: tab
     active: ip_blacklist_manage
-admin_operation_analysis_register:
-    name: 数据统计
-    parent: admin_system
-    router_name: admin_operation_analysis_register
-    router_params: { tab: trend , analysisDateType:register }
-    router_params_context: false
-    mode: page
-    type: menu
-    active: data
 admin_operation_analysis_:
     name: 查阅
     parent: admin_operation_analysis_register
@@ -811,15 +710,6 @@ admin_operation_analysis_:
     mode: page
     type: tab
     active: data
-# admin_operation_analysis_register_query:
-#     name: 查阅
-#     parent: admin_operation_analysis_register
-#     router_name: admin_operation_analysis_register
-#     router_params: { tab: trend , analysisDateType:register }
-#     router_params_context: false
-#     mode: page
-#     type: tab
-#     active: register
 admin_logs:
     name: 系统日志
     parent: admin_system
@@ -828,6 +718,7 @@ admin_logs:
     mode: page
     type: menu
     active: logs
+    group: 2
 admin_logs_query:
     name: 查阅
     parent: admin_logs
@@ -836,11 +727,18 @@ admin_logs_query:
     mode: page
     type: tab
     active: logs_query
+admin_app_my_cloud:
+    name: 我的教育云
+    parent: admin_app
+    router_name: admin_app_my_cloud
+    mode: page
+    type: menu
+    active: my-cloud
 admin_app_center_show:
     name: ES应用
     parent: admin_app
     router_name: admin_app_center
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: menu
     active: center
@@ -856,7 +754,7 @@ admin_app_center:
     name: 应用中心
     parent: admin_app_center_show
     router_name: admin_app_center
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: tab
     active: center
@@ -864,7 +762,7 @@ admin_app_installed:
     name: 已购项目
     parent: admin_app_center_show
     router_name: admin_app_installed
-    router_params: null
+    router_params: { postStatus : all }
     mode: page
     type: tab
     active: installed

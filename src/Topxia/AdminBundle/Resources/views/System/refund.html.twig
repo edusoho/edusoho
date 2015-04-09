@@ -1,8 +1,9 @@
 {% extends 'TopxiaAdminBundle:System:payment-set.layout.html.twig' %}
 
 {% set submenu = 'refund' %}
+{% block title %}{{ getTitle('admin_setting_refund')}}{% endblock %}
 
-{% block maincontent %}
+{% block main_content %}
 
 {{ web_macro.flash_messages() }}
 

@@ -1,11 +1,11 @@
-{% extends 'TopxiaAdminBundle:Content:article.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
 
 {% set script_controller = 'article/list' %}
 
 {% set tab_menus = permissions('admin_operation_article',"tab") %}
 {% set menu = 'article' %}
 {% set submenu = 'article' %}
-{% block title %}{{ parent() }}-{{ admin_macro.title(tab_menus,submenu) }}{% endblock %}
+{% block title %}{{ getTitle('admin_operation_article_manage')}}{% endblock %}
 
 {% block main %}
 <div class="mbl">
@@ -15,7 +15,7 @@
 <div class="clearfix mbs">
 
 	{% set btn_menus = permissions("admin_operation_article","button") %}
-                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+    {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
 
 </div>
 

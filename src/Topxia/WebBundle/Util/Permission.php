@@ -10,6 +10,8 @@ Class Permission
     public function getPermissions($parent, $type) 
     {   
         $permissions = $this->parsePermissions();
+        $permissions = $this->addCode($permissions);
+        $permissions = $this->sort($permissions);
 
         $result = array();
 
@@ -105,10 +107,48 @@ Class Permission
          
   /*      }*/
 
-        $permissions = $this->addCode($permissions);
-        $permissions = $this->sort($permissions);
-
         return $permissions;
+    }
+
+    public function getTitle($code)
+    {
+        $permissions = $this->parsePermissions();
+        $title="";
+        $permission = isset($permissions[$code]) ? $permissions[$code] : null;
+
+        if($this->getNameByCode($code, $permissions)) {
+
+            $title .= $this->getNameByCode($code, $permissions);
+        }
+
+        while ($permission['parent']) {
+            
+            $code = $permission['parent'];
+            if($this->getNameByCode($code, $permissions)) {
+
+                $title .= "-";
+                $title .= $this->getNameByCode($code, $permissions);
+                
+            }
+
+            $permission = isset($permissions[$permission['parent']]) ? $permissions[$permission['parent']] : null;
+        }
+
+        return $title;
+    }
+
+    private function getNameByCode($code, $permissions)
+    {       
+
+        if(isset($permissions[$code])) {
+
+            $permission = $permissions[$code];
+            
+            return $permission['name'];
+        }
+
+        return null;
+
     }
 
     private function addCode($permissions)
