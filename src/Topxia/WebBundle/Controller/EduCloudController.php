@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Respose;
 
 class EduCloudController extends BaseController
 {
@@ -113,6 +114,27 @@ class EduCloudController extends BaseController
             $response = array('success' => false, 'message' => '验证码错误');
         }        
         return $this->createJsonResponse($response);
+    }
+
+    public function cloudCallBackAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+
+        $data = $request->request->all();
+        $webAccessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
+
+        if(!empty($data['accessKey']) && $data['accessKey'] == $webAccessKey && !empty($data['action'])) {
+
+            $setting['message'] = empty($data['reason']) ? '' : $data['reason'];
+
+            $setting['status'] = $data['action'];
+
+            $this->getSettingService()->set('cloud_sms', $setting);
+
+            return $this->createJsonResponse(array('status'=>'ok'));
+        }
+
+        return $this->createJsonResponse(array('error'=>'accessKey error!'));
     }
 
     private function generateSmsCode($length = 6)
