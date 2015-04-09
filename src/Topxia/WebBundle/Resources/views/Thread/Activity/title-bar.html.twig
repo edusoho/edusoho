@@ -1,4 +1,4 @@
-<div class="thread-activity-title-bar">
+<div class="thread-event-title-bar">
   <span class="label label-success" title="活动">活动</span>
   <h1 class="thread-title">{{ thread.title }}</h1>
   {% if thread.sticky %}
@@ -16,8 +16,8 @@
 </div>
 
 {% if member is empty %}
-  <button class="btn btn-success btn-sm js-activity-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">我要报名</button>
+  <button class="btn btn-success btn-sm js-event-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">我要报名</button>
 {% else %}
-  <button class="btn btn-success btn-sm js-activity-apply disabled" data-toggle="modal" data-target="#modal">已报名</button>
-  <button class="btn btn-link js-activity-cancel" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">取消报名</button>
+  <button class="btn btn-success btn-sm js-event-apply disabled" data-toggle="modal" data-target="#modal">已报名</button>
+  <button class="btn btn-link js-event-cancel" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">取消报名</button>
 {% endif %}

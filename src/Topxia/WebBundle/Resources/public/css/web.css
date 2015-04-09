@@ -808,7 +808,7 @@ body {
 
 }
 
-.thread-activity-title {
+.thread-event-title {
   font-size: 20px;
   line-height: 36px;
   margin: 0;
@@ -817,7 +817,7 @@ body {
   overflow:hidden;
 }
 
-.thread-activity-title-bar {
+.thread-event-title-bar {
   margin-top: 10px;
 }
 

@@ -20,7 +20,7 @@ define(function(require, exports, module) {
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
             'click .pagination a': 'onClickPagination',
             'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
-            'click .js-activity-cancel': 'onClickActivityCancelBtn'
+            'click .js-event-cancel': 'onClickEventCancelBtn'
         },
 
         setup:function() {
@@ -130,7 +130,7 @@ define(function(require, exports, module) {
             $form.toggleClass('hide');
             this._initSubpostForm($form);
         },
-        onClickActivityCancelBtn: function(e) {
+        onClickEventCancelBtn: function(e) {
             $.post($(e.currentTarget).data('url'), function(result){
                 console.log(1);
                 window.location.reload();

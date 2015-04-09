@@ -17,13 +17,13 @@
       </div>
   </div>
 
-  <div class="js-activity-content" {% if type != 'activity' %}style="display:none;" {% endif %}>
+  <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label for="startTime">活动时间</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}thread.startTime|date('Y-m-d h:m'){% endif %}">
+        <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d h:m') }}{% endif %}">
         </div>
     </div>
 

@@ -19,10 +19,10 @@ define(function(require, exports, module) {
             },
             onChangesTypeSelect: function(e) {
                 var $currentTarget = $(e.currentTarget);
-                if ($currentTarget.val() == 'activity') {
-                    this.$('.js-activity-content').slideDown();
+                if ($currentTarget.val() == 'event') {
+                    this.$('.js-event-content').slideDown();
                 } else {
-                    this.$('.js-activity-content').slideUp();
+                    this.$('.js-event-content').slideUp();
                 }
             },
             _initValidator: function() {

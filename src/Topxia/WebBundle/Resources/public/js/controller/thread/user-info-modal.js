@@ -4,11 +4,11 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
 
-    var $modal = $('#join-activity-form').parents('.modal');
+    var $modal = $('#join-event-form').parents('.modal');
 
     exports.run = function() {
         var validator = new Validator({
-            element: '#join-activity-form',
+            element: '#join-event-form',
             failSilently: true,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {

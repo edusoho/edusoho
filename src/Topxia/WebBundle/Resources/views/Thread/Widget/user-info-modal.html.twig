@@ -3,7 +3,7 @@
 {% block title %}加入活动{% endblock %}
 {% block body %}
 
-  <form id="join-activity-form" class="form-horizontal" method="post" 
+  <form id="join-event-form" class="form-horizontal" method="post" 
   action="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}"
   >
 
@@ -28,7 +28,7 @@
 {% block footer %}
   
   <button class="btn btn-link" data-dismiss="modal">取消</button>
-  <button id="join-activity-btn" class="btn btn-primary" data-loading-text="正在提交" type="submit" data-toggle="form-submit" data-target="#join-activity-form">提交</button>
+  <button id="join-event-btn" class="btn btn-primary" data-loading-text="正在提交" type="submit" data-toggle="form-submit" data-target="#join-event-form">提交</button>
 
   <script>
     app.load('thread/user-info-modal');

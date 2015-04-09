@@ -127,14 +127,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['targetId'])) {
             throw $this->createServiceException(' Id不能为空！');
         }
-        if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question', 'activity'))) {
+        if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question', 'event'))) {
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
 
         $user = $this->getCurrentUser();
         $thread['userId'] = $user['id'];
 
-        if ($thread['type'] == 'activity') {
+        if ($thread['type'] == 'event') {
             $thread['startTime'] = strtotime($thread['startTime']);
             $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
         } else {
