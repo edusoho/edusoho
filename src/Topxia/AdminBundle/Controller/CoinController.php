@@ -147,7 +147,7 @@ class CoinController extends BaseController
                 $coinSettings['price_type']="Coin";
                 $coinSettings['cash_model']="currency";
                 if (isset($data['course-cash'])){
-                    $this->updateCoursesCashPrice($data["course-cash"]);
+                    $this->updateCoursesCoinPrice($data["course-cash"]);
                 }
             }
 
@@ -159,14 +159,14 @@ class CoinController extends BaseController
         )));
     }
 
-    private function updateCoursesPrice($data,$rate)
+    private function updateCoursesPrice($data)
     {   
         foreach ($data as $key => $value) {
             $this->getCourseService()->setCoursePrice($key, 'default', $value);
         }
     }
 
-    private function updateCoursesCashPrice($data)
+    private function updateCoursesCoinPrice($data)
     {
         foreach ($data as $key => $value) {
             $this->getCourseService()->setCoursePrice($key, 'coin', $value);
