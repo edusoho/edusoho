@@ -733,10 +733,8 @@ define(function(require, exports, module) {
                 var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
                 $.post(url);
                 learningCounter = 0;
-            } else {
-                if(!paused){
-                    learningCounter++;
-                }
+            } else if(!paused){
+                learningCounter++;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
