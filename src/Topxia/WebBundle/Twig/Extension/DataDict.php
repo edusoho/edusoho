@@ -107,6 +107,13 @@ class DataDict
             'last_week' => '上周',
             'this_month' => '本月',
             'last_month' => '上月',
+            '1' => '一',
+            '2' => '二',
+            '3' => '三',
+            '4' => '四',
+            '5' => '五',
+            '6' => '六',
+            '7' => '日'
     	),
         'contentStatus' => array(
             'published' => '已发布',
@@ -252,7 +259,7 @@ class DataDict
         'threadProperty' => array(
             'isStick' => '置顶',
             'isElite' => '加精',
-        ),
+        )
 	);
 
 	public static function dict($type)

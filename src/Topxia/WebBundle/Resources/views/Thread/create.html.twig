@@ -23,7 +23,7 @@
         <label for="startTime">活动时间</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name= "startTime" value="{{ thread.startTime|default('') }}">
+        <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{{ thread.startTime|default('')|date('Y-m-d h:m') }}">
         </div>
     </div>
 

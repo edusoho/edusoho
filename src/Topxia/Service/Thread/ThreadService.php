@@ -89,5 +89,7 @@ interface ThreadService
 	/**
 	* 话题成员
 	**/
-	public function findActivityMembersByThreadId($threadId);
+	public function findMembersByThreadId($threadId);
+
+	public function remainMemberNum($thread);
 }

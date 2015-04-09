@@ -181,13 +181,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $user = $this->getCurrentUser();
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content'));
+        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location'));
         if (empty($fields)) {
             throw $this->createServiceException('参数缺失，更新失败。');
         }
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['startTime'] = strtotime($fields['startTime']);
         return $this->getThreadDao()->updateThread($id, $fields);
     }
 
@@ -489,9 +490,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
     }
 
-    public function findActivityMembersByThreadId($threadId)
+    public function remainMemberNum($thread)
     {
-        return ArrayToolkit::index($this->getThreadMemberDao()->findActivityMembersByThreadId($threadId), 'userId');
+        $count = $this->getThreadMemberDao()->findMembersCountByThreadId($thread['id']);
+        return $thread['maxUsers'] == -1 ? -1 : intval($thread['maxUsers']) - intval($count);
+    }
+
+    public function findMembersByThreadId($threadId)
+    {
+        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId), 'userId');
     }
 
     private function getTargetFirewall($resource)

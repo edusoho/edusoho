@@ -66,7 +66,7 @@ define(function(require, exports, module) {
                 this.$("#startTime").datetimepicker({
                     language: 'zh-CN',
                     autoclose: true,
-                    format: 'yyyy-mm-dd HH:mm:ss',
+                    format: 'yyyy-mm-dd HH:ii',
                     minView: 'hour'
                 }); 
             }

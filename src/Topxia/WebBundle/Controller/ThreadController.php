@@ -308,7 +308,7 @@ class ThreadController extends BaseController
 
     public function showMembersAction(Request $request, $thread)
     {
-        $members = $this->getThreadService()->findActivityMembersByThreadId($thread['id']);
+        $members = $this->getThreadService()->findMembersByThreadId($thread['id']);
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         foreach ($members as $key => $member) {
