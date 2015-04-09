@@ -5014,3 +5014,16 @@ a.homework-essay-textarea-pack-up{
 	color: #449d44;
 	font-size: 22px;
 }
+.banner-announcement {
+    background: #ebf6f1;
+    height: 40px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+.banner-volume {
+    line-height: 25px;
+    vertical-align: middle;
+    margin-top: 8px;
+    color: #3e3e3e;
+    font-size: 14px;
+}
