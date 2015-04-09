@@ -596,7 +596,9 @@ class CourseController extends BaseController
 	public function recordLearningTimeAction(Request $request,$lessonId,$time)
 	{	
 		$user = $this->getCurrentUser();
-
+		if(!$user->isLogin()){
+			$this->createAccessDeniedException();
+		}
 		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
 
 		return $this->createJsonResponse(true);
@@ -643,6 +645,10 @@ class CourseController extends BaseController
 	public function recordWatchingTimeAction(Request $request,$lessonId,$time)
 	{	
 		$user = $this->getCurrentUser();
+
+		if(!$user->isLogin()){
+			$this->createAccessDeniedException();
+		}
 
 		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
 
