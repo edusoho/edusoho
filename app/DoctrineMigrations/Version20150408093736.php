@@ -15,7 +15,7 @@ class Version20150408093736 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `thread` ADD `startTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '开始时间' AFTER `status`;");
         $this->addSql("ALTER TABLE `thread` ADD `endTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '结束时间' AFTER `startTIme`;");
-        $this->addSql("ALTER TABLE `thread` ADD `maxUsers` INT(10) NOT NULL DEFAULT '-1' COMMENT '最大人数' AFTER `hitNum`;");
+        $this->addSql("ALTER TABLE `thread` ADD `maxUsers` INT(10) NOT NULL DEFAULT '0' COMMENT '最大人数' AFTER `hitNum`;");
         $this->addSql("ALTER TABLE `thread` ADD `location` VARCHAR(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地点' AFTER `lastPostTime`;");
         $this->addSql("ALTER TABLE `thread` ADD `memberNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '成员人数' AFTER `hitNum`;");
         
