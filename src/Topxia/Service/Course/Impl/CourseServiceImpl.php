@@ -129,11 +129,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	private function _prepareCourseConditions($conditions)
 	{        
-		if (isset($conditions['noteNumGreaterThan'])) {
-			$conditions = $conditions ;
-		}else{
-			$conditions = array_filter($conditions);
-		}
+		$conditions = array_filter($conditions);
+
 		if (isset($conditions['date'])) {
 			$dates = array(
 				'yesterday'=>array(
