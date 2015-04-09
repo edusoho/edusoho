@@ -7,15 +7,7 @@
         <a href="{{ path(thread.targetType ~ '_threads', {(thread.targetType~'Id'): thread.targetId}) }}" class="text-muted">话题</a> <span class="text-muted">&raquo; 正文</span>
       </div>
 
-      <div class="thread-title-bar">
-        <h1 class="thread-title">{{ thread.title }}</h1>
-        {% if thread.sticky %}
-          <span class="label label-danger" title="置顶帖">置顶</span>
-        {% endif %}
-        {% if thread.nice %}
-          <span class="label label-warning" title="精华帖">精</span>
-        {% endif %}
-      </div>
+      {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-title-bar.html.twig' %}
 
       <div class="thread-metas">
         {{  web_macro.user_link(author, 'link-muted') }}
@@ -26,7 +18,7 @@
       </div>
     </div>
     <div class="panel-body">
-      {{ thread.content|at(thread.ats)|raw }}
+      {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-body.html.twig' %}
     </div>
 
     <div class="panel-footer clearfix">

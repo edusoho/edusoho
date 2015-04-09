@@ -306,6 +306,35 @@ class ThreadController extends BaseController
         ));
     }
 
+    public function showMembersAction(Request $request, $thread)
+    {
+        $members = $this->getThreadService()->findActivityMembersByThreadId($thread['id']);
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        foreach ($members as $key => $member) {
+            $members[$key] = $users[$key];
+        }
+        $myFriends = $this->_findMyJoindedFriends($members);
+
+        return $this->render('TopxiaWebBundle:Thread/Widget:user-grids.html.twig', array(
+            'members' => $members,
+            'myFriends' => $myFriends,
+        ));
+    }
+
+    private function _findMyJoindedFriends($members)
+    {
+        $myFriends = $this->getUserService()->findAllUserFollowing($this->getCurrentUser()->id);
+        $newFrinds = array();
+        foreach ($myFriends as $key => $myFriend) {
+            if (!empty($members[$key])) {
+                $newFrinds[] = $myFriend;
+            }
+        }
+
+        return $newFrinds;
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');

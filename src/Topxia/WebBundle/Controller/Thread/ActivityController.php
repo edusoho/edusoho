@@ -31,10 +31,6 @@ class ActivityController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $activityMembers = $this->getThreadService()->findActivityMembersByThreadId($thread['id']);
-
-        $myFriends = $this->_findMyJoindedFriends($activityMembers);
-
         $userIds = array_unique(array_merge(ArrayToolkit::column($activityMembers, 'userId'), ArrayToolkit::column($posts, 'userId')));
 
 
@@ -125,19 +121,6 @@ class ActivityController extends BaseController
         return $this->render('TopxiaWebBundle:Thread/Activity:other-activities-block.html.twig' , array(
             'threads' => $threads
         ));
-    }
-
-    private function _findMyJoindedFriends($activityMembers)
-    {
-        $myFriends = $this->getUserService()->findAllUserFollowing($this->getCurrentUser()->id);
-        $newFrinds = array();
-        foreach ($myFriends as $key => $myFriend) {
-            if (!empty($activityMembers[$key])) {
-                $newFrinds[] = $myFriend;
-            }
-        }
-
-        return $newFrinds;
     }
 
     protected function getThreadService()
