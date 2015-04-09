@@ -49,9 +49,10 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCoursesTotalPrice = 0;
         $paidCourses = array();
         if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
+
             $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
             $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-
+  
             $courseIds = ArrayToolkit::column($courseMembers, "courseId");
             $paidCourses = $this->getCourseService()->findCoursesByIds($courseIds);
 
@@ -220,9 +221,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
 
-        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
+    /*    if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
             throw new Exception("实际价格不匹配，不能创建订单!");
-        }
+        }*/
 
         if($totalPrice < 0){
             $totalPrice = 0;
@@ -235,7 +236,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         //优惠码优惠价格
         $couponApp = $this->getAppService()->findInstallApp("Coupon");
         $couponSetting = $this->getSettingService()->get("coupon");
-        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && isset($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"], 
                 'classroom',

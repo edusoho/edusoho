@@ -93,10 +93,9 @@ class CustomOrderController extends OrderController
         $orderInfo['verifiedMobile'] = $verifiedMobile;
 
         #如果是课程结算，需要判断该用户是否是会员，是否可以享受课程打折
-        if($targetType  =='course' ){
+        if($targetType  =='course' || $targetType=='classroom' ){
             $orderInfo = $this->setShowVipDiscount($orderInfo,$currentUser);
         }
-
 
         return $this->render('CustomWebBundle:Order:order-create.html.twig', $orderInfo);
     }
@@ -152,7 +151,7 @@ class CustomOrderController extends OrderController
             $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
 
              //如果是课程，则根据用户是否是VIP重新教研支付金额
-            if($targetType  =='course' ){
+            if($targetType  =='course' || $targetType=='classroom'){
                list($amount, $totalPrice) = $this-> setPayVipDiscount($user, $fields, $amount, $totalPrice);
             }
 
@@ -161,7 +160,6 @@ class CustomOrderController extends OrderController
                 
                 return $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
             }
-
             //价格比较
             if(intval($amount*100) != intval($shouldPayMoney*100)) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
@@ -215,14 +213,15 @@ class CustomOrderController extends OrderController
                 $vipPrice=$totalPrice*0.1*$level['courseDiscount'];
                 $vipPrice=sprintf("%.2f", $vipPrice);
                 $totalPrice = $vipPrice;
+
                 $coinSetting = $this->setting("coin");
                 //如果使用的是人民币 totalPrice 单位是人民币
                 if ($coinSetting['coin_enabled']) {
-                    if ($coinSetting['price_type']=='RMB') {
+                    if ($coinSetting['price_type']=='Coin') {
                         $cash_rate = empty($coinSetting["cash_rate"]) ? 1 : $coinSetting["cash_rate"]; 
-                        $amount = round($totalPrice*1000 - $fields['coinPayAmount']/ $cash_rate*1000)/1000;//出去汇率，以人民币计算
+                        $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000/$cash_rate;//除去汇率，以人民币计算
                     }else{
-                        $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000;//出去汇率，以人民币计算
+                        $amount = round($totalPrice*1000 - $fields['coinPayAmount']*1000)/1000;
                     }    
                 }else{
                     $amount =  $vipPrice;
@@ -235,28 +234,27 @@ class CustomOrderController extends OrderController
     protected function setShowVipDiscount($orderInfo,$currentUser){
         $vip=$this->getVipService()->getMemberByUserId($currentUser["id"]);
         $orderInfo['vip'] = $vip;
-        $course =$orderInfo['courses'][0];
-        $level=array();
-        $vipPrice=$course['price'];
-        $status="false";
+       
         if($vip){
+            $level=array();
             $level=$this->getLevelService()->getLevel($vip['levelId']);
-             $orderInfo['level'] = $level;
+            $orderInfo['level'] = $level;
+            
             if($level && $this->getVipService()->checkUserInMemberLevel($currentUser["id"],$vip['levelId'])=="ok"){
-                $status=$this->getVipService()->checkUserInMemberLevel($currentUser["id"],$vip['levelId']);
-                $course['status'] = $status;
 
-                $vipPrice=$course['price']*0.1*$level['courseDiscount'];
-                $vipPrice=sprintf("%.2f", $vipPrice);
-                $course['vipPrice'] =  $vipPrice;
+                if($orderInfo['priceType'] =='RMB'){
+                    $vipPrice=$orderInfo['totalPrice']*0.1*$level['courseDiscount'];
+                    $vipPrice=sprintf("%.2f", $vipPrice);
 
-                if(isset($course['coinPrice'])){
-                    $course['vipCoinPrice']=$course['coinPrice']*0.1*$level['courseDiscount'];
-                    $course['vipCoinPrice']=sprintf("%.2f", $course['vipCoinPrice']);
+                    $orderInfo['vipPrice'] = $vipPrice;
+                }
+                if($orderInfo['priceType'] =='Coin'){
+                    $vipCoinPrice=$orderInfo['totalPrice']*0.1*$level['courseDiscount'];
+                    $vipCoinPrice=sprintf("%.2f", $vipCoinPrice);
+
+                    $orderInfo['vipCoinPrice'] = $vipCoinPrice;
                 }
             }
-           
-           $orderInfo['course'] = $course;
         }
         return  $orderInfo;
     }

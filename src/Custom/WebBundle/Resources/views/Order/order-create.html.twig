@@ -27,17 +27,13 @@
             <input type="hidden" name="targetId" value="{{targetId}}"/>
 
             {% if vip |default(false) %} 
-                 {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
-                      {% if priceType|default('RMB') =='Coin' %}
-                        <input type="hidden" name="totalPrice" value="{{course.vipCoinPrice}}"/>
-                      {% else %}
-                          <input type="hidden" name="totalPrice" value="{{course.vipPrice}}"/>
-                      {% endif %}
-                 {% else %}
-                      <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
-                 {% endif %}  
+              {% if priceType|default('RMB') =='Coin' %}
+                <input type="hidden" name="totalPrice" value="{{vipCoinPrice}}"/>
               {% else %}
-                   <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>  
+                  <input type="hidden" name="totalPrice" value="{{vipPrice}}"/>
+              {% endif %}  
+            {% else %}
+               <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>  
              {% endif %}
 
 
@@ -67,11 +63,9 @@
                   订单金额：
                   <span  {%if not vip|default(false) %} role="total-price" {% endif %}
                       {% if vip|default(false) %}
-                          {% if course.status=="ok" and level.courseDiscount|default(10) <= 10 %}
-                                     class="price old-price " 
-                          {% endif %}
+                          class="price old-price " 
                       {% else %}  
-                                   class="price " 
+                          class="price " 
                       {% endif %}>{{totalPrice}}  </span>
 
                {#    <span role="total-price" class="order-price">{{totalPrice}}</span> #}
@@ -86,13 +80,11 @@
                   {% if vip |default(false) %}
                      会员折扣价：
                     <span role="total-price" class="now-price">
-                       {% if level.courseDiscount|default(10) <= 10  and course.status=="ok" %}
-                          {% if priceType|default('RMB') =='Coin' %}
-                              {{course.vipCoinPrice}}
-                          {% else %}
-                              {{course.vipPrice}}
-                          {% endif %}
-                       {% endif %}   
+                        {% if priceType|default('RMB') =='Coin' %}
+                            {{vipCoinPrice}}
+                        {% else %}
+                            {{vipPrice}}
+                        {% endif %}  
                     </span>
                     {% if priceType|default('RMB') == "RMB" %}
                         元

@@ -28,13 +28,9 @@
 
 
     {% if vip |default(false) %}
-         {% if level.courseDiscount|default(10) < 10  and course.status=="ok" %}
-                <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{course.vipCoinPrice|default(0)}}" maxlength="">
-          {% else %}
-              <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
-         {% endif %} 
+      <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{vipCoinPrice|default(0)}}" maxlength="">
     {% else  %}
-           <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
+       <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
     {% endif %}  
 
 
