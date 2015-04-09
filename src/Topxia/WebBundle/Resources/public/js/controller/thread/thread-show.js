@@ -19,7 +19,8 @@ define(function(require, exports, module) {
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
             'click .pagination a': 'onClickPagination',
-            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm'
+            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
+            'click .js-activity-cancel': 'onClickActivityCancelBtn'
         },
 
         setup:function() {
@@ -128,6 +129,12 @@ define(function(require, exports, module) {
             var $form = $btn.parents('.thread-subpost-container').find('.thread-subpost-form');
             $form.toggleClass('hide');
             this._initSubpostForm($form);
+        },
+        onClickActivityCancelBtn: function(e) {
+            $.post($(e.currentTarget).data('url'), function(result){
+                console.log(1);
+                window.location.reload();
+            });
         },
 
         _initSubpostForm: function($form) {

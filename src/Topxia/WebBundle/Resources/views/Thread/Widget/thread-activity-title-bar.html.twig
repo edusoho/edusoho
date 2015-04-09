@@ -1,17 +1,1 @@
-<div class="thread-activity-title-bar">
-  <span class="label label-success" title="活动">活动</span>
-  <h1 class="thread-title">{{ thread.title }}</h1>
-  {% if thread.sticky %}
-    <span class="label label-danger" title="置顶帖">置顶</span>
-  {% endif %}
-  {% if thread.nice %}
-    <span class="label label-warning" title="精华帖">精</span>
-  {% endif %}
-</div>
-
-<div>
-  <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('dateType',thread.startTime|date('N')) ~ thread.startTime|date(' h:i') }}</p>
-  <p>地点：{{ thread.location }}</p>
-  <p>名额：{{ thread.maxUsers }} 人 （还剩 {{ service.remainMemberNum(thread) }}人）</p>
-</div>
-<button class="btn btn-success btn-sm">我要报名</button>
+{{ render(controller('TopxiaWebBundle:Thread/Activity:showActivityTitle', {request:app.request, thread:thread})) }}

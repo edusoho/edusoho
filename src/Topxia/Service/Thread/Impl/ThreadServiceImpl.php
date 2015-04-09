@@ -490,6 +490,23 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
     }
 
+    public function createMember($fields)
+    {
+        $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
+        if (empty($member)) {
+            $fields['createdTime'] = time();
+            return $this->getThreadMemberDao()->addMember($fields);
+        } else {
+            return null;
+        }
+        
+    }
+
+    public function deleteMember($memberId)
+    {
+        return $this->getThreadMemberDao()->deleteMember($memberId);
+    }
+
     public function remainMemberNum($thread)
     {
         $count = $this->getThreadMemberDao()->findMembersCountByThreadId($thread['id']);
@@ -499,6 +516,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function findMembersByThreadId($threadId)
     {
         return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId), 'userId');
+    }
+
+    public function getMemberByThreadIdAndUserId($threadId, $userId)
+    {
+        return $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($threadId, $userId);
     }
 
     private function getTargetFirewall($resource)
