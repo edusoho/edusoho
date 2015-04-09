@@ -16,7 +16,7 @@
               {% if thread.type == 'question' %}
                 <span class="label label-info" title="问答帖">问</span>
               {% elseif thread.type == 'event' %}
-                <span class="label label-info" title="问答帖">活动</span>
+                <span class="label label-info" title="活动">活动</span>
               {% endif %}
               <a class="thread-item-title" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 

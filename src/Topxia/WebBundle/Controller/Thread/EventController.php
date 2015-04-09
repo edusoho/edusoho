@@ -10,12 +10,10 @@ class EventController extends BaseController
     public function showEventTitleAction(Request $request, $thread)
     {
         $user = $this->getCurrentUser();
-        $remainNum = $this->getThreadService()->remainMemberNum($thread);
         $member = $this->getThreadService()->getMemberByThreadIdAndUserId($thread['id'], $user['id']);
 
         return $this->render('TopxiaWebBundle:Thread/Event:title-bar.html.twig', array(
             'thread' => $thread,
-            'remainNum' => $remainNum,
             'member' => $member,
         ));
     }
@@ -30,7 +28,7 @@ class EventController extends BaseController
         );
         $threads = $this->getThreadService()->searchThreads($conditions, 'created', 0, 5);
 
-        return $this->render('TopxiaWebBundle:Thread/Event:other-activities-block.html.twig', array(
+        return $this->render('TopxiaWebBundle:Thread/Event:other-events-block.html.twig', array(
             'threads' => $threads,
         ));
     }

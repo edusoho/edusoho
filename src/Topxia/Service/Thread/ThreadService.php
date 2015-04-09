@@ -37,31 +37,31 @@ interface ThreadService
      * 点击查看话题
      *
      * 此方法，用来增加话题的查看数。
-     * 
+     *
      * @param integer $courseId 课程ID
      * @param integer $threadId 话题ID
-     * 
+     *
      */
     public function hitThread($targetId, $threadId);
 
     /**
      * 获得话题的回帖
-     * 
-     * @param integer  $courseId 话题的课程ID
-     * @param integer  $threadId 话题ID
-     * @param string    $sort     排序方式： defalut按帖子的发表时间顺序；best按顶的次序排序。
-     * @param integer   $start    开始行数
-     * @param integer   $limit    获取数据的限制行数
-     * 
+     *
+     * @param integer $courseId 话题的课程ID
+     * @param integer $threadId 话题ID
+     * @param string  $sort     排序方式： defalut按帖子的发表时间顺序；best按顶的次序排序。
+     * @param integer $start    开始行数
+     * @param integer $limit    获取数据的限制行数
+     *
      * @return array 获得的话题回帖列表。
      */
     public function findThreadPosts($targetId, $threadId, $sort = 'default', $start, $limit);
 
     /**
      * 获得话题回帖的数量
-     * @param  integer  $courseId 话题的课程ID
-     * @param  integer  $threadId 话题ID
-     * @return integer  话题回帖的数量
+     * @param  integer $courseId 话题的课程ID
+     * @param  integer $threadId 话题ID
+     * @return integer 话题回帖的数量
      */
     public function getThreadPostCount($targetId, $threadId);
 
@@ -87,13 +87,11 @@ interface ThreadService
     public function voteUpPost($id);
 
     /**
-    * 话题成员
-    **/
+     * 话题成员
+     **/
     public function findMembersByThreadId($threadId);
 
     public function getMemberByThreadIdAndUserId($threadId, $userId);
-
-    public function remainMemberNum($thread);
 
     public function createMember($member);
 

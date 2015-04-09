@@ -495,7 +495,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
         if (empty($member)) {
             $fields['createdTime'] = time();
-            return $this->getThreadMemberDao()->addMember($fields);
+            $member = $this->getThreadMemberDao()->addMember($fields);
+            $this->getThreadDao()->waveThread($fields['threadId'], 'memberNum', +1);
+            return $member;
         } else {
             return null;
         }
@@ -504,13 +506,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function deleteMember($memberId)
     {
-        return $this->getThreadMemberDao()->deleteMember($memberId);
-    }
+        $member = $this->getThreadMemberDao()->getMember($memberId);
+        if (empty($member)) {
+            return;
+        }
 
-    public function remainMemberNum($thread)
-    {
-        $count = $this->getThreadMemberDao()->findMembersCountByThreadId($thread['id']);
-        return $thread['maxUsers'] == -1 ? -1 : intval($thread['maxUsers']) - intval($count);
+        $this->getThreadMemberDao()->deleteMember($memberId);
+        $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
     }
 
     public function findMembersByThreadId($threadId)

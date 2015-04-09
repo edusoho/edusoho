@@ -12,7 +12,14 @@
 <div>
   <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('dateType',thread.startTime|date('N')) ~ thread.startTime|date(' h:i') }}</p>
   <p>地点：{{ thread.location }}</p>
-  <p>名额：{{ thread.maxUsers }} 人 （还剩 {{ remainNum }}人）</p>
+  <p>名额：
+  {% if thread.maxUsers == -1 %}
+    不限
+  {% else %}
+    {{ thread.maxUsers }} 人 （还剩 {{ thread.maxUsers - thread.memberNum }}人）
+  {% endif %}
+  
+  </p>
 </div>
 
 {% if member is empty %}
