@@ -167,5 +167,10 @@ class MyTeachingController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
+     protected function getThreadService()
+     {
+          return $this->getServiceKernel()->createService('Thread.ThreadService');
+     }
     
 }
