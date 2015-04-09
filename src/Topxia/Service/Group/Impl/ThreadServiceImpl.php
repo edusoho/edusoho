@@ -246,21 +246,27 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     private function subTxt($string)
     {
         $string=explode(".", $string);
-       
-        $length=10;
-        $text=$string[0];
-        $text = strip_tags($text);
-
-        $text = str_replace(array("\n", "\r", "\t") , '', $text);
-        $text = str_replace('&nbsp;' , ' ', $text);
-        $text = trim($text);
-
+      
+        $text = $this->pureString($string);
+ 
+        $length = 10;
         $length = (int) $length;
+
         if ( ($length > 0) && (mb_strlen($text,'utf-8') > $length) )  {
             $text = mb_substr($text, 0, $length, 'UTF-8');
         }
 
-        return $text.".".$string[1];
+        $strLength= sizeof($string);
+        return $text.".".$string[$strLength-1];
+    }
+
+    private function pureString($string){
+        $text = $string[0];
+        $text = strip_tags($text);
+
+        $text = str_replace(array("\n", "\r", "\t") , '', $text);
+        $text = str_replace('&nbsp;' , ' ', $text);
+        return  trim($text);
     }
 
     public function getGoods($id)
