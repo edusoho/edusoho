@@ -636,47 +636,27 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 	}
 
-	public function waveLearningTime($lessonId,$userId,$time)
+	public function waveLearningTime($userId, $lessonId, $time)
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+		if($time<=200){
+			$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'learnTime' => $learn['learnTime']+intval($time),
-		));
+			));
+		}
 	}
 
 	public function waveWatchingTime($userId,$lessonId,$time)
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
-		if($learn['videoStatus']=="playing" && $time<=120)
+		if($time<=200){
 			$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
 				'updateTime' => time(),
-		));
-	}
-
-	public function watchPlay($userId,$lessonId)
-	{
-		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
-
-		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-				'videoStatus' => 'playing',
-				'updateTime' => time(),
-		));
-	}
-
-	public function watchPaused($userId,$lessonId)
-	{
-		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
-
-		$time = time() - $learn['updateTime'];
-		$this->waveWatchingTime($userId,$lessonId,$time);
-		
-		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-			'videoStatus' => 'paused',
-			'updateTime' => time(),
-		));
+			));
+		}
 	}
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
