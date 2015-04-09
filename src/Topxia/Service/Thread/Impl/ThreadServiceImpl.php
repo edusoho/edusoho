@@ -494,6 +494,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
         if (empty($member)) {
+            $thread = $this->getThreadDao()->getThread($fields['threadId']);
+            if ($thread['maxUsers'] == $thread['memberNum']) {
+                throw $this->createAccessDeniedException('已超过人数限制!');
+            }
             $fields['createdTime'] = time();
             $member = $this->getThreadMemberDao()->addMember($fields);
             $this->getThreadDao()->waveThread($fields['threadId'], 'memberNum', +1);

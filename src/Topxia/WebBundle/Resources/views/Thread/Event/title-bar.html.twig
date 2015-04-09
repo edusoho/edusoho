@@ -21,8 +21,9 @@
   
   </p>
 </div>
-
-{% if member is empty %}
+{% if thread.maxUsers == thread.memberNum %}
+  <button class="btn btn-danger btn-sm disabled">名额已满</button>
+{% elseif member is empty %}
   <button class="btn btn-success btn-sm js-event-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">我要报名</button>
 {% else %}
   <button class="btn btn-success btn-sm js-event-apply disabled" data-toggle="modal" data-target="#modal">已报名</button>
