@@ -698,7 +698,9 @@ define(function(require, exports, module) {
         },
 
         execute: function(){
-            this.addMediaPlayingCounter();
+            if(this.player && this.type){
+                this.addMediaPlayingCounter();
+            }
             this.addLearningCounter();
         },
 
@@ -724,7 +726,7 @@ define(function(require, exports, module) {
                 learningCounter = 0;
             }
 
-            var paused = this.player && (
+            var paused = this.player && this.type && (
                 (this.type == "MediaPlayer" && typeof(this.player.getPlaying) == "function" && !this.player.getPlaying())
                 || (this.type == "AudioPlayer" && this.player.paused)
                 || (this.type == "VideoPlayer" && this.player.paused()));
