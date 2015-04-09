@@ -55,6 +55,10 @@ common_qrcode:
     pattern:  /common/qrcode
     defaults: { _controller: TopxiaWebBundle:Common:qrcode }
 
+common_crontab:
+    pattern:  /common/crontab
+    defaults: { _controller: TopxiaWebBundle:Common:crontab }
+
 user_terms:
     pattern:  /userterms
     defaults: { _controller: TopxiaWebBundle:Register:userTerms }

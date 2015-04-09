@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set billable = false %}
-{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
+{% if course.price > 0 %}
   {% set billable = true %}
 {% endif %}
 

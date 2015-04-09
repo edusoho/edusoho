@@ -80,6 +80,12 @@ interface CourseService
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
 
+	public function setCoursePrice($courseId, $currency, $price);
+
+	public function setCoursesPriceWithDiscount($discountId);
+
+	public function revertCoursesPriceWithDiscount($discountId);
+
 	/**
 	 * 删除课程
 	 */

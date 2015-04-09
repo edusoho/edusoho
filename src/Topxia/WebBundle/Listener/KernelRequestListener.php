@@ -17,6 +17,7 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
     	$request = $event->getRequest();
+
     	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
 
             if (stripos($request->getPathInfo(), '/mapi') === 0) {

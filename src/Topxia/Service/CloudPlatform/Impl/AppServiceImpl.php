@@ -99,7 +99,7 @@ class AppServiceImpl extends BaseService implements AppService
                 'coursePublishedCount' => (string) $coursePublishedCount,
                 'courseUnpublishedCount' => (string) $courseUnpublishedCount,
                 'courseCount' => (string) ($coursePublishedCount + $courseUnpublishedCount),
-                'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'notFree' => true)),
+                'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'originPrice_GT' => '0.00')),
                 'lessonCount' => (string) $this->getCourseService()->searchLessonCount(array()),
                 'courseMemberCount' => (string) $this->getCourseService()->searchMemberCount(array('role' => 'student')),
                 'mobileLoginCount' => (string) $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),

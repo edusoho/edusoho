@@ -211,6 +211,11 @@ class CourseController extends BaseController
 	public function showAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->getCourse($id);
+
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
+            $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
+        }
+
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
         
@@ -307,10 +312,7 @@ class CourseController extends BaseController
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
-			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
-				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
-			}
+
 			if($coursesPrice ==1){
 				$course['price'] =0;
 				$course['coinPrice'] =0;
@@ -1034,6 +1036,11 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
+
+    protected function getDiscountService() 
+    {
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+    }    
 
     protected function getClassroomService()
     {
