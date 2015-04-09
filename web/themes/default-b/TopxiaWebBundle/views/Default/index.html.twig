@@ -14,6 +14,19 @@
         <div class="cycle-pager"></div>
         {{ blocks.home_top_banner|raw }}
       </div>
+      {% set announcements = data('Announcement',{ count:3 }) %}
+        {% if announcements %}
+          <div class=" banner-announcement">
+            <div class="col-md-1">
+              <span class="glyphicon glyphicon-volume-up pull-right banner-volume"></span>
+            </div>
+            <div class="row col-md-10">
+              {% for announcement in announcements %}
+                  <div class="col-md-4 banner-volume"><a class="open-article-link" href="{{announcement.url}}" target="_blank">{{announcement.title|sub_text(20)}}</a></div>
+              {% endfor %}
+            </div>
+          </div>
+      {% endif %}
     {% endif %}
 
     <ul class="homepage-category-nav">

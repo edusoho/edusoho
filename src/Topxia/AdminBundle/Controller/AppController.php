@@ -189,7 +189,7 @@ class AppController extends BaseController
 
     public function installedAction(Request $request, $postStatus)
     {   
-        $apps = $this->getAppService()->getCenterApps();
+        $apps = $this->getAppService()->getCenterApps() ? : array();
 
         $apps = ArrayToolkit::index($apps, 'code');
 

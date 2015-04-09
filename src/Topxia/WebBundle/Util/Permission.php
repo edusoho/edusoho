@@ -196,7 +196,6 @@ Class Permission
 
         ksort($permissions);
 
-
         return $permissions;
         
     }

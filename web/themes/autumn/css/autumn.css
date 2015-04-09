@@ -688,3 +688,14 @@ a:hover {
 .homepage .hot-group p {
     margin-bottom: 10px;
 }
+.banner-announcement {
+    background: #ebf6f1;
+    height: 40px;
+}
+.banner-volume {
+    line-height: 25px;
+    vertical-align: middle;
+    margin-top: 8px;
+    color: #3e3e3e;
+    font-size: 14px;
+}
