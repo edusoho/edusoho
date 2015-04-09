@@ -157,12 +157,12 @@ define(function(require, exports, module) {
         _afterLoadLesson: function(lessonId) {
             var player, type;
             if (this.get('videoPlayer')) {
-                player = dashboard.get('videoPlayer');
+                player = this.get('videoPlayer');
                 type = "VideoPlayer";
             }
 
             if (this.get('audioPlayer')) {
-                player = dashboard.get('audioPlayer');
+                player = this.get('audioPlayer');
                 type = "AudioPlayer";
             }
 
