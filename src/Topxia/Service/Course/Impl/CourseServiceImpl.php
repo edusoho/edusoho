@@ -642,7 +642,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 	}
 
-	public function waveLearningTime($lessonId,$userId,$time)
+	public function waveLearningTime($userId, $lessonId, $time)
 	{
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 

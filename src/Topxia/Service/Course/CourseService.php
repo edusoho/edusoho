@@ -165,7 +165,7 @@ interface CourseService
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 
-	public function waveLearningTime($lessonId,$userId,$time);
+	public function waveLearningTime($userId, $lessonId, $time);
 
 	public function findLearnsCountByLessonId($lessonId);
 

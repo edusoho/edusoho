@@ -599,7 +599,7 @@ class CourseController extends BaseController
 		if(!$user->isLogin()){
 			$this->createAccessDeniedException();
 		}
-		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
+		$this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
 
 		return $this->createJsonResponse(true);
 	}
