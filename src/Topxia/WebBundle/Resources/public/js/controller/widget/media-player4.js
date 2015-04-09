@@ -37,6 +37,10 @@ define(function(require, exports, module) {
 
         },
 
+        playing: function() {
+            
+        },
+
         dispose: function() {
             var runtime = this.get('runtime');
             if (runtime == 'flash') {

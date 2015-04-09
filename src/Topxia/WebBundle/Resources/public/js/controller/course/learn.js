@@ -168,15 +168,15 @@ define(function(require, exports, module) {
 
             if (this.get('mediaPlayer')) {
                 player = this.get('mediaPlayer');
+                player = document.getElementById(player.get("playerId"));
                 type = "MediaPlayer";
             }
-console.log(player.getPlaying());
+
             var counter = new Counter(player, type, lessonId);
-            counter.onTimeCounter();
             if(typeof(counterId)!="undefined" && counterId) {
                 clearInterval(counterId);
             }
-            //counterId = setInterval(counter.onTimeCounter, 1000);
+            counterId = setInterval(function(){counter.execute()}, 1000);
         },
 
         _onChangeLessonId: function(id) {
@@ -694,10 +694,10 @@ console.log(player.getPlaying());
             this.player = player;
             this.type = type;
             this.lessonId = lessonId;
+            this.interval = 120;
         },
 
-        onTimeCounter: function(){
-            console.log("onTimeCounter");
+        execute: function(){
             this.addMediaPlayingCounter();
             this.addLearningCounter();
         },
@@ -707,8 +707,9 @@ console.log(player.getPlaying());
             if("undefined" == learningCounter){
                 learningCounter = 0;
             }
-            
-            if(learningCounter >= 120){
+            learningCounter++;
+
+            if(learningCounter >= this.interval){
                 var url="../../course/"+this.lessonId+'/learn/time/'+learningCounter;
                 $.post(url);
                 learningCounter = 0;
@@ -724,16 +725,18 @@ console.log(player.getPlaying());
             }
 
             var paused = this.player && (
-                (this.type == "MediaPlayer" && !this.player.getPlaying())
+                (this.type == "MediaPlayer" && typeof(this.player.getPlaying) == "function" && !this.player.getPlaying())
                 || (this.type == "AudioPlayer" && this.player.paused)
                 || (this.type == "VideoPlayer" && this.player.paused()));
 
-            if(learningCounter >= 120 || (learningCounter>0 && paused)){
+            if(learningCounter >= this.interval || (learningCounter>0 && paused)){
                 var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
                 $.post(url);
                 learningCounter = 0;
             } else {
-                learningCounter++;
+                if(!paused){
+                    learningCounter++;
+                }
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);

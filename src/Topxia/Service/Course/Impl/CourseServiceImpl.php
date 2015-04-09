@@ -662,29 +662,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 	}
 
-	public function watchPlay($userId,$lessonId)
-	{
-		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
-
-		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-				'videoStatus' => 'playing',
-				'updateTime' => time(),
-		));
-	}
-
-	public function watchPaused($userId,$lessonId)
-	{
-		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
-
-		$time = time() - $learn['updateTime'];
-		$this->waveWatchingTime($userId,$lessonId,$time);
-		
-		$this->getLessonLearnDao()->updateLearn($learn['id'], array(
-			'videoStatus' => 'paused',
-			'updateTime' => time(),
-		));
-	}
-
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
 	{
 		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);

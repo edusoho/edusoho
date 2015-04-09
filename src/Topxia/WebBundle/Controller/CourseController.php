@@ -597,7 +597,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time*60);
+		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
 
 		return $this->createJsonResponse(true);
 	}
@@ -644,25 +644,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time*60);
-
-		return $this->createJsonResponse(true);
-	}
-
-	public function watchPlayAction(Request $request,$lessonId)
-	{	
-		$user = $this->getCurrentUser();
-
-		$this->getCourseService()->watchPlay($user['id'],$lessonId);
-
-		return $this->createJsonResponse(true);
-	}
-
-	public function watchPausedAction(Request $request,$lessonId)
-	{	
-		$user = $this->getCurrentUser();
-
-		$this->getCourseService()->watchPaused($user['id'],$lessonId);
+		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
 
 		return $this->createJsonResponse(true);
 	}
