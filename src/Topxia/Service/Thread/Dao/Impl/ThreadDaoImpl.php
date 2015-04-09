@@ -86,6 +86,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere("createdTime >= :startTime")
             ->andWhere("createdTime <= :endTime")
             ->andWhere('title LIKE :title')
+            ->andWhere('targetId IN (:targetIds)')
             ->andWhere('content LIKE :content');
 		return $builder;
 	}
