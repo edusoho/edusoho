@@ -68,7 +68,13 @@
                 <img src="{{ file_path(perTeacher.largeAvatar, 'avatar.png') }}" class="img-circle">
   
                 <h2 style="font-size: 18px; margin-top: 15px" class="recommend-teacher-name">{{ profile.truename }}</h2>
-  
+                <p style="text-align: center;color:#F59200;">
+               {% if perTeacher.title %}
+                  {{ perTeacher.title }}
+                {% else %}
+                  请设置头衔
+                {% endif %}
+                </p>
                 <p>{{ perTeacher.about|plain_text(65) }}</p>
               </a>
             </li>

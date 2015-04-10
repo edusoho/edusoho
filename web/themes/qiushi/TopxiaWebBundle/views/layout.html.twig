@@ -196,7 +196,6 @@
     <div class="copyright hidden-sm hidden-xs">
 
       {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-      <span class="">客服热线：400-889-9712</span>
 
       <p>关注求是微信公众号</p>
       <img src="{{ asset('themes/qiushi/img/weixin.png') }}" alt="" class="img-responsive"/>
@@ -204,7 +203,6 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
       <div class="site-footer-links" >
       {% include "TopxiaWebBundle::powered-by.html.twig" %}
-      <p class="text-center">湖州求是教育集团地址：<a href="">德清县武康镇府前港44号</a></p>
         {% if setting('site.copyright') %}<p class="text-center">Copyright©2003-2013 <a href="/">{{ setting('site.copyright') }}</a> All Rights Reserve</p>{% endif %}
         {% if setting('site.icp') %} <p class="text-center"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></p>{% endif %}
       </div>
