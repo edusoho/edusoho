@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set billable = false %}
-{% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}
+{% if course.price > 0 %}
   {% set billable = true %}
 {% endif %}
 
@@ -221,10 +221,8 @@
         {% endif %}
       {% else %}
 
-      {% if is_plugin_installed('Classroom') %}
         <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
-      {% endif %}
-
+   
       {% endif %}
     {% endif %}
   {% else %}

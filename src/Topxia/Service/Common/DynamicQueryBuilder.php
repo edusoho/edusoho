@@ -27,12 +27,36 @@ class DynamicQueryBuilder extends QueryBuilder
     	if (!$this->isWhereInConditions($where)) {
     		return $this;
     	}
+
+        if($this->isInCondition($where)) {
+            return $this->addWhereIn($where);
+        }
+
         return parent::andWhere($where);
+
     }
 
     public function andStaticWhere($where)
     {
     	return parent::andWhere($where);
+    }
+
+    private function addWhereIn($where)
+    {
+        $conditionName = $this->getConditionName($where);
+        if (empty($this->conditions[$conditionName]) or !is_array($this->conditions[$conditionName])) {
+            return $this;
+        }
+
+        $marks = array();
+        foreach (array_values($this->conditions[$conditionName]) as $index => $value) {
+            $marks[] = ":{$conditionName}_{$index}";
+             $this->conditions["{$conditionName}_{$index}"] = $value;
+        }
+        
+        $where = str_replace(":{$conditionName}", join(',', $marks), $where);
+
+        return parent::andWhere($where);
     }
 
     public function execute()
@@ -43,12 +67,31 @@ class DynamicQueryBuilder extends QueryBuilder
     	return parent::execute();
     }
 
+    private function isInCondition($where)
+    {
+        $matched = preg_match('/\s+(IN)\s+/', $where, $matches);
+        if (empty($matched)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private function getConditionName($where) {
+        $matched = preg_match('/:([a-zA-z0-9_]+)/', $where, $matches);
+        if (empty($matched)) {
+            return false;
+        }
+        return $matches[1];
+    }
+
     private function isWhereInConditions($where)
     {
-    	$matched = preg_match('/:([a-zA-z0-9_]+)/', $where, $matches);
-    	if (empty($matched)) {
+        $conditionName = $this->getConditionName($where);
+    	if (!$conditionName) {
     		return false;
     	}
-        return array_key_exists($matches[1], $this->conditions) && !is_null($this->conditions[$matches[1]]);
+
+        return array_key_exists($conditionName, $this->conditions) && !is_null($this->conditions[$conditionName]);
     }
 }

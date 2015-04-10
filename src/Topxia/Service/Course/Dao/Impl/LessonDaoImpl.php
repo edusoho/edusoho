@@ -87,26 +87,31 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $addtionalCondition = ";";
 
+        $params = array($courseId,$startTime,$startTime,$startTime,$endTime);
         if (!empty($excludeLessonId)) {
-            $addtionalCondition = "and id != {$excludeLessonId};";
+            $addtionalCondition = "and id != ? ;";
+            $params[] = $excludeLessonId;
         }
 
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = {$courseId} and ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})) ".$addtionalCondition;
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? and ((startTime  < ? and endTime > ?) or  (startTime between ? and ?)) ".$addtionalCondition;
         
-        return $this->getConnection()->fetchAll($sql, array($courseId,$startTime,$endTime));
+
+        return $this->getConnection()->fetchAll($sql, $params);
     }
 
     public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0)
     {
         $addtionalCondition = ";";
 
+        $params = array($startTime,$startTime,$startTime, $endTime);
         if (!empty($excludeLessonId)) {
-            $addtionalCondition = "and id != {$excludeLessonId};";
+            $addtionalCondition = "and id != ? ;";
+            $params[] = $excludeLessonId;
         }
 
-        $sql = "SELECT * FROM {$this->table} WHERE ((startTime  < {$startTime} and endTime > {$startTime}) or  (startTime between {$startTime} and {$endTime})) ".$addtionalCondition;
+        $sql = "SELECT * FROM {$this->table} WHERE ((startTime  < ? and endTime > ?) or  (startTime between ? and ?)) ".$addtionalCondition;
         
-        return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
+        return $this->getConnection()->fetchAll($sql, $params);
     }
 
     public function findLessonsByChapterId($chapterId)
@@ -174,36 +179,23 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('endTime > :endTimeGreaterThan')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
-
-        if (isset($conditions['courseIds'])) {
-            $courseIds = array();
-            foreach ($conditions['courseIds'] as $courseId) {
-                if (ctype_digit((string)abs($courseId))) {
-                    $courseIds[] = $courseId;
-                }
-            }
-            if ($courseIds) {
-                $courseIds = join(',', $courseIds);
-                $builder->andStaticWhere("courseId IN ($courseIds)");
-            }
-        }
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('courseId IN ( :courseIds )');;
 
         return $builder;
     }
 
     public function analysisLessonNumByTime($startTime,$endTime)
     {
-              $sql="SELECT count( id)  as num FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
-
-              return $this->getConnection()->fetchColumn($sql);
+        $sql="SELECT count(id)  as num FROM `{$this->table}` WHERE  `createdTime`>=? and `createdTime`<=?  ";
+        return $this->getConnection()->fetchColumn($sql, array($startTime, $endTime));
     }
 
     public function analysisLessonDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? and `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
-            return $this->getConnection()->fetchAll($sql);
+            return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
 }

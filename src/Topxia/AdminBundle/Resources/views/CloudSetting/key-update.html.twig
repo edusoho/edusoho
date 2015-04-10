@@ -15,7 +15,7 @@
     <label class="col-md-3 control-label" for="access-key-field">AccessKey</label>
     <div class="col-md-6 controls">
       <input id="access-key-field" class="form-control" type="text" name="accessKey" value="{{ app.request.request.get('accessKey')|default(setting('storage.cloud_access_key', '')) }}">
-      <p class="help-block">在线升级EduSoho系统、购买EduSoho应用、使用EduSoho云服务，都需使用此Key。</p>
+      <p class="help-block">{{ '在线升级EduSoho系统、购买EduSoho应用、使用EduSoho云服务，都需使用此Key。'|copyright_less }}</p>
     </div>
   </div>
 
