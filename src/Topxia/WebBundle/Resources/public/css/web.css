@@ -275,9 +275,11 @@ textarea {
 }
 
 .toolbar-nav .glyphicon-download-alt .badge {
-padding: 1px 5px;
-position:absolute;
-font-style: normal;
+  padding: 1px 5px;
+  position:absolute;
+  font-style: normal;
+  color: #999;
+  background-color: #DDD;
 }
 
 .site-navbar .mobile-badge-container .badge {
