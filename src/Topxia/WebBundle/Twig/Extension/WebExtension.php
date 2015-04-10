@@ -714,9 +714,8 @@ class WebExtension extends \Twig_Extension
     public function getFileType($fileName,$string=null)
     {
         $fileName=explode(".", $fileName);
-
-        $name=strtolower($fileName[1]);
-        if($string) $name=strtolower($fileName[1]).$string;
+        
+        if($string) $name=strtolower($fileName[count($fileName)-1]).$string;
 
         return $name;
     }
