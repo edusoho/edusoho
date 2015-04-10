@@ -13,7 +13,7 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $('#save-btn').button('submiting').addClass('disabled');
-            },
+            }
 		});
         
 
