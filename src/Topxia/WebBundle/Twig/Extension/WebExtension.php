@@ -572,8 +572,6 @@ class WebExtension extends \Twig_Extension
     {
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
-        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
         
         if(strpos($uri, '://')) {
             $uri = $this->parseFileUri($uri);
@@ -589,13 +587,7 @@ class WebExtension extends \Twig_Extension
         $url = ltrim($url, ' /');
         $url = $assets->getUrl($url);
 
-        if ($cdnUrl) {
-            $url = $cdnUrl . $url;
-        } else if ($absolute) {
-            $url = $request->getSchemeAndHttpHost() . $url;
-        }
-
-        return $url;
+        return $this->addHost($url, $absolute);
     }
 
     public function getSystemDefaultPath($category,$systemDefault = false)
@@ -678,15 +670,31 @@ class WebExtension extends \Twig_Extension
 
     private function getPublicFilePath($path, $defaultKey = false, $absolute = false)
     {
+        $assets = $this->container->get('templating.helper.assets');
         if(empty($path)){
             $defaultSetting = $this->getSetting("default",array());
             if(array_key_exists($defaultKey, $defaultSetting) && $defaultSetting[$defaultKey]) {
                 $path = $defaultSetting[$defaultKey];
+                return $this->parseUri($path, $absolute);
             } else {
                 $path = $assets->getUrl('assets/img/default/' . $defaultKey);
+                return $this->addHost($path, $absolute);
             }
         }
+
         return $this->parseUri($path, $absolute);
+    }
+
+    private function addHost($path, $absolute)
+    {
+        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        if ($cdnUrl) {
+            $path = $cdnUrl . $path;
+        } else if ($absolute) {
+            $path = $request->getSchemeAndHttpHost() . $path;
+        }
+        return $path;
     }
 
     public function fileSizeFilter($size)

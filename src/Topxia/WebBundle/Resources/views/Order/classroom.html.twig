@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-4 col-sm-5">
       <a href="{{path('classroom_show',{id:classroom.id})}}">
-        <img class="img-responsive" src="{{ default_path('classroom-default-213-142.png', classroom.middlePicture, 'middle')|default(asset('assets/img/default/classroom-default-213-142.png')) }}" alt="" width="213" height="142">
+        <img class="img-responsive" src="{{ fpath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}" alt="" width="213" height="142">
       </a>
     </div>
 

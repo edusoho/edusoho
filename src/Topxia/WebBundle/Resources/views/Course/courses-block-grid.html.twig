@@ -10,7 +10,7 @@
   {% for course in courses %}
     <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
+        <img src="{{ fpath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
           {% if course.status == 'draft' %}
             <span class="label  label-warning course-status">未发布</span>
           {% elseif course.status == 'closed' %}
@@ -85,7 +85,7 @@
           {% set user = users[course.teacherIds|first]|default(null) %}
           {% if user %}
             <span class="teacher clearfix">
-              <img src="{{ default_path('avatar',user.smallAvatar, 'small') }}" class="thumb">
+              <img src="{{ fpath(user.smallAvatar, 'avatar.png') }}" class="thumb">
               <span class="nickname ellipsis">{{ user.nickname }}</span>
               <span class="user-title ellipsis">{{ user.title }}</span>
             </span>
@@ -99,7 +99,7 @@
               <div class="mbm"> 
               {% if course.classroomCount > 0 %}
                 {% set classroom = course.classroom %}
-                <img class="classroomPicture" src="{{ default_path('classroomPicture',classroom.smallPicture, 'small') }}"> <span class="text-muted">{{classroom.title}}
+                <img class="classroomPicture" src="{{ fpath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
                 {% if course.classroomCount > 1 %}
                 等
                 {% endif %}</span>
