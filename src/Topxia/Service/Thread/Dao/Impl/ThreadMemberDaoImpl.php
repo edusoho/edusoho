@@ -46,10 +46,10 @@ class ThreadMemberDaoImpl extends BaseDao implements ThreadMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($threadId));
     }
 
-    public function findMembersByThreadId($threadId)
+    public function findMembersByThreadId($threadId, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE threadId = ?;";
-
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE threadId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($threadId)) ?: array();
     }
 }

@@ -507,7 +507,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getThreadDao()->waveThread($fields['threadId'], 'memberNum', +1);
             return $member;
         } else {
-            return null;
+            throw $this->createServiceException('成员已存在!');
+            
         }
         
     }
@@ -516,16 +517,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $member = $this->getThreadMemberDao()->getMember($memberId);
         if (empty($member)) {
-            return;
+            throw $this->createServiceException('成员不存在!');
         }
 
         $this->getThreadMemberDao()->deleteMember($memberId);
         $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
     }
 
-    public function findMembersByThreadId($threadId)
+    public function findMembersByThreadId($threadId, $start, $limit)
     {
-        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId), 'userId');
+        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId, $start, $limit), 'userId');
     }
 
     public function getMemberByThreadIdAndUserId($threadId, $userId)

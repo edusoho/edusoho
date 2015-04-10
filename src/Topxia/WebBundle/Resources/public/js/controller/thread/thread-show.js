@@ -78,7 +78,6 @@ define(function(require, exports, module) {
         },
 
         onConfirmBtn: function(e) {
-            console.log('click');
             var $btn = $(e.currentTarget);
             if (!confirm($btn.data('confirmMessage'))) {
                 return ;
@@ -132,7 +131,6 @@ define(function(require, exports, module) {
         },
         onClickEventCancelBtn: function(e) {
             $.post($(e.currentTarget).data('url'), function(result){
-                console.log(1);
                 window.location.reload();
             });
         },
