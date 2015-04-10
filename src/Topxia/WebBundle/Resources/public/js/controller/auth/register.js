@@ -145,26 +145,29 @@ define(function(require, exports, module) {
 
         }
 
-        var smsSender = new SmsSender({
-            element: '.js-sms-send',
-            url: $('.js-sms-send').data('url'),
-            smsType:'sms_registration',
-            preSmsSend: function(){
-                var couldSender = true;
+        if ($('.js-sms-send').length > 0 ) {
+            
+            var smsSender = new SmsSender({
+                element: '.js-sms-send',
+                url: $('.js-sms-send').data('url'),
+                smsType:'sms_registration',
+                preSmsSend: function(){
+                    var couldSender = true;
 
-                validator.query('[name="mobile"]').execute(function(error, results, element) {
-                    if (error) {
-                        couldSender = false;
+                    validator.query('[name="mobile"]').execute(function(error, results, element) {
+                        if (error) {
+                            couldSender = false;
+                            return;
+                        }
+                        couldSender = true;
                         return;
-                    }
-                    couldSender = true;
-                    return;
-                });
+                    });
 
-                return couldSender;
-            }      
-        });
+                    return couldSender;
+                }      
+            });
 
+        }
 
 
     };
