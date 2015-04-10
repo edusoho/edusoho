@@ -729,7 +729,7 @@ define(function(require, exports, module) {
 
             var paused = this.player && this.type && (
                 (this.type == "MediaPlayer" && typeof(this.player.getPlaying) == "function" && !this.player.getPlaying())
-                || (this.type == "AudioPlayer" && this.player.paused)
+                || (this.type == "AudioPlayer" && this.player.media.paused)
                 || (this.type == "VideoPlayer" && this.player.paused()));
 
             var posted = false;
