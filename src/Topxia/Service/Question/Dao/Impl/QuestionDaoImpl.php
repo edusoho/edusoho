@@ -231,6 +231,11 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             $conditions['stem'] = "%{$conditions['stem']}%";
         }
 
+        if (isset($conditions['targets']) && is_array($conditions['targets'])) {
+            unset($conditions['target']);
+            unset($conditions['targetPrefix']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'questions')
             ->andWhere("target IN ( :targets )")
