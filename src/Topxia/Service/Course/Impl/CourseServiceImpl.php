@@ -686,8 +686,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 				if ($nowDiscount) {
 					$fields['discountId'] = $nowDiscount['id'];
 					$fields['discount'] = $nowDiscount['globalDiscount'];
+					$discount = $nowDiscount['globalDiscount'];
 				}
-				$discount = $nowDiscount['globalDiscount'];
 			}
 		}
 
