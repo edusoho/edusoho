@@ -572,22 +572,27 @@ class WebExtension extends \Twig_Extension
         $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
         $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
         
-        $uri = $this->parseFileUri($uri);
-        if ($uri['access'] == 'public') {
-            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
-            $url = ltrim($url, ' /');
-            $url = $assets->getUrl($url);
-
-            if ($cdnUrl) {
-                $url = $cdnUrl . $url;
-            } else {
-                if ($absolute) {
-                    $url = $request->getSchemeAndHttpHost() . $url;
-                }
+        if(strpos($path, '://')) {
+            $uri = $this->parseFileUri($uri);
+            $url = "";
+            if ($uri['access'] == 'public') {
+                $url = $uri['path'];
             }
-
-            return $url;
+        } else {
+            $url = $uri;
         }
+
+        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $url;
+        $url = ltrim($url, ' /');
+        $url = $assets->getUrl($url);
+
+        if ($cdnUrl) {
+            $url = $cdnUrl . $url;
+        } else if ($absolute) {
+            $url = $request->getSchemeAndHttpHost() . $url;
+        }
+
+        return $url;
     }
 
     public function getSystemDefaultPath($category,$systemDefault = false)
@@ -660,7 +665,24 @@ class WebExtension extends \Twig_Extension
 
     public function getFurl($path, $defaultKey = false, $absolute = false)
     {
-        
+        if(empty($path)){
+            $defaultSetting = $this->getSetting("default",array());
+            if(array_key_exists($defaultKey, $defaultSetting) && $defaultSetting[$defaultKey]) {
+                $path = $defaultSetting[$defaultKey];
+            } else {
+                $path = $assets->getUrl('assets/img/default/' . $defaultKey);
+            }
+        }
+        if(strpos($path, '://')) {
+
+        }
+    }
+
+    private function getCdnUrl()
+    {
+        $cdn = $this->getSetting('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        return $cdnUrl;
     }
 
     public function fileSizeFilter($size)
