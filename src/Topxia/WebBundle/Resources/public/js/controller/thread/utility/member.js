@@ -17,7 +17,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(e.currentTarget);
                 if ($target.data('expandAll')) {
-                    this.$('ul.user-grids').show();
+                    this.$('ul.user-grids').fadeIn(500);
                     this.$('.js-members-expand').hide();
                     this.$('.js-members-collapse').show();
                 } else {
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             
             },
             collapse: function(e) {
-                this.$('ul.user-grids').hide();
+                this.$('ul.user-grids').fadeOut(500);
                 this.$('.js-members-expand').show();
                 this.$('.js-members-collapse').hide();
             }
