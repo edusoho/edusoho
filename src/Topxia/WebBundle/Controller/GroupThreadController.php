@@ -302,13 +302,6 @@ class GroupThreadController extends BaseController
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members=$this->getUserService()->findUsersByIds($memberIds);
 
-        $groupShareContent="";
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        if(isset($defaultSetting['groupShareContent'])){
-            $groupShareContent = str_replace("{{groupname}}", $group['title'], $defaultSetting['groupShareContent']);
-            $groupShareContent = str_replace("{{threadname}}", $threadMain['title'], $groupShareContent);
-        }
-
         $isAdopt=$this->getThreadService()->searchPosts(array('adopt'=>1,'threadId'=>$threadId),array('createdTime','desc'),0,1);
 
         $threadMain=$this->hideThings($threadMain);
@@ -322,7 +315,6 @@ class GroupThreadController extends BaseController
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
             'isCollected' => $isCollected,
-            'groupShareContent'=>$groupShareContent,
             'threadMain'=>$threadMain,
             'user'=>$user,
             'owner'=>$owner,

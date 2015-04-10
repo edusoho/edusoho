@@ -222,20 +222,6 @@ class CourseController extends BaseController
                 $coursesPrice=0;
         }
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-
-        if (isset($defaultSetting['courseShareContent'])){
-            $courseShareContent = $defaultSetting['courseShareContent'];
-        } else {
-        	$courseShareContent = "";
-        }
-
-        $valuesToBeReplace = array('{{course}}');
-        $valuesToReplace = array($course['title']);
-        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
-
-
-
 		$nextLiveLesson = null;
 
 		$weeks = array("日","一","二","三","四","五","六");
@@ -385,7 +371,6 @@ class CourseController extends BaseController
 			'currentTime' => $currentTime,
 			'courseReviews' => $courseReviews,
 			'weeks' => $weeks,
-			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
 			'ChargeCoin'=> $ChargeCoin,
 			'classrooms'=> $classrooms
@@ -612,7 +597,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
+		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time*60);
 
 		return $this->createJsonResponse(true);
 	}
@@ -659,7 +644,7 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
-		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
+		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time*60);
 
 		return $this->createJsonResponse(true);
 	}
@@ -714,18 +699,6 @@ class CourseController extends BaseController
 
 		$users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-
-        if (isset($defaultSetting['courseShareContent'])){
-            $courseShareContent = $defaultSetting['courseShareContent'];
-        } else {
-        	$courseShareContent = "";
-        }
-
-        $valuesToBeReplace = array('{{course}}');
-        $valuesToReplace = array($course['title']);
-        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
-
 		if (empty($member)) {
 			$member['deadline'] = 0; 
 			$member['levelId'] = 0;
@@ -757,7 +730,6 @@ class CourseController extends BaseController
 			'manage' => $manage,
 			'isNonExpired' => $isNonExpired,
 			'vipChecked' => $vipChecked,
-			'courseShareContent' => $courseShareContent,
 			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
 		));
 	}

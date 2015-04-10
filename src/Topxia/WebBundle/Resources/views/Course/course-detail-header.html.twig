@@ -103,7 +103,11 @@
         {% endif %}
       </div>
 
-      <div class="share pull-left clearfix"  data-bdText="{{courseShareContent}}"></div>
+      <div class="dropdown pull-left">
+        <a href="javascript:;" class="btn btn-link" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
+        {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+      </div>
+
 
         <div class="pull-left hidden-xs">
           <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>

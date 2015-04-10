@@ -213,6 +213,15 @@ define(function(require, exports, module) {
 	    });
 
 	    $("#modal").on("hide.bs.modal", function(){
+            var length = chunkUpload.get("fileQueue").length;
+            var currentFileIndex = chunkUpload.get("currentFileIndex");
+            
+            if(length != currentFileIndex){
+                if(!confirm("当前正在上传的文件将停止上传，确定关闭？")){
+                    return false;
+                }
+            }
+            
             chunkUpload.destroy();
             window.location.reload();
         });
