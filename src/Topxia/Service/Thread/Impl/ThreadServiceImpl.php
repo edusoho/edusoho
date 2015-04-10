@@ -135,6 +135,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['userId'] = $user['id'];
 
         if ($thread['type'] == 'event') {
+            if ($this->tryAccess('thread.event.create', $thread)) {
+                throw $this->createAccessDeniedException('权限不够!');
+            }
             $thread['startTime'] = strtotime($thread['startTime']);
             $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
         } else {
@@ -470,6 +473,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'post.update' => 'accessPostUpdate',
             'post.delete' => 'accessPostDelete',
             'post.vote' => 'accessPostVote',
+            'thread.event.create' => 'accessEventCreate',
         );
 
         if (!array_key_exists($permision, $permisions)) {
