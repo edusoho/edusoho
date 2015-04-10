@@ -88,19 +88,31 @@ class MemberController extends BaseController
         }
 
         $filename = $thread['title'] . '-成员.xls';
-        $this->_setHeader($filename);
         $members = $this->_findMembersByThreadId($threadId);
-        $objWriter = PHPExcelToolkit::export($members, array('creator' => $user['nickname'], 'sheetName' => '成员'));
+        $execelInfo = $this->_makeInfo($user);
+        $objWriter = PHPExcelToolkit::export($members, $execelInfo);
+        $this->_setHeader($filename);
         $objWriter->save('php://output');
+    }
+
+    private function _makeInfo($user)
+    {
+        $title = array(
+            'nickname' => '昵称',
+            'truename' => '真实姓名',
+            'mobile' => '手机号码',
+            'createdTime' => '报名时间'
+        );
+        $info = array();
+        $info['title'] = $title;
+        $info['creator'] = $user['nickname'];
+        $info['sheetName'] = '成员';
+        return $info;
     }
 
     private function _findMembersByThreadId($threadId)
     {
         $members = $this->getThreadService()->findMembersByThreadId($threadId, 0, PHP_INT_MAX);
-        unset($members['id']);
-        unset($members['threadId']);
-        unset($members['userId']);
-        unset($members['createdTime']);
         return $members;
     }
 
