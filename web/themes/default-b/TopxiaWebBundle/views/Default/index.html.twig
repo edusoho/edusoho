@@ -40,7 +40,7 @@
                  {% if loop.index <= 5%}
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                      <img src="{{ fpath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
                     </a>
                     <div class="class-body">
                       <h3 class="class-title">
@@ -173,7 +173,7 @@
                         <div class="topic-body">
                           {% set user = thread.user %}
                           {% set latestPostUser = thread.latestPostUser %}
-                          <img src="{{ default_path('avatar',thread.user.mediumAvatar, 'medium') }}" class="pull-left">
+                          <img src="{{ fpath(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
                           <h3>{{ user.nickname }}</h3>
                           <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
                         </div>
@@ -207,7 +207,7 @@
                     <li class="col-sm-6 col-md-4">
                       <div class="teachers-item">
                         <a href="{{ path('user_show', {id:teacher.id}) }}">
-                         <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, 'medium') }}">
+                         <img class="img-circle" src="{{ fpath(teacher.mediumAvatar, 'avatar.png') }}">
                         </a>
                  
                           <span>{{ web_macro.user_link(teacher) }}</span>
@@ -345,7 +345,7 @@
                     <li class="media">
                       <a href="{{ path('course_show', {id:course.id}) }}">
                         <div class="course-item">
-                          <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+                          <img src="{{ fpath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
                           <div class="course-title">{{ course.title }}</div>
                         </div>
                       </a>
@@ -369,7 +369,7 @@
                 {% for learn in learns %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, 'medium') }}">
+                      <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -448,7 +448,7 @@
     {% for course in courses %}
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-          <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
+          <img src="{{ fpath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
             {% if course.status == 'draft' %}
               <span class="label  label-warning course-status">未发布</span>
             {% elseif course.status == 'closed' %}
@@ -517,7 +517,7 @@
             {% set user = users[course.teacherIds|first]|default(null) %}
             {% if user %}
               <span class="teacher clearfix">
-                <img src="{{ default_path('avatar',user.smallAvatar, 'small') }}" class="thumb">
+                <img src="{{ fpath(user.smallAvatar, 'avatar.png') }}" class="thumb">
                 <span class="nickname ellipsis">{{ user.nickname }}</span>
                 <span class="user-title ellipsis">{{ user.title }}</span>
               </span>
