@@ -698,20 +698,21 @@ define(function(require, exports, module) {
         },
 
         execute: function(){
+            var posted = false;
             if(this.player && this.type){
-                this.addMediaPlayingCounter();
+                posted = this.addMediaPlayingCounter();
             }
-            this.addLearningCounter();
+            this.addLearningCounter(posted);
         },
 
-        addLearningCounter: function() {
+        addLearningCounter: function(promptlyPost) {
             var learningCounter = Store.get("lesson_id_"+this.lessonId+"_learning_counter");
             if(!learningCounter){
                 learningCounter = 0;
             }
             learningCounter++;
 
-            if(learningCounter >= this.interval){
+            if(promptlyPost || learningCounter >= this.interval){
                 var url="../../course/"+this.lessonId+'/learn/time/'+learningCounter;
                 $.post(url);
                 learningCounter = 0;
@@ -731,15 +732,19 @@ define(function(require, exports, module) {
                 || (this.type == "AudioPlayer" && this.player.paused)
                 || (this.type == "VideoPlayer" && this.player.paused()));
 
+            var posted = false;
             if(learningCounter >= this.interval || (learningCounter>0 && paused)){
                 var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
                 $.post(url);
+                posted = true;
                 learningCounter = 0;
             } else if(!paused){
                 learningCounter++;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
+
+            return posted;
         }
     });
 
