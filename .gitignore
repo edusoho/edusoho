@@ -1,3 +1,4 @@
+/.idea
 /web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
@@ -47,4 +48,3 @@ web/assets/img/default/video.png
 .publish
 .buildpath
 .phpintel*
-.phpintel/*

@@ -123,6 +123,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			unset($conditions['keywordType']);
 		}
 
+		if(empty($conditions['threadType'])){
+			unset($conditions['threadType']);
+		}
+
+		if(isset($conditions['threadType'])){
+			$conditions[$conditions['threadType']] = 1;
+			unset($conditions['threadType']);
+		}
+
 		if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
 			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
 				throw $this->createServiceException('keywordType参数不正确');
@@ -163,6 +172,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$thread['createdTime'] = time();
 		$thread['latestPostUserId'] = $thread['userId'];
 		$thread['latestPostTime'] = $thread['createdTime'];
+		$thread['private'] = $course['status'] == 'published' ? 0 : 1;
 		$thread = $this->getThreadDao()->addThread($thread);
 
 		foreach ($course['teacherIds'] as $teacherId) {

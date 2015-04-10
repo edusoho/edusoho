@@ -276,6 +276,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
 
+        $auth = $this->getSettingService()->get('auth', array());
+        if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed' )
+        {
+            return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
+        }
+        
         if (!SimpleValidator::email($email)) {
             return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
         }

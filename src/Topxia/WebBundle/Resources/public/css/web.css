@@ -274,6 +274,14 @@ textarea {
   border-radius: 12px;
 }
 
+.toolbar-nav .glyphicon-download-alt .badge {
+  padding: 1px 5px;
+  position:absolute;
+  font-style: normal;
+  color: #999;
+  background-color: #DDD;
+}
+
 .site-navbar .mobile-badge-container .badge {
   position: absolute;
   top: 5px;
@@ -288,48 +296,6 @@ textarea {
  * </global>
  */
 
-
-/**
- * jQuery sortable
- */
-body.dragging, body.dragging * {
-  cursor: move !important;
-}
-
-.dragged {
-  position: absolute;
-  opacity: 0.5;
-  z-index: 2000;
-}
-
-ul.sortable-list li.placeholder, ol.sortable-list li.placeholder {
-  margin-bottom: 10px 0;
-  width: 100%;
-  height: 40px;
-  background: #FCFFC0;
-  border: 1px dashed #ccc;
-  list-style: none;
-}
-
-tr.placeholder {
-  display: block;
-  background: red;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-tr.placeholder:before {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-left-color: red;
-    margin-top: -5px;
-    left: -5px;
-    border-right: none;
-}
 
 /**
  * jQuery.Select2 Plugin Style
@@ -445,6 +411,66 @@ body {
  * COURSE
  */
 
+.course-card-detail {
+	padding-top: 16px;
+}
+
+.course-action {
+	margin-top: 10px;
+	margin-right: 24px;
+	float: right;
+}
+
+.btn-course {
+	padding: 16px 64px;
+	float: right;
+	text-align: center;
+	font-size: 16px;
+}
+
+.btn-course:hover {
+	border-color: #285e8e;
+}
+
+.btn-course-vip {
+	padding: 16px 64px;
+	float: right;
+	text-align: center;
+	font-size: 16px;
+}
+
+.course-card-btn {
+	padding: 0 !important;
+}
+
+.course-card-wrap .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.course-card-top {
+	padding: 24px 0; 
+}
+
+.course-card hr {
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+
+.course-card-bottom {
+	width: 100%;
+	background: #f1f1f1;
+}
+
+.course-card-share {
+	margin-top: 10px;
+	margin-right: 20px;
+}
+
+.course-card-bottom .btn-course a {
+	color: #fff;
+}
+
 .course-header {
   position: relative;
 }
@@ -550,78 +576,29 @@ body {
   margin-bottom: 15px;
   padding: 10px;
   background-color: #f5f5f5;
+  list-style: none;
 }
 
-.course-cover-heading .price-info p {
+.course-cover-heading .price-info > li {
   line-height: 22px;
-  margin-bottom: 0;
+  margin: 3px 0;
   vertical-align: middle;
 }
 
-@media (min-width: 767px) and (max-width: 991px) {
-  .course-cover-heading .price-info p {
-    margin-bottom: 5px;
-  }
-}
-
-.course-cover-heading .price-info .price-label {
+.course-cover-heading .price-info-label {
   width: 60px;
   display: inline-block;
   color: #999;
 }
 
-.course-cover-heading .price-info .old-price {
-  font-size: 16px;
-  color: #999;
+.course-cover-heading .course-price-widget .price {
+  font-size: 18px;
+  /*font-weight: bold;*/
 }
 
 .course-cover-heading .price-info .activity {
-  color: #f40;
+  color: #f50;
   margin-right: 10px;
-}
-
-.course-cover-heading .price-info .discount-tag {
-  margin-top: -3px;
-  margin-left: 20px;
-  padding: 0 15px;
-  background: #f4511e;
-  color: #fff;
-  text-decoration: none;
-  float: left;
-  height: 24px;
-  line-height: 24px;
-  position: relative;
-  font-size: 14px;
-}
-
-.course-cover-heading .price-info .discount-tag:before {
-  content: "";
-  float: left;
-  position: absolute;
-  top: 0;
-  left: -12px;
-  width: 0;
-  height: 0;
-  border-color: transparent #f4511e transparent transparent;
-  border-style: solid;
-  border-width: 12px 12px 12px 0;
-}
-
-.course-cover-heading .price-info .discount-tag:after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 2px;
-  float: left;
-  width: 4px;
-  height: 4px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  background: #fff;
-  -moz-box-shadow: -1px -1px 2px #8e0000;
-  -webkit-box-shadow: -1px -1px 2px #8e0000;
-  box-shadow: -1px -1px 2px #8e0000;
 }
 
 .course-cover-heading .stats {
@@ -765,7 +742,7 @@ body {
 
 @media (min-width: 1200px) {
   #course-nav-tabs.affix {
-    width: 1088px;
+    width: 1110px;
   }
 }
 
@@ -1373,6 +1350,7 @@ body {
 .course-item-list .item {
   position: relative;
   line-height: 30px;
+  height: 30px;
   padding: 2px 10px 0 0;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -1391,6 +1369,7 @@ body {
 .course-item-list .chapter-item {
   background-color: #f6f6f6;
   margin: 25px 0 10px 0;
+  height: 34px;
 }
 
 .course-item-list .chapter-item-unit {
@@ -1471,6 +1450,7 @@ body {
   position: absolute;
   left: 120px;
   right: 145px;
+  top: 2px;
   display: inline-block;
   color: #888;
   text-decoration: none;
@@ -2126,6 +2106,86 @@ body {
 /**
  * </COURSE>
  */
+
+.course-list-price {
+	color: #d9534f;
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.course-photo {
+	position: relative;
+}
+
+.course-title {
+	line-height: 32px;
+	margin: 8px 0 16px 0;
+}
+
+.course-subtitle {
+	margin-bottom: 8px;
+	color: #aaa;
+}
+
+.label-activity {
+	background-color: #d9534f;
+	position: absolute;
+	top: 0px;
+	left: 32px;
+	padding: 4px 8px;
+	font-size: 14px;
+	line-height: 24px;
+	font-weight: normal;
+	border-radius: 0;
+}
+
+.course-list-block .price-num {
+	color: #d9534f;
+}
+
+.label-discount {
+	border-radius: 0;
+	padding: 4px 8px;
+	position: relative;
+	/*top: -8px;*/
+	left: 8px;
+}
+
+.label-discount-list {
+	margin-left: 8px;
+	border-radius: 0;
+	padding: 4px 8px;
+	position: relative;
+}
+
+.label-discount s{
+	position: absolute;
+	width: 0;
+	display: block;
+	font-size: 0;
+	left: -4px;
+	bottom: 0;
+	height: 0;
+	border: 3px solid #d9534f;
+	border-color: transparent #d9534f #d9534f transparent;	
+}
+
+.course-property {
+	color: #aaa;
+	padding-bottom: 10px;
+}
+
+.discount-num {
+	color: #d9534f;
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.activity-num {
+	color: #d9534f;
+	font-size: 24px;
+	margin: 3px;
+}
 
 .lesson-manage-panel .panel-heading.sticky {
   margin: 0;
@@ -3117,6 +3177,11 @@ body {
   color: #999;
 }
 
+.course-grid .price-block {
+	text-align: left;
+	padding: 6px 0;
+}
+
 .course-grid .metas .price-num {
   padding-top: 2px;
   font-size: 15px;
@@ -3243,6 +3308,10 @@ body {
   }
 }
 
+.course-wide-list .course-price-info {
+  float: right;
+}
+
 .course-wide-list .course-title {
   margin: 10px 0 10px;
   word-break:break-all;
@@ -3300,6 +3369,10 @@ body {
 .course-coinPrice {
   color: #e57259;
   font-size: 16px;
+}
+
+.origin-price {
+	font-size: 12px;
 }
 
 .course-wide-list .divider {
@@ -3905,6 +3978,10 @@ body {
   margin-bottom: 18px;
 }
 
+.question-eassy-form-control img {
+  max-width: 100%;
+}
+
 .testpaper-status .label {
   padding: 5px 25px;
   border-radius: 3px;
@@ -4160,6 +4237,14 @@ body {
 
 .testpaper-question-essay .testpaper-question-result {
   float: none;
+}
+
+.testpaper-question-essay .testpaper-question-result img {
+  max-width: 100%;
+}
+
+.question-essay .question-body img {
+  max-width: 100%;
 }
 
 .testpaper-question-result {
@@ -4825,8 +4910,11 @@ a.homework-essay-textarea-pack-up{
 }
 
 .order-pay .order-item {
-  border-bottom: 1px solid #E5E5E5;
   padding-top: 30px;
+}
+
+.order-pay .order-item-clear {
+  border-bottom: 1px solid #E5E5E5;
 }
 
 .order-item {
@@ -4873,7 +4961,6 @@ a.homework-essay-textarea-pack-up{
 .order-item-title .cancel {
   margin-left: 20px;
   float: left;
-  margin-top: 6px;
   text-decoration: none;
   color: #1071b5;
   cursor: pointer;
@@ -4980,14 +5067,6 @@ a.homework-essay-textarea-pack-up{
   
 }
 
-
-.coupon-detail input {
-  height: 27px;
-  line-height: 27px;
-  border: 1px solid #b5b5b5;
-  font-size: 14px;
-}
-
 .order-item .order-item-detail{
   padding: 0px 56px 17px 56px;
 }
@@ -5031,10 +5110,6 @@ a.homework-essay-textarea-pack-up{
   margin-left: 15px;
   font-size: 12px;
   padding-top: 10px;
-}
-
-.order-item-detail .pay-password input {
-  width: 150px;
 }
 
 .pay-center .uncheck {
@@ -5126,7 +5201,7 @@ a.homework-essay-textarea-pack-up{
 }
 .nav-course-buy-btn{
   padding-bottom: 8px;
-    padding-top: 8px;
+  padding-top: 8px;
 }
 .question-num {
   display:inline-block;
@@ -5199,3 +5274,78 @@ a.homework-essay-textarea-pack-up{
   }
 }
 
+.course-checkbox-label {
+  font-weight: normal;
+}
+
+/**
+ * Widget: 课程价格组件
+ */
+.course-price-widget .price {
+  color: #f40;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.course-price-widget .origin-price {
+  font-size: 13px;
+  color: #999;
+}
+
+.course-price-widget .discount {
+  position: relative;
+  margin-left: 8px;
+  padding: 0 6px 0 10px;
+  display: inline-block;
+  font-size: 12px;
+  color: #fff;
+  background: #f4511e;
+  height: 16px;
+  line-height: 16px;
+}
+
+.course-price-widget .discount:before {
+  content: "";
+  float: left;
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-color: transparent #f4511e transparent transparent;
+  border-style: solid;
+  border-width: 8px 8px 8px 0;
+}
+
+.course-price-widget .discount:after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 2px;
+  float: left;
+  width: 4px;
+  height: 4px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background: #fff;
+  -moz-box-shadow: -1px -1px 2px #8e0000;
+  -webkit-box-shadow: -1px -1px 2px #8e0000;
+  box-shadow: -1px -1px 2px #8e0000;
+}
+
+.my-wallet-panel img{
+  width: 100%;
+}
+
+.table-striped .sort-handle{
+  padding: 5px;
+  cursor: pointer;
+  color: #ccc;
+  display: inline-block;
+  font-size:18px;
+}
+
+.table-striped .sort-handle:hover{
+  color:#999;
+};

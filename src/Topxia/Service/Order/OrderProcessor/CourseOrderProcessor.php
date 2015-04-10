@@ -13,6 +13,15 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->router;
 	}
 
+    public function preCheck($targetId, $userId)
+    {
+        if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
+            return array('error' => '已经是课程的学员了!');
+        }
+
+        return array();
+    }
+
 	public function getOrderInfo($targetId, $fields)
 	{
 		$course = $this->getCourseService()->getCourse($targetId);

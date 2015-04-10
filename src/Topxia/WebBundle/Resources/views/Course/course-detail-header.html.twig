@@ -5,13 +5,13 @@
       <a  href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:freeLesson.courseId, lessonId:freeLesson.id}) }}" >
         <span class="glyphicon glyphicon-play-circle" style="font-size:80px;position:absolute;top:30%;right:40%;"></span>
         <img src="{{ default_path('coursePicture', course.largePicture, 'large') }}" class="img-responsive" />
-        {% if course.serializeMode != 'none' %}  
+        {% if course.serializeMode == 'serialize' %}  
           <span class="tag-serial"></span>
         {% endif %} 
       </a>
     {% else %}
       <img src="{{ default_path('coursePicture', course.largePicture, 'large') }}" class="img-responsive" />
-      {% if course.serializeMode != 'none' %}  
+      {% if course.serializeMode == 'serialize' %}  
         <span class="tag-serial"></span>
       {% endif %} 
     {% endif %}
@@ -33,9 +33,7 @@
       {% endif %}
     </h1>
     <div class="subtitle">{{ course.subtitle }}</div>
-    <div class="price-info">
-      {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
-    </div>
+    {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
 
     <div class="stats">
       <span class="stat-item">
@@ -84,9 +82,9 @@
         {% endif %}
         >
           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>                
+            {% if course.coinPrice > 0 %}购买课程{% else %}加入学习{% endif %}</a>                
           {% else %}
-            {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+            {% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
           {% endif %}
         </a>
 
@@ -103,7 +101,11 @@
         {% endif %}
       </div>
 
-      <div class="share pull-left clearfix"  data-bdText="{{courseShareContent}}"></div>
+      <div class="dropdown pull-left">
+        <a href="javascript:;" class="btn btn-link" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
+        {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+      </div>
+
 
         <div class="pull-left hidden-xs">
           <a class="btn btn-link" href="#" style="display:none;"> <i class="glyphicon glyphicon-play-circle"></i>

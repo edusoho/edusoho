@@ -39,8 +39,10 @@ class CourseLessonController extends BaseController
             }
         }
 
+        $hasVideoWatermarkEmbedded = 0;
         if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -60,7 +62,9 @@ class CourseLessonController extends BaseController
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
-
+            }
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $hasVideoWatermarkEmbedded = 1;
             }
 
         } else if ($lesson['mediaSource'] == 'youku') {
@@ -84,6 +88,7 @@ class CourseLessonController extends BaseController
             'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
+            'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
     }

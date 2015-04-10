@@ -44,10 +44,16 @@
               <a class="btn btn-link  collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
             {% endif %}
       </div>
-      <div class="metas">
+      <div class="metas clearfix">
+        <div class="dropdown pull-right">
+          <a href="javascript:;" class="text-muted" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
+          {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
+        </div>
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
-        <span>{{ threadMain.hitNum }} 次查看</span><div class="share pull-right" data-bdText="{{groupShareContent}}"></div>
+        <span>{{ threadMain.hitNum }} 次查看</span>
+
+
       </div>
     </div>
     <div class="panel-body" id="post-action">
