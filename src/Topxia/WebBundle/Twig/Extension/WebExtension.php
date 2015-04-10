@@ -55,13 +55,15 @@ class WebExtension extends \Twig_Extension
         return array(
             'theme_global_script' => new \Twig_Function_Method($this, 'getThemeGlobalScript') ,
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
-            // file_path即将废弃，不要再使用
+            // file_path 即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            // default_path 即将废弃，不要再使用
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
+            // file_url 即将废弃，不要再使用
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'furl' => new \Twig_Function_Method($this, 'getFurl'),
-            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
+            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
             'set_price' => new \Twig_Function_Method($this, 'getSetPrice') ,
@@ -572,7 +574,7 @@ class WebExtension extends \Twig_Extension
         $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
         $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
         
-        if(strpos($path, '://')) {
+        if(strpos($uri, '://')) {
             $uri = $this->parseFileUri($uri);
             $url = "";
             if ($uri['access'] == 'public') {
@@ -673,16 +675,7 @@ class WebExtension extends \Twig_Extension
                 $path = $assets->getUrl('assets/img/default/' . $defaultKey);
             }
         }
-        if(strpos($path, '://')) {
-
-        }
-    }
-
-    private function getCdnUrl()
-    {
-        $cdn = $this->getSetting('cdn',array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
-        return $cdnUrl;
+        return $this->parseUri($path, $absolute);
     }
 
     public function fileSizeFilter($size)
