@@ -71,13 +71,15 @@ class MemberController extends BaseController
 
     public function _findPageMembers($request, $threadId)
     {
-        $page = $request->query->get('page', 0);
-        $start = intval($page) * 16;
-        $members = $this->getThreadService()->findMembersByThreadId($threadId, $start, 16);
+        $page = $request->query->get('page', 1);
+        $start = (intval($page) - 1) * 16;
+        $members = $this->getThreadService()->findMembersByThreadId($threadId, $start, $start + 16);
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
         foreach ($members as $key => $member) {
-            $members[$key] = $users[$key];
+            if (!empty($users[$key])) {
+                $members[$key] = $users[$key];
+            }
         }
         return $members;
     }

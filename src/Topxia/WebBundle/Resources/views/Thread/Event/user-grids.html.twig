@@ -1,6 +1,3 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-
-{% do load_script('thread/utility/member') %}
 {% if myFriends|default(null) %}
   <div class="joined-frineds">
     <p>好友在参加</p>
@@ -11,14 +8,17 @@
 {% endif %}
 
 {% if members|default(null) %}
-  <div class="joined-users">
+{% do load_script('thread/utility/member') %}
+  <div class="joined-users" data-sum="{{ membersCount|default(0) }}">
     <p>活动成员（{{ membersCount|default(0) }}）</p>
     <ul class="user-grids">
       {% include 'TopxiaWebBundle:Thread/Event:user-grids-li.html.twig' %}
     </ul>
     <div class="text-center">
+    {% if membersCount|default(0) > 16 %}
       <span class="glyphicon glyphicon-chevron-down js-members-expand" style="cursor: pointer;" data-url="{{ path('ajax_thread_member_show', {threadId:threadId}) }}"></span>
       <span class="glyphicon glyphicon-chevron-up js-members-collapse" style="cursor: pointer; display:none"></span>
+    {% endif %}
     </div>
   </div>
 {% endif %}
