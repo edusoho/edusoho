@@ -62,6 +62,7 @@ class WebExtension extends \Twig_Extension
             // file_url 即将废弃，不要再使用
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'furl' => new \Twig_Function_Method($this, 'getFurl'),
+            'fpath' => new \Twig_Function_Method($this, 'getFpath'),
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
             'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
@@ -665,7 +666,17 @@ class WebExtension extends \Twig_Extension
         return $url;
     }
 
-    public function getFurl($path, $defaultKey = false, $absolute = false)
+    public function getFurl($path, $defaultKey = false)
+    {
+        return $this->getPublicFilePath($path, $defaultKey, true);
+    }
+
+    public function getFpath($path, $defaultKey = false)
+    {
+        return $this->getPublicFilePath($path, $defaultKey, false);
+    }
+
+    private function getPublicFilePath($path, $defaultKey = false, $absolute = false)
     {
         if(empty($path)){
             $defaultSetting = $this->getSetting("default",array());
