@@ -23,7 +23,7 @@
           </tr>
           <tr>
             <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_detail_data',{id:course.id})}}" href="javascript:">{{course.title}}</a></td>
-            <td>{{course.studentNum}}</td>
+            <td>{{courseLearnCount}}</td>
             <td>{{isLearnedNum}}</td>
             <td>{{(learnTime/60)|round(0, 'floor')}}</td>
             <td>{{questionCount}}</td>

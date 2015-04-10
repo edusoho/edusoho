@@ -269,6 +269,7 @@ class CourseManageController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
             'course' => $course,
+            'courseLearnCount' => $courseLearnCount,
             'isLearnedNum'=>$isLearnedNum,
             'learnTime'=>$learnTime,
             'noteCount'=>$noteCount,
