@@ -58,9 +58,10 @@ class WebExtension extends \Twig_Extension
             // file_path即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
+            'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
+            'furl' => new \Twig_Function_Method($this, 'getFurl'),
             'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
-            'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
             'set_price' => new \Twig_Function_Method($this, 'getSetPrice') ,
@@ -655,6 +656,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public function getFurl($path, $defaultKey = false, $absolute = false)
+    {
+        
     }
 
     public function fileSizeFilter($size)
