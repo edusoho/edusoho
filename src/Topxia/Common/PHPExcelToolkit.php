@@ -25,17 +25,25 @@ class PHPExcelToolkit
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Export file");
         // Add some data
-        $objPHPExcel->setActiveSheetIndex(0)
+        $activieSheet = $objPHPExcel->setActiveSheetIndex(0);
+        $activieSheet
             ->setCellValue("A1", $title['nickname'])
             ->setCellValue("B1", $title['truename'])
             ->setCellValue("C1", $title['mobile']);
+            
+        $activieSheet->getColumnDimension('A')->setWidth(14);
+        $activieSheet->getColumnDimension('B')->setWidth(14);
+        $activieSheet->getColumnDimension('C')->setWidth(14);
+        $activieSheet->getRowDimension('1')->setRowHeight(18);
         if (!empty($data)) {
             $index = 2;
             foreach ($data as $one) {
-                $objPHPExcel->setActiveSheetIndex(0)
+                $activieSheet
                     ->setCellValue("A{$index}", $one['nickname'])
                     ->setCellValue("B{$index}", $one['truename'])
                     ->setCellValue("C{$index}", $one['mobile']);
+                    
+                $activieSheet->getRowDimension($index)->setRowHeight(18);
                 $index++;
             }
         }
