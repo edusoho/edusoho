@@ -100,7 +100,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $marks = str_repeat('?,', count($types) - 1) . '?';
         $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$marks})) AND (`target` like ? OR `target` = ?)";
 
-        $params = array_merge($types, array($target."\/%", $target))
+        $params = array_merge($types, array($target."\/%", $target));
 
         return $this->getConnection()->fetchColumn($sql, $params);
     }
@@ -239,10 +239,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->andWhere('parentId = :parentId')
             ->andWhere('difficulty = :difficulty')
             ->andWhere('type = :type')
-            ->andWhere('stem LIKE :stem');
+            ->andWhere('stem LIKE :stem')
             ->andWhere("type IN ( :types )")
             ->andWhere("id NOT IN ( :excludeIds ) ");
-        }
 
         if (isset($conditions['excludeUnvalidatedMaterial']) and ($conditions['excludeUnvalidatedMaterial'] == 1)){
             $builder->andStaticWhere(" not( type = 'material' and subCount = 0 )");
