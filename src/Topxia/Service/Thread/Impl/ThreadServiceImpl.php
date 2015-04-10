@@ -524,6 +524,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
     }
 
+    public function deleteMembersByThreadId($threadId)
+    {
+        if (empty($threadId)) {
+            throw $this->createServiceException('参数错误!');
+        }
+
+        $thread = $this->getThread($threadId);
+
+        if (!empty($thread)) {
+            throw $this->createAccessDeniedException('相关连帖子还存在,不能删除!');
+        }
+
+        $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);
+    }
+
     public function findMembersCountByThreadId($threadId)
     {
         return $this->getThreadMemberDao()->findMembersCountByThreadId($threadId);

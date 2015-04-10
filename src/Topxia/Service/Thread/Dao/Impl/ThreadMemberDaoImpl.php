@@ -39,6 +39,12 @@ class ThreadMemberDaoImpl extends BaseDao implements ThreadMemberDao
         return $this->getConnection()->delete($this->table, array('id' => $memberId));
     }
 
+    public function deleteMembersByThreadId($threadId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE threadId = ?;";
+        return $this->getConnection()->executeUpdate($sql, array($threadId));
+    }
+
     public function findMembersCountByThreadId($threadId)
     {
         $sql = "SELECT count(1) FROM {$this->table} WHERE threadId = ?;";

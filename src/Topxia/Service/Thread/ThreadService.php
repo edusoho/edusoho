@@ -90,7 +90,7 @@ interface ThreadService
      * 话题成员
      **/
     public function findMembersCountByThreadId($threadId);
-    
+
     public function findMembersByThreadId($threadId, $start, $limit);
 
     public function findMembersByThreadIdAndUserIds($threadId, $userIds);
@@ -100,4 +100,6 @@ interface ThreadService
     public function createMember($member);
 
     public function deleteMember($memberId);
+
+    public function deleteMembersByThreadId($threadId);
 }

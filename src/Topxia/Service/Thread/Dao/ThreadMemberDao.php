@@ -12,6 +12,8 @@ interface ThreadMemberDao
 
     public function deleteMember($memberId);
 
+    public function deleteMembersByThreadId($threadId);
+
     public function findMembersCountByThreadId($threadId);
 
     public function findMembersByThreadId($threadId, $start, $limit);
