@@ -77,7 +77,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
 
         $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ({$marks})) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
         
-        $params = array_merge($types, array($target."%", $target))
+        $params = array_merge($types, array($target."\/%", $target));
 
         $questions = $this->getConnection()->fetchAll($sql, $params);
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -100,7 +100,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $marks = str_repeat('?,', count($types) - 1) . '?';
         $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$marks})) AND (`target` like ? OR `target` = ?)";
 
-        $params = array_merge($types, array($target."%", $target))
+        $params = array_merge($types, array($target."\/%", $target))
 
         return $this->getConnection()->fetchColumn($sql, $params);
     }
