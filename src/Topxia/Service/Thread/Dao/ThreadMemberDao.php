@@ -15,4 +15,6 @@ interface ThreadMemberDao
     public function findMembersCountByThreadId($threadId);
 
     public function findMembersByThreadId($threadId, $start, $limit);
+
+    public function findMembersByThreadIdAndUserIds($threadId, $userIds);
 }

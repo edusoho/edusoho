@@ -89,7 +89,11 @@ interface ThreadService
     /**
      * 话题成员
      **/
+    public function findMembersCountByThreadId($threadId);
+    
     public function findMembersByThreadId($threadId, $start, $limit);
+
+    public function findMembersByThreadIdAndUserIds($threadId, $userIds);
 
     public function getMemberByThreadIdAndUserId($threadId, $userId);
 

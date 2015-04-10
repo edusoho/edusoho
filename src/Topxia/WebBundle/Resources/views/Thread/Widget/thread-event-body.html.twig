@@ -1,2 +1,3 @@
 <div>{{ thread.content|at(thread.ats)|raw }}</div>
-{{ render(controller('TopxiaWebBundle:Thread:showMembers', {request:app.request, thread:thread})) }}
+
+{{ render(controller('TopxiaWebBundle:Thread/Member:showMembers', {request:app.request, thread:thread})) }}

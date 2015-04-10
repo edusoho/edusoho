@@ -524,9 +524,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadDao()->waveThread($member['threadId'], 'memberNum', -1);
     }
 
+    public function findMembersCountByThreadId($threadId)
+    {
+        return $this->getThreadMemberDao()->findMembersCountByThreadId($threadId);
+    }
+    
     public function findMembersByThreadId($threadId, $start, $limit)
     {
         return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId, $start, $limit), 'userId');
+    }
+
+    public function findMembersByThreadIdAndUserIds($threadId, $userIds)
+    {
+        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId, $userIds), 'userId');
     }
 
     public function getMemberByThreadIdAndUserId($threadId, $userId)
