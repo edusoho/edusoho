@@ -231,9 +231,8 @@ class CourseManageController extends BaseController
 
         $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
 
-        $courseLearnCount = $this->getCourseService()->searchLearnCount(array('courseId'=>$id));
         $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
-        $learnTime=$courseLearnCount==0 ? 0 : intval($learnTime/$courseLearnCount);
+        $learnTime=$course["studentNum"]==0 ? 0 : intval($learnTime/$course["studentNum"]);
 
         $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
 
@@ -269,7 +268,6 @@ class CourseManageController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
             'course' => $course,
-            'courseLearnCount' => $courseLearnCount,
             'isLearnedNum'=>$isLearnedNum,
             'learnTime'=>$learnTime,
             'noteCount'=>$noteCount,
