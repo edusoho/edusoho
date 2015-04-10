@@ -38,30 +38,31 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsbyTypes($types, $start, $limit)
     {
         if (empty($types)) {
             return array();
         }
 
-        $marks = str_repeat('?,', count($types) - 1) . '?';
-
-        $sql ="SELECT * FROM {$this->table} WHERE `parentId` = 0 AND type in ({$marks})  LIMIT {$start},{$limit}";
-        $questions = $this->getConnection()->fetchAll($sql, $types);
+        $sql ="SELECT * FROM {$this->table} WHERE `parentId` = 0 AND type in ({$types})  LIMIT {$start},{$limit}";
+        $questions = $this->getConnection()->fetchAll($sql, array($types));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
     {
         if (empty($types)) {
             return array();
         }
-        $marks = str_repeat('?,', count($types) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$marks})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
-        $questions = $this->getConnection()->fetchAll($sql, $types);
+
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
+        $questions = $this->getConnection()->fetchAll($sql, array($types));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         if (empty($types)) {
@@ -72,24 +73,20 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-
-        $marks = str_repeat('?,', count($types) - 1) . '?';
-
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ({$marks})) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like ? OR `target` = ?) LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
         
-        $params = array_merge($types, array($target."\/%", $target));
-
-        $questions = $this->getConnection()->fetchAll($sql, $params);
+        $questions = $this->getConnection()->fetchAll($sql, array());
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsCountbyTypes($types)
     {
-        $marks = str_repeat('?,', count($types) - 1) . '?';
-        $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$marks})";
-        return $this->getConnection()->fetchColumn($sql, $types);
+        $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
+        return $this->getConnection()->fetchColumn($sql, array($types));
     }
 
+    //@todo:sql
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
     {
         if ($questionSource == 'course'){
@@ -97,12 +94,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $marks = str_repeat('?,', count($types) - 1) . '?';
-        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$marks})) AND (`target` like ? OR `target` = ?)";
-
-        $params = array_merge($types, array($target."\/%", $target));
-
-        return $this->getConnection()->fetchColumn($sql, $params);
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target` like '{$target}/%' OR `target` = '{$target}')";
+        return $this->getConnection()->fetchColumn($sql, array());
     }
 
     public function findQuestionsByParentIds(array $ids)
@@ -190,6 +183,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeQuery($sql, $ids);
     }
 
+    //@todo:sql
     public function getQuestionCountGroupByTypes($conditions)
     {   
         $sqlConditions = array();
