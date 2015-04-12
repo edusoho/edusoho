@@ -2,10 +2,10 @@
 
 namespace Topxia\Service\Course;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 interface CourseCopyService
 {
+    public function copy($course);
+
     public function copyTeachers($courseId, $newCourse);
 
     public function copyTestpapers($courseId, $newCourse, $newQuestions);
@@ -22,7 +22,7 @@ interface CourseCopyService
 
     public function copyMaterials($courseId, $newCourse, $newLessons);
 
-    public function copyHomeworks($courseId, $newCourse, $newLessons,$newQuestions);
+    public function copyHomeworks($courseId, $newCourse, $newLessons, $newQuestions);
 
     public function copyExercises($courseId, $newCourse, $newLessons);
 }
