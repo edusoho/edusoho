@@ -23,6 +23,10 @@ class ThreadEventSubscriber implements EventSubscriberInterface
 
     public function onThreadDelete(ServiceEvent $event)
     {
+        $thread = $event->getSubject();
+        if ($thread['type'] == 'event') {
+            $this->getThreadService()->deleteMembersByThreadId($thread['id']);
+        }
         $this->callTargetEventProcessor('onThreadDelete', $event);
     }
 
@@ -62,7 +66,7 @@ class ThreadEventSubscriber implements EventSubscriberInterface
 
         $processors = ServiceKernel::instance()->getModuleConfig('thread.event_processor');
         if (!isset($processors[$subject['targetType']])) {
-            return ;
+            return;
         }
 
         $processors = (array) $processors[$subject['targetType']];
@@ -75,4 +79,8 @@ class ThreadEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    private function getThreadService()
+    {
+        return ServiceKernel::instance()->createService('Thread.ThreadService');
+    }
 }

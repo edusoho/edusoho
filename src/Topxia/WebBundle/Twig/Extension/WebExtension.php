@@ -89,7 +89,7 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
-            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
+            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
         );
     }
 

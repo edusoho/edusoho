@@ -1582,6 +1582,11 @@ thread_cancel_nice:
     defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
     methods: [POST]
 
+ajax_thread_member_show:
+    pattern: /ajax/thread/{threadId}/members
+    defaults: { _controller: TopxiaWebBundle:Thread\Member:ajaxFindMembers }
+    methods: [GET]
+
 #占位
 vip:
     pattern: /vip/

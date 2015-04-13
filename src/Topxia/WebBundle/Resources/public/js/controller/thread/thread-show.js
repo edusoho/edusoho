@@ -19,7 +19,8 @@ define(function(require, exports, module) {
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
             'click .pagination a': 'onClickPagination',
-            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm'
+            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
+            'click .js-event-cancel': 'onClickEventCancelBtn'
         },
 
         setup:function() {
@@ -77,7 +78,6 @@ define(function(require, exports, module) {
         },
 
         onConfirmBtn: function(e) {
-            console.log('click');
             var $btn = $(e.currentTarget);
             if (!confirm($btn.data('confirmMessage'))) {
                 return ;
@@ -128,6 +128,11 @@ define(function(require, exports, module) {
             var $form = $btn.parents('.thread-subpost-container').find('.thread-subpost-form');
             $form.toggleClass('hide');
             this._initSubpostForm($form);
+        },
+        onClickEventCancelBtn: function(e) {
+            $.post($(e.currentTarget).data('url'), function(result){
+                window.location.reload();
+            });
         },
 
         _initSubpostForm: function($form) {
