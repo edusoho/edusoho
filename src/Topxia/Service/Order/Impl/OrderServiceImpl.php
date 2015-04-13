@@ -218,7 +218,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function sumOrderPriceByTarget($targetType, $targetId)
     {
-        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid'));
+        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'refunding', 'refunded'));
     }
 
     public function sumCouponDiscountByOrderIds($orderIds)
