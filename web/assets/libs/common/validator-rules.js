@@ -232,6 +232,25 @@ define(function(require, exports, module) {
                 }
             },"开始时间必须小于或等于结束时间"
         ],
+        
+
+
+
+        [
+            'date_and_time',
+            /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/,
+            '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss'
+        ],        
+
+        [
+            'date_and_time_check',
+            function() {
+                var startTime = $('[name=startTime]').val();
+                var endTime = $('[name=endTime]').val();
+                return (startTime < endTime);
+            },"结束时间不能早于或等于开始时间"
+        ],        
+
         [
             'deadline_date_check',
             function(opt) {
@@ -265,6 +284,7 @@ define(function(require, exports, module) {
                 return l == Number(options.len);
             },"{{display}}的长度必须等于{{len}}"
         ]        
+
     ];
 
     exports.inject = function(Validator) {
