@@ -64,7 +64,6 @@ class WebExtension extends \Twig_Extension
             // system_default_path 即将废弃，不要再使用
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
 
-            'default_file_path' => new \Twig_Function_Method($this,'getDefaultFilePath'),
             'furl' => new \Twig_Function_Method($this, 'getFurl'),
             'fpath' => new \Twig_Function_Method($this, 'getFpath'),
             'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
@@ -609,22 +608,6 @@ class WebExtension extends \Twig_Extension
             } else {
                 $url = $assets->getUrl($publicUrlpath . $category);
             }
-        } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
-        }
-
-        return $url;
-    }
-
-    public function getDefaultFilePath($category)
-    {
-        $assets = $this->container->get('templating.helper.assets');
-        $publicUrlpath = 'assets/img/default/';
-
-        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
-        if(isset($defaultSetting) && isset($defaultSetting[$category])){
-            $uri = $defaultSetting[$category];
-            $url = $this->parseUri($uri);
         } else {
             $url = $assets->getUrl($publicUrlpath . $category);
         }
