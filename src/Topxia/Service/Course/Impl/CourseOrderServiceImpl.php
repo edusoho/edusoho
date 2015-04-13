@@ -47,6 +47,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['title'] = "购买课程《{$course['title']}》";
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
+            if(!empty($course['discountId'])){
+                $order['discountId'] = $course['discountId'];
+                $order['discount'] = $course['discount'];
+            }
+
             $order['payment'] = $info['payment'];
             $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
             $order['priceType'] = $info['priceType'];
@@ -65,14 +70,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if($notShowPrice == 1) {
                 $order['amount'] = 0;
                 $order['totalPrice'] = 0;
-            }
-
-            if($order['amount'] > 0){
-                //如果是限时打折，判断是否在限免期，如果是，则Amout为0
-                if($course['freeStartTime'] < time() &&  $course['freeEndTime'] > time() ){
-                    $order['amount'] = 0;
-                    $order['totalPrice'] = 0;
-                }
             }
 
             $order['snPrefix'] = 'C';

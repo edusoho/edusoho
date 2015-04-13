@@ -955,7 +955,7 @@ class SettingController extends BaseController
             } else {
                 $fields['enabled'] = 0;
             }
-
+           
             $field = $this->getUserFieldService()->updateField($id, $fields);
 
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));

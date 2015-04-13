@@ -33,9 +33,7 @@
       {% endif %}
     </h1>
     <div class="subtitle">{{ course.subtitle }}</div>
-    <div class="price-info">
-      {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
-    </div>
+    {% include 'TopxiaWebBundle:Course:course-detail-price.html.twig' with {'course':course} %}
 
     <div class="stats">
       <span class="stat-item">
@@ -84,9 +82,9 @@
         {% endif %}
         >
           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            {% if course.coinPrice > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>                
+            {% if course.coinPrice > 0 %}购买课程{% else %}加入学习{% endif %}</a>                
           {% else %}
-            {% if course.price > 0 and (date(course.freeStartTime) >= date() or date(course.freeEndTime) < date()) %}购买课程{% else %}加入学习{% endif %}</a>
+            {% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
           {% endif %}
         </a>
 

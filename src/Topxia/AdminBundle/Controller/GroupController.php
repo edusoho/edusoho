@@ -82,6 +82,8 @@ class GroupController extends BaseController
     {
         $threadIds=$request->request->all();
         foreach ($threadIds['ID'] as $threadId) {
+            $thread=$this->getThreadService()->getThread($threadId);
+            $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<strong>“{$thread['title']}”</strong>被管理员删除。");
             $this->getThreadService()->deleteThread($threadId); 
         }
         return new Response('success');
