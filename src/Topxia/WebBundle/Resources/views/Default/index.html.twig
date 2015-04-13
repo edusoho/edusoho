@@ -192,7 +192,7 @@
                          <div class="media">
                             <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
                               {% if group.logo %}
-                              <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
+                              <img src="{{fpath(group.logo)}}" alt="{{group.title}}">
                               {%else%}
                               <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
                               {%endif%}

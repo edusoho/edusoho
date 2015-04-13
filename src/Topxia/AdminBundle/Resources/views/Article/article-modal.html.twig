@@ -125,7 +125,7 @@
 				<div class="panel-body">
 					<div id="article-thumb-container">
 					  {% if article.thumb|default(null) %}
-						  <img src='{{ file_path(article.thumb) }}'>
+						  <img src='{{ fpath(article.thumb) }}'>
 					  {% endif %}
 				   </div>
 				   <br>
