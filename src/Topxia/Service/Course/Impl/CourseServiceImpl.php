@@ -681,7 +681,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$discount = $course['discount'];
 		} else {
 			$discount = 10;
-			if ($price > 0) {
+			$discountApp = $this->getAppService()->findInstallApp('Discount');
+			if ($price > 0 && $discountApp) {
 				$nowDiscount = $this->getDiscountService()->getNowGlobalDiscount();
 				if ($nowDiscount) {
 					$fields['discountId'] = $nowDiscount['id'];
