@@ -12,6 +12,11 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 		return "TopxiaAdminBundle:Course:layout.html.twig";
 	}
 
+    public function removeStudent($targetId, $userId)
+    {
+        $this->getCourseService()->removeStudent($targetId, $userId);
+    }
+
 	public function findByLikeTitle($title)
 	{
 		return $this->getCourseService()->findCoursesByLikeTitle($title);

@@ -7,6 +7,8 @@ interface OrderRefundProcessor
 
 	public function findByLikeTitle($title);
 
+	public function removeStudent($targetId, $userId);
+
 	public function auditRefundOrder($id, $pass, $data);
 
 	public function cancelRefundOrder($id);

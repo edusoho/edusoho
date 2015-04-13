@@ -141,6 +141,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
         }
+
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
 
         if ($refund['status'] == 'created') {
