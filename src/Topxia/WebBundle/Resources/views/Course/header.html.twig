@@ -48,15 +48,7 @@
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <i class="esicon esicon-share"></i>
               </button>
-              <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
-                
-                <li><div class="share" data-bdText="{{courseShareContent}}"></div></li>
-              </ul>
-              <div id="course-social-share-params" 
-                data-title="课程 《{{ course.title }}》"
-                data-picture="{{ default_path('coursePicture',course.largePicture, 'large', true) }}"
-                data-url="{{ url('course_show', {id:course.id}) }}"
-                ></div>
+              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course', right: true} %}
             </div>
             {% if canExit %}
               {% if member.joinedType == 'course' and member.orderId %}
@@ -123,12 +115,6 @@
     {% endif %}
 
     {% if not isNonExpired %}
-      {% if free_limit_type(course) == 'free_end' %}
-        <div class="alert alert-danger alert-dismissable">
-          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
-          您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
-        </div>
-      {% else %}
        <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
@@ -140,7 +126,6 @@
           {% endif %}
           </a>
       </div>
-      {% endif %}
     {% endif %}
 
   </div>

@@ -812,6 +812,7 @@ a:focus {
   float: left;
   width: 65%;
   line-height: 25px;
+  line-height: 10px\9;
   text-align: center;
 }
 @media (min-width: 992px) and (max-width: 1199px) {

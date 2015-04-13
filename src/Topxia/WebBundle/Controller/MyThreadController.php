@@ -34,6 +34,7 @@ class MyThreadController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
         return $this->render('TopxiaWebBundle:MyThread:discussions.html.twig',array(
+            'threadType' => 'course',
             'courses'=>$courses,
             'users'=>$users,
             'threads'=>$threads,

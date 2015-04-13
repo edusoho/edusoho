@@ -62,6 +62,20 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         return $this->getClassroomService()->canCreateThreadEvent($resource);
     }
 
+    public function accessMemberDelete($member)
+    {
+        if ($this->getClassroomService()->canManageClassroom($resource['targetId'])) {
+            return true;
+        }
+
+        $user = $this->getCurrentUser();
+        if ($member['userId'] == $user['id']) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function hasManagePermission($resource, $ownerCanManage = false)
     {
         if ($this->getClassroomService()->canManageClassroom($resource['targetId'])) {

@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         });
 
         var validator = new Validator({
-            element: '#thread-post-form',
+            element: '#thread-post-form'
         });
 
         validator.addItem({
