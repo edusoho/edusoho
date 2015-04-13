@@ -22,9 +22,7 @@ define(function(require, exports, module) {
 
             imageCrop.crop({
                 imgs: {
-                    large: [480, 270],
-                    middle: [304, 171],
-                    small: [96, 54],
+                    'course.png': [480, 270]
                 }
             });
 
