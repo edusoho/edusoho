@@ -18,6 +18,12 @@ class AppServiceImpl extends BaseService implements AppService
 
     private $client;
 
+
+    public function getAppByCode($code)
+    {
+        return $this->getAppDao()->getAppByCode($code);
+    }
+
     public function findApps($start, $limit)
     {
         return $this->getAppDao()->findApps($start, $limit);
@@ -495,12 +501,9 @@ class AppServiceImpl extends BaseService implements AppService
 
     }
 
-    public function updateAppVersion($code,$fromVersion,$version)
+    public function updateAppVersion($id, $version)
     {
-        $this->getAppDao()->updateAppVersion($code,$version);
-        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
-        
-        return true;
+        return $this->getAppDao()->updateApp($id, array('version' => $version));
     }
 
     public function getLoginToken()

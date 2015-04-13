@@ -10,6 +10,8 @@
 
 <div class="page-header"><h1>系统日志</h1></div>
 
+{% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'logs' } %}
+
 {{ web_macro.flash_messages() }}
 
 <form class="well well-sm form-inline">
