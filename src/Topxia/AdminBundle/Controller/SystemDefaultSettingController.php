@@ -40,7 +40,6 @@ class SystemDefaultSettingController extends BaseController
             $setting['defaultAvatar'] = 1;
             unset($setting['defaultAvatarFileName']);
             $setting['avatar.png'] = $files[$fileIds["avatar.png"]["id"]]["uri"];
-var_dump($setting);exit();
             $this->getSettingService()->set("default",$setting);
 
             array_map(function($oldAvatar){
