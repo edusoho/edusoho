@@ -517,7 +517,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function deleteMember($memberId)
     {
         $member = $this->getThreadMemberDao()->getMember($memberId);
-        
+        $thread = $this->getThreadDao()->getThread($member['threadId']);
+        $member['targetType'] = $thread['targetType'];
+        $member['targetId'] = $thread['targetId'];
         $this->tryAccess('thread.member.delete', $member);
         if (empty($member)) {
             throw $this->createServiceException('成员不存在!');
