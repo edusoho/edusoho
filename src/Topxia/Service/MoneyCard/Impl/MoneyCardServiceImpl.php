@@ -83,13 +83,8 @@ class MoneyCardServiceImpl extends BaseService
 
         $moneyCardIds = $this->makeRands($batch['cardLength'], $batch['number'], $batch['cardPrefix'], $moneyCardData['passwordLength']);
 
-        $cardIds = array();
-        foreach ($moneyCardIds as $cardId => $cardPassword) {
-            $cardIds[] = $cardId;
-        }
-
-        if (!$this->getMoneyCardDao()->isCardIdAvaliable($cardIds)) {
-            throw $this->createServiceException('卡号有重复，生成失败，请重新生成！');
+        if (!$this->getMoneyCardDao()->isCardPasswordAvaliable(array_values($moneyCardIds))) {
+            throw $this->createServiceException('密码有重复，生成失败，请重新生成！');
         }
         $batch = $this->getMoneyCardBatchDao()->addBatch($batch);
         $moneyCards = array();
