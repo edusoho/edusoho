@@ -204,8 +204,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->tryAccess('thread.delete', $thread);
-
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
+        if ($thread['type'] == 'event') {
+            $this->deleteMembersByThreadId($thread['id']);
+        }
         $this->getThreadDao()->deleteThread($threadId);
 
         $this->dispatchEvent('thread.delete', $thread);
@@ -537,10 +539,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread = $this->getThread($threadId);
         $this->tryAccess('thread.delete', $thread);
-
-        if (!empty($thread)) {
-            throw $this->createAccessDeniedException('相关连帖子还存在,不能删除!');
-        }
 
         $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);
     }
