@@ -139,7 +139,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 throw $this->createAccessDeniedException('权限不够!');
             }
             $thread['startTime'] = strtotime($thread['startTime']);
-            $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
+            $thread['maxUsers'] = empty($thread['maxUsers']) ? 0 : intval($thread['maxUsers']);
         } else {
             unset($thread['startTime']);
             unset($thread['maxUsers']);
