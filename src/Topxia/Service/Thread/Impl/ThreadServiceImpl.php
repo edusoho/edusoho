@@ -501,7 +501,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
         if (empty($member)) {
             $thread = $this->getThreadDao()->getThread($fields['threadId']);
-            if ($thread['maxUsers'] == $thread['memberNum']) {
+            if ($thread['maxUsers'] == $thread['memberNum'] && $thread['maxUsers'] != 0) {
                 throw $this->createAccessDeniedException('已超过人数限制!');
             }
             $fields['createdTime'] = time();
