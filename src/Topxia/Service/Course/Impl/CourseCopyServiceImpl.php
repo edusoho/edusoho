@@ -8,9 +8,9 @@ use Topxia\Service\Course\CourseCopyService;
 
 class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 {
-    public function copy($course)
+    public function copy($course, $link = false)
     {
-        $newCourse = $this->copyCourse($course);
+        $newCourse = $this->copyCourse($course, $link);
 
         $newTeachers = $this->copyTeachers($course['id'], $newCourse);
 
@@ -213,12 +213,15 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    public function copyCourse($course)
+    public function copyCourse($course, $link = false)
     {
-        $fields = ArrayToolkit::parts($course, array('title', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId'));
+        $fields = ArrayToolkit::parts($course, array('title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId'));
         $fields['status'] = 'draft';
         $fields['createdTime'] = time();
-        $fields['parentId'] = $course['id'];
+        if ($link) {
+            $fields['status'] = empty($fields['status']) ? 'draft' : $fields['status'];
+            $fields['parentId'] = $course['id'];
+        }
 
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }

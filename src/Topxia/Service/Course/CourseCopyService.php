@@ -4,7 +4,7 @@ namespace Topxia\Service\Course;
 
 interface CourseCopyService
 {
-    public function copy($course);
+    public function copy($course, $link);
 
     public function copyTeachers($courseId, $newCourse);
 
