@@ -216,11 +216,12 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     public function copyCourse($course, $link = false)
     {
         $fields = ArrayToolkit::parts($course, array('title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId'));
-        $fields['status'] = 'draft';
         $fields['createdTime'] = time();
         if ($link) {
             $fields['status'] = empty($fields['status']) ? 'draft' : $fields['status'];
             $fields['parentId'] = $course['id'];
+        } else {
+            $fields['status'] = 'draft';
         }
 
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
