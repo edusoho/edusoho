@@ -1,0 +1,12 @@
+{% if is_plugin_installed("Classroom") and version_compare(plugin_version('Classroom'),'1.0.3','>') %}
+	{{ render(controller('ClassroomBundle:Classroom:classroomBlock',{courseId:course.id})) }}
+{% endif %}
+
+{{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
+
+{{ render(controller('TopxiaWebBundle:CourseThread:latestBlock',{course:course})) }}
+
+{{ render(controller('TopxiaWebBundle:Course:latestMembersBlock',{course:course})) }}
+
+{{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+

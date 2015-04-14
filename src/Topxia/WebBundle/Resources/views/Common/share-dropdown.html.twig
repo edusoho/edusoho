@@ -1,0 +1,36 @@
+{% if type == 'course' %}
+  {% set title = course.title %}
+  {% set summary = course.about|plain_text(50) %}
+  {% set message = setting('default.courseShareContent')|default('我正在学习{{course}}，收获巨大哦，一起来学习吧！')|simple_template({course: '《' ~ course.title ~ '》'}) %}
+  {% set url = url('course_show', {id:course.id}) %}
+  {% set picture = default_path('coursePicture', course.largePicture, '', true) %}
+{% elseif type == 'classroom' %}
+
+  {% set title = classroom.title %}
+  {% set summary = classroom.about|plain_text(50) %}
+  {% set message = setting('default.classroomShareContent')|default('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！')|simple_template({classroom: '「' ~ classroom.title ~ '」'}) %}
+  {% set url = url('classroom_show', {id:classroom.id}) %}
+  {% set picture = default_path('coursePicture', classroom.largePicture, '', true) %}
+
+{% elseif type ==  'article' %}
+  {% set title = article.title %}
+  {% set summary = article.body|plain_text(50) %}
+  {% set message = setting('default.articleShareContent')|default('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。')|simple_template({articletitle: '「' ~ article.title ~ '」' , sitename: '「' ~ setting('site.name') ~ '」' }) %}
+  {% set url = url('article_show', {id:article.id}) %}
+  {% set picture = '' %}
+{% elseif type == 'group_thread' %}
+  {% set title = thread.title %}
+  {% set summary = thread.content|plain_text(50) %}
+  {% set message = setting('default.groupShareContent')|default('我正在{{groupname}}小组，看到{{threadname}}，很不错哦，一起来看看吧！')|simple_template({threadname: '「' ~ thread.title ~ '」' , groupname: '「' ~ group.title ~ '」' }) %}
+  {% set url = url('group_thread_show', {id:group.id, threadId:thread.id}) %}
+  {% set picture = '' %}
+{% endif %}
+
+<ul class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
+  <li><a class="js-social-share" href="javascript:;" title="分享到微博" data-share="weibo"><span class="social-share-icon-weibo"></span> 微博</a></li>
+  <li><a class="js-social-share" href="javascript:;" title="分享到QQ好友" data-share="qq"><span class="social-share-icon-qq"></span> QQ好友</a></li>
+  <li><a class="js-social-share" href="javascript:;" title="分享到QQ空间" data-share="qzone"><span class="social-share-icon-qzone"></span> QQ空间</a></li>
+  <li><a class="js-social-share" href="javascript:;" title="分享到微信" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><span class="social-share-icon-weixin"></span> 微信</a></li>
+</ul>
+
+{{ load_script('common/share-dropdown') }}

@@ -19,5 +19,5 @@ doctrine:
     dbal:
         host:     127.0.0.1
         dbname:   edusoho-test
-        user:     root
-        password: root
+        user:     tester
+        password: tester

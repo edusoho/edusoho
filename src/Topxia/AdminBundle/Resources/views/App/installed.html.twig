@@ -34,6 +34,7 @@
       {% endif  %}
       
       {% for app in apps %}
+
         {% if app.installed|default(0) or app.userAccess|default('fail') == 'ok' %}
         <tr>
           <td>
@@ -99,6 +100,7 @@
     
         </tr>
         {% endif %}
+
       {% endfor %}
     </tbody>
   </table>

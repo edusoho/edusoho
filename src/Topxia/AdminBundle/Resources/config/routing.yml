@@ -203,6 +203,10 @@ admin_navigation:
     pattern:  /navigation
     defaults: { _controller: TopxiaAdminBundle:Navigation:index }
 
+admin_navigation_seqs_update:
+    pattern:  /navigation/seqs/update
+    defaults: { _controller: TopxiaAdminBundle:Navigation:updateSeqs }
+
 admin_navigation_create:
     pattern:  /navigation/create
     defaults: { _controller: TopxiaAdminBundle:Navigation:create }
@@ -609,6 +613,10 @@ admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
 
+admin_cloud_recharge:
+    pattern:  /cloud/recharge
+    defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
@@ -946,25 +954,25 @@ admin_group_close:
 admin_group_open:
     pattern:  /group/{id}/open
     defaults: { _controller: TopxiaAdminBundle:Group:openGroup }
-admin_groupThread_removeElite:
+admin_group_thread_cancel_elite:
     pattern:  /group/thread/{threadId}/removeElite
     defaults: { _controller: TopxiaAdminBundle:Group:removeElite }
-admin_groupThread_setElite:
+admin_group_thread_set_elite:
     pattern:  /group/thread/{threadId}/setElite
     defaults: { _controller: TopxiaAdminBundle:Group:setElite }
-admin_groupThread_removeStick:
+admin_group_thread_cancel_stick:
     pattern:  /group/thread/{threadId}/removeStick
     defaults: { _controller: TopxiaAdminBundle:Group:removeStick }
-admin_groupThread_setStick:
+admin_group_thread_set_stick:
     pattern:  /group/thread/{threadId}/setStick
     defaults: { _controller: TopxiaAdminBundle:Group:setStick }
-admin_groupThread_close:
+admin_group_thread_close:
     pattern:  /group/thread/{threadId}/closeThread
     defaults: { _controller: TopxiaAdminBundle:Group:closeThread }
-admin_groupThread_open:
+admin_group_thread_open:
     pattern:  /group/thread/{threadId}/openThread
     defaults: { _controller: TopxiaAdminBundle:Group:openThread }
-admin_groupThread_delete:
+admin_group_thread_delete:
     pattern:  /group/thread/{threadId}/deleteThread
     defaults: { _controller: TopxiaAdminBundle:Group:deleteThread }
 admin_group_transfer:

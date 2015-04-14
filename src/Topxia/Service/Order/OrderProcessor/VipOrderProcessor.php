@@ -14,6 +14,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->router;
 	}
 
+    public function preCheck($targetId, $userId)
+    {
+        return array();
+    }
+
 	public function getOrderInfo($targetId, $fields)
 	{
         $user = $this->getUserService()->getCurrentUser();

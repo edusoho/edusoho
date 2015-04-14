@@ -484,3 +484,8 @@ input.LargeInput {width: 600px;}
   border-top: 1px solid #ccc;
   text-align: center;
 }
+
+.navigation-table tr{
+  cursor: pointer;
+}
+

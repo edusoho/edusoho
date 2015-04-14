@@ -66,7 +66,7 @@
 
           {% endif %}
         </div>
-        <form action="{{path('group_member_delete',{id:groupinfo.id})}}" method="post" id="member-form"> 
+        <form action="{{path('group_member_delete',{id:groupinfo.id})}}" method="post" id="member-form" class="clearfix"> 
 
              <h4>组员</h4>
 
@@ -98,9 +98,6 @@
         </form>
 
         <div class="pull-right">{{ web_macro.paginator(paginator) }}</div>
-
-
-
 
         </div>
       </div>

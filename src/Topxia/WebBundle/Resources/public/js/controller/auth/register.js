@@ -5,14 +5,6 @@ define(function(require, exports, module) {
     var SmsSender = require('../widget/sms-sender');
 
     exports.run = function() {
-        $(function(){
-            //数字验证 
-            if ($("#getcode_num").length > 0){
-                $("#getcode_num").click(function(){ 
-                    $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                }); 
-            }
-        });
 
         $(".date").datetimepicker({
             language: 'zh-CN',
@@ -33,6 +25,11 @@ define(function(require, exports, module) {
         });
 
         if ($("#getcode_num").length > 0){
+            
+            $("#getcode_num").click(function(){ 
+                $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+            }); 
+
             validator.addItem({
                 element: '[name="captcha_num"]',
                 required: true,
@@ -78,12 +75,12 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="company"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({
             element: '[name="job"]',
-            required: true,
+            required: true
         });
 
         validator.addItem({
@@ -108,6 +105,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="sms_code"]',
                 required: true,
+                triggerType: 'submit',
                 rule: 'integer fixedLength{len:6} remote',
                 display: '短信验证码'           
             });
@@ -147,26 +145,29 @@ define(function(require, exports, module) {
 
         }
 
-        var smsSender = new SmsSender({
-            element: '.js-sms-send',
-            url: $('.js-sms-send').data('url'),
-            smsType:'sms_registration',
-            preSmsSend: function(){
-                var couldSender = true;
+        if ($('.js-sms-send').length > 0 ) {
+            
+            var smsSender = new SmsSender({
+                element: '.js-sms-send',
+                url: $('.js-sms-send').data('url'),
+                smsType:'sms_registration',
+                preSmsSend: function(){
+                    var couldSender = true;
 
-                validator.query('[name="mobile"]').execute(function(error, results, element) {
-                    if (error) {
-                        couldSender = false;
+                    validator.query('[name="mobile"]').execute(function(error, results, element) {
+                        if (error) {
+                            couldSender = false;
+                            return;
+                        }
+                        couldSender = true;
                         return;
-                    }
-                    couldSender = true;
-                    return;
-                });
+                    });
 
-                return couldSender;
-            }      
-        });
+                    return couldSender;
+                }      
+            });
 
+        }
 
 
     };

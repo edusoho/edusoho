@@ -1,13 +1,6 @@
 define(function(require, exports, module) {
 
-    var Share=require('../../util/share.js');
     exports.run = function() {
-
-        Share.create({
-                selector: '.share',
-                icons: 'itemsAll',
-                display: ''
-        });
 
         $('.course-exit-btn').on('click', function(){
         	var $btn = $(this);

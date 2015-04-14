@@ -22,55 +22,28 @@
     </a>
     <div class="course-body">
      <div style="float:right;" class="text-muted mrm mls">
-         {% if setting('course.coursesPrice') == 0 %}
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if course.coinPrice > 0 and free_limit_type(course) == 'free_now' %}
-                  <span class="free-money-text"><del>{{ course.coinPrice }}</del></span>
-                {% endif %}
+        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            <span class="course-price" style="display:inline">
+              {% if course.coinPrice > 0 %}
+                 价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
               {% else %}
-                {% if course.price > 0 and free_limit_type(course) == 'free_now' %}
-                  <span class="free-money-text"><del>{{ course.price }}</del></span>
-                {% endif %}
+                免费
               {% endif %}
-
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                  <span class="course-price" style="display:inline">
-                    {% if course.coinPrice > 0 %}
-                      {% if free_limit_type(course) == 'free_now' %}
-                        0.00 元
-                      {% else %}
-                       价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                      {% endif %}  
-                    {% else %}免费{% endif %}
-                  </span>
-
-              {% else %}
-                <span class="course-price">
-                  {% if course.price > 0 %}
-                    {% if free_limit_type(course) == 'free_now' %}
-                      0.00 元
-                    {% else %}
-                     价格： {{ course.price }}元
-                    {% endif %}  
-                  {% else %}免费{% endif %}
-                  
-                </span>
+            </span>
+        {% else %}
+          <span class="course-price">
+            {% if course.price > 0 %}
+               价格： {{ course.price }}元
+            {% else %}
+              免费
             {% endif %}
-          {% endif %}          
-    
-          {% if setting('course.show_student_num_enabled', '1') == 1 %}
+          </span>
+        {% endif %}
+
+        {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员')}}</span>
-          {% endif %}
-
-          {% if free_limit_type(course) == 'free_now' %}
-           <span class="text-muted text-sm">
-            到期时间
-            <span>{{course.freeEndTime|date('n')}}</span>月
-            <span>{{course.freeEndTime|date('d')}}</span>日
-            <span>{{course.freeEndTime|date('H')}}</span>时
-          </span>
-           {% endif %}
+        {% endif %}
 
         </div>
 
@@ -127,7 +100,7 @@
           </div>
         {% else %}
         <div class="course-metas-{{course.id}}" style="display:none;">        
-          <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></sapn>
+          <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></span>
         </div>
         {% endif %}
       </div>

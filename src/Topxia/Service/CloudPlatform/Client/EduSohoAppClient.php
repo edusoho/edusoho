@@ -7,7 +7,7 @@ use Topxia\System;
 class EduSohoAppClient implements AppClient
 {
 
-    protected $userAgent = 'Open Edusoho App Client 1.0';
+    protected $userAgent = 'Open EduSoho App Client 1.0';
 
     protected $connectTimeout = 5;
 
