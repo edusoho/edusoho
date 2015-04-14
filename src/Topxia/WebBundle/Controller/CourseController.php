@@ -282,12 +282,15 @@ class CourseController extends BaseController
 		}
 
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
+			$addCount=0;
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
 				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
 					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
+					$addCount++;
 				}
 			}
+			$course['studentNum'] += $addCount;
 		}
 
 		$classrooms=array();
@@ -310,6 +313,7 @@ class CourseController extends BaseController
 			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
 			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
 				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
+                            
 			}
 			if($coursesPrice ==1){
 				$course['price'] =0;
