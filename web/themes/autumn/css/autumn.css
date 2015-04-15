@@ -683,7 +683,9 @@ a:hover {
 .banner-announcement {
     background: #ebf6f1;
     height: 40px;
+    margin: 0 ;
 }
+
 .banner-volume {
     line-height: 25px;
     vertical-align: middle;
