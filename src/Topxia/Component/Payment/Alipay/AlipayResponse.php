@@ -38,7 +38,9 @@ class AlipayResponse extends Response
             $data['status'] = 'success';
         } else if (in_array($params['trade_status'], array('TRADE_CLOSED'))) {
             $data['status'] = 'closed';
-        }else {
+        } else if (in_array($params['trade_status'], array('WAIT_BUYER_PAY'))) {
+            $data['status'] = 'created';
+        } else {
             $data['status'] = 'unknown';
         }
         $data['amount'] = $params['total_fee'];
