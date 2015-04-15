@@ -23,7 +23,7 @@
             </div>
             <div class="row col-md-10">
               {% for announcement in announcements %}
-                  <div class="col-md-4 banner-volume"><a class="open-article-link" href="{{announcement.url}}" target="_blank">{{announcement.title|sub_text(20)}}</a></div>
+                  <div class="col-md-4 banner-volume"><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(20)}}</a></div>
               {% endfor %}
             </div>
           </div>

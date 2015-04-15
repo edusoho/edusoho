@@ -5,7 +5,7 @@
 {% block title %}{% if announcement|default(null) %}编辑{% else %}新增{% endif %}公告{% endblock %}
 {% block body %}
 
-<form id="announcement-create-form" class="form-horizontal" method="post" action="{{ path('admin_announcement_create')}}">
+<form id="announcement-create-form" class="form-horizontal" method="post" action="{% if announcement|default(null) %}{{ path('admin_announcement_edit',{id:announcement.id})}}{% else %}{{ path('admin_announcement_create')}}{% endif %}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">

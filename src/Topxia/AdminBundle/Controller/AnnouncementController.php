@@ -55,7 +55,7 @@ class AnnouncementController extends BaseController
 
             $announcement = $request->request->all();
 
-            $this->getAnnouncementService()->updateAnnouncement($id, $announcement);
+            $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $announcement);
             
         }
 

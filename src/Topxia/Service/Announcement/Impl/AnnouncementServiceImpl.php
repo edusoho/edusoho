@@ -55,7 +55,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         return $announcement;
     }
 
-    public function updateAnnouncement($id, $fields)
+    public function updateAnnouncement($id, $announcement)
     {   
         if (!isset($announcement['title']) or empty($announcement['title'])) {
             throw $this->createServiceException("公告内容不能为空！");
@@ -76,7 +76,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         $announcement['startTime'] = strtotime($announcement['startTime']);
         $announcement['endTime'] = strtotime($announcement['endTime']);
 
-        return $this->getAnnouncementDao()->updateAnnouncement($id, $fields);
+        return $this->getAnnouncementDao()->updateAnnouncement($id, $announcement);
     }
 
     private function getAnnouncementDao() 
