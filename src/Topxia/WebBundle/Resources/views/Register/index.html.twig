@@ -21,6 +21,14 @@
                   <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
                 </div>
               </div>
+            {% elseif field == 'emailOrMobile' %}
+              <div class="form-group">
+                <label class="control-label required" for="register_{{ field }}">邮箱或手机</label>
+                <div class="controls">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="" data-explain="填写你常用的邮箱或者手机作为登录帐号">
+                  <p class="help-block">填写你常用的邮箱或手机作为登录帐号</p>
+                </div>
+              </div>
             {% elseif field == 'email' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">邮箱地址</label>
