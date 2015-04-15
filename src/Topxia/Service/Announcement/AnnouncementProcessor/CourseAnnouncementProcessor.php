@@ -25,7 +25,6 @@ class CourseAnnouncementProcessor implements AnnouncementProcessor
 	{
 		$count = $this->getCourseService()->getCourseStudentCount($targetId);
     	$members = $this->getCourseService()->findCourseStudents($targetId, 0, $count);
-    	//$url = $this->generateUrl('course_show', array('id'=>$targetId), true);
 
     	$result = false;
 		if ($members) {
@@ -46,19 +45,17 @@ class CourseAnnouncementProcessor implements AnnouncementProcessor
 
 	public function getTargetObject($targetId)
 	{
-		$course = $this->getCourseService()->getCourse($targetId);
-
-        return $course;
+		return $this->getCourseService()->getCourse($targetId);
 	}
 
 	public function getShowPageName($targetId)
 	{
 		$canTake = $this->checkTake($targetId);
 
-		if (!$canTake) {
-			return 'announcement-course-nojoin-show-modal.html.twig';
-		} else {
+		if ($canTake) {
 			return 'announcement-show-modal.html.twig';
+		} else {
+			return 'announcement-course-nojoin-show-modal.html.twig';
 		}
 	}
 

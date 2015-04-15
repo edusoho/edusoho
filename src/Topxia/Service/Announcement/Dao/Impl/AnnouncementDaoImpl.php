@@ -9,14 +9,16 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 {
     protected $table = 'announcement';
 
-    public function searchAnnouncements($conditions, $orderBy, $start, $limit)
+    public function searchAnnouncements($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
-            ->orderBy($orderBy[0],$orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+        foreach ($orderBys as $orderBy) {
+            $builder->addOrderBy($orderBy[0], $orderBy[1]);
+        }
 
         return $builder->execute()->fetchAll() ? : array();
     }
@@ -26,7 +28,6 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
-
 
 	public function addAnnouncement($fields)
 	{

@@ -8,7 +8,7 @@ class AnnouncementProcessorFactory
 
 	public static function create($target)
     {
-    	if(empty($target)) {
+    	if(empty($target) || !in_array($target,array('course','classroom'))) {
     		throw new Exception("公告类型不存在");
     	}
 

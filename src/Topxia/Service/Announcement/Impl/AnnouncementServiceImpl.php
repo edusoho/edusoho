@@ -10,9 +10,10 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
 	public function searchAnnouncements($conditions, $orderBy, $start, $limit)
     {
-        
         $conditions = $this->_prepareSearchConditions($conditions);
-        $orders = $this->getAnnouncementDao()->searchAnnouncements($conditions, $orderBy, $start, $limit);
+        $orderBys = $this->filterSort($orderBy);
+
+        $orders = $this->getAnnouncementDao()->searchAnnouncements($conditions, $orderBys, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
     }
@@ -77,6 +78,23 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
+
+	private function filterSort($sort)
+    {
+        switch ($sort) {
+
+            case 'createdTime':
+                $orderBys = array(
+                    array('createdTime', 'DESC'),
+                );
+                break;
+
+            default:
+                throw $this->createServiceException('参数sort不正确。');
+        }
+
+        return $orderBys;
+    }
 
 	private function getAnnouncementDao()
     {

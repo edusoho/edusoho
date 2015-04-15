@@ -16,21 +16,6 @@ class AnnouncementController extends BaseController
         $processor = $this->getAnnouncementProcessor($announcement['targetType']);
         $targetObject = $processor->getTargetObject($targetId);
 
-        /*$classroom = array();
-        $canLook = false;
-        if ($announcement['targetType'] == 'classroom') {
-        	$classroom = $this->getClassroomService()->getClassroom($targetId);
-        	$canLook = $this->getClassroomService()->canLookClassroom($targetId);
-        	
-        	if(!$canLook){
-        		return $this->render('TopxiaWebBundle:Announcement:announcement-classroom-nojoin-show-modal.html.twig',array(
-					'announcement' => $announcement,
-					'canLook' => $canLook,
-					'classroom' => $classroom,
-				));
-        	}
-        }*/
-
         $showPageName = $processor->getShowPageName($targetId);
 
 		return $this->render('TopxiaWebBundle:Announcement:'.$showPageName,array(
@@ -46,7 +31,7 @@ class AnnouncementController extends BaseController
 			'targetId' => $targetId
 		);
 
-		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10000);
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, 'createdTime', 0, 10000);
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-show-all-modal.html.twig',array(
@@ -128,7 +113,7 @@ class AnnouncementController extends BaseController
 		$canManage = $processor->checkManage($targetObject['id']);
 		$canTake = $processor->checkTake($targetObject['id']);
 
-		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, 'createdTime', 0, 10);
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-block.html.twig',array(
 			'targetObject' => $targetObject,

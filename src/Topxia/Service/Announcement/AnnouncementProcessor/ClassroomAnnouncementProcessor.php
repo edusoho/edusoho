@@ -47,25 +47,23 @@ class ClassroomAnnouncementProcessor implements AnnouncementProcessor
 	{
 		$this->getClassroomService()->tryManageClassroom($targetId);
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        
+
         return $classroom;
 	}
 
 	public function getTargetObject($targetId)
 	{
-        $classroom = $this->getClassroomService()->getClassroom($targetId);
-
-        return $classroom;
+        return $this->getClassroomService()->getClassroom($targetId);
 	}
 
 	public function getShowPageName($targetId)
 	{
 		$canTake = $this->checkTake($targetId);
 
-		if (!$canTake) {
-			return 'announcement-classroom-nojoin-show-modal.html.twig';
-		} else {
+		if ($canTake) {
 			return 'announcement-show-modal.html.twig';
+		} else {
+			return 'announcement-classroom-nojoin-show-modal.html.twig';
 		}
 	}
 
