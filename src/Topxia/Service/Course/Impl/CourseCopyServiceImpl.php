@@ -10,31 +10,39 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 {
     public function copy($course, $link = false)
     {
-        $newCourse = $this->copyCourse($course, $link);
+        $this->getCourseDao()->getConnection()->beginTransaction();
+        try {
+            $newCourse = $this->copyCourse($course, $link);
 
-        $newTeachers = $this->copyTeachers($course['id'], $newCourse);
+            $newTeachers = $this->copyTeachers($course['id'], $newCourse);
 
-        $newChapters = $this->copyChapters($course['id'], $newCourse);
+            $newChapters = $this->copyChapters($course['id'], $newCourse);
 
-        $newLessons = $this->copyLessons($course['id'], $newCourse, $newChapters);
+            $newLessons = $this->copyLessons($course['id'], $newCourse, $newChapters);
 
-        $newQuestions = $this->copyQuestions($course['id'], $newCourse, $newLessons);
+            $newQuestions = $this->copyQuestions($course['id'], $newCourse, $newLessons);
 
-        $newTestpapers = $this->copyTestpapers($course['id'], $newCourse, $newQuestions);
+            $newTestpapers = $this->copyTestpapers($course['id'], $newCourse, $newQuestions);
 
-        $this->convertTestpaperLesson($newLessons, $newTestpapers);
+            $this->convertTestpaperLesson($newLessons, $newTestpapers);
 
-        $newMaterials = $this->copyMaterials($course['id'], $newCourse, $newLessons);
+            $newMaterials = $this->copyMaterials($course['id'], $newCourse, $newLessons);
 
-        $code = 'Homework';
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+            $code = 'Homework';
+            $homework = $this->getAppService()->findInstallApp($code);
+            $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
 
-        if ($isCopyHomework) {
-            $newHomeworks = $this->copyHomeworks($course['id'], $newCourse, $newLessons, $newQuestions);
-            $newExercises = $this->copyExercises($course['id'], $newCourse, $newLessons);
+            if ($isCopyHomework) {
+                $newHomeworks = $this->copyHomeworks($course['id'], $newCourse, $newLessons, $newQuestions);
+                $newExercises = $this->copyExercises($course['id'], $newCourse, $newLessons);
+            }
+
+            $this->getCourseDao()->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getCourseDao()->getConnection()->rollback();
+            throw $e;
         }
-
+        
         return $newCourse;
     }
     
