@@ -1,11 +1,12 @@
-{% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %}云短信 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_app_my_cloud')}}{% endblock %}
 
-{% set submenu = 'sms' %} 
+{% set submenu = 'my-cloud' %} 
+{% set menu = 'my-cloud' %}
 {% set script_controller = 'educloud/sms-setting' %}
 
-{% block maincontent %}
+{% block main %}
   <div class="page-header"><h1>云短信</h1></div>
     {% if smsStatus.status == 'error' %}
     	<div class="panel panel-default">

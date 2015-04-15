@@ -25,9 +25,7 @@ class AppController extends BaseController
     public function myCloudAction(Request $request)
     {
        $content = $this->getEduCloudService()->getUserGeneral();
-        // var_dump($this->getEduCloudService()->getUserGeneral());exit();
-        // var_dump($this->getAppService()->getCenterApps());exit();
-        $user = $this->getCurrentUser();
+
         $api = $this->createAPIClient();
         $info = $api->get('/me');
 
@@ -43,8 +41,6 @@ class AppController extends BaseController
             $settings['cloud_key_applied'] = 0;
             $this->getSettingService()->set('storage', $settings);
         }
-
-        $currentHost = $request->server->get('HTTP_HOST');
 
         if(isset($info['licenseDomains'])) {
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -65,42 +61,45 @@ class AppController extends BaseController
         curl_close($curl);
         $notices = json_decode($notices, true);
 
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
-
-        $result = $client->getBills($client->getBucket());
-
-        $loginToken = $this->getAppService()->getLoginToken();
 
         $currentTime = date('Y-m-d', time());
-        $endDate = $content['user']['endDate'];
-        $arrearageDate = $content['account']['arrearageDate'];
-        $diffTime = strtotime($currentTime) - strtotime($arrearageDate);
-        $diffPackageDate = strtotime($currentTime) - strtotime($endDate);
-        $day = $diffTime/(60*60*24);
-        $packageDate = $diffPackageDate/(60*60*24);
+
+        $account = '' ;
+        $day = '';
+        if (isset($content['account']['arrearageDate'])) {
+            $account = $content['account'];
+            $arrearageDate = $account['arrearageDate'];
+            $diffTime = strtotime($currentTime) - strtotime($arrearageDate);
+            $day = $diffTime/(60*60*24);
+        }
+        
+        $user = '' ;
+        $packageDate = '' ;
+        if (isset($content['user']['endDate'])) {
+            $user = $content['user'];
+            $endDate = $user['endDate'];
+            $diffPackageDate = strtotime($currentTime) - strtotime($endDate);
+            $packageDate = $diffPackageDate/(60*60*24);
+        }
 
         $storage = '' ;
         $storageDate = '' ;
-        $service = $content['service'];
-        if (isset($service['storage'])) {
-            $storage = $service['storage'];
+        if (isset($content['service']['storage'])) {
+            $storage = $content['service']['storage'];
             $diffStorageDate = strtotime($currentTime) - strtotime($storage['endMonth']);
             $storageDate = $diffStorageDate/(60*60*24);
         }
 
         $live = '' ;
-        $service = $content['service'];
-        if (isset($service['live'])) {
-            $live = $service['live'];
+        if (isset($content['service']['live'])) {
+            $live = $scontent['service']['live'];
         }
 
         $sms = '' ;
-        $service = $content['service'];
-        if (isset($service['sms'])) {
-            $sms = $service['sms'];
+        if (isset($content['service']['sms'])) {
+            $sms = $content['service']['sms'];
         }
-// var_dump($storage);exit();
+
         if ($info['levelName'] == '商业授权') {
                 return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
                     'content' =>$content,
@@ -109,22 +108,14 @@ class AppController extends BaseController
                     'day' =>$day,
                     'storage' =>$storage,
                     'live' =>$live,
+                    'user' =>$user,
                     'sms' =>$sms,
-                    // 'userInfo' =>$userInfo,
+                    'account' =>$account,
                     "notices"=>$notices,
-                    // 'money' => $result['money'],
-                    // 'bills' => $result['bills'],
-                    // 'token' => $loginToken["token"],
                     'info' => $info,
                 ));
         }else{
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    // 'user'=>$user,
-                    // "notices"=>$notices,
-                    // 'money' => $result['money'],
-                    // 'bills' => $result['bills'],
-                    // 'token' => $loginToken["token"],
-                    // 'info' => $info,
                 ));
         }
 

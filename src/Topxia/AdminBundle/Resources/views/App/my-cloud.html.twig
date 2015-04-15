@@ -21,7 +21,9 @@
                   <div class="media-body">
 
                     <p><span class="name">{{ app.user.nickname }}</span>，您好</p>
-                    <p>ES云平台账户名: {{content.user.siteName}}</p>
+                    
+                    <p>ES云平台账户名: {{content.user.siteName|default('') }}</p>
+                    
                   </div>
                 </div>
 
@@ -30,7 +32,7 @@
                   {% if notices %}
                   <ul>
                   {% for notice in notices %}
-                    <li class="glyphicon glyphicon-bell" style="color:#fed032;font-size:16px;"><a href="{{notice.detailUrl}}" style="margin-left:22px;" target="_blank">{{notice.content}}<span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span></a></li>
+                    <li><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span></li>
                   {% endfor %}
                   </ul>
                   {% endif %}
@@ -43,14 +45,15 @@
           <!--账户余额-->
           <div class="alert alert-warning edu-balance" role="alert">
             <h4 class="eduyun-title text-muted">
-              账户余额<i class="glyphicon glyphicon-question-sign"></i>
+              账户余额<a href="http://open.edusoho.com/article/1#recharge" target="_blank" style="margin-right:820px;margin-top:-17px;"><i class="glyphicon glyphicon-question-sign"></i></a>
             </h4>
             <p>
               <!-- <span class="text-warning balance">222.11</span>元 -->
-              <span class="text-danger balance">{{content.account.cash}}</span>元
-              <a href="javascript:;" class="btn-recharge btn btn-warning">充值</a>
-              <a href="javascript:;" class="btn btn-link">查看账单</a>    
+              <span class="text-danger balance">{{content.account.cash|default('0') }}</span>元
+              <a href="http://open.edusoho.com/account/cash/list" class="btn-recharge btn btn-warning" target="_blank">充值</a>
+              <a href="http://open.edusoho.com/account/cash/list" class="btn btn-link" target="_blank">查看账单</a>    
             </p> 
+            {% if account %}
             <!--不足50元-->
             {% if content.account.cash < 50 %}
             <p class="text-warning">余额不足50元，请尽快充值！</p>
@@ -63,6 +66,7 @@
             {% if content.account.arrearageDate > 0 and 10<day %}
             <p class="text-danger">您已欠费超过10天，教育云服务已暂停，请尽快充值！</p>
             {% endif %}
+            {% endif %}
           </div>    
 
 
@@ -72,17 +76,17 @@
               <div class="panel panel-default">
                 <div class="panel-body">
                   <h4 class="eduyun-title">套餐信息</h4>
-                  <p class="text-muted">版本：{{content.user.levelName}}</p>
-                  <p class="text-muted">有效期：{{ content.user.startDate }}~{{ content.user.endDate }}</p>
+                  <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
+                  <p class="text-muted">有效期：{{ content.user.startDate|default('') }}~{{ content.user.endDate|default('') }}</p>
                   <!--已到期-->
                   {% if packageDate > 0 %}
-                  <p class="text-danger text-sm">套餐服务已到期，请尽快<a href="javascript:;">续费</a>！</p>
+                  <p class="text-danger text-sm">套餐服务已到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！</p>
                   {% endif %}
                   <!--30天提醒-->
                   {% if packageDate > 30 %}
-                  <p class="text-warning text-sm">套餐服务将于30天后到期，请尽快<a href="javascript:;">续费</a>，以免影响正常使用</p> 
+                  <p class="text-warning text-sm">套餐服务将于30天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
                   <p class="text-warning">
-                    点击<a href="javascript:;">这里</a>了解套餐详情!
+                    点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
                   </p>
                   {% endif %}
                 </div>  
@@ -112,11 +116,11 @@
               <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-body">
-                    <h4 class="eduyun-title">云视频+云文档<a href="">查看账单</a><a href="">去升级</a></h4>
+                    <h4 class="eduyun-title">云视频+云文档<a href="http://www.edusoho.com/product/system" target="_blank">去升级</a></h4>
                     <!--未购买-->
                     {% if not storage %}
                     <div class="alert alert-warning alert-sm" role="alert">
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云视频包，点击<a href="javascript:;">这里</a>了解详情
+                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云视频包，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
                     </div>
                     {% else %}
                     <p class="text-muted">上月空间用量：{{storage.bill.space}}G <span class="text-warning text-sm">(剩余1G)</span></p>
@@ -124,12 +128,12 @@
                     <p class="text-muted">云视频包有效期：{{storage.bill.startMonth}}~{{storage.bill.endMonth}}</p>
                     <!--30天过期  -->
                     {% if -30<storageDate<0 %}
-                    <p class="text-warning " style="display:none;">云视频视频包将于30天后过期，请尽快<a href="javascript:;">续费</a></p>
+                    <p class="text-warning " style="display:none;">云视频视频包将于30天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}
                     <!--已过期 -->
                     {% if storageDate > 0 %}
                     <p class="text-danger" >
-                      云视频包意过期，请尽快<a href="javascript:;">续费</a>
+                      云视频包意过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>
                     </p>
                     {% endif %}
                     {% endif %}
@@ -142,21 +146,21 @@
               <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-body">
-                   <h4 class="eduyun-title">云直播<a href="">去购买</a></h4>
+                   <h4 class="eduyun-title">云直播<a href="http://www.edusoho.com/product/system" target="_blank">去购买</a></h4>
                    <!--未购买-->
                    {% if not live %}
                    <div class="alert alert-warning alert-sm" role="alert">
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="javascript:;">这里</a>了解详情
+                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
                     </div>
                     <p class="text-muted">有效期：不可用</p>
                     {% else %}
                     <!--7天警告-->
                     {% if -30<storageDate<0 %}
-                    <p class="text-warning">云视频包将于30天后过期，请尽快<a href="javascript:;">续费</a></p>
+                    <p class="text-warning">云视频包将于30天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}
                     <!--已过期-->
                     {% if storageDate > 0 %}
-                    <p class="text-danger">云视频包意过期，请尽快<a href="javascript:;">续费</a></p>
+                    <p class="text-danger">云视频包意过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}
                     {% endif %}
                     <p class="panel-bottom">
@@ -173,11 +177,11 @@
               <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-body">
-                    <h4 class="eduyun-title">云短信<a href="{{ url('admin_edu_cloud_sms_bill') }}">查看账单</a></h4>
+                    <h4 class="eduyun-title">云短信<a href="http://open.edusoho.com/service/sms/account" target="_blank">查看账单</a></h4>
                     <div class="alert alert-warning alert-sm" role="alert" >
                       <!--未开启-->
                      {% if not sms %}
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未开启云短信功能，<a href="javascript:;">去开启</a>
+                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未开启云短信功能，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开启</a>
                       {% endif %}
                       <!--被停用-->
                       {% if sms and sms.status == 'stoped'%}
