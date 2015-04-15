@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block footer %}
-    {% if not classroom.private %}
+    {% if not targetObject.private %}
       <a href="{{ path('classroom_become_auditor', {id:targetObject.id}) }}" class="btn btn-primary">加入旁听生</a>
    {% endif %}
 {% endblock %}
