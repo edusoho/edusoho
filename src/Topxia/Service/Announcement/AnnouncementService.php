@@ -5,11 +5,11 @@ interface AnnouncementService
 {
 	public function searchAnnouncements($conditions, $sort, $start, $limit);
     
-	public function getAnnouncement($targetId, $id);
+	public function getAnnouncement($id);
 
-	public function createAnnouncement($targetType, $targetId, $fields);
+	public function createAnnouncement($fields);
 
-	public function updateAnnouncement($targetId, $id, $fields);
+	public function updateAnnouncement($id, $fields);
 
-	public function deleteAnnouncement($targetId, $id);
+	public function deleteAnnouncement($id);
 }

@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Announcement\AnnouncementProcessor\AnnouncementProcessorFactory;
 
 
 class AnnouncementController extends BaseController
@@ -11,10 +12,11 @@ class AnnouncementController extends BaseController
 
 	public function showAction(Request $request, $id, $targetId)
 	{
-		//list($course, $member) = $this->getCourseService()->tryTakeCourse($targetId);
-        $announcement = $this->getAnnouncementService()->getAnnouncement($targetId, $id);
+        $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+        $processor = $this->getAnnouncementProcessor($announcement['targetType']);
+        $targetObject = $processor->getTargetObject($targetId);
 
-        $classroom = array();
+        /*$classroom = array();
         $canLook = false;
         if ($announcement['targetType'] == 'classroom') {
         	$classroom = $this->getClassroomService()->getClassroom($targetId);
@@ -27,15 +29,13 @@ class AnnouncementController extends BaseController
 					'classroom' => $classroom,
 				));
         	}
-        }
-        
+        }*/
 
-		return $this->render('TopxiaWebBundle:Announcement:announcement-show-modal.html.twig',array(
+        $showPageName = $processor->getShowPageName($targetId);
+
+		return $this->render('TopxiaWebBundle:Announcement:'.$showPageName,array(
 			'announcement' => $announcement,
-			//'course' => $course,
-			'canLook' => $canLook,
-			'classroom' => $classroom,
-			//'canManage' => $this->getCourseService()->canManageCourse($course['id']),
+			'targetObject' => $targetObject,
 		));
 	}
 
@@ -57,13 +57,21 @@ class AnnouncementController extends BaseController
 
 	public function createAction(Request $request, $targetType, $targetId)
 	{
-		$targetObject = $this->checkPermission($targetType, $targetId);
+		$processor = $this->getAnnouncementProcessor($targetType);
+		$targetObject = $processor->tryManageObject($targetId);
 		
 	    if($request->getMethod() == 'POST'){
-        	$announcement = $this->getAnnouncementService()->createAnnouncement($targetType, $targetId, $request->request->all());
+	    	$data = $request->request->all();
+	    	$data['targetType'] = $targetType;
+	    	$data['targetId'] = $targetId;
+
+        	$announcement = $this->getAnnouncementService()->createAnnouncement($data);
 
         	if ($request->request->get('notify') == 'notify'){
-	        	$result = $this->announcementNotification($targetType, $targetId, $targetObject);
+        		$targetObjectShowRout = $processor->getTargetShowUrl();
+        		$targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, array('id'=>$targetId), true);
+
+	        	$result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
 	        }
 
         	return $this->createJsonResponse(true);
@@ -78,12 +86,17 @@ class AnnouncementController extends BaseController
 	
 	public function updateAction(Request $request, $id, $targetType, $targetId)
 	{	
-		$targetObject = $this->checkPermission($targetType, $targetId);
+		$processor = $this->getAnnouncementProcessor($targetType);
+		$targetObject = $processor->tryManageObject($targetId);
 		
-        $announcement = $this->getAnnouncementService()->getAnnouncement($targetId, $id);
+        $announcement = $this->getAnnouncementService()->getAnnouncement($id);
 
 	    if($request->getMethod() == 'POST') {
-        	$this->getAnnouncementService()->updateAnnouncement($targetId, $id, $request->request->all());
+	    	$data = $request->request->all();
+	    	$data['targetType'] = $targetType;
+	    	$data['targetId'] = $targetId;
+
+        	$this->getAnnouncementService()->updateAnnouncement($id, $data);
 	        return $this->createJsonResponse(true);
 		}
 
@@ -96,9 +109,10 @@ class AnnouncementController extends BaseController
 
 	public function deleteAction(Request $request, $id, $targetType, $targetId)
 	{
-		$targetObject = $this->checkPermission($targetType, $targetId);
+		$processor = $this->getAnnouncementProcessor($targetType);
+		$targetObject = $processor->tryManageObject($targetId);
 		
-		$this->getAnnouncementService()->deleteAnnouncement($targetId, $id);
+		$this->getAnnouncementService()->deleteAnnouncement($id);
 
 		return $this->createJsonResponse(true);
 	}
@@ -110,7 +124,9 @@ class AnnouncementController extends BaseController
 			'targetId' => $targetObject['id']
 		);
 
-		list($canManage, $canTake) = $this->checkManageAndTake($targetObject, $targetType);
+		$processor = $this->getAnnouncementProcessor($targetType);
+		$canManage = $processor->checkManage($targetObject['id']);
+		$canTake = $processor->checkTake($targetObject['id']);
 
 		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
 
@@ -123,73 +139,11 @@ class AnnouncementController extends BaseController
 		));
 	}
 
-	private function checkPermission($targetType, $targetId)
+
+	private function getAnnouncementProcessor($targetType)
 	{
-		switch ($targetType) {
-			case 'course':
-				$targetObject = $this->getCourseService()->tryManageCourse($targetId);
-				break;
-			
-			case 'classroom':
-				$this->getClassroomService()->tryManageClassroom($targetId);
-        		$targetObject = $this->getClassroomService()->getClassroom($targetId);
-				break;
-			
-		}
-
-		return $targetObject;
-	}
-
-	private function checkManageAndTake($targetObject, $targetType){
-		switch ($targetType) {
-			case 'course':
-				$canManage = $this->getCourseService()->canManageCourse($targetObject['id']);
-				$canTake = $this->getCourseService()->canTakeCourse($targetObject);
-				break;
-			
-			case 'classroom':
-				$canManage = $this->getClassroomService()->canManageClassroom($targetObject['id']);
-				$canTake = $this->getClassroomService()->canTakeClassroom($targetObject['id']);
-				break;
-		}
-
-		return array($canManage,$canTake);
-	}
-
-	private function announcementNotification($targetType, $targetId, $targetObject)
-	{
-		switch ($targetType) {
-			case 'course':
-				$count = $this->getCourseService()->getCourseStudentCount($targetId);
-	        	$members = $this->getCourseService()->findCourseStudents($targetId, 0, $count);
-	        	$url = $this->generateUrl('course_show', array('id'=>$targetId), true);
-	        	$title = '课程';
-
-				break;
-			
-			case 'classroom':
-				$count = $this->getClassroomService()->searchMemberCount(array('classroomId'=>$targetId,'role'=>'student'));
-	        	$members = $this->getClassroomService()->searchMembers(
-		            array('classroomId'=>$targetId,'role'=>'student'),
-		            array('createdTime','DESC'),
-		            0,$count
-		        );
-
-	        	$url = $this->generateUrl('classroom_show', array('id'=>$targetId), true);
-	        	$title = '班级';
-
-				break;
-			
-		}
-
-		$result = null;
-		if ($members) {
-			foreach ($members as $member) {
-        		$result = $this->getNotificationService()->notify($member['userId'], 'default', "【{$title}公告】你正在学习的<a href='{$url}' target='_blank'>{$targetObject['title']}</a>发布了一个新的公告，<a href='{$url}' target='_blank'>快去看看吧</a>");
-    		}
-		}
-		
-		return $result;
+		$processor = AnnouncementProcessorFactory::create($targetType);
+		return $processor;
 	}
 
 	protected function getAnnouncementService()
@@ -197,24 +151,9 @@ class AnnouncementController extends BaseController
         return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    protected function getClassroomService()
-    {
-    	return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
+    }   
 
 }

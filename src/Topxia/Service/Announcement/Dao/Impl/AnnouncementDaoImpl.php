@@ -27,6 +27,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
+
 	public function addAnnouncement($fields)
 	{
         $affected = $this->getConnection()->insert($this->table, $fields);

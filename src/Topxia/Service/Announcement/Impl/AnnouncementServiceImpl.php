@@ -17,16 +17,16 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         return ArrayToolkit::index($orders, 'id');
     }
 
-	public function getAnnouncement($targetId, $id)
+	public function getAnnouncement($id)
 	{
 		$announcement = $this->getAnnouncementDao()->getAnnouncement($id);
-		if (empty($announcement) or $announcement['targetId'] != $targetId) {
+		if (empty($announcement)) {
 			$this->createNotFoundException("公告(#{$id})不存在。");
 		}
 		return $announcement;
 	}
 
-	public function createAnnouncement($targetType, $targetId, $fields)
+	public function createAnnouncement($fields)
 	{
         if (!ArrayToolkit::requireds($fields, array('content'))) {
         	$this->createNotFoundException("公告数据不正确，创建失败。");
@@ -36,21 +36,21 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         	$fields['content'] = $this->purifyHtml($fields['content']);
         }
 
-		$announcement = array();
-		$announcement['targetId'] = $targetId;
-		$announcement['targetType'] = $targetType;
-		$announcement['content'] = $fields['content'];
-		$announcement['userId'] = $this->getCurrentUser()->id;
-		$announcement['createdTime'] = time();
+        if(isset($fields['notify'])){
+        	unset($fields['notify']);
+        }
 
-		return $this->getAnnouncementDao()->addAnnouncement($announcement);
+		$fields['userId'] = $this->getCurrentUser()->id;
+		$fields['createdTime'] = time();
+
+		return $this->getAnnouncementDao()->addAnnouncement($fields);
 	}
 
 
 
-	public function updateAnnouncement($targetId, $id, $fields)
+	public function updateAnnouncement($id, $fields)
 	{
-        $announcement = $this->getAnnouncement($targetId, $id);
+        $announcement = $this->getAnnouncement($id);
         if(empty($announcement)) {
         	$this->createNotFoundException("公告#{$id}不存在。");
         }
@@ -68,9 +68,9 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     	));
 	}
 
-	public function deleteAnnouncement($targetId, $id)
+	public function deleteAnnouncement($id)
 	{
-		$announcement = $this->getAnnouncement($targetId, $id);
+		$announcement = $this->getAnnouncement($id);
 		if(empty($announcement)) {
 			$this->createNotFoundException("公告#{$id}不存在。");
 		}
