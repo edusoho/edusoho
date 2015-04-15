@@ -47,8 +47,11 @@ class LogController extends BaseController {
     public function prodAction(Request $request)
     {
         $logfile = $this->container->getParameter('kernel.root_dir') . '/logs/prod.log';
-
-        $logs = $this->readFileLastLines($logfile, 2000);
+        if (file_exists($logfile)) {
+            $logs = $this->readFileLastLines($logfile, 2000);
+        } else {
+            $logs = '';
+        }
 
         return $this->render('TopxiaAdminBundle:System:logs-prod.html.twig', array(
             'logs' => $logs,
