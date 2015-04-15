@@ -199,7 +199,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->addLog($log);
     }
 
-    public function cancelOrder($id, $message = '')
+    public function cancelOrder($id, $message = '', $data = array())
     {
         $order = $this->getOrder($id);
         if (empty($order)) {
@@ -212,7 +212,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
 
-        $this->_createLog($order['id'], 'cancelled', $message);
+        $this->_createLog($order['id'], 'cancelled', $message, $data);
 
         return $order;
     }
