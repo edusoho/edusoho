@@ -22,6 +22,29 @@ class AppController extends BaseController
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
+    public function getArticle($type)
+    {
+        $userAgent = 'Open Edusoho App Client 1.0';
+        $connectTimeout = 10;
+        $timeout = 10;
+         if ($type == '非商业授权') {
+            $url = "http://open.edusoho.com/api/v1/context/articles";
+        }else{
+            $url = "http://open.edusoho.com/api/v1/context/notice";
+        }
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url );
+        $notices = curl_exec($curl);
+        curl_close($curl);
+
+        return $notices;
+    }
+
     public function myCloudAction(Request $request)
     {
        $content = $this->getEduCloudService()->getUserGeneral();
@@ -46,25 +69,8 @@ class AppController extends BaseController
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
         }
 
-        $userAgent = 'Open Edusoho App Client 1.0';
-        $connectTimeout = 10;
-        $timeout = 10;
-         if ($info['levelName'] == '非商业授权') {
-            $url = "http://open.edusoho.com/api/v1/context/articles";
-        }else{
-            $url = "http://open.edusoho.com/api/v1/context/notice";
-        }
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_URL, $url );
-        $notices = curl_exec($curl);
-        curl_close($curl);
+        $notices = $this->getArticle($info['levelName']);
         $notices = json_decode($notices, true);
-
 
         $currentTime = date('Y-m-d', time());
 
