@@ -49,7 +49,11 @@ class AppController extends BaseController
         $userAgent = 'Open Edusoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
-        $url = "http://open.edusoho.com/api/v1/context/notice";
+         if ($info['levelName'] == '非商业授权') {
+            $url = "http://open.edusoho.com/api/v1/context/articles";
+        }else{
+            $url = "http://open.edusoho.com/api/v1/context/notice";
+        }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
@@ -100,7 +104,11 @@ class AppController extends BaseController
             $sms = $content['service']['sms'];
         }
 
-        if ($info['levelName'] == '商业授权') {
+        if ($info['levelName'] == '非商业授权') {
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'notices' => $notices,
+                ));
+        }else{
                 return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
                     'content' =>$content,
                     'packageDate' =>$packageDate,
@@ -114,12 +122,7 @@ class AppController extends BaseController
                     "notices"=>$notices,
                     'info' => $info,
                 ));
-        }else{
-                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                ));
         }
-
-
     }
 
     private function isLocalAddress($address)
