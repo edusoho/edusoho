@@ -123,8 +123,8 @@
                       <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云视频包，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
                     </div>
                     {% else %}
-                    <p class="text-muted">上月空间用量：{{storage.bill.space}}G <span class="text-warning text-sm">(剩余1G)</span></p>
-                    <p class="text-muted">上月流量：{{storage.bill.transfer}}G <span class="text-warning text-sm">(剩余20G）</span></p>
+                    <p class="text-muted">上月空间用量：{{storage.bill.space}}G <span class="text-warning text-sm">(剩余{{storage.freeSpace - storage.bill.space}}G)</span></p>
+                    <p class="text-muted">上月流量：{{storage.bill.transfer}}G <span class="text-warning text-sm">(剩余{{storage.freeTransfer - storage.bill.transfer}}G）</span></p>
                     <p class="text-muted">云视频包有效期：{{storage.bill.startMonth}}~{{storage.bill.endMonth}}</p>
                     <!--30天过期  -->
                     {% if -30 < storageDate and storageDate < 0 %}
