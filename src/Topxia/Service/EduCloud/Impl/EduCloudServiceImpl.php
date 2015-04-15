@@ -13,6 +13,11 @@ class EduCloudServiceImpl extends BaseService
     {
         if (empty($this->cloudOptions)) {
             $settings = $this->createService('System.SettingService')->get('storage', array());
+            $settings['cloud_api_server'] = "http://115.29.78.158:90";
+            $settings['cloud_access_key'] = "WzDklJ6FCb5iFdBwtk5SKKtALZb8emba";
+            $settings['cloud_secret_key'] = "VOvhyBWaN1sse4ZIp5AaQ4KB3WJhiVse";
+            // $this->getSettingService()->set('storage', $settings);
+            // var_dump($settings);exit();
             $this->cloudOptions = array(
                 'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
                 'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
@@ -25,6 +30,7 @@ class EduCloudServiceImpl extends BaseService
     private function createAPIClient()
     {
         $options = $this->getCloudOptions();
+        // var_dump($options);exit();
         return new CloudAPI($options);
     }
 
@@ -33,6 +39,7 @@ class EduCloudServiceImpl extends BaseService
         if (empty($this->cloudApi)) {
             $this->cloudApi = $this->createAPIClient();
         }
+// var_dump($this->cloudApi);exit();
         return $this->cloudApi;
     }
 
@@ -40,6 +47,18 @@ class EduCloudServiceImpl extends BaseService
     {
         $api = $this->getCloudApi();
         return $api->get('/accounts');
+    }
+
+    public function getUserGeneral()
+    {
+        $api = $this->getCloudApi();
+        $options = $this->getCloudOptions();
+// var_dump($options);exit();
+        $result = $api->get(
+                sprintf('/users/%s/overview', $options['accessKey'])
+                );
+        // var_dump($result);exit();
+        return $result;
     }
 
     public function applyForSms($name = 'smsHead')

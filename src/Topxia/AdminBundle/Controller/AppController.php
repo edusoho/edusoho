@@ -24,6 +24,9 @@ class AppController extends BaseController
 
     public function myCloudAction(Request $request)
     {
+       $content = $this->getEduCloudService()->getUserGeneral();
+        // var_dump($this->getEduCloudService()->getUserGeneral());exit();
+        // var_dump($this->getAppService()->getCenterApps());exit();
         $user = $this->getCurrentUser();
         $api = $this->createAPIClient();
         $info = $api->get('/me');
@@ -62,34 +65,66 @@ class AppController extends BaseController
         curl_close($curl);
         $notices = json_decode($notices, true);
 
-        // $factory = new CloudClientFactory();
-        // $client = $factory->createClient();
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
 
-        // $result = $client->getBills($client->getBucket());
+        $result = $client->getBills($client->getBucket());
 
-        // $loginToken = $this->getAppService()->getLoginToken();
+        $loginToken = $this->getAppService()->getLoginToken();
 
-        if ($info['levelName'] == '1商业授权') {
+        $currentTime = date('Y-m-d', time());
+        $endDate = $content['user']['endDate'];
+        $arrearageDate = $content['account']['arrearageDate'];
+        $diffTime = strtotime($currentTime) - strtotime($arrearageDate);
+        $diffPackageDate = strtotime($currentTime) - strtotime($endDate);
+        $day = $diffTime/(60*60*24);
+        $packageDate = $diffPackageDate/(60*60*24);
+
+        $storage = '' ;
+        $storageDate = '' ;
+        $service = $content['service'];
+        if (isset($service['storage'])) {
+            $storage = $service['storage'];
+            $diffStorageDate = strtotime($currentTime) - strtotime($storage['endMonth']);
+            $storageDate = $diffStorageDate/(60*60*24);
+        }
+
+        $live = '' ;
+        $service = $content['service'];
+        if (isset($service['live'])) {
+            $live = $service['live'];
+        }
+
+        $sms = '' ;
+        $service = $content['service'];
+        if (isset($service['sms'])) {
+            $sms = $service['sms'];
+        }
+// var_dump($storage);exit();
+        if ($info['levelName'] == '商业授权') {
                 return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-                    'user'=>$user,
+                    'content' =>$content,
+                    'packageDate' =>$packageDate,
+                    'storageDate' =>$storageDate,
+                    'day' =>$day,
+                    'storage' =>$storage,
+                    'live' =>$live,
+                    'sms' =>$sms,
+                    // 'userInfo' =>$userInfo,
                     "notices"=>$notices,
                     // 'money' => $result['money'],
                     // 'bills' => $result['bills'],
                     // 'token' => $loginToken["token"],
                     'info' => $info,
-                    'currentHost' => $currentHost,
-                    'isLocalAddress' => $this->isLocalAddress($currentHost),
                 ));
         }else{
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    'user'=>$user,
-                    "notices"=>$notices,
+                    // 'user'=>$user,
+                    // "notices"=>$notices,
                     // 'money' => $result['money'],
                     // 'bills' => $result['bills'],
                     // 'token' => $loginToken["token"],
-                    'info' => $info,
-                    'currentHost' => $currentHost,
-                    'isLocalAddress' => $this->isLocalAddress($currentHost),
+                    // 'info' => $info,
                 ));
         }
 
@@ -288,4 +323,9 @@ class AppController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 }

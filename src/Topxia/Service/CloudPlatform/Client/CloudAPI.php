@@ -11,7 +11,7 @@ class CloudAPI
 
     protected $timeout = 20;
 
-    private $apiUrl = 'http://api.edusoho.net';
+    private $apiUrl = 'http://115.29.78.158:99/app_api';
 
     private $debug = false;
 
