@@ -1992,6 +1992,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$member = $this->getMemberDao()->addMember($fields);
+		$fields = array(
+			'studentNum'=> $this->getCourseStudentCount($courseId),
+		);
+		$this->getCourseDao()->updateCourse($courseId, $fields);
 		return $member;
 
 	}
