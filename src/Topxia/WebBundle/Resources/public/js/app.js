@@ -117,5 +117,20 @@ define(function(require, exports, module) {
     	$(this).removeClass("md-spin");
     });
 
+    $('.js-user-card').hover(function() {
+            var e=$(this);
+            if (e.data('bind')) {
+                return;
+            } else {
+                e.data('bind', true);
+                $.get(e.data('cardUrl'),function(d) {
+                    e.popover({
+                        html: true,
+                        trigger: 'hover',
+                        content: d
+                    }).popover('show');
+                });
+            }
+    });
 
 });
