@@ -81,6 +81,8 @@ class AlipayRequest extends Request {
             $converted['body'] = $this->filterText($params['summary']);
         }
 
+        $converted['it_b_pay'] = "1m";
+        
         $converted['sign'] = $this->signParams($converted);
 
         return $converted;
