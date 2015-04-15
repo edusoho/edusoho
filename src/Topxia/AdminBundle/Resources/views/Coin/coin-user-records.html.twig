@@ -77,7 +77,15 @@
 
         {% if userIds %}
           {% for userId in userIds %}
-            <tr><td >{{ web_macro.user_link(users[userId] , 'link-muted') }}</td><td style="color:#1bb974;">{{userInCash(userId,condition.timeType)|default("0.00")}}</td><td style="color:#ff7b0e;">{{userOutCash(userId,condition.timeType)|default("0.00")}}</td><td style="color:blue;">{{userAccount(userId).cash|default(0)}}</td><td><a class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType})}}" href="javascript:;">查看</a></td></tr>
+             <tr>
+              <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
+              <td style="color:#1bb974;"> {{userInCash(userId,condition.timeType)|default("0.00")}}</td>
+              <td style="color:#ff7b0e;"> {{userOutCash(userId,condition.timeType)|default("0.00")}}</td>
+              <td style="color:blue;"> {{userAccount(userId).cash|default(0)}}</td>
+              <td>
+                <a  class= {% if userAccount(userId) %} "btn btn-default"  {% else %} "btn btn-default disabled"  {% endif %} data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType})}}" href="javascript:;">查看</a>
+              </td>
+            </tr>
           {% endfor %}
         {% endif %}
        

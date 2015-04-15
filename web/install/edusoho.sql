@@ -195,7 +195,9 @@ CREATE TABLE `course` (
   `type` varchar(255) NOT NULL DEFAULT 'normal' COMMENT '课程类型',
   `maxStudentNum` int(11) NOT NULL DEFAULT '0' COMMENT '直播课程最大学员数上线',
   `price` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程价格',
+  `originPrice` FLOAT(10,2) NOT NULL DEFAULT  '0.00' COMMENT '课程人民币原价',
   `coinPrice` FLOAT(10,2) NOT NULL DEFAULT 0.00,
+  `originCoinPrice` FLOAT(10,2) NOT NULL DEFAULT  0 COMMENT '课程虚拟币原价',
   `expiryDay` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程过期天数',
   `showStudentNumType` enum('opened','closed') NOT NULL DEFAULT 'opened' COMMENT '学员数显示模式',
   `serializeMode` enum('none','serialize','finished') NOT NULL DEFAULT 'none' COMMENT '连载模式',
@@ -222,6 +224,8 @@ CREATE TABLE `course` (
   `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
   `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
+  `discountId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '折扣活动ID',
+  `discount` FLOAT( 10, 2 ) NOT NULL DEFAULT  '10' COMMENT  '折扣',
   `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
   `daysOfNotifyBeforeDeadline` INT(10) NOT NULL DEFAULT '0',
   `useInClassroom` ENUM('single','more') NOT NULL DEFAULT 'single' COMMENT '课程能否用于多个班级' , 
@@ -666,6 +670,8 @@ CREATE TABLE `orders` (
   `totalPrice` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '订单总价',
   `isGift` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为赠送礼物',
   `giftTo` varchar(64) NOT NULL DEFAULT '' COMMENT '赠送给用户ID',
+  `discountId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '折扣活动ID',
+  `discount` FLOAT( 10, 2 ) NOT NULL DEFAULT  '10' COMMENT  '折扣',
   `refundId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次退款操作记录的ID',
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
@@ -1316,3 +1322,18 @@ CREATE TABLE `thread_vote` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `postId` (`threadId`,`postId`,`userId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='话题投票表';
+
+DROP TABLE IF EXISTS `crontab_job`;
+CREATE TABLE `crontab_job` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `name` varchar(1024) NOT NULL COMMENT '任务名称',
+  `cycle` enum('once') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
+  `jobClass` varchar(1024) NOT NULL COMMENT '任务的Class名称',
+  `jobParams` text NOT NULL COMMENT '任务参数',
+  `executing` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行状态',
+  `nextExcutedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务下次执行的时间',
+  `latestExecutedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务最后执行的时间',
+  `creatorId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务创建人',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '任务创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
