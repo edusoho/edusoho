@@ -47,6 +47,22 @@ class AnnouncementController extends BaseController
         return $this->render('TopxiaAdminBundle:Announcement:create.html.twig');
     }
 
+    public function editAction(Request $request, $id)
+    {   
+        $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+
+        if ($request->getMethod() == "POST" ) {
+
+            $announcement = $request->request->all();
+
+            $this->getAnnouncementService()->updateAnnouncement($id, $announcement);
+            
+        }
+
+        return $this->render('TopxiaAdminBundle:Announcement:create.html.twig',array(
+            'announcement'=>$announcement));
+    }
+
     public function deleteAction($id)
     {
         $this->getAnnouncementService()->deleteAnnouncement($id);

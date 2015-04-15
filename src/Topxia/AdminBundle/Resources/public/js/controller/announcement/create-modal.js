@@ -49,7 +49,6 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=url]',
-            required: true,
             rule: 'url'
         });
 
