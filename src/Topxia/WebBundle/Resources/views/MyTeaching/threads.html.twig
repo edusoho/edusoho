@@ -36,7 +36,9 @@
 
   <div class="panel-body">
 
-    {% include 'TopxiaWebBundle:MyTeaching:tab.html.twig'%}
+    {% if type == 'discussion' %}
+	    {% include 'TopxiaWebBundle:MyTeaching:tab.html.twig'%}
+    {% endif %}
 
     {% if threads %}
 		

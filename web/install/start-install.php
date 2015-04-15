@@ -229,7 +229,6 @@ function install_step999()
             )
         )));
 
-
         $serviceKernel->setConnection($connection);
 
         $init = new SystemInit();
@@ -355,6 +354,14 @@ class SystemInit
 
     public function initKey()
     {
+        $settings = $this->getSettingService()->get('storage', array());
+        if (!empty($settings['cloud_key_applied'])) {
+            return array(
+                'accessKey' => '您的Key已生成，请直接进入系统',
+                'secretKey' => '---',
+            );
+        }
+
         $applier = new KeyApplier();
 
         $users = $this->getUserService()->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
@@ -367,8 +374,6 @@ class SystemInit
         if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
             return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
         }
-
-        $settings = $this->getSettingService()->get('storage', array());
 
         $settings['cloud_access_key'] = $keys['accessKey'];
         $settings['cloud_secret_key'] = $keys['secretKey'];
