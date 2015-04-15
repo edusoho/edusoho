@@ -174,8 +174,7 @@ class PayCenterController extends BaseController
 
         if($payData['status'] == "created") {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->updateOrder($order["id"], array('data'=>json_encode($payData)));
-            
+            $this->getOrderService()->payCreate($order["id"], $payDate);
             return new Response('success');
         }
 

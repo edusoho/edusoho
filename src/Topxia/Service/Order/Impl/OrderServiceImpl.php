@@ -217,6 +217,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
+    public function payCreate($id, $payDate)
+    {
+        $this->getOrderService()->updateOrder($id, array('data'=>json_encode($payData)));
+        $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
+    }
+
     public function sumOrderPriceByTarget($targetType, $targetId)
     {
         return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'refunding', 'refunded'));
