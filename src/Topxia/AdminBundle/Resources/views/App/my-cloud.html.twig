@@ -59,11 +59,11 @@
             <p class="text-warning">余额不足50元，请尽快充值！</p>
             {% endif %}
             <!--欠费7天预留保护期-->
-            {% if content.account.arrearageDate > 0 and 0<day<7 %}
+            {% if content.account.arrearageDate > 0 and 0 < day and day < 7 %}
             <p class="text-warning">您已欠费，还剩7天的预留保护期，请尽快充值！</p>
             {% endif %}
             <!--欠费冻结-->
-            {% if content.account.arrearageDate > 0 and 10<day %}
+            {% if content.account.arrearageDate > 0 and 10 < day %}
             <p class="text-danger">您已欠费超过10天，教育云服务已暂停，请尽快充值！</p>
             {% endif %}
             {% endif %}
@@ -127,7 +127,7 @@
                     <p class="text-muted">上月流量：{{storage.bill.transfer}}G <span class="text-warning text-sm">(剩余20G）</span></p>
                     <p class="text-muted">云视频包有效期：{{storage.bill.startMonth}}~{{storage.bill.endMonth}}</p>
                     <!--30天过期  -->
-                    {% if -30<storageDate<0 %}
+                    {% if -30 < storageDate and storageDate < 0 %}
                     <p class="text-warning " style="display:none;">云视频视频包将于30天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}
                     <!--已过期 -->
@@ -155,7 +155,7 @@
                     <p class="text-muted">有效期：不可用</p>
                     {% else %}
                     <!--7天警告-->
-                    {% if -30<storageDate<0 %}
+                    {% if -30 < storageDate and storageDate < 0 %}
                     <p class="text-warning">云视频包将于30天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}
                     <!--已过期-->
