@@ -25,12 +25,6 @@ class EduCloudServiceImpl extends BaseService
         return $this->cloudOptions;
     }
 
-    private function createAPIClient()
-    {
-        $options = $this->getCloudOptions();
-        return new CloudAPI($options);
-    }
-
     private function getCloudApi()
     {
         if (empty($this->cloudApi)) {
@@ -45,7 +39,7 @@ class EduCloudServiceImpl extends BaseService
         return $api->get('/accounts');
     }
 
-    public function getUserGeneral()
+    public function getUserOverview()
     {
         $api = $this->getCloudApi();
         $options = $this->getCloudOptions();
@@ -53,6 +47,14 @@ class EduCloudServiceImpl extends BaseService
                 sprintf('/users/%s/overview', $options['accessKey'])
                 );
         return $result;
+    }
+
+    public function getInfo()
+    {
+        $api = $this->getCloudApi();
+        $info = $api->get('/me');
+
+        return $info;
     }
 
     public function applyForSms($name = 'smsHead')
