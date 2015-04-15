@@ -39,7 +39,7 @@
       {% endif %}
 
       {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
-      {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+      {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
       {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
     </div>
   </div>
