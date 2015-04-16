@@ -11,7 +11,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
     protected $allowedOrderFields = array(
         'createdTime',
         'updatedTime',
-        'like'
+        'likeNum'
     );
     public function getNote($id)
     {
@@ -47,6 +47,16 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
     public function deleteNote($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    public function count($id, $field, $diff)
+    {
+        $fields = array('likeNum');
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+        }
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
     public function getNoteByUserIdAndLessonId($userId, $lessonId)

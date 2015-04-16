@@ -18,6 +18,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.lesson_finish' => 'onLessonFinish',
             'course.join' => 'onCourseJoin',
             'course.favorite' => 'onCourseFavorite',
+            'course.note.liked' => 'onCourseNoteLike',
+            'course.note.cancelLike' => 'onCourseNoteCancelLike',
         );
     }
 
@@ -83,6 +85,18 @@ class CourseEventSubscriber implements EventSubscriberInterface
         ));
     }
 
+    public function onCourseNoteLike(ServiceEvent $event)
+    {
+        $note = $event->getSubject();
+        $this->getNoteService()->count($note['id'], 'likeNum', +1);
+    }
+
+    public function onCourseNoteCancelLike(ServiceEvent $event)
+    {
+        $note = $event->getSubject();
+        $this->getNoteService()->count($note['id'], 'likeNum', -1);
+    }
+
     private function simplifyCousrse($course)
     {
         return array(
@@ -110,5 +124,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     private function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
+    }
+
+    private function getNoteService()
+    {
+        return ServiceKernel::instance()->createService('Course.NoteService');
     }
 }
