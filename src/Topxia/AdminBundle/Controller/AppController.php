@@ -51,7 +51,7 @@ class AppController extends BaseController
         // }
 
         $account = isset($content['account']) ? $content['account'] : '';
-        $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($arrearageDate))/(60*60*24) : '';
+        $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
 
         // $user = '' ;
         // $packageDate = '' ;
@@ -63,7 +63,7 @@ class AppController extends BaseController
         // }
 
         $user = isset($content['user'] ? $content['user'] : '' ;
-        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($endDate)/(60*60*24)) : '' ;
+        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
 
         // $storage = '' ;
         // $storageDate = '' ;
@@ -74,7 +74,7 @@ class AppController extends BaseController
         // }
 
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
-        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($storage['endMonth'])/(60*60*24)) : '' ;
+        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
 
         // $live = '' ;
         // if (isset($content['service']['live'])) {
