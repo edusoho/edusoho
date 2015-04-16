@@ -27,15 +27,15 @@ class AppController extends BaseController
     {
        $content = $this->getEduCloudService()->getUserOverview();
 
-       $info = $this->getEduCloudService()->getInfo();
+       $info = $this->getEduCloudService()->getAccountInfo();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
-        $notices = $EduSohoOpenClient->getArticle($info['level']);
-        $notices = json_decode($notices, true);
-var_dump($notices);exit();
+        $articles = $EduSohoOpenClient->getArticles();
+        $articles = json_decode($articles, true);
+// var_dump($notices);exit();
         if ($info['level'] == 'license') {
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    'notices' => $notices,
+                    'articles' => $articles,
                 ));
         }
 
@@ -53,6 +53,9 @@ var_dump($notices);exit();
          $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
 
         $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
+
+        $notices = $EduSohoOpenClient->getNotices();
+        $notices = json_decode($notices, true);
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
                     'content' =>$content,

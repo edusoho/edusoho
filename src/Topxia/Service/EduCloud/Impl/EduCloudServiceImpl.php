@@ -56,7 +56,7 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-    public function getInfo()
+    public function getAccountInfo()
     {
         $api = $this->getCloudApi();
         $info = $api->get('/me');
