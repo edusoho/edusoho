@@ -11,6 +11,8 @@
 {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 </div>
 
+{% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'logs' } %}
+
 {{ web_macro.flash_messages() }}
 
 <form class="well well-sm form-inline">

@@ -1,9 +1,8 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% block title %}开发者设置 - {{ parent() }}{% endblock %}
 
-{% set submenu = 'course_setting' %}
-{% block main_content %}
+{% block content %}
 <div class="page-header"><h1>开发者设置</h1></div>
 
 {{ web_macro.flash_messages() }}
@@ -55,5 +54,18 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 </form>
+
+<div class="alert alert-warning">
+  <h4>注意事项</h4>
+  <ul>
+    <li>此页设置，仅供调试使用，请勿随意修改参数，不然将造成系统不可预知的错误。</li>
+    <li>请保持：<br>
+      「调试」：关闭<br>
+      「应用中心API地址」：空<br>
+      「云服务API地址」：　http://api.edusoho.net 或 空<br>
+      「HLS加密视频」：　开启
+    </li>
+  </ul>
+</div>
 
 {% endblock %}

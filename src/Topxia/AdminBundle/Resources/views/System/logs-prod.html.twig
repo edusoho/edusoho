@@ -1,0 +1,18 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% block title %}系统运行日志 - {{ parent() }}{% endblock %}
+
+{% set menu = 'logs' %}
+
+{% block main %}
+  <div class="page-header"><h1>系统运行日志</h1></div>
+
+  {% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'prod' } %}
+
+  <div class="alert alert-warning">显示最近的２０００条日志信息。</div>
+
+  <pre>
+    {{ logs|nl2br }}
+  </pre>
+
+{% endblock %}

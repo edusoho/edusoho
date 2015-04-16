@@ -3,6 +3,8 @@ namespace Topxia\Service\CloudPlatform;
 
 interface AppService 
 {
+    public function getAppByCode($code);
+    
     public function findApps($start, $limit);
 
     public function findAppCount();
@@ -12,6 +14,8 @@ interface AppService
     public function getMainVersion();
 
     public function registerApp($app);
+
+    public function updateAppVersion($id, $version);
 
     /**
      * 获得应用中心应用列表
@@ -68,8 +72,6 @@ interface AppService
     public function uninstallApp($code);
 
     public function findInstallApp($code);
-
-    public function updateAppVersion($code,$fromVersion,$version);
 
     public function getLoginToken();
 
