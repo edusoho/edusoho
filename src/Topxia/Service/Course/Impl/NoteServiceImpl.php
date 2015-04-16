@@ -92,8 +92,8 @@ class NoteServiceImpl extends BaseService implements NoteService
             'courseId' => 0,
             'lessonId' => 0,
             'content' => '',
+            'status' => 0,
         ));
-
         $note['content'] = $this->purifyHtml($note['content']) ? : '';
         $note['length'] = $this->calculateContnentLength($note['content']);
 
