@@ -32,8 +32,8 @@ class AppController extends BaseController
         $EduSohoOpenClient = new EduSohoOpenClient;
         $notices = $EduSohoOpenClient->getArticle($info['level']);
         $notices = json_decode($notices, true);
-
-        if ($info['level'] == 'none') {
+var_dump($notices);exit();
+        if ($info['level'] == 'license') {
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                     'notices' => $notices,
                 ));
@@ -41,52 +41,16 @@ class AppController extends BaseController
 
         $currentTime = date('Y-m-d', time());
 
-        // $account = '' ;
-        // $day = '';
-        // if (isset($content['account']['arrearageDate'])) {
-        //     $account = $content['account'];
-        //     $arrearageDate = $account['arrearageDate'];
-        //     $diffTime = strtotime($currentTime) - strtotime($arrearageDate);
-        //     $day = $diffTime/(60*60*24);
-        // }
-
         $account = isset($content['account']) ? $content['account'] : '';
         $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
 
-        // $user = '' ;
-        // $packageDate = '' ;
-        // if (isset($content['user']['endDate'])) {
-        //     $user = $content['user'];
-        //     $endDate = $user['endDate'];
-        //     $diffPackageDate = strtotime($currentTime) - strtotime($endDate);
-        //     $packageDate = $diffPackageDate/(60*60*24);
-        // }
-
-        $user = isset($content['user'] ? $content['user'] : '' ;
+        $user = isset($content['user']) ? $content['user'] : '' ;
         $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
-
-        // $storage = '' ;
-        // $storageDate = '' ;
-        // if (isset($content['service']['storage'])) {
-        //     $storage = $content['service']['storage'];
-        //     $diffStorageDate = strtotime($currentTime) - strtotime($storage['endMonth']);
-        //     $storageDate = $diffStorageDate/(60*60*24);
-        // }
 
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
         $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
 
-        // $live = '' ;
-        // if (isset($content['service']['live'])) {
-        //     $live = $scontent['service']['live'];
-        // }
-
          $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
-
-        // $sms = '' ;
-        // if (isset($content['service']['sms'])) {
-        //     $sms = $content['service']['sms'];
-        // }
 
         $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
 

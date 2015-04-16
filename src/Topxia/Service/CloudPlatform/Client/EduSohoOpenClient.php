@@ -11,7 +11,7 @@ class EduSohoOpenClient
         $userAgent = 'Open Edusoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
-         if ($name == 'none') {
+         if ($name == 'license') {
             $url = "http://open.edusoho.com/api/v1/context/articles";
         }else{
             $url = "http://open.edusoho.com/api/v1/context/notice";

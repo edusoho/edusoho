@@ -25,6 +25,13 @@ class EduCloudServiceImpl extends BaseService
         return $this->cloudOptions;
     }
 
+    private function createAPIClient()
+   {
+      $options = $this->getCloudOptions();
+
+        return new CloudAPI($options);
+   }
+
     private function getCloudApi()
     {
         if (empty($this->cloudApi)) {
