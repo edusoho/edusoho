@@ -8,12 +8,15 @@
 {% block main %}
 
 
-<div class="clearfix well well-sm">
   {% if setting('developer.debug') %}
+
+    <div class="clearfix well well-sm">
       {% set btn_menus = permissions("admin_operation_block","button") %}
       {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+    </div>
+    
   {% endif %}
-</div>
+
 
 <table id="block-table" class="table table-striped">
   <thead>

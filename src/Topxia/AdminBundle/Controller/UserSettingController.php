@@ -40,6 +40,8 @@ class UserSettingController extends BaseController
             'registerSort' => array(0 => "email", 1 => "nickname", 2 => "password"),
             'captcha_enabled' => 0,
             'register_protective' => 'none',
+            'nickname_enabled' => 0,
+            'avatar_alert' => 'none',
         );
 
         if (isset($auth['captcha_enabled']) && $auth['captcha_enabled']) {
@@ -64,11 +66,16 @@ class UserSettingController extends BaseController
                 'defaultAvatar','user_name'
             ));
 
+            $setting['nickname_enabled'] = $defaultSetting['nickname_enabled'];
+            $setting['avatar_alert'] = $defaultSetting['avatar_alert'];
+
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default,$defaultSettings,$courseDefaultSetting,$userDefaultSetting);
 
             $this->getSettingService()->set('user_default', $userDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
+
+            $this->getSettingService()->set('user_partner', $setting);
 
             if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
                 $firstSettingTime = $auth['setting_time'];
@@ -159,8 +166,6 @@ class UserSettingController extends BaseController
 
         $default = array(
             'mode' => 'default',
-            'nickname_enabled' => 0,
-            'avatar_alert' => 'none',
             'email_filter' => '',
         );
 
@@ -174,8 +179,6 @@ class UserSettingController extends BaseController
             $data = $request->request->all();
             $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
             $setting = array('mode' => $data['mode'],
-                'nickname_enabled' => $data['nickname_enabled'],
-                'avatar_alert' => $data['avatar_alert'],
                 'email_filter' => $data['email_filter'],
             );
             $this->getSettingService()->set('user_partner', $setting);
