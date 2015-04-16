@@ -352,23 +352,28 @@ class WebExtension extends \Twig_Extension
         return date('Y-m-d', $time);
     }
 
-    public function remainTimeFilter($value)
+    public function remainTimeFilter($value,$timeType='')
     {
+       $remainTime="";     
         $remain = $value - time();
-
-        if ($remain <= 0) {
-            return '0分钟';
+ 
+        if ($remain <= 0  &&  empty($timeType)) {
+          return  $remainTime['second']= '0分钟';
         }
 
-        if ($remain <= 3600) {
-            return round($remain / 60) . '分钟';
+        if ($remain <= 3600 &&  empty($timeType)) {
+           return $remainTime['minutes'] = round($remain / 60) . '分钟';
         }
 
-        if ($remain < 86400) {
-            return round($remain / 3600) . '小时';
+        if ($remain < 86400 &&  empty($timeType)) {
+           return $remainTime['hours'] = round($remain / 3600) . '小时';
         }
-
-        return round($remain / 86400) . '天';
+         $remainTime['day'] = round(($remain < 0 ? 0 : $remain )/ 86400) . '天';
+        if(!empty($timeType)){
+                return  $remainTime[$timeType];
+        }else{
+                return  $remainTime['day'] ;
+        }
     }
 
     public function getCountdownTime($value)
