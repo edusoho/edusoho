@@ -154,6 +154,10 @@ class UserController extends MobileController
         $nickname = $request->get('nickname');
         $password = $request->get('password');
 
+        if (!$this->getAuthService()->isRegisterEnabled()) {
+            return $this->createErrorResponse($request, 'register_closed', '注册已关闭，请联系管理员');
+        }
+
         if (!SimpleValidator::email($email)) {
             return $this->createErrorResponse($request, 'email_invalid', '邮箱地址格式不正确');
         }

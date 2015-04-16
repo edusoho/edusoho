@@ -6,10 +6,10 @@
 {% block title %}{{ getTitle('admin_approval_approving')}}{% endblock %}
 {% block maincontent %}
 
-      <div>
+      <div class="btn-group">
           <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_approval_approving') }}">审核中</a>
 
-          <a type="button" class="btn btn-default btn-sm btn-info" href="{{ path('admin_approval_approved') }}">审核成功</a>
+          <a type="button" class="btn btn-default btn-sm btn-primary" href="{{ path('admin_approval_approved') }}">审核成功</a>
 
       </div>
 

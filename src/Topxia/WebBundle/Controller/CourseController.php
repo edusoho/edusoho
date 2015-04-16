@@ -35,6 +35,7 @@ class CourseController extends BaseController
 			'type' => 'normal',
 			'categoryId' => $category['id'],
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
+			'price' => ($sort == 'free') ? '0.00' : null
 		);
 
 		$paginator = new Paginator(
@@ -210,6 +211,11 @@ class CourseController extends BaseController
 	public function showAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->getCourse($id);
+
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
+            $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
+        }
+
         $code = 'ChargeCoin';
         $ChargeCoin = $this->getAppService()->findInstallApp($code);
         
@@ -220,20 +226,6 @@ class CourseController extends BaseController
         }else{
                 $coursesPrice=0;
         }
-
-        $defaultSetting = $this->getSettingService()->get('default', array());
-
-        if (isset($defaultSetting['courseShareContent'])){
-            $courseShareContent = $defaultSetting['courseShareContent'];
-        } else {
-        	$courseShareContent = "";
-        }
-
-        $valuesToBeReplace = array('{{course}}');
-        $valuesToReplace = array($course['title']);
-        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
-
-
 
 		$nextLiveLesson = null;
 
@@ -295,12 +287,15 @@ class CourseController extends BaseController
 		}
 
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
+			$addCount=0;
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
-				if(in_array($classroomMember["role"], array("student"))) {
+				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
 					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
+					$addCount++;
 				}
 			}
+			$course['studentNum'] += $addCount;
 		}
 
 		$classrooms=array();
@@ -320,10 +315,7 @@ class CourseController extends BaseController
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-			//判断用户deadline到了，但是还是限免课程，将用户deadline延长
-			if( $member['deadline'] < time() && !empty($course['freeStartTime']) && !empty($course['freeEndTime']) && $course['freeEndTime'] >= time()) {
-				$member = $this->getCourseService()->updateCourseMember($member['id'], array('deadline'=>$course['freeEndTime']));
-			}
+
 			if($coursesPrice ==1){
 				$course['price'] =0;
 				$course['coinPrice'] =0;
@@ -384,7 +376,6 @@ class CourseController extends BaseController
 			'currentTime' => $currentTime,
 			'courseReviews' => $courseReviews,
 			'weeks' => $weeks,
-			'courseShareContent'=>$courseShareContent,
 			'consultDisplay' => true,
 			'ChargeCoin'=> $ChargeCoin,
 			'classrooms'=> $classrooms
@@ -610,8 +601,10 @@ class CourseController extends BaseController
 	public function recordLearningTimeAction(Request $request,$lessonId,$time)
 	{	
 		$user = $this->getCurrentUser();
-
-		$this->getCourseService()->waveLearningTime($lessonId,$user['id'],$time);
+		if(!$user->isLogin()){
+			$this->createAccessDeniedException();
+		}
+		$this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
 
 		return $this->createJsonResponse(true);
 	}
@@ -658,25 +651,11 @@ class CourseController extends BaseController
 	{	
 		$user = $this->getCurrentUser();
 
+		if(!$user->isLogin()){
+			$this->createAccessDeniedException();
+		}
+
 		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
-
-		return $this->createJsonResponse(true);
-	}
-
-	public function watchPlayAction(Request $request,$lessonId)
-	{	
-		$user = $this->getCurrentUser();
-
-		$this->getCourseService()->watchPlay($user['id'],$lessonId);
-
-		return $this->createJsonResponse(true);
-	}
-
-	public function watchPausedAction(Request $request,$lessonId)
-	{	
-		$user = $this->getCurrentUser();
-
-		$this->getCourseService()->watchPaused($user['id'],$lessonId);
 
 		return $this->createJsonResponse(true);
 	}
@@ -713,18 +692,6 @@ class CourseController extends BaseController
 
 		$users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-
-        if (isset($defaultSetting['courseShareContent'])){
-            $courseShareContent = $defaultSetting['courseShareContent'];
-        } else {
-        	$courseShareContent = "";
-        }
-
-        $valuesToBeReplace = array('{{course}}');
-        $valuesToReplace = array($course['title']);
-        $courseShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $courseShareContent);
-
 		if (empty($member)) {
 			$member['deadline'] = 0; 
 			$member['levelId'] = 0;
@@ -756,7 +723,6 @@ class CourseController extends BaseController
 			'manage' => $manage,
 			'isNonExpired' => $isNonExpired,
 			'vipChecked' => $vipChecked,
-			'courseShareContent' => $courseShareContent,
 			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
 		));
 	}
@@ -1061,6 +1027,11 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
+
+    protected function getDiscountService() 
+    {
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+    }    
 
     protected function getClassroomService()
     {

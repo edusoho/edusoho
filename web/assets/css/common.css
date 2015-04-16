@@ -38,6 +38,39 @@
   display: none;
 }
 
+
+.social-share-icon-weibo,
+.social-share-icon-qq,
+.social-share-icon-qzone,
+.social-share-icon-weixin
+ {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  *display: inline-block;
+  *zoom: 1;
+  background: url(../img/common/social-share-icons.png) 0 0 no-repeat;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.social-share-icon-qzone {
+  background-position: 0 -00px;
+}
+
+.social-share-icon-weibo {
+  background-position: 0 -30px;
+}
+
+.social-share-icon-weixin {
+  background-position: 0 -60px;
+}
+
+.social-share-icon-qq {
+  background-position: 0 -90px;
+}
+
+
 .social-icon-weibo,
 .social-icon-qq,
 .social-icon-renren,
@@ -1823,4 +1856,46 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 .outflow-num {
   color: #ff7b0e;
+}
+
+/**
+ * jQuery sortable
+ */
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+ul.sortable-list li.placeholder, ol.sortable-list li.placeholder {
+  margin-bottom: 10px 0;
+  width: 100%;
+  height: 40px;
+  background: #FCFFC0;
+  border: 1px dashed #ccc;
+  list-style: none;
+}
+
+tr.placeholder {
+  display: block;
+  background: red;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+tr.placeholder:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-left-color: red;
+    margin-top: -5px;
+    left: -5px;
+    border-right: none;
 }

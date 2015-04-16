@@ -8,10 +8,10 @@
 {% block main %}
 
 
-<div class="clearfix mbs">
+<div class="clearfix well well-sm">
   {% if setting('developer.debug') %}
       {% set btn_menus = permissions("admin_operation_block","button") %}
-                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+      {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
   {% endif %}
 </div>
 

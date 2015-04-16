@@ -13,13 +13,13 @@
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
   </div >
 
-  <div class="mbl">
+  <div class="mbl btn-group">
 
-      <a href="{{ url('admin_app_center', {postStatus: 'all' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-info{% endif %}">全部</a>
+      <a href="{{ url('admin_app_center', {postStatus: 'all' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">全部</a>
 
-      <a href=" {{ url('admin_app_center', {postStatus: 'theme' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-info{% endif %}">主题</a>
+      <a href=" {{ url('admin_app_center', {postStatus: 'theme' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">主题</a>
 
-      <a href=" {{ url('admin_app_center', {postStatus: 'app' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-info{% endif %}">应用</a>
+      <a href=" {{ url('admin_app_center', {postStatus: 'app' }) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">应用</a>
   </div>
 
 

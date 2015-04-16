@@ -99,10 +99,10 @@
   <tr>
     <th>手机号码</th>
     <td>
-      {% if profile.mobile %}
-        {{ profile.mobile }}
+      {% if user.verifiedMobile %}
+        {{user.verifiedMobile|default('')}}<span class="text-success">(已绑定)</span> 
       {% else %}
-        暂无
+        {{ profile.mobile|default('暂无') }}
       {% endif %}
     </td>
   </tr>

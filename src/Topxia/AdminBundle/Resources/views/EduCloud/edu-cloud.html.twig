@@ -22,7 +22,7 @@
           <tr>
             <td>账户余额</td> 
             <td><span>{{account.cash|default(0)}}</span> 元 </td>
-            <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/token_login?token={{token}}&goto=order_recharge" target="_blank"> 去充值 </a></td>
+            <td><a class="btn btn-primary btn-sm" href="{{path('admin_cloud_recharge')}}" target="_blank"> 去充值 </a></td>
           </tr>
         
           <tr>

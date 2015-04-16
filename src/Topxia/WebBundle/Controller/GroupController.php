@@ -95,7 +95,7 @@ class GroupController extends BaseController
             );
 
             $group = $this->getGroupService()->addGroup($user,$group);
-            return $this->redirect($this->generateUrl('group_show',array('id'=>$group['id'])));
+            return $this->redirect($this->generateUrl('group_logo_set',array('id'=>$group['id'])));
         }
 
         return $this->render("TopxiaWebBundle:Group:groupadd.html.twig");

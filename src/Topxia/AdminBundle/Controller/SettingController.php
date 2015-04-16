@@ -298,7 +298,7 @@ class SettingController extends BaseController
             'defaultCoursePictureFileName' => 'coursePicture',
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
+            'groupShareContent' => '我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！',
             'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
             'user_name' => '学员',
             'chapter_name' => '章',
@@ -399,60 +399,6 @@ class SettingController extends BaseController
             'mode' => $setting['mode'],
             'bind' => $bind,
         ));
-    }
-
-    public function developerAction(Request $request)
-    {
-        $developerSetting = $this->getSettingService()->get('developer', array());
-        $storageSetting = $this->getSettingService()->get('storage', array());
-
-        $default = array(
-            'debug' => '0',
-            'app_api_url' => '',
-            'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'hls_encrypted' => '1',
-        );
-
-        $developerSetting = array_merge($default, $developerSetting);
-
-        if ($request->getMethod() == 'POST') {
-            $developerSetting = $request->request->all();
-            $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
-            $this->getSettingService()->set('storage', $storageSetting);
-            $this->getSettingService()->set('developer', $developerSetting);
-
-            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
-            $this->setFlashMessage('success', '开发者已保存！');
-        }
-
-        return $this->render('TopxiaAdminBundle:System:developer-setting.html.twig', array(
-            'developerSetting' => $developerSetting,
-        ));
-    }
-
-    public function modifyVersionAction(Request $request)
-    {
-        $fromVersion = $request->query->get('fromVersion');
-        $version = $request->query->get('version');
-        $code = $request->query->get('code');
-
-        if (empty($fromVersion) || empty($version) || empty($code)) {
-            exit('注意参数为:<br><br>code<br>fromVersion<br>version<br><br>全填，不能为空！');
-        }
-
-        $appCount = $this->getAppservice()->findAppCount();
-        $apps = $this->getAppservice()->findApps(0, $appCount);
-        $appsCodes = ArrayToolkit::column($apps, 'code');
-
-        if (!in_array($code, $appsCodes)) {
-            exit('code 填写有问题！请检查!');
-        }
-
-        $fromVersionArray['fromVersion'] = $fromVersion;
-        $versionArray['version'] = $version;
-        $this->getAppservice()->updateAppVersion($code, $fromVersionArray, $versionArray);
-
-        return $this->redirect($this->generateUrl('admin_app_upgrades'));
     }
 
     private function getCourseService()

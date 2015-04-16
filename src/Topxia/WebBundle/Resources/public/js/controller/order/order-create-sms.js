@@ -24,6 +24,7 @@ define(function(require, exports, module) {
 	            smsValidator.addItem({
 	                element: '[name="sms_code_modal"]',
 	                required: true,
+	                triggerType: 'submit',
 	                rule: 'integer fixedLength{len:6} remote',
 	                display: '短信验证码'           
 	            });

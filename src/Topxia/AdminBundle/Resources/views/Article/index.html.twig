@@ -12,13 +12,6 @@
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
 </div>
 
-<div class="clearfix mbs">
-
-	{% set btn_menus = permissions("admin_operation_article","button") %}
-    {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
-
-</div>
-
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
@@ -41,7 +34,10 @@
 		  {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--发布状态--') }}
 		</select>
 	</div>
-	<button class="btn btn-primary pull-right" type="submit">搜索</button>
+	<button class="btn btn-primary" type="submit">搜索</button>
+	{% set btn_menus = permissions("admin_operation_article","button") %}
+    {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+
 </form>
 
 <div id="aticle-table-container">

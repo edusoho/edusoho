@@ -80,6 +80,12 @@ interface CourseService
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
 
+	public function setCoursePrice($courseId, $currency, $price);
+
+	public function setCoursesPriceWithDiscount($discountId);
+
+	public function revertCoursesPriceWithDiscount($discountId);
+
 	/**
 	 * 删除课程
 	 */
@@ -165,19 +171,19 @@ interface CourseService
 
 	public function analysisLessonViewDataByTime($startTime,$endTime,$conditions);
 
-	public function waveLearningTime($lessonId,$userId,$time);
+	public function waveLearningTime($userId, $lessonId, $time);
 
 	public function findLearnsCountByLessonId($lessonId);
 
 	public function waveWatchingTime($userId,$lessonId,$time);
 
-	public function watchPlay($userId,$lessonId);
-
-	public function watchPaused($userId,$lessonId);
-
 	public function searchLearnTime($conditions);
 
 	public function searchWatchTime($conditions);
+
+	public function checkWatchNum($userId, $lessonId);
+
+	public function waveWatchNum($userId, $lessonId, $diff);
 
 
 	/**

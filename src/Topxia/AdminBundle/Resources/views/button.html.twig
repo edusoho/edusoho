@@ -18,17 +18,17 @@
                 {% endfor %}
 
                 {% if menu.mode == 'modal' %}
-                  <a data-url="{{path(router_name,param)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                  <a data-url="{{path(router_name,param)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-success btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% else %}
-                  <a href="{{path(router_name,param)}}" class=" {{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}" {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                  <a href="{{path(router_name,param)}}" class=" {{menu.class|default(' btn btn-success btn-sm pull-right mls mbs')}}" {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% endif %}
 
               {% else %}
 
                 {% if menu.mode == 'modal' %}
-                  <a data-url="{{path(router_name,router_params)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                  <a data-url="{{path(router_name,router_params)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-success btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% else %}
-                  <a href="{{path(router_name,router_params)}}" class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}"  {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                  <a href="{{path(router_name,router_params)}}" class="{{menu.class|default(' btn btn-success btn-sm pull-right mls mbs')}}"  {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 {% endif %}
 
               {% endif %}
@@ -36,9 +36,9 @@
            
             {% else %}
               {% if menu.mode == 'modal' %}
-                <a data-url="{{path(router_name)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <a data-url="{{path(router_name)}}" data-toggle="modal" data-target="#modal"  class="{{menu.class|default(' btn btn-success btn-sm pull-right mls ')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
               {% else %}
-                <a href="{{path(router_name)}}" class="{{menu.class|default(' btn btn-info btn-sm pull-right mls mbs')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <a href="{{path(router_name)}}" class="{{menu.class|default(' btn btn-success btn-sm pull-right mls ')}}  " {% if menu.blank|default(false) %}target=blank{% endif %} >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
               {% endif %}
             {% endif %}
           

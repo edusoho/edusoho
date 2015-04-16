@@ -93,7 +93,7 @@
 							<label for="profile_mobile" class="col-md-2 control-label">手机号码</label>
 							<div class="col-md-7 controls">
 								<div class="control-text">
-									{{ user.verifiedMobile|default('') }}
+									{{ blur_phone_number(user.verifiedMobile|default('')) }}
 									<small class="text-success">(已绑定)</small>
 								</div>
 							</div>
@@ -107,13 +107,15 @@
 								<div class="help-block" style="display:none"></div>
 							</div>
 						</div>
-						<div class="help-block approval">
-							<label class="col-md-2 control-label"></label>
-							<p class="text-warning"> 
-							还没绑定手机号，<strong><a href="{{path('settings_bind_mobile')}}">前去绑定</a>。
-							</strong>
-							</p>
-						</div>
+						{% if setting('cloud_sms.sms_enabled', '') == '1' %}
+							<div class="help-block">
+								<label class="col-md-2 control-label"></label>
+								<p class="text-warning"> 
+								还没绑定手机号，<strong><a href="{{path('settings_bind_mobile')}}">前去绑定</a>。
+								</strong>
+								</p>
+							</div>
+						{% endif %}
 					{% endif %}
 
 					{# <div class="form-group form-forIam-group form-student-group">

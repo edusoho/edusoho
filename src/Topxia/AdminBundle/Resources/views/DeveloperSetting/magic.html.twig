@@ -1,0 +1,35 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% block title %}Feature Magic Setting - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="page-header"><h1>Feature Magic Setting</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <textarea class="form-control" rows="10" name="setting">{{ setting }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-danger">
+  <h4>注意事项</h4>
+  <ul>
+    <li>此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！</li>
+  </ul>
+</div>
+
+{% endblock %}

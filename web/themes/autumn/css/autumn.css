@@ -142,18 +142,9 @@ a:hover {
     margin:10px 20px 20px;
 }
 
-.autumn-course-grid .price {
-    float: right;
-    color: #f78a4b;
-    font-weight: bold;
+.autumn-course-grid .course-price-info {
+    margin:10px 20px;
 }
-
-.autumn-course-grid .price-show {
-    display:inline;
-    color: #f78a4b;
-    font-weight: bold;
-}
-
 
 .autumn-course-list {
 
@@ -688,10 +679,12 @@ a:hover {
 .homepage .hot-group p {
     margin-bottom: 10px;
 }
+
 .banner-announcement {
     background: #ebf6f1;
-    height: 40px;
+    height: 40px; 
 }
+
 .banner-volume {
     line-height: 25px;
     vertical-align: middle;
@@ -699,3 +692,4 @@ a:hover {
     color: #3e3e3e;
     font-size: 14px;
 }
+

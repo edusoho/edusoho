@@ -81,6 +81,10 @@ class LoginController extends BaseController
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
+        if(strpos($targetPath, '/app.php') === 0) {
+            $targetPath = str_replace('/app.php', '', $targetPath);
+        }
+
         return $targetPath;
     }
 

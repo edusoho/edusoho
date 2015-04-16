@@ -32,12 +32,30 @@ class BuildThemeAppCommand extends BaseCommand
         $this->_buildDistPackage($name);
     }
 
+    private function _copyScript($themeDir, $distDir)
+    {
+        $scriptDir = "{$themeDir}/Scripts";
+        $distScriptDir = "{$distDir}/Scripts";
+        if ($this->filesystem->exists($scriptDir)) {
+            $this->filesystem->mirror($scriptDir, $distScriptDir);
+            $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
+        } else {
+            $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
+        }
+
+        $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
+
+        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+    }
+
     private function _buildDistPackage($name)
     {
         $themeDir = $this->getThemeDirectory($name);
 
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
+        $this->_copyScript($themeDir, $distDir);
+        $this->_copyMeta($themeDir, $distDir);
         file_put_contents($distDir . '/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
         $this->_zip($distDir);
@@ -60,6 +78,13 @@ class BuildThemeAppCommand extends BaseCommand
         } else {
             $this->output->writeln("<comment>    * 移除'.git'目录： 无");
         }
+    }
+
+    private function _copyMeta($themeDir, $distDir)
+    {
+        $source = "{$themeDir}/theme.json";
+        $target = "{$distDir}/theme.json";
+        $this->filesystem->copy($source, $target);
     }
 
     private function _zipPackage($distDir)
