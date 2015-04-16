@@ -171,7 +171,10 @@ class UploadFileController extends BaseController
         }
 
         if (empty($file)) {
-            throw new \RuntimeException('文件不存在');
+            $result = array(
+                "error"->"文件不存在"
+            );
+            return $this->createJsonResponse($result);
         }
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
 
