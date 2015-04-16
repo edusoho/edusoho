@@ -22,19 +22,8 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $this->getNoteDao()->findNotesByUserIdAndCourseId($userId, $courseId);
     }
 
-    public function searchNotes($conditions, $sort, $start, $limit)
+    public function searchNotes($conditions, $orderBy, $start, $limit)
     {
-        switch ($sort) {
-            case 'created':
-                $orderBy = array('createdTime', 'DESC');
-                break;
-            case 'updated':
-                $orderBy =  array('updatedTime', 'DESC');
-                break;
-            default:
-                throw $this->createServiceException('参数sort不正确。');
-        }
-
         $conditions = $this->prepareSearchNoteConditions($conditions);
         return $this->getNoteDao()->searchNotes($conditions, $orderBy, $start, $limit);
     }
