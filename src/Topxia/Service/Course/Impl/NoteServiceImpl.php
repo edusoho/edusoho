@@ -94,7 +94,9 @@ class NoteServiceImpl extends BaseService implements NoteService
         if (!$existNote) {
             $note['userId'] = $user['id'];
             $note['createdTime'] = time();
+            $note['updatedTime'] = time();
             $note = $this->getNoteDao()->addNote($note);
+            $this->getDispatcher()->dispatch('course.note.create', new ServiceEvent($note));
         } else {
             $note['updatedTime'] = time();
             $note = $this->getNoteDao()->updateNote($existNote['id'], $note);
@@ -122,6 +124,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         $this->getNoteDao()->deleteNote($id);
+        $this->getDispatcher()->dispatch('course.note.delete', new ServiceEvent($note));
 
         $this->getCourseService()->setMemberNoteNumber(
             $note['courseId'],

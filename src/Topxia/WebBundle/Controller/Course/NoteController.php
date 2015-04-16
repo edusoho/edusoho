@@ -45,6 +45,7 @@ class NoteController extends BaseController
             'notes' => $notes,
             'noteLikes' => $noteLikes,
             'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
