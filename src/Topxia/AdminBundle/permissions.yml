@@ -718,12 +718,19 @@ admin_logs:
     active: logs
     group: 2
 admin_logs_query:
-    name: 查阅
+    name: 系统操作日志
     parent: admin_logs
     router_name: admin_logs
     mode: page
     type: tab
-    active: logs_query
+    active: logs
+admin_logs_prod:
+    name: 程序运行日志
+    parent: admin_logs
+    router_name: admin_logs_prod
+    mode: page
+    type: tab
+    active: logs_prod
 admin_app_my_cloud:
     name: 我的教育云
     parent: admin_app
