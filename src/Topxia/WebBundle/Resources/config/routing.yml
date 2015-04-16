@@ -1176,6 +1176,10 @@ user_learning_classrooms:
     pattern:  /user/{id}/learning/classrooms
     defaults: { _controller: TopxiaWebBundle:User:learning }
 
+user_card_show:
+    pattern:  /user/{userId}/card/show
+    defaults: { _controller: TopxiaWebBundle:User:cardShow }
+
 message_create:
     pattern: /message/create/{toId}
     defaults: { _controller: TopxiaWebBundle:Message:create }
