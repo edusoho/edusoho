@@ -1,4 +1,7 @@
+html {
 
+  overflow-y : scroll;
+}
 
 
 .init-state {color:gray !important;}
@@ -234,11 +237,6 @@ input.LargeInput {width: 600px;}
   margin-left: 22px;
   font-weight: normal;
   font-size: 14px;
-}
-
-.admin-star {
-  color:#FF9900;
-  background-color:#fff
 }
 
 .admin-down {
