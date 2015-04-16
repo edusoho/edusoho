@@ -5,7 +5,7 @@ class CloudAPI
 {
     const VERSION = 'v1';
 
-    protected $userAgent = 'Edusoho Cloud API Client 1.0';
+    protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
     protected $connectTimeout = 10;
 

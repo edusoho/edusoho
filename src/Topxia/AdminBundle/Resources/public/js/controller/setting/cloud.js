@@ -96,6 +96,7 @@ define(function(require, exports, module) {
                         data.convertor = 'HLSVideo';
                     }
                 }
+                data.lazyConvert = 1;
 
                 $.ajax({
                     url: this.element.data('paramsUrl'),

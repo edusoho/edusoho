@@ -16,7 +16,12 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {   
-        $personDynamics=$this->getStatusService()->searchStatuses(array(), array('createdTime','DESC'), 0, $arguments['count']);
+        $personDynamics=$this->getStatusService()->searchStatuses(
+            array('private' => 0), 
+            array('createdTime','DESC'), 
+            0, 
+            $arguments['count']
+        );
 
         $ownerIds = ArrayToolkit::column($personDynamics, 'userId');
 

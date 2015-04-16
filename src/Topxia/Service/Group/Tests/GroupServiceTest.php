@@ -135,34 +135,6 @@ class GroupServiceTest extends BaseTestCase
 
     }
 
-    public function testSearchGroups()
-    {
-        $user=$this->createUser();
-        $textGroup1 = array(
-            'title' => 'textgroup1',
-        );
-        $textGroup2 = array(
-            'title' => 'textgroup2',
-        );
-        $group1=$this->getGroupService()->addGroup($user,$textGroup1);
-        $group2=$this->getGroupService()->addGroup($user,$textGroup2);
-
-        $groups=$this->getGroupService()->searchGroups(array('title'=>$textGroup1['title']),array('createdTime','desc'),0,1);
-
-        $this->assertTrue(is_array($groups));
-
-        $this->assertEquals($group1,$groups[0]);
-
-        $groups=$this->getGroupService()->searchGroups(array('title'=>'nnnnnnn'),array('createdTime','desc'),0,1);
-
-        $this->assertEquals(array(),$groups);
-
-        $groups=$this->getGroupService()->searchGroups(array('??'=>'nnnnnnn'),array('createdTime','desc'),0,1);
-        
-        $this->assertEquals($group1,$groups[0]);
-
-    }   
-
     public function testSearchGroupsCount()
     {
         $user=$this->createUser();

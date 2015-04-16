@@ -25,6 +25,13 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         return $this->getAnnouncement($this->getConnection()->lastInsertId());
     }
 
+    public function updateAnnouncement($id, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+
+        return $this->getAnnouncement($id);
+    }
+    
     public function deleteAnnouncement($id)
     {
         $this->getConnection()->delete($this->table,array('id'=>$id));

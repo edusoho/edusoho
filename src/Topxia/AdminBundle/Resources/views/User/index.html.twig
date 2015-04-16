@@ -8,15 +8,6 @@
 {% set script_controller = 'user/list' %}
 
 {% block maincontent %}
-  
-
-<div class="clearfix mbs">
-
-  {% set menus = permissions("admin_user_show","button") %}
-
-  {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus} %}
-
-</div>
 
 {{ web_macro.flash_messages() }}
 
@@ -48,6 +39,9 @@
 
         {% endif %}
     {% endif %}
+    {% set menus = permissions("admin_user_show","button") %}
+
+    {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus} %}
 
   </form>
 

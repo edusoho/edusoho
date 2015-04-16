@@ -18,6 +18,12 @@ class AppServiceImpl extends BaseService implements AppService
 
     private $client;
 
+
+    public function getAppByCode($code)
+    {
+        return $this->getAppDao()->getAppByCode($code);
+    }
+
     public function findApps($start, $limit)
     {
         return $this->getAppDao()->findApps($start, $limit);
@@ -57,7 +63,7 @@ class AppServiceImpl extends BaseService implements AppService
             throw $this->createServiceException('参数缺失,注册APP失败!');
         }
 
-        $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version'));
+        $app = ArrayToolkit::parts($app, array('code', 'name', 'description', 'version', 'type'));
 
         $app['fromVersion'] = $app['version'];
         $app['description'] = empty($app['description']) ? '' : $app['description'] ;
@@ -99,7 +105,7 @@ class AppServiceImpl extends BaseService implements AppService
                 'coursePublishedCount' => (string) $coursePublishedCount,
                 'courseUnpublishedCount' => (string) $courseUnpublishedCount,
                 'courseCount' => (string) ($coursePublishedCount + $courseUnpublishedCount),
-                'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'notFree' => true)),
+                'moneyCourseCount' => (string) $this->getCourseService()->searchCourseCount(array('status' => 'published', 'originPrice_GT' => '0.00')),
                 'lessonCount' => (string) $this->getCourseService()->searchLessonCount(array()),
                 'courseMemberCount' => (string) $this->getCourseService()->searchMemberCount(array('role' => 'student')),
                 'mobileLoginCount' => (string) $this->getUserService()->searchTokenCount(array('type'=>'mobile_login')),
@@ -495,12 +501,15 @@ class AppServiceImpl extends BaseService implements AppService
 
     }
 
-    public function updateAppVersion($code,$fromVersion,$version)
+    public function updateAppVersion($id, $version)
     {
-        $this->getAppDao()->updateAppVersion($code,$version);
-        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
-        
-        return true;
+        $app = $this->getAppDao()->getApp($id);
+        if (empty($app)) {
+            throw $this->createServiceException("App #{$id}不存在，更新版本失败！");
+        }
+
+        $this->getLogService()->info('system', 'update_app_version', "强制更新应用「{$app['name']}」版本为「{$version}」");
+        return $this->getAppDao()->updateApp($id, array('version' => $version));
     }
 
     public function getLoginToken()
@@ -733,6 +742,11 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }

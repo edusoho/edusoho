@@ -14,7 +14,8 @@
         <div class="cycle-pager"></div>
         {{ blocks.home_top_banner|raw }}
       </div>
-      {% set announcements = data('Announcement',{ count:3 }) %}
+    {% endif %}
+    {% set announcements = data('Announcement',{ count:3 }) %}
         {% if announcements %}
           <div class=" banner-announcement">
             <div class="col-md-1">
@@ -22,13 +23,11 @@
             </div>
             <div class="row col-md-10">
               {% for announcement in announcements %}
-                  <div class="col-md-4 banner-volume"><a class="open-article-link" href="{{announcement.url}}" target="_blank">{{announcement.title|sub_text(20)}}</a></div>
+                  <div class="col-md-4 banner-volume"><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(18)}}</a></div>
               {% endfor %}
             </div>
           </div>
-      {% endif %}
     {% endif %}
-
     <ul class="homepage-category-nav">
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
@@ -53,7 +52,7 @@
                  {% if loop.index <= 5%}
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                      <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
                     </a>
                     <div class="class-body">
                       <h3 class="class-title">
@@ -322,7 +321,7 @@
       <div class="col-md-3">
         {# 在学课程 #}
         {% if app.user %}
-          {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+          {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
         {% endif %}
 
         {# 热门标签 #}    
@@ -497,26 +496,12 @@
 
             <span class="metas clearfix">
             {% if setting('course.coursesPrice') == 0 %}
-              <span style="text-align:left;">
-     
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                <span class="price-num mbm" style="display:block">价格：{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                </span>
-              {% else %}
-                <span class="price-num mbm">价格：{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
-                </span>
-              {% endif %}
-              </span>
+              <div class="price-block">
+                 {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+              </div>
             {% endif %}
 
-              {% if setting('course.show_student_num_enabled', '1') == 1 %}
-              <span class="student-col">
-                <span class="meta-label">学生</span>
-                <span class="student-num">{{ course.studentNum }}人</span>
-              </span>
-              {% endif %}
-
-              <span class="review-col pull-left" style="text-align:left;">
+              <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
                   <span class="review-rating">
@@ -529,6 +514,13 @@
                   </span>
                 {% endif %}
               </span>
+
+              {% if course.showStudentNumType == 'opened' %}
+              <span class="student-col">
+                <span class="meta-label">学生</span>
+                <span class="student-num">{{ course.studentNum }}人</span>
+              </span>
+              {% endif %}
 
             </span>
           {% endif %}

@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 
     require('ckeditor');
     var Validator = require('bootstrap.validator');
-    var Share=require('../../util/share.js');
     require('common/validator-rules').inject(Validator);
 
     exports.run = function() {

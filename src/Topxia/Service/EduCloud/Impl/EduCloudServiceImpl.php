@@ -115,6 +115,12 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
+    public function getLiveCourseStatus()
+    {
+        $api = $this->getCloudApi();
+        return $api->get('/lives/account');
+    }    
+
     public function getCloudSmsKey($key)
     {
         $setting = $this->createService('System.SettingService')->get('cloud_sms', array());

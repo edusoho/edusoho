@@ -86,10 +86,11 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     }
 
     public function updateFileUsedCount($fileIds, $offset){
-        $fileIdsCollection = "'" . implode("', '", $fileIds) . "'";
-        $sql = "UPDATE {$this->table} SET usedCount = usedCount + ? where id in ({$fileIdsCollection})";
 
-        return $this->getConnection()->executeUpdate($sql, array($offset));
+        $marks = str_repeat('?,', count($fileIds) - 1) . '?';
+        $sql = "UPDATE {$this->table} SET usedCount = usedCount + ? where id in ({$marks})";
+
+        return $this->getConnection()->executeUpdate($sql, array_merge(array($offset), $fileIds));
     }
 
     public function getFileByTargetType($targetType)
@@ -113,11 +114,8 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->andWhere('targetId = :targetId')
             ->andWhere('type = :type')
             ->andWhere('storage = :storage')
-            ->andWhere('filename LIKE :filenameLike');
-         
-		if (isset ( $conditions ['createdUserIds'] )) {
-			$builder->andStaticWhere ( 'createdUserId in (' . $conditions ['createdUserIds'] . ')' );
-		}
+            ->andWhere('filename LIKE :filenameLike')
+            ->andWhere('createdUserId in ( :createdUserIds )');
 
          return $builder;
     }

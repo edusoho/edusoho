@@ -86,6 +86,14 @@
   app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
+  app.crontab = '{{ path('common_crontab') }}';
+  {% set crontabNextExecutedTime = setting('crontab_next_executed_time', 0) %}
+  {% if crontabNextExecutedTime > 0 %}
+    {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
+      app.scheduleCrontab = '{{ path('common_crontab') }}';
+    {% endif %}
+  {% endif %}
+
   var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
 
   app.config = {{

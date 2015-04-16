@@ -106,8 +106,8 @@ class CoinController extends BaseController
 
             }
 
-            $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
-
+            $courses=$this->getCourseService()->searchCourses(array('originPrice_GT'=>'0.00'), 'latest', 0 ,99999);
+            
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
             'set' => $set,
             'courses'=>$courses
@@ -147,7 +147,7 @@ class CoinController extends BaseController
                 $coinSettings['price_type']="Coin";
                 $coinSettings['cash_model']="currency";
                 if (isset($data['course-cash'])){
-                    $this->updateCoursesCashPrice($data["course-cash"]);
+                    $this->updateCoursesCoinPrice($data["course-cash"]);
                 }
             }
 
@@ -159,19 +159,17 @@ class CoinController extends BaseController
         )));
     }
 
-    private function updateCoursesPrice($data,$rate)
+    private function updateCoursesPrice($data)
     {   
         foreach ($data as $key => $value) {
-            
-            $this->getCourseService()->updateCourse($key,array('price'=>$value,'coinPrice'=>$value*$rate));
+            $this->getCourseService()->setCoursePrice($key, 'default', $value);
         }
     }
 
-    private function updateCoursesCashPrice($data)
+    private function updateCoursesCoinPrice($data)
     {
         foreach ($data as $key => $value) {
-           
-            $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
+            $this->getCourseService()->setCoursePrice($key, 'coin', $value);
         }
     }
 
@@ -782,15 +780,6 @@ class CoinController extends BaseController
         return $condition;
     }
 
-    private function processPrice($priceType, $cashRate)
-    {
-        if($priceType=="RMB") {
-            $this->getCourseService()->updatePrice($cashRate);
-        } else if($priceType=="Coin" ) {
-            $this->getCourseService()->updateCoinPrice($cashRate);
-        }
-    }
-
     private function filterCondition($conditions)
     {
         if  (isset($conditions['keywordType'])) {
@@ -871,8 +860,4 @@ class CoinController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-
-
-
-
 }

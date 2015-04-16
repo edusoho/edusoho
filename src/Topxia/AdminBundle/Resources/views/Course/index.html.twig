@@ -20,9 +20,6 @@
   {% if liveSetEnabled == 1 %}
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm pull-right mls" target="_blank">创建直播课程</a>
   {% endif %}
-  {% set menus = permissions('admin_course_show','button') %}
- 
- {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
 
     </div>
   </div>
@@ -45,6 +42,9 @@
       <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
     </div>
     <button class="btn btn-primary">搜索</button>
+    {% set menus = permissions('admin_course_show','button') %}
+ 
+    {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
   </form>
 
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
