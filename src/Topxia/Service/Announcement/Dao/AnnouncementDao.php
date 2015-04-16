@@ -3,7 +3,7 @@ namespace Topxia\Service\Announcement\Dao;
 
 interface AnnouncementDao
 {
-	public function searchAnnouncements($conditions,$orderBys,$start,$limit);
+	public function searchAnnouncements($conditions,$orderBy,$start,$limit);
 
 	public function getAnnouncement($id);
 

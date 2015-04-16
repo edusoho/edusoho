@@ -9,9 +9,11 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 {
     protected $table = 'announcement';
 
-    public function searchAnnouncements($conditions, $orderBys, $start, $limit)
+    public function searchAnnouncements($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $orderBys = $this->filterSort($orderBy);
+
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
@@ -59,5 +61,22 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
             ->andWhere("targetId = :targetId");
             
         return $builder;
+    }
+
+    private function filterSort($sort)
+    {
+        switch ($sort) {
+
+            case 'createdTime':
+                $orderBys = array(
+                    array('createdTime', 'DESC'),
+                );
+                break;
+
+            default:
+                throw $this->createDaoException('参数sort不正确。');
+        }
+
+        return $orderBys;
     }
 }
