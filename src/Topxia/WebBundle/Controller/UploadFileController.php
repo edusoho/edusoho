@@ -141,7 +141,12 @@ class UploadFileController extends BaseController
     public function cloudConvertCallback2Action(Request $request)
     {
         $file = $this->cloudConvertCallback2($request);    
-
+        if(empty($file)) {
+            $result = array(
+                "error" => "文件不存在"
+            );
+            return $this->createJsonResponse($result);
+        }
         return $this->createJsonResponse($file['metas2']);
     }
 
@@ -171,10 +176,7 @@ class UploadFileController extends BaseController
         }
 
         if (empty($file)) {
-            $result = array(
-                "error" => "文件不存在"
-            );
-            return $this->createJsonResponse($result);
+            return null;
         }
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
 
@@ -209,10 +211,15 @@ class UploadFileController extends BaseController
         }
 
         $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
-        if (empty($file)) {
+
+        if(empty($file)) {
             $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
-            throw new \RuntimeException('文件不存在');
+            $result = array(
+                "error" => "文件不存在"
+            );
+            return $this->createJsonResponse($result);
         }
+
 
         $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
 
