@@ -10,6 +10,7 @@ use Topxia\Service\Util\CloudClientFactory;
 
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 
 class AppController extends BaseController
 {
@@ -24,76 +25,50 @@ class AppController extends BaseController
 
     public function myCloudAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        $api = $this->createAPIClient();
-        $info = $api->get('/me');
+       $content = $this->getEduCloudService()->getUserOverview();
 
-        if (!empty($info['accessKey'])) {
-            $settings = $this->getSettingService()->get('storage', array());
-            if (empty($settings['cloud_key_applied'])) {
-                $settings['cloud_key_applied'] = 1;
-                $this->getSettingService()->set('storage', $settings);
-            }
-            $this->refreshCopyright($info);
-        } else {
-            $settings = $this->getSettingService()->get('storage', array());
-            $settings['cloud_key_applied'] = 0;
-            $this->getSettingService()->set('storage', $settings);
+       $info = $this->getEduCloudService()->getAccountInfo();
+
+        $EduSohoOpenClient = new EduSohoOpenClient;
+        if (empty($info['level']) or $info['level'] == 'none') {
+                $articles = $EduSohoOpenClient->getArticles();
+                $articles = json_decode($articles, true);
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'articles' => $articles,
+                ));
         }
 
-        $currentHost = $request->server->get('HTTP_HOST');
+        $currentTime = date('Y-m-d', time());
 
-        if(isset($info['licenseDomains'])) {
-            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
-        }
+        $account = isset($content['account']) ? $content['account'] : '';
+        $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
 
-        $userAgent = 'Open Edusoho App Client 1.0';
-        $connectTimeout = 10;
-        $timeout = 10;
-        $url = "http://open.edusoho.com/api/v1/context/notice";
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_URL, $url );
-        $notices = curl_exec($curl);
-        curl_close($curl);
+        $user = isset($content['user']) ? $content['user'] : '' ;
+        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
+
+        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
+        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
+
+         $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
+
+        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
+
+        $notices = $EduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
 
-        // $factory = new CloudClientFactory();
-        // $client = $factory->createClient();
-
-        // $result = $client->getBills($client->getBucket());
-
-        // $loginToken = $this->getAppService()->getLoginToken();
-
-        if ($info['levelName'] == '1商业授权') {
-                return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-                    'user'=>$user,
+        return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
+                    'content' =>$content,
+                    'packageDate' =>$packageDate,
+                    'storageDate' =>$storageDate,
+                    'day' =>$day,
+                    'storage' =>$storage,
+                    'live' =>$live,
+                    'user' =>$user,
+                    'sms' =>$sms,
+                    'account' =>$account,
                     "notices"=>$notices,
-                    // 'money' => $result['money'],
-                    // 'bills' => $result['bills'],
-                    // 'token' => $loginToken["token"],
                     'info' => $info,
-                    'currentHost' => $currentHost,
-                    'isLocalAddress' => $this->isLocalAddress($currentHost),
                 ));
-        }else{
-                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    'user'=>$user,
-                    "notices"=>$notices,
-                    // 'money' => $result['money'],
-                    // 'bills' => $result['bills'],
-                    // 'token' => $loginToken["token"],
-                    'info' => $info,
-                    'currentHost' => $currentHost,
-                    'isLocalAddress' => $this->isLocalAddress($currentHost),
-                ));
-        }
-
-
     }
 
     private function isLocalAddress($address)
@@ -288,4 +263,9 @@ class AppController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 }
