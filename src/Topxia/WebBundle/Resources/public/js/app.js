@@ -71,7 +71,10 @@ define(function(require, exports, module) {
 		}
 	});
 
-
+    if (app.scheduleCrontab) {
+        $.post(app.scheduleCrontab);
+    }
+    
     floatConsult();
 
     function floatConsult()

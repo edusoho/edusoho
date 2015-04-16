@@ -105,6 +105,7 @@ class MyTeachingController extends BaseController
         if (empty($myTeachingCourseCount)) {
             return $this->render('TopxiaWebBundle:MyTeaching:threads.html.twig', array(
                 'type'=>$type,
+                'threadType' => 'course',
                 'threads' => array()
             ));
         }
@@ -138,18 +139,14 @@ class MyTeachingController extends BaseController
             'users'=> $users,
             'courses' => $courses,
             'lessons' => $lessons,
-            'type'=>$type
+            'type'=>$type,
+            'threadType' => 'course',
     	));
 	}
 
     protected function getCourseThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
     protected function getUserService()
@@ -171,5 +168,10 @@ class MyTeachingController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
+     protected function getThreadService()
+     {
+          return $this->getServiceKernel()->createService('Thread.ThreadService');
+     }
     
 }
