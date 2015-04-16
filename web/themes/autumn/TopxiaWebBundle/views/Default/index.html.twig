@@ -18,21 +18,20 @@
       </a>
 
     </div>      
-    {% set announcements = data('Announcement',{ count:3 }) %}
-        {% if announcements %}
-          <div class=" banner-announcement">
-            <div class="col-md-1">
-              <span class="glyphicon glyphicon-volume-up pull-right banner-volume"></span>
-            </div>
-            <div class="row col-md-10">
-              {% for announcement in announcements %}
-                  <div class="col-md-4 banner-volume"><a class="open-article-link"{% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(20)}}</a></div>
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
   {% endif %}
-
+  {% set announcements = data('Announcement',{ count:3 }) %}
+      {% if announcements %}
+        <div class=" banner-announcement">
+          <div class="col-md-1">
+            <span class="glyphicon glyphicon-volume-up pull-right banner-volume"></span>
+          </div>
+          <div class="row col-md-10">
+            {% for announcement in announcements %}
+                <div class="col-md-4 banner-volume"><a class="open-article-link"{% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(20)}}</a></div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
 {% endblock %}
 
 {% block stylesheets %}
