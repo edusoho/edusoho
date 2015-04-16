@@ -31,7 +31,7 @@ class AnnouncementController extends BaseController
 			'targetId' => $targetId
 		);
 
-		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, 'createdTime', 0, 10000);
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10000);
 		$users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-show-all-modal.html.twig',array(
@@ -113,7 +113,7 @@ class AnnouncementController extends BaseController
 		$canManage = $processor->checkManage($targetObject['id']);
 		$canTake = $processor->checkTake($targetObject['id']);
 
-		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, 'createdTime', 0, 10);
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-block.html.twig',array(
 			'targetObject' => $targetObject,
