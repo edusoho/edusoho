@@ -1,10 +1,15 @@
 {# {% extends 'TopxiaAdminBundle:EduCloud:edu-cloud-layout.html.twig' %} #}
-{% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %}教育云 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_edu_cloud_sms')}}{% endblock %}
+{% set submenu = 'cloud_sms' %} 
+{% set menu = 'cloud-video' %}
+{% set tab_menus = permissions('admin_setting_cloud_video',"tab") %}
 
 {% block main %}
- 
+   <div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+  </div >
 <div class="text-center">
   <h1 class="text-muted">网络问题，无法连接EduSoho开放云平台</h1>
 </div>
