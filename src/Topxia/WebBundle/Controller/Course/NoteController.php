@@ -16,6 +16,10 @@ class NoteController extends BaseController
 
         $user = $this->getCurrentUser();
 
+        if (empty($courseIds)) {
+            $courseIds = array(-1);
+        }
+        
         $conditions = array(
             'status' => 1,
             'courseIds' => $courseIds,
