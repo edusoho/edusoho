@@ -172,7 +172,7 @@ class UploadFileController extends BaseController
 
         if (empty($file)) {
             $result = array(
-                "error"->"文件不存在"
+                "error" => "文件不存在"
             );
             return $this->createJsonResponse($result);
         }
