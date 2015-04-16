@@ -780,8 +780,6 @@ define(function(require, exports, module) {
                 learningCounter++;
             }
 
-            console.log(this.watchLimit);
-
             if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
                 this.watched = true;
                 var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
