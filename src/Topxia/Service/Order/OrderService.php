@@ -74,5 +74,5 @@ interface OrderService
 
     public function updateOrderCashSn($id, $cashSn);
 
-    public function payCreate($id, $payDate);
+    public function createPayRecord($id, $payDate);
 }
