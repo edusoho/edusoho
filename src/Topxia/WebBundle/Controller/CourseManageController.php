@@ -171,22 +171,9 @@ class CourseManageController extends BaseController
     public function priceAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        
-
-        $coinSetting=$this->getSettingService()->get('coin',array());
-        if(isset($coinSetting['cash_rate'])){
-            $cashRate=$coinSetting['cash_rate'];
-        }else{
-            $cashRate=1;
-        }
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
-        if ($this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -197,24 +184,44 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if(isset($fields['freeStartTime'])){
-                $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
-                $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
+            if (isset($fields['coinPrice'])) {
+                $this->getCourseService()->setCoursePrice($course['id'], 'coin', $fields['coinPrice']);
+                unset($fields['coinPrice']);
             }
-            
-            $course = $this->getCourseService()->updateCourse($id, $fields);
+
+            if (isset($fields['price'])) {
+                $this->getCourseService()->setCoursePrice($course['id'], 'default', $fields['price']);
+                unset($fields['price']);
+            }
+
+            if (!empty($fields)) {
+                $course = $this->getCourseService()->updateCourse($id, $fields);
+            } else {
+                $course = $this->getCourseService()->getCourse($id);
+            }
 
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-
-
         response:
+
+        if ($this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
+
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))) {
+            $discount = $this->getDiscountService()->getDiscount($course['discountId']);
+        } else {
+            $discount = null;
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
-            'cashRate'=> empty($cashRate)? 1 : $cashRate
+            'discount' => $discount,
         ));
     }
 
@@ -225,7 +232,7 @@ class CourseManageController extends BaseController
         $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
 
         $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
-        $learnTime=$course['studentNum']==0 ? 0 : intval($learnTime/$course['studentNum']);
+        $learnTime=$course["studentNum"]==0 ? 0 : intval($learnTime/$course["studentNum"]);
 
         $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
 
@@ -429,16 +436,16 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }
+    } 
 
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+    protected function getDiscountService()
+    {
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+    }
+
 
 }

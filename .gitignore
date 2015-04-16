@@ -1,3 +1,4 @@
+/.idea
 /web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
@@ -33,7 +34,8 @@
 src/Topxia/Service/Util/DirectCloudClient.php
 src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
-app/data/install.lock
+/app/data/install.lock
+/app/data/dev.lock
 app/data/plugin_installed.php
 /web/themes/*
 !/web/themes/autumn
@@ -47,4 +49,3 @@ web/assets/img/default/video.png
 .publish
 .buildpath
 .phpintel*
-.phpintel/*

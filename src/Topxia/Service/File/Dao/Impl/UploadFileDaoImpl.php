@@ -85,12 +85,12 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getFile($id);
     }
 
-    //@todo:sql
     public function updateFileUsedCount($fileIds, $offset){
-        $fileIdsCollection = "'" . implode("', '", $fileIds) . "'";
-        $sql = "UPDATE {$this->table} SET usedCount = usedCount + ? where id in ({$fileIdsCollection})";
 
-        return $this->getConnection()->executeUpdate($sql, array($offset));
+        $marks = str_repeat('?,', count($fileIds) - 1) . '?';
+        $sql = "UPDATE {$this->table} SET usedCount = usedCount + ? where id in ({$marks})";
+
+        return $this->getConnection()->executeUpdate($sql, array_merge(array($offset), $fileIds));
     }
 
     public function getFileByTargetType($targetType)

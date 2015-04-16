@@ -63,6 +63,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->fetchColumn($sql, $categoryIds);
 	}
 
+	//@todo:sql
 	public function searchArticles($conditions, $orderBys, $start, $limit)
 	{
 		$this->filterStartLimit($start, $limit);
@@ -120,26 +121,24 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
     
-    //@todo:sql
 	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count)
 	{
 		$sql ="SELECT * FROM {$this->table} WHERE status = 'published'";
 		$length=count($tagIds);
+		$tagArray = array();
 		$sql .=" AND (";
 		for ($i=0; $i < $length ; $i++) { 
-			$tagId = $tagIds[$i];
-			$like = "\"$tagId\"";
-			$sql .= "  tagIds LIKE  '%$like%' ";
+			$sql .= "  tagIds LIKE  ? ";
 			if($i != $length-1){
 				$sql .=" OR ";
 			}
-			
+			$tagArray[] = '%|'.$tagIds[$i].'|%';
 		}
 		$sql .=" ) ";
 
 		$sql .= " ORDER BY publishedTime DESC LIMIT 0, {$count}";
 		
-		return $this->getConnection()->fetchAll($sql);
+		return $this->getConnection()->fetchAll($sql, $tagArray);
 	}	
 
 	private function _createSearchQueryBuilder($conditions)

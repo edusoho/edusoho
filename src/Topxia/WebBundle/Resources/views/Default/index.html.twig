@@ -35,7 +35,7 @@
                 <ul class="home-class-list">
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                      <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
                     </a>
                     <div class="class-body">
                       <h3 class="class-title">
@@ -372,17 +372,9 @@
         <img class="course-picture" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
-          <div style="float:right;" class="text-muted mrm mls">
-            {% if setting('course.coursesPrice') == 0 %}
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                <span class="course-price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                </span>
-              {% else %}
-                <span class="course-price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
-                </span>
-              {% endif %}
-            {% endif %}
-            </div>
+        <div class="course-price-info">
+          {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+        </div>
         <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
         {% if course.serializeMode=='serialize' %}
           <span class="label label-success ">更新中</span>

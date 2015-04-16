@@ -85,7 +85,7 @@ define(function(require, exports, module) {
                 self.set('player', audioPlayer);
 
             }, 'json');
-        },
+        }
 
 
 

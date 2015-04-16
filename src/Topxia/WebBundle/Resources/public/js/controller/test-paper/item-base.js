@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 			Notify: Notify,
 			questionType: [],
 			itemScores: [],
-			confirmTrTemplate: null,
+			confirmTrTemplate: null
 		},
 
 		events: {
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
             'click [data-role=item-modal-btn]'  : 'createListModal',
             'show.bs.modal [id=confirm-modal]'  : 'addConfirmTr',
             'click [id=confirm-modal] .confirm-submit'  : 'submit',
-            'keyup [name^=scores][type=text]'   : function(){ Test.menuTotal() },
+            'keyup [name^=scores][type=text]'   : function(){ Test.menuTotal() }
 		},
 
 		setup:function(){
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                 $($(e.currentTarget).data('target')).html(data).modal({
                     backdrop:true,
                     keyboard:true,
-                    show:true,
+                    show:true
                 });
             })
 		},
@@ -167,7 +167,7 @@ define(function(require, exports, module) {
             Test.sortable();
 
             self.$('#myTab li:first a').trigger('click');
-		},
+		}
 
 	});
 
