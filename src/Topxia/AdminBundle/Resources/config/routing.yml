@@ -564,13 +564,17 @@ admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
-admin_setting_developer_change_version:
-    pattern:  /setting/developer/modifyVersion
-    defaults: { _controller: TopxiaAdminBundle:Setting:modifyVersion }
-
 admin_setting_developer:
     pattern:  /setting/developer
-    defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:index }
+
+admin_setting_developer_version:
+    pattern:  /setting/developer/version
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:version }
+
+admin_setting_developer_magic:
+    pattern:  /setting/developer/magic
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
 admin_setting_cdn:
     pattern:  /setting/cdn
@@ -608,6 +612,10 @@ admin_optimize_remove_upload_files:
 admin_logs:
     pattern:  /logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
+
+admin_logs_prod:
+    pattern:  /logs/prod
+    defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
 admin_cloud_bill:
     pattern:  /cloud/bill

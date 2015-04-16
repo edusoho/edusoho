@@ -341,6 +341,12 @@ course_lesson_learn_cancel:
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
     methods: [POST]
 
+course_lesson_watch_num:
+    pattern:  /course/{courseId}/lesson/{lessonId}/watch_num
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:watchNum }
+    methods: [POST]
+
+
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list
     defaults: { _controller: TopxiaWebBundle:LessonLessonPlugin:list }
@@ -1273,6 +1279,14 @@ cloud_reconvert_old_file:
 cloud_video_fingerprint:
     pattern: /cloud/video_fingerprint
     defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
+
+cloud_ppt_watermark:
+    pattern: /cloud/ppt_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:pptWatermark }
+
+cloud_doc_watermark:
+    pattern: /cloud/doc_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:docWatermark }
 
 systeminfo:
     pattern: /systeminfo
