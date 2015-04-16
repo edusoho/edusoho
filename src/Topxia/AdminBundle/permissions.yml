@@ -38,7 +38,7 @@ admin_order:
     type: menu
     active: order
 admin_finance:
-    name: 帐务
+    name: 账务
     parent: admin
     router_name: admin_bill
     router_params: null
@@ -620,7 +620,7 @@ admin_group_set:
     type: tab
     active: group_set
 admin_setting_finance:
-    name: 帐务设置
+    name: 账务设置
     parent: admin_system
     router_name: admin_setting_payment
     router_params: null
