@@ -60,7 +60,9 @@
             <div class="lesson-content-text-body"></div>
           </div>
 
-          <div class="lesson-content lesson-content-document" id="lesson-document-content" data-role="lesson-content" style="display:none;">
+          <div class="lesson-content lesson-content-document" id="lesson-document-content" data-role="lesson-content" style="display:none;"
+              {% if setting('magic.doc_watermark') %}data-watermark-url="{{ path('cloud_doc_watermark') }}" {% endif %}
+            >
             <div class="lesson-content-document-body"></div>
           </div>   
 
@@ -74,7 +76,9 @@
           <div class="lesson-content lesson-content-text" id="lesson-testpaper-content" data-role="lesson-content" style="display:none;">
             <div class="lesson-content-text-body"></div>
           </div>
-          <div class="lesson-content lesson-content-text" id="lesson-ppt-content" data-role="lesson-content" style="display:none;">
+          <div class="lesson-content lesson-content-text" id="lesson-ppt-content" data-role="lesson-content" style="display:none;"
+              {% if setting('magic.ppt_watermark') %}data-watermark-url="{{ path('cloud_ppt_watermark') }}" {% endif %}
+            >
             <div class="lesson-content-text-body"></div>
           </div>
 

@@ -1274,6 +1274,14 @@ cloud_video_fingerprint:
     pattern: /cloud/video_fingerprint
     defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
 
+cloud_ppt_watermark:
+    pattern: /cloud/ppt_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:pptWatermark }
+
+cloud_doc_watermark:
+    pattern: /cloud/doc_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:docWatermark }
+
 systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Systeminfo:index }

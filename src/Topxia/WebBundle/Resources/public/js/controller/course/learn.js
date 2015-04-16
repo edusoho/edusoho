@@ -514,10 +514,23 @@ define(function(require, exports, module) {
                             var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
                             $("#lesson-ppt-content").html(html).show();
 
-                            var player = new SlidePlayer({
-                                element: '.slide-player',
-                                slides: response
-                            });
+                            var watermarkUrl = $("#lesson-ppt-content").data('watermarkUrl');
+                            if (watermarkUrl) {
+                                $.get(watermarkUrl, function(watermark) {
+                                    var player = new SlidePlayer({
+                                        element: '.slide-player',
+                                        slides: response,
+                                        watermark: watermark
+                                    });
+                                });
+
+                            } else {
+                                var player = new SlidePlayer({
+                                    element: '.slide-player',
+                                    slides: response
+                                });
+                            }
+
 
                         }, 'json');
                     }
@@ -534,12 +547,23 @@ define(function(require, exports, module) {
                             var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
                             $("#lesson-document-content").html(html).show();
 
-                            var player = new DocumentPlayer({
-                                element: '#lesson-document-content',
-                                swfFileUrl:response.swfUri,
-                                pdfFileUrl:response.pdfUri
-                            });
-
+                            var watermarkUrl = $("#lesson-document-content").data('watermarkUrl');
+                            if (watermarkUrl) {
+                                $.get(watermarkUrl, function(watermark) {
+                                    var player = new DocumentPlayer({
+                                        element: '#lesson-document-content',
+                                        swfFileUrl:response.swfUri,
+                                        pdfFileUrl:response.pdfUri,
+                                        watermark: watermark
+                                    });
+                                });
+                            } else {
+                                var player = new DocumentPlayer({
+                                    element: '#lesson-document-content',
+                                    swfFileUrl:response.swfUri,
+                                    pdfFileUrl:response.pdfUri
+                                });
+                            }
                         }, 'json');
                     }
 

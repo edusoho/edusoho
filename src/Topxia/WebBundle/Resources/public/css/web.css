@@ -4402,6 +4402,21 @@ body {
   background: #fff url(../img/loader.gif) no-repeat center center;
 }
 
+.slide-player-watermark {
+  position: absolute;
+  width: 100%;
+  bottom: 50px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  cursor: default;  
+}
+
 .slide-player-control {
   position: absolute;
   width: 100%;
