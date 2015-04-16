@@ -2,10 +2,9 @@
 namespace Topxia\WebBundle\Controller\Thread;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use Topxia\Common\PHPExcelToolkit;
 
 class MemberController extends BaseController
 {
@@ -22,14 +21,16 @@ class MemberController extends BaseController
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
                 'truename' => $data['truename'],
-                'mobile' => $data['mobile']
+                'mobile' => $data['mobile'],
             );
 
             $member = $this->getThreadService()->createMember($member);
+
             return $this->createJsonResponse(empty($member) ? false : true);
         }
 
         $thread = $this->getThreadService()->getThread($threadId);
+
         return $this->render('TopxiaWebBundle:Thread/Widget:user-info-modal.html.twig', array(
             'thread' => $thread,
         ));
@@ -64,12 +65,58 @@ class MemberController extends BaseController
     public function ajaxFindMembersAction(Request $request, $threadId)
     {
         $members = $this->_findPageMembers($request, $threadId);
+
         return $this->render('TopxiaWebBundle:Thread/Event:user-grids-li.html.twig', array(
             'members' => $members,
         ));
     }
 
-    public function _findPageMembers($request, $threadId)
+    public function exportAction(Request $request, $threadId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('用户还未登录!');
+        }
+
+        $thread = $this->getThreadService()->getThread($threadId);
+        if (empty($thread)) {
+            return $this->createMessageResponse('warning', '帖子不存在!');
+        }
+
+        if (!$this->getThreadService()->canAccess('thread.update', $thread)) {
+            throw $this->createAccessDeniedException('无权限操作!');
+        }
+
+        $filename = $thread['title'] . '-成员.xls';
+        $members = $this->_findMembersByThreadId($threadId);
+        $execelInfo = $this->_makeInfo($user);
+        $objWriter = PHPExcelToolkit::export($members, $execelInfo);
+        $this->_setHeader($filename);
+        $objWriter->save('php://output');
+    }
+
+    private function _makeInfo($user)
+    {
+        $title = array(
+            'nickname' => '昵称',
+            'truename' => '真实姓名',
+            'mobile' => '手机号码',
+            'createdTime' => '报名时间'
+        );
+        $info = array();
+        $info['title'] = $title;
+        $info['creator'] = $user['nickname'];
+        $info['sheetName'] = '成员';
+        return $info;
+    }
+
+    private function _findMembersByThreadId($threadId)
+    {
+        $members = $this->getThreadService()->findMembersByThreadId($threadId, 0, PHP_INT_MAX);
+        return $members;
+    }
+
+    private function _findPageMembers($request, $threadId)
     {
         $page = $request->query->get('page', 1);
         $start = (intval($page) - 1) * 16;
@@ -81,6 +128,7 @@ class MemberController extends BaseController
                 $members[$key] = $users[$key];
             }
         }
+
         return $members;
     }
 
@@ -95,6 +143,18 @@ class MemberController extends BaseController
         }
 
         return $newFrinds;
+    }
+
+    private function _setHeader($filename)
+    {
+        header('Content-Type: application/vnd.ms-excel');
+        header("Content-Disposition: attachment;filename={$filename}");
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
     }
 
     protected function getThreadService()

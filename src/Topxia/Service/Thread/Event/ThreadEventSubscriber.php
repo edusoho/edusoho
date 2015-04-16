@@ -24,9 +24,6 @@ class ThreadEventSubscriber implements EventSubscriberInterface
     public function onThreadDelete(ServiceEvent $event)
     {
         $thread = $event->getSubject();
-        if ($thread['type'] == 'event') {
-            $this->getThreadService()->deleteMembersByThreadId($thread['id']);
-        }
         $this->callTargetEventProcessor('onThreadDelete', $event);
     }
 

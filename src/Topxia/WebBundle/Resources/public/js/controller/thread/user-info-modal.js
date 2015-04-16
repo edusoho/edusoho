@@ -24,12 +24,14 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="mobile"]',
-            rule: 'phone'
+            rule: 'phone',
+            required: true
         });
 
         validator.addItem({
             element: '[name="truename"]',
-            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}'
+            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}',
+            required: true
         });
 
     };
