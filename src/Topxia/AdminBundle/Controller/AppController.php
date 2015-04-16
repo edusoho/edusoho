@@ -30,10 +30,9 @@ class AppController extends BaseController
        $info = $this->getEduCloudService()->getAccountInfo();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
-        if ($info['level'] == 'license') {
+        if (empty($info['level']) or $info['level'] == 'none') {
                 $articles = $EduSohoOpenClient->getArticles();
                 $articles = json_decode($articles, true);
-        var_dump($articles);exit();
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                     'articles' => $articles,
                 ));
