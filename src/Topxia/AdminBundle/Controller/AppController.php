@@ -26,11 +26,11 @@ class AppController extends BaseController
     public function myCloudAction(Request $request)
     {
        $content = $this->getEduCloudService()->getUserOverview();
-
+var_dump($content);exit();
        $info = $this->getEduCloudService()->getAccountInfo();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
-        if (empty($info['level']) or $info['level'] == 'none') {
+        if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
                 $articles = $EduSohoOpenClient->getArticles();
                 $articles = json_decode($articles, true);
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
@@ -180,7 +180,9 @@ class AppController extends BaseController
 
             if ($key != 'MAIN') {
                 $dic = $dir.'/plugins/'.$key.'/plugin.json';
-                $appMeta[$key] = json_decode(file_get_contents($dic));
+                if(file_exists($dic)){
+                    $appMeta[$key] = json_decode(file_get_contents($dic));
+                }
             }
 
         }
