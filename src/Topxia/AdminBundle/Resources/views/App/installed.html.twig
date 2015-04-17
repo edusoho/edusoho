@@ -71,16 +71,12 @@
               </div>
               
               {% if app.installed|default(0) %}
+                  {% if app.code|lower != 'MAIN' %}
+                    {% set url = appUrls[app.code].manage_index|default('') %}
+                  {% endif %}
               <div class="right-info pull-right">
-                  {% if app.code|lower == 'vip' %}
-                    <a href="../../vip/list" class="btn btn-primary">管理</a>
-                  {% elseif app.code|lower == 'coupon' %}
-                    <a href="../../coupon" class="btn btn-primary">管理</a>
-                  {% elseif app.code|lower == 'questionplus' %}
-                    <a href="../../question/plumber/setting" class="btn btn-primary">管理</a>
-                  {% elseif app.code|lower in ['homework', 'materiallib'] %}
-                  {% elseif app.code|lower != 'main' and app.type == 'plugin' %}
-                    <a href="../../{{ app.code|lower }}/index" class="btn btn-primary">管理</a>
+                  {% if url != '' %}
+                  <a href="{{url(url)}}"  class="btn btn-primary">管理</a>
                   {% endif %}
 
                   {% if setting('developer.debug') and app.code|lower != 'main' %}
