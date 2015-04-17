@@ -5021,9 +5021,22 @@ a.homework-essay-textarea-pack-up{
     margin-bottom: 20px;
 }
 .banner-volume {
-    line-height: 25px;
-    vertical-align: middle;
-    margin-top: 8px;
     color: #3e3e3e;
-    font-size: 14px;
 }
+
+.set-email-alert {
+	font-size: 12px;
+  	text-align: center;
+  	margin-bottom: 0px;
+  	border-radius: 0px; 
+  	padding: 10px;
+}
+
+.set-email-alert .close {
+	font-size: 16px;
+}
+
+.announcement .alert {
+	padding: 10px;
+}
+
