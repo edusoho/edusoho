@@ -1,11 +1,11 @@
-{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Article:article.layout.html.twig' %}
 
 {% set modal_size = 'xlarge' %}
 
 {% set menu = 'admin_operation_article' %}
 
 {% block title %}
-	{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯 -资讯管理- {{ parent() }}
+	{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯-资讯管理-运营-后台
 {% endblock %}
 
 {% set script_controller = 'article/article-modal' %}

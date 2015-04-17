@@ -89,6 +89,7 @@ admin_operation_group_create:
     parent: admin_operation_group_manage
     router_name: group_add
     group: 2
+    blank: 1
 admin_operation_group_manage:
     name: 组管理
     parent: admin_operation_group
@@ -112,6 +113,7 @@ admin_course_add:
     parent: admin_course_show
     router_name: course_create
     group: 2
+    blank: 1
 admin_live_course:
     name: 直播管理
     parent: admin_course
@@ -280,7 +282,7 @@ admin_setting_user_fields:
     name: 字段自定义
     parent: admin_setting_user
 admin_user_avatar:
-    name: 用户头像
+    name: 默认头像
     parent: admin_setting_user
     router_name: admin_setting_avatar
 admin_setting_course_setting:

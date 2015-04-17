@@ -1,0 +1,15 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set side_menus = permissions('admin_operation') %}
+{% set nav = 'admin_operation' %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+        {% include 'TopxiaAdminBundle::side.html.twig' with {menus : side_menus , nav : menu} %}
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

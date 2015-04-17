@@ -1,9 +1,9 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% set script_controller = "coin/model" %}
-{% set tab_menus = permissions("admin_setting_finance","tab")%}
-{% set menu = 'finance_settings' %}
-{% set submenu = 'coin_settings' %}
+{% set tab_menus = permissions("admin_setting_finance", 1)%}
+{% set menu = 'admin_setting_finance' %}
+{% set submenu = 'admin_coin_settings' %}
 {% block title %}{{ getTitle('admin_coin_settings')}}{% endblock %}
 
 {% block main %}
@@ -11,14 +11,13 @@
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
 </div>
 
-    <div class="well">
-      <div class="btn-group">
-          <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_coin_settings') }}">设置</a>
-
-          <a type="button" class="btn btn-default btn-sm  btn-primary" href="{{ path('admin_coin_model') }}">使用方式</a>
-
-      </div>
+    <div>
+    <ul class="nav nav-pills">
+      <li role="presentation" > <a href="{{ path('admin_coin_settings') }}">设置</a></li>
+      <li role="presentation" class="active"><a href="{{ path('admin_coin_model') }}">使用方式</a></li>
+    </ul> 
     </div>
+    
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-model-form">
   
