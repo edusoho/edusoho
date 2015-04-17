@@ -16,35 +16,38 @@
       <input type="text" id="title" class="form-control" placeholder="标题" ata-display="标题" name= "title" value="{{ thread.title|default('') }}">
       </div>
   </div>
-
-  <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
-    <div class="form-group">
-      <div class="col-md-2 control-label">
-        <label for="startTime">活动时间</label>
-      </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d H:i') }}{% endif %}">
+  
+  {% if type == 'event' %}
+    <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="startTime">活动时间</label>
         </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-2 control-label">
-        <label for="location">活动地点</label>
+        <div class="col-md-7 controls">
+          <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d H:i') }}{% endif %}">
+          </div>
       </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
-        </div>
-    </div>
 
-    <div class="form-group">
-      <div class="col-md-2 control-label">
-        <label for="maxUsers">最大人数</label>
-      </div>
-      <div class="col-md-7 controls">
-        <input type="text" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="location">活动地点</label>
         </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="maxUsers">最大人数</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
+          </div>
+      </div>
     </div>
-  </div>
+  {% endif %}
+ 
 
   <div class="form-group">
     <div class="controls col-md-12">

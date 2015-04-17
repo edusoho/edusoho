@@ -23,7 +23,6 @@ class ThreadEventSubscriber implements EventSubscriberInterface
 
     public function onThreadDelete(ServiceEvent $event)
     {
-        $thread = $event->getSubject();
         $this->callTargetEventProcessor('onThreadDelete', $event);
     }
 
