@@ -25,9 +25,9 @@
                 <td>{{lesson.title}}{% if lesson.type == "text" %}（图文）{% elseif lesson.type == 'video' %}（视频）{% elseif lesson.type == 'audio' %}（音频）{% elseif lesson.type == 'testpaper' %}（试卷）{% elseif lesson.type == 'ppt' %}（ppt）{% endif %}</td>
                 <td>{{lesson.LearnedNum}}</td>
                 <td>{{lesson.finishedNum}}</td>
-                <td>{{lesson.learnTime}}</td>
+                <td>{{(lesson.learnTime/60)|round(0, 'floor')}}</td>
                 <td>{% if lesson.type =='audio' or lesson.type =='video' %}{{lesson.length}}{% else %}----{% endif %}</td>
-                <td>{% if lesson.mediaSource != 'self' and lesson.type == 'video' %}无{% elseif lesson.type =='audio' or lesson.type =='video'%}{{lesson.watchTime}}{% else %}----{% endif %}</td>
+                <td>{% if lesson.mediaSource != 'self' and lesson.type == 'video' %}无{% elseif lesson.type =='audio' or lesson.type =='video'%}{{(lesson.watchTime/60)|round(0, 'floor')}}{% else %}----{% endif %}</td>
                 <td>{% if lesson.type =='testpaper' %}{{lesson.score}}{% else %}----{% endif %}</td>
               </tr>
             {% endfor %}

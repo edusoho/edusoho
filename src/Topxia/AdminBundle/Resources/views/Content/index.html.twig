@@ -11,11 +11,6 @@
 {% set type = app.request.get('type') %}
 {% set typeName = dict('contentType')[type] %}
 
-
-<div class="clearfix mbs">
-  <button class="btn btn-info btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type: type}) }}"><span class="glyphicon glyphicon-plus"></span> 添加{{ typeName }}</button>
-</div>
-
 <form class="well well-sm form-inline">
 	<div class="form-group">
 		<select class="form-control" name="status">
@@ -27,6 +22,8 @@
 	</div>
 		<input type="hidden" name="type" value="{{ type }}">
 	<button class="btn btn-primary" type="submit">搜索</button>
+
+  	<button class="btn btn-success btn-sm pull-right" id="content-add-btn" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_content_create', {type: type}) }}"> 添加{{ typeName }}</button>
 </form>
 
 <table class="table table-hover" id="content-table">

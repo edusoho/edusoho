@@ -5,6 +5,12 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Util\PluginUtil;
+use Topxia\Service\Util\CloudClientFactory;
+
+use Topxia\Service\CloudPlatform\KeyApplier;
+use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 
 class AppController extends BaseController
 {
@@ -15,6 +21,71 @@ class AppController extends BaseController
     public function oldUpgradeCheckAction()
     {
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
+    }
+
+    public function myCloudAction(Request $request)
+    {
+       $content = $this->getEduCloudService()->getUserOverview();
+
+       $info = $this->getEduCloudService()->getAccountInfo();
+
+        $EduSohoOpenClient = new EduSohoOpenClient;
+        if (empty($info['level']) or $info['level'] == 'none') {
+                $articles = $EduSohoOpenClient->getArticles();
+                $articles = json_decode($articles, true);
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'articles' => $articles,
+                ));
+        }
+
+        $currentTime = date('Y-m-d', time());
+
+        $account = isset($content['account']) ? $content['account'] : '';
+        $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
+
+        $user = isset($content['user']) ? $content['user'] : '' ;
+        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
+
+        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
+        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
+
+         $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
+
+        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
+
+        $notices = $EduSohoOpenClient->getNotices();
+        $notices = json_decode($notices, true);
+
+        return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
+                    'content' =>$content,
+                    'packageDate' =>$packageDate,
+                    'storageDate' =>$storageDate,
+                    'day' =>$day,
+                    'storage' =>$storage,
+                    'live' =>$live,
+                    'user' =>$user,
+                    'sms' =>$sms,
+                    'account' =>$account,
+                    "notices"=>$notices,
+                    'info' => $info,
+                ));
+    }
+
+    private function isLocalAddress($address)
+    {
+        if (in_array($address, array('localhost', '127.0.0.1'))) {
+            return true;
+        }
+
+        if (strpos($address, '192.168.') === 0) {
+            return true;
+        }
+
+        if (strpos($address, '10.') === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     public function centerAction(Request $request, $postStatus)
@@ -100,9 +171,17 @@ class AppController extends BaseController
         $appsInstalled = $this->getAppService()->findApps(0, 100);
         $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
 
+        $dir = dirname(dirname(dirname(dirname(__DIR__)))); 
+        $appMeta = array();
+
         foreach ($appsInstalled as $key => $value) {
 
             $appsInstalled[$key]['installed'] = 1;
+
+            if ($key != 'MAIN') {
+                $dic = $dir.'/plugins/'.$key.'/plugin.json';
+                $appMeta[$key] = json_decode(file_get_contents($dic));
+            }
 
         }
 
@@ -124,6 +203,7 @@ class AppController extends BaseController
             'theme' => $theme,
             'plugin' => $plugin,
             'type' => $postStatus,
+            'appMeta' => $appMeta,
         ));
     }
 
@@ -192,4 +272,9 @@ class AppController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }   
 }

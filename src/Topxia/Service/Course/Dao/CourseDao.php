@@ -30,6 +30,8 @@ interface CourseDao
     
     public function waveCourse($id,$field,$diff);
 
+    public function clearCourseDiscountPrice($discountId);
+
     public function analysisCourseDataByTime($startTime,$endTime);
 
     public function findCoursesCountByLessThanCreatedTime($endTime);

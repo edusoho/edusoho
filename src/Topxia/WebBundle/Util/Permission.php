@@ -8,7 +8,13 @@ use Topxia\Service\Common\ServiceKernel;
 Class Permission
 {   
     public function getPermissions($parent, $type) 
-    {   
+    {
+        $group = null;
+        if (ctype_digit((string) $type)) {
+            $group = $type;
+            $type = null;
+        }
+
         $permissions = $this->parsePermissions();
         $permissions = $this->addCode($permissions);
         $permissions = $this->sort($permissions);
@@ -22,6 +28,19 @@ Class Permission
                 if ($type) {
 
                     if (isset($value['type']) && $value['type'] == $type ) {
+
+                        $result[] = $value;
+                        continue;
+
+                    }
+
+                    continue;
+                    
+                }
+
+                if ($group) {
+
+                    if (isset($value['group']) && $value['group'] == $group ) {
 
                         $result[] = $value;
                         continue;
@@ -69,13 +88,13 @@ Class Permission
 
         $permissionsCacheFile = "../app/cache/".$environment."permissions.yml";
 
+/*
+        if (file_exists($permissionsCacheFile)) {
 
-        // if (file_exists($permissionsCacheFile)) {
 
+            return Yaml::parse($permissionsCacheFile);
 
-        //     return Yaml::parse($permissionsCacheFile);
-
-        // }else {
+        }else {*/
 
 
             foreach (array('Topxia/WebBundle', 'Topxia/AdminBundle', 'Custom/WebBundle', 'Custom/AdminBundle') as $value) {
@@ -105,7 +124,7 @@ Class Permission
 
             file_put_contents($permissionsCacheFile, Yaml::dump($permissions));
          
-  /*      }*/
+        //}
 
         return $permissions;
     }

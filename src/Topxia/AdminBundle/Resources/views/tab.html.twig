@@ -2,7 +2,7 @@
   <div data-role="navigation">
     <ul class="nav nav-tabs">
       {% for menu in sub_menus %}
-
+  
           {% set param = {} %}
           {% set router_name = menu.router_name %}
 
@@ -19,16 +19,16 @@
                   {% set param = param|merge(item) %}
                 
                 {% endfor %}
-                <li class="{% if type == menu.active|default('-1') %}active{% endif %}"><a href="{{path(router_name,param)}}" class="{{menu.class|default('')}}  " {% if menu.blank|default(false) %}target=blank{% endif %}>{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <li class="{% if type == menu.code|default('-1') %}active{% endif %}"><a href="{{path(router_name,param)}}" class="{{menu.class|default('')}}  " {% if menu.blank|default(false) %}target=blank{% endif %}>{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 </li>
               {% else %}
-                <li class="{% if type == menu.active|default('-1') %}active{% endif %}"><a href="{{path(router_name,router_params)}}" class="{{menu.class|default('')}}  " {% if menu.blank|default(false) %}target=blank{% endif %}>{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+                <li class="{% if type == menu.code|default('-1') %}active{% endif %}"><a href="{{path(router_name,router_params)}}" class="{{menu.class|default('')}}  " {% if menu.blank|default(false) %}target=blank{% endif %}>{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
                 </li>
               {% endif %}
 
            
             {% else %}
-              <li class="{% if type == menu.active|default('-1') %}active{% endif %}"><a href="{{path(router_name)}}" class="{{menu.class|default('')}}  " {% if menu.blank|default(false) %}target=blank{% endif %}>{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
+              <li class="{% if type == menu.code|default('-1') %}active{% endif %}"><a href="{{path(router_name)}}" class="{{menu.class|default('')}}  " {% if menu.blank|default(false) %}target=blank{% endif %}>{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{menu.name}}</a>
               </li>
             {% endif %}
           

@@ -9,20 +9,6 @@
 
 {{ web_macro.flash_messages() }}
 
-  <fieldset>
-    <legend>课程默认图片</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label"></div>
-      <div class="controls col-md-8 radios" id="defaultCoursePicture">
-        {{ radios('coursePicture', {1:'自定义默认课程图片', 0:'系统默认课程图片'}, defaultSetting.defaultCoursePicture) }}
-        <p>网校内未上传图片的课程，都会显示该图片。推荐尺寸（360*180）</p>
-        {% include 'TopxiaAdminBundle:System:default-course-picture.html.twig' %}
-      </div>
-    </div>
-  </fieldset>
-  <div class="page-header" style="display:none;"><h1>分享内容</h1></div>
-<legend></legend>
-
 <form class="form-horizontal" method="post" id="course-form" novalidate>
 
   <fieldset>
@@ -328,6 +314,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
   </fieldset>
 
+
   <input type="hidden" name="defaultCoursePicture" value="{{ defaultSetting.defaultCoursePicture }}">
 
 <fieldset>
@@ -340,7 +327,9 @@ glyphicon glyphicon-chevron-up"></span></a></div>
         <div class="controls col-md-4">
           <input  type="text" id="chapter_name" name="chapter_name" class="form-control" {% if defaultSetting.chapter_name %}value="{{defaultSetting.chapter_name}}" {% else %} value="章" {% endif %}>
         </div>
+
     </div>
+
 
     <div class="row form-group">
         <div class="col-md-2 col-md-offset-2 control-label">

@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
     var Widget = require('widget'),
+        Class = require('class'),
+        Store = require('store'),
         Backbone = require('backbone'),
         VideoJS = require('video-js'),
         swfobject = require('swfobject'),
@@ -15,7 +17,6 @@ define(function(require, exports, module) {
     var DocumentPlayer = require('../widget/document-player');
 
     var iID = null;
-    var recordWatchTimeId = null;
 
     var LessonDashboard = Widget.extend({
 
@@ -24,6 +25,8 @@ define(function(require, exports, module) {
         _toolbar: null,
 
         _lessons: [],
+
+        _counter: null,
 
         events: {
             'click [data-role=next-lesson]': 'onNextLesson',
@@ -34,9 +37,9 @@ define(function(require, exports, module) {
         attrs: {
             courseId: null,
             courseUri: null,
-            playStatus: null,
             dashboardUri: null,
-            lessonId: null
+            lessonId: null,
+            watchLimit: false
         },
 
         setup: function() {
@@ -85,7 +88,6 @@ define(function(require, exports, module) {
         _onFinishLearnLesson: function() {
             var $btn = this.element.find('[data-role=finish-lesson]'),
                 toolbar = this._toolbar,
-                playStatus = this.get('playStatus'),
                 self = this;
 
                 var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
@@ -118,6 +120,7 @@ define(function(require, exports, module) {
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
+            this.set('watchLimit', this.element.data('watchLimit'));
 
         },
 
@@ -155,6 +158,33 @@ define(function(require, exports, module) {
             });
         },
 
+        _afterLoadLesson: function(lessonId) {
+            var player, type;
+            if (this.get('videoPlayer')) {
+                player = this.get('videoPlayer');
+                type = "VideoPlayer";
+            }
+
+            if (this.get('audioPlayer')) {
+                player = this.get('audioPlayer');
+                type = "AudioPlayer";
+            }
+
+            if (this.get('mediaPlayer')) {
+                player = this.get('mediaPlayer');
+                player = document.getElementById(player.get("playerId"));
+                type = "MediaPlayer";
+            }
+
+            if (this._counter && this._counter.timerId) {
+                clearInterval(this._counter.timerId);
+            }
+
+            var self = this;
+            this._counter = new Counter(player, type, this.get('courseId'), lessonId, this.get('watchLimit'));
+            this._counter.setTimerId(setInterval(function(){self._counter.execute()}, 1000));
+        },
+
         _onChangeLessonId: function(id) {
             var self = this;
             if (!this._toolbar) {
@@ -190,12 +220,6 @@ define(function(require, exports, module) {
 
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
-
-                function recordWatchTime(){
-                    url="../../course/"+lesson.id+'/watch/time/2';
-                    $.post(url);
-                }
-
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 var $titleStr = "";
@@ -216,8 +240,6 @@ define(function(require, exports, module) {
                 } else {
                     that.element.find('[data-role=unit-number]').parent().hide().next().hide();
                 }
-
-
 
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
                     $("#lesson-unpublished-content").show();
@@ -266,22 +288,13 @@ define(function(require, exports, module) {
                     mediaPlayer.on('ended', function() {
                         var userId = $('#lesson-video-content').data("userId");
                         DurationStorage.del(userId, lesson.mediaId);
-                        
-                        $.post("../../course/"+lesson.id+'/watch/paused');
+                        if (that._counter) {
+                            that._counter.watched = false;
+                        }
+
                         that._onFinishLearnLesson();
-                        that.set('playStatus', 'ended');
-                        clearInterval(recordWatchTimeId);
                     });
-                    mediaPlayer.on('ready', function() {
-                        clearInterval(recordWatchTimeId);
-                        recordWatchTimeId = setInterval(recordWatchTime, 120000);
-                    });
-                    mediaPlayer.on('paused', function() {
-                        $.post("../../course/"+lesson.id+'/watch/paused');
-                    });
-                    mediaPlayer.on('playing', function() {
-                        $.post("../../course/"+lesson.id+'/watch/play');
-                    });
+
                     mediaPlayer.play();
 
                     that.set('mediaPlayer', mediaPlayer);
@@ -304,26 +317,14 @@ define(function(require, exports, module) {
                             player.dimensions('100%', '100%');
                             player.src(lesson.mediaUri);
                             player.on('ended', function() {
-                                $.post("../../course/"+lesson.id+'/watch/paused');
                                 if (hasPlayerError) {
                                     return ;
                                 }
                                 that._onFinishLearnLesson();
-                                that.set('playStatus', 'ended');
                                 player.currentTime(0);
                                 player.pause();
                             });
                             
-                            player.on('play',function(){
-                                $.post("../../course/"+lesson.id+'/watch/play');
-                            });
-                            player.on('pause',function(){
-                                $.post("../../course/"+lesson.id+'/watch/paused');
-                            });
-                            player.on('loadeddata',function(){
-                                clearInterval(recordWatchTimeId);
-                                recordWatchTimeId = setInterval(recordWatchTime, 120000);
-                            });
                             player.on('error', function(error){
                                 hasPlayerError = true;
                                 var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
@@ -359,19 +360,7 @@ define(function(require, exports, module) {
                             enableAutosize:true,
                             success: function(media) {
                                 media.addEventListener("ended", function() {
-                                    that.set('playStatus', 'ended');
-                                    $.post("../../course/"+lesson.id+'/watch/paused');
                                     that._onFinishLearnLesson();
-                                });
-                                media.addEventListener("pause", function() {
-                                    $.post("../../course/"+lesson.id+'/watch/paused');
-                                });
-                                media.addEventListener("play", function() {
-                                    $.post("../../course/"+lesson.id+'/watch/play');
-                                });
-                                media.addEventListener("loadeddata", function() {
-                                    clearInterval(recordWatchTimeId);
-                                    recordWatchTimeId = setInterval(recordWatchTime, 120000);
                                 });
                                 media.play();
                             }
@@ -532,10 +521,23 @@ define(function(require, exports, module) {
                             var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
                             $("#lesson-ppt-content").html(html).show();
 
-                            var player = new SlidePlayer({
-                                element: '.slide-player',
-                                slides: response
-                            });
+                            var watermarkUrl = $("#lesson-ppt-content").data('watermarkUrl');
+                            if (watermarkUrl) {
+                                $.get(watermarkUrl, function(watermark) {
+                                    var player = new SlidePlayer({
+                                        element: '.slide-player',
+                                        slides: response,
+                                        watermark: watermark
+                                    });
+                                });
+
+                            } else {
+                                var player = new SlidePlayer({
+                                    element: '.slide-player',
+                                    slides: response
+                                });
+                            }
+
 
                         }, 'json');
                     }
@@ -552,12 +554,23 @@ define(function(require, exports, module) {
                             var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
                             $("#lesson-document-content").html(html).show();
 
-                            var player = new DocumentPlayer({
-                                element: '#lesson-document-content',
-                                swfFileUrl:response.swfUri,
-                                pdfFileUrl:response.pdfUri
-                            });
-
+                            var watermarkUrl = $("#lesson-document-content").data('watermarkUrl');
+                            if (watermarkUrl) {
+                                $.get(watermarkUrl, function(watermark) {
+                                    var player = new DocumentPlayer({
+                                        element: '#lesson-document-content',
+                                        swfFileUrl:response.swfUri,
+                                        pdfFileUrl:response.pdfUri,
+                                        watermark: watermark
+                                    });
+                                });
+                            } else {
+                                var player = new DocumentPlayer({
+                                    element: '#lesson-document-content',
+                                    swfFileUrl:response.swfUri,
+                                    pdfFileUrl:response.pdfUri
+                                });
+                            }
                         }, 'json');
                     }
 
@@ -570,6 +583,7 @@ define(function(require, exports, module) {
                             $("#lesson-swf-content").show();
 
                     }
+
                 }
 
                 if (lesson.type == 'testpaper') {
@@ -588,7 +602,7 @@ define(function(require, exports, module) {
 
                 that._toolbar.set('lesson', lesson);
                 that._startLesson();
-
+                that._afterLoadLesson(id);
             }, 'json');
 
             $.get(this.get('courseUri') + '/lesson/' + id + '/learn/status', function(json) {
@@ -706,20 +720,92 @@ define(function(require, exports, module) {
     };
 
 
+    var Counter = Class.create({
+        initialize: function(player, type, courseId, lessonId, watchLimit) {
+            this.player = player;
+            this.type = type;
+            this.courseId = courseId;
+            this.lessonId = lessonId;
+            this.interval = 120;
+            this.watched = false;
+            this.watchLimit = watchLimit;
+        },
+
+        setTimerId: function(timerId) {
+            this.timerId = timerId;
+        },
+
+        execute: function(){
+            var posted = false;
+            if(this.player && this.type){
+                posted = this.addMediaPlayingCounter();
+            }
+            this.addLearningCounter(posted);
+        },
+
+        addLearningCounter: function(promptlyPost) {
+            var learningCounter = Store.get("lesson_id_"+this.lessonId+"_learning_counter");
+            if(!learningCounter){
+                learningCounter = 0;
+            }
+            learningCounter++;
+
+            if(promptlyPost || learningCounter >= this.interval){
+                var url="../../course/"+this.lessonId+'/learn/time/'+learningCounter;
+                $.post(url);
+                learningCounter = 0;
+            }
+
+            Store.set("lesson_id_"+this.lessonId+"_learning_counter", learningCounter);
+        }, 
+
+        addMediaPlayingCounter: function() {
+            var learningCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
+            if(!learningCounter){
+                learningCounter = 0;
+            }
+
+            var paused = this.player && this.type && (
+                (this.type == "MediaPlayer" && typeof(this.player.getPlaying) == "function" && !this.player.getPlaying())
+                || (this.type == "AudioPlayer" && this.player.media.paused)
+                || (this.type == "VideoPlayer" && this.player.paused()));
+
+            var posted = false;
+            if(learningCounter >= this.interval || (learningCounter>0 && paused)){
+                var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
+                $.post(url);
+                posted = true;
+                learningCounter = 0;
+            } else if(!paused){
+                learningCounter++;
+            }
+
+            if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
+                this.watched = true;
+                var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
+                $.post(url, function(result) {
+                    if (result.status == 'ok') {
+                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
+                    } else if (result.status == 'error') {
+                        window.location.reload();
+                    }
+
+                }, 'json');
+            }
+
+            Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
+
+            return posted;
+        }
+    });
+
+
     exports.run = function() {
         
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
 
-        function recordLearningTime(){
-            url="../../course/"+dashboard.attrs.lessonId.value+'/learn/time/2';
-            $.post(url);
-            setTimeout(recordLearningTime, 120000);
-        }
-        setTimeout(recordLearningTime, 120000);
-
-        
     };
 
 });

@@ -14,6 +14,15 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->router;
 	}
 
+    public function preCheck($targetId, $userId)
+    {
+        if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
+            return array('error' => '已经是班级的学员了!');
+        }
+
+        return array();
+    }
+
 	public function getOrderInfo($targetId, $fields)
 	{
         $classroom = $this->getClassroomService()->getClassroom($targetId);
@@ -60,8 +69,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         if(!$coinEnable) {
             $totalPrice = $classroom["price"];
             $discountRate = 0;
-            if($coursesTotalPrice>0)
+            if($coursesTotalPrice>0){
                 $discountRate = $totalPrice/$coursesTotalPrice;
+            }elseif ($coursesTotalPrice == 0) {
+                $totalPrice=0;
+            }
+
 
             foreach ($paidCourses as $key => $paidCourse) {
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
@@ -102,8 +115,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $afterCourseDiscountPrice = $totalPrice;
         $discountRate = 0;
-        if($coursesTotalPrice>0)
+        if($coursesTotalPrice>0){
             $discountRate = $totalPrice/$coursesTotalPrice;
+        }elseif ($coursesTotalPrice == 0) {
+            $totalPrice=0;
+        }
 
         foreach ($paidCourses as $key => $paidCourse) {
             $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
@@ -211,9 +227,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
 
-        if(intval($totalPrice*100) != intval($fields['totalPrice']*100)) {
-            throw new Exception("实际价格不匹配，不能创建订单!");
-        }
 
         if($totalPrice < 0){
             $totalPrice = 0;

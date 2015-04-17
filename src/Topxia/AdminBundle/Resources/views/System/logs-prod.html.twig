@@ -1,0 +1,18 @@
+{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+
+{% set menu = 'logs' %}
+{% set submenu = 'logs_prod' %}
+{% set menus = permissions('admin_logs','tab') %}
+{% block title %}{{ getTitle('admin_logs_prod')}}{% endblock %}
+
+{% block main %}
+
+  {% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'prod' } %}
+
+  <div class="alert alert-warning">显示最近的２０００条日志信息。</div>
+
+  <pre>
+    {{ logs|nl2br }}
+  </pre>
+
+{% endblock %}

@@ -12,4 +12,6 @@ interface AnnouncementDao
     public function searchAnnouncementsCount($conditions);
 
     public function deleteAnnouncement($id);
+
+    public function updateAnnouncement($id, $fields);
 }

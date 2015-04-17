@@ -10,7 +10,7 @@
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
 </div>
 
-<div class="clearfix mbs">
+<div class="clearfix well well-sm">
   {% set btn_menus = permissions("admin_operation_article_category","button") %}
                 {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
 </div>

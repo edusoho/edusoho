@@ -6,10 +6,8 @@
 {% set script_controller = 'log/list' %}
 {% block title %}{{ getTitle('admin_logs_query')}}{% endblock %}
 {% block main %}
-<div class="mbl">
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
+{% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'logs' } %}
 
 {{ web_macro.flash_messages() }}
 

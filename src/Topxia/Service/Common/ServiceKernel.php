@@ -87,6 +87,7 @@ class ServiceKernel
 
             foreach ($finder as $dir) {
                 $filepath = $dir->getRealPath() . '/module_config.php';
+
                 if (file_exists($filepath)) {
                     $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
                 }
@@ -99,7 +100,6 @@ class ServiceKernel
         }
 
         $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
-
         foreach ($subscribers as $subscriber) {
             $this->dispatcher()->addSubscriber(new $subscriber());
         }

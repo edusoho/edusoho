@@ -77,7 +77,7 @@ class DefaultController extends BaseController
 
     public function getCloudNoticesAction(Request $request)
     {
-        $userAgent = 'Open Edusoho App Client 1.0';
+        $userAgent = 'Open EduSoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
         $url = "http://open.edusoho.com/api/v1/context/notice";
@@ -130,6 +130,8 @@ class DefaultController extends BaseController
                 $mainAppUpgrade = $value;
             }
         }
+        
+        $liveCourseStatus = $this->getEduCloudService()->getLiveCourseStatus();
 
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
             "apps"=>$apps,
@@ -137,6 +139,7 @@ class DefaultController extends BaseController
             "mainAppUpgrade"=>$mainAppUpgrade,
             "app_count"=>$app_count,
             "unInstallAppCount"=>$unInstallAppCount,
+            "liveCourseStatus" => $liveCourseStatus
         ));
     }
 
@@ -361,6 +364,11 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
     }
 
     protected function getSettingService()

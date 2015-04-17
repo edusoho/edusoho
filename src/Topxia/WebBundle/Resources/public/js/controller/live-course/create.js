@@ -36,7 +36,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '#live-title-field',
+            element: '#live-title-field'
         });
 
         $("[name=startTime]").datetimepicker({

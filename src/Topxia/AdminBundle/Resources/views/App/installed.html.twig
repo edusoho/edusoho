@@ -12,13 +12,13 @@
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
   </div>
 
-  <div class="mbl">
+  <div class="mbl btn-group">
 
-      <a href="{{ url('admin_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-info{% endif %}">全部</a>
+      <a href="{{ url('admin_app_installed', {postStatus: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">全部</a>
 
-      <a href=" {{ url('admin_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-info{% endif %}">主题</a>
+      <a href=" {{ url('admin_app_installed', {postStatus: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">主题</a>
 
-      <a href=" {{ url('admin_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-info{% endif %}">应用</a>
+      <a href=" {{ url('admin_app_installed', {postStatus: 'app'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'app'%}btn-primary{% endif %}">应用</a>
   </div>
 
   <table class="table table-striped table-hover">
@@ -34,6 +34,7 @@
       {% endif  %}
       
       {% for app in apps %}
+
         {% if app.installed|default(0) or app.userAccess|default('fail') == 'ok' %}
         <tr>
           <td>
@@ -70,16 +71,12 @@
               </div>
               
               {% if app.installed|default(0) %}
+                  {% if app.code|lower != 'MAIN' %}
+                    {% set url = appMeta[app.code].manage_index|default('') %}
+                  {% endif %}
               <div class="right-info pull-right">
-                  {% if app.code|lower == 'vip' %}
-                    <a href="../vip/list" class="btn btn-primary">管理</a>
-                  {% elseif app.code|lower == 'coupon' %}
-                    <a href="../coupon" class="btn btn-primary">管理</a>
-                  {% elseif app.code|lower == 'questionplus' %}
-                    <a href="../question/plumber/setting" class="btn btn-primary">管理</a>
-                  {% elseif app.code|lower in ['homework', 'materiallib'] %}
-                  {% elseif app.code|lower != 'main' and app.type == 'plugin' %}
-                    <a href="../{{ app.code|lower }}/index" class="btn btn-primary">管理</a>
+                  {% if url != '' %}
+                  <a href="{{url(url)}}"  class="btn btn-primary">管理</a>
                   {% endif %}
 
                   {% if setting('developer.debug') and app.code|lower != 'main' %}
@@ -99,6 +96,7 @@
     
         </tr>
         {% endif %}
+
       {% endfor %}
     </tbody>
   </table>

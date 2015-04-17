@@ -40,6 +40,46 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
     public function dropFieldData($fieldName)
     {   
+        $fieldNames = array(
+            'intField1',
+            'intField2',
+            'intField3',
+            'intField4',
+            'intField5',
+            'dateField1',
+            'dateField2',
+            'dateField3',
+            'dateField4',
+            'dateField5',
+            'floatField1',
+            'floatField2',
+            'floatField3',
+            'floatField4',
+            'floatField5',
+            'textField1',
+            'textField2',
+            'textField3',
+            'textField4',
+            'textField5',
+            'textField6',
+            'textField7',
+            'textField8',
+            'textField9',
+            'textField10',
+            'varcharField1',
+            'varcharField2',
+            'varcharField3',
+            'varcharField4',
+            'varcharField5',
+            'varcharField6',
+            'varcharField7',
+            'varcharField8',
+            'varcharField9',
+            'varcharField10');
+        if (!in_array($fieldName, $fieldNames)) {
+            throw $this->createDaoException('fieldName error');
+        }
+
         $sql="UPDATE {$this->table} set {$fieldName} =null ";
         return $this->getConnection()->exec($sql);
     }
