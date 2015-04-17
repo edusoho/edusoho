@@ -36,7 +36,7 @@
     <button class="btn btn-primary">搜索</button>
     {% set menus = permissions('admin_course_show', 2) %}
  
-    {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
+    {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus, type:submenu} %}
       {% if liveSetEnabled == 1 %}
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-success btn-sm pull-right mls" target="_blank">创建直播课程</a>
   {% endif %}
