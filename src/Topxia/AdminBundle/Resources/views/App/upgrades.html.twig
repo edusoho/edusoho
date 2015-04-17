@@ -3,9 +3,9 @@
 {% block title %}{{ getTitle('admin_app_upgrades')}}{% endblock %}
 
 {% set script_controller = 'app/upgrades' %}
-{% set menu = 'center' %}
-{% set tab_menus = permissions('admin_app_center_show',"tab") %}
-{% set submenu = 'upgrades' %}
+{% set menu = 'admin_app_center_show' %}
+{% set tab_menus = permissions('admin_app_center_show', 1) %}
+{% set submenu = 'admin_app_upgrades' %}
 
 {% block main %}
   <div class="mbl">

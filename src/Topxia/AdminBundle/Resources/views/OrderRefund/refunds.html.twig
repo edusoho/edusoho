@@ -1,8 +1,8 @@
 {% extends layout %}
 
 {% set script_controller = 'order/refunds' %}
-{% set tab_menus = permissions('admin_'~targetType~'_refunds',"tab") %}
-{% set menu = targetType~'_refunds' %}
+{% set tab_menus = permissions('admin_'~targetType~'_refunds', 1) %}
+{% set menu = 'admin_'~targetType~'_refunds' %}
 {% set submenu = targetType~'_refunds_manage' %}
 {% block title %}{{ getTitle('admin_'~targetType~'_refunds')}}{% endblock %}
 

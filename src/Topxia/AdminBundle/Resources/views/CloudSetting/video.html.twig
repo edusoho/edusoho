@@ -1,9 +1,9 @@
   {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 {% block title %}{{ getTitle('admin_cloud_video_setting')}}{% endblock %}
 
-{% set menu = 'cloud-video' %}
-{% set tab_menus = permissions('admin_setting_cloud_video',"tab") %}
-{% set submenu = 'cloud_video_setting' %}
+{% set menu = 'admin_setting_cloud_video' %}
+{% set tab_menus = permissions('admin_setting_cloud_video', 1) %}
+{% set submenu = 'admin_cloud_video_setting' %}
 {% set script_controller = 'setting/cloud' %}
 
 {% block main %}

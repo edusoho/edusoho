@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% set menus = permissions("admin_setting_user","tab")%}
-{% set menu = 'user_set' %}
+{% set menus = permissions("admin_setting_user", 1)%}
+{% set menu = 'admin_setting_user' %}
 
 {% block main %}
 

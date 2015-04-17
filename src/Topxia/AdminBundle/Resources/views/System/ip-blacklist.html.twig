@@ -1,10 +1,10 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% set menu = 'ip_blacklist' %}
-{% set submenu = 'ip_blacklist_manage' %}
-{% set menus = permissions('admin_setting_ip_blacklist','tab') %}
+{% set menu = 'admin_setting_ip_blacklist' %}
+{% set submenu = 'admin_setting_ip_blacklist' %}
+{% set menus = permissions('admin_setting_ip_blacklist', 1) %}
 
-{% block title %}{{ getTitle('admin_setting_ip_blacklist_manage')}}{% endblock %}
+{% block title %}{{ getTitle('admin_setting_ip_blacklist')}}{% endblock %}
 {% block main %}
 <div class="mbl">
 

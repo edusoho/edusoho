@@ -1,8 +1,8 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% set menu = 'logs' %}
-{% set submenu = 'logs_prod' %}
-{% set menus = permissions('admin_logs','tab') %}
+{% set menu = 'admin_logs' %}
+{% set submenu = 'admin_logs_prod' %}
+{% set menus = permissions('admin_logs', 1) %}
 {% block title %}{{ getTitle('admin_logs_prod')}}{% endblock %}
 
 {% block main %}
