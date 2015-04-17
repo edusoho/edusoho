@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
    var AnnouncementWidget = Widget.extend({
       attrs: {
-         speed: 100
+         speed: 50
       },
 
       events: {
