@@ -23,18 +23,27 @@ class MenuExtension extends \Twig_Extension
         );
     }
 
-    public function htmlTitle($code)
+    public function htmlTitle($position, $code)
     {
+        if ($position != 'admin') {
+            throw new \RuntimeException('menu position error.');
+        }
         return $this->createMenuUtil()->getTitle($code);
     }
 
-    public function pageTitle($code)
+    public function pageTitle($position, $code)
     {
+        if ($position != 'admin') {
+            throw new \RuntimeException('menu position error.');
+        }
         return $this->createMenuUtil()->getTitle2($code);
     }
 
-    public function menus($parent = null, $group = null)
+    public function menus($position, $parent = null, $group = null)
     {
+        if ($position != 'admin') {
+            throw new \RuntimeException('menu position error.');
+        }
         return $this->createMenuUtil()->getPermissions($parent, $group);
     }
 
