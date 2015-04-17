@@ -692,10 +692,8 @@ a:hover {
     background: #ebf6f1;
     height: 40px;
 }
-.banner-volume {
-    line-height: 25px;
-    vertical-align: middle;
-    margin-top: 8px;
-    color: #3e3e3e;
-    font-size: 14px;
+
+.announcement .alert {
+    margin-bottom: 0px;
+    margin-top: 20px;
 }
