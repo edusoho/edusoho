@@ -5029,7 +5029,7 @@ a.homework-essay-textarea-pack-up{
   	text-align: center;
   	margin-bottom: 0px;
   	border-radius: 0px; 
-  	padding: 10px;
+  	padding: 5px;
 }
 
 .set-email-alert .close {
@@ -5037,7 +5037,9 @@ a.homework-essay-textarea-pack-up{
 }
 
 .announcement .alert {
-	padding: 10px;
-	margin-bottom: 0px;
+	padding: 5px 20px;
+	margin-bottom: -10px;
+    margin-top: -5px;
+	font-size: 12px;
 }
 
