@@ -146,7 +146,6 @@ admin_operation_article_create:
     router_params_context: false
     mode: page
     type: button
-    icon: 'glyphicon glyphicon-plus'
 admin_operation_category_create:
     name: 新建栏目
     parent: admin_operation_article_category
@@ -181,7 +180,6 @@ admin_operation_group_create:
     router_params_context: false
     mode: page
     type: button
-    icon: 'glyphicon glyphicon-plus'
 admin_operation_group_manage:
     name: 组管理
     parent: admin_operation_group
