@@ -543,6 +543,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);
     }
 
+    public function setUserBadgeTitle($thread, $users)
+    {
+        //TO DO
+        $namespace = ucfirst($thread['targetType']);
+        $users = $this->createService("{$namespace}:{$namespace}.{$namespace}ThreadService")->setUserBadgeTitle($thread['targetId'], $users);
+
+        return $users;
+    }
+
     public function findMembersCountByThreadId($threadId)
     {
         return $this->getThreadMemberDao()->findMembersCountByThreadId($threadId);
