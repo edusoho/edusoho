@@ -31,6 +31,7 @@ seajs.config({
 		'overlay' : 'arale/overlay/1.1.4/overlay',
 		'mask' : 'arale/overlay/1.1.4/mask',
 		'sticky': 'arale/sticky/1.3.1/sticky',
+		'cookie': 'arale/cookie/1.0.2/cookie',
 		"templatable": "arale/templatable/0.9.1/templatable",
 		'placeholder': 'arale/placeholder/1.1.0/placeholder',
 		'json': 'gallery/json/1.0.3/json',

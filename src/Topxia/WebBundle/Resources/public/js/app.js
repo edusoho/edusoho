@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+	var Cookie = require('cookie');
 
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
@@ -116,7 +117,13 @@ define(function(require, exports, module) {
 
     if($(".set-email-alert").length>0){
     	$(".set-email-alert .close").click(function(){
-    		//$.cookie("close_set_email_alert",'true',{expires:0,path:'/'});
+    		Cookie.set("close_set_email_alert",'true');
+    	});
+    }
+
+    if($(".announcements-alert").length>0){
+    	$(".announcements-alert .close").click(function(){
+    		Cookie.set("close_announcements_alert",'true');
     	});
     }
 

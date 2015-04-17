@@ -134,19 +134,7 @@
     </div>
   </div>
 
-  {% set announcements = data('Announcement',{ count:2 }) %}
-  {% if announcements %}
-    <div class="container announcement">
-      <div class="alert alert-warning alert-dismissible" role="alert">
-        {% for announcement in announcements %}
-          <a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>
-            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.title|sub_text(16)}}
-          </a>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
+  {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
 
   <div id="content-container" class="container">
     {% block content %}{% endblock %}

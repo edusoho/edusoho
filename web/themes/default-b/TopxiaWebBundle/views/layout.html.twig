@@ -49,7 +49,7 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-  {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
+  {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) and not app.request.cookies.get('close_set_email_alert') %}
     <div class="alert alert-info set-email-alert">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
@@ -133,19 +133,7 @@
     </div>
   </div>
 
-  {% set announcements = data('Announcement',{ count:2 }) %}
-  {% if announcements %}
-    <div class="container announcement">
-      <div class="alert alert-warning alert-dismissible" role="alert">
-        {% for announcement in announcements %}
-          <a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>
-            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.title|sub_text(16)}}
-          </a>
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
+  {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
 
   <div id="content-container" class="container">
     {% block content %}{% endblock %}
