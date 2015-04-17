@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             'click .js-post-delete': 'onPostDelete',
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
-            'click .pagination a': 'onClickPagination',
+            //'click .pagination a': 'onClickPagination',
             'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm'
         },
 
@@ -91,7 +91,7 @@ define(function(require, exports, module) {
             });
         },
 
-        onClickPagination: function(e) {
+        /*onClickPagination: function(e) {
             e.preventDefault();
             var $btn = $(e.currentTarget);
 
@@ -101,7 +101,7 @@ define(function(require, exports, module) {
                 $btn.parents('.pagination').remove();
                 $('body').scrollTop(pos.top);
             });
-        },
+        },*/
 
         onClickReply: function(e) {
             var $btn = $(e.currentTarget);
