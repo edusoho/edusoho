@@ -32,7 +32,7 @@
 
                 <div class="media edu-user col-md-8">
                   <div class="pull-left">
-                    <a href="javascript:;">{% if isBinded.avatar == "" %}<img src="{{ default_path('user_avatar.jpg') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
+                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.jpg') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
                   </div>
                   <div class="media-body">
 
