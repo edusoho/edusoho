@@ -171,9 +171,17 @@ class AppController extends BaseController
         $appsInstalled = $this->getAppService()->findApps(0, 100);
         $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
 
+        $dir = dirname(dirname(dirname(dirname(__DIR__)))); 
+        $appMeta = array();
+
         foreach ($appsInstalled as $key => $value) {
 
             $appsInstalled[$key]['installed'] = 1;
+
+            if ($key != 'MAIN') {
+                $dic = $dir.'/plugins/'.$key.'/plugin.json';
+                $appMeta[$key] = json_decode(file_get_contents($dic));
+            }
 
         }
 
@@ -195,6 +203,7 @@ class AppController extends BaseController
             'theme' => $theme,
             'plugin' => $plugin,
             'type' => $postStatus,
+            'appMeta' => $appMeta,
         ));
     }
 
