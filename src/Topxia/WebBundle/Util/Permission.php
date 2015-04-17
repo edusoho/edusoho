@@ -145,7 +145,7 @@ Class Permission
             $code = $permission['parent'];
             if($this->getNameByCode($code, $permissions)) {
 
-                $title .= "-";
+                $title .= " - ";
                 $title .= $this->getNameByCode($code, $permissions);
                 
             }
@@ -156,9 +156,20 @@ Class Permission
         return $title;
     }
 
+    public function getFullTitle($code)
+    {
+        return $this->getTitle($code);
+    }
+
+    public function getTitle2($code)
+    {
+        $permissions = $this->parsePermissions();
+
+        return $this->getNameByCode($code, $permissions);
+    }
+
     private function getNameByCode($code, $permissions)
     {       
-
         if(isset($permissions[$code])) {
 
             $permission = $permissions[$code];
