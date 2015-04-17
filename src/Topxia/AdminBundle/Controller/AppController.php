@@ -61,7 +61,7 @@ class AppController extends BaseController
         $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date']) : '' ;
 
         $live = isset($content['service']['live']) ? $content['service']['live'] : null ;
-        $liveDate = isset($content['service']['live']['expire']) ?  (strtotime($currentTime) -strtotime($content['service']['live']['expire']))/(60*60*24) : '' ;
+        $liveDate = isset($content['service']['live']['expire']) ?  ($content['service']['live']['expire'] - strtotime($currentTime) )/(60*60*24) : '' ;
 
         $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null ;
 
