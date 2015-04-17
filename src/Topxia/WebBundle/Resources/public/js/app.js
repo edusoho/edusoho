@@ -114,5 +114,11 @@ define(function(require, exports, module) {
     	$(this).removeClass("md-spin");
     });
 
+    if($(".set-email-alert").length>0){
+    	$(".set-email-alert .close").click(function(){
+    		//$.cookie("close_set_email_alert",'true',{expires:0,path:'/'});
+    	});
+    }
+
 
 });
