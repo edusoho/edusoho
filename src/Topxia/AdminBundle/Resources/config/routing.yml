@@ -637,6 +637,10 @@ admin_app_my_cloud:
     pattern:  /app/center/my/cloud
     defaults: { _controller: TopxiaAdminBundle:App:myCloud }
 
+admin_cloud_service_information:
+    pattern:  /app/center/my/cloud/information
+    defaults: { _controller: TopxiaAdminBundle:App:serviceInformation }
+
 # admin_app_cloud:
 #     pattern:  /app/center/cloud
 #     defaults: { _controller: TopxiaAdminBundle:App:cloud }

@@ -421,6 +421,7 @@ input.LargeInput {width: 600px;}
   margin-right: 5px;
 }
 
+
 .edu-user .name {
   color: #333;
   font-size: 18px;
@@ -429,6 +430,7 @@ input.LargeInput {width: 600px;}
 .edu-notice {
   border-left: 1px solid #ccc;
   padding-left: 30px;
+  min-height: 120px;
 }
 
 .edu-notice .title {
