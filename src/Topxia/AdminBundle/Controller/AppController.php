@@ -25,58 +25,26 @@ class AppController extends BaseController
 
     public function myCloudAction(Request $request)
     {
-       $content = $this->getEduCloudService()->getUserOverview();
-       $info = $this->getEduCloudService()->getAccountInfo();
-       $isBinded = $this->getAppService()->getBinded();
+        $content = $this->getEduCloudService()->getUserOverview();
+        $info = $this->getEduCloudService()->getAccountInfo();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
         if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
-                $articles = $EduSohoOpenClient->getArticles();
-                $articles = json_decode($articles, true);
-                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    'articles' => $articles,
-                ));
+            $articles = $EduSohoOpenClient->getArticles();
+            $articles = json_decode($articles, true);
+            return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                'articles' => $articles,
+            ));
         }
 
-        $currentTime = date('Y-m-d', time());
-
-        $account = isset($content['account']) ? $content['account'] : '';
-        $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
-
-        $user = isset($content['user']) ? $content['user'] : '' ;
-        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
-
-        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
-        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
-
-         $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
-
-        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
-
-        $notices = $EduSohoOpenClient->getNotices();
-        $notices = json_decode($notices, true);
-
-        return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-                    'content' =>$content,
-                    'packageDate' =>$packageDate,
-                    'storageDate' =>$storageDate,
-                    'day' =>$day,
-                    'storage' =>$storage,
-                    'live' =>$live,
-                    'user' =>$user,
-                    'sms' =>$sms,
-                    'account' =>$account,
-                    "notices"=>$notices,
-                    'info' => $info,
-                    'isBinded' => $isBinded,
-                ));
+        return $this->redirect($this->getUrl("admin_cloud_service_information"));
     }
 
-        public function serviceInformationAction(Request $request)
+    public function serviceInformationAction(Request $request)
     {
-       $content = $this->getEduCloudService()->getUserOverview();
-       $info = $this->getEduCloudService()->getAccountInfo();
-       $isBinded = $this->getAppService()->getBinded();
+        $content = $this->getEduCloudService()->getUserOverview();
+        $info = $this->getEduCloudService()->getAccountInfo();
+        $isBinded = $this->getAppService()->getBinded();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
 
@@ -101,21 +69,21 @@ class AppController extends BaseController
         $notices = json_decode($notices, true);
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-                    'content' =>$content,
-                    'packageDate' =>$packageDate,
-                    'storageDate' =>$storageDate,
-                    'liveDate' =>$liveDate,
-                    'day' =>$day,
-                    'month' => $month,
-                    'storage' =>$storage,
-                    'live' =>$live,
-                    'user' =>$user,
-                    'sms' =>$sms,
-                    'account' =>$account,
-                    "notices"=>$notices,
-                    'info' => $info,
-                    'isBinded' => $isBinded,
-                ));
+            'content' =>$content,
+            'packageDate' =>$packageDate,
+            'storageDate' =>$storageDate,
+            'liveDate' =>$liveDate,
+            'day' =>$day,
+            'month' => $month,
+            'storage' =>$storage,
+            'live' =>$live,
+            'user' =>$user,
+            'sms' =>$sms,
+            'account' =>$account,
+            "notices"=>$notices,
+            'info' => $info,
+            'isBinded' => $isBinded,
+        ));
     }
 
     private function isLocalAddress($address)
@@ -162,13 +130,13 @@ class AppController extends BaseController
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
-        'apps' => $apps,
-        'theme' => $theme,
-        'allApp' => $app,
-        'installedApps' => $installedApps,
-        'type' => $postStatus,
+            'apps' => $apps,
+            'theme' => $theme,
+            'allApp' => $app,
+            'installedApps' => $installedApps,
+            'type' => $postStatus,
 
-    ));
+        ));
 
     }
 
