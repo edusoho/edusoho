@@ -467,3 +467,15 @@ input.LargeInput {width: 600px;}
   cursor: pointer;
 }
 
+.images-content {
+  position: absolute; 
+  z-index: 10; 
+  left: 720px; 
+  bottom:20px; 
+  width: 100%; 
+  color: #fff; 
+  height: 54px; 
+  line-height: 54px; 
+  overflow: hidden; 
+}
+

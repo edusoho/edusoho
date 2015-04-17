@@ -2,7 +2,7 @@
 
 {% block title %}{{ getTitle('admin_app_my_cloud')}}{% endblock %}
 
-{% set menu = 'my-cloud' %}
+{% set menu = 'admin_app_my_cloud' %}
 {% set submenu = 'service-information' %}
 
 {% block main %}
@@ -95,13 +95,13 @@
               <div class="panel panel-default">
                 <div class="panel-body">
                   <h4 class="eduyun-title">套餐信息</h4>
-                  {% if content.user.level == "none" %}
+                  {% if user.level == "none" %}
                     <div class="alert alert-warning alert-sm" role="alert">
                       <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
                     </div>
                   {% else %}
-                  <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
-                  <p class="text-muted">有效期：{{ content.user.startDate|default('') }}~{{ content.user.endDate|default('') }}</p>
+                  <p class="text-muted">版本：{{user.levelName|default('')}}</p>
+                  <p class="text-muted">有效期：{{ user.startDate|default('') }}~{{ user.endDate|default('') }}</p>
                   {% endif %}
                   <!--已到期-->
                   {% if packageDate > 0 %}

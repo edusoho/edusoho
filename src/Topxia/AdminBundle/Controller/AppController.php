@@ -50,20 +50,20 @@ class AppController extends BaseController
 
         $currentTime = date('Y-m-d', time());
 
-        $account = isset($content['account']) ? $content['account'] : '';
+        $account = isset($content['account']) ? $content['account'] : null;
         $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
 
-        $user = isset($content['user']) ? $content['user'] : '' ;
+        $user = isset($content['user']) ? $content['user'] : null ;
         $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
 
-        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
+        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
         $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
         $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date']) : '' ;
 
-        $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
+        $live = isset($content['service']['live']) ? $content['service']['live'] : null ;
         $liveDate = isset($content['service']['live']['expire']) ? (strtotime($currentTime) - strtotime($content['service']['live']['expire']))/(60*60*24) : '' ;
 
-        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
+        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null ;
 
         $notices = $EduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
