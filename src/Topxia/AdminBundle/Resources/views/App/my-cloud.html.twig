@@ -100,7 +100,7 @@
                       <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
                     </div>
                   {% else %}
-                  <p class="text-muted">版本：{% if user.level == "none" %}非商业授权{% else %}商业授权{% endif %}</p>
+                  <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
                   <p class="text-muted">有效期：{{ user.startDate|default('') }}~{{ user.endDate|default('') }}</p>
                   {% endif %}
                   <!--已到期-->
@@ -124,7 +124,7 @@
                   <!-- 商业授权 -->
                   <!-- <p class="text-muted">商业授权</p> -->
                   <!-- 非商业授权 -->
-                  <p class="text-muted">{{ info.levelName }}</p>
+                  <p class="text-muted">{% if user.level == "none" %}非商业授权{% else %}商业授权{% endif %}</p>
                   <p class="text-muted">授权域名: {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
         {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
                 </div>
