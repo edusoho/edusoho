@@ -124,6 +124,33 @@ class UserSettingController extends BaseController
         ));
     }
 
+    public function userAvatarAction(Request $request)
+    {
+        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
+        $defaultSetting = $this->getSettingService()->get('default', array());
+
+        if ($request->getMethod() == 'POST') {
+            $userDefaultSetting = $request->request->all();
+
+            $userDefaultSetting =  ArrayToolkit::parts($userDefaultSetting, array(
+                'defaultAvatar'
+            )); 
+
+            $defaultSetting = array_merge($defaultSetting,$userDefaultSetting);
+
+            $this->getSettingService()->set('default', $defaultSetting);
+            
+            $this->getSettingService()->set('user_default', $userDefaultSetting);
+
+            $this->getLogService()->info('system', 'update_settings', "更新头像设置", $userDefaultSetting);
+            $this->setFlashMessage('success', '头像设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:user-avatar.html.twig', array(
+            'defaultSetting' => $defaultSetting,
+        ));
+    }
+
     public function loginConnectAction(Request $request)
     {
         $loginConnect = $this->getSettingService()->get('login_bind', array());
