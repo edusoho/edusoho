@@ -74,7 +74,7 @@
             </p> 
             {% if account %}
             <!--不足50元-->
-            {% if 0 < content.account.cash < 50 %}
+            {% if 0 < content.account.cash  and content.account.cash < 50 %}
             <p class="text-warning">余额不足50元，请尽快充值！</p>
             {% endif %}
             <!--欠费7天预留保护期-->
