@@ -33,10 +33,10 @@ define(function(require, exports, module) {
          if(marginTop < (childrenCount-1)*childHeight){
             offset.top--;
             marginTop++;
-            obj.offset({top:(offset.top), left:offset.left});
+            obj.offset({top:offset.top, left:offset.left});
             obj.data("margin-top", marginTop);
          } else {
-            obj.offset({top:offset.top+(marginTop), left:offset.left})
+            obj.offset({top:offset.top+(childHeight), left:offset.left})
             obj.data("margin-top", marginTop-childHeight);
             $(obj.children()[0]).appendTo(obj);
 
