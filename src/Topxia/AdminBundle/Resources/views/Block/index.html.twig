@@ -2,7 +2,7 @@
 {% set tab_menus = menus("admin",'admin_operation_block', 1) %}
 {% set menu = 'admin_operation_block' %}
 {% set submenu = 'block' %}
-{% block title %}{{ getTitle('admin_operation_block')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_operation_block')}}{% endblock %}
 
 {% set script_controller = 'block/list' %}
 {% block main %}

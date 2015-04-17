@@ -2,7 +2,7 @@
 
 {% set script_controller = 'setting/user-center' %}
 {% set submenu = 'admin_setting_user_center' %}
-{% block title %}{{ getTitle('admin_setting_user_center')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_setting_user_center')}}{% endblock %}
 {% block main_content %}
 
   {% if setting.mode !='default' %}

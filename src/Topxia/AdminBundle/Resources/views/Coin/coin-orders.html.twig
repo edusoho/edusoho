@@ -2,7 +2,7 @@
 
 {% set submenu = 'coin_order_query' %}
 
-{% block title %}{{ getTitle('admin_coin_orders')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_coin_orders')}}{% endblock %}
 {% block main_content %}
 
   {% if setting('coin.coin_enabled') %}

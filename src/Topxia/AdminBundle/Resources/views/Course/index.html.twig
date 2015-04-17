@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_course_manage')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_course_manage')}}{% endblock %}
 
 {% set menus = menus("admin",'admin_course_show', 1) %}
 {% set menu = 'admin_course_show' %}

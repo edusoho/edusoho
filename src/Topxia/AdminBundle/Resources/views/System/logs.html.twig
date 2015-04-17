@@ -4,7 +4,7 @@
 {% set submenu = 'admin_logs_query' %}
 {% set menus = menus("admin",'admin_logs', 1) %}
 {% set script_controller = 'log/list' %}
-{% block title %}{{ getTitle('admin_logs_query')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_logs_query')}}{% endblock %}
 {% block main %}
 
 {% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'logs' } %}

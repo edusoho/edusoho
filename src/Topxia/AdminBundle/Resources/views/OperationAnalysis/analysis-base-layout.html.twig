@@ -7,7 +7,7 @@
 
     
 {% set menus = menus("admin",'admin_operation_analysis_register', 1) %}
-{% block title %}{{ getTitle('admin_operation_analysis_register')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_operation_analysis_register')}}{% endblock %}
 
 {% block main %}
   <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />

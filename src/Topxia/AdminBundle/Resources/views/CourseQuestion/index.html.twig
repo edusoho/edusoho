@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
 {% set menus = menus("admin",'admin_course_question', 1) %}
-{% block title %}{{ getTitle('admin_course_question')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_course_question')}}{% endblock %}
 
 {% set script_controller = 'course/questions' %}
 
