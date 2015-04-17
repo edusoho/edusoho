@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
-{% set menu = 'operation_settings' %}
-{% set submenu = 'group_set' %}
-{% set menus = permissions('admin_setting_operation','tab') %}
+{% set menu = 'admin_setting_operation' %}
+{% set submenu = 'admin_group_set' %}
+{% set menus = permissions('admin_setting_operation', 1) %}
 {% block title %}{{ getTitle('admin_group_set')}}{% endblock %}
 
     {% block main %}

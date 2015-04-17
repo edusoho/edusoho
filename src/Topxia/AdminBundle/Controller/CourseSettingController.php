@@ -63,7 +63,7 @@ class CourseSettingController extends BaseController
             }
 
             $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
-                'defaultCoursePicture','chapter_name',
+                'chapter_name',
                 'part_name'
             ));
             $this->getSettingService()->set('course_default', $courseDefaultSetting);
@@ -103,6 +103,38 @@ class CourseSettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
             'userFields' => $userFields,
+            'defaultSetting' => $defaultSetting,
+            'hasOwnCopyright' => false,
+        ));
+    }
+
+    public function courseAvatarAction(Request $request)
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        $courseDefaultSet = $this->getCourseDefaultSet();
+        $defaultSetting = array_merge($courseDefaultSet, $courseDefaultSetting);
+
+        if ($request->getMethod() == 'POST') {
+
+            $defaultSetting = $request->request->all();
+
+            $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+                'defaultCoursePicture'
+            ));
+            $this->getSettingService()->set('course_default', $courseDefaultSetting);
+
+            $default = $this->getSettingService()->get('default', array());
+            $defaultSetting = array_merge($default,$courseDefaultSetting);
+            $this->getSettingService()->set('default', $defaultSetting);
+
+            $this->getLogService()->info('system', 'update_settings', "更新课程默认图片设置", $courseSetting);
+            $this->setFlashMessage('success', '课程默认图片设置已保存！');
+        }
+
+        return $this->render('TopxiaAdminBundle:System:course-avatar.html.twig', array(
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => false,
         ));

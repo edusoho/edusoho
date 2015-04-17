@@ -35,11 +35,11 @@ define(function(require, exports, module) {
 
 			if($('.divider').length> 0) {
 
-				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a>');
+				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面已添加</a>');
 				
 			}else{
 
-				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面以添加</a><li role="presentation" class="divider"></li>');
+				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面已添加</a><li role="presentation" class="divider"></li>');
 			
 			}
 			$('.admin-collect').addClass('open');

@@ -1,10 +1,9 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% set active = 'manage' %}
-{% set menus = permissions('admin_course_note','tab') %}
+{% set menus = permissions('admin_course_note', 1) %}
 {% block title %}{{ getTitle('admin_course_note')}}{% endblock %}
 
-{% set menu = 'note' %}
+{% set menu = 'admin_course_note' %}
 
 {% set script_controller = 'course/note' %}
 

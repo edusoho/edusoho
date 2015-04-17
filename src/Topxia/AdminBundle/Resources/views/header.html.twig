@@ -2,7 +2,7 @@
   <ul class="nav navbar-nav">
     {% for menu in sub_menus %}
         {% set param = {} %}
-        {% set router_name = menu.router_name %}
+        {% set router_name = menu.router_name|default(menu.code) %}
 
           {% if menu.router_params|default(null) %}
           {% set router_params = menu.router_params %}
@@ -19,14 +19,14 @@
               
               {% endfor %}
 
-            <li  {% if nav == menu.active|default('-1') %}class="active"{% endif %} ><a href="{{path(router_name,param)}}">{{menu.name}}</a></li>
+            <li  {% if nav == menu.code|default('-1') %}class="active"{% endif %} ><a href="{{path(router_name,param)}}">{{menu.name}}</a></li>
             {% else %}
-            <li {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name,router_params)}}">{{menu.name}}</a></li>
+            <li {% if nav == menu.code|default('-1') %}class="active"{% endif %}><a href="{{path(router_name,router_params)}}">{{menu.name}}</a></li>
             {% endif %}
 
          
           {% else %}
-          <li  {% if nav == menu.active|default('-1') %}class="active"{% endif %}><a href="{{path(router_name)}}">{{menu.name}}</a></li>
+          <li  {% if nav == menu.code|default('-1') %}class="active"{% endif %}><a href="{{path(router_name)}}">{{menu.name}}</a></li>
           {% endif %}
         
         {% endfor %}

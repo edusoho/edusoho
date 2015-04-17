@@ -5,9 +5,9 @@
 
 {% set script_controller = 'course/recommend-list' %}
 
-  {% set menu = 'course' %}
-  {% set type = 'recommend'  %}
-  {% set menus = permissions('admin_course_show','tab') %}
+  {% set menu = 'admin_course_show' %}
+  {% set type = 'admin_course_recommend'  %}
+  {% set menus = permissions('admin_course_show', 1) %}
 
 {% block main %}
 

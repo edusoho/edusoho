@@ -21,7 +21,8 @@
       <label for="url">内容链接</label>
     </div>
     <div class="col-md-8 controls">
-      <input type="text" id="url"  name="url" class="form-control" value="{% if announcement|default(null) %}{{announcement.url}}{% else %}http://{% endif %}">
+      <input type="text" id="url"  name="url" class="form-control" value="{{ announcement.url|default('')}}">
+      <p class="help-block">以"http://"或"https://"开头</p>
     </div>
   </div>
 

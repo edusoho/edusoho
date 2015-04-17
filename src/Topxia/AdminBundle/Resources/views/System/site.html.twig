@@ -1,8 +1,8 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% set menus = permissions('admin_setting','tab') %}
-{% set menu = 'site' %}
-{% set submenu = 'site-massage' %}
+{% set menus = permissions('admin_setting', 1) %}
+{% set menu = 'admin_setting' %}
+{% set submenu = 'admin_setting_massage' %}
 {% set script_controller = 'setting/site' %}
 {% block title %}{{ getTitle('admin_setting_massage')}}{% endblock %}
 

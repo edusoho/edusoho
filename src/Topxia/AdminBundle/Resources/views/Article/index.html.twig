@@ -2,9 +2,9 @@
 
 {% set script_controller = 'article/list' %}
 
-{% set tab_menus = permissions('admin_operation_article',"tab") %}
-{% set menu = 'article' %}
-{% set submenu = 'article' %}
+{% set tab_menus = permissions('admin_operation_article', 1) %}
+{% set menu = 'admin_operation_article' %}
+{% set submenu = 'admin_operation_article_manage' %}
 {% block title %}{{ getTitle('admin_operation_article_manage')}}{% endblock %}
 
 {% block main %}
@@ -35,7 +35,7 @@
 		</select>
 	</div>
 	<button class="btn btn-primary" type="submit">搜索</button>
-	{% set btn_menus = permissions("admin_operation_article","button") %}
+	{% set btn_menus = permissions("admin_operation_article", 2) %}
     {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
 
 </form>

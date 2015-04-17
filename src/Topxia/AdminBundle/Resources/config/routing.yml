@@ -536,6 +536,10 @@ admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userCenter }
 
+admin_setting_avatar:
+    pattern:  /setting/user-avatar
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:userAvatar }
+
 admin_setting_user_fields:
     pattern:  /setting/user-fields
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userFields }
@@ -543,6 +547,10 @@ admin_setting_user_fields:
 admin_setting_course_setting:
     pattern:  /setting/course-setting
     defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseSetting }
+
+admin_setting_course_avatar:
+    pattern:  /setting/course-avatar
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseAvatar }
 
 admin_setting_live_course_setting:
     pattern:  /setting/live-course-setting

@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Block:layout.html.twig' %}
-{% set tab_menus = permissions('admin_operation_block',"tab") %}
-{% set menu = 'block' %}
+{% set tab_menus = permissions('admin_operation_block', 1) %}
+{% set menu = 'admin_operation_block' %}
 {% set submenu = 'block' %}
 {% block title %}{{ getTitle('admin_operation_block')}}{% endblock %}
 
@@ -8,12 +8,15 @@
 {% block main %}
 
 
-<div class="clearfix well well-sm">
   {% if setting('developer.debug') %}
-      {% set btn_menus = permissions("admin_operation_block","button") %}
+
+    <div class="clearfix well well-sm">
+      {% set btn_menus = permissions("admin_operation_block", 2) %}
       {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+    </div>
+    
   {% endif %}
-</div>
+
 
 <table id="block-table" class="table table-striped">
   <thead>

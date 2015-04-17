@@ -138,7 +138,7 @@ class WebExtension extends \Twig_Extension
     {   
         $permission = new Permission();
         $permissions = $permission->getPermissions($parent, $type);
-
+        
         return $permissions;
     }
 

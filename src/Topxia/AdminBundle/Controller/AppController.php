@@ -222,7 +222,6 @@ class AppController extends BaseController
         $appMeta = array();
 
         foreach ($appsInstalled as $key => $value) {
-
             $appsInstalled[$key]['installed'] = 1;
 
             if ($key != 'MAIN') {
@@ -237,9 +236,8 @@ class AppController extends BaseController
         $apps = array_merge($apps, $appsInstalled);
         $theme = array();
         $plugin = array();
-        
-        foreach ($apps as $key => $value) {
 
+        foreach ($apps as $key => $value) {
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
             }elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {

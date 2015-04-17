@@ -1,10 +1,10 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% set menu = 'optimize' %}
-{% set submenu = 'optimize_manage' %}
-{% set menus = permissions('admin_optimize','tab') %}
+{% set menu = 'admin_optimize' %}
+{% set submenu = 'admin_optimize' %}
+{% set menus = permissions('admin_optimize', 1) %}
 
-{% block title %}{{ getTitle('admin_optimize_manage')}}{% endblock %}
+{% block title %}{{ getTitle('admin_optimize')}}{% endblock %}
 
 {% set script_controller = 'optimize/optimize' %}
 

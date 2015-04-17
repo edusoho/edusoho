@@ -2,10 +2,10 @@
 
 {% set modal_size = 'xlarge' %}
 
-{% set menu = 'article' %}
+{% set menu = 'admin_operation_article' %}
 
 {% block title %}
-	资讯管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯 - {{ parent() }}
+	{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯 -资讯管理- {{ parent() }}
 {% endblock %}
 
 {% set script_controller = 'article/article-modal' %}

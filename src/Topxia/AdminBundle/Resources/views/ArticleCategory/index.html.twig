@@ -1,8 +1,8 @@
 {% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
 
-{% set tab_menus = permissions('admin_operation_article',"tab") %}
-{% set menu = 'article' %}
-{% set submenu = 'category' %}
+{% set tab_menus = permissions('admin_operation_article', 1) %}
+{% set menu = 'admin_operation_article' %}
+{% set submenu = 'admin_operation_article_category' %}
 {% block title %}{{ getTitle('admin_operation_article_category')}}{% endblock %}
 
 {% block main %}
@@ -10,9 +10,9 @@
     {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
 </div>
 
-<div class="clearfix mbs">
-  {% set btn_menus = permissions("admin_operation_article_category","button") %}
-                {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+<div class="clearfix well well-sm">
+  {% set btn_menus = permissions("admin_operation_article_category", 2) %}
+  {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
 </div>
 
 <table class="table table-hover" id="category-table">

@@ -71,9 +71,10 @@ class SystemDefaultSettingController extends BaseController
         $defaultSettings = $this->getSettingService()->get('default', array());
         $userDefaultSetting = $this->getSettingService()->get('user_default', array());
         $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
-        $defaultSetting = array_merge($defaultSettings,$courseDefaultSetting,$userDefaultSetting);
 
         $userDefaultSetting['defaultAvatar'] = 1;
+        $defaultSetting = array_merge($defaultSettings,$courseDefaultSetting,$userDefaultSetting);
+        
         $filename = $userDefaultSetting['defaultAvatarFileName'];
         $this->getSettingService()->set("user_default", $userDefaultSetting);
         $this->getSettingService()->set("default",$defaultSetting);
@@ -103,7 +104,7 @@ class SystemDefaultSettingController extends BaseController
 
         $this->filesystem->copy($smallFilePath, $path.$filename);
 
-        return $this->redirect($this->generateUrl('admin_setting_auth'));
+        return $this->redirect($this->generateUrl('admin_setting_avatar'));
     }
 
     public function defaultCoursePictureAction(Request $request)
@@ -154,9 +155,9 @@ class SystemDefaultSettingController extends BaseController
         $defaultSettings = $this->getSettingService()->get('default', array());
         $userDefaultSetting = $this->getSettingService()->get('user_default', array());
         $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $courseDefaultSetting['defaultCoursePicture'] = 1;
         $defaultSetting = array_merge($defaultSettings,$userDefaultSetting,$courseDefaultSetting);
 
-        $courseDefaultSetting['defaultCoursePicture'] = 1;
         $this->getSettingService()->set("course_default", $courseDefaultSetting);
         $this->getSettingService()->set("default",$defaultSetting);
         
@@ -187,7 +188,7 @@ class SystemDefaultSettingController extends BaseController
 
         $this->filesystem->copy($smallFilePath, $path.$filename);
 
-        return $this->redirect($this->generateUrl('admin_setting_course_setting'));
+        return $this->redirect($this->generateUrl('admin_setting_course_avatar'));
     }
 
     protected function getSettingService()

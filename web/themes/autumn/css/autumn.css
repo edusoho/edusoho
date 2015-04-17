@@ -685,11 +685,6 @@ a:hover {
     height: 40px; 
 }
 
-.banner-volume {
-    line-height: 25px;
-    vertical-align: middle;
-    margin-top: 8px;
-    color: #3e3e3e;
-    font-size: 14px;
+.announcement .alert {
+    padding: 10px 15px;
 }
-

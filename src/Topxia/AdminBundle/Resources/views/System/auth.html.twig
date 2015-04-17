@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
 
-{% set submenu = 'auth' %}
+{% set submenu = 'admin_user_auth' %}
 {% set script_controller = 'setting/auth' %}
 {% block title %}{{ getTitle('admin_user_auth')}}{% endblock %}
 
@@ -9,24 +9,6 @@
 
 {{ web_macro.flash_messages() }}
 
- <fieldset>
-    <legend>用户默认头像</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label"></div>
-      <div class="controls col-md-8 radios" id="default-avatar" >
-        {{ radios('avatar', {1:'自定义默认头像', 0:'系统默认头像'}, defaultSetting.defaultAvatar) }}
-        <p>网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（120*120）</p>    
-        {% include 'TopxiaAdminBundle:System:default-avatar.html.twig' %}
-      </div>
-    </div>
-  </fieldset>
-    <div class="page-header" style="display:none;"><h1>分享内容</h1></div>
-<legend></legend>
- 
-
-
-
-
 <form  id="auth-form" class="form-horizontal" method="post" novalidate>
   <div class="form-group">
     <div class="col-md-3 control-label">
@@ -34,6 +16,14 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('register_mode', {'opened':'开启', 'closed':'关闭'}, auth.register_mode) }}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>用户修改昵称</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
     </div>
   </div>
 
@@ -128,9 +118,18 @@
 	    {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
 	  </div>
 	</div>
+
 	<div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录</div>
 	<input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
-  
+    <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>头像设置提醒</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner').avatar_alert|default('none')) }}
+    </div>
+  </div>
+
   <fieldset>
     <legend>新用户激活邮件设置</legend>
 
@@ -421,7 +420,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
   </fieldset>
 
- <input type="hidden" name="defaultAvatar" value="{{ defaultSetting.defaultAvatar }}">
+
  <fieldset>
     <legend>名称设置</legend>
 
