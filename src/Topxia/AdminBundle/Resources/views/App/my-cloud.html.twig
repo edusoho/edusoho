@@ -210,10 +210,9 @@
                          <div class="alert alert-warning alert-sm" role="alert">
                             <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
                           </div>
-                          <p class="text-muted">有效期：不可用</p>
                     {% else %}
                           <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
-                          <p class="text-muted">有效期至：{% if expire == null %}无{% else %}{{expire|date("Y-m-d")}}{% endif %}</p>
+                          <p class="text-muted">有效期至：{% if expire == null %}{% else %}{{expire|date("Y-m-d")}}{% endif %}</p>
                     <!--7天警告-->
                     {% if 7 > liveDate and liveDate > 0 %}
                           <p class="text-warning">云直播服务将于{{liveDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
@@ -266,7 +265,7 @@
                             <div class="alert alert-warning alert-sm" role="alert" >
                                 <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>
                                 您的云短信功能已被暂停
-                                <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="此处填写理由！">[{{sms.reason}}]</a>
+                                <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="此处填写理由！">[{{sms.reason|default("")}}]</a>
                             </div>
                             <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
                             <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
