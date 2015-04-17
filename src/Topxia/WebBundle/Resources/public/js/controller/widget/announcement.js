@@ -4,23 +4,23 @@ define(function(require, exports, module) {
 
    var AnnouncementWidget = Widget.extend({
       attrs: {
-         speed: 500
+         speed: 100
       },
 
       events: {
          'mouseover': 'mouseover',
-         'onmouseout': 'mouseout'
+         'mouseout': 'mouseout'
       },
 
       setup: function() {
-         //this.marquee();
          var self = this;
-         var AnnouncementsInterval=setInterval(this.marquee, self, this.get("speed"));
+         var AnnouncementsInterval=setInterval(function(){
+            self.marquee(self);
+         }, this.get("speed"));
          this.set("AnnouncementsInterval", AnnouncementsInterval);
       },
 
       marquee: function(self){
-         console.log(self.get("speed"));
          var obj = $(self.element[0]).find(".items");
          var childrenCount = obj.children().length;
          var childHeight = $(obj.children()[0]).height();
@@ -29,15 +29,15 @@ define(function(require, exports, module) {
             marginTop = 0;
          }
 
-         console.log((childrenCount-1)*childHeight);
          var offset = obj.offset();
-         console.log(marginTop );
          if(marginTop < (childrenCount-1)*childHeight){
-            console.log(offset.top+10);
-            obj.offset({top:(offset.top++), left:offset.left});
-            obj.data("margin-top", marginTop++);
+            offset.top--;
+            marginTop++;
+            obj.offset({top:(offset.top), left:offset.left});
+            obj.data("margin-top", marginTop);
          } else {
-            obj.offset({top:offset.top-marginTop, left:offset.left})
+            obj.offset({top:offset.top+marginTop, left:offset.left})
+            obj.data("margin-top", 0);
          }
       },
 
@@ -46,7 +46,10 @@ define(function(require, exports, module) {
       }, 
 
       mouseout: function() {
-         var AnnouncementsInterval=setInterval(this.marquee, speed)
+         var self = this;
+         var AnnouncementsInterval = setInterval(function(){
+            self.marquee(self);
+         }, this.get("speed"));
          this.set("AnnouncementsInterval", AnnouncementsInterval);
       }
 
