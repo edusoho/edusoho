@@ -74,15 +74,15 @@
             </p> 
             {% if account %}
             <!--不足50元-->
-            {% if content.account.cash < 50 %}
+            {% if 0 < content.account.cash  and content.account.cash < 50 %}
             <p class="text-warning">余额不足50元，请尽快充值！</p>
             {% endif %}
             <!--欠费7天预留保护期-->
-            {% if content.account.arrearageDate > 0 and 0 < day and day < 7 %}
+            {% if content.account.arrearageDate < 0 and 0 < day and day < 7 %}
             <p class="text-warning">您已欠费，还剩7天的预留保护期，请尽快充值！</p>
             {% endif %}
             <!--欠费冻结-->
-            {% if content.account.arrearageDate > 0 and 10 < day %}
+            {% if content.account.arrearageDate < 0 and 10 < day %}
             <p class="text-danger">您已欠费超过10天，教育云服务已暂停，请尽快充值！</p>
             {% endif %}
             {% endif %}
@@ -109,7 +109,7 @@
                   {% endif %}
                   <!--30天提醒-->
                   {% if -30 < packageDate and packageDate < 0 %}
-                  <p class="text-warning text-sm">套餐服务将于30天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
+                  <p class="text-warning text-sm">套餐服务将于30天内到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
                   <p class="text-warning">
                     点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
                   </p>
