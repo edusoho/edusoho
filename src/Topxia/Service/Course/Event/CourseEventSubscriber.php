@@ -17,6 +17,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.join' => 'onCourseJoin',
             'course.favorite' => 'onCourseFavorite',
             'course.note.create' => 'onCourseNoteCreate',
+            'course.note.update' => 'onCourseNoteUpdate',
             'course.note.delete' => 'onCourseNoteDelete',
             'course.note.liked' => 'onCourseNoteLike',
             'course.note.cancelLike' => 'onCourseNoteCancelLike',
@@ -91,9 +92,27 @@ class CourseEventSubscriber implements EventSubscriberInterface
         if ($app) {
             $note = $event->getSubject();
             $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
-            if ($classroom) {
+            if ($classroom && $note['status']) {
                 $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
             }
+        }
+    }
+
+    public function onCourseNoteUpdate(ServiceEvent $event)
+    {
+        $app = $this->getAppService()->findAppsByCodes(array('Classroom'));
+        if ($app) {
+            $note = $event->getSubject();
+            $preStatus = $event->getArgument('preStatus');
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+            if ($classroom && $note['status'] && !$preStatus) {
+                $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+            }
+
+            if ($classroom && !$note['status'] && $preStatus) {
+                $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+            }
+
         }
     }
 

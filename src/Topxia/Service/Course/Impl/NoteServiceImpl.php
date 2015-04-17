@@ -100,6 +100,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         } else {
             $note['updatedTime'] = time();
             $note = $this->getNoteDao()->updateNote($existNote['id'], $note);
+            $this->getDispatcher()->dispatch('course.note.update', new ServiceEvent($note, array('preStatus' => $existNote['status'])));
         }
 
         $this->getCourseService()->setMemberNoteNumber(
