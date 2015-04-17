@@ -1,5 +1,5 @@
 {% set announcements = data('Announcement',{ count:2 }) %}
-{% if announcements %}
+{% if announcements and not app.request.cookies.get('close_announcements_alert') %}
   <div class="announcement announcements-alert" >
     <div class="alert alert-warning alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
