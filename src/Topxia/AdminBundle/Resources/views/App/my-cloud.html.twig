@@ -36,7 +36,7 @@
                   </div>
                   <div class="media-body">
 
-                    <p><span class="name">{{ isBinded.name }}</span>，您好</p>
+                    <p><span class="name">{{ isBinded.name|default("") }}</span>，您好</p>
                     
                     <p>ES云平台账户名: {{content.user.siteName|default('') }}</p>
                     
