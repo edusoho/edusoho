@@ -2,7 +2,7 @@
 {% block title %}{{ getTitle('admin_cloud_video_setting')}}{% endblock %}
 
 {% set menu = 'admin_setting_cloud_video' %}
-{% set tab_menus = permissions('admin_setting_cloud_video', 1) %}
+{% set tab_menus = menus("admin",'admin_setting_cloud_video', 1) %}
 {% set submenu = 'admin_cloud_video_setting' %}
 {% set script_controller = 'setting/cloud' %}
 

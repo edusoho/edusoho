@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Coin:finance.html.twig' %}
 
-{% set menus = permissions("admin_bills", 1)%}
+{% set menus = menus("admin","admin_bills", 1)%}
 {% set menu = 'admin_bills' %}
 
 {% block main %}

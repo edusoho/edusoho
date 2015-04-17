@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set nav = 'admin_app' %}
-{% set side_menus = permissions('admin_app') %}
+{% set side_menus = menus("admin",'admin_app') %}
 
 {% block content %}
   <div class="col-md-2">

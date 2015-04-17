@@ -4,7 +4,7 @@
 {% block title %}{{ getTitle('admin_edu_cloud_sms')}}{% endblock %}
 {% set submenu = 'cloud_sms' %} 
 {% set menu = 'cloud-video' %}
-{% set tab_menus = permissions('admin_setting_cloud_video',"tab") %}
+{% set tab_menus = menus("admin",'admin_setting_cloud_video',"tab") %}
 
 {% block main %}
    <div class="mbl">

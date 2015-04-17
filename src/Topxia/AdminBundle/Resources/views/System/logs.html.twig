@@ -2,7 +2,7 @@
 
 {% set menu = 'admin_logs' %}
 {% set submenu = 'admin_logs_query' %}
-{% set menus = permissions('admin_logs', 1) %}
+{% set menus = menus("admin",'admin_logs', 1) %}
 {% set script_controller = 'log/list' %}
 {% block title %}{{ getTitle('admin_logs_query')}}{% endblock %}
 {% block main %}

@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:System:mobile.layout.html.twig' %}
 
 {% set menu = 'admin_operation_mobile' %}
-{% set tab_menus = permissions('admin_operation_mobile', 1) %}
+{% set tab_menus = menus("admin",'admin_operation_mobile', 1) %}
 {% set submenu = 'admin_operation_mobile_banner_manage' %}
 {% block title %}{{ getTitle('admin_operation_mobile_banner_manage')}}{% endblock %}
 

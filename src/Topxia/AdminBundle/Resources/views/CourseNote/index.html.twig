@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% set menus = permissions('admin_course_note', 1) %}
+{% set menus = menus("admin",'admin_course_note', 1) %}
 {% block title %}{{ getTitle('admin_course_note')}}{% endblock %}
 
 {% set menu = 'admin_course_note' %}

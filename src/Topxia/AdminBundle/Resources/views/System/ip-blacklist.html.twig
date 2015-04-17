@@ -2,7 +2,7 @@
 
 {% set menu = 'admin_setting_ip_blacklist' %}
 {% set submenu = 'admin_setting_ip_blacklist' %}
-{% set menus = permissions('admin_setting_ip_blacklist', 1) %}
+{% set menus = menus("admin",'admin_setting_ip_blacklist', 1) %}
 
 {% block title %}{{ getTitle('admin_setting_ip_blacklist')}}{% endblock %}
 {% block main %}

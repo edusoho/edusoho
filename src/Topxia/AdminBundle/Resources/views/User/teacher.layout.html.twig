@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% set menus = permissions("admin_teacher", 1)%}
+{% set menus = menus("admin","admin_teacher", 1)%}
 {% set menu = 'admin_teacher' %}
 
 {% block main %}

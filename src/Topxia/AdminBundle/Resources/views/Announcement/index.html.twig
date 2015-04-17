@@ -2,7 +2,7 @@
 
 {% set script_controller = 'announcement/index' %}
 {% block title %}{{ getTitle('admin_announcement')}}{% endblock %}
-{% set side_menus = permissions('admin_operation') %}
+{% set side_menus = menus("admin",'admin_operation') %}
 {% set nav = 'admin_operation' %}
 {% set menu = 'admin_announcement' %}
 {% block content %}
@@ -16,7 +16,7 @@
         <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
         
         <div class="clearfix well well-sm">
-            {% set btn_menus = permissions("admin_announcement", 2) %}
+            {% set btn_menus = menus("admin","admin_announcement", 2) %}
             {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
         </div>
 

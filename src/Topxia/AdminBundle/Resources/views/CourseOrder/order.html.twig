@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:CourseOrder:layout.html.twig' %}
 
-{% set menus = permissions("admin_course_order", 1)%}
+{% set menus = menus("admin","admin_course_order", 1)%}
 {% set menu = 'admin_course_order' %}
 
 {% block main %}

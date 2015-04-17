@@ -7,7 +7,7 @@
 
   {% set menu = 'admin_course_show' %}
   {% set type = 'admin_course_recommend'  %}
-  {% set menus = permissions('admin_course_show', 1) %}
+  {% set menus = menus("admin",'admin_course_show', 1) %}
 
 {% block main %}
 

@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% set menus = permissions('admin_course_tag', 1) %}
+{% set menus = menus("admin",'admin_course_tag', 1) %}
 {% block title %}{{ getTitle('admin_course_tag')}}{% endblock %}
 
 {% set menu = 'admin_course_tag' %}
@@ -9,7 +9,7 @@
 
 <div class="well well-sm clearfix">
 
-  {% set menus = permissions('admin_course_tag', 2) %}
+  {% set menus = menus("admin",'admin_course_tag', 2) %}
  
   {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
 </div>

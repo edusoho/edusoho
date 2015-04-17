@@ -3,7 +3,7 @@
 {% set menu = 'admin_setting_operation' %}
 {% set submenu = 'admin_article_setting' %}
 
-{% set menus = permissions('admin_setting_operation', 1) %}
+{% set menus = menus("admin",'admin_setting_operation', 1) %}
 {% block title %}{{ getTitle('admin_article_setting')}}{% endblock %}
 
 {% block main %}

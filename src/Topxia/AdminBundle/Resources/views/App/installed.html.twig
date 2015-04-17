@@ -4,7 +4,7 @@
 
 {% set script_controller = 'app/installed' %}
 {% set menu = 'admin_app_center_show' %}
-{% set tab_menus = permissions('admin_app_center_show', 1) %}
+{% set tab_menus = menus("admin",'admin_app_center_show', 1) %}
 {% set submenu = 'admin_app_installed' %}
 
 {% block main %}
