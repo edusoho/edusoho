@@ -694,7 +694,5 @@ a:hover {
 }
 
 .announcement .alert {
-    margin-bottom: -10px;
-    margin-top: 10px;
     padding: 10px 15px;
 }
