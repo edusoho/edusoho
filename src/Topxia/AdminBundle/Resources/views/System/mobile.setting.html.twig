@@ -1,8 +1,8 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% set menu = 'mobile_settings' %}
-{% set tab_menus = permissions('admin_setting_mobile','tab') %}
-{% set submenu = 'mobile_settings' %}
+{% set menu = 'admin_setting_mobile' %}
+{% set tab_menus = permissions('admin_setting_mobile', 1) %}
+{% set submenu = 'admin_setting_mobile' %}
 
 {% block title %}{{ getTitle('admin_setting_mobile')}}{% endblock %}
 

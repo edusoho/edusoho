@@ -49,7 +49,6 @@ class OrderRefundController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($refunds, 'userId'));
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
-        
         return $this->render('TopxiaAdminBundle:OrderRefund:refunds.html.twig', array(
             'refunds' => $refunds,
             'users' => $users,

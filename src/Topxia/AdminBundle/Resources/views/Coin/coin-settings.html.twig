@@ -1,9 +1,9 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% set script_controller = "coin/range" %}
-{% set menus = permissions("admin_setting_finance","tab")%}
-{% set menu = 'finance_settings' %}
-{% set submenu = 'coin_settings' %}
+{% set menus = permissions("admin_setting_finance", 1)%}
+{% set menu = 'admin_setting_finance' %}
+{% set submenu = 'admin_coin_settings' %}
 
 {% block title %}{{ getTitle('admin_coin_settings')}}{% endblock %}
 
