@@ -139,7 +139,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 throw $this->createAccessDeniedException('权限不够!');
             }
             $thread['startTime'] = strtotime($thread['startTime']);
-            $thread['maxUsers'] = empty($thread['maxUsers']) ? -1 : intval($thread['maxUsers']);
+            $thread['maxUsers'] = empty($thread['maxUsers']) ? 0 : intval($thread['maxUsers']);
         } else {
             unset($thread['startTime']);
             unset($thread['maxUsers']);
@@ -204,8 +204,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->tryAccess('thread.delete', $thread);
-
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
+        if ($thread['type'] == 'event') {
+            $this->deleteMembersByThreadId($thread['id']);
+        }
         $this->getThreadDao()->deleteThread($threadId);
 
         $this->dispatchEvent('thread.delete', $thread);
@@ -501,7 +503,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $member = $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($fields['threadId'], $fields['userId']);
         if (empty($member)) {
             $thread = $this->getThreadDao()->getThread($fields['threadId']);
-            if ($thread['maxUsers'] == $thread['memberNum']) {
+            if ($thread['maxUsers'] == $thread['memberNum'] && $thread['maxUsers'] != 0) {
                 throw $this->createAccessDeniedException('已超过人数限制!');
             }
             $fields['createdTime'] = time();
@@ -517,7 +519,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function deleteMember($memberId)
     {
         $member = $this->getThreadMemberDao()->getMember($memberId);
-        
+        $thread = $this->getThreadDao()->getThread($member['threadId']);
+        $member['targetType'] = $thread['targetType'];
+        $member['targetId'] = $thread['targetId'];
         $this->tryAccess('thread.member.delete', $member);
         if (empty($member)) {
             throw $this->createServiceException('成员不存在!');
@@ -535,10 +539,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread = $this->getThread($threadId);
         $this->tryAccess('thread.delete', $thread);
-
-        if (!empty($thread)) {
-            throw $this->createAccessDeniedException('相关连帖子还存在,不能删除!');
-        }
 
         $this->getThreadMemberDao()->deleteMembersByThreadId($threadId);
     }

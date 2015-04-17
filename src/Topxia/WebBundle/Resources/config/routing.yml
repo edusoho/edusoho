@@ -1586,6 +1586,10 @@ thread_cancel_nice:
     defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
     methods: [POST]
 
+thread_export_members:
+    pattern: /thread/{threadId}/export/members
+    defaults: { _controller: TopxiaWebBundle:Thread\Member:export }
+
 ajax_thread_member_show:
     pattern: /ajax/thread/{threadId}/members
     defaults: { _controller: TopxiaWebBundle:Thread\Member:ajaxFindMembers }

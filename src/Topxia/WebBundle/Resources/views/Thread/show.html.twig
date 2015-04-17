@@ -45,6 +45,12 @@
             <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
           {% endif %}
         {% endif %}
+
+        {% if thread.type == 'event' %}
+          {% if service.canAccess('thread.update', thread) %}
+            <a href="{{ path('thread_export_members', {threadId:thread.id}) }}" class="btn btn-link" target="_balnk"><span class="glyphicon glyphicon-export"></span> 导出成员</a>
+          {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>
