@@ -172,7 +172,7 @@ class AppController extends BaseController
         $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
 
         $dir = dirname(dirname(dirname(dirname(__DIR__)))); 
-        $appUrls = array();
+        $appMeta = array();
 
         foreach ($appsInstalled as $key => $value) {
 
@@ -180,7 +180,7 @@ class AppController extends BaseController
 
             if ($key != 'MAIN') {
                 $dic = $dir.'/plugins/'.$key.'/plugin.json';
-                $appUrls[$key] = json_decode(file_get_contents($dic));
+                $appMeta[$key] = json_decode(file_get_contents($dic));
             }
 
         }
@@ -203,7 +203,7 @@ class AppController extends BaseController
             'theme' => $theme,
             'plugin' => $plugin,
             'type' => $postStatus,
-            'appUrls' => $appUrls,
+            'appMeta' => $appMeta,
         ));
     }
 

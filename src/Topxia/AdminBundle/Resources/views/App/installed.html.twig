@@ -72,7 +72,7 @@
               
               {% if app.installed|default(0) %}
                   {% if app.code|lower != 'MAIN' %}
-                    {% set url = appUrls[app.code].manage_index|default('') %}
+                    {% set url = appMeta[app.code].manage_index|default('') %}
                   {% endif %}
               <div class="right-info pull-right">
                   {% if url != '' %}
