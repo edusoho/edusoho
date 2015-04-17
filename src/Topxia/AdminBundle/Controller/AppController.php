@@ -37,7 +37,7 @@ class AppController extends BaseController
             ));
         }
 
-        return $this->redirect($this->getUrl("admin_cloud_service_information"));
+        return $this->redirect($this->generateUrl("admin_cloud_service_information"));
     }
 
     public function serviceInformationAction(Request $request)
