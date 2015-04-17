@@ -101,9 +101,9 @@ Class Permission
                 
                 $dir = "../src/".$value;
        
-                if (file_exists($dir."/permissions.yml")) {
+                if (file_exists($dir."/Resources/config/menus_admin.yml")) {
 
-                    $permissions = $this->loadPermissionYml($permissions, $dir."/permissions.yml");
+                    $permissions = $this->loadPermissionYml($permissions, $dir."/Resources/config/menus_admin.yml");
                 }
           
             }
@@ -115,7 +115,7 @@ Class Permission
 
                 if ($file != "." && $file != "..") {
 
-                  $fullpath = $dir."/".$file."/$file"."Bundle"."/permissions.yml";
+                  $fullpath = $dir."/".$file."/$file"."Bundle"."/Resources/config/menus_admin.yml";
 
                   $permissions = $this->loadPermissionYml($permissions, $fullpath);
                 }
