@@ -1,12 +1,11 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% set active = 'manage' %}
-{% set menus = permissions('admin_course_review','tab') %}
+{% set menus = permissions('admin_course_review', 1) %}
 {% block title %}{{ getTitle('admin_course_review')}}{% endblock %}
 
 {% set script_controller = 'review/list' %}
 
-{% set menu = 'review' %}
+{% set menu = 'admin_course_review' %}
 
 {% block main %}
 

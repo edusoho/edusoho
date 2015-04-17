@@ -1,11 +1,11 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
-{% set type = 'manage' %}
-{% set menus = permissions('admin_course_thread','tab') %}
+{% set type = 'admin_course_thread_manage' %}
+{% set menus = permissions('admin_course_thread', 1) %}
 
 {% block title %}{{ getTitle('admin_course_thread_manage')}}{% endblock %}
 {% set script_controller = 'course/threads' %}
 
-{% set menu = 'thread' %}
+{% set menu = 'admin_course_thread' %}
 
 {% block main %}
 

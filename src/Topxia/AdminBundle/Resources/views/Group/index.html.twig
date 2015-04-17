@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
-{% set tab_menus = permissions('admin_operation_group',"tab") %}
-{% set menu = 'group' %}
-{% set submenu = 'group' %}
+{% set tab_menus = permissions('admin_operation_group', 1) %}
+{% set menu = 'admin_operation_group' %}
+{% set submenu = 'admin_operation_group_manage' %}
 {% block title %}{{ getTitle('admin_operation_group_manage')}}{% endblock %}
 
 {% set script_controller='group/group' %}
@@ -29,7 +29,7 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-    {% set btn_menus = permissions("admin_operation_group_manage","button") %}
+    {% set btn_menus = permissions("admin_operation_group_manage", 2) %}
     {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
   </form>
   {% if groupinfo%}

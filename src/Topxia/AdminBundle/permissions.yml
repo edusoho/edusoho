@@ -213,10 +213,9 @@ admin_cash_bill:
     name: 现金账单
     parent: admin_bills
     router_name: admin_bill
-admin_coin_bill:
+admin_coin_records:
     name: 虚拟币账单
     parent: admin_bills
-    router_name: admin_coin_records
 admin_coin_user:
     name: 虚拟币管理
     parent: admin_finance
@@ -228,6 +227,7 @@ admin_coin_user_records:
 admin_course_refunds:
     name: 课程退款管理
     parent: admin_finance
+    router_name: admin_order_refunds
     router_params: {targetType:course,status:created}
 admin_course_refunds_manage:
     name: 管理

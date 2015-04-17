@@ -2,9 +2,9 @@
 
 {% block title %}{{ getTitle('admin_course_manage')}}{% endblock %}
 
-{% set menus = permissions('admin_course_show','tab') %}
-{% set menu = 'course' %}
-{% set type = 'manage'  %}
+{% set menus = permissions('admin_course_show', 1) %}
+{% set menu = 'admin_course_show' %}
+{% set type = 'admin_course_manage'  %}
 
 {% set script_controller = 'course/manage' %}
 
@@ -34,7 +34,7 @@
       <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
     </div>
     <button class="btn btn-primary">搜索</button>
-    {% set menus = permissions('admin_course_show','button') %}
+    {% set menus = permissions('admin_course_show', 2) %}
  
     {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
       {% if liveSetEnabled == 1 %}

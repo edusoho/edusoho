@@ -1,8 +1,8 @@
 {% extends 'TopxiaAdminBundle:System:mobile.layout.html.twig' %}
 
-{% set menu = 'mobile' %}
-{% set tab_menus = permissions('admin_operation_mobile','tab') %}
-{% set submenu = 'mobile_select_manage' %}
+{% set menu = 'admin_operation_mobile' %}
+{% set tab_menus = permissions('admin_operation_mobile', 1) %}
+{% set submenu = 'admin_operation_mobile_select_manage' %}
 {% block title %}{{ getTitle('admin_operation_mobile_select_manage')}}{% endblock %}
 
 {% set script_controller = 'operation/course-grid' %}
