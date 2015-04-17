@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set side_menus = permissions('admin_finance') %}
+{% set side_menus = menus("admin",'admin_finance') %}
 {% set nav = 'finance' %}
 
 {% block content %}

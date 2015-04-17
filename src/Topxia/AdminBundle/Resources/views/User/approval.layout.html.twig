@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
 
-{% set menus = permissions("admin_approval_approving","tab")%}
+{% set menus = menus("admin","admin_approval_approving","tab")%}
 {% set menu = 'admin_approval_approving' %}
 
 {% block main %}

@@ -39,7 +39,7 @@
 
         {% endif %}
     {% endif %}
-    {% set menus = permissions("admin_user_show", 2) %}
+    {% set menus = menus("admin","admin_user_show", 2) %}
 
     {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus} %}
 

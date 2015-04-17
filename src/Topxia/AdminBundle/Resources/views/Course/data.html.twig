@@ -5,7 +5,7 @@
 {% block title %}{{ getTitle('admin_course_data')}}{% endblock %}
 {% block main %}
 
-  {% set menus = permissions('admin_course_show', 1) %}
+  {% set menus = menus("admin",'admin_course_show', 1) %}
   {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
     <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">

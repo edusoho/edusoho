@@ -2,7 +2,7 @@
 
 {% set menu = 'admin_logs' %}
 {% set submenu = 'admin_logs_prod' %}
-{% set menus = permissions('admin_logs', 1) %}
+{% set menus = menus("admin",'admin_logs', 1) %}
 {% block title %}{{ getTitle('admin_logs_prod')}}{% endblock %}
 
 {% block main %}

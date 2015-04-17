@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% set script_controller = 'navigation/page' %}
-{% set menus = permissions('admin_setting', 1) %}
+{% set menus = menus("admin",'admin_setting', 1) %}
 {% set menu = 'admin_setting' %}
 {% set types = {top:'顶部', foot:'底部'} %}
 {% set submenu = 'admin_'~type~'_navigation' %}

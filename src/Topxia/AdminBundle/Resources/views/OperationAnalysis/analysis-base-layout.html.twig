@@ -6,7 +6,7 @@
 
 
     
-{% set menus = permissions('admin_operation_analysis_register', 1) %}
+{% set menus = menus("admin",'admin_operation_analysis_register', 1) %}
 {% block title %}{{ getTitle('admin_operation_analysis_register')}}{% endblock %}
 
 {% block main %}

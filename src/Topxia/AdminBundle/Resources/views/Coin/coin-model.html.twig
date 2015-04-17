@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
 {% set script_controller = "coin/model" %}
-{% set tab_menus = permissions("admin_setting_finance", 1)%}
+{% set tab_menus = menus("admin","admin_setting_finance", 1)%}
 {% set menu = 'admin_setting_finance' %}
 {% set submenu = 'admin_coin_settings' %}
 {% block title %}{{ getTitle('admin_coin_settings')}}{% endblock %}
