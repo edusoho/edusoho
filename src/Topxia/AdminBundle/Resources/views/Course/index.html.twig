@@ -4,7 +4,7 @@
 
 {% set menus = permissions('admin_course_show', 1) %}
 {% set menu = 'admin_course_show' %}
-{% set type = 'admin_course_manage'  %}
+{% set submenu = 'admin_course_manage'  %}
 
 {% set script_controller = 'course/manage' %}
 
@@ -12,7 +12,7 @@
 <div class="mbl">
 
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 
 </div>
 
