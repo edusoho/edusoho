@@ -4,7 +4,7 @@
 
 {% set menus = permissions('admin_course_show', 1) %}
 {% set menu = 'admin_course_show' %}
-{% set type = 'admin_course_manage'  %}
+{% set submenu = 'admin_course_manage'  %}
 
 {% set script_controller = 'course/manage' %}
 
@@ -12,7 +12,7 @@
 <div class="mbl">
 
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
 
 </div>
 
@@ -36,7 +36,7 @@
     <button class="btn btn-primary">搜索</button>
     {% set menus = permissions('admin_course_show', 2) %}
  
-    {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus,type:type} %}
+    {% include 'TopxiaAdminBundle::button.html.twig' with {menus:menus, type:submenu} %}
       {% if liveSetEnabled == 1 %}
     <a href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-success btn-sm pull-right mls" target="_blank">创建直播课程</a>
   {% endif %}

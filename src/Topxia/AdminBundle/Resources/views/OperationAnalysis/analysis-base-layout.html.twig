@@ -2,6 +2,9 @@
 {% set panel = 'dashboard' %}
 {% set nav = 'system' %}
 {% set menu = 'admin_operation_analysis_register' %}
+{% set submenu = 'admin_operation_analysis_register' %}
+
+
     
 {% set menus = permissions('admin_operation_analysis_register', 1) %}
 {% block title %}{{ getTitle('admin_operation_analysis_register')}}{% endblock %}
@@ -18,7 +21,7 @@
 
 
   <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:menu} %}
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
   </div>
   <form  class="well well-sm form-inline" action="{{url("admin_operation_analysis_rount",{tab:tab})}}" method="get" id="operation-form"  role="form" >
           <div class="form-group">

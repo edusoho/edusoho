@@ -175,11 +175,10 @@ class AppController extends BaseController
         $appMeta = array();
 
         foreach ($appsInstalled as $key => $value) {
-
             $appsInstalled[$key]['installed'] = 1;
 
             if ($key != 'MAIN') {
-                $dic = $dir.'/plugins/'.$key.'/plugin.json';
+                $dic = $dir.'/plugins/'.ucfirst($key).'/plugin.json';
                 $appMeta[$key] = json_decode(file_get_contents($dic));
             }
 
@@ -188,9 +187,8 @@ class AppController extends BaseController
         $apps = array_merge($apps, $appsInstalled);
         $theme = array();
         $plugin = array();
-        
-        foreach ($apps as $key => $value) {
 
+        foreach ($apps as $key => $value) {
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
             }elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {
