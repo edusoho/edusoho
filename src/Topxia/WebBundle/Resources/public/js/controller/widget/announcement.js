@@ -36,8 +36,10 @@ define(function(require, exports, module) {
             obj.offset({top:(offset.top), left:offset.left});
             obj.data("margin-top", marginTop);
          } else {
-            obj.offset({top:offset.top+marginTop, left:offset.left})
-            obj.data("margin-top", 0);
+            obj.offset({top:offset.top+(marginTop), left:offset.left})
+            obj.data("margin-top", marginTop-childHeight);
+            $(obj.children()[0]).appendTo(obj);
+
          }
       },
 
