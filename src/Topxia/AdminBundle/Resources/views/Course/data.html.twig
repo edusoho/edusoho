@@ -2,7 +2,7 @@
 
 {% set menu = 'admin_course_show' %}
 {% set submenu = 'admin_course_data'  %}
-{% block title %}{{ getTitle('admin_course_data')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_course_data')}}{% endblock %}
 {% block main %}
 
   {% set menus = menus("admin",'admin_course_show', 1) %}

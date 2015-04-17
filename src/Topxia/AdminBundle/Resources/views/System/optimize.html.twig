@@ -4,7 +4,7 @@
 {% set submenu = 'admin_optimize' %}
 {% set menus = menus("admin",'admin_optimize', 1) %}
 
-{% block title %}{{ getTitle('admin_optimize')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_optimize')}}{% endblock %}
 
 {% set script_controller = 'optimize/optimize' %}
 

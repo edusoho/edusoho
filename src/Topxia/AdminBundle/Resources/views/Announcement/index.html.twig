@@ -1,7 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'announcement/index' %}
-{% block title %}{{ getTitle('admin_announcement')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_announcement')}}{% endblock %}
 {% set side_menus = menus("admin",'admin_operation') %}
 {% set nav = 'admin_operation' %}
 {% set menu = 'admin_announcement' %}

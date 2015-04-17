@@ -2,7 +2,7 @@
 
 {% set submenu = 'admin_user_avatar' %}
 {% set script_controller = 'setting/avatar' %}
-{% block title %}{{ getTitle('admin_user_avatar')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_user_avatar')}}{% endblock %}
 
 {% block main_content %}
 {{ web_macro.flash_messages() }}

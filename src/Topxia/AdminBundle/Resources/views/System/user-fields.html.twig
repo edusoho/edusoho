@@ -3,7 +3,7 @@
 {% set script_controller = 'system/user-fields' %}
 
 {% set submenu = 'admin_setting_user_fields' %}
-{% block title %}{{ getTitle('admin_setting_user_fields')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_setting_user_fields')}}{% endblock %}
 {% block main_content %}
 	<div class="well well-sm clearfix">
 		<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">添加字段</button>

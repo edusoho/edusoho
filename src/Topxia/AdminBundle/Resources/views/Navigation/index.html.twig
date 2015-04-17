@@ -5,7 +5,7 @@
 {% set menu = 'admin_setting' %}
 {% set types = {top:'顶部', foot:'底部'} %}
 {% set submenu = 'admin_'~type~'_navigation' %}
-{% block title %}{{ getTitle('admin_'~type~'_navigation')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_'~type~'_navigation')}}{% endblock %}
 
 {% block main %}
 
