@@ -4,7 +4,7 @@
       {% for menu in sub_menus %}
   
           {% set param = {} %}
-          {% set router_name = menu.router_name %}
+          {% set router_name = menu.router_name|default(menu.code) %}
 
             {% if menu.router_params|default(null) %}
             {% set router_params = menu.router_params %}

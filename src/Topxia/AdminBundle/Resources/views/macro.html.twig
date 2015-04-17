@@ -33,7 +33,7 @@
  
  {% for menu in menus %}
  	{% for sub_menu in menu %}
- 		{% if sub_menu.active == type %}{{sub_menu.name}}{% endif %}
+ 		{% if sub_menu.code == type %}{{sub_menu.name}}{% endif %}
 	{% endfor %}
  {% endfor %}
 <hr/>

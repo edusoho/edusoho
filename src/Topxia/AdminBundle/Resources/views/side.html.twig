@@ -4,7 +4,7 @@
         {% if menu.code == "admin_live_course" and  setting('course.live_course_enabled') == 0 %}
         {% else %}
           {% set param = {} %}
-          {% set router_name = menu.router_name %}
+          {% set router_name = menu.router_name|default(menu.code) %}
 
             {% if menu.router_params|default(null) %}
             {% set router_params = menu.router_params %}
@@ -19,14 +19,14 @@
                   {% set param = param|merge(item) %}
                 
                 {% endfor %}
-                <a href="{{path(router_name,param)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
+                <a href="{{path(router_name,param)}}" class="list-group-item {% if nav == menu.code|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
               {% else %}
-                <a href="{{path(router_name,router_params)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
+                <a href="{{path(router_name,router_params)}}" class="list-group-item {% if nav == menu.code|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
               {% endif %}
 
            
             {% else %}
-              <a href="{{path(router_name)}}" class="list-group-item {% if nav == menu.active|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
+              <a href="{{path(router_name)}}" class="list-group-item {% if nav == menu.code|default('-1') %}active{% endif %}" {% if menu.blank|default(false) %}target=blank{% endif %}>{{menu.name}}</a>
             {% endif %}
         {% endif %}
       {% endfor %}

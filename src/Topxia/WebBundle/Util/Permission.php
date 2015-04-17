@@ -40,7 +40,7 @@ Class Permission
 
                 if ($group) {
 
-                    if (isset($value['group']) && $value['group'] == $group ) {
+                    if (isset($value['group']) && $value['group'] == $group || (!isset($value['group']) && $group == 1 )) {
 
                         $result[] = $value;
                         continue;
