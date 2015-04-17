@@ -54,10 +54,10 @@ class AppController extends BaseController
         $day = isset($content['account']['arrearageDate']) ? $content['account']['arrearageDate']/(60*60*24) : '';
 
         $user = isset($content['user']) ? $content['user'] : null ;
-        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
+        $packageDate = isset($content['user']['endDate']) ? (strtotime($content['user']['endDate'])- strtotime($currentTime) )/(60*60*24) : '' ;
 
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
-        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
+        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($content['service']['storage']['endMonth'])- strtotime($currentTime) )/(60*60*24) : '' ;
         $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date']) : '' ;
 
         $live = isset($content['service']['live']) ? $content['service']['live'] : null ;
