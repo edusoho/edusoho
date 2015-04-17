@@ -399,6 +399,7 @@ input.LargeInput {width: 600px;}
   margin-right: 5px;
 }
 
+
 .edu-user .name {
   color: #333;
   font-size: 18px;
@@ -407,6 +408,7 @@ input.LargeInput {width: 600px;}
 .edu-notice {
   border-left: 1px solid #ccc;
   padding-left: 30px;
+  min-height: 120px;
 }
 
 .edu-notice .title {
@@ -463,5 +465,17 @@ input.LargeInput {width: 600px;}
 
 .navigation-table tr{
   cursor: pointer;
+}
+
+.images-content {
+  position: absolute; 
+  z-index: 10; 
+  left: 720px; 
+  bottom:20px; 
+  width: 100%; 
+  color: #fff; 
+  height: 54px; 
+  line-height: 54px; 
+  overflow: hidden; 
 }
 
