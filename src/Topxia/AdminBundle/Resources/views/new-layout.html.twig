@@ -1,9 +1,11 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <!DOCTYPE html>
-{% set menu_top = menu_nav|default(null) %}
-{% set menu_sidebar = menu_sidebar|default(null) %}
-{% set menu_main = menu_main|default(null) %}
+{% set menu = menu|default(null) %}
+{% set menu_paths = menu_paths(menu) %}
+{% set menu_nav = menu_paths[0]|default(null) %}
+{% set menu_sidebar = menu_paths[1]|default(null) %}
+{% set menu_main = menu_paths[2]|default(null) %}
 
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
@@ -15,7 +17,14 @@
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
-  <title>{% block title %} {% if not setting('copyright.owned') %}EduSoho-{% endif %}{{ admin_macro.title(header_menus,nav) }}{% endblock %}</title>
+  <title>
+    {% block title %}
+      {% for m in menu_paths %}
+        {{ m.name }}
+      {% endif %}
+    {% endblock %}
+    {% if not setting('copyright.owned') %} | EduSoho{% endif %}
+  </title>
 
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
