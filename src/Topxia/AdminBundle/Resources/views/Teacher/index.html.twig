@@ -1,11 +1,10 @@
-{% extends 'TopxiaAdminBundle:User:teacher.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% block title %}{{ html_title('admin','admin_teacher')}}{% endblock %}
-  
-{% set submenu = 'admin_teacher' %}
+{% set menu = 'admin_teacher' %}
+
 {% set script_controller = 'user/teacher-list' %}
 
-{% block maincontent %}
+{% block main %}
 
 <table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>

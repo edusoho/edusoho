@@ -162,11 +162,11 @@ admin_user_show:
     router_name: admin_user
 admin_user_create:
     name: 添加新用户
-    parent: admin_user_show
+    parent: admin_user_manage
     mode: modal
     group: 2
 admin_user_manage:
-    name: 管理
+    name: 用户管理
     parent: admin_user_show
     router_name: admin_user
 admin_login_record:

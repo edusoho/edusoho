@@ -1,11 +1,15 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <!DOCTYPE html>
+
 {% set menu = menu|default(null) %}
-{% set menu_paths = menu_paths(menu) %}
-{% set menu_nav = menu_paths[0]|default(null) %}
-{% set menu_sidebar = menu_paths[1]|default(null) %}
-{% set menu_main = menu_paths[2]|default(null) %}
+{% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
+
+{% set menu_current = menu_breadcrumb|last %}
+
+{% set menu_nav = menu_breadcrumb[0]|default(null) %}
+{% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
+{% set menu_main = menu_breadcrumb[2]|default(null) %}
 
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
@@ -19,9 +23,9 @@
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
     {% block title %}
-      {% for m in menu_paths %}
-        {{ m.name }}
-      {% endif %}
+      {% for m in menu_breadcrumb|reverse %}
+        {{ m.name }} -
+      {% endfor %}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -40,7 +44,6 @@
   <![endif]-->
 </head>
 
-
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -54,10 +57,14 @@
       </div>
       <div class="navbar-collapse collapse">
 
-        {% set header_menus = menus('admin', 'admin') %}
-        {% include 'TopxiaAdminBundle::header.html.twig' with {menus:header_menus, nav: menu_nav } %}
+        <ul class="nav navbar-nav">
+          {% for m in menu_children('admin', 'admin', 1) %}
+            <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {{ _self.menu_link_html(m) }}
+            </li>
+          {% endfor %}
+        </ul>
 
-     
         <ul class="nav navbar-nav navbar-right">
           <li class="admin-collect" data-url="{{path('admin_common_admin')}}"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
           <ul class="dropdown-menu collect-list">
@@ -85,14 +92,38 @@
 
         <div class="col-md-2">
           {% block sidebar %}
-            {% include 'TopxiaAdminBundle::side.html.twig' with {menus : side_menus , nav : menu} %}
+            {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
+              <div class="list-group">
+                {% for m in groupedMenus %}
+                  {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                  {{ _self.menu_link_html(m, menuClass) }}
+                {% endfor %}
+              </div>
+            {% endfor %}
           {% endblock %}
         </div>
 
         <div class="col-md-10">
-          <div class="page-header">
-            <h1>{{ page_title('admin', menu) }}</h1>
+          <div class="page-header clearfix">
+            <h1 class="pull-left">{{ menu_current.name }}</h1>
+            <div class="pull-right">
+              {% for m in menu_children('admin', menu_current.code, 2) %}
+                {{ _self.menu_link_html(m, 'btn btn-success btn-sm') }}
+              {% endfor %}
+            </div>
           </div>
+
+          {% set tabMenus = menu_children('admin', menu_sidebar.code, 1) %}
+          {% if tabMenus %}
+            <ul class="nav nav-tabs mbm">
+              {% for m in tabMenus %}
+                <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
+                  {{ _self.menu_link_html(m) }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
           {% block main %}{% endblock %}
         </div>
 
@@ -106,3 +137,21 @@
   <div id="modal" class="modal" ></div>
 </body>
 </html>
+
+{% macro menu_link_html(menu, class) %}
+  <a 
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+  {% if menu.mode|default(null) == 'modal' %}
+    data-url="{{ menu_path(menu) }}"
+    data-toggle="modal"
+    data-target="#modal"
+  {% else %}
+    href="{{ menu_path(menu) }}"
+  {% endif %}
+  {% if menu.blank|default(false) %}
+    target="blank"
+  {% endif %}
+  >{{ menu.name }}</a>
+{% endmacro %}
