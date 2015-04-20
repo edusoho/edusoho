@@ -7,6 +7,7 @@
 {% set menu_nav = menu_breadcrumb[0]|default(null) %}
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
+{% set menu_hiddens = setting('menu_hiddens', []) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -106,7 +107,9 @@
 
               {% block page_buttons %}
                 {% for m in menu_children('admin', menu_current.code, 2) %}
-                  {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% endif %}
                 {% endfor %}
               {% endblock %}
 
