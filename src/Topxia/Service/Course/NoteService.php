@@ -1,13 +1,12 @@
 <?php
 namespace Topxia\Service\Course;
 
-
 interface NoteService
 {
-    CONST NOTE_TYPE_PRIVATE = 0;
-    CONST NOTE_TYPE_PUBLIC = 1;
+    const NOTE_TYPE_PRIVATE = 0;
+    const NOTE_TYPE_PUBLIC = 1;
 
-	public function getNote($id);
+    public function getNote($id);
 
     public function getUserLessonNote($userId, $lessonId);
 
@@ -19,7 +18,23 @@ interface NoteService
 
     public function saveNote(array $note);
 
-	public function deleteNote($id);
+    public function deleteNote($id);
 
-	public function deleteNotes(array $ids);
+    public function deleteNotes(array $ids);
+
+    public function count($id, $field, $diff);
+
+    public function like($noteId);
+
+    public function cancelLike($noteId);
+
+    public function getNoteLikeByNoteIdAndUserId($noteId, $userId);
+
+    public function findNoteLikesByUserId($userId);
+
+    public function findNoteLikesByNoteId($noteId);
+
+    public function findNoteLikesByNoteIds(array $noteIds);
+
+    public function findNoteLikesByNoteIdsAndUserId(array $noteIds, $userId);
 }
