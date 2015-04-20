@@ -56,7 +56,7 @@
         <ul class="nav navbar-nav">
           {% for m in menu_children('admin', 'admin', 1) %}
             <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-              {{ _self.menu_link_html(m) }}
+              {{ _self.menu_link_html(_context, m) }}
             </li>
           {% endfor %}
         </ul>
@@ -92,7 +92,7 @@
               <div class="list-group">
                 {% for m in groupedMenus %}
                   {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                  {{ _self.menu_link_html(m, menuClass) }}
+                  {{ _self.menu_link_html(_context, m, menuClass) }}
                 {% endfor %}
               </div>
             {% endfor %}
@@ -104,7 +104,7 @@
             <h1 class="pull-left">{% block page_title %}{{ menu_current.name }}{% endblock %}</h1>
             <div class="pull-right">
               {% for m in menu_children('admin', menu_current.code, 2) %}
-                {{ _self.menu_link_html(m, 'btn btn-success btn-sm') }}
+                {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
               {% endfor %}
             </div>
           </div>
@@ -123,7 +123,7 @@
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(m) }}
+                  {{ _self.menu_link_html(_context, m) }}
                 </li>
               {% endfor %}
             </ul>
@@ -133,7 +133,7 @@
             <ul class="nav nav-pills mbl">
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(m) }}
+                  {{ _self.menu_link_html(_context, m) }}
                 </li>
               {% endfor %}
             </ul>
@@ -153,7 +153,7 @@
 </body>
 </html>
 
-{% macro menu_link_html(menu, class) %}
+{% macro menu_link_html(_context, menu, class) %}
   <a 
   {% if class %}
     class="{{ class }}"
