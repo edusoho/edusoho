@@ -109,7 +109,12 @@
             </div>
           </div>
 
-          {% set tabMenus = menu_children('admin', menu_breadcrumb[(menu_breadcrumb|length)-1].code|default(null), 1) %}
+          {% if menu_breadcrumb|length <= 2 %}
+            {% set tabMenus = null %}
+          {% else %}
+            {% set tabMenus = menu_children('admin', menu_breadcrumb[(menu_breadcrumb|length)-2].code|default(null), 1) %}
+          {% endif %}
+
           {% if tabMenus %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
