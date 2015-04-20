@@ -1,6 +1,12 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <!DOCTYPE html>
+{% set menu = menu|default(null) %}
+{% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
+{% set menu_current = menu_breadcrumb|last %}
+{% set menu_nav = menu_breadcrumb[0]|default(null) %}
+{% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
+{% set menu_main = menu_breadcrumb[2]|default(null) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -11,12 +17,14 @@
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
-  {% set header_menus = menus("admin",'admin') %}
-
-  {% set nav = nav|default(null) %}
-  {% set menu = menu|default(null) %}
-
-  <title>{% block title %} {% if not setting('copyright.owned') %}EduSoho-{% endif %}{{ admin_macro.title(header_menus,nav) }}{% endblock %}</title>
+  <title>
+    {% block title %}
+      {% for m in menu_breadcrumb|reverse %}
+        {{ m.name }} -
+      {% endfor %}
+    {% endblock %}
+    {% if not setting('copyright.owned') %} | EduSoho{% endif %}
+  </title>
 
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
@@ -32,7 +40,6 @@
   <![endif]-->
 </head>
 
-
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -46,21 +53,26 @@
       </div>
       <div class="navbar-collapse collapse">
 
-        {% include 'TopxiaAdminBundle::header.html.twig' with {menus:header_menus,nav:nav} %}
+        <ul class="nav navbar-nav">
+          {% for m in menu_children('admin', 'admin', 1) %}
+            <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {{ _self.menu_link_html(_context, m) }}
+            </li>
+          {% endfor %}
+        </ul>
 
-     
         <ul class="nav navbar-nav navbar-right">
-          <li class="admin-collect" data-url="{{path('admin_common_admin')}}"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
-          <ul class="dropdown-menu collect-list">
-          {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
-          </ul>
+          <li data-url="{{path('admin_common_admin')}}">
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
+            <ul class="dropdown-menu shortcuts">
+              {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
+            </ul>
           </li>
           <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
 
-          <li class="dropdown hidden-lt-ie8">
-                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down admin-down"></span></a>
+          <li class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
                 <ul class="dropdown-menu main-list">
-                  
                   <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
                 </ul>
               </li>
@@ -71,14 +83,94 @@
   </div>
 
   <div class="container">
-    <div class="row">{% block content %}{% endblock %}</div>
-  </div>
+    <div class="row">
+      {% block content %}
 
+        <div class="col-md-2">
+          {% block sidebar %}
+            {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
+              <div class="list-group">
+                {% for m in groupedMenus %}
+                  {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                  {{ _self.menu_link_html(_context, m, menuClass) }}
+                {% endfor %}
+              </div>
+            {% endfor %}
+          {% endblock %}
+        </div>
+
+        <div class="col-md-10">
+          <div class="page-header clearfix">
+            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
+            <div class="pull-right">
+
+              {% block page_buttons %}
+                {% for m in menu_children('admin', menu_current.code, 2) %}
+                  {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                {% endfor %}
+              {% endblock %}
+
+            </div>
+          </div>
+
+          {% set menu_breadcrumb_length = menu_breadcrumb|length %}
+
+          {% if menu_breadcrumb_length >= 3 %}
+            {% set tabMenus = menu_children('admin', menu_breadcrumb[1].code|default(null), 1) %}
+          {% endif %}
+
+          {% if menu_breadcrumb_length >= 4 %}
+            {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
+          {% endif %}
+
+          {% if tabMenus|default(null) and menu_current.group == 1 %}
+            <ul class="nav nav-tabs mbm">
+              {% for m in tabMenus %}
+                <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
+                  {{ _self.menu_link_html(_context, m) }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if subTabMenus|default(null) and menu_current.group == 1 %}
+            <ul class="nav nav-pills mbl">
+              {% for m in subTabMenus %}
+                <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
+                  {{ _self.menu_link_html(_context, m) }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% block main %}{% endblock %}
+        </div>
+
+      {% endblock %}
+    </div>
+  </div>
 
   {% block footer %}{% endblock %}
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
-
   <div id="modal" class="modal" ></div>
 </body>
 </html>
+
+{% macro menu_link_html(_context, menu, class) %}
+  <a 
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+  {% if menu.mode|default(null) == 'modal' %}
+    data-url="{{ menu_path(menu) }}"
+    data-toggle="modal"
+    data-target="#modal"
+  {% else %}
+    href="{{ menu_path(menu) }}"
+  {% endif %}
+  {% if menu.blank|default(false) %}
+    target="blank"
+  {% endif %}
+  >{{ menu.name }}</a>
+{% endmacro %}

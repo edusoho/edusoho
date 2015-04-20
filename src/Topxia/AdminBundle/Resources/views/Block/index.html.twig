@@ -1,10 +1,16 @@
-{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_operation_block' %}
 
 {% set script_controller = 'block/list' %}
 {% block main %}
+  {% if setting('developer.debug') %}
 
+    <div class="clearfix ">
+      <a data-url="{{ path('admin_block_create') }}" data-toggle="modal" data-target="#modal" class=" btn btn-success btn-sm pull-right mls "> 新增编辑区</a>
+    </div>
+    
+  {% endif %}
 <table id="block-table" class="table table-striped">
   <thead>
     <tr>

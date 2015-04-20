@@ -239,10 +239,6 @@ input.LargeInput {width: 600px;}
   font-size: 14px;
 }
 
-.admin-down {
-  color: #999;
-}
-
 .remove {
     visibility: hidden;
     font-size: 14px;
@@ -479,3 +475,21 @@ input.LargeInput {width: 600px;}
   overflow: hidden; 
 }
 
+.shortcuts {
+  min-width: 320px;
+}
+
+.shortcut-item {
+  position: relative;
+}
+
+.shortcut-item > a {
+  padding-right: 40px!important;
+}
+
+.shortcut-item .glyphicon-remove-circle {
+  position: absolute;
+  right: 15px;
+  top: 6px;
+  cursor: pointer;
+}

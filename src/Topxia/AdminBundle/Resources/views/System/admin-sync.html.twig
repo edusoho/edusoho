@@ -1,11 +1,9 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
-
-{% block title %}管理员帐号同步 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'setting/user-center' %}
-{% set submenu = 'user_center' %}
+{% set menu = 'admin_setting_user_center' %}
 
-{% block main_content %}
+{% block main %}
 
 {% set user_center_name = mode == 'phpwind' ? 'WindID' : 'Ucenter' %}
 

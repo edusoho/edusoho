@@ -1,7 +1,7 @@
-<li>
+<li class="shortcut-item clearfix">
   <a href="{{admin.url}}">
-    <i class="glyphicon glyphicon-bookmark"></i>
+    <i class="glyphicon glyphicon-bookmark text-info"></i>
     {{admin.title}}
   </a>
-  <span class="glyphicon glyphicon-remove-circle remove" data-url="{{path('admin_common_remove',{id:admin.id})}}"></span>
+  <span class="glyphicon glyphicon-remove-circle text-muted" data-url="{{ path('admin_common_remove', {id:admin.id}) }}" title="删除常用链接"></span>
 </li>

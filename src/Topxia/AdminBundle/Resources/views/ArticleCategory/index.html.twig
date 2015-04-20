@@ -1,19 +1,8 @@
-{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set tab_menus = menus("admin",'admin_operation_article', 1) %}
-{% set menu = 'admin_operation_article' %}
-{% set submenu = 'admin_operation_article_category' %}
-{% block title %}{{ html_title('admin','admin_operation_article_category')}}{% endblock %}
+{% set menu = 'admin_operation_article_category' %}
 
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
-
-<div class="clearfix well well-sm">
-  {% set btn_menus = menus("admin","admin_operation_article_category", 2) %}
-  {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
-</div>
 
 <table class="table table-hover" id="category-table">
   <thead>
