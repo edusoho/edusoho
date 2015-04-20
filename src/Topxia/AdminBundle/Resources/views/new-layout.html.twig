@@ -101,7 +101,7 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ menu_current.name }}{% endblock %}</h1>
+            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
             <div class="pull-right">
 
               {% block page_buttons %}

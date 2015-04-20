@@ -334,13 +334,17 @@ admin_payment:
     name: 支付
     parent: admin_setting_finance
     router_name: admin_setting_payment
-admin_coin_settings:
+_admin_coin_settings:
     name: 虚拟币
     parent: admin_setting_finance
+    router_name: admin_coin_settings
+admin_coin_settings:
+    name: 虚拟币设置
+    parent: _admin_coin_settings
 admin_coin_model:
     name: 使用方式
-    parent: admin_coin_settings
-    group: 1
+    fullname: 虚拟币使用方式设置
+    parent: _admin_coin_settings
 admin_setting_refund:
     name: 退款
     parent: admin_setting_finance
