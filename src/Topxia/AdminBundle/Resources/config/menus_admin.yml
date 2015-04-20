@@ -336,6 +336,10 @@ admin_payment:
 admin_coin_settings:
     name: 虚拟币
     parent: admin_setting_finance
+admin_coin_model:
+    name: 使用方式
+    parent: admin_coin_settings
+    group: 2
 admin_setting_refund:
     name: 退款
     parent: admin_setting_finance

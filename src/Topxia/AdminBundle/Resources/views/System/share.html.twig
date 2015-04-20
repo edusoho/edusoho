@@ -1,7 +1,8 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
-{% set submenu = 'admin_setting_share' %}
-{% block title %}{{ html_title('admin','admin_setting_share')}}{% endblock %}
-{% block main_content %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
+
+{% set menu = 'admin_setting_share' %}
+
+{% block main %}
 <meta http-equiv="pragma" content="no-cache" />
   {{ web_macro.flash_messages() }}
 
