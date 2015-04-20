@@ -1,11 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {% set script_controller = 'setting/theme' %}
 
-{% set submenu = 'admin_setting_theme' %}
-{% block title %}{{ html_title('admin','admin_setting_theme')}}{% endblock %}
+{% set menu = 'admin_setting_theme' %}
 
-{% block main_content %}
+{% block main %}
 
   <table class="table table-striped table-hover" id="theme-table">
     <thead>

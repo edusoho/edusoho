@@ -77,7 +77,7 @@ admin_operation_category_create:
     mode: modal
     group: 2
 admin_operation_article_manage:
-    name: 管理
+    name: 资讯管理
     parent: admin_operation_article
     router_name: admin_article
 admin_operation_article_category:

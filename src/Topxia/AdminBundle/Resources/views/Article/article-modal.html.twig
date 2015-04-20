@@ -6,9 +6,7 @@
 
 {% set article = article|default(null) %}
 
-{% if article %}
-	{% block page_title %}编辑资讯{% endblock %}
-{% endif %}
+{% block page_title %}{% if article %}编辑资讯{% else %}{{parent()}}{% endif %}{% endblock %}
 
 {% block main %}
 

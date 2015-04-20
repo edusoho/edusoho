@@ -5,17 +5,6 @@
 {% set script_controller = 'block/list' %}
 {% block main %}
 
-
-  {% if setting('developer.debug') %}
-
-    <div class="clearfix well well-sm">
-      {% set btn_menus = menus("admin","admin_operation_block", 2) %}
-      {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
-    </div>
-    
-  {% endif %}
-
-
 <table id="block-table" class="table table-striped">
   <thead>
     <tr>
