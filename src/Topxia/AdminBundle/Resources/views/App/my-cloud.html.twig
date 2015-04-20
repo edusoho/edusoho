@@ -169,7 +169,7 @@
                       {% if (storage.freeTransfer|default(0) > 0 and not bill ) or  (storage.freeSpace|default(0) > 0 and not bill)  %}
                           <p class="text-muted">空间用量暂无记录</p>
                           <p class="text-muted">已用流量暂无记录</p>
-                          <p class="text-muted">云视频包有效期：{{bill.startMonth|default('')}}~{{bill.endMonth|default('')}}</p>
+                          <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
                       {% endif %}
 
                       {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and bill %}
@@ -183,7 +183,7 @@
                       {% if (storage.freeTransfer|default(0) > 0 and bill ) or  (storage.freeSpace|default(0) > 0 and bill ) %}
                           <p class="text-muted">{{month|default('上')}}月空间用量：{{bill.space|default(0)}}G</p>
                           <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
-                          <p class="text-muted">云视频包有效期：{{bill.startMonth|default('')}}~{{bill.endMonth|default('')}}</p>
+                          <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
                       {% endif %}
                       {% if storageDate|default(31)  == 0 %}
                           <p class="text-warning " style="display:none;">云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
