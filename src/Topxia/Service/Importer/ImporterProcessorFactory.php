@@ -8,11 +8,11 @@ class ImporterProcessorFactory
 
 	public static function create($target)
     {
-    	if(empty($target) || !in_array($target,array('classroomUser'))) {
+    	if(empty($target) || !in_array($target,array('classroom'))) {
     		throw new Exception("用户导入类型不存在");
     	}
 
-    	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'ImporterProcessor';
+    	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'UserImporterProcessor';
 
     	return new $class();
     }

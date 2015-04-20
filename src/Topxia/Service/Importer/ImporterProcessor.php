@@ -7,20 +7,28 @@ interface ImporterProcessor
 
     public function excelAnalyse($file);
 
-    public function getRowTotal($excelWorksheet);
+    public function getExcelFieldsValue();
 
-    public function getColTotal($excelWorksheet);
-
-    public function getExcelFieldsValue($objWorksheet, $colTotal, $row);
+    public function getFieldSort();
 
     public function validExcelFieldValue($userData,$row,$fieldCol);
 
-	public function checkRepeatData($fieldSort,$highestRow,$excelWorksheet);
+	public function checkRepeatData();
 
 	public function arrayRepeat($array);
 	
 	public function checkNecessaryFields($excelFields);
 
-	public function getUserData($objWorksheet, $rowAndCol, $fieldSort);
+	public function getUserData();
+
+	public function tryManage($targetId);
+
+	public function getExcelExample();
+
+	public function getExcelInfoValidateUrl();
+
+	public function getExcelInfoImportUrl();
+
+	public function excelDataImporting($targetObject, $userData, $userUrl);
 
 }

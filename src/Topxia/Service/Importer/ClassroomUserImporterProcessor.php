@@ -10,6 +10,13 @@ use Exception;
 class ClassroomUserImporterProcessor implements ImporterProcessor
 {
 	protected $necessaryFields = array('nickname' => '用户名');
+	protected $objWorksheet;
+	protected $rowTotal = 0;
+	protected $colTotal = 0;
+	protected $excelFields = array();
+	protected $excelExample = 'bundles/classroom/example/classmember_import_example.xls';
+	protected $validateRouter = 'classroom_manage_student_import';
+	protected $importingRouter = 'classroom_manage_student_to_base';
 
 	public function validateExcelFile($file)
 	{
@@ -25,14 +32,14 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
             return $errorMessage;
         }
 
-        list($objWorksheet,$rowAndCol,$excelField) = $this->excelAnalyse($file);
+        $this->excelAnalyse($file);
 
-        if ($rowAndCol['rowLength'] > 1000) {
+        if ($this->rowTotal > 1000) {
             $message = 'Excel超过1000行数据!';
             return $errorMessage;
         } 
 
-        if (!$this->checkNecessaryFields($excelField)) {
+        if (!$this->checkNecessaryFields($this->excelFields)) {
             $message = '缺少必要的字段';
             return $errorMessage;
         }
@@ -57,26 +64,21 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
 
         $rowAndCol = array('rowLength' => $highestRow,'colLength' => $highestColumnIndex);
 
+        $this->objWorksheet = $objWorksheet;
+        $this->rowTotal = $highestRow;
+        $this->colTotal = $highestColumnIndex;
+        $this->excelFields = $excelFields;
+
         return array($objWorksheet,$rowAndCol,$excelFields);
     }
 
-    public function getRowTotal($objWorksheet)
-    {
-    	return $objWorksheet->getHighestRow();
-    }
 
-    public function getColTotal($objWorksheet)
-    {
-    	$highestColumn = $objWorksheet->getHighestColumn();
-        return PHPExcel_Cell::columnIndexFromString($highestColumn);
-    }
-
-    public function getExcelFieldsValue($objWorksheet, $colTotal, $row)
+    public function getExcelFieldsValue()
     {
     	$columnsData = array();
-    	for ($col = 0; $col < $colTotal; $col++)
+    	for ($col = 0; $col < $this->colTotal; $col++)
         {
-            $infoData = $objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
+            $infoData = $this->objWorksheet->getCellByColumnAndRow($col, 2)->getFormattedValue();
             $columnsData[$col] = $infoData."";
         }
 
@@ -94,10 +96,11 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         return $errorInfo;
     }
 
-	public function checkRepeatData($fieldSort, $highestRow, $objWorksheet)
+	public function checkRepeatData()
 	{
 		$errorInfo=array();
         $nicknameData=array();
+        $fieldSort = $this->getFieldSort();
 
         foreach ($fieldSort as $key => $value) {
             if ($value['fieldName'] == 'nickname' ){
@@ -105,9 +108,9 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
             }
         }
 
-        for ($row=3; $row <= $highestRow; $row++) {
+        for ($row=3; $row <= $this->rowTotal; $row++) {
 
-            $nickNameColData = $objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
+            $nickNameColData = $this->objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
             if ($nickNameColData."" == "") continue;
             $nicknameData[] = $nickNameColData.""; 
         }
@@ -139,11 +142,12 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         return $repeatRow;
 	}
 	
-	public function getFieldSort($excelFields)
+	public function getFieldSort()
 	{
 		$fieldSort = array();
 		$necessaryFields = $this->necessaryFields;
-        
+        $excelFields = $this->excelFields;
+
      	foreach($excelFields as $key => $value){
      		if(in_array($value, $necessaryFields)){
                 foreach ($necessaryFields as $fieldKey => $fieldValue) {
@@ -168,15 +172,16 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
 		return false;
 	}
 
-	public function getUserData($objWorksheet, $rowAndCol, $fieldSort)
+	public function getUserData()
 	{
 		$userCount = 0;
+		$fieldSort = $this->getFieldSort();
 
-		for ($row = 3;$row <= $rowAndCol['rowLength'];$row++) 
+		for ($row = 3;$row <= $this->rowTotal;$row++) 
         {
-            for ($col = 0; $col < $rowAndCol['colLength']; $col++)
+            for ($col = 0; $col < $this->colTotal; $col++)
             {
-                $infoData = $objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
+                $infoData = $this->objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
                 $columnsData[$col] = $infoData."";
             }
 
@@ -209,6 +214,80 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         return $data;
 	}
 
+	public function tryManage($targetId)
+	{
+		$this->getClassroomService()->tryManageClassroom($targetId);
+        return $this->getClassroomService()->getClassroom($targetId);
+	}
+
+	public function getExcelExample()
+	{
+		return $this->excelExample;
+	}
+
+	public function getExcelInfoValidateUrl()
+	{
+		return $this->validateRouter;
+	}
+
+	public function getExcelInfoImportUrl()
+	{
+		return $this->importingRouter;
+	}
+
+	public function excelDataImporting($targetObject, $userData, $userUrl)
+	{
+		$existsUserCount = 0;
+        $successCount = 0;
+
+		foreach($userData as $key => $user){
+            $user = $this->getUserService()->getUserByNickname($user['nickname']);
+
+            $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($targetObject['id'], $user['id']);
+            $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($targetObject['id'], $user['id']);
+
+            if ($isClassroomStudent || $isClassroomTeacher) {
+                $existsUserCount++;
+            } else {
+                $currentUser = $this->getUserService()->getCurrentUser();
+
+                $order = $this->getOrderService()->createOrder(array(
+                    'userId' => $user['id'],
+                    'title' => "购买班级《{$targetObject['title']}》(管理员添加)",
+                    'targetType' => 'classroom',
+                    'targetId' => $targetObject['id'],
+                    'amount' => $targetObject['price'],
+                    'payment' => 'none',
+                    'snPrefix' => 'CR',
+                ));
+
+                $this->getOrderService()->payOrder(array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time(),
+                ));
+
+                $info = array(
+                    'orderId' => $order['id'],
+                    'note'  => '通过批量导入添加',
+                );
+
+                if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
+                    $successCount++;
+                };
+
+                $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
+                
+                $this->getNotificationService()->notify($member['userId'], 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>加入班级<strong>{$targetObject['title']}</strong>成为正式学员");
+
+                $this->getLogService()->info('classroom', 'add_student', "班级《{$targetObject['title']}》(#{$targetObject['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加");
+            }
+        }
+
+        return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
+	}
+
 	private function trim($data)
     {       
         $data=trim($data);
@@ -225,5 +304,23 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-    
+    private function getClassroomService() 
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getOrderService()
+    {
+        return ServiceKernel::instance()->createService('Order.OrderService');
+    }
+
+    private function getNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User.NotificationService');
+    }
+
+    protected function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System.LogService');
+    }
 }
