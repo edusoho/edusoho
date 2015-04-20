@@ -48,7 +48,9 @@
                   {% if notices %}
                   <ul>
                   {% for notice in notices %}
+                    {% if loop.index <= 3 %}
                     <li><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a></li>
+                    {% endif %}
                   {% endfor %}
                   </ul>
                   {% endif %}
@@ -78,11 +80,11 @@
             <p class="text-warning">余额不足50元，请尽快充值！</p>
             {% endif %}
             <!--欠费7天预留保护期-->
-            {% if content.account.arrearageDate < 0 and 0 < day and day < 7 %}
+            {% if content.account.cash < 0 and 0 < day and day <= 7 %}
             <p class="text-warning">您已欠费，还剩{{day}}天的预留保护期，请尽快充值！</p>
             {% endif %}
             <!--欠费冻结-->
-            {% if content.account.arrearageDate < 0 and 10 < day %}
+            {% if content.account.cash < 0 and 10 <= day %}
             <p class="text-danger">您已欠费超过{{day}}天，教育云服务已暂停，请尽快充值！</p>
             {% endif %}
             {% endif %}
@@ -103,12 +105,18 @@
                   <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
                   <p class="text-muted">有效期：{{ user.startDate|default('') }}~{{ user.endDate|default('') }}</p>
                   {% endif %}
+                  {% if packageDate == 0 %}
+                  <p class="text-warning text-sm">套餐服务将于明天到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
+                  <p class="text-warning">
+                    点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
+                  </p>
+                  {% endif %}
                   <!--已到期-->
                   {% if packageDate < 0 %}
                   <p class="text-danger text-sm">套餐服务已到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！</p>
                   {% endif %}
                   <!--30天提醒-->
-                  {% if 30 > packageDate and packageDate > 0 %}
+                  {% if 30 >= packageDate and packageDate > 0 %}
                   <p class="text-warning text-sm">套餐服务将于{{packageDate}}天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
                   <p class="text-warning">
                     点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
@@ -180,8 +188,11 @@
                           <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
                           <p class="text-muted">云视频包有效期：{{bill.startMonth|default('')}}~{{bill.endMonth|default('')}}</p>
                       {% endif %}
+                      {% if storageDate == 0 %}
+                          <p class="text-warning " style="display:none;">云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                      {% endif %}
                     <!--30天过期  -->
-                      {% if 30 > storageDate and storageDate > 0 %}
+                      {% if 30 >= storageDate and storageDate > 0 %}
                           <p class="text-warning " style="display:none;">云视频视频包将于{{storageDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                       {% endif %}
                       <!--已过期 -->
@@ -213,8 +224,11 @@
                     {% else %}
                           <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
                           <p class="text-muted">有效期至：{% if expire == null %}{% else %}{{expire|date("Y-m-d")}}{% endif %}</p>
+                    {% if liveDate == 0 %}
+                          <p class="text-warning">云直播服务将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                    {% endif %}
                     <!--7天警告-->
-                    {% if 7 > liveDate and liveDate > 0 %}
+                    {% if 7 >= liveDate and liveDate > 0 %}
                           <p class="text-warning">云直播服务将于{{liveDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}
                     <!--已过期-->
