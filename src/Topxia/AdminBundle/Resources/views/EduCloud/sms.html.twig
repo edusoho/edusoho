@@ -1,14 +1,11 @@
 {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
 
-{% block title %}{{ html_title('admin','admin_edu_cloud_sms')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_app_my_cloud')}}{% endblock %}
 
-{% set submenu = 'cloud_sms' %} 
-{% set menu = 'cloud-video' %}
-{% set tab_menus = menus("admin",'admin_setting_cloud_video',"tab") %}
+{% set menu = 'admin_app_my_cloud' %}
 {% set script_controller = 'educloud/sms-setting' %}
 
-{% block maincontent %}
-  <div class="page-header"><h1>云短信</h1></div>
+{% block main %}
   	{{ web_macro.flash_messages() }}
 
     {% if smsStatus.status == 'error' %}
