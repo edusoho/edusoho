@@ -101,7 +101,7 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
-            <h1 class="pull-left">{{ menu_current.name }}</h1>
+            <h1 class="pull-left">{% block page_title %}{{ menu_current.name }}{% endblock %}</h1>
             <div class="pull-right">
               {% for m in menu_children('admin', menu_current.code, 2) %}
                 {{ _self.menu_link_html(m, 'btn btn-success btn-sm') }}
