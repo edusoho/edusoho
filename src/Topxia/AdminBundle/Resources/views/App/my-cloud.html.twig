@@ -97,9 +97,9 @@
               <div class="panel panel-default">
                 <div class="panel-body">
                   <h4 class="eduyun-title">套餐信息</h4>
-                  {% if user.level|default("none") == "none" %}
+                  {% if user.hasLicense|default("0") == "0" %}
                     <div class="alert alert-warning alert-sm" role="alert">
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
+                      <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
                     </div>
                   {% else %}
                   <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
@@ -132,7 +132,7 @@
                   <!-- 商业授权 -->
                   <!-- <p class="text-muted">商业授权</p> -->
                   <!-- 非商业授权 -->
-                  <p class="text-muted">{% if user.level|default("none") == "none" %}非商业授权{% else %}商业授权{% endif %}</p>
+                  <p class="text-muted">{% if user.hasLicense|default("0") == "0" %}非商业授权{% else %}商业授权{% endif %}</p>
                   <p class="text-muted">授权域名: {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
         {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
                 </div>
@@ -156,14 +156,14 @@
                     {% if not storage %}
 
                         <div class="alert alert-warning alert-sm" role="alert">
-                          <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未开通云视频云文档功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
+                          <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云文档功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
                         </div>
 
                     {% else %}
 
                       {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and not bill %}
                            <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
                           </div>
                           <p class="text-muted">空间用量暂无记录</p>
                           <p class="text-muted">已用流量暂无记录</p>
@@ -177,7 +177,7 @@
 
                       {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and bill %}
                            <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
                           </div>
                           <p class="text-muted">{{month|default('上')}}月空间用量：{{bill.space|default(0)}}G</p>
                           <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
@@ -189,11 +189,11 @@
                           <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
                       {% endif %}
                       {% if storageDate|default(31)  == 0 %}
-                          <p class="text-warning " style="display:none;">云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                          <p class="text-warning " >云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                       {% endif %}
                     <!--30天过期  -->
                       {% if 30 >= storageDate|default(31)  and storageDate|default(31)  > 0 %}
-                          <p class="text-warning " style="display:none;">云视频视频包将于{{storageDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                          <p class="text-warning " >云视频视频包将于{{storageDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                       {% endif %}
                       <!--已过期 -->
                       {% if storageDate|default(31)  < 0 %}
@@ -219,7 +219,7 @@
                    <!--未购买-->
                    {% if not live %}
                          <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
                           </div>
                     {% else %}
                           <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
@@ -257,13 +257,13 @@
                      {% if not sms %}
                             <div class="alert alert-warning alert-sm" role="alert" >
                               <!--未开启-->
-                               <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未开通云短信，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开通</a>
+                               <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云短信，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开通</a>
                            </div>
                       {% else %}
 
                         {% if status == 'created' %}
                           <div class="alert alert-warning alert-sm" role="alert" >
-                              <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未开启云短信功能，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开启</a>
+                              <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开启云短信功能，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开启</a>
                           </div>
                               <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
                               <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
@@ -277,7 +277,7 @@
                       <!--被停用-->
                         {% if status == 'stoped'%}
                             <div class="alert alert-warning alert-sm" role="alert" >
-                                <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>
+                                <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
                                 您的云短信功能已被暂停
 <!--                                 <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="此处填写理由！">[{{sms.reason|default("")}}]</a> -->
                             </div>
