@@ -256,6 +256,9 @@ admin_setting_theme:
     name: 主题
     parent: admin_setting
     router_name: admin_setting_theme
+admin_setting_mailer:
+    name: 邮件服务器设置
+    parent: admin_setting
 admin_top_navigation:
     name: 顶部导航
     parent: admin_setting
