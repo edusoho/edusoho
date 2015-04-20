@@ -51,17 +51,17 @@ class AppController extends BaseController
         $currentTime = date('Y-m-d', time());
 
         $account = isset($content['account']) ? $content['account'] : null;
-        $day = isset($content['account']['arrearageDate']) ? floor((strtotime($currentTime) - $content['account']['arrearageDate'])/86400) : '';
+        $day = isset($content['account']['arrearageDate']) ? ceil((strtotime($currentTime) - $content['account']['arrearageDate'])/86400) : '';
 
         $user = isset($content['user']) ? $content['user'] : null ;
-        $packageDate = isset($content['user']['endDate']) ? floor((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
+        $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
 
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
-        $storageDate = isset($content['service']['storage']['endMonth']) ? floor((strtotime($content['service']['storage']['endMonth']) - strtotime($currentTime)) /86400) : '' ;
+        $storageDate = isset($content['service']['storage']['expire']) ? ceil( ($content['service']['storage']['expire'] - strtotime($currentTime) ) /86400) : '' ;
         $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],0,1) : '' ;
 
         $live = isset($content['service']['live']) ? $content['service']['live'] : null ;
-        $liveDate = isset($content['service']['live']['expire']) ?  floor(($content['service']['live']['expire'] - strtotime($currentTime)) /86400) : '' ;
+        $liveDate = isset($content['service']['live']['expire']) ?  ceil(($content['service']['live']['expire'] - strtotime($currentTime)) /86400) : '' ;
 
         $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null ;
 
