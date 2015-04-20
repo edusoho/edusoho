@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             'click .js-post-delete': 'onPostDelete',
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
-            'click .pagination a': 'onClickPagination',
+            'click .thread-subpost-container .pagination a': 'onClickPagination',
             'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm'
         },
 
