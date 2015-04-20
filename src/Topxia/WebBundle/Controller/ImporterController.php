@@ -13,9 +13,6 @@ class ImporterController extends BaseController
 {
 	public function ValidateExcelInfoAction(Request $request, $target)
     {
-        //$this->getClassroomService()->tryManageClassroom($target['id']);
-        //$classroom=$this->getClassroomService()->getClassroom($target['id']);
-
         $processor = $this->getImporterProcessor($target['type']);
         $targetObject = $processor->tryManage($target['id']);
 
