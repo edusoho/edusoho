@@ -1644,3 +1644,12 @@ edu_cloud_sms_callback:
     defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
     methods: [POST]
 
+course_note_like:
+    pattern:  /course/note/{noteId}/like
+    defaults: { _controller: TopxiaWebBundle:Course/Note:like }
+    methods: [POST]
+
+course_note_cancel_like:
+    pattern:  /course/note/{noteId}/cancel_like
+    defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
+    methods: [POST]

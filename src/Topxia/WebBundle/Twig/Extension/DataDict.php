@@ -289,6 +289,14 @@ class DataDict
             'event' => '活动组织',
             'liveAnswer' => '直播答疑',
         ),
+        'classroomRoles' => array(
+            'auditor' => '旁听生',
+            'student' => '学生',
+            'headTeacher' => '班主任',
+            'teacher' => '老师',
+            'assistant' => '助教',
+            'assistantStudent' => '助教',
+        )
     );
 
     public static function dict($type)

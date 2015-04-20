@@ -3,8 +3,6 @@ namespace Topxia\Service\Course\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Common\StringToolkit;
-use Topxia\WebBundle\Util\TargetHelper;
-
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -18,6 +16,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.lesson_finish' => 'onLessonFinish',
             'course.join' => 'onCourseJoin',
             'course.favorite' => 'onCourseFavorite',
+            'course.note.create' => 'onCourseNoteCreate',
+            'course.note.update' => 'onCourseNoteUpdate',
+            'course.note.delete' => 'onCourseNoteDelete',
+            'course.note.liked' => 'onCourseNoteLike',
+            'course.note.cancelLike' => 'onCourseNoteCancelLike',
         );
     }
 
@@ -34,7 +37,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
-            )
+            ),
         ));
     }
 
@@ -51,7 +54,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
-            )
+            ),
         ));
     }
 
@@ -66,7 +69,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'private' => $course['status'] == 'published' ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
-            )
+            ),
         ));
     }
 
@@ -83,8 +86,62 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'userId' => $userId,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
-            )
+            ),
         ));
+    }
+
+    public function onCourseNoteCreate(ServiceEvent $event)
+    {
+        $app = $this->getAppService()->findAppsByCodes(array('Classroom'));
+        if ($app) {
+            $note = $event->getSubject();
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+            if ($classroom && $note['status']) {
+                $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+            }
+        }
+    }
+
+    public function onCourseNoteUpdate(ServiceEvent $event)
+    {
+        $app = $this->getAppService()->findAppsByCodes(array('Classroom'));
+        if ($app) {
+            $note = $event->getSubject();
+            $preStatus = $event->getArgument('preStatus');
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+            if ($classroom && $note['status'] && !$preStatus) {
+                $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+            }
+
+            if ($classroom && !$note['status'] && $preStatus) {
+                $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+            }
+
+        }
+    }
+
+    public function onCourseNoteDelete(ServiceEvent $event)
+    {
+        $app = $this->getAppService()->findAppsByCodes(array('Classroom'));
+        if ($app) {
+            $note = $event->getSubject();
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+            if ($classroom) {
+                $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+            }
+        }
+    }
+
+    public function onCourseNoteLike(ServiceEvent $event)
+    {
+        $note = $event->getSubject();
+        $this->getNoteService()->count($note['id'], 'likeNum', +1);
+    }
+
+    public function onCourseNoteCancelLike(ServiceEvent $event)
+    {
+        $note = $event->getSubject();
+        $this->getNoteService()->count($note['id'], 'likeNum', -1);
     }
 
     private function simplifyCousrse($course)
@@ -114,5 +171,20 @@ class CourseEventSubscriber implements EventSubscriberInterface
     private function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
+    }
+
+    private function getNoteService()
+    {
+        return ServiceKernel::instance()->createService('Course.NoteService');
+    }
+
+    private function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getAppService()
+    {
+        return ServiceKernel::instance()->createService('CloudPlatform.AppService');
     }
 }
