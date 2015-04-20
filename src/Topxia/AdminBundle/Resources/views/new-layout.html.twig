@@ -130,7 +130,7 @@
           {% endif %}
 
           {% if subTabMenus|default(null) %}
-            <ul class="nav nav-pills mbm">
+            <ul class="nav nav-pills mbl">
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
                   {{ _self.menu_link_html(m) }}
