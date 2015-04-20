@@ -153,8 +153,9 @@ admin_category_create:
     name: 添加分类
     parent: admin_course_category
     router_params: {'groupId': 'group.id'}
-    router_params_context: 0
+    router_params_context: 1
     group: 2
+    mode: modal
 admin_course_tag:
     name: 标签管理
     parent: admin_course
@@ -339,7 +340,7 @@ admin_coin_settings:
 admin_coin_model:
     name: 使用方式
     parent: admin_coin_settings
-    group: 2
+    group: 1
 admin_setting_refund:
     name: 退款
     parent: admin_setting_finance

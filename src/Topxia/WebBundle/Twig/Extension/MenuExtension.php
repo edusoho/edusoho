@@ -33,21 +33,20 @@ class MenuExtension extends \Twig_Extension
             'page_title' => new \Twig_Function_Method($this, 'pageTitle'),
             'menu_children' => new \Twig_Function_Method($this, 'getMenuChildren'),
             'menu_breadcrumb' => new \Twig_Function_Method($this, 'getMenuBreadcrumb'),
-            'menu_path' => new \Twig_Function_Method($this, 'getMenuPath', array('needs_context' => true)),
+            'menu_path' => new \Twig_Function_Method($this, 'getMenuPath', array('needs_context' => true, 'needs_environment' => true)),
 
         );
     }
 
-    public function getMenuPath($context, $menu)
+    public function getMenuPath($env, $context, $menu)
     {
         $route = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
-
         if (!empty($menu['router_params_context'])) {
             foreach ($params as $key => $value) {
                 $value = explode('.', $value, 2);
-                $params[$key] = $context[$value[0]][$value[1]];
+                $params[$key] = $context['_context'][$value[0]][$value[1]];
 
             }
         }
