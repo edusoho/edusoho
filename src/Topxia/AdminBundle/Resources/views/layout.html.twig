@@ -92,8 +92,10 @@
             {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
               <div class="list-group">
                 {% for m in groupedMenus %}
-                  {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                  {{ _self.menu_link_html(_context, m, menuClass) }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                    {{ _self.menu_link_html(_context, m, menuClass) }}
+                  {% endif %}
                 {% endfor %}
               </div>
             {% endfor %}
@@ -130,7 +132,9 @@
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {{ _self.menu_link_html(_context, m) }}
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>
@@ -140,7 +144,9 @@
             <ul class="nav nav-pills mbl">
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {{ _self.menu_link_html(_context, m) }}
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>
