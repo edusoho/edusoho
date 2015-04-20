@@ -62,17 +62,17 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-          <li class="admin-collect" data-url="{{path('admin_common_admin')}}"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
-          <ul class="dropdown-menu collect-list">
-          {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
-          </ul>
+          <li data-url="{{path('admin_common_admin')}}">
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
+            <ul class="dropdown-menu shortcuts">
+              {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
+            </ul>
           </li>
           <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
 
-          <li class="dropdown hidden-lt-ie8">
-                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down admin-down"></span></a>
+          <li class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
                 <ul class="dropdown-menu main-list">
-                  
                   <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
                 </ul>
               </li>

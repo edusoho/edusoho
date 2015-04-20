@@ -6,6 +6,8 @@ define(function(require, exports, module) {
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
 
+	var Notify = require('common/bootstrap-notify');
+
 	$('[data-toggle="tooltip"]').tooltip();
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
@@ -20,41 +22,21 @@ define(function(require, exports, module) {
 
 	};
 
-	$('.collapse').on('click','.collect',function() {
-		
-		var title = $(document).attr("title");
-		
-		var url = window.location.pathname;
-		var param = window.location.search;
-		
-		$.post($(this).data('url'),{title:title,url:url+param},function(data) {
-			
-			if (data !="error") {
-				$('.collect-list').append(data);
-			}
-
-			if($('.divider').length> 0) {
-
-				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面已添加</a>');
-				
-			}else{
-
-				$('.collect').html('<a ><i class="glyphicon glyphicon-ok"></i> 当前页面已添加</a><li role="presentation" class="divider"></li>');
-			
-			}
-			$('.admin-collect').addClass('open');
-
+	$('.shortcuts').on('click', '.shortcut-add', function() {
+		Notify.success('已添加当前页面为常用链接！');
+		var params = {
+			title: $(document).attr("title"),
+			url: window.location.pathname + window.location.search
+		};
+		$.post($(this).data('url'), params, function() {
+			window.location.reload();
 		});
-
 	});
 
-	$('.collapse').on('click','.remove',function(){
-
-		$.post($(this).data('url'),{url:window.location.pathname},function(data) {
-
-			$('.collect-list').html(data);
-			
-			$('.admin-collect').addClass('open');
+	$('.shortcuts').on('click', '.glyphicon-remove-circle', function() {
+		Notify.success('删除常用链接成功！');
+		$.post($(this).data('url'), function() {
+			window.location.reload();
 		});
 	});
 
