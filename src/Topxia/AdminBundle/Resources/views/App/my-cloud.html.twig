@@ -132,7 +132,7 @@
                   <!-- 商业授权 -->
                   <!-- <p class="text-muted">商业授权</p> -->
                   <!-- 非商业授权 -->
-                  <p class="text-muted">{% if user.level == "none" %}非商业授权{% else %}商业授权{% endif %}</p>
+                  <p class="text-muted">{% if user.level|default("none") == "none" %}非商业授权{% else %}商业授权{% endif %}</p>
                   <p class="text-muted">授权域名: {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
         {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
                 </div>
