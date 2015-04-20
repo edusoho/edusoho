@@ -6,6 +6,9 @@ namespace Topxia\Service\Thread;
  */
 interface ThreadService
 {
+    /**
+    * 基础API
+    */
     public function getThread($threadId);
 
     public function searchThreads($conditions, $sort, $start, $limit);
@@ -102,4 +105,10 @@ interface ThreadService
     public function deleteMember($memberId);
 
     public function deleteMembersByThreadId($threadId);
+
+    /**
+    * 扩展API
+    */
+
+    public function setUserBadgeTitle($thread, $users);
 }
