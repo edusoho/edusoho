@@ -5361,4 +5361,9 @@ a.homework-essay-textarea-pack-up{
 
 .table-striped .sort-handle:hover{
   color:#999;
-};
+}
+
+.classroom-status img {
+  width: 50px;
+  height: 50px;
+}
