@@ -98,12 +98,6 @@ admin_operation_group_thread:
     name: 话题管理
     parent: admin_operation_group
     router_name: admin_groupThread
-admin_operation_block_create:
-    name: 新增编辑区
-    parent: admin_operation_block
-    router_name: admin_block_create
-    mode: modal
-    group: 2
 admin_course_show:
     name: 课程管理
     parent: admin_course

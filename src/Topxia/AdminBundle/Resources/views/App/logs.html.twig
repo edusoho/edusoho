@@ -1,11 +1,8 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
-
-{% block title %}{{ html_title('admin','admin_app_logs')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'app/logs' %}
-{% set menu = 'admin_app_center_show' %}
-{% set tab_menus = menus("admin",'admin_app_center_show', 1) %}
-{% set submenu = 'admin_app_logs' %}
+
+{% set menu = 'admin_app_logs' %}
 
 {% block main %}
   <style>
@@ -13,10 +10,6 @@
       max-width: 400px;
     }
   </style>
-
-  <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-  </div>
 
   <table class="table table-striped table-hover">
     <thead>
