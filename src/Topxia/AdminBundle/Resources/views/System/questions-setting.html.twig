@@ -1,9 +1,8 @@
-{% extends 'TopxiaAdminBundle:System:course.setting.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set submenu = 'questions_setting' %}
-{% block title %}{{ html_title('admin','admin_setting_questions_setting')}}{% endblock %}
+{% set menu = 'admin_setting_questions_setting' %}
 
-{% block main_content %}
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 

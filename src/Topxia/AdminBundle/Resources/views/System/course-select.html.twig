@@ -1,9 +1,6 @@
-{% extends 'TopxiaAdminBundle:System:mobile.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set menu = 'admin_operation_mobile' %}
-{% set tab_menus = menus("admin",'admin_operation_mobile', 1) %}
-{% set submenu = 'admin_operation_mobile_select_manage' %}
-{% block title %}{{ html_title('admin','admin_operation_mobile_select_manage')}}{% endblock %}
+{% set menu = 'admin_operation_mobile_select_manage' %}
 
 {% set script_controller = 'operation/course-grid' %}
 
@@ -62,12 +59,6 @@
 
 </style>
 {% if setting("mobile.enabled") == 1 %}
-
-<div class="mbl">
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:tab_menus,type:submenu} %}
-
-</div>
 
 {{ web_macro.flash_messages() }}
 

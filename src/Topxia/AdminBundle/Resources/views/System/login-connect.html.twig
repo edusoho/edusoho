@@ -1,11 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {% set script_controller = 'system/login_bind' %}
 
-{% set submenu = 'admin_setting_login_bind' %}
-{% block title %}{{ html_title('admin','admin_setting_login_bind')}}{% endblock %}
+{% set menu = 'admin_setting_login_bind' %}
 
-{% block main_content %}
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 

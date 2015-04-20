@@ -77,7 +77,7 @@ admin_operation_category_create:
     mode: modal
     group: 2
 admin_operation_article_manage:
-    name: 管理
+    name: 资讯管理
     parent: admin_operation_article
     router_name: admin_article
 admin_operation_article_category:
@@ -334,22 +334,17 @@ admin_payment:
     name: 支付
     parent: admin_setting_finance
     router_name: admin_setting_payment
-
 _admin_coin_settings:
     name: 虚拟币
     parent: admin_setting_finance
     router_name: admin_coin_settings
-
 admin_coin_settings:
     name: 虚拟币设置
     parent: _admin_coin_settings
-
 admin_coin_model:
     name: 使用方式
     fullname: 虚拟币使用方式设置
     parent: _admin_coin_settings
-
-
 admin_setting_refund:
     name: 退款
     parent: admin_setting_finance
