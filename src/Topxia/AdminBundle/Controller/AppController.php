@@ -51,8 +51,10 @@ class AppController extends BaseController
         $currentTime = date('Y-m-d', time());
 
         $account = isset($content['account']) ? $content['account'] : null;
-        $day = isset($content['account']['arrearageDate']) ? ceil((strtotime($currentTime) - $content['account']['arrearageDate'])/86400) : '';
-
+        $day = ''; 
+        if (isset($content['account']['arrearageDate']) and  $content['account']['arrearageDate'] != 0 ) {
+            $day = isset($content['account']['arrearageDate']) ? ceil( (strtotime($currentTime) - $content['account']['arrearageDate']) /86400) : '';
+        }
         $user = isset($content['user']) ? $content['user'] : null ;
         $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
 
