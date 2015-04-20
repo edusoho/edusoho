@@ -1,12 +1,9 @@
-{% extends 'TopxiaAdminBundle:Message:message.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% block title %}{{ html_title('admin','admin_message')}}{% endblock %}
-  
+{% set menu = 'admin_message' %}
 {% set script_controller = 'message/list' %}
 
-{% set submenu = 'admin_message' %}
-
-{% block maincontent %}
+{% block main %}
 <div class="well well-sm">
   <form id="message-search-form" class="form-inline" action="" method="get" novalidate> 
 

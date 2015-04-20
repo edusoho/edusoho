@@ -1,12 +1,9 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set menu = 'admin_course_show' %}
-{% set submenu = 'admin_course_data'  %}
-{% block title %}{{ html_title('admin','admin_course_data')}}{% endblock %}
+{% set menu = 'admin_course_data' %}
+
 {% block main %}
 
-  {% set menus = menus("admin",'admin_course_show', 1) %}
-  {% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
     <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">
         <select class="form-control" name="categoryId">

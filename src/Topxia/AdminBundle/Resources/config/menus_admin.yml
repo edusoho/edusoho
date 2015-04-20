@@ -67,7 +67,7 @@ admin_operation_analysis_register:
     group: 3
 admin_operation_article_create:
     name: 添加资讯
-    parent: admin_operation_article
+    parent: admin_operation_article_manage
     router_name: admin_article_create
     group: 2
 admin_operation_category_create:
@@ -110,8 +110,15 @@ admin_course_show:
     router_name: admin_course
 admin_course_add:
     name: 创建课程
-    parent: admin_course_show
+    parent: admin_course_manage
     router_name: course_create
+    group: 2
+    blank: 1
+admin_live_course_add:
+    name: 创建直播课程
+    parent: admin_course_manage
+    router_name: course_create
+    router_params: {'flag': 'isLive'}
     group: 2
     blank: 1
 admin_live_course:
@@ -142,6 +149,12 @@ admin_course_review:
 admin_course_category:
     name: 分类管理
     parent: admin_course
+admin_category_create:
+    name: 添加分类
+    parent: admin_course_category
+    router_params: {'groupId': 'group.id'}
+    router_params_context: 0
+    group: 2
 admin_course_tag:
     name: 标签管理
     parent: admin_course
@@ -162,11 +175,11 @@ admin_user_show:
     router_name: admin_user
 admin_user_create:
     name: 添加新用户
-    parent: admin_user_show
+    parent: admin_user_manage
     mode: modal
     group: 2
 admin_user_manage:
-    name: 管理
+    name: 用户管理
     parent: admin_user_show
     router_name: admin_user
 admin_login_record:
@@ -182,15 +195,15 @@ admin_message:
     name: 私信管理
     parent: admin_user
 admin_course_manage:
-    name: 管理
+    name: 课程管理
     parent: admin_course_show
     router_name: admin_course
 admin_course_recommend:
-    name: 推荐
+    name: 课程推荐
     parent: admin_course_show
     router_name: admin_course_recommend_list
 admin_course_data:
-    name: 统计
+    name: 课程统计
     parent: admin_course_show
 admin_course_order:
     name: 课程订单

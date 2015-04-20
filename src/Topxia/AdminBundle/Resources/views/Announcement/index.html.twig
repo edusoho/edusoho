@@ -1,24 +1,10 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {% set script_controller = 'announcement/index' %}
-{% block title %}{{ html_title('admin','admin_announcement')}}{% endblock %}
-{% set side_menus = menus("admin",'admin_operation') %}
-{% set nav = 'admin_operation' %}
-{% set menu = 'admin_announcement' %}
-{% block content %}
-    <div class="col-md-2">
-    {% block sidebar %}
-        {% include 'TopxiaAdminBundle::side.html.twig' with {menus : side_menus , nav : menu} %}
-    {% endblock %}
-    </div>
 
-    <div class="col-md-10">
-        <div class="page-header"><h1>{{ admin_macro.title(side_menus,menu) }}</h1></div>
-        
-        <div class="clearfix well well-sm">
-            {% set btn_menus = menus("admin","admin_announcement", 2) %}
-            {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
-        </div>
+{% set menu = 'admin_announcement' %}
+
+{% block main %}
 
         <table id="announcement-table" class="table table-striped">
           <thead>
@@ -71,5 +57,5 @@
         {% endif %}
 
         {{ web_macro.paginator(paginator) }}
-    </div>
+   
 {% endblock %}

@@ -1,17 +1,11 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
-
-{% block title %}{{ html_title('admin','admin_course_recommend')}}{% endblock %}
-
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {% set script_controller = 'course/recommend-list' %}
 
-  {% set menu = 'admin_course_show' %}
-  {% set type = 'admin_course_recommend'  %}
-  {% set menus = menus("admin",'admin_course_show', 1) %}
+{% set menu = 'admin_course_recommend' %}
 
 {% block main %}
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
   <table class="table table-striped table-hover mtl" id="course-recommend-table">
     <thead>
     <tr>

@@ -1,14 +1,10 @@
-{% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
-{% set tab_menus = menus("admin",'admin_operation_group', 1) %}
-{% set menu = 'admin_operation_group' %}
-{% set submenu = 'admin_operation_group_manage' %}
-{% block title %}{{ html_title('admin','admin_operation_group_manage')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
+
+{% set menu = 'admin_operation_group_manage' %}
 
 {% set script_controller='group/group' %}
+
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -29,8 +25,7 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-    {% set btn_menus = menus("admin","admin_operation_group_manage", 2) %}
-    {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+
   </form>
   {% if groupinfo%}
   <table class="table table-striped table-hover" id="group-table">

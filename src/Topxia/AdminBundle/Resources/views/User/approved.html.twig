@@ -1,10 +1,10 @@
-{% extends 'TopxiaAdminBundle:User:approval.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {% set script_controller = 'user/approved' %}
 
-{% set submenu = 'approving' %}
-{% block title %}{{ html_title('admin','admin_approval_approving')}}{% endblock %}
-{% block maincontent %}
+{% set menu = 'admin_approval_approving' %}
+
+{% block main %}
 
       <div class="btn-group">
           <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_approval_approving') }}">审核中</a>

@@ -1,13 +1,13 @@
-{% extends layout %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {#
     {% set script_controller = 'trade/index' %}
 #}
 
-{% set submenu = type~'_order_query' %}
-{% block title %}{{ html_title('admin','admin_'~type~'_order')}}{% endblock %}
+{% set menu = 'admin_' ~ type ~ '_order' %}
 
-{% block maincontent %}
+
+{% block main %}
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
