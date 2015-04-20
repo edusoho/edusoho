@@ -109,16 +109,30 @@
             </div>
           </div>
 
-          {% if menu_breadcrumb|length <= 2 %}
-            {% set tabMenus = null %}
-          {% else %}
-            {% set tabMenus = menu_children('admin', menu_breadcrumb[(menu_breadcrumb|length)-2].code|default(null), 1) %}
+          {% set menu_breadcrumb_length = menu_breadcrumb|length %}
+
+          {% if menu_breadcrumb_length >= 3 %}
+            {% set tabMenus = menu_children('admin', menu_breadcrumb[1].code|default(null), 1) %}
           {% endif %}
-  
-          {% if tabMenus %}
+
+          {% if menu_breadcrumb_length >= 4 %}
+            {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
+          {% endif %}
+
+          {% if tabMenus|default(null) %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
+                  {{ _self.menu_link_html(m) }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          {% if subTabMenus|default(null) %}
+            <ul class="nav nav-pills mbm">
+              {% for m in subTabMenus %}
+                <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
                   {{ _self.menu_link_html(m) }}
                 </li>
               {% endfor %}
