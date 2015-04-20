@@ -1,14 +1,8 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
-{% set menu = 'admin_setting_operation' %}
-{% set submenu = 'admin_group_set' %}
-{% set menus = menus("admin",'admin_setting_operation', 1) %}
-{% block title %}{{ html_title('admin','admin_group_set')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-    {% block main %}
-    <div class="mbl">
+{% set menu = 'admin_group_set' %}
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
+{% block main %}
 
       {{ web_macro.flash_messages() }}
             <form class="form-horizontal" method="post" id="member-zone-form" novalidate>

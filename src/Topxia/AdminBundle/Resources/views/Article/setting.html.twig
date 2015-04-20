@@ -1,16 +1,9 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set menu = 'admin_setting_operation' %}
-{% set submenu = 'admin_article_setting' %}
-
-{% set menus = menus("admin",'admin_setting_operation', 1) %}
-{% block title %}{{ html_title('admin','admin_article_setting')}}{% endblock %}
+{% set menu = 'admin_article_setting' %}
 
 {% block main %}
-<div class="mbl">
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
 
 {{ web_macro.flash_messages() }}
 

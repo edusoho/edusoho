@@ -1,22 +1,14 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set menus = menus("admin",'admin_setting', 1) %}
-{% set menu = 'admin_setting' %}
-{% set submenu = 'admin_setting_massage' %}
+{% set menu = 'admin_setting_massage' %}
+
 {% set script_controller = 'setting/site' %}
-{% block title %}{{ html_title('admin','admin_setting_massage')}}{% endblock %}
 
 {% block main %}
 
 <style>
 #site-logo-container,#site-favicon-container img {max-width: 80%; margin-bottom: 10px;}
 </style>
-
-<div class="mbl">
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-
-</div>
 
 {{ web_macro.flash_messages() }}
 

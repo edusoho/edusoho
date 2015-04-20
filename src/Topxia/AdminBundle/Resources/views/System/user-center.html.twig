@@ -1,9 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
 {% set script_controller = 'setting/user-center' %}
-{% set submenu = 'admin_setting_user_center' %}
-{% block title %}{{ html_title('admin','admin_setting_user_center')}}{% endblock %}
-{% block main_content %}
+
+{% set menu = 'admin_setting_user_center' %}
+
+{% block main %}
 
   {% if setting.mode !='default' %}
     <div class="page-header clearfix"><a href="{{ path('admin_setting_admin_sync') }}" class="pull-right btn btn-link">管理员帐号同步</a>

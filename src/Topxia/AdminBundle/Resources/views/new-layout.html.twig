@@ -101,11 +101,15 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ menu_current.name }}{% endblock %}</h1>
+            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
             <div class="pull-right">
-              {% for m in menu_children('admin', menu_current.code, 2) %}
-                {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-              {% endfor %}
+
+              {% block page_buttons %}
+                {% for m in menu_children('admin', menu_current.code, 2) %}
+                  {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                {% endfor %}
+              {% endblock %}
+
             </div>
           </div>
 

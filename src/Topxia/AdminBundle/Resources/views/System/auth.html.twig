@@ -1,12 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set submenu = 'admin_user_auth' %}
+{% set menu = 'admin_user_auth' %}
+
 {% set script_controller = 'setting/auth' %}
-{% block title %}{{ html_title('admin','admin_user_auth')}}{% endblock %}
 
-{% block main_content %}
-<div class="page-header"><h1>注册设置</h1></div>
-
+{% block main %}
 {{ web_macro.flash_messages() }}
 
 <form  id="auth-form" class="form-horizontal" method="post" novalidate>
