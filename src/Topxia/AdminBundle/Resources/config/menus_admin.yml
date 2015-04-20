@@ -91,7 +91,7 @@ admin_operation_group_create:
     group: 2
     blank: 1
 admin_operation_group_manage:
-    name: 组管理
+    name: 小组管理
     parent: admin_operation_group
     router_name: admin_group
 admin_operation_group_thread:
