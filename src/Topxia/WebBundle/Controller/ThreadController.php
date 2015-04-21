@@ -63,7 +63,7 @@ class ThreadController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
-
+        $users = $this->getThreadService()->setUserBadgeTitle($thread, $users);
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
 
         return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
@@ -196,21 +196,22 @@ class ThreadController extends BaseController
     public function postAction(Request $request, $threadId)
     {
         $user = $this->getCurrentUser();
+        $thread = $this->getThreadService()->getThread($threadId);
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $fields['threadId'] = $threadId;
 
             $post = $this->getThreadService()->createPost($fields);
-
+            $authors = $this->getThreadService()->setUserBadgeTitle($thread, array($user['id'] => $user->toArray()));
             return $this->render('TopxiaWebBundle:Thread:post-item.html.twig', array(
                 'post' => $post,
-                'author' => $this->getCurrentUser(),
+                'author' => $authors[$user['id']],
                 'service' => $this->getThreadService(),
             ));
         }
 
         return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
-            'thread' => $this->getThreadService()->getThread($threadId),
+            'thread' => $thread,
             'service' => $this->getThreadService(),
         ));
     }

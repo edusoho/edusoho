@@ -5367,3 +5367,20 @@ a.homework-essay-textarea-pack-up{
   width: 50px;
   height: 50px;
 }
+
+.note-list .like {
+  cursor: pointer;
+}
+
+.note-list .like em {
+  font-style: normal;
+  font-weight: normal;
+}
+
+.note-list .liked {
+  color: #eb7350;
+}
+
+.note-list .like:hover {
+  color: #eb7350;
+}

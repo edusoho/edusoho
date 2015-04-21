@@ -1,0 +1,28 @@
+<li class="note-item">
+  <div class="media">
+    <div class="pull-left">
+      <a href="">
+        <img src="{{ default_path('avatar', user.smallAvatar, '') }}">
+      </a>
+    </div>
+    <div class="media-body">
+      <p class="clearfix">
+        <span><a href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></span>
+        ·
+        {{ note.updatedTime|date('Y-m-d') }}
+        <span class="mll like js-like {% if userLike is not empty %}liked{% endif %}" data-like-url="{{ path('course_note_like', {noteId:note.id}) }}" data-cancel-like-url="{{ path('course_note_cancel_like', {noteId:note.id}) }}">
+        <i class="glyphicon glyphicon-thumbs-up text-center"></i>
+        <em class="js-like-num">{{ note.likeNum }}</em>
+        </span>
+      </p>
+      <div class="short-long-text">
+        <div class="short-text">
+          {{ note.content|plain_text(80) }} <span class="trigger">(展开)</span>
+        </div>
+        <div class="long-text">
+          {{ note.content|raw }} <span class="trigger">(收起)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>

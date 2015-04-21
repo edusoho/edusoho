@@ -375,7 +375,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'noteNumGreaterThan' => 0
         );
         
-        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
+        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $lessons     = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
         for ($i = 0; $i < count($courseNotes); $i++) {
             $courseNote  = $courseNotes[$i];
