@@ -304,9 +304,11 @@ class CourseManageController extends BaseController
 
             $this->getCourseService()->setCourseTeachers($id, $teachers);
 
-            $classroom = $this->getClassroomService()->findClassroomsByCourseId($id);
-            if ($classroom) {
-                $this->getClassroomService()->updateClassroomTeachers($classroom[0]['classroomId']);
+            if ($this->isPluginInstalled("Classroom")) {
+                $classroom = $this->getClassroomService()->findClassroomsByCourseId($id);
+                if ($classroom) {
+                    $this->getClassroomService()->updateClassroomTeachers($classroom[0]['classroomId']);
+                }
             }
 
             $this->setFlashMessage('success', '教师设置成功！');
