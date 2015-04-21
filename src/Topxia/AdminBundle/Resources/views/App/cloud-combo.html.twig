@@ -2,7 +2,7 @@
               <div class="panel panel-default">
                 <div class="panel-body">
                   <h4 class="eduyun-title">套餐信息</h4>
-                  {% if user.hasLicense|default("0") == "0" %}
+                  {% if user.level|default("none") == "none" %}
                     <div class="alert alert-warning alert-sm" role="alert">
                       <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
                     </div>
