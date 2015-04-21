@@ -889,6 +889,7 @@ var cordova = require('cordova'),
 function androidExec(success, fail, service, action, args) {
     // Set default bridge modes if they have not already been set.
     // By default, we use the failsafe, since addJavascriptInterface breaks too often
+
     if (jsToNativeBridgeMode === undefined) {
         androidExec.setJsToNativeBridgeMode(jsToNativeModes.JS_OBJECT);
     }
@@ -911,6 +912,7 @@ function androidExec(success, fail, service, action, args) {
         window.location = 'http://cdv_exec/' + service + '#' + action + '#' + callbackId + '#' + argsJson;
     } else {
         var messages = nativeApiProvider.get().exec(service, action, callbackId, argsJson);
+
         // If argsJson was received by Java as null, try again with the PROMPT bridge mode.
         // This happens in rare circumstances, such as when certain Unicode characters are passed over the bridge on a Galaxy S2.  See CB-2666.
         if (jsToNativeBridgeMode == jsToNativeModes.JS_OBJECT && messages === "@Null arguments.") {
