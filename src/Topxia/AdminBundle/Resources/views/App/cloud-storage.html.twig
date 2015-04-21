@@ -41,6 +41,8 @@
                           <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
                       {% endif %}
 
+                      {% if storage.freeTransfer|default(0) != 0 or storage.freeSpace|default(0) != 0 %}
+
                       {% if storageDate|default(31)  == 0 %}
                           <p class="text-danger text-sm" >云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                       {% endif %}
@@ -53,6 +55,8 @@
                           <p class="text-danger text-sm" >
                             云视频包已过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>
                           </p>
+                      {% endif %}
+
                       {% endif %}
 
                     {% endif %}
