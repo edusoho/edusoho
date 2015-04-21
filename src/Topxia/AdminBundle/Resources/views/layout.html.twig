@@ -21,7 +21,11 @@
   <title>
     {% block title %}
       {% for m in menu_breadcrumb|reverse %}
-        {{ m.name }} -
+        {% if loop.index == menu_breadcrumb|length %}
+          {{ m.name }}
+        {% else %}
+          {{ m.name }} -
+        {% endif %}
       {% endfor %}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
