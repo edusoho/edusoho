@@ -9,6 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
+use Topxia\WebBundle\Util\Permission;
 
 class WebExtension extends \Twig_Extension
 {
@@ -90,6 +91,9 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
+            'permissions' => new \Twig_Function_Method($this, 'permissions'),
+            'getTitle' => new \Twig_Function_Method($this, 'getTitle'),
+            'setItem' => new \Twig_Function_Method($this, 'setItem'),
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
         );
     }
@@ -105,7 +109,19 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId,$timeType="oneWeek")
+    public function getTitle($code)
+    {
+        $permission = new Permission();
+
+        return $permission->getTitle($code);
+    }
+
+    public function setItem($key, $value)
+    {
+        return array($key=>$value);
+    }
+
+    public function getOutCash($userId, $timeType="oneWeek")
     {   
         $time=$this->filterTime($timeType);
         $condition=array(
@@ -116,6 +132,14 @@ class WebExtension extends \Twig_Extension
             );
 
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+    }
+
+    public function permissions($parent='', $type=null)
+    {   
+        $permission = new Permission();
+        $permissions = $permission->getPermissions($parent, $type);
+        
+        return $permissions;
     }
 
     public function getInCash($userId,$timeType="oneWeek")

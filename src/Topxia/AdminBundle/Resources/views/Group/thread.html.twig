@@ -1,12 +1,15 @@
 {% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
-{% set menu = 'thread' %}
-{% block title %}话题管理{% endblock %}
+
+{% set tab_menus = permissions('admin_operation_group',"tab") %}
+{% set menu = 'group' %}
+{% set submenu = 'thread' %}
+{% block title %}{{ getTitle('admin_operation_group_thread')}}{% endblock %}
+
 {% set script_controller='group/thread' %}
 {% block main %}
-
-  <div class="page-header">
-    <h1>话题管理</h1>
-  </div>
+<div class="mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
 
   <form  class="form-inline well well-sm" action="" method="get" novalidate>
 

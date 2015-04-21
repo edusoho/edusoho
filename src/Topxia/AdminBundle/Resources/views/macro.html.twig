@@ -28,3 +28,13 @@
 
 	{% endspaceless %}
 {% endmacro %}
+
+{% macro title(menus,type) %}
+ 
+ {% for menu in menus %}
+ 	{% for sub_menu in menu %}
+ 		{% if sub_menu.active == type %}{{sub_menu.name}}{% endif %}
+	{% endfor %}
+ {% endfor %}
+<hr/>
+{% endmacro %}

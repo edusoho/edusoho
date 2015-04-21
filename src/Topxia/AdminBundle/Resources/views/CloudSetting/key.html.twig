@@ -1,14 +1,12 @@
-  {% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
 
-{% block title %}授权码设置 - {{ parent() }}{% endblock %}
+{% block title %}{{ getTitle('admin_setting_cloud')}}{% endblock %}
 
 {% set submenu = 'key' %}
 
 {% set script_controller = 'setting/cloud-key' %}
 
 {% block maincontent %}
-
-<div class="page-header"><h1>授权码设置</h1></div>
 
 {{ web_macro.flash_messages() }}
 

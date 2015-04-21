@@ -1,13 +1,11 @@
 {% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
 
-{% block title %}登录设置 - {{ parent() }}{% endblock %}
-
 {% set script_controller = 'system/login_bind' %}
 
 {% set submenu = 'login_bind' %}
+{% block title %}{{ getTitle('admin_setting_login_bind')}}{% endblock %}
 
-{% block maincontent %}
-<div class="page-header"><h1>登录设置</h1></div>
+{% block main_content %}
 
 {{ web_macro.flash_messages() }}
 

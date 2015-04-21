@@ -679,3 +679,12 @@ a:hover {
 .homepage .hot-group p {
     margin-bottom: 10px;
 }
+
+.banner-announcement {
+    background: #ebf6f1;
+    height: 40px; 
+}
+
+.announcement .alert {
+    padding: 10px 15px;
+}

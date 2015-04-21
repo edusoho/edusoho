@@ -291,3 +291,9 @@
   overflow: hidden;
   margin: 0 10px 10px;
 }
+.banner-announcement {
+    background: #ebf6f1;
+    height: 40px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
