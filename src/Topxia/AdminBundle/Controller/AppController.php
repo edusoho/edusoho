@@ -53,14 +53,23 @@ class AppController extends BaseController
         $account = isset($content['account']) ? $content['account'] : null;
         $day = ''; 
         if (isset($content['account']['arrearageDate']) and  $content['account']['arrearageDate'] != 0 ) {
-            $day = isset($content['account']['arrearageDate']) ? ceil( (strtotime($currentTime) - $content['account']['arrearageDate']) /86400) : '';
+            $day =ceil( (strtotime($currentTime) - $content['account']['arrearageDate']) /86400) ;
         }
+
         $user = isset($content['user']) ? $content['user'] : null ;
+        $endDate = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '' ;
+        $startDate = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '' ;
         $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
 
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
         $storageDate = isset($content['service']['storage']['expire']) ? ceil( ($content['service']['storage']['expire'] - strtotime($currentTime) ) /86400) : '' ;
         $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],0,1) : '' ;
+        $startYear = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],0,4) : '' ;
+        $startMonth = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],-2) : '' ;
+        $endYear = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'],0,4) : '' ;
+        $endMonth = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'],-2) : '' ;
+        $storageStart=$startYear.'.'.$startMonth;
+        $storageEnd=$endYear.'.'.$endMonth;
 
         $live = isset($content['service']['live']) ? $content['service']['live'] : null ;
         $liveDate = isset($content['service']['live']['expire']) ?  ceil(($content['service']['live']['expire'] - strtotime($currentTime)) /86400) : '' ;
@@ -74,7 +83,11 @@ class AppController extends BaseController
             'content' =>$content,
             'packageDate' =>$packageDate,
             'storageDate' =>$storageDate,
+            'startDate' =>$startDate,
+            'endDate' =>$endDate,
             'liveDate' =>$liveDate,
+            'storageStart' =>$storageStart,
+            'storageEnd' =>$storageEnd,
             'day' =>$day,
             'month' => $month,
             'storage' =>$storage,

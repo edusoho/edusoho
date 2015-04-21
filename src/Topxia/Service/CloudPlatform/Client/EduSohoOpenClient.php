@@ -16,7 +16,8 @@ class EduSohoOpenClient
 
     public function getNotices()
     {
-        $url = "http://open.edusoho.com/api/v1/context/notice";
+        // $url = "http://open.edusoho.com/api/v1/context/notice";
+        $url = "http://115.29.78.158:99/api/v1/context/notice";
         $notices = $this->getContents($url);
 
         return $notices;
