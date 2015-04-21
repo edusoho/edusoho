@@ -134,7 +134,8 @@ class RegisterController extends BaseController
             $user =$this->getUserService()->getUser($registration['id']);
 
             $goto = $this->generateUrl('register_submited', array(
-                'id' => $user['id'], 'hash' => $this->makeHash($user),
+                'id' => $user['id'], 
+                'hash' => $this->makeHash($user),
                 'goto' => $this->getTargetPath($request),
             ));
             return $this->redirect($goto);
@@ -261,7 +262,7 @@ class RegisterController extends BaseController
                 'user' => $user,
                 'hash' => $hash,
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-                'target_path' => $this->getTargetPath($request),
+                '_target_path' => $this->getTargetPath($request),
                 ));
            }
     }

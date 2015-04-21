@@ -44,6 +44,7 @@
           <div class="form-group">
             <div class="controls">
               <button type="submit" id="register-nickname-btn" data-submiting-text="正在提交" class="btn btn-primary btn-large btn-block">保存</button>
+              <p class="help-block">如果跳过则随机生成昵称 <a href="{{path('homepage')}}" class="pull-right">跳过</a></p>           
             </div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
