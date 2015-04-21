@@ -498,3 +498,7 @@ input.LargeInput {width: 600px;}
 .shortcut-item:hover .glyphicon-remove-circle {
   visibility: visible;
 }
+.small {
+
+  font-size: 12px;
+}
