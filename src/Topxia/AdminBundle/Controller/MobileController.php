@@ -85,7 +85,8 @@ class MobileController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $courseGrids = $request->request->all();
-            $mobile = array_merge($courseGrids,$operationMobile,$settingMobile);
+
+            $mobile = array_merge($operationMobile, $settingMobile, $courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
@@ -93,7 +94,7 @@ class MobileController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
-
+ 
         $courseIds = explode(",", $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');

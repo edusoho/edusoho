@@ -7,6 +7,7 @@
 {% set menu_nav = menu_breadcrumb[0]|default(null) %}
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
+{% set menu_hiddens = setting('menu_hiddens', []) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -91,8 +92,10 @@
             {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
               <div class="list-group">
                 {% for m in groupedMenus %}
-                  {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                  {{ _self.menu_link_html(_context, m, menuClass) }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                    {{ _self.menu_link_html(_context, m, menuClass) }}
+                  {% endif %}
                 {% endfor %}
               </div>
             {% endfor %}
@@ -106,7 +109,9 @@
 
               {% block page_buttons %}
                 {% for m in menu_children('admin', menu_current.code, 2) %}
-                  {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                  {% endif %}
                 {% endfor %}
               {% endblock %}
 
@@ -127,17 +132,21 @@
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {{ _self.menu_link_html(_context, m) }}
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>
           {% endif %}
 
           {% if subTabMenus|default(null) and menu_current.group == 1 %}
-            <ul class="nav nav-pills mbl">
+            <ul class="nav nav-pills mbl small">
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {% if not menu_hiddens[m.code]|default(false) %}
+                    {{ _self.menu_link_html(_context, m) }}
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>
