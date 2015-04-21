@@ -18,7 +18,7 @@
             {% endif %}
             <!--欠费7天预留保护期-->
             {% if content.account.cash|default(0) < 0 and 0 < day|default(0) and day|default(0) <= 7 %}
-            <p class="text-danger text-sm">您已欠费，还剩{{day}}天的预留保护期，请尽快充值！</p>
+            <p class="text-danger text-sm">您已欠费，还剩{{7-day}}天的预留保护期，请尽快充值！</p>
             {% endif %}
             <!--欠费冻结-->
             {% if content.account.cash|default(0) < 0 and 10 <= day|default(0) %}

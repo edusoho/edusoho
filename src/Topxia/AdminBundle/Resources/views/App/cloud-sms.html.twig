@@ -30,7 +30,7 @@
                             <div class="alert alert-warning alert-sm" role="alert" >
                                 <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
                                 您的云短信功能已被暂停
-<!--                                 <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="此处填写理由！">[{{sms.reason|default("")}}]</a> -->
+                                <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="{{sms.reason|default("")}}">[<span style="color:green;">?</span>]</a>
                             </div>
                             <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
                             <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
