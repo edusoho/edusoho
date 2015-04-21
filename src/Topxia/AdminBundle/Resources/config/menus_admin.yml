@@ -22,8 +22,7 @@ admin_finance:
 admin_app:
     name: 教育云
     parent: admin
-    router_name: admin_app_installed
-    router_params: { postStatus : all }
+    router_name: admin_app_my_cloud
 admin_system:
     name: 系统
     parent: admin
