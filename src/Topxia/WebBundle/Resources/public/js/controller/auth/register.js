@@ -24,6 +24,15 @@ define(function(require, exports, module) {
             failSilently: true
         });
 
+        var regiser_emailOrMobile_validator =function(){
+            //1. 获取校验规则对象
+            var email = Validator.getRule('email');
+            //2. 组合校验规则
+            var emailOrMobile = email.or('mobile');
+            //3. 注册新的校验规则
+            Validator.addRule('emailOrMobile', emailOrMobile, '电子邮箱或者手机号码格式不正确。');
+        }();
+
         if ($("#getcode_num").length > 0){
             
             $("#getcode_num").click(function(){ 
@@ -100,6 +109,12 @@ define(function(require, exports, module) {
             required: true,
             rule: 'idcard'
         });
+
+        validator.addItem({
+            element: '[name="emailOrMobile"]',
+            required: true,
+            rule: 'emailOrMobile emailOrMobile_remote'
+        })
 
         if($('input[name="sms_code"]').length>0){
             validator.addItem({

@@ -34,6 +34,8 @@ interface UserService
 
     public function isEmailAvaliable($email);
 
+    public function isMobileAvaliable($mobile);
+
     public function hasAdminRoles($userId);
 
     public function rememberLoginSessionId($id, $sessionId);

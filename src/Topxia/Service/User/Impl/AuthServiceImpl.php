@@ -146,6 +146,23 @@ class AuthServiceImpl extends BaseService implements AuthService
         return array('success', '');
     }
 
+    public function checkMobile($mobile){
+        try {
+            $result = $this->getAuthProvider()->checkMobile($mobile);
+        } catch (\Exception $e) {
+            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+        }
+        if ($result[0] != 'success') {
+            return $result;
+        }
+        $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
+        if (!$avaliable) {
+            return array('error_duplicate', '手机号码已存在!');
+        }
+        
+        return array('success', '');
+    }
+
     public function checkPassword($userId, $password)
     {
         if ($this->hasPartnerAuth()) {
@@ -231,7 +248,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
             $this->partner = new $class();
         }
-
         return $this->partner;
     }
 

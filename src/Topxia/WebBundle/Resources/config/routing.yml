@@ -67,6 +67,10 @@ register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
 
+register_nickname_update:
+    pattern:  /register/nickname/update
+    defaults: { _controller: TopxiaWebBundle:Register:nicknameUpdate }
+
 register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
@@ -83,6 +87,10 @@ register_email_verify:
 register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
+
+register_emailOrMobile_check:
+    pattern:  /register/emailOrMobile/check
+    defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
 
 register_nickname_check:
     pattern:  /register/nickname/check

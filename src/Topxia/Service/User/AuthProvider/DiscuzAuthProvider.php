@@ -75,6 +75,12 @@ class DiscuzAuthProvider implements AuthProvider
         return $this->convertApiResult($result);
     }
 
+    public function checkMobile($mobile)
+    {
+        return array('success', '');
+    }
+
+
     public function checkPassword($userId, $password)
     {
         $this->initDiscuzApi();

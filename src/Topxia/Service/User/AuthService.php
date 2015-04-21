@@ -21,6 +21,8 @@ interface AuthService
 
     public function checkEmail($email);
 
+    public function checkMobile($mobile);
+
     public function checkPassword($userId, $password);
 
     public function checkPartnerLoginById($userId, $password);

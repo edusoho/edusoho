@@ -215,6 +215,17 @@ define(function(require, exports, module) {
             }
         ],
         [
+            'emailOrMobile_remote',
+            function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    value = element.val().replace(/\./g, "!");
+                $.get(url, {value:value}, function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
+        ],
+        [
             'date_check',
             function() {
 
