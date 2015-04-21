@@ -13,7 +13,7 @@ define(function(require, exports, module) {
                         imageArray.push(img.src);
                         img.addEventListener('click',
                         function() {
-                          navigator.cordovaUtil.showImages(this.alt,imageArray);
+                          esNativeCore.showImages(this.alt,imageArray);
                         })
                       }
                     }

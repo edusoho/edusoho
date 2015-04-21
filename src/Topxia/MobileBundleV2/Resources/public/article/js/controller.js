@@ -75,7 +75,7 @@ function CategoryController($scope, $http, broadCast)
 	      "item" : []
 	  };
 
-	navigator.cordovaUtil.createMenu(menu);
+	esNativeCore.createMenu(menu);
 	console.log("createMenu");
 	
 	angular.$client.showCategory = function(){
@@ -96,7 +96,7 @@ function CategoryController($scope, $http, broadCast)
 function DetailController($scope, $http, $stateParams)
 {
 	var articleId = $stateParams.id;
-      navigator.cordovaUtil.createMenu();
+      	esNativeCore.createMenu();
 	$http.get('/mapi_v2/articleApp/detail/' + articleId).success(function(data) {
     		$scope.content = data.content;
     		document.title = data.title;

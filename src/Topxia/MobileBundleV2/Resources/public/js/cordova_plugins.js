@@ -4,7 +4,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
             "file": "plugins/esNativeCore.js",
             "id": "com.edusoho.kuozhi.webview.cordova.ESNativeCore",
             "merges": [
-                "window.ESNativeCore"
+                "window.esNativeCore"
             ]
         }
     ]
