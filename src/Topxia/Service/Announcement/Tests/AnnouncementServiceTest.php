@@ -9,7 +9,8 @@ use Topxia\Service\User\CurrentUser;
 class AnnouncementServiceTest extends BaseTestCase
 {
     public function testCreateAnnouncement()
-    {   
+    {   exec("nginx -v", $output);
+        var_dump($output);
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 3,
