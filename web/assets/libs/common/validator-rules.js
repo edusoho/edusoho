@@ -215,6 +215,17 @@ define(function(require, exports, module) {
             }
         ],
         [
+            'nickname_remote',
+            function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    value = element.val().replace(/\./g, "!");
+                $.get(url, {value:value,userId:element.data('userid')}, function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
+        ],
+        [
             'emailOrMobile_remote',
             function(options, commit) {
                 var element = options.element,

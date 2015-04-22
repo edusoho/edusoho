@@ -108,7 +108,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
 
 
-    public function checkUsername($username)
+    public function checkUsername($username, $userId='')
     {   
         try {
             $result = $this->getAuthProvider()->checkUsername($username);
@@ -120,7 +120,8 @@ class AuthServiceImpl extends BaseService implements AuthService
             return $result;
         }
 
-        $avaliable = $this->getUserService()->isNicknameAvaliable($username);
+        $avaliable = $this->getUserService()->isNicknameAvaliable($username,$userId);
+
         if (!$avaliable) {
             return array('error_duplicate', '名称已存在!');
         }

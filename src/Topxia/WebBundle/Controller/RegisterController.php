@@ -69,30 +69,7 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
-            if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   $this->isMobileRegister($registration)){
-                 $this->authenticateUser($user);
-                 $this->sendRegisterMessage($user);
-            }
-
-
-           $goto = $this->generateUrl('register_submited', array(
-                'id' => $user['id'], 'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request),
-            ));
-         
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                 $this->authenticateUser($user);
-                 $this->sendRegisterMessage($user);
-                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-            }
-
-            $mailerSetting=$this->getSettingService()->get('mailer');
-            if(!$mailerSetting['enabled']){
-                return $this->redirect($this->getTargetPath($request));
-            }
-            
-            return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));
-            
+            return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
         }
 
         $auth=$this->getSettingService()->get('auth');
@@ -126,18 +103,36 @@ class RegisterController extends BaseController
 
     public function nicknameUpdateAction(Request $request)
     {
-         $form = $this->createForm(new RegisterType());
         if ($request->getMethod() == 'POST') {
 
             $registration = $request->request->all();
             $this->getAuthService()->changeNickname($registration['id'], $registration['nickname']);
             $user =$this->getUserService()->getUser($registration['id']);
 
+            $authSettings = $this->getSettingService()->get('auth', array());
+
+            if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   !$this->isEmptyVeryfyMobile($user)){
+                 $this->authenticateUser($user);
+                 $this->sendRegisterMessage($user);
+            }
+
             $goto = $this->generateUrl('register_submited', array(
                 'id' => $user['id'], 
                 'hash' => $this->makeHash($user),
                 'goto' => $this->getTargetPath($request),
             ));
+         
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                 $this->authenticateUser($user);
+                 $this->sendRegisterMessage($user);
+                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+            }
+
+            $mailerSetting=$this->getSettingService()->get('mailer');
+
+            if(!$mailerSetting['enabled'] && $this->isEmptyVeryfyMobile($user)){
+                return $this->redirect($this->getTargetPath($request));
+            }
             return $this->redirect($goto);
         }
 
@@ -155,6 +150,13 @@ class RegisterController extends BaseController
              }
         }
         return false;
+    }
+
+     private function isEmptyVeryfyMobile($user){
+        if(isset($user['verifiedMobile']) && !empty($user['verifiedMobile'])){
+              return false;
+        }
+        return true;
     }
     
 
@@ -195,22 +197,6 @@ class RegisterController extends BaseController
                 break;
         }
     }
-   /** 
-   *generate redirectUrl by user loginType(eg. mobile or email)
-   */
-   private function gotoUrlGenerate($registration,$user, $request){
-       if(isset($registration['emailOrMobile'])){
-           $registration = $this->getUserService()->purseEmailOrMobile($registration);
-           if(isset($registration['verifiedMobile']) && !empty($registration['verifiedMobile'])){
-               return  $this->generateUrl('homepage');
-           }else{
-               return  $this->generateUrl('register_submited', array(
-                   'id' => $user['id'], 'hash' => $this->makeHash($user),
-                   'goto' => $this->getTargetPath($request),
-               ));
-           }
-       }
-   }
 
     public function userTermsAction(Request $request)
     {
@@ -398,7 +384,8 @@ class RegisterController extends BaseController
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
-        list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+        $userId = $request->query->get('userId');
+        list($result, $message) = $this->getAuthService()->checkUsername($nickname, $userId);
         if ($result == 'success') {
             $response = array('success' => true, 'message' => '');
         } else {

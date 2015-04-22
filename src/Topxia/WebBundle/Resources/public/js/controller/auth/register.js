@@ -117,18 +117,24 @@ define(function(require, exports, module) {
             });
         }
 
+         validator.addItem({
+            element: '[name="em_sms_code"]',
+            required: true,
+            triggerType: 'submit',
+            rule: 'integer fixedLength{len:6} remote',
+            display: '短信验证码'           
+         });
+
         $("#register_emailOrMobile").blur(function(){
             var emailOrMobile  = $("#register_emailOrMobile").val();
             var reg_mobile = /^1\d{10}$/;
             var isMobile = reg_mobile.test(emailOrMobile);
+          
+     
             if(isMobile){
-                validator.addItem({
-                    element: '[name="em_sms_code"]',
-                    required: true,
-                    triggerType: 'submit',
-                    rule: 'integer fixedLength{len:6} remote',
-                    display: '短信验证码'           
-                 });
+              $('#em_sms-code').attr('name','em_sms_code');
+             }else{
+                $('#em_sms-code').attr('name','default_sms_code');
              }
         }); 
 

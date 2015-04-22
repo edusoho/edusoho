@@ -31,12 +31,13 @@
       <form id="register-nickname-form" class="form-vertical" method="post" action="{{path('register_nickname_update')}}">
           <input type="hidden" name='id' value="{{user.id}}">
           <input type="hidden" name='emailOrMobile' value="{{user.verifiedMobile}}">
+           <input type="hidden" id='random_nickname' value="{{user.nickname}}">
 
           {{ web_macro.flash_messages() }}
         <div class="form-group">
           <label class="control-label required hidden" for="register_nickname">昵称</label>
           <div class="controls">
-            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字" placeholder='昵称'>
+            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}"  data-userid ="{{user.id}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字" placeholder='昵称'>
             <p class="help-block"></p>
           </div>
         </div>
@@ -44,7 +45,7 @@
           <div class="form-group">
             <div class="controls">
               <button type="submit" id="register-nickname-btn" data-submiting-text="正在提交" class="btn btn-primary btn-large btn-block">保存</button>
-              <p class="help-block">如果跳过则随机生成昵称 <a href="{{path('homepage')}}" class="pull-right">跳过</a></p>           
+              <p class="help-block">如果跳过，您将使用随机生成的昵称 <a href="javascript:;" class="pull-right nickname_ingnore">跳过</a></p>           
             </div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

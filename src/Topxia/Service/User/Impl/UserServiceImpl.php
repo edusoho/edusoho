@@ -181,13 +181,18 @@ class UserServiceImpl extends BaseService implements UserService
         ));
     }
 
-    public function isNicknameAvaliable($nickname)
+    public function isNicknameAvaliable($nickname, $userId='')
     {
         if (empty($nickname)) {
             return false;
         }
         $user = $this->getUserDao()->findUserByNickname($nickname);
-        return empty($user) ? true : false;
+        if(empty($user)){
+            return true;
+        }elseif(!empty($userId) && $user['id'] == $userId){
+            return  true;
+        }
+        return false;
     }
 
     public function isEmailAvaliable($email)
@@ -359,10 +364,9 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $maxLoop =100;
         $registration = $this->purseEmailOrMobile($registration);
-          
         if(!isset($registration['nickname'])){
             for($i =0; $i<$maxLoop; $i++){
-                $registration['nickname'] ='EduSoho用户'.substr($this->getRandChar(), 0, 8); 
+                $registration['nickname'] ='EduSoho'.substr($this->getRandChar(), 0,6); 
                 if($this->isNicknameAvaliable($registration['nickname'])) {
                     break;
                 }   

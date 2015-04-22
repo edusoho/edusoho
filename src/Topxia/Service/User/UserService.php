@@ -30,7 +30,7 @@ interface UserService
 
     public function changeAvatar($userId, $filePath, array $options);
 
-    public function isNicknameAvaliable($nickname);
+    public function isNicknameAvaliable($nickname,$userId);
 
     public function isEmailAvaliable($email);
 

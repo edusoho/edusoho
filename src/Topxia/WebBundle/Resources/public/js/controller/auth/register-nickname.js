@@ -18,10 +18,16 @@ define(function(require, exports, module) {
             failSilently: true
         });
 
+        $(".nickname_ingnore").click(function (){
+            $("#register_nickname").val($('#random_nickname').val());
+           // $("#register-nickname-btn").click();
+            $("#register-nickname-form").submit();
+        })
+
         validator.addItem({
             element: '[name="nickname"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} nickname_remote'
         });
     };
 
