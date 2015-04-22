@@ -24,15 +24,6 @@ define(function(require, exports, module) {
             failSilently: true
         });
 
-        var regiser_emailOrMobile_validator =function(){
-            //1. 获取校验规则对象
-            var email = Validator.getRule('email');
-            //2. 组合校验规则
-            var emailOrMobile = email.or('mobile');
-            //3. 注册新的校验规则
-            Validator.addRule('emailOrMobile', emailOrMobile, '电子邮箱或者手机号码格式不正确。');
-        }();
-
         if ($("#getcode_num").length > 0){
             
             $("#getcode_num").click(function(){ 
@@ -44,7 +35,6 @@ define(function(require, exports, module) {
                 required: true,
                 rule: 'alphanumeric remote',
                 onItemValidated: function(error, message, eleme) {
-                    // console.log(message);
                     if (message == "验证码错误"){
                         $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
                     }
@@ -116,6 +106,7 @@ define(function(require, exports, module) {
             rule: 'emailOrMobile emailOrMobile_remote'
         })
 
+  
         if($('input[name="sms_code"]').length>0){
             validator.addItem({
                 element: '[name="sms_code"]',
@@ -125,6 +116,21 @@ define(function(require, exports, module) {
                 display: '短信验证码'           
             });
         }
+
+        $("#register_emailOrMobile").blur(function(){
+            var emailOrMobile  = $("#register_emailOrMobile").val();
+            var reg_mobile = /^1\d{10}$/;
+            var isMobile = reg_mobile.test(emailOrMobile);
+            if(isMobile){
+                validator.addItem({
+                    element: '[name="em_sms_code"]',
+                    required: true,
+                    triggerType: 'submit',
+                    rule: 'integer fixedLength{len:6} remote',
+                    display: '短信验证码'           
+                 });
+             }
+        }); 
 
 
         for(var i=1;i<=5;i++){
@@ -168,8 +174,8 @@ define(function(require, exports, module) {
                 smsType:'sms_registration',
                 preSmsSend: function(){
                     var couldSender = true;
-
-                    validator.query('[name="mobile"]').execute(function(error, results, element) {
+                    var $mobile_target =  validator.query('[name="mobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="mobile"]');
+                    $mobile_target.execute(function(error, results, element) {
                         if (error) {
                             couldSender = false;
                             return;

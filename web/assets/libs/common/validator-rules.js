@@ -294,6 +294,27 @@ define(function(require, exports, module) {
                 var l = element.val().length;
                 return l == Number(options.len);
             },"{{display}}的长度必须等于{{len}}"
+        ],
+        [
+            'emailOrMobile',
+             function(options){
+               var emailOrMobile = options.element.val();
+               var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+               var reg_mobile = /^1\d{10}$/;
+               var result =false;
+               var isEmail = reg_email.test(emailOrMobile);
+               var isMobile = reg_mobile.test(emailOrMobile);
+               if(isMobile){
+                    $(".email_mobile_msg").removeClass('hidden');
+               }else {
+                    $(".email_mobile_msg").addClass('hidden');
+               }
+               if (isEmail || isMobile) {
+                    result = true;
+                }
+                return  result;  
+             },
+             "{{display}}格式错误"
         ]        
 
     ];
