@@ -170,11 +170,11 @@ define(function(require, exports, module) {
         }
 
         if ($('.js-sms-send').length > 0 ) {
-            
             var smsSender = new SmsSender({
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_registration',
+                dataTo : $('[name="mobile"]').val() == null? 'emailOrMobile' : 'mobile',
                 preSmsSend: function(){
                     var couldSender = true;
                     var $mobile_target =  validator.query('[name="mobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="mobile"]');

@@ -30,34 +30,10 @@ class RegisterController extends BaseController
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
-                $captchaCodePostedByUser = strtolower($registration['captcha_num']);
-                $captchaCode = $request->getSession()->get('captcha_code');                   
-                if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
-                    throw new \RuntimeException('验证码错误。');    
-                }                   
-                if (!isset($captchaCode)||strlen($captchaCode)<5){    
-                    throw new \RuntimeException('验证码错误。');    
-                }
-                if ($captchaCode != $captchaCodePostedByUser){ 
-                    $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
-                    throw new \RuntimeException('验证码错误。');
-                }
-                $request->getSession()->set('captcha_code',mt_rand(0,999999999));
-            }
-            
-            $registration['verifiedMobile'] = '';
-            if ( isset($authSettings['registerSort'])
-                &&in_array('mobile', $authSettings['registerSort'])
-                &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
-                &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
-                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
-                if ($result){
-                    $registration['verifiedMobile'] = $sessionField['to'];
-                }else{
-                    return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
-                }
-            }
+            //验证码校验
+            $this->captcha_enabled_validator($authSettings,$registration,$request);
+            //手机校验码
+            $this->sms_code_validator($authSettings,$registration,$request);
 
             $registration['createdIp'] = $request->getClientIp();
             if(isset($authSettings['register_protective'])){
@@ -549,4 +525,38 @@ class RegisterController extends BaseController
         return $this->container->get('topxia.twig.web_extension');
     }
 
+
+    //validate captcha
+    private function captcha_enabled_validator($authSettings,$registration,$request){
+         if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
+            $captchaCodePostedByUser = strtolower($registration['captcha_num']);
+            $captchaCode = $request->getSession()->get('captcha_code');                   
+            if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
+                throw new \RuntimeException('验证码错误1。');    
+            }                   
+            if (!isset($captchaCode)||strlen($captchaCode)<5){    
+                throw new \RuntimeException('验证码错误2。');    
+            }
+            if ($captchaCode != $captchaCodePostedByUser){ 
+                $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
+                throw new \RuntimeException('验证码错误3。');
+            }
+            $request->getSession()->set('captcha_code',mt_rand(0,999999999));
+        }
+    }
+
+    private function sms_code_validator($authSettings,$registration,$request){
+        $registration['verifiedMobile'] = '';
+        if ( isset($authSettings['registerSort'])
+            &&in_array('mobile', $authSettings['registerSort'])
+            &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
+            &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
+            if ($result){
+                $registration['verifiedMobile'] = $sessionField['to'];
+            }else{
+                return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
+            }
+        }
+    }
 }
