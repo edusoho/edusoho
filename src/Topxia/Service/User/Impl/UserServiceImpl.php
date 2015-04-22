@@ -700,6 +700,41 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 
+    public function markLoginFailed($userId, $ip)
+    {
+
+
+    }
+
+    public function markLoginSuccess($userId, $ip)
+    {
+
+    }
+
+    public function checkLoginForbidden($userId, $ip)
+    {
+        $user = $userId ? $this->getUser($userId) : null;
+
+        $setting = $this->getSettingService('bind', array());
+        $default = array(
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'temporary_lock_minutes' => 20,
+        );
+        $setting = array_merge($default, $setting);
+
+        $ipFailedCount = $this->getIpBlacklistService()->getIpFailedCount($ip);
+        if ($ipFailedCount > 20) {
+            return array( 'status' => 'error', 'code' => 'max_ip_failed_limit');
+        }
+
+        if ($user && $setting['temporary_lock_enabled'] && ($user['consecutivePasswordErrorTimes'] >= $setting['temporary_lock_allowed_times'])) {
+            return array( 'status' => 'error', 'code' => 'max_failed_limit');
+        }
+
+        return array('status' => 'ok');
+    }
+
     public function lockUser($id)
     {
         $user = $this->getUser($id);

@@ -1,0 +1,79 @@
+<?php
+namespace Topxia\Service\System\Impl;
+
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\System\IpBlacklistService;
+
+class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
+{
+
+    public function increaseIpFailedCount($ip)
+    {
+        $ip = $this->getIpFailedDao()->getIpByIp($ip);
+        if (empty($ip)) {
+            $ip = array(
+                'ip' => $ip,
+                'counter' => 1,
+                'expiredTime' => time() + self::FAILED_DURATION,
+                'createdTime' => time(),
+            );
+           $ip = $this->getIpFailedDao()->addIp($ip);
+
+           return $ip['counter'];
+        }
+
+        if ($this->isIpExpired($ip)) {
+            $this->getIpFailedDao()->deleteIp($ip['id']);
+
+            $ip = array(
+                'ip' => $ip,
+                'counter' => 1,
+                'expiredTime' => time() + self::FAILED_DURATION,
+                'createdTime' => time(),
+            );
+           $ip = $this->getIpFailedDao()->addIp($ip);
+
+           return $ip['counter'];
+        }
+
+        $this->getIpFailedDao()->increaseIpCounter($ip['id'], 1);
+
+        return $ip['counter'] + 1;
+    }
+
+    public function getIpFailedCount($ip)
+    {
+        $ip = $this->getIpFailedDao()->getIpByIp($ip);
+        if (empty($ip)) {
+            return 0;
+        }
+
+        if ($this->isIpExpired($ip)) {
+            $this->getIpFailedDao()->deleteIp($ip['id']);
+            return 0;
+        }
+
+        return $ip['counter'];
+    }
+
+    public function clearFailedIp($ip)
+    {
+        $ip = $this->getIpFailedDao()->getIpByIp($ip);
+        if (empty($ip)) {
+            return ;
+        }
+
+        $this->getIpFailedDao()->deleteIp($ip['id']);
+    }
+
+    protected function isIpExpired($ip)
+    {
+        return $ip['expiredTime'] < time();
+    }
+
+    protected function getIpFailedDao()
+    {
+        return $this->createDao('System.IpFailedDao');
+    }
+
+}

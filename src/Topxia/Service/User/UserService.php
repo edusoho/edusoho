@@ -86,6 +86,12 @@ interface UserService
 
     public function markLoginInfo();
 
+    public function markLoginFailed($userId, $ip);
+
+    public function markLoginSuccess($userId, $ip);
+
+    public function checkLoginForbidden($userId, $ip);
+
     public function updateUserProfile($id, $fields);
 
     public function getUserProfile($id);
