@@ -59,7 +59,7 @@ class CourseOrderController extends OrderController
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
 
-        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));
