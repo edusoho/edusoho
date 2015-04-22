@@ -177,7 +177,7 @@ class LiveCourseController extends BaseController
 
             $result = $client->entryLive($params);
 
-            if($result["error"]){
+            if(isset($result["error"]) && $result["error"]){
                 return $this->createMessageResponse('error', $result["errorMsg"]);
             }
 
