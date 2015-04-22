@@ -30,6 +30,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $course = $event->getArgument('course');
         $this->getStatusService()->publishStatus(array(
             'type' => 'start_learn_lesson',
+            'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
@@ -46,6 +47,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $course = $event->getArgument('course');
         $this->getStatusService()->publishStatus(array(
             'type' => 'learned_lesson',
+            'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
@@ -61,6 +63,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $course = $event->getSubject();
         $this->getStatusService()->publishStatus(array(
             'type' => 'favorite_course',
+            'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
@@ -76,6 +79,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $userId = $event->getArgument('userId');
         $this->getStatusService()->publishStatus(array(
             'type' => 'become_student',
+            'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
