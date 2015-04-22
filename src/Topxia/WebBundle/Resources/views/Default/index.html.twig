@@ -6,373 +6,304 @@
   <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
 {% endblock %}
 
-{% block content %}
-
-<div class="es-row-wrap container-gap">
-
+{% block main_content %}
   {% if blocks.home_top_banner %}
-    <div class="homepage-feature homepage-feature-slides mbl">
-      <div class="cycle-pager"></div>
-      {{ blocks.home_top_banner|raw }}
-    </div>
-  {% endif %}
-  {% set announcements = data('Announcement',{ count:3 }) %}
-        {% if announcements %}
-          <div class=" banner-announcement">
-            <div class="col-md-1">
-              <span class="glyphicon glyphicon-volume-up pull-right banner-volume"></span>
+    <section class="poster hidden-xs">
+      <div class="carousel slide" id="carousel" data-ride="carousel">
+        <ol class="carousel-indicators"></ol>
+        <div class="carousel-inner" role="listbox">
+          <div class="item active">
+            <div class="container">
+              <div class="item-left col-sm-3 col-md-4">
+                <div class="title">全新改版<br>简约风格</div>
+                <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
+              </div>
+              <div class="pull-right item-right">
+                <img src="{{ asset('bundles/topxiaweb/img/poster_computer.jpg') }}" class="item-img-bg">
+                <img src="{{ asset('bundles/topxiaweb/img/poster_computer_content.jpg') }}" class="item-img">
+              </div>
             </div>
-            <div class="row col-md-10">
-              {% for announcement in announcements %}
-                  <div class="col-md-4 banner-volume"><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(18)}}</a></div>
+          </div>
+          <div class="item">
+            <div class="container">
+              <div class="item-left col-sm-3 col-md-4">
+                <div class="title">全新改版<br>简约风格</div>
+                <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
+              </div>
+              <div class="pull-right item-right">
+                <img src="{{ asset('bundles/topxiaweb/img/poster_computer.jpg') }}" class="item-img-bg">
+                <img src="{{ asset('bundles/topxiaweb/img/poster_computer_content.jpg') }}" class="item-img">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% set announcements = data('Announcement',{ count:1 }) %}
+    {% if announcements %}
+    {% set announcement = announcements[0] %}
+    <section class="index-notice">
+      <div class="container">
+        <div class="text-line">
+          <h5><i class="iconfont icon-bell"></i><span><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(50)}}</a></span></h5>
+          <div class="line"></div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- 课程删选 -->
+  <section class="index-cuorse-cat">
+    <div class="container">
+      <div class="cuorse-cat-mian">
+        <div class="hidden-xs js-index-cuorse-cat course-cat-tags">
+          <a href="javascript:;" class="btn btn-default">全部课程</a>
+          <a href="javascript:;" class="btn btn-default">后端开发</a>
+          <a href="javascript:;" class="btn btn-default">web前端开发</a>
+          <a href="javascript:;" class="btn btn-default">图形图像设计</a>
+          <a href="javascript:;" class="btn btn-default">编程基础</a>
+        </div>
+        <div class="btn-group visible-xs">
+          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
+          <ul class="dropdown-menu js-index-cuorse-cat" role="menu">
+            <li><a href="javascript:;">全部课程</a></li>
+            <li><a href="javascript:;">后端开发</a></li>
+            <li><a href="javascript:;">web前端开发</a></li>
+            <li><a href="javascript:;">图形图像设计</a></li>
+            <li><a href="javascript:;">编程基础</a></li>
+          </ul>
+        </div>
+        <div class="course-sort js-course-sort">
+          <a href="javascript:;" class="active iconfont icon-time" data-toggle="tooltip" data-placement="top" title="按时间排序"></a>
+          <a href="javascript:;" class="iconfont icon-hot" data-toggle="tooltip" data-placement="top" title="最热"></a>
+          <a href="javascript:;" class="iconfont icon-aisding" data-toggle="tooltip" data-placement="top" title="点赞"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 课程列表 -->
+  <section class="index-course-list lazyload">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href="javascript:;">
+                <span class="tag-discount"></span>
+                <img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg">
+              </a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
+              <div class="metas clearfix">
+                <a href="javascript:;" class="num"><i class="iconfont icon-group"></i>100</a>
+                <a href="javascript:;" class="comment"><i class="iconfont icon-comment"></i>100</a>
+                <span class="price">¥1111</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href="javascript:;">
+                <span class="tag-discount free"></span>
+                <img class="transform img-responsive" src="img-temp/course_1.jpg"  data-original="img-temp/course_1.jpg">
+              </a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator</a></div>
+              <div class="metas clearfix">
+                <a href="javascript:;" class="num"><i class="iconfont icon-group"></i>100</a>
+                <a href="javascript:;" class="comment"><i class="iconfont icon-comment"></i>100</a>
+                <span class="price free">免费</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
+              <div class="metas clearfix">
+                <span class="num"><i class="iconfont icon-group"></i>100</span>
+                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
+                <span class="price">¥1111</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
+              <div class="metas clearfix">
+                <span class="num"><i class="iconfont icon-group"></i>100</span>
+                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
+                <span class="price">¥1111</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
+              <div class="metas clearfix">
+                <span class="num"><i class="iconfont icon-group"></i>100</span>
+                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
+                <span class="price">¥1111</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
+              <div class="metas clearfix">
+                <span class="num"><i class="iconfont icon-group"></i>100</span>
+                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
+                <span class="price">¥1111</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
+            </div>
+            <div class="course-info">
+              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
+              <div class="metas clearfix">
+                <span class="num"><i class="iconfont icon-group"></i>100</span>
+                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
+                <span class="price">¥1111</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="course-more">
+        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特性 -->
+  <section class="index-introduction">
+    <div class="container">
+      <div class="row">
+        <a href="javascript:;" class="col-md-4 col-sm-4 col-xs-12">
+          <img class="img-responsive" src="{{ asset('bundles/topxiaweb/img/icon_introduction_1.png') }}">
+          <h4>体系化学习</h4>
+          <h5>体系化学习，掌握完整知识结构</h5>
+        </a>
+        <a href="javascript:;" class="col-md-4 col-sm-4 col-xs-12">
+          <img class="img-responsive" src="{{ asset('bundles/topxiaweb/img/icon_introduction_2.png') }}">
+          <h4>体系化学习</h4>
+          <h5>体系化学习，掌握完整知识结构</h5>
+        </a>
+        <a href="javascript:;" class="col-md-4 col-sm-4 col-xs-12">
+          <img class="img-responsive" src="{{ asset('bundles/topxiaweb/img/icon_introduction_3.png') }}">
+          <h4>体系化学习</h4>
+          <h5>体系化学习，掌握完整知识结构</h5>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 小组动态 -->
+  {% if setting('group').group_show|default(1) %}
+  {% set groups = data('HotGroup', {'count':6}) %}
+  <section class="group-dynamic">
+    <div class="container">
+      <div class="group-dynamic-header">
+        <div class="text-line">
+          <h5><span>小组动态</span></h5>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="group-dynamic-body row">
+        <div class="col-md-6">
+          <div class="panel es-panel index-group clearfix">
+            <div class="panel-heading clearfix">
+              <h3 class="panel-title"><i class="iconfont icon-hot pull-left"></i>推荐小组</h3>
+              <a href="{{ path('group') }}" class="more">...</a>
+            </div>
+            <div class="panel-body row">
+              {% for group in groups %}
+              <div class="media group-item col-md-6 col-sm-4">
+                <div class="media-left">
+                  <a href="javascript:;">
+                    {% if group.logo %}
+                        <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
+                        {%else%}
+                        <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                    {%endif%}
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="title"><a href="">{{ group.title }}</a></div>
+                  <div class="metas">
+                    <a href="javascript:;"><i class="iconfont icon-group"></i>{{ group.memberNum }}</a>
+                    <a href="javascript:;"><i class="iconfont icon-comment"></i>{{ group.threadNum }}</a>
+                  </div>
+                </div>
+              </div>
               {% endfor %}
             </div>
           </div>
-    {% endif %}
-  <div class="row row-9-3">
-
-    <div class="col-md-9">
-
-      {% if is_plugin_installed('Classroom')  and setting('classroom.enabled') %}
-      {% set items = data('RecommendClassrooms',{'count':6}) %}
-          <div class="es-box">
-              <div class="es-box-heading">
-                <h2>{{ setting('classroom.name')|default("班级") }}</h2>
-                <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-              </div>
-              <div class="es-box-body">
-                 {% for classroom in items.classrooms %}
-                 {% set teachers = items.users[classroom.id]|default(null) %}
-                 {% if loop.index <= 5%}
-                <ul class="home-class-list">
-                  <li class="class-item">
-                    <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
-                    </a>
-                    <div class="class-body">
-                      <h3 class="class-title">
-                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
-                      </h3>
-                      <div class="class-metas">
-                        {% if teachers %}
-                      <span class="class-teacher">
-                        <i class="fa fa-user"></i>
-                        {% for teacher in teachers %}
-                          {% if loop.index <= 5%}
-                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-                           {% endif %}
-                        {% endfor %}
-                      </span>
-                    {% endif %}
-                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
-                        <span class="class-price">
-
-                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                              {% if classroom.price > 0 %}
-                               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                              {% else %}
-                                免费
-                              {% endif %}
-                          {% else %}
-                              {% if classroom.price > 0 %}
-                                {{ classroom.price }}元
-                              {% else %}
-                                免费
-                              {% endif %}
-                          {% endif %}
-
-                        </span>
-                      </div>
-                      <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
-                    </div>
-                  </li>
-                   {% endif %}
-                 {% endfor %}
-                </ul>
-              </div>
+        </div>
+        {% set learns = data('PersonDynamic', {'count':config.count}) %}
+        <div class="col-md-6">
+          <div class="panel es-panel index-dynamic">
+            <div class="panel-heading clearfix">
+              <h3 class="panel-title"><i class="iconfont icon-pseson pull-left"></i>学员动态</h3>
+              <a href="javascript:;" class="more">...</a>
             </div>
-            {% endif %}
-
-
-      {% if courses %}
-        <div class="es-box">
-          <div class="es-box-heading">
-            <h2>课程</h2>
-            <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
-          </div>
-          <div class="es-box-body">
-              {{ _self.course_lists(data('LatestCourses',{ count:5 })) }}
+            <div class="panel-body">
+              {% for learn in learns %}
+              <div class="media">
+                <div class="media-left">
+                  <a href="javascript:;">
+                    <img class="img-circle" src="img-temp/course_1.jpg">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="title">
+                    <a href="">李小龙</a>
+                  </div>
+                  <div class="content">
+                    <a href="">加入了课程《十分钟掌握HTML5基础》课程</a>
+                  </div>
+                  <span class="date">111小时前</span>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
           </div>
         </div>
-      {% endif %} 
-
-      {% if setting('course.live_course_enabled') %}
-
-        {% if recentLiveCourses %}
-          <div class="es-box">
-            <div class="es-box-heading">
-              <h2>最新直播</h2>
-              {% if recentLiveCourses|length >= 1 %}
-                <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
-              {% endif %} 
-            </div>
-            <div class="es-box-body">
-              {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', { courses:recentLiveCourses, view: 'list'})) }}
-            </div>
-          </div>
-        {% endif %}
-      
-      {% endif %}
-
-      {# 最新资讯 #}
-      {% set articles = data('LatestArticles',{'count':4}) %}
-      {% if articles %}
-        <div class="es-box news">
-          <div class="es-box-heading">
-            <h2>最新资讯</h2>
-            <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
-          </div>
-          <div class="es-box-body">
-            <ul class="row">
-            {% for article in articles %}
-              {% if article %}
-                <li class="col-md-6">
-                  <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
-                </li>
-              {% endif %}
-            {% endfor %}
-            </ul>
-          </div>
-        </div>
-      {% endif %}
-
-      {# vip #}
-      {% if setting('vip.enabled') %}
-        {% set levels = data('VipLevels',{'count':100}) %}
-        {% if levels %}
-          <div class="es-box vip">
-            <div class="es-box-heading">
-              <h2>会员专区</h2>
-              <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
-            </div>
-            <div class="es-box-body">
-              <ul class="row vip-lists">
-                  {% for level in levels %}
-                    <li class="col-sm-12">
-                      <div class="vip-item">
-                        <div class="row">
-                          <div class="col-sm-4 col-md-4">
-                            <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                            <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
-                          </div>
-                          </a>
-                          <div class="col-sm-5 col-md-5">
-                            <h3>{{ level.name }}</h3>
-                            <p>{{ level.description|plain_text(40) }}</p>
-                          </div>
-                          <div class="vip-price col-sm-3 col-md-3">
-                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            <h4> {{  set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
-                           {% else %}
-                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
-                         {% endif %}
-                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
-                          </div>
-                        </div>
-                      </div>      
-                    </li>
-                  {% endfor %}
-              </ul>
-            </div>
-          </div>
-        {% endif %}   
-      {% endif %}
-
-      {# 小组 #}
-      {% if setting('group').group_show|default(1) %}
-        {% set groups = data('HotGroup', {'count':15}) %}
-        {% if groups %}
-          <div class="es-box hot-group">
-            <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
-            <div class="es-box-body">
-               <ul class="list-unstyled">
-                {% for group in groups %}
-                  {% if group.status=='open' %} 
-                    <li class="col-md-4"> 
-                      <div class="panel">
-                         <div class="media">
-                            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
-                              {% if group.logo %}
-                              <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
-                              {%else%}
-                              <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
-                              {%endif%}
-                            </a>
-                            <div class="media-body">
-                              <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
-                              <div class="text-muted text-normal">
-                                {{group.memberNum}}个成员&nbsp;
-                                {{group.threadNum}}个话题
-                              </div>
-                            </div> 
-                          </div>
-                        </div>
-                      </li>
-                    {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        {% endif %}
-      {% endif %}
+      </div>
     </div>
-
-    <div class="col-md-3">
-      {{ render(controller('TopxiaWebBundle:Default:promotedTeacherBlock')) }}
-
-      {# 学员动态 #}
-      {% set learns = data('PersonDynamic', {'count':5}) %}
-      {% if learns %}
-        <div class="es-box status-side">
-          <div class="es-box-heading">
-            <h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态</h2>
-          </div>
-            <div class="es-box-body">
-              <ul class="media-list">
-                {% for learn in learns %}
-                  {% if learn.type == "finished_testpaper" %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
-                    </div>
-                  </li>
-
-                {% elseif learn.type == "finished_homework" %}
-                <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                  </a>
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
-                  </div>
-                </li>
-
-
-
-
-                {% elseif learn.type == "finished_exercise" %}
-                <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                  </a>
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
-                  </div>
-                </li>
-
-                  {% elseif learn.objectType == "course" and learn.type == "become_student" %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      加入了课程 {{learn.properties.course.title|plain_text(15)}}
-                    </div>
-                  </li>
-                  {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
-                    <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
-                    </div>
-                  </li>
-
-                      {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
-                       <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
-                    </div>
-                  </li>
- 
-                  
-                  {% elseif learn.type == "learned_lesson" %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
-                    </div>
-                  </li>
-                  {% elseif learn.type == "favorite_course" %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        收藏了课程 {{learn.properties.course.title|plain_text(15)}}
-                      </div>
-                    </li>
-                    {% elseif learn.type == "start_learn_lesson" %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
-                      </div>
-                    </li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        {% endif %}
-      
-      {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:5})) }}
-
-      {# 最热话题 #}
-      {% if setting('group').group_show|default(1) %}
-        {% set hotThreads = data('HotThreads', {'count':11}) %}
-        {% if hotThreads %}
-          <div class="es-box hot-threads">
-            <div class="es-box-heading"><h2>最热话题</h2></div>
-            <div class="es-box-body">
-              <ul class="text-list">
-                {% for thread in hotThreads %}
-                  {% if thread %}
-                    <li style="border-bottom:none;background:url('{{asset('assets/img/default/triangle.png')}}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;"><a  href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{thread.title|sub_text(15)}}</a></li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        {% endif %}
-      {% endif %}
-
-    </div>
-
-  </div>
-
-</div>
+  </section>
+  {% endif %}
 {% endblock %}
 
 {% macro course_lists(courses) %}
