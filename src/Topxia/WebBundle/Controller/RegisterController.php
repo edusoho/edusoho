@@ -33,14 +33,18 @@ class RegisterController extends BaseController
             //验证码校验
             $this->captcha_enabled_validator($authSettings,$registration,$request);
             //手机校验码
-            $this->sms_code_validator($authSettings,$registration,$request);
-
-            $registration['createdIp'] = $request->getClientIp();
-            if(isset($authSettings['register_protective'])){
-                $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
-                if(!$status){
-                    return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+            if($this->sms_code_validator($authSettings,$registration,$request)){
+                $registration['verifiedMobile'] = '';
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
+                if ($result){
+                    $registration['verifiedMobile'] = $sessionField['to'];
+                }else{
+                    return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
                 }
+            }
+            //ip次数限制
+            if($this->register_limit_validator($registration, $authSettings,$request)){
+               return  $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
             }
 
             $user = $this->getAuthService()->register($registration);
@@ -50,7 +54,9 @@ class RegisterController extends BaseController
 
         $auth=$this->getSettingService()->get('auth');
 
-        if(!isset($auth['registerSort']))$auth['registerSort']="";
+        if(!isset($auth['registerSort'])){
+            $auth['registerSort']="";
+        }
         
 
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -533,30 +539,35 @@ class RegisterController extends BaseController
             $captchaCodePostedByUser = strtolower($registration['captcha_num']);
             $captchaCode = $request->getSession()->get('captcha_code');                   
             if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
-                throw new \RuntimeException('验证码错误1。');    
+                throw new \RuntimeException('验证码错误。');    
             }                   
             if (!isset($captchaCode)||strlen($captchaCode)<5){    
-                throw new \RuntimeException('验证码错误2。');    
+                throw new \RuntimeException('验证码错误。');    
             }
             if ($captchaCode != $captchaCodePostedByUser){ 
                 $request->getSession()->set('captcha_code',mt_rand(0,999999999));  
-                throw new \RuntimeException('验证码错误3。');
+                throw new \RuntimeException('验证码错误。');
             }
             $request->getSession()->set('captcha_code',mt_rand(0,999999999));
         }
     }
 
     private function sms_code_validator($authSettings,$registration,$request){
-        $registration['verifiedMobile'] = '';
         if ( isset($authSettings['registerSort'])
             &&in_array('mobile', $authSettings['registerSort'])
             &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
             &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
-            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
-            if ($result){
-                $registration['verifiedMobile'] = $sessionField['to'];
-            }else{
-                return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
+          return true;
+        }
+    }
+
+    private function register_limit_validator($registration, $authSettings, $request){
+        $registration['createdIp'] = $request->getClientIp();
+
+        if(isset($authSettings['register_protective'])){
+            $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
+            if(!$status){
+                return  true;
             }
         }
     }
