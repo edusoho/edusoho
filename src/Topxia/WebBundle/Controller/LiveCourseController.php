@@ -177,6 +177,10 @@ class LiveCourseController extends BaseController
 
             $result = $client->entryLive($params);
 
+            if($result["error"]){
+                return $this->createMessageResponse('error', $result["errorMsg"]);
+            }
+
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
                 'url' => $result['url'],
