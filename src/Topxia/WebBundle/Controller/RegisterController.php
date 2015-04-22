@@ -64,7 +64,8 @@ class RegisterController extends BaseController
 
         if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
             && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
-            && !in_array('mobile', $auth['registerSort'])) {
+            && !in_array('mobile', $auth['registerSort']) 
+            && $this->setting('auth.register_mode') != 'email_or_mobile') {
             $auth['registerSort'][] = "mobile";
         }
 
