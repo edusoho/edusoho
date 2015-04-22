@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
         // group:'course'
         CKEDITOR.replace('course-about-field', {
-            toolbar: 'Simple',
+            toolbar: 'Detail',
             filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
         });
 
