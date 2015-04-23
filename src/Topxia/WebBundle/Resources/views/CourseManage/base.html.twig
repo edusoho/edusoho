@@ -83,13 +83,15 @@
 				</div>
 			{% endif %}
 
-			<div class="form-group">
-			  <label class="col-md-2 control-label">实名认证</label>
-			  <div class="col-md-8 controls radios">
-			    {{ radios('approval', {'1':'是', '0':'否'}, course.approval ) }}
-			  	<div class="help-block">设置该值后，学员购买课程前，必须先去申请实名认证。</div>
-			  </div>
-			</div>
+			{% if setting('magic.buy_before_approval') %}
+				<div class="form-group">
+				  <label class="col-md-2 control-label">实名认证</label>
+				  <div class="col-md-8 controls radios">
+				    {{ radios('approval', {'1':'是', '0':'否'}, course.approval ) }}
+				  	<div class="help-block">设置该值后，学员购买课程前，必须先去申请实名认证。</div>
+				  </div>
+				</div>
+			{% endif %}
 			
 			<div class="form-group">
 			  <label class="col-md-2 control-label">分类</label>
