@@ -4,10 +4,10 @@ define(function(require, exports, module) {
 
         $("#article-property-tips").popover({
             html: true,
-            trigger: 'hover',
+            trigger: 'click',
             placement: 'right',
             content: $("#article-property-tips-html").html(),
-            delay: { "hide": 850 }
+            // delay: { "hide": 850 }
         });
 
     };

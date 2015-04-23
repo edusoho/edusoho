@@ -31,7 +31,7 @@
                                 <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
                                 您的云短信功能已被暂停
 
-                                  <span class="glyphicon glyphicon-question-sign text-muted " id="article-property-tips" data-toggle="tooltip"></span> 
+                                  <a tabindex="0"  role="button" class="glyphicon glyphicon-question-sign text-muted " id="article-property-tips" data-toggle="popover" data-trigger="focus"></a> 
                                    <div id="article-property-tips-html" style="display:none;">
                                     {{sms.reason|default("")}}<br><a href="{{path('admin_edu_cloud_sms')}}" target="_blank">申请重新开启</a></li>
                                   </div>
