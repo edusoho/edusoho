@@ -229,7 +229,7 @@ class AppController extends BaseController
             if ($key != 'MAIN') {
                 $dic = $dir.'/plugins/'.$appItem.'/plugin.json';
                 if(file_exists($dic)){
-                    $appMeta[$key] = json_decode(file_get_contents($dic));
+                    $appMeta[$appItem] = json_decode(file_get_contents($dic));
                 }
 
             }
