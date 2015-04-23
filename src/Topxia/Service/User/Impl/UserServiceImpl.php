@@ -702,7 +702,37 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function markLoginFailed($userId, $ip)
     {
+        $user = $userId ? $this->getUser($userId) : null;
+        $counter = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
+        $default = array(
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'temporary_lock_minutes' => 20,
+        );
+        $setting = array_merge($default, $setting);
 
+        $fields = array();
+        if ($setting['temporary_lock_enabled']) {
+            if (time() > $user['lastPasswordFailTime'] + $setting['temporary_lock_minutes']*60) {
+                $fields['consecutivePasswordErrorTimes'] = 1;
+            } else {
+                $fields['consecutivePasswordErrorTimes'] ++;
+            }
+
+            if ($fields['consecutivePasswordErrorTimes'] >=  $setting['temporary_lock_allowed_times']) {
+                $fields['lockDeadline'] = time() + $setting['temporary_lock_minutes']*60;
+            } else {
+                $fields = array();
+                $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
+            }
+
+            $fields['lastPasswordFailTime'] = time();
+
+            $this->getUserDao()->updateUser($user['id', ])
+
+
+            $this->getUserDao()->updateUser($user['id'], array('lastPasswordFailTime' => $currentTime));   
+        }
 
     }
 
