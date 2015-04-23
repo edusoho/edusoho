@@ -45,6 +45,11 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->createAppClient()->getApps();
     }
 
+    public function getBinded()
+    {
+        return $this->createAppClient()->getBinded();
+    }
+
     public function getCenterPackageInfo($id)
     {
         return $this->createAppClient()->getPackage($id);

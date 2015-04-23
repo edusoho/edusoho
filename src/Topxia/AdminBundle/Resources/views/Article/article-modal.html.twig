@@ -1,14 +1,12 @@
-{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set modal_size = 'xlarge' %}
-
-{% set menu = 'article' %}
-
-{% block title %}
-	资讯管理>>{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯 - {{ parent() }}
-{% endblock %}
+{% set menu = 'admin_operation_article_create' %}
 
 {% set script_controller = 'article/article-modal' %}
+
+{% set article = article|default(null) %}
+
+{% block page_title %}{% if article %}编辑资讯{% else %}{{parent()}}{% endif %}{% endblock %}
 
 {% block main %}
 
@@ -20,11 +18,6 @@
 
 </style>
 
-{% set article = article|default(null) %}
-
-<div class="page-header clearfix">
- 	<h1 class="pull-left">{% if article|default(null) %}编辑{% else %}添加{% endif %}资讯</h1>
-</div>
 
 <form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
 	{% if article %}

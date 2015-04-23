@@ -53,6 +53,8 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
             throw $this->createServiceException("url不能为空！");
         }
 
+        $admin['createdTime'] = time();
+
         $admin = $this->getCommonAdminDao()->addCommonAdmin($admin);
 
         return $admin;

@@ -911,6 +911,14 @@ class WebExtension extends \Twig_Extension
     {
         $coinSettings = ServiceKernel::instance()->createService('System.SettingService')->get('coin',array());
 
+        if(!isset($coinSettings['price_type'])) {
+            $coinSettings['price_type'] = "RMB";
+        }
+
+        if(!isset($coinSettings['coin_enabled'])) {
+            $coinSettings['coin_enabled'] = 0;
+        }
+
         if($coinSettings['coin_enabled'] == 1 and $coinSettings['price_type'] == 'coin'){
                 if ($order['amount'] == 0  and $order['coinAmount'] == 0 ){
                     $default = "无";

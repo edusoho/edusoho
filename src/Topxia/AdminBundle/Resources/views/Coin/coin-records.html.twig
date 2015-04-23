@@ -1,9 +1,8 @@
-{% extends 'TopxiaAdminBundle:Coin:finance.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set submenu = 'records' %}
-{% block title %}{{ getTitle('admin_coin_bill')}}{% endblock %}
- 
-{% block main_content %}
+{% set menu = 'admin_coin_records' %}
+
+{% block main %}
 
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 

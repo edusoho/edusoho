@@ -1,16 +1,10 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
-
-{% block title %}{{ getTitle('admin_app_installed')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'app/installed' %}
-{% set menu = 'center' %}
-{% set tab_menus = permissions('admin_app_center_show',"tab") %}
-{% set submenu = 'installed' %}
+
+{% set menu = 'admin_app_installed' %}
 
 {% block main %}
-  <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-  </div>
 
   <div class="mbl btn-group">
 
@@ -32,13 +26,18 @@
       {% elseif type == 'app' %}
       {% set apps = plugin %}
       {% endif  %}
-      
-      {% for app in apps %}
 
+      {% for app in apps %}
+  
         {% if app.installed|default(0) or app.userAccess|default('fail') == 'ok' %}
         <tr>
           <td>
-              <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+              {% if app.code == "MAIN" %}
+                <img src="/assets/img/default/MAIN_icon.png" class="app-img pull-left mrl mtm"/>
+              {% else %}
+                <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+              {% endif %}
+              
             <div class="mtm">
               <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
                 <h4><strong class="text-primary">{{ app.name }}</strong>            

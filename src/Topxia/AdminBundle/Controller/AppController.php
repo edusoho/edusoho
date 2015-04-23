@@ -25,50 +25,80 @@ class AppController extends BaseController
 
     public function myCloudAction(Request $request)
     {
-       $content = $this->getEduCloudService()->getUserOverview();
-
-       $info = $this->getEduCloudService()->getAccountInfo();
+        $content = $this->getEduCloudService()->getUserOverview();
+        $info = $this->getEduCloudService()->getAccountInfo();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
-        if (empty($info['level']) or $info['level'] == 'none') {
-                $articles = $EduSohoOpenClient->getArticles();
-                $articles = json_decode($articles, true);
-                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    'articles' => $articles,
-                ));
+        if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
+            $articles = $EduSohoOpenClient->getArticles();
+            $articles = json_decode($articles, true);
+            return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                'articles' => $articles,
+            ));
         }
+
+        return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
+    }
+
+    public function myCloudOverviewAction(Request $request)
+    {
+        $content = $this->getEduCloudService()->getUserOverview();
+        $info = $this->getEduCloudService()->getAccountInfo();
+        $isBinded = $this->getAppService()->getBinded();
+
+        $EduSohoOpenClient = new EduSohoOpenClient;
 
         $currentTime = date('Y-m-d', time());
 
-        $account = isset($content['account']) ? $content['account'] : '';
-        $day = isset($content['account']['arrearageDate']) ? (strtotime($currentTime) - strtotime($content['account']['arrearageDate']))/(60*60*24) : '';
+        $account = isset($content['account']) ? $content['account'] : null;
+        $day = ''; 
+        if (isset($content['account']['arrearageDate']) and  $content['account']['arrearageDate'] != 0 ) {
+            $day =ceil( (strtotime($currentTime) - $content['account']['arrearageDate']) /86400) ;
+        }
 
-        $user = isset($content['user']) ? $content['user'] : '' ;
-        $packageDate = isset($content['user']['endDate']) ? (strtotime($currentTime) - strtotime($content['user']['endDate']))/(60*60*24) : '' ;
+        $user = isset($content['user']) ? $content['user'] : null ;
+        $endDate = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '' ;
+        $startDate = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '' ;
+        $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
 
-        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : '' ;
-        $storageDate = isset($content['service']['storage']['endMonth']) ? (strtotime($currentTime) - strtotime($content['service']['storage']['endMonth']))/(60*60*24) : '' ;
+        $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
+        $storageDate = isset($content['service']['storage']['expire']) ? ceil( ($content['service']['storage']['expire'] - strtotime($currentTime) ) /86400) : '' ;
+        $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],0,1) : '' ;
+        $startYear = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],0,4) : '' ;
+        $startMonth = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],-2) : '' ;
+        $endYear = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'],0,4) : '' ;
+        $endMonth = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'],-2) : '' ;
+        $storageStart=$startYear.'.'.$startMonth;
+        $storageEnd=$endYear.'.'.$endMonth;
 
-         $live = isset($content['service']['live']) ? $content['service']['live'] : '' ;
+        $live = isset($content['service']['live']) ? $content['service']['live'] : null ;
+        $liveDate = isset($content['service']['live']['expire']) ?  ceil(($content['service']['live']['expire'] - strtotime($currentTime)) /86400) : '' ;
 
-        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : '' ;
+        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null ;
 
         $notices = $EduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-                    'content' =>$content,
-                    'packageDate' =>$packageDate,
-                    'storageDate' =>$storageDate,
-                    'day' =>$day,
-                    'storage' =>$storage,
-                    'live' =>$live,
-                    'user' =>$user,
-                    'sms' =>$sms,
-                    'account' =>$account,
-                    "notices"=>$notices,
-                    'info' => $info,
-                ));
+            'content' =>$content,
+            'packageDate' =>$packageDate,
+            'storageDate' =>$storageDate,
+            'startDate' =>$startDate,
+            'endDate' =>$endDate,
+            'liveDate' =>$liveDate,
+            'storageStart' =>$storageStart,
+            'storageEnd' =>$storageEnd,
+            'day' =>$day,
+            'month' => $month,
+            'storage' =>$storage,
+            'live' =>$live,
+            'user' =>$user,
+            'sms' =>$sms,
+            'account' =>$account,
+            "notices"=>$notices,
+            'info' => $info,
+            'isBinded' => $isBinded,
+        ));
     }
 
     private function isLocalAddress($address)
@@ -115,13 +145,13 @@ class AppController extends BaseController
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
-        'apps' => $apps,
-        'theme' => $theme,
-        'allApp' => $app,
-        'installedApps' => $installedApps,
-        'type' => $postStatus,
+            'apps' => $apps,
+            'theme' => $theme,
+            'allApp' => $app,
+            'installedApps' => $installedApps,
+            'type' => $postStatus,
 
-    ));
+        ));
 
     }
 
@@ -174,21 +204,41 @@ class AppController extends BaseController
         $dir = dirname(dirname(dirname(dirname(__DIR__)))); 
         $appMeta = array();
 
+        foreach ($apps as $key => $value) {
+            
+            unset($apps[$key]);
+
+            $appInfo = $value;
+            $code = strtolower($key);
+
+            $apps[$code] = $appInfo;
+        }
+       
         foreach ($appsInstalled as $key => $value) {
+            
+            unset($appsInstalled[$key]);
 
+            $appInfo = $value;
+            $key = strtolower($key);
+
+            $appsInstalled[$key] = $appInfo;
             $appsInstalled[$key]['installed'] = 1;
-
+            $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
+            
             if ($key != 'MAIN') {
                 $dic = $dir.'/plugins/'.$key.'/plugin.json';
-                $appMeta[$key] = json_decode(file_get_contents($dic));
+                if(file_exists($dic)){
+                    $appMeta[$key] = json_decode(file_get_contents($dic));
+                }
             }
 
         }
 
         $apps = array_merge($apps, $appsInstalled);
+
         $theme = array();
         $plugin = array();
-        
+
         foreach ($apps as $key => $value) {
 
             if ($value['type'] == 'theme') {

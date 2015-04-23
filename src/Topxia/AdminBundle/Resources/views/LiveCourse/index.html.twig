@@ -1,9 +1,6 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'live-course' %}
-{% set type = 'live-course'%}
-{% set tab_menus = permissions('admin_live_course','tab') %}
-{% block title %}{{ getTitle('admin_live_course')}}{% endblock %}
+{% set menu = 'admin_live_course' %}
 
 {% block main %}
 

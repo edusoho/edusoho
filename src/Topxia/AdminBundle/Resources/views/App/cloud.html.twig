@@ -1,12 +1,25 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_app_my_cloud')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_my_cloud')}}{% endblock %}
 
-{% set menu = 'my-cloud' %}
-{% set tab_menus = permissions('admin_app_my_cloud',"tab") %}
-{% set submenu = 'my-cloud' %}
+{% set menu = 'admin_my_cloud' %}
+{% set submenu = 'cloud-introduction' %}
 
 {% block main %}
+
+      <ul class="nav nav-tabs mbl">
+
+        <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
+          <a href="{{ url('admin_my_cloud') }}">产品简介
+          </a>
+        </li>
+
+        <li class="{% if submenu == 'service-information' %}active{% endif %}">
+          <a href="{{ url('admin_my_cloud_overview') }}">服务概况
+          </a>
+        </li>
+
+      </ul>
 
       <!-- 广告页面开始 -->
       <div class="es-eduyun-ad">
@@ -29,8 +42,14 @@
             <div class="carousel-inner" role="listbox">
               <div class="item active">
                 <img class="img-responsive" src="{{ default_path('banner.jpg') }}">
-                <a href="http://www.edusoho.com/product/educloud" class="btn btn-warning" target="_blank">接入教育云<span
+                <a href="" class="btn btn-warning" disabled>接入教育云<span
                   class="glyphicon glyphicon-circle-arrow-right"></span></a>
+                  <div class="images-content"> 
+                      即将上线，去了解详情
+                      <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=800023860&site=qq&menu=yes" >
+                        <img border="0" src="{{ default_path('qq_logo.png') }}"/>
+                      </a>
+                  </div> 
               </div>
             </div>
           </div>
@@ -80,10 +99,11 @@
           </div>
 
           <div class="col-md-4">
-            <h3 class="es-ad-title">一次接入，教育应用随心选择</h3>
+            <h3 class="es-ad-title">一次接入，云短信随心选择</h3>
 
             <div class="es-ad-info">
-              <p>主题、题库、营销等教育应用</p>
+              <p>及时发送通知，实用便捷 </p> 
+              <p>获得精准信息，实现高效营销</p>
 
             </div>
             <div class="media">

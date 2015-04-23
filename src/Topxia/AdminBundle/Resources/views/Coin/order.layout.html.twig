@@ -1,9 +1,9 @@
-{% extends 'TopxiaAdminBundle:Coin:order.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set menus = permissions("admin_coin_order","tab")%}
-{% set menu = 'coin_order' %}
+{% set nav = 'admin_order' %}
+
+{% set menu = 'admin_coin_orders' %}
+
 {% block main %}
-
-
-  {% block main_content %}{% endblock %}
+  
 {% endblock %}

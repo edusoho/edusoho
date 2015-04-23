@@ -1,11 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'system/login_bind' %}
 
-{% set submenu = 'login_bind' %}
-{% block title %}{{ getTitle('admin_setting_login_bind')}}{% endblock %}
+{% set menu = 'admin_setting_login_bind' %}
 
-{% block main_content %}
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 
@@ -40,11 +39,11 @@
 <fieldset>
 <div class="form-group">
       <div class="col-md-3 control-label">
-          <label >用户登陆保护</label>
+          <label >用户登录保护</label>
       </div>
       <div class="controls col-md-8 radios">
           {{ radios('temporary_lock_enabled', {1:'开启', 0:'关闭'}, loginConnect.temporary_lock_enabled) }} 
-          <p class="help-block">开启后，登陆时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户</p>
+          <p class="help-block">开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户</p>
       </div>
 
       <div id="times_and_minutes" class="col-md-8 col-md-offset-3">

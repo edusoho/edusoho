@@ -15,19 +15,7 @@
         {{ blocks.home_top_banner|raw }}
       </div>
     {% endif %}
-    {% set announcements = data('Announcement',{ count:3 }) %}
-        {% if announcements %}
-          <div class=" banner-announcement">
-            <div class="col-md-1">
-              <span class="glyphicon glyphicon-volume-up pull-right banner-volume"></span>
-            </div>
-            <div class="row col-md-10">
-              {% for announcement in announcements %}
-                  <div class="col-md-4 banner-volume"><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(18)}}</a></div>
-              {% endfor %}
-            </div>
-          </div>
-    {% endif %}
+    
     <ul class="homepage-category-nav">
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
