@@ -1,14 +1,9 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}资讯频道设置 - {{ parent() }}{% endblock %}
-
-{% set menu = 'setting' %}
+{% set menu = 'admin_article_setting' %}
 
 {% block main %}
 
-<div class="page-header clearfix">
-  <h1 class="pull-left">资讯频道设置</h1>
-</div>
 
 {{ web_macro.flash_messages() }}
 

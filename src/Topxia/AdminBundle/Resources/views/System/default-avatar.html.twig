@@ -30,7 +30,7 @@
         <img src="{{ system_default_path('avatar', '' ) }}">
       </div>
   </div>
-
+  
 {% else %}
 
   <div class="form-group" id="avatar-class" style="display:none;">
@@ -57,12 +57,12 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>
-
-  <div class="form-group" id="system-avatar-class">
-    <div class="col-md-8 control-label"><b>系统默认头像</b></div>
-      <div class="controls col-md-8 controls">
-        <img src="{{ system_default_path('avatar', '' ) }}">
-      </div>
-  </div>
+    <div class="form-group" id="system-avatar-class">
+      <div class="col-md-8 control-label"><b>系统默认头像</b></div>
+        <div class="controls col-md-8 controls">
+          <img src="{{ system_default_path('avatar', '' ) }}">
+        </div>
+    </div>
 
 {% endif %}
+

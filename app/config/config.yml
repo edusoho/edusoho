@@ -133,7 +133,11 @@ services:
         tags:
             - { name: twig.extension }
 
-
+    topxia.twig.menu_extension:
+        class: Topxia\WebBundle\Twig\Extension\MenuExtension
+        arguments:    [@service_container]
+        tags:
+            - { name: twig.extension }
 
 
     kernel.listener.user_login_token_listener:

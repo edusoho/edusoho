@@ -26,6 +26,8 @@ define(function(require, exports, module) {
 
         _lessons: [],
 
+        _counter: null,
+
         events: {
             'click [data-role=next-lesson]': 'onNextLesson',
             'click [data-role=prev-lesson]': 'onPrevLesson',
@@ -36,7 +38,8 @@ define(function(require, exports, module) {
             courseId: null,
             courseUri: null,
             dashboardUri: null,
-            lessonId: null
+            lessonId: null,
+            watchLimit: false
         },
 
         setup: function() {
@@ -117,6 +120,7 @@ define(function(require, exports, module) {
             this.set('courseId', this.element.data('courseId'));
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
+            this.set('watchLimit', this.element.data('watchLimit'));
 
         },
 
@@ -172,11 +176,13 @@ define(function(require, exports, module) {
                 type = "MediaPlayer";
             }
 
-            var counter = new Counter(player, type, lessonId);
-            if(typeof(counterId)!="undefined" && counterId) {
-                clearInterval(counterId);
+            if (this._counter && this._counter.timerId) {
+                clearInterval(this._counter.timerId);
             }
-            counterId = setInterval(function(){counter.execute()}, 1000);
+
+            var self = this;
+            this._counter = new Counter(player, type, this.get('courseId'), lessonId, this.get('watchLimit'));
+            this._counter.setTimerId(setInterval(function(){self._counter.execute()}, 1000));
         },
 
         _onChangeLessonId: function(id) {
@@ -235,8 +241,6 @@ define(function(require, exports, module) {
                     that.element.find('[data-role=unit-number]').parent().hide().next().hide();
                 }
 
-
-
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
                     $("#lesson-unpublished-content").show();
                     return;
@@ -284,6 +288,9 @@ define(function(require, exports, module) {
                     mediaPlayer.on('ended', function() {
                         var userId = $('#lesson-video-content').data("userId");
                         DurationStorage.del(userId, lesson.mediaId);
+                        if (that._counter) {
+                            that._counter.watched = false;
+                        }
 
                         that._onFinishLearnLesson();
                     });
@@ -514,10 +521,23 @@ define(function(require, exports, module) {
                             var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
                             $("#lesson-ppt-content").html(html).show();
 
-                            var player = new SlidePlayer({
-                                element: '.slide-player',
-                                slides: response
-                            });
+                            var watermarkUrl = $("#lesson-ppt-content").data('watermarkUrl');
+                            if (watermarkUrl) {
+                                $.get(watermarkUrl, function(watermark) {
+                                    var player = new SlidePlayer({
+                                        element: '.slide-player',
+                                        slides: response,
+                                        watermark: watermark
+                                    });
+                                });
+
+                            } else {
+                                var player = new SlidePlayer({
+                                    element: '.slide-player',
+                                    slides: response
+                                });
+                            }
+
 
                         }, 'json');
                     }
@@ -534,12 +554,23 @@ define(function(require, exports, module) {
                             var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
                             $("#lesson-document-content").html(html).show();
 
-                            var player = new DocumentPlayer({
-                                element: '#lesson-document-content',
-                                swfFileUrl:response.swfUri,
-                                pdfFileUrl:response.pdfUri
-                            });
-
+                            var watermarkUrl = $("#lesson-document-content").data('watermarkUrl');
+                            if (watermarkUrl) {
+                                $.get(watermarkUrl, function(watermark) {
+                                    var player = new DocumentPlayer({
+                                        element: '#lesson-document-content',
+                                        swfFileUrl:response.swfUri,
+                                        pdfFileUrl:response.pdfUri,
+                                        watermark: watermark
+                                    });
+                                });
+                            } else {
+                                var player = new DocumentPlayer({
+                                    element: '#lesson-document-content',
+                                    swfFileUrl:response.swfUri,
+                                    pdfFileUrl:response.pdfUri
+                                });
+                            }
                         }, 'json');
                     }
 
@@ -690,11 +721,18 @@ define(function(require, exports, module) {
 
 
     var Counter = Class.create({
-        initialize: function(player, type, lessonId) {
+        initialize: function(player, type, courseId, lessonId, watchLimit) {
             this.player = player;
             this.type = type;
+            this.courseId = courseId;
             this.lessonId = lessonId;
             this.interval = 120;
+            this.watched = false;
+            this.watchLimit = watchLimit;
+        },
+
+        setTimerId: function(timerId) {
+            this.timerId = timerId;
         },
 
         execute: function(){
@@ -740,6 +778,19 @@ define(function(require, exports, module) {
                 learningCounter = 0;
             } else if(!paused){
                 learningCounter++;
+            }
+
+            if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
+                this.watched = true;
+                var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
+                $.post(url, function(result) {
+                    if (result.status == 'ok') {
+                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
+                    } else if (result.status == 'error') {
+                        window.location.reload();
+                    }
+
+                }, 'json');
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);

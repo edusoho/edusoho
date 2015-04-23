@@ -1,21 +1,15 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
-
-{% block title %}问答管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'course/questions' %}
 
-{% set menu = 'question' %}
+{% set menu = 'admin_course_question' %}
 
 {% block main %}
-
-<div class="page-header clearfix">
-  <h1 class="pull-left">问答管理</h1>
-</div>
 
 {% include 'TopxiaAdminBundle:CourseQuestion:tab.html.twig' %}
 <br>
 
-  <div class="well well-sm">
+  <div class="well well-sm mtl">
     <form class="form-inline">
 
       <div class="form-group">

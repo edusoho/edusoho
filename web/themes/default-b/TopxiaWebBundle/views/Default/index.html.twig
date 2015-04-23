@@ -15,7 +15,7 @@
         {{ blocks.home_top_banner|raw }}
       </div>
     {% endif %}
-
+    
     <ul class="homepage-category-nav">
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
