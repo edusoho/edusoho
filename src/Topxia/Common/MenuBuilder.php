@@ -88,9 +88,19 @@ class MenuBuilder
     }
 
     public function buildMenus()
-    {
+    {   
         if ($this->menus) {
             return $this->menus;
+        }
+
+        $environment = ServiceKernel::instance()->getEnvironment();
+
+        $cacheFile = "../app/cache/".$environment."/menus_".$this->position.".php";
+        
+        if ($environment != "dev" && file_exists($cacheFile)) {
+
+            return include $cacheFile;
+
         }
 
         $menus = $this->loadMenus();
@@ -135,6 +145,14 @@ class MenuBuilder
 
         $this->menus = $menus;
 
+        if ($environment == "dev") {
+
+            return $menus;
+        }
+
+        $cache = "<?php \nreturn " . var_export($menus, true) . ';';
+        file_put_contents($cacheFile, $cache);
+
         return $menus;
     }
 
@@ -142,16 +160,6 @@ class MenuBuilder
     {
         $position = $this->position;
         $configPaths = array();
-
-        $environment = ServiceKernel::instance()->getEnvironment();
-
-        $cacheFile = "../app/cache/".$environment."/menus_admin.php";
-        
-        if ($environment != "dev" && file_exists($cacheFile)) {
-
-            return include $cacheFile;
-
-        }
 
         $rootDir = realpath(__DIR__ . '/../../../');
 
@@ -184,14 +192,6 @@ class MenuBuilder
 
             $menus = array_merge($menus, $menu);
         }
-
-        if ($environment == "dev") {
-
-            return $menus;
-        }
-
-        $cache = "<?php \nreturn " . var_export($menus, true) . ';';
-        file_put_contents($cacheFile, $cache);
 
         return $menus;
     }
