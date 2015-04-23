@@ -1,7 +1,7 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set nav = 'order' %}
-{% set side_menus = permissions('admin_order') %}
+{% set nav = 'admin_order' %}
+{% set side_menus = menus("admin",'admin_order') %}
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
@@ -14,7 +14,7 @@
     {% endblock %}
   </div>
   <div class="col-md-10">
-      <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
+      <div class="page-header"><h1>{{ admin_macro.title(side_menus,menu) }}</h1></div>
       {% block main %}{% endblock %}
   </div>
 {% endblock %}

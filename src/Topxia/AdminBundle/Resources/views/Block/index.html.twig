@@ -1,22 +1,18 @@
-{% extends 'TopxiaAdminBundle:Block:layout.html.twig' %}
-{% set tab_menus = permissions('admin_operation_block',"tab") %}
-{% set menu = 'block' %}
-{% set submenu = 'block' %}
-{% block title %}{{ getTitle('admin_operation_block')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set script_controller = 'block/list' %}
-{% block main %}
+{% set menu = 'admin_operation_block' %}
 
+{% block page_buttons %}  {% if setting('developer.debug') %}
 
-  {% if setting('developer.debug') %}
-
-    <div class="clearfix well well-sm">
-      {% set btn_menus = permissions("admin_operation_block","button") %}
-      {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
+    <div class="clearfix ">
+      <a data-url="{{ path('admin_block_create') }}" data-toggle="modal" data-target="#modal" class=" btn btn-success btn-sm pull-right mls "> 新增编辑区</a>
     </div>
     
   {% endif %}
+{% endblock %}
 
+{% set script_controller = 'block/list' %}
+{% block main %}
 
 <table id="block-table" class="table table-striped">
   <thead>

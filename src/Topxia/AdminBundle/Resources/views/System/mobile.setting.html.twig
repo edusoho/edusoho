@@ -1,10 +1,6 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'mobile_settings' %}
-{% set tab_menus = permissions('admin_setting_mobile','tab') %}
-{% set submenu = 'mobile_settings' %}
-
-{% block title %}{{ getTitle('admin_setting_mobile')}}{% endblock %}
+{% set menu = 'admin_setting_mobile' %}
 
 {% set script_controller = 'setting/mobile' %}
 
@@ -19,12 +15,6 @@
 #mobile-logo-container img 
 {max-width: 80%; margin-bottom: 10px;}
 </style>
-
-<div class="mbl">
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:tab_menus,type:submenu} %}
-
-</div>
 
 {{ web_macro.flash_messages() }}
 

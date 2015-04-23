@@ -1,17 +1,10 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
-
-{% block title %}{{ getTitle('admin_app_upgrades')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'app/upgrades' %}
-{% set menu = 'center' %}
-{% set tab_menus = permissions('admin_app_center_show',"tab") %}
-{% set submenu = 'upgrades' %}
+
+{% set menu = 'admin_app_upgrades' %}
 
 {% block main %}
-  <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-  </div>
-
 {% if status|default(null) %}
   <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
 {% else %}

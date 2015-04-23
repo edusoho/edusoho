@@ -1,15 +1,9 @@
-  {% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
-{% block title %}{{ getTitle('admin_cloud_video_setting')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'cloud-video' %}
-{% set tab_menus = permissions('admin_setting_cloud_video',"tab") %}
-{% set submenu = 'cloud_video_setting' %}
+{% set menu = 'admin_cloud_video_setting' %}
 {% set script_controller = 'setting/cloud' %}
 
 {% block main %}
-  <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-  </div >
 
 {{ web_macro.flash_messages() }}
 

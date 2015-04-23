@@ -40,7 +40,7 @@ Class Permission
 
                 if ($group) {
 
-                    if (isset($value['group']) && $value['group'] == $group ) {
+                    if (isset($value['group']) && $value['group'] == $group || (!isset($value['group']) && $group == 1 )) {
 
                         $result[] = $value;
                         continue;
@@ -101,9 +101,9 @@ Class Permission
                 
                 $dir = "../src/".$value;
        
-                if (file_exists($dir."/permissions.yml")) {
+                if (file_exists($dir."/Resources/config/menus_admin.yml")) {
 
-                    $permissions = $this->loadPermissionYml($permissions, $dir."/permissions.yml");
+                    $permissions = $this->loadPermissionYml($permissions, $dir."/Resources/config/menus_admin.yml");
                 }
           
             }
@@ -115,7 +115,7 @@ Class Permission
 
                 if ($file != "." && $file != "..") {
 
-                  $fullpath = $dir."/".$file."/$file"."Bundle"."/permissions.yml";
+                  $fullpath = $dir."/".$file."/$file"."Bundle"."/Resources/config/menus_admin.yml";
 
                   $permissions = $this->loadPermissionYml($permissions, $fullpath);
                 }
@@ -145,7 +145,7 @@ Class Permission
             $code = $permission['parent'];
             if($this->getNameByCode($code, $permissions)) {
 
-                $title .= "-";
+                $title .= " - ";
                 $title .= $this->getNameByCode($code, $permissions);
                 
             }
@@ -156,9 +156,20 @@ Class Permission
         return $title;
     }
 
+    public function getFullTitle($code)
+    {
+        return $this->getTitle($code);
+    }
+
+    public function getTitle2($code)
+    {
+        $permissions = $this->parsePermissions();
+
+        return $this->getNameByCode($code, $permissions);
+    }
+
     private function getNameByCode($code, $permissions)
     {       
-
         if(isset($permissions[$code])) {
 
             $permission = $permissions[$code];

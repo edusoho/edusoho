@@ -1,17 +1,10 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_app_center')}}{% endblock %}
+{% set menu = 'admin_app_center' %}
 
-{% set menu = 'center' %}
-{% set tab_menus = permissions('admin_app_center_show',"tab") %}
-{% set submenu = 'center' %}
 {% set script_controller = 'app/center' %}
 
 {% block main %}
-
-  <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-  </div >
 
   <div class="mbl btn-group">
 

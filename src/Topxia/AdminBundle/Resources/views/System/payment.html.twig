@@ -1,11 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:payment-set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'system/payment' %}
 
-{% set submenu = 'payment' %}
-{% block title %}{{ getTitle('admin_payment')}}{% endblock %}
+{% set menu = 'admin_payment' %}
 
-{% block main_content %}
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 

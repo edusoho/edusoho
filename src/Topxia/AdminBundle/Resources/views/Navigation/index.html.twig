@@ -1,22 +1,15 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'navigation/page' %}
-{% set menus = permissions('admin_setting','tab') %}
-{% set menu = 'site' %}
+
+{% set menu = 'admin_'~type~'_navigation' %}
 {% set types = {top:'顶部', foot:'底部'} %}
-{% set submenu =  types[type] %}
-{% block title %}{{ getTitle('admin_'~type~'_navigation')}}{% endblock %}
+
+{% block page_buttons %} 
+    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">新增{{ types[type] }}导航</button>
+{% endblock %}
 
 {% block main %}
-
-<div class="mbl">
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
-
-<div class="clearfix well well-sm">
-  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">新增{{ types[type] }}导航</button>
-</div>
 
 <table id="navigation-table" class="table table-striped table-hover navigation-table">
 	<thead>
