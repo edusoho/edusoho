@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 				Notify.danger('每周精品栏目只能设置三门课程！')
 				return;
 			}
-			if($courseIds.val().indexOf($(this).data("courseId"))>-1){
+			if($courseIds.val().indexOf($(this).data("courseId")+',')>-1){
 				Notify.danger('每周精品栏目中已经存在此门课程！');
 				return;
 			}
