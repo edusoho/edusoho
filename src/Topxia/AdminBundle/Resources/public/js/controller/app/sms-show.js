@@ -7,7 +7,6 @@ define(function(require, exports, module) {
             trigger: 'click',
             placement: 'right',
             content: $("#article-property-tips-html").html(),
-            // delay: { "hide": 850 }
         });
 
     };
