@@ -4401,6 +4401,21 @@ body {
   background: #fff url(../img/loader.gif) no-repeat center center;
 }
 
+.slide-player-watermark {
+  position: absolute;
+  width: 100%;
+  bottom: 50px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  cursor: default;  
+}
+
 .slide-player-control {
   position: absolute;
   width: 100%;
@@ -5255,6 +5270,46 @@ a.homework-essay-textarea-pack-up{
   }
 }
 
+.banner-announcement {
+    background: #ebf6f1;
+    height: 40px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+.banner-volume {
+    color: #3e3e3e;
+}
+
+.set-email-alert {
+	font-size: 12px;
+  	text-align: center;
+  	margin-bottom: 0px;
+  	border-radius: 0px; 
+  	padding: 5px;
+}
+
+.set-email-alert .close {
+	font-size: 16px;
+}
+
+.announcement .alert {
+	padding: 10px 15px;
+	margin-bottom: 10px;
+  margin-top: -5px;
+	font-size: 14px;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.announcement .alert .items {
+  position: absolute;
+}
+
+.announcement .alert .items .item {
+  height: 30px;
+}
+
 .classroom-block .content {
   font-size: 14px;
   color: #bbb;
@@ -5347,4 +5402,4 @@ a.homework-essay-textarea-pack-up{
 
 .table-striped .sort-handle:hover{
   color:#999;
-};
+}

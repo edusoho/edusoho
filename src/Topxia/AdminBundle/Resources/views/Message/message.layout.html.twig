@@ -1,0 +1,9 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% set menus = permissions("admin_message","tab")%}
+{% set menu = 'message' %}
+
+{% block main %}
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

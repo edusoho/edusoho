@@ -1,16 +1,24 @@
-
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}虚拟币模式设置 - {{ parent() }}{% endblock %}
-
 {% set script_controller = "coin/model" %}
-{% set menu = 'coin' %}
-{% set submenu = 'model' %}
+{% set tab_menus = permissions("admin_setting_finance","tab")%}
+{% set menu = 'finance_settings' %}
+{% set submenu = 'coin_settings' %}
+{% block title %}{{ getTitle('admin_coin_settings')}}{% endblock %}
 
 {% block main %}
-  <div class="page-header"><h1>虚拟币管理</h1></div>
-    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
+<div class = "mbl">
+    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
+</div>
 
+    <div class="well">
+      <div class="btn-group">
+          <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_coin_settings') }}">设置</a>
+
+          <a type="button" class="btn btn-default btn-sm  btn-primary" href="{{ path('admin_coin_model') }}">使用方式</a>
+
+      </div>
+    </div>
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-model-form">
   

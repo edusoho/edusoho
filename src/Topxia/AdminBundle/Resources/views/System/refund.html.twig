@@ -1,12 +1,9 @@
 {% extends 'TopxiaAdminBundle:System:payment-set.layout.html.twig' %}
 
-{% block title %}退款设置 - {{ parent() }}{% endblock %}
-
 {% set submenu = 'refund' %}
+{% block title %}{{ getTitle('admin_setting_refund')}}{% endblock %}
 
-{% block maincontent %}
-
-<div class="page-header"><h1>退款设置</h1></div>
+{% block main_content %}
 
 {{ web_macro.flash_messages() }}
 

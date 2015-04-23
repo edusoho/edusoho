@@ -1,17 +1,11 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Coin:records.layout.html.twig' %}
 
-{% block title %}用户虚拟币 - {{ parent() }}{% endblock %}
-
-{% set menu = 'coin' %}
 {% set submenu = 'user-records' %}
+{% block title %}{{ getTitle('admin_coin_user')}}{% endblock %}
 
- 
-{% block main %}
+{% block main_content %}
 
-    <div class="page-header"><h1>虚拟币管理</h1></div>
-    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
-
-
+  {% if setting('coin.coin_enabled')  %}
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
         <input value="{{condition.type}}" name="flowType" type="hidden"/>
@@ -77,7 +71,15 @@
 
         {% if userIds %}
           {% for userId in userIds %}
-            <tr><td >{{ web_macro.user_link(users[userId] , 'link-muted') }}</td><td style="color:#1bb974;">{{userInCash(userId,condition.timeType)|default("0.00")}}</td><td style="color:#ff7b0e;">{{userOutCash(userId,condition.timeType)|default("0.00")}}</td><td style="color:blue;">{{userAccount(userId).cash|default(0)}}</td><td><a class="btn btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType})}}" href="javascript:;">查看</a></td></tr>
+             <tr>
+              <td> {{ web_macro.user_link(users[userId] , 'link-muted') }}</td>
+              <td style="color:#1bb974;"> {{userInCash(userId,condition.timeType)|default("0.00")}}</td>
+              <td style="color:#ff7b0e;"> {{userOutCash(userId,condition.timeType)|default("0.00")}}</td>
+              <td style="color:blue;"> {{userAccount(userId).cash|default(0)}}</td>
+              <td>
+                <a  class= {% if userAccount(userId) %} "btn btn-default"  {% else %} "btn btn-default disabled"  {% endif %} data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_flow_detail',{userId:userId,timeType:condition.timeType})}}" href="javascript:;">查看</a>
+              </td>
+            </tr>
           {% endfor %}
         {% endif %}
        
@@ -88,5 +90,12 @@
       {% endif %}
     </div>
 
+{% else %}
+<div class="well" style="text-align:center;">
 
+
+虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-帐务设置-虚拟币-使用方式  </a>中设置开启
+
+</div>
+{% endif %}
 {% endblock %}

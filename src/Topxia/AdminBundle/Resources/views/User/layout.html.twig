@@ -1,30 +1,20 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
-
+{% set side_menus = permissions('admin_user') %}
 {% set nav = 'user' %}
 
 {% block content %}
   <div class="col-md-2">
     {% block sidebar %}
-      <div class="list-group">
-        <a href="{{ url('admin_user') }}" class="list-group-item {% if menu == 'user' %}active{% endif %}">用户管理</a>
 
-      {% if is_plugin_installed("UserImporter") and setting("plugin_userImporter_enabled",1) %}
-          <a href="{{ url('admin_user_import') }}" class="list-group-item {% if menu == 'user-lead' %}active{% endif %}">用户导入</a>
-      {% endif %}
+      <div class="panel panel-default">
 
-        <a href="{{ url('admin_teacher') }}" class="list-group-item {% if menu == 'teacher' %}active{% endif %}">教师管理</a>
-
-        <a href="{{ url('admin_approval_approving') }}" class="list-group-item {% if menu == 'approval' %}active{% endif %}">实名认证</a>
-
-        <a href="{{ url('admin_message') }}" class="list-group-item {% if menu == 'message' %}active{% endif %}">私信管理</a>
-        
-        <a href="{{ url('admin_money_card') }}" class="list-group-item {% if menu == 'money_card' %}active{% endif %}" style="display:none;">充值卡管理</a>
-
-        <a href="{{ url('admin_login_record') }}" class="list-group-item {% if menu == 'login_record' %}active{% endif %}">用户登录日志</a>
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
       </div>
+      
     {% endblock %}
   </div>
   <div class="col-md-10">
+      <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
       {% block main %}{% endblock %}
   </div>
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% set menus = permissions("admin_user_show","tab")%}
+
+{% set menu = 'user' %}
+
+{% block main %}
+
+<div class = "mbl">
+
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
+
+</div>
+
+
+  {% block maincontent %}{% endblock %}
+{% endblock %}

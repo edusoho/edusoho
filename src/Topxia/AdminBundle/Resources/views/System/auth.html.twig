@@ -1,12 +1,10 @@
 {% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
 
-{% block title %}注册设置 - {{ parent() }}{% endblock %}
-
 {% set submenu = 'auth' %}
 {% set script_controller = 'setting/auth' %}
+{% block title %}{{ getTitle('admin_user_auth')}}{% endblock %}
 
-{% block maincontent %}
-
+{% block main_content %}
 <div class="page-header"><h1>注册设置</h1></div>
 
 {{ web_macro.flash_messages() }}
@@ -18,6 +16,14 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('register_mode', {'opened':'开启', 'closed':'关闭'}, auth.register_mode) }}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>用户修改昵称</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
     </div>
   </div>
 
@@ -112,9 +118,18 @@
 	    {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
 	  </div>
 	</div>
+
 	<div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录</div>
 	<input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
-  
+    <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>头像设置提醒</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner').avatar_alert|default('none')) }}
+    </div>
+  </div>
+
   <fieldset>
     <legend>新用户激活邮件设置</legend>
 
@@ -405,6 +420,27 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
   </fieldset>
 
+
+ <fieldset>
+    <legend>名称设置</legend>
+
+    <div class="row form-group">
+        <div class="col-md-2 col-md-offset-2 control-label">
+            <label for="user_name">用户名称</label>
+        </div>
+        <div class="controls col-md-4">
+          <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
+        </div>
+    </div>
+
+  <div class="alert alert-info deduction text-center">
+  <p><strong> 
+  注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+  </strong></p>
+  </div>
+
+  </fieldset> 
+  
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">

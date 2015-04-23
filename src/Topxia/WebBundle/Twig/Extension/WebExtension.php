@@ -9,6 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
+use Topxia\WebBundle\Util\Permission;
 
 class WebExtension extends \Twig_Extension
 {
@@ -90,6 +91,9 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
+            'permissions' => new \Twig_Function_Method($this, 'permissions'),
+            'getTitle' => new \Twig_Function_Method($this, 'getTitle'),
+            'setItem' => new \Twig_Function_Method($this, 'setItem'),
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
         );
     }
@@ -105,7 +109,19 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId,$timeType="oneWeek")
+    public function getTitle($code)
+    {
+        $permission = new Permission();
+
+        return $permission->getTitle($code);
+    }
+
+    public function setItem($key, $value)
+    {
+        return array($key=>$value);
+    }
+
+    public function getOutCash($userId, $timeType="oneWeek")
     {   
         $time=$this->filterTime($timeType);
         $condition=array(
@@ -116,6 +132,14 @@ class WebExtension extends \Twig_Extension
             );
 
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+    }
+
+    public function permissions($parent='', $type=null)
+    {   
+        $permission = new Permission();
+        $permissions = $permission->getPermissions($parent, $type);
+        
+        return $permissions;
     }
 
     public function getInCash($userId,$timeType="oneWeek")
@@ -352,23 +376,28 @@ class WebExtension extends \Twig_Extension
         return date('Y-m-d', $time);
     }
 
-    public function remainTimeFilter($value)
+    public function remainTimeFilter($value,$timeType='')
     {
+       $remainTime="";     
         $remain = $value - time();
-
-        if ($remain <= 0) {
-            return '0分钟';
+ 
+        if ($remain <= 0  &&  empty($timeType)) {
+          return  $remainTime['second']= '0分钟';
         }
 
-        if ($remain <= 3600) {
-            return round($remain / 60) . '分钟';
+        if ($remain <= 3600 &&  empty($timeType)) {
+           return $remainTime['minutes'] = round($remain / 60) . '分钟';
         }
 
-        if ($remain < 86400) {
-            return round($remain / 3600) . '小时';
+        if ($remain < 86400 &&  empty($timeType)) {
+           return $remainTime['hours'] = round($remain / 3600) . '小时';
         }
-
-        return round($remain / 86400) . '天';
+         $remainTime['day'] = round(($remain < 0 ? 0 : $remain )/ 86400) . '天';
+        if(!empty($timeType)){
+                return  $remainTime[$timeType];
+        }else{
+                return  $remainTime['day'] ;
+        }
     }
 
     public function getCountdownTime($value)
@@ -719,9 +748,8 @@ class WebExtension extends \Twig_Extension
     public function getFileType($fileName,$string=null)
     {
         $fileName=explode(".", $fileName);
-
-        $name=strtolower($fileName[1]);
-        if($string) $name=strtolower($fileName[1]).$string;
+        
+        if($string) $name=strtolower($fileName[count($fileName)-1]).$string;
 
         return $name;
     }

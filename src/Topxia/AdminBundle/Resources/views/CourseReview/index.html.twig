@@ -1,15 +1,14 @@
 {% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
 
-{% block title %}课程评价管理 - {{ parent() }}{% endblock %}
+{% set active = 'manage' %}
+{% set menus = permissions('admin_course_review','tab') %}
+{% block title %}{{ getTitle('admin_course_review')}}{% endblock %}
 
 {% set script_controller = 'review/list' %}
 
 {% set menu = 'review' %}
 
 {% block main %}
-  <div class="page-header clearfix">
-    <h1>评价管理</h1>
-  </div>
 
   <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
 

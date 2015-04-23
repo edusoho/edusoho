@@ -1,0 +1,9 @@
+{% extends 'TopxiaAdminBundle:Coin:records.html.twig' %}
+
+{% set tab_menus = permissions("admin_coin_user","tab")%}
+{% set menu = 'coin-records' %}
+
+{% block main %}
+
+  {% block main_content %}{% endblock %}
+{% endblock %}

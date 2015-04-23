@@ -1,15 +1,18 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}优化和备份 - {{ parent() }}{% endblock %}
-
 {% set menu = 'optimize' %}
+{% set submenu = 'optimize_manage' %}
+{% set menus = permissions('admin_optimize','tab') %}
+
+{% block title %}{{ getTitle('admin_optimize_manage')}}{% endblock %}
 
 {% set script_controller = 'optimize/optimize' %}
 
 {% block main %}
+<div class="mbl">
 
-	<div class="page-header"><h1>优化和备份</h1></div>
-
+{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
+</div>
 	{{ web_macro.flash_messages() }}
 
 

@@ -11,7 +11,13 @@
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
-  <title>{% block title %}{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台{% endblock %}</title>
+  {% set header_menus = permissions('admin') %}
+
+  {% set nav = nav|default(null) %}
+  {% set menu = menu|default(null) %}
+
+  <title>{% block title %} {% if not setting('copyright.owned') %}EduSoho-{% endif %}{{ admin_macro.title(header_menus,nav) }}{% endblock %}</title>
+
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
@@ -26,8 +32,6 @@
   <![endif]-->
 </head>
 
-{% set nav = nav|default(null) %}
-{% set menu = menu|default(null) %}
 
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
@@ -42,30 +46,24 @@
       </div>
       <div class="navbar-collapse collapse">
 
-        <ul class="nav navbar-nav">
-      {% if is_granted('ROLE_ADMIN') %}
-          <li {% if nav == 'course' %}class="active"{% endif %}><a href="{{ path('admin_course') }}">课程</a></li>
-          <li {% if nav == 'user' %}class="active"{% endif %}><a href="{{ path('admin_user') }}">用户</a></li>
-          <li {% if nav == 'content' %}class="active"{% endif %}><a href="{{ path('admin_navigation') }}">内容</a></li>          
-          <li {% if nav == 'group' %}class="active"{% endif %}><a href="{{ path('admin_group') }}">小组</a></li>
-          {% if is_plugin_installed('Classroom') %}
-            <li {% if nav == 'classroom' %}class="active"{% endif %}><a href="{{ path('admin_classroom') }}">班级</a></li>
-          {% endif %}
-          <li {% if nav == 'app' %}class="active"{% endif %}>
-            <a href="{{ path('admin_app_installed') }}">应用</a>
-          </li>
-        {% endif %}
+        {% include 'TopxiaAdminBundle::header.html.twig' with {menus:header_menus,nav:nav} %}
 
-          {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <li {% if nav == 'system' %}class="active"{% endif %}><a href="{{ path('admin_setting_site') }}">系统</a></li>
-          {% endif %}
-
-        </ul>
-
+     
         <ul class="nav navbar-nav navbar-right">
+          <li class="admin-collect" data-url="{{path('admin_common_admin')}}"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
+          <ul class="dropdown-menu collect-list">
+          {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
+          </ul>
+          </li>
           <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
-          <li><a href="{{ path('user_show', {id:app.user.uri|default(app.user.id)}) }}"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }}</a></li>
-          <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
+
+          <li class="dropdown hidden-lt-ie8">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down admin-down"></span></a>
+                <ul class="dropdown-menu main-list">
+                  
+                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
+                </ul>
+              </li>
         </ul>
 
       </div><!--/.navbar-collapse -->

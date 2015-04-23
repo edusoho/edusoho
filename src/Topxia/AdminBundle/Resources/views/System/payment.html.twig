@@ -1,14 +1,11 @@
 {% extends 'TopxiaAdminBundle:System:payment-set.layout.html.twig' %}
 
-{% block title %}支付方式 - {{ parent() }}{% endblock %}
-
 {% set script_controller = 'system/payment' %}
 
 {% set submenu = 'payment' %}
+{% block title %}{{ getTitle('admin_payment')}}{% endblock %}
 
-{% block maincontent %}
-
-<div class="page-header"><h1>支付方式</h1></div>
+{% block main_content %}
 
 {{ web_macro.flash_messages() }}
 
