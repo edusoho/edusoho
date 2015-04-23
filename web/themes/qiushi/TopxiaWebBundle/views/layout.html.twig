@@ -103,15 +103,12 @@
             <button type="submit" class="btn"><span class="fa fa-search"></span></button>
           </div>
         </form>
-        <p style="
-    margin: 0 0 10px;   height: 50px;   line-height: 50px;
-"><i class="fa fa-phone" style="
-    margin-right: 5px;
-"></i>400-800-6219</p>
+
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       
       <ul class="nav navbar-nav navbar-right user-menu  hidden-xs">
+        <li><a href="tel:4008006219"><i class="fa fa-phone"></i>400-800-6219</a></li>
       	{% if app.user %}
 	        <li><a href="{{ path('my') }}">我的课程</a></li>
 	        <li class="dropdown">
@@ -198,10 +195,13 @@
   <!--页面底部开始-->
 <div class="footer-sec">
   <div class="container clearfix">
-    <div class="copyright hidden-sm hidden-xs">
+    <div class="copyright hidden-sm hidden-xs" style="height:150px">
 
       {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-
+      <div style="width: 115px;float: right;margin-top: 10px;margin-right: 20px;">
+      <img src="http://www.qswangxiao.com/files/system/webchat.jpg?5.2.5"  class="img-responsive" style="position: initial;">
+    <p  style="position: initial;">关注微信公众号</p>
+  </div>
       <p>关注微信公众号</p>
       <img src="{{ asset('themes/qiushi/img/weixin.png') }}" alt="" class="img-responsive"/>
     </div>
