@@ -19,7 +19,7 @@
   <div class="checkbox-group appTypeChoices" RepeatDirection="Horizontal" id="appTypeChoices" name="appTypeChoices" style="float:right;margin-top:-45px;">
       <div class="sortedCourses">
       <input type="checkbox" name="appTypeChoices" id="installedApps" 
-         value="installedApps" data-url="{{path('admin_app_center_hidden',{postStatus: type })}}" {% if appTypeChoices|default(null)  == 'installedApps' %} checked{% endif %} >
+         value="installedApps" data-url="{{path('admin_app_center',{postStatus: type })}}" {% if appTypeChoices|default(null)  == 'installedApps' %} checked{% endif %} >
          隐藏已购应用
        <input type="hidden" name="type" value= '{{type}}' id="type">
       </div>
@@ -53,7 +53,7 @@
               {% else %}
       <tr>
         <td>
-          <img src="http://115.29.78.158:99/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
+          <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
 
           <div class="mtm">
             <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
