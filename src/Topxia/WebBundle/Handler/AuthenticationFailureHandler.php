@@ -51,7 +51,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             }
             $exception = new AuthenticationException($message);
         } else {
-            $failed = $this->getUserService()->markLoginFailed($user ? $user['id'] : 0, $ip);
+            $failed = $this->getUserService()->markLoginFailed($user ? $user['id'] : 0, $request->getClientIp());
             $leftCount = $setting['temporary_lock_allowed_times'] - $failed['failed_count'];
             $leftCount = $leftCount > 0 ? $leftCount : 0;
             $message = "帐号或密码错误，您还有{$leftTimes}次输入机会";

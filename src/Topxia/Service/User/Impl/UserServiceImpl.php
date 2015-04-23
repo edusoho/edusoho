@@ -704,6 +704,8 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $userId ? $this->getUser($userId) : null;
         $counter = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
+
+        $setting = $this->getSettingService()->get('bind', array());
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
@@ -712,7 +714,7 @@ class UserServiceImpl extends BaseService implements UserService
         $setting = array_merge($default, $setting);
 
         $fields = array();
-        if ($setting['temporary_lock_enabled']) {
+        if ($user && $setting['temporary_lock_enabled']) {
             if (time() > $user['lastPasswordFailTime'] + $setting['temporary_lock_minutes']*60) {
                 $fields['consecutivePasswordErrorTimes'] = 1;
             } else {
@@ -728,13 +730,19 @@ class UserServiceImpl extends BaseService implements UserService
 
             $fields['lastPasswordFailTime'] = time();
 
-            $this->getUserDao()->updateUser($user['id'], $fields);   
+            $user = $this->getUserDao()->updateUser($user['id'], $fields);   
         }
 
-        $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
+        if ($user) {
+            $log = "用户({$user['nickname']})，连续第{$user['consecutivePasswordErrorTimes']}次登录失败。";
+        } else {
+            $log = "用户(IP: $ip)，连续第{$user['consecutivePasswordErrorTimes']}次登录失败。";
+
+        }
+
+        $this->getLogService()->info('user', 'login_fail', $log);
 
         return array('failed_count' => $fields['consecutivePasswordErrorTimes']);
-
     }
 
     public function markLoginSuccess($userId, $ip)
