@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
         $("#sms-reason-tips").popover({
             html: true,
-            trigger: 'click',
+            trigger: 'focus',
             placement: 'right',
             content: $("#sms-reason-tips-html").html(),
         });
