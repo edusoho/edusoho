@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     require('jquery.cycle2');
 
+    var Lazyload = require('echo.js');
+
     exports.run = function() {
         $('.homepage-feature').cycle({
             fx: "scrollHorz",
@@ -9,6 +11,8 @@ define(function(require, exports, module) {
             log: "false",
             pauseOnHover: "true"
         });
+
+        Lazyload.init();
 
         $('input:checkbox[name="coursesTypeChoices"]').on("change", function() {
 

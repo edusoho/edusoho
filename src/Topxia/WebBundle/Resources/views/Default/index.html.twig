@@ -19,8 +19,8 @@
                 <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
               </div>
               <div class="pull-right item-right">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer.jpg') }}" class="item-img-bg">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer_content.jpg') }}" class="item-img">
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer.jpg'), 'item-img-bg') }}
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer_content.jpg'), 'item-img') }}
               </div>
             </div>
           </div>
@@ -31,8 +31,8 @@
                 <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
               </div>
               <div class="pull-right item-right">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer.jpg') }}" class="item-img-bg">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer_content.jpg') }}" class="item-img">
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer.jpg'), 'item-img-bg') }}
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer_content.jpg'), 'item-img') }}
               </div>
             </div>
           </div>
@@ -184,9 +184,9 @@
                 <div class="media-left">
                   <a href="{{ path('group_show',{id:group.id})}}">
                     {% if group.logo %}
-                        <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
-                        {%else%}
-                        <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                       {{ lazy_img(file_path(group.logo), 'img-circle') }}
+                        {% else %}
+                       {{ lazy_img(asset('assets/img/default/group.png'), 'img-circle') }}
                     {%endif%}
                   </a>
                 </div>
@@ -214,7 +214,7 @@
               <div class="media">
                 <div class="media-left">
                   <a href="javascript:;">
-                    <img class="img-circle" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                    {{ lazy_img(default_path('avatar', learn.user.mediumAvatar, ''), 'img-circle') }}
                   </a>
                 </div>
                 <div class="media-body">

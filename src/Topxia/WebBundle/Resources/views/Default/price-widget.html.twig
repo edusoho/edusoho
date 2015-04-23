@@ -22,7 +22,8 @@
 
       {% endif %}
     {% endif %}
-    <a href="{{ path('course_show', {id:course.id}) }}"><img class="transform img-responsive" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" data-original="{{ default_path('coursePicture', course.middlePicture, 'large') }}"></a>
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      {{ lazy_img(default_path('coursePicture', course.middlePicture, 'large'), 'transform img-responsive') }}
   </div>
 
     <div class="course-info">
