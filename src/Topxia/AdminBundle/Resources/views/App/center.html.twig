@@ -67,21 +67,21 @@
               <div class="text-muted">作者： {{ app.developerName }}</div>
               <div class="mts text-muted">{% if app.type == "theme" %}主题{% else %}应用{% endif %}
               </div>
-<!--               <div class="class-rating mtm">
-  {% if app.comment|default(null) %}
-    {% set comment = app.comment%}
-    <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
-    <span class="text-muted">{{ comment.commenters }}个评价</span>
-  {% else %}
-    <span class="stars-0">&nbsp;</span>
-    <span class="text-muted">0个评价</span>
-  {% endif %}
-</div> -->
+              <div class="class-rating mtm">
+              {% if app.comment|default(null) %}
+                {% set comment = app.comment%}
+                <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
+                <span class="text-muted">{{ comment.commenters }}个评价</span>
+              {% else %}
+                <span class="stars-0">&nbsp;</span>
+                <span class="text-muted">0个评价</span>
+              {% endif %}
+            </div>
             </div>
 
             <div class="middle-info pull-left short-long-text">
               <div class="short-text text-muted">{{ app.description|plain_text(80) }} <span class="trigger">(展开)</span></div>
-              <div class="long-text">{{ app.description|raw }} <span class="trigger">(收起)</span></div>
+              <div class="long-text text-muted">{{ app.description|raw }} <span class="trigger">(收起)</span></div>
             </div>
 
             <div class="right-info pull-right">

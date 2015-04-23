@@ -2,12 +2,11 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $("#article-property-tips").popover({
+        $("#sms-reason-tips").popover({
             html: true,
-            trigger: 'hover',
+            trigger: 'focus',
             placement: 'right',
-            content: $("#article-property-tips-html").html(),
-            delay: { "hide": 850 }
+            content: $("#sms-reason-tips-html").html(),
         });
 
     };
