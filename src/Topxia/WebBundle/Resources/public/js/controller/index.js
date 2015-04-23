@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     require('jquery.cycle2');
 
+    var Lazyload = require('echo.js');
+
     exports.run = function() {
         $('.homepage-feature').cycle({
             fx: "scrollHorz",
@@ -9,6 +11,8 @@ define(function(require, exports, module) {
             log: "false",
             pauseOnHover: "true"
         });
+
+        Lazyload.init();
 
         $('input:checkbox[name="coursesTypeChoices"]').on("change", function() {
 
@@ -18,19 +22,30 @@ define(function(require, exports, module) {
         });
 
         $(".js-course-sort a").click(function() {
+
             if (!$(this).hasClass("active")) {
                 $(this).addClass("active").siblings().removeClass("active");
-                var postData = {
-                    id: $(this).attr("data-id")
-                };
-                $.ajax({
-                    url: "",
-                    type: "POST",
-                    data: postData,
-                    success: function(data) {
 
-                    }
-                });
+                if ($(this).data('role') == 'time') {
+
+                    $('.latest-course').show();
+                    $('.rateing-courses').hide();
+                    $('.popular-courses').hide();
+
+                }else if ($(this).data('role') == 'hot'){
+
+                    $('.latest-course').hide();
+                    $('.rateing-courses').hide();
+                    $('.popular-courses').show();
+
+                }else {
+                    
+                    $('.latest-course').hide();
+                    $('.rateing-courses').show();
+                    $('.popular-courses').hide();
+
+                }
+                
             }
         });
 

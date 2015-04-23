@@ -19,8 +19,8 @@
                 <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
               </div>
               <div class="pull-right item-right">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer.jpg') }}" class="item-img-bg">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer_content.jpg') }}" class="item-img">
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer.jpg'), 'item-img-bg') }}
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer_content.jpg'), 'item-img') }}
               </div>
             </div>
           </div>
@@ -31,8 +31,8 @@
                 <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
               </div>
               <div class="pull-right item-right">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer.jpg') }}" class="item-img-bg">
-                <img src="{{ asset('bundles/topxiaweb/img/poster_computer_content.jpg') }}" class="item-img">
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer.jpg'), 'item-img-bg') }}
+                {{ lazy_img(asset('bundles/topxiaweb/img/poster_computer_content.jpg'), 'item-img') }}
               </div>
             </div>
           </div>
@@ -58,154 +58,85 @@
   <section class="index-cuorse-cat">
     <div class="container">
       <div class="cuorse-cat-mian">
+        {% set tags = data('Tags',{'count':5}) %}
+        {% if tags %}
         <div class="hidden-xs js-index-cuorse-cat course-cat-tags">
-          <a href="javascript:;" class="btn btn-default">全部课程</a>
-          <a href="javascript:;" class="btn btn-default">后端开发</a>
-          <a href="javascript:;" class="btn btn-default">web前端开发</a>
-          <a href="javascript:;" class="btn btn-default">图形图像设计</a>
-          <a href="javascript:;" class="btn btn-default">编程基础</a>
+          {% for tag in tags %}
+          <a href="/tag/{{ tag.name }}" class="btn btn-default">{{ tag.name }}</a>
+          {% endfor %}
         </div>
         <div class="btn-group visible-xs">
           <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
           <ul class="dropdown-menu js-index-cuorse-cat" role="menu">
-            <li><a href="javascript:;">全部课程</a></li>
-            <li><a href="javascript:;">后端开发</a></li>
-            <li><a href="javascript:;">web前端开发</a></li>
-            <li><a href="javascript:;">图形图像设计</a></li>
-            <li><a href="javascript:;">编程基础</a></li>
+            {% for tag in tags %}
+            <li><a href="javascript:;" class="btn btn-default">{{ tag.name }}</a></li>
+            {% endfor %}
           </ul>
         </div>
+        {% endif %}
         <div class="course-sort js-course-sort">
-          <a href="javascript:;" class="active iconfont icon-time" data-toggle="tooltip" data-placement="top" title="按时间排序"></a>
-          <a href="javascript:;" class="iconfont icon-hot" data-toggle="tooltip" data-placement="top" title="最热"></a>
-          <a href="javascript:;" class="iconfont icon-aisding" data-toggle="tooltip" data-placement="top" title="点赞"></a>
+          <a href="javascript:;" class="active iconfont icon-time" data-toggle="tooltip" data-placement="top" title="按时间排序" data-role="time"></a>
+          <a href="javascript:;" class="iconfont icon-hot" data-toggle="tooltip" data-placement="top" title="最热" data-role="hot"></a>
+          <a href="javascript:;" class="iconfont icon-aisding" data-toggle="tooltip" data-placement="top" title="评价" data-role="rating"></a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 课程列表 -->
-  <section class="index-course-list lazyload">
+  {% set courses = data('LatestCourses',{'count':8}) %}
+  {% if courses %}
+  <section class="index-course-list lazyload latest-course">
     <div class="container">
       <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href="javascript:;">
-                <span class="tag-discount"></span>
-                <img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
-              <div class="metas clearfix">
-                <a href="javascript:;" class="num"><i class="iconfont icon-group"></i>100</a>
-                <a href="javascript:;" class="comment"><i class="iconfont icon-comment"></i>100</a>
-                <span class="price">¥1111</span>
-              </div>
-            </div>
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-sm-6">
+          {% include "TopxiaWebBundle:Default:price-widget.html.twig" with {shows: ['price', 'discount']} %}
           </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href="javascript:;">
-                <span class="tag-discount free"></span>
-                <img class="transform img-responsive" src="img-temp/course_1.jpg"  data-original="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator</a></div>
-              <div class="metas clearfix">
-                <a href="javascript:;" class="num"><i class="iconfont icon-group"></i>100</a>
-                <a href="javascript:;" class="comment"><i class="iconfont icon-comment"></i>100</a>
-                <span class="price free">免费</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
-              <div class="metas clearfix">
-                <span class="num"><i class="iconfont icon-group"></i>100</span>
-                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
-                <span class="price">¥1111</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
-              <div class="metas clearfix">
-                <span class="num"><i class="iconfont icon-group"></i>100</span>
-                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
-                <span class="price">¥1111</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
-              <div class="metas clearfix">
-                <span class="num"><i class="iconfont icon-group"></i>100</span>
-                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
-                <span class="price">¥1111</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
-              <div class="metas clearfix">
-                <span class="num"><i class="iconfont icon-group"></i>100</span>
-                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
-                <span class="price">¥1111</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="course-item">
-            <div class="course-img">
-              <a href=""><img class="transform img-responsive" src="img-temp/course_1.jpg" data-original="img-temp/course_1.jpg"></a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a href="">Android UiAutomator UiScrollable API 详细介绍</a></div>
-              <div class="metas clearfix">
-                <span class="num"><i class="iconfont icon-group"></i>100</span>
-                <span class="comment"><i class="iconfont icon-comment"></i>100</span>
-                <span class="price">¥1111</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
       <div class="course-more">
         <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
       </div>
     </div>
   </section>
+  {% endif %}
+  
+  {% set courses = data('PopularCourses',{'count':8}) %}
+  {% if courses %}
+  <section class="index-course-list lazyload popular-courses"  style="display:none;">
+    <div class="container">
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-sm-6">
+          {% include "TopxiaWebBundle:Default:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="course-more">
+        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
 
+  {% set courses = data('CourseRankByRating',{'count':8}) %}
+  {% if courses %}
+  <section class="index-course-list lazyload rateing-courses" style="display:none;">
+    <div class="container">
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-sm-6">
+          {% include "TopxiaWebBundle:Default:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="course-more">
+        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
   <!-- 特性 -->
   <section class="index-introduction">
     <div class="container">
@@ -245,22 +176,22 @@
           <div class="panel es-panel index-group clearfix">
             <div class="panel-heading clearfix">
               <h3 class="panel-title"><i class="iconfont icon-hot pull-left"></i>推荐小组</h3>
-              <a href="{{ path('group') }}" class="more">...</a>
+              <a href="{{ path('group') }}" class="group-more pull-right">...</a>
             </div>
             <div class="panel-body row">
               {% for group in groups %}
               <div class="media group-item col-md-6 col-sm-4">
                 <div class="media-left">
-                  <a href="javascript:;">
+                  <a href="{{ path('group_show',{id:group.id})}}">
                     {% if group.logo %}
-                        <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
-                        {%else%}
-                        <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                       {{ lazy_img(file_path(group.logo), 'img-circle') }}
+                        {% else %}
+                       {{ lazy_img(asset('assets/img/default/group.png'), 'img-circle') }}
                     {%endif%}
                   </a>
                 </div>
                 <div class="media-body">
-                  <div class="title"><a href="">{{ group.title }}</a></div>
+                  <div class="title"><a href="{{ path('group_show',{id:group.id})}}">{{ group.title }}</a></div>
                   <div class="metas">
                     <a href="javascript:;"><i class="iconfont icon-group"></i>{{ group.memberNum }}</a>
                     <a href="javascript:;"><i class="iconfont icon-comment"></i>{{ group.threadNum }}</a>
@@ -283,17 +214,35 @@
               <div class="media">
                 <div class="media-left">
                   <a href="javascript:;">
-                    <img class="img-circle" src="img-temp/course_1.jpg">
+                    {{ lazy_img(default_path('avatar', learn.user.mediumAvatar, ''), 'img-circle') }}
                   </a>
                 </div>
                 <div class="media-body">
                   <div class="title">
-                    <a href="">李小龙</a>
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                   </div>
                   <div class="content">
-                    <a href="">加入了课程《十分钟掌握HTML5基础》课程</a>
+                    {% if learn.type == "finished_testpaper" %}
+                      完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
+                    {% elseif learn.type == "finished_homework" %}
+                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
+                    {% elseif learn.type == "finished_exercise" %}
+                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
+                    {% elseif learn.objectType == "course" and learn.type == "become_student" %}
+                    加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                    {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                    成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                    {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                    成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+                    {% elseif learn.type == "learned_lesson" %}
+                    完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
+                    {% elseif learn.type == "favorite_course" %}
+                    收藏了课程 {{learn.properties.course.title|plain_text(15)}}
+                    {% elseif learn.type == "start_learn_lesson" %}
+                    开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
+                    {% endif %}
                   </div>
-                  <span class="date">111小时前</span>
+                  <span class="date">{{learn.createdTime|smart_time}}</span>
                 </div>
               </div>
               {% endfor %}
