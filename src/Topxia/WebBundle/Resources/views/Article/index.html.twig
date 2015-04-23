@@ -33,14 +33,8 @@
             {% for promotedArticle in promotedArticles %}
                 <a href="javascript:;" class="topic-post-small {% if loop.index < 2 %}one{% else %}two{% endif %}">
                   <div class="content">
-                    <p>行业资讯</p>
-                    <h4 class="text">Jeff Weiner领导下的LinkedIn将走向何方</h4>
-                  </div>
-                </a>
-                <a href="javascript:;" class="topic-post-small two">
-                  <div class="content">
-                    <p>行业资讯</p>
-                    <h4 class="text">Jeff Weiner领导下的LinkedIn将走向何方</h4>
+                    <p>{{promotedCategories[promotedArticle['id']].name}}</p>
+                    <h4 class="text">{{promotedArticle.title}}</h4>
                   </div>
                 </a>
             {% endfor %}

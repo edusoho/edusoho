@@ -56,7 +56,7 @@ class ArticleController extends BaseController
 
         $promotedArticles = $this->getArticleService()->searchArticles(
             $promotedConditions,'normal',
-            0, 5
+            0, 2
         );
 
         $promotedCategories = array();
