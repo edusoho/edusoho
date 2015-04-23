@@ -59,11 +59,17 @@ class ArticleController extends BaseController
             0, 5
         );
 
+        $promotedCategories = array();
+        foreach ($promotedArticles as $key => $value) {
+            $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
+        }
+
         return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
             'categoryTree' => $categoryTree,
             'latestArticles' => $latestArticles,
             'featuredArticles' => $featuredArticles,
             'promotedArticles' => $promotedArticles,
+            'promotedCategories' => $promotedCategories,
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories

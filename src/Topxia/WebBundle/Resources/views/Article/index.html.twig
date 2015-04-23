@@ -29,18 +29,22 @@
       </div>
 
       <div class="col-md-4 article-header-right hidden-sm hidden-xs">
-        <a href="javascript:;" class="topic-post-small one">
-          <div class="content">
-            <p>行业资讯</p>
-            <h4 class="text">Jeff Weiner领导下的LinkedIn将走向何方</h4>
-          </div>
-        </a>
-        <a href="javascript:;" class="topic-post-small two">
-          <div class="content">
-            <p>行业资讯</p>
-            <h4 class="text">Jeff Weiner领导下的LinkedIn将走向何方</h4>
-          </div>
-        </a>
+          {% if promotedArticles %}
+            {% for promotedArticle in promotedArticles %}
+                <a href="javascript:;" class="topic-post-small {% if loop.index < 2 %}one{% else %}two{% endif %}">
+                  <div class="content">
+                    <p>行业资讯</p>
+                    <h4 class="text">Jeff Weiner领导下的LinkedIn将走向何方</h4>
+                  </div>
+                </a>
+                <a href="javascript:;" class="topic-post-small two">
+                  <div class="content">
+                    <p>行业资讯</p>
+                    <h4 class="text">Jeff Weiner领导下的LinkedIn将走向何方</h4>
+                  </div>
+                </a>
+            {% endfor %}
+          {% endif %}
       </div>
       
     </div>
