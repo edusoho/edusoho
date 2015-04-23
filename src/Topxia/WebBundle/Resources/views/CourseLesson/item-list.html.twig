@@ -96,7 +96,18 @@
 				    {% if item.requireCredit > 0 %}
 				      <small class="text-muted">(需{{ item.requireCredit }}学分)</small>
 				    {% endif %}
-
+						
+						{% if setting('magic.lesson_watch_limit') 
+								and course.watchLimit > 0 
+								and item.type == 'video' %}
+							{% set limitNum = course.watchLimit - lessonLearns[item.id].watchNum|default(0) %}
+							{% if limitNum > 0 %}
+								 <span class="badge" style="background-color: #45DD48;">{{ limitNum }}</span>
+							{% else %}
+								<span class="badge" style="background-color: #D72F2B;">0</span>
+							{% endif %}
+							
+						{% endif %}
 		    	</a>
 		    	<button class="btn btn-success btn-mini action">开始学习</button>
 		    </li>

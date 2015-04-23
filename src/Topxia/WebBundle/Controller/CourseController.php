@@ -315,7 +315,7 @@ class CourseController extends BaseController
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-
+			$lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $course['id']);
 			if($coursesPrice ==1){
 				$course['price'] =0;
 				$course['coinPrice'] =0;
@@ -327,6 +327,7 @@ class CourseController extends BaseController
 				'member' => $member,
 				'items' => $items,
 				'learnStatuses' => $learnStatuses,
+				'lessonLearns' => $lessonLearns,
 				'currentTime' => $currentTime,
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),

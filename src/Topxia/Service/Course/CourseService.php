@@ -153,6 +153,8 @@ interface CourseService
 
 	public function getUserLearnLessonStatuses($userId, $courseId);
 
+	public function findUserLearnedLessons($userId, $courseId);
+
 	public function getUserNextLearnLesson($userId, $courseId);
 
 	public function searchLearnCount($conditions);
