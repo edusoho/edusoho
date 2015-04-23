@@ -19,7 +19,7 @@
   <div class="checkbox-group appTypeChoices" RepeatDirection="Horizontal" id="appTypeChoices" name="appTypeChoices" style="float:right;margin-top:-45px;">
       <div class="sortedCourses">
       <input type="checkbox" name="appTypeChoices" id="installedApps" 
-         value="installedApps" data-url="{{path('admin_app_center_hidden',{postStatus: type }) }}" >
+         value="installedApps" data-url="{{path('admin_app_center_hidden',{postStatus: type }) }}">
          隐藏已购应用
       <input type="hidden" name="type" value= '{{type}}' id="type">
       </div>
@@ -70,8 +70,8 @@
               <div class="class-rating mtm">
               {% if app.comment|default(null) %}
                 {% set comment = app.comment%}
-                <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
-                <span class="text-muted">{{ comment.commenters }}个评价</span>
+                <span class="stars-{{ comment.rating|number_format|default(0) }}">&nbsp;</span>
+                <span class="text-muted">{{ comment.commenters|default(0) }}个评价</span>
               {% else %}
                 <span class="stars-0">&nbsp;</span>
                 <span class="text-muted">0个评价</span>
