@@ -89,15 +89,36 @@ class UserController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+      private function mobileCheckAction (Request $request){
+        $mobile = $request->query->get('value');
+        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+        if ($result == 'success') {
+           $response = array('success' => true, 'message' => '');
+        } else {
+           $response = array('success' => false, 'message' => $message);
+        }
+         return $this->createJsonResponse($response);
+    }
+
+    public function emailOrMobileCheckAction(Request $request){
+        $emailOrMobile = $request->query->get('value');
+        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        if(SimpleValidator::email($emailOrMobile)){
+            return $this->emailCheckAction($request);
+        }else if(SimpleValidator::mobile($emailOrMobile)){
+            return $this->mobileCheckAction($request);
+        }else {
+            $response = array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
+            return $this->createJsonResponse($response);
+        }
+    }
+
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $userData['email'] = $formData['email'];
-            $userData['nickname'] = $formData['nickname'];
-            $userData['password'] = $formData['password'];
-            $userData['createdIp'] = $request->getClientIp();
-            $user = $this->getAuthService()->register($userData);
+          
+            $user = $this->getAuthService()->register($this->dealForDate($formData, $request));
             $this->get('session')->set('registed_email', $user['email']);
 
             if(isset($formData['roles'])){
@@ -110,9 +131,30 @@ class UserController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
-        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
+        return $this->render($this->getUserAddPage());
     }
 
+    private function dealForDate($formData, $request){
+        if(isset($formData['email'])){
+            $userData['email'] = $formData['email'];
+        }
+        if(isset($formData['emailOrMobile'])){
+            $userData['emailOrMobile'] = $formData['emailOrMobile'];
+        }
+        $userData['nickname'] = $formData['nickname'];
+        $userData['password'] = $formData['password'];
+        $userData['createdIp'] = $request->getClientIp();
+        return $userData;
+    }
+
+    private function getUserAddPage(){
+        $auth = $this->getSettingService()->get('auth');
+        if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
+            return 'TopxiaAdminBundle:User:create-modal-mobile.html.twig';
+        }else{
+            return 'TopxiaAdminBundle:User:create-modal.html.twig';
+        }
+    }
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);

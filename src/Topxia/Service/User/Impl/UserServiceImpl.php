@@ -339,11 +339,10 @@ class UserServiceImpl extends BaseService implements UserService
 
    public function purseEmailOrMobile($registration)
     {
-        if(!isset($registration['emailOrMobile']) or  empty($registration['emailOrMobile'])){
+        if(!$this->isMobileRegisterMode()){
             return $registration;
         }
-        $authSetting = $this->getSettingservice()->get('auth');
-        if ($authSetting['register_mode'] == 'email_or_mobile') {
+        if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
             if (SimpleValidator::email($registration['emailOrMobile'])) {
                 $registration['email'] = $registration['emailOrMobile'];
             } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
@@ -352,8 +351,15 @@ class UserServiceImpl extends BaseService implements UserService
             } else {
                 throw $this->createServiceException('emailOrMobile error!');
             }
+        }else{
+            throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
         }
         return  $registration;
+    }
+
+    private function isMobileRegisterMode(){
+        $authSetting = $this->getSettingservice()->get('auth');
+        return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
     }
 
     private function getRandChar(){
@@ -362,31 +368,22 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function register($registration, $type = 'default')
     {
-        $maxLoop =100;
         $registration = $this->purseEmailOrMobile($registration);
-        if(!isset($registration['nickname'])){
-            for($i =0; $i<$maxLoop; $i++){
-                $registration['nickname'] ='EduSoho'.substr($this->getRandChar(), 0,6); 
-                if($this->isNicknameAvaliable($registration['nickname'])) {
-                    break;
-                }   
-            }    
-        }
 
+        if($this->isMobileRegisterMode()){
+            $registration['nickname'] = $this->nicknameGenerate($registration);
+        }
+     
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
         }
+
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
             throw $this->createServiceException('昵称已存在');
         }
-      
-        if(!isset($registration['email'])){
-            for($i =0; $i<$maxLoop; $i++){
-             $registration['email'] = 'u_' . substr($this->getRandChar(), 0, 12) . '@edusoho.net';
-             if($this->isEmailAvaliable($registration['email'])){
-                break;
-             }
-            }
+
+        if($this->isMobileRegisterMode() && !isset($registration['email'])){
+           $registration['email'] = $this->emailGenerate($registration);   
         }
 
          if (!SimpleValidator::email($registration['email'])) {
@@ -465,6 +462,25 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getDispatcher()->dispatch('user.service.registered', new ServiceEvent($user));
 
         return $user;
+    }
+    private function nicknameGenerate($registration, $maxLoop=100){
+        for($i =0; $i<$maxLoop; $i++){
+            $registration['nickname'] ='EduSoho'.substr($this->getRandChar(), 0,6); 
+            if($this->isNicknameAvaliable($registration['nickname'])) {
+                break;
+            }   
+        }    
+        return $registration['nickname'];
+    }
+
+    private function emailGenerate($registration, $maxLoop=100){
+         for($i =0; $i<$maxLoop; $i++){
+            $registration['email'] = 'edu_' . substr($this->getRandChar(), 0, 9) . '@edusoho.net';
+            if($this->isEmailAvaliable($registration['email'])){
+                break;
+            }
+       }
+        return $registration['email'];  
     }
 
     public function importUpdateEmail($users)

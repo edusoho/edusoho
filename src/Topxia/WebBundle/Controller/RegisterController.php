@@ -326,8 +326,6 @@ class RegisterController extends BaseController
     public function mobileCheckAction(Request $request)
     {
         $mobile = $request->query->get('value');
-        $mobile = str_replace('!', '.', $mobile);
-
         return $this->createJsonResponse($this->mobileCheckResponse($mobile));
     }
 
