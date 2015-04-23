@@ -4,8 +4,8 @@ define(function(require, exports, module) {
 
         $("#article-property-tips").popover({
             html: true,
-            trigger: 'hover',//'hover','click'
-            placement: 'right',//'bottom',
+            trigger: 'hover',
+            placement: 'right',
             content: $("#article-property-tips-html").html(),
             delay: { "hide": 850 }
         });
