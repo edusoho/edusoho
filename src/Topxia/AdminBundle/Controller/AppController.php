@@ -216,6 +216,7 @@ class AppController extends BaseController
        
         foreach ($appsInstalled as $key => $value) {
             
+            $appItem = $key;
             unset($appsInstalled[$key]);
 
             $appInfo = $value;
@@ -226,14 +227,14 @@ class AppController extends BaseController
             $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
             
             if ($key != 'MAIN') {
-                $dic = $dir.'/plugins/'.$key.'/plugin.json';
+                $dic = $dir.'/plugins/'.$appItem.'/plugin.json';
                 if(file_exists($dic)){
-                    $appMeta[$key] = json_decode(file_get_contents($dic));
+                    $appMeta[$appItem] = json_decode(file_get_contents($dic));
                 }
+
             }
 
         }
-
         $apps = array_merge($apps, $appsInstalled);
 
         $theme = array();
