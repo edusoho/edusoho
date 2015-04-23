@@ -133,7 +133,7 @@ define(function(require, exports, module) {
     	});
 
     	$(".announcements-alert .close").click(function(){
-    		Cookie.set("close_announcements_alert",'true','/');
+    		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
 
