@@ -1,33 +1,3 @@
-<style type="text/css">
-#sms, #sms ul {
-padding: 0;
-margin-top: -18px;
-list-style: none;
-}
-.mainitems a{
-margin-left: 40px;
-}
-.mainitems .sms-reason{
-margin-left: 160px;
-}
-.contents{
-float: left;
-word-break:break-all;
-display: none;
-position: absolute;
-border: 1px solid black;
-max-width: 54%;
-}
-#sms li>ul { 
-top: auto;
-left: auto;
-}
-#sms li:hover ul, li.over ul { 
-display: block;
-margin-top: 0px;
-margin-left: 165px;
-}
-</style>
               <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-body">
@@ -61,15 +31,15 @@ margin-left: 165px;
                                 <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
                                 您的云短信功能已被暂停
 
-                                <ul id="sms">
-                                <li class="mainitems">
-                                <div class="sms-reason">[<span style="color:green;">?</span>]</div>
-                                <ul class="contents">
-                                <li style="color:#555;">{{sms.reason|default("")}}<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">申请重新开启</a></li>
-                                <!-- <li></li> -->
-                                </ul>
-                                </li>
-                                </ul>
+                              <style type="text/css">
+                                .popover{
+                                  z-index: 9999;
+                                      }
+                                  </style>
+                                  <span class="glyphicon glyphicon-question-sign text-muted " id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                                   <div id="article-property-tips-html" style="display:none;">
+                                    {{sms.reason|default("")}}<br><a href="{{path('admin_edu_cloud_sms')}}" target="_blank">申请重新开启</a></li>
+                                  </div>
 
                             </div>
                             <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>

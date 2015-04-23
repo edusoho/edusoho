@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-        $(".sms-reason").on('mousemove',function(){
-            $(".reason").addClass("over");
-        });
 
-        $(".sms-reason").on('mouseout',function(){
-            $(".reason").removeClass("over");
-
+        $("#article-property-tips").popover({
+            html: true,
+            trigger: 'hover',//'hover','click'
+            placement: 'right',//'bottom',
+            content: $("#article-property-tips-html").html(),
+            delay: { "hide": 850 }
         });
 
     };
