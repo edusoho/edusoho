@@ -3,11 +3,11 @@
 namespace Topxia\Service\System\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\System\Dao\IpFailed;
+use Topxia\Service\System\Dao\IpBlacklistDao;
 
-class IpFailedImpl extends BaseDao implements IpFailed
+class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
 {
-    protected $table = 'ip_failed';
+    protected $table = 'ip_blacklist';
 
     public function getIp($id)
     {
@@ -15,7 +15,7 @@ class IpFailedImpl extends BaseDao implements IpFailed
         return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
-    public function getIpByIp($ip)
+    public function getIpByIpAndType($ip, $type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE ip = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($ip));

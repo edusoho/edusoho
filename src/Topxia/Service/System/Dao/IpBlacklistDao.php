@@ -2,15 +2,15 @@
 
 namespace Topxia\Service\System\Dao;
 
-interface IpFailedDao
+interface IpBlacklistDao
 {
     public function addIp($fields);
 
     public function getIp($id);
 
-    public function getIpByIp($ip);
+    public function getIpByIpAndType($ip, $type);
 
-    public function findIpsByExpiredTimeLessThan($time, $start, $limit);
+    public function findIpsByTypeAndExpiredTimeLessThan($time, $start, $limit);
 
     public function increaseIpCounter($id, $diff);
 

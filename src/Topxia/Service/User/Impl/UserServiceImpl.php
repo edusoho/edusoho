@@ -728,11 +728,12 @@ class UserServiceImpl extends BaseService implements UserService
 
             $fields['lastPasswordFailTime'] = time();
 
-            $this->getUserDao()->updateUser($user['id', ])
-
-
-            $this->getUserDao()->updateUser($user['id'], array('lastPasswordFailTime' => $currentTime));   
+            $this->getUserDao()->updateUser($user['id'], $fields);   
         }
+
+        $this->getLogService()->info('user', 'login_fail', "用户名：{$username}，登录失败：{$message}");
+
+        return array('failed_count' => $fields['consecutivePasswordErrorTimes']);
 
     }
 
@@ -745,7 +746,8 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $userId ? $this->getUser($userId) : null;
 
-        $setting = $this->getSettingService('bind', array());
+        $setting = $this->getSettingService()->get('bind', array());
+
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
@@ -1147,6 +1149,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getIpBlacklistService()
+    {
+        return $this->createService('System.IpBlacklistService');
     }
 
     private function getPasswordEncoder()
