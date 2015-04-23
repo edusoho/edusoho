@@ -30,7 +30,12 @@
                             <div class="alert alert-warning alert-sm" role="alert" >
                                 <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
                                 您的云短信功能已被暂停
-                                <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="{{sms.reason|default("")}}">[<span style="color:green;">?</span>]</a>
+
+                                  <span class="glyphicon glyphicon-question-sign text-muted " id="article-property-tips" data-toggle="tooltip"></span> 
+                                   <div id="article-property-tips-html" style="display:none;">
+                                    {{sms.reason|default("")}}<br><a href="{{path('admin_edu_cloud_sms')}}" target="_blank">申请重新开启</a></li>
+                                  </div>
+
                             </div>
                             <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
                             <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
