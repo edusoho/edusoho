@@ -48,10 +48,22 @@ class ArticleController extends BaseController
             $featuredConditions,'normal',
             0, 5
         );
+
+        $promotedConditions = array(
+            'status' => 'published',
+            'promoted' => 1,
+        );
+
+        $promotedArticles = $this->getArticleService()->searchArticles(
+            $promotedConditions,'normal',
+            0, 5
+        );
+
         return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
             'categoryTree' => $categoryTree,
             'latestArticles' => $latestArticles,
             'featuredArticles' => $featuredArticles,
+            'promotedArticles' => $promotedArticles,
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories

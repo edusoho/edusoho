@@ -4,30 +4,30 @@
 {% block content %}
   <!-- 资讯 -->
   <section class="es-well article-list-header">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="javascript:;">全部咨询</a></li>
-      <li role="presentation"><a href="javascript:;">行业资讯</a></li>
-      <li role="presentation"><a href="javascript:;">阔知新闻</a></li>
-    </ul>
+      {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
+
+      {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
+        <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
+      {% endif %}
+
     <div class="row">
       <!-- 轮播图 -->
       <div class="aricle-carousel carousel slide col-md-8" id="aricle-carousel" data-ride="carousel">
         <ol class="carousel-indicators"></ol>
         <div class="carousel-inner" role="listbox">
-          <div class="item active">
-            <img src="img-temp/course_1.jpg">
-            <div class="carousel-caption">
-              阔知学堂iOS版升级至v2.0.0，手机端全线升级！
-            </div>
-          </div>
-          <div class="item">
-            <img src="img-temp/course_1.jpg">
-            <div class="carousel-caption">
-              阔知学堂iOS版升级至v2.0.0，手机端全线升级！
-            </div>
-          </div>
+          {% if featuredArticles %}
+            {% for featuredArticle in featuredArticles %}
+                <div class="item {% if loop.index < 2 %}active{% endif %}">
+                  <img src="{{ featuredArticle.picture }} ">
+                  <div class="carousel-caption">
+                   {{ featuredArticle.title }}
+                  </div>
+                </div>
+            {% endfor %}
+          {% endif %}
         </div>
       </div>
+
       <div class="col-md-4 article-header-right hidden-sm hidden-xs">
         <a href="javascript:;" class="topic-post-small one">
           <div class="content">
@@ -42,6 +42,7 @@
           </div>
         </a>
       </div>
+      
     </div>
   </section>
 
