@@ -204,13 +204,28 @@ class AppController extends BaseController
         $dir = dirname(dirname(dirname(dirname(__DIR__)))); 
         $appMeta = array();
 
+        foreach ($apps as $key => $value) {
+            
+            unset($apps[$key]);
+
+            $appInfo = $value;
+            $code = strtolower($key);
+
+            $apps[$code] = $appInfo;
+        }
+       
         foreach ($appsInstalled as $key => $value) {
             $appsInstalled[$key]['installed'] = 1;
 
-            if(isset($apps[$key]) && !empty($apps[$key])){
-                $appsInstalled[$key] = $apps[$key];
-            }
+            unset($appsInstalled[$key]);
 
+            $appInfo = $value;
+            $key = strtolower($key);
+
+            $appsInstalled[$key] = $appInfo;
+
+            $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? : null;
+            
             if ($key != 'MAIN') {
                 $dic = $dir.'/plugins/'.$key.'/plugin.json';
                 if(file_exists($dic)){
@@ -221,10 +236,12 @@ class AppController extends BaseController
         }
 
         $apps = array_merge($apps, $appsInstalled);
+
         $theme = array();
         $plugin = array();
 
         foreach ($apps as $key => $value) {
+
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
             }elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {
