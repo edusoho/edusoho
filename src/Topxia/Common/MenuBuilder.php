@@ -143,6 +143,16 @@ class MenuBuilder
         $position = $this->position;
         $configPaths = array();
 
+        $environment = ServiceKernel::instance()->getEnvironment();
+
+        $cacheFile = "../app/cache/".$environment."/menus_admin.php";
+        
+        if ($environment != "dev" && file_exists($cacheFile)) {
+
+            return include $cacheFile;
+
+        }
+
         $rootDir = realpath(__DIR__ . '/../../../');
 
         $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
@@ -174,6 +184,14 @@ class MenuBuilder
 
             $menus = array_merge($menus, $menu);
         }
+
+        if ($environment == "dev") {
+
+            return $menus;
+        }
+
+        $cache = "<?php \nreturn " . var_export($menus, true) . ';';
+        file_put_contents($cacheFile, $cache);
 
         return $menus;
     }
