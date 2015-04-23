@@ -37,10 +37,10 @@ class AppController extends BaseController
             ));
         }
 
-        return $this->redirect($this->generateUrl("admin_cloud_service_information"));
+        return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
     }
 
-    public function serviceInformationAction(Request $request)
+    public function myCloudOverviewAction(Request $request)
     {
         $content = $this->getEduCloudService()->getUserOverview();
         $info = $this->getEduCloudService()->getAccountInfo();

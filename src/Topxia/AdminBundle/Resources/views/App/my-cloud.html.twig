@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_app_my_cloud' %}
+{% set menu = 'admin_my_cloud' %}
 {% set submenu = 'service-information' %}
 {% set script_controller = 'app/sms-show' %}
 
@@ -10,12 +10,12 @@
          <ul class="nav nav-tabs mbl">
 
           <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
-            <a href="{{ url('admin_app_my_cloud') }}">产品简介
+            <a href="{{ url('admin_my_cloud') }}">产品简介
             </a>
           </li>
 
           <li class="{% if submenu == 'service-information' %}active{% endif %}">
-            <a href="{{ url('admin_cloud_service_information') }}">服务概况
+            <a href="{{ url('admin_my_cloud_overview') }}">服务概况
             </a>
           </li>
 
