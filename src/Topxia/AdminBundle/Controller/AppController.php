@@ -215,16 +215,15 @@ class AppController extends BaseController
         }
        
         foreach ($appsInstalled as $key => $value) {
-            $appsInstalled[$key]['installed'] = 1;
-
+            
             unset($appsInstalled[$key]);
 
             $appInfo = $value;
             $key = strtolower($key);
 
             $appsInstalled[$key] = $appInfo;
-
-            $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? : null;
+            $appsInstalled[$key]['installed'] = 1;
+            $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
             
             if ($key != 'MAIN') {
                 $dic = $dir.'/plugins/'.$key.'/plugin.json';
