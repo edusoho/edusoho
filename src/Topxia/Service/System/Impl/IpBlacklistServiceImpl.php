@@ -9,29 +9,31 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function increaseIpFailedCount($ip)
     {
-        $ip = $this->getIpFailedDao()->getIpByIp($ip);
+        $ip = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
         if (empty($ip)) {
             $ip = array(
                 'ip' => $ip,
+                'type' => 'failed',
                 'counter' => 1,
                 'expiredTime' => time() + self::FAILED_DURATION,
                 'createdTime' => time(),
             );
-           $ip = $this->getIpFailedDao()->addIp($ip);
+           $ip = $this->getIpBlacklistDao()->addIp($ip);
 
            return $ip['counter'];
         }
 
         if ($this->isIpExpired($ip)) {
-            $this->getIpFailedDao()->deleteIp($ip['id']);
+            $this->getIpBlacklistDao()->deleteIp($ip['id']);
 
             $ip = array(
                 'ip' => $ip,
+                'type' => 'failed',
                 'counter' => 1,
                 'expiredTime' => time() + self::FAILED_DURATION,
                 'createdTime' => time(),
             );
-           $ip = $this->getIpFailedDao()->addIp($ip);
+           $ip = $this->getIpBlacklistDao()->addIp($ip);
 
            return $ip['counter'];
         }
@@ -43,7 +45,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function getIpFailedCount($ip)
     {
-        $ip = $this->getIpFailedDao()->getIpByIp($ip);
+        $ip = $this->getIpFailedDao()->getIpByIpAndType($ip, 'failed');
         if (empty($ip)) {
             return 0;
         }
@@ -58,7 +60,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function clearFailedIp($ip)
     {
-        $ip = $this->getIpFailedDao()->getIpByIp($ip);
+        $ip = $this->getIpFailedDao()->getIpByIpAndType($ip, 'failed');
         if (empty($ip)) {
             return ;
         }
@@ -73,7 +75,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     protected function getIpFailedDao()
     {
-        return $this->createDao('System.IpFailedDao');
+        return $this->createDao('System.IpBlacklistDao');
     }
 
 }

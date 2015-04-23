@@ -10,7 +10,7 @@ interface IpBlacklistDao
 
     public function getIpByIpAndType($ip, $type);
 
-    public function findIpsByTypeAndExpiredTimeLessThan($time, $start, $limit);
+    public function findIpsByTypeAndExpiredTimeLessThan($type, $time, $start, $limit);
 
     public function increaseIpCounter($id, $diff);
 

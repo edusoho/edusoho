@@ -17,14 +17,14 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
 
     public function getIpByIpAndType($ip, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ip = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($ip));
+        $sql = "SELECT * FROM {$this->table} WHERE ip = ? AND type =? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($ip, $type));
     }
 
-    public function findIpsByExpiredTimeLessThan($time, $start, $limit)
+    public function findIpsByTypeAndExpiredTimeLessThan($type, $time, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE expiredTime <= ? LIMIT {$start}, {$limit}";
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND expiredTime <= ? LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAssoc($sql, array($ip));
     }
 

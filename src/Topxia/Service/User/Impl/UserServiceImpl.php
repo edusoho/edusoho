@@ -1161,17 +1161,6 @@ class UserServiceImpl extends BaseService implements UserService
         return new MessageDigestPasswordEncoder('sha256');
     }
 
-    public function userLoginFail($user,$failAllowNum = 3,$temporaryMinutes = 20)
-    {
-        $currentTime = time();
-        if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum-1){
-            $this->getUserDao()->updateUser($user['id'], array('lockDeadline' => $currentTime+$temporaryMinutes*60));
-        } else {
-            $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
-        }
-        $this->getUserDao()->updateUser($user['id'], array('lastPasswordFailTime' => $currentTime));        
-    }
-
     public function isUserTemporaryLockedOrLocked($user)
     {
         return ( $user['locked'] == 1 )||( $user['lockDeadline'] > time() );
