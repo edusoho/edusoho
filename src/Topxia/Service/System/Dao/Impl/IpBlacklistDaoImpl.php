@@ -37,11 +37,11 @@ class IpBlacklistDaoImpl extends BaseDao implements IpBlacklistDao
         return $this->getIp($this->getConnection()->lastInsertId());
     }
 
-    public function increaseIpCounter($id, $diff)
+    public function increaseIpCounter($id, $counter)
     {
         $counter = (int) $counter;
         $sql = "UPDATE {$this->table} SET counter = counter + ? WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        return $this->getConnection()->executeQuery($sql, array($counter, $id));
     }
 
     public function deleteIp($id)

@@ -9,8 +9,8 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function increaseIpFailedCount($ip)
     {
-        $ip = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
-        if (empty($ip)) {
+        $existIp = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
+        if (empty($existIp)) {
             $ip = array(
                 'ip' => $ip,
                 'type' => 'failed',
@@ -23,8 +23,8 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
            return $ip['counter'];
         }
 
-        if ($this->isIpExpired($ip)) {
-            $this->getIpBlacklistDao()->deleteIp($ip['id']);
+        if ($this->isIpExpired($existIp)) {
+            $this->getIpBlacklistDao()->deleteIp($existIp['id']);
 
             $ip = array(
                 'ip' => $ip,
@@ -38,9 +38,9 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
            return $ip['counter'];
         }
 
-        $this->getIpBlacklistDao()->increaseIpCounter($ip['id'], 1);
+        $this->getIpBlacklistDao()->increaseIpCounter($existIp['id'], 1);
 
-        return $ip['counter'] + 1;
+        return $existIp['counter'] + 1;
     }
 
     public function getIpFailedCount($ip)

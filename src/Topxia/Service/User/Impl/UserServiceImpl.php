@@ -734,15 +734,14 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if ($user) {
-            $log = "用户({$user['nickname']})，连续第{$user['consecutivePasswordErrorTimes']}次登录失败。";
+            $log = "用户({$user['nickname']})，" . ($user['consecutivePasswordErrorTimes'] ? "连续第{$user['consecutivePasswordErrorTimes']}次登录失败" : '登录失败');
         } else {
-            $log = "用户(IP: $ip)，连续第{$user['consecutivePasswordErrorTimes']}次登录失败。";
-
+            $log = "用户(IP: $ip)，" . ($user['consecutivePasswordErrorTimes'] ? "连续第{$user['consecutivePasswordErrorTimes']}次登录失败" : '登录失败');
         }
 
         $this->getLogService()->info('user', 'login_fail', $log);
 
-        return array('failed_count' => $fields['consecutivePasswordErrorTimes']);
+        return array('failedCount' => $user['consecutivePasswordErrorTimes'], 'ipFaildCount' => $counter);
     }
 
     public function markLoginSuccess($userId, $ip)
