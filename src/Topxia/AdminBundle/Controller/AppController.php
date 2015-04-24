@@ -213,6 +213,8 @@ class AppController extends BaseController
             if ($key != 'MAIN') {
                 if(in_array($key, array("vip", "coupon"))){
                     $key = ucfirst($appItem);
+                } else {
+                    $key = $appItem;
                 }
                 $dic = $dir.'/plugins/'.$key.'/plugin.json';
                 if(file_exists($dic)){
