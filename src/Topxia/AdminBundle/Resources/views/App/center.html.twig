@@ -95,7 +95,7 @@
                     <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
                  {% else %}
                     {% if app.userAccess|default(null) == "impossible" %}
-                      <a href="http://open.edusoho.com" class="user-access" target=_blank>商业专属</a>
+                      <a href="http://www.edusoho.com/product/system" class="user-access" target=_blank>商业专属</a>
                     {% else %}
                       {% if app.price == 0 %}
                        <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
