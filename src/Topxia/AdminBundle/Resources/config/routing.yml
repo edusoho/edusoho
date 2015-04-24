@@ -87,6 +87,14 @@ admin_block_edit:
     pattern:  /block/{block}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
 
+admin_block_visual_edit:
+    pattern:  /block/{blockId}/visual/edit
+    defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
+
+admin_block_visual_edit_history:
+    pattern:  /block/{blockId}/visual/edit/history
+    defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }
+
 admin_blockhistory_preview:
     pattern:  /blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Block:preview }

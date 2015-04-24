@@ -1,0 +1,23 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_operation_block' %}
+{% block title %}{{ getTitle('admin_operation_block')}}{% endblock %}
+{% block page_title %} <a href="{{ path('admin_block') }}">编辑区管理</a> - {{ block.title }}编辑 {% endblock %}
+
+{% set script_controller = 'block/list' %}
+{% block main %}
+  <ul class="nav nav-pills">
+    <li role="presentation" {% if action == 'edit' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">编辑</a></li>
+    <li role="presentation" {% if action == 'history' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit_history', {blockId:block.id}) }}">历史记录</a></li>
+  </ul>
+  
+  {{ web_macro.flash_messages() }}
+  <form id="block-edit-form" method="POST" action="">
+    {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
+  </form>
+
+{% endblock %}

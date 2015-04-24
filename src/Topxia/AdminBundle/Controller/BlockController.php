@@ -135,6 +135,23 @@ class BlockController extends BaseController
         ));
     }
 
+    public function visualEditAction(Request $request, $blockId)
+    {
+        $block = $this->getBlockService()->getBlock($blockId);
+
+        if ('POST' == $request->getMethod()) {
+            $data = $request->request->get('data');
+            $this->getBlockService()->updateBlock($blockId, array('data' =>$data));
+            $this->setFlashMessage('success', '保存成功!');
+            return $this->redirect($this->generateUrl('admin_block_visual_edit',  array('blockId' => $blockId)));
+        }
+
+        return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
+            'block' => $block,
+            'action' => 'edit',
+        ));
+    }
+
     public function createAction(Request $request)
     {
         
