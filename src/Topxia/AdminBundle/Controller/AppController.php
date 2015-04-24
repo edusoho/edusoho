@@ -147,11 +147,22 @@ class AppController extends BaseController
             }elseif ($value['type'] == 'app') {
                 $app[] = $value;
             }
+
+            $apps[$key]['code'] = strtolower($value['code']);
         }
 
-        $codes = ArrayToolkit::column($apps, 'code');
+        $installedApps = $this->getAppService()->findApps(0, 100);
+        $installedApps = ArrayToolkit::index($installedApps, 'code');
 
-        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+        foreach ($installedApps as $key => $value) {
+            
+            unset($installedApps[$key]);
+
+            $key = strtolower($key);
+
+            $installedApps[$key] = $value;     
+
+        }
 
         $showType=$request->query->get("showType");
 
