@@ -34,11 +34,11 @@ class EduCloudController extends BaseController
 
                 $hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
                 if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])){
-                    return $this->createJsonResponse(array('error' => "您已经绑定了这个手机"));
+                    return $this->createJsonResponse(array('error' => "您已经绑定了该手机号码"));
                 }
 
                 if (!$this->getUserService()->isMobileUnique($to)) {
-                    return $this->createJsonResponse(array('error' => "该手机已被其他用户绑定"));
+                    return $this->createJsonResponse(array('error' => "该手机号码已被其他用户绑定"));
                 }
             }
 
