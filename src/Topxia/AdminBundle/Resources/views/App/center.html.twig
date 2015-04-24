@@ -51,13 +51,15 @@
         <td>
           <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
           <div class="mtm">
-            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
-              <h4><strong class="text-primary">{{ app.name }}</strong>            
-              {% if app.licensed %}
-              <span class="label label-success mls">商业版</span>
-              {% endif %}
+            
+              <h4>
+                <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
+                  <strong class="text-primary">{{ app.name }}</strong>            
+                  {% if app.licensed %}
+                  <span class="label label-success mls">商业版</span>
+                  {% endif %}
+                  </a>
               </h4>
-            </a>
   
           </div>
           
