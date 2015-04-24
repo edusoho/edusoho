@@ -52,6 +52,8 @@ class AppController extends BaseController
 
         $isBinded = $this->getAppService()->getBinded();
 
+        $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'],0,stripos($isBinded['email'], '@')),-4),'****',$isBinded['email']) : null ;
+
         $EduSohoOpenClient = new EduSohoOpenClient;
 
         $currentTime = date('Y-m-d', time());
@@ -104,6 +106,7 @@ class AppController extends BaseController
             "notices"=>$notices,
             'info' => $info,
             'isBinded' => $isBinded,
+            'email' => $email,
         ));
     }
 
