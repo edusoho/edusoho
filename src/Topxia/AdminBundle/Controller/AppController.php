@@ -152,23 +152,13 @@ class AppController extends BaseController
 
         $showType=$request->query->get("showType");
 
-        if ($showType == 'hidden') {
-            return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array(
-                'apps' => $apps,
-                'theme' => $theme,
-                'allApp' => $app,
-                'installedApps' => $installedApps,
-                'type' => $postStatus,
-                'appTypeChoices' => 'installedApps',
-            ));
-        }
-
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
             'allApp' => $app,
             'installedApps' => $installedApps,
             'type' => $postStatus,
+            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null
         ));
     }
 
