@@ -44,7 +44,15 @@ class AppController extends BaseController
     {
         $content = $this->getEduCloudService()->getUserOverview();
         $info = $this->getEduCloudService()->getAccountInfo();
+        if(isset($info['licenseDomains'])) {
+
+            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+
+        }
+
         $isBinded = $this->getAppService()->getBinded();
+
+        $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'],0,stripos($isBinded['email'], '@')),-4),'****',$isBinded['email']) : null ;
 
         $EduSohoOpenClient = new EduSohoOpenClient;
 
@@ -98,6 +106,7 @@ class AppController extends BaseController
             "notices"=>$notices,
             'info' => $info,
             'isBinded' => $isBinded,
+            'email' => $email,
         ));
     }
 
@@ -138,11 +147,24 @@ class AppController extends BaseController
             }elseif ($value['type'] == 'app') {
                 $app[] = $value;
             }
+
+            $apps[$key]['code'] = strtolower($value['code']);
         }
 
-        $codes = ArrayToolkit::column($apps, 'code');
+        $installedApps = $this->getAppService()->findApps(0, 100);
+        $installedApps = ArrayToolkit::index($installedApps, 'code');
 
-        $installedApps = $this->getAppService()->findAppsByCodes($codes);
+        foreach ($installedApps as $key => $value) {
+            
+            unset($installedApps[$key]);
+
+            $key = strtolower($key);
+
+            $installedApps[$key] = $value;     
+
+        }
+
+        $showType=$request->query->get("showType");
 
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
             'apps' => $apps,
@@ -150,46 +172,8 @@ class AppController extends BaseController
             'allApp' => $app,
             'installedApps' => $installedApps,
             'type' => $postStatus,
-
+            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null
         ));
-
-    }
-
-    public function centerHiddenAction(Request $request, $postStatus)
-    {
-        $apps = $this->getAppService()->getCenterApps();
-
-        if (isset($apps['error'])) {
-            return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array('status' => 'error','type' => $postStatus));
-        }
-
-        if (!$apps) {
-            return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array('status' => 'unlink','type' => $postStatus));
-        }
-        
-        $theme = array();
-        $app = array();
-        foreach ($apps as $key => $value) {
-            if ($value['type'] == 'theme') {
-                $theme[] = $value;
-            }elseif ($value['type'] == 'app') {
-                $app[] = $value;
-            }
-        }
-
-        $codes = ArrayToolkit::column($apps, 'code');
-
-        $installedApps = $this->getAppService()->findAppsByCodes($codes);
-
-        return $this->render('TopxiaAdminBundle:App:center-hidden.html.twig', array(
-        'apps' => $apps,
-        'theme' => $theme,
-        'allApp' => $app,
-        'installedApps' => $installedApps,
-        'type' => $postStatus,
-        'appTypeChoices' => 'installedApps',
-    ));
-
     }
 
     public function installedAction(Request $request, $postStatus)

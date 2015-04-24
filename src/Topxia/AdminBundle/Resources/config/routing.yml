@@ -633,13 +633,21 @@ admin_cloud_recharge:
     pattern:  /cloud/recharge
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
 
+admin_cloud_detail:
+    pattern:  /cloud/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
+
+admin_cloud_sms_account:
+    pattern:  /cloud/sms/account
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
-admin_app_center_hidden:
-    pattern:  /app/center/{postStatus}/hidden
-    defaults: { _controller: TopxiaAdminBundle:App:centerHidden }
+admin_app_center:
+    pattern:  /app/center/{postStatus}
+    defaults: { _controller: TopxiaAdminBundle:App:center }
 
 admin_my_cloud:
     pattern:  /my/cloud
@@ -652,10 +660,6 @@ admin_my_cloud_overview:
 # admin_app_cloud:
 #     pattern:  /app/center/cloud
 #     defaults: { _controller: TopxiaAdminBundle:App:cloud }
-
-admin_app_center:
-    pattern:  /app/center/{postStatus}/unhidden
-    defaults: { _controller: TopxiaAdminBundle:App:center }
 
 admin_app_installed:
     pattern:  /app/installed/{postStatus}
