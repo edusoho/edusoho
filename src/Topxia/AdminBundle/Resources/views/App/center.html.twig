@@ -54,7 +54,12 @@
                             
                             {% if installedApp %}
                             {% else %}
+                            {% include 'TopxiaAdminBundle:App:app-detail.html.twig'  %}
+                            <div class="right-info pull-right">
                             <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
+                            </div>
+                              </td>
+                            </tr>
                             {% endif %}
                          {% else %}
 
@@ -79,7 +84,7 @@
               {% include 'TopxiaAdminBundle:App:app-detail.html.twig'  %}
               <div class="right-info pull-right">
 
-                 {% if app.purchased|default(false) == true %}
+                 {% if app.purchased|default(false) == true or installedApp %}
             
                     {% if installedApp %}
                       <a href="javascript:;" class="btn btn-default disabled app-btn">已购买</a>
