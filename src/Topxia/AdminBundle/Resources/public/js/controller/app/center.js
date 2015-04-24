@@ -11,7 +11,7 @@ define(function(require, exports, module) {
             if (element.attr("id") == "installedApps" && element.prop('checked')) {
                 window.location.href = $(this).data('url');
             } else {
-                window.location.href = '/admin/app/center/' + hidden + '/unhidden';
+                window.location.href = $(this).data('url');
             }
         });
 
