@@ -392,6 +392,7 @@ admin_app_installed:
 admin_app_upgrades:
     name: 更新
     parent: admin_app_center_show
+    class: app-upgrade
 admin_app_logs:
     name: 更新日志
     parent: admin_app_center_show
