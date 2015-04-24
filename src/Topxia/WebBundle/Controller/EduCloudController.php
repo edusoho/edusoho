@@ -32,13 +32,13 @@ class EduCloudController extends BaseController
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
 
-                if (!$this->getUserService()->isMobileUnique($to)) {
-                    return $this->createJsonResponse(array('error' => "这个手机已经被绑定"));
-                }
-
                 $hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
                 if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])){
                     return $this->createJsonResponse(array('error' => "您已经绑定了这个手机"));
+                }
+
+                if (!$this->getUserService()->isMobileUnique($to)) {
+                    return $this->createJsonResponse(array('error' => "该手机已被其他用户绑定"));
                 }
             }
 
