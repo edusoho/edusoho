@@ -1,6 +1,8 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_app_my_cloud' %}
+{% set menu = 'admin_my_cloud' %}
+{% set submenu = 'service-information' %}
+{% set script_controller = 'app/sms-show' %}
 
 {% block main %}
 
@@ -8,12 +10,12 @@
          <ul class="nav nav-tabs mbl">
 
           <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
-            <a href="{{ url('admin_app_my_cloud') }}">产品简介
+            <a href="{{ url('admin_my_cloud') }}">产品简介
             </a>
           </li>
 
           <li class="{% if submenu == 'service-information' %}active{% endif %}">
-            <a href="{{ url('admin_cloud_service_information') }}">服务概况
+            <a href="{{ url('admin_my_cloud_overview') }}">服务概况
             </a>
           </li>
 
@@ -29,14 +31,16 @@
 
                 <div class="media edu-user col-md-8">
                   <div class="pull-left">
-                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.jpg') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
+                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.png') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
                   </div>
                   <div class="media-body">
-
-                    <p><span class="name">{{ isBinded.name|default("")}}</span>{% if isBinded.name|default("") == "" %}{% else %}，{% endif %}您好</p>
-                    
+                    {% if isBinded.name|default("")  == "" %}
+                    <br>
+                    <p>您尚未绑定EduSoho开放云平台&nbsp;<a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"><i class="glyphicon glyphicon-question-sign"></i></a></p>
+                    {% else %}
+                    <p><span class="name">{{ isBinded.name|default("")}}</span>，您好</p>
                     <p>ES云平台账户名: {{content.user.siteName|default('') }}</p>
-                    
+                    {% endif %}
                   </div>
                 </div>
 
@@ -58,83 +62,18 @@
 
 
           <!--账户余额-->
-          <div class="alert alert-warning edu-balance" role="alert">
-            <h4 class="eduyun-title text-muted">
-              账户余额<a href="http://open.edusoho.com/article/1#recharge" target="_blank" style="margin-right:820px;margin-top:-17px;"><i class="glyphicon glyphicon-question-sign"></i></a>
-            </h4>
-            <p>
-              {% if content.account.cash|default('0') > 0 %}
-                <span class="text-warning balance">{{content.account.cash|default(0) }}</span>元
-              {% else %}
-                <span class="text-danger balance">{{content.account.cash|default(0) }}</span>元
-              {% endif %}
-              <a href="http://open.edusoho.com/account/cash/list" class="btn-recharge btn btn-warning" target="_blank">充值</a>
-              <a href="http://open.edusoho.com/account/cash/list" class="btn btn-link" target="_blank">查看账单</a>    
-            </p> 
-            {% if account %}
-            <!--不足50元-->
-            {% if 0 < content.account.cash|default(0) and content.account.cash|default(0) < 50 %}
-            <p class="text-warning">余额不足50元，请尽快充值！</p>
-            {% endif %}
-            <!--欠费7天预留保护期-->
-            {% if content.account.cash|default(0) < 0 and 0 < day|default(0) and day|default(0) <= 7 %}
-            <p class="text-warning">您已欠费，还剩{{day}}天的预留保护期，请尽快充值！</p>
-            {% endif %}
-            <!--欠费冻结-->
-            {% if content.account.cash|default(0) < 0 and 10 <= day|default(0) %}
-            <p class="text-danger">您已欠费超过{{day}}天，教育云服务已暂停，请尽快充值！</p>
-            {% endif %}
-            {% endif %}
-          </div>    
+          {% include 'TopxiaAdminBundle:App:cloud-account.html.twig'  %}
 
 
           <!--套餐信息-->
           <div class="edu-combo row">
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <h4 class="eduyun-title">套餐信息</h4>
-                  {% if user.hasLicense|default("0") == "0" %}
-                    <div class="alert alert-warning alert-sm" role="alert">
-                      <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
-                    </div>
-                  {% else %}
-                  <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
-                  <p class="text-muted">有效期：{{ user.startDate|default('') }}~{{ user.endDate|default('') }}</p>
-                  {% endif %}
-                  {% if packageDate|default(31)  == 0 %}
-                  <p class="text-warning text-sm">套餐服务将于明天到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
-                  <p class="text-warning">
-                    点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
-                  </p>
-                  {% endif %}
-                  <!--已到期-->
-                  {% if packageDate|default(31)  < 0 %}
-                  <p class="text-danger text-sm">套餐服务已到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！</p>
-                  {% endif %}
-                  <!--30天提醒-->
-                  {% if 30 >= packageDate|default(31)  and packageDate|default(31)   > 0 %}
-                  <p class="text-warning text-sm">套餐服务将于{{packageDate}}天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
-                  <p class="text-warning">
-                    点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
-                  </p>
-                  {% endif %}
-                </div>  
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <h4 class="eduyun-title">授权信息</h4>
-                  <!-- 商业授权 -->
-                  <!-- <p class="text-muted">商业授权</p> -->
-                  <!-- 非商业授权 -->
-                  <p class="text-muted">{% if user.hasLicense|default("0") == "0" %}非商业授权{% else %}商业授权{% endif %}</p>
-                  <p class="text-muted">授权域名: {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
-        {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
-                </div>
-              </div>
-            </div>
+
+          {% include 'TopxiaAdminBundle:App:cloud-combo.html.twig'  %}
+
+          <!-- 授权信息 -->
+
+          {% include 'TopxiaAdminBundle:App:cloud-license.html.twig'  %}
+
           </div>
 
 
@@ -143,149 +82,21 @@
 
             <!--服务动态内容 --> 
             <div class="edu-service row">
-              <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    {% set bill = storage.bill|default(null) %}
 
-                    <h4 class="eduyun-title">云视频+云文档{% if (storage and storage.freeTransfer|default(0) > 0) or  (storage and storage.freeSpace|default(0) > 0) %}<a href="http://www.edusoho.com/product/system" target="_blank">去升级</a>{% endif %}</h4>
-                    <!--未购买-->
-                    {% if not storage %}
+              <!--云视频信息 -->
+              {% include 'TopxiaAdminBundle:App:cloud-storage.html.twig'  %}
 
-                        <div class="alert alert-warning alert-sm" role="alert">
-                          <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云文档功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
-                        </div>
+              <!-- 云直播信息 -->
+              {% include 'TopxiaAdminBundle:App:cloud-live.html.twig'  %}
 
-                    {% else %}
-
-                      {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and not bill %}
-                           <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
-                          </div>
-                          <p class="text-muted">空间用量暂无记录</p>
-                          <p class="text-muted">已用流量暂无记录</p>
-                      {% endif %}
-
-                      {% if (storage.freeTransfer|default(0) > 0 and not bill ) or  (storage.freeSpace|default(0) > 0 and not bill)  %}
-                          <p class="text-muted">空间用量暂无记录</p>
-                          <p class="text-muted">已用流量暂无记录</p>
-                          <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
-                      {% endif %}
-
-                      {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and bill %}
-                           <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
-                          </div>
-                          <p class="text-muted">{{month|default('上')}}月空间用量：{{bill.space|default(0)}}G</p>
-                          <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
-                      {% endif %}
-
-                      {% if (storage.freeTransfer|default(0) > 0 and bill ) or  (storage.freeSpace|default(0) > 0 and bill ) %}
-                          <p class="text-muted">{{month|default('上')}}月空间用量：{{bill.space|default(0)}}G</p>
-                          <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
-                          <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
-                      {% endif %}
-                      {% if storageDate|default(31)  == 0 %}
-                          <p class="text-warning " >云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                      {% endif %}
-                    <!--30天过期  -->
-                      {% if 30 >= storageDate|default(31)  and storageDate|default(31)  > 0 %}
-                          <p class="text-warning " >云视频视频包将于{{storageDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                      {% endif %}
-                      <!--已过期 -->
-                      {% if storageDate|default(31)  < 0 %}
-                          <p class="text-danger" >
-                            云视频包已过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>
-                          </p>
-                      {% endif %}
-
-                    {% endif %}
-                    <p class="panel-bottom">
-                      TLP2.0加密，为您的网校保驾护航！
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    {% set capacity = live.capacity|default(null) %}
-                    {% set expire = live.expire|default(null) %}
-
-                   <h4 class="eduyun-title">云直播{% if live%}<a href="http://www.edusoho.com/product/system" target="_blank">去购买</a>{% endif %}</h4>
-                   <!--未购买-->
-                   {% if not live %}
-                         <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
-                          </div>
-                    {% else %}
-                          <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
-                          <p class="text-muted">有效期至：{% if expire == null %}{% else %}{{expire|date("Y-m-d")}}{% endif %}</p>
-                    {% if liveDate == 0 %}
-                          <p class="text-warning">云直播服务将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                    {% endif %}
-                    <!--7天警告-->
-                    {% if 7 >= liveDate|default(31)  and liveDate|default(31)  > 0 %}
-                          <p class="text-warning">云直播服务将于{{liveDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                    {% endif %}
-                    <!--已过期-->
-                    {% if liveDate|default(31)  < 0 %}
-                          <p class="text-danger">云直播服务已过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                    {% endif %}
-                    {% endif %}
-                    <p class="panel-bottom">
-                      支持Web端、移动端，让手机也能看直播！
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
 
             <!--服务云视频-->
             <div class="edu-service row">
-              <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    {% set status = sms.status|default('created') %}
-                    
-                    <h4 class="eduyun-title">云短信{% if sms %}<a href="http://open.edusoho.com/service/sms/account" target="_blank">查看账单</a>{% endif %}</h4>
+              <!-- 云短信信息 -->
+              {% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}
 
-                     {% if not sms %}
-                            <div class="alert alert-warning alert-sm" role="alert" >
-                              <!--未开启-->
-                               <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云短信，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开通</a>
-                           </div>
-                      {% else %}
-
-                        {% if status == 'created' %}
-                          <div class="alert alert-warning alert-sm" role="alert" >
-                              <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开启云短信功能，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开启</a>
-                          </div>
-                              <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
-                              <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
-                        {% endif %}
-
-                        {% if status == 'used' %}
-                            <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
-                            <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
-                        {% endif %}
-
-                      <!--被停用-->
-                        {% if status == 'stoped'%}
-                            <div class="alert alert-warning alert-sm" role="alert" >
-                                <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
-                                您的云短信功能已被暂停
-<!--                                 <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="此处填写理由！">[{{sms.reason|default("")}}]</a> -->
-                            </div>
-                            <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
-                            <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
-                        {% endif %}
-
-                      {% endif %}
-                  </div>
-                </div>
-              </div>
             </div>
 
           </fieldset>

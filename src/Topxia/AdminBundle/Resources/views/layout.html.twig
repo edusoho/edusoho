@@ -21,7 +21,11 @@
   <title>
     {% block title %}
       {% for m in menu_breadcrumb|reverse %}
-        {{ m.name }} -
+        {% if loop.index == menu_breadcrumb|length %}
+          {{ m.name }}
+        {% else %}
+          {{ m.name }} -
+        {% endif %}
       {% endfor %}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
@@ -141,7 +145,7 @@
           {% endif %}
 
           {% if subTabMenus|default(null) and menu_current.group == 1 %}
-            <ul class="nav nav-pills mbl">
+            <ul class="nav nav-pills mbl small">
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}

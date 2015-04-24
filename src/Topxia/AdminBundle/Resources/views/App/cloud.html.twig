@@ -1,8 +1,8 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ html_title('admin','admin_app_my_cloud')}}{% endblock %}
+{% block title %}{{ html_title('admin','admin_my_cloud')}}{% endblock %}
 
-{% set menu = 'admin_app_my_cloud' %}
+{% set menu = 'admin_my_cloud' %}
 {% set submenu = 'cloud-introduction' %}
 
 {% block main %}
@@ -10,12 +10,12 @@
       <ul class="nav nav-tabs mbl">
 
         <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
-          <a href="{{ url('admin_app_my_cloud') }}">产品简介
+          <a href="{{ url('admin_my_cloud') }}">产品简介
           </a>
         </li>
 
         <li class="{% if submenu == 'service-information' %}active{% endif %}">
-          <a href="{{ url('admin_cloud_service_information') }}">服务概况
+          <a href="{{ url('admin_my_cloud_overview') }}">服务概况
           </a>
         </li>
 
@@ -42,7 +42,7 @@
             <div class="carousel-inner" role="listbox">
               <div class="item active">
                 <img class="img-responsive" src="{{ default_path('banner.jpg') }}">
-                <a href="http://www.edusoho.com/product/educloud" class="btn btn-warning" target="_blank">接入教育云<span
+                <a href="" class="btn btn-warning" disabled>接入教育云<span
                   class="glyphicon glyphicon-circle-arrow-right"></span></a>
                   <div class="images-content"> 
                       即将上线，去了解详情

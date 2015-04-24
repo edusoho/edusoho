@@ -29,29 +29,29 @@
     <div class="col-md-3 control-label">
       <label >注册防护机制</label>
     </div>
-    <div class="controls col-md-8 ">
-      <label class="radio-inline">
+    <div class="controls col-md-8 radios">
+      <label>
         <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
       </label>
-      <label class="radio-inline">
+      <label>
         <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
       </label>
-      <label class="radio-inline">
+      <label>
         <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
       </label>
-      <label class="radio-inline">
+      <label>
         <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
       </label>
     </div>
 
-    <div class="controls col-md-8 mtl low register-help" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+    <div class="controls col-md-8 mtl low register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
       <div class="well">
         方案说明：
             <p class="mll mtm">1：注册时需填写验证码。</p>
       </div>
     </div>
 
-    <div class="controls col-md-8 mtl middle register-help" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+    <div class="controls col-md-8 mtl middle register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
       <div class="well">
         方案说明：
             <p class="mll mtm">1：注册时需填写验证码。</p>
@@ -59,7 +59,7 @@
       </div>
     </div>
 
-    <div class="controls col-md-8 mtl high register-help" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+    <div class="controls col-md-8 mtl high register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
       <div class="well">
         方案说明：
             <p class="mll mtm">1：注册时需填写验证码。</p>

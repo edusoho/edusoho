@@ -13,7 +13,7 @@ class EduSohoAppClient implements AppClient
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://115.29.78.158:99/app_api';
+    private $apiUrl = 'http://open.edusoho.com/app_api';
 
     private $debug = false;
 

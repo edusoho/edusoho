@@ -24,8 +24,13 @@ define(function(require, exports, module) {
 
 	$('.shortcuts').on('click', '.shortcut-add', function() {
 		Notify.success('已添加当前页面为常用链接！');
+
+		var title = $(document).attr("title");
+
+		title = title.split('|');
+
 		var params = {
-			title: $(document).attr("title"),
+			title: title[0],
 			url: window.location.pathname + window.location.search
 		};
 		$.post($(this).data('url'), params, function() {

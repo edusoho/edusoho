@@ -13,9 +13,6 @@ class EduCloudServiceImpl extends BaseService
     {
         if (empty($this->cloudOptions)) {
             $settings = $this->createService('System.SettingService')->get('storage', array());
-            $settings['cloud_api_server'] = "http://115.29.78.158:90";
-            $settings['cloud_access_key'] = "KorYdWVgAVJK3SVFXsSoaABUn6ZmYPmI";
-            $settings['cloud_secret_key'] = "dOHrKDHlyq5Ci0igtaFDLhy8oxumnQ5B";
 
             $this->cloudOptions = array(
                 'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
