@@ -8,8 +8,13 @@
               {% else %}
                 <span class="text-danger balance">{{content.account.cash|default(0) }}</span>元
               {% endif %}
+              {% if isBinded.name|default("")  == "" %}
               <a href="http://open.edusoho.com/account/cash/list" class="btn-recharge btn btn-warning" target="_blank">充值</a>
               <a href="http://open.edusoho.com/account/cash/list" class="btn btn-link" target="_blank">查看账单</a>    
+              {% else %}
+              <a href="{{path('admin_cloud_detail')}}" class="btn-recharge btn btn-warning" target="_blank">充值</a>
+              <a href="{{path('admin_cloud_detail')}}" class="btn btn-link" target="_blank">查看账单</a>  
+              {% endif %}
             </p> 
             {% if account %}
             <!--不足50元-->

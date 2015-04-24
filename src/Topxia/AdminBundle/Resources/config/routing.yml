@@ -633,6 +633,14 @@ admin_cloud_recharge:
     pattern:  /cloud/recharge
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
 
+admin_cloud_detail:
+    pattern:  /cloud/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
+
+admin_cloud_sms_account:
+    pattern:  /cloud/sms/account
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
