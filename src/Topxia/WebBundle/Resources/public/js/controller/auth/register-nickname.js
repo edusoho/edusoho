@@ -19,8 +19,8 @@ define(function(require, exports, module) {
         });
 
         $(".nickname_ingnore").click(function (){
-            $("#register_nickname").val($('#random_nickname').val());
-           // $("#register-nickname-btn").click();
+            var $reg_nickname = $("#register_nickname");
+            $reg_nickname.val($reg_nickname.data('randmo'));
             $("#register-nickname-form").submit();
         })
 

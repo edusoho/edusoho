@@ -31,13 +31,12 @@
       <form id="register-nickname-form" class="form-vertical" method="post" action="{{path('register_nickname_update')}}">
           <input type="hidden" name='id' value="{{user.id}}">
           <input type="hidden" name='emailOrMobile' value="{{user.verifiedMobile}}">
-           <input type="hidden" id='random_nickname' value="{{user.nickname}}">
 
           {{ web_macro.flash_messages() }}
         <div class="form-group">
           <label class="control-label required hidden" for="register_nickname">昵称</label>
           <div class="controls">
-            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}"  data-userid ="{{user.id}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字" placeholder='昵称'>
+            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}"  data-userid ="{{user.id}}" data-randmo="{{user.nickname}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字" placeholder='昵称'>
             <p class="help-block"></p>
           </div>
         </div>
