@@ -76,6 +76,7 @@ class usercontrol extends base {
 		if(($status = $this->_check_email($email)) < 0) {
 			return $status;
 		}
+	
 		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer, $regip);
 		return $uid;
 	}
@@ -174,6 +175,13 @@ class usercontrol extends base {
 		$this->init_input();
 		$uid = $this->input('uid');
 		return $_ENV['user']->delete_user($uid);
+	}
+
+	function onrename(){
+		$this->init_input();
+		$uid= $this->input('uid');
+		$usernamenew= $this->input('usernamenew');
+		return $_ENV['user']->rename_user($uid, $usernamenew);
 	}
 
 	function onaddprotected() {
