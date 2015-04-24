@@ -17,6 +17,7 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
      *   type:  featured  可选  是否头条
      *          promoted  可选  是否推荐
      *          sticky    可选  是否置顶
+     *   categoryId: 分类ID
      *
      * @param  array $arguments 参数
      * @return array 资讯列表
@@ -38,10 +39,13 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
             $conditions['sticky'] = 1;
         }
 
+        if (!empty($arguments['categoryId'])) {
+            $conditions['categoryId'] = (int) $arguments['categoryId'];
+        }
+
     	$articles = $this->getArticleService()->searchArticles($conditions,'created', 0, $arguments['count']);
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
-
 
         foreach ($articles as $key => $article) {
             if (empty($article['categoryId'])) {
