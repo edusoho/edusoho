@@ -191,18 +191,13 @@ class UserServiceImpl extends BaseService implements UserService
         ));
     }
 
-    public function isNicknameAvaliable($nickname, $userId='')
+    public function isNicknameAvaliable($nickname)
     {
         if (empty($nickname)) {
             return false;
         }
         $user = $this->getUserDao()->findUserByNickname($nickname);
-        if(empty($user)){
-            return true;
-        }elseif(!empty($userId) && $user['id'] == $userId){
-            return  true;
-        }
-        return false;
+        return empty($user) ? true : false;
     }
 
     public function isEmailAvaliable($email)
@@ -367,7 +362,7 @@ class UserServiceImpl extends BaseService implements UserService
         return  $registration;
     }
 
-    private function isMobileRegisterMode(){
+    public function isMobileRegisterMode(){
         $authSetting = $this->getSettingservice()->get('auth');
         return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
     }
@@ -378,12 +373,6 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function register($registration, $type = 'default')
     {
-        $registration = $this->purseEmailOrMobile($registration);
-
-        if($this->isMobileRegisterMode()){
-            $registration['nickname'] = $this->nicknameGenerate($registration);
-        }
-     
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
         }
@@ -392,11 +381,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('昵称已存在');
         }
 
-        if($this->isMobileRegisterMode() && !isset($registration['email'])){
-           $registration['email'] = $this->emailGenerate($registration);   
-        }
-
-         if (!SimpleValidator::email($registration['email'])) {
+        if (!SimpleValidator::email($registration['email'])) {
             throw $this->createServiceException('email error!');
         }
         if (!$this->isEmailAvaliable($registration['email'])) {
@@ -473,7 +458,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         return $user;
     }
-    private function nicknameGenerate($registration, $maxLoop=100){
+    public function nicknameGenerate($registration, $maxLoop=100){
         for($i =0; $i<$maxLoop; $i++){
             $registration['nickname'] ='EduSoho'.substr($this->getRandChar(), 0,6); 
             if($this->isNicknameAvaliable($registration['nickname'])) {
@@ -483,7 +468,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $registration['nickname'];
     }
 
-    private function emailGenerate($registration, $maxLoop=100){
+    public function emailGenerate($registration, $maxLoop=100){
          for($i =0; $i<$maxLoop; $i++){
             $registration['email'] = 'edu_' . substr($this->getRandChar(), 0, 9) . '@edusoho.net';
             if($this->isEmailAvaliable($registration['email'])){

@@ -11,6 +11,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
+        $registration = $this->refillFormdata($registration);
         $authUser = $this->getAuthProvider()->register($registration);
 
         if ($type == 'default') {
@@ -31,6 +32,18 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $newUser;
     }
 
+    private function refillFormdata($registration){
+        $registration = $this->getUserService()->purseEmailOrMobile($registration);
+
+        if($this->getUserService()->isMobileRegisterMode()){
+            $registration['nickname'] = $this->getUserService()->nicknameGenerate($registration);
+        }
+         if($this->getUserService()->isMobileRegisterMode() && !isset($registration['email'])){
+           $registration['email'] = $this->getUserService()->emailGenerate($registration);   
+        }
+        return $registration;
+    }
+    
     public function syncLogin($userId)
     {
         $providerName = $this->getAuthProvider()->getProviderName();
@@ -108,23 +121,26 @@ class AuthServiceImpl extends BaseService implements AuthService
 
 
 
-    public function checkUsername($username, $userId='')
-    {   
-        try {
-            $result = $this->getAuthProvider()->checkUsername($username);
-        } catch (\Exception $e) {
-            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+    public function checkUsername($username, $randomName='')
+    {     
+        //如果一步注册则$randomName为空，正常校验discus和系统教研，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
+        if(empty($randomName)|| $username == $randomName){
+            try {
+                $result = $this->getAuthProvider()->checkUsername($username);
+            } catch (\Exception $e) {
+                return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+            }
+
+            if ($result[0] != 'success') {
+                return $result;
+            }
+
+            $avaliable = $this->getUserService()->isNicknameAvaliable($username);
+            if (!$avaliable) {
+                return array('error_duplicate', '名称已存在!');
+            }
         }
 
-        if ($result[0] != 'success') {
-            return $result;
-        }
-
-        $avaliable = $this->getUserService()->isNicknameAvaliable($username,$userId);
-
-        if (!$avaliable) {
-            return array('error_duplicate', '名称已存在!');
-        }
 
         return array('success', '');
     }

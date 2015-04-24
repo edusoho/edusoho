@@ -46,7 +46,6 @@ class RegisterController extends BaseController
             if($this->register_limit_validator($registration, $authSettings,$request)){
                return  $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
             }
-
             $user = $this->getAuthService()->register($registration);
 
             return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
@@ -365,8 +364,8 @@ class RegisterController extends BaseController
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
-        $userId = $request->query->get('userId');
-        list($result, $message) = $this->getAuthService()->checkUsername($nickname, $userId);
+        $randomName = $request->query->get('randomName');
+        list($result, $message) = $this->getAuthService()->checkUsername($nickname,$randomName);
         if ($result == 'success') {
             $response = array('success' => true, 'message' => '');
         } else {
