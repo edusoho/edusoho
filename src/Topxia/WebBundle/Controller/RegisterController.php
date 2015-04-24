@@ -46,9 +46,39 @@ class RegisterController extends BaseController
             if($this->register_limit_validator($registration, $authSettings,$request)){
                return  $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
             }
+
             $user = $this->getAuthService()->register($registration);
 
-            return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
+            if(!isset($registration['nickname'])){
+                return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
+            }else{
+                $authSettings = $this->getSettingService()->get('auth', array());
+
+                if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   !$this->isEmptyVeryfyMobile($user)){
+                     $this->authenticateUser($user);
+                     $this->sendRegisterMessage($user);
+                }
+
+                $goto = $this->generateUrl('register_submited', array(
+                    'id' => $user['id'], 
+                    'hash' => $this->makeHash($user),
+                    'goto' => $this->getTargetPath($request),
+                ));
+             
+                if ($this->getAuthService()->hasPartnerAuth()) {
+                     $this->authenticateUser($user);
+                     $this->sendRegisterMessage($user);
+                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+                }
+
+                $mailerSetting=$this->getSettingService()->get('mailer');
+
+                if(!$mailerSetting['enabled'] && $this->isEmptyVeryfyMobile($user)){
+                    return $this->redirect($this->getTargetPath($request));
+                }
+                return $this->redirect($goto);
+            }
+
         }
 
         $auth=$this->getSettingService()->get('auth');
@@ -116,6 +146,7 @@ class RegisterController extends BaseController
                 return $this->redirect($this->getTargetPath($request));
             }
             return $this->redirect($goto);
+          
         }
 
         return $this->render("TopxiaWebBundle:Register:nickname-update.html.twig", array(
@@ -123,7 +154,6 @@ class RegisterController extends BaseController
             'registration' => $registration,
             ));
     }
-
 
     private function isMobileRegister($registration){
         if(isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])){
