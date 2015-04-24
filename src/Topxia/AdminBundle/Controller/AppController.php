@@ -44,6 +44,12 @@ class AppController extends BaseController
     {
         $content = $this->getEduCloudService()->getUserOverview();
         $info = $this->getEduCloudService()->getAccountInfo();
+        if(isset($info['licenseDomains'])) {
+
+            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+
+        }
+
         $isBinded = $this->getAppService()->getBinded();
 
         $EduSohoOpenClient = new EduSohoOpenClient;
