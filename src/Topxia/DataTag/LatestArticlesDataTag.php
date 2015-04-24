@@ -41,7 +41,7 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
 
         if (!empty($arguments['categoryId'])) {
             $conditions['categoryId'] = (int) $arguments['categoryId'];
-            $conditions['includeChindren'] = 1;
+            $conditions['includeChildren'] = 1;
         }
 
     	$articles = $this->getArticleService()->searchArticles($conditions,'created', 0, $arguments['count']);
