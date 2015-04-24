@@ -211,7 +211,10 @@ class AppController extends BaseController
             $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
             
             if ($key != 'MAIN') {
-                $dic = $dir.'/plugins/'.$appItem.'/plugin.json';
+                if(in_array($key, array("vip", "coupon"))){
+                    $key = ucfirst($appItem);
+                }
+                $dic = $dir.'/plugins/'.$key.'/plugin.json';
                 if(file_exists($dic)){
                     $appMeta[$appItem] = json_decode(file_get_contents($dic));
                 }
