@@ -248,7 +248,7 @@
       {% endif %}
 
       {# 会员专区 #}
-      {% if is_plugin_installed('Classroom') and setting('vip.enabled') %}
+      {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
         {% set levels = data('VipLevels',{'count':100}) %}
         {% if levels %}
           <div class="panel panel-autumn panel-autumn-primary">
