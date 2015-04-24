@@ -59,6 +59,10 @@
                            <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
                         {% endif %}
                           <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
+                            </div>
+                          </div> 
+                        </td>
+                      </tr>
                    {% endif %}
 
             {% else %}
@@ -75,11 +79,11 @@
                   {% endif %}
                {% endif %} 
                 <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
+                    </div>
+                  </div> 
+                </td>
+              </tr>
                 {% endif %}
-                </div>
-              </div> 
-        </td>
-      </tr>
       {% endfor %}
     </tbody>
   </table>
