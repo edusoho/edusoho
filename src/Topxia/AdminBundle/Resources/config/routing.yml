@@ -95,6 +95,14 @@ admin_block_visual_edit_history:
     pattern:  /block/{blockId}/visual/edit/history
     defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }
 
+admin_block_picture_upload:
+    pattern:  /block/{blockId}/picture/upload
+    defaults: { _controller: TopxiaAdminBundle:Block:upload }
+
+admin_block_picture_preview:
+    pattern:  /block/{blockId}/picture/preview
+    defaults: { _controller: TopxiaAdminBundle:Block:picPreview }
+
 admin_blockhistory_preview:
     pattern:  /blockhistory/{id}/preview
     defaults: { _controller: TopxiaAdminBundle:Block:preview }

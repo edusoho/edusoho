@@ -3,19 +3,23 @@
 <p class="text-muted">{{ item.desc }}</p>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="width:50%;">
   {% for dataId in 1..item.count %}
+  {% set data = block.data[code][dataId]|default(null) %}
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
         <h4 class="panel-title">
           <a data-toggle="collapse" data-parent="#accordion" href="#{{code}}-collapse-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ dataId }}">
             {{ item.title }} - <span class="js-seq">{{ dataId }}</span>
           </a>
+          {% if item.type == 'imglink' and data.src|default(null) and data.alt|default(null) %}
+            <a class="mlm glyphicon glyphicon-picture"></a>
+            <a class="" style="cursor: pointer;" data-url="{{ path('admin_block_picture_preview', {blockId:block.id, url:data.src}) }}" data-toggle="modal" data-target="#modal">{{ data.alt|plain_text(40) }}</a>
+          {% endif %}
+
         </h4>
       </div>
       <div id="{{code}}-collapse-{{ dataId }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{code}}-heading-{{ dataId }}">
         <div class="panel-body">
-         {% include 'TopxiaAdminBundle:Block/Tag:' ~ item.type ~ '.html.twig' with { data:block.data[code][dataId]|default(null) } %}
-        }
-        }
+         {% include 'TopxiaAdminBundle:Block/Tag:' ~ item.type ~ '.html.twig' %}
         </div>
       </div>
     </div>

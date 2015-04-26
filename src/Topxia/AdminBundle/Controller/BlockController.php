@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 
 
 class BlockController extends BaseController
@@ -141,9 +142,8 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->get('data');
-            $this->getBlockService()->updateBlock($blockId, array('data' =>$data));
+            $block = $this->getBlockService()->updateBlock($blockId, array('data' =>$data));
             $this->setFlashMessage('success', '保存成功!');
-            return $this->redirect($this->generateUrl('admin_block_visual_edit',  array('blockId' => $blockId)));
         }
 
         return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
@@ -206,6 +206,38 @@ class BlockController extends BaseController
         } elseif ($id != $blockByCode['id']){
             return $this->createJsonResponse(array('success' => false, 'message' => '不允许设置为已存在的其他编码值'));
         }
+    }
+
+    public function uploadAction(Request $request, $blockId)
+    {
+        $file = $request->files->get('picture');
+        if (!FileToolkit::isImageFile($file)) {
+            throw $this->createAccessDeniedException('图片格式不正确！');
+        }
+
+        $filename = 'block_picture_' . time() . '.' . $file->getClientOriginalExtension();
+
+        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file = $file->move($directory, $filename);
+
+        $block = $this->getBlockService()->getBlock($blockId);
+
+        $url = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $url = ltrim($url, '/');
+
+        $response = array(
+            'url' => $this->container->get('templating.helper.assets')->getUrl($url),
+        );
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function picPreviewAction(Request $request, $blockId)
+    {
+        $url = $request->query->get('url', '');
+        return $this->render('TopxiaAdminBundle:Block:picture-preview-modal.html.twig', array(
+            'url' => $url
+        ));
     }
 
     protected function getBlockService()

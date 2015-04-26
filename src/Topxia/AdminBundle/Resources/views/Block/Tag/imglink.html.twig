@@ -2,6 +2,7 @@
   <div>
      <label>图片</label>
      <input type="text" name="data[{{ code }}][{{ dataId }}][src]" value="{{ data.src|default('') }}">
+     <button class="btn btn-default btn-sm img-upload" type="button" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code, dataId:dataId}) }}">上传</button>
    </div>
    <div>
      <label>图片描述</label>

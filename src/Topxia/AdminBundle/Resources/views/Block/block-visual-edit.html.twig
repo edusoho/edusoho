@@ -4,7 +4,7 @@
 {% block title %}{{ getTitle('admin_operation_block')}}{% endblock %}
 {% block page_title %} <a href="{{ path('admin_block') }}">编辑区管理</a> - {{ block.title }}编辑 {% endblock %}
 
-{% set script_controller = 'block/list' %}
+{% set script_controller = 'block/visual-edit' %}
 {% block main %}
   <ul class="nav nav-pills">
     <li role="presentation" {% if action == 'edit' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">编辑</a></li>
