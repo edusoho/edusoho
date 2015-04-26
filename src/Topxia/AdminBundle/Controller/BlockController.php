@@ -152,6 +152,11 @@ class BlockController extends BaseController
         ));
     }
 
+    public function visualHistoryAction(Request $request, $blockId)
+    {
+        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig");
+    }
+
     public function createAction(Request $request)
     {
         
