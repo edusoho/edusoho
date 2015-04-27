@@ -413,4 +413,8 @@ admin_announcement_create:
     parent: admin_announcement
     mode: modal
     group: 2
-
+admin_course_review_tab:
+    name: 课程评价
+    parent: admin_course_review
+    router_name: admin_review
+    group: 1
