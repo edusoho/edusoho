@@ -510,3 +510,18 @@ input.LargeInput {width: 600px;}
   font-size: 12px;
 }
 
+.block-picture-preview {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -200px 0 0 -200px;
+  text-align: center;
+}
+
+.block-picture-preview img {
+  width: 350px;
+  height: 350px;
+  margin-top: 25px;
+}
