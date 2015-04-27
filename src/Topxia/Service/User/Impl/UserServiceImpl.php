@@ -763,7 +763,7 @@ class UserServiceImpl extends BaseService implements UserService
         $setting = array_merge($default, $setting);
 
         $ipFailedCount = $this->getIpBlacklistService()->getIpFailedCount($ip);
-        if ($ipFailedCount > 20) {
+        if ($ipFailedCount > 5) {
             return array( 'status' => 'error', 'code' => 'max_ip_failed_limit');
         }
 
