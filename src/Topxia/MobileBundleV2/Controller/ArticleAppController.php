@@ -17,11 +17,12 @@ class ArticleAppController extends MobileBaseController
         
         $clientType = "pc";
         $userAgent = $request->headers->get("user-agent");
-        if (strpos($userAgent, "iOS")) {
+        if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
             $clientType = "iOS";
         } else if (strpos($userAgent, "Android")) {
             $clientType = "Android";
         }
+        
         return $this->render('TopxiaMobileBundleV2:Article:index.html.twig', array("clientType"=>$clientType));
     }
 
