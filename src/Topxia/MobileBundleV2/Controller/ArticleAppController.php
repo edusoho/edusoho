@@ -15,7 +15,14 @@ class ArticleAppController extends MobileBaseController
             $setting = array('name' => '资讯频道', 'pageNums' => 20);
         }
         
-        return $this->render('TopxiaMobileBundleV2:Article:index.html.twig', array());
+        $clientType = "pc";
+        $userAgent = $request->headers->get("user-agent");
+        if (strpos($userAgent, "iOS")) {
+            $clientType = "iOS";
+        } else if (strpos($userAgent, "Android")) {
+            $clientType = "Android";
+        }
+        return $this->render('TopxiaMobileBundleV2:Article:index.html.twig', array("clientType"=>$clientType));
     }
 
     public function categoryAction(Request $request)

@@ -11,7 +11,11 @@
 <link href="{{ asset('bundles/topxiamobilebundlev2/css/ui-style.css') }}" rel="stylesheet" />
 
 {% endblock %}
-
+{% if clientType == 'Android' %}
+    <script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova_Android.js') }}"></script>
+{%  elseif clientType == 'iOS' %} 
+    <script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova_iOS.js') }}"></script>
+{% endif %}
 {% block head_scripts %}
 
 {% endblock %}
@@ -20,7 +24,13 @@
 <body unresolved  onload="onLoad()">
 
 <script type="text/javascript">
+    window.onLoad = function() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+    }
 
+    window.onDeviceReady = function() {
+        console.log("onDeviceReady:");
+    }
 </script>
 {% block content %}
 
@@ -35,9 +45,7 @@
         "AppFilters": "article/js/filter.js",
         "AppServices": "article/js/service.js",
         "frozen": "libs/frozen/1.2.1/js/frozen.js",
-        "app": "article/js/app.js",
-        "cordova_Android" : "js/cordova_Android.js",
-        "cordova_iOS" : "js/cordova_iOS.js"
+        "app": "article/js/app.js"
       }
     })
 
