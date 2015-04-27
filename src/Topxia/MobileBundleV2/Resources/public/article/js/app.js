@@ -4,6 +4,19 @@ define(function(require, exports, module) {
 	require("AppFilters");
 	require("frozen");
 
+	var clientType = "iOS";
+	if (navigator.userAgent.indexOf("Android") > 0) {
+		console.log("Android");
+		clientType = "Android";
+	} else if (navigator.userAgent.indexOf("iOS") > 0) {
+		console.log("iOS");
+		clientType = "iOS";
+	}
+	
+	require.async("cordova_" + clientType, function(cordova) {
+		console.log(cordova);
+	});
+
 	var app = angular.module('EduSohoArticleApp', [
 		'ionic',
 		'AppControllers',

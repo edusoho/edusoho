@@ -1512,6 +1512,7 @@ function handlePluginsObject(path, moduleList, finishPluginLoading) {
 }
 
 function injectPluginScript(pathPrefix, finishPluginLoading) {
+    pathPrefix = "/bundles/topxiamobilebundlev2/js/";
     var pluginPath = pathPrefix + 'cordova_plugins.js';
 
     injectScript(pluginPath, function() {
