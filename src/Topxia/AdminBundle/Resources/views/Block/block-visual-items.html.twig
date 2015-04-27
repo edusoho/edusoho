@@ -1,6 +1,9 @@
 {% for code,item in block.meta.items|default(null) %}
-<strong>{{ item.title }}</strong>
-<p class="text-muted">{{ item.desc }}</p>
+<div class="item-title">
+  <strong>{{ item.title }}</strong>
+  <p class="text-muted">{{ item.desc }}</p>
+</div>
+
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="width:50%;">
   {% for dataId in 1..item.count %}
   {% set data = block.data[code][dataId]|default(null) %}

@@ -510,6 +510,19 @@ input.LargeInput {width: 600px;}
   font-size: 12px;
 }
 
+.visual-edit-form .item-title {
+  padding: 10px;
+}
+
+.visual-edit-form .item-title p {
+  margin: 0;
+}
+
+.visual-edit-form .alert-success {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .block-picture-preview {
   width: 400px;
   height: 400px;

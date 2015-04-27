@@ -10,8 +10,8 @@
     <li role="presentation" {% if action == 'history' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit_history', {blockId:block.id}) }}">历史记录</a></li>
   </ul>
   
-  {{ web_macro.flash_messages() }}
-  <form id="block-edit-form" method="POST" action="">
+  <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+    {{ web_macro.flash_messages() }}
     {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   
