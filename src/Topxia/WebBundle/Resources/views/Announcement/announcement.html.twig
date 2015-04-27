@@ -6,10 +6,15 @@
       <div class="items">
         {% for announcement in announcements %}
         <div class="item">
-          <a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>
+          {% if announcement.url %}
+          <a class="open-article-link" href="{{announcement.url}}" target="_blank">
             <span class="glyphicon glyphicon-volume-up banner-volume"></span>
             {{announcement.title|sub_text(50)}}
           </a>
+          {% else %}
+            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
+            {{announcement.title|sub_text(50)}}
+          {% endif %}
         </div>
         {% endfor %}
       </div>

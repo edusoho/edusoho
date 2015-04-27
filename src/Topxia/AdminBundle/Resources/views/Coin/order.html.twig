@@ -1,20 +1,9 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::new-layout.html.twig' %}
 
-{% set nav = 'order' %}
-{% set side_menus = permissions('admin_order') %}
-{% block content %}
-  <div class="col-md-2">
-    {% block sidebar %}
+{% set nav = 'admin_order' %}
 
-      <div class="panel panel-default">
+{% set menu = 'admin_coin_orders' %}
 
-          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus,nav:menu} %}
-      </div>
-
-    {% endblock %}
-  </div>
-  <div class="col-md-10">
-      <h4>{{ admin_macro.title(side_menus,menu) }}</h4>
-      {% block main %}{% endblock %}
-  </div>
+{% block main %}
+  
 {% endblock %}

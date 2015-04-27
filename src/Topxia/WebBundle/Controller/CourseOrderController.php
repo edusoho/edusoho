@@ -65,7 +65,7 @@ class CourseOrderController extends OrderController
             ));
         }
         
-        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));

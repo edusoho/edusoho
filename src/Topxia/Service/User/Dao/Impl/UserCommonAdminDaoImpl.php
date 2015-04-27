@@ -9,7 +9,7 @@ use PDO;
 
 class UserCommonAdminDaoImpl extends BaseDao implements UserCommonAdminDao
 {   
-    protected $table = 'user_common_admin';
+    protected $table = 'shortcut';
 
     public function getCommonAdmin($id)
     {

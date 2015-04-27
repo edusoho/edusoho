@@ -23,6 +23,10 @@ define(function(require, exports, module) {
       marquee: function(self){
          var obj = $(self.element[0]).find(".items");
          var childrenCount = obj.children().length;
+         if(childrenCount<=1){
+            clearInterval(this.get("AnnouncementsInterval"));
+            return;
+         }
          var childHeight = $(obj.children()[0]).height();
          var marginTop = obj.data("margin-top");
          if(!marginTop){
@@ -33,10 +37,10 @@ define(function(require, exports, module) {
          if(marginTop < (childrenCount-1)*childHeight){
             offset.top--;
             marginTop++;
-            obj.offset({top:(offset.top), left:offset.left});
+            obj.offset({top:offset.top, left:offset.left});
             obj.data("margin-top", marginTop);
          } else {
-            obj.offset({top:offset.top+(marginTop), left:offset.left})
+            obj.offset({top:offset.top+(childHeight), left:offset.left})
             obj.data("margin-top", marginTop-childHeight);
             $(obj.children()[0]).appendTo(obj);
 

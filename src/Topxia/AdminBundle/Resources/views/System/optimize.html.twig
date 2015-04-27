@@ -1,18 +1,11 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'optimize' %}
-{% set submenu = 'optimize_manage' %}
-{% set menus = permissions('admin_optimize','tab') %}
-
-{% block title %}{{ getTitle('admin_optimize_manage')}}{% endblock %}
+{% set menu = 'admin_optimize' %}
 
 {% set script_controller = 'optimize/optimize' %}
 
 {% block main %}
-<div class="mbl">
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
 	{{ web_macro.flash_messages() }}
 
 

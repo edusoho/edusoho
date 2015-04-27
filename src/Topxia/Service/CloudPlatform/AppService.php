@@ -21,6 +21,8 @@ interface AppService
      * 获得应用中心应用列表
      */
     public function getCenterApps();
+    
+    public function getBinded();
 
     public function getCenterPackageInfo($id);
 
