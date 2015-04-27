@@ -647,7 +647,7 @@ admin_customer_service:
 
 admin_app_center:
     pattern:  /app/center/{postStatus}
-    defaults: { _controller: TopxiaAdminBundle:App:center }
+    defaults: { _controller: TopxiaAdminBundle:App:center, postStatus:'all' }
 
 admin_my_cloud:
     pattern:  /setting/my/cloud
