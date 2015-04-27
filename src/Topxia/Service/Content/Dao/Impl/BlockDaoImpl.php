@@ -29,6 +29,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function addBlock($block)
     {
+        $this->createSerializer()->serialize($block, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $block);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert block error.');

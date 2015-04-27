@@ -270,6 +270,14 @@ class BlockController extends BaseController
         ));
     }
 
+    public function recoveryAction(Request $request, $blockId, $historyId)
+    {
+        $history = $this->getBlockService()->getBlockHistory($historyId);
+        $this->getBlockService()->recovery($blockId, $history);
+        $this->setFlashMessage('success', '恢复成功!');
+        return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockId' => $blockId)));
+    }
+
     protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');

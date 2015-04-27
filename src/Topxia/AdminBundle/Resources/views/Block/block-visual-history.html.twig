@@ -9,6 +9,7 @@
     <li role="presentation" {% if action == 'history' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit_history', {blockId:block.id}) }}">历史记录</a></li>
   </ul>
   
+  {{ web_macro.flash_messages() }}
   <table id="block-history-table" class="visual-block-history-table table table-striped table-condensed">
     <thead>
       <th>修改时间</th>
@@ -24,12 +25,11 @@
             <a class="btn btn-xs btn-default edit-btn" 
             href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
 
-            <button class="btn-recover-content btn btn-xs btn-default edit-btn">恢复此内容</button>
-            <div class="data-role-content" style="display:none"> {{ blockHistory.content }} </div>
+            <a class="btn btn-xs btn-default edit-btn" href="{{ path('admin_block_recovery', {blockId:block.id, historyId:blockHistory.id})}}">恢复此内容</a>
           </td>
         </tr>
       {% endfor %}
     </tbody>
     </table>
-
+  {{ web_macro.paginator(paginator) }} 
 {% endblock %}
