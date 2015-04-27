@@ -164,63 +164,21 @@
           <h3 class="panel-title"><i class="iconfont icon-hot"></i>热门资讯</h3>
         </div>
         <div class="panel-body">
-          <div class="media">
-            <div class="media-left media-middle">
-              <a href="javascript:;">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <a href="javascript:;">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <a href="javascript:;">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
+
+          {% for popularArticle in popularArticles%}
+
           <div class="media">
             <div class="media-left media-middle">
               <i class="iconfont icon-yuan"></i>
-              <span class="num">4</span>
+              <span class="num">{{ loop.index}}</span>
             </div>
             <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+              <a href="javascript:;">{{popularArticle.title}}</a>
             </div>
           </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">5</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">6</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
+
+          {% endfor %}
+
         </div>
       </div>
       <!-- 热门标签 -->
@@ -309,60 +267,19 @@
       <div class="panel es-panel recommend-article">
         <div class="panel-heading"><i class="iconfont icon-language"></i>推荐资讯</div>
         <div class="panel-body">
+
+          {% for recommendArticle in recommendArticles%}
           <div class="media">
             <div class="media-left media-middle">
               <i class="iconfont icon-yuan"></i>
-              <span class="num">1</span>
+              <span class="num">{{loop.index}}</span>
             </div>
             <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+              <a href="javascript:;">{{recommendArticle.title}}</a>
             </div>
           </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">2</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">3</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">4</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">5</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">6</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
-            </div>
-          </div>
+          {% endfor %}
+          
         </div>
       </div>
     </aside>
