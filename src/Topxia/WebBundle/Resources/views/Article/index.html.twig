@@ -48,6 +48,9 @@
     <!-- list主内容-->
     <div class="col-md-8 article-list-mian">
       <section class="es-well">
+    {% if latestArticles %}
+
+      {% for article in latestArticles %}
         <article class="item">
           <div class="article-metas clearfix">
             <div class="pull-left">
@@ -58,103 +61,43 @@
               </div>
             </div>
             <div class="metas-body">
-              <p>行业资讯</p>
-              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
+              <p>
+              {% for category in categories %}
+                {% if article.categoryId == category.id %}
+                  {{ category.name }} 
+                {% endif %}
+              {% endfor %}
+              </p>
+              <h2 class="title"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title }}</a></h2>
             </div>
           </div>
           <div class="media">
             <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
+              {% if article.thumb %}
+                <a href="{{ path('article_detail', { id:article.id }) }}">
+                  <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="资讯缩略图">
+                </a>
+              {% endif %}
             </div>
             <div class="media-body">
-              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
+               {{ article.body|plain_text(150) }}
             </div>
           </div>
         </article>
-        <article class="item">
-          <div class="article-metas clearfix">
-            <div class="pull-left">
-              <i class="iconfont icon-yuan"></i>
-              <div class="date">
-                <h3>24</h3>
-                <p>12月</p>
-              </div>
-            </div>
-            <div class="metas-body">
-              <p>行业资讯</p>
-              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="media-body">
-              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
-            </div>
-          </div>
-        </article>
-        <article class="item">
-          <div class="article-metas clearfix">
-            <div class="pull-left">
-              <i class="iconfont icon-yuan"></i>
-              <div class="date">
-                <h3>24</h3>
-                <p>12月</p>
-              </div>
-            </div>
-            <div class="metas-body">
-              <p>行业资讯</p>
-              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="media-body">
-              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
-            </div>
-          </div>
-        </article>
-        <article class="item">
-          <div class="article-metas clearfix">
-            <div class="pull-left">
-              <i class="iconfont icon-yuan"></i>
-              <div class="date">
-                <h3>24</h3>
-                <p>12月</p>
-              </div>
-            </div>
-            <div class="metas-body">
-              <p>行业资讯</p>
-              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-left">
-              <a href="#">
-                <img class="media-object" src="img-temp/course_1.jpg">
-              </a>
-            </div>
-            <div class="media-body">
-              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
-            </div>
-          </div>
-        </article>
+    {% endfor %}
         <nav>
-          <ul class="pager">
+<!--           <ul class="pager">
             <li class="previous"><a href="#">&lt;上一页</a></li>
             <li class="next"><a href="#">下一页&gt;</a></li>
-          </ul>
+          </ul> -->
+          {{ web_macro.paginator(paginator) }}
         </nav>
+      
+      {% else %}
+        <div class="empty tac text-muted mvl">还没有任何资讯</div>
+      {% endif %}
       </section>
+
     </div>
 
     <aside class="col-md-4 article-sidebar">

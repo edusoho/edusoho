@@ -1,20 +1,22 @@
-{% if articles %}
   <div class="panel es-panel recommend-article">
     <div class="panel-heading">
       <i class="iconfont icon-language"></i>推荐资讯
     </div>
     <div class="panel-body">
-      {% for key,article in articles %}
-        <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">{{ key+1 }}</span>
+      {% if articles %}
+          {% for key,article in articles %}
+            <div class="media">
+                <div class="media-left media-middle">
+                  <i class="iconfont icon-yuan"></i>
+                  <span class="num">{{ key+1 }}</span>
+                </div>
+                <div class="media-body">
+                  <a href="{{ path('article_detail', { id:article.id }) }}" title="{{ article.title }}">{{ article.title|plain_text(19) }}</a>
+                </div>
             </div>
-            <div class="media-body">
-              <a href="{{ path('article_detail', { id:article.id }) }}" title="{{ article.title }}">{{ article.title|plain_text(19) }}</a>
-            </div>
-        </div>
-      {% endfor %}
+          {% endfor %}
+      {% else %}
+        <div class="empty">暂无推荐资讯</div>
+      {% endif %}
     </div>
   </div>
-{% endif %}

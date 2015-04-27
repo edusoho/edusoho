@@ -33,7 +33,15 @@ class ArticleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+        // $publishedTime = array();
+        foreach ($latestArticles as $key => $value) {
+            $publishedTime = date('Y-m-d',$value['publishedTime']);
+            $publishedTime = explode('-', $publishedTime);
+            var_dump($value['id']);
+            var_dump($publishedTime);
+
+        }
+
         $categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
