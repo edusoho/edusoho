@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 	require("AppFilters");
 	require("frozen");
 
-	var clientType = "iOS";
+	var clientType = "Android";
 	if (navigator.userAgent.indexOf("Android") > 0) {
 		console.log("Android");
 		clientType = "Android";
@@ -12,9 +12,17 @@ define(function(require, exports, module) {
 		console.log("iOS");
 		clientType = "iOS";
 	}
-	
+	window.onDeviceReady = function() {
+		console.log("onDeviceReady:");
+	}
 	require.async("cordova_" + clientType, function(cordova) {
-		console.log(cordova);
+		document.addEventListener("deviceready", onDeviceReady, false);
+		angular.element(document).ready(function() {
+			         	angular.bootstrap(document, ['EduSohoArticleApp']);
+			         	angular.$client = {};
+		});
+
+		
 	});
 
 	var app = angular.module('EduSohoArticleApp', [
@@ -106,8 +114,4 @@ define(function(require, exports, module) {
 		});
 	}]);
 
-	angular.element(document).ready(function() {
-		         angular.bootstrap(document, ['EduSohoArticleApp']);
-		         angular.$client = {};
-	});
 });
