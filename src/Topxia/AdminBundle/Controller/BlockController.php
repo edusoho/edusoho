@@ -142,7 +142,13 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->get('data');
-            $block = $this->getBlockService()->updateBlock($blockId, array('data' =>$data));
+            $html = $this->renderView($this->getFullBlockTemplateName($block['templateName']), array(
+                'block' => $block
+            ));
+            $block = $this->getBlockService()->updateBlock($blockId, array(
+                'data' => $data,
+                'content' => $html
+            ));
             $this->setFlashMessage('success', '保存成功!');
         }
 
