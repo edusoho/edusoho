@@ -212,10 +212,6 @@ interface UserService
 
     public function dropFieldData($fieldName);
 
-    public function isUserTemporaryLockedOrLocked($user);
-
-    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
-
     /**
      * 解析文本中@(提)到的用户
      */

@@ -216,7 +216,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
-        $this->clearUserConsecutivePasswordErrorTimesAndLockDeadline($id);
+        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
 
         $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
 
@@ -746,7 +746,14 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function markLoginSuccess($userId, $ip)
     {
+        $fields = array(
+            'lockDeadline' => 0,
+            'consecutivePasswordErrorTimes' => 0,
+            'lastPasswordFailTime' => 0,
+        );
 
+        $this->getUserDao()->updateUser($userId, $fields);
+        $this->getIpBlacklistService()->clearFailedIp($ip);
     }
 
     public function checkLoginForbidden($userId, $ip)
@@ -1172,15 +1179,6 @@ class UserServiceImpl extends BaseService implements UserService
         return new MessageDigestPasswordEncoder('sha256');
     }
 
-    public function isUserTemporaryLockedOrLocked($user)
-    {
-        return ( $user['locked'] == 1 )||( $user['lockDeadline'] > time() );
-    }
-
-    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId)
-    {
-        $this->getUserDao()->updateUser($userId, array('lockDeadline' => 0, 'consecutivePasswordErrorTimes' => 0));
-    }
 }
 
 class UserSerialize
