@@ -64,21 +64,6 @@ class ArticleController extends BaseController
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-        $popularConditions = array(
-            'type' => 'article',
-            'status' => 'published'
-        );
-
-        $popularArticles = $this->getArticleService()->searchArticles($popularConditions, 'popular', 0 , 6);
-
-        $recommendConditions = array(
-            'type' => 'article',
-            'status' => 'published',
-            'promoted' => 1
-        );
-
-        $recommendArticles = $this->getArticleService()->searchArticles($recommendConditions, 'normal', 0 , 6);
-
         return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
             'categoryTree' => $categoryTree,
             'latestArticles' => $latestArticles,
@@ -88,8 +73,6 @@ class ArticleController extends BaseController
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories,
-            'popularArticles' => $popularArticles,
-            'recommendArticles' => $recommendArticles,
         ));
     }
 

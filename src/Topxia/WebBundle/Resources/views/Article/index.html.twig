@@ -159,28 +159,7 @@
 
     <aside class="col-md-4 article-sidebar">
      <!-- 热门资讯 -->
-      <div class="panel es-panel  hot-article">
-        <div class="panel-heading">
-          <h3 class="panel-title"><i class="iconfont icon-hot"></i>热门资讯</h3>
-        </div>
-        <div class="panel-body">
-
-          {% for popularArticle in popularArticles%}
-
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">{{ loop.index}}</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">{{popularArticle.title}}</a>
-            </div>
-          </div>
-
-          {% endfor %}
-
-        </div>
-      </div>
+        {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
       <!-- 热门标签 -->
       <div class="panel es-panel hot-tag">
         <div class="panel-heading">
@@ -264,24 +243,7 @@
         </div>
       </div>
       <!-- 推荐资讯 -->
-      <div class="panel es-panel recommend-article">
-        <div class="panel-heading"><i class="iconfont icon-language"></i>推荐资讯</div>
-        <div class="panel-body">
-
-          {% for recommendArticle in recommendArticles%}
-          <div class="media">
-            <div class="media-left media-middle">
-              <i class="iconfont icon-yuan"></i>
-              <span class="num">{{loop.index}}</span>
-            </div>
-            <div class="media-body">
-              <a href="javascript:;">{{recommendArticle.title}}</a>
-            </div>
-          </div>
-          {% endfor %}
-          
-        </div>
-      </div>
+  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
     </aside>
   </div>
 
