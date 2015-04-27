@@ -200,23 +200,23 @@ admin_statistic:
     defaults: { _controller: TopxiaAdminBundle:Statistic:index }
 
 admin_navigation:
-    pattern:  /navigation
+    pattern:  /setting/navigation
     defaults: { _controller: TopxiaAdminBundle:Navigation:index }
 
 admin_navigation_seqs_update:
-    pattern:  /navigation/seqs/update
+    pattern:  /setting/navigation/seqs/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:updateSeqs }
 
 admin_navigation_create:
-    pattern:  /navigation/create
+    pattern:  /setting/navigation/create
     defaults: { _controller: TopxiaAdminBundle:Navigation:create }
 
 admin_navigation_update:
-    pattern:  /navigation/{id}/update
+    pattern:  /setting/navigation/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:update }
 
 admin_navigation_delete:
-    pattern:  /navigation/{id}/delete
+    pattern:  /setting/navigation/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Navigation:delete }
     methods: [POST]
 
@@ -589,11 +589,11 @@ admin_setting_cdn:
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
 
 admin_optimize:
-    pattern:  /optimize
+    pattern:  /setting/optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
 
 admin_optimize_remove_cache:
-    pattern:  /optimize/remove-cache
+    pattern:  /setting/optimize/remove-cache
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeCache }
     methods: [POST]
 
@@ -603,26 +603,26 @@ admin_optimize_remove_tmp:
     methods: [POST]
 
 admin_optimize_remove_backup:
-    pattern:  /optimize/remove-backup
+    pattern:  /setting/optimize/remove-backup
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeBackup }
     methods: [POST]
 
 admin_optimize_backupdb:
-    pattern:  /optimize/backupdb
+    pattern:  /setting/optimize/backupdb
     defaults: { _controller: TopxiaAdminBundle:Optimize:backupdb }
     methods: [POST]
 
 admin_optimize_remove_upload_files:
-    pattern:  /optimize/remove-unusedfiles
+    pattern:  /setting/optimize/remove-unusedfiles
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
     methods: [POST]
 
 admin_logs:
-    pattern:  /logs
+    pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 
 admin_logs_prod:
-    pattern:  /logs/prod
+    pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
 admin_cloud_bill:
@@ -901,7 +901,7 @@ admin_article_category_delete:
     methods: [POST]
 
 admin_article_setting:
-    pattern: /article/setting
+    pattern: /setting/article
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:articleSet }
 
 admin_article:
@@ -964,7 +964,7 @@ admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
 admin_group_set:
-    pattern:  /group/set
+    pattern:  /setting/group
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:groupSet }
 admin_groupThread:
     pattern:  /group/thread
@@ -1106,7 +1106,7 @@ admin_coin_picture_remove:
     methods: [POST]
 
 admin_coin_settings:
-    path:     /coin/settings
+    path:     /setting/coin
     defaults: { _controller: TopxiaAdminBundle:Coin:settings }
 admin_coin_records:
     path:     /coin/records
@@ -1145,7 +1145,7 @@ admin_coin_flow_detail:
     defaults: { _controller: TopxiaAdminBundle:Coin:flowDetail }
 
 admin_coin_model:
-    path:     /coin/model
+    path:     /setting/coin/model
     defaults: { _controller: TopxiaAdminBundle:Coin:model }
 
 admin_coin_model_save:
