@@ -2,13 +2,15 @@
  
 namespace Topxia\WebBundle\Handler;
  
+use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Topxia\WebBundle\Handler\AuthenticationHelper;
 use Topxia\Service\Common\ServiceKernel;
  
-class AuthenticationFailureHandler extends BaseAuthenticationHandler
+class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
 {
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -19,7 +21,7 @@ class AuthenticationFailureHandler extends BaseAuthenticationHandler
             goto end;
         }
 
-        $forbidden = $this->checkLoginForbidden($request);
+        $forbidden = AuthenticationHelper::checkLoginForbidden($request);
 
         if ($forbidden['status'] == 'error') {
             $message = $forbidden['message'];

@@ -1,16 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Handler;
  
-use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 use Topxia\Service\Common\ServiceKernel;
  
-class BaseAuthenticationHandler extends DefaultAuthenticationFailureHandler
+class AuthenticationHelper
 {
 
-    protected function checkLoginForbidden($request)
+    public static function checkLoginForbidden($request)
     {
 
-        $setting = $this->getSettingService()->get('login_bind', array());
+        $setting = self::getSettingService()->get('login_bind', array());
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
@@ -19,12 +18,12 @@ class BaseAuthenticationHandler extends DefaultAuthenticationFailureHandler
         $setting = array_merge($default, $setting);
 
         $username = $request->request->get('_username');
-        $user = $this->getUserService()->getUserByNickname($username);
+        $user = self::getUserService()->getUserByNickname($username);
         if (empty($user)) {
-            $user = $this->getUserService()->getUserByEmail($username);
+            $user = self::getUserService()->getUserByEmail($username);
         }
 
-        $result = $this->getUserService()->checkLoginForbidden($user ? $user['id'] : 0, $request->getClientIp());
+        $result = self::getUserService()->checkLoginForbidden($user ? $user['id'] : 0, $request->getClientIp());
         if ($result['status'] == 'error') {
             switch ($result['code']) {
                 case 'max_ip_failed_limit':
@@ -46,12 +45,12 @@ class BaseAuthenticationHandler extends DefaultAuthenticationFailureHandler
         return $result;
     }
 
-    private function getUserService()
+    private static function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-    protected function getSettingService()
+    protected static function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }

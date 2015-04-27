@@ -767,6 +767,10 @@ class UserServiceImpl extends BaseService implements UserService
             return array( 'status' => 'error', 'code' => 'max_ip_failed_limit');
         }
 
+        if ($user && $setting['temporary_lock_enabled'] &&  ($setting['lockDeadline'] > time()) ) {
+            return array( 'status' => 'error', 'code' => 'max_failed_limit');
+        }
+
         if ($user && $setting['temporary_lock_enabled'] && ($user['consecutivePasswordErrorTimes'] >= $setting['temporary_lock_allowed_times'])) {
             return array( 'status' => 'error', 'code' => 'max_failed_limit');
         }
