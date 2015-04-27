@@ -2,17 +2,14 @@
  
 namespace Topxia\WebBundle\Handler;
  
-use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Topxia\Service\Common\ServiceKernel;
  
-class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
+class AuthenticationFailureHandler extends BaseAuthenticationHandler
 {
-
-    protected $translator;
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
@@ -22,36 +19,13 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             goto end;
         }
 
-        $setting = $this->getSettingService()->get('login_bind', array());
-        $default = array(
-            'temporary_lock_enabled' => 0,
-            'temporary_lock_allowed_times' => 5,
-            'temporary_lock_minutes' => 20,
-        );
-        $setting = array_merge($default, $setting);
+        $forbidden = $this->checkLoginForbidden($request);
 
-        $username = $request->request->get('_username');
-        $user = $this->getUserService()->getUserByNickname($username);
-        if (empty($user)) {
-            $user = $this->getUserService()->getUserByEmail($username);
-        }
-
-        $passResult = $this->getUserService()->checkLoginForbidden($user ? $user['id'] : 0, $request->getClientIp());
-        if ($passResult['status'] == 'error') {
-            switch ($passResult['status']) {
-                case 'max_ip_failed_limit':
-                    $message = '帐号或密码输入错误过多，请在１个小时后再试。';
-                    break;
-                case 'max_failed_limit':
-                    $message = "帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}后再试，您可以通过找回并重置密码来解除封禁。";
-                    break;
-                default:
-                    $message = "帐号或密码输入错误过多，您已被禁止登录。";
-                    break;
-            }
+        if ($forbidden['status'] == 'error') {
+            $message = $forbidden['message'];
             $exception = new AuthenticationException($message);
         } else {
-            $failed = $this->getUserService()->markLoginFailed($user ? $user['id'] : 0, $request->getClientIp());
+            $failed = $this->getUserService()->markLoginFailed($forbidden['user'] ? $forbidden['user']['id'] : 0, $request->getClientIp());
             if ($failed['failedCount']) {
                 $leftCount = $setting['temporary_lock_allowed_times'] - $failed['failedCount'];
                 $leftCount = $leftCount > 0 ? $leftCount : 0;
@@ -72,23 +46,8 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         return parent::onAuthenticationFailure($request, $exception);
     }
 
-    public function setTranslator($translator)
-    {
-        $this->translator = $translator;
-    }
-
-    private function getLogService()
-    {
-        return ServiceKernel::instance()->createService('System.LogService');
-    }
-
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

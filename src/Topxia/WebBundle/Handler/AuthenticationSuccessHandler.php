@@ -9,13 +9,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Security\Core\Exception\LockedException;
 
-class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
+class AuthenticationSuccessHandler extends BaseAuthenticationHandler
 {
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        // $this->getUserService()->markLoginInfo();
+
+        $forbidden = $this->checkLoginForbidden($request);
+
+        if ($forbidden['status'] == 'error') {
+
+        }
+
+
+
 
         $userId = $token->getUser()->id;
+
+
+
 
         $loginConnect = $this->getSettingService()->get('login_bind', array());
         $default = array(

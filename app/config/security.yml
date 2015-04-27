@@ -13,8 +13,6 @@ services:
     topxia.authentication.failure_handler:
         class: Topxia\WebBundle\Handler\AuthenticationFailureHandler
         parent: security.authentication.failure_handler
-        calls:
-            - [setTranslator, [@translator]]
 
     topxia.authentication.success_handler:
         class: Topxia\WebBundle\Handler\AuthenticationSuccessHandler
