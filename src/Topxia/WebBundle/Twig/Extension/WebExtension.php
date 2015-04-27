@@ -47,6 +47,7 @@ class WebExtension extends \Twig_Extension
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
+            'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
         );
     }
 
@@ -91,7 +92,6 @@ class WebExtension extends \Twig_Extension
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
-            'transform_array' => new \Twig_Function_Method($this, 'transformArray'),
         );
     }
 
@@ -934,24 +934,10 @@ class WebExtension extends \Twig_Extension
         return intval($number / $total * 100) . '%';
     }
 
-    public function transformArray($content,$transformKey,$transformValue)
+    public function arrayMerge($text,$content)
     {
-        $values=array();
-        foreach ($content as $key => $value) {
-            if ($transformKey == $key) {
-                $content[$key] = $transformValue;
-            }else{
-                if (strpos($transformValue,":")) {
-                    $transformValues = explode(':', $transformValue);
-                    $values[$transformValues[0]] = $transformValues[1];
-                    $content[$transformKey] = $values;
-                }else{
-                    $content[$transformKey] = $transformValue;
-                }
-            }
-        }
-        
-        return $content;
+        $array = array_merge($text,$content);
+        return $array;
     }
 
     public function getSetPrice($price)
