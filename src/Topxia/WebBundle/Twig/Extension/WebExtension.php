@@ -91,6 +91,7 @@ class WebExtension extends \Twig_Extension
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
+            'transform_array' => new \Twig_Function_Method($this, 'transformArray'),
         );
     }
 
@@ -931,6 +932,26 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
         return intval($number / $total * 100) . '%';
+    }
+
+    public function transformArray($content,$transformKey,$transformValue)
+    {
+        $values=array();
+        foreach ($content as $key => $value) {
+            if ($transformKey == $key) {
+                $content[$key] = $transformValue;
+            }else{
+                if (strpos($transformValue,":")) {
+                    $transformValues = explode(':', $transformValue);
+                    $values[$transformValues[0]] = $transformValues[1];
+                    $content[$transformKey] = $values;
+                }else{
+                    $content[$transformKey] = $transformValue;
+                }
+            }
+        }
+        
+        return $content;
     }
 
     public function getSetPrice($price)

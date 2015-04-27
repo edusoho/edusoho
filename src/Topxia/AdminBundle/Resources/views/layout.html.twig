@@ -60,6 +60,15 @@
 
         <ul class="nav navbar-nav">
           {% for m in menu_children('admin', 'admin', 1) %}
+
+            {% if m.code == "admin_app"%}
+               {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                 {% set m =  transform_array(m,'router_name','admin_app_center') %}
+                 {% set m = transform_array(m,'router_params','postStatus:all') %}
+                 {% set m =  transform_array(m,'children','0:admin_app_center_show') %}
+               {% endif %}
+            {% endif %}
+
             {% if m.code != "admin_system" %}
                 <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
                   {{ _self.menu_link_html(_context, m) }}
@@ -71,6 +80,7 @@
                   </li>
                 {% endif %}
             {% endif %}
+
           {% endfor %}
         </ul>
 
@@ -102,12 +112,25 @@
         <div class="col-md-2">
           {% block sidebar %}
             {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
+
               <div class="list-group">
                 {% for m in groupedMenus %}
-                  {% if not menu_hiddens[m.code]|default(false) %}
-                    {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                    {{ _self.menu_link_html(_context, m, menuClass) }}
+                  {% if m.code != "admin_my_cloud" and  m.code != "admin_setting_cloud_video" and  m.code != "admin_setting_cloud"%}
+                            
+                      {% if not menu_hiddens[m.code]|default(false) %}
+                        {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                        {{ _self.menu_link_html(_context, m, menuClass) }}
+                      {% endif %}
+
+                  {% else %}
+                      {% if  is_granted('ROLE_SUPER_ADMIN') %}
+                            {% if not menu_hiddens[m.code]|default(false) %}
+                              {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                              {{ _self.menu_link_html(_context, m, menuClass) }}
+                            {% endif %}
+                       {% endif %}
                   {% endif %}
+
                 {% endfor %}
               </div>
             {% endfor %}
