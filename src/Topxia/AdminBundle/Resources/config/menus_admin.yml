@@ -48,6 +48,25 @@ admin_operation_block:
     parent: admin_operation
     router_name: admin_block
     group: 2
+admin_operation_block_all:
+    name: 全部
+    parent: admin_operation_block
+    router_name: admin_block
+admin_operation_block_currentTheme:
+    name: 当前主题
+    parent: admin_operation_block
+    router_name: admin_block
+    router_params: { categary: theme }  
+admin_operation_block_system:
+    name: 系统
+    parent: admin_operation_block
+    router_name: admin_block 
+    router_params: { categary: system }   
+admin_operation_block_editList:
+    name: 最近编辑
+    parent: admin_operation_block
+    router_name: admin_block
+    router_params: { sort: lastest }    
 admin_operation_content:
     name: 自定义页面管理
     parent: admin_operation
