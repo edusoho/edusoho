@@ -47,6 +47,7 @@ class WebExtension extends \Twig_Extension
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
+            'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
         );
     }
 
@@ -931,6 +932,12 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
         return intval($number / $total * 100) . '%';
+    }
+
+    public function arrayMerge($text,$content)
+    {
+        $array = array_merge($text,$content);
+        return $array;
     }
 
     public function getSetPrice($price)
