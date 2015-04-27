@@ -29,7 +29,7 @@
 
       {% for app in apps %}
   
-        {% if app.installed|default(0) or app.userAccess|default('fail') == 'ok' %}
+        {% if app.installed|default(0) or app.purchased or (app.userAccess|default(null) == "ok" ) and (app.price == 0 and not  app.licensed ) %}
         <tr>
           <td>
               {% if app.code == "MAIN" %}
@@ -39,10 +39,11 @@
               {% endif %}
               
             <div class="mtm">
-              <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
-                <h4><strong class="text-primary">{{ app.name }}</strong>            
-                </h4>
-              </a>
+              
+                <h4>
+                  <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}"><strong class="text-primary">{{ app.name }}</strong>
+                  </a>            
+                </h4>     
     
             </div>
             

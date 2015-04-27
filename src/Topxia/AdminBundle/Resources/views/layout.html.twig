@@ -60,9 +60,17 @@
 
         <ul class="nav navbar-nav">
           {% for m in menu_children('admin', 'admin', 1) %}
-            <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-              {{ _self.menu_link_html(_context, m) }}
-            </li>
+            {% if m.code != "admin_system" %}
+                <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+                  {{ _self.menu_link_html(_context, m) }}
+                </li>  
+            {% else %}    
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                  <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+                  {{ _self.menu_link_html(_context, m) }}
+                  </li>
+                {% endif %}
+            {% endif %}
           {% endfor %}
         </ul>
 
@@ -137,7 +145,7 @@
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m) }}
+                    {{ _self.menu_link_html(_context, m, m.class|default('')) }}
                   {% endif %}
                 </li>
               {% endfor %}
