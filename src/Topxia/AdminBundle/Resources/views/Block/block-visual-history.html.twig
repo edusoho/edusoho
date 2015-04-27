@@ -1,1 +1,35 @@
-暂时不支持可视化编辑的历史记录
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_operation_block' %}
+{% block page_title %} 编辑内容 {% endblock %}
+
+{% block main %}
+  <ul class="nav nav-pills">
+    <li role="presentation" {% if action == 'edit' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">编辑</a></li>
+    <li role="presentation" {% if action == 'history' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit_history', {blockId:block.id}) }}">历史记录</a></li>
+  </ul>
+  
+  <table id="block-history-table" class="visual-block-history-table table table-striped table-condensed">
+    <thead>
+      <th>修改时间</th>
+      <th>修改用户</th>
+      <th>操作</th>
+    </thead>
+    <tbody>
+      {% for blockHistory in blockHistorys %}
+        <tr id="{{ blockHistory.id }}">
+          <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
+          <td>{{ historyUsers[blockHistory.userId].nickname }}</td>
+          <td>
+            <a class="btn btn-xs btn-default edit-btn" 
+            href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
+
+            <button class="btn-recover-content btn btn-xs btn-default edit-btn">恢复此内容</button>
+            <div class="data-role-content" style="display:none"> {{ blockHistory.content }} </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock %}

@@ -154,7 +154,26 @@ class BlockController extends BaseController
 
     public function visualHistoryAction(Request $request, $blockId)
     {
-        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig");
+        $block = $this->getBlockService()->getBlock($blockId);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
+            5
+        );
+
+        $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
+            $block['id'], 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+        $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
+        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig", array(
+            'block' => $block,
+            'paginator' => $paginator,
+            'blockHistorys' => $blockHistorys,
+            'historyUsers' => $historyUsers,
+            'action' => 'history'
+        ));
     }
 
     public function createAction(Request $request)

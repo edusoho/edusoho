@@ -538,3 +538,7 @@ input.LargeInput {width: 600px;}
   height: 350px;
   margin-top: 25px;
 }
+
+.visual-block-history-table {
+  margin-top: 15px;
+}
