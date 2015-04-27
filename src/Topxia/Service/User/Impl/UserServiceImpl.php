@@ -703,9 +703,10 @@ class UserServiceImpl extends BaseService implements UserService
     public function markLoginFailed($userId, $ip)
     {
         $user = $userId ? $this->getUser($userId) : null;
-        $counter = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
+        
 
-        $setting = $this->getSettingService()->get('bind', array());
+        $setting = $this->getSettingService()->get('login_bind', array());
+
         $default = array(
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
@@ -718,7 +719,7 @@ class UserServiceImpl extends BaseService implements UserService
             if (time() > $user['lastPasswordFailTime'] + $setting['temporary_lock_minutes']*60) {
                 $fields['consecutivePasswordErrorTimes'] = 1;
             } else {
-                $fields['consecutivePasswordErrorTimes'] ++;
+                $fields['consecutivePasswordErrorTimes'] = $user['consecutivePasswordErrorTimes'] + 1;
             }
 
             if ($fields['consecutivePasswordErrorTimes'] >=  $setting['temporary_lock_allowed_times']) {
@@ -741,7 +742,13 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getLogService()->info('user', 'login_fail', $log);
 
-        return array('failedCount' => $user['consecutivePasswordErrorTimes'], 'ipFaildCount' => $counter);
+        $ipFailedCount = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
+
+        return array(
+            'failedCount' => $user['consecutivePasswordErrorTimes'],
+            'leftFailedCount' => $setting['temporary_lock_allowed_times'] - $user['consecutivePasswordErrorTimes'],
+            'ipFaildCount' => $ipFailedCount
+        );
     }
 
     public function markLoginSuccess($userId, $ip)
@@ -760,7 +767,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $user = $userId ? $this->getUser($userId) : null;
 
-        $setting = $this->getSettingService()->get('bind', array());
+        $setting = $this->getSettingService()->get('login_bind', array());
 
         $default = array(
             'temporary_lock_enabled' => 0,
@@ -774,7 +781,7 @@ class UserServiceImpl extends BaseService implements UserService
             return array( 'status' => 'error', 'code' => 'max_ip_failed_limit');
         }
 
-        if ($user && $setting['temporary_lock_enabled'] &&  ($setting['lockDeadline'] > time()) ) {
+        if ($user && $setting['temporary_lock_enabled'] &&  ($user['lockDeadline'] > time()) ) {
             return array( 'status' => 'error', 'code' => 'max_failed_limit');
         }
 

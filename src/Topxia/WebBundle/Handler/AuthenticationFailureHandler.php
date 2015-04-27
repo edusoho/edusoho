@@ -16,7 +16,6 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
-
         if ($exception->getMessage() != "Bad credentials") {
             goto end;
         }
@@ -28,11 +27,17 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
             $exception = new AuthenticationException($message);
         } else {
             $failed = $this->getUserService()->markLoginFailed($forbidden['user'] ? $forbidden['user']['id'] : 0, $request->getClientIp());
-            if ($failed['failedCount']) {
-                $leftCount = $setting['temporary_lock_allowed_times'] - $failed['failedCount'];
-                $leftCount = $leftCount > 0 ? $leftCount : 0;
-                $message = "帐号或密码错误，您还有{$leftCount}次输入机会";
+            if ($forbidden['user']) {
+                if ($failed['leftFailedCount']) {
+                    $message = "帐号或密码错误，您还有{$failed['leftFailedCount']}次输入机会";
+                } else {
+                    $setting = $this->getSettingService()->get('login_bind', array());
+                    $setting = array_merge(array('temporary_lock_minutes' => 20), $setting);
+                    $message = "帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}后再试，您可以通过找回并重置密码来解除封禁。";
+                }
                 $exception = new AuthenticationException($message);
+            } else {
+                $message = $exception->getMessage();
             }
         }
 
@@ -51,5 +56,10 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

@@ -24,7 +24,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $this->getUserService()->markLoginSuccess($userId, $request->getClientIp());
         }
 
-
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => true

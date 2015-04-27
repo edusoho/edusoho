@@ -9,13 +9,18 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
     public function increaseIpFailedCount($ip)
     {
+        $setting = $this->getSettingService()->get('login_bind', array());
+        $setting = array_merge(array('temporary_lock_minutes' => 20), $setting);
+
+
+
         $existIp = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
         if (empty($existIp)) {
             $ip = array(
                 'ip' => $ip,
                 'type' => 'failed',
                 'counter' => 1,
-                'expiredTime' => time() + self::FAILED_DURATION,
+                'expiredTime' => time() + ($setting['temporary_lock_minutes'] * 60),
                 'createdTime' => time(),
             );
            $ip = $this->getIpBlacklistDao()->addIp($ip);
@@ -30,7 +35,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
                 'ip' => $ip,
                 'type' => 'failed',
                 'counter' => 1,
-                'expiredTime' => time() + self::FAILED_DURATION,
+                'expiredTime' => time() + ($setting['temporary_lock_minutes'] * 60),
                 'createdTime' => time(),
             );
            $ip = $this->getIpBlacklistDao()->addIp($ip);
@@ -76,6 +81,11 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
     protected function getIpBlacklistDao()
     {
         return $this->createDao('System.IpBlacklistDao');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
 }
