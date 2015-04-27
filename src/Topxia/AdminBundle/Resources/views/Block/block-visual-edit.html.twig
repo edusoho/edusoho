@@ -1,8 +1,7 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_operation_block' %}
-{% block title %}{{ getTitle('admin_operation_block')}}{% endblock %}
-{% block page_title %} <a href="{{ path('admin_block') }}">编辑区管理</a> - {{ block.title }}编辑 {% endblock %}
+{% block page_title %} 编辑内容 {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
 {% block main %}
@@ -16,7 +15,7 @@
     {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   
-    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <a class="btn btn-link" href="{{ path('admin_block') }}">取消</a>
     <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
   </form>
 
