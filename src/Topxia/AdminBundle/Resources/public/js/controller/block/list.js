@@ -21,9 +21,8 @@ define(function(require, exports, module) {
 　　  currKey=e.keyCode||e.which||e.charCode;
 		if(currKey == 191){
 			setTimeout(function(){
-				$("#quitsearch")[0].focus()
+				$("#block-input")[0].focus()
 			},300)
-　　   alert("按键码: " + currKey );
 		}
 　　 }				
 　　 document.onkeyup = keyUp;
