@@ -11,6 +11,7 @@ class RecommendTeachersDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new RecommendTeachersDataTag();
+        $datatag->getData(array('count' => 5));
 
     }
 

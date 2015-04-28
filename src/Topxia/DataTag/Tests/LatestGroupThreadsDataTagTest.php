@@ -11,6 +11,7 @@ class LatestGroupThreadsDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new LatestGroupThreadsDataTag();
+        $datatag->getData(array('count' => 5));
 
     }
 

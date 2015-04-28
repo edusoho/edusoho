@@ -11,6 +11,7 @@ class LatestLoginUsersDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new LatestLoginUsersDataTag();
+        $datatag->getData(array('count' => 5));
 
     }
 

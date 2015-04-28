@@ -11,6 +11,7 @@ class NavigationDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new NavigationDataTag();
+        $datatag->getData(array('type' => 'top'));
 
     }
 

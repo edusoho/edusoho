@@ -11,6 +11,7 @@ class LatestCourseQuestionsDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new LatestCourseQuestionsDataTag();
+        $datatag->getData(array('courseId' => 1, 'count' => 5));
 
     }
 

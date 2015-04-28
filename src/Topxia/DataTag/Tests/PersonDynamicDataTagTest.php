@@ -11,6 +11,7 @@ class PersonDynamicDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new PersonDynamicDataTag();
+        $datatag->getData(array('count' => 5));
 
     }
 

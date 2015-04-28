@@ -11,7 +11,7 @@ class HotGroupDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new HotGroupDataTag();
-
+        $datatag->getData(array('count' => 5));
     }
 
 }

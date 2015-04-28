@@ -11,6 +11,7 @@ class FreeLessonsDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new FreeLessonsDataTag();
+        $datatag->getData(array('count' => 5));
 
     }
 

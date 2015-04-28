@@ -11,6 +11,7 @@ class PromotedTeacherDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new PromotedTeacherDataTag();
+        $datatag->getData(array());
 
     }
 

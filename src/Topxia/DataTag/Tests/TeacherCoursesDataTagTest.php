@@ -11,6 +11,7 @@ class TeacherCoursesDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new TeacherCoursesDataTag();
+        $datatag->getData(array('userId' =>1, 'count' => 5));
 
     }
 

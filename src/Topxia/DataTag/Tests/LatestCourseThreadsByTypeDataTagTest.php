@@ -11,6 +11,7 @@ class LatestCourseThreadsByTypeDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new LatestCourseThreadsByTypeDataTag();
+        $datatag->getData(array('type' => 'question', 'count' => 5));
 
     }
 

@@ -11,6 +11,7 @@ class UserLatestLearnCoursesDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new UserLatestLearnCoursesDataTag();
+        $datatag->getData(array('userId' => 1, 'count' => 5));
 
     }
 

@@ -11,6 +11,7 @@ class LatestArticlesDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new LatestArticlesDataTag();
+        $datatag->getData(array('count' => 5, 'type' => 'featured'));
 
     }
 

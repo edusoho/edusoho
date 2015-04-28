@@ -11,6 +11,7 @@ class UserDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new UserDataTag();
+        $datatag->getData(array('userId' => 1));
 
     }
 

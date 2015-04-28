@@ -10,8 +10,21 @@ class CourseDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-        $datatag = new CourseDataTag();
+        $course = array(
+            'type' => 'online',
+            'title' => 'online test course 1',
+        );
 
+        $course = $this->getCourseService()->createCourse($course);
+
+        $datatag = new CourseDataTag();
+        $foundCourse = $datatag->getData(array('courseId' => $course['id']));
+        $this->assertEquals($course['id'], $foundCourse['id']);
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }

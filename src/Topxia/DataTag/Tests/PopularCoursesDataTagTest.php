@@ -11,6 +11,7 @@ class PopularCoursesDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new PopularCoursesDataTag();
+        $datatag->getData(array('type' => 'hitNum', 'count' => 5));
 
     }
 

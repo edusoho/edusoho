@@ -11,6 +11,7 @@ class LatestFinishedLearnsDataTagTest extends BaseTestCase
     public function testGetData()
     {
         $datatag = new LatestFinishedLearnsDataTag();
+        $datatag->getData(array('count' => 5));
 
     }
 
