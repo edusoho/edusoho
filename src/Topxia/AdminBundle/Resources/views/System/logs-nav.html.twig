@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs mbl">
+  <li class="{% if tab == 'logs' %}active{% endif %}">
+    <a href="{{ url('admin_logs') }}">系统操作日志
+    </a>
+  </li>
+  <li class="{% if tab == 'prod' %}active{% endif %}">
+    <a href="{{ url('admin_logs_prod') }}">程序运行日志
+    </a>
+  </li>
+</ul>

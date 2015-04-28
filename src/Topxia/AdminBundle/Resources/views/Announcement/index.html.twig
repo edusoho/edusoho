@@ -1,0 +1,61 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'announcement/index' %}
+
+{% set menu = 'admin_announcement' %}
+
+{% block main %}
+
+        <table id="announcement-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th width="28%">公告信息</th>
+              <th>发布时间</th>
+              <th>结束时间</th>
+              <th>状态</th>
+              <th>发布人</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% if announcements %}
+            {% for announcement in announcements %}
+            <tr>
+              <td><a href="{{announcement.url}}" target="_content">{{announcement.title}}</td>
+              <td>{{announcement.startTime|date('Y-m-d H:i')}}</td>
+              <td>{{announcement.endTime|date('Y-m-d H:i')}}</td>
+              <td>
+                {% if now < announcement.startTime %}
+                  即将开始
+                {% elseif now > announcement.endTime  %}
+                  已结束
+                {% else %}
+                  显示中
+                {% endif %}
+              </td>
+              <td>{{users[announcement.userId].nickname}}</td>
+              <td>  
+                <div class="btn-group">
+                  <a  data-url="{{ path('admin_announcement_edit',{id:announcement.id}) }}" class="btn btn-default btn-sm"  data-toggle="modal" data-target="#modal">编辑</a>
+                  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                   <li><a href="javascript::" data-url="{{path('admin_announcement_delete',{id:announcement.id})}}" class="delete-btn"><span class="glyphicon glyphicon-trash"></span> 删除</a></li>
+                   
+                </ul>
+                </div>
+            </td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+          </tbody>
+        </table>
+
+        {% if not announcements %}
+        <div class="empty">暂无公告</div>
+        {% endif %}
+
+        {{ web_macro.paginator(paginator) }}
+   
+{% endblock %}

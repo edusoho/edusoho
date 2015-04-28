@@ -1,0 +1,13 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_logs_prod' %}
+
+{% block main %}
+
+  <div class="alert alert-warning">显示最近的２０００条日志信息。</div>
+
+  <pre>
+    {{ logs|nl2br }}
+  </pre>
+
+{% endblock %}

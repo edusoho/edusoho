@@ -200,38 +200,38 @@ admin_statistic:
     defaults: { _controller: TopxiaAdminBundle:Statistic:index }
 
 admin_navigation:
-    pattern:  /navigation
+    pattern:  /setting/navigation
     defaults: { _controller: TopxiaAdminBundle:Navigation:index }
 
 admin_navigation_seqs_update:
-    pattern:  /navigation/seqs/update
+    pattern:  /setting/navigation/seqs/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:updateSeqs }
 
 admin_navigation_create:
-    pattern:  /navigation/create
+    pattern:  /setting/navigation/create
     defaults: { _controller: TopxiaAdminBundle:Navigation:create }
 
 admin_navigation_update:
-    pattern:  /navigation/{id}/update
+    pattern:  /setting/navigation/{id}/update
     defaults: { _controller: TopxiaAdminBundle:Navigation:update }
 
 admin_navigation_delete:
-    pattern:  /navigation/{id}/delete
+    pattern:  /setting/navigation/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Navigation:delete }
     methods: [POST]
 
 admin_review:
     pattern:  /review
-    defaults: { _controller: TopxiaAdminBundle:Review:index }
+    defaults: { _controller: TopxiaAdminBundle:CourseReview:index }
 
 admin_review_delete:
     pattern: /review/{id}/delete
-    defaults: {_controller: TopxiaAdminBundle:Review:delete }
+    defaults: {_controller: TopxiaAdminBundle:CourseReview:delete }
     methods: [POST]
 
 admin_review_batch_delete:
     pattern: /review/batch_delete
-    defaults: {_controller: TopxiaAdminBundle:Review:batchDelete }
+    defaults: {_controller: TopxiaAdminBundle:CourseReview:batchDelete }
     methods: [POST]
 
 admin_note:
@@ -357,15 +357,33 @@ admin_order_audit_refund:
 
 admin_setting_site:
     pattern:  /setting/site
-    defaults: { _controller: TopxiaAdminBundle:Setting:site }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:site }
+
+admin_operation_mobile:
+    pattern:  /operation/mobile
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobile }
+
+admin_operation_mobile_select:
+    pattern:  /operation/mobile/select
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
 
 admin_setting_mobile:
     pattern:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }
 
+admin_operation_mobile_picture_upload:
+    pattern:  /operation/mobile/picture/upload/{type}
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobilePictureUpload }
+    methods: [POST]
+
 admin_setting_mobile_picture_upload:
     pattern:  /setting/mobile/picture/upload/{type}
     defaults: { _controller: TopxiaAdminBundle:Setting:mobilePictureUpload }
+    methods: [POST]
+
+admin_operation_mobile_picture_remove:
+    pattern:  /operation/mobile/picture/remove/{type}
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobilePictureRemove }
     methods: [POST]
 
 admin_setting_mobile_picture_remove:
@@ -405,7 +423,7 @@ admin_setting_favicon_remove:
 
 admin_setting_auth:
     pattern:  /setting/auth
-    defaults: { _controller: TopxiaAdminBundle:Setting:auth }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:auth }
 
 admin_setting_mailer:
     pattern:  /setting/mailer
@@ -413,11 +431,11 @@ admin_setting_mailer:
 
 admin_setting_login_bind:
     pattern:  /setting/login-connect
-    defaults: { _controller: TopxiaAdminBundle:Setting:loginConnect }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:loginConnect }
 
 admin_setting_payment:
     pattern:  /setting/payment
-    defaults: { _controller: TopxiaAdminBundle:Setting:payment }
+    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:payment }
 
 admin_setting_cloud_video:
     pattern:  /setting/cloud/video
@@ -475,7 +493,7 @@ admin_setting_cloud_video_embed_watermark_remove:
 
 admin_setting_refund:
     pattern:  /setting/refund
-    defaults: { _controller: TopxiaAdminBundle:Setting:refund }
+    defaults: { _controller: TopxiaAdminBundle:FinanceSetting:refund }
 
 admin_setting_default:
     pattern:  /setting/default
@@ -483,7 +501,7 @@ admin_setting_default:
 
 admin_setting_share:
     pattern:  /setting/share
-    defaults: { _controller: TopxiaAdminBundle:Setting:share }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:share }
 
 admin_setting_default_avatar_crop:
     pattern:  /setting/default/avatar/crop
@@ -508,50 +526,66 @@ admin_setting_theme_change:
 
 admin_setting_user_center:
     pattern:  /setting/user-center
-    defaults: { _controller: TopxiaAdminBundle:Setting:userCenter }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:userCenter }
+
+admin_setting_avatar:
+    pattern:  /setting/user-avatar
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:userAvatar }
 
 admin_setting_user_fields:
     pattern:  /setting/user-fields
-    defaults: { _controller: TopxiaAdminBundle:Setting:userFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:userFields }
 
 admin_setting_course_setting:
     pattern:  /setting/course-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:courseSetting }
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseSetting }
+
+admin_setting_course_avatar:
+    pattern:  /setting/course-avatar
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:courseAvatar }
+
+admin_setting_live_course_setting:
+    pattern:  /setting/live-course-setting
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:liveCourseSetting }
 
 admin_setting_questions_setting:
     pattern: /setting/questions-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:questionsSetting }
+    defaults: { _controller: TopxiaAdminBundle:CourseSetting:questionsSetting }
 
 admin_setting_consult_setting:
     pattern:  /setting/consult-setting
-    defaults: { _controller: TopxiaAdminBundle:Setting:consultSetting }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultSetting }
 
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
-    defaults: { _controller: TopxiaAdminBundle:Setting:consultUpload }
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
 
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
 
-admin_setting_developer_change_version:
-    pattern:  /setting/developer/modifyVersion
-    defaults: { _controller: TopxiaAdminBundle:Setting:modifyVersion }
-
 admin_setting_developer:
     pattern:  /setting/developer
-    defaults: { _controller: TopxiaAdminBundle:Setting:developer }
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:index }
+
+admin_setting_developer_version:
+    pattern:  /setting/developer/version
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:version }
+
+admin_setting_developer_magic:
+    pattern:  /setting/developer/magic
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
 
 admin_optimize:
-    pattern:  /optimize
+    pattern:  /setting/optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
 
 admin_optimize_remove_cache:
-    pattern:  /optimize/remove-cache
+    pattern:  /setting/optimize/remove-cache
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeCache }
     methods: [POST]
 
@@ -561,23 +595,27 @@ admin_optimize_remove_tmp:
     methods: [POST]
 
 admin_optimize_remove_backup:
-    pattern:  /optimize/remove-backup
+    pattern:  /setting/optimize/remove-backup
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeBackup }
     methods: [POST]
 
 admin_optimize_backupdb:
-    pattern:  /optimize/backupdb
+    pattern:  /setting/optimize/backupdb
     defaults: { _controller: TopxiaAdminBundle:Optimize:backupdb }
     methods: [POST]
 
 admin_optimize_remove_upload_files:
-    pattern:  /optimize/remove-unusedfiles
+    pattern:  /setting/optimize/remove-unusedfiles
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
     methods: [POST]
 
 admin_logs:
-    pattern:  /logs
+    pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
+
+admin_logs_prod:
+    pattern:  /setting/logs/prod
+    defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
 admin_cloud_bill:
     pattern:  /cloud/bill
@@ -587,16 +625,36 @@ admin_cloud_recharge:
     pattern:  /cloud/recharge
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
 
+admin_cloud_detail:
+    pattern:  /cloud/detail
+    defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
+
+admin_cloud_sms_account:
+    pattern:  /cloud/sms/account
+    defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
 
 admin_app_center:
-    pattern:  /app/center
+    pattern:  /app/center/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:App:center }
 
+admin_my_cloud:
+    pattern:  /my/cloud
+    defaults: { _controller: TopxiaAdminBundle:App:myCloud }
+
+admin_my_cloud_overview:
+    pattern:  /my/cloud/overview
+    defaults: { _controller: TopxiaAdminBundle:App:myCloudOverview }
+
+# admin_app_cloud:
+#     pattern:  /app/center/cloud
+#     defaults: { _controller: TopxiaAdminBundle:App:cloud }
+
 admin_app_installed:
-    pattern:  /app/installed
+    pattern:  /app/installed/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:App:installed }
 
 admin_app_uninstall:
@@ -835,8 +893,8 @@ admin_article_category_delete:
     methods: [POST]
 
 admin_article_setting:
-    pattern: /article/setting
-    defaults: { _controller: TopxiaAdminBundle:Article:setting }
+    pattern: /setting/article
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:articleSet }
 
 admin_article:
     pattern:  /article
@@ -898,8 +956,8 @@ admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
 admin_group_set:
-    pattern:  /group/set
-    defaults: { _controller: TopxiaAdminBundle:Group:set }
+    pattern:  /setting/group
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:groupSet }
 admin_groupThread:
     pattern:  /group/thread
     defaults: { _controller: TopxiaAdminBundle:Group:thread }
@@ -1007,15 +1065,15 @@ admin_operation_analysis_lesson_exit:
 
 admin_user_fields_add:
     pattern:  /user_fields/add
-    defaults: { _controller: TopxiaAdminBundle:Setting:addUserFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:addUserFields }
 
 admin_user_fields_edit:
     pattern:  /user_fields/edit/{id}
-    defaults: { _controller: TopxiaAdminBundle:Setting:editUserFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:editUserFields }
 
 admin_user_fields_delete:
     pattern:  /user_fields/delete/{id}
-    defaults: { _controller: TopxiaAdminBundle:Setting:deleteUserFields }
+    defaults: { _controller: TopxiaAdminBundle:UserSetting:deleteUserFields }
 
 admin_system_status:
     pattern:  /system/status
@@ -1040,17 +1098,17 @@ admin_coin_picture_remove:
     methods: [POST]
 
 admin_coin_settings:
-    path:     /coin/settings
+    path:     /setting/coin
     defaults: { _controller: TopxiaAdminBundle:Coin:settings }
 admin_coin_records:
     path:     /coin/records
     defaults: { _controller: TopxiaAdminBundle:Coin:records }
 admin_coin_orders:
     path:     /coin/orders
-    defaults: { _controller: TopxiaAdminBundle:Coin:orders }
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:orders }
 admin_coin_orders_log:
     path:     /coin/orders/log/{id}
-    defaults: { _controller: TopxiaAdminBundle:Coin:logs }
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:logs }
 # admin_coin_admin:
 #     path:     /coin/admin
 #     defaults: { _controller: TopxiaAdminBundle:Coin:admin }
@@ -1079,13 +1137,22 @@ admin_coin_flow_detail:
     defaults: { _controller: TopxiaAdminBundle:Coin:flowDetail }
 
 admin_coin_model:
-    path:     /coin/model
+    path:     /setting/coin/model
     defaults: { _controller: TopxiaAdminBundle:Coin:model }
 
 admin_coin_model_save:
     path:     /coin/model/save
     defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }
 
+admin_common_add:
+    pattern:  /common/add
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:addCommonAdmin }
+admin_common_admin:
+    pattern:  /common/admin
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonAdmin }
+admin_common_remove:
+    pattern:  /common/remove/{id}
+    defaults: { _controller: TopxiaAdminBundle:CommonAdmin:commonRemove }
 admin_edu_cloud:
     pattern:  /edu_cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
@@ -1105,4 +1172,21 @@ admin_edu_cloud_sms_bill:
 admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
-    
+
+admin_announcement:
+    pattern:  /announcement
+    defaults: { _controller: TopxiaAdminBundle:Announcement:index }
+
+admin_announcement_create:
+    pattern:  /announcement/create
+    defaults: { _controller: TopxiaAdminBundle:Announcement:create }
+
+admin_announcement_delete:
+    pattern:  /announcement/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:Announcement:delete }
+    methods: [POST]
+
+admin_announcement_edit:
+    pattern:  /announcement/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:Announcement:edit }
+

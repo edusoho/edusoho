@@ -1,11 +1,9 @@
-{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}系统默认设置 - {{ parent() }}{% endblock %}
-
-{% set submenu = 'default' %}
+{% set menu = 'admin_user_avatar' %}
 {% set script_controller = 'setting/default-avatar-crop' %}
 
-{% block maincontent %}
+{% block main %}
 
 <meta http-equiv="pragma" content="no-cache" />
 <div class="panel panel-default panel-col">

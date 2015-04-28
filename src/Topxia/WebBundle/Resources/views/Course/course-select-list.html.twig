@@ -22,31 +22,28 @@
     </a>
     <div class="course-body">
      <div style="float:right;" class="text-muted mrm mls">
-         {% if setting('course.coursesPrice') == 0 %}
-              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                  <span class="course-price" style="display:inline">
-                    {% if course.coinPrice > 0 %}
-                       价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                    {% else %}
-                      免费
-                    {% endif %}
-                  </span>
-
+        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            <span class="course-price" style="display:inline">
+              {% if course.coinPrice > 0 %}
+                 价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
               {% else %}
-                <span class="course-price">
-                  {% if course.price > 0 %}
-                     价格： {{ course.price }}元
-                  {% else %}
-                    免费
-                  {% endif %}
-                </span>
+                免费
+              {% endif %}
+            </span>
+        {% else %}
+          <span class="course-price">
+            {% if course.price > 0 %}
+               价格： {{ course.price }}元
+            {% else %}
+              免费
             {% endif %}
-          {% endif %}          
-    
-          {% if setting('course.show_student_num_enabled', '1') == 1 %}
+          </span>
+        {% endif %}
+
+        {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员')}}</span>
-          {% endif %}
+        {% endif %}
 
         </div>
 

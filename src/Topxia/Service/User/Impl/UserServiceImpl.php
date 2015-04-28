@@ -166,11 +166,12 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     public function isNicknameAvaliable($nickname)
-    {
+    { 
         if (empty($nickname)) {
             return false;
         }
         $user = $this->getUserDao()->findUserByNickname($nickname);
+  
         return empty($user) ? true : false;
     }
 

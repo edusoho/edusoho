@@ -181,6 +181,10 @@ interface CourseService
 
 	public function searchWatchTime($conditions);
 
+	public function checkWatchNum($userId, $lessonId);
+
+	public function waveWatchNum($userId, $lessonId, $diff);
+
 
 	/**
 	 * Chapter API

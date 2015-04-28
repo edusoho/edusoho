@@ -127,7 +127,12 @@ define(function(require, exports, module) {
              + '<span>%M</span> 分 '
              + '<span>%S</span> 秒'));
          }).on('finish.countdown', function() {
-            window.location.reload();
+            $(this).html('活动时间到，正在刷新网页，请稍等...');
+            setTimeout(function() {
+                $.post(app.crontab, function(){
+                    window.location.reload();
+                });
+            }, 2000);
          });
 
     };

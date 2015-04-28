@@ -162,7 +162,7 @@ class CourseManageController extends BaseController
 
         response:
 
-        if ($this->setting('vip.enabled')) {
+        if ($this->isPluginInstalled("Vip") && $this->setting('vip.enabled')) {
             $levels = $this->getLevelService()->findEnabledLevels();
         } else {
             $levels = array();
@@ -189,7 +189,7 @@ class CourseManageController extends BaseController
         $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
 
         $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
-        $learnTime=$course['studentNum']==0 ? 0 : intval($learnTime/$course['studentNum']);
+        $learnTime=$course["studentNum"]==0 ? 0 : intval($learnTime/$course["studentNum"]);
 
         $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
 

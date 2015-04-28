@@ -105,6 +105,7 @@ class MyTeachingController extends BaseController
         if (empty($myTeachingCourseCount)) {
             return $this->render('TopxiaWebBundle:MyTeaching:threads.html.twig', array(
                 'type'=>$type,
+                'threadType' => 'course',
                 'threads' => array()
             ));
         }

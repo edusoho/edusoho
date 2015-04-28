@@ -11,7 +11,7 @@ class CourseOrderController extends BaseController
         return $this->forward('TopxiaAdminBundle:Order:manage', array(
             'request' => $request,
             'type' => 'course',
-            'layout' => 'TopxiaAdminBundle:Course:layout.html.twig',
+            'layout' => 'TopxiaAdminBundle:CourseOrder:order.html.twig',
         ));
     }
 

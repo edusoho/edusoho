@@ -28,7 +28,6 @@
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/default-b.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/class-defaultb.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
     <!--[if lt IE 8]>
@@ -49,6 +48,8 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
+
+  {% include 'TopxiaWebBundle::email-setting.html.twig' %}
 
   <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
     <div class="container">
@@ -125,14 +126,10 @@
     </div>
   </div>
 
+
   <div id="content-container" class="container">
-    {% if app.user and app.user.setup == 0 and (hideSetupHint is not defined or hideSetupHint != true) %}
-      <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        为了帐号的安全，以及更好的使用体验，请设置您的Email地址。
-        <a href="{{ path('settings_setup') }}">现在就去设置</a>
-      </div>
-    {% endif %}
+    {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
+    
     {% block content %}{% endblock %}
   </div><!-- /container -->
 

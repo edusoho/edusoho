@@ -1,0 +1,26 @@
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4 class="eduyun-title">套餐信息</h4>
+                  {% if user.level|default("none") == "none" %}
+                    <div class="text-danger text-sm" role="alert">
+                      <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
+                    </div>
+                  {% else %}
+                  <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
+                  <p class="text-muted">有效期：{{ startDate|default('') }}~{{ endDate|default('') }}</p>
+                  {% endif %}
+                  {% if packageDate|default(31)  == 0 %}
+                  <p class="text-danger text-sm">套餐服务将于明天到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
+                  {% endif %}
+                  <!--已到期-->
+                  {% if packageDate|default(31)  < 0 %}
+                  <p class="text-danger text-sm">套餐服务已到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！</p>
+                  {% endif %}
+                  <!--30天提醒-->
+                  {% if 30 >= packageDate|default(31)  and packageDate|default(31)   > 0 %}
+                  <p class="text-danger text-sm">套餐服务将于{{packageDate}}天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
+                  {% endif %}
+                </div>  
+              </div>
+            </div>

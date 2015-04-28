@@ -15,7 +15,7 @@
         {{ blocks.home_top_banner|raw }}
       </div>
     {% endif %}
-
+    
     <ul class="homepage-category-nav">
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
@@ -223,7 +223,7 @@
         {% endif %}
 
         {# vip #}
-        {% if setting('vip.enabled') %}
+        {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
           {% set levels = data('VipLevels',{'count':100}) %}
           {% if levels %}
             <div class="es-box vip">
