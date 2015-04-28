@@ -1,0 +1,40 @@
+{% set texts = {} %}
+{% set links = {} %}
+{% set logos = {} %}
+{% set index = 1 %}
+{% for code,group in block.data|default(null) %}
+  {% if group.type == 'text' %}
+    {% set texts = texts|merge({('_' ~ index) :group.items})%}
+  {% endif %}
+
+  {% if group.type == 'link' %}
+    {% set links = links|merge({('_' ~ index):group.items})%}
+    {% set index = index + 1 %}
+  {% endif %}
+  
+  {% if group.type == 'imglink' %}
+    {% set logos = logos|merge({('-' ~ loop.index):group.items})%}
+  {% endif %}
+  
+{% endfor %}
+<div>
+  <div class="col-md-8 links-wrap clearfix ">
+    {% for i,text in texts %}
+      <div class="links-list pull-left">
+        <h4>{{ (text|first).value|default('') }}</h4>
+        <ul>
+        {% for link in links[i]|default(null) %}
+          <li><a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+    
+    {% for logo in logos|first %}
+      <div class="col-md-4 powered hidden-xs hidden-sm">
+        <img src="{{ logo.src|default('') }}" alt="{{ logo.alt|default('') }}">
+      </div>
+    {% endfor %}
+
+  
+</div>

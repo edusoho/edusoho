@@ -159,6 +159,7 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->get('data');
+
             $html = $this->renderView($this->getFullBlockTemplateName($block['templateName']), array(
                 'block' => $block
             ));

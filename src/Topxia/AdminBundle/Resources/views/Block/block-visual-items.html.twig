@@ -6,25 +6,28 @@
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="width:50%;">
   {% for dataId in 1..item.count %}
-  {% set data = block.data[code][dataId]|default(null) %}
+  {% set data = block.data[code]['items'][dataId]|default(null) %}
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#{{code}}-collapse-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ dataId }}">
-            {{ item.title }} - <span class="js-seq">{{ dataId }}</span>
+          <a data-toggle="collapse" data-parent="#accordion" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
+            {{ item.title }} -
           </a>
   
           {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
 
         </h4>
       </div>
-      <div id="{{code}}-collapse-{{ dataId }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{code}}-heading-{{ dataId }}">
+      <div id="{{code}}-collapse-{{ loop.index }}-{{ dataId }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{code}}-heading-{{ dataId }}">
         <div class="panel-body">
          {% include 'TopxiaAdminBundle:Block/Tag:' ~ item.type ~ '.html.twig' %}
         </div>
       </div>
     </div>
+
   {% endfor %}
 
 </div>
+
+<input class="form-control" type="hidden" name="data[{{ code }}][type]" id="{{ item.type }}" value="{{ item.type }}" >
 {% endfor %}

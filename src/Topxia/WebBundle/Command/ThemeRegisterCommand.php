@@ -115,7 +115,7 @@ class ThemeRegisterCommand extends BaseCommand
                 $block = array(
                     'code' => $blockCode,
                     'category' => $code,
-                    'meta' => $meta['items'],
+                    'meta' => $meta,
                     'templateName' => $meta['templateName'],
                     'title' => $meta['title']
                 );
