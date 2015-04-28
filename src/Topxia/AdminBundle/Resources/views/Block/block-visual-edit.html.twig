@@ -1,14 +1,10 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_operation_block' %}
+{% set menu = 'admin_block_visual_edit' %}
 {% block page_title %} 编辑内容 {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
 {% block main %}
-  <ul class="nav nav-pills">
-    <li role="presentation" {% if action == 'edit' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">编辑</a></li>
-    <li role="presentation" {% if action == 'history' %} class="active" {% endif %}><a href="{{ path('admin_block_visual_edit_history', {blockId:block.id}) }}">历史记录</a></li>
-  </ul>
   
   <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
     {{ web_macro.flash_messages() }}

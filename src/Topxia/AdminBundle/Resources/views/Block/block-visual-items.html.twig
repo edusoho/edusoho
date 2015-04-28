@@ -13,15 +13,8 @@
           <a data-toggle="collapse" data-parent="#accordion" href="#{{code}}-collapse-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ dataId }}">
             {{ item.title }} - <span class="js-seq">{{ dataId }}</span>
           </a>
-
-          {% if item.type == 'imglink' and data.src|default(null) and data.alt|default(null) %}
-            <a class="mlm glyphicon glyphicon-picture"></a>
-            <a class="" style="cursor: pointer;color: #428bca;" data-url="{{ path('admin_block_picture_preview', {blockId:block.id, url:data.src}) }}" data-toggle="modal" data-target="#modal">{{ data.alt|plain_text(40) }}</a>
-          {% endif %}
-
-          {% if item.type == 'link' and data.href|default(null) and data.value|default(null) %}
-            <a class="" style="cursor: pointer;color: #428bca;" href="{{ data.href }}">{{ data.value|plain_text(40) }}</a>
-          {% endif %}
+  
+          {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
 
         </h4>
       </div>
