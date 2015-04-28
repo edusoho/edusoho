@@ -23,6 +23,10 @@ class CourseThreadDataTag extends CourseBaseDataTag implements DataTag
         $this->checkThreadId($arguments);
 
     	$thread = $this->getThreadService()->getThread($arguments['courseId'], $arguments['threadId']);
+        if (empty($thread)) {
+            return null;
+        }
+        
         $thread['course'] = $this->getCourseService()->getCourse($arguments['courseId']);
 
         return $thread;
