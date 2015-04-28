@@ -258,3 +258,95 @@
   返回
   bool
 ```
+
+* unLearnCourse        *退出学习*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id
+  reason        String          退出学习原因
+  
+  返回
+  json
+```
+
+* getCourse        *获取指定课程信息*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id
+  
+  返回
+  json
+```
+
+* searchCourse        *搜索课程*
+
+```
+  参数          类型            描述
+  search        String          搜索内容
+  tagId         int             标签id
+  type          String          课程类型(normal, live)
+  
+  返回
+  json
+```
+
+* getLearnedCourse        *获取用户已学过课程*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  start         int             起始索引
+  limit         int             limit
+  
+  返回
+  json
+```
+
+* getLearningCourse        *获取用户在学课程*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  type          String          课程类型(normal, live)
+  start         int             起始索引
+  limit         int             limit
+  
+  返回
+  json
+```
+
+* getLearnStatus        *获取学习状态*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id
+  
+  返回
+  json
+```
+
+* getAllLiveCourses        *获取所有直播课程*
+
+```
+  参数          类型            描述
+  start         int             起始索引
+  limit         int             limit
+  
+  返回
+  json
+```
