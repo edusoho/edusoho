@@ -1,12 +1,13 @@
 ## Api请求说明:
 - 请求支持GET,POST
-#### http://hostname/mapi_v2/service/method
+
+#### 请求格式 : http://hostname/mapi_v2/service/method
 #### Example : http://trymob.edusoho.cn/mapi_v2/Category/getAllCategories
 #### 备注:
 * hostname  域名
 * service   服务接口名
 * method    接口方法
-
+* 没有标注的方法，参数都是可选
 
 ## Api服务列表
 
@@ -47,3 +48,74 @@
 
 <a id="Course" />
 ### Course 接口方法列表
+
+* getCourseNotices  *获取课程公告*
+
+```
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  start         int             起始索引
+  limit         int             limit
+  
+  返回
+  json
+```
+
+* getLessonNote     *获取课时笔记*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  lessonId      int             课时id(必选)
+  limit         int             limit
+  
+  返回
+  json
+```
+
+* getCourseMember       *获取课程会员信息*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  
+  返回
+  json
+```
+
+* postThread    *发表评论/问答*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  threadId      int             评论/问答id(必选)
+  content       String          评论内容(必选)
+  
+  返回
+  json
+```
+
+* commitCourse     *评价课程*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  rating        int             评论星数(必选)
+  postId        int             回复id(必选)
+  content       String          评论内容(必选)
+  
+  返回
+  json
+```
