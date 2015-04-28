@@ -214,7 +214,7 @@ class ArticleController extends BaseController
             'status' => 'published'
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 10);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 6);
 
         return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
             'articles' => $articles
@@ -229,7 +229,7 @@ class ArticleController extends BaseController
             'promoted' => 1
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 10);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 6);
 
         return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
             'articles' => $articles
