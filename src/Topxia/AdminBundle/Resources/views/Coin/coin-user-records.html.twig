@@ -1,17 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}用户虚拟币 - {{ parent() }}{% endblock %}
+{% set menu = 'admin_coin_user' %}
 
-{% set menu = 'coin' %}
-{% set submenu = 'user-records' %}
-
- 
 {% block main %}
 
-    <div class="page-header"><h1>虚拟币管理</h1></div>
-    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
-
-
+  {% if setting('coin.coin_enabled')  %}
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
         <input value="{{condition.type}}" name="flowType" type="hidden"/>
@@ -96,5 +89,12 @@
       {% endif %}
     </div>
 
+{% else %}
+<div class="well" style="text-align:center;">
 
+
+虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
+
+</div>
+{% endif %}
 {% endblock %}

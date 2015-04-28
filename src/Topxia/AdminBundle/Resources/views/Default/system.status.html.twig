@@ -44,7 +44,7 @@
           {% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
       {% endif %}</td></tr>
 
-        <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center")}}">查看</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已安装了全部应用
+        <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center",{postStatus : 'all'})}}">查看</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已安装了全部应用
       {% endif %}</td></tr>
 
         <tr><td>云视频</td><td>{% if setting("storage.cloud_bucket")!="" %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已开通{% if setting("storage.upload_mode") != 'cloud' %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_cloud")}}">查看</a>{% endif %}{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未开通<a class="pull-right" href="{{path("admin_setting_cloud")}}">查看</a>

@@ -47,6 +47,7 @@ class WebExtension extends \Twig_Extension
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
+            'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
         );
     }
 
@@ -105,7 +106,7 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId,$timeType="oneWeek")
+    public function getOutCash($userId, $timeType="oneWeek")
     {   
         $time=$this->filterTime($timeType);
         $condition=array(
@@ -887,6 +888,14 @@ class WebExtension extends \Twig_Extension
     {
         $coinSettings = ServiceKernel::instance()->createService('System.SettingService')->get('coin',array());
 
+        if(!isset($coinSettings['price_type'])) {
+            $coinSettings['price_type'] = "RMB";
+        }
+
+        if(!isset($coinSettings['coin_enabled'])) {
+            $coinSettings['coin_enabled'] = 0;
+        }
+
         if($coinSettings['coin_enabled'] == 1 and $coinSettings['price_type'] == 'coin'){
                 if ($order['amount'] == 0  and $order['coinAmount'] == 0 ){
                     $default = "无";
@@ -923,6 +932,12 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
         return intval($number / $total * 100) . '%';
+    }
+
+    public function arrayMerge($text,$content)
+    {
+        $array = array_merge($text,$content);
+        return $array;
     }
 
     public function getSetPrice($price)
