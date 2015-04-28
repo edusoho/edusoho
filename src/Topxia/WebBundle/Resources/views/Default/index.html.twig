@@ -1,5 +1,4 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
-{% set bodyClass = 'homepage new-ui' %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -7,7 +6,7 @@
 {% endblock %}
 
 {% block main_content %}
-  {% if not blocks.home_top_banner %}
+  {% if blocks.home_top_banner %}
     <section class="poster hidden-xs">
       <div class="carousel slide" id="carousel" data-ride="carousel">
         <ol class="carousel-indicators"></ol>
