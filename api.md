@@ -1,3 +1,4 @@
+
 ## Api请求说明:
 - 请求支持GET,POST
 
@@ -19,7 +20,7 @@
 * School
 * Testpaper
 
-<a id="Category" />
+<span id="Category"></span>
 ### Category 接口方法列表
 
 * getCategories        *获取指定分类*
@@ -77,7 +78,7 @@
     |    json   |   最大返回100条|
     ---
 
-<a id="Course" />
+<span id="Course"></span>
 ### Course 接口方法列表
 
 * getCourseNotices        *获取课程公告*
@@ -546,7 +547,7 @@
     |    json   |   |
     ---
 
-<a id="Lesson" />
+<span id="Lesson"></span>
 ### Lesson 接口方法列表
 
 * getLessonMaterial        *获取课时资料*
