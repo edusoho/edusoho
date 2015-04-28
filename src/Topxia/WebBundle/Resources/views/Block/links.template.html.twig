@@ -1,0 +1,18 @@
+<section class="es-section es-links">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 links-wrap clearfix ">
+      {% for code,links in block.data|default(null) %}
+        <div class="links-list pull-left">
+          <h4>{{ block.meta.items[code]['title']|default('') }}</h4>
+          <ul>
+            {% for link in links %}
+            <li><a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

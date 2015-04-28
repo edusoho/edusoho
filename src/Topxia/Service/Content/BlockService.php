@@ -30,6 +30,8 @@ interface BlockService
 
 	public function updateContent($id, $content);
 
+	public function recovery($blockId, $history);
+
 	/**
 	 * 批量获取指定code的，编辑区块内容。
 	 * @param  array  $codes 编号列表

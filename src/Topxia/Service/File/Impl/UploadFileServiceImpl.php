@@ -84,7 +84,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ($conditions ['currentUserId']);
 			
             if(isset($myFriends)) {
-				$createdUserIds = "'" . implode("','", ArrayToolkit::column ($myFriends, "sourceUserId" )) . "'";
+				$createdUserIds = ArrayToolkit::column ($myFriends, "sourceUserId" );
 			}else{
 				//Browsing shared files, but nobody is sharing with current user.
 				return array();
@@ -109,7 +109,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     		$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts($conditions['currentUserId']);
     			
     		if (isset($myFriends)) {
-                $createdUserIds = implode(",", ArrayToolkit::column($myFriends, "sourceUserId"));
+                $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");
     		}else{
     			//Browsing shared files, but nobody is sharing with current user.
                 return 0;

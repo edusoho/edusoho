@@ -22,7 +22,7 @@ define(function(require, exports, module) {
                             Notify.danger('上传网站LOGO失败，请重试！')
                         },
                         success: function(response) {
-                            self.prev('input').val(response.url);
+                            self.parents('.form-group').find('input').val(response.url);
                             Notify.success('上传图片成功！');
                         }
                     });

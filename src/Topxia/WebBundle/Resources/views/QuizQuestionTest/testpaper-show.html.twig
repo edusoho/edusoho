@@ -2,7 +2,7 @@
 
 {% block testpaper_heading_status %}
   {% if isPreview|default(false) %}
-    <div class="label label-warning">试卷预览中</div>
+    <div class="label label-success">试卷预览中</div>
   {% else %}
     {% if paperResult.status|default(null) == 'doing' %}
       <div class="label label-primary testpaper-status-doing">答题中</div>

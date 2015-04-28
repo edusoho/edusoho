@@ -168,6 +168,14 @@ abstract class BaseController extends Controller
         }
     }
 
+    protected function getFullBlockTemplateName($name)
+    {
+        if (preg_match('/.*?:.*?:.*/', $name)) {
+            return $name;
+        }
+        return "TopxiaWebBundle:Block:" . $name;
+    }
+
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

@@ -121,6 +121,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $blockHistoryInfo = array(
             'blockId'=>$updatedBlock['id'],
             'content'=>$updatedBlock['content'],
+            'data' => $updatedBlock['data'],
             'templateData'=>$updatedBlock['templateData'],
             'userId'=>$user['id'],
             'createdTime'=>time()
@@ -172,6 +173,20 @@ class BlockServiceImpl extends BaseService implements BlockService
 
         // $content = $this->purifyHtml($content);
         return $this->getBlockDao()->updateBlock($id, array('content'=>$content));
+    }
+
+    public function recovery($blockId, $history)
+    {
+        $block = $this->getBlockDao()->getBlock($blockId);
+        if (!$block) {
+            throw $this->createServiceException("此编辑区不存在，更新失败!");
+        }
+
+        // $content = $this->purifyHtml($content);
+        return $this->getBlockDao()->updateBlock($blockId, array(
+            'content' => $history['content'],
+            'data' => $history['data']
+        ));
     }
 
     private function getBlockDao()

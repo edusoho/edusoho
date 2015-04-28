@@ -159,7 +159,13 @@ class BlockController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->get('data');
-            $block = $this->getBlockService()->updateBlock($blockId, array('data' =>$data));
+            $html = $this->renderView($this->getFullBlockTemplateName($block['templateName']), array(
+                'block' => $block
+            ));
+            $block = $this->getBlockService()->updateBlock($blockId, array(
+                'data' => $data,
+                'content' => $html
+            ));
             $this->setFlashMessage('success', '保存成功!');
         }
 
@@ -171,7 +177,26 @@ class BlockController extends BaseController
 
     public function visualHistoryAction(Request $request, $blockId)
     {
-        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig");
+        $block = $this->getBlockService()->getBlock($blockId);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
+            5
+        );
+
+        $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
+            $block['id'], 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+        $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
+        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig", array(
+            'block' => $block,
+            'paginator' => $paginator,
+            'blockHistorys' => $blockHistorys,
+            'historyUsers' => $historyUsers,
+            'action' => 'history'
+        ));
     }
 
     public function createAction(Request $request)
@@ -260,6 +285,14 @@ class BlockController extends BaseController
         return $this->render('TopxiaAdminBundle:Block:picture-preview-modal.html.twig', array(
             'url' => $url
         ));
+    }
+
+    public function recoveryAction(Request $request, $blockId, $historyId)
+    {
+        $history = $this->getBlockService()->getBlockHistory($historyId);
+        $this->getBlockService()->recovery($blockId, $history);
+        $this->setFlashMessage('success', '恢复成功!');
+        return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockId' => $blockId)));
     }
 
     protected function getBlockService()

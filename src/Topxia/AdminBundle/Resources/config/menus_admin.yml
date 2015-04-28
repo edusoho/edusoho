@@ -49,6 +49,36 @@ admin_operation_block:
     router_name: admin_block
     router_params: { 'category': 'all'}
     group: 2
+admin_block_visual_edit:
+    name: 编辑
+    parent: admin_operation_block
+    router_params: {'blockId': 'block.id'}
+    router_params_context: 1
+
+admin_block_visual_edit_history:
+    name: 历史记录
+    parent: admin_operation_block
+    router_params: {'blockId': 'block.id'}
+    router_params_context: 1
+admin_operation_block_all:
+    name: 全部
+    parent: admin_operation_block
+    router_name: admin_block
+admin_operation_block_currentTheme:
+    name: 当前主题
+    parent: admin_operation_block
+    router_name: admin_block
+    router_params: { categary: theme }
+admin_operation_block_system:
+    name: 系统
+    parent: admin_operation_block
+    router_name: admin_block 
+    router_params: { categary: system }
+admin_operation_block_editList:
+    name: 最近编辑
+    parent: admin_operation_block
+    router_name: admin_block
+    router_params: { sort: lastest }
 admin_operation_content:
     name: 自定义页面管理
     parent: admin_operation
@@ -414,4 +444,3 @@ admin_announcement_create:
     parent: admin_announcement
     mode: modal
     group: 2
-
