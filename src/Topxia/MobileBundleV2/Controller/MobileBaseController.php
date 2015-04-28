@@ -31,7 +31,11 @@ class MobileBaseController extends BaseController
         if ($callback) {
             return $this->createJsonP($request, $callback, $data);
         } else {
-            return new JsonResponse($data);
+            $response = new JsonResponse($data);
+            $response->headers->set("Access-Control-Allow-Origin", "*");
+            $response->headers->set("Access-Control-Allow-Methods", "POST, GET");
+            $response->headers->set("Access-Control-Max-Age", "30");
+            return $response;
         }
     }
 
