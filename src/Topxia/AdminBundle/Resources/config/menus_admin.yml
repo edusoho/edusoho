@@ -47,6 +47,7 @@ admin_operation_block:
     name: 编辑区管理
     parent: admin_operation
     router_name: admin_block
+    router_params: { 'category': 'all'}
     group: 2
 admin_operation_content:
     name: 自定义页面管理

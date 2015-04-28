@@ -15,7 +15,7 @@
     {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   
-    <a class="btn btn-link" href="{{ path('admin_block') }}">取消</a>
+    <a class="btn btn-link" href="{{ path('admin_block',{'category':'all'}) }}">取消</a>
     <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
   </form>
 

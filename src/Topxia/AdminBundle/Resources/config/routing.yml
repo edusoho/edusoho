@@ -59,9 +59,12 @@ admin_content_alias_check:
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
 
 admin_block:
-    pattern:  /block
+    pattern:  /block/list-{category}
     defaults: { _controller: TopxiaAdminBundle:Block:index }
 
+admin_block_match:
+    pattern:  /block/list/quikSearch
+    defaults: { _controller: TopxiaAdminBundle:Block:blockMatch }
 admin_block_create:
     pattern:  /block/create
     defaults: { _controller: TopxiaAdminBundle:Block:create }
