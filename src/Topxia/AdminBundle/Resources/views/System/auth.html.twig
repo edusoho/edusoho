@@ -1,14 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}注册设置 - {{ parent() }}{% endblock %}
+{% set menu = 'admin_user_auth' %}
 
-{% set submenu = 'auth' %}
 {% set script_controller = 'setting/auth' %}
 
-{% block maincontent %}
-
-<div class="page-header"><h1>注册设置</h1></div>
-
+{% block main %}
 {{ web_macro.flash_messages() }}
 
 <form  id="auth-form" class="form-horizontal" method="post" novalidate>
@@ -20,34 +16,42 @@
       {{ radios('register_mode', {'opened':'邮箱注册', 'email_or_mobile':'邮箱或手机注册', 'closed':'关闭'}, auth.register_mode) }}
     </div>
   </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>用户修改昵称</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
+    </div>
+  </div>
 
   <div class="form-group">
     <div class="col-md-3 control-label">
       <label >注册防护机制</label>
     </div>
-    <div class="controls col-md-8 ">
-      <label class="radio-inline">
+    <div class="controls col-md-8 radios">
+      <label>
         <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
       </label>
-      <label class="radio-inline">
+      <label>
         <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
       </label>
-      <label class="radio-inline">
+      <label>
         <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
       </label>
-      <label class="radio-inline">
+      <label>
         <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
       </label>
     </div>
 
-    <div class="controls col-md-8 mtl low register-help" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+    <div class="controls col-md-8 mtl low register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
       <div class="well">
         方案说明：
             <p class="mll mtm">1：注册时需填写验证码。</p>
       </div>
     </div>
 
-    <div class="controls col-md-8 mtl middle register-help" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+    <div class="controls col-md-8 mtl middle register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
       <div class="well">
         方案说明：
             <p class="mll mtm">1：注册时需填写验证码。</p>
@@ -55,7 +59,7 @@
       </div>
     </div>
 
-    <div class="controls col-md-8 mtl high register-help" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+    <div class="controls col-md-8 mtl high register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
       <div class="well">
         方案说明：
             <p class="mll mtm">1：注册时需填写验证码。</p>
@@ -112,9 +116,18 @@
 	    {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
 	  </div>
 	</div>
+
 	<div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录</div>
 	<input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
-  
+    <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>头像设置提醒</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner').avatar_alert|default('none')) }}
+    </div>
+  </div>
+
   <fieldset>
     <legend>新用户激活邮件设置</legend>
 
@@ -415,6 +428,27 @@ glyphicon glyphicon-chevron-up"></span></a></div>
 
   </fieldset>
 
+
+ <fieldset>
+    <legend>名称设置</legend>
+
+    <div class="row form-group">
+        <div class="col-md-2 col-md-offset-2 control-label">
+            <label for="user_name">用户名称</label>
+        </div>
+        <div class="controls col-md-4">
+          <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
+        </div>
+    </div>
+
+  <div class="alert alert-info deduction text-center">
+  <p><strong> 
+  注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+  </strong></p>
+  </div>
+
+  </fieldset> 
+  
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">

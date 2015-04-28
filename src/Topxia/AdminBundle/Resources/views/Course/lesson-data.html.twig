@@ -1,13 +1,8 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{course.title}} - {{ parent() }}{% endblock %}
-
-{% set menu = 'course-data' %}
+{% set menu = 'admin_course_data' %}
 
 {% block main %}
-    <div class="page-header">
-      <h1>{{course.title}}</h1>
-    </div>
     <div class="table-responsive">
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
