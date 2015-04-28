@@ -45,9 +45,11 @@ class ThemeRegisterCommand extends BaseCommand
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
 
+        $this->initBlock($code, $themeDir);
+        $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
+        
         PluginUtil::refresh();
         $output->writeln("<comment>  - 刷新主题缓存...</comment><info>OK</info>");
-
 
 
         $output->writeln("<info>注册成功....</info>");
@@ -94,9 +96,42 @@ class ThemeRegisterCommand extends BaseCommand
         return $meta;
     }
 
+    private function initBlock($code, $pluginDir)
+    {
+        $blockMeta = $pluginDir . '/block.json';
+        if (!file_exists($blockMeta)) {
+            throw new \RuntimeException("插件编辑区元信息文件{$blockMeta}不存在！");
+        }
+
+        $blockMeta = json_decode(file_get_contents($blockMeta), true);
+        if (empty($blockMeta)) {
+            throw new \RuntimeException("插件元信息文件{$blockMeta}格式不符合JSON规范，解析失败，请检查元信息文件格式");
+        }
+
+        foreach ($blockMeta as $key => $meta) {
+            $blockCode = $code . ':' . $key;
+            $block = $this->getBlockService()->getBlockByCode($blockCode);
+            if (empty($block)) {
+                $block = array(
+                    'code' => $blockCode,
+                    'category' => $code,
+                    'meta' => $meta['items'],
+                    'templateName' => $meta['templateName'],
+                    'title' => $meta['title']
+                );
+                $this->getBlockService()->createBlock($block);
+            }
+          
+        }
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+    protected function getBlockService()
+    {
+        return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
     private function initServiceKernel()

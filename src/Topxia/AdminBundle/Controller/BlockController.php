@@ -12,7 +12,7 @@ use Topxia\Common\FileToolkit;
 
 class BlockController extends BaseController
 {
-    public function indexAction(Request $request, $category)
+    public function indexAction(Request $request, $category='')
     {
 
         list($condation, $sort)= $this->dealQueryFields($category);
