@@ -142,15 +142,17 @@ class AppController extends BaseController
         $theme = array();
         $app = array();
         foreach ($apps as $key => $value) {
+
+            $value['code'] = strtolower($value['code']);
+            $apps[$key]['code'] = $value['code'];
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
             }elseif ($value['type'] == 'app') {
                 $app[] = $value;
             }
-
-            $apps[$key]['code'] = strtolower($value['code']);
+            
         }
-
+ 
         $installedApps = $this->getAppService()->findApps(0, 100);
         $installedApps = ArrayToolkit::index($installedApps, 'code');
 
