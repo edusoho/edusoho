@@ -8,9 +8,9 @@ use Topxia\Common\ArrayToolkit;
 class BlockServiceImpl extends BaseService implements BlockService
 {
 
-    public function searchBlockCount()
+    public function searchBlockCount($condition)
     {
-        return $this->getBlockDao()->searchBlockCount();
+        return $this->getBlockDao()->searchBlockCount($condition);
     }
 
     public function findBlockHistoryCountByBlockId($blockId)
@@ -74,9 +74,9 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
     }
 
-    public function searchBlocks($start, $limit)
+    public function searchBlocks($condition, $sort,$start, $limit)
     {
-        return $this->getBlockDao()->findBlocks($start, $limit);
+        return $this->getBlockDao()->findBlocks($condition, $sort, $start, $limit);
     }
 
     public function findBlockHistorysByBlockId($blockId, $start, $limit)

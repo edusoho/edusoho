@@ -12,15 +12,16 @@ use Topxia\Common\FileToolkit;
 
 class BlockController extends BaseController
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $category)
     {
+
+        list($condation, $sort)= $this->dealQueryFields($category);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getBlockService()->searchBlockCount(),
+            $this->getBlockService()->searchBlockCount($condation),
             20
         );
-
-        $findedBlocks = $this->getBlockService()->searchBlocks($paginator->getOffsetCount(),
+        $findedBlocks = $this->getBlockService()->searchBlocks($condation, $sort, $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
         
         $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
@@ -29,10 +30,26 @@ class BlockController extends BaseController
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
             'blocks'=>$findedBlocks,
             'latestUpdateUser'=>$latestUpdateUser,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'type' => $category
         ));
     }
+    private function dealQueryFields($category){
+         $sort=[];
+         $condation =[];
+        if($category =='lastest'){
+            $sort = array('updateTime', 'DESC');
+        }elseif($category != 'all'){
+           $condation['category'] =  $category;
+        }
+        return array($condation,  $sort);
+    }
 
+    public function blockMatchAction(Request $request){
+        $likeString = $request->query->get('q');
+        $blocks = $this->getBlockService()->searchBlocks(array('title'=>$likeString), array('updateTime', 'DESC'), 0, 10);
+        return $this->createJsonResponse($blocks);
+    }
     public function previewAction(Request $request, $id)
     {
         $blockHistory = $this->getBlockService()->getBlockHistory($id);

@@ -8,9 +8,9 @@ interface BlockService
 
 	public function getBlockByCode($code);
 
-	public function searchBlocks($start, $limit);
+	public function searchBlocks($condition, $sorty, $start, $limit);
 
-	public function searchBlockCount();
+	public function searchBlockCount($condition);
 
 	public function findBlockHistorysByBlockId($blockId, $start, $limit);
 

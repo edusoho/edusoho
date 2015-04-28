@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
+	var AutoComplete = require('autocomplete');
 	exports.run = function() {
 
 		$('body').on('click', 'button.delete-btn', function() {
@@ -13,6 +14,36 @@ define(function(require, exports, module) {
 					alert('服务器错误!');
 				}
 			}, 'json');
+		});
+
+	function keyUp(e) {
+　　  var currKey=0,e=e||event;
+　　  currKey=e.keyCode||e.which||e.charCode;
+		if(currKey == 191){
+			setTimeout(function(){
+				$("#quitsearch")[0].focus()
+			},300)
+　　   alert("按键码: " + currKey );
+		}
+　　 }				
+　　 document.onkeyup = keyUp;
+	
+		
+	  var autocomplete = new AutoComplete({
+	        trigger: '#block-input',
+	        dataSource: $("#block-input").data('url'),
+	        filter: {
+	            name: 'stringMatch',
+	            options: {
+	                key: 'title'
+	            }
+	        },
+            selectFirst: true
+	    }).render();
+
+	    autocomplete.on('itemSelect', function(data){
+	    	var error = '';
+        $("#blockitem"+data.id).find(".update-btn").click();
 		});
 		
 	};
