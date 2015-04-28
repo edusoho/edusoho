@@ -1,0 +1,280 @@
+//幻灯片
+.poster {
+  position: relative;
+  z-index: 99;
+  background: #fff;
+  padding-bottom: 30px;
+  background: #3c3c3c url(../img/poster_bg.jpg) center 0 no-repeat;
+  .item {
+    height: 490px;
+    padding-top: 140px;
+    .box-shadow(none);
+    .item-left {
+      .title {
+        font-size: 70px;
+        line-height: 80px;
+        margin-bottom: 20px;
+        color: #fff;
+        .animation(fadeInUp 1s .2s ease both);
+        @media (max-width: @screen-md-max) {
+          font-size: 60px;
+        }
+        @media (max-width: @screen-sm-max) {
+          font-size: 40px;
+          line-height: 50px;
+        }
+      }
+      .subtitle {
+        color: #38a672;
+        font-size: 22px;
+        span {
+          margin-right: 20px;
+        }
+        .animation(fadeInLeft 1s .8s ease both);
+      }
+      
+    }
+    .item-right {
+      position: relative;
+      width: 725px;
+      height: 391px;
+      .animation(fadeInRight 1s .2s ease both);
+      @media (max-width: @screen-md-max) {
+        width: 500px;
+      }
+    }
+    @media (max-width: @screen-md-max) {
+      img {
+        width: 100%;
+      }
+    }
+    .item-img {
+      width: 465px;
+      position: absolute;
+      top: 30px;
+      left: 130px;
+      @media (max-width: @screen-md-max) {
+        width: 320px;
+        top: 20px;
+        left: 90px;
+      }
+
+    }
+  }
+  .carousel-indicators {
+    bottom: -30px;
+    @media (max-width: @screen-md-max) {
+      bottom: -10px;
+    }
+    li {
+      height: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 0 3px;
+      border: 0;
+      background-color: #d4d4d4;
+
+    }
+    li.active {
+      margin: 0 3px;
+      background-color: #10b67c;
+    }
+  }
+}
+
+//公告
+.index-notice {
+  background: #fff;
+}
+
+//分类
+.cuorse-filter {
+  background: #fff;
+  .cuorse-filter-mian {
+    position: relative;
+    padding-right: 150px;
+  }
+  .course-cat-tags > .btn {
+    width: 163px;
+    margin: 0 20px 10px 0;
+  }
+  .course-sort {
+    position: absolute;
+    right: 0;
+    top: 0;
+    .btn-circle {
+      margin-left: 10px;
+    }
+  }
+}
+
+//课程模块
+.index-course-list {
+  position: relative;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  background: #fff;
+  z-index: 99;
+  .course-more {
+    position: absolute;
+    bottom: -29px;
+    left: 50%;
+    margin: -29px 0 0 -29px;
+    z-index: 1;
+    >a {
+      border-radius: 50%;
+      width: 58px;
+      height: 58px;
+      background: #fff;
+      color: #a6a6a6;
+      display: inline-block;
+      text-align: center;
+      line-height: 42px;
+      font-size: 30px;
+      .box-shadow(4px 4px 12px -2px rgba(20%, 20%, 40%, 0.5));
+      .es-transition;
+      &:hover {
+        border-color: @brand-primary;
+        color: #666;
+        .box-shadow(2px 10px 15px 0px rgba(20%, 20%, 40%, 0.5));
+        .es-transition;
+      }
+    }
+  }
+}
+
+//学习介绍
+.index-introduction {
+  position: relative;
+  background: url(../img/introduction_bg.jpg) center 0 repeat-y;
+  @media (max-width: @screen-sm-max) {
+    background: @brand-primary;
+  }
+  h4, h5 {
+    color: #fff;
+  }
+  img {
+    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+  }
+  a {
+    margin: 90px 0 60px 0;
+    display: inline-block;
+    text-align: center;
+    height: 220px;
+    vertical-align: top;
+    @media (max-width: @screen-sm-max) {
+      margin: 40px 0;
+    }
+  }
+}
+
+//小组动态
+.group-dynamic {
+  padding-bottom: 30px;
+  background: #fafafa;
+}
+
+.group-dynamic-header .text-line span {
+  padding: 0 50px;
+  font-size: 28px;
+  background: #fafafa;
+}
+
+.index-group {
+  padding-bottom: 23px;
+  margin-bottom: 20px;
+  .group-item {
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+      border:1px solid #fff;
+    }
+    .title {
+      font-size: 16px;
+      margin-bottom: 10px;
+      a {
+        color: #616161;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+  }
+  .media-body {
+    span,a {
+      margin-right: 10px;
+      color:@gray;
+    }
+    a:hover {
+      color: @brand-success;
+    }
+  }
+  .media {
+    margin-top: 20px;
+    &:first-child {
+      margin-top: 20px;
+    }
+  }
+  .metas {
+    color: @gray;
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+.index-dynamic {
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  .media:last-child .media-body {
+    border: none;
+  }
+  .media-body {
+    overflow: hidden;
+    padding-right: 80px;
+    padding-bottom: 10px;
+    position: relative;
+    border-bottom: 1px solid @gray-lighter;
+    .title a {
+      font-size: 12px;
+      color: @gray;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+    }
+    .content { 
+      height: 20px;
+      overflow: hidden;
+      display: block;
+      color: @gray-dark;
+    }
+    .content a {
+      color: #616161;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+    }
+  }
+  .date {
+    position: absolute;
+    right: 0px;
+    top: 15px;
+    color: @gray-light;
+  }
+  .media-left img {
+    width: 40px;
+    height: 40px;
+  }
+  h5 {
+    margin: 5px 0;
+  }
+}

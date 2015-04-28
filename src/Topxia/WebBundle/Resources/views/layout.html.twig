@@ -28,9 +28,9 @@
     <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
-     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/main.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/iconfont.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/main.css') }}" />
     <!--[if lt IE 8]>
       <link href="{{ asset('assets/css/oldie.css') }}" rel="stylesheet">
     <![endif]-->
@@ -51,7 +51,7 @@
 {% block body %}
   
   {% include 'TopxiaWebBundle::email-setting.html.twig' %}
-  <header class="navbar">
+  <header class="es-header navbar">
     <div class="container">
       <div class="navbar-header">
         <div class="visible-xs navbar-mobile">
@@ -59,7 +59,7 @@
           <div class="nav-mobile">
             <form class="navbar-form">
               <div class="form-group">
-                <input class="form-control" placeholder="搜索">
+                <input class="form-control" placeholder="搜索" name="q">
                 <button class="button iconfont icon-search"></button>
               </div>
             </form>
