@@ -91,12 +91,53 @@ class UserSettingController extends BaseController
             }
 
             if ($auth['register_protective'] == "none") {
-
                 $auth['captcha_enabled'] = 0;
-
             } else {
-
                 $auth['captcha_enabled'] = 1;
+            }
+
+            if($auth["register_mode"] == "email_or_mobile") {
+                foreach ($auth['registerSort'] as $key => $value) {
+                    if($value == "email" || $value == "mobile") {
+                        unset($auth['registerSort'][$key]);
+                    }
+                }
+                if(!in_array('emailOrMobile', $auth['registerSort'])) {
+                    array_unshift($auth['registerSort'], 'emailOrMobile');
+                }
+
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if($value == "email" || $value == "mobile") {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+                if(!in_array('emailOrMobile', $auth['registerFieldNameArray'])) {
+                    array_unshift($auth['registerFieldNameArray'], 'emailOrMobile');
+                }
+            }
+
+
+            if($auth["register_mode"] == "opened") {
+                foreach ($auth['registerSort'] as $key => $value) {
+                    if($value == "emailOrMobile") {
+                        unset($auth['registerSort'][$key]);
+                    }
+                }
+                if(!in_array('email', $auth['registerSort'])) {
+                    array_unshift($auth['registerSort'], 'email');
+                }
+
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if($value == "emailOrMobile") {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+                if(!in_array('email', $auth['registerFieldNameArray'])) {
+                    array_unshift($auth['registerFieldNameArray'], 'email');
+                }
+                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] = 'mobile';
+                }
             }
 
             $this->getSettingService()->set('auth', $auth);
@@ -108,6 +149,34 @@ class UserSettingController extends BaseController
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         if ($auth['registerFieldNameArray']) {
+            
+            if($auth["register_mode"] == "email_or_mobile") {
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if($value == "email" || $value == "mobile") {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+                if(!in_array('emailOrMobile', $auth['registerFieldNameArray'])) {
+                    array_unshift($auth['registerFieldNameArray'], 'emailOrMobile');
+                }
+            }
+
+
+            if($auth["register_mode"] == "opened") {
+
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if($value == "emailOrMobile") {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+                if(!in_array('email', $auth['registerFieldNameArray'])) {
+                    array_unshift($auth['registerFieldNameArray'], 'email');
+                }
+                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] = 'mobile';
+                }
+            }
+
             foreach ($userFields as $key => $fieldValue) {
                 if (!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])) {
                     $auth['registerFieldNameArray'][] = $fieldValue['fieldName'];
