@@ -448,16 +448,16 @@ a.transition:hover {
 .navbar-mobile .navbar-form .form-control {
   width: 100%;
 }
-.footer {
+.es-footer {
   background: #3f3f3f;
 }
-.footer .copyright {
+.es-footer .copyright {
   border-top: 1px solid #2a2a2a;
   text-align: center;
   padding: 20px 0;
   line-height: 30px;
 }
-.footer .copyright span {
+.es-footer .copyright span {
   margin-right: 30px;
   color: #bababa;
 }
@@ -1122,9 +1122,11 @@ textarea.form-control {
 }
 .index-notice {
   background: #fff;
+  margin-bottom: -30px;
 }
 .cuorse-filter {
   background: #fff;
+  padding-top: 30px;
 }
 .cuorse-filter .cuorse-filter-mian {
   position: relative;

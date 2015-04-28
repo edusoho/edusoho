@@ -80,31 +80,32 @@
         {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
       </ul>
 
-      <div class="pull-right navbar-user">
-        <ul class="nav navbar-nav navbar-right hidden-xs">
-          <!--
-          <li><a href="javascript:;">登陆</a></li>
-          <li><a href="javascript:;">注册</a></li>
-           -->
+      <div class="navbar-user">
+        <ul class="nav user-nav">
           {% if app.user %}
-          <li class="info-img">
+          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              <img src="{{ default_path('avatar', app.user.smallAvatar, '') }}" class="img-circle">
+              <img src="{{ default_path('avatar', app.user.smallAvatar, '') }}" class="user-avatar">
             </a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="javascript:;" class="user">{{ app.user.nickname }}</a></li>
+              <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
               <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="iconfont icon-ren"></i>个人主页</a></li>
               <li><a href="{{ path('settings') }}"><i class="iconfont icon-shezhi"></i>个人设置</a></li>
               <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="iconfont icon-001"></i>账户中心</a></li>
               {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="iconfont icon-dashboard"></i>管理后台</a></li>
               {% endif %}
+              <li class="visible-sm visible-xs">
+                <a href="{{ path('my') }}"><i class="iconfont icon-study"></i>学习中心</a>
+              </li>
+              <li class="visible-sm visible-xs"><a href="{{ path('notification') }}"><i class="iconfont icon-bell"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
+              <li class="visible-sm visible-xs"><a href="{{ path('message') }}"><i class="iconfont icon-shezhi"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
               <li><a href="{{ path('logout') }}"><i class="iconfont icon-tuichu"></i>退出登陆</a></li>
             </ul>
           </li>
-          <li>
+          <li class="hidden-sm hidden-xs">
             <a href="{{ path('my') }}">学习中心</a>
           </li>
-          <li>
+          <li class="hidden-sm hidden-xs">
             <a href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="iconfont icon-youjian"></i></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="{{ path('notification') }}"><i class="iconfont icon-bell"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
@@ -112,32 +113,8 @@
             </ul>
           </li>
           {% else %}
-             <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登陆</a></li>
-             <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
-          {% endif %}
-        </ul>
-        <ul class="nav navbar-nav navbar-right visible-xs">
-          {% if app.user %}
-          <li class="info-img">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              <img src="{{ default_path('avatar', app.user.smallAvatar, '') }}" class="img-circle">
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="javascript:;" class="user">{{ app.user.nickname }}</a></li>
-              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="iconfont icon-ren"></i>个人主页</a></li>
-              <li><a href="{{ path('settings') }}"><i class="iconfont icon-shezhi"></i>个人设置</a></li>
-              <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="iconfont icon-001"></i>账户中心</a></li>
-              {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="iconfont icon-dashboard"></i>管理后台</a></li>
-              {% endif %}
-              <li><a href="{{ path('logout') }}"><i class="iconfont icon-tuichu"></i>退出登陆</a></li>
-              <li><a href="javascript:;"><i class="iconfont icon-study"></i>学习中心</a></li>
-              <li><a href="{{ path('notification') }}"><i class="iconfont icon-tongzhi"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
-              <li><a href="{{ path('message') }}"><i class="iconfont icon-shezhi"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
-            </ul>
-          </li>
-          {% else %}
-             <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登陆</a></li>
-             <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登陆</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
           {% endif %}
         </ul>
         <form class="navbar-form col-md-6 col-sm-3 pull-right hidden-xs">
@@ -160,7 +137,7 @@
 
   {% endblock %}
     
-  <footer class="footer clearfix">
+  <footer class="es-footer">
     <div class="footer-link">
       <div class="container">
         <div class="row">

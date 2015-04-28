@@ -33,13 +33,16 @@ class ArticleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        // $publishedTime = array();
         foreach ($latestArticles as $key => $value) {
-            $publishedTime = date('Y-m-d',$value['publishedTime']);
-            $publishedTime = explode('-', $publishedTime);
-            var_dump($value['id']);
-            var_dump($publishedTime);
-
+            $publishedTime[$value['id']] = date('Y-m-d',$value['publishedTime']);
+        }
+        $month=array();
+        $day=array();
+        foreach ($publishedTime as $key => $value) {
+            $first = strpos($value,"-");
+            $last = strrpos($value,"-");
+            $month[$key] = substr($value,$first+1,2);
+            $day[$key] = substr($value,$last+1,2);
         }
 
         $categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
@@ -81,6 +84,8 @@ class ArticleController extends BaseController
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories,
+            'month' => $month,
+            'day' => $day,
         ));
     }
 
@@ -209,7 +214,7 @@ class ArticleController extends BaseController
             'status' => 'published'
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 10);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0 , 6);
 
         return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
             'articles' => $articles
@@ -224,7 +229,7 @@ class ArticleController extends BaseController
             'promoted' => 1
         );
 
-        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 10);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 6);
 
         return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
             'articles' => $articles

@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
-{% set bodyClass = 'homepage' %}
+{% set bodyClass = 'homepage new-ui' %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main_content %}
-  {% if blocks.home_top_banner %}
+  {% if not blocks.home_top_banner %}
     <section class="poster hidden-xs">
       <div class="carousel slide" id="carousel" data-ride="carousel">
         <ol class="carousel-indicators"></ol>
@@ -55,12 +55,12 @@
   {% endif %}
 
   <!-- 课程删选 -->
-  <section class="index-cuorse-cat">
+  <section class="cuorse-filter" id="cuorse-filter">
     <div class="container">
-      <div class="cuorse-cat-mian">
+      <div class="cuorse-filter-mian">
         {% set tags = data('Tags',{'count':5}) %}
         {% if tags %}
-        <div class="hidden-xs js-index-cuorse-cat course-cat-tags">
+        <div class="hidden-xs course-cat-tags js-cuorse-filter">
           {% for tag in tags %}
           <a href="/tag/{{ tag.name }}" class="btn btn-default">{{ tag.name }}</a>
           {% endfor %}
@@ -74,10 +74,10 @@
           </ul>
         </div>
         {% endif %}
-        <div class="course-sort js-course-sort">
-          <a href="javascript:;" class="active iconfont icon-time" data-toggle="tooltip" data-placement="top" title="按时间排序" data-role="time"></a>
-          <a href="javascript:;" class="iconfont icon-hot" data-toggle="tooltip" data-placement="top" title="最热" data-role="hot"></a>
-          <a href="javascript:;" class="iconfont icon-aisding" data-toggle="tooltip" data-placement="top" title="评价" data-role="rating"></a>
+        <div class="course-sort"  id="course-sort">
+          <a href="javascript:;" class="btn-circle active iconfont icon-time" data-toggle="tooltip" data-placement="top" title="按时间排序" data-role="time"></a>
+          <a href="javascript:;" class="btn-circle iconfont icon-hot" data-toggle="tooltip" data-placement="top" title="最热" data-role="hot"></a>
+          <a href="javascript:;" class="btn-circle iconfont icon-aisding" data-toggle="tooltip" data-placement="top" title="评价" data-role="rating"></a>
         </div>
       </div>
     </div>
@@ -137,6 +137,7 @@
     </div>
   </section>
   {% endif %}
+
   <!-- 特性 -->
   <section class="index-introduction">
     <div class="container">
@@ -173,10 +174,10 @@
       </div>
       <div class="group-dynamic-body row">
         <div class="col-md-6">
-          <div class="panel es-panel index-group clearfix">
+          <div class="panel panel-default index-group clearfix">
             <div class="panel-heading clearfix">
+              <a href="{{ path('group') }}" class="more">...</a>
               <h3 class="panel-title"><i class="iconfont icon-hot pull-left"></i>推荐小组</h3>
-              <a href="{{ path('group') }}" class="group-more pull-right">...</a>
             </div>
             <div class="panel-body row">
               {% for group in groups %}
@@ -184,17 +185,17 @@
                 <div class="media-left">
                   <a href="{{ path('group_show',{id:group.id})}}">
                     {% if group.logo %}
-                       {{ lazy_img(file_path(group.logo), 'img-circle') }}
+                      {{ lazy_img(file_path(group.logo), '') }}
                         {% else %}
-                       {{ lazy_img(asset('assets/img/default/group.png'), 'img-circle') }}
+                      {{ lazy_img(asset('assets/img/default/group.png'), '') }}
                     {%endif%}
                   </a>
                 </div>
                 <div class="media-body">
                   <div class="title"><a href="{{ path('group_show',{id:group.id})}}">{{ group.title }}</a></div>
                   <div class="metas">
-                    <a href="javascript:;"><i class="iconfont icon-group"></i>{{ group.memberNum }}</a>
-                    <a href="javascript:;"><i class="iconfont icon-comment"></i>{{ group.threadNum }}</a>
+                    <span><i class="iconfont icon-group"></i>{{ group.memberNum }}</span>
+                    <span><i class="iconfont icon-comment"></i>{{ group.threadNum }}</span>
                   </div>
                 </div>
               </div>
@@ -204,16 +205,15 @@
         </div>
         {% set learns = data('PersonDynamic', {'count':4}) %}
         <div class="col-md-6">
-          <div class="panel es-panel index-dynamic">
+          <div class="panel panel-default index-dynamic">
             <div class="panel-heading clearfix">
               <h3 class="panel-title"><i class="iconfont icon-pseson pull-left"></i>学员动态</h3>
-              <a href="javascript:;" class="more">...</a>
             </div>
             <div class="panel-body">
               {% for learn in learns %}
               <div class="media">
                 <div class="media-left">
-                  <a href="javascript:;">
+                  <a href="{{ path('user_show', {id:learn.user.id}) }}">
                     {{ lazy_img(default_path('avatar', learn.user.mediumAvatar, ''), 'img-circle') }}
                   </a>
                 </div>
