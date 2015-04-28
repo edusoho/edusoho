@@ -70,7 +70,7 @@
     <div class="actions clearfix">
       <div class="pull-left">
         <a class="btn btn-primary btn-fat " id="course-buy-btn" 
-        {% if setting("course.buy_fill_userinfo")|default(false) %}
+        {% if setting("course.buy_fill_userinfo")|default(false) or (setting('magic.buy_before_approval') and app.user.approvalStatus == 'unapprove') %}
           href="#modal" 
           data-toggle="modal" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
