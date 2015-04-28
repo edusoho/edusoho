@@ -1,0 +1,121 @@
+## Api请求说明:
+- 请求支持GET,POST
+
+#### 请求格式 : http://hostname/mapi_v2/service/method
+#### Example : http://trymob.edusoho.cn/mapi_v2/Category/getAllCategories
+#### 备注:
+* hostname  域名
+* service   服务接口名
+* method    接口方法
+* 没有标注的方法，参数都是可选
+
+## Api服务列表
+
+* [Category](#Category)
+* Course
+* Lesson
+* User
+* Order
+* School
+* Testpaper
+
+<a id="Category" />
+### Category 接口方法列表
+
+* getCategories *获取指定分类*
+
+```
+  参数          类型            描述
+  category      String          父级分类名称
+  
+  返回
+  json
+```
+    
+* getAllCategories  *获取所有分类*
+
+```
+  返回
+  json
+```
+* getTags   *获取所有标签*
+
+```
+  最大返回100条
+  返回
+  json
+```
+
+<a id="Course" />
+### Course 接口方法列表
+
+* getCourseNotices  *获取课程公告*
+
+```
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  start         int             起始索引
+  limit         int             limit
+  
+  返回
+  json
+```
+
+* getLessonNote     *获取课时笔记*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  lessonId      int             课时id(必选)
+  limit         int             limit
+  
+  返回
+  json
+```
+
+* getCourseMember       *获取课程会员信息*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  
+  返回
+  json
+```
+
+* postThread    *发表评论/问答*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  threadId      int             评论/问答id(必选)
+  content       String          评论内容(必选)
+  
+  返回
+  json
+```
+
+* commitCourse     *评价课程*
+
+```
+  请求头        类型            描述
+  token         String          用户登录token，验证请求权限
+  
+  参数          类型            描述
+  courseId      int             课程id(必选)
+  rating        int             评论星数(必选)
+  postId        int             回复id(必选)
+  content       String          评论内容(必选)
+  
+  返回
+  json
+```
