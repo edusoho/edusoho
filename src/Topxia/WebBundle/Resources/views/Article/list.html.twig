@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{% if category.seoTitle %}{{ category.seoTitle }}{% else %}{{ category.name }}{% endif %} - {{ parent() }}{% endblock %}
 
@@ -6,60 +6,338 @@
 
 {% block description %}{{ category.seoDesc }}{% endblock %}
 
-{% block article_main %}
+{% block content %}
+<section class="container es-main">
 
-  {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
-  {% if articles %}
-    <ul class="article-wide-list">
-      {% for article in articles %}
-        <li class="media article-item clearfix">
-          <div class="article-title text-muted">
-            <div class="pull-left">
-              {% for category in categories %}
-                {% if article.categoryId == category.id %}
-                  <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a>
-                  </span>
-                {% endif %}
-              {% endfor %}
-            </div>
-            <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
-          </div>
-          {% if article.thumb %}
-            <a class="hidden-xs pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-              <img class="article-picture" src="{{ file_url(article.thumb) }}" alt="资讯缩略图">
-            </a>
-          {% endif %}
-          <div class="media-body">
-            <h4 class="media-heading"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title }}</a></h4>
-            {{ article.body|plain_text(150) }}
-          </div>
-        </li>
-      {% endfor %}
+  <!-- 资讯 -->
+  <section class="es-section article-list-header">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="javascript:;">全部资讯</a></li>
+      <li role="presentation"><a href="javascript:;">行业资讯</a></li>
+      <li role="presentation"><a href="javascript:;">阔知新闻</a></li>
     </ul>
-  {% else %}
-    <div class="empty tac text-muted mvl">还没有任何资讯</div>
-  {% endif %}
-  {{ web_macro.paginator(paginator) }}
+    <ul class="second-cat-nav">
+      <li><a href="">全部</a></li>
+      <li><a href="">在线教育</a></li>
+      <li class="active"><a href="">金融</a></li>
+      <li><a href="">科技</a></li>
+      <li><a href="">游戏</a></li>
+      <li><a href="">游戏</a></li>
+      <li><a href="">游戏</a></li>
+    </ul>
+    <ul class="third-cat-nav">
+      <li class="active"><a href="">全部</a></li>
+      <li><a href="">股市</a></li>
+      <li><a href="">比特币</a></li>
+      <li><a href="">莱特币</a></li>
+      <li><a href="">在线支付</a></li>
+    </ul>
+  </section>
 
-{% endblock %}
+  <div class="article-list-body row">
+    <!-- list主内容-->
+    <div class="col-md-8 article-list-mian">
+      <section class="es-section">
+        <article class="article-item">
+          <div class="article-metas clearfix">
+            <div class="pull-left">
+              <div class="date">
+                <div class="day">24</div>
+                <div class="month">12月</div>
+              </div>
+            </div>
+            <div class="metas-body">
+              <p>行业资讯</p>
+              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="img-temp/course_1.jpg">
+              </a>
+            </div>
+            <div class="media-body">
+              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
+            </div>
+          </div>
+        </article>
+        <article class="article-item">
+          <div class="article-metas clearfix">
+            <div class="pull-left">
+              <div class="date">
+                <div class="day">24</div>
+                <div class="month">12月</div>
+              </div>
+            </div>
+            <div class="metas-body">
+              <p>行业资讯</p>
+              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="img-temp/course_1.jpg">
+              </a>
+            </div>
+            <div class="media-body">
+              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
+            </div>
+          </div>
+        </article>
+        <article class="article-item">
+          <div class="article-metas clearfix">
+            <div class="pull-left">
+              <div class="date">
+                <div class="day">24</div>
+                <div class="month">12月</div>
+              </div>
+            </div>
+            <div class="metas-body">
+              <p>行业资讯</p>
+              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="img-temp/course_1.jpg">
+              </a>
+            </div>
+            <div class="media-body">
+              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
+            </div>
+          </div>
+        </article>
+        <article class="article-item">
+          <div class="article-metas clearfix">
+            <div class="pull-left">
+              <div class="date">
+                <div class="day">24</div>
+                <div class="month">12月</div>
+              </div>
+            </div>
+            <div class="metas-body">
+              <p>行业资讯</p>
+              <h2 class="title"><a href="javascript:;">“一年回顾”功能侵犯用户隐私，Facebook道歉</a></h2>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left">
+              <a href="#">
+                <img class="media-object" src="img-temp/course_1.jpg">
+              </a>
+            </div>
+            <div class="media-body">
+              昨天，特斯拉宣布将会升级该公司的敞篷车型 Roadster 3.0，大幅提升了这款电动车的续航里程。此次升级将在 2015 年初接受预约，特斯拉并未透露这些升级需要车主支付多少费用，不过该公司称这并不是 Roadster 最后一次升级。
+            </div>
+          </div>
+        </article>
+        <nav>
+          <ul class="pager">
+            <li class="previous"><a href="#">&lt;上一页</a></li>
+            <li class="next"><a href="#">下一页&gt;</a></li>
+          </ul>
+        </nav>
+      </section>
+    </div>
 
-{% block article_side %}
-
-	<ul class="nav nav-pills nav-stacked article-sub">
-		{% for cat in subCategories %}
-      {% if cat.published == 1 %}
-  		  <li {% if category.id == cat.id %}class="active"{% endif %}>
-  		    <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
-  		    {% if cat.depth > 1 %}
-  		      {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
-  		    {% endif %}
-  		    {{ cat.name }}</a>
-  		  </li>
-      {% endif %}
-		{% endfor %}
-	</ul>
-
-  {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
-  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
+    <aside class="col-md-4 article-sidebar">
+     <!-- 热门资讯 -->
+      <div class="panel panel-default  hot-article">
+        <div class="panel-heading">
+          <h3 class="panel-title"><i class="iconfont icon-hot"></i>热门资讯</h3>
+        </div>
+        <div class="panel-body">
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">1</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">2</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">3</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">4</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">5</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">6</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 热门标签 -->
+      <div class="panel panel-default hot-tag">
+        <div class="panel-heading">
+          <h3 class="panel-title"><i class="iconfont icon-tag"></i>热门标签</h3>
+        </div>
+        <div class="panel-body">
+          <a class="btn-tag" href="javascript:;">在线教育</a>
+          <a class="btn-tag" href="javascript:;">产品动态</a>
+          <a class="btn-tag" href="javascript:;">EduSoho</a>
+          <a class="btn-tag" href="javascript:;">IOS</a>
+          <a class="btn-tag" href="javascript:;">Java</a>
+          <a class="btn-tag" href="javascript:;">Android</a>
+          <a class="btn-tag" href="javascript:;">前端开发</a>
+          <a class="btn-tag" href="javascript:;">在线教育</a>
+          <a class="btn-tag" href="javascript:;">Android</a>
+          <a class="btn-tag" href="javascript:;">EduSoho</a>
+          <a class="btn-tag" href="javascript:;">IOS</a>
+          <a class="btn-tag" href="javascript:;">Java</a>
+        </div>
+      </div>
+      <!-- 热门评论 -->
+      <div class="panel panel-default hot-comments">
+        <div class="panel-heading"><i class="iconfont icon-message"></i>热门评论</div>
+        <div class="panel-body">
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 推荐资讯 -->
+      <div class="panel panel-default recommend-article">
+        <div class="panel-heading"><i class="iconfont icon-language"></i>推荐资讯</div>
+        <div class="panel-body">
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">1</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">2</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">3</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">4</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">5</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left media-middle">
+              <span class="num">6</span>
+            </div>
+            <div class="media-body">
+              <a href="javascript:;">深度垂直+一键登入，教育应用分发平台Clever获3000万美元B轮融资</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
 
 {% endblock %}
