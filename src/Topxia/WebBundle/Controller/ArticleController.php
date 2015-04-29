@@ -210,7 +210,7 @@ class ArticleController extends BaseController
 
         $conditions = array (
             'targetId'=>$id,
-            'targetId'=>'article',
+            'targetType'=>'article',
             'parentId'=>0
         );
 
