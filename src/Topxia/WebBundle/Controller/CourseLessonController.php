@@ -84,6 +84,8 @@ class CourseLessonController extends BaseController
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         }
+
+        
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
