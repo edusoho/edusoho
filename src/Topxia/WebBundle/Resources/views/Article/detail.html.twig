@@ -8,59 +8,186 @@
 
 {% block article_main %}
 
-  <ul class="breadcrumb">
-      <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
-      {% for breadcrumb in breadcrumbs %}
-        <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
-      {% endfor %}
-      <li class="active">正文</li>
-  </ul>
+<section class="container es-main">
 
-  <h2 class="thread-title">{{article.title}}</h2>
-     <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
-     <div class="published-time pull-right">{{ article.hits|default(0) }} 次浏览</div>
-     <p><br></p>
-  <div class="thread-body">{{article.body |raw }}</div>
+  <div class="article-detail row">
+    <!-- 主内容 -->
+    <div class="col-md-8 article-detail-main">
+      <section class="es-section article-content">
+        <ol class="breadcrumb">
+          <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
+          {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
+          {% endfor %}
+          <li class="active">正文</li>
+        </ol>
+        <div class="article-metas">
+          <div class="pull-left">
+            <div class="date">
+              <div class="day">{{day}}</div>
+              <div class="month">{{month}}月</div>
+            </div>
+          </div>
+          <div class="metas-body">
+            <h2 class="title">
+              <a href="javascript:;">
+                {{article.title}}
+              </a>
+            </h2>
+            <div class="sns">
+              <span class="views-num"><i class="iconfont icon-eye"></i>{{ article.hits|default(0) }}</span>
+              <span class="comment-num"><i class="iconfont icon-comment"></i>10</span>
+              <span class="love-num"><i class="iconfont icon-aixin"></i>15</span>
+            </div>
+          </div>
+        </div>
+        <div class="article-text">
+            {{article.body |raw }}
+        </div>
+        <div class="article-tags">
+          标签：
+          <a class="btn-tag" href="">在线教育</a>
+          <a class="btn-tag" href="">产品动态</a>
+          <a class="btn-tag" href="">Edusoho</a>
+          <a class="btn-tag" href="">IOS</a>
+        </div>
+        <div class="article-sns">
+          <a class="love" href=""><i class="iconfont icon-eye"></i>{{ article.hits|default(0) }}</a>
+          <span class="es-share right open">
+            <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
+              <i class="iconfont icon-share-variant"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+              <div class="bdsharebuttonbox bdshare-button-style0-24" style="padding:1px;" data-bd-bind="1429085802250">
+                <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="margin:3px 2px 2px 6px;"><i class="iconfont icon-weixin"></i></a>
+                <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="margin:3px 2px 2px 6px;"><i class="iconfont icon-sina"></i></a>
+                <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="margin:3px 1px 2px 6px;"><i class="iconfont icon-qq"></i></a>
+                      {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
+              </div>
+            </ul>
+          </span>
+        </div>
+<!--         <div class="related-artcile">
+          <div class="row">
+            <a class="col-sm-4" href="javascript:;">
+              <div class="related-item">
+                <img class="img-responsive" src="img-temp/course_1.jpg" alt="">
+                <div class="title">
+                  Jeff Weiner领导下的LinkedIn将走向何方？
+                </div>
+              </div>
+            </a>
+            <a class="col-sm-4" href="javascript:;">
+              <div class="related-item">
+                <img class="img-responsive" src="img-temp/course_1.jpg" alt="">
+                <div class="title">
+                  Jeff Weiner领导下的LinkedIn将走向何方？
+                </div>
+              </div>
+            </a>
+            <a class="col-sm-4" href="javascript:;">
+              <div class="related-item">
+                <img class="img-responsive" src="img-temp/course_1.jpg" alt="">
+                <div class="title">
+                  Jeff Weiner领导下的LinkedIn将走向何方？
+                </div>
+              </div>
+            </a>
+          </div>
+        </div> -->
 
-  <p class="clearfix">
 
-    <div class="dropdown pull-right">
-      <a href="javascript:;" class="btn btn-link" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
-      {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
+      </section>
     </div>
 
-  {% if tags %}
-     <span class="text-muted">标签:</span>
-    {% for tag in tags %}
-         <span class="label label-info">{{tag.name}}</span>
-    {% endfor %}
-  {% endif %}
-  <br>
-  {% if article.source %}
-     <span class="text-muted">原文出处: &nbsp;</span>
-     {% if article.sourceUrl %}
-       <a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a>
-     {% else %}
-       {{article.source}}
-     {% endif %}
-  {% endif %}
-  </p>
-  <ul class="pager" style="margin-top:30px;">
-    {% if articlePrevious %}
-      <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; 上一篇</a></li>
-    {% else %}
-      <li class="previous disabled"><a href="javascript:;">&larr; 上一篇</a></li>
-    {% endif %}
+    <aside class="col-md-4 article-sidebar">
+     <!-- 热门资讯 -->
+             {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
+      <!-- 热门标签 -->
+      {% set tags = data('Tags',{'count':5}) %}
+        {% if tags %}
 
-      {% if articleNext %}
-      <li class="next"><a href="{{ path('article_detail',{id:articleNext.id}) }}"> 下一篇 &rarr;</a></li>
-    {% else %}
-      <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
-    {% endif %}
-  </ul>
+      <div class="panel panel-default hot-tag">
+
+        <div class="panel-heading">
+          <h3 class="panel-title"><i class="iconfont icon-tag"></i>热门标签</h3>
+        </div>
+        <div class="panel-body">
+                {% for tag in tags %}
+                  {% if tag %} 
+                    <a class="btn-tag" href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+                  {% endif %}
+                {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <!-- 热门评论 -->
+      <div class="panel panel-default hot-comments">
+        <div class="panel-heading"><i class="iconfont icon-message"></i>热门评论</div>
+        <div class="panel-body">
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="pull-left">
+                <img src="img-temp/course_1.jpg" class="img-circle">
+              </div>
+              <div class="comments-info">
+                <p><a href="javascript:;">老大</a><span>评论于</span></p>
+                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
+              </div>
+              <div class="comments-content">
+                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 推荐资讯 -->
+      {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
+    </aside>
+  </div>
+</section>
+  
 {% endblock %}
 
-{% block article_side %}
-  {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
-  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
-{% endblock %}
