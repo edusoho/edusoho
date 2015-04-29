@@ -8,22 +8,30 @@
 
 {% block content %}
 <section class="container es-main">
-
   <!-- 资讯 -->
   <section class="es-section article-list-header">
+    {% set currentNavCategory = categoryCode|default(null) %}
+    {% set rootCategory = rootCategory.code|default(null) %}
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="javascript:;">全部资讯</a></li>
-      <li role="presentation"><a href="javascript:;">行业资讯</a></li>
-      <li role="presentation"><a href="javascript:;">阔知新闻</a></li>
+        <li role="presentation" {% if not currentNavCategory %}  class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
+      {% for cat in categoryTree %}
+        {% if cat.parentId == 0 and cat.published == 1 %}
+           <li class="{% if rootCategory == cat.code %}active{% endif %}" role="presentation"><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
+        {% endif %}
+      {% endfor %}
     </ul>
     <ul class="second-cat-nav">
-      <li><a href="">全部</a></li>
-      <li><a href="">在线教育</a></li>
-      <li class="active"><a href="">金融</a></li>
-      <li><a href="">科技</a></li>
-      <li><a href="">游戏</a></li>
-      <li><a href="">游戏</a></li>
-      <li><a href="">游戏</a></li>
+    {% for cat in subCategories %}
+      {% if cat.published == 1 %}
+        <li {% if category.id == cat.id %}class="active"{% endif %}>
+          <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
+          {% if cat.depth > 1 %}
+            {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
+          {% endif %}
+          {{ cat.name }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
     </ul>
     <ul class="third-cat-nav">
       <li class="active"><a href="">全部</a></li>
@@ -32,6 +40,8 @@
       <li><a href="">莱特币</a></li>
       <li><a href="">在线支付</a></li>
     </ul>
+
+
   </section>
 
   <div class="article-list-body row">
