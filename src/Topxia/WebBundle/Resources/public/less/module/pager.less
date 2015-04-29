@@ -1,0 +1,20 @@
+.pager >li {
+  >a {
+    color: @gray;
+    .es-transition;
+    @media (min-width: @screen-lg-min) {
+      padding: 8px 25px;
+      .border-radius(20px);
+    }
+    &:hover {
+      background: none;
+      color: @brand-primary;
+      border-color: @brand-primary;
+      .es-transition;
+    }
+  }
+  &.disabled >a:hover {
+    border-color: #e0e0e0;
+  }
+}
+

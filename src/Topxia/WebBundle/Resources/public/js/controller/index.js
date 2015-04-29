@@ -21,7 +21,7 @@ define(function(require, exports, module) {
             $(this).parents("form").submit();
         });
 
-        $(".js-course-sort a").click(function() {
+        $("#course-sort a").click(function() {
 
             if (!$(this).hasClass("active")) {
                 $(this).addClass("active").siblings().removeClass("active");
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
             }
         });
 
-        $(".index-cuorse-cat").on("click", ".js-index-cuorse-cat a", function(e) {
+        $("#cuorse-filter").on("click", ".js-cuorse-filter>a", function(e) {
             var $that = $(this);
             var postData = {
                 id: $(this).attr("data-id")
