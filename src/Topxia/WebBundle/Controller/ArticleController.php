@@ -38,13 +38,14 @@ class ArticleController extends BaseController
         }
         $month=array();
         $day=array();
-        foreach ($publishedTime as $key => $value) {
-            $first = strpos($value,"-");
-            $last = strrpos($value,"-");
-            $month[$key] = substr($value,$first+1,2);
-            $day[$key] = substr($value,$last+1,2);
+        if(isset($publishedTime)){
+            foreach ($publishedTime as $key => $value) {
+                $first = strpos($value,"-");
+                $last = strrpos($value,"-");
+                $month[$key] = substr($value,$first+1,2);
+                $day[$key] = substr($value,$last+1,2);
+            }
         }
-
         $categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
@@ -127,6 +128,20 @@ class ArticleController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        foreach ($articles as $key => $value) {
+            $publishedTime[$value['id']] = date('Y-m-d',$value['publishedTime']);
+        }
+        $month=array();
+        $day=array();
+        if(isset($publishedTime)){
+            foreach ($publishedTime as $key => $value) {
+                $first = strpos($value,"-");
+                $last = strrpos($value,"-");
+                $month[$key] = substr($value,$first+1,2);
+                $day[$key] = substr($value,$last+1,2);
+            }
+        }
+
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
@@ -140,7 +155,9 @@ class ArticleController extends BaseController
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories,
-            'subCategories' => $subCategories
+            'subCategories' => $subCategories,
+            'month' => $month,
+            'day' => $day,
         ));
     }
 
