@@ -40,6 +40,10 @@ class BlockController extends BaseController
         if($category =='lastest'){
             $sort = array('updateTime', 'DESC');
         }elseif($category != 'all'){
+          if($category == 'theme'){
+            $theme = $this->getSettingService()->get('theme', array());
+            $category = $theme['uri'];
+          }
            $condation['category'] =  $category;
         }
         return array($condation,  $sort);
@@ -299,6 +303,11 @@ class BlockController extends BaseController
     protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }
