@@ -148,6 +148,23 @@ class ArticleController extends BaseController
     {
         $article = $this->getArticleService()->getArticle($id);
 
+        if ($request->getMethod() == "POST" ) {
+
+            $fields = $request->request->all();
+       
+            $post['content'] = $fields['content'];
+            $post['targetType'] = 'article';
+            $post['targetId'] = $id;
+
+            $user = $this->getCurrentUser();
+
+            if ($user->isLogin()) {
+
+                $this->getThreadService()->createPost($post);
+                
+            }
+        }
+
         if (empty($article)) {
             throw $this->createNotFoundException('文章已删除或者未发布！');
         }
@@ -191,6 +208,27 @@ class ArticleController extends BaseController
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 
+        $conditions = array (
+            'targetId'=>$id,
+            'targetId'=>'article',
+            'parentId'=>0
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchPostsCount($conditions),
+            20
+        );
+
+        $posts=$this->getThreadService()->searchPosts(
+            $conditions,
+            array('createdTime','asc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
             'articleSetting' => $articleSetting,
@@ -204,6 +242,34 @@ class ArticleController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'categoryName' => $category['name'],
             'categoryCode' => $category['code'],
+            'posts' => $posts,
+            'users' => $users,
+            'paginator' => $paginator,
+            'service' => $this->getThreadService(),
+        ));
+    }
+
+    public function subpostsAction(Request $request, $targetId, $postId, $less = false)
+    {
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->findPostsCountByParentId($postId),
+            10
+        );
+
+        $paginator->setBaseUrl($this->generateUrl('article_post_subposts', array('targetId' => $targetId, 'postId' => $postId)));
+
+        $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
+        return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
+            'parentId' => $postId,
+            'targetId' => $targetId,
+            'posts' => $posts,
+            'users' => $users,
+            'paginator' => $paginator,
+            'less' => $less,
+            'service' => $this->getThreadService(),
         ));
     }
 
@@ -294,6 +360,11 @@ class ArticleController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    private function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
 }
