@@ -29,8 +29,8 @@
     <div class="course-info">
       <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
       <div class="metas clearfix">
-        <span class="num"><i class="iconfont icon-group"></i>{{ course.studentNum }}</span>
-        <span class="comment"><i class="iconfont icon-comment"></i>{{ course.ratingNum }}</span>
+        <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+        <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
         {% if course.discountId %}
 
           {% if 'full' in shows or 'price' in shows %}

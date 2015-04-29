@@ -46,7 +46,7 @@
     <section class="index-notice">
       <div class="container">
         <div class="text-line">
-          <h5><i class="iconfont icon-bell"></i><span><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(50)}}</a></span></h5>
+          <h5><i class="es-icon es-icon-notifications"></i><span><a class="open-article-link" {% if announcement.url %} href="{{announcement.url}}" target="_blank"{% endif %}>{{announcement.title|sub_text(50)}}</a></span></h5>
           <div class="line"></div>
         </div>
       </div>
@@ -73,10 +73,17 @@
           </ul>
         </div>
         {% endif %}
-        <div class="course-sort"  id="course-sort">
-          <a href="javascript:;" class="btn-circle active iconfont icon-time" data-toggle="tooltip" data-placement="top" title="按时间排序" data-role="time"></a>
-          <a href="javascript:;" class="btn-circle iconfont icon-hot" data-toggle="tooltip" data-placement="top" title="最热" data-role="hot"></a>
-          <a href="javascript:;" class="btn-circle iconfont icon-aisding" data-toggle="tooltip" data-placement="top" title="评价" data-role="rating"></a>
+        <div class="course-sort" id="course-sort">
+          <a href="javascript:;" class="btn-circle active" data-toggle="tooltip" data-placement="top" title="按时间排序">
+            <i class="es-icon es-icon-accesstime"></i>
+          </a>
+          <a href="javascript:;" class="btn-circle " data-toggle="tooltip" data-placement="top" title="最热">
+            <i class="es-icon es-icon-whatshot"></i>
+          </a>
+          <a href="javascript:;" class="btn-circle " data-toggle="tooltip" data-
+          placement="top" title="点赞">
+            <i class="es-icon es-icon-thumbup"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -85,7 +92,7 @@
   <!-- 课程列表 -->
   {% set courses = data('LatestCourses',{'count':8}) %}
   {% if courses %}
-  <section class="index-course-list lazyload latest-course">
+  <section class="index-course-list latest-course">
     <div class="container">
       <div class="row">
         {% for course in courses %}
@@ -103,7 +110,7 @@
   
   {% set courses = data('PopularCourses',{'count':8}) %}
   {% if courses %}
-  <section class="index-course-list lazyload popular-courses"  style="display:none;">
+  <section class="index-course-list popular-courses"  style="display:none;">
     <div class="container">
       <div class="row">
         {% for course in courses %}
@@ -121,7 +128,7 @@
 
   {% set courses = data('CourseRankByRating',{'count':8}) %}
   {% if courses %}
-  <section class="index-course-list lazyload rateing-courses" style="display:none;">
+  <section class="index-course-list rateing-courses" style="display:none;">
     <div class="container">
       <div class="row">
         {% for course in courses %}
@@ -148,14 +155,64 @@
         </a>
         <a href="javascript:;" class="col-md-4 col-sm-4 col-xs-12">
           <img class="img-responsive" src="{{ asset('bundles/topxiaweb/img/icon_introduction_2.png') }}">
-          <h4>体系化学习</h4>
-          <h5>体系化学习，掌握完整知识结构</h5>
+          <h4>教与学结合</h4>
+          <h5>教学结合，提高学习质量</h5>
         </a>
         <a href="javascript:;" class="col-md-4 col-sm-4 col-xs-12">
           <img class="img-responsive" src="{{ asset('bundles/topxiaweb/img/icon_introduction_3.png') }}">
-          <h4>体系化学习</h4>
-          <h5>体系化学习，掌握完整知识结构</h5>
+          <h4>与代码为伍</h4>
+          <h5>学得怎么样？考试结果告诉你</h5>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 推荐班级 -->
+  <section class="index-class">
+    <div class="container">
+      <div class="index-class-header">
+        <div class="text-line">
+          <h5><span>推荐班级</span></h5>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="index-class-list row">
+        <div class="col-md-3 col-sm-6">
+          <div class="class-item">
+            <a href="">
+              <img class="img-responsive" src="img-temp/class_1.jpg" alt="">
+              <h3>淘宝运营课程高级班</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="class-item">
+            <a href="">
+              <img class="img-responsive" src="img-temp/class_2.jpg" alt="">
+              <h3>淘宝运营课程高级班</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="class-item">
+            <a href="">
+              <img class="img-responsive" src="img-temp/class_3.jpg" alt="">
+              <h3>淘宝运营课程高级班淘宝运营课程高级班</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="class-item">
+            <a href="">
+              <img class="img-responsive" src="img-temp/class_4.jpg" alt="">
+              <h3>淘宝运营课程高级班</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -166,7 +223,7 @@
   <section class="group-dynamic">
     <div class="container">
       <div class="group-dynamic-header">
-        <div class="text-line">
+        <div class="text-line gray">
           <h5><span>小组动态</span></h5>
           <div class="line"></div>
         </div>
@@ -176,7 +233,7 @@
           <div class="panel panel-default index-group clearfix">
             <div class="panel-heading clearfix">
               <a href="{{ path('group') }}" class="more">...</a>
-              <h3 class="panel-title"><i class="iconfont icon-hot pull-left"></i>推荐小组</h3>
+              <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>推荐小组</h3>
             </div>
             <div class="panel-body row">
               {% for group in groups %}
@@ -193,8 +250,8 @@
                 <div class="media-body">
                   <div class="title"><a href="{{ path('group_show',{id:group.id})}}">{{ group.title }}</a></div>
                   <div class="metas">
-                    <span><i class="iconfont icon-group"></i>{{ group.memberNum }}</span>
-                    <span><i class="iconfont icon-comment"></i>{{ group.threadNum }}</span>
+                    <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                    <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
                   </div>
                 </div>
               </div>
@@ -206,7 +263,7 @@
         <div class="col-md-6">
           <div class="panel panel-default index-dynamic">
             <div class="panel-heading clearfix">
-              <h3 class="panel-title"><i class="iconfont icon-pseson pull-left"></i>学员动态</h3>
+              <h3 class="panel-title"><i class="es-icon es-icon-recentactors pull-left"></i>学员动态</h3>
             </div>
             <div class="panel-body">
               {% for learn in learns %}

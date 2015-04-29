@@ -1,12 +1,12 @@
 <div class="panel panel-default recommend-article">
   <div class="panel-heading">
-    <i class="iconfont icon-language"></i>推荐资讯
+    <i class="es-icon es-icon-language"></i>推荐资讯
   </div>
   <div class="panel-body">
     {% if articles %}
       {% for key,article in articles %}
-        <div class="media">
-            <div class="media-left media-middle">
+        <div class="media media-number">
+            <div class="media-left">
               <span class="num">{{ key+1 }}</span>
             </div>
             <div class="media-body">

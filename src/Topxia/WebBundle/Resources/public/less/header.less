@@ -37,7 +37,6 @@
   }
 }
 
-
 // 菜单
 .nav.navbar-nav {
   @media (max-width: @screen-xs-max) {
@@ -73,13 +72,12 @@
   }
   >li > .dropdown-menu {
     border-radius: 5px;
-    li a {
-      padding: 10px;
-      &:hover {
-        background: @brand-primary;
-        color: #fff;
-      }
-    }
+    // li a {
+    //   &:hover {
+    //     background: @brand-primary;
+    //     color: #fff;
+    //   }
+    // }
   }
 }
 
@@ -124,8 +122,8 @@
   }
   .button {
     position: absolute;
-    right: 10px;
-    top: 4px;
+    right: 5px;
+    top: 3px;
     border: none;
     background: none;
   }
@@ -159,6 +157,21 @@
         color: @brand-primary;
         background: none;
         .es-transition;
+      }
+      &.hasmessage {
+        position: relative;
+        display: block;
+        >.dot {
+          position: absolute;
+          display: block;
+          width: 5px;
+          height: 5px;
+          top: 17px;
+          right: 11px;
+          font-size: 20px;
+          .border-radius(50%);
+          background-color: @brand-danger;
+        }
       }
     }
   }

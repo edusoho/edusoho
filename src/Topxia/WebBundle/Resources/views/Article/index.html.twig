@@ -1,14 +1,13 @@
 {% extends 'TopxiaWebBundle:Article:layout.html.twig' %}
 
-
 {% block content %}
   <!-- 资讯 -->
   <div class="es-section article-list-header">
-      {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
+    {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
 
-      {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
-        <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
-      {% endif %}
+    {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
+      <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
+    {% endif %}
 
     <div class="row">
       <!-- 轮播图 -->
@@ -95,94 +94,8 @@
 
     </div>
 
-    <aside class="col-md-4 article-sidebar">
-      <!-- 热门资讯 -->
-        {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
-      <!-- 热门标签 -->
+    {% include 'TopxiaWebBundle::Article:sidebar.html.twig' %}
 
-      {% set tags = data('Tags',{'count':5}) %}
-        {% if tags %}
-
-      <div class="panel panel-default hot-tag">
-
-        <div class="panel-heading">
-          <h3 class="panel-title"><i class="iconfont icon-tag"></i>热门标签</h3>
-        </div>
-        <div class="panel-body">
-                {% for tag in tags %}
-                  {% if tag %} 
-                    <a class="btn-tag" href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
-                  {% endif %}
-                {% endfor %}
-        </div>
-      </div>
-      {% endif %}
-      
-      <!-- 热门评论 -->
-      <div class="panel panel-default hot-comments">
-        <div class="panel-heading"><i class="iconfont icon-message"></i>热门评论</div>
-        <div class="panel-body">
-          <div class="media">
-            <div class="media-body">
-              <div class="pull-left">
-                <a href=""><img src="img-temp/course_1.jpg" class="img-circle"></a>
-              </div>
-              <div class="comments-info">
-                <p><a href="javascript:;">老大</a><span>评论于</span></p>
-                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-              </div>
-              <div class="comments-content">
-                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-              </div>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-body">
-              <div class="pull-left">
-                <img src="img-temp/course_1.jpg" class="img-circle">
-              </div>
-              <div class="comments-info">
-                <p><a href="javascript:;">老大</a><span>评论于</span></p>
-                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-              </div>
-              <div class="comments-content">
-                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-              </div>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-body">
-              <div class="pull-left">
-                <img src="img-temp/course_1.jpg" class="img-circle">
-              </div>
-              <div class="comments-info">
-                <p><a href="javascript:;">老大</a><span>评论于</span></p>
-                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-              </div>
-              <div class="comments-content">
-                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-              </div>
-            </div>
-          </div>
-          <div class="media">
-            <div class="media-body">
-              <div class="pull-left">
-                <img src="img-temp/course_1.jpg" class="img-circle">
-              </div>
-              <div class="comments-info">
-                <p><a href="javascript:;">老大</a><span>评论于</span></p>
-                <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-              </div>
-              <div class="comments-content">
-                最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 推荐资讯 -->
-      {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
-    </aside>
   </div>
 
 {% endblock %}
