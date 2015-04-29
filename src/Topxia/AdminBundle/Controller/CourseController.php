@@ -174,10 +174,9 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions = array(
-            'status' => 'published',
-            'recommended'=> 1
-        );
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $conditions['recommended'] = 1;
 
         $paginator = new Paginator(
             $this->get('request'),
