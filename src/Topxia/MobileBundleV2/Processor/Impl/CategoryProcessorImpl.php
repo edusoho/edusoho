@@ -30,6 +30,7 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
             } else {
                 $ids = $this->controller->getCategoryService()->findCategoryChildrenIds($group['id']);
                 $categories = $this->controller->getCategoryService()->findCategoriesByIds($ids);
+                $categories = array_values($categories);
             }
         }
 
