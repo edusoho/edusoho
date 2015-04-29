@@ -88,8 +88,9 @@
       </div>
     </div>
   </section>
+  
 
-  <!-- 课程列表 -->
+  <!-- 课程列表  todo fix me -->
   {% set courses = data('LatestCourses',{'count':8}) %}
   {% if courses %}
   <section class="index-course-list latest-course">
@@ -102,12 +103,13 @@
         {% endfor %}
       </div>
       <div class="course-more">
-        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
+        <a href="{{ path('course_explore') }}" data-toggle="tooltip" data-placement="top" title="更多">...</a>
       </div>
     </div>
   </section>
   {% endif %}
   
+  <!-- 课程列表  todo fix me -->
   {% set courses = data('PopularCourses',{'count':8}) %}
   {% if courses %}
   <section class="index-course-list popular-courses"  style="display:none;">
@@ -120,12 +122,13 @@
         {% endfor %}
       </div>
       <div class="course-more">
-        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
+        <a href="{{ path('course_explore') }}" data-toggle="tooltip" data-placement="top" title="更多">...</a>
       </div>
     </div>
   </section>
   {% endif %}
-
+  
+  <!-- 课程列表  todo fix me -->
   {% set courses = data('CourseRankByRating',{'count':8}) %}
   {% if courses %}
   <section class="index-course-list rateing-courses" style="display:none;">
@@ -138,7 +141,7 @@
         {% endfor %}
       </div>
       <div class="course-more">
-        <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="更多">...</a>
+        <a href="{{ path('course_explore') }}" data-toggle="tooltip" data-placement="top" title="更多">...</a>
       </div>
     </div>
   </section>
