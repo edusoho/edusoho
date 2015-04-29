@@ -229,6 +229,12 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
+        $first = strpos(date('Y-m-d',$article['publishedTime']),"-");
+        $last = strrpos(date('Y-m-d',$article['publishedTime']),"-");
+        $month= substr(date('Y-m-d',$article['publishedTime']),$first+1,2);
+        $day= substr(date('Y-m-d',$article['publishedTime']),$last+1,2);
+
+
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
             'articleSetting' => $articleSetting,
@@ -242,6 +248,8 @@ class ArticleController extends BaseController
             'breadcrumbs' => $breadcrumbs,
             'categoryName' => $category['name'],
             'categoryCode' => $category['code'],
+            'day' => $day,
+            'month' => $month,
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,
