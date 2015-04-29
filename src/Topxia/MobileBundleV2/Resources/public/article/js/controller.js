@@ -25,12 +25,14 @@ function ListController($scope, $http, $ionicLoading, broadCast)
   		$ionicLoading.show({
 		        template:'加载中...',
 		});
-  		$http.post(
-  			'/mapi_v2/articleApp/list', 
-  		{
-  			start: $scope.start,
-  			categoryId : $scope.categoryId 
-  		}).success(function(data) {
+		$http({
+			method: 'get',
+			url : '/mapi_v2/articleApp/list',
+			params : {
+				start: $scope.start,
+  				categoryId : $scope.categoryId 
+			}
+		}).success(function(data) {
 			$ionicLoading.hide();
 			if (! $scope.articles) {
 				$scope.articles = [];
@@ -44,9 +46,9 @@ function ListController($scope, $http, $ionicLoading, broadCast)
 	    			success();
 	    		}
 	    		$scope.start += $scope.limit;
-	  	}).error(function(){
-			$ionicLoading.hide();
-	  	});
+	    	}).error(function(){
+				$ionicLoading.hide();
+	    	});
   	}
 
   	queryArticelList(); 
