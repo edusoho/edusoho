@@ -198,7 +198,7 @@
     
     | 参数  | 类型  | 描述 |
     |:------------- |:---------------:| :-------------|
-    | lessonId      | int |         课时id(必选) |
+    | lessonId      | int |         课时id(必选) id为0默认获取所有课程问答/讨论 |
     | type      | String |         默认question（question,thread) |
     | start      | int |       起始索引|
     | limit      | int |       limit |
