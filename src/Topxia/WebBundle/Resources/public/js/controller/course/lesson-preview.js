@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 	var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
-    
+
     exports.run = function() {
 
 		if ($("#lesson-preview-video-player").length > 0) {
@@ -97,7 +97,7 @@ define(function(require, exports, module) {
                     return ;
                 }
 
-                var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+                var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'400px\'></iframe>';
                 $("#lesson-preview-doucment").html(html);
 
                 var watermarkUrl = $("#lesson-preview-doucment").data('watermarkUrl');
