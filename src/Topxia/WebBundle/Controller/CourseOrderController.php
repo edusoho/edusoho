@@ -59,7 +59,7 @@ class CourseOrderController extends OrderController
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
 
-        if($course['approval'] == 1 && $userInfo['approvalStatus'] == 'unapprove'){
+        if($course['approval'] == 1 && ($userInfo['approvalStatus'] == 'unapprove' || $userInfo['approvalStatus'] == 'approve_fail')){
             return $this->render('TopxiaWebBundle:CourseOrder:approve-modal.html.twig', array(
                 'course' => $course
             ));
