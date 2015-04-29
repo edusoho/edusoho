@@ -68,50 +68,37 @@ class UserController extends BaseController
         $email = $request->query->get('value');
         $email = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '该Email地址可以使用');
-        } else {
-            $response = array('success' => false, 'message' => $message);
-        }
-        return $this->createJsonResponse($response);
+        return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '该昵称可以使用');
-        } else {
-            $response = array('success' => false, 'message' => $message);
-        }
-        return $this->createJsonResponse($response);
+        return $this->validateResult($result, $message);
     }
 
       private function mobileCheckAction (Request $request){
         $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
-        if ($result == 'success') {
-           $response = array('success' => true, 'message' => '');
-        } else {
-           $response = array('success' => false, 'message' => $message);
-        }
-         return $this->createJsonResponse($response);
+        return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request){
         $emailOrMobile = $request->query->get('value');
         $emailOrMobile = str_replace('!', '.', $emailOrMobile);
-        if(SimpleValidator::email($emailOrMobile)){
-            return $this->emailCheckAction($request);
-        }else if(SimpleValidator::mobile($emailOrMobile)){
-            return $this->mobileCheckAction($request);
-        }else {
-            $response = array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
-            return $this->createJsonResponse($response);
-        }
+        list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
+        return $this->validateResult($result, $message);
     }
 
+    private function validateResult($result, $message){
+        if ($result == 'success') {
+           $response = array('success' => true, 'message' => '');
+        } else {
+           $response = array('success' => false, 'message' => $message);
+        }
+        return $this->createJsonResponse($response);
+    }
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -130,7 +117,7 @@ class UserController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
-        return $this->render($this->getUserAddPage());
+        return $this->render($this->getCreateUserModal());
     }
 
     private function dealForDate($formData, $request){
@@ -146,10 +133,10 @@ class UserController extends BaseController
         return $userData;
     }
 
-    private function getUserAddPage(){
+    private function getCreateUserModal(){
         $auth = $this->getSettingService()->get('auth');
         if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
-            return 'TopxiaAdminBundle:User:create-modal-mobile.html.twig';
+            return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
         }else{
             return 'TopxiaAdminBundle:User:create-modal.html.twig';
         }

@@ -346,49 +346,33 @@ class RegisterController extends BaseController
 
     public function emailCheckAction(Request $request)
     {
+
         $email = $request->query->get('value');
         $email = str_replace('!', '.', $email);
-
-        return $this->createJsonResponse($this->emailCheckResponse($email));
+        list($result, $message) = $this->getAuthService()->checkEmail($email);
+        return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
         $mobile = $request->query->get('value');
-        return $this->createJsonResponse($this->mobileCheckResponse($mobile));
+        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+        return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request){
         $emailOrMobile = $request->query->get('value');
-        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
-        if(SimpleValidator::email($emailOrMobile)){
-           $response = $this->emailCheckResponse($emailOrMobile);
-        }else if(SimpleValidator::mobile($emailOrMobile)){
-           $response =  $this->mobileCheckResponse ($emailOrMobile);
-        }else {
-            $response = array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
+         $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
+        return $this->validateResult($result, $message);
+    }
+    private function validateResult($result, $message){
+        if ($result == 'success') {
+           $response = array('success' => true, 'message' => '');
+        } else {
+           $response = array('success' => false, 'message' => $message);
         }
         return $this->createJsonResponse($response);
-    }
-
-    private function emailCheckResponse ($email){
-       list($result, $message) = $this->getAuthService()->checkEmail($email);
-
-        if ($result == 'success') {
-          return $response = array('success' => true, 'message' => '');
-        } else {
-          return $response = array('success' => false, 'message' => $message);
-        }
-    }
-
-   private function mobileCheckResponse ($mobile){
-       list($result, $message) = $this->getAuthService()->checkMobile($mobile);
-
-        if ($result == 'success') {
-          return $response = array('success' => true, 'message' => '');
-        } else {
-          return $response = array('success' => false, 'message' => $message);
-        }
     }
 
     public function nicknameCheckAction(Request $request)
@@ -396,12 +380,7 @@ class RegisterController extends BaseController
         $nickname = $request->query->get('value');
         $randomName = $request->query->get('randomName');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname,$randomName);
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '');
-        } else {
-            $response = array('success' => false, 'message' => $message);
-        }
-        return $this->createJsonResponse($response);
+        return $this->validateResult($result, $message);
     }
 
     public function captchaCheckAction(Request $request)

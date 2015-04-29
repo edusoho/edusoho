@@ -19,6 +19,8 @@ interface AuthService
 
     public function checkUsername($username,$randomName='');
 
+    public function checkEmailOrMobile($emailOrMobile);
+
     public function checkEmail($email);
 
     public function checkMobile($mobile);

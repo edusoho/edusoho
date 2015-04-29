@@ -226,7 +226,7 @@ define(function(require, exports, module) {
             }
         ],
         [
-            'emailOrMobile_remote',
+            'email_or_mobile_remote',
             function(options, commit) {
                 var element = options.element,
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
@@ -307,7 +307,7 @@ define(function(require, exports, module) {
             },"{{display}}的长度必须等于{{len}}"
         ],
         [
-            'emailOrMobile',
+            'email_or_mobile',
              function(options){
                var emailOrMobile = options.element.val();
                var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;

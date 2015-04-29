@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\AuthService;
+use Topxia\Common\SimpleValidator;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -177,6 +178,16 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
         
         return array('success', '');
+    }
+
+    public function checkEmailOrMobile($emailOrMobile){
+        if(SimpleValidator::email($emailOrMobile)){
+           return $this->checkEmail($emailOrMobile);
+        }else if(SimpleValidator::mobile($emailOrMobile)){
+           return $this->checkMobile ($emailOrMobile);
+        }else {
+           return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
+        }
     }
 
     public function checkPassword($userId, $password)
