@@ -1,12 +1,10 @@
-{% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
-{% set menu = 'set' %}
-{% block title %}小组设置{% endblock %}
-    {% block main %}
-      {{ web_macro.flash_messages() }}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-            <div class="page-header clearfix">
-              <h1 class="pull-left">小组设置</h1>
-            </div>
+{% set menu = 'admin_group_set' %}
+
+{% block main %}
+
+      {{ web_macro.flash_messages() }}
             <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
            
             <div class="row form-group">

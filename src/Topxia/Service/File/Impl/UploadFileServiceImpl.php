@@ -84,7 +84,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $myFriends = $this->getUploadFileShareDao ()->findMySharingContacts ($conditions ['currentUserId']);
 			
             if(isset($myFriends)) {
-				$createdUserIds = "'" . implode("','", ArrayToolkit::column ($myFriends, "sourceUserId" )) . "'";
+				$createdUserIds = ArrayToolkit::column ($myFriends, "sourceUserId" );
 			}else{
 				//Browsing shared files, but nobody is sharing with current user.
 				return array();
@@ -109,7 +109,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     		$myFriends = $this->getUploadFileShareDao ()->findMySharingContacts($conditions['currentUserId']);
     			
     		if (isset($myFriends)) {
-                $createdUserIds = implode(",", ArrayToolkit::column($myFriends, "sourceUserId"));
+                $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");
     		}else{
     			//Browsing shared files, but nobody is sharing with current user.
                 return 0;
@@ -412,10 +412,41 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 					);
 					
 					$this->getUploadFileShareDao()->addShare($fileShareFields);
+
 				}
+                
 			}
 		}
 	}
+
+    public function findShareHistoryByUserId($sourceUserId, $targetUserId)
+    {
+        return $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
+    }
+
+    public function addShare($sourceUserId, $targetUserId)
+    {
+        $fileShareFields = array (
+            'sourceUserId' => $sourceUserId,
+            'targetUserId' => $targetUserId,
+            'isActive' => 1,
+            'createdTime' => time (),
+            'updatedTime' => time () 
+        );
+        
+        return $this->getUploadFileShareDao()->addShare($fileShareFields);
+
+    }
+
+    public function updateShare($shareHistoryId)
+    {
+        $fileShareFields = array (
+                'isActive' => 1,
+                'updatedTime' => time ()
+        );
+        
+        return $this->getUploadFileShareDao()->updateShare($shareHistoryId, $fileShareFields);
+    }
 
 	public function cancelShareFile($sourceUserId, $targetUserId) {
 		$shareHistory = $this->getUploadFileShareDao ()->findShareHistory ( $sourceUserId, $targetUserId );
@@ -481,4 +512,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         return $this->createService('System.LogService');
     }
+
+    
 }

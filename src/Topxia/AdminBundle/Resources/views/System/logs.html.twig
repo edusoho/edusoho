@@ -1,14 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}系统日志 - {{ parent() }}{% endblock %}
-
-{% set menu = 'logs' %}
+{% set menu = 'admin_logs_query' %}
 
 {% set script_controller = 'log/list' %}
 
 {% block main %}
-
-<div class="page-header"><h1>系统日志</h1></div>
 
 {{ web_macro.flash_messages() }}
 
