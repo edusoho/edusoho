@@ -2,7 +2,46 @@
     "autumn:home_top_banner":
     {
         "title": "清秋主题：首页头部图片轮播",
-        "templateName": "carousel.template.html.twig.template.html.twig",
+        "templateName": "carousel.template.html.twig",
+        "default":
+        {
+            "carousel": {
+                "items": {
+                    "1": {
+                        "src": "\/themes\/autumn\/img\/slide-1.jpg",
+                        "alt": "示例图片",
+                        "href": "http:\/\/www.edusoho.com\/",
+                        "target": "_blank"
+                    },
+                    "2": {
+                        "src": "\/themes\/autumn\/img\/slide-2.jpg",
+                        "alt": "示例图片",
+                        "href": "http:\/\/www.edusoho.com\/",
+                        "target": "_self"
+                    },
+                    "3": {
+                        "src": "\/themes\/autumn\/img\/slide-2.jpg",
+                        "alt": "示例图片",
+                        "href": "http:\/\/www.edusoho.com\/",
+                        "target": "_blank"
+                    },
+                    "4": {
+                        "src": "",
+                        "alt": "",
+                        "href": "",
+                        "target": "_self"
+                    },
+                    "5": {
+                        "src": "",
+                        "alt": "",
+                        "href": "",
+                        "target": "_self"
+                    }
+                },
+                "type": "imglink"
+            }
+        }
+        ,
         "items": {
             "carousel":
             {

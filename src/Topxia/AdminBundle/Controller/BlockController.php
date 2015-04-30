@@ -168,6 +168,7 @@ class BlockController extends BaseController
             $html = $this->renderView($this->getFullBlockTemplateName($block['templateName']), array(
                 'block' => $block
             ));
+            
             $block = $this->getBlockService()->updateBlock($blockId, array(
                 'data' => $data,
                 'content' => $html

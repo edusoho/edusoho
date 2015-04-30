@@ -1,0 +1,3 @@
+{% for imglink in (block.data|first)['items']|default(null) if imglink.src|default('') %}
+  <a href="{{ imglink.href|default('') }}" target="{{ imglink.target }}"><img src=" {{ imglink.src|default('') }}" alt="{{ imglink.alt|default('') }}"></a>
+{% endfor %}
