@@ -45,6 +45,12 @@ interface UploadFileService
     public function findMySharingContacts($targetUserId);
     
     public function shareFiles($sourceUserId, $targetUserIds);
+
+    public function addShare($sourceUserId, $targetUserId);
+
+    public function updateShare($shareHistoryId);
+
+    public function findShareHistoryByUserId($sourceUserId, $targetUserId);
     
     public function findShareHistory($sourceUserId);
     
