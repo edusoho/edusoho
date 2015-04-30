@@ -1,0 +1,17 @@
+{
+    "autumn:home_top_banner":
+    {
+        "title": "清秋主题：首页头部图片轮播",
+        "templateName": "carousel.template.html.twig.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "清秋主题：首页头部图片轮播",
+                "desc": "",
+                "count": 5,
+                "type": "imglink"
+            }
+        }
+    }
+ 
+}

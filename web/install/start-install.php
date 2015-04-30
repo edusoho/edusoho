@@ -638,6 +638,7 @@ EOD;
     {
         $block = $this->getBlockService()->createBlock(array(
             'code'=>'home_top_banner',
+            'category' => 'default'
             'title'=>'默认主题：首页头部图片轮播'
         ));
 
@@ -646,6 +647,10 @@ EOD;
 <a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
 <a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
 EOD;
+        
+        $jsonFile = __DIR__ . '/../../web/themes/default/block.json';
+        $this->initBlockMeta('default');
+        
         $this->getBlockService()->updateContent($block['id'], $content);
 
         $block = $this->getBlockService()->createBlock(array(
@@ -690,6 +695,33 @@ EOD;
 EOD;
         $this->getBlockService()->updateContent($block['id'], $content);
 
+    }
+
+    private function initBlockMeta($code, $jsonFile)
+    {
+        if (!file_exists($jsonFile)) {
+            throw new \RuntimeException("插件编辑区元信息文件{$blockMeta}不存在！");
+        }
+
+        $blockMeta = json_decode(file_get_contents($jsonFile), true);
+        if (empty($blockMeta)) {
+            throw new \RuntimeException("插件元信息文件{$blockMeta}格式不符合JSON规范，解析失败，请检查元信息文件格式");
+        }
+
+        foreach ($blockMeta as $key => $meta) {
+            $block = $this->getBlockService()->getBlockByCode($key);
+            if (empty($block)) {
+                $block = array(
+                    'code' => $key,
+                    'category' => $code,
+                    'meta' => $meta,
+                    'templateName' => $meta['templateName'],
+                    'title' => $meta['title']
+                );
+                $this->getBlockService()->createBlock($block);
+            }
+          
+        }
     }
 
     public function initLockFile()

@@ -55,6 +55,14 @@ admin_block_visual_edit:
     router_params: {'blockId': 'block.id'}
     router_params_context: 1
 
+admin_block_visual_view_data:
+    name: 查看数据
+    parent: admin_block_visual_edit
+    router_params: {'blockId': 'block.id'}
+    router_params_context: 1
+    group: 2
+    blank: 1
+
 admin_block_visual_edit_history:
     name: 历史记录
     parent: admin_operation_block

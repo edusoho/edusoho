@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
@@ -178,6 +179,12 @@ class BlockController extends BaseController
             'block' => $block,
             'action' => 'edit',
         ));
+    }
+
+    public function dataViewAction(Request $request, $blockId)
+    {
+        $block = $this->getBlockService()->getBlock($blockId);
+        return new Response('<pre>' . json_encode($block['data'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . '</pre>');
     }
 
     public function visualHistoryAction(Request $request, $blockId)

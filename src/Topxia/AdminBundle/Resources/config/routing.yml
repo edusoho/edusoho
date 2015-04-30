@@ -94,6 +94,10 @@ admin_block_visual_edit:
     pattern:  /block/{blockId}/visual/edit
     defaults: { _controller: TopxiaAdminBundle:Block:visualEdit }
 
+admin_block_visual_view_data:
+    pattern:  /block/{blockId}/data/view
+    defaults: { _controller: TopxiaAdminBundle:Block:dataView }
+
 admin_block_visual_edit_history:
     pattern:  /block/{blockId}/visual/edit/history
     defaults: { _controller: TopxiaAdminBundle:Block:visualHistory }

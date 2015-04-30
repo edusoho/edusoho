@@ -59,18 +59,17 @@ class ThemeRegisterCommand extends BaseCommand
     private function executeInstall($pluginDir)
     {
         $installFile = $pluginDir . '/Scripts/InstallScript.php';
-        if (!file_exists($installFile)) {
-            throw new \RuntimeException("插件安装脚本{$installFile}不存在！");
+        if (file_exists($installFile)) {
+            include $installFile;
+            if (!class_exists('InstallScript')) {
+                throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
+            }
+
+            $installer = new \InstallScript(ServiceKernel::instance());
+            $installer->setInstallMode('command');
+            $installer->execute();
         }
 
-        include $installFile;
-        if (!class_exists('InstallScript')) {
-            throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
-        }
-
-        $installer = new \InstallScript(ServiceKernel::instance());
-        $installer->setInstallMode('command');
-        $installer->execute();
     }
 
     private function parseMeta($code, $pluginDir)
@@ -109,17 +108,26 @@ class ThemeRegisterCommand extends BaseCommand
         }
 
         foreach ($blockMeta as $key => $meta) {
-            $blockCode = $code . ':' . $key;
-            $block = $this->getBlockService()->getBlockByCode($blockCode);
+            $block = $this->getBlockService()->getBlockByCode($key);
+            $default = !empty($meta['default']) ? : null;
             if (empty($block)) {
                 $block = array(
-                    'code' => $blockCode,
+                    'code' => $key,
                     'category' => $code,
                     'meta' => $meta,
+                    'data' => $default,
                     'templateName' => $meta['templateName'],
                     'title' => $meta['title']
                 );
                 $this->getBlockService()->createBlock($block);
+            } else {
+                $this->getBlockService()->updateBlock($block['id'], array(
+                    'category' => $code,
+                    'meta' => $meta,
+                    'data' => $default,
+                    'templateName' => $meta['templateName'],
+                    'title' => $meta['title']
+                ));
             }
           
         }

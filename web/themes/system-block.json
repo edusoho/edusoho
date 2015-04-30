@@ -1,0 +1,32 @@
+{
+    "bill_banner":
+    {
+        "title": "我的账户Banner",
+        "templateName": "bill_banner.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "我的账户Banner",
+                "desc": "",
+                "count": 1,
+                "type": "imglink"
+            }
+        }
+    },
+
+    "live_top_banner":
+    {
+        "title": "直播频道首页图片轮播",
+        "templateName": "live_top_banner.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "直播频道首页图片轮播",
+                "desc": "",
+                "count": 3,
+                "type": "imglink"
+            }
+        }
+    }
+ 
+}
