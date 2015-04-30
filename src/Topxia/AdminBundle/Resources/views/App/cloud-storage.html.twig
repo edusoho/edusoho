@@ -3,7 +3,7 @@
                   <div class="panel-body">
                     {% set bill = storage.bill|default(null) %}
 
-                    <h4 class="eduyun-title">云视频+云文档{% if (storage and storage.freeTransfer|default(0) > 0) or  (storage and storage.freeSpace|default(0) > 0) %}<a href="http://www.edusoho.com/product/system" target="_blank">升级云视频包</a> | {% endif %}{% if storage %}<a href="{{path('admin_cloud_bill')}}" target="_blank" >查看账单</a>{% endif %}</h4>
+                    <h4 class="eduyun-title">云视频+云文档{% if storage %}<a href="{{path('admin_cloud_bill')}}" target="_blank" >查看账单</a>{% endif %}{% if (storage and storage.freeTransfer|default(0) > 0) or  (storage and storage.freeSpace|default(0) > 0) %}<a href="http://www.edusoho.com/product/system" target="_blank">升级</a> {% endif %}</h4>
                     <!--未购买-->
                     {% if not storage %}
 
