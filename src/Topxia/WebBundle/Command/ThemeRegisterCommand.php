@@ -109,7 +109,7 @@ class ThemeRegisterCommand extends BaseCommand
 
         foreach ($blockMeta as $key => $meta) {
             $block = $this->getBlockService()->getBlockByCode($key);
-            $default = !empty($meta['default']) ? : null;
+            $default = empty($meta['default']) ? null : $meta['default'];
             if (empty($block)) {
                 $block = array(
                     'code' => $key,
