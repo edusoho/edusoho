@@ -7,20 +7,23 @@
 {% block description %}{{ category.seoDesc }}{% endblock %}
 
 {% block content %}
-<section class="container es-main">
+<div id="content-container" class="container">
   <!-- 资讯 -->
-  <section class="es-section article-list-header">
+  <div class="es-tabs article-list-header">
+    <div class="tab-header">
     {% set currentNavCategory = categoryCode|default(null) %}
     {% set rootCategory = rootCategory.code|default(null) %}
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" {% if not currentNavCategory %}  class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
+    <ul class="clearfix">
+        <li {% if not currentNavCategory %}  class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
       {% for cat in categoryTree %}
         {% if cat.parentId == 0 and cat.published == 1 %}
-           <li class="{% if rootCategory == cat.code %}active{% endif %}" role="presentation"><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
+           <li class="{% if rootCategory == cat.code %}active{% endif %}" ><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
         {% endif %}
       {% endfor %}
     </ul>
-    <ul class="second-cat-nav">
+    </div>
+    <div class="tab-body">
+      <ul class="clearfix">
     {% for cat in subCategories %}
       {% if cat.published == 1 %}
         <li {% if category.id == cat.id %}class="active"{% endif %}>
@@ -32,24 +35,25 @@
         </li>
       {% endif %}
     {% endfor %}
-    </ul>
-    <ul class="third-cat-nav">
+      </ul>
+    </div>
+<!--     <ul class="third-cat-nav">
       <li class="active"><a href="">全部</a></li>
       <li><a href="">股市</a></li>
       <li><a href="">比特币</a></li>
       <li><a href="">莱特币</a></li>
       <li><a href="">在线支付</a></li>
-    </ul>
+    </ul> -->
 
 
-  </section>
+  </div>
 
   <div class="article-list-body row">
     <!-- list主内容-->
     <div class="col-md-8 article-list-mian">
       <section class="es-section">
       {% if articles %}
-                {% for article in articles %}
+        {% for article in articles %}
         <article class="article-item">
           <div class="article-metas clearfix">
             <div class="pull-left">
@@ -179,6 +183,6 @@
       {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
     </aside>
   </div>
-</section>
+</div>
 
 {% endblock %}
