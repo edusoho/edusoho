@@ -91,6 +91,11 @@ class LoginBindController extends BaseController
             goto response;
         }
 
+        if(!$this->getAuthService()->isRegisterEnabled()) {
+            $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
+            goto response;
+        }
+
         $user = $this->generateUser($type, $token, $oauthUser,$setData=array());
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
@@ -120,6 +125,11 @@ class LoginBindController extends BaseController
         
         if (empty($oauthUser['id'])) {
             $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
+            goto response;
+        }
+
+        if(!$this->getAuthService()->isRegisterEnabled()) {
+            $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
             goto response;
         }
 
@@ -185,8 +195,6 @@ class LoginBindController extends BaseController
         $user = $this->getAuthService()->register($registration, $type);
         return $user;
     }
-
-
 
     public function existAction(Request $request, $type)
     {

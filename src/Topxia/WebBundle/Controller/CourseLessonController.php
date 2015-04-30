@@ -39,8 +39,10 @@ class CourseLessonController extends BaseController
             }
         }
 
+        $hasVideoWatermarkEmbedded = 0;
         if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -60,7 +62,9 @@ class CourseLessonController extends BaseController
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
-
+            }
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $hasVideoWatermarkEmbedded = 1;
             }
 
         } else if ($lesson['mediaSource'] == 'youku') {
@@ -84,6 +88,7 @@ class CourseLessonController extends BaseController
             'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
+            'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
             'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
         ));
     }
@@ -125,6 +130,7 @@ class CourseLessonController extends BaseController
         $json['id'] = $lesson['id'];
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
+        $json['liveProvider'] = $lesson["liveProvider"];
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if(!empty($app)){
@@ -198,6 +204,16 @@ class CourseLessonController extends BaseController
                         }
 
                     }
+
+                    if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                        $user = $this->getCurrentUser();
+                        $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                        if ($watchStatus['status'] == 'error') {
+                            $json['mediaError'] = "您的观看次数已经达到{$watchStatus['num']}次，最多只能看{$watchStatus['limit']}次。";
+                        }
+                    }
+
+
                 } else {
                     $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
                 }
@@ -462,6 +478,13 @@ class CourseLessonController extends BaseController
     {
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
         return $this->createJsonResponse(true);
+    }
+
+    public function watchNumAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        $result = $this->getCourseService()->waveWatchNum($user['id'], $lessonId, 1);
+        return $this->createJsonResponse($result);
     }
 
     private function createLocalMediaResponse(Request $request, $file, $isDownload = false)

@@ -1,18 +1,13 @@
-{% extends layout %}
-
-{% block title %}{{ dict_text('targetName', type) }}订单管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {#
     {% set script_controller = 'trade/index' %}
 #}
 
-{% set menu = 'order' %}
+{% set menu = 'admin_' ~ type ~ '_order' %}
+
 
 {% block main %}
-
-  <div class="page-header clearfix">
-    <h1>{{ dict_text('targetName', type) }}订单管理</h1>
-  </div>
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
@@ -35,7 +30,7 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {% set options = {sn: '订单号', buyer:'购买者用户名', targetId: dict_text('targetName', type) ~ '编号', title: '课程名'} %}
+        {% set options = {sn: '订单号', buyer:'购买者用户名', targetId: dict_text('targetName', type) ~ '编号', title: dict_text('targetName', type) ~ '名'} %}
         {{ select_options(options, request.get('keywordType')) }}
       </select>
     </div>

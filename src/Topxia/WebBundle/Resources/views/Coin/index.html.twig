@@ -7,7 +7,7 @@
 
 {% block main %}
 {# <div class="panel panel-default panel-col"> #}
-<div class="panel panel-default panel-col lesson-manage-panel">
+<div class="panel panel-default panel-col my-wallet-panel">
 
   {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
 {#   <div class="panel-heading">
@@ -45,7 +45,7 @@
 
              {% if setting('coin.coin_enabled') %}
                 <div class="coin-btn">
-                  {% if setting('coin.charge_coin_enabled') %}
+                  {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') %}
                     {# <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-default"  style="color: #428bca;" > &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a> #}
                     <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-primary" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
 

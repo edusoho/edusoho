@@ -39,9 +39,8 @@
           <div class="btn-group">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="评价" data-placement="top" href="#modal">
               <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
-
-            {% if course.showStudentNumType == 'opened' or member.role|default('student') == 'teacher' or isAdmin %}
-              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+            {% if setting('course.show_student_num_enabled', '1') == 1 or member.role|default('student') == 'teacher' or isAdmin %}
+              <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{{setting('default.user_name', '学员')}}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
               href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
             {% endif %}
 
@@ -49,25 +48,17 @@
               <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <i class="esicon esicon-share"></i>
               </button>
-              <ul class="dropdown-menu pull-right shares-dropdown-menu js-social-shares">
-                
-                <li><div class="share" data-bdText="{{courseShareContent}}"></div></li>
-              </ul>
-              <div id="course-social-share-params" 
-                data-title="课程 《{{ course.title }}》"
-                data-picture="{{ default_path('coursePicture',course.largePicture, 'large', true) }}"
-                data-url="{{ url('course_show', {id:course.id}) }}"
-                ></div>
+              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course', right: true} %}
             </div>
-            {% if member.role|default(null) == 'student' %}
-                  {% if member.orderId %}
-                   <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('course_order_refund', {id:course.id}) }}">
-                   <i class="esicon esicon-exit"></i></a>
-                  {% else %}
-                  <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}">
-                    <i class="esicon esicon-exit"></i></a>
-                    {% endif %}
-                {% endif %}
+            {% if canExit %}
+              {% if member.joinedType == 'course' and member.orderId %}
+              <a class="btn btn-default btn-sm " title="退出学习" type="button" href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
+              <i class="esicon esicon-exit"></i></a>
+              {% else %}
+              <a class="btn btn-default btn-sm course-exit-btn" id="exit-course-learning" title="退出学习" type="button"  href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}">
+              <i class="esicon esicon-exit"></i></a>
+              {% endif %}
+            {% endif %}
             {% if canManage %}
             <a class="btn btn-default btn-sm " type="button" href="{{ path('course_manage', {id:course.id}) }}"  title="课程管理"  >
             <i class="esicon esicon-setting"></i>
@@ -105,15 +96,18 @@
       <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {% if vipChecked == 'not_member' %}
-          您已经不是会员，不能学习此课程！请重新开通会员，或购买课程！
+          您已经不是会员，不能学习此课程！
+          {% if course.price > 0 %}
+            请重新<a class="btn-link" href="{{ path('vip') }}" target="_blank">开通会员</a>
+          {% else %}
+            <a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">返回课程首页</a>
+          {% endif %}！
         {% elseif vipChecked == 'member_expired' %}
-          您的会员已过期，不能学习此课程，请先续费。
-        {% elseif vipChecked == 'level_not_exist' %}
-          会员等级已删除，不能学习此课程。
+          您的会员已过期，不能学习此课程，请先<a class="btn-link" href="{{ path('vip_renew') }}" target="_blank">续费</a>。
         {% elseif vipChecked == 'level_low' %}
-          会员等级不够，不能学习此课程。
-        {% elseif vipChecked == 'vip_closed' %}
-          会员专区已关闭，您不能继续学课程。
+          会员等级不够，不能学习此课程。请先<a class="btn-link" href="{{ path('vip_upgrade') }}" target="_blank">升级会员</a>。
+        {% else %}
+          此课程已不支持会员免费学，<a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">返回课程首页</a>
         {% endif %}
 
       </div>
@@ -121,12 +115,6 @@
     {% endif %}
 
     {% if not isNonExpired %}
-      {% if free_limit_type(course) == 'free_end' %}
-        <div class="alert alert-danger alert-dismissable">
-          <a class="btn btn-primary" href="{{path('course_rebuy',{courseId:course.id})}}" style="float:right;margin-top: -6px;margin-right:-20px" title="">购买</a>
-          您购买的课程限时免费活动已结束，无法继续学习课时、提问等。请重新购买该课程。
-        </div>
-      {% else %}
        <div class="alert alert-danger alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
@@ -138,7 +126,6 @@
           {% endif %}
           </a>
       </div>
-      {% endif %}
     {% endif %}
 
   </div>

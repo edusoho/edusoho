@@ -1,16 +1,16 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle:Cloud:layout.html.twig' %}
 
 {% block title %}云视频账单 - {{ parent() }}{% endblock %}
 
-{% set menu = 'bill' %}
+{% set submenu = 'video' %}
 
-{% block main %}
+{% block maincontent %}
 
 <div class="page-header"><h1>云视频账单</h1></div>
 
   <div class="well well-sm">
     账户余额：<strong class="text-success">{{ money }}元</strong>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="http://open.edusoho.com/token_login?token={{token}}&goto=order_recharge" target="_blank" class="btn btn-primary">充值</a>
+    <a href="{{path('admin_cloud_recharge')}}" target="_blank" class="btn btn-primary">充值</a>
     <a href="http://open.edusoho.com/article/1#recharge" style="float:right;" target="_blank" class="btn btn-link">充值帮助</a>
   </div>
 

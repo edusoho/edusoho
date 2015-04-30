@@ -78,19 +78,6 @@ class ArticleAppController extends MobileBaseController
             'status' => 'published'
         );
 
-        $defaultSetting = $this->getSettingService()->get('default', array());
-        $site = $this->getSettingService()->get('site', array());
-
-        if (empty($defaultSetting)){
-            $articleShareContent = '';
-        } else {
-            $articleShareContent = $defaultSetting['articleShareContent'];
-        }
-
-        $valuesToBeReplace = array('{{articletitle}}', '{{sitename}}');
-        $valuesToReplace = array($article['title'], $site['name']);
-        $articleShareContent = str_replace($valuesToBeReplace, $valuesToReplace, $articleShareContent);
-
         $createdTime = $article['createdTime'];
 
         //$currentArticleId = $article['id'];
@@ -100,6 +87,7 @@ class ArticleAppController extends MobileBaseController
         //$articleSetting = $this->getSettingService()->get('article', array());
     
         $this->getArticleService()->hitArticle($id);
+
         return $this->createJson($request, array(
             "title"=>$article["title"],
             "content"=>$this->render('TopxiaMobileBundleV2:Article:detail.html.twig', array(

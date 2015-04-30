@@ -2,6 +2,9 @@ define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+	var Cookie = require('cookie');
+	var Announcement = require('../../topxiaweb/js/controller/widget/announcement.js');
+
 
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
@@ -16,6 +19,13 @@ define(function(require, exports, module) {
 
 	};
 
+	exports.loadScript = function(scripts) {
+		for(var index in scripts) {
+			exports.load(scripts[index]);
+		}
+		
+	}
+
 	window.app.load = exports.load;
 
 	if (app.themeGlobalScript) {
@@ -26,6 +36,9 @@ define(function(require, exports, module) {
 		exports.load(app.controller);
 	}
 
+	if (app.scripts) {
+		exports.loadScript(app.scripts);
+	}
 
 	$(document).ajaxError(function(event, jqxhr, settings, exception) {
 		var json = jQuery.parseJSON(jqxhr.responseText);
@@ -61,7 +74,10 @@ define(function(require, exports, module) {
 		}
 	});
 
-
+    if (app.scheduleCrontab) {
+        $.post(app.scheduleCrontab);
+    }
+    
     floatConsult();
 
     function floatConsult()
@@ -103,6 +119,23 @@ define(function(require, exports, module) {
     }).mouseleave(function() {
     	$(this).removeClass("md-spin");
     });
+
+    if($(".set-email-alert").length>0){
+    	$(".set-email-alert .close").click(function(){
+    		Cookie.set("close_set_email_alert",'true');
+    	});
+    }
+
+    if($(".announcements-alert").length>0){
+
+    	new Announcement({
+    		element:'.announcements-alert'
+    	});
+
+    	$(".announcements-alert .close").click(function(){
+    		Cookie.set("close_announcements_alert",'true',{path: '/'});
+    	});
+    }
 
 
 });

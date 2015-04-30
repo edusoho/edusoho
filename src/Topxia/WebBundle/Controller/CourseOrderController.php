@@ -59,7 +59,7 @@ class CourseOrderController extends OrderController
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
 
-        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));
@@ -69,6 +69,8 @@ class CourseOrderController extends OrderController
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
+            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
+            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0)?$user['verifiedMobile']:'',
             'avatarAlert' => AvatarAlert::alertJoinCourse($user),
             'courseSetting' => $courseSetting,
             'member' => $member,
@@ -109,6 +111,7 @@ class CourseOrderController extends OrderController
             'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
             'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
         ));
+
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $coinSetting = $this->setting("coin");
@@ -233,64 +236,6 @@ class CourseOrderController extends OrderController
             'users' => empty($users) ? null : $users,
             'payUrl' => 'course_order_pay',
         );
-    }
-
-    public function refundAction(Request $request , $id)
-    {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
-
-        if (empty($member) or empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能退学。');
-        }
-
-        $order = $this->getOrderService()->getOrder($member['orderId']);
-        if (empty($order)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-            $reason = empty($data['reason']) ? array() : $data['reason'];
-            $amount = empty($data['applyRefund']) ? 0 : null;
-
-            $refund = $this->getCourseOrderService()->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
-
-            return $this->createJsonResponse($refund);
-        }
-
-        $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
-        $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-
-        return $this->render('TopxiaWebBundle:CourseOrder:refund-modal.html.twig', array(
-            'course' => $course,
-            'order' => $order,
-            'maxRefundDays' => $maxRefundDays,
-            'refundOverdue' => $refundOverdue,
-        ));
-    }
-
-    public function cancelRefundAction(Request $request , $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException();
-        }
-
-        $user = $this->getCurrentUser();
-        if (empty($user)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-        if (empty($member) or empty($member['orderId'])) {
-            throw $this->createAccessDeniedException('您不是课程的学员或尚未购买该课程，不能取消退款。');
-        }
-
-        $this->getCourseOrderService()->cancelRefundOrder($member['orderId']);
-
-        return $this->createJsonResponse(true);
-
     }
 
     private function getEnabledPayments()

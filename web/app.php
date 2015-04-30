@@ -42,6 +42,8 @@ $serviceKernel->setEnvVariable(array(
     'baseUrl' =>  $request->getSchemeAndHttpHost() . $request->getBasePath(),
 ));
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
+$serviceKernel->registerModuleDirectory(dirname(__DIR__). '/plugins');
+
 $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
 $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 

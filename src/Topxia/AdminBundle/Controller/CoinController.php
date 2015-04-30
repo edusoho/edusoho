@@ -106,8 +106,8 @@ class CoinController extends BaseController
 
             }
 
-            $courses=$this->getCourseService()->searchCourses(array('notFree'=>"true"),'latest',0,99999);
-
+            $courses=$this->getCourseService()->searchCourses(array('originPrice_GT'=>'0.00'), 'latest', 0 ,99999);
+            
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
             'set' => $set,
             'courses'=>$courses
@@ -138,16 +138,17 @@ class CoinController extends BaseController
             $coinSettings['cash_rate']=$data['cash_rate'];
             
             if($data['cash_model']=="deduction"){
-
                 $coinSettings['price_type']="RMB";
                 $coinSettings['cash_model']="deduction";
-                $this->updateCoursesPrice($data['course-rmb'],$data['cash_rate']);
-
+                if (isset($data['course-rmb'])){
+                    $this->updateCoursesPrice($data['course-rmb'],$data['cash_rate']);
+                }
             }else{
-
                 $coinSettings['price_type']="Coin";
                 $coinSettings['cash_model']="currency";
-                $this->updateCoursesCashPrice($data["course-cash"]);
+                if (isset($data['course-cash'])){
+                    $this->updateCoursesCoinPrice($data["course-cash"]);
+                }
             }
 
             $this->getSettingService()->set('coin', $coinSettings);
@@ -158,19 +159,17 @@ class CoinController extends BaseController
         )));
     }
 
-    private function updateCoursesPrice($data,$rate)
+    private function updateCoursesPrice($data)
     {   
         foreach ($data as $key => $value) {
-            
-            $this->getCourseService()->updateCourse($key,array('price'=>$value,'coinPrice'=>$value*$rate));
+            $this->getCourseService()->setCoursePrice($key, 'default', $value);
         }
     }
 
-    private function updateCoursesCashPrice($data)
+    private function updateCoursesCoinPrice($data)
     {
         foreach ($data as $key => $value) {
-           
-            $this->getCourseService()->updateCourse($key,array('coinPrice'=>$value));
+            $this->getCourseService()->setCoursePrice($key, 'coin', $value);
         }
     }
 
@@ -409,71 +408,11 @@ class CoinController extends BaseController
         ));
     }
 
-    public function  ordersAction(Request $request){
-
-        $fields = $request->query->all();
-        $conditions=array();
-        if(!empty($fields)){
-          $conditions =$fields;
-        };
-        if  (isset($conditions['keywordType'])) {
-          if ($conditions['keywordType'] == 'userName'){
-            $conditions['keywordType'] = 'userId';
-            $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
-            $conditions['keyword'] = $userFindbyNickName? $userFindbyNickName['id']:-1;
-          }
-        }
-        if (isset($conditions['keywordType'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCashOrdersService()->searchOrdersCount($conditions),
-            20
-          );
-
-        $orders=$this->getCashOrdersService()->searchOrders(
-            $conditions,
-            array('createdTime','DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-          );
-
-        $userIds =  ArrayToolkit::column($orders, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('TopxiaAdminBundle:Coin:coin-orders.html.twig',array(
-            'users'=>$users,
-            'orders'=>$orders,
-            'paginator'=>$paginator,
-          ));
-    }
-
     protected function settingsRenderedPage($coinSettings)
     {
       return $this->render('TopxiaAdminBundle:Coin:coin-settings.html.twig',array(
         'coin_settings_posted' => $coinSettings,
       ));
-    }
-
-    public function logsAction($id)
-    {
-        $order = $this->getCashOrdersService()->getOrder($id);
-        $user = $this->getUserService()->getUser($order['userId']);
-
-        $orderLogs = $this->getCashOrdersService()->getLogsByOrderId($order['id']);
-        
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-        
-        return $this->render('TopxiaAdminBundle:Coin:order-log-modal.html.twig', array(
-            'order'=>$order,
-            'user'=>$user,
-            'orderLogs'=>$orderLogs,
-            'users' => $users
-        ));
     }
 
     public function giveCoinAction(Request $request)
@@ -841,15 +780,6 @@ class CoinController extends BaseController
         return $condition;
     }
 
-    private function processPrice($priceType, $cashRate)
-    {
-        if($priceType=="RMB") {
-            $this->getCourseService()->updatePrice($cashRate);
-        } else if($priceType=="Coin" ) {
-            $this->getCourseService()->updateCoinPrice($cashRate);
-        }
-    }
-
     private function filterCondition($conditions)
     {
         if  (isset($conditions['keywordType'])) {
@@ -930,8 +860,4 @@ class CoinController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-
-
-
-
 }

@@ -20,7 +20,9 @@
                         data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
                     {% endif %}
 
-                ></div>
+                >
+                </div>
+                <input type="hidden" id="videoWatermarkEmbedded" value="{{ hasVideoWatermarkEmbedded }}">
             {% else %}
                 <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
             {% endif %}
@@ -43,6 +45,7 @@
 {% endblock %}
 
 {% block footer %}
+{% if is_plugin_installed('Classroom') %}
     {% if lesson.status == 'published' %}
         {% if course.price=='0.00'  %}
                 <a id="buy-btn" type="button" class="btn btn-primary" 
@@ -69,9 +72,11 @@
                 {% endif %}
                 >
                     {% if user.id %}觉得不错？点击购买此课程（{{ course.price }}元）
+                    
                     {% else %}登录后购买学习完整的课程
                     {% endif %}
                 </a>
+        {% endif %}
         {% endif %}
     {% else %}
         <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>

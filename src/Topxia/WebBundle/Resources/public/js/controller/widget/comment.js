@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 	var CommentWidget = Widget.extend({
 		events: {
 			'submit .comment-widget-form': 'createComment',
-			'click .comment-delete-btn': 'deleteComment',
+			'click .comment-delete-btn': 'deleteComment'
 		},
 
 		setup: function() {

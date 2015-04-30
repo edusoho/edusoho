@@ -38,6 +38,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsbyTypes($types, $start, $limit)
     {
         if (empty($types)) {
@@ -49,6 +50,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
     {
         if (empty($types)) {
@@ -60,6 +62,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
     {
         if (empty($types)) {
@@ -70,18 +73,20 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target`= '{$target}' )  LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
         
         $questions = $this->getConnection()->fetchAll($sql, array());
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    //@todo:sql
     public function findQuestionsCountbyTypes($types)
     {
         $sql ="SELECT count(*) FROM {$this->table} WHERE type in ({$types})";
         return $this->getConnection()->fetchColumn($sql, array($types));
     }
 
+    //@todo:sql
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
     {
         if ($questionSource == 'course'){
@@ -89,7 +94,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target`= '{$target}' )";
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target` like '{$target}/%' OR `target` = '{$target}')";
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
@@ -167,11 +172,18 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         if(empty($ids)){ 
             return array(); 
         }
+
+        $fields = array('finishedTimes', 'passedTimes');
+        if(!in_array($status, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $status, implode(',', $fields)));
+        }
+
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql = "UPDATE {$this->table} SET {$status} = {$status}+1 WHERE id IN ({$marks})";
         return $this->getConnection()->executeQuery($sql, $ids);
     }
 
+    //@todo:sql
     public function getQuestionCountGroupByTypes($conditions)
     {   
         $sqlConditions = array();
@@ -187,7 +199,9 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             $sql .= " AND target IN ({$targetMarks}) ";
         }
         if(isset($conditions["courseId"])) {
-            $sql .= " AND (target='course-{$conditions['courseId']}' or target like 'course-{$conditions['courseId']}/%') ";   
+            $sql .= " AND (target=? or target like ?) ";   
+            $sqlConditions[] = "course-{$conditions['courseId']}";
+            $sqlConditions[] = "course-{$conditions['courseId']}/%";
         }
         $sql = "SELECT COUNT(*) AS questionNum, type FROM {$this->table} WHERE parentId = '0' {$sql} GROUP BY type ";
         return $this->getConnection()->fetchAll($sql, $sqlConditions);
@@ -211,59 +225,22 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             $conditions['stem'] = "%{$conditions['stem']}%";
         }
 
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'questions');
-
-        if (isset($conditions['targets']) and is_array($conditions['targets'])) {
-            $targets = array();
-            foreach ($conditions['targets'] as $target) {
-                if (empty($target)) {
-                    continue;
-                }
-                if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $target)) {
-                    $targets[] = $target;
-                }
-            }
-            if (!empty($targets)) {
-                $targets = "'" . implode("','", $targets) . "'";
-                $builder->andStaticWhere("target IN ({$targets})");
-            }
-        } else {
-            $builder->andWhere('target = :target')
-                ->andWhere('target = :targetPrefix OR target LIKE :targetLike');
+        if (isset($conditions['targets']) && is_array($conditions['targets'])) {
+            unset($conditions['target']);
+            unset($conditions['targetPrefix']);
         }
 
-        $builder->andWhere('parentId = :parentId')
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'questions')
+            ->andWhere("target IN ( :targets )")
+            ->andWhere('target = :target')
+            ->andWhere('target = :targetPrefix OR target LIKE :targetLike')
+            ->andWhere('parentId = :parentId')
             ->andWhere('difficulty = :difficulty')
             ->andWhere('type = :type')
-            ->andWhere('stem LIKE :stem');
-
-        if (isset($conditions['types'])) {  
-            $types = array();
-            foreach ($conditions['types'] as $type) {
-                if (empty($type)) {
-                    continue;
-                }
-                if (preg_match('/^[a-zA-Z0-9_\-\/]+$/', $type)) {
-                    $types[] = $type;
-                }
-            }
-            if (!empty($types)) {
-                $types = "'" . implode("','", $types) . "'";
-                $builder->andStaticWhere("type IN ({$types})");
-            }
-        }
-
-        if (isset($conditions['excludeIds']) and is_array($conditions['excludeIds'])) {
-            $excludeIds = array();
-            foreach ($conditions['excludeIds'] as $id) {
-                $excludeIds[] = intval($id);
-            }
-
-            if (!empty($excludeIds)) {
-                $builder->andStaticWhere("id NOT IN (" . implode(',', $excludeIds) . ")");
-            }
-        }
+            ->andWhere('stem LIKE :stem')
+            ->andWhere("type IN ( :types )")
+            ->andWhere("id NOT IN ( :excludeIds ) ");
 
         if (isset($conditions['excludeUnvalidatedMaterial']) and ($conditions['excludeUnvalidatedMaterial'] == 1)){
             $builder->andStaticWhere(" not( type = 'material' and subCount = 0 )");

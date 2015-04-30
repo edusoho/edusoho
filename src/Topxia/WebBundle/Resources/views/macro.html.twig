@@ -1,6 +1,6 @@
 {%- macro user_avatar(user, class) -%}
   <a class="user-link user-avatar-link {{ class }}" href="{{ path('user_show', {id:user.id}) }}">
-    <img src="{{ default_path('avatar',user.smallAvatar, '') }}">
+    <img src="{{ default_path('avatar', user.smallAvatar, '') }}">
   </a>
 {%- endmacro -%}
 
@@ -43,22 +43,20 @@
   {% endspaceless %}
 {% endmacro %}
 
-{% macro paginator(paginator) %}
+{% macro paginator(paginator, class) %}
   {% if paginator.lastPage > 1 %}
-    <ul  class="pagination">
-      {% if paginator.currentPage == paginator.firstPage %}
-        <li class="disabled"><span>上一页</span></li>
-      {% else %}
+    <ul class="pagination {{ class }}">
+      {% if paginator.currentPage != paginator.firstPage %}
+        <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">首页</a></li>
         <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">上一页</a></li>
       {% endif %}
       {% for page in paginator.pages %}
         <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
       {% endfor %}
 
-      {% if paginator.currentPage == paginator.lastPage %}
-        <li class="disabled"><span>下一页</span></li>
-      {% else %}
+      {% if paginator.currentPage != paginator.lastPage %}
         <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">下一页</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.itemCount) }}">尾页</a></li>
       {% endif %}
     </ul>
   {% endif %}

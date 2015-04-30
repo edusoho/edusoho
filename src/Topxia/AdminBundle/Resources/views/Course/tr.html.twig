@@ -27,11 +27,14 @@
       </a>
       <ul class="dropdown-menu pull-right">
 
+        {% if not course.recommended %}
         <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_course_recommend', {id:course.id, ref:'courseList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
+        {% endif %}
 
         {% if course.recommended %}
           <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
         {% endif %}
+        
         <li ><a class="copy-course" id="copy-course" href="javascript:" 
         {% if course.type == "live" %}
         title="直播课程不支持复制"
@@ -41,7 +44,7 @@
         data-target="#modal"  
         data-url="{{ path('admin_course_copy', {id:course.id}) }}" 
         data-type="{{course.type}}"
-        ><span class="badge">new</span><span class="glyphicon glyphicon-plus-sign"></span> 复制课程</a></li>
+        ><span class="glyphicon glyphicon-plus-sign"></span> 复制课程</a></li>
 
         <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为未购买用户</a></li>
         <li><a href="{{ path('course_show', {id:course.id, previewAs:'member'}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span> 预览：作为已购买用户</a></li>
@@ -56,10 +59,12 @@
           <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_course_publish', {id:course.id}) }}"><span class="glyphicon glyphicon-ok-circle"></span> 发布课程</a></li>
         {% endif %}
 
+        {% if course.status == 'draft' %}
         <li class="divider"></li>
 
         <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id}) }}"
         data-chapter="{{default.chapter_name|default('章')}}" data-part="{{default.part_name|default('节')}}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-trash"></span> 删除课程</a></li>
+        {% endif %}
       </ul>
     </div>
   </td>

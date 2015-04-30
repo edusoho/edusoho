@@ -1,23 +1,27 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Client;
 
-class CloudAPI 
+use Psr\Log\LoggerInterface;
+
+class CloudAPI
 {
     const VERSION = 'v1';
 
-    protected $userAgent = 'Edusoho Cloud API Client 1.0';
+    protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
-    protected $connectTimeout = 10;
+    protected $connectTimeout = 30;
 
-    protected $timeout = 20;
+    protected $timeout = 60;
 
     private $apiUrl = 'http://api.edusoho.net';
 
     private $debug = false;
 
-    public function __construct (array $options)
+    private $logger = null;
+
+    public function __construct(array $options)
     {
-        $this->accessKey = $options['accessKey']; 
+        $this->accessKey = $options['accessKey'];
         $this->secretKey = $options['secretKey'];
 
         if (!empty($options['apiUrl'])) {
@@ -51,9 +55,20 @@ class CloudAPI
         return $this->_request('DELETE', $uri, $params, $header);
     }
 
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        return $this;
+    }
+
     private function _request($method, $uri, $params, $headers)
     {
+        $requestId = substr(md5(uniqid('', true)), -16);
+
         $url = $this->apiUrl . '/' . self::VERSION . $uri;
+
+        $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
+
         $headers[] = 'Content-type: application/json';
 
         $curl = curl_init();
@@ -63,7 +78,7 @@ class CloudAPI
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_HEADER, 1);
 
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
@@ -84,16 +99,30 @@ class CloudAPI
         }
 
         $headers[] = 'Auth-Token: ' . $this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
+        $headers[] = 'API-REQUEST-ID: '. $requestId;
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
-        curl_close($curl);
+        $curlinfo = curl_getinfo($curl);
+        $header = substr($response, 0, $curlinfo['header_size']);
+        $body = substr($response, $curlinfo['header_size']);
 
-        $result = json_decode($response, true);
+        $this->debug && $this->logger && $this->logger->debug("[{$requestId}] CURL_INFO", $curlinfo);
+        $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_HEADER {$header}");
+        $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_BODY {$body}");
+
+        curl_close($curl);
+        $result = json_decode($body, true);
 
         if (empty($result)) {
+            $context = array(
+                'CURLINFO' => $curlinfo,
+                'HEADER' => $header,
+                'BODY' => $body,
+            );
+            $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
             throw new \RuntimeException("Response json decode error:<br> $response");
         }
 
@@ -107,7 +136,7 @@ class CloudAPI
             throw new \RuntimeException('Make AuthToken Error.');
         }
 
-        $text = $matches[1] . "\n". json_encode($params) . "\n" . $this->secretKey;
+        $text = $matches[1] . "\n" . json_encode($params) . "\n" . $this->secretKey;
 
         $hash = md5($text);
 

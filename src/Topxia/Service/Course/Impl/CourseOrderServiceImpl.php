@@ -55,12 +55,12 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getCourseService()->isCourseStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException('已经是课程学员，创建课程订单失败。');
+                throw $this->createServiceException('已经是课程学员，操作失败。');
             }
 
             $course = $this->getCourseService()->getCourse($info['targetId']);
             if (empty($course)) {
-                throw $this->createServiceException('课程不存在，创建课程订单失败。');
+                throw $this->createServiceException('课程不存在，操作失败。');
             }
 
             $this->cancelOldOrders($course, $user);
@@ -71,6 +71,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order['title'] = "购买课程《{$course['title']}》";
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
+            if(!empty($course['discountId'])){
+                $order['discountId'] = $course['discountId'];
+                $order['discount'] = $course['discount'];
+            }
+
             $order['payment'] = $info['payment'];
             $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
             $order['priceType'] = $info['priceType'];
@@ -89,14 +94,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if($notShowPrice == 1) {
                 $order['amount'] = 0;
                 $order['totalPrice'] = 0;
-            }
-
-            if($order['amount'] > 0){
-                //如果是限时打折，判断是否在限免期，如果是，则Amout为0
-                if($course['freeStartTime'] < time() &&  $course['freeEndTime'] > time() ){
-                    $order['amount'] = 0;
-                    $order['totalPrice'] = 0;
-                }
             }
 
             $order['snPrefix'] = 'C';
@@ -164,16 +161,17 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     {
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
-            throw $this->createServiceException('订单不存在，不嫩申请退款。');
+            throw $this->createServiceException('订单不存在，不能申请退款。');
         }
-
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
+
         if ($refund['status'] == 'created') {
             $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting = $this->getSettingService()->get('refund');
             $message = empty($setting) or empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
             if ($message) {
+                $course = $this->getCourseService()->getCourse($order["targetId"]);
                 $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
                 $variables = array(
                     'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"

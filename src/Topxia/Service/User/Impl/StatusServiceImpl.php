@@ -9,19 +9,22 @@ class StatusServiceImpl extends BaseService implements StatusService
 {
     public function publishStatus($status,$deleteOld=true)
     {
-        $user = $this->getCurrentUser();
+        if(!isset($status["userId"])) {
+            $user = $this->getCurrentUser();
 
-        if($user['id']==0){
-            return ;
-        }
+            if($user['id']==0){
+                return ;
+            }
 
-        $status['userId'] = $user['id'];
+            $status['userId'] = $user['id'];
+        } 
+
         $status['createdTime'] = time();
         $status['message'] = empty($status['message']) ? '' : $status['message'];
         if($deleteOld){
             $this->deleteOldStatus($status);
         }
-
+        
         return $this->getStatusDao()->addStatus($status);
     }
 

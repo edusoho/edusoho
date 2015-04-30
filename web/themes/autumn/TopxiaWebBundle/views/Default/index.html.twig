@@ -16,14 +16,82 @@
       <a class="right carousel-control" href="#autumn-carousel" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
-    </div>
-  {% endif %}
 
+    </div>      
+  {% endif %}
+  
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/autumn/css/class-autumn.css') }}" />
 {% endblock %}
 
 {% block content %}
   <div class="row">
     <div class="col-md-8">
+
+      {% if  is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+      {% set items = data('RecommendClassrooms',{'count':6}) %}
+        <div class="panel panel-autumn panel-autumn-primary">
+            <div class="panel-heading panel-heading-important">
+              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>RecommendClasses</small></h2>
+              <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
+            </div>
+            <div class="panel-body">
+              <ul class="home-class-list">
+                {% for classroom in items.classrooms %}
+                 {% set teachers = items.users[classroom.id]|default(null) %}
+                 {% if loop.index <= 5%}
+                <li class="class-item">
+                  <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                    <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                  </a>
+                  <div class="class-body">
+                    <h3 class="class-title">
+                      <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                    </h3>
+                    <div class="class-metas">
+                     {% if teachers %}
+                      <span class="class-teacher">
+                        <i class="fa fa-user"></i>
+                        {% for teacher in teachers %}
+                          {% if loop.index <= 5%}
+                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                           {% endif %}
+                        {% endfor %}
+                      </span>
+                    {% endif %}
+                      <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
+                      <span class="class-price">
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if classroom.price > 0 %}
+                               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                免费
+                              {% endif %}
+                          {% else %}
+                              {% if classroom.price > 0 %}
+                                {{ classroom.price }}元
+                              {% else %}
+                                免费
+                              {% endif %}
+                          {% endif %}
+
+
+                      </span>
+                    </div>
+                    <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
+                  </div>
+                </li>
+                   {% endif %}
+                 {% endfor %}
+              </ul>
+            </div>
+          </div>
+          {% endif %}
+
+
       {# 推荐课程 #}
       {% set recommendCourses  = data('RecommendCourses',{ count:3 }) %}
       {% if recommendCourses %}
@@ -33,43 +101,9 @@
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
-            <ul class="autumn-grids">
+            <ul class="autumn-grids">             
               {% for course in recommendCourses %}
-                {% if course %}
-                  <li class="autumn-grid autumn-course-grid">
-                    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture', course.middlePicture, 'large') }}">
-                      {% if course.serializeMode == 'serialize' %}
-                        <span class="label label-success series-mode-label">更新中</span>
-                      {% elseif course.serializeMode == 'finished' %}
-                        <span class="label label-warning series-mode-label">已完结</span>
-                      {% endif %}
-                    </a>
-                    <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                    <div class="course-about">{{ course.about|plain_text(60) }}</div>
-
-                    <div class="mll">  
-                      {% if setting('course.coursesPrice') == 0 %}
-                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                          </span>
-                        {% else %}
-                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                          </span>
-                      {% endif %}
-                    {% endif %}
-                    </div>
-
-                    <div class="course-metas">
-
-                      <span class="teachers">
-                         主讲:
-                        {% for teacher in course.teachers %}
-                         {{ web_macro.user_link(teacher, 'text-muted') }}
-                        {% endfor %}
-                      </span>
-                    </div>
-                  </li>
-                {% endif %}
+                {% include 'TopxiaWebBundle:Default:course-grid.html.twig' %}
               {% endfor %}
             </ul>
           </div>
@@ -87,57 +121,7 @@
           <div class="panel-body">
             <ul class="autumn-grids">
               {% for course in latestCourses %}
-                {% if course %}
-
-                  <li class="autumn-grid autumn-course-grid">
-                    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
-                      {% if course.status == 'draft' %}
-                        <span class="label  label-warning course-status">未发布</span>
-                      {% elseif course.status == 'closed' %}
-                        <span class="label label-danger course-status">已关闭</span>
-                      {% endif %} 
-
-                      {% if course.serializeMode == 'serialize' %}
-                        <span class="label label-success series-mode-label">更新中</span>
-                      {% elseif course.serializeMode == 'finished' %}
-                        <span class="label label-warning series-mode-label">已完结</span>
-                      {% endif %}
-
-                      {% if course.type == 'live' %}
-                        {% set lesson = course['lesson']|default(null) %}
-                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                          <span class="label label-warning series-mode-label">正在直播中</span>
-                        {% else %}
-                          <span class="label label-success series-mode-label">直播</span>
-                        {% endif %}
-                      {% endif %}
-                    </a>
-                    <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                    <div class="course-about">{{ course.about|plain_text(60) }}</div>
-                    
-                    <div class="mll">  
-                      {% if setting('course.coursesPrice') == 0 %}
-                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                          </span>
-                        {% else %}
-                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                          </span>
-                      {% endif %}
-                    {% endif %}
-                  </div>
-                  
-                    <div class="course-metas">
-
-                      <span class="teachers">
-                         主讲:
-                        {% for teacher in course.teachers %}
-                         {{ web_macro.user_link(teacher, 'text-muted') }}
-                        {% endfor %}
-                      </span>
-                    </div>
-                  </li>
-                {% endif %}
+                {% include 'TopxiaWebBundle:Default:course-grid.html.twig' %}
               {% endfor %}
             </ul>
           </div>
@@ -156,59 +140,9 @@
             <div class="panel-body">
               <ul class="autumn-grids">
                 {% for course in recentLiveCourses %}
-                {% set lesson = course.lesson %}
-
+                  {% set lesson = course.lesson %}
                   {% if course %}
-                    <li class="autumn-grid autumn-course-grid">
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, '') }}">
-                        {% if course.status == 'draft' %}
-                          <span class="label  label-warning course-status">未发布</span>
-                        {% elseif course.status == 'closed' %}
-                          <span class="label label-danger course-status">已关闭</span>
-                        {% endif %} 
-
-                        {% if course.serializeMode == 'serialize' %}
-                          <span class="label label-success series-mode-label">更新中</span>
-                        {% elseif course.serializeMode == 'finished' %}
-                          <span class="label label-warning series-mode-label">已完结</span>
-                        {% endif %}
-
-                        {% if course.type == 'live' %}
-                          {% set lesson = course['lesson']|default(null) %}
-                          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                            <span class="label label-warning series-mode-label">正在直播中</span>
-                          {% else %}
-                            <span class="label label-success series-mode-label">直播</span>
-                          {% endif %}
-                        {% endif %}
-                      </a>
-                      <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                      <div class="live-course-lesson">
-                        <span class="live-time mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                        <p class="text-warning mrs">{{ lesson.title }}</p>
-                      </div>
-
-                      <div class="course-metas">
-                        <p>  
-                          {% if setting('course.coursesPrice') == 0 %}
-                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                              <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                              </span>
-                            {% else %}
-                              <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                              </span>
-                          {% endif %}
-                        {% endif %}
-                      </p>
-
-                        <span class="teachers">
-                           主讲:
-                          {% for teacher in course.teachers %}
-                           {{ web_macro.user_link(teacher, 'text-muted') }}
-                          {% endfor %}
-                        </span>
-                      </div>
-                    </li>
+                    {% include 'TopxiaWebBundle:Default:live-course-grid.html.twig' %}                    
                   {% else %}
                     <div class="empty">无推荐课程，请在后台课程管理设置。</div>
                   {% endif %}
@@ -314,7 +248,7 @@
       {% endif %}
 
       {# 会员专区 #}
-      {% if setting('vip.enabled') %}
+      {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
         {% set levels = data('VipLevels',{'count':100}) %}
         {% if levels %}
           <div class="panel panel-autumn panel-autumn-primary">
@@ -401,7 +335,7 @@
     <div class="col-md-4">
       {# 在学课程 #}
       {% if app.user %}
-        {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+        {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
       {% endif %}
       
       {# 热门标签 #}
@@ -495,7 +429,7 @@
                   </div>
                 </li>
                                   
-                {% elseif learn.type == "become_student" %}
+                {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
                     <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
@@ -505,6 +439,27 @@
                     加入了课程 {{learn.properties.course.title|plain_text(15)}}
                   </div>
                 </li>
+                {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                  </div>
+                </li>
+                {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                <li class="media">
+                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
+                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                  </a>
+                  <div class="media-body">
+                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+                    成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+                  </div>
+                </li>
+
                 {% elseif learn.type == "learned_lesson" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">

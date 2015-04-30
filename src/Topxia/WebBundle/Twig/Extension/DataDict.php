@@ -10,6 +10,12 @@ class DataDict
 			'closed' => '已关闭'
 		),
 
+		'classroomStatus' => array(
+			'draft' => '未发布',
+			'published' => '已发布',
+			'closed' => '已关闭'
+		),
+
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -218,7 +224,8 @@ class DataDict
         ),
         'targetName' => array(
         	'course' => '课程',
-        	'vip' => '会员'
+        	'vip' => '会员',
+        	'classroom' => '班级'
     	),
     	'groupstatus'=>array(
     		'open'=>'开启',
@@ -240,6 +247,31 @@ class DataDict
         ),
         'coinOrderType'=>array(
             'userName'=>'用户名',
+        ),
+        'discountType' => array(
+            'discount' => '限时打折',
+            'free' => '限时免费',
+            'global' => '全站打折',
+        ),
+        'discountStatus' => array(
+            'unstart' => '未开始',
+            'running' => '进行中',
+            'finished' => '已结束',
+        ),
+        'discountStatus:html' => array(
+            'unstart' => '<span class="text-muted">未开始</span>',
+            'running' => '<span class="text-success">进行中</span>',
+            'finished' => '<span class="text-muted">已结束</span>',
+        ),
+        'discountAuditStatus' => array(
+            'passed' => '已通过',
+            'rejected' => '未通过',
+            'pending' => '待审核',
+            'creation' => '编辑中',
+        ),
+        'threadProperty' => array(
+            'isStick' => '置顶',
+            'isElite' => '加精',
         ),
 	);
 

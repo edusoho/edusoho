@@ -30,6 +30,12 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ? : null;
     }
 
+    public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND userId = ? AND isLearned = 1";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $userId));
+    }
+
     public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $this->filterStartLimit($start, $limit);
@@ -210,6 +216,13 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId));
     }
 
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    {
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
+        return $this->getConnection()->fetchAll($sql, array_merge(array($studentId), $courseIds));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -220,20 +233,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')
-            ->andWhere('createdTime < :startTimeLessThan');
-
-        if (isset($conditions['courseIds'])) {
-            $courseIds = array();
-            foreach ($conditions['courseIds'] as $courseId) {
-                if (ctype_digit($courseId)) {
-                    $courseIds[] = $courseId;
-                }
-            }
-            if ($courseIds) {
-                $courseIds = join(',', $courseIds);
-                $builder->andStaticWhere("courseId IN ($courseIds)");
-            }
-        }
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('courseId IN (:courseIds)');
 
         return $builder;
     }

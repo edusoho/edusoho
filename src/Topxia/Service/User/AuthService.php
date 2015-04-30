@@ -34,4 +34,6 @@ interface AuthService
     public function hasPartnerAuth();
 
     public function getPartnerName();
+
+    public function isRegisterEnabled();
 }

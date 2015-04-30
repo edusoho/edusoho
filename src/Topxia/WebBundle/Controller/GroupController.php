@@ -18,7 +18,7 @@ class GroupController extends BaseController
         $mycreatedGroup = array();
         $myJoinGroup = array();
 
-        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
+        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 8);
     
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
@@ -95,7 +95,7 @@ class GroupController extends BaseController
             );
 
             $group = $this->getGroupService()->addGroup($user,$group);
-            return $this->redirect($this->generateUrl('group_show',array('id'=>$group['id'])));
+            return $this->redirect($this->generateUrl('group_logo_set',array('id'=>$group['id'])));
         }
 
         return $this->render("TopxiaWebBundle:Group:groupadd.html.twig");
@@ -763,8 +763,12 @@ class GroupController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
-       
-        $this->getGroupService()->joinGroup($user,$id);
+        
+        try{
+            $this->getGroupService()->joinGroup($user,$id);
+        }catch (\Exception $e){
+            $this->setFlashMessage("danger",$e->getMessage());
+        }
         
         return $this->redirect($this->generateUrl('group_show', array(
             'id'=>$id,

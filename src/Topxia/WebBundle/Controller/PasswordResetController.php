@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\SmsToolkit;
 
 class PasswordResetController extends BaseController
 {
@@ -74,7 +75,7 @@ class PasswordResetController extends BaseController
 
     public function updateAction(Request $request)
     {
-        $token = $this->getUserService()->getToken('password-reset', $request->query->get('token'));
+        $token = $this->getUserService()->getToken('password-reset', $request->query->get('token')?:$request->request->get('token'));
         if (empty($token)) {
             return $this->render('TopxiaWebBundle:PasswordReset:error.html.twig');
         }
@@ -103,6 +104,32 @@ class PasswordResetController extends BaseController
         ));
     }
 
+    public function resetBySmsAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+  
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
+            if ($result){
+                $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('mobile'));
+
+                if (empty($targetUser)){
+                    return $this->createMessageResponse('error', '用户不存在，请重新找回');    
+                }
+
+                $token = $this->getUserService()->makeToken('password-reset',$targetUser['id'],strtotime('+1 day'));
+                $request->request->set('token',$token);
+
+                return $this->redirect($this->generateUrl('password_reset_update', array(
+                    'token' => $token,
+                )));
+            }else{
+                return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
+            }
+        }
+        return $this->createJsonResponse('GET method');
+    }
+
     public function getEmailLoginUrl ($email)
     {
         $host = substr($email, strpos($email, '@') + 1);
@@ -122,5 +149,4 @@ class PasswordResetController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }

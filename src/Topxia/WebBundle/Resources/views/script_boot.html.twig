@@ -86,6 +86,16 @@
   app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
+  app.crontab = '{{ path('common_crontab') }}';
+  {% set crontabNextExecutedTime = setting('crontab_next_executed_time', 0) %}
+  {% if crontabNextExecutedTime > 0 %}
+    {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
+      app.scheduleCrontab = '{{ path('common_crontab') }}';
+    {% endif %}
+  {% endif %}
+
+  var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+
   app.config = {{
     {
       api:{
@@ -99,7 +109,6 @@
         video_player_watermark_plugin: parameter('cloud.video_player_watermark_plugin'),
         video_player_fingerprint_plugin: parameter('cloud.video_player_fingerprint_plugin')
       },
-      editor_upload_path: path('kindeditor_upload'),
       loading_img_path: asset('assets/img/default/loading.gif'),
     }|json_encode|raw
   }};
@@ -111,6 +120,9 @@
   {% if script_arguments is defined %}
     app.arguments = {{ script_arguments|json_encode|raw }};
   {% endif %}
+  
+  app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+
   app.mainScript = '{{ script_main }}';
 </script>
 {% if setting('cdn.enabled') %} {% set cdnUrl = setting('cdn.url') %} {% else %} {% set cdnUrl = '' %} {% endif %}

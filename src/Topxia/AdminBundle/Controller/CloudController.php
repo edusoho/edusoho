@@ -15,8 +15,6 @@ class CloudController extends BaseController
 
         $result = $client->getBills($client->getBucket());
 
-        $loginToken = $this->getAppService()->getLoginToken();
-
         if (!empty($result['error'])) {
             return $this->createMessageResponse('error', '获取账单信息失败，云视频参数配置不正确，或网络通讯失败。',  '获取账单信息失败');
         }
@@ -25,9 +23,26 @@ class CloudController extends BaseController
         return $this->render('TopxiaAdminBundle:Cloud:bill.html.twig', array(
             'money' => $result['money'],
             'bills' => $result['bills'],
-            'token' => $loginToken["token"]
         ));
 
+    }
+
+    public function rechargeAction(Request $request)
+    {
+        $loginToken = $this->getAppService()->getLoginToken();
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=order_recharge');
+    }
+
+    public function detailAction(Request $request)
+    {
+        $loginToken = $this->getAppService()->getLoginToken();
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=account_person');
+    }
+
+    public function smsAccountAction(Request $request)
+    {
+        $loginToken = $this->getAppService()->getLoginToken();
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=service_sms_accout');
     }
 
     protected function getAppService()

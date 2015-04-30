@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
+use Topxia\Common\Paginator;
 
 class DefaultController extends BaseController
 {
@@ -34,13 +35,14 @@ class DefaultController extends BaseController
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
+
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
             'blocks' => $blocks,
             'recentLiveCourses' => $recentLiveCourses,
             'consultDisplay' => true,
-            'cashRate' => $cashRate,
+            'cashRate' => $cashRate
         ));
     }
 
@@ -133,7 +135,7 @@ class DefaultController extends BaseController
 
     public function latestReviewsBlockAction($number)
     {
-        $reviews = $this->getReviewService()->searchReviews(array(), 'latest', 0, $number);
+        $reviews = $this->getReviewService()->searchReviews(array('private' => 0), 'latest', 0, $number);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
         return $this->render('TopxiaWebBundle:Default:latest-reviews-block.html.twig', array(
@@ -145,12 +147,12 @@ class DefaultController extends BaseController
 
     public function topNavigationAction($siteNav = null)
     {
-    	$navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
+        $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
-    	return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
-    		'navigations' => $navigations,
+        return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
+            'navigations' => $navigations,
             'siteNav' => $siteNav
-		));
+        ));
     }
 
 
@@ -237,5 +239,10 @@ class DefaultController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }
