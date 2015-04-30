@@ -827,6 +827,19 @@ body {
 
 }
 
+.thread-event-title {
+  font-size: 20px;
+  line-height: 36px;
+  margin: 0;
+  padding: 0;
+  word-wrap:break-word;
+  overflow:hidden;
+}
+
+.thread-event-title-bar {
+  margin-top: 10px;
+}
+
 .thread-metas {
   color: #999;
   font-size: 12px;
@@ -5405,7 +5418,28 @@ a.homework-essay-textarea-pack-up{
   color:#999;
 }
 
+<<<<<<< HEAD
+.user-status-list img {
+  width: 50px;
+  height: 50px;
+}
 
+.note-list .like {
+  cursor: pointer;
+}
+
+.note-list .like em {
+  font-style: normal;
+  font-weight: normal;
+}
+
+.note-list .liked {
+  color: #eb7350;
+}
+
+.note-list .like:hover {
+  color: #eb7350;
+}
 /* =========================== color =========================== */
 /* =========================== media =========================== */
 .inline-block {

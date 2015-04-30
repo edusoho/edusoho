@@ -94,6 +94,20 @@ abstract class BaseDao
        $limit = (int) $limit; 
     }
 
+    protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
+    {
+        $keys = array_keys($orderBy);
+        foreach ($orderBy as $field => $order) {
+            if (!in_array($field, $allowedOrderByFields)) {
+                throw new \RuntimeException("不允许对{$field}字段进行排序", 1);
+            }
+            
+            if (!in_array($order, array('ASC','DESC'))){
+                throw new \RuntimeException("orderBy排序方式错误", 1);
+            }
+        }
+    }
+
     protected function checkOrderBy (array $orderBy, array $allowedOrderByFields)
     {
         if (empty($orderBy[0]) or empty($orderBy[1])) {

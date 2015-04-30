@@ -4,12 +4,13 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\NoteService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class NoteServiceImpl extends BaseService implements NoteService
 {
-	public function getNote($id)
-	{
-		return $this->getNoteDao()->getNote($id);
+    public function getNote($id)
+    {
+        return $this->getNoteDao()->getNote($id);
     }
 
     public function getUserLessonNote($userId, $lessonId)
@@ -18,30 +19,21 @@ class NoteServiceImpl extends BaseService implements NoteService
     }
 
     public function findUserCourseNotes($userId, $courseId)
-    {   
+    {
         return $this->getNoteDao()->findNotesByUserIdAndCourseId($userId, $courseId);
     }
 
-    public function searchNotes($conditions, $sort, $start, $limit)
+    public function searchNotes($conditions, $orderBy, $start, $limit)
     {
-        switch ($sort) {
-            case 'created':
-                $orderBy = array('createdTime', 'DESC');
-                break;
-            case 'updated':
-                $orderBy =  array('updatedTime', 'DESC');
-                break;
-            default:
-                throw $this->createServiceException('参数sort不正确。');
-        }
-
         $conditions = $this->prepareSearchNoteConditions($conditions);
+
         return $this->getNoteDao()->searchNotes($conditions, $orderBy, $start, $limit);
     }
 
     public function searchNoteCount($conditions)
     {
         $conditions = $this->prepareSearchNoteConditions($conditions);
+
         return $this->getNoteDao()->searchNoteCount($conditions);
     }
 
@@ -75,8 +67,8 @@ class NoteServiceImpl extends BaseService implements NoteService
      *  3. 插入到数据库
      *  4. 更新其他相关的缓存字段
      */
-	public function saveNote(array $note)
-	{
+    public function saveNote(array $note)
+    {
         if (!ArrayToolkit::requireds($note, array('lessonId', 'courseId', 'content'))) {
             throw $this->createServiceException('缺少必要的字段，保存笔记失败');
         }
@@ -84,7 +76,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         list($course, $member) = $this->getCourseService()->tryTakeCourse($note['courseId']);
         $user = $this->getCurrentUser();
 
-        if(!$this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId'])) {
+        if (!$this->getCourseService()->getCourseLesson($note['courseId'], $note['lessonId'])) {
             throw $this->createServiceException('课时不存在，保存笔记失败');
         }
 
@@ -92,6 +84,7 @@ class NoteServiceImpl extends BaseService implements NoteService
             'courseId' => 0,
             'lessonId' => 0,
             'content' => '',
+            'status' => 0,
         ));
 
         $note['content'] = $this->purifyHtml($note['content']) ? : '';
@@ -101,23 +94,26 @@ class NoteServiceImpl extends BaseService implements NoteService
         if (!$existNote) {
             $note['userId'] = $user['id'];
             $note['createdTime'] = time();
+            $note['updatedTime'] = time();
             $note = $this->getNoteDao()->addNote($note);
+            $this->getDispatcher()->dispatch('course.note.create', new ServiceEvent($note));
         } else {
             $note['updatedTime'] = time();
             $note = $this->getNoteDao()->updateNote($existNote['id'], $note);
+            $this->getDispatcher()->dispatch('course.note.update', new ServiceEvent($note, array('preStatus' => $existNote['status'])));
         }
 
         $this->getCourseService()->setMemberNoteNumber(
             $note['courseId'],
-            $note['userId'], 
+            $note['userId'],
             $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId'])
         );
 
         return $note;
-	}
+    }
 
-	public function deleteNote($id)
-	{
+    public function deleteNote($id)
+    {
         $note = $this->getNote($id);
         if (empty($note)) {
             throw $this->createServiceException("笔记(#{$id})不存在，删除失败");
@@ -129,17 +125,18 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
 
         $this->getNoteDao()->deleteNote($id);
+        $this->getDispatcher()->dispatch('course.note.delete', new ServiceEvent($note));
 
         $this->getCourseService()->setMemberNoteNumber(
             $note['courseId'],
-            $note['userId'], 
+            $note['userId'],
             $this->getNoteDao()->getNoteCountByUserIdAndCourseId($note['userId'], $note['courseId'])
         );
 
         if ($note['userId'] != $currentUser['id']) {
             $this->getLogService()->info('note', 'delete', "删除笔记#{$id}");
         }
-	}
+    }
 
     public function deleteNotes(array $ids)
     {
@@ -148,19 +145,97 @@ class NoteServiceImpl extends BaseService implements NoteService
         }
     }
 
+    public function count($id, $field, $diff)
+    {
+        $this->getNoteDao()->count($id, $field, $diff);
+    }
+
+    public function like($noteId)
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            throw $this->createNotFoundException("用户还未登录,不能点赞。");
+            
+        }
+
+        $note = $this->getNote($noteId);
+        if (empty($note)) {
+            throw $this->createNotFoundException("笔记不存在，或已删除。");
+        }
+
+        $like = $this->getNoteLikeByNoteIdAndUserId($noteId, $user['id']);
+        if (!empty($like)) {
+            throw $this->createAccessDeniedException('不可重复对一条笔记点赞！');
+        }
+
+        $noteLike = array(
+            'noteId' => $noteId,
+            'userId' => $user['id'],
+            'createdTime' => time(),
+        );
+
+        $this->getDispatcher()->dispatch('course.note.liked', new ServiceEvent($note));
+
+        return $this->getNoteLikeDao()->addNoteLike($noteLike);
+    }
+
+    public function cancelLike($noteId)
+    {
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            throw $this->createNotFoundException("用户还未登录,不能点赞。");
+            
+        }
+
+        $note = $this->getNote($noteId);
+        if (empty($note)) {
+            throw $this->createNotFoundException("笔记不存在，或已删除。");
+        }
+
+        $this->getNoteLikeDao()->deleteNoteLikeByNoteIdAndUserId($noteId, $user['id']);
+
+        $this->getDispatcher()->dispatch('course.note.cancelLike', new ServiceEvent($note));
+    }
+
+    public function getNoteLikeByNoteIdAndUserId($noteId, $userId)
+    {
+        return $this->getNoteLikeDao()->getNoteLikeByNoteIdAndUserId($noteId, $userId);
+    }
+
+    public function findNoteLikesByUserId($userId)
+    {
+        return $this->getNoteLikeDao()->findNoteLikesByUserId($userId);
+    }
+
+    public function findNoteLikesByNoteId($noteId)
+    {
+        return $this->getNoteLikeDao()->findNoteLikesByNoteId($noteId);
+    }
+
+    public function findNoteLikesByNoteIds(array $noteIds)
+    {
+        return $this->getNoteLikeDao()->findNoteLikesByNoteIds($noteIds);
+    }
+
+    public function findNoteLikesByNoteIdsAndUserId(array $noteIds, $userId)
+    {
+        return ArrayToolkit::index($this->getNoteLikeDao()->findNoteLikesByNoteIdsAndUserId($noteIds, $userId), 'noteId');
+    }
+
     // @todo HTML Purifier
     private function calculateContnentLength($content)
     {
-        $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '',$content)));
+        $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '', $content)));
+
         return mb_strlen($content, 'utf-8');
     }
 
     private function getNoteDao()
     {
-    	return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course.CourseNoteDao');
     }
 
-   private function getCourseService()
+    private function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
@@ -173,5 +248,10 @@ class NoteServiceImpl extends BaseService implements NoteService
     private function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    private function getNoteLikeDao()
+    {
+        return $this->createDao('Course.CourseNoteLikeDao');
     }
 }

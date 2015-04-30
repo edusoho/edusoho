@@ -1,0 +1,31 @@
+<div class="thread-event-title-bar">
+  <span class="label label-success" title="活动">活动</span>
+  <h1 class="thread-title">{{ thread.title }}</h1>
+  {% if thread.sticky %}
+    <span class="label label-danger" title="置顶帖">置顶</span>
+  {% endif %}
+  {% if thread.nice %}
+    <span class="label label-warning" title="精华帖">精</span>
+  {% endif %}
+</div>
+
+<div>
+  <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('dateType',thread.startTime|date('N')) ~ thread.startTime|date(' H:i') }}</p>
+  <p>地点：{{ thread.location }}</p>
+  <p>报名人数：
+  {% if thread.maxUsers == 0 %}
+    {{ thread.memberNum }} 人 (名额不限)
+  {% else %}
+    {{ thread.memberNum }} 人 （还剩 {{ thread.maxUsers - thread.memberNum }}人）
+  {% endif %}
+  
+  </p>
+</div>
+{% if thread.maxUsers == thread.memberNum and thread.maxUsers != 0 %}
+  <button class="btn btn-danger btn-sm disabled">名额已满</button>
+{% elseif member is empty %}
+  <button class="btn btn-success btn-sm js-event-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">我要报名</button>
+{% else %}
+  <button class="btn btn-success btn-sm js-event-apply disabled" data-toggle="modal" data-target="#modal">已报名</button>
+  <button class="btn btn-link js-event-cancel" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">取消报名</button>
+{% endif %}

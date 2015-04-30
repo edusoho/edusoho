@@ -12,7 +12,10 @@
                           </div>
                     {% else %}
                           <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
-                          <p class="text-muted">有效期至：{% if expire == null %}{% else %}{{expire|date("Y-m-d")}}{% endif %}</p>
+                          {% if expire  %}
+                          <p class="text-muted">有效期至：{{expire|date("Y-m-d")}}
+                          </p>
+                          {% endif %}
                     {% if liveDate == 0 %}
                           <p class="text-danger text-sm">云直播服务将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
                     {% endif %}

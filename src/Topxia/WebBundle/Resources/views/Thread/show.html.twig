@@ -7,15 +7,7 @@
         <a href="{{ path(thread.targetType ~ '_threads', {(thread.targetType~'Id'): thread.targetId}) }}" class="text-muted">话题</a> <span class="text-muted">&raquo; 正文</span>
       </div>
 
-      <div class="thread-title-bar">
-        <h1 class="thread-title">{{ thread.title }}</h1>
-        {% if thread.sticky %}
-          <span class="label label-danger" title="置顶帖">置顶</span>
-        {% endif %}
-        {% if thread.nice %}
-          <span class="label label-warning" title="精华帖">精</span>
-        {% endif %}
-      </div>
+      {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-title-bar.html.twig' %}
 
       <div class="thread-metas">
         {{  web_macro.user_link(author, 'link-muted') }}
@@ -26,7 +18,7 @@
       </div>
     </div>
     <div class="panel-body">
-      {{ thread.content|at(thread.ats)|raw }}
+      {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-body.html.twig' %}
     </div>
 
     <div class="panel-footer clearfix">
@@ -51,6 +43,12 @@
             <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
           {% else %}
             <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
+          {% endif %}
+        {% endif %}
+
+        {% if thread.type == 'event' %}
+          {% if service.canAccess('thread.update', thread) %}
+            <a href="{{ path('thread_export_members', {threadId:thread.id}) }}" class="btn btn-link" target="_balnk"><span class="glyphicon glyphicon-export"></span> 导出成员</a>
           {% endif %}
         {% endif %}
       </div>

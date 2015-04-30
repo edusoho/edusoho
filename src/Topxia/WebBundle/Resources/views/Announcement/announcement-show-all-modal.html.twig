@@ -1,0 +1,38 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}查看本课程的所有公告{% endblock %}
+
+{% block body %}
+
+<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>创建者</th>
+            <th>公告内容</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{% for announcement in announcements %}
+		          <tr>
+		            <td > {{ users[announcement.userId].nickname}} </td>
+		            <td>{{ announcement.content | raw }}</td>
+		            <td>{{ announcement.createdTime|date('Y-n-d H:i:s')}}</td>
+		            {% if announcement.updatedTime == 0 %}
+		               <td> 尚未更新</td> 
+		            {% else %}
+		            <td>{{ announcement.createdTime|date('Y-n-d H:i:s')}}</td>
+		            {% endif %}
+		          </tr>
+			{% endfor %}
+        </tbody>
+</table>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-default" data-dismiss="modal">退出</button>
+{% endblock %}
+
+{% set hideFooter = true %}

@@ -124,8 +124,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 	}
 
 	private function _prepareCourseConditions($conditions)
-	{        
-		$conditions = array_filter($conditions);
+	{
+		$conditions = array_filter($conditions, function($value){
+			if($value == 0) {
+				return true;
+			}
+			return !empty($value);
+		});
 
 		if (isset($conditions['date'])) {
 			$dates = array(
@@ -188,6 +193,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			unset($conditions['nickname']);
 		}
 		
+
 		return $conditions;
 	}
 
@@ -2306,79 +2312,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return array($course, $member);
 	}
-
-	public function getCourseAnnouncement($courseId, $id)
-	{
-		$announcement = $this->getAnnouncementDao()->getAnnouncement($id);
-		if (empty($announcement) or $announcement['courseId'] != $courseId) {
-			return null;
-		}
-		return $announcement;
-	}
-
-	public function findAnnouncements($courseId, $start, $limit)
-	{
-		return $this->getAnnouncementDao()->findAnnouncementsByCourseId($courseId, $start, $limit);
-	}
-
-	public function findAnnouncementsByCourseIds(array $ids, $start, $limit)
-	{
-		return $this->getAnnouncementDao()->findAnnouncementsByCourseIds($ids,$start, $limit);
-	}
-	
-	public function createAnnouncement($courseId, $fields)
-	{
-		$course = $this->tryManageCourse($courseId);
-        if (!ArrayToolkit::requireds($fields, array('content'))) {
-        	$this->createNotFoundException("课程公告数据不正确，创建失败。");
-        }
-
-        if(isset($fields['content'])){
-        	$fields['content'] = $this->purifyHtml($fields['content']);
-        }
-
-		$announcement = array();
-		$announcement['courseId'] = $course['id'];
-		$announcement['content'] = $fields['content'];
-		$announcement['userId'] = $this->getCurrentUser()->id;
-		$announcement['createdTime'] = time();
-		return $this->getAnnouncementDao()->addAnnouncement($announcement);
-	}
-
-
-
-	public function updateAnnouncement($courseId, $id, $fields)
-	{
-		$course = $this->tryManageCourse($courseId);
-
-        $announcement = $this->getCourseAnnouncement($courseId, $id);
-        if(empty($announcement)) {
-        	$this->createNotFoundException("课程公告{$id}不存在。");
-        }
-
-        if (!ArrayToolkit::requireds($fields, array('content'))) {
-        	$this->createNotFoundException("课程公告数据不正确，更新失败。");
-        }
-        
-        if(isset($fields['content'])){
-        	$fields['content'] = $this->purifyHtml($fields['content']);
-        }
-
-        return $this->getAnnouncementDao()->updateAnnouncement($id, array(
-        	'content' => $fields['content']
-    	));
-	}
-
-	public function deleteCourseAnnouncement($courseId, $id)
-	{
-		$course = $this->tryManageCourse($courseId);
-		$announcement = $this->getCourseAnnouncement($courseId, $id);
-		if(empty($announcement)) {
-			$this->createNotFoundException("课程公告{$id}不存在。");
-		}
-
-		$this->getAnnouncementDao()->deleteAnnouncement($id);
-	}
 	
 	public function generateLessonReplay($courseId,$lessonId)
 	{
@@ -2458,11 +2391,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
-    }
-
-    private function getAnnouncementDao()
-    {
-    	return $this->createDao('Course.CourseAnnouncementDao');
     }
 
 	private function hasCourseManagerRole($courseId, $userId) 
