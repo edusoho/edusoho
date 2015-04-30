@@ -14,17 +14,30 @@
     }
   }
   h5 {
-    z-index: 1;
     position: relative;
     text-align: center;
-    font-size: 16px;
+    font-size: 28px;
+    z-index: 1;
+    >i {
+      padding-left: 20px;
+      background: #fff;
+    }
+    >span {
+      background: #fff;
+      padding: 0 50px;
+    }
   }
-  i {
-    padding: 0 20px;
-    background: #fff;
+  &.gray {
+    h5>span {
+      background: #fafafa;
+    }
   }
-  span {
-    background: #fff;
-    padding-right: 10px;
+  &.small {
+    h5 {
+      font-size: 16px;
+      >span {
+        padding: 0 20px;
+      }
+    }
   }
 }

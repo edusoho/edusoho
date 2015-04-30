@@ -1,11 +1,11 @@
-<div class="panel panel-default  hot-article">
+<div class="panel panel-default hot-article">
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="iconfont icon-hot"></i>热门资讯</h3>
+    <h3 class="panel-title"><i class="es-icon es-icon-whatshot"></i>热门资讯</h3>
   </div>
   <div class="panel-body">
     {% if articles %}
       {% for key,article in articles %}
-          <div class="media">
+          <div class="media media-number">
             <div class="media-left">
               <span class="num">{{ key+1 }}</span>
             </div>

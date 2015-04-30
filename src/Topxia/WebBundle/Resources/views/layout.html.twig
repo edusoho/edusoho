@@ -28,7 +28,7 @@
     <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/iconfont.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/es-icon.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/main.css') }}" />
     <!--[if lt IE 8]>
@@ -55,12 +55,14 @@
     <div class="container">
       <div class="navbar-header">
         <div class="visible-xs navbar-mobile">
-          <a href="javascript:;" class="navbar-more js-navbar-more"><i class="iconfont icon-gengduo"></i></a>
+          <a href="javascript:;" class="navbar-more js-navbar-more">
+            <i class="es-icon es-icon-menu"></i>
+          </a>
           <div class="nav-mobile">
             <form class="navbar-form">
               <div class="form-group">
                 <input class="form-control" placeholder="搜索" name="q">
-                <button class="button iconfont icon-search"></button>
+                <button class="button es-icon es-icon-search"></button>
               </div>
             </form>
             <ul class="nav navbar-nav">
@@ -85,31 +87,35 @@
           {% if app.user %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              <img src="{{ default_path('avatar', app.user.smallAvatar, '') }}" class="user-avatar">
+              <img class="user-avatar" src="{{ default_path('avatar', app.user.smallAvatar, '') }}">
             </a>
             <ul class="dropdown-menu" role="menu">
               <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
-              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="iconfont icon-ren"></i>个人主页</a></li>
-              <li><a href="{{ path('settings') }}"><i class="iconfont icon-shezhi"></i>个人设置</a></li>
-              <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="iconfont icon-001"></i>账户中心</a></li>
-              {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="iconfont icon-dashboard"></i>管理后台</a></li>
+              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>个人主页</a></li>
+              <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
+              <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
+              {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>管理后台</a></li>
               {% endif %}
               <li class="visible-sm visible-xs">
-                <a href="{{ path('my') }}"><i class="iconfont icon-study"></i>学习中心</a>
+                <a href="{{ path('my') }}"><i class="es-icon es-icon-study"></i>学习中心</a>
               </li>
-              <li class="visible-sm visible-xs"><a href="{{ path('notification') }}"><i class="iconfont icon-bell"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
-              <li class="visible-sm visible-xs"><a href="{{ path('message') }}"><i class="iconfont icon-shezhi"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
-              <li><a href="{{ path('logout') }}"><i class="iconfont icon-tuichu"></i>退出登陆</a></li>
+              <li class="visible-sm visible-xs"><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
+              <li class="visible-sm visible-xs"><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+              <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登陆</a></li>
             </ul>
           </li>
           <li class="hidden-sm hidden-xs">
             <a href="{{ path('my') }}">学习中心</a>
           </li>
           <li class="hidden-sm hidden-xs">
-            <a href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="iconfont icon-youjian"></i></a>
+            {% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}
+              <a class="hasmessage" href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
+            {% else %}
+              <a href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i></a>
+            {% endif %}
             <ul class="dropdown-menu" role="menu">
-              <li><a href="{{ path('notification') }}"><i class="iconfont icon-bell"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
-              <li><a href="{{ path('message') }}"><i class="iconfont icon-shezhi"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+              <li><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
+              <li><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
             </ul>
           </li>
           {% else %}
@@ -117,10 +123,10 @@
             <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
           {% endif %}
         </ul>
-        <form class="navbar-form col-md-6 col-sm-3 pull-right hidden-xs">
+        <form class="navbar-form pull-right hidden-xs">
           <div class="form-group">
-            <input class="form-control js-search">
-            <button class="button iconfont icon-search"></button>
+            <input class="form-control js-search" name="q">
+            <button class="button es-icon es-icon-search"></button>
           </div>
         </form>
       </div>
@@ -176,10 +182,10 @@
           <div class="col-md-4 footer-logo">
             <img src="{{ asset('bundles/topxiaweb/img/bottom_logo.png') }}">
             <div class="footer-partner">
-              <a href="javascript:;"><i class="iconfont icon-sina"></i></a>
-              <a href="javascript:;"><i class="iconfont icon-qq"></i></a>
-              <a href="javascript:;"><i class="iconfont icon-weixin"></i></a>
-              <a href="javascript:;"><i class="iconfont icon-mobile"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-weibo"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
             </div>
           </div>
         </div>
@@ -196,11 +202,10 @@
 
   {% block bottom %}{% endblock %}
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
-<div id="modal" class="modal"></div>
+  <div id="modal" class="modal"></div>
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-
 
 </body>
 </html>

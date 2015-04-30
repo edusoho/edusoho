@@ -63,34 +63,36 @@
   }
   .border-radius; 
   &.one {
-    background-image: -webkit-linear-gradient(top, #cced6a, #21aa68);
-    background-image: -o-linear-gradient(top, #cced6a, #21aa68);
-    background-image: -webkit-gradient(top, #cced6a, #21aa68); 
-    background-image: -moz-linear-gradient(top, #cced6a, #21aa68); 
-    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#cced6a', EndColorStr='#21aa68'); 
+    .es-transition;
+    background-color: #21aa68\9;
+    background: -webkit-linear-gradient(top, #cced6a, #21aa68);
+    background: -o-linear-gradient(top, #cced6a, #21aa68);
+    background: -webkit-gradient(top, #cced6a, #21aa68); 
+    background: -moz-linear-gradient(top, #cced6a, #21aa68); 
     &:hover {
-      background-image: -webkit-linear-gradient(top, #21aa68, #cced6a);
-      background-image: -o-linear-gradient(top, #21aa68, #cced6a);
-      background-image: -webkit-gradient(top, #21aa68, #cced6a);
-      background-image: -moz-linear-gradient(top, #21aa68, #cced6a);
-      filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#21aa68', EndColorStr='#cced6a'); 
+      .es-transition;
+      .opacity(0.8);
+      // background: -webkit-linear-gradient(top, #21aa68, #cced6a);
+      // background: -o-linear-gradient(top, #21aa68, #cced6a);
+      // background: -webkit-gradient(top, #21aa68, #cced6a);
+      // background: -moz-linear-gradient(top, #21aa68, #cced6a);
     }
   }
   &.two {
     margin-bottom: 0;
-    .es-transition(1s);
+    .es-transition;
+    background-color: #6124bd\9;
     background-image: -webkit-linear-gradient(top, #d987eb, #6124bd);
     background-image: -o-linear-gradient(top, #d987eb, #6124bd);
     background-image: -webkit-gradient(top, #d987eb, #6124bd);
     background-image: -moz-linear-gradient(top, #d987eb, #6124bd);
-    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#d987eb', EndColorStr='#6124bd'); 
     &:hover {
-      .es-transition(1s);
-      background-image: -webkit-linear-gradient(top, #6124bd, #d987eb);
-      background-image: -o-linear-gradient(top, #6124bd, #d987eb);
-      background-image: -webkit-gradient(top, #6124bd, #d987eb);
-      background-image: -moz-linear-gradient(top, #6124bd, #d987eb);
-      filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#6124bd', EndColorStr='#d987eb'); 
+      .es-transition;
+      .opacity(0.8);
+      // background-image: -webkit-linear-gradient(top, #6124bd, #d987eb);
+      // background-image: -o-linear-gradient(top, #6124bd, #d987eb);
+      // background-image: -webkit-gradient(top, #6124bd, #d987eb);
+      // background-image: -moz-linear-gradient(top, #6124bd, #d987eb);
     }  
   }
   .content {
@@ -151,11 +153,12 @@
     width: 40px;
     margin-top: 10px;
     text-align: center;
-    color: #d3d3d3;
-    border: 1px solid @gray;
+    color: #ccc;
+    border: 1px solid #ccc;
     border-radius: 50%;
     .day {
-      font-size: 18px;
+      margin-top: 2px;
+      font-size: 16px;
       line-height: 1.2;
     }
     .month {
@@ -203,95 +206,11 @@
 
 // 侧边栏
 .article-sidebar {
-  /*热门资讯、推荐资讯*/
-  .hot-article,
-  .recommend-article {
-    .media {
-      &:nth-child(1) .num,
-      &:nth-child(2) .num,
-      &:nth-child(3) .num {
-        border-color: @brand-primary;
-        color: @brand-primary;
-      }
-    }
-    .media-left {
-      position: relative;
-      color: @gray;
-      .num {
-        display: block;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        text-align: center;
-        border: 1px solid @gray;
-        border-radius: 50%;
-      }
-    }
-    .media {
-      border-bottom: 1px solid #f6f6f6;
-      padding-bottom: 15px;
-      .media-body {
-        a {
-          height: 36px;
-          overflow: hidden;
-          display: block;
-          color: @gray;
-        }
-        a:hover {
-          color: @brand-primary;
-        }
-      }
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
 
   /*热门标签*/
   .hot-tag {
     .btn-tag {
       margin: 10px 15px 10px 0;
-    }
-  }
-
-  /*热门评论*/
-  .hot-comments {
-    img {
-      width: 40px;
-      height: 40px;
-    }
-    .comments-info {
-      padding-left: 50px;
-      p {
-        margin: 0;
-        font-size: 12px;
-        color: #e2e2e2;
-        margin-top: 2px;
-        a {
-          margin-right: 10px;
-        }
-      }
-      h5 {
-        margin: 0;
-        a {
-          color: @gray;
-          height: 20px;
-          display: inline-block;
-          line-height: 20px;
-        }
-        a:hover {
-          color: @brand-primary;
-        }
-      }
-    }
-    .comments-content {
-      padding: 10px;
-      background: @gray-lighter;
-      color: @gray;
-      line-height: 25px;
-      border: 1px solid #f1f1f1;
-      margin-top: 15px;
-      margin-bottom: 10px;
     }
   }
 }

@@ -1,4 +1,4 @@
-
+// 班级头部
 .class-header {
   padding: 30px 0 40px 0;
   background: url("../img/class_bg.jpg");
@@ -189,3 +189,71 @@
     }
   }
 }
+
+// 班级主体
+.class-detail-main {
+  .nav.nav-tabs>li>a {
+    padding: 10px 30px;
+    .badge {
+      margin-left: 5px;
+      background-color: @gray;
+      .es-transition;
+    }
+    &:hover .badge {
+      background-color: @brand-primary;
+      .es-transition;
+    }
+  }
+}
+
+// 班级tab内容
+.class-detail-content {
+  p {
+    line-height: 30px;
+    margin-bottom: 30px;
+    text-indent: 2em;
+  }
+}
+
+// 班级侧边栏
+.class-sidebar {
+  .serve-team {
+    .media-body {
+      border-bottom: 1px solid @gray-lighter;
+      >.title >a {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+      >p {
+        margin-top: 10px;
+        color: @gray;
+      }
+    }
+    .media:last-child .media-body {
+      border: none;
+    }  
+  }
+  .new-student {
+    .student-list {
+      overflow: hidden;
+      li {
+        float: left;
+        width: 20%;
+        margin: 10px auto;
+        text-align: center;
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+  .student-dynamic {
+    
+  }
+}
+
