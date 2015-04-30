@@ -170,6 +170,7 @@ define(function(require, exports, module) {
         validator.removeItem('#lesson-media-field');
         validator.removeItem('#lesson-second-field');
         validator.removeItem('#lesson-minute-field');
+        validator.removeItem('#lesson-suggest-period-field');
 
         validator.addItem({
             element: '#lesson-title-field',
@@ -232,6 +233,12 @@ define(function(require, exports, module) {
                 break;
         }
 
+        validator.addItem({
+            element: '#lesson-suggest-period-field',
+            required: true,
+            rule: 'decimal',
+            display: '建议学习时长'
+        });
     }
 
     exports.run = function() {
@@ -269,16 +276,27 @@ define(function(require, exports, module) {
             }
         }
 
-        var updateDuration = function (length) {
+        var updateDuration = function (type, length) {
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
                 return ;
             }
             var minute = parseInt(length / 60);
             var second = length - minute * 60;
+            var hour = length / 3600;
+            var multiple = Math.ceil(hour / 0.5)*0.5;
+            var suggestHour = hour > multiple ? (multiple+0.5) : multiple;
 
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
+
+            /*if (type == 'video') {
+                $("#video-lesson-suggest-period-field").val(suggestHour);
+            } else if (type == 'audio') {
+                $("#audio-lesson-suggest-period-field").val(suggestHour);
+            }*/
+            
+            $("#lesson-suggest-period-field").val(suggestHour);
         }
 
         var $content = $("#lesson-content-field");
@@ -313,13 +331,13 @@ define(function(require, exports, module) {
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
-            updateDuration(item.length);
+            updateDuration('video',item.length);
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
-            updateDuration(item.length);
+            updateDuration('audio',item.length);
         });
 
         pptChooser.on('change', function(item) {

@@ -938,6 +938,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'liveProvider' => 'none',
+			'suggestHours' => '0.0',
 		));
 
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1111,6 +1112,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'suggestHours' => '1.0',
 		));
 
 		if (isset($fields['title'])) {
