@@ -101,9 +101,63 @@ class CloudController extends BaseController
             return new Response('');
         }
 
-        $host = $request->getHttpHost();
+        // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
+        $pattern = $this->setting('magic.video_fingerprint');
+        if ($pattern) {
+            $fingerprint = $this->parsePattern($pattern, $user);
+        } else {
+            $host = $request->getHttpHost();
+            $fingerprint = "{$host} {$user['nickname']}";
+        }
 
-        return new Response("{$host} {$user['nickname']}");
+        return new Response($fingerprint);
+    }
+
+    public function docWatermarkAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return new Response('');
+        }
+
+        $pattern = $this->setting('magic.doc_watermark');
+        if ($pattern) {
+            $watermark = $this->parsePattern($pattern, $user->toArray());
+        } else {
+            $watermark = '';
+        }
+
+        return new Response($watermark);
+    }
+
+    public function pptWatermarkAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return new Response('');
+        }
+
+        $pattern = $this->setting('magic.ppt_watermark');
+        if ($pattern) {
+            $watermark = $this->parsePattern($pattern, $user->toArray());
+        } else {
+            $watermark = '';
+        }
+
+        return new Response($watermark);
+    }
+
+
+    private function parsePattern($pattern, $user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+
+        $values = array_merge($user, $profile);
+        $values = array_filter($values, function($value){
+            return !is_array($value);
+        });
+
+        return $this->get('topxia.twig.web_extension')->simpleTemplateFilter($pattern, $values);
     }
 
     private function checkSign($server, $sign, $secretKey)

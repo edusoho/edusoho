@@ -83,7 +83,7 @@ class CourseLessonController extends BaseController
             } else {
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
-        }
+        } 
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
@@ -204,6 +204,16 @@ class CourseLessonController extends BaseController
                         }
 
                     }
+
+                    if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                        $user = $this->getCurrentUser();
+                        $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                        if ($watchStatus['status'] == 'error') {
+                            $json['mediaError'] = "您的观看次数已经达到{$watchStatus['num']}次，最多只能看{$watchStatus['limit']}次。";
+                        }
+                    }
+
+
                 } else {
                     $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
                 }
@@ -468,6 +478,13 @@ class CourseLessonController extends BaseController
     {
         $this->getCourseService()->cancelLearnLesson($courseId, $lessonId);
         return $this->createJsonResponse(true);
+    }
+
+    public function watchNumAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        $result = $this->getCourseService()->waveWatchNum($user['id'], $lessonId, 1);
+        return $this->createJsonResponse($result);
     }
 
     private function createLocalMediaResponse(Request $request, $file, $isDownload = false)

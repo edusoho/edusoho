@@ -56,6 +56,12 @@ class CloudSettingController extends BaseController
 
         $currentHost = $request->server->get('HTTP_HOST');
 
+        if(isset($info['licenseDomains'])) {
+
+            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+
+        }
+        
         return $this->render('TopxiaAdminBundle:CloudSetting:key-license-info.html.twig', array(
             'info' => $info,
             'currentHost' => $currentHost,

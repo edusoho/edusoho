@@ -21,6 +21,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Filesystem\Filesystem;
 
 function check_installed()
 {
@@ -80,6 +81,7 @@ function install_step1()
         'app/data/udisk',
         'app/data/private_files',
         'web/files',
+        'web/install',
         'app/cache',
         'app/data',
         'app/logs',
@@ -212,6 +214,18 @@ function install_step4()
     ));
 }
 
+function install_step5()
+{
+    try {
+        $filesystem = new Filesystem();
+        $filesystem->remove(__DIR__);
+    } catch(\Exception $e) {
+
+    }
+
+    header("Location: ../app.php/");
+    exit(); 
+}
 
 /**
  * 生产Key
@@ -219,7 +233,12 @@ function install_step4()
 function install_step999()
 {
     if (empty($_COOKIE['nokey'])) {
-        session_start();
+        
+        if (empty($_SESSION)){
+
+            session_start();
+            
+        }
 
         $connection = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);
