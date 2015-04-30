@@ -205,7 +205,7 @@ class CourseManageController extends BaseController
 
         response:
 
-        if ($this->setting('vip.enabled')) {
+        if ($this->isPluginInstalled("Vip") && $this->setting('vip.enabled')) {
             $levels = $this->getLevelService()->findEnabledLevels();
         } else {
             $levels = array();

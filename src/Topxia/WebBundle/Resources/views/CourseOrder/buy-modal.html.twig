@@ -231,7 +231,11 @@
       <button class="btn btn-primary" disabled="disabled">加入学习</button> 
     {% else %}  
       {% if not avatarAlert %}
-        <button id="join-course-btn" class="btn btn-primary" data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        <button id="join-course-btn" class="btn btn-primary" 
+        {% if course.status != 'published' or (course.type == 'live' and course.studentNum >= course.maxStudentNum) %}
+        disabled="disabled"
+        {% endif %}
+        data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
 

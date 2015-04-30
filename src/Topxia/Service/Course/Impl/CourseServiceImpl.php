@@ -392,6 +392,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'locationId' => 0,
 			'address' => '',
 			'maxStudentNum' => 0,
+			'watchLimit' => 0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -663,6 +664,49 @@ class CourseServiceImpl extends BaseService implements CourseService
 				'updateTime' => time(),
 			));
 		}
+	}
+
+	public function checkWatchNum($userId, $lessonId)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$course = $this->getCourse($lesson['courseId']);
+
+		if (empty($course['watchLimit'])) {
+			return array('status' => 'ignore');
+		}
+
+		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+		if (empty($learn)) {
+			return array('status' => 'ok', 'num' => 0, 'limit' => $course['watchLimit']);
+		}
+
+		if ($learn['watchNum'] < $course['watchLimit']) {
+			return array('status' => 'ok', 'num' => $learn['watchNum'], 'limit' => $course['watchLimit']);
+		}
+
+		return array('status' => 'error', 'num' => $learn['watchNum'] , 'limit' => $course['watchLimit']);
+	}
+
+	public function waveWatchNum($userId, $lessonId, $diff)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$course = $this->getCourse($lesson['courseId']);
+
+		if (empty($course['watchLimit'])) {
+			return array('status' => 'ignore');
+		}
+
+		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+		if (empty($learn)) {
+			return array('status' => 'ignore');
+		}
+
+		if (($learn['watchNum'] + $diff) <= $course['watchLimit']) {
+			$this->getLessonLearnDao()->updateLearn($learn['id'], array('watchNum' => $learn['watchNum'] + $diff));
+			return array('status' => 'ok', 'num' => $learn['watchNum'] + $diff, 'limit' => $course['watchLimit']);
+		}
+
+		return array('status' => 'error', 'num' => $learn['watchNum'], 'limit' => $course['watchLimit']);
 	}
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
@@ -1998,6 +2042,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$member = $this->getMemberDao()->addMember($fields);
+		$fields = array(
+			'studentNum'=> $this->getCourseStudentCount($courseId),
+		);
+		$this->getCourseDao()->updateCourse($courseId, $fields);
 		return $member;
 
 	}

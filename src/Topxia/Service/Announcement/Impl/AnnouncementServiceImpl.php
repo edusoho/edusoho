@@ -12,9 +12,14 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        $orders = $this->getAnnouncementDao()->searchAnnouncements($conditions, $orderBy, $start, $limit);
+        $announcements = $this->getAnnouncementDao()->searchAnnouncements($conditions, $orderBy, $start, $limit);
 
-        return ArrayToolkit::index($orders, 'id');
+        return ArrayToolkit::index($announcements, 'id');
+    }
+
+    public function searchAnnouncementsCount($conditions)
+    {
+        return $this->getAnnouncementDao()->searchAnnouncementsCount($conditions);
     }
 
 	public function getAnnouncement($id)
@@ -85,15 +90,16 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     private function _prepareSearchConditions($conditions)
     {
-    	$targetType = array('course','classroom');
-    	if(!in_array($conditions['targetType'],$targetType)){
+    	$targetType = array('course','classroom','global');
+    	if(!in_array($conditions['targetType'], $targetType)){
     		throw $this->createServiceException('targetType不正确！');
     	}
 
     	return $conditions;
     }
 
-    private function getCourseService(){
+    private function getCourseService()
+    {
     	return $this->createService('Course.CourseService');
     }
 }

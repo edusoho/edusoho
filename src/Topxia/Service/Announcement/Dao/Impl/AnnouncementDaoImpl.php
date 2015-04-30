@@ -23,6 +23,15 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
+    public function searchAnnouncementsCount($conditions)
+    {        
+        $builder = $this->createSearchQueryBuilder($conditions)
+            ->select('count(id)');
+  
+        return $builder->execute()->fetchColumn(0); 
+
+    }
+
     public function getAnnouncement($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
@@ -56,7 +65,10 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere("targetType = :targetType")
-            ->andWhere("targetId = :targetId");
+            ->andWhere("targetId = :targetId")
+            ->andWhere('startTime <=:startTime')
+            ->andWhere('endTime >=:endTime')
+            ->andWhere('userId =:userId');
             
         return $builder;
     }

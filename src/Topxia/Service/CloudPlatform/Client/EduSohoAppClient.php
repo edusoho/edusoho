@@ -32,7 +32,14 @@ class EduSohoAppClient implements AppClient
     public function getApps()
     {
         $args = array();
-        return $this->callRemoteApi('GET', 'GetApps', $args);
+        //GetAppCenter
+        return $this->callRemoteApi('GET', 'GetAppCenter', $args);
+    }
+
+    public function getBinded()
+    {
+        $args = array();
+        return $this->callRemoteApi('GET', 'HasBinded', $args);
     }
 
     public function getMessages()

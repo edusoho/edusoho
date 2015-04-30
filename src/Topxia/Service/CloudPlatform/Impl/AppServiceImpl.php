@@ -18,6 +18,12 @@ class AppServiceImpl extends BaseService implements AppService
 
     private $client;
 
+
+    public function getAppByCode($code)
+    {
+        return $this->getAppDao()->getAppByCode($code);
+    }
+
     public function findApps($start, $limit)
     {
         return $this->getAppDao()->findApps($start, $limit);
@@ -37,6 +43,11 @@ class AppServiceImpl extends BaseService implements AppService
     public function getCenterApps()
     {
         return $this->createAppClient()->getApps();
+    }
+
+    public function getBinded()
+    {
+        return $this->createAppClient()->getBinded();
     }
 
     public function getCenterPackageInfo($id)
@@ -493,14 +504,21 @@ class AppServiceImpl extends BaseService implements AppService
 
         $this->getAppDao()->deleteApp($app['id']);
 
+        $cachePath = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+
     }
 
-    public function updateAppVersion($code,$fromVersion,$version)
+    public function updateAppVersion($id, $version)
     {
-        $this->getAppDao()->updateAppVersion($code,$version);
-        $this->getAppDao()->updateAppFromVersion($code,$fromVersion);
-        
-        return true;
+        $app = $this->getAppDao()->getApp($id);
+        if (empty($app)) {
+            throw $this->createServiceException("App #{$id}不存在，更新版本失败！");
+        }
+
+        $this->getLogService()->info('system', 'update_app_version', "强制更新应用「{$app['name']}」版本为「{$version}」");
+        return $this->getAppDao()->updateApp($id, array('version' => $version));
     }
 
     public function getLoginToken()
@@ -733,6 +751,11 @@ class AppServiceImpl extends BaseService implements AppService
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 
 }

@@ -287,12 +287,15 @@ class CourseController extends BaseController
 		}
 
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
+			$addCount=0;
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
 				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
 					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
+					$addCount++;
 				}
 			}
+			$course['studentNum'] += $addCount;
 		}
 
 		$classrooms=array();
@@ -341,7 +344,7 @@ class CourseController extends BaseController
 		$tags = $this->getTagService()->findTagsByIds($course['tags']);
 
 		$checkMemberLevelResult = $courseMemberLevel = null;
-		if ($this->setting('vip.enabled')) {
+		if ($this->isPluginInstalled("Vip") && $this->setting('vip.enabled')) {
 			$courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
 			if ($courseMemberLevel) {
 				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);

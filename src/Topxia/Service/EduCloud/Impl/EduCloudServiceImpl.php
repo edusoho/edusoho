@@ -13,6 +13,7 @@ class EduCloudServiceImpl extends BaseService
     {
         if (empty($this->cloudOptions)) {
             $settings = $this->createService('System.SettingService')->get('storage', array());
+
             $this->cloudOptions = array(
                 'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
                 'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
@@ -23,10 +24,11 @@ class EduCloudServiceImpl extends BaseService
     }
 
     private function createAPIClient()
-    {
-        $options = $this->getCloudOptions();
+   {
+      $options = $this->getCloudOptions();
+
         return new CloudAPI($options);
-    }
+   }
 
     private function getCloudApi()
     {
@@ -40,6 +42,24 @@ class EduCloudServiceImpl extends BaseService
     {
         $api = $this->getCloudApi();
         return $api->get('/accounts');
+    }
+
+    public function getUserOverview()
+    {
+        $api = $this->getCloudApi();
+        $options = $this->getCloudOptions();
+        $result = $api->get(
+                sprintf('/users/%s/overview', $options['accessKey'])
+                );
+        return $result;
+    }
+
+    public function getAccountInfo()
+    {
+        $api = $this->getCloudApi();
+        $info = $api->get('/me');
+
+        return $info;
     }
 
     public function applyForSms($name = 'smsHead')

@@ -21,6 +21,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Filesystem\Filesystem;
 
 function check_installed()
 {
@@ -80,6 +81,7 @@ function install_step1()
         'app/data/udisk',
         'app/data/private_files',
         'web/files',
+        'web/install',
         'app/cache',
         'app/data',
         'app/logs',
@@ -212,6 +214,18 @@ function install_step4()
     ));
 }
 
+function install_step5()
+{
+    try {
+        $filesystem = new Filesystem();
+        $filesystem->remove(__DIR__);
+    } catch(\Exception $e) {
+
+    }
+
+    header("Location: ../app.php/");
+    exit(); 
+}
 
 /**
  * 生产Key
@@ -228,7 +242,6 @@ function install_step999()
                 'root_dir' => realpath(__DIR__ . '/../../app'),
             )
         )));
-
 
         $serviceKernel->setConnection($connection);
 
@@ -355,6 +368,14 @@ class SystemInit
 
     public function initKey()
     {
+        $settings = $this->getSettingService()->get('storage', array());
+        if (!empty($settings['cloud_key_applied'])) {
+            return array(
+                'accessKey' => '您的Key已生成，请直接进入系统',
+                'secretKey' => '---',
+            );
+        }
+
         $applier = new KeyApplier();
 
         $users = $this->getUserService()->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime', 'DESC'), 0, 1);
@@ -367,8 +388,6 @@ class SystemInit
         if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
             return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
         }
-
-        $settings = $this->getSettingService()->get('storage', array());
 
         $settings['cloud_access_key'] = $keys['accessKey'];
         $settings['cloud_secret_key'] = $keys['secretKey'];

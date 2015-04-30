@@ -50,7 +50,7 @@ class ThreadController extends BaseController
         );
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getThreadService()->searchPostsCount($conditions),
             20
         );
