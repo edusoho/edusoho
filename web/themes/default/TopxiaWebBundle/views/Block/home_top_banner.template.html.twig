@@ -1,0 +1,11 @@
+{% if block.content|default(null) %}
+  {% for imglink in (block.data|first)['items']|default(null) if imglink.src|default('') %}
+    <a href="{{ imglink.href|default('') }}" target="{{ imglink.target }}"><img src=" {{ imglink.src|default('') }}" alt="{{ imglink.alt|default('') }}"></a>
+  {% endfor %}
+{% else %}
+  <a href="http://www.edusoho.com/" target="_blank"><img src=" /themes/default/img/banner.png" alt="示例图片"></a>
+  <a href="http://www.edusoho.com/" target="_blank"><img src=" /themes/default/img/banner.png" alt="示例图片"></a>
+  <a href="http://www.edusoho.com/" target="_self"><img src=" /themes/default/img/banner.png" alt="示例图片"></a>
+  <a href="http://www.edusoho.com/" target="_blank"><img src=" /themes/default/img/banner.png" alt="示例图片"></a>
+  <a href="http://www.edusoho.com/" target="_blank"><img src=" /themes/default/img/banner.png" alt="示例图片"></a>
+{% endif %}
