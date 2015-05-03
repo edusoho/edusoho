@@ -171,12 +171,10 @@ abstract class BaseController extends Controller
     protected function getFullBlockTemplateName($theme, $name)
     {
 
-        $this->getSettingService()->set('blockDir', "{$theme}/TopxiaWebBundle/views/Block");
-
-        if ($theme != 'system') {
-            return "theme:template:{$name}";
+        $this->getSettingService()->set('BlockTheme', $theme);
+        if (preg_match('/.*?:.*?:.*/', $name)) {
+            return $name;
         }
-
         return "TopxiaWebBundle:Block:{$name}";
     }
 

@@ -61,11 +61,13 @@ class FileLocator extends BaseFileLocator
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
         }
 
+        $blockTheme = $this->getSettingService()->get('BlockTheme', '');
         //寻址编辑区模板
-        if (false !== strpos($name, 'theme:template:')) {
-            list($theme, $placeholder, $template) = explode(':', $name, 3);
-            $file = $this->kernel->getRootDir() . '/../web/themes/' . $theme . '/' . $template;
+        if (!empty($blockTheme) && false !== strpos($name, 'template.html.twig')) {
+            $name = str_replace(array('@', '/Resources'), '', $name);
+            $file = $this->kernel->getRootDir() . "/../web/themes/{$blockTheme}/{$name}";
             if (file_exists($file)) {
+                $this->getSettingService()->set('BlockTheme', '');
                 return $file;
             }
         }

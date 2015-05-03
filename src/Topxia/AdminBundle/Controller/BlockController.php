@@ -165,10 +165,8 @@ class BlockController extends BaseController
         if ('POST' == $request->getMethod()) {
             $data = $request->request->get('data');
 
-            $templateName = $this->getFullBlockTemplateName($block['category'], $block['templateName']);
-            $html = $this->renderView('TopxiaWebBundle:Block:template.html.twig', array(
-                'block' => $block,
-                'templateName' => $templateName
+            $html = $this->renderView($this->getFullBlockTemplateName($block['category'], $block['templateName']), array(
+                'block' => $block
             ));
             
             $block = $this->getBlockService()->updateBlock($blockId, array(
