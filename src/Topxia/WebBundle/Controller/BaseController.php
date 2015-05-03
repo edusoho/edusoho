@@ -168,12 +168,16 @@ abstract class BaseController extends Controller
         }
     }
 
-    protected function getFullBlockTemplateName($name)
+    protected function getFullBlockTemplateName($theme, $name)
     {
-        if (preg_match('/.*?:.*?:.*/', $name)) {
-            return $name;
+
+        $this->getSettingService()->set('blockDir', "{$theme}/TopxiaWebBundle/views/Block");
+
+        if ($theme != 'system') {
+            return "theme:template:{$name}";
         }
-        return "TopxiaWebBundle:Block:" . $name;
+
+        return "TopxiaWebBundle:Block:{$name}";
     }
 
     protected function getServiceKernel()
@@ -189,6 +193,11 @@ abstract class BaseController extends Controller
     protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

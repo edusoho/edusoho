@@ -36,7 +36,6 @@ class FileLocator extends BaseFileLocator
         }
 
         $paths[] = $this->themePath;
-
         parent::__construct($paths);
     }
 
@@ -60,6 +59,15 @@ class FileLocator extends BaseFileLocator
 
         if (false !== strpos($name, '..')) {
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
+        }
+
+        //寻址编辑区模板
+        if (false !== strpos($name, 'theme:template:')) {
+            list($theme, $placeholder, $template) = explode(':', $name, 3);
+            $file = $this->kernel->getRootDir() . '/../web/themes/' . $theme . '/' . $template;
+            if (file_exists($file)) {
+                return $file;
+            }
         }
 
         $bundleName = substr($name, 1);
