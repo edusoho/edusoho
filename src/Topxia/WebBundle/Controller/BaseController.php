@@ -170,8 +170,12 @@ abstract class BaseController extends Controller
 
     protected function getFullBlockTemplateName($theme, $name)
     {
-
-        $this->getSettingService()->set('BlockTheme', $theme);
+        if ($theme != 'system') {
+            $this->getSettingService()->set('BlockTheme', $theme);
+        } else {
+            $this->getSettingService()->set('BlockTheme', '');
+        }
+        
         if (preg_match('/.*?:.*?:.*/', $name)) {
             return $name;
         }
