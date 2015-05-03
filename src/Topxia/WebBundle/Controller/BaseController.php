@@ -168,18 +168,28 @@ abstract class BaseController extends Controller
         }
     }
 
-    protected function getFullBlockTemplateName($theme, $name)
+    protected function getFullBlockTemplateName($category, $name)
     {
-        if ($theme != 'system') {
-            $this->getSettingService()->set('BlockTheme', $theme);
-        } else {
+        $app = $this->getAppService()->getAppByCode($category);
+        $bundleName = '';
+        if ($category != 'system' && $app['type'] == 'theme') {
+            $bundleName = 'TopxiaWebBundle';
+            $this->getSettingService()->set('BlockTheme', $category);
+        }
+
+        if ($category != 'system' && $app['type'] == 'plugin') {
+            $bundleName = "{$category}Bundle";
+        } 
+
+        if ($category == 'system') {
+            $bundleName = 'TopxiaWebBundle';
             $this->getSettingService()->set('BlockTheme', '');
         }
         
         if (preg_match('/.*?:.*?:.*/', $name)) {
             return $name;
         }
-        return "TopxiaWebBundle:Block:{$name}";
+        return "{$bundleName}:Block:{$name}";
     }
 
     protected function getServiceKernel()
@@ -200,6 +210,11 @@ abstract class BaseController extends Controller
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
 }

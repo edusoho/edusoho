@@ -1,6 +1,6 @@
 {% for imglink in (block.data|first)['items']|default(null) if imglink.src|default('') %}
   <div class="col-md-12">
-    <a href="{{ imglink.href|default('') }}"><img src="{{ asset(imglink.src) }}" /></a>
+    <a href="{{ imglink.href|default('') }}"><img src="{{ asset(imglink.src) }}" alt="{{ imglink.alt|default('') }}" /></a>
   </div>
 {% else %}
   <div class="col-md-12">
