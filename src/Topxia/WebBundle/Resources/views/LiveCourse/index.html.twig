@@ -8,12 +8,15 @@
 
   {% if paginator.currentPage == 1 %}
   	{% set blocks = data('Blocks',{'codes':['live_top_banner'] }) %}
-  	{% if blocks.live_top_banner %}
-      <div class="homepage-feature homepage-feature-slides mbl">
-        <div class="cycle-pager"></div>
-        {{ blocks.live_top_banner|raw }}
-      </div>
-    {% endif %}
+    <div class="homepage-feature homepage-feature-slides mbl">
+      <div class="cycle-pager"></div>
+      	{% if blocks.live_top_banner %}
+          {{ blocks.live_top_banner|raw }}
+        {% else %}
+          <a href="#"><img src="{{ asset('/assets/img/placeholder/live-slide-1.jpg') }}" /></a>
+          <a href="#"><img src="{{ asset('/assets/img/placeholder/live-slide-2.jpg') }}" /></a>
+        {% endif %}
+    </div>
   {% endif  %}
 
 	<div class="es-box">
