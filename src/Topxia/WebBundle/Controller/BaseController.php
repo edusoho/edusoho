@@ -193,7 +193,7 @@ abstract class BaseController extends Controller
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-    protected function getSettingService()
+    private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

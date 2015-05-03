@@ -10,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\PluginUtil;
+use Topxia\Common\BlockToolkit;
 
 
 class ThemeRegisterCommand extends BaseCommand
@@ -45,7 +46,7 @@ class ThemeRegisterCommand extends BaseCommand
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
 
-        $this->initBlock($code, $themeDir);
+        $this->initBlock($code, $themeDir . '/block.json');
         $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
         
         PluginUtil::refresh();
@@ -95,42 +96,9 @@ class ThemeRegisterCommand extends BaseCommand
         return $meta;
     }
 
-    private function initBlock($code, $pluginDir)
+    private function initBlock($code, $jsonFile)
     {
-        $blockMeta = $pluginDir . '/block.json';
-        if (!file_exists($blockMeta)) {
-            throw new \RuntimeException("插件编辑区元信息文件{$blockMeta}不存在！");
-        }
-
-        $blockMeta = json_decode(file_get_contents($blockMeta), true);
-        if (empty($blockMeta)) {
-            throw new \RuntimeException("插件元信息文件{$blockMeta}格式不符合JSON规范，解析失败，请检查元信息文件格式");
-        }
-
-        foreach ($blockMeta as $key => $meta) {
-            $block = $this->getBlockService()->getBlockByCode($key);
-            $default = empty($meta['default']) ? null : $meta['default'];
-            if (empty($block)) {
-                $block = array(
-                    'code' => $key,
-                    'category' => $code,
-                    'meta' => $meta,
-                    'data' => $default,
-                    'templateName' => $meta['templateName'],
-                    'title' => $meta['title']
-                );
-                $this->getBlockService()->createBlock($block);
-            } else {
-                $this->getBlockService()->updateBlock($block['id'], array(
-                    'category' => $code,
-                    'meta' => $meta,
-                    'data' => $default,
-                    'templateName' => $meta['templateName'],
-                    'title' => $meta['title']
-                ));
-            }
-          
-        }
+        BlockToolkit::init($code, $jsonFile);
     }
 
     protected function getAppService()

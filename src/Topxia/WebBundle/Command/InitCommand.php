@@ -9,6 +9,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\BlockToolkit;
 
 class InitCommand extends BaseCommand
 {
@@ -39,6 +40,7 @@ class InitCommand extends BaseCommand
 		$this->initFile($output);
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
+        $this->initBlock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
@@ -369,6 +371,13 @@ EOD;
         touch($this->getContainer()->getParameter('kernel.root_dir') . '/config/routing_plugins.yml');
 
         $output->writeln(' ...<info>成功</info>');
+    }
+
+    public function initBlock($output)
+    {
+        $output->write('  初始化编辑区');
+        $systemJson = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/system-block.json';
+        BlockToolkit::init('system', $systemJson);
     }
 
 	private function initServiceKernel()
