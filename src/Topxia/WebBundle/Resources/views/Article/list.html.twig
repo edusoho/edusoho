@@ -25,7 +25,7 @@
     <div class="tab-body">
       <ul class="clearfix">
     {% for cat in subCategories %}
-      {% if cat.published == 1 %}
+      {% if cat.published == 1 and cat.depth < 3 %}
         <li {% if category.id == cat.id %}class="active"{% endif %}>
           <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
           {% if cat.depth > 1 %}
@@ -36,16 +36,19 @@
       {% endif %}
     {% endfor %}
       </ul>
+
+      <ul class="clearfix">
+          {% for cat in subCategories %}
+            {% if cat.published == 1 and 2 < cat.depth and cat.depth < 4 %}
+              <li {% if category.id == cat.id %}class="active"{% endif %}>
+                <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
+                {{ cat.name }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+      </ul>
+
     </div>
-<!--     <ul class="third-cat-nav">
-      <li class="active"><a href="">全部</a></li>
-      <li><a href="">股市</a></li>
-      <li><a href="">比特币</a></li>
-      <li><a href="">莱特币</a></li>
-      <li><a href="">在线支付</a></li>
-    </ul> -->
-
-
   </div>
 
   <div class="article-list-body row">

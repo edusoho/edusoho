@@ -76,6 +76,29 @@ class ArticleController extends BaseController
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
+        $conditions = array (
+            'targetType'=>'article'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchPostsCount($conditions),
+            4
+        );
+
+        $allPosts=$this->getThreadService()->searchPosts(
+            $conditions,
+            array('ups','desc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $popularUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($allPosts, 'userId'));
+
+        $popularPosts =  array();
+        foreach ($allPosts as $key => $value) {
+            $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
+        }
+
         return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
             'categoryTree' => $categoryTree,
             'latestArticles' => $latestArticles,
@@ -87,6 +110,9 @@ class ArticleController extends BaseController
             'categories' => $categories,
             'month' => $month,
             'day' => $day,
+            'allPosts' => $allPosts,
+            'popularUsers' => $popularUsers,
+            'popularPosts' => $popularPosts,
         ));
     }
 
@@ -146,6 +172,29 @@ class ArticleController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
+        $conditions = array (
+            'targetType'=>'article'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchPostsCount($conditions),
+            4
+        );
+
+        $allPosts=$this->getThreadService()->searchPosts(
+            $conditions,
+            array('ups','desc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $popularUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($allPosts, 'userId'));
+
+        $popularPosts =  array();
+        foreach ($allPosts as $key => $value) {
+            $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
+        }
+
         return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
             'categoryTree' => $categoryTree,
             'categoryCode' => $categoryCode,
@@ -158,6 +207,9 @@ class ArticleController extends BaseController
             'subCategories' => $subCategories,
             'month' => $month,
             'day' => $day,
+            'allPosts' => $allPosts,
+            'popularUsers' => $popularUsers,
+            'popularPosts' => $popularPosts,
         ));
     }
 
@@ -251,6 +303,28 @@ class ArticleController extends BaseController
         $month= substr(date('Y-m-d',$article['publishedTime']),$first+1,2);
         $day= substr(date('Y-m-d',$article['publishedTime']),$last+1,2);
 
+        $conditions = array (
+            'targetType'=>'article'
+        );
+
+        $popularPaginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchPostsCount($conditions),
+            4
+        );
+
+        $allPosts=$this->getThreadService()->searchPosts(
+            $conditions,
+            array('ups','desc'),
+            $popularPaginator->getOffsetCount(),
+            $popularPaginator->getPerPageCount()
+        );
+        $popularUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($allPosts, 'userId'));
+
+        $popularPosts =  array();
+        foreach ($allPosts as $key => $value) {
+            $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
+        }
 
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
@@ -271,6 +345,9 @@ class ArticleController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'service' => $this->getThreadService(),
+            'allPosts' => $allPosts,
+            'popularUsers' => $popularUsers,
+            'popularPosts' => $popularPosts,
         ));
     }
 

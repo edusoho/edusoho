@@ -23,62 +23,30 @@
   <div class="panel panel-default hot-comments">
     <div class="panel-heading"><i class="es-icon es-icon-textsms"></i>热门评论</div>
     <div class="panel-body">
-      <div class="media media-comment">
-        <div class="media-body">
-          <div class="pull-left">
-            <a href=""><img src="img-temp/course_1.jpg" class="img-circle"></a>
-          </div>
-          <div class="comments-info">
-            <p><a href="javascript:;">老大</a><span>评论于</span></p>
-            <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-          </div>
-          <div class="comments-content">
-            最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-          </div>
-        </div>
-      </div>
-      <div class="media media-comment">
-        <div class="media-body">
-          <div class="pull-left">
-            <img src="img-temp/course_1.jpg" class="img-circle">
-          </div>
-          <div class="comments-info">
-            <p><a href="javascript:;">老大</a><span>评论于</span></p>
-            <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-          </div>
-          <div class="comments-content">
-            最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-          </div>
-        </div>
-      </div>
-      <div class="media media-comment">
-        <div class="media-body">
-          <div class="pull-left">
-            <img src="img-temp/course_1.jpg" class="img-circle">
-          </div>
-          <div class="comments-info">
-            <p><a href="javascript:;">老大</a><span>评论于</span></p>
-            <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-          </div>
-          <div class="comments-content">
-            最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-          </div>
-        </div>
-      </div>
-      <div class="media media-comment">
-        <div class="media-body">
-          <div class="pull-left">
-            <img src="img-temp/course_1.jpg" class="img-circle">
-          </div>
-          <div class="comments-info">
-            <p><a href="javascript:;">老大</a><span>评论于</span></p>
-            <h5><a href="javascript:;">2014年最棒的八个UI设计灵感，你最中</a></h5>
-          </div>
-          <div class="comments-content">
-            最喜欢google的material design灵感，绝对是最为领先的一种设计理念。
-          </div>
-        </div>
-      </div>
+
+    {% if allPosts %} 
+      {% for post in allPosts %}
+      {% set author = popularUsers[post.userId] %}     
+      {% set article = popularPosts[post.targetId] %}     
+            <div class="media media-comment">
+              <div class="media-body">
+                <div class="pull-left">
+                  <a href="{{ path('user_show', {id:author.id}) }}"><img src="{{ default_path('avatar', author.smallAvatar, '') }}" class="img-circle"></a>
+                </div>
+                <div class="comments-info">
+                  <p><a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a><span>评论于</span></p>
+                  <h5><a href="{{ path('article_detail', { id:article.id }) }}">{{ article.title }}</a></h5>
+                </div>
+                <div class="comments-content">
+                 {{ post.content|at(post.ats)|raw }}
+                </div>
+              </div>
+            </div>
+      {% endfor %}
+    {% else %}
+      <li class="empty">一个评论都没有！</li>
+    {% endif %}
+
     </div>
   </div>
   <!-- 推荐资讯 -->
