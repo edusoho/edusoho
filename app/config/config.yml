@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 5.3.2
+        assets_version: 5.4.2
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -133,7 +133,11 @@ services:
         tags:
             - { name: twig.extension }
 
-
+    topxia.twig.menu_extension:
+        class: Topxia\WebBundle\Twig\Extension\MenuExtension
+        arguments:    [@service_container]
+        tags:
+            - { name: twig.extension }
 
 
     kernel.listener.user_login_token_listener:

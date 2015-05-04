@@ -11,10 +11,18 @@ define(function(require, exports, module) {
             if (element.attr("id") == "installedApps" && element.prop('checked')) {
                 window.location.href = $(this).data('url');
             } else {
-                window.location.href = '/admin/app/center/' + hidden + '/unhidden';
+                window.location.href = $(this).data('url');
             }
         });
 
+        $.post('/admin/app/upgrades_count', function(count){
+
+            if (count > 0) {
+
+                $('.app-upgrade').append("<span class=\"badge mls\" style=\"background-color:#FF3333\">"+count+"</span>");
+            }
+
+        });
     };
 
 });

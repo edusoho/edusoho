@@ -9,7 +9,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
 
 
-class UserFieldServiceTest extends BaseTestCase
+class UserCommonAdminServiceTest extends BaseTestCase
 {
     public function testAddCommonAdmin()
     {   

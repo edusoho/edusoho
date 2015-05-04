@@ -1,13 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'logs' %}
-{% set submenu = 'logs_query' %}
-{% set menus = permissions('admin_logs','tab') %}
+{% set menu = 'admin_logs_query' %}
+
 {% set script_controller = 'log/list' %}
-{% block title %}{{ getTitle('admin_logs_query')}}{% endblock %}
-{% block main %}
 
-{% include 'TopxiaAdminBundle:System:logs-nav.html.twig' with { tab: 'logs' } %}
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 

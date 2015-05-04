@@ -1,15 +1,8 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'ip_blacklist' %}
-{% set submenu = 'ip_blacklist_manage' %}
-{% set menus = permissions('admin_setting_ip_blacklist','tab') %}
+{% set menu = 'admin_setting_ip_blacklist' %}
 
-{% block title %}{{ getTitle('admin_setting_ip_blacklist_manage')}}{% endblock %}
 {% block main %}
-<div class="mbl">
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
 
 {{ web_macro.flash_messages() }}
 

@@ -1,16 +1,10 @@
-{% extends 'TopxiaAdminBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'article/list' %}
 
-{% set tab_menus = permissions('admin_operation_article',"tab") %}
-{% set menu = 'article' %}
-{% set submenu = 'article' %}
-{% block title %}{{ getTitle('admin_operation_article_manage')}}{% endblock %}
+{% set menu = 'admin_operation_article_manage' %}
 
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 	<div class="form-group">
@@ -35,8 +29,6 @@
 		</select>
 	</div>
 	<button class="btn btn-primary" type="submit">搜索</button>
-	{% set btn_menus = permissions("admin_operation_article","button") %}
-    {% include 'TopxiaAdminBundle::button.html.twig' with {menus : btn_menus} %}
 
 </form>
 

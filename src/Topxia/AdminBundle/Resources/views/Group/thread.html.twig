@@ -1,15 +1,9 @@
-{% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set tab_menus = permissions('admin_operation_group',"tab") %}
-{% set menu = 'group' %}
-{% set submenu = 'thread' %}
-{% block title %}{{ getTitle('admin_operation_group_thread')}}{% endblock %}
+{% set menu = 'admin_operation_group_thread' %}
 
 {% set script_controller='group/thread' %}
 {% block main %}
-<div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-</div>
 
   <form  class="form-inline well well-sm" action="" method="get" novalidate>
 

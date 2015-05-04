@@ -42,6 +42,7 @@ class OperationSettingController extends BaseController
             $set=$request->request->all();
 
             $this->getSettingService()->set('group', $set);
+            $this->setFlashMessage('success', '小组设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:Group:set.html.twig', array(
