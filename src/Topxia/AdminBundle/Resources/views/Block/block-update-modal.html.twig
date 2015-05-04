@@ -60,7 +60,7 @@
       {% set templateData = blockHistory.templateData %}
         <tr id="{{ blockHistory.id }}">
           <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
-          <td>{{ historyUsers[blockHistory.userId].nickname }}</td>
+          <td>{{ historyUsers[blockHistory.userId].nickname|default('用户已删除') }}</td>
           <td>
             <a class="btn btn-xs btn-default edit-btn" 
             href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
