@@ -62,7 +62,7 @@
 
         {% endif %}
 
-        {% if setting('vip.enabled') %}
+        {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
           <div class="form-group">
             <label class="col-md-2 control-label">会员课程设置</label>
             <div class="col-md-8 controls">

@@ -1822,6 +1822,7 @@ body {
   left: 0;
   right: 0;
   background: #e5e5e5;
+  z-index: 999;
 }
 
 .lesson-dashboard .dashboard-content {

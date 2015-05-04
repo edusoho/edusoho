@@ -345,7 +345,7 @@ class CourseController extends BaseController
 		$tags = $this->getTagService()->findTagsByIds($course['tags']);
 
 		$checkMemberLevelResult = $courseMemberLevel = null;
-		if ($this->setting('vip.enabled')) {
+		if ($this->isPluginInstalled("Vip") && $this->setting('vip.enabled')) {
 			$courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
 			if ($courseMemberLevel) {
 				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);

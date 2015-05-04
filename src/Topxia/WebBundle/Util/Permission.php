@@ -121,7 +121,7 @@ Class Permission
                 }
             }
             closedir($dh);
-
+            
             file_put_contents($permissionsCacheFile, Yaml::dump($permissions));
          
         //}

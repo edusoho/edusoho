@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE IF NOT EXISTS `announcement` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,`url` varchar(255) NOT NULL,
+  `startTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `endTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章ID',
@@ -229,10 +240,12 @@ CREATE TABLE `course` (
   `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
   `daysOfNotifyBeforeDeadline` INT(10) NOT NULL DEFAULT '0',
   `useInClassroom` ENUM('single','more') NOT NULL DEFAULT 'single' COMMENT '课程能否用于多个班级' , 
+  `watchLimit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '视频观看次数限制',
   `singleBuy` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '加入班级后课程能否单独购买' ,
   `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
   `freeStartTime` int(10) NOT NULL DEFAULT '0',
   `freeEndTime` int(10) NOT NULL DEFAULT '0',
+  `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -328,6 +341,7 @@ CREATE TABLE `course_lesson_learn` (
   `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习完成时间',
   `learnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时间',
   `watchTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习观看时间',
+  `watchNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '观看次数',
   `videoStatus` enum('paused','playing') NOT NULL DEFAULT 'paused' COMMENT '学习观看时间',
   `updateTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -783,6 +797,15 @@ CREATE TABLE `setting` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `shortcut`;
+CREATE TABLE `shortcut` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `status`;
 CREATE TABLE `status` (

@@ -504,6 +504,10 @@ class AppServiceImpl extends BaseService implements AppService
 
         $this->getAppDao()->deleteApp($app['id']);
 
+        $cachePath = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+
     }
 
     public function updateAppVersion($id, $version)
