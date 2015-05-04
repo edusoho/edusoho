@@ -403,6 +403,10 @@ admin_cloud_video_setting:
 admin_edu_cloud_sms:
     name: 云短信设置
     parent: admin_setting_cloud_video
+admin_cloud_bill:
+    name: 云视频账单
+    parent: admin_my_cloud
+    router_name: admin_cloud_bill
 admin_announcement:
     name: 网站公告管理
     parent: admin_operation
@@ -413,4 +417,8 @@ admin_announcement_create:
     parent: admin_announcement
     mode: modal
     group: 2
-
+admin_course_review_tab:
+    name: 课程评价
+    parent: admin_course_review
+    router_name: admin_review
+    group: 1
