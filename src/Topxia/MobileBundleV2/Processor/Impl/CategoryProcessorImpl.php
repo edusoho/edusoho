@@ -101,8 +101,13 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
             "weight"=>"0",
             "groupId"=>"0",
             "description"=>"默认分类",
-            "depth"=>"0",
+            "depth"=>"0"
             ));
+
+        return array(
+            "depth"=>$group["depth"],
+            "data"=>$this->coverCategoryChilds($categories)
+            );
         return $this->coverCategoryChilds($categories);
     }
 
