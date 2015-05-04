@@ -54,46 +54,29 @@
             <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
               <i class="es-icon es-icon-share"></i>
             </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-              <div class="bdsharebuttonbox bdshare-button-style0-24" style="padding:1px;" data-bd-bind="1429085802250">
-                <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weixin"></i></a>
-                <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weibo"></i></a>
-                <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qq"></i></a>
-              </div>
-            </ul>
-            <!-- {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %} -->
+            {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
           </span>
         </div>
 
         <div class="related-artcile">
           <div class="row">
-            <a class="col-sm-4" href="javascript:;">
+            {% if sameTagArticles %}
+              {% for sameTagArticle in sameTagArticles%}
+            <a class="col-sm-4" href="{{ path('article_detail', { id:sameTagArticle.id }) }}">
               <div class="related-item">
-                <img class="img-responsive" src="img-temp/course_1.jpg" alt="">
+                <img class="img-responsive" src="{{ file_url(article.thumb) }}" alt="">
                 <div class="title">
-                  Jeff Weiner领导下的LinkedIn将走向何方？
+                  {{sameTagArticle.title}}
                 </div>
               </div>
             </a>
-            <a class="col-sm-4" href="javascript:;">
-              <div class="related-item">
-                <img class="img-responsive" src="img-temp/course_1.jpg" alt="">
-                <div class="title">
-                  Jeff Weiner领导下的LinkedIn将走向何方？
-                </div>
-              </div>
-            </a>
-            <a class="col-sm-4" href="javascript:;">
-              <div class="related-item">
-                <img class="img-responsive" src="img-temp/course_1.jpg" alt="">
-                <div class="title">
-                  Jeff Weiner领导下的LinkedIn将走向何方？
-                </div>
-              </div>
-            </a>
+              {% endfor %}
+            {% else %}
+                  <li class="empty">暂无类似资讯！</li>
+            {% endif %}
           </div>
         </div>
-        
+
         <form class="es-commet" method="post">
           <div class="es-commet-header">
             文章评论<span class="badge badge-primary">{{count}}</span>

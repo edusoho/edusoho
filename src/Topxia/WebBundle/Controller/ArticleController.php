@@ -217,12 +217,6 @@ class ArticleController extends BaseController
     {
         $article = $this->getArticleService()->getArticle($id);
 
-        if(empty($article['tagIds'])){
-            $article['tagIds'] = array();
-        }
-        $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
-        $tagNames = ArrayToolkit::column($tags, 'name');
-
         if ($request->getMethod() == "POST" ) {
 
             $fields = $request->request->all();
@@ -272,6 +266,7 @@ class ArticleController extends BaseController
             $article['tagIds'] = array();
         }
         $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
+        $tagNames = ArrayToolkit::column($tags, 'name');
 
         $seoKeyword = "";
         if($tags){
@@ -339,6 +334,20 @@ class ArticleController extends BaseController
 
         $count = $this->getThreadService()->searchPostsCount($conditions);
 
+        $conditions = array(
+            'type' => 'article',
+            'status' => 'published'
+        );
+
+        $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0 , 10);
+
+        $sameTagArticles = array();
+        foreach ($articles as $key => $value) {
+           if(array_intersect ($value['tagIds'], $article['tagIds']) and $value['id'] != $article['id'] and !empty($value['thumb'])){
+                $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
+           }
+        }
+
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
             'articleSetting' => $articleSetting,
@@ -363,6 +372,7 @@ class ArticleController extends BaseController
             'popularPosts' => $popularPosts,
             'count' => $count,
             'tagNames' => $tagNames,
+            'sameTagArticles' => $sameTagArticles,
         ));
     }
 
