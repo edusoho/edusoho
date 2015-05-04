@@ -36,8 +36,7 @@
             </h2>
             <div class="sns">
               <span class="views-num"><i class="es-icon es-icon-visibility"></i>{{ article.hits|default(0) }}</span>
-              <span class="comment-num"><i class="es-icon es-icon-textsms"></i>10</span>
-              <span class="love-num"><i class="es-icon es-icon-favorite"></i>15</span>
+              <span class="comment-num"><i class="es-icon es-icon-textsms"></i>{{count}}</span>
             </div>
           </div>
         </div>
@@ -46,13 +45,11 @@
         </div>
         <div class="article-tags">
           标签：
-          <a class="btn-tag" href="">在线教育</a>
-          <a class="btn-tag" href="">产品动态</a>
-          <a class="btn-tag" href="">Edusoho</a>
-          <a class="btn-tag" href="">IOS</a>
+          {% for tagName in tagNames %}
+          <a class="btn-tag" href="">{{tagName}}</a>
+          {% endfor %}
         </div>
         <div class="article-sns">
-          <a class="love" href=""><i class="es-icon es-icon-favorite"></i>{{ article.hits|default(0) }}</a>
           <span class="es-share right open">
             <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
               <i class="es-icon es-icon-share"></i>
@@ -67,6 +64,7 @@
             <!-- {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %} -->
           </span>
         </div>
+
         <div class="related-artcile">
           <div class="row">
             <a class="col-sm-4" href="javascript:;">
@@ -95,9 +93,10 @@
             </a>
           </div>
         </div>
+        
         <form class="es-commet" method="post">
           <div class="es-commet-header">
-            文章评论<span class="badge badge-primary">42</span>
+            文章评论<span class="badge badge-primary">{{count}}</span>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <textarea class="form-control" rows="6" placeholder="您的想法" name="content" {% if not app.user %}disabled=true{% endif %}></textarea>

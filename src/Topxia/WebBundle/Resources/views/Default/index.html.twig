@@ -171,54 +171,32 @@
   </section>
 
   <!-- 推荐班级 -->
+{% if  is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+{% set items = data('RecommendClassrooms',{'count':4}) %}
   <section class="index-class">
     <div class="container">
       <div class="index-class-header">
         <div class="text-line">
-          <h5><span>推荐班级</span></h5>
+          <h5><span>推荐{{ setting('classroom.name')|default("班级") }}</span></h5>
           <div class="line"></div>
         </div>
       </div>
+    {% for classroom in items.classrooms %}
       <div class="index-class-list row">
         <div class="col-md-3 col-sm-6">
           <div class="class-item">
-            <a href="">
-              <img class="img-responsive" src="img-temp/class_1.jpg" alt="">
-              <h3>淘宝运营课程高级班</h3>
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+              <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="">
+              <h3>{{ classroom.title }}</h3>
               <div class="image-overlay"></div>
             </a>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="class-item">
-            <a href="">
-              <img class="img-responsive" src="img-temp/class_2.jpg" alt="">
-              <h3>淘宝运营课程高级班</h3>
-              <div class="image-overlay"></div>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="class-item">
-            <a href="">
-              <img class="img-responsive" src="img-temp/class_3.jpg" alt="">
-              <h3>淘宝运营课程高级班淘宝运营课程高级班</h3>
-              <div class="image-overlay"></div>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="class-item">
-            <a href="">
-              <img class="img-responsive" src="img-temp/class_4.jpg" alt="">
-              <h3>淘宝运营课程高级班</h3>
-              <div class="image-overlay"></div>
-            </a>
-          </div>
-        </div>
+    {% endfor %}
       </div>
     </div>
   </section>
+{% endif %}
 
   <!-- 小组动态 -->
   {% if setting('group').group_show|default(1) %}

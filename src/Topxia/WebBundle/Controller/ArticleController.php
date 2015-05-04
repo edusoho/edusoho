@@ -217,6 +217,12 @@ class ArticleController extends BaseController
     {
         $article = $this->getArticleService()->getArticle($id);
 
+        if(empty($article['tagIds'])){
+            $article['tagIds'] = array();
+        }
+        $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
+        $tagNames = ArrayToolkit::column($tags, 'name');
+
         if ($request->getMethod() == "POST" ) {
 
             $fields = $request->request->all();
@@ -326,6 +332,13 @@ class ArticleController extends BaseController
             $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
         }
 
+        $conditions = array (
+            'targetId'=>$id,
+            'targetType'=>'article',
+        );
+
+        $count = $this->getThreadService()->searchPostsCount($conditions);
+
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
             'articleSetting' => $articleSetting,
@@ -348,6 +361,8 @@ class ArticleController extends BaseController
             'allPosts' => $allPosts,
             'popularUsers' => $popularUsers,
             'popularPosts' => $popularPosts,
+            'count' => $count,
+            'tagNames' => $tagNames,
         ));
     }
 
