@@ -10,7 +10,7 @@ class AnnouncementController extends BaseController
 {   
     public function indexAction()
     {   
-        $conditions = array();
+        $conditions = array("targetType"=>"global");
 
         $paginator=new Paginator(
             $this->get('request'),

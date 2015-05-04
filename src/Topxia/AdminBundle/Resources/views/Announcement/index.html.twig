@@ -21,7 +21,7 @@
           {% if announcements %}
             {% for announcement in announcements %}
             <tr>
-              <td><a href="{{announcement.url}}" target="_content">{{announcement.title}}</td>
+              <td><a href="{{announcement.url}}" target="_content">{{announcement.content}}</td>
               <td>{{announcement.startTime|date('Y-m-d H:i')}}</td>
               <td>{{announcement.endTime|date('Y-m-d H:i')}}</td>
               <td>
