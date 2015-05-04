@@ -37,6 +37,51 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
         return $categories;
     }
 
+    private function coverCategoryChilds($categories)
+    {
+        $categorieStack = array();
+
+        foreach ($categories as $key => $categorie) {
+            if (empty($categorieStack)) {
+                array_push($categorieStack, $categorie);
+                continue;
+            }
+
+            $popCategory = &$categorieStack[count($categorieStack) - 1];
+            $popDepth = $popCategory["depth"];
+            $depth = $categorie["depth"];
+            if ($depth > 0 && $depth > $popDepth) {
+                if (! isset($popCategory["childs"])) {
+                    $popCategory["childs"] = array();
+                }
+
+                array_push($categorieStack, $categorie);
+                $popCategory["childs"][] = &$categorieStack[count($categorieStack) - 1];
+            }  else {
+                //最后的节点出栈
+                $popChildCategory = end($categorieStack);
+                $popChildDepth = $popChildCategory["depth"];
+                while ($depth <= $popChildDepth) {
+                    //如果最后节点depth仍然比要加入的节点的depth大，继续弹出
+                    array_pop($categorieStack);
+                    $popChildCategory = end($categorieStack);
+                    $popChildDepth = $popChildCategory["depth"];
+                }
+
+                //获取当前出栈的节点的父节点，并添加子节点
+                $popCategory = &$categorieStack[count($categorieStack) - 1];
+                array_push($categorieStack, $categorie);
+                $popCategory["childs"][] = &$categorieStack[count($categorieStack) - 1];
+            }
+
+        }
+
+        if (count($categorieStack) > 1) {
+            array_pop($categorieStack);
+        }
+
+        return $categorieStack;
+    }
 
     public function getAllCategories()
     {
@@ -58,7 +103,7 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
             "description"=>"默认分类",
             "depth"=>"0",
             ));
-        return $categories;
+        return $this->coverCategoryChilds($categories);
     }
 
     private function sortCategories($categories)
