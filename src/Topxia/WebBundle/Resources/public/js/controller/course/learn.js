@@ -561,6 +561,8 @@ define(function(require, exports, module) {
                                         element: '#lesson-document-content',
                                         swfFileUrl:response.swfUri,
                                         pdfFileUrl:response.pdfUri,
+                                        xPosition: 'center',
+                                        yPosition: 'center',
                                         watermark: watermark
                                     });
                                 });
