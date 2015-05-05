@@ -8,10 +8,13 @@ interface SchoolProcessor
 	public function getSchoolBanner();
 	public function getSchoolAnnouncement();
 	public function getRecommendCourses();
+	public function getHotCourses();
 	public function getLatestCourses();
 	public function getWeekRecommendCourses();
 	public function getUserterms();
 	public function getSchoolInfo();
+
+	public function getSchoolProfile();
 
 	public function sendSuggestion();
 

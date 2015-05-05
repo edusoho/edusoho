@@ -184,6 +184,19 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         ));
     }
 
+    public function getSchoolProfile()
+    {
+        $mobile = $this->controller->getSettingService()->get('mobile', array());
+        
+        $content = $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
+            'content' => $this->controller->convertAbsoluteUrl($this->request, $mobile['about'])
+        ))->getContent();
+
+        return array(
+            "data"=>$content
+            );
+    }
+
     public function getSchoolInfo()
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
@@ -213,6 +226,16 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             "limit"=>3,
             "data"=>$this->controller->filterCourses($sortedCourses));
         return $result;
+    }
+
+    public function getHotCourses()
+    {
+        $conditions = array(
+            'status' => 'published',
+            'type' => 'normal',
+            "recommended"=>0
+        );
+        return $this->getCourseByType("popular", $conditions);
     }
 
     public function getRecommendCourses()
