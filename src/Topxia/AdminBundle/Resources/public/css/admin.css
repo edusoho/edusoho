@@ -239,19 +239,6 @@ input.LargeInput {width: 600px;}
   font-size: 14px;
 }
 
-.admin-down {
-  color: #999;
-}
-
-.main-list, .collect-list{
-
-  background-color: #101010;
-
-}
-.main-list>li>a, .collect-list>li>a {
-
-  color: #fff;
-}
 .remove {
     visibility: hidden;
     font-size: 14px;
@@ -261,21 +248,8 @@ input.LargeInput {width: 600px;}
 .common-plus:hover .remove {
     visibility: visible;
 }
-.dropdown-menu>li>div {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color: #333;
-  width: 300px;
-  
-}
-.dropdown-menu>li>div a{
-  
-  color:#fff;
-  white-space: nowrap;
-}
+
+
 .analysis-input {
   max-width: 120px;
 }
@@ -302,6 +276,13 @@ input.LargeInput {width: 600px;}
   margin-top: -25px;
   margin-left: 30px;
 }
+.info .right-info .user-access {
+  
+  position: absolute;
+  margin-top: 30px;
+  text-decoration: underline;
+}
+
 .info .right-info .price {
 
   color: #f0ad4e;
@@ -421,6 +402,7 @@ input.LargeInput {width: 600px;}
   margin-right: 5px;
 }
 
+
 .edu-user .name {
   color: #333;
   font-size: 18px;
@@ -429,6 +411,7 @@ input.LargeInput {width: 600px;}
 .edu-notice {
   border-left: 1px solid #ccc;
   padding-left: 30px;
+  min-height: 120px;
 }
 
 .edu-notice .title {
@@ -485,5 +468,45 @@ input.LargeInput {width: 600px;}
 
 .navigation-table tr{
   cursor: pointer;
+}
+
+.images-content {
+  position: absolute; 
+  z-index: 10; 
+  left: 720px; 
+  bottom:20px; 
+  width: 100%; 
+  color: #fff; 
+  height: 54px; 
+  line-height: 54px; 
+  overflow: hidden; 
+}
+
+.shortcuts {
+  min-width: 320px;
+}
+
+.shortcut-item {
+  position: relative;
+}
+
+.shortcut-item > a {
+  padding-right: 40px!important;
+}
+
+.shortcut-item .glyphicon-remove-circle {
+  visibility: hidden;
+  position: absolute;
+  right: 15px;
+  top: 6px;
+  cursor: pointer;
+}
+
+.shortcut-item:hover .glyphicon-remove-circle {
+  visibility: visible;
+}
+.small {
+
+  font-size: 12px;
 }
 

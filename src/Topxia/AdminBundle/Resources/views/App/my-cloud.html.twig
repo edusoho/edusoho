@@ -1,12 +1,26 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_app_my_cloud')}}{% endblock %}
-
-{% set menu = 'my-cloud' %}
-{% set tab_menus = permissions('admin_app_my_cloud',"tab") %}
-{% set submenu = 'my-cloud' %}
+{% set menu = 'admin_my_cloud' %}
+{% set submenu = 'service-information' %}
+{% set script_controller = 'app/sms-show' %}
 
 {% block main %}
+      {% if not storage and not live and not sms%}
+         <ul class="nav nav-tabs mbl">
+
+          <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
+            <a href="{{ url('admin_my_cloud') }}">产品简介
+            </a>
+          </li>
+
+          <li class="{% if submenu == 'service-information' %}active{% endif %}">
+            <a href="{{ url('admin_my_cloud_overview') }}">服务概况
+            </a>
+          </li>
+
+        </ul> 
+      {% endif %}
+
         <div class="eduyun-main">
 
           <!--个人资料-->
@@ -16,14 +30,16 @@
 
                 <div class="media edu-user col-md-8">
                   <div class="pull-left">
-                    <a href="javascript:;"><img src="{{ default_path('avatar', app.user.mediumAvatar, '') }}" alt=""> </a>
+                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.png') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
                   </div>
                   <div class="media-body">
-
-                    <p><span class="name">{{ app.user.nickname }}</span>，您好</p>
-                    
-                    <p>ES云平台账户名: {{content.user.siteName|default('') }}</p>
-                    
+                    {% if isBinded.name|default("")  == "" %}
+                    <br>
+                    <p>您尚未绑定EduSoho开放云平台&nbsp;<a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"><i class="glyphicon glyphicon-question-sign"></i></a></p>
+                    {% else %}
+                    <p><span class="name">{{ isBinded.name|default("")}}</span>，您好</p>
+                    <p>ES云平台账户名: {{email|default('') }}</p>
+                    {% endif %}
                   </div>
                 </div>
 
@@ -32,9 +48,13 @@
                   {% if notices %}
                   <ul>
                   {% for notice in notices %}
-                    <li><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span></li>
+                    {% if loop.index <= 3 %}
+                    <li><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a></li>
+                    {% endif %}
                   {% endfor %}
                   </ul>
+                  {% else %}
+                  <span class="empty">暂无公告</span>
                   {% endif %}
                 </div>
               </div>
@@ -43,68 +63,18 @@
 
 
           <!--账户余额-->
-          <div class="alert alert-warning edu-balance" role="alert">
-            <h4 class="eduyun-title text-muted">
-              账户余额<a href="http://open.edusoho.com/article/1#recharge" target="_blank" style="margin-right:820px;margin-top:-17px;"><i class="glyphicon glyphicon-question-sign"></i></a>
-            </h4>
-            <p>
-              <!-- <span class="text-warning balance">222.11</span>元 -->
-              <span class="text-danger balance">{{content.account.cash|default('0') }}</span>元
-              <a href="http://open.edusoho.com/account/cash/list" class="btn-recharge btn btn-warning" target="_blank">充值</a>
-              <a href="http://open.edusoho.com/account/cash/list" class="btn btn-link" target="_blank">查看账单</a>    
-            </p> 
-            {% if account %}
-            <!--不足50元-->
-            {% if content.account.cash < 50 %}
-            <p class="text-warning">余额不足50元，请尽快充值！</p>
-            {% endif %}
-            <!--欠费7天预留保护期-->
-            {% if content.account.arrearageDate > 0 and 0 < day and day < 7 %}
-            <p class="text-warning">您已欠费，还剩7天的预留保护期，请尽快充值！</p>
-            {% endif %}
-            <!--欠费冻结-->
-            {% if content.account.arrearageDate > 0 and 10 < day %}
-            <p class="text-danger">您已欠费超过10天，教育云服务已暂停，请尽快充值！</p>
-            {% endif %}
-            {% endif %}
-          </div>    
+          {% include 'TopxiaAdminBundle:App:cloud-account.html.twig'  %}
 
 
           <!--套餐信息-->
           <div class="edu-combo row">
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <h4 class="eduyun-title">套餐信息</h4>
-                  <p class="text-muted">版本：{{content.user.levelName|default('')}}</p>
-                  <p class="text-muted">有效期：{{ content.user.startDate|default('') }}~{{ content.user.endDate|default('') }}</p>
-                  <!--已到期-->
-                  {% if packageDate > 0 %}
-                  <p class="text-danger text-sm">套餐服务已到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！</p>
-                  {% endif %}
-                  <!--30天提醒-->
-                  {% if packageDate > 30 %}
-                  <p class="text-warning text-sm">套餐服务将于30天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用</p> 
-                  <p class="text-warning">
-                    点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解套餐详情!
-                  </p>
-                  {% endif %}
-                </div>  
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                  <h4 class="eduyun-title">授权信息</h4>
-                  <!-- 商业授权 -->
-                  <!-- <p class="text-muted">商业授权</p> -->
-                  <!-- 非商业授权 -->
-                  <p class="text-muted">{{ info.levelName }}</p>
-                  <p class="text-muted">授权域名: {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
-        {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
-                </div>
-              </div>
-            </div>
+
+          {% include 'TopxiaAdminBundle:App:cloud-combo.html.twig'  %}
+
+          <!-- 授权信息 -->
+
+          {% include 'TopxiaAdminBundle:App:cloud-license.html.twig'  %}
+
           </div>
 
 
@@ -113,90 +83,21 @@
 
             <!--服务动态内容 --> 
             <div class="edu-service row">
-              <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <h4 class="eduyun-title">云视频+云文档<a href="http://www.edusoho.com/product/system" target="_blank">去升级</a></h4>
-                    <!--未购买-->
-                    {% if not storage %}
-                    <div class="alert alert-warning alert-sm" role="alert">
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云视频包，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
-                    </div>
-                    {% else %}
-                    <p class="text-muted">上月空间用量：{{storage.bill.space}}G <span class="text-warning text-sm">(剩余{{storage.freeSpace - storage.bill.space}}G)</span></p>
-                    <p class="text-muted">上月流量：{{storage.bill.transfer}}G <span class="text-warning text-sm">(剩余{{storage.freeTransfer - storage.bill.transfer}}G）</span></p>
-                    <p class="text-muted">云视频包有效期：{{storage.bill.startMonth}}~{{storage.bill.endMonth}}</p>
-                    <!--30天过期  -->
-                    {% if -30 < storageDate and storageDate < 0 %}
-                    <p class="text-warning " style="display:none;">云视频视频包将于30天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                    {% endif %}
-                    <!--已过期 -->
-                    {% if storageDate > 0 %}
-                    <p class="text-danger" >
-                      云视频包意过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>
-                    </p>
-                    {% endif %}
-                    {% endif %}
-                    <p class="panel-bottom">
-                      TLP2.0加密，为您的网校保驾护航！
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                   <h4 class="eduyun-title">云直播<a href="http://www.edusoho.com/product/system" target="_blank">去购买</a></h4>
-                   <!--未购买-->
-                   {% if not live %}
-                   <div class="alert alert-warning alert-sm" role="alert">
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
-                    </div>
-                    <p class="text-muted">有效期：不可用</p>
-                    {% else %}
-                    <!--7天警告-->
-                    {% if -30 < storageDate and storageDate < 0 %}
-                    <p class="text-warning">云视频包将于30天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                    {% endif %}
-                    <!--已过期-->
-                    {% if storageDate > 0 %}
-                    <p class="text-danger">云视频包意过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
-                    {% endif %}
-                    {% endif %}
-                    <p class="panel-bottom">
-                      支持Web端、移动端，让手机也能看直播！
-                    </p>
-                  </div>
-                </div>
-              </div>
+
+              <!--云视频信息 -->
+              {% include 'TopxiaAdminBundle:App:cloud-storage.html.twig'  %}
+
+              <!-- 云直播信息 -->
+              {% include 'TopxiaAdminBundle:App:cloud-live.html.twig'  %}
+
             </div>
 
 
             <!--服务云视频-->
             <div class="edu-service row">
-              <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <h4 class="eduyun-title">云短信<a href="http://open.edusoho.com/service/sms/account" target="_blank">查看账单</a></h4>
-                    <div class="alert alert-warning alert-sm" role="alert" >
-                      <!--未开启-->
-                     {% if not sms %}
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>您尚未开启云短信功能，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开启</a>
-                      {% endif %}
-                      <!--被停用-->
-                      {% if sms and sms.status == 'stoped'%}
-                      <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>
-                      您的云短信功能已被暂停
-                      <a href="javascript:;" class="tooltop" data-toggle="tooltip" data-palacement="top" title="此处填写理由！">[{{sms.reason}}]</a>
-                      {% endif %}
-                    </div>
-                    {% if sms %}
-                    <p class="text-muted">昨日用量：{{sms.yestoday}}条</p>
-                    <p class="text-muted">上月使用：{{sms.lastMonth}}条</p>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
+              <!-- 云短信信息 -->
+              {% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}
+
             </div>
 
           </fieldset>

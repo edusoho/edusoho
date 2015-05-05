@@ -1,9 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:user_set.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'setting/user-center' %}
-{% set submenu = 'user_center' %}
-{% block title %}{{ getTitle('admin_setting_user_center')}}{% endblock %}
-{% block main_content %}
+
+{% set menu = 'admin_setting_user_center' %}
+
+{% block main %}
 
   {% if setting.mode !='default' %}
     <div class="page-header clearfix"><a href="{{ path('admin_setting_admin_sync') }}" class="pull-right btn btn-link">管理员帐号同步</a>
@@ -28,7 +29,7 @@
     <div class="col-md-3 control-label"><label>Ucenter配置</label></div>
     <div class="controls col-md-8">
       <textarea class="form-control" name="discuz_config" rows="10">{{ discuzConfig }}</textarea>
-      <div class="help-block">从Ucenter复制配置，粘帖到此处。注意：请不要去除头部的 &lt;?php。 <a href="http://demo.edusoho.com/course/125" target="_blank">如何配置？</a></div>
+      <div class="help-block">从Ucenter复制配置，粘帖到此处。注意：请在第一行加上" &lt;?php"。 <a href="http://www.qiqiuyu.com/course/125" target="_blank">如何配置？</a></div>
     </div>
   </div>
 

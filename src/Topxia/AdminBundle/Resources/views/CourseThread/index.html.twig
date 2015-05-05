@@ -1,19 +1,10 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
-{% set type = 'manage' %}
-{% set menus = permissions('admin_course_thread','tab') %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_course_thread_manage')}}{% endblock %}
 {% set script_controller = 'course/threads' %}
 
-{% set menu = 'thread' %}
+{% set menu = 'admin_course_thread_manage' %}
 
 {% block main %}
-
-<div class="mbl">
-
-
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:type} %}
-</div>
 
 <div class="well well-sm">
   <form class="form-inline">

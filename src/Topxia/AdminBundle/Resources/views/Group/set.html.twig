@@ -1,14 +1,8 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
-{% set menu = 'operation_settings' %}
-{% set submenu = 'group_set' %}
-{% set menus = permissions('admin_setting_operation','tab') %}
-{% block title %}{{ getTitle('admin_group_set')}}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-    {% block main %}
-    <div class="mbl">
+{% set menu = 'admin_group_set' %}
 
-{% include 'TopxiaAdminBundle::tab.html.twig' with {menus:menus,type:submenu} %}
-</div>
+{% block main %}
 
       {{ web_macro.flash_messages() }}
             <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
@@ -24,7 +18,7 @@
             </div>
 
            <div class="row form-group">
-              <div class="col-md-2 control-label">
+              <div class="col-md-2 control-label" style="white-space:nowrap;">
                 <label >最热话题的时间范围</label>
               </div>
               <div class="controls col-md-7 radios">

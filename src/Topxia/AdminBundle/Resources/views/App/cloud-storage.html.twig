@@ -1,0 +1,69 @@
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    {% set bill = storage.bill|default(null) %}
+
+                    <h4 class="eduyun-title">云视频+云文档{% if storage %}<a href="{{path('admin_cloud_bill')}}" target="_blank" >查看账单</a>{% endif %}{% if (storage and storage.freeTransfer|default(0) > 0) or  (storage and storage.freeSpace|default(0) > 0) %}<a href="http://www.edusoho.com/product/system" target="_blank">升级</a> {% endif %}</h4>
+
+                    <!--未购买-->
+                    {% if not storage %}
+
+                        <div class="alert alert-warning alert-sm" role="alert">
+                          <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云文档功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
+                        </div>
+
+                    {% else %}
+
+                      {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and not bill %}
+                           <div class="alert alert-warning alert-sm" role="alert">
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
+                          </div>
+                          <p class="text-muted">空间用量暂无记录</p>
+                          <p class="text-muted">已用流量暂无记录</p>
+                      {% endif %}
+
+                      {% if (storage.freeTransfer|default(0) > 0 and not bill ) or  (storage.freeSpace|default(0) > 0 and not bill)  %}
+                          <p class="text-muted">空间用量暂无记录</p>
+                          <p class="text-muted">已用流量暂无记录</p>
+                          <p class="text-muted">云视频包有效期：{{storageStart|default('')}}~{{storageEnd|default('')}}</p>
+                      {% endif %}
+
+                      {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and bill %}
+                           <div class="alert alert-warning alert-sm" role="alert">
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="http://www.edusoho.com/product/system" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
+                          </div>
+                          <p class="text-muted">{{month|default('上')}}月空间用量：{{bill.space|default(0)}}G</p>
+                          <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
+                      {% endif %}
+
+                      {% if (storage.freeTransfer|default(0) > 0 and bill ) or  (storage.freeSpace|default(0) > 0 and bill ) %}
+                          <p class="text-muted">{{month|default('上')}}月空间用量：{{bill.space|default(0)}}G</p>
+                          <p class="text-muted">{{month|default('上')}}月流量：{{bill.transfer|default(0)}}G</p>
+                          <p class="text-muted">云视频包有效期：{{storage.startMonth|default('')}}~{{storage.endMonth|default('')}}</p>
+                      {% endif %}
+
+                      {% if storage.freeTransfer|default(0) != 0 or storage.freeSpace|default(0) != 0 %}
+
+                      {% if storageDate|default(31)  == 0 %}
+                          <p class="text-danger text-sm" >云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                      {% endif %}
+                    <!--30天过期  -->
+                      {% if 30 >= storageDate|default(31)  and storageDate|default(31)  > 0 %}
+                          <p class="text-danger text-sm" >云视频视频包将于{{storageDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                      {% endif %}
+                      <!--已过期 -->
+                      {% if storageDate|default(31)  < 0 %}
+                          <p class="text-danger text-sm" >
+                            云视频包已过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>
+                          </p>
+                      {% endif %}
+
+                      {% endif %}
+
+                    {% endif %}
+                    <p class="panel-bottom">
+                      TLP2.0加密，为您的网校保驾护航！
+                    </p>
+                  </div>
+                </div>
+              </div>

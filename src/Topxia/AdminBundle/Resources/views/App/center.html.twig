@@ -1,17 +1,10 @@
-{% extends 'TopxiaAdminBundle:App:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_app_center')}}{% endblock %}
+{% set menu = 'admin_app_center' %}
 
-{% set menu = 'center' %}
-{% set tab_menus = permissions('admin_app_center_show',"tab") %}
-{% set submenu = 'center' %}
 {% set script_controller = 'app/center' %}
 
 {% block main %}
-
-  <div class="mbl">
-    {% include 'TopxiaAdminBundle::tab.html.twig' with {menus : tab_menus , type : submenu} %}
-  </div >
 
   <div class="mbl btn-group">
 
@@ -26,7 +19,7 @@
   <div class="checkbox-group appTypeChoices" RepeatDirection="Horizontal" id="appTypeChoices" name="appTypeChoices" style="float:right;margin-top:-45px;">
       <div class="sortedCourses">
       <input type="checkbox" name="appTypeChoices" id="installedApps" 
-         value="installedApps" data-url="{{path('admin_app_center_hidden',{postStatus: type }) }}" >
+         value="installedApps"  {% if appTypeChoices|default(null)  == 'installedApps' %} data-url="{{path('admin_app_center',{postStatus: type,showType:'unhidden'})}}"  checked  {% else %} data-url="{{path('admin_app_center',{postStatus: type,showType:'hidden'}) }}" {% endif %}>
          隐藏已购应用
       <input type="hidden" name="type" value= '{{type}}' id="type">
       </div>
@@ -54,75 +47,70 @@
 
       {% for app in apps %}
         {% set installedApp = installedApps[app.code]|default(null) %}
-      <tr>
-        <td>
-          <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
-          <div class="mtm">
-            <a target="_blank" href="http://open.edusoho.com/app/{{ app.code }}">
-              <h4><strong class="text-primary">{{ app.name }}</strong>            
-              {% if app.licensed %}
-              <span class="label label-success mls">商业版</span>
-              {% endif %}
-              </h4>
-            </a>
-  
-          </div>
-          
-          <div class="info mtm mbm clearfix">
-            <div class="left-info pull-left">
 
-              <div class="text-muted">作者： {{ app.developerName }}</div>
-              <div class="mts text-muted">{% if app.type == "theme" %}主题{% else %}应用{% endif %}
-              </div>
-<!--               <div class="class-rating mtm">
-  {% if app.comment|default(null) %}
-    {% set comment = app.comment%}
-    <span class="stars-{{ comment.rating|number_format }}">&nbsp;</span>
-    <span class="text-muted">{{ comment.commenters }}个评价</span>
-  {% else %}
-    <span class="stars-0">&nbsp;</span>
-    <span class="text-muted">0个评价</span>
-  {% endif %}
-</div> -->
-            </div>
+           {% if appTypeChoices|default(null)  == 'installedApps' %}
 
-            <div class="middle-info pull-left short-long-text">
-              <div class="short-text text-muted">{{ app.description|plain_text(80) }} <span class="trigger">(展开)</span></div>
-              <div class="long-text">{{ app.description|raw }} <span class="trigger">(收起)</span></div>
-            </div>
+                         {% if app.purchased|default(false) == true or installedApp %}
+                            
+                            {% if installedApp %}
+                            {% else %}
+                            {% include 'TopxiaAdminBundle:App:app-detail.html.twig'  %}
+                            <div class="right-info pull-right">
+                            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
+                            </div>
+                              </td>
+                            </tr>
+                            {% endif %}
+                         {% else %}
 
-            <div class="right-info pull-right">
+                          {% include 'TopxiaAdminBundle:App:app-detail.html.twig'  %}
+                            <div class="right-info pull-right">
+                              {% if app.userAccess|default(null) == "impossible" %}
+                                <a href="http://open.edusoho.com" class="user-access" target=_blank>商业专属</a>
+                              {% else %}
+                                  {% if app.price == 0 %}
+                                   <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
+                                  {% else %}
+                                     <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
+                                  {% endif %}
+                                    <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
+                                {% endif %}
+                            </div>
+                              </td>
+                            </tr>
+                         {% endif %}                
 
-<!--               {% if installedApp %}
-    <a href="javascript:;" class="btn btn-default disabled app-btn">已购买</a>
+            {% else %}
+              {% include 'TopxiaAdminBundle:App:app-detail.html.twig'  %}
+              <div class="right-info pull-right">
 
-{% else %}
-    {% if app.userAccess == 'ok' %}
-       <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
-    {% else %}
-       <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
-    {% endif %}
-{% endif %} -->
-           {% if app.purchased|default(false) == true or installedApp %}
-            <a href="javascript:;" class="btn btn-default disabled app-btn">已购买</a>
-           {% else %}
-              {% if app.price == 0 and not app.licensed %}
-                 <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
-              {% else %}
-                 <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
-              {% endif %}
-           {% endif %} 
+                 {% if app.purchased|default(false) == true or installedApp %}
+            
+                    {% if installedApp %}
+                      <a href="javascript:;" class="btn btn-default disabled app-btn">已购买</a>
+                    {% else %}
+                      <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
+                    {% endif %}
+                    
+                    <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
+                 {% else %}
+                    {% if app.userAccess|default(null) == "impossible" %}
+                      <a href="http://www.edusoho.com/product/system" class="user-access" target=_blank>商业专属</a>
+                    {% else %}
+                      {% if app.price == 0 %}
+                       <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">安装</a>
+                      {% else %}
+                         <a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">购买</a>
+                      {% endif %}
+                        <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
+                    {% endif %}
+                 {% endif %} 
                
+              </div> 
+                </td>
+              </tr>
+                {% endif %}
 
-
-                <p class="mtm"><span class="text-muted">价格：</sapn><span class="price"> ¥ {% if app.price > 0 %}{{ app.price}}{% else %}免费{% endif %}</sapn></p>
-            </div>
-          </div> 
-          
-         <!--  
-         <div class="text-muted"><small>最后更新： {{ app.latestTime|date('Y-m-d') }}</small></div> -->
-        </td>
-      </tr>
       {% endfor %}
     </tbody>
   </table>

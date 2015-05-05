@@ -1,11 +1,10 @@
-{% extends 'TopxiaAdminBundle:User:user.layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ getTitle('admin_login_record')}}{% endblock %}
-  
-{% set submenu = 'login_record' %}
+{% set menu = 'admin_login_record' %}
+
 {% set script_controller = 'login-record/list' %}
 
-{% block maincontent %}
+{% block main %}
 
 <div class="well well-sm">
   <form id="login-record-search-form" class="form-inline" action="" method="get" novalidate> 
@@ -34,8 +33,6 @@
   </form>
 </div>
 
-
-
 <table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
@@ -43,7 +40,7 @@
       <th>用户邮箱</th>
       <th>登录时间IP</th>
       <th>登录地点</th>
-      <th width="8%">查看记录</th>
+      <th width="12%">查看记录</th>
     </tr>
   </thead>
   <tbody>
