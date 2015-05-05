@@ -76,7 +76,7 @@
         {% if user.approvalStatus == 'approved' %}
           <div class="control-text">{{ user.truename }} <small class="text-success">(已认证)</small></div>
         {% elseif user.approvalStatus == 'approving' %}
-          <div class="control-text">{{ user.truename }} <small class="text-warning">(真实认证中)</small></div>
+          <div class="control-text">{{ user.truename }} <small class="text-warning">(实名认证中)</small></div>
         {% else %}
           <input class="form-control" id="truename" type="text" name="truename" value="{{ user.truename }}">
         {% endif %}
@@ -129,7 +129,7 @@
         {% if user.approvalStatus == 'approved' %}
           <div class="control-text">{{ user.idcard }} <small class="text-success">(已认证)</small></div>
         {% elseif user.approvalStatus == 'approving' %}
-          <div class="control-text">{{ user.idcard }} <small class="text-warning">(真实认证中)</small></div>
+          <div class="control-text">{{ user.idcard }} <small class="text-warning">(实名认证中)</small></div>
         {% else %}
           <input type="text" id="idcard" name="{{ field }}"  class="form-control" value="{{user.idcard}}">
         {% endif %}

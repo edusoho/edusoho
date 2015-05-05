@@ -39,6 +39,10 @@
 			{% endif %}
 		{% endfor %}
   </div>
+  {% if setting('magic.testpaper_watermark') %}
+    <div class="testpaper-watermark" data-url="{{ path('cloud_testpaper_watermark') }}">
+    </div>
+  {% endif %}
 </div>
 
 {% endif %}

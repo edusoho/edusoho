@@ -7,7 +7,7 @@ use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class HLSController extends BaseController
 {
@@ -61,7 +61,7 @@ class HLSController extends BaseController
             'audio' => $file['convertParams']['audioQuality'],
         );
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create();
 
         $playlist = $api->get('/hls/playlist', array( 'streams' => $streams, 'qualities' => $qualities));
 
@@ -115,7 +115,7 @@ class HLSController extends BaseController
             $params['line'] = $line;
         }
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create();
 
         $stream = $api->get('/hls/stream', $params);
 
@@ -197,16 +197,6 @@ class HLSController extends BaseController
         }
 
         return $beginning;
-    }
-
-    protected function createAPIClient()
-    {
-        $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
-        return new CloudAPI(array(
-            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
-        ));
     }
 
 }
