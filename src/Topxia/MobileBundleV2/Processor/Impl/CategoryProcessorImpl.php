@@ -39,6 +39,7 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
 
     private function coverCategoryChilds($categories)
     {
+        $realityDepth = 0;
         $categorieStack = array();
 
         foreach ($categories as $key => $categorie) {
@@ -56,7 +57,11 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
                 }
 
                 array_push($categorieStack, $categorie);
-                $popCategory["childs"][] = &$categorieStack[count($categorieStack) - 1];
+                $count = count($categorieStack);
+                if ($realityDepth < $count) {
+                    $realityDepth ++;
+                }
+                $popCategory["childs"][] = &$categorieStack[$count - 1];
             }  else {
                 //最后的节点出栈
                 $popChildCategory = end($categorieStack);
@@ -80,7 +85,7 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
             array_pop($categorieStack);
         }
 
-        return $categorieStack;
+        return array($categorieStack, $realityDepth);
     }
 
     public function getAllCategories()
@@ -104,11 +109,13 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
             "depth"=>"0"
             ));
 
+        list($coverCategorys, $realityDepth) = $this->coverCategoryChilds($categories);
         return array(
+            "realityDepth"=>$realityDepth,
             "depth"=>$group["depth"],
-            "data"=>$this->coverCategoryChilds($categories)
+            "data"=>$coverCategorys
             );
-        return $this->coverCategoryChilds($categories);
+        return $coverCategorys;
     }
 
     private function sortCategories($categories)
