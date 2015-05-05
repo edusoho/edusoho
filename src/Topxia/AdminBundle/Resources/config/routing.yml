@@ -651,14 +651,14 @@ admin_customer_service:
 
 admin_app_center:
     pattern:  /app/center/{postStatus}
-    defaults: { _controller: TopxiaAdminBundle:App:center }
+    defaults: { _controller: TopxiaAdminBundle:App:center, postStatus:'all' }
 
 admin_my_cloud:
-    pattern:  /my/cloud
+    pattern:  /setting/my/cloud
     defaults: { _controller: TopxiaAdminBundle:App:myCloud }
 
 admin_my_cloud_overview:
-    pattern:  /my/cloud/overview
+    pattern:  /setting/my/cloud/overview
     defaults: { _controller: TopxiaAdminBundle:App:myCloudOverview }
 
 # admin_app_cloud:
@@ -1170,7 +1170,7 @@ admin_edu_cloud:
     defaults: { _controller: TopxiaAdminBundle:EduCloud:index }
 
 admin_edu_cloud_sms:
-    pattern:  /edu_cloud/sms
+    pattern:  /setting/edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
 
 admin_edu_cloud_apply_for_sms:
