@@ -526,6 +526,26 @@ class CourseServiceTest extends BaseTestCase
         $this->getCourseService()->sortCourseItems($course['id'], $itemIds);
     }
 
+    public function testFindUserLearnedLessons()
+    {
+        $course = $this->getCourseService()->createCourse(array(
+            'title' => 'online test course 1',
+        ));
+        $lesson = $this->getCourseService()->createLesson(array(
+            'courseId' => $course['id'],
+            'chapterId' => 0,
+            'title' => 'test lesson 1',
+            'content' => 'test lesson content 1',
+            'type' =>'text'
+        ));
+
+        $user = $this->getCurrentUser();
+
+        $this->getCourseService()->finishLearnLesson($course['id'], $lesson['id']);
+        $userLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $course['id']);
+        $this->assertEquals(1, count($userLearns));
+    }
+
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
@@ -596,6 +616,7 @@ class CourseServiceTest extends BaseTestCase
 
         return $this->getCourseService()->getCourseItems($course['id']);
     }
+
 
     private function getUserService()
     {
