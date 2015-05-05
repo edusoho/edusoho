@@ -11,6 +11,7 @@ define(function(require, exports, module) {
                 'yPosition': 'top',
                 'isUseRandomPos': false,
                 'opacity': 0.8,
+                'rotate': 45,
                 'contents': ''
             }, options);
 
@@ -22,10 +23,23 @@ define(function(require, exports, module) {
             var leftOffset = minLeftOffset;
 
             function genereateDiv() {
-                var divStart = "<div id='waterMark' class='' style='-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;text-align: center; display:none; position:absolute;width:500px;height:20px;vertical-align: middle;'>";
-                var contents = settings.contents;
-                var divEnd = "</div>";
-                return divStart + contents + divEnd;
+                var $watermarkDiv = $('<div id="waterMark"></div>');
+                $watermarkDiv.css({
+                    '-webkit-touch-callout': 'none',
+                    '-webkit-user-select': 'none',
+                    '-khtml-user-select': 'none',
+                    '-moz-user-select': 'none',
+                    '-ms-user-select': 'none',
+                    'user-select': 'none',
+                    'text-align': 'center', 
+                    'display': 'none', 
+                    'position': 'absolute',
+                    'width': 500,
+                    'height': 20,
+                    'vertical-align': 'middle'
+                });
+                $watermarkDiv.html(settings.contents);
+                return $watermarkDiv;
             }
 
             function alwaysShow() {
@@ -100,8 +114,15 @@ define(function(require, exports, module) {
 
             function init() {
                 thiz.append(genereateDiv());
+                var rotate = 'rotate(' + settings.rotate + 'deg)';
                 $("#waterMark").css({
-                    opacity: settings.opacity
+                    opacity: settings.opacity,
+                    '-webkit-transform': rotate,
+                    '-moz-transform': rotate,
+                    '-ms-transform': rotate,
+                    '-o-transform': rotate,
+                    'transform': rotate,
+                    'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"
                 });
                 startShow();
             }
@@ -172,12 +193,7 @@ define(function(require, exports, module) {
             $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v2/viewer.html#'+self.attrs.pdfFileUrl.value);
 
             if (this.get('watermark')) {
-                $('#lesson-document-content').WaterMark({ 
-                    'yPosition': 'bottom',
-                    'isAlwaysShow': true,
-                    'isUseRandomPos': false,
-                    'contents': this.get('watermark')
-                });
+                this.element.WaterMark(this.get('watermark'));
             }
         },
 
@@ -208,12 +224,7 @@ define(function(require, exports, module) {
             );
 
             if (this.get('watermark')) {
-                $('#lesson-document-content').WaterMark({ 
-                    'yPosition': 'bottom',
-                    'isAlwaysShow': true,
-                    'isUseRandomPos': false,
-                    'contents': this.get('watermark')
-                });
+                this.element.WaterMark(this.get('watermark'));
             }
 
         }
