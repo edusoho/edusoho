@@ -35,9 +35,10 @@ class BlockController extends BaseController
             'type' => $category
         ));
     }
-    private function dealQueryFields($category){
-         $sort=[];
-         $condation =[];
+    private function dealQueryFields($category)
+    {
+        $sort = array();
+        $condation = array();
         if($category =='lastest'){
             $sort = array('updateTime', 'DESC');
         }elseif($category != 'all'){
