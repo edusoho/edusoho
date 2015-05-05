@@ -4,8 +4,8 @@
   <p class="text-muted">{{ item.desc }}</p>
 </div>
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="width:50%;">
-  {% for dataId in 1..item.count %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  {% for dataId in 0..item.count - 1 %}
   {% set data = block.data[code]['items'][dataId]|default(null) %}
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
