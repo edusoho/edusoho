@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     require('ckeditor');
+    require('../widget/document-player');
 
     var AudioPlayer = require('./audioplayer');
     var playedQuestions = [];
@@ -22,17 +23,18 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         /* init testpaper watermark */
-        var $watermark = $('.testpaper-body .testpaper-watermark');
+        var $watermark = $('.testpaper-question.testpaper-watermark');
         if ($watermark.length > 0) {
-            $.get($watermark.data('url'), function(response){
-                var $append = '';
-                $.each(response, function(n, value){
-                    $append = $append + '<p>' + value + '</p>' ;
-                });
+            $.get($watermark.data('watermarkUrl'), function(response){
                 $watermark.each(function(){
-                    $(this).append($append);
-                });
-            })
+                    $(this).WaterMark({
+                        'yPosition': 'center',
+                        'style': {'font-size':10},
+                        'opacity': 0.6,
+                        'contents': response
+                    });
+                })
+            });
         }
    
 
