@@ -523,6 +523,14 @@ input.LargeInput {width: 600px;}
   margin-bottom: 10px;
 }
 
+.block-affix-nav {
+  max-height: 450px;
+  min-width: 150px;
+  max-width: 250px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
 .block-picture-preview {
   width: 400px;
   height: 400px;

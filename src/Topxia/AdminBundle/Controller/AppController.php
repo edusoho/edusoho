@@ -28,7 +28,7 @@ class AppController extends BaseController
         $content = $this->getEduCloudService()->getUserOverview();
         $info = $this->getEduCloudService()->getAccountInfo();
 
-        $EduSohoOpenClient = new EduSohoOpenClient;
+        $EduSohoOpenClient = new EduSohoOpenClient();
         if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
             $articles = $EduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
