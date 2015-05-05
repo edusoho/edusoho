@@ -88,7 +88,7 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
         return array($categorieStack, $realityDepth);
     }
 
-    public function getAllCategories()
+    public function getCategorieTree()
     {
         $group = $this->controller->getCategoryService()->getGroupByCode('course');
         if (empty($group)) {
@@ -116,6 +116,30 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
             "data"=>$coverCategorys
             );
         return $coverCategorys;
+    }
+
+    public function getAllCategories()
+    {
+        $group = $this->controller->getCategoryService()->getGroupByCode('course');
+        if (empty($group)) {
+            return array();
+        } 
+
+        $categories = $this->controller->getCategoryService()->getCategoryTree($group['id']);
+
+        array_unshift($categories, array(
+            "id"=>"0",
+            "code"=>"root",
+            "name"=>"默认分类",
+            "icon"=>"",
+            "path"=>"0",
+            "weight"=>"0",
+            "groupId"=>"0",
+            "description"=>"默认分类",
+            "depth"=>"0"
+            ));
+
+        return $categories;
     }
 
     private function sortCategories($categories)
