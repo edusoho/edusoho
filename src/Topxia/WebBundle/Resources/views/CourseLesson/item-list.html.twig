@@ -99,12 +99,13 @@
 						
 						{% if setting('magic.lesson_watch_limit') 
 								and course.watchLimit > 0 
-								and item.type == 'video' %}
+								and item.type == 'video'
+								and showWatchLimit|default(false) %}
 							{% set limitNum = course.watchLimit - lessonLearns[item.id].watchNum|default(0) %}
 							{% if limitNum > 0 %}
-							  <span class="badge" style="background-color: #45DD48;">{{ limitNum }}</span>
+							  &nbsp;&nbsp;<span style="color:#E79022">(还可观看{{ limitNum }}次)</span>
 							{% else %}
-								<span class="badge" style="background-color: #D72F2B;">0</span>
+								&nbsp;&nbsp;<span style="color:#E79022">(已无观看次数)</span>
 							{% endif %}
 							
 						{% endif %}
