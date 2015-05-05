@@ -5,8 +5,6 @@ define(function(require, exports, module) {
     exports.run = function() {
         var editForm = Widget.extend({
             events: {
-                    'click .js-add-collapse' : 'onAddBtn',
-                    'change .lesson-content input' : 'onChangeUpdateBtn'
             },
 
             setup: function() {
@@ -29,9 +27,22 @@ define(function(require, exports, module) {
                 });
 
                 $('[name=picture]').length > 0 && $('[name=picture]').css("height", 30);
-            },
-            onAddBtn: function() {
                 
+                
+                this._initForm();
+            },
+            _initForm: function() {
+                $form = this.element;
+                $form.data('serialize', $form.serialize()); 
+                $(window).on('beforeunload',function(){
+                    if ($form.serialize() != $form.data('serialize')) {
+                        return "还有没有保存的数据,是否要离开此页面?";
+                    }
+                });
+                
+                this.$('#block-save-btn').on('click', function(){
+                    $form.data('serialize', $form.serialize()); 
+                });
             },
             onChangeUpdateBtn: function() {
 

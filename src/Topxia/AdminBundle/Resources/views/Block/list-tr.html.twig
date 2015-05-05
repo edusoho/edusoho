@@ -11,9 +11,9 @@
         <span class="text-muted text-sm">{{ block.updateTime|date('Y-n-d H:i:s') }}</span>
     </td>
     <td>
-        <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">编辑内容</button>
         <a class="btn btn-sm btn-primary update-btn" href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">可视化编辑</a>
         {% if setting('developer.debug') %}
+        <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">编辑内容</button>
         <button class="btn btn-sm btn-default edit-btn" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal" >设置</button>
         <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">删除</button>
         {% endif %}

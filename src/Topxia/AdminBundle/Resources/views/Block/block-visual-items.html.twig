@@ -1,33 +1,36 @@
 {% for code,item in block.meta.items|default(null) %}
-<div class="item-title">
-  <strong>{{ item.title }}</strong>
-  <p class="text-muted">{{ item.desc }}</p>
-</div>
+<section id="js-affix-{{ code }}">
+  <div class="item-title">
+    <strong>{{ item.title }}</strong>
+    <p class="text-muted">{{ item.desc }}</p>
+  </div>
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  {% for dataId in 0..item.count - 1 %}
-  {% set data = block.data[code]['items'][dataId]|default(null) %}
-    <div class="panel panel-default">
-      <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
-            {{ item.title }} -
-          </a>
-  
-          {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
+  <div class="panel-group" id="js-accordion-{{ code }}" role="tablist" aria-multiselectable="true">
+    {% for dataId in 0..item.count - 1 %}
+    {% set data = block.data[code]['items'][dataId]|default(null) %}
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
+              {{ item.title }} -
+            </a>
+    
+            {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
 
-        </h4>
-      </div>
-      <div id="{{code}}-collapse-{{ loop.index }}-{{ dataId }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{code}}-heading-{{ dataId }}">
-        <div class="panel-body">
-         {% include 'TopxiaAdminBundle:Block/Tag:' ~ item.type ~ '.html.twig' %}
+          </h4>
+        </div>
+        <div id="{{code}}-collapse-{{ loop.index }}-{{ dataId }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="{{code}}-heading-{{ dataId }}">
+          <div class="panel-body">
+           {% include 'TopxiaAdminBundle:Block/Tag:' ~ item.type ~ '.html.twig' %}
+          </div>
         </div>
       </div>
-    </div>
 
-  {% endfor %}
+    {% endfor %}
 
-</div>
+  </div>
 
-<input class="form-control" type="hidden" name="data[{{ code }}][type]" id="{{ item.type }}" value="{{ item.type }}" >
+  <input class="form-control" type="hidden" name="data[{{ code }}][type]" id="{{ item.type }}" value="{{ item.type }}" >
+</section>
+  
 {% endfor %}
