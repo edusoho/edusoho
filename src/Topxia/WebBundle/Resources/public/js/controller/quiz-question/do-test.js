@@ -21,6 +21,20 @@ define(function(require, exports, module) {
     var isAjaxing = 0;
 
     exports.run = function() {
+        /* init testpaper watermark */
+        var $watermark = $('.testpaper-body .testpaper-watermark');
+        if ($watermark.length > 0) {
+            $.get($watermark.data('url'), function(response){
+                var $append = '';
+                $.each(response, function(n, value){
+                    $append = $append + '<p>' + value + '</p>' ;
+                });
+                $watermark.each(function(){
+                    $(this).append($append);
+                });
+            })
+        }
+   
 
         $('#testpaper-navbar').affix({
             offset: {
