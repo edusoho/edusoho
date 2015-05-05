@@ -290,12 +290,6 @@ define(function(require, exports, module) {
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
 
-            /*if (type == 'video') {
-                $("#video-lesson-suggest-period-field").val(suggestHour);
-            } else if (type == 'audio') {
-                $("#audio-lesson-suggest-period-field").val(suggestHour);
-            }*/
-            
             $("#lesson-suggest-period-field").val(suggestHour);
         }
 
@@ -465,5 +459,14 @@ define(function(require, exports, module) {
             $("#see-draft-btn").hide();
         });
         
+        $('#lesson-suggest-period-field').bind('blur',function(){
+            var val = $(this).val();
+            if (isNaN(val)) {
+                return false;
+            }
+            var multiple = Math.ceil(val / 0.5)*0.5;
+            var temp = val > multiple ? (multiple+0.5) : multiple;
+            $(this).val(temp.toFixed(1));
+        })
     };
 });
