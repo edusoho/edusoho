@@ -39,7 +39,6 @@ define(function(require, exports, module) {
                     'vertical-align': 'middle'
                 });
                 $watermarkDiv.html(settings.contents);
-                console.log($watermarkDiv);
                 return $watermarkDiv;
             }
 
@@ -194,7 +193,7 @@ define(function(require, exports, module) {
             $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v2/viewer.html#'+self.attrs.pdfFileUrl.value);
 
             if (this.get('watermark')) {
-                $('#lesson-document-content').WaterMark(this.get('watermark'));
+                this.element.WaterMark(this.get('watermark'));
             }
         },
 
@@ -225,7 +224,7 @@ define(function(require, exports, module) {
             );
 
             if (this.get('watermark')) {
-                $('#lesson-document-content').WaterMark(this.get('watermark'));
+                this.element.WaterMark(this.get('watermark'));
             }
 
         }
