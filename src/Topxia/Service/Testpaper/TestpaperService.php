@@ -97,4 +97,6 @@ interface TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items);
 
+    public function getItemsCountByTestIdAndType($conditions, $groupBy='');
+
 }

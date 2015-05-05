@@ -785,6 +785,10 @@ course_manage_testpaper_items:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:items }
 
+course_manage_testpaper_items_get:
+    pattern: /course/{courseId}/manage/testpaper/items_get
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsGet }
+
 course_manage_testpaper_items_reset:
     pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items_reset
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:itemsReset }

@@ -859,7 +859,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets($targets);
     }
 
-
+    public function getItemsCountByTestIdAndType ($conditions, $groupBy='')
+    {
+        return $this->getTestpaperItemDao()->getItemsCountByTestIdAndType($conditions, $groupBy);
+    }
 
 
 	private function getTestpaperDao()
