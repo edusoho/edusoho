@@ -4,26 +4,8 @@
 {% set script_controller = 'auth/register' %}
 
 {% block content %}
- <style type="text/css">
-  .form-group {
-    margin-bottom: 40px;
-  }
-  .form-control {
-      display: block;
-      width: 100%;
-      height: 38px;
-      padding: 6px 12px;
-      font-size: 14px;
-      line-height: 1.42857;
-      color: #555;
-      background-color: #FFF;
-      background-image: none;
-      border: 1px solid #CCC;
-      border-radius: 4px;
-      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
-      transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
-    }
- </style>
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/auth.css') }}" />
+
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3 ptl">
     {% if isRegisterEnabled %}
