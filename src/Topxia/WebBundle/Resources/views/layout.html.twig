@@ -25,7 +25,7 @@
     <link href="{{ asset('bundles/topxiaweb/css/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
+    <!-- <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" /> -->
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/es-icon.css') }}" />
@@ -132,7 +132,9 @@
       </div>
     </div>
   </header>
-  
+
+  {% block main_header %} {% endblock %}
+
   {% block main_content %}
   <div id="content-container" class="container">
     {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
