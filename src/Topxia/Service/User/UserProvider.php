@@ -18,14 +18,8 @@ class UserProvider implements UserProviderInterface {
     }
 
     public function loadUserByUsername ($username) {
-        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
-            $user = $this->getUserService()->getUserByEmail($username);
-        } elseif (SimpleValidator::mobile($username)) {
-            $user = $this->getUserService()->getUserByVerifiedMobile($username);
-        } else {
-            $user = $this->getUserService()->getUserByNickname($username);
-        }
-
+        $user = $this->getUserService()->getUserByLoginField($username);
+        
         if (empty($user)) {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
