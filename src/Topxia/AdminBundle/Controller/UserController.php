@@ -68,35 +68,37 @@ class UserController extends BaseController
         $email = $request->query->get('value');
         $email = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '该Email地址可以使用');
-        } else {
-            $response = array('success' => false, 'message' => $message);
-        }
-        return $this->createJsonResponse($response);
+        return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+        return $this->validateResult($result, $message);
+    }
+
+    public function emailOrMobileCheckAction(Request $request){
+        $emailOrMobile = $request->query->get('value');
+        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
+        return $this->validateResult($result, $message);
+    }
+
+    private function validateResult($result, $message){
         if ($result == 'success') {
-            $response = array('success' => true, 'message' => '该昵称可以使用');
+           $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $message);
+           $response = array('success' => false, 'message' => $message);
         }
         return $this->createJsonResponse($response);
     }
-
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $userData['email'] = $formData['email'];
-            $userData['nickname'] = $formData['nickname'];
-            $userData['password'] = $formData['password'];
-            $userData['createdIp'] = $request->getClientIp();
-            $user = $this->getAuthService()->register($userData);
+          
+            $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
             $this->get('session')->set('registed_email', $user['email']);
 
             if(isset($formData['roles'])){
@@ -109,9 +111,30 @@ class UserController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
-        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
+        return $this->render($this->getCreateUserModal());
     }
 
+    private function getRegisterData($formData, $clientIp){
+        if(isset($formData['email'])){
+            $userData['email'] = $formData['email'];
+        }
+        if(isset($formData['emailOrMobile'])){
+            $userData['emailOrMobile'] = $formData['emailOrMobile'];
+        }
+        $userData['nickname'] = $formData['nickname'];
+        $userData['password'] = $formData['password'];
+        $userData['createdIp'] = $clientIp;
+        return $userData;
+    }
+
+    private function getCreateUserModal(){
+        $auth = $this->getSettingService()->get('auth');
+        if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
+            return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
+        }else{
+            return 'TopxiaAdminBundle:User:create-modal.html.twig';
+        }
+    }
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);

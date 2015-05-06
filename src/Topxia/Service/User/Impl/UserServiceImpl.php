@@ -49,6 +49,16 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
+    public function getUserByLoginField($keyword){
+        if(SimpleValidator::email($keyword)){
+            return $this->getUserDao()->findUserByEmail($keyword);
+        }
+        if(SimpleValidator::mobile($keyword)){
+            return $this->getUserDao()->findUserByVerifiedMobile($keyword);
+        }
+        return $this->getUserDao()->findUserByNickname($keyword);
+    }
+
     public function getUserByVerifiedMobile($mobile)
     {
         $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
@@ -200,6 +210,15 @@ class UserServiceImpl extends BaseService implements UserService
         return empty($user) ? true : false;
     }
 
+    public function isMobileAvaliable($mobile){
+        if(empty($mobile)){
+            return false;
+        }
+        $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
+        return empty($user) ? true : false;
+    }
+
+
     public function changePassword($id, $password)
     {
         $user = $this->getUser($id);
@@ -324,39 +343,67 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
+   public function parseEmailOrMobile($registration)
+    {
+        if(!$this->isMobileRegisterMode()){
+            return $registration;
+        }
+        if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
+            if (SimpleValidator::email($registration['emailOrMobile'])) {
+                $registration['email'] = $registration['emailOrMobile'];
+            } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
+                $registration['mobile'] = $registration['emailOrMobile'];
+                $registration['verifiedMobile'] = $registration['emailOrMobile'];
+            } else {
+                throw $this->createServiceException('emailOrMobile error!');
+            }
+        }else{
+            throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
+        }
+        return  $registration;
+    }
+
+    public function isMobileRegisterMode(){
+        $authSetting = $this->getSettingservice()->get('auth');
+        return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
+    }
+
+    private function getRandomChar(){
+          return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    }
+
     public function register($registration, $type = 'default')
     {
-
-        if (!SimpleValidator::email($registration['email'])) {
-            throw $this->createServiceException('email error!');
-        }
-        
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
-        }
-
-        if (!$this->isEmailAvaliable($registration['email'])) {
-            throw $this->createServiceException('Email已存在');
         }
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
             throw $this->createServiceException('昵称已存在');
         }
 
+        if (!SimpleValidator::email($registration['email'])) {
+            throw $this->createServiceException('email error!');
+        }
+        if (!$this->isEmailAvaliable($registration['email'])) {
+            throw $this->createServiceException('Email已存在');
+        }
+        
         $user = array();
-        $user['email'] = $registration['email'];
         if (isset($registration['verifiedMobile'])) {
             $user['verifiedMobile'] = $registration['verifiedMobile'];
-        }else{
+        } else {
             $user['verifiedMobile'] = '';
         }
+        
+        $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
 
-        if(in_array($type, array('default', 'phpwind', 'discuz'))) {
+        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
@@ -369,15 +416,15 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
 
-        if (isset($registration['mobile']) &&$registration['mobile']!=""&& !SimpleValidator::mobile($registration['mobile'])) {
+        if (isset($registration['mobile']) && $registration['mobile'] != "" && !SimpleValidator::mobile($registration['mobile'])) {
             throw $this->createServiceException('mobile error!');
         }
 
-        if (isset($registration['idcard']) &&$registration['idcard']!=""&& !SimpleValidator::idcard($registration['idcard'])) {
+        if (isset($registration['idcard']) && $registration['idcard'] != "" && !SimpleValidator::idcard($registration['idcard'])) {
             throw $this->createServiceException('idcard error!');
         }
 
-        if (isset($registration['truename']) &&$registration['truename']!=""&& !SimpleValidator::truename($registration['truename'])) {
+        if (isset($registration['truename']) && $registration['truename'] != "" && !SimpleValidator::truename($registration['truename'])) {
             throw $this->createServiceException('truename error!');
         }
 
@@ -393,12 +440,12 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['qq'] = empty($registration['qq']) ? '' : $registration['qq'];
         $profile['site'] = empty($registration['site']) ? '' : $registration['site'];
         $profile['gender'] = empty($registration['gender']) ? 'secret' : $registration['gender'];
-        for($i=1;$i<=5;$i++){
+        for ($i = 1;$i <= 5;$i++) {
             $profile['intField'.$i] = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
             $profile['dateField'.$i] = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
             $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
         }
-        for($i=1;$i<=10;$i++){
+        for ($i = 1;$i <= 10;$i++) {
             $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? "" : $registration['varcharField'.$i];
             $profile['textField'.$i] = empty($registration['textField'.$i]) ? "" : $registration['textField'.$i];
         }
@@ -411,6 +458,25 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getDispatcher()->dispatch('user.service.registered', new ServiceEvent($user));
 
         return $user;
+    }
+    public function generateNickname($registration, $maxLoop=100){
+        for($i =0; $i<$maxLoop; $i++){
+            $registration['nickname'] ='EduSoho'.substr($this->getRandomChar(), 0,6); 
+            if($this->isNicknameAvaliable($registration['nickname'])) {
+                break;
+            }   
+        }    
+        return $registration['nickname'];
+    }
+
+    public function generateEmail($registration, $maxLoop=100){
+         for($i =0; $i<$maxLoop; $i++){
+            $registration['email'] = 'edu_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
+            if($this->isEmailAvaliable($registration['email'])){
+                break;
+            }
+       }
+        return $registration['email'];  
     }
 
     public function importUpdateEmail($users)

@@ -71,7 +71,7 @@ class CourseStudentManageController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$data = $request->request->all();
-			$user = $this->getUserService()->getUserByNickname($data['nickname']);
+			$user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 			if (empty($user)) {
 				throw $this->createNotFoundException("用户{$data['nickname']}不存在");
 			}
@@ -123,6 +123,8 @@ class CourseStudentManageController extends BaseController
 		             'default'=> $default
 		));
 	}
+
+    
 
 	public function removeAction(Request $request, $courseId, $userId)
 	{
@@ -248,14 +250,13 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	public function checkNicknameAction(Request $request, $id)
+	public function checkStudentAction(Request $request, $id)
 	{
-		$nickname = $request->query->get('value');
-		$result = $this->getUserService()->isNicknameAvaliable($nickname);
-		if ($result) {
+		$keyword = $request->query->get('value');
+		$user = $this->getUserService()->getUserByLoginField($keyword);
+		if (!$user) {
 			$response = array('success' => false, 'message' => '该用户不存在');
 		} else {
-			$user = $this->getUserService()->getUserByNickname($nickname);
 			$isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
 			if($isCourseStudent){
 				$response = array('success' => false, 'message' => '该用户已是本课程的学员了');

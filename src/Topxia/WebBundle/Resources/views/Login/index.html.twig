@@ -2,8 +2,9 @@
 
 {% block title %}登录 - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/login' %}
-
 {% block content %}
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/auth.css') }}" />
+
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3">
 
@@ -15,18 +16,18 @@
         {% if error %}
           <div class="alert alert-danger">{{ error.message|trans }}</div>
         {% endif %}
-{{ web_macro.flash_messages() }}
+        {{ web_macro.flash_messages() }}
         <div class="form-group">
-          <label class="control-label" for="login_username">帐号</label>
+          <label class="control-label hidden" for="login_username">帐号</label>
           <div class="controls">
-            <input class="form-control" id="login_username" type="text" name="_username" value="{{ last_username }}" required />
-            <div class="help-block">请输入Email地址 / 用户昵称</div>
+            <input class="form-control" id="login_username" type="text" name="_username" value="{{ last_username }}" required placeholder='邮箱/手机/昵称' />
+            <div class="help-block"></div>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label" for="login_password">密码</label>
+          <label class="control-label hidden" for="login_password">密码</label>
           <div class="controls">
-            <input class="form-control" id="login_password" type="password" name="_password" required />
+            <input class="form-control" id="login_password" type="password" name="_password" required placeholder='密码' />
           </div>
         </div>
 

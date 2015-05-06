@@ -162,7 +162,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'opened',
+            'register_mode'=>'email',
             'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',

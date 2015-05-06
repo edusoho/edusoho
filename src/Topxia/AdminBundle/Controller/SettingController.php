@@ -212,7 +212,7 @@ class SettingController extends BaseController
 
         return $this->createJsonResponse(true);
     }
-    
+
     private function setCloudSmsKey($key, $val)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
