@@ -233,7 +233,12 @@ function install_step5()
 function install_step999()
 {
     if (empty($_COOKIE['nokey'])) {
-        session_start();
+        
+        if (empty($_SESSION)){
+
+            session_start();
+            
+        }
 
         $connection = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);

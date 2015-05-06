@@ -61,7 +61,7 @@
                 <a class="pull-right" href="{{path("admin_setting_course_setting")}}#live-course-set">查看</a>
               {% else %}
                 {% if (liveCourseStatus|length) > 0 %}
-                  {% if (liveCourseStatus.type|default('')) == "normal" %}
+                  {% if (liveCourseStatus.type|default('')) == "normal" and liveCourseStatus.expire|default(0) > 0  %}
                     (有效期至{{(liveCourseStatus.expire|default('0'))|date('Y-m-d')}} )
                   {% elseif (liveCourseStatus.type|default('')) == "tryOut" %} 
                     (体验用户)

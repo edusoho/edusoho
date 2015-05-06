@@ -91,7 +91,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 			}
 			
 		} elseif (isset($conditions['currentUserId'] )) {
-			$createdUserIds = $conditions['currentUserId'];
+			$createdUserIds = array($conditions['currentUserId']);
 		}
 		
 		if(isset($createdUserIds)){
@@ -116,7 +116,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     		}
     			
     	} elseif (isset($conditions['currentUserId'] )) {
-    		$createdUserIds = $conditions ['currentUserId'];
+    		$createdUserIds = array($conditions['currentUserId']);
     	}
     	
     	if(isset($createdUserIds)){
