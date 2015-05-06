@@ -1293,6 +1293,10 @@ cloud_doc_watermark:
     pattern: /cloud/doc_watermark
     defaults: {_controller: TopxiaWebBundle:Cloud:docWatermark }
 
+cloud_testpaper_watermark:
+    pattern: /cloud/testpaper_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:testpaperWatermark }
+
 systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Systeminfo:index }

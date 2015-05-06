@@ -28,7 +28,7 @@ class AppController extends BaseController
         $content = $this->getEduCloudService()->getUserOverview();
         $info = $this->getEduCloudService()->getAccountInfo();
 
-        $EduSohoOpenClient = new EduSohoOpenClient;
+        $EduSohoOpenClient = new EduSohoOpenClient();
         if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
             $articles = $EduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
@@ -142,15 +142,17 @@ class AppController extends BaseController
         $theme = array();
         $app = array();
         foreach ($apps as $key => $value) {
+
+            $value['code'] = strtolower($value['code']);
+            $apps[$key]['code'] = $value['code'];
             if ($value['type'] == 'theme') {
                 $theme[] = $value;
             }elseif ($value['type'] == 'app') {
                 $app[] = $value;
             }
-
-            $apps[$key]['code'] = strtolower($value['code']);
+            
         }
-
+ 
         $installedApps = $this->getAppService()->findApps(0, 100);
         $installedApps = ArrayToolkit::index($installedApps, 'code');
 
