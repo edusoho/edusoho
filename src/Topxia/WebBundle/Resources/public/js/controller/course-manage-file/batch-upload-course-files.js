@@ -41,7 +41,7 @@ define(function(require, exports, module) {
         };
 
         for(var key in fileSuffixs){
-            if(fileSuffixs[key].lastIndexOf(fileSuffix)>0){
+            if(fileSuffixs[key].lastIndexOf(fileSuffix)>=0){
                 return key;
             }
         }
