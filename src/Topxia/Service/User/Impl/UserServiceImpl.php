@@ -51,12 +51,12 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserByLoginField($keyword){
         if(SimpleValidator::email($keyword)){
-            return $this->getUserDao()->findUserByEmail($keyword);
+            return $this->getUserByEmail($keyword);
         }
         if(SimpleValidator::mobile($keyword)){
-            return $this->getUserDao()->findUserByVerifiedMobile($keyword);
+            return $this->getUserByVerifiedMobile($keyword);
         }
-        return $this->getUserDao()->findUserByNickname($keyword);
+        return $this->getUserByNickname($keyword);
     }
 
     public function getUserByVerifiedMobile($mobile)
