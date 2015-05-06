@@ -3,9 +3,10 @@ namespace Topxia\Common;
 
 use Topxia\Service\Common\ServiceKernel;
 
-class BlockToolkit {
+class BlockToolkit
+{
 
-    public static function init($code, $jsonFile) 
+    public static function init($code, $jsonFile)
     {
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
@@ -28,7 +29,7 @@ class BlockToolkit {
                         'meta' => $meta,
                         'data' => $default,
                         'templateName' => $meta['templateName'],
-                        'title' => $meta['title']
+                        'title' => $meta['title'],
                     );
                     $blockService->createBlock($block);
                 } else {
@@ -37,13 +38,11 @@ class BlockToolkit {
                         'meta' => $meta,
                         'data' => $default,
                         'templateName' => $meta['templateName'],
-                        'title' => $meta['title']
+                        'title' => $meta['title'],
                     ));
                 }
-              
             }
         }
-
     }
 
     public static function updateCarousel($code)
@@ -79,7 +78,7 @@ class BlockToolkit {
         $blockService->updateBlock($block['id'], array(
             'data' => $data,
         ));
-    } 
+    }
 
     public static function updateLinks($code)
     {
@@ -87,32 +86,37 @@ class BlockToolkit {
         $block = $blockService->getBlockByCode($code);
         $data = $block['data'];
         $content = $block['content'];
-        preg_match_all('/<dt>(.?*)</dt>/i', $content, $textMatchs);
-        preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/i', $content, $altMatchs);
-        preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $content, $linkMatchs);
-        preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $content, $targetMatchs);
-        foreach ($data['carousel']['items'] as $key => $imglink) {
-            if (!empty($imgMatchs[1][$key])) {
-                $imglink['src'] = $imgMatchs[1][$key];
+        preg_match_all('/<dt>(.*?)<\/dt>/i', $content, $textMatchs);
+        preg_match_all('/<dl>.*?<\/dl>/i', $content, $dlMatchs);
+        $index = 0;
+        $index2 = 0;
+        foreach ($data as $key => &$object) {
+            if ($object['type'] == 'text') {
+                $object['items'][0]['value'] = $textMatchs[1][$index++];
             }
 
-            if (!empty($altMatchs[1][$key])) {
-                $imglink['alt'] = $altMatchs[1][$key];
-            }
+            if ($object['type'] == 'link' && !empty($dl = $dlMatchs[0][$index2++])) {
+                preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);
+                preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
+                preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);
+                foreach ($object['items'] as $i => &$item) {
+                    if (!empty($hrefMatchs[1][$i])) {
+                        $item['href'] = $hrefMatchs[1][$i];
+                    }
 
-            if (!empty($linkMatchs[1][$key])) {
-                $imglink['href'] = $linkMatchs[1][$key];
-            }
+                    if (!empty($targetMatchs[1][$i])) {
+                        $item['target'] = $targetMatchs[1][$i];
+                    }
 
-            if (!empty($targetMatchs[1][$key])) {
-                $imglink['target'] = $targetMatchs[1][$key];
+                    if (!empty($valuetMatchs[1][$i])) {
+                        $item['value'] = $valuetMatchs[1][$i];
+                    }
+                }
             }
-
-            $data['carousel']['items'][$key] = $imglink;
         }
 
         $blockService->updateBlock($block['id'], array(
             'data' => $data,
         ));
-    } 
+    }
 }
