@@ -368,7 +368,7 @@ class UserServiceImpl extends BaseService implements UserService
         return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
     }
 
-    private function getRandChar(){
+    private function getRandomChar(){
           return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
@@ -461,7 +461,7 @@ class UserServiceImpl extends BaseService implements UserService
     }
     public function generateNickname($registration, $maxLoop=100){
         for($i =0; $i<$maxLoop; $i++){
-            $registration['nickname'] ='EduSoho'.substr($this->getRandChar(), 0,6); 
+            $registration['nickname'] ='EduSoho'.substr($this->getRandomChar(), 0,6); 
             if($this->isNicknameAvaliable($registration['nickname'])) {
                 break;
             }   
@@ -471,7 +471,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function generateEmail($registration, $maxLoop=100){
          for($i =0; $i<$maxLoop; $i++){
-            $registration['email'] = 'edu_' . substr($this->getRandChar(), 0, 9) . '@edusoho.net';
+            $registration['email'] = 'edu_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
             if($this->isEmailAvaliable($registration['email'])){
                 break;
             }
