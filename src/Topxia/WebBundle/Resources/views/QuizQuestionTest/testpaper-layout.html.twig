@@ -99,7 +99,14 @@
                   </select>
                 </div>
               </div>
-
+              <div class="form-group">
+                <div class="col-md-4 controls">
+                  试卷得分:<span id="objectiveScore">{{ paperResult.objectiveScore }}</span>
+                </div>
+                <div class="col-md-8 controls radios">
+                  {{ radios('passedStatus', {'passed':'考试通过', 'unpassed':'考试不通过'}, 'passed' ) }}
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <a href="javascript:;" class="btn btn-default" data-dismiss="modal">取消</a>

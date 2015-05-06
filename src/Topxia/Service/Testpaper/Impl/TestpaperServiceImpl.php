@@ -607,7 +607,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testResults = array();
         
         $teacherSay = $field['teacherSay'];
+        $passedStatus = $field['passedStatus'];
         unset($field['teacherSay']);
+        unset($field['passedStatus']);
 
 
         $items = $this->getTestpaperItemDao()->findItemsByTestpaperId($paperId);
@@ -652,7 +654,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'status' => 'finished',
             'checkTeacherId' => $teacherId,
             'checkedTime' => time(),
-            'teacherSay' => $teacherSay
+            'teacherSay' => $teacherSay,
+            'passedStatus' => $passedStatus
         ));
     }
 
