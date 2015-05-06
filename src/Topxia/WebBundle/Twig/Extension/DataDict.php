@@ -288,6 +288,7 @@ class DataDict
             'teacherAnswer' => '教师答疑',
             'event' => '活动组织',
             'liveAnswer' => '直播答疑',
+            'workAdvise' => '就业指导',
         ),
         'classroomRoles' => array(
             'auditor' => '旁听生',
