@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 　　  currKey=e.keyCode||e.which||e.charCode;
 		if(currKey == 191){
 			setTimeout(function(){
-				$("#block-input")[0].focus()
+				$("#block-input")[0].focus();
 			},300)
 		}
 　　 }				
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 
 	    autocomplete.on('itemSelect', function(data){
 	    	var error = '';
-        $("#blockitem"+data.id).find(".update-btn").click();
+	    	window.location.href=window.location.host+"admin/block/"+data.id+"/visual/edit";
 		});
 		
 	};
