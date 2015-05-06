@@ -343,7 +343,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
-   public function purseEmailOrMobile($registration)
+   public function parseEmailOrMobile($registration)
     {
         if(!$this->isMobileRegisterMode()){
             return $registration;

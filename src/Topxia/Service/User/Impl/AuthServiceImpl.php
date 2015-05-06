@@ -35,7 +35,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     }
 
     private function refillFormData($registration){
-        $registration = $this->getUserService()->purseEmailOrMobile($registration);
+        $registration = $this->getUserService()->parseEmailOrMobile($registration);
         if(!isset($registration['nickname']) || empty($registration['nickname'])){
             $registration['nickname'] = $this->getUserService()->nicknameGenerate($registration);
         }
