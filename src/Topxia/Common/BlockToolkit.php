@@ -2,12 +2,14 @@
 namespace Topxia\Common;
 
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class BlockToolkit
 {
 
-    public static function init($code, $jsonFile)
+    public static function init($code, $jsonFile, $appType, $container = null)
     {
+
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
             if (empty($blockMeta)) {
@@ -15,12 +17,13 @@ class BlockToolkit
             }
 
             $blockService = ServiceKernel::instance()->createService('Content.BlockService');
+            $block = array();
             foreach ($blockMeta as $key => $meta) {
                 $block = $blockService->getBlockByCode($key);
                 $default = array();
-                foreach ($meta['items'] as $key => $item) {
-                    $default[$key]['items'] = $item['default'];
-                    $default[$key]['type'] = $item['type'];
+                foreach ($meta['items'] as $i => $item) {
+                    $default[$i]['items'] = $item['default'];
+                    $default[$i]['type'] = $item['type'];
                 }
                 if (empty($block)) {
                     $block = array(
@@ -31,9 +34,9 @@ class BlockToolkit
                         'templateName' => $meta['templateName'],
                         'title' => $meta['title'],
                     );
-                    $blockService->createBlock($block);
+                    $block = $blockService->createBlock($block);
                 } else {
-                    $blockService->updateBlock($block['id'], array(
+                    $block = $blockService->updateBlock($block['id'], array(
                         'category' => $code,
                         'meta' => $meta,
                         'data' => $default,
@@ -41,8 +44,31 @@ class BlockToolkit
                         'title' => $meta['title'],
                     ));
                 }
+
+                if (empty($block['content'])) {
+                    $container->enterScope('request');
+                    $container->set('request', new Request(), 'request');
+
+                    if (!in_array($appType, array('theme', 'plugin'))) {
+                        throw new \RuntimeException("参数不正确!必须是主题和插件!");
+                    }
+
+                    if ($appType == 'theme') {
+                        $content =  $container->get('templating')->render("@{$appType}s/{$code}/TopxaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
+                    }
+
+                    if ($appType == 'plugin') {
+                        $content =  $container->get('templating')->render("@{$appType}s/{$code}/{$code}Bundle/Resources/views/Block/{$block['templateName']}", array('block' => $block));
+                    }
+                    
+                    $blockService->updateContent($block['id'], $content);
+                }
             }
+
+          
         }
+
+        
     }
 
     public static function updateCarousel($code)
