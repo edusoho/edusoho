@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
-    var Uploader = require('webuploader');
+    require('webuploader');
     exports.run = function() {
         var editForm = Widget.extend({
             events: {
@@ -79,7 +79,7 @@ define(function(require, exports, module) {
                    var self = $(this);
                    var uploader = WebUploader.create({
                        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                       server: $(this).data('uploadUrl'),
+                       server: $(this).data('url'),
                        pick: '#'+$(this).attr('id'),
                        formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
                        accept: {
@@ -89,15 +89,20 @@ define(function(require, exports, module) {
                        }
                     });
 
+                    uploader.on( 'fileQueued', function( file ) {
+                       Notify.info('正在上传，请稍等！', 0);
+                       uploader.upload();
+                    });
+
                    uploader.on( 'uploadSuccess', function( file, response ) {
-                       self.closest('.form-group').find('input').val(response.url);
+                       self.closest('.form-group').find('input').val(response.hashId);
                        Notify.success('上传成功！', 1);
                    });
 
                    uploader.on( 'uploadError', function( file, response ) {
                        Notify.danger('上传失败，请重试！');
                    });
-                   
+                
                });
             }
         });
