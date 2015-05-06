@@ -5,6 +5,8 @@ define(function(require, exports, module) {
     exports.run = function() {
         var editForm = Widget.extend({
             events: {
+                'click .js-add-btn': 'onClickAddBtn',
+                'click .js-remove-btn': 'onClickRemoveBtn',
             },
 
             setup: function() {
@@ -44,8 +46,33 @@ define(function(require, exports, module) {
                     $form.data('serialize', $form.serialize()); 
                 });
             },
-            onChangeUpdateBtn: function() {
+            onClickAddBtn: function(e) {
+                var $target = $(e.currentTarget);
+                var $panelGroup = $target.prev('.panel-group');
+                var $panels = $panelGroup.children('.panel.panel-default');
+                if ($panels.length >= $panelGroup.data('count')) {
+                    alert('最多只能添加' + $panelGroup.data('count') + '个!');
+                } else {
+                    $model = $panels[0].clone();
+                    $panelGroup.append($panels[0].outerHTML);
 
+                }
+                
+
+            },
+            onClickRemoveBtn: function(e) {
+                if (confirm("你确定要删除吗?")) {
+                    var $target = $(e.currentTarget);
+                    var $panelGroup = $target.closest('.panel-group');
+                    var $parent = $target.closest('.panel.panel-default');
+                    var $panels = $panelGroup.children('.panel.panel-default');
+                    if ($panels.length == 1) {
+                        alert("必须要有一个!");
+                    } else {
+                        $parent.remove();
+                    }
+                }
+                
             }
         });
 
