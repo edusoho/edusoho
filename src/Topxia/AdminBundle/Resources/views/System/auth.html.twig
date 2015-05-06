@@ -13,7 +13,7 @@
       <label >用户注册模式</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('register_mode', {'opened':'邮箱注册', 'email_or_mobile':'邮箱或手机注册', 'closed':'关闭'}, auth.register_mode) }}
+      {{ radios('register_mode', {'email':'邮箱注册', 'email_or_mobile':'邮箱或手机注册', 'closed':'关闭'}, auth.register_mode) }}
     </div>
   </div>
   <div class="form-group">
@@ -168,10 +168,10 @@
         </div>
         <div class="controls col-md-8 "  id="show-list">
         {% for sort in auth.registerSort%}
-            {% if sort=='email' and setting("auth.register_mode") == "opened" %}
+            {% if sort=='email' and setting("auth.register_mode") == "email" %}
             <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
             {% endif %}
-            {% if sort=='mobile' and setting("auth.register_mode") == "opened" %}
+            {% if sort=='mobile' and setting("auth.register_mode") == "email" %}
             <button type="button" class="btn btn-default btn-xs">手机号码</button>
             {% endif %}
             {% if sort=='emailOrMobile' and setting("auth.register_mode") == "email_or_mobile" %}
@@ -215,7 +215,7 @@
             <div class="form-group"><ul class="register-list sortable-list" data-role="list">
             {% if auth.registerFieldNameArray %}
             {% for sort in auth.registerFieldNameArray %}
-               {% if sort=='email' and setting("auth.register_mode") == "opened"  %}
+               {% if sort=='email' and setting("auth.register_mode") == "email"  %}
                 <li class="list-group-item clearfix" data-role="item" >
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                 &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
@@ -247,7 +247,7 @@
                   &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="truename"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="truename"></input><input type="hidden"  name="registerFieldNameArray[]" value="truename"></input> 姓名
                 </li>
                {% endif %}
-               {% if sort=='mobile' and setting("auth.register_mode") == "opened" %}
+               {% if sort=='mobile' and setting("auth.register_mode") == "email" %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                   &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>

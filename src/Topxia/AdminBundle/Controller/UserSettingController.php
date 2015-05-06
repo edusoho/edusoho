@@ -117,7 +117,7 @@ class UserSettingController extends BaseController
             }
 
 
-            if($auth["register_mode"] == "opened") {
+            if($auth["register_mode"] == "email") {
                 foreach ($auth['registerSort'] as $key => $value) {
                     if($value == "emailOrMobile") {
                         unset($auth['registerSort'][$key]);
@@ -162,7 +162,7 @@ class UserSettingController extends BaseController
             }
 
 
-            if($auth["register_mode"] == "opened") {
+            if($auth["register_mode"] == "email") {
 
                 foreach ($auth['registerFieldNameArray'] as $key => $value) {
                     if($value == "emailOrMobile") {
