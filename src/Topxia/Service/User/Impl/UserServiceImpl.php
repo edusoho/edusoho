@@ -49,14 +49,14 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    public function getUserByQueryField($queryfiled){
-        if(SimpleValidator::email($queryfiled)){
-            return $this->getUserDao()->findUserByEmail($queryfiled);
+    public function getUserByLoginField($keyword){
+        if(SimpleValidator::email($keyword)){
+            return $this->getUserDao()->findUserByEmail($keyword);
         }
-        if(SimpleValidator::mobile($queryfiled)){
-            return $this->getUserDao()->findUserByVerifiedMobile($queryfiled);
+        if(SimpleValidator::mobile($keyword)){
+            return $this->getUserDao()->findUserByVerifiedMobile($keyword);
         }
-        return $this->getUserDao()->findUserByNickname($queryfiled);
+        return $this->getUserDao()->findUserByNickname($keyword);
     }
 
     public function getUserByVerifiedMobile($mobile)

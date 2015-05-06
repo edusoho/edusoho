@@ -71,7 +71,7 @@ class CourseStudentManageController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$data = $request->request->all();
-			$user = $this->getUserService()->getUserByQueryField($data['queryfield']);
+			$user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 			if (empty($user)) {
 				throw $this->createNotFoundException("用户{$data['nickname']}不存在");
 			}
@@ -252,8 +252,8 @@ class CourseStudentManageController extends BaseController
 
 	public function checkNicknameAction(Request $request, $id)
 	{
-		$queryfiled = $request->query->get('value');
-		$user = $this->getUserService()->getUserByQueryField($queryfiled);
+		$keyword = $request->query->get('value');
+		$user = $this->getUserService()->getUserByLoginField($keyword);
 		if (!$user) {
 			$response = array('success' => false, 'message' => '该用户不存在');
 		} else {
