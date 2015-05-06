@@ -31,9 +31,9 @@ class RegisterController extends BaseController
             $authSettings = $this->getSettingService()->get('auth', array());
 
             //验证码校验
-            $this->captcha_enabled_validator($authSettings,$registration,$request);
+            $this->captchaEnabledValidator($authSettings,$registration,$request);
             //手机校验码
-            if($this->sms_code_validator($authSettings,$registration,$request)){
+            if($this->smsCodeValidator($authSettings,$registration,$request)){
                 $registration['verifiedMobile'] = '';
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
                 if ($result){
@@ -43,7 +43,7 @@ class RegisterController extends BaseController
                 }
             }
             //ip次数限制
-            if($this->register_limit_validator($registration, $authSettings,$request)){
+            if($this->registerLimitValidator($registration, $authSettings,$request)){
                return  $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
             }
 
@@ -540,7 +540,7 @@ class RegisterController extends BaseController
 
 
     //validate captcha
-    private function captcha_enabled_validator($authSettings,$registration,$request){
+    private function captchaEnabledValidator($authSettings,$registration,$request){
          if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
             $captchaCodePostedByUser = strtolower($registration['captcha_num']);
             $captchaCode = $request->getSession()->get('captcha_code');                   
@@ -558,7 +558,7 @@ class RegisterController extends BaseController
         }
     }
 
-    private function sms_code_validator($authSettings,$registration,$request){
+    private function smsCodeValidator($authSettings,$registration,$request){
         if ( isset($authSettings['registerSort'])
             &&in_array('mobile', $authSettings['registerSort'])
             &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
@@ -567,7 +567,7 @@ class RegisterController extends BaseController
         }
     }
 
-    private function register_limit_validator($registration, $authSettings, $request){
+    private function registerLimitValidator($registration, $authSettings, $request){
         $registration['createdIp'] = $request->getClientIp();
 
         if(isset($authSettings['register_protective'])){
