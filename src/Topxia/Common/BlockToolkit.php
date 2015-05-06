@@ -44,7 +44,7 @@ class BlockToolkit
                 }
 
                 if (empty($block['content'])) {
-                    $content = render($block, $container);
+                    $content = self::render($block, $container);
                     $blockService->updateContent($block['id'], $content);
                 }
             }
@@ -53,13 +53,13 @@ class BlockToolkit
 
     public static function render($block, $container)
     {
-        if (empty($container->get('request'))) {
+        if (!$container->isScopeActive('request')) {
             $container->enterScope('request');
             $container->set('request', new Request(), 'request');
         }
 
         $appService = ServiceKernel::instance()->createService('CloudPlatform.AppService');
-        $app = $this->getAppService()->getAppByCode($block['category']);
+        $app = $appService->getAppByCode($block['category']);
         $templateName = $block['templateName'];
         $category = $block['category'];
         if ($category != 'system' && $app['type'] == 'theme') {

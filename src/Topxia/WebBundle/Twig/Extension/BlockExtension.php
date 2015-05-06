@@ -40,7 +40,7 @@ class BlockExtension extends \Twig_Extension
 
         // 从data渲染生成html然后返回
 
-        return BlockToolkit::render($block);
+        return BlockToolkit::render($block, $this->container);
     }
 
     public function getName()

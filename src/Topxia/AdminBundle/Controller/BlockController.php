@@ -9,7 +9,7 @@ use Topxia\Service\Common\ServiceException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
-
+use Topxia\Common\BlockToolkit;
 
 class BlockController extends BaseController
 {
