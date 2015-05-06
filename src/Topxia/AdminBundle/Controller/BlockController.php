@@ -186,7 +186,12 @@ class BlockController extends BaseController
     public function dataViewAction(Request $request, $blockId)
     {
         $block = $this->getBlockService()->getBlock($blockId);
-        return new Response('<pre>' . json_encode($block['data'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . '</pre>');
+        unset($block['meta']['default']);
+        foreach ($block['meta']['items'] as $key => &$item) {
+            $item['default'] = $block['data'][$key]['items'];
+        }
+       
+        return new Response('<pre>' . json_encode($block['meta'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . '</pre>');
     }
 
     public function visualHistoryAction(Request $request, $blockId)

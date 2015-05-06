@@ -16,7 +16,11 @@ class BlockToolkit {
             $blockService = ServiceKernel::instance()->createService('Content.BlockService');
             foreach ($blockMeta as $key => $meta) {
                 $block = $blockService->getBlockByCode($key);
-                $default = empty($meta['default']) ? null : $meta['default'];
+                $default = array();
+                foreach ($meta['items'] as $key => $item) {
+                    $default[$key]['items'] = $item['default'];
+                    $default[$key]['type'] = $item['type'];
+                }
                 if (empty($block)) {
                     $block = array(
                         'code' => $key,
