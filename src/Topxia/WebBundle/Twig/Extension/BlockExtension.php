@@ -2,18 +2,18 @@
 namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\MenuBuilder;
+use Topxia\Common\BlockToolkit;
 
 class BlockExtension extends \Twig_Extension
 {
     protected $container;
 
-    public function __construct ($container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
 
-    public function getFilters ()
+    public function getFilters()
     {
         return array(
         );
@@ -22,7 +22,7 @@ class BlockExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'block_show' => new \Twig_Function_Method($this, 'showBlock'),
+            'block_show' => new \Twig_Function_Method($this, 'showBlock', array('is_safe' => array('html'))),
         );
     }
 
@@ -38,18 +38,13 @@ class BlockExtension extends \Twig_Extension
             return $block['content'];
         }
 
-        $html = '';
-
         // 从data渲染生成html然后返回
 
-
+        return BlockToolkit::render($block);
     }
 
-    public function getName ()
+    public function getName()
     {
         return 'topxia_block_twig';
     }
-
 }
-
-

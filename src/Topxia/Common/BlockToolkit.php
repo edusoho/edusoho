@@ -69,6 +69,11 @@ class BlockToolkit
         
     }
 
+    public static function render($block)
+    {
+        
+    }
+
     public static function updateCarousel($code)
     {
         $blockService = ServiceKernel::instance()->createService('Content.BlockService');
