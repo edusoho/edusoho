@@ -11,21 +11,46 @@ define(function(require, exports, module) {
                 'yPosition': 'top',
                 'isUseRandomPos': false,
                 'opacity': 0.8,
+                'rotate': 45,
+                'style': {},
                 'contents': ''
             }, options);
 
             var showTimer;
-            var thiz = $(this);
+            var $thiz = $(this);
             var minTopOffset = 40;
             var minLeftOffset = 15;
             var topOffset = minTopOffset;
             var leftOffset = minLeftOffset;
+            var $watermarkDiv = null;
 
             function genereateDiv() {
-                var divStart = "<div id='waterMark' class='' style='-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;text-align: center; display:none; position:absolute;width:500px;height:20px;vertical-align: middle;'>";
-                var contents = settings.contents;
-                var divEnd = "</div>";
-                return divStart + contents + divEnd;
+                $watermarkDiv = $('<div id="waterMark"></div>');
+                var rotate = 'rotate(' + settings.rotate + 'deg)';
+                $watermarkDiv.css({
+                    '-webkit-touch-callout': 'none',
+                    '-webkit-user-select': 'none',
+                    '-khtml-user-select': 'none',
+                    '-moz-user-select': 'none',
+                    '-ms-user-select': 'none',
+                    'user-select': 'none',
+                    'text-align': 'center', 
+                    'display': 'none', 
+                    'position': 'absolute',
+                    'width': 500,
+                    'height': 20,
+                    'vertical-align': 'middle',
+                    opacity: settings.opacity,
+                    '-webkit-transform': rotate,
+                    '-moz-transform': rotate,
+                    '-ms-transform': rotate,
+                    '-o-transform': rotate,
+                    'transform': rotate,
+                    'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"
+                });
+                $watermarkDiv.css(settings.style);
+                $watermarkDiv.html(settings.contents);
+                return $watermarkDiv;
             }
 
             function alwaysShow() {
@@ -34,11 +59,11 @@ define(function(require, exports, module) {
 
             function displayWaterMark() {
                 getOffset();
-                $('#waterMark').css({
+                $watermarkDiv.css({
                     'top': topOffset,
                     'left': leftOffset
                 });
-                $('#waterMark').show();
+                $watermarkDiv.show();
             }
 
             function timeingShow() {
@@ -46,7 +71,7 @@ define(function(require, exports, module) {
                 showTimer = setInterval(function() {
                     displayWaterMark();
                     setTimeout(function() {
-                        $('#waterMark').hide();
+                        $watermarkDiv.hide();
                     }, settings.duringTime);
 
                 }, settings.interval);
@@ -61,8 +86,8 @@ define(function(require, exports, module) {
             }
 
             function setOffsetRandom() {
-                var maxTopOffset = (thiz.height() - $('#waterMark').height() - minTopOffset);
-                var maxLeftOffset = (thiz.width() - $('#waterMark').width() - minLeftOffset);
+                var maxTopOffset = ($thiz.height() - $watermarkDiv.height() - minTopOffset);
+                var maxLeftOffset = ($thiz.width() - $watermarkDiv.width() - minLeftOffset);
 
                 topOffset = Math.random() * maxTopOffset + minTopOffset;
                 leftOffset = Math.random() * maxLeftOffset;
@@ -73,19 +98,19 @@ define(function(require, exports, module) {
                     leftOffset = minLeftOffset;
                 }
                 if (settings.xPosition == "center") {
-                    leftOffset = (thiz.width() - $('#waterMark').width()) / 2;
+                    leftOffset = ($thiz.width() - $watermarkDiv.width()) / 2;
                 }
                 if (settings.xPosition == "right") {
-                    leftOffset = (thiz.width() - $('#waterMark').width()) - minLeftOffset;
+                    leftOffset = ($thiz.width() - $watermarkDiv.width()) - minLeftOffset;
                 }
                 if (settings.yPosition == "top") {
                     topOffset = minTopOffset;
                 }
                 if (settings.yPosition == "center") {
-                    topOffset = (thiz.height() - $('#waterMark').height()) / 2 + minTopOffset;
+                    topOffset = ($thiz.height() - $watermarkDiv.height()) / 2 + minTopOffset;
                 }
                 if (settings.yPosition == "bottom") {
-                    topOffset = (thiz.height() - $('#waterMark').height() - minTopOffset);
+                    topOffset = ($thiz.height() - $watermarkDiv.height() - minTopOffset);
                 }
             }
 
@@ -99,10 +124,8 @@ define(function(require, exports, module) {
             }
 
             function init() {
-                thiz.append(genereateDiv());
-                $("#waterMark").css({
-                    opacity: settings.opacity
-                });
+                $thiz.append(genereateDiv());
+                
                 startShow();
             }
 
@@ -147,13 +170,13 @@ define(function(require, exports, module) {
 
         },
 
-        init: function (thiz) {
+        init: function ($thiz) {
 
             if (this.isSupportHtml5() && !this.isIE9()) {
-                this.initPDFJSViewer(thiz);
+                this.initPDFJSViewer($thiz);
            
             }else{
-                this.initSwfViewer(thiz);
+                this.initSwfViewer($thiz);
             }
 
         },
@@ -166,24 +189,19 @@ define(function(require, exports, module) {
 
         },
 
-        initPDFJSViewer: function(thiz) {
+        initPDFJSViewer: function($thiz) {
             self=this;
             $("html").attr('dir','ltr');
             $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v2/viewer.html#'+self.attrs.pdfFileUrl.value);
 
             if (this.get('watermark')) {
-                $('#lesson-document-content').WaterMark({ 
-                    'yPosition': 'bottom',
-                    'isAlwaysShow': true,
-                    'isUseRandomPos': false,
-                    'contents': this.get('watermark')
-                });
+                this.element.WaterMark(this.get('watermark'));
             }
         },
 
-        initSwfViewer: function(thiz){
+        initSwfViewer: function($thiz){
 
-            thiz.html('<div id="website"><p align="center" class="style1">您还没有安装flash播放器 请点击<a href="http://www.adobe.com/go/getflashplayer">这里</a>安装</p></div>');
+            $thiz.html('<div id="website"><p align="center" class="style1">您还没有安装flash播放器 请点击<a href="http://www.adobe.com/go/getflashplayer">这里</a>安装</p></div>');
             var flashvars = {
               doc_url: escape(this.attrs.swfFileUrl.value) 
             };
@@ -208,12 +226,7 @@ define(function(require, exports, module) {
             );
 
             if (this.get('watermark')) {
-                $('#lesson-document-content').WaterMark({ 
-                    'yPosition': 'bottom',
-                    'isAlwaysShow': true,
-                    'isUseRandomPos': false,
-                    'contents': this.get('watermark')
-                });
+                this.element.WaterMark(this.get('watermark'));
             }
 
         }
