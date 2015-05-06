@@ -7,6 +7,7 @@ use Topxia\Common\SimpleValidator;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\MessageReplyType;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -385,7 +386,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
         ));
-        return $result;
+
+        $response = $this->controller->createJson($this->request, $result);
+        $response->headers->setCookie(new Cookie("token", $token, 0));
+        return $response;
     }
     
     private function loadUserByUsername($request, $username)

@@ -25,7 +25,7 @@ class MobileBaseController extends BaseController
         return $this->createJson($request, $result);
     }
 
-    protected function createJson(Request $request, $data)
+    public function createJson(Request $request, $data)
     {
         $callback = $request->query->get('callback');
         if ($callback) {
@@ -34,6 +34,7 @@ class MobileBaseController extends BaseController
             $response = new JsonResponse($data);
             $response->headers->set("Access-Control-Allow-Origin", "*");
             $response->headers->set("Access-Control-Allow-Methods", "POST, GET");
+            $response->headers->set("Access-Control-Request-Headers", "token");
             $response->headers->set("Access-Control-Max-Age", "30");
             return $response;
         }
