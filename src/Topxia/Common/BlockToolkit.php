@@ -9,7 +9,6 @@ class BlockToolkit
 
     public static function init($code, $jsonFile, $appType, $container = null)
     {
-
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
             if (empty($blockMeta)) {
@@ -45,33 +44,39 @@ class BlockToolkit
                 }
 
                 if (empty($block['content'])) {
-                    $container->enterScope('request');
-                    $container->set('request', new Request(), 'request');
-
-                    if (!in_array($appType, array('theme', 'plugin'))) {
-                        throw new \RuntimeException("参数不正确!必须是主题和插件!");
-                    }
-
-                    if ($appType == 'theme') {
-                        $content =  $container->get('templating')->render("@{$appType}s/{$code}/TopxiaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
-                    }
-
-                    if ($appType == 'plugin') {
-                        $content =  $container->get('templating')->render("@{$appType}s/{$code}/{$code}Bundle/Resources/views/Block/{$block['templateName']}", array('block' => $block));
-                    }
-                    
+                    $content = render($block, $container);
                     $blockService->updateContent($block['id'], $content);
                 }
             }
-
         }
-
-        
     }
 
-    public static function render($block)
+    public static function render($block, $container)
     {
-        
+        if (empty($container->get('request'))) {
+            $container->enterScope('request');
+            $container->set('request', new Request(), 'request');
+        }
+
+        $appService = ServiceKernel::instance()->createService('CloudPlatform.AppService');
+        $app = $this->getAppService()->getAppByCode($block['category']);
+        $templateName = $block['templateName'];
+        $category = $block['category'];
+        if ($category != 'system' && $app['type'] == 'theme') {
+            return $container->get('templating')->render("@themes/{$category}/TopxiaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
+        }
+
+        if ($category != 'system' && $app['type'] == 'plugin') {
+            return $container->get('templating')->render("@plugins/{$category}/{$category}Bundle/Resources/views/Block/{$block['templateName']}", array('block' => $block));
+        }
+
+        if ($category == 'system') {
+            if (preg_match('/.*?:.*?:.*/', $templateName)) {
+                return $container->get('templating')->render($templateName);
+            } else {
+                return $container->get('templating')->render("TopxiaWebBundle:Block:{$templateName}");
+            }
+        }
     }
 
     public static function updateCarousel($code)
@@ -100,7 +105,6 @@ class BlockToolkit
             if (!empty($targetMatchs[1][$key])) {
                 $imglink['target'] = $targetMatchs[1][$key];
             }
-
         }
 
         $blockService->updateBlock($block['id'], array(

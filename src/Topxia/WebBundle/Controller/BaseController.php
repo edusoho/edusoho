@@ -168,30 +168,6 @@ abstract class BaseController extends Controller
         }
     }
 
-    protected function getFullBlockTemplateName($category, $name)
-    {
-        $app = $this->getAppService()->getAppByCode($category);
-        $bundleName = '';
-        if ($category != 'system' && $app['type'] == 'theme') {
-            $bundleName = 'TopxiaWebBundle';
-            $this->getSettingService()->set('BlockTheme', $category);
-        }
-
-        if ($category != 'system' && $app['type'] == 'plugin') {
-            $bundleName = "{$category}Bundle";
-        } 
-
-        if ($category == 'system') {
-            $bundleName = 'TopxiaWebBundle';
-            $this->getSettingService()->set('BlockTheme', '');
-        }
-        
-        if (preg_match('/.*?:.*?:.*/', $name)) {
-            return $name;
-        }
-        return "{$bundleName}:Block:{$name}";
-    }
-
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

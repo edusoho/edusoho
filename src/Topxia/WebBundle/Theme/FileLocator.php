@@ -36,6 +36,7 @@ class FileLocator extends BaseFileLocator
         }
 
         $paths[] = $this->themePath;
+
         parent::__construct($paths);
     }
 
@@ -59,17 +60,6 @@ class FileLocator extends BaseFileLocator
 
         if (false !== strpos($name, '..')) {
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
-        }
-
-        $blockTheme = $this->getSettingService()->get('BlockTheme', '');
-        //寻址编辑区模板
-        if (!empty($blockTheme) && false !== strpos($name, 'template.html.twig')) {
-            $name = str_replace(array('@', '/Resources'), '', $name);
-            $file = $this->kernel->getRootDir() . "/../web/themes/{$blockTheme}/{$name}";
-            if (file_exists($file)) {
-                $this->getSettingService()->set('BlockTheme', '');
-                return $file;
-            }
         }
 
         $bundleName = substr($name, 1);
