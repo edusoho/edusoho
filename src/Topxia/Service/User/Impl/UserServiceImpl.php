@@ -469,7 +469,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $registration['nickname'];
     }
 
-    public function emailGenerate($registration, $maxLoop=100){
+    public function generateEmail($registration, $maxLoop=100){
          for($i =0; $i<$maxLoop; $i++){
             $registration['email'] = 'edu_' . substr($this->getRandChar(), 0, 9) . '@edusoho.net';
             if($this->isEmailAvaliable($registration['email'])){
