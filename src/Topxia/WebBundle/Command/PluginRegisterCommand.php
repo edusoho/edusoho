@@ -45,7 +45,7 @@ class PluginRegisterCommand extends BaseCommand
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
 
-        $this->initBlock($code, $pluginDir . '/block.json');
+        $this->initBlock($code, $pluginDir . '/block.json', $this->getContainer());
         $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
 
         PluginUtil::refresh();
@@ -97,9 +97,9 @@ class PluginRegisterCommand extends BaseCommand
         return $meta;
     }
 
-    private function initBlock($code, $jsonFile)
+    private function initBlock($code, $jsonFile, $container)
     {
-        BlockToolkit::init($code, $jsonFile);
+        BlockToolkit::init($code, $jsonFile, 'plugin', $container);
     }
 
     protected function getAppService()

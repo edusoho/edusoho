@@ -188,7 +188,7 @@ class BlockController extends BaseController
         $block = $this->getBlockService()->getBlock($blockId);
         unset($block['meta']['default']);
         foreach ($block['meta']['items'] as $key => &$item) {
-            $item['default'] = $block['data'][$key]['items'];
+            $item['default'] = $block['data'][$key];
         }
        
         return new Response('<pre>' . json_encode($block['meta'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . '</pre>');
