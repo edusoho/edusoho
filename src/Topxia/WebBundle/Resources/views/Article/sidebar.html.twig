@@ -1,0 +1,54 @@
+<aside class="col-md-4 article-sidebar">
+  <!-- 热门资讯 -->
+    {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
+  <!-- 热门标签 -->
+
+  {% set tags = data('Tags',{'count':5}) %}
+  {% if tags %}
+    <div class="panel panel-default hot-tag">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="es-icon es-icon-loyalty"></i>热门标签</h3>
+      </div>
+      <div class="panel-body">
+        {% for tag in tags %}
+          {% if tag %} 
+            <a class="btn-tag" href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  
+  <!-- 热门评论 -->
+  <div class="panel panel-default hot-comments">
+    <div class="panel-heading"><i class="es-icon es-icon-textsms"></i>热门评论</div>
+    <div class="panel-body">
+
+    {% if allPosts %} 
+      {% for post in allPosts %}
+      {% set author = popularUsers[post.userId] %}     
+      {% set article = popularPosts[post.targetId] %}     
+            <div class="media media-comment">
+              <div class="media-body">
+                <div class="pull-left">
+                  <a href="{{ path('user_show', {id:author.id}) }}"><img src="{{ default_path('avatar', author.smallAvatar, '') }}" class="img-circle"></a>
+                </div>
+                <div class="comments-info">
+                  <p><a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a><span>评论于</span></p>
+                  <h5><a href="{{ path('article_detail', { id:article.id }) }}">{{ article.title }}</a></h5>
+                </div>
+                <div class="comments-content">
+                 {{ post.content|at(post.ats)|raw }}
+                </div>
+              </div>
+            </div>
+      {% endfor %}
+    {% else %}
+      <li class="empty">一个评论都没有！</li>
+    {% endif %}
+
+    </div>
+  </div>
+  <!-- 推荐资讯 -->
+  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
+</aside>

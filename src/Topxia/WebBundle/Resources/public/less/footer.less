@@ -1,0 +1,89 @@
+
+.es-footer {
+  background: #3f3f3f;
+  .copyright {
+    border-top: 1px solid #2a2a2a;
+    text-align: center;
+    padding: 20px 0;
+    line-height: 30px;
+    span {
+      margin-right: 30px;
+      color: #bababa;
+    }
+  }
+}
+
+.footer-link {
+  padding: 55px 0;
+  border-bottom: 1px solid #5e5e5e;
+}
+
+.footer-main {
+  .link-item {
+    width: 20%;
+    float: left;
+    text-shadow: 0 1px 3px #000;
+    @media (max-width: @screen-xs-max) {
+      width: 33.33%;
+    }
+  }
+  a {
+    display: block;
+    margin-top: 20px;
+    color: #b1b1b1;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+  h3 {
+    color: #b1b1b1;
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+}
+
+.footer-logo {
+  margin-top: 20px;
+  text-align: center;
+  @media (max-width: @screen-sm-max) {
+    padding: 0 0 30px 0;
+  }
+  .footer-partner {
+    margin-top: 30px;
+    i {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      margin: 0 10px;
+      font-size: 20px;
+      vertical-align: middle;
+      border-radius: 50%;
+      border: 1px solid #fff;
+      color: #fff;
+      text-align: center;
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+    }
+    i.es-icon-weibo:hover {
+      background: @brand-danger;
+      border-color: @brand-danger;
+    }
+    i.es-icon-qq:hover {
+      background: @brand-info;
+      border-color: @brand-info;
+    }
+    i.es-icon-weixin:hover {
+      background: @brand-success;
+      border-color: @brand-success;
+    }
+    i.es-icon-phone:hover {
+      background: @brand-warning;
+      border-color: @brand-warning;
+    }
+  }
+}

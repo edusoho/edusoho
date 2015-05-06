@@ -1,0 +1,259 @@
+// 班级头部
+.class-header {
+  padding: 30px 0 40px 0;
+  background: url("../img/class_bg.jpg");
+  background-size: 100% 100%;
+  .class-header-mian {
+    position: relative;
+    z-index: 2;
+  }
+  .class-bg-layer {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    .border-radius;
+    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    z-index: -1;
+    &.two {
+      top: 10px;
+      left: 10px;
+      z-index: -2;
+    }
+  }
+  .class-header-bg {
+    background-color: #fff;
+    .border-radius;
+    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    z-index: 1;
+  }
+  .class-img {
+    float: left;
+    width: 50%;
+    img {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+  }
+  .class-info {
+    float: left;
+    width: 50%;
+    >.title {
+      margin: 30px 30px 20px 30px;
+    }
+    >.metas {
+      min-height: 60px;
+      margin-bottom: 20px;
+      margin-left: 30px;
+      color: #999;
+      i {
+        color: @brand-primary;
+      }
+      span {
+        margin-left: 8px;
+      }
+    }
+  }
+  .class-data {
+    list-style-type: none;
+    padding: 10px 0;
+    background-color: @gray-lighter;
+    li {
+      float: left;
+      width: 25%;
+      padding: 10px 0;
+      color: @gray;
+      text-align: center;
+      line-height: 30px;
+      border-right: 1px solid @gray-light;
+      &.active >i {
+        color: @brand-primary;
+      }
+      &:last-child {
+        border: none;
+      }
+      >span>a>i,
+      >i {
+        color: @gray;
+        font-size: 26px;
+      }
+    }
+  }
+  .class-serve {
+    padding: 20px 10px 20px 30px;
+    .serve-info {
+      position: relative;
+      float: left;
+      width: 50%;
+      height: 70px;
+      border: 1px dashed @gray-lighter;
+      .serve-frame {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 30px;
+        padding: 5px;
+        font-size: 12px;
+        line-height: 15px;
+        text-align: center;
+        background-color: @gray-lighter;
+      }
+      >ul {
+        padding: 25px 20px 25px 50px;
+        >li {
+          float: left;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+          margin: 0 5px;
+          color: #fff;
+          background-color: @gray;
+          text-align: center;
+          .border-radius;
+          &.one {
+            background-color: @brand-primary;
+          }
+          &.two {
+            background-color: @brand-danger;
+          }
+          &.three {
+            background-color: @brand-warning;
+          }
+          &.four {
+            background-color: @brand-info;
+          }
+          >a {
+            display: block;
+            color: #fff;
+            &:focus {
+              box-shadow: none;
+              border: none;
+            }
+          }
+        }
+      }
+    }
+    .btn-buy {
+      float: left;
+      width: 50%;
+      // padding: 0 10px;
+      line-height: 70px;
+      .btn-link {
+        color: @gray;
+        &:hover {
+          color: @brand-primary;
+          text-decoration: none;
+        }
+      }
+      .btn-lg {
+        padding: 13px 40px;
+        font-size: 14px;
+      }
+    }
+  }
+  .price {
+    position: absolute;
+    width: 205px;
+    height: 82px;
+    text-align: center;
+    line-height: 82px;
+    top: 40px;
+    right: -22px;
+    color: #fff;
+    font-size: 12px;
+    background: @brand-primary;
+    background: url("../img/price_bg.png");
+    span {
+      font-size: 24px;
+    }
+  }
+  .setting {
+    position: absolute;
+    display: block;
+    top: -10px;
+    right: -15px;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    .border-radius(50%);
+    background-color: @gray;
+    color: #fff;
+    .es-transition;
+    &:hover {
+      .es-transition;
+      background-color: @brand-primary;
+    }
+  }
+}
+
+// 班级主体
+.class-detail-main {
+  .nav.nav-tabs>li>a {
+    padding: 10px 30px;
+    .badge {
+      margin-left: 5px;
+      background-color: @gray;
+      .es-transition;
+    }
+    &:hover .badge {
+      background-color: @brand-primary;
+      .es-transition;
+    }
+  }
+}
+
+// 班级tab内容
+.class-detail-content {
+  p {
+    line-height: 30px;
+    margin-bottom: 30px;
+    text-indent: 2em;
+  }
+}
+
+// 班级侧边栏
+.class-sidebar {
+  .serve-team {
+    .media-body {
+      border-bottom: 1px solid @gray-lighter;
+      >.title >a {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+      >p {
+        margin-top: 10px;
+        color: @gray;
+      }
+    }
+    .media:last-child .media-body {
+      border: none;
+    }  
+  }
+  .new-student {
+    .student-list {
+      overflow: hidden;
+      li {
+        float: left;
+        width: 20%;
+        margin: 10px auto;
+        text-align: center;
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+  .student-dynamic {
+    
+  }
+}
+

@@ -27,10 +27,15 @@
 {% endif %}
 
 <ul class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
-  <li><a class="js-social-share" href="javascript:;" title="分享到微博" data-share="weibo"><span class="social-share-icon-weibo"></span> 微博</a></li>
-  <li><a class="js-social-share" href="javascript:;" title="分享到QQ好友" data-share="qq"><span class="social-share-icon-qq"></span> QQ好友</a></li>
-  <li><a class="js-social-share" href="javascript:;" title="分享到QQ空间" data-share="qzone"><span class="social-share-icon-qzone"></span> QQ空间</a></li>
-  <li><a class="js-social-share" href="javascript:;" title="分享到微信" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><span class="social-share-icon-weixin"></span> 微信</a></li>
+
+
+<div class="bdsharebuttonbox bdshare-button-style0-24" style="padding:1px;" data-bd-bind="1429085802250">
+  <a href="javascript:;" class="bds_weixin js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weixin"></i></a>
+  <a href="javascript:;" class="bds_tsina js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weibo"></i></a>
+  <a href="javascript:;" class="bds_qq js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq" style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qq"></i></a>
+  <a href="javascript:;" class="bds_qzone js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone"style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qzone"></i></a>
+</div>
+
 </ul>
 
 {{ load_script('common/share-dropdown') }}

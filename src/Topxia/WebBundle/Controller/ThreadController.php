@@ -222,6 +222,7 @@ class ThreadController extends BaseController
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
         $fields['parentId'] = $postId;
+
         $post = $this->getThreadService()->createPost($fields);
 
         return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(

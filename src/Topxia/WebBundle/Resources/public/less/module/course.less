@@ -1,0 +1,75 @@
+.course-item {
+  margin-bottom: 20px;
+  // border: 1px solid #f7f7f7;
+  border: 1px solid @gray-light;
+  border-shadow: 5px 5px 5px #666;
+  border-radius: 4px;
+  // .box-shadow(0px 2px 6px rgba(20%, 20%, 40%, 0.1));
+  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+  a {
+    color: #212121;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+  .course-info {
+    padding: 0 20px;
+  }
+  .course-img {
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    .tag-discount {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 68px;
+      height: 68px;
+      z-index: 999;
+      background: url("../img/tag_discount.png");
+      &.free {
+        background: url("../img/tag_limitfree.png");
+      }
+    }
+    .img-responsive {
+      width: 100%;
+      // border-top-left-radius: 4px;
+      // border-top-right-radius: 4px;
+    }
+    img {
+      .es-transition;
+    }
+    a:hover {
+      img.transform {
+        .es-transform;
+      }
+    }
+  }
+  .title {
+    height: 40px;
+    margin: 10px auto;
+    overflow: hidden;
+  }
+  .metas {
+    padding: 10px 0;
+    border-top: 1px solid #f1f1f1;
+    color: @gray;
+    a{color: @gray;}
+    .num {
+      margin-right: 10px;
+    }
+    i {
+      margin-right: 5px;
+    }
+    .price {
+      float: right;
+      color: @brand-danger;
+    }
+    .free {
+      color: #238312;
+    }
+  }
+}

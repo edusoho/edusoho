@@ -327,10 +327,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createPost($fields)
     {
         $user = $this->getCurrentUser();
-        $thread = $this->getThread($fields['threadId']);
 
-        $fields['targetType'] = $thread['targetType'];
-        $fields['targetId'] = $thread['targetId'];
+        if (isset($fields['threadId']) && $fields['threadId'] != 0 ) {
+
+            $thread = $this->getThread($fields['threadId']);
+
+            $fields['targetType'] = $thread['targetType'];
+            $fields['targetId'] = $thread['targetId'];
+
+        }
+
         $this->tryAccess('post.create', $fields);
 
         $fields['content'] = $this->purifyHtml($fields['content']);
@@ -350,6 +356,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $post = $this->getThreadPostDao()->addPost($fields);
+
+        if ($fields['targetType'] == "article") return $post;
 
         $this->getThreadDao()->updateThread($thread['id'], array(
             'lastPostUserId' => $post['userId'],
