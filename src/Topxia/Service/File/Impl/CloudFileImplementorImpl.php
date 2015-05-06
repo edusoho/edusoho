@@ -201,11 +201,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $keys[] = $file['metas2']['thumb'];
         }
 
-        if (!empty($file['metas2']['pdf'] && !empty($file['metas2']['pdf']['key'])) {
+        if (!empty($file['metas2']['pdf']) && !empty($file['metas2']['pdf']['key'])) {
             $keys[] = $file['metas2']['pdf']['key'];
         }
 
-        if (!empty($file['metas2']['swf'] && !empty($file['metas2']['swf']['key'])) {
+        if (!empty($file['metas2']['swf']) && !empty($file['metas2']['swf']['key'])) {
             $keys[] = $file['metas2']['swf']['key'];
         }
 
