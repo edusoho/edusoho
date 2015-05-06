@@ -31,24 +31,40 @@ define(function(require, exports, module) {
     	});
 	}
 
+    function getFileType(fileSuffix) {
+        var fileSuffixs = {
+            "video": "*.mp4;*.avi;*.flv;*.wmv;*.mov;",
+            "audio": "*.mp3",
+            "document": "*.doc;*.docx;*.pdf",
+            "ppt": "*.ppt;*.pptx",
+            "flash": "*.swf"
+        };
+
+        for(var key in fileSuffixs){
+            if(fileSuffixs[key].lastIndexOf(fileSuffix)>=0){
+                return key;
+            }
+        }
+        return "other";
+    }
+
 	function uploadStart(file, self, switcher) {
         console.log(file);
         var data = {};
         var targetType = self.element.data('targetType');
 		var uploadMode = self.element.data('uploadMode');
 		var hlsEncrypted = self.element.data('hlsEncrypted');
+
+        var fileSuffix = file.name.substr(file.name.lastIndexOf(".")+1).toLowerCase();
+        var fileType = getFileType(fileSuffix);
+
 		if ((targetType == 'courselesson' || targetType == 'materiallib') && uploadMode == 'cloud') {
-			if (file.type == 'audio/mpeg') {
+			if ($.inArray(fileType, ['audio','flash']) >= 0) {
 				data.convertor = '';
-			} else if (file.type == 'application/x-shockwave-flash') {
-                data.convertor = '';
-            } else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
-				data.convertor = 'ppt';
+            } else if ($.inArray(fileType, ['ppt','document']) >= 0) {
+				data.convertor = fileType;
                 data.lazyConvert = 1;
-			}else if ( (file.type == 'application/msword') || (file.type == 'application/pdf') || (file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
-                data.convertor = 'document';
-                data.lazyConvert = 1;
-            } else {
+            } else if(fileType == 'video'){
 				if (switcher) {
 					data.videoQuality = switcher.get('videoQuality');
 					data.audioQuality = switcher.get('audioQuality');

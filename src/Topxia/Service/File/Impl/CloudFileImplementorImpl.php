@@ -63,7 +63,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
 
-        $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($fileInfo['mimeType']);
+        $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
         $uploadFile['storage'] = 'cloud';
         $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
