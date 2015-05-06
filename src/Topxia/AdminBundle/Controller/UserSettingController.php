@@ -96,7 +96,7 @@ class UserSettingController extends BaseController
                 $auth['captcha_enabled'] = 1;
             }
 
-            if($auth["register_mode"] == "email_or_mobile") {
+            if($auth["register_mode"] == "email_or_mobile" ) {
                 foreach ($auth['registerSort'] as $key => $value) {
                     if($value == "email" || $value == "mobile") {
                         unset($auth['registerSort'][$key]);
