@@ -73,7 +73,7 @@ class AnnouncementController extends BaseController
 	{	
 		$processor = $this->getAnnouncementProcessor($targetType);
 		$targetObject = $processor->tryManageObject($targetId);
-		
+
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
 
 	    if($request->getMethod() == 'POST') {

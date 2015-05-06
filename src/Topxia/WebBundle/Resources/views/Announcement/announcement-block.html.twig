@@ -1,7 +1,5 @@
 {% do load_script('announcement/announcement') %}
 
-<div class="panel panel-default">
-  <div class="panel-heading">
     {% if canManage %}
       <div class="pull-right">
         <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}" class="btn btn-link btn-xs">
@@ -9,43 +7,24 @@
         </a>
       </div>
     {% endif %}
-    <h3 class="panel-title">公告</h3>
-  </div>
 
-    <div class="panel-body">
         <ul class="media-list announcement-list">
             {% for announcement in announcements %}
-                <li class="media">
-                    <div class="media-body">
-                      <p>
-                        {#% if canTake %#}
-                            <a id="course-buy-btn" href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetId:targetObject.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
-                        {#% else %}
-                            <a id="course-buy-btn"
-                            {% if setting("targetObject.buy_fill_userinfo")|default(false) %}
-                            href="#modal" data-toggle="modal" 
-                            data-url="{{ path('course_buy', {id:targetObject.id, targetType:'course'}) }}"
-                            {% else %}
-                            href="{{ path('order_show', {targetId:targetObject.id, targetType:'course'}) }}"
-                            {% endif %}
-                            >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
-                        {% endif %#}
-                      </p>
+                <li>
+                <i class="es-icon es-icon-notifications"></i>
+                      <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetId:targetObject.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
 
                       {% if canManage %}
-                        <div class="clearfix">
-                          <span class="pull-right text-muted text-sm">{{ announcement.createdTime|date('Y-m-d H:i') }}</span>
-                          <a class="text-muted text-sm mrm action" href="javascript:;" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:'course',  targetId:targetObject.id}) }}">
+                          <a class="text-muted text-sm mrm action" href="javascript:;" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:'classroom',  targetId:targetObject.id}) }}">
                             <span class="glyphicon glyphicon-pencil"></span> 修改</a>
                           <a class="text-muted text-sm action" href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}">
                             <span class="glyphicon glyphicon-trash"></span> 删除</a>
-                        </div>
                       {% endif %}
-                    </div>
+
                 </li>
             {% else %}
-                <div class="empty">暂无课程公告</div>
+                <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}公告</div>
             {% endfor %}
         </ul>
-    </div>
-</div>  
+
+
