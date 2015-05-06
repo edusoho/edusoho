@@ -90,31 +90,6 @@ class FileToolkit
         return 'bmp jpg jpeg gif png ico';
     }
 
-    public static function getFileTypeByMimeType($mimeType)
-    {
-        if (strpos($mimeType, 'video') === 0) {
-            return 'video';
-        } elseif (strpos($mimeType, 'audio') === 0) {
-            return 'audio';
-        } elseif (strpos($mimeType, 'image') === 0) {
-            return 'image';
-        } elseif (in_array($mimeType, array(
-            'application/vnd.ms-powerpoint',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation'))) {
-            return 'ppt';
-        } elseif (strpos($mimeType, 'application/x-shockwave-flash') === 0 
-            or strpos($mimeType, 'application/vnd.adobe.flash.movie') === 0) {
-            return 'flash';
-        } elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
-            or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
-        			or strpos($mimeType, 'application/msword') === 0
-            or strpos($mimeType, 'application/pdf') === 0) {
-            return 'document';
-        }
-
-        return 'other';
-    }
-
     public static function getMimeTypeByExtension($extension)
     {
         $mimes = array(
@@ -902,6 +877,8 @@ class FileToolkit
             return 'document';
         } elseif (in_array($extension, array('ppt', 'pptx'))) {
             return 'ppt';
+        } elseif (in_array($extension, array('swf'))) {
+            return 'flash';
         }else {
             return 'other';
         }
