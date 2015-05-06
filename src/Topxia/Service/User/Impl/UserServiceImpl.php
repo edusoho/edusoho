@@ -459,7 +459,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         return $user;
     }
-    public function nicknameGenerate($registration, $maxLoop=100){
+    public function generateNickname($registration, $maxLoop=100){
         for($i =0; $i<$maxLoop; $i++){
             $registration['nickname'] ='EduSoho'.substr($this->getRandChar(), 0,6); 
             if($this->isNicknameAvaliable($registration['nickname'])) {
