@@ -32,6 +32,7 @@ define(function(require, exports, module) {
 	}
 
 	function uploadStart(file, self, switcher) {
+        console.log(file);
         var data = {};
         var targetType = self.element.data('targetType');
 		var uploadMode = self.element.data('uploadMode');
