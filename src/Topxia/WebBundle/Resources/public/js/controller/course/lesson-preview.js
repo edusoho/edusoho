@@ -102,12 +102,18 @@ define(function(require, exports, module) {
 
                 var watermarkUrl = $("#lesson-preview-doucment").data('watermarkUrl');
                 if (watermarkUrl) {
+                    console.log('i am in?');
                     $.get(watermarkUrl, function(watermark) {
                         var player = new DocumentPlayer({
                             element: '#lesson-preview-doucment',
                             swfFileUrl:response.swfUri,
                             pdfFileUrl:response.pdfUri,
-                            watermark: watermark
+                            watermark: {
+                                'xPosition': 'center',
+                                'yPosition': 'center',
+                                'rotate': 45,
+                                'contents': watermark
+                            }
                         });
                     });
                 } else {

@@ -35,7 +35,7 @@
         
         {% elseif lesson.type == 'document' %}
 
-            <div id="lesson-preview-doucment" data-url="{{ path('course_lesson_document', {courseId:lesson.courseId, lessonId:lesson.id}) }}"></div>
+            <div id="lesson-preview-doucment" data-url="{{ path('course_lesson_document', {courseId:lesson.courseId, lessonId:lesson.id}) }}" {% if setting('magic.doc_watermark') %}data-watermark-url="{{ path('cloud_doc_watermark') }}" {% endif %}></div>
         {% else %}
             <div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
                 {{ lesson.content|raw }}

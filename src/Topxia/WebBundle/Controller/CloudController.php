@@ -160,13 +160,8 @@ class CloudController extends BaseController
         } else {
             $watermark = '';
         }
-        $watermark = explode(',', $watermark);
-        $newWaterMark = array();
-        foreach ($watermark as $key => $value) {
-            $temp = explode(":", $value);
-            $newWaterMark[$temp[0]] = $temp[1];
-        }
-        return $this->createJsonResponse($newWaterMark);
+  
+        return $this->createJsonResponse($watermark);
     }
 
     private function parsePattern($pattern, $user)
