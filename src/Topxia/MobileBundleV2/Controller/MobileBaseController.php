@@ -103,6 +103,10 @@ class MobileBaseController extends BaseController
             $token = $request->query->get('token', '');
         }
 
+        if (empty($token)) {
+            $token = $request->cookies->get("token");
+        }
+
         return $token;
     }
 
