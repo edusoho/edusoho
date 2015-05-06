@@ -88,8 +88,8 @@ register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
 
-register_emailOrMobile_check:
-    pattern:  /register/emailOrMobile/check
+register_email_or_mobile_check:
+    pattern:  /register/email_or_mobile/check
     defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
 
 register_nickname_check:

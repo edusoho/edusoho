@@ -124,8 +124,8 @@ admin_user_create_email_check:
     pattern:  /user/create/email/check
     defaults: { _controller: TopxiaAdminBundle:User:emailCheck }
 
-admin_user_create_emailOrMobile_check:
-    pattern:  /user/create/emailOrMobile/check
+admin_user_create_email_or_mobile_check:
+    pattern:  /user/create/email_or_mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:emailOrMobileCheck }
     
 admin_user_create_nickname_check:
