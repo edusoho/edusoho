@@ -207,20 +207,24 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $keys[] = $file['metas2']['swf']['key'];
         }
 
-
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
-            $result1 = $this->getCloudClient()->deleteFilesByKeys('private', $keys);
-            $result2 = $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
-        } else {
-            $result1 = $this->getCloudClient()->deleteFilesByKeys('private', $keys);
-            $result2 = $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
+        $result1 = $this->getCloudClient()->deleteFilesByKeys('private', $keys);
+        if ($result1['status'] !== 'ok') {
+            return false;
         }
 
-        if ($result1['status'] === 'ok' && $result2['status'] === 'ok' ) {
-            return true;
+        if (!empty($keyPrefixs)) {
+            if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+                $result2 = $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
+            } else {
+                $result2 = $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
+            }
+
+            if ($result2['status'] !== 'ok') {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     public function makeUploadParams($rawParams)
