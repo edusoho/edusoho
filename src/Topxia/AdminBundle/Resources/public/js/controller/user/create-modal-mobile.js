@@ -29,8 +29,8 @@ define(function(require, exports, module) {
         });
         validator.addItem({
             element: '[name="emailOrMobile"]',
-            required: true,
-            rule: 'emailOrMobile emailOrMobile_remote'
+            required: true, 
+            rule: 'email_or_mobile email_or_mobile_remote'
         });
 
         validator.addItem({
