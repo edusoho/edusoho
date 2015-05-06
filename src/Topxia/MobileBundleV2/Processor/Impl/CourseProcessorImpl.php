@@ -669,6 +669,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getFavoriteCoruse()
     {
         $user  = $this->controller->getUserByToken($this->request);
+
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
         
@@ -1034,7 +1035,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "finishedTime",
             "ASC"
         ), 0, $count);
-        
+
         $lessons = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($learnStatusArray, 'lessonId'));
         
         $tempCourses = array();
@@ -1042,9 +1043,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $tempCourses[$course["id"]] = $course;
         }
         
+        $learnStatusArray = $this->coverLearnStatusTime($learnStatusArray);
         foreach ($lessons as $key => $lesson) {
             $courseId = $lesson["courseId"];
             if (isset($tempCourses[$courseId])) {
+                $tempCourses[$courseId]["startTime"] = $learnStatusArray[$courseId];
                 $tempCourses[$courseId]["lastLessonTitle"] = $lesson["title"];
             }
         }
@@ -1059,6 +1062,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
     
+    private function coverLearnStatusTime($learnStatusArray)
+    {
+        $map = array();
+        foreach ($learnStatusArray as $key => $learnStatus) {
+            $map[$learnStatus["courseId"]] = date("Y:m:d H:m:s", $learnStatus["startTime"]);
+        }
+
+        return $map;
+    }
+
     public function getLearnStatus()
     {
         $courseId = $this->getParam("courseId");
