@@ -173,28 +173,26 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function deleteFile($file, $deleteSubFile = true)
+    public function deleteFile($file)
     {
         $keys = array($file['hashId']);
         $keyPrefixs = array();
 
-        if ($deleteSubFile) {
-            foreach (array('sd', 'hd', 'shd') as $key) {
-                if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
-                    continue ;
-                }
-
-                // 防错
-                if (strlen($file['metas2'][$key]['key']) < 5) {
-                    continue;
-                }
-
-                $keyPrefixs[] = $file['metas2'][$key]['key'];
+        foreach (array('sd', 'hd', 'shd') as $key) {
+            if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
+                continue ;
             }
 
-            if (!empty($file['metas2']['imagePrefix']) && (strlen($file['metas2']['imagePrefix']) > 5)) {
-                $keyPrefixs[] = $file['metas2']['imagePrefix'];
+            // 防错
+            if (strlen($file['metas2'][$key]['key']) < 5) {
+                continue;
             }
+
+            $keyPrefixs[] = $file['metas2'][$key]['key'];
+        }
+
+        if (!empty($file['metas2']['imagePrefix']) && (strlen($file['metas2']['imagePrefix']) > 5)) {
+            $keyPrefixs[] = $file['metas2']['imagePrefix'];
         }
 
         if (!empty($file['metas2']['thumb'])) {
