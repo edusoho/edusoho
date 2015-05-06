@@ -179,7 +179,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $keyPrefixs = array();
 
         if ($deleteSubFile) {
-            foreach (array('sd', 'hd', 'shd', 'pdf') as $key) {
+            foreach (array('sd', 'hd', 'shd') as $key) {
                 if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
                     continue ;
                 }
@@ -191,7 +191,24 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
                 $keyPrefixs[] = $file['metas2'][$key]['key'];
             }
+
+            if (!empty($file['metas2']['imagePrefix']) && (strlen($file['metas2']['imagePrefix']) > 5)) {
+                $keyPrefixs[] = $file['metas2']['imagePrefix'];
+            }
         }
+
+        if (!empty($file['metas2']['thumb'])) {
+            $keys[] = $file['metas2']['thumb'];
+        }
+
+        if (!empty($file['metas2']['pdf'] && !empty($file['metas2']['pdf']['key'])) {
+            $keys[] = $file['metas2']['pdf']['key'];
+        }
+
+        if (!empty($file['metas2']['swf'] && !empty($file['metas2']['swf']['key'])) {
+            $keys[] = $file['metas2']['swf']['key'];
+        }
+
 
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
             $this->getCloudClient()->deleteFilesByKeys('private', $keys);
