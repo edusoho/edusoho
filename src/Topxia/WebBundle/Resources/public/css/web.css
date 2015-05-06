@@ -6423,3 +6423,28 @@ a:focus {
   border-radius: 2px;
 }
 
+.testpaper-body .testpaper-watermark {
+  margin: -25px 0 0 -100px;
+  left: 50%;
+  top: 50%;
+  font-size: 20px;
+  position: absolute;
+  text-align: center;
+  color: #e0e0e0;
+  -webkit-transform: rotate(45deg); 
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand');
+  z-index: 0;
+}
+
+.panel.testpaper-question-block {
+  position: relative;
+
+}
+.panel.testpaper-question-block .panel-body{
+  position:relative;
+  z-index:1;
+}
