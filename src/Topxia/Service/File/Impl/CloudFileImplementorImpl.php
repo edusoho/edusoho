@@ -209,13 +209,18 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
 
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
-            $this->getCloudClient()->deleteFilesByKeys('private', $keys);
-            $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
+            $result1 = $this->getCloudClient()->deleteFilesByKeys('private', $keys);
+            $result2 = $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
         } else {
-            $this->getCloudClient()->deleteFilesByKeys('private', $keys);
-            $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
+            $result1 = $this->getCloudClient()->deleteFilesByKeys('private', $keys);
+            $result2 = $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
         }
 
+        if ($result1['status'] === 'ok' && $result2['status'] === 'ok' ) {
+            return true;
+        }
+
+        return false;
     }
 
     public function makeUploadParams($rawParams)

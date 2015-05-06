@@ -148,12 +148,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException("文件(#{$id})不存在，删除失败");
         }
         
-        $result = $this->getFileImplementorByFile($file)->deleteFile($file);
-
-        if ($result['status'] === 'ok') {
+        $deleted = $this->getFileImplementorByFile($file)->deleteFile($file);
+        if ($deleted) {
             $deleted = $this->getUploadFileDao()->deleteFile($id);
-        } else {
-            $deleted = false;
         }
 
         return $deleted;
