@@ -250,7 +250,7 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	public function checkNicknameAction(Request $request, $id)
+	public function checkStudentAction(Request $request, $id)
 	{
 		$keyword = $request->query->get('value');
 		$user = $this->getUserService()->getUserByLoginField($keyword);

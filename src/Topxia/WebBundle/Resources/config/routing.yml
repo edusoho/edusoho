@@ -572,9 +572,9 @@ course_manage_student_remark:
     pattern:  /course/{courseId}/manage/student/{userId}/remark
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
 
-course_manage_student_check_nickname:
-    pattern:  /course/{id}/manage/nickname_check
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkNickname }
+course_manage_student_check:
+    pattern:  /course/{id}/manage/student_check
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
