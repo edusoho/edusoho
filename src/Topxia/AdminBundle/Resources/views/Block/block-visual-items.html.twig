@@ -7,7 +7,7 @@
 
   <div class="panel-group" id="js-accordion-{{ code }}" role="tablist" aria-multiselectable="true">
     {% for dataId in 0..item.count - 1 %}
-    {% set data = block.data[code]['items'][dataId]|default(null) %}
+    {% set data = block.data[code][dataId]|default(null) %}
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
           <h4 class="panel-title">
@@ -30,7 +30,6 @@
 
   </div>
 
-  <input class="form-control" type="hidden" name="data[{{ code }}][type]" id="{{ item.type }}" value="{{ item.type }}" >
 </section>
   
 {% endfor %}

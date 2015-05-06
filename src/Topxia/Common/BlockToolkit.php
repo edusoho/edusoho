@@ -22,8 +22,7 @@ class BlockToolkit
                 $block = $blockService->getBlockByCode($key);
                 $default = array();
                 foreach ($meta['items'] as $i => $item) {
-                    $default[$i]['items'] = $item['default'];
-                    $default[$i]['type'] = $item['type'];
+                    $default[$i] = $item['default'];
                 }
                 if (empty($block)) {
                     $block = array(
@@ -65,7 +64,6 @@ class BlockToolkit
                 }
             }
 
-          
         }
 
         
@@ -81,7 +79,7 @@ class BlockToolkit
         preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/i', $content, $altMatchs);
         preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $content, $linkMatchs);
         preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $content, $targetMatchs);
-        foreach ($data['carousel']['items'] as $key => $imglink) {
+        foreach ($data['carousel'] as $key => &$imglink) {
             if (!empty($imgMatchs[1][$key])) {
                 $imglink['src'] = $imgMatchs[1][$key];
             }
@@ -98,7 +96,6 @@ class BlockToolkit
                 $imglink['target'] = $targetMatchs[1][$key];
             }
 
-            $data['carousel']['items'][$key] = $imglink;
         }
 
         $blockService->updateBlock($block['id'], array(
