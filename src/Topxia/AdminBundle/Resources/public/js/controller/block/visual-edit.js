@@ -53,9 +53,19 @@ define(function(require, exports, module) {
                 if ($panels.length >= $panelGroup.data('count')) {
                     alert('最多只能添加' + $panelGroup.data('count') + '个!');
                 } else {
-                    $model = $panels[0].clone();
-                    $panelGroup.append($panels[0].outerHTML);
-
+                    $model = $($panels[0]).clone();
+                    $model.find('input').val('');
+                    $model.find('textarea').html('');
+                    $model.find('.title-label').html('');
+                    $headingId = new Date().getTime() + '-heading';
+                    $model.find('.panel-heading').attr('id', $headingId);
+                    $collapseId = new Date().getTime()+ '-collapse';
+                    $model.find('.panel-collapse').attr('aria-labelledby', $headingId).attr('id', $collapseId);
+                    $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+$collapseId).attr('aria-controls', $collapseId);
+                    $model.find('input[data-role=radio-yes]').prop('checked', false);
+                    $model.find('input[data-role=radio-no]').prop('checked', true);
+                    $panelGroup.append($model);
+                    this.refreshIndex($panelGroup);
                 }
                 
 
@@ -70,9 +80,18 @@ define(function(require, exports, module) {
                         alert("必须要有一个!");
                     } else {
                         $parent.remove();
+                        this.refreshIndex($panelGroup);
                     }
                 }
                 
+            },
+            refreshIndex: function($panelGroup) {
+                $prefixCode = $panelGroup.data('code');
+                $panels = $panelGroup.children('.panel.panel-default');
+                $panels.each(function(index, object){
+                    var $replace = $($(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]"));
+                    $(this).replaceWith($replace);
+                });
             }
         });
 

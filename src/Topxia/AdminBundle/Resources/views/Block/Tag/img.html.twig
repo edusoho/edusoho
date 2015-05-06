@@ -4,7 +4,7 @@
       <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" value="{{ data.src|default('') }}">
     </div>
     <div class="col-md-2">
-      <button class="btn btn-default btn-sm img-upload" type="button" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code, dataId:dataId}) }}">上传</button>
+      <button class="btn btn-default btn-sm img-upload" type="button" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">上传</button>
     </div>
  </div>
 

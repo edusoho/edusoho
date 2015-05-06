@@ -5,9 +5,9 @@
     <p class="text-muted">{{ item.desc }}</p>
   </div>
 
-  <div class="panel-group" id="js-accordion-{{ code }}" data-count="{{ item.count }}" role="tablist" aria-multiselectable="true">
+  <div class="panel-group" id="js-accordion-{{ code }}" data-code="data[{{ code }}]" data-count="{{ item.count }}" role="tablist" aria-multiselectable="true">
     {% for dataId,data in  block.data[code]|default(null)  %}
-      <div class="panel panel-default" data-code="data[{{ code }}]">
+      <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
