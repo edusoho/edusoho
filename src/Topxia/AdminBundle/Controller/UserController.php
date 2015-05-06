@@ -98,7 +98,7 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
           
-            $user = $this->getAuthService()->register($this->dealForDate($formData, $request));
+            $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
             $this->get('session')->set('registed_email', $user['email']);
 
             if(isset($formData['roles'])){
@@ -114,7 +114,7 @@ class UserController extends BaseController
         return $this->render($this->getCreateUserModal());
     }
 
-    private function dealForDate($formData, $request){
+    private function getRegisterData($formData, $clientIp){
         if(isset($formData['email'])){
             $userData['email'] = $formData['email'];
         }
@@ -123,7 +123,7 @@ class UserController extends BaseController
         }
         $userData['nickname'] = $formData['nickname'];
         $userData['password'] = $formData['password'];
-        $userData['createdIp'] = $request->getClientIp();
+        $userData['createdIp'] = $clientIp;
         return $userData;
     }
 
