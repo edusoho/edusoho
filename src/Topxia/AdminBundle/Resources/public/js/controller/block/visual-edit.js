@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
-    var Uploader = require('upload');
+    var Uploader = require('webuploader');
     exports.run = function() {
         var editForm = Widget.extend({
             events: {
@@ -10,27 +10,7 @@ define(function(require, exports, module) {
             },
 
             setup: function() {
-                this.$('.img-upload').each(function(){
-                    var self = $(this);
-                    new Uploader({
-                        trigger: $(this),
-                        name: 'picture',
-                        action: $(this).data('url'),
-                        data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                        accept: 'image/*',
-                        error: function(file) {
-                            Notify.danger('上传网站LOGO失败，请重试！')
-                        },
-                        success: function(response) {
-                            self.parents('.form-group').find('input').val(response.url);
-                            Notify.success('上传图片成功！');
-                        }
-                    });
-                });
-
-                $('[name=picture]').length > 0 && $('[name=picture]').css("height", 30);
-                
-                
+                this._bindUploader(this.element);                
                 this._initForm();
             },
             _initForm: function() {
@@ -64,6 +44,7 @@ define(function(require, exports, module) {
                     $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+$collapseId).attr('aria-controls', $collapseId);
                     $model.find('input[data-role=radio-yes]').attr('checked', false);
                     $model.find('input[data-role=radio-no]').attr('checked', true);
+                    this._bindUploader($model); 
                     $panelGroup.append($model);
                     this.refreshIndex($panelGroup);
                 }
@@ -89,9 +70,35 @@ define(function(require, exports, module) {
                 $prefixCode = $panelGroup.data('code');
                 $panels = $panelGroup.children('.panel.panel-default');
                 $panels.each(function(index, object){
-                    var $replace = $($(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]"));
+                    var $replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]");
                     $(this).replaceWith($replace);
                 });
+            },
+            _bindUploader: function($element) {
+               $element.find('.img-upload').each(function(){
+                   var self = $(this);
+                   var uploader = WebUploader.create({
+                       swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+                       server: $(this).data('uploadUrl'),
+                       pick: '#'+$(this).attr('id'),
+                       formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+                       accept: {
+                           title: 'Images',
+                           extensions: 'gif,jpg,jpeg,png',
+                           mimeTypes: 'image/*'
+                       }
+                    });
+
+                   uploader.on( 'uploadSuccess', function( file, response ) {
+                       self.closest('.form-group').find('input').val(response.url);
+                       Notify.success('上传成功！', 1);
+                   });
+
+                   uploader.on( 'uploadError', function( file, response ) {
+                       Notify.danger('上传失败，请重试！');
+                   });
+                   
+               });
             }
         });
 

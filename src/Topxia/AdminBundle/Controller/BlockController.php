@@ -290,7 +290,7 @@ class BlockController extends BaseController
         $url = ltrim($url, '/');
 
         $response = array(
-            'url' => $this->container->get('templating.helper.assets')->getUrl($url),
+            'url' => $url,
         );
 
         return $this->createJsonResponse($response);
