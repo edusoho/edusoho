@@ -54,7 +54,7 @@ class BlockToolkit
                     }
 
                     if ($appType == 'theme') {
-                        $content =  $container->get('templating')->render("@{$appType}s/{$code}/TopxaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
+                        $content =  $container->get('templating')->render("@{$appType}s/{$code}/TopxiaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
                     }
 
                     if ($appType == 'plugin') {
