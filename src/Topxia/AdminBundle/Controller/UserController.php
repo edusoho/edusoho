@@ -78,12 +78,6 @@ class UserController extends BaseController
         return $this->validateResult($result, $message);
     }
 
-      private function mobileCheckAction (Request $request){
-        $mobile = $request->query->get('value');
-        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
-        return $this->validateResult($result, $message);
-    }
-
     public function emailOrMobileCheckAction(Request $request){
         $emailOrMobile = $request->query->get('value');
         $emailOrMobile = str_replace('!', '.', $emailOrMobile);
