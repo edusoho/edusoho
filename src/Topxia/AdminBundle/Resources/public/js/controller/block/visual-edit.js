@@ -54,16 +54,16 @@ define(function(require, exports, module) {
                     alert('最多只能添加' + $panelGroup.data('count') + '个!');
                 } else {
                     $model = $($panels[0]).clone();
-                    $model.find('input').val('');
-                    $model.find('textarea').html('');
+                    $model.find('input').attr('value', '');
+                    $model.find('textarea').attr('html', '');
                     $model.find('.title-label').html('');
                     $headingId = new Date().getTime() + '-heading';
                     $model.find('.panel-heading').attr('id', $headingId);
                     $collapseId = new Date().getTime()+ '-collapse';
                     $model.find('.panel-collapse').attr('aria-labelledby', $headingId).attr('id', $collapseId);
                     $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+$collapseId).attr('aria-controls', $collapseId);
-                    $model.find('input[data-role=radio-yes]').prop('checked', false);
-                    $model.find('input[data-role=radio-no]').prop('checked', true);
+                    $model.find('input[data-role=radio-yes]').attr('checked', false);
+                    $model.find('input[data-role=radio-no]').attr('checked', true);
                     $panelGroup.append($model);
                     this.refreshIndex($panelGroup);
                 }
