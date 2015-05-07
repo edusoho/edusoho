@@ -22,9 +22,31 @@ class BaseProcessor {
         $instance->setDelegator($processorDelegator);
         return $processorDelegator;
     }
+
+    protected function stopInvoke()
+    {
+        $this->delegator ->stopInvoke();
+    }
+
     protected function getParam($name, $default = null) {
         $result = $this->request->get($name, $default);
         return $result;
+    }
+
+    protected function filterUsersFiled($users)
+    {
+        $controller = $this->controller;
+        return array_map(function($user) use ($controller)
+        {
+            foreach ($user as $key => $value) {
+                if (!in_array($key, array(
+                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "salt", "title"))) {
+                    unset($user[$key]);
+                }
+            }
+            
+            return $user;
+        }, $users);
     }
 
     protected function log($action, $message, $data)
@@ -42,6 +64,7 @@ class BaseProcessor {
     public function setDelegator($processorDelegator) {
         $this->delegator = $processorDelegator;
     }
+
     public function getDelegator() {
         return $this->delegator;
     }
