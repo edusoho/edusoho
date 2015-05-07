@@ -56,12 +56,18 @@ class WebExtension extends \Twig_Extension
         return array(
             'theme_global_script' => new \Twig_Function_Method($this, 'getThemeGlobalScript') ,
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
-            // file_path即将废弃，不要再使用
+            // file_path 即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            // default_path 即将废弃，不要再使用
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
-            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
-            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
+            // file_url 即将废弃，不要再使用
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
+            // system_default_path 即将废弃，不要再使用
+            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
+
+            'fileurl' => new \Twig_Function_Method($this, 'getFurl'),
+            'filepath' => new \Twig_Function_Method($this, 'getFpath'),
+            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
             'set_price' => new \Twig_Function_Method($this, 'getSetPrice') ,
@@ -542,10 +548,6 @@ class WebExtension extends \Twig_Extension
     {
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
-
-        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
-        
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
@@ -558,6 +560,10 @@ class WebExtension extends \Twig_Extension
                 if ($defaultSetting[$key] == 1) {
                     $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
                 }
+            } else if(array_key_exists($key, $defaultSetting) && $defaultSetting[$key]){
+                $uri = $defaultSetting[$size."Default".ucfirst($category)."Uri"];
+            } else {
+                return $url;
             }
 
             if ($absolute) {
@@ -567,26 +573,29 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        $uri = $this->parseFileUri($uri);
-        if ($uri['access'] == 'public') {
-            
-            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
-            $url = ltrim($url, ' /');
-            $url = $assets->getUrl($url);
+        return $this->parseUri($uri, $absolute);
+    }
 
-            if ($cdnUrl) {
-                $url = $cdnUrl . $url;
-            } else {
-                if ($absolute) {
-                    $url = $request->getSchemeAndHttpHost() . $url;
-                }
+    private function parseUri($uri, $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        $request = $this->container->get('request');
+        
+        if(strpos($uri, '://')) {
+            $uri = $this->parseFileUri($uri);
+            $url = "";
+            if ($uri['access'] == 'public') {
+                $url = $uri['path'];
             }
-
-            return $url;
-        }else{
-
+        } else {
+            $url = $uri;
         }
 
+        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $url;
+        $url = ltrim($url, ' /');
+        $url = $assets->getUrl($url);
+
+        return $this->addHost($url, $absolute);
     }
 
     public function getSystemDefaultPath($category,$systemDefault = false)
@@ -595,13 +604,15 @@ class WebExtension extends \Twig_Extension
         $publicUrlpath = 'assets/img/default/';
 
         $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
-
         if($systemDefault && isset($defaultSetting)){
             $fileName = 'default'.ucfirst($category).'FileName';
             if (array_key_exists($fileName, $defaultSetting)) {
                 $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
+            }else if(isset($defaultSetting["default".ucfirst($category)]) && $defaultSetting["defaultAvatar"] && array_key_exists("smallDefault".ucfirst($category)."Uri", $defaultSetting)){
+                $uri = $defaultSetting["largeDefault".ucfirst($category)."Uri"];
+                $url = $this->parseUri($uri);
             } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+                $url = $assets->getUrl($publicUrlpath . $category);
             }
         } else {
             $url = $assets->getUrl($publicUrlpath . $category);
@@ -653,6 +664,45 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public function getFurl($path, $defaultKey = false)
+    {
+        return $this->getPublicFilePath($path, $defaultKey, true);
+    }
+
+    public function getFpath($path, $defaultKey = false)
+    {
+        return $this->getPublicFilePath($path, $defaultKey, false);
+    }
+
+    private function getPublicFilePath($path, $defaultKey = false, $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        if(empty($path)){
+            $defaultSetting = $this->getSetting("default",array());
+            if(array_key_exists($defaultKey, $defaultSetting) && $defaultSetting[$defaultKey]) {
+                $path = $defaultSetting[$defaultKey];
+                return $this->parseUri($path, $absolute);
+            } else {
+                $path = $assets->getUrl('assets/img/default/' . $defaultKey);
+                return $this->addHost($path, $absolute);
+            }
+        }
+
+        return $this->parseUri($path, $absolute);
+    }
+
+    private function addHost($path, $absolute)
+    {
+        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        if ($cdnUrl) {
+            $path = $cdnUrl . $path;
+        } else if ($absolute) {
+            $path = $request->getSchemeAndHttpHost() . $path;
+        }
+        return $path;
     }
 
     public function fileSizeFilter($size)

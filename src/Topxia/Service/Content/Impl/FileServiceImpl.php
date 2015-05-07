@@ -122,8 +122,16 @@ class FileServiceImpl extends BaseService implements FileService
 	}
 
 	public function deleteFile($id)
+	{	
+		$file = $this->getFileDao()->getFile($id);
+		$this->deleteFileByUri($file["uri"]);
+	}
+
+	public function deleteFileByUri($uri)
 	{
-		$this->getFileDao()->deleteFile($id);
+		$this->getFileDao()->deleteFileByUri($uri);
+		$parsed = $this->parseFileUri($uri);
+		@unlink($parsed["fullpath"]);
 	}
 
     public function getFile($id)
@@ -281,6 +289,23 @@ class FileServiceImpl extends BaseService implements FileService
     {
         $files=$this->getFileDao()->getFilesByIds($ids);
         return ArrayToolkit::index($files, 'id');
+    }
+
+    public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight)
+    {
+        if(empty($fileId)) {
+            throw $this->createServiceException("参数不正确");
+        }
+
+        $file = $this->getFile($fileId);
+        if(empty($file)) {
+            throw $this->createServiceException("文件不存在");
+        }
+        
+        $parsed = $this->parseFileUri($file["uri"]);
+
+        list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], $scaledWidth, $scaledHeight);
+        return array($parsed["path"], $naturalSize, $scaledSize);
     }
 
     private function getSettingService()

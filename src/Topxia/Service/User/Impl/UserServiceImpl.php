@@ -127,54 +127,38 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($userId, array('email' => $email));
     }
 
-    public function changeAvatar($userId, $filePath, array $options)
+    public function changeAvatar($userId, $data)
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，头像更新失败！');
         }
 
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
 
-        $pathinfo = pathinfo($filePath);
+        $files = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
 
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
-
-        $largeImage = $rawImage->copy();
-        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(200, 200));
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
-        $largeFileRecord = $this->getFileService()->uploadFile('user', new File($largeFilePath));
-
-        $largeImage->resize(new Box(120, 120));
-        $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
-        $largeImage->save($mediumFilePath, array('quality' => 90));
-        $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
-
-        $largeImage->resize(new Box(48, 48));
-        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        $largeImage->save($smallFilePath, array('quality' => 90));
-        $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
-        @unlink($filePath);
+        $fields = array(
+            'smallAvatar' => $files[$fileIds["small"]["id"]]["uri"],
+            'mediumAvatar' => $files[$fileIds["medium"]["id"]]["uri"],
+            'largeAvatar' => $files[$fileIds["large"]["id"]]["uri"]
+        );
 
         $oldAvatars = array(
-            'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
-            'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
-            'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
+            'smallAvatar' => $user['smallAvatar'] ? $user['smallAvatar'] : null,
+            'mediumAvatar' => $user['mediumAvatar'] ? $user['mediumAvatar'] : null,
+            'largeAvatar' => $user['largeAvatar'] ? $user['largeAvatar'] : null
         );
 
         array_map(function($oldAvatar){
             if (!empty($oldAvatar)) {
-                @unlink($oldAvatar);
+                $this->getFileService()->deleteFileByUri($oldAvatar);
             }
         }, $oldAvatars);
 
-        return  $this->getUserDao()->updateUser($userId, array(
-            'smallAvatar' => $smallFileRecord['uri'],
-            'mediumAvatar' => $mediumFileRecord['uri'],
-            'largeAvatar' => $largeFileRecord['uri'],
-        ));
+        return  $this->getUserDao()->updateUser($userId, $fields);
     }
 
     public function isNicknameAvaliable($nickname)

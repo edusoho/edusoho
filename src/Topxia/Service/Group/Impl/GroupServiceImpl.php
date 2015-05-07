@@ -105,27 +105,40 @@ class GroupServiceImpl extends BaseService implements GroupService {
         ));
     }
 
-    public function changeGroupLogo($id, $filePath, $options)
-     {
-        $group=$this->getGroup($id);
-        $mediumFileRecord=$this->changeLogo($filePath,120,120,$options,$group['logo']);
-        return  $this->getGroupDao()->updateGroup($id, array(
-            'logo' => $mediumFileRecord['uri'],
-        ));
-
-     }
-
-    public function changeGroupBackgroundLogo($id, $filePath, $options)
+    public function changeGroupImg($id, $field, $data)
     {
-        
+        if(!in_array($field, array("logo", "backgroundLogo"))) {
+            throw $this->createServiceException('更新的字段错误！');
+        }
+
         $group=$this->getGroup($id);
-        $mediumFileRecord=$this->changeLogo($filePath,1140,279,$options,$group['backgroundLogo']);
+        if (empty($group)) {
+            throw $this->createServiceException('小组不存在，更新失败！');
+        }
 
-        return  $this->getGroupDao()->updateGroup($id, array(
-            'backgroundlogo' => $mediumFileRecord['uri'],
-        ));
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
+
+        $files = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
+
+        $fields = array(
+            $field => $files[$fileIds[$field]["id"]]["uri"],
+        );
+
+        $oldAvatars = array(
+            $field => $group[$field] ? $group[$field] : null,
+        );
+
+        array_map(function($oldAvatar){
+            if (!empty($oldAvatar)) {
+                $this->getFileService()->deleteFileByUri($oldAvatar);
+            }
+        }, $oldAvatars);
+
+        return  $this->getGroupDao()->updateGroup($id, $fields);
+
     }
-
 
     public function joinGroup($user,$groupId) 
     {
@@ -279,32 +292,6 @@ class GroupServiceImpl extends BaseService implements GroupService {
         }
         
         return $conditions;
-    }
-
-    private function changeLogo($filePath,$x,$y,$options,$logoUrl){
-        $pathinfo = pathinfo($filePath);
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
-
-        $grouplogoImage = $rawImage->copy();
-        $grouplogoImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        
-        $grouplogoImage->resize(new Box($x, $y));
-        $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
-        $grouplogoImage->save($mediumFilePath, array('quality' => 90));
-        $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
-         @unlink($filePath);
-        $oldAvatars = array(
-            'logo' => $logoUrl ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $logoUrl) : null,
-         );
-
-        array_map(function($oldAvatar){
-            if (!empty($oldAvatar)) {
-                @unlink($oldAvatar);
-            }
-        }, $oldAvatars);
-        return $mediumFileRecord;
-
     }
 
     private function getLogService() 

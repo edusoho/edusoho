@@ -179,6 +179,7 @@ class CourseSettingController extends BaseController
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
         return $this->render('TopxiaAdminBundle:System:live-course-setting.html.twig', array(
             'courseSetting' => $setting,
+            'capacity' => $capacity
         ));
     }
 

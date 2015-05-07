@@ -7,7 +7,7 @@
     </div>
     <div class="es-box-body user-learn clearfix">
       <a href="{{ path('course_show', {id:course.id}) }}">
-        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+        <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
       </a>
       <p>《{{ course.title }}》</p>
       {% set teacher = course.teachers|first %}

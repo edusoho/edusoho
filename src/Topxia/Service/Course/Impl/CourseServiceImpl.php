@@ -6,6 +6,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Common\FileToolKit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Util\LiveClientFactory;
 
@@ -404,59 +405,48 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $fields;
 	}
 
-    public function changeCoursePicture ($courseId, $filePath, array $options)
+    public function changeCoursePicture($courseId, $data)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，图标更新失败！');
         }
 
-        $pathinfo = pathinfo($filePath);
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
 
-        $largeImage = $rawImage->copy();
-        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(480, 270));
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
-        $largeFileRecord = $this->getFileService()->uploadFile('course', new File($largeFilePath));
-
-        $largeImage->resize(new Box(304, 171));
-        $middleFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_middle.{$pathinfo['extension']}";
-        $largeImage->save($middleFilePath, array('quality' => 90));
-        $middleFileRecord = $this->getFileService()->uploadFile('course', new File($middleFilePath));
-
-        $largeImage->resize(new Box(96, 54));
-        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        $largeImage->save($smallFilePath, array('quality' => 90));
-        $smallFileRecord = $this->getFileService()->uploadFile('course', new File($smallFilePath));
+        $files = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
 
         $fields = array(
-        	'smallPicture' => $smallFileRecord['uri'],
-        	'middlePicture' => $middleFileRecord['uri'],
-        	'largePicture' => $largeFileRecord['uri'],
+        	'smallPicture' => $files[$fileIds["small"]["id"]]["uri"],
+        	'middlePicture' => $files[$fileIds["middle"]["id"]]["uri"],
+        	'largePicture' => $files[$fileIds["large"]["id"]]["uri"]
     	);
 
-    	@unlink($filePath);
+    	$this->deleteNotUsedPictures($course);
 
+		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+        
+        return $this->getCourseDao()->updateCourse($courseId, $fields);
+    }
+
+    private function deleteNotUsedPictures($course)
+    {
     	$oldPictures = array(
-            'smallPicture' => $course['smallPicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['smallPicture']) : null,
-            'middlePicture' => $course['middlePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['middlePicture']) : null,
-            'largePicture' => $course['largePicture'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $course['largePicture']) : null
+            'smallPicture' => $course['smallPicture'] ? $course['smallPicture'] : null,
+            'middlePicture' => $course['middlePicture'] ? $course['middlePicture'] : null,
+            'largePicture' => $course['largePicture'] ? $course['largePicture'] : null
         );
 
     	$courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
     	if ($courseCount <= 1) {
     		array_map(function($oldPicture){
                 	if (!empty($oldPicture)){
-        	            @unlink($oldPicture);
+                		$this->getFileService()->deleteFileByUri($oldPicture);
                 	}
                 }, $oldPictures);
         }
-		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
-        
-        return $this->getCourseDao()->updateCourse($courseId, $fields);
     }
 
 	public function recommendCourse($id, $number)
