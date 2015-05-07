@@ -22,6 +22,7 @@ use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\BlockToolkit;
 
 function check_installed()
 {
@@ -641,92 +642,10 @@ EOD;
 
     public function initBlocks()
     {
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'home_top_banner',
-            'category' => 'default'
-            'title'=>'默认主题：首页头部图片轮播'
-        ));
-
-        $content = <<<'EOD'
-<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
-<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
-<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
-EOD;
-        
-        $jsonFile = __DIR__ . '/../../web/themes/default/block.json';
-        $this->initBlockMeta('default');
-        
-        $this->getBlockService()->updateContent($block['id'], $content);
-
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'autumn:home_top_banner',
-            'title'=>'清秋主题：首页头部图片轮播'
-        ));
-
-        $content = <<<'EOD'
-<div class="item active">
-    <img src="../themes/autumn/img/slide-1.jpg">
-</div>
-<div class="item">
-    <img src="../themes/autumn/img/slide-2.jpg">
-</div>
-<div class="item">
-    <img src="../themes/autumn/img/slide-3.jpg">
-</div>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
-
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'live_top_banner',
-            'title'=>'直播频道首页图片轮播'
-        ));
-
-        $content = <<<'EOD'
-<a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
-<a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
-
-
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'bill_banner',
-            'title'=>'我的账户Banner'
-        ));
-
-        $content = <<<'EOD'
-<br><div class="col-md-12">  
-<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" style="width: 100%;"/></a>
-<br><br></div>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
-
-    }
-
-    private function initBlockMeta($code, $jsonFile)
-    {
-        if (!file_exists($jsonFile)) {
-            throw new \RuntimeException("插件编辑区元信息文件{$blockMeta}不存在！");
-        }
-
-        $blockMeta = json_decode(file_get_contents($jsonFile), true);
-        if (empty($blockMeta)) {
-            throw new \RuntimeException("插件元信息文件{$blockMeta}格式不符合JSON规范，解析失败，请检查元信息文件格式");
-        }
-
-        foreach ($blockMeta as $key => $meta) {
-            $block = $this->getBlockService()->getBlockByCode($key);
-            if (empty($block)) {
-                $block = array(
-                    'code' => $key,
-                    'category' => $code,
-                    'meta' => $meta,
-                    'templateName' => $meta['templateName'],
-                    'title' => $meta['title']
-                );
-                $this->getBlockService()->createBlock($block);
-            }
-          
-        }
+        $themeDir = realpath(__DIR__ . '/../themes/');
+        BlockToolkit::init('system', "{$themeDir}/block.json");
+        BlockToolkit::init('default', "{$themeDir}/default/block.json");
+        BlockToolkit::init('autumn', "{$themeDir}/autumn/block.json");
     }
 
     public function initLockFile()
