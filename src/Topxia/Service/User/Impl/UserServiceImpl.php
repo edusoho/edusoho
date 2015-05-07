@@ -152,9 +152,10 @@ class UserServiceImpl extends BaseService implements UserService
             'largeAvatar' => $user['largeAvatar'] ? $user['largeAvatar'] : null
         );
 
-        array_map(function($oldAvatar){
+        $service = $this;
+        array_map(function($oldAvatar) use($service) {
             if (!empty($oldAvatar)) {
-                $this->getFileService()->deleteFileByUri($oldAvatar);
+                $service->getFileService()->deleteFileByUri($oldAvatar);
             }
         }, $oldAvatars);
 
