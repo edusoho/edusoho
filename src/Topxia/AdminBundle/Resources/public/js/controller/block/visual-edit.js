@@ -12,6 +12,7 @@ define(function(require, exports, module) {
             setup: function() {
                 this._bindUploader(this.element);                
                 this._initForm();
+                this._bindCollapseEvent(this.element);
             },
             _initForm: function() {
                 $form = this.element;
@@ -44,11 +45,11 @@ define(function(require, exports, module) {
                     $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+$collapseId).attr('aria-controls', $collapseId);
                     $model.find('input[data-role=radio-yes]').attr('checked', false);
                     $model.find('input[data-role=radio-no]').attr('checked', true);
-                    $uploadId = new Date().getTime();
-                    $model.find('.webuploader-container').attr('id',  $uploadId);
+                    var code = $panelGroup.data('code');
+                    $model.find('.webuploader-container').attr('id',  'item-' + code + 'uploadId-' + ($panels.length + 1));
                     $panelGroup.append($model);
-                    this._bindUploader($model); 
                     this.refreshIndex($panelGroup);
+                    this._bindUploader($model); 
                 }
                 
 
@@ -69,7 +70,7 @@ define(function(require, exports, module) {
                 
             },
             refreshIndex: function($panelGroup) {
-                $prefixCode = $panelGroup.data('code');
+                $prefixCode = $panelGroup.data('prefix');
                 $panels = $panelGroup.children('.panel.panel-default');
                 $panels.each(function(index, object){
                     var $replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]");
@@ -96,16 +97,27 @@ define(function(require, exports, module) {
                        uploader.upload();
                     });
 
-                   uploader.on( 'uploadSuccess', function( file, response ) {
+                    uploader.on( 'uploadSuccess', function( file, response ) {
                        self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
                        Notify.success('上传成功！', 1);
                    });
 
-                   uploader.on( 'uploadError', function( file, response ) {
+                    uploader.on( 'uploadError', function( file, response ) {
                        Notify.danger('上传失败，请重试！');
-                   });
+                    });
                 
                });
+            },
+            _bindCollapseEvent: function($element) {
+                $element.find('[data-role=collapse]').each(function(){
+                    $(this).on('shown.bs.collapse', function(e){
+                        $(e.target).find('.webuploader-container div:eq(1)').css({width:46, height:30});
+                    });
+                    $(this).on('hidden.bs.collapse', function(e){
+                        $(e.target).find('.webuploader-container div:eq(1)').css({width:1, height:1});
+                    });
+                });
+               
             }
         });
 
