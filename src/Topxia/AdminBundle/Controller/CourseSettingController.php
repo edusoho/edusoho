@@ -110,12 +110,7 @@ class CourseSettingController extends BaseController
 
     public function courseAvatarAction(Request $request)
     {
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
-        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
-        $courseDefaultSet = $this->getCourseDefaultSet();
-        $defaultSetting = array_merge($courseDefaultSet, $courseDefaultSetting);
+        $defaultSetting = $this->getSettingService()->get('default', array());
 
         if ($request->getMethod() == 'POST') {
 
@@ -124,13 +119,13 @@ class CourseSettingController extends BaseController
             $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
                 'defaultCoursePicture'
             ));
-            $this->getSettingService()->set('course_default', $courseDefaultSetting);
 
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default,$courseDefaultSetting);
+
             $this->getSettingService()->set('default', $defaultSetting);
 
-            $this->getLogService()->info('system', 'update_settings', "更新课程默认图片设置", $courseSetting);
+            $this->getLogService()->info('system', 'update_settings', "更新课程默认图片设置", $defaultSetting);
             $this->setFlashMessage('success', '课程默认图片设置已保存！');
         }
 

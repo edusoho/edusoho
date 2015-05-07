@@ -25,21 +25,11 @@ define(function(require, exports, module) {
             var $watermarkDiv = null;
 
             function genereateDiv() {
-                $watermarkDiv = $('<div id="waterMark"></div>');
+                var IEversion = getInternetExplorerVersion();
+                $watermarkDiv = $('<div id="waterMark" class="watermark"></div>');
                 var rotate = 'rotate(' + settings.rotate + 'deg)';
+                $watermarkDiv.addClass('active');
                 $watermarkDiv.css({
-                    '-webkit-touch-callout': 'none',
-                    '-webkit-user-select': 'none',
-                    '-khtml-user-select': 'none',
-                    '-moz-user-select': 'none',
-                    '-ms-user-select': 'none',
-                    'user-select': 'none',
-                    'text-align': 'center', 
-                    'display': 'none', 
-                    'position': 'absolute',
-                    'width': 500,
-                    'height': 20,
-                    'vertical-align': 'middle',
                     opacity: settings.opacity,
                     '-webkit-transform': rotate,
                     '-moz-transform': rotate,
@@ -49,6 +39,12 @@ define(function(require, exports, module) {
                     'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"
                 });
                 $watermarkDiv.css(settings.style);
+                if (IEversion >= 8 && IEversion < 9 ) {
+                    $watermarkDiv.css({
+                        'height': 60,
+                        'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity="+ (parseFloat(settings.opacity) * 100) +")"
+                    });
+                }
                 $watermarkDiv.html(settings.contents);
                 return $watermarkDiv;
             }
@@ -121,6 +117,19 @@ define(function(require, exports, module) {
                     timeingShow();
 
                 }
+            }
+
+            function getInternetExplorerVersion()
+            {
+              var rv = -1; // Return value assumes failure.
+              if (navigator.appName == 'Microsoft Internet Explorer')
+              {
+                var ua = navigator.userAgent;
+                var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+                if (re.exec(ua) != null)
+                  rv = parseFloat( RegExp.$1 );
+              }
+              return rv;
             }
 
             function init() {
