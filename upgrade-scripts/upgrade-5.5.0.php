@@ -10,6 +10,7 @@ use Topxia\Service\Common\ServiceKernel;
         $this->getConnection()->beginTransaction();
         try{
             $this->authSetting();
+            $this->updateDefaultPicture();
 
             $this->getConnection()->commit();
         } catch(\Exception $e) {
@@ -29,7 +30,7 @@ use Topxia\Service\Common\ServiceKernel;
 
         }
 
-        $developerSetting = ServiceKernel::instance()->createService('System.SettingService')->get('developer', array());
+        $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
@@ -37,18 +38,34 @@ use Topxia\Service\Common\ServiceKernel;
 
      }
 
-     private function  authSetting(){
-        //query
-        $sql = "SELECT value FROM setting WHERE name='auth'";
-        $result = $this->getConnection()->fetchColumn($sql);
+     private function updateDefaultPicture()
+     {
+        $default = $this->getSettingService()->get("default", array());
+        if($default["defaultCoursePictureFileName"]) {
+            $default["course.png"] = 'assets/img/default/large'.$default["defaultCoursePictureFileName"];
+        }
+        if($default["defaultAvatarFileName"]) {
+            $default["avatar.png"] = 'assets/img/default/large'.$default["defaultAvatarFileName"];
+        }
 
-        //update value
-        $dateser = unserialize($result);
-        $dateser['register_mode'] ='email';
-        $value = serialize($dateser);
-        //update to db
-        $sql = "UPDATE setting SET value ='{$value}' where  name='auth'";
-        $this->getConnection()->exec( $sql);
+        $this->getSettingService()->set("default", $default);
+
+     }
+
+     private function  authSetting()
+     {
+        $auth = $this->getSettingService()->get("auth", array());
+
+        if($auth['register_mode'] == "opened") {
+            $auth['register_mode'] = 'email';
+        }
+
+        $this->getSettingService()->set("auth", $auth);
+     }
+
+     private function getSettingService()
+     {
+        return ServiceKernel::instance()->createService('System.SettingService');
      }
 
  }
