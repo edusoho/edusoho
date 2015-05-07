@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require("common/jquery.placeholder.js")
+    require("placeholder");
     require("jquery.bootstrap-datetimepicker");
     var SmsSender = require('../widget/sms-sender');
     exports.run = function() {
