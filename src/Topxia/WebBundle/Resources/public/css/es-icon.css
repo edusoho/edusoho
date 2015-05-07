@@ -15,16 +15,22 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.es-icon-anonymous-iconfont:before { content: "\e666"; }
 .es-icon-portrait:before { content: "\e65e"; }
 .es-icon-accesstime:before { content: "\e658"; }
 .es-icon-addbox:before { content: "\e65f"; }
 .es-icon-checkbox:before { content: "\e660"; }
+.es-icon-forum:before { content: "\e662"; }
 .es-icon-thumbup:before { content: "\e659"; }
 .es-icon-reply:before { content: "\e65a"; }
 .es-icon-textsms:before { content: "\e657"; }
 .es-icon-assignmentind:before { content: "\e661"; }
+.es-icon-keyboardarrowdown:before { content: "\e663"; }
+.es-icon-keyboardarrowup:before { content: "\e664"; }
 .es-icon-language:before { content: "\e65b"; }
 .es-icon-loyalty:before { content: "\e65c"; }
+.es-icon-morehoriz:before { content: "\e665"; }
+.es-icon-remove:before { content: "\e667"; }
 .es-icon-search:before { content: "\e600"; }
 .es-icon-mail:before { content: "\e601"; }
 .es-icon-personadd:before { content: "\e602"; }
