@@ -98,7 +98,7 @@ class ThemeRegisterCommand extends BaseCommand
 
     private function initBlock($code, $jsonFile, $container)
     {
-        BlockToolkit::init($code, $jsonFile, 'theme', $container);
+        BlockToolkit::init($code, $jsonFile, $container);
     }
 
     protected function getAppService()

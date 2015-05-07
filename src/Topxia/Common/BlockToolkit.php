@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BlockToolkit
 {
-
-    public static function init($code, $jsonFile, $appType, $container = null)
+    public static function init($category, $jsonFile, $container = null)
     {
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
@@ -26,7 +25,7 @@ class BlockToolkit
                 if (empty($block)) {
                     $block = array(
                         'code' => $key,
-                        'category' => $code,
+                        'category' => $category,
                         'meta' => $meta,
                         'data' => $default,
                         'templateName' => $meta['templateName'],
@@ -35,7 +34,7 @@ class BlockToolkit
                     $block = $blockService->createBlock($block);
                 } else {
                     $block = $blockService->updateBlock($block['id'], array(
-                        'category' => $code,
+                        'category' => $category,
                         'meta' => $meta,
                         'data' => $default,
                         'templateName' => $meta['templateName'],

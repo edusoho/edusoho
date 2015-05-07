@@ -1,9 +1,4 @@
-{% for imglink in (block.data|first)['items']|default(null) if imglink.src|default('') %}
-  <div class="col-md-12">
-    <a href="{{ imglink.href|default('') }}"><img src="{{ asset(imglink.src) }}" alt="{{ imglink.alt|default('') }}" /></a>
-  </div>
-{% else %}
-  <div class="col-md-12">
-    <a href="#"><img src="{{ asset('/assets/img/placeholder/banner-wallet.png') }}" /></a>
-  </div>
-{% endfor %}
+{% set imglink = carousel|first|default(null) %}
+<a href="{{ imglink.href|default('') }}">
+  <img src="{{ asset(imglink.src) }}" alt="{{ imglink.alt|default('') }}" />
+</a>

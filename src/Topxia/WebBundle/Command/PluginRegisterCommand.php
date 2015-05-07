@@ -97,9 +97,9 @@ class PluginRegisterCommand extends BaseCommand
         return $meta;
     }
 
-    private function initBlock($code, $jsonFile, $container)
+    private function initBlock($category, $jsonFile, $container)
     {
-        BlockToolkit::init($code, $jsonFile, 'plugin', $container);
+        BlockToolkit::init($category, $jsonFile, $container);
     }
 
     protected function getAppService()
