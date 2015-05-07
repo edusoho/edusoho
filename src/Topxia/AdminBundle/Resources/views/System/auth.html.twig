@@ -14,7 +14,6 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('register_mode', {'email':'邮箱注册', 'email_or_mobile':'邮箱或手机注册', 'closed':'关闭'}, auth.register_mode) }}
-      <div class="help-block" >当开通云短信，且注册新用户时使用手机验证码，开启邮箱或手机注册才可用</div>
     </div>
   </div>
   <div class="form-group">
@@ -457,6 +456,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input ytpe="hidden" name='_cloud_sms'  value= "setting('cloud_sms.sms_enabled')">
 </form>
 
 {% endblock %}
