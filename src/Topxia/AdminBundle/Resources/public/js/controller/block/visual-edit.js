@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     require('webuploader');
     exports.run = function() {
         var editForm = Widget.extend({
+            uploaders: [],
             events: {
                 'click .js-add-btn': 'onClickAddBtn',
                 'click .js-remove-btn': 'onClickRemoveBtn',
@@ -38,18 +39,18 @@ define(function(require, exports, module) {
                     $model.find('input').attr('value', '');
                     $model.find('textarea').attr('html', '');
                     $model.find('.title-label').html('');
-                    $headingId = new Date().getTime() + '-heading';
-                    $model.find('.panel-heading').attr('id', $headingId);
-                    $collapseId = new Date().getTime() + '-collapse';
-                    $model.find('.panel-collapse').attr('aria-labelledby', $headingId).attr('id', $collapseId);
-                    $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+$collapseId).attr('aria-controls', $collapseId);
+                    var headingId = new Date().getTime() + '-heading';
+                    $model.find('.panel-heading').attr('id', headingId);
+                    var collapseId = new Date().getTime() + '-collapse';
+                    $model.find('.panel-collapse').attr('aria-labelledby', headingId).attr('id', collapseId);
+                    $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+collapseId).attr('aria-controls', collapseId);
                     $model.find('input[data-role=radio-yes]').attr('checked', false);
                     $model.find('input[data-role=radio-no]').attr('checked', true);
                     var code = $panelGroup.data('code');
-                    $model.find('.webuploader-container').attr('id',  'item-' + code + 'uploadId-' + ($panels.length + 1));
+                    var uploadId = new Date().getTime();
+                    $model.find('.webuploader-container').attr('id',  'item-' + code + 'uploadId-' + (uploadId));
                     $panelGroup.append($model);
                     this.refreshIndex($panelGroup);
-                    this._bindUploader($model); 
                 }
                 
 
@@ -70,14 +71,20 @@ define(function(require, exports, module) {
                 
             },
             refreshIndex: function($panelGroup) {
+                this._destoryUploader(this.element);
                 $prefixCode = $panelGroup.data('prefix');
                 $panels = $panelGroup.children('.panel.panel-default');
                 $panels.each(function(index, object){
-                    var $replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]");
-                    $(this).replaceWith($replace);
+                    $(this).find('.webuploader-container').html('上传');
+                    var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]");
+                    $(this).replaceWith(replace);
                 });
+
+                this._bindUploader(this.element);
+                this._bindCollapseEvent(this.element); 
             },
             _bindUploader: function($element) {
+                var thiz = this;
                $element.find('.img-upload').each(function(){
                    var self = $(this);
                    var uploader = WebUploader.create({
@@ -105,7 +112,9 @@ define(function(require, exports, module) {
                     uploader.on( 'uploadError', function( file, response ) {
                        Notify.danger('上传失败，请重试！');
                     });
-                
+                    
+                    var id =$(this).attr('id');
+                    thiz.uploaders[id] = uploader;
                });
             },
             _bindCollapseEvent: function($element) {
@@ -118,6 +127,9 @@ define(function(require, exports, module) {
                     });
                 });
                
+            },
+            _destoryUploader: function($element) {
+            
             }
         });
 
