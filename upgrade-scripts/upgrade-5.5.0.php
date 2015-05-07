@@ -79,6 +79,20 @@ use Topxia\Common\BlockToolkit;
 
     }
 
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
+    protected function isFileGroupExist($group)
+    {
+        $sql = "select * from file_group where code='{$group}' ";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
     private function updateBlocks()
     {
         global $kernel;
@@ -103,27 +117,13 @@ use Topxia\Common\BlockToolkit;
         BlockToolkit::updateCarousel($code);
     }
 
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function isFileGroupExist($group)
-    {
-        $sql = "select * from file_group where code='{$group}' ";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
      private function updateDefaultPicture()
      {
         $default = $this->getSettingService()->get("default", array());
-        if($default["defaultCoursePictureFileName"]) {
+        if(array_key_exists("defaultCoursePictureFileName", $default) && $default["defaultCoursePictureFileName"]) {
             $default["course.png"] = 'assets/img/default/large'.$default["defaultCoursePictureFileName"];
         }
-        if($default["defaultAvatarFileName"]) {
+        if(array_key_exists("defaultAvatarFileName", $default) && $default["defaultAvatarFileName"]) {
             $default["avatar.png"] = 'assets/img/default/large'.$default["defaultAvatarFileName"];
         }
 
@@ -135,7 +135,7 @@ use Topxia\Common\BlockToolkit;
      {
         $auth = $this->getSettingService()->get("auth", array());
 
-        if($auth['register_mode'] == "opened") {
+        if(array_key_exists("register_mode", $auth) && $auth['register_mode'] == "opened") {
             $auth['register_mode'] = 'email';
         }
 
