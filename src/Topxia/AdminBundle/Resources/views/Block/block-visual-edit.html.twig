@@ -10,8 +10,9 @@
   {% if app.debug %}
     <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockId:block.id}) }}" target="_blank">查看JSON配置</a>
   {% endif %}
-  
+
   <div class="col-md-6">
+    <h4>{{ block.title }}</h4>
     <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
       {{ web_macro.flash_messages() }}
       {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
