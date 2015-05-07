@@ -2,17 +2,20 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     require('webuploader');
+    //require('jquery.colorbox');
     exports.run = function() {
         var editForm = Widget.extend({
             uploaders: [],
             events: {
                 'click .js-add-btn': 'onClickAddBtn',
                 'click .js-remove-btn': 'onClickRemoveBtn',
-                'click .js-title-label': 'onClickPreviewPic',
+                'click .js-title-label': 'onClickTitleLabel',
+                'click .js-img-preview': 'onClickPicPreview',
                 'change .js-label-input': 'onChangeLabel'
             },
 
             setup: function() {
+                //this._bindImgPreview(this.element);
                 this._bindUploader(this.element);                
                 this._initForm();
                 this._bindCollapseEvent(this.element);
@@ -72,19 +75,13 @@ define(function(require, exports, module) {
                 }
                 e.stopPropagation();
             },
-            onClickPreviewPic: function(e) {
+            onClickTitleLabel: function(e) {
                 var $target = $(e.currentTarget);
-
-                if ($target.data('url')) {
-                    $.get($target.data('url'), function(html){
-                        if (html) {
-                            $('#modal').html(html);
-                            $('#modal').modal('show');
-                        }
-                    });
-                    e.stopPropagation();
-                } 
-                
+                e.stopPropagation();
+            },
+            onClickPicPreview: function(e) {
+                var $target = $(e.currentTarget);
+                e.stopPropagation();
             },
             onChangeLabel: function(e) {
                 var $target = $(e.currentTarget);
@@ -103,9 +100,14 @@ define(function(require, exports, module) {
                 this._bindUploader(this.element);
                 this._bindCollapseEvent(this.element); 
             },
+            _bindImgPreview: function($element) {
+                $element.find('.js-img-preview').colorbox({rel:'group1', photo:true, current:'{current} / {total}', title:function() {
+                    return $(this).data('title');
+                }});
+            },
             _bindUploader: function($element) {
                 var thiz = this;
-               $element.find('.img-upload').each(function(){
+                $element.find('.img-upload').each(function(){
                    var self = $(this);
                    var uploader = WebUploader.create({
                        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
