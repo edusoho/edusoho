@@ -1,11 +1,10 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    require("placeholder");
     require("jquery.bootstrap-datetimepicker");
     var SmsSender = require('../widget/sms-sender');
-
     exports.run = function() {
-
         $(".date").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
