@@ -274,11 +274,28 @@ class BlockController extends BaseController
 
     public function uploadAction(Request $request, $blockId)
     {
+        $response = array();
         if ($request->getMethod() == 'POST') {
-            $originalFile = $this->get('request')->files->get('file');
-            $file = $this->getUploadFileService()->addFile('blockpicture', 0, array('isPublic' => 1), 'local', $originalFile);
-            return new Response(json_encode($file));
+            $file = $request->files->get('file');
+            if (!FileToolkit::isImageFile($file)) {
+                throw $this->createAccessDeniedException('图片格式不正确！');
+            }
+
+            $filename = 'block_picture_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+            $file = $file->move($directory, $filename);
+
+            $block = $this->getBlockService()->getBlock($blockId);
+
+            $url = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+            $url = ltrim($url, '/');
+
+            $response = array(
+                'url' => $url,
+            );
         }
+        return $this->createJsonResponse($response);
     }
 
     public function picPreviewAction(Request $request, $blockId)
@@ -305,11 +322,6 @@ class BlockController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    private function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
 }

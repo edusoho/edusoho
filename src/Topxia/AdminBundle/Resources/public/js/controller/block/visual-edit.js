@@ -39,13 +39,15 @@ define(function(require, exports, module) {
                     $model.find('.title-label').html('');
                     $headingId = new Date().getTime() + '-heading';
                     $model.find('.panel-heading').attr('id', $headingId);
-                    $collapseId = new Date().getTime()+ '-collapse';
+                    $collapseId = new Date().getTime() + '-collapse';
                     $model.find('.panel-collapse').attr('aria-labelledby', $headingId).attr('id', $collapseId);
                     $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+$collapseId).attr('aria-controls', $collapseId);
                     $model.find('input[data-role=radio-yes]').attr('checked', false);
                     $model.find('input[data-role=radio-no]').attr('checked', true);
-                    this._bindUploader($model); 
+                    $uploadId = new Date().getTime();
+                    $model.find('.webuploader-container').attr('id',  $uploadId);
                     $panelGroup.append($model);
+                    this._bindUploader($model); 
                     this.refreshIndex($panelGroup);
                 }
                 
@@ -95,7 +97,7 @@ define(function(require, exports, module) {
                     });
 
                    uploader.on( 'uploadSuccess', function( file, response ) {
-                       self.closest('.form-group').find('input').val(response.hashId);
+                       self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
                        Notify.success('上传成功！', 1);
                    });
 
