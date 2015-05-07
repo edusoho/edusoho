@@ -2,20 +2,22 @@
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
+    var WebUploader = require('edusoho.webuploader');
+    var Notify = require('common/bootstrap-notify');
+
     exports.run = function() {
-        if($('#group-avatar-form').length>0){
-            var validator = new Validator({
-            element: '#group-avatar-form'
-            });
 
-            validator.addItem({
-            element: '[name="form[avatar]"]',
-            required: true,
-            rule: 'maxsize_image',
-            requiredErrorMessage: '请选择要上传的文件。'
-            });
+        var uploader = new WebUploader({
+            element: '#group-save-btn'
+        });
 
-        }
+        uploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#group-save-btn").data("gotoUrl");
+            Notify.success('上传成功！', 1);
+            document.location.href = url;
+        });
+
+
     };
 
 });

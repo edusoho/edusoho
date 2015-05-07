@@ -466,7 +466,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'opened',
+            'register_mode'=>'email',
             'email_activation_title' => '请激活您的{{sitename}}账号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
