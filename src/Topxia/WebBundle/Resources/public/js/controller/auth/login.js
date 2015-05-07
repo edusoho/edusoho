@@ -1,9 +1,10 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    require("common/jquery.placeholder.js")
     require("jquery.bootstrap-datetimepicker");
-    
     exports.run = function() {
+        $('input, textarea').placeholder(); 
         var validator = new Validator({
             element: '#login-form'
         });
