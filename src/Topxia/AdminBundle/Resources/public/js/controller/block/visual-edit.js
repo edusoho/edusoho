@@ -8,7 +8,8 @@ define(function(require, exports, module) {
             events: {
                 'click .js-add-btn': 'onClickAddBtn',
                 'click .js-remove-btn': 'onClickRemoveBtn',
-                'click .js-title-label': 'onClickPreviewPic'
+                'click .js-title-label': 'onClickPreviewPic',
+                'change .js-label-input': 'onChangeLabel'
             },
 
             setup: function() {
@@ -74,12 +75,19 @@ define(function(require, exports, module) {
             onClickPreviewPic: function(e) {
                 var $target = $(e.currentTarget);
 
-                $.get($target.data('url'), function(html){
-                    $('#modal').html(html);
-                    $('#modal').modal('show');
+                $target.data('url') && $.get($target.data('url'), function(html){
+                    if (html) {
+                        $('#modal').html(html);
+                        $('#modal').modal('show');
+                    }
+                    
                 });
                 
                 e.stopPropagation();
+            },
+            onChangeLabel: function(e) {
+                var $target = $(e.currentTarget);
+                console.log($target.closest('.panel.panel-default').find('.js-title-label').html($target.val()));
             },
             refreshIndex: function($panelGroup) {
                 this._destoryUploader(this.element);
