@@ -75,15 +75,16 @@ define(function(require, exports, module) {
             onClickPreviewPic: function(e) {
                 var $target = $(e.currentTarget);
 
-                $target.data('url') && $.get($target.data('url'), function(html){
-                    if (html) {
-                        $('#modal').html(html);
-                        $('#modal').modal('show');
-                    }
-                    
-                });
+                if ($target.data('url')) {
+                    $.get($target.data('url'), function(html){
+                        if (html) {
+                            $('#modal').html(html);
+                            $('#modal').modal('show');
+                        }
+                    });
+                    e.stopPropagation();
+                } 
                 
-                e.stopPropagation();
             },
             onChangeLabel: function(e) {
                 var $target = $(e.currentTarget);
