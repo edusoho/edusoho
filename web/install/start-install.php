@@ -643,9 +643,45 @@ EOD;
     public function initBlocks()
     {
         $themeDir = realpath(__DIR__ . '/../themes/');
-        BlockToolkit::init('system', "{$themeDir}/block.json");
-        BlockToolkit::init('default', "{$themeDir}/default/block.json");
-        BlockToolkit::init('autumn', "{$themeDir}/autumn/block.json");
+
+        $metaFiles = array(
+            'system' => "{$themeDir}/block.json",
+            'default' => "{$themeDir}/default/block.json",
+            'autumn' => "{$themeDir}/autumn/block.json"
+        );
+
+        foreach ($metaFiles as $category => $file) {
+            $metas = file_get_contents($file);
+            $metas = json_decode($metas, true);
+
+            foreach ($metas as $code => $meta) {
+
+                $data = array();
+                foreach ($meta['items'] as $key => $item) {
+                    $data[$key] = $item['default'];
+                }
+
+                $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
+                if (file_exists($filename)) {
+                    $content = file_get_contents($filename);
+                } else {
+                    $content = '';
+                }
+
+                $this->getBlockService()->createBlock(array(
+                    'title' => $meta['title'] ,
+                    'mode' => 'template' ,
+                    'templateName' => $meta['templateName'],
+                    'content' => $content,
+                    'code' => $code,
+                    'meta' => $meta,
+                    'data' => $data,
+                    'category' => $category
+                ));
+            }
+
+        }
+
     }
 
     public function initLockFile()
