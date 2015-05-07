@@ -22,11 +22,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function getUser($id, $lock = false)
     {
         $user = $this->getUserDao()->getUser($id, $lock);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function findUsersCountByLessThanCreatedTime($endTime)
@@ -42,31 +38,25 @@ class UserServiceImpl extends BaseService implements UserService
     public function getUserByNickname($nickname)
     {
         $user = $this->getUserDao()->findUserByNickname($nickname);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function getUserByLoginField($keyword){
         if(SimpleValidator::email($keyword)){
-            return $this->getUserByEmail($keyword);
+            $user =  $this->getUserDao()->findUserByEmail($keyword);
         }
-        if(SimpleValidator::mobile($keyword)){
-            return $this->getUserByVerifiedMobile($keyword);
+        else if(SimpleValidator::mobile($keyword)){
+            $user =  $this->getUserDao()->findUserByVerifiedMobile($keyword);
+        }else {
+            $user =  $this->getUserDao()->findUserByNickname($keyword);
         }
-        return $this->getUserByNickname($keyword);
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function getUserByVerifiedMobile($mobile)
     {
         $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }    
 
     public function getUserByEmail($email)
@@ -75,11 +65,7 @@ class UserServiceImpl extends BaseService implements UserService
             return null;
         }
         $user = $this->getUserDao()->findUserByEmail($email);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function findUsersByIds(array $ids)
