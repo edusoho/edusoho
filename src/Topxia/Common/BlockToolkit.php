@@ -69,10 +69,10 @@ class BlockToolkit
         $block = $blockService->getBlockByCode($code);
         $data = $block['data'];
         $content = $block['content'];
-        preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/i', $content, $imgMatchs);
-        preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/i', $content, $altMatchs);
-        preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $content, $linkMatchs);
-        preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $content, $targetMatchs);
+        preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $content, $imgMatchs);
+        preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $content, $altMatchs);
+        preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/is', $content, $linkMatchs);
+        preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/is', $content, $targetMatchs);
         foreach ($data['carousel'] as $key => &$imglink) {
             if (!empty($imgMatchs[1][$key])) {
                 $imglink['src'] = $imgMatchs[1][$key];
