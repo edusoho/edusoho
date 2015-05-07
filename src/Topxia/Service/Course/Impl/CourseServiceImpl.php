@@ -441,9 +441,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     	$courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
     	if ($courseCount <= 1) {
-    		array_map(function($oldPicture){
+    		$fileService = $this->getFileService();
+    		array_map(function($oldPicture) use($fileService){
                 	if (!empty($oldPicture)){
-                		$this->getFileService()->deleteFileByUri($oldPicture);
+                		$fileService->deleteFileByUri($oldPicture);
                 	}
                 }, $oldPictures);
         }

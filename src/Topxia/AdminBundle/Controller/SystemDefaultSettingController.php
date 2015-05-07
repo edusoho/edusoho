@@ -42,9 +42,10 @@ class SystemDefaultSettingController extends BaseController
             $setting['avatar.png'] = $files[$fileIds['avatar.png']['id']]['uri'];
             $this->getSettingService()->set("default",$setting);
 
-            array_map(function($oldAvatar){
+            $fileService = $this->getFileService();
+            array_map(function($oldAvatar) use($fileService){
                 if (!empty($oldAvatar)) {
-                    $this->getFileService()->deleteFileByUri($oldAvatar);
+                    $fileService->deleteFileByUri($oldAvatar);
                 }
             }, $oldAvatars);
 
@@ -85,9 +86,10 @@ class SystemDefaultSettingController extends BaseController
 
             $this->getSettingService()->set("default",$setting);
 
-            array_map(function($oldAvatar){
+            $fileService = $this->getFileService();
+            array_map(function($oldAvatar) use($fileService){
                 if (!empty($oldAvatar)) {
-                    $this->getFileService()->deleteFileByUri($oldAvatar);
+                    $fileService->deleteFileByUri($oldAvatar);
                 }
             }, $oldAvatars);
 

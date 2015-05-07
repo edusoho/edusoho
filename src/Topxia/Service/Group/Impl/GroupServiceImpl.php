@@ -130,9 +130,10 @@ class GroupServiceImpl extends BaseService implements GroupService {
             $field => $group[$field] ? $group[$field] : null,
         );
 
-        array_map(function($oldAvatar){
+        $fileService = $this->getFileService();
+        array_map(function($oldAvatar) use($fileService){
             if (!empty($oldAvatar)) {
-                $this->getFileService()->deleteFileByUri($oldAvatar);
+                $fileService->deleteFileByUri($oldAvatar);
             }
         }, $oldAvatars);
 
