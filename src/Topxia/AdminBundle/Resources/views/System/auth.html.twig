@@ -233,7 +233,7 @@
                {% if sort=='nickname' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %} {% if sort == "nickname" %} checked =true {% endif %} {% endfor %} name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"></span>
                 </li>
                {% endif %}
                {% if sort=='password' %}
