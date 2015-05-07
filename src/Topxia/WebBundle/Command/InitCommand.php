@@ -376,8 +376,15 @@ EOD;
     public function initBlock($output)
     {
         $output->write('  初始化编辑区');
-        $systemJson = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/block.json';
-        BlockToolkit::init('system', $systemJson, $this->getContainer());
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/block.json';
+        BlockToolkit::init('system', $json, $this->getContainer());
+
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/default/block.json';
+        BlockToolkit::init('default', $json, $this->getContainer());
+
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
+        BlockToolkit::init('autumn', $json, $this->getContainer());
+
     }
 
 	private function initServiceKernel()
