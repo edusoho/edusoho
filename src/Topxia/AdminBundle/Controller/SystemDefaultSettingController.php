@@ -48,7 +48,7 @@ class SystemDefaultSettingController extends BaseController
                 }
             }, $oldAvatars);
 
-            return $this->redirect($this->generateUrl('admin_setting_default'));
+            return $this->redirect($this->generateUrl('admin_setting_avatar'));
         }
 
         $fileId = $request->getSession()->get("fileId");
@@ -91,7 +91,7 @@ class SystemDefaultSettingController extends BaseController
                 }
             }, $oldAvatars);
 
-            return $this->redirect($this->generateUrl('admin_setting_default'));
+            return $this->redirect($this->generateUrl('admin_setting_course_avatar'));
         }
 
         $fileId = $request->getSession()->get("fileId");
