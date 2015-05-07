@@ -18,7 +18,7 @@
   {% for course in courses %}
   <li class=" {% if course.id in unEnabledCourseIds %} enabled {% endif %}course-item clearfix"   data-id="{{course.id}}" >
     <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-      <img class="course-picture" src="{{ fpath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+      <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
      <div style="float:right;" class="text-muted mrm mls">
@@ -79,7 +79,7 @@
         {% set teacher = users[course.teacherIds|first]|default(null) %}
         {% if teacher %}
           <div class="teacher">
-            <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ fpath(teacher.smallAvatar, 'course.png') }}" class="teacher-avatar"></a>
+            <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'course.png') }}" class="teacher-avatar"></a>
             <a class="teacher-nickname ellipsis" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
             <span class="teacher-title ellipsis">{{ teacher.title }}</span>
           </div>

@@ -1,7 +1,7 @@
 <li id="post-{{ post.id }}" class="thread-post thread-subpost media {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
   data-author-name="{{ author.nickname }}">
   <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
-    <img class="media-object" src="{{ fpath(author.smallAvatar, 'avatar.png') }}" >
+    <img class="media-object" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" >
   </a>
   <div class="media-body">
     <div class="metas">

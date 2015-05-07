@@ -6,7 +6,7 @@
     {% endif %}
     <li class="media">
       <a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
-        <img src="{{ fpath(user.smallAvatar, 'avatar.png') }}" class="media-object">
+        <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="media-object">
       </a>
       <div class="media-body">
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}

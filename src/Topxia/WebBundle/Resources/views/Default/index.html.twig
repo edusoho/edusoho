@@ -35,7 +35,7 @@
                 <ul class="home-class-list">
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img src="{{ fpath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                      <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
                     </a>
                     <div class="class-body">
                       <h3 class="class-title">
@@ -192,7 +192,7 @@
                          <div class="media">
                             <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
                               {% if group.logo %}
-                              <img src="{{fpath(group.logo)}}" alt="{{group.title}}">
+                              <img src="{{filepath(group.logo)}}" alt="{{group.title}}">
                               {%else%}
                               <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
                               {%endif%}
@@ -232,7 +232,7 @@
                   {% if learn.type == "finished_testpaper" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -243,7 +243,7 @@
                 {% elseif learn.type == "finished_homework" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -257,7 +257,7 @@
                 {% elseif learn.type == "finished_exercise" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -268,7 +268,7 @@
                   {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -278,7 +278,7 @@
                   {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
                     <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -289,7 +289,7 @@
                       {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
                        <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -301,7 +301,7 @@
                   {% elseif learn.type == "learned_lesson" %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -311,7 +311,7 @@
                   {% elseif learn.type == "favorite_course" %}
                     <li class="media">
                       <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                        <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                       </a>
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -321,7 +321,7 @@
                     {% elseif learn.type == "start_learn_lesson" %}
                     <li class="media">
                       <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ fpath(learn.user.mediumAvatar, 'avatar.png') }}">
+                        <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                       </a>
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -369,7 +369,7 @@
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ fpath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
         <div class="course-price-info">
@@ -408,7 +408,7 @@
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ fpath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
               <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               <span class="teacher-title ellipsis">{{ teacher.title }}</span>
             </div>

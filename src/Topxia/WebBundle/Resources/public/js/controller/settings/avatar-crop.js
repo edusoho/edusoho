@@ -13,7 +13,7 @@ define(function(require, exports, module) {
             element: "#avatar-crop",
             group: "user",
             cropedWidth: 200,
-            cropedHeight: 200,
+            cropedHeight: 200
         });
 
         imageCrop.on("afterCrop", function(response){

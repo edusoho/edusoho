@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         
         var uploader = new WebUploader({
-            element: '#upload-picture-btn',
+            element: '#upload-picture-btn'
         });
 
         uploader.on('uploadSuccess', function(file, response ) {

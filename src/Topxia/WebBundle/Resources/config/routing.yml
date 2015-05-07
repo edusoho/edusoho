@@ -1385,7 +1385,7 @@ group_transfer:
     pattern:  /group/transferGroup/{id}
     defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
 group_setLogoCrop:
-    pattern:  /group/setting/logoCrop/{id}
+    pattern:  /group/{id}/setting/logoCrop
     defaults: { _controller: TopxiaWebBundle:Group:logoCrop }
 group_logo_set:
     pattern:  /group/{id}/setting/logo

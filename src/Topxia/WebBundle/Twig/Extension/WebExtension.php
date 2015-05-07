@@ -65,8 +65,8 @@ class WebExtension extends \Twig_Extension
             // system_default_path 即将废弃，不要再使用
             'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
 
-            'furl' => new \Twig_Function_Method($this, 'getFurl'),
-            'fpath' => new \Twig_Function_Method($this, 'getFpath'),
+            'fileurl' => new \Twig_Function_Method($this, 'getFurl'),
+            'filepath' => new \Twig_Function_Method($this, 'getFpath'),
             'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,

@@ -89,7 +89,7 @@
     </div>
     <div class="controls col-md-8 radios">
 
-      <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img src="{{ fpath(storageSetting.video_watermark_image) }}">{% endif %}</div>
+      <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img src="{{ filepath(storageSetting.video_watermark_image) }}">{% endif %}</div>
       <button class="btn btn-default" id="cloud-video-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">上传</button>
       <button class="btn btn-default" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}" {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>删除</button>
 
@@ -104,7 +104,7 @@
     </div>
     <div class="controls col-md-8 radios">
 
-      <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img src="{{ fpath(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
+      <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img src="{{ filepath(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
       <button class="btn btn-default" id="cloud-video-embed-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_upload') }}">上传</button>
       <button class="btn btn-default" id="cloud-video-embed-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_remove') }}" {% if not storageSetting.video_embed_watermark_image %}style="display:none;"{% endif %}>删除</button>
 

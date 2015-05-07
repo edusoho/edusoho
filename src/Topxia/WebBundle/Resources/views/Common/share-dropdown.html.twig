@@ -3,14 +3,14 @@
   {% set summary = course.about|plain_text(50) %}
   {% set message = setting('default.courseShareContent')|default('我正在学习{{course}}，收获巨大哦，一起来学习吧！')|simple_template({course: '《' ~ course.title ~ '》'}) %}
   {% set url = url('course_show', {id:course.id}) %}
-  {% set picture = fpath(course.largePicture, 'course.png') %}
+  {% set picture = filepath(course.largePicture, 'course.png') %}
 {% elseif type == 'classroom' %}
 
   {% set title = classroom.title %}
   {% set summary = classroom.about|plain_text(50) %}
   {% set message = setting('default.classroomShareContent')|default('我正在学习{{classroom}}，收获巨大哦，一起来学习吧！')|simple_template({classroom: '「' ~ classroom.title ~ '」'}) %}
   {% set url = url('classroom_show', {id:classroom.id}) %}
-  {% set picture = fpath(classroom.largePicture, 'classroom.png') %}
+  {% set picture = filepath(classroom.largePicture, 'classroom.png') %}
 
 {% elseif type ==  'article' %}
   {% set title = article.title %}

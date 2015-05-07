@@ -14,7 +14,7 @@
 			{% if lesson.mediaSource == 'self' %}
 				<div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
                     {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
-                        data-watermark="{{ fpath(setting('storage.video_watermark_image'), null, true) }}"
+                        data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
                     {% endif %}
                     {% if setting('storage.video_fingerprint') and app.user %}
                         data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"

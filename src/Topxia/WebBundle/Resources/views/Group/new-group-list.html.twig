@@ -6,7 +6,7 @@
         {% for group in newGroups %}
           <li class="media">
             <a href="{{path('group_show',{id:group.id})}}" class="pull-left">
-              <img src="{{fpath(group.logo, 'group.png')}}" class="media-object group-logo-sm">
+              <img src="{{filepath(group.logo, 'group.png')}}" class="media-object group-logo-sm">
             </a>
             <div class="media-body">
               <p>
