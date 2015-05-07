@@ -350,7 +350,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }, $threads);
 
         $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        $threads = $this->filterThreads($threads, $courses, $users);
+        $threads = $this->filterThreads($threads, $courses, $this->filterUserInThread($users));
         return array(
             "start" => $start,
             "limit" => $limit,
@@ -359,6 +359,22 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
     }
     
+    private function filterUserInThread($users)
+    {
+        $controller = $this->controller;
+        return array_map(function($user) use ($controller)
+        {
+            foreach ($user as $key => $value) {
+                if (!in_array($key, array(
+                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "salt", "title"))) {
+                    unset($user[$key]);
+                }
+            }
+            
+            return $user;
+        }, $users);
+    }
+
     public function getCourseNotes()
     {
         $start    = $this->getParam("start", 0);
