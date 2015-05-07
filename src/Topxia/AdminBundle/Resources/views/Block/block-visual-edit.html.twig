@@ -1,10 +1,16 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_block_visual_edit' %}
+
 {% block page_title %} 编辑内容 {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
 {% block main %}
+
+  {% if app.debug %}
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockId:block.id}) }}" target="_blank">查看JSON配置</a>
+  {% endif %}
+  
   <div class="col-md-6">
     <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
       {{ web_macro.flash_messages() }}
@@ -19,8 +25,8 @@
   
 
   
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     {% include 'TopxiaAdminBundle:Block:affix-nav.html.twig' %}
-  </div>
+  </div> -->
 
 {% endblock %}
