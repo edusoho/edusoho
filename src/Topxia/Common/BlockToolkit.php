@@ -69,12 +69,14 @@ class BlockToolkit
         $block = $blockService->getBlockByCode($code);
         $data = $block['data'];
         $content = $block['content'];
+        $unset = true;
         preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $content, $imgMatchs);
         preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $content, $altMatchs);
         preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/is', $content, $linkMatchs);
         preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/is', $content, $targetMatchs);
         foreach ($data['carousel'] as $key => &$imglink) {
             if (!empty($imgMatchs[1][$key])) {
+                $unset = false;
                 $imglink['src'] = $imgMatchs[1][$key];
             }
 
@@ -88,6 +90,11 @@ class BlockToolkit
 
             if (!empty($targetMatchs[1][$key])) {
                 $imglink['target'] = $targetMatchs[1][$key];
+            }
+
+            if ($unset) {
+                unset($data['carousel'][$key]);
+                $unset = true;
             }
         }
 
@@ -106,6 +113,7 @@ class BlockToolkit
         preg_match_all('/< *dl.*?>.*?<\/dl>/is', $content, $dlMatchs);
         $index = 0;
         $index2 = 0;
+        $unset = true;
         foreach ($data as $key => &$object) {
             if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
                 $object[0]['value'] = $textMatchs[1][$index];
@@ -127,7 +135,13 @@ class BlockToolkit
                     }
 
                     if (!empty($valuetMatchs[1][$i])) {
+                        $unset = false;
                         $item['value'] = $valuetMatchs[1][$i];
+                    }
+
+                    if ($unset) {
+                        unset($object[$i]);
+                        $unset = true;
                     }
                 }
             }
