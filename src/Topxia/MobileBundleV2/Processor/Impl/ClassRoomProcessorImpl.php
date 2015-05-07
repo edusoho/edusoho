@@ -29,7 +29,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	                $conditions,
 	                array('createdTime','desc'),
 	                $start,
-	                $total
+	                $limit
 	        );
 
 	        $classRoomTeacherIds = ArrayToolkit::column($classrooms,'teacherIds');
@@ -41,7 +41,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	    	$classrooms[$i]["teacherIds"] = $this->filterUsersFiled($users);
 	        }
 
-	        return $classrooms;
+	        return array(
+	            "start" => $start,
+	            "limit" => $limit,
+	            "total" => $total,
+	            "data" => $classrooms
+	        );
 	}
 
 	    private function getClassroomService() 
