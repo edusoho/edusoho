@@ -45,7 +45,7 @@ define(function(require, exports, module) {
                     $model.find('.panel-heading').attr('id', headingId);
                     var collapseId = new Date().getTime() + '-collapse';
                     $model.find('.panel-collapse').attr('aria-labelledby', headingId).attr('id', collapseId);
-                    $model.find('a[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+collapseId).attr('aria-controls', collapseId);
+                    $model.find('h4[data-toggle=collapse]').attr('aria-expanded', false).attr('href', "#"+collapseId).attr('aria-controls', collapseId);
                     $model.find('input[data-role=radio-yes]').attr('checked', false);
                     $model.find('input[data-role=radio-no]').attr('checked', true);
                     var code = $panelGroup.data('code');
