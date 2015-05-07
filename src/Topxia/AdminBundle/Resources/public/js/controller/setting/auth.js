@@ -46,7 +46,7 @@ define(function(require, exports, module) {
       }else{
         if($('input[name=_cloud_sms]').val() !=1){
            $("input:radio[value="+old_selected_value+"]").prop("checked", true);
-           Notify.danger("请先开通运短信功能！");
+           Notify.danger("请先开通云短信功能！");
         }
       }
     })
