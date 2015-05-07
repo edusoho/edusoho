@@ -102,8 +102,8 @@ class BlockToolkit
         $block = $blockService->getBlockByCode($code);
         $data = $block['data'];
         $content = $block['content'];
-        preg_match_all('/<dt>(.*?)<\/dt>/i', $content, $textMatchs);
-        preg_match_all('/<dl>.*?<\/dl>/i', $content, $dlMatchs);
+        preg_match_all('/< *dt[\s\S]*?>(.*?)<\/dt>/i', $content, $textMatchs);
+        preg_match_all('/< *dl[\s\S]*?>[\s\S]*?<\/dl>/i', $content, $dlMatchs);
         $index = 0;
         $index2 = 0;
         foreach ($data as $key => &$object) {
