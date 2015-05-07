@@ -457,7 +457,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  <input ytpe="hidden" name='_cloud_sms'  value= "setting('cloud_sms.sms_enabled')">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
 </form>
 
 {% endblock %}

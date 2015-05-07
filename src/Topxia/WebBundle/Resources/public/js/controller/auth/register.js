@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     var SmsSender = require('../widget/sms-sender');
     exports.run = function() {
-         $('input, textarea').placeholder(); 
         $(".date").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
