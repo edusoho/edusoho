@@ -25,6 +25,7 @@ class BlockToolkit
                 if (empty($block)) {
                     $block = array(
                         'code' => $key,
+                        'mode' => 'template',
                         'category' => $category,
                         'meta' => $meta,
                         'data' => $default,
@@ -34,6 +35,7 @@ class BlockToolkit
                     $block = $blockService->createBlock($block);
                 } else {
                     $block = $blockService->updateBlock($block['id'], array(
+                        'mode' => 'template',
                         'category' => $category,
                         'meta' => $meta,
                         'data' => $default,

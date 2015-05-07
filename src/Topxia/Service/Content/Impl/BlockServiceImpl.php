@@ -172,7 +172,10 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
 
         // $content = $this->purifyHtml($content);
-        return $this->getBlockDao()->updateBlock($id, array('content'=>$content));
+        return $this->getBlockDao()->updateBlock($id, array(
+            'content'=>$content,
+            'updateTime' => time()
+        ));
     }
 
     public function recovery($blockId, $history)
