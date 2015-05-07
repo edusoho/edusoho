@@ -69,12 +69,13 @@ class BlockToolkit
         $block = $blockService->getBlockByCode($code);
         $data = $block['data'];
         $content = $block['content'];
-        $unset = true;
+        
         preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $content, $imgMatchs);
         preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $content, $altMatchs);
         preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/is', $content, $linkMatchs);
         preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/is', $content, $targetMatchs);
         foreach ($data['carousel'] as $key => &$imglink) {
+            $unset = true;
             if (!empty($imgMatchs[1][$key])) {
                 $unset = false;
                 $imglink['src'] = $imgMatchs[1][$key];
@@ -94,7 +95,6 @@ class BlockToolkit
 
             if ($unset) {
                 unset($data['carousel'][$key]);
-                $unset = true;
             }
         }
 
@@ -113,7 +113,7 @@ class BlockToolkit
         preg_match_all('/< *dl.*?>.*?<\/dl>/is', $content, $dlMatchs);
         $index = 0;
         $index2 = 0;
-        $unset = true;
+        
         foreach ($data as $key => &$object) {
             if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
                 $object[0]['value'] = $textMatchs[1][$index];
@@ -126,6 +126,7 @@ class BlockToolkit
                 preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
                 preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);
                 foreach ($object as $i => &$item) {
+                    $unset = true;
                     if (!empty($hrefMatchs[1][$i])) {
                         $item['href'] = $hrefMatchs[1][$i];
                     }
@@ -141,7 +142,6 @@ class BlockToolkit
 
                     if ($unset) {
                         unset($object[$i]);
-                        $unset = true;
                     }
                 }
             }
