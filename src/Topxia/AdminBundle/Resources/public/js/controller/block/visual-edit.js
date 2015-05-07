@@ -33,7 +33,7 @@ define(function(require, exports, module) {
                 var $panelGroup = $target.prev('.panel-group');
                 var $panels = $panelGroup.children('.panel.panel-default');
                 if ($panels.length >= $panelGroup.data('count')) {
-                    alert('最多只能添加' + $panelGroup.data('count') + '个!');
+                    Notify.danger('最多只能添加' + $panelGroup.data('count') + '个!');
                 } else {
                     $model = $($panels[0]).clone();
                     $model.find('input').attr('value', '');
@@ -62,7 +62,7 @@ define(function(require, exports, module) {
                     var $parent = $target.closest('.panel.panel-default');
                     var $panels = $panelGroup.children('.panel.panel-default');
                     if ($panels.length == 1) {
-                        alert("必须要有一个!");
+                        Notify.danger("必须要有一个!");
                     } else {
                         $parent.remove();
                         this.refreshIndex($panelGroup);
