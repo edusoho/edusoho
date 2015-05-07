@@ -432,7 +432,7 @@ class UserServiceImpl extends BaseService implements UserService
     }
     public function generateNickname($registration, $maxLoop=100){
         for($i =0; $i<$maxLoop; $i++){
-            $registration['nickname'] ='EduSoho'.substr($this->getRandomChar(), 0,6); 
+            $registration['nickname'] ='user'.substr($this->getRandomChar(), 0,6); 
             if($this->isNicknameAvaliable($registration['nickname'])) {
                 break;
             }   
@@ -442,7 +442,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function generateEmail($registration, $maxLoop=100){
          for($i =0; $i<$maxLoop; $i++){
-            $registration['email'] = 'edu_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
+            $registration['email'] = 'user_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
             if($this->isEmailAvaliable($registration['email'])){
                 break;
             }
