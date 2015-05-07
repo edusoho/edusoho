@@ -38,15 +38,17 @@ define(function(require, exports, module) {
       $('.' + type).show();
 
     });
-
+    
+    var old_selected_value = $("input[name='register_mode']:checked").val();
     $('input[name=register_mode]:radio').change(function(){
       var selected_value = $("input[name='register_mode']:checked").val();
+
       if(selected_value !='email_or_mobile'){
-        old_selected_value =selected_value; //记住上一次的记录
+        old_selected_value = selected_value; //记住上一次的记录
       }else{
         if($('input[name=_cloud_sms]').val() !=1){
            $("input:radio[value="+old_selected_value+"]").prop("checked", true);
-           Notify.danger("请先开通云短信功能！");
+           Notify.danger("请先开启云短信功能！");
         }
       }
     })
