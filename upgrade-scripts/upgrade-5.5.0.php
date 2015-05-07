@@ -11,6 +11,7 @@ use Topxia\Service\Common\ServiceKernel;
         try{
             $this->authSetting();
             $this->updateDefaultPicture();
+            $this->updateScheme();
 
             $this->getConnection()->commit();
         } catch(\Exception $e) {
@@ -37,6 +38,58 @@ use Topxia\Service\Common\ServiceKernel;
 
 
      }
+
+     private function updateScheme()
+     {
+        $connection = $this->getConnection();
+
+        if(!$this->isFileGroupExist('tmp')) {
+            $connection->exec("INSERT INTO `file_group` (`name`, `code`, `public`) VALUES ('临时目录', 'tmp', '1');");
+        }
+
+        if(!$this->isFileGroupExist('system')) {
+            $connection->exec("INSERT INTO `file_group` (`name`, `code`, `public`) VALUES ('全局设置文件', 'system', '1');");
+        }
+
+        if(!$this->isFileGroupExist('group')) {
+            $connection->exec("INSERT INTO `file_group` (`name`, `code`, `public`) VALUES ('小组', 'group', '1');");
+        }
+
+        if(!$this->isFieldExist('block', 'meta')) {
+            $connection->exec("ALTER TABLE `block` ADD `meta` TEXT NULL DEFAULT NULL COMMENT '编辑区元信息' AFTER `code`;");
+        }
+
+        if(!$this->isFieldExist('block', 'data')) {
+            $connection->exec("ALTER TABLE `block` ADD `data` TEXT NULL DEFAULT NULL COMMENT '编辑区内容' AFTER `meta`;");
+        }
+
+        if(!$this->isFieldExist('block', 'templateName')) {
+            $connection->exec("ALTER TABLE `block` ADD `templateName` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编辑区模板名字' AFTER `template`;");
+        }
+
+        if(!$this->isFieldExist('block_history', 'data')) {
+            $connection->exec("ALTER TABLE `block_history` ADD `data` TEXT NULL DEFAULT NULL COMMENT 'block元信息' AFTER `templateData`;");
+        }
+
+        if(!$this->isFieldExist('block', 'category')) {
+            $connection->exec("ALTER TABLE  `block` ADD   `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)';");
+        }
+
+     }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
+    protected function isFileGroupExist($group)
+    {
+        $sql = "select * from file_group where code='{$group}' ";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
 
      private function updateDefaultPicture()
      {
