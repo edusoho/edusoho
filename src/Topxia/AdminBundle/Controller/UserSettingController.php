@@ -206,10 +206,6 @@ class UserSettingController extends BaseController
 
             $defaultSetting = array_merge($defaultSetting,$userDefaultSetting);
 
-            if($defaultSetting['defaultAvatar']==0){
-                unset($defaultSetting['avatar.png']);
-            }
-
             $this->getSettingService()->set('default', $defaultSetting);
             
             $this->getLogService()->info('system', 'update_settings', "更新头像设置", $userDefaultSetting);

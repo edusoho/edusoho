@@ -62,9 +62,8 @@ class WebExtension extends \Twig_Extension
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
             // file_url 即将废弃，不要再使用
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
-            // system_default_path 即将废弃，不要再使用
-            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
 
+            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
             'fileurl' => new \Twig_Function_Method($this, 'getFurl'),
             'filepath' => new \Twig_Function_Method($this, 'getFpath'),
             'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
@@ -598,27 +597,20 @@ class WebExtension extends \Twig_Extension
         return $this->addHost($url, $absolute);
     }
 
-    public function getSystemDefaultPath($category,$systemDefault = false)
+    public function getSystemDefaultPath($defaultKey,$absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
-        $publicUrlpath = 'assets/img/default/';
+        $defaultSetting = $this->getSetting("default",array());
 
-        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
-        if($systemDefault && isset($defaultSetting)){
-            $fileName = 'default'.ucfirst($category).'FileName';
-            if (array_key_exists($fileName, $defaultSetting)) {
-                $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
-            }else if(isset($defaultSetting["default".ucfirst($category)]) && $defaultSetting["defaultAvatar"] && array_key_exists("smallDefault".ucfirst($category)."Uri", $defaultSetting)){
-                $uri = $defaultSetting["largeDefault".ucfirst($category)."Uri"];
-                $url = $this->parseUri($uri);
-            } else {
-                $url = $assets->getUrl($publicUrlpath . $category);
-            }
+        if(array_key_exists($defaultKey, $defaultSetting) 
+            && $defaultSetting[$defaultKey]
+            ) {
+            $path = $defaultSetting[$defaultKey];
+            return $this->parseUri($path, $absolute);
         } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+            $path = $assets->getUrl('assets/img/default/' . $defaultKey);
+            return $this->addHost($path, $absolute);
         }
-
-        return $url;
     }
 
     public function makeLazyImg($src, $class='', $alt = '')
@@ -681,7 +673,12 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('templating.helper.assets');
         if(empty($path)){
             $defaultSetting = $this->getSetting("default",array());
-            if(array_key_exists($defaultKey, $defaultSetting) && $defaultSetting[$defaultKey]) {
+
+            if((($defaultKey == 'course.png' && $defaultSetting['defaultCoursePicture']==1)
+                || ($defaultKey == 'avatar.png' && $defaultSetting['defaultAvatar']==1))
+                && (array_key_exists($defaultKey, $defaultSetting) 
+                && $defaultSetting[$defaultKey])
+                ) {
                 $path = $defaultSetting[$defaultKey];
                 return $this->parseUri($path, $absolute);
             } else {

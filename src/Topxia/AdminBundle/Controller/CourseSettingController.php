@@ -122,9 +122,6 @@ class CourseSettingController extends BaseController
 
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default,$courseDefaultSetting);
-            if($defaultSetting['defaultCoursePicture'] == 0){
-                unset($defaultSetting['course.png']);
-            }
 
             $this->getSettingService()->set('default', $defaultSetting);
 
