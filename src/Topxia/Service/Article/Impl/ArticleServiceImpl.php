@@ -180,7 +180,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		}
 
 		$this->getArticleDao()->updateArticle($id, $fields = array('thumb' => '', 'originalThumb' => ''));
-
 		$this->getFileService()->deleteFileByUri($checkArticle["thumb"]);
 		$this->getFileService()->deleteFileByUri($checkArticle["originalThumb"]);
 
