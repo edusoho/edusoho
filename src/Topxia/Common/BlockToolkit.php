@@ -107,16 +107,17 @@ class BlockToolkit
         $index = 0;
         $index2 = 0;
         foreach ($data as $key => &$object) {
-            if ($object['type'] == 'text') {
-                $object['items'][0]['value'] = $textMatchs[1][$index++];
+            if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
+                $object[0]['value'] = $textMatchs[1][$index++];
             }
 
-            if ($object['type'] == 'link' && !empty($dlMatchs[0][$index2++])) {
+            if (in_array($key, array('firstColumnLinks', 'secondColumnLinks', 'thirdColumnLinks', 'fourthColumnLinks', 'fifthColumnLinks')) 
+                    && !empty($dlMatchs[0][$index2++])) {
                 $dl = $dlMatchs[0][$index2++];
                 preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);
                 preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
                 preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);
-                foreach ($object['items'] as $i => &$item) {
+                foreach ($object as $i => &$item) {
                     if (!empty($hrefMatchs[1][$i])) {
                         $item['href'] = $hrefMatchs[1][$i];
                     }
