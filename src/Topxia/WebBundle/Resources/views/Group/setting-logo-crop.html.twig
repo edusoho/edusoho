@@ -26,6 +26,11 @@
     <div class="col-md-offset-2 col-md-8 controls">
       <a class="btn btn-fat btn-primary" 
       id="upload-picture-btn" 
+      {% if app.request.get('page')=='backGroundLogoCrop' %}
+      data-reload-url="{{path('group_backgroundlogo_set',{id:groupinfo.id})}}"
+      {% elseif app.request.get('page')=='logoCrop' %}
+      data-reload-url="{{path('group_logo_set',{id:groupinfo.id})}}"
+      {% endif %}
       >保存</a>
     </div>
   </div>
