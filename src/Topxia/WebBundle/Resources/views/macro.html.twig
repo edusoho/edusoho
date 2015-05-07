@@ -4,6 +4,12 @@
   </a>
 {%- endmacro -%}
 
+{%- macro classroom_user_avatar(user, class) -%}
+  <a class="user-link user-avatar-link {{ class }} js-user-card" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}">
+    <img class="img-circle" src="{{ default_path('avatar', user.smallAvatar, '') }}">
+  </a>
+{%- endmacro -%}
+
 {% macro user_link(user, class) %}
   {% if user %}
     <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>

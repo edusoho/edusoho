@@ -1,31 +1,37 @@
   {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-  <ul class="media-list thread-list-default">
+<div class="topic-list">
+  {% if threads%}
     {% for thread in threads %}
       {% set author = users[thread.userId] %}
-      <li class="media">
-        {{ web_macro.user_avatar(author, 'pull-left media-object media-object-small')}}
+      <div class="media topic-item">
+            <div class="media-left media-middle">
+                {{ web_macro.classroom_user_avatar(author, 'pull-left')}}
+            </div>
           <div class="media-body">
-            {% if thread.postNum > 0 %}
-              <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
-            {% endif %}
-            <div class="mbm">
-              {% if thread.sticky %}
-                <span class="label label-danger" title="置顶帖">置顶</span>
-              {% endif %}
-              {% if thread.type == 'question' %}
-                <span class="label label-info" title="问答帖">问</span>
+          <div class="title">
+              {% if thread.type == 'question'%}
+               <i class="es-icon es-icon-help1 color-d"></i>
               {% elseif thread.type == 'event' %}
                 <span class="label label-info" title="活动">活动</span>
               {% endif %}
-              <a class="thread-item-title" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+
+               <a  href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title }}</a>
+              {% if thread.sticky %}
+                <span class="label label-primary" title="置顶帖">置顶</span>
+              {% endif %}
 
               {% if thread.nice %}
-                <span class="label label-warning" title="精华帖">精</span>
+                <span class="label label-danger" title="精华帖">精华</span>
               {% endif %}
             </div>
-            
-            <div class="text-muted text-normal">
+            {% if thread.type == 'question' %}
+            <div class="metas">
+              <a href=""> 啊本</a> <span>发起了问题</span> · <span>2小时前</span> ·
+              <span class="color-p">课时10</span>
+            </div>
+            {% else %}
+            <div class="metas">
               by {{ web_macro.user_link(author, 'link-muted') }}
 
               {% if thread.postNum > 0 %}
@@ -35,14 +41,26 @@
               {% endif %}
               <span class="bullet">•</span>
               <span>{{ thread.lastPostTime|smart_time }}</span>
-              <span class="bullet">•</span>
-              <span>{{ thread.hitNum }}浏览</span>
             </div>
+            {% endif %}
           </div>
-      </li>
-    {% else %}
-      <li class="mvl tac text-muted">暂无话题</li>
-    {% endfor %}
-  </ul>
 
-  {{ web_macro.paginator(paginator) }}
+          <div class="media-data hidden-xs">
+            {% if thread.postNum > 0 %}
+            <span>{{ thread.postNum }}<br>回复</span>
+            {% endif %}
+            <span>{{ thread.hitNum }}<br>浏览</span>
+          </div>
+
+      </div>
+    {% endfor %}
+        {% else %}
+      <div class="empty">暂无话题</div>
+      {% endif %}
+  </div>
+
+  <nav class="text-center">
+    <ul class="pagination">
+        {{ web_macro.paginator(paginator) }}
+      </ul>
+  </nav>
