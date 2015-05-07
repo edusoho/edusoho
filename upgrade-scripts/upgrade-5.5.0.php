@@ -81,17 +81,19 @@ use Topxia\Common\BlockToolkit;
 
     private function updateBlocks()
     {
+        global $kernel;
+
         //初始化系统编辑区
-        BlockToolkit::init('system', realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/system-block.json"));
+        BlockToolkit::init('system', realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/block.json"), $kernel->getContainer());
         $this->_updateCarouselByCode('bill_banner');
         $this->_updateCarouselByCode('live_top_banner');
 
         //初始化默认主题编辑区
-        BlockToolkit::init('default', realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/default/block.json"));
+        BlockToolkit::init('default', realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/default/block.json"), $kernel->getContainer());
         $this->_updateCarouselByCode('home_top_banner');
 
         //初始化清秋主题
-        BlockToolkit::init('autumn', realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/autumn/block.json"));
+        BlockToolkit::init('autumn', realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/autumn/block.json"), $kernel->getContainer());
         $this->_updateCarouselByCode('autumn:home_top_banner');
 
     }
