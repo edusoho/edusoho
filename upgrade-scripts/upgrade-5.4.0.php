@@ -29,6 +29,11 @@ use Topxia\Service\Common\ServiceKernel;
 
         }
 
+        $developerSetting = ServiceKernel::instance()->createService('System.SettingService')->get('developer', array());
+        $developerSetting['debug'] = 0;
+
+        ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
+
 
      }
 
