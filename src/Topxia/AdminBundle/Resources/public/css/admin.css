@@ -527,6 +527,23 @@ input.LargeInput {width: 600px;}
   cursor: pointer;
 }
 
+.ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visual-edit-form .panel-group .panel-title .panel-item-title {
+  max-width: 20%;
+  float: left;
+}
+
+.visual-edit-form .panel-group .panel-title .title-label {
+  max-width: 60%;
+  float: left;
+}
+
 .block-affix-nav {
   max-height: 450px;
   min-width: 150px;

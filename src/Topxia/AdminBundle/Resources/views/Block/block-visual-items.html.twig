@@ -9,10 +9,11 @@
     {% for dataId,data in  block.data[code]|default(null)  %}
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
-          <h4 class="panel-title" data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
-            {{ item.title }} -
+          <h4 class="panel-title clearfix" data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
+            <span class="panel-item-title ellipsis">{{ item.title }}</span>
+            <span class="pull-left">&nbsp;-&nbsp;</span> 
             {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
-            <i class="js-remove-btn glyphicon glyphicon-trash pull-right" style="cursor:pointer;" title="删除"></i>
+            <i class="js-remove-btn glyphicon glyphicon-trash pull-right" title="删除"></i>
           </h4>
 
         </div>

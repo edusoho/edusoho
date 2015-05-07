@@ -69,7 +69,7 @@ define(function(require, exports, module) {
                         this.refreshIndex($panelGroup);
                     }
                 }
-                
+                e.stopPropagation();
             },
             onClickPreviewPic: function(e) {
                 var $target = $(e.currentTarget);
