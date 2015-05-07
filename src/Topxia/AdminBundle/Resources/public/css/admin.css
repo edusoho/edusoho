@@ -523,6 +523,10 @@ input.LargeInput {width: 600px;}
   margin-bottom: 10px;
 }
 
+.visual-edit-form .panel-group .panel-title {
+  cursor: pointer;
+}
+
 .block-affix-nav {
   max-height: 450px;
   min-width: 150px;
