@@ -6423,3 +6423,18 @@ a:focus {
   border-radius: 2px;
 }
 
+.watermark.active {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: center;
+  display: none; 
+  position: absolute;
+  width: 500px;
+  height: 20px;
+  vertical-align: middle;
+  opacity: 0.8;
+}
