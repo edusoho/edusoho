@@ -535,12 +535,12 @@ input.LargeInput {width: 600px;}
 }
 
 .visual-edit-form .panel-group .panel-title .panel-item-title {
-  max-width: 20%;
+  max-width: 40%;
   float: left;
 }
 
 .visual-edit-form .panel-group .panel-title .title-label {
-  max-width: 60%;
+  max-width: 40%;
   float: left;
 }
 
