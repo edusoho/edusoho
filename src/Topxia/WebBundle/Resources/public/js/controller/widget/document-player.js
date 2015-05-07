@@ -42,7 +42,7 @@ define(function(require, exports, module) {
                 if (IEversion >= 8 && IEversion < 9 ) {
                     $watermarkDiv.css({
                         'height': 60,
-                        'color': '#C7C2C2'
+                        'filter': "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity="+ (parseFloat(settings.opacity) * 100) +")"
                     });
                 }
                 $watermarkDiv.html(settings.contents);
