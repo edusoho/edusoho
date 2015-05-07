@@ -127,7 +127,8 @@ class BlockToolkit
                 $object['items'][0]['value'] = $textMatchs[1][$index++];
             }
 
-            if ($object['type'] == 'link' && !empty($dl = $dlMatchs[0][$index2++])) {
+            if ($object['type'] == 'link' && !empty($dlMatchs[0][$index2++])) {
+                $dl = $dlMatchs[0][$index2++];
                 preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);
                 preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
                 preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);
