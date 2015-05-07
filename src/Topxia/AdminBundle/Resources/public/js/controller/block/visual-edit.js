@@ -77,7 +77,9 @@ define(function(require, exports, module) {
             },
             onClickTitleLabel: function(e) {
                 var $target = $(e.currentTarget);
-                e.stopPropagation();
+                if (!$target.data('noLink')) {
+                    e.stopPropagation();
+                }
             },
             onClickPicPreview: function(e) {
                 var $target = $(e.currentTarget);

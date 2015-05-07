@@ -13,7 +13,9 @@
             <span class="panel-item-title ellipsis">{{ item.title }}</span>
             <span class="pull-left">&nbsp;-&nbsp;</span> 
             {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
-            <i class="js-remove-btn glyphicon glyphicon-trash pull-right" title="删除"></i>
+            {% if item.count != 1 %}
+              <i class="js-remove-btn glyphicon glyphicon-trash pull-right" title="删除"></i>
+            {% endif %}
           </h4>
 
         </div>
@@ -28,7 +30,9 @@
 
   </div>
 
+{% if item.count != 1 %}
   <div class="btn btn-default text-center js-add-btn" style="width:100%;margin-top:-10px;margin-bottom:20px;">+新增</div>
+{% endif %}
 
 </section>
   
