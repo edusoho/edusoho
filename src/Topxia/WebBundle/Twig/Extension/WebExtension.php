@@ -674,8 +674,8 @@ class WebExtension extends \Twig_Extension
         if(empty($path)){
             $defaultSetting = $this->getSetting("default",array());
 
-            if((($defaultKey == 'course.png' && $defaultSetting['defaultCoursePicture']==1)
-                || ($defaultKey == 'avatar.png' && $defaultSetting['defaultAvatar']==1))
+            if((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',$defaultSetting) && $defaultSetting['defaultCoursePicture']==1)
+                || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',$defaultSetting) && $defaultSetting['defaultAvatar']==1))
                 && (array_key_exists($defaultKey, $defaultSetting) 
                 && $defaultSetting[$defaultKey])
                 ) {
