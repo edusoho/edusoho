@@ -2,54 +2,37 @@
     "home_top_banner":
     {
         "title": "默认主题：首页头部图片轮播",
-        "templateName": "home_top_banner.template.html.twig",
-        "default":
-        {
-            "carousel": {
-                "items": {
-                    "1": {
-                        "src": "\/themes\/default\/img\/banner.png",
-                        "alt": "示例图片",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
-                    },
-                    "2": {
-                        "src": "\/themes\/default\/img\/banner.png",
-                        "alt": "示例图片",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
-                    },
-                    "3": {
-                        "src": "\/themes\/default\/img\/banner.png",
-                        "alt": "示例图片",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_self"
-                    },
-                    "4": {
-                        "src": "\/themes\/default\/img\/banner.png",
-                        "alt": "示例图片",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
-                    },
-                    "5": {
-                        "src": "\/themes\/default\/img\/banner.png",
-                        "alt": "示例图片",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
-                    }
-                },
-                "type": "imglink"
-            }
-        },
+        "templateName": "@theme/default/block/home_top_banner.template.html.twig",
         "items": {
             "carousel":
             {
                 "title": "默认主题：首页头部图片轮播",
                 "desc": "",
                 "count": 5,
-                "type": "imglink"
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "/assets/img/placeholder/carousel-1200x256-1.png",
+                        "alt": "示例图片1",
+                        "href": "#",
+                        "target": "_blank"
+                    },
+                    {
+                        "src": "/assets/img/placeholder/carousel-1200x256-2.png",
+                        "alt": "示例图片2",
+                        "href": "#",
+                        "target": "_blank"
+                    },
+                    {
+                        "src": "/assets/img/placeholder/carousel-1200x256-3.png",
+                        "alt": "示例图片3",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
             }
         }
+
     }
  
 }

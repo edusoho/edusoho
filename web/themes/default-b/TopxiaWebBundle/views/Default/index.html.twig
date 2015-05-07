@@ -9,12 +9,10 @@
 
   <div class="es-row-wrap container-gap">
 
-    {% if blocks.home_top_banner %}
-      <div class="homepage-feature homepage-feature-slides">
-        <div class="cycle-pager"></div>
-        {{ blocks.home_top_banner|raw }}
-      </div>
-    {% endif %}
+    <div class="homepage-feature homepage-feature-slides">
+      <div class="cycle-pager"></div>
+      {{ block_show('home_top_banner') }}
+    </div>
     
     <ul class="homepage-category-nav">
       {% for category in categories %}

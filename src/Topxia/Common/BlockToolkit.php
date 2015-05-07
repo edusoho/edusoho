@@ -59,14 +59,6 @@ class BlockToolkit
         }
         $templateName = $block['templateName'];
 
-        // if ($category != 'system' && $app['type'] == 'theme') {
-        //     return $container->get('templating')->render("@themes/{$category}/TopxiaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
-        // }
-
-        // if ($category != 'system' && $app['type'] == 'plugin') {
-        //     return $container->get('templating')->render("@plugins/{$category}/{$category}Bundle/Resources/views/Block/{$block['templateName']}", array('block' => $block));
-        // }
-
         return $container->get('templating')->render($templateName, $block['data']);
     }
 

@@ -38,6 +38,7 @@ class BlockExtension extends \Twig_Extension
             return $block['content'];
         }
 
+
         // 从data渲染生成html然后返回
 
         return BlockToolkit::render($block, $this->container);

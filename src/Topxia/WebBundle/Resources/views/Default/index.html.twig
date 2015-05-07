@@ -10,12 +10,10 @@
 
 <div class="es-row-wrap container-gap">
 
-  {% if blocks.home_top_banner %}
     <div class="homepage-feature homepage-feature-slides mbl">
       <div class="cycle-pager"></div>
-      {{ blocks.home_top_banner|raw }}
+      {{ block_show('home_top_banner') }}
     </div>
-  {% endif %}
   
   <div class="row row-9-3">
 
