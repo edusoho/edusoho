@@ -109,8 +109,8 @@ class ThreadController extends BaseController
             $data = $request->request->all();
             $data['targetType'] = $target['type'];
             $data['targetId'] = $target['id'];
-            $thread = $this->getThreadService()->createThread($data);
 
+            $thread = $this->getThreadService()->createThread($data);
             return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
                "{$target['type']}Id" => $thread['targetId'],
                'threadId' => $thread['id'],
