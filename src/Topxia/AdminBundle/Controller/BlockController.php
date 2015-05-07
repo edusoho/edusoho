@@ -198,7 +198,7 @@ class BlockController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
-            5
+            20
         );
 
         $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
@@ -211,8 +211,7 @@ class BlockController extends BaseController
             'block' => $block,
             'paginator' => $paginator,
             'blockHistorys' => $blockHistorys,
-            'historyUsers' => $historyUsers,
-            'action' => 'history'
+            'historyUsers' => $historyUsers
         ));
     }
 

@@ -183,14 +183,4 @@ abstract class BaseController extends Controller
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    private function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }
-
 }
