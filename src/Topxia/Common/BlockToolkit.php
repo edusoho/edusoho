@@ -116,7 +116,7 @@ class BlockToolkit
         
         foreach ($data as $key => &$object) {
             if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
-                $object[0]['value'] = $textMatchs[1][$index];
+                $object[0]['value'] = $textMatchs[1][$index++];
             }
 
             if (in_array($key, array('firstColumnLinks', 'secondColumnLinks', 'thirdColumnLinks', 'fourthColumnLinks', 'fifthColumnLinks')) 
