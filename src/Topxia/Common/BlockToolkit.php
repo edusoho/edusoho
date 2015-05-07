@@ -57,26 +57,17 @@ class BlockToolkit
             $container->enterScope('request');
             $container->set('request', new Request(), 'request');
         }
-
-        $appService = ServiceKernel::instance()->createService('CloudPlatform.AppService');
-        $app = $appService->getAppByCode($block['category']);
         $templateName = $block['templateName'];
-        $category = $block['category'];
-        if ($category != 'system' && $app['type'] == 'theme') {
-            return $container->get('templating')->render("@themes/{$category}/TopxiaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
-        }
 
-        if ($category != 'system' && $app['type'] == 'plugin') {
-            return $container->get('templating')->render("@plugins/{$category}/{$category}Bundle/Resources/views/Block/{$block['templateName']}", array('block' => $block));
-        }
+        // if ($category != 'system' && $app['type'] == 'theme') {
+        //     return $container->get('templating')->render("@themes/{$category}/TopxiaWebBundle/views/Block/{$block['templateName']}", array('block' => $block));
+        // }
 
-        if ($category == 'system') {
-            if (preg_match('/.*?:.*?:.*/', $templateName)) {
-                return $container->get('templating')->render($templateName);
-            } else {
-                return $container->get('templating')->render("TopxiaWebBundle:Block:{$templateName}");
-            }
-        }
+        // if ($category != 'system' && $app['type'] == 'plugin') {
+        //     return $container->get('templating')->render("@plugins/{$category}/{$category}Bundle/Resources/views/Block/{$block['templateName']}", array('block' => $block));
+        // }
+
+        return $container->get('templating')->render($templateName, $block['data']);
     }
 
     public static function updateCarousel($code)
