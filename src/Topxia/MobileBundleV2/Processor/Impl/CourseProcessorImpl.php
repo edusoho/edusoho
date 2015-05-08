@@ -350,7 +350,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }, $threads);
 
         $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        $threads = $this->filterThreads($threads, $courses, $this->filterUsersFiled($users));
+        $threads = $this->filterThreads($threads, $courses, $this->filterUserFiled($users));
         return array(
             "start" => $start,
             "limit" => $limit,
@@ -1066,7 +1066,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $map = array();
         foreach ($learnStatusArray as $key => $learnStatus) {
-            $map[$learnStatus["courseId"]] = date("Y:m:d H:m:s", $learnStatus["startTime"]);
+            $map[$learnStatus["courseId"]] = date("c", $learnStatus["startTime"]);
         }
 
         return $map;
