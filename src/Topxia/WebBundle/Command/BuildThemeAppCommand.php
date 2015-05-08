@@ -67,6 +67,8 @@ class BuildThemeAppCommand extends BaseCommand
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
 
+        $this->filesystem->remove($sourceTargetDir . '/dev' );
+
         return $sourceTargetDir;
     }
 
