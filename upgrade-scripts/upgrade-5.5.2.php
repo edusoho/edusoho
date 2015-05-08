@@ -33,22 +33,6 @@ use Topxia\Common\BlockToolkit;
          ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
      }
 
-     protected function isFieldExist($table, $filedName)
-     {
-         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-         $result = $this->getConnection()->fetchAssoc($sql);
-
-         return empty($result) ? false : true;
-     }
-
-     protected function isFileGroupExist($group)
-     {
-         $sql = "select * from file_group where code='{$group}' ";
-         $result = $this->getConnection()->fetchAssoc($sql);
-
-         return empty($result) ? false : true;
-     }
-
      private function updateBlocks()
      {
          global $kernel;
