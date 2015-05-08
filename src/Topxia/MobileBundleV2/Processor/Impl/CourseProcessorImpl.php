@@ -304,6 +304,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getCourseThreads()
     {
         $user     = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
         $type     = $this->getParam("type", "question");
         $lessonId = $this->getParam("lessonId", "0");
         
@@ -825,6 +828,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $courseId = $this->getParam("courseId");
         $user     = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
         list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
         
         if (empty($member)) {
