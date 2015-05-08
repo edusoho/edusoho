@@ -121,10 +121,30 @@ use Topxia\Common\BlockToolkit;
      {
         $default = $this->getSettingService()->get("default", array());
         if(array_key_exists("defaultCoursePictureFileName", $default) && $default["defaultCoursePictureFileName"]) {
-            $default["course.png"] = 'assets/img/default/large'.$default["defaultCoursePictureFileName"];
+            $filesystem = new Filesystem();
+            $rootDir = realpath($this->kernel->getParameter('kernel.root_dir') . '/../');
+
+            $originFile = "{$rootDir}/web/assets/img/default/large".$default["defaultCoursePictureFileName"];
+            $targetFile = "{$rootDir}/web/files/2015/05-08/large".$default["defaultCoursePictureFileName"];
+
+            if (file_exists($originFile)) {
+                $filesystem->copy($originFile, $targetFile);
+                $default["course.png"] = '2015/05-08/large'.$default["defaultCoursePictureFileName"];
+            }
+
+
         }
         if(array_key_exists("defaultAvatarFileName", $default) && $default["defaultAvatarFileName"]) {
-            $default["avatar.png"] = 'assets/img/default/large'.$default["defaultAvatarFileName"];
+            $filesystem = new Filesystem();
+            $rootDir = realpath($this->kernel->getParameter('kernel.root_dir') . '/../');
+            $originFile = "{$rootDir}/web/assets/img/default/large".$default["defaultAvatarFileName"];
+            $targetFile = "{$rootDir}/web/files/2015/05-08/large".$default["defaultAvatarFileName"];
+
+            if (file_exists($originFile)) {
+                $filesystem->copy($originFile, $targetFile);
+                $default["avatar.png"] = '2015/05-08/large'.$default["defaultAvatarFileName"];
+            }
+
         }
 
         $this->getSettingService()->set("default", $default);
