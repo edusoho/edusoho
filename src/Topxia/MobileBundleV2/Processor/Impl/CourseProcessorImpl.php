@@ -353,7 +353,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }, $threads);
 
         $users = $this->controller->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
-        $threads = $this->filterThreads($threads, $courses, $this->filterUserFiled($users));
+        $threads = $this->filterThreads($threads, $courses, $this->filterUsersFiled($users));
         return array(
             "start" => $start,
             "limit" => $limit,
