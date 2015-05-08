@@ -74,27 +74,29 @@ class BlockToolkit
         preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $content, $altMatchs);
         preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/is', $content, $linkMatchs);
         preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/is', $content, $targetMatchs);
-        foreach ($data['carousel'] as $key => &$imglink) {
-            $unset = true;
-            if (!empty($imgMatchs[1][$key])) {
-                $unset = false;
-                $imglink['src'] = $imgMatchs[1][$key];
-            }
+        if (trim($content)) {
+            foreach ($data['carousel'] as $key => &$imglink) {
+                $unset = true;
+                if (!empty($imgMatchs[1][$key])) {
+                    $unset = false;
+                    $imglink['src'] = $imgMatchs[1][$key];
+                }
 
-            if (!empty($altMatchs[1][$key])) {
-                $imglink['alt'] = $altMatchs[1][$key];
-            }
+                if (!empty($altMatchs[1][$key])) {
+                    $imglink['alt'] = $altMatchs[1][$key];
+                }
 
-            if (!empty($linkMatchs[1][$key])) {
-                $imglink['href'] = $linkMatchs[1][$key];
-            }
+                if (!empty($linkMatchs[1][$key])) {
+                    $imglink['href'] = $linkMatchs[1][$key];
+                }
 
-            if (!empty($targetMatchs[1][$key])) {
-                $imglink['target'] = $targetMatchs[1][$key];
-            }
+                if (!empty($targetMatchs[1][$key])) {
+                    $imglink['target'] = $targetMatchs[1][$key];
+                }
 
-            if ($unset) {
-                unset($data['carousel'][$key]);
+                if ($unset) {
+                    unset($data['carousel'][$key]);
+                }
             }
         }
 
@@ -114,39 +116,41 @@ class BlockToolkit
         $index = 0;
         $index2 = 0;
         
-        foreach ($data as $key => &$object) {
-            if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
-                $object[0]['value'] = $textMatchs[1][$index++];
-            }
+        if (trim($content)) {
+            foreach ($data as $key => &$object) {
+                if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
+                    $object[0]['value'] = $textMatchs[1][$index++];
+                }
 
-            if (in_array($key, array('firstColumnLinks', 'secondColumnLinks', 'thirdColumnLinks', 'fourthColumnLinks', 'fifthColumnLinks')) 
-                    && !empty($dlMatchs[0][$index2])) {
-                $dl = $dlMatchs[0][$index2++];
-                preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);
-                preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
-                preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);
-                foreach ($object as $i => &$item) {
-                    $unset = true;
-                    if (!empty($hrefMatchs[1][$i])) {
-                        $item['href'] = $hrefMatchs[1][$i];
-                    }
+                if (in_array($key, array('firstColumnLinks', 'secondColumnLinks', 'thirdColumnLinks', 'fourthColumnLinks', 'fifthColumnLinks')) 
+                        && !empty($dlMatchs[0][$index2])) {
+                    $dl = $dlMatchs[0][$index2++];
+                    preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);
+                    preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
+                    preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);
+                    foreach ($object as $i => &$item) {
+                        $unset = true;
+                        if (!empty($hrefMatchs[1][$i])) {
+                            $item['href'] = $hrefMatchs[1][$i];
+                        }
 
-                    if (!empty($targetMatchs[1][$i])) {
-                        $item['target'] = $targetMatchs[1][$i];
-                    }
+                        if (!empty($targetMatchs[1][$i])) {
+                            $item['target'] = $targetMatchs[1][$i];
+                        }
 
-                    if (!empty($valuetMatchs[1][$i])) {
-                        $unset = false;
-                        $item['value'] = $valuetMatchs[1][$i];
-                    }
+                        if (!empty($valuetMatchs[1][$i])) {
+                            $unset = false;
+                            $item['value'] = $valuetMatchs[1][$i];
+                        }
 
-                    if ($unset) {
-                        unset($object[$i]);
+                        if ($unset) {
+                            unset($object[$i]);
+                        }
                     }
                 }
             }
         }
-
+        
         $blockService->updateBlock($block['id'], array(
             'data' => $data,
         ));
