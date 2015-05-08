@@ -127,9 +127,12 @@ use Topxia\Common\BlockToolkit;
             $originFile = "{$rootDir}/web/assets/img/default/large".$default["defaultCoursePictureFileName"];
             $targetFile = "{$rootDir}/web/files/2015/05-08/large".$default["defaultCoursePictureFileName"];
 
-            $filesystem->copy($originFile, $targetFile);
+            if (file_exists($originFile)) {
+                $filesystem->copy($originFile, $targetFile);
+                $default["course.png"] = '2015/05-08/large'.$default["defaultCoursePictureFileName"];
+            }
 
-            $default["course.png"] = '2015/05-08/large'.$default["defaultCoursePictureFileName"];
+
         }
         if(array_key_exists("defaultAvatarFileName", $default) && $default["defaultAvatarFileName"]) {
             $filesystem = new Filesystem();
@@ -137,9 +140,11 @@ use Topxia\Common\BlockToolkit;
             $originFile = "{$rootDir}/web/assets/img/default/large".$default["defaultAvatarFileName"];
             $targetFile = "{$rootDir}/web/files/2015/05-08/large".$default["defaultAvatarFileName"];
 
-            $filesystem->copy($originFile, $targetFile);
+            if (file_exists($originFile)) {
+                $filesystem->copy($originFile, $targetFile);
+                $default["avatar.png"] = '2015/05-08/large'.$default["defaultAvatarFileName"];
+            }
 
-            $default["avatar.png"] = '2015/05-08/large'.$default["defaultAvatarFileName"];
         }
 
         $this->getSettingService()->set("default", $default);
