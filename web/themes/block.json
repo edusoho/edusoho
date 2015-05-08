@@ -31,7 +31,7 @@
             {
                 "title": "轮播图",
                 "desc": "建议使用715x310大小的图片，最多可设置５张图片。",
-                "count": 5,
+                "count": 3,
                 "type": "imglink",
                 "default": [
                     {
@@ -43,6 +43,12 @@
                     {
                         "src": "\/assets\/img\/placeholder\/live-slide-2.jpg",
                         "alt": "轮播图２图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-2.jpg",
+                        "alt": "轮播图3图片描述",
                         "href": "#",
                         "target": "_self"
                     }
