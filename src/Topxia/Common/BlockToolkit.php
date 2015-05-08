@@ -58,9 +58,12 @@ class BlockToolkit
             $container->enterScope('request');
             $container->set('request', new Request(), 'request');
         }
-        $templateName = $block['templateName'];
 
-        return $container->get('templating')->render($templateName, $block['data']);
+        if (empty($block['templateName']) || empty($block['data'])) {
+            return '';
+        }
+
+        return $container->get('templating')->render($block['templateName'], $block['data']);
     }
 
     public static function updateCarousel($code)
