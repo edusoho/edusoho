@@ -10,14 +10,13 @@ class CategoryAnnouncementDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-       //检测categoryId 成立获取对应的数据
-       //添加group
+       //添加category
         $groupId = $this->getCategoryService()->addGroup(array(
         "code" => "course",
         "name" => "课程分类",
         "depth" => "2"
         ));
-       //添加category
+       
         $CategoryId1 = $this->getCategoryService()->createCategory(array(
         "code" => "default",
         "name" => "默认分类",
