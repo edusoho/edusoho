@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Topxia\System;
+use Topxia\Common\BlockToolkit;
 
 class BuildPluginAppCommand extends BaseCommand
 {
@@ -36,12 +37,14 @@ class BuildPluginAppCommand extends BaseCommand
         $pluginDir = $this->getPluginDirectory($name);
         $version = $this->getPluginVersion($name, $pluginDir);
 
+        $this->_generateBlockContent($pluginDir, $this->getContainer());
         $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
         $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
+        $this->_deleteUnusedFolder($pluginDir);
     }
 
     private function _copySource($name, $pluginDir, $distDir)
@@ -121,6 +124,18 @@ class BuildPluginAppCommand extends BaseCommand
         $this->filesystem->mkdir($distDir);
 
         return realpath($distDir);
+    }
+
+    private function _generateBlockContent($pluginDir, $container)
+    {
+        if (file_exists($pluginDir . '/block.json')) {
+            BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $pluginDir . '/blocks', $container);
+        }
+    }
+
+    private function _deleteUnusedFolder($pluginDir)
+    {
+        $this->filesystem->remove($pluginDir . '/blocks');
     }
 
     private function getPluginVersion($name, $pluginDir)
