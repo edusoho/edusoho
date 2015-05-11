@@ -26,7 +26,7 @@ class BlockToolkit
                     $block = array(
                         'code' => $key,
                         'mode' => 'template',
-                        'category' => $category,
+                        'category' => empty($meta['category']) ? 'system' : $meta['category'],
                         'meta' => $meta,
                         'data' => $default,
                         'templateName' => $meta['templateName'],
@@ -36,7 +36,7 @@ class BlockToolkit
                 } else {
                     $block = $blockService->updateBlock($block['id'], array(
                         'mode' => 'template',
-                        'category' => $category,
+                        'category' => empty($meta['category']) ? 'system' : $meta['category'],
                         'meta' => $meta,
                         'data' => $default,
                         'templateName' => $meta['templateName'],
