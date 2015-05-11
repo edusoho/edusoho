@@ -8,13 +8,14 @@
   <div class="panel-group" id="js-accordion-{{ code }}"  data-code="{{ code }}" data-prefix="data[{{ code }}]" data-count="{{ item.count }}" data-role="collapse" role="tablist" aria-multiselectable="true">
     {% for dataId,data in  block.data[code]|default(null)  %}
       <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}">
-          <h4 class="panel-title clearfix" data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
+        <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}" data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
+          <h4 class="panel-title clearfix">
             <span class="panel-item-title ellipsis">{{ item.title }}</span>
             <span class="pull-left">&nbsp;-&nbsp;</span> 
             {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
+            <i class="js-expand-icon glyphicon glyphicon-chevron-down pull-right" title="展开"></i>
             {% if item.count != 1 %}
-              <i class="js-remove-btn glyphicon glyphicon-trash pull-right" title="删除"></i>
+              <i class="mrs js-remove-btn glyphicon glyphicon-trash pull-right" title="删除"></i>
             {% endif %}
           </h4>
 

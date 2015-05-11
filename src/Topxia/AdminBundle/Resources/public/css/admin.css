@@ -539,6 +539,10 @@ input.LargeInput {width: 600px;}
   float: left;
 }
 
+.visual-edit-form .panel-group .panel-heading {
+  cursor: pointer;
+}
+
 .visual-edit-form .panel-group .panel-title .title-label {
   max-width: 40%;
   float: left;

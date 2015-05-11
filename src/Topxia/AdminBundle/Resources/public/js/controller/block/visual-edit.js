@@ -144,9 +144,11 @@ define(function(require, exports, module) {
             _bindCollapseEvent: function($element) {
                 $element.find('[data-role=collapse]').each(function(){
                     $(this).on('shown.bs.collapse', function(e){
+                        $(e.target).siblings('.panel-heading').find('.js-expand-icon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
                         $(e.target).find('.webuploader-container div:eq(1)').css({width:46, height:30});
                     });
                     $(this).on('hidden.bs.collapse', function(e){
+                        $(e.target).siblings('.panel-heading').find('.js-expand-icon').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
                         $(e.target).find('.webuploader-container div:eq(1)').css({width:1, height:1});
                     });
                 });
