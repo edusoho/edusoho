@@ -45,6 +45,24 @@
                         "alt": "轮播图２图片描述",
                         "href": "#",
                         "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt": "轮播图3图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-2.jpg",
+                        "alt": "轮播图4图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt": "轮播图5图片描述",
+                        "href": "#",
+                        "target": "_self"
                     }
                 ]
             }
