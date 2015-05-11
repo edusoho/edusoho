@@ -8,6 +8,7 @@ define(function(require, exports, module) {
         	validator: 0,
         	url:'',
         	smsType:'',
+        	dataTo:'mobile',
         	getPostData: function(data){
 	        	return data;
         	},
@@ -22,7 +23,6 @@ define(function(require, exports, module) {
 
         },
         postData: function(url, data) {
-
 	        var refreshTimeLeft = function(){
 	        	var leftTime = $('#js-time-left').html();
 	        	$('#js-time-left').html(leftTime-1);
@@ -56,10 +56,9 @@ define(function(require, exports, module) {
     		if (leftTime.length > 0){
     			return false;
     		}
-
 			var url = this.get("url");
 			var data = {};
-	        data.to = $('[name="mobile"]').val();        	
+	        data.to = $('[name="'+this.get("dataTo")+'"]').val();   
 	        data.sms_type = this.get("smsType");
 
 			data = $.extend(data, this.get("getPostData")(data));

@@ -2,18 +2,9 @@
 
 {% set menu = 'admin_operation_block' %}
 
-{% block page_buttons %}  {% if setting('developer.debug') %}
-
-    <div class="clearfix ">
-      <a data-url="{{ path('admin_block_create') }}" data-toggle="modal" data-target="#modal" class=" btn btn-success btn-sm pull-right mls "> 新增编辑区</a>
-    </div>
-    
-  {% endif %}
-{% endblock %}
-
 {% set script_controller = 'block/list' %}
 {% block main %}
-
+ {% include 'TopxiaAdminBundle:Block:table.html.twig'%}
 <table id="block-table" class="table table-striped">
   <thead>
     <tr>
@@ -32,6 +23,46 @@
   {% endif %}
    </tbody>
 </table>
-
  {{ web_macro.paginator(paginator) }} 
+ <style>
+.form-control.quicksearch{
+  display:inline;
+  float:right;
+  width:auto;
+  padding:4px 12px;
+}
+<style>
+
+.price{
+
+  color: #e57259;
+  font-size: 16px;
+
+}
+
+.ui-autocomplete {
+    border:1px solid #ccc;
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 3px #EEEEEE;
+}
+.ui-autocomplete-ctn{
+    margin:0;
+    padding:0;
+}
+.ui-autocomplete-item {
+    width: 180px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 30px;
+    padding:0 10px 0 10px;
+    cursor: default;
+}
+.ui-autocomplete-item-hover {
+    background:#f2f2f2;
+}
+.ui-autocomplete-item-hl {
+    background:#F6FF94;
+}
+</style>
 {% endblock %}

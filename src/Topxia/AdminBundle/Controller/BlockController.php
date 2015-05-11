@@ -4,22 +4,25 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-
+use Topxia\Common\FileToolkit;
+use Topxia\Common\BlockToolkit;
 
 class BlockController extends BaseController
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $category='')
     {
+
+        list($condation, $sort)= $this->dealQueryFields($category);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getBlockService()->searchBlockCount(),
+            $this->getBlockService()->searchBlockCount($condation),
             20
         );
-
-        $findedBlocks = $this->getBlockService()->searchBlocks($paginator->getOffsetCount(),
+        $findedBlocks = $this->getBlockService()->searchBlocks($condation, $sort, $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
         
         $latestBlockHistory = $this->getBlockService()->getLatestBlockHistory();
@@ -28,10 +31,31 @@ class BlockController extends BaseController
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
             'blocks'=>$findedBlocks,
             'latestUpdateUser'=>$latestUpdateUser,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'type' => $category
         ));
     }
+    private function dealQueryFields($category)
+    {
+        $sort = array();
+        $condation = array();
+        if($category =='lastest'){
+            $sort = array('updateTime', 'DESC');
+        }elseif($category != 'all'){
+          if($category == 'theme'){
+            $theme = $this->getSettingService()->get('theme', array());
+            $category = $theme['uri'];
+          }
+           $condation['category'] =  $category;
+        }
+        return array($condation,  $sort);
+    }
 
+    public function blockMatchAction(Request $request){
+        $likeString = $request->query->get('q');
+        $blocks = $this->getBlockService()->searchBlocks(array('title'=>$likeString), array('updateTime', 'DESC'), 0, 10);
+        return $this->createJsonResponse($blocks);
+    }
     public function previewAction(Request $request, $id)
     {
         $blockHistory = $this->getBlockService()->getBlockHistory($id);
@@ -135,6 +159,62 @@ class BlockController extends BaseController
         ));
     }
 
+    public function visualEditAction(Request $request, $blockId)
+    {
+        $block = $this->getBlockService()->getBlock($blockId);
+
+        if ('POST' == $request->getMethod()) {
+            $data = $request->request->get('data');
+            $block['data'] = $data;
+            $html = BlockToolkit::render($block, $this->container);
+            
+            $block = $this->getBlockService()->updateBlock($blockId, array(
+                'data' => $data,
+                'content' => $html
+            ));
+            $this->setFlashMessage('success', '保存成功!');
+        }
+
+        return $this->render('TopxiaAdminBundle:Block:block-visual-edit.html.twig', array(
+            'block' => $block,
+            'action' => 'edit',
+        ));
+    }
+
+    public function dataViewAction(Request $request, $blockId)
+    {
+        $block = $this->getBlockService()->getBlock($blockId);
+        unset($block['meta']['default']);
+        foreach ($block['meta']['items'] as $key => &$item) {
+            $item['default'] = $block['data'][$key];
+        }
+       
+        return new Response('<pre>' . json_encode($block['meta'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . '</pre>');
+    }
+
+    public function visualHistoryAction(Request $request, $blockId)
+    {
+        $block = $this->getBlockService()->getBlock($blockId);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getBlockService()->findBlockHistoryCountByBlockId($block['id']),
+            20
+        );
+
+        $blockHistorys = $this->getBlockService()->findBlockHistorysByBlockId(
+            $block['id'], 
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount());
+
+        $historyUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($blockHistorys, 'userId'));
+        return $this->render("TopxiaAdminBundle:Block:block-visual-history.html.twig", array(
+            'block' => $block,
+            'paginator' => $paginator,
+            'blockHistorys' => $blockHistorys,
+            'historyUsers' => $historyUsers
+        ));
+    }
+
     public function createAction(Request $request)
     {
         
@@ -191,9 +271,56 @@ class BlockController extends BaseController
         }
     }
 
+    public function uploadAction(Request $request, $blockId)
+    {
+        $response = array();
+        if ($request->getMethod() == 'POST') {
+            $file = $request->files->get('file');
+            if (!FileToolkit::isImageFile($file)) {
+                throw $this->createAccessDeniedException('图片格式不正确！');
+            }
+
+            $filename = 'block_picture_' . time() . '.' . $file->getClientOriginalExtension();
+
+            $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+            $file = $file->move($directory, $filename);
+
+            $block = $this->getBlockService()->getBlock($blockId);
+
+            $url = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+            $url = ltrim($url, '/');
+
+            $response = array(
+                'url' => $url,
+            );
+        }
+        return $this->createJsonResponse($response);
+    }
+
+    public function picPreviewAction(Request $request, $blockId)
+    {
+        $url = $request->query->get('url', '');
+        return $this->render('TopxiaAdminBundle:Block:picture-preview-modal.html.twig', array(
+            'url' => $url
+        ));
+    }
+
+    public function recoveryAction(Request $request, $blockId, $historyId)
+    {
+        $history = $this->getBlockService()->getBlockHistory($historyId);
+        $this->getBlockService()->recovery($blockId, $history);
+        $this->setFlashMessage('success', '恢复成功!');
+        return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockId' => $blockId)));
+    }
+
     protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

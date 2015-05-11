@@ -22,11 +22,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function getUser($id, $lock = false)
     {
         $user = $this->getUserDao()->getUser($id, $lock);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function findUsersCountByLessThanCreatedTime($endTime)
@@ -42,21 +38,25 @@ class UserServiceImpl extends BaseService implements UserService
     public function getUserByNickname($nickname)
     {
         $user = $this->getUserDao()->findUserByNickname($nickname);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
+    public function getUserByLoginField($keyword){
+        if(SimpleValidator::email($keyword)){
+            $user =  $this->getUserDao()->findUserByEmail($keyword);
         }
+        else if(SimpleValidator::mobile($keyword)){
+            $user =  $this->getUserDao()->findUserByVerifiedMobile($keyword);
+        }else {
+            $user =  $this->getUserDao()->findUserByNickname($keyword);
+        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function getUserByVerifiedMobile($mobile)
     {
         $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }    
 
     public function getUserByEmail($email)
@@ -65,11 +65,7 @@ class UserServiceImpl extends BaseService implements UserService
             return null;
         }
         $user = $this->getUserDao()->findUserByEmail($email);
-        if(!$user){
-            return null;
-        } else {
-            return UserSerialize::unserialize($user);
-        }
+        return !$user ? null : UserSerialize::unserialize($user);
     }
 
     public function findUsersByIds(array $ids)
@@ -131,54 +127,39 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->updateUser($userId, array('email' => $email));
     }
 
-    public function changeAvatar($userId, $filePath, array $options)
+    public function changeAvatar($userId, $data)
     {
         $user = $this->getUser($userId);
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，头像更新失败！');
         }
 
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
 
-        $pathinfo = pathinfo($filePath);
+        $files = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
 
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
-
-        $largeImage = $rawImage->copy();
-        $largeImage->crop(new Point($options['x'], $options['y']), new Box($options['width'], $options['height']));
-        $largeImage->resize(new Box(200, 200));
-        $largeFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_large.{$pathinfo['extension']}";
-        $largeImage->save($largeFilePath, array('quality' => 90));
-        $largeFileRecord = $this->getFileService()->uploadFile('user', new File($largeFilePath));
-
-        $largeImage->resize(new Box(120, 120));
-        $mediumFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_medium.{$pathinfo['extension']}";
-        $largeImage->save($mediumFilePath, array('quality' => 90));
-        $mediumFileRecord = $this->getFileService()->uploadFile('user', new File($mediumFilePath));
-
-        $largeImage->resize(new Box(48, 48));
-        $smallFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_small.{$pathinfo['extension']}";
-        $largeImage->save($smallFilePath, array('quality' => 90));
-        $smallFileRecord = $this->getFileService()->uploadFile('user', new File($smallFilePath));
-        @unlink($filePath);
-
-        $oldAvatars = array(
-            'smallAvatar' => $user['smallAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['smallAvatar']) : null,
-            'mediumAvatar' => $user['mediumAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['mediumAvatar']) : null,
-            'largeAvatar' => $user['largeAvatar'] ? $this->getKernel()->getParameter('topxia.upload.public_directory') . '/' . str_replace('public://', '', $user['largeAvatar']) : null
+        $fields = array(
+            'smallAvatar' => $files[$fileIds["small"]["id"]]["uri"],
+            'mediumAvatar' => $files[$fileIds["medium"]["id"]]["uri"],
+            'largeAvatar' => $files[$fileIds["large"]["id"]]["uri"]
         );
 
-        array_map(function($oldAvatar){
+        $oldAvatars = array(
+            'smallAvatar' => $user['smallAvatar'] ? $user['smallAvatar'] : null,
+            'mediumAvatar' => $user['mediumAvatar'] ? $user['mediumAvatar'] : null,
+            'largeAvatar' => $user['largeAvatar'] ? $user['largeAvatar'] : null
+        );
+
+        $fileService = $this->getFileService();
+        array_map(function($oldAvatar) use($fileService) {
             if (!empty($oldAvatar)) {
-                @unlink($oldAvatar);
+                $fileService->deleteFileByUri($oldAvatar);
             }
         }, $oldAvatars);
 
-        return  $this->getUserDao()->updateUser($userId, array(
-            'smallAvatar' => $smallFileRecord['uri'],
-            'mediumAvatar' => $mediumFileRecord['uri'],
-            'largeAvatar' => $largeFileRecord['uri'],
-        ));
+        return  $this->getUserDao()->updateUser($userId, $fields);
     }
 
     public function isNicknameAvaliable($nickname)
@@ -199,6 +180,15 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->findUserByEmail($email);
         return empty($user) ? true : false;
     }
+
+    public function isMobileAvaliable($mobile){
+        if(empty($mobile)){
+            return false;
+        }
+        $user = $this->getUserDao()->findUserByVerifiedMobile($mobile);
+        return empty($user) ? true : false;
+    }
+
 
     public function changePassword($id, $password)
     {
@@ -324,39 +314,67 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
+   public function parseEmailOrMobile($registration)
+    {
+        if(!$this->isMobileRegisterMode()){
+            return $registration;
+        }
+        if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
+            if (SimpleValidator::email($registration['emailOrMobile'])) {
+                $registration['email'] = $registration['emailOrMobile'];
+            } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
+                $registration['mobile'] = $registration['emailOrMobile'];
+                $registration['verifiedMobile'] = $registration['emailOrMobile'];
+            } else {
+                throw $this->createServiceException('emailOrMobile error!');
+            }
+        }else{
+            throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
+        }
+        return  $registration;
+    }
+
+    public function isMobileRegisterMode(){
+        $authSetting = $this->getSettingservice()->get('auth');
+        return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
+    }
+
+    private function getRandomChar(){
+          return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    }
+
     public function register($registration, $type = 'default')
     {
-
-        if (!SimpleValidator::email($registration['email'])) {
-            throw $this->createServiceException('email error!');
-        }
-        
         if (!SimpleValidator::nickname($registration['nickname'])) {
             throw $this->createServiceException('nickname error!');
-        }
-
-        if (!$this->isEmailAvaliable($registration['email'])) {
-            throw $this->createServiceException('Email已存在');
         }
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
             throw $this->createServiceException('昵称已存在');
         }
 
+        if (!SimpleValidator::email($registration['email'])) {
+            throw $this->createServiceException('email error!');
+        }
+        if (!$this->isEmailAvaliable($registration['email'])) {
+            throw $this->createServiceException('Email已存在');
+        }
+        
         $user = array();
-        $user['email'] = $registration['email'];
         if (isset($registration['verifiedMobile'])) {
             $user['verifiedMobile'] = $registration['verifiedMobile'];
-        }else{
+        } else {
             $user['verifiedMobile'] = '';
         }
+        
+        $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
 
-        if(in_array($type, array('default', 'phpwind', 'discuz'))) {
+        if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
@@ -369,15 +387,15 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
 
-        if (isset($registration['mobile']) &&$registration['mobile']!=""&& !SimpleValidator::mobile($registration['mobile'])) {
+        if (isset($registration['mobile']) && $registration['mobile'] != "" && !SimpleValidator::mobile($registration['mobile'])) {
             throw $this->createServiceException('mobile error!');
         }
 
-        if (isset($registration['idcard']) &&$registration['idcard']!=""&& !SimpleValidator::idcard($registration['idcard'])) {
+        if (isset($registration['idcard']) && $registration['idcard'] != "" && !SimpleValidator::idcard($registration['idcard'])) {
             throw $this->createServiceException('idcard error!');
         }
 
-        if (isset($registration['truename']) &&$registration['truename']!=""&& !SimpleValidator::truename($registration['truename'])) {
+        if (isset($registration['truename']) && $registration['truename'] != "" && !SimpleValidator::truename($registration['truename'])) {
             throw $this->createServiceException('truename error!');
         }
 
@@ -393,12 +411,12 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['qq'] = empty($registration['qq']) ? '' : $registration['qq'];
         $profile['site'] = empty($registration['site']) ? '' : $registration['site'];
         $profile['gender'] = empty($registration['gender']) ? 'secret' : $registration['gender'];
-        for($i=1;$i<=5;$i++){
+        for ($i = 1;$i <= 5;$i++) {
             $profile['intField'.$i] = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
             $profile['dateField'.$i] = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
             $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
         }
-        for($i=1;$i<=10;$i++){
+        for ($i = 1;$i <= 10;$i++) {
             $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? "" : $registration['varcharField'.$i];
             $profile['textField'.$i] = empty($registration['textField'.$i]) ? "" : $registration['textField'.$i];
         }
@@ -411,6 +429,25 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getDispatcher()->dispatch('user.service.registered', new ServiceEvent($user));
 
         return $user;
+    }
+    public function generateNickname($registration, $maxLoop=100){
+        for($i =0; $i<$maxLoop; $i++){
+            $registration['nickname'] ='user'.substr($this->getRandomChar(), 0,6); 
+            if($this->isNicknameAvaliable($registration['nickname'])) {
+                break;
+            }   
+        }    
+        return $registration['nickname'];
+    }
+
+    public function generateEmail($registration, $maxLoop=100){
+         for($i =0; $i<$maxLoop; $i++){
+            $registration['email'] = 'user_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
+            if($this->isEmailAvaliable($registration['email'])){
+                break;
+            }
+       }
+        return $registration['email'];  
     }
 
     public function importUpdateEmail($users)

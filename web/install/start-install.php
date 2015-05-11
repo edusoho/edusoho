@@ -22,6 +22,7 @@ use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\BlockToolkit;
 
 function check_installed()
 {
@@ -233,7 +234,12 @@ function install_step5()
 function install_step999()
 {
     if (empty($_COOKIE['nokey'])) {
-        session_start();
+        
+        if (empty($_SESSION)){
+
+            session_start();
+            
+        }
 
         $connection = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);
@@ -461,7 +467,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'opened',
+            'register_mode'=>'email',
             'email_activation_title' => '请激活您的{{sitename}}账号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
@@ -636,59 +642,45 @@ EOD;
 
     public function initBlocks()
     {
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'home_top_banner',
-            'title'=>'默认主题：首页头部图片轮播'
-        ));
+        $themeDir = realpath(__DIR__ . '/../themes/');
 
-        $content = <<<'EOD'
-<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
-<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
-<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
+        $metaFiles = array(
+            'system' => "{$themeDir}/block.json",
+            'default' => "{$themeDir}/default/block.json",
+            'autumn' => "{$themeDir}/autumn/block.json"
+        );
 
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'autumn:home_top_banner',
-            'title'=>'清秋主题：首页头部图片轮播'
-        ));
+        foreach ($metaFiles as $category => $file) {
+            $metas = file_get_contents($file);
+            $metas = json_decode($metas, true);
 
-        $content = <<<'EOD'
-<div class="item active">
-    <img src="../themes/autumn/img/slide-1.jpg">
-</div>
-<div class="item">
-    <img src="../themes/autumn/img/slide-2.jpg">
-</div>
-<div class="item">
-    <img src="../themes/autumn/img/slide-3.jpg">
-</div>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
+            foreach ($metas as $code => $meta) {
 
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'live_top_banner',
-            'title'=>'直播频道首页图片轮播'
-        ));
+                $data = array();
+                foreach ($meta['items'] as $key => $item) {
+                    $data[$key] = $item['default'];
+                }
 
-        $content = <<<'EOD'
-<a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
-<a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
+                $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
+                if (file_exists($filename)) {
+                    $content = file_get_contents($filename);
+                } else {
+                    $content = '';
+                }
 
+                $this->getBlockService()->createBlock(array(
+                    'title' => $meta['title'] ,
+                    'mode' => 'template' ,
+                    'templateName' => $meta['templateName'],
+                    'content' => $content,
+                    'code' => $code,
+                    'meta' => $meta,
+                    'data' => $data,
+                    'category' => $category
+                ));
+            }
 
-        $block = $this->getBlockService()->createBlock(array(
-            'code'=>'bill_banner',
-            'title'=>'我的账户Banner'
-        ));
-
-        $content = <<<'EOD'
-<br><div class="col-md-12">  
-<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" style="width: 100%;"/></a>
-<br><br></div>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
+        }
 
     }
 

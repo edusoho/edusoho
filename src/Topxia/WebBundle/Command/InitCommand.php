@@ -9,6 +9,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\BlockToolkit;
 
 class InitCommand extends BaseCommand
 {
@@ -39,6 +40,7 @@ class InitCommand extends BaseCommand
 		$this->initFile($output);
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
+        $this->initBlock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
@@ -162,7 +164,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'opened',
+            'register_mode'=>'email',
             'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
@@ -369,6 +371,20 @@ EOD;
         touch($this->getContainer()->getParameter('kernel.root_dir') . '/config/routing_plugins.yml');
 
         $output->writeln(' ...<info>成功</info>');
+    }
+
+    public function initBlock($output)
+    {
+        $output->write('  初始化编辑区');
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/block.json';
+        BlockToolkit::init('system', $json, $this->getContainer());
+
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/default/block.json';
+        BlockToolkit::init('default', $json, $this->getContainer());
+
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
+        BlockToolkit::init('autumn', $json, $this->getContainer());
+
     }
 
 	private function initServiceKernel()

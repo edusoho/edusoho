@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 5.4.0
+        assets_version: 5.5.1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -29,6 +29,7 @@ twig:
     paths:
         "%kernel.root_dir%/../web/customize": customize
         "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
+        "%kernel.root_dir%/../web/themes": theme
     globals:
         disabled_features: %disabled_features%
 
@@ -135,6 +136,12 @@ services:
 
     topxia.twig.menu_extension:
         class: Topxia\WebBundle\Twig\Extension\MenuExtension
+        arguments:    [@service_container]
+        tags:
+            - { name: twig.extension }
+
+    topxia.twig.block_extension:
+        class: Topxia\WebBundle\Twig\Extension\BlockExtension
         arguments:    [@service_container]
         tags:
             - { name: twig.extension }

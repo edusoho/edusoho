@@ -164,6 +164,7 @@ class DataDict
 		),
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
+			'verifiedMobile' => '手机号',
 			'email' => '邮件地址',
 			'loginIp' => '登录IP'
 		),		

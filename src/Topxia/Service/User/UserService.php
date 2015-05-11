@@ -10,6 +10,9 @@ interface UserService
 
     public function getUserByNickname($nickname);
 
+    //根据用户名/邮箱/手机号精确查找用户
+    public function getUserByLoginField($keyword);
+
     public function getUserByVerifiedMobile($mobile);
     
     public function getUserByEmail($email);
@@ -28,11 +31,13 @@ interface UserService
 
     public function changeEmail($userId, $email);
 
-    public function changeAvatar($userId, $filePath, array $options);
+    public function changeAvatar($userId, $data);
 
     public function isNicknameAvaliable($nickname);
 
     public function isEmailAvaliable($email);
+
+    public function isMobileAvaliable($mobile);
 
     public function hasAdminRoles($userId);
 

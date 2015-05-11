@@ -10,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\PluginUtil;
+use Topxia\Common\BlockToolkit;
 
 
 class ThemeRegisterCommand extends BaseCommand
@@ -45,9 +46,11 @@ class ThemeRegisterCommand extends BaseCommand
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
 
+        $this->initBlock($code, $themeDir . '/block.json', $this->getContainer());
+        $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
+        
         PluginUtil::refresh();
         $output->writeln("<comment>  - 刷新主题缓存...</comment><info>OK</info>");
-
 
 
         $output->writeln("<info>注册成功....</info>");
@@ -57,18 +60,17 @@ class ThemeRegisterCommand extends BaseCommand
     private function executeInstall($pluginDir)
     {
         $installFile = $pluginDir . '/Scripts/InstallScript.php';
-        if (!file_exists($installFile)) {
-            throw new \RuntimeException("插件安装脚本{$installFile}不存在！");
+        if (file_exists($installFile)) {
+            include $installFile;
+            if (!class_exists('InstallScript')) {
+                throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
+            }
+
+            $installer = new \InstallScript(ServiceKernel::instance());
+            $installer->setInstallMode('command');
+            $installer->execute();
         }
 
-        include $installFile;
-        if (!class_exists('InstallScript')) {
-            throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
-        }
-
-        $installer = new \InstallScript(ServiceKernel::instance());
-        $installer->setInstallMode('command');
-        $installer->execute();
     }
 
     private function parseMeta($code, $pluginDir)
@@ -94,9 +96,18 @@ class ThemeRegisterCommand extends BaseCommand
         return $meta;
     }
 
+    private function initBlock($code, $jsonFile, $container)
+    {
+        BlockToolkit::init($code, $jsonFile, $container);
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+    protected function getBlockService()
+    {
+        return $this->getServiceKernel()->createService('Content.BlockService');
     }
 
     private function initServiceKernel()
