@@ -10,6 +10,7 @@
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="{{code}}-heading-{{ dataId }}" data-toggle="collapse" data-parent="#js-accordion-{{ code }}" href="#{{code}}-collapse-{{ loop.index }}-{{ dataId }}" aria-expanded="false" aria-controls="{{code}}-collapse-{{ loop.index }}-{{ dataId }}">
           <h4 class="panel-title clearfix">
+            <i class="js-move-seq glyphicon glyphicon-move pull-left mrs"></i>
             <span class="panel-item-title ellipsis">{{ item.title }}</span>
             <span class="pull-left">&nbsp;-&nbsp;</span> 
             {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}

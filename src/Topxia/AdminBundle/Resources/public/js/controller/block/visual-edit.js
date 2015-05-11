@@ -19,6 +19,7 @@ define(function(require, exports, module) {
                 this._bindUploader(this.element);                
                 this._initForm();
                 this._bindCollapseEvent(this.element);
+                this._bindSortable(this.element);
             },
             _initForm: function() {
                 $form = this.element;
@@ -153,6 +154,11 @@ define(function(require, exports, module) {
                     });
                 });
                
+            },
+            _bindSortable: function($element)
+            {
+                $element.find('.panel-group').each(function(){
+                })
             },
             _destoryUploader: function($element) {
             
