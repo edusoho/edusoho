@@ -17,7 +17,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam("receipt-data");
         $amount = $this->getParam("amount", 0);
-        return $this->requestReceiptData($user["id"], $amount, $receipt, true);
+        return $this->requestReceiptData($user["id"], $amount, $receipt, false);
     }
 
     private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)     
