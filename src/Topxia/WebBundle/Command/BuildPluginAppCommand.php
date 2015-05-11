@@ -44,7 +44,6 @@ class BuildPluginAppCommand extends BaseCommand
         $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
-        $this->_deleteUnusedFolder($pluginDir);
     }
 
     private function _copySource($name, $pluginDir, $distDir)
@@ -132,11 +131,6 @@ class BuildPluginAppCommand extends BaseCommand
             $this->filesystem->copy($pluginDir . '/block.json', $distDir . '/block.json');
             BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $distDir . '/blocks', $container);
         }
-    }
-
-    private function _deleteUnusedFolder($pluginDir)
-    {
-        $this->filesystem->remove($pluginDir . '/blocks');
     }
 
     private function getPluginVersion($name, $pluginDir)
