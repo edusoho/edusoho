@@ -37,10 +37,10 @@ class BuildPluginAppCommand extends BaseCommand
         $pluginDir = $this->getPluginDirectory($name);
         $version = $this->getPluginVersion($name, $pluginDir);
 
-        $this->_generateBlockContent($pluginDir, $this->getContainer());
         $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
+        $this->_generateBlocks($pluginDir, $distDir, $this->getContainer());
         $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
@@ -126,10 +126,11 @@ class BuildPluginAppCommand extends BaseCommand
         return realpath($distDir);
     }
 
-    private function _generateBlockContent($pluginDir, $container)
+    private function _generateBlocks($pluginDir, $distDir, $container)
     {
         if (file_exists($pluginDir . '/block.json')) {
-            BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $pluginDir . '/blocks', $container);
+            $this->filesystem->copy($pluginDir . '/block.json', $distDir . '/block.json');
+            BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $distDir . '/blocks', $container);
         }
     }
 
