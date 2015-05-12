@@ -67,6 +67,10 @@ register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
 
+register_nickname_update:
+    pattern:  /register/nickname/update
+    defaults: { _controller: TopxiaWebBundle:Register:nicknameUpdate }
+
 register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
@@ -83,6 +87,10 @@ register_email_verify:
 register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
+
+register_email_or_mobile_check:
+    pattern:  /register/email_or_mobile/check
+    defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
 
 register_nickname_check:
     pattern:  /register/nickname/check
@@ -103,6 +111,11 @@ register_captcha_num:
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
+    methods: [POST]
+
+file_img_crop:
+    pattern:  /file/img/crop
+    defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
 uploadfile_upload:
@@ -564,9 +577,9 @@ course_manage_student_remark:
     pattern:  /course/{courseId}/manage/student/{userId}/remark
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
 
-course_manage_student_check_nickname:
-    pattern:  /course/{id}/manage/nickname_check
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkNickname }
+course_manage_student_check:
+    pattern:  /course/{id}/manage/student_check
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
@@ -1380,8 +1393,8 @@ group_transfer:
     pattern:  /group/transferGroup/{id}
     defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
 group_setLogoCrop:
-    pattern:  /group/setting/logoCrop/{file}/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:groupSetLogoCrop }
+    pattern:  /group/{id}/setting/logoCrop
+    defaults: { _controller: TopxiaWebBundle:Group:logoCrop }
 group_logo_set:
     pattern:  /group/{id}/setting/logo
     defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }

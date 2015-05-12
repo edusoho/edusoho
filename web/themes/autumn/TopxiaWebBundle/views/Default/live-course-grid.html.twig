@@ -1,6 +1,6 @@
 {% if (course.discountActivityId > 0) and ((course.price != course.originPrice) or (course.coinPrice != course.originCoinPrice)) %}
   <li class="autumn-grid autumn-course-grid">
-    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
+    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ filepath(course.largePicture, 'course.png') }}">
       {% if course.status == 'draft' %}
         <span class="label  label-warning course-status">未发布</span>
       {% elseif course.status == 'closed' %}
@@ -65,7 +65,7 @@
   </li>
   {% else %}
   <li class="autumn-grid autumn-course-grid">
-    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
+    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ filepath(course.largePicture, 'course.png') }}">
       {% if course.status == 'draft' %}
         <span class="label  label-warning course-status">未发布</span>
       {% elseif course.status == 'closed' %}

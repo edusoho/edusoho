@@ -565,7 +565,7 @@ class GroupController extends BaseController
 
     }
 
-    public function groupSetLogoCropAction(Request $request,$file,$id)
+    public function logoCropAction(Request $request,$id)
     {
 
         $group = $this->getGroupService()->getGroup($id);
@@ -575,49 +575,30 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        $filename = $file;
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-        
         if($request->getMethod() == 'POST') {
 
             $options = $request->request->all();
             if($request->query->get('page')=="backGroundLogoCrop"){
-               $this->getGroupService()->changeGroupBackgroundLogo($id, $pictureFilePath, $options);
+               $this->getGroupService()->changeGroupImg($id, "backgroundLogo", $options["images"]);
             }else{
-               $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
+               $this->getGroupService()->changeGroupImg($id, "logo", $options["images"]);
             }
           
-        return $this->redirect($this->generateUrl('group_show', array(
-                    'id'=>$id,
-                    )));
+            return $this->redirect($this->generateUrl('group_show', array(
+                'id'=>$id,
+            )));
         }
-        try {
-
-            $imagine = new Imagine(); 
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {          
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('info', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        if($request->query->get('page')=="backGroundLogoCrop"){
-              $scaledSize = $naturalSize->widen(1070)->heighten(240);
-        }else{
-              $scaledSize = $naturalSize->widen(270)->heighten(270);
-        }
-      
-        $pictureUrl = 'tmp/' . $filename;
+        
+        $fileId = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,));
+            'scaledSize' => $scaledSize,
+        ));
 
     }
 
@@ -656,19 +637,6 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        if ($request->getMethod() == 'POST') {
-
-            $fileName=$this->setLogo($request,$user);
-            
-            return $this->redirect($this->generateUrl('group_setLogoCrop', array(
-                'file' => $fileName,
-                'id'=>$id,
-                'page'=>'logoCrop',
-                'type'=>'logo'
-                )
-            ));
-        }
-
         return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
                 'groupinfo' => $group,
                 'is_groupmember' => $this->getGroupMemberRole($id),
@@ -685,18 +653,6 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
-        }
-        if ($request->getMethod() == 'POST') {
-
-            $fileName=$this->setLogo($request,$user);
-
-            return $this->redirect($this->generateUrl('group_setLogoCrop', array(
-                'file' => $fileName,
-                'id'=>$id,
-                'page'=>'backGroundLogoCrop',
-                'type'=>'background',
-                )
-            ));       
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
@@ -886,6 +842,11 @@ class GroupController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
     
     private function convertFiltersToConditions($id, $filters)

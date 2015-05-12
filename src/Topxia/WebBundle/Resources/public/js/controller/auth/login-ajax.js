@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
+    require("placeholder")
 
     exports.run = function() {
         var validator = new Validator({

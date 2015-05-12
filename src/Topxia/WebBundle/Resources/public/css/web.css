@@ -5405,24 +5405,7 @@ a.homework-essay-textarea-pack-up{
   color:#999;
 }
 
-.testpaper-body .testpaper-watermark {
-  margin: -25px 0 0 -100px;
-  left: 50%;
-  top: 50%;
-  font-size: 20px;
-  position: absolute;
-  text-align: center;
-  color: #e0e0e0;
-  -webkit-transform: rotate(45deg); Chrome & Safari
-  -moz-transform: rotate(45deg); Firefox
-  -ms-transform: rotate(45deg); IE 9+
-  -o-transform: rotate(45deg); Opera
-  transform: rotate(45deg); CSS3
-  filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand');
-  z-index: 0;
-}
-
-.panel.testpaper-question-block {
+.panel.testpaper-question-block .testpaper-question{
   position: relative;
 
 }
@@ -6438,4 +6421,20 @@ a:focus {
   padding: 5px 10px;
   white-space: nowrap;
   border-radius: 2px;
+}
+
+.watermark.active {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: center;
+  display: none; 
+  position: absolute;
+  width: 500px;
+  height: 20px;
+  vertical-align: middle;
+  opacity: 0.8;
 }
