@@ -40,7 +40,7 @@ define(function(require, exports, module) {
 
         crop: function(postData){
             var self = this;
-        	var cropImgUrl = '/file/img/crop';
+        	var cropImgUrl = '../../../file/img/crop';
         	if(!postData) {
         		postData = {};
         	}
