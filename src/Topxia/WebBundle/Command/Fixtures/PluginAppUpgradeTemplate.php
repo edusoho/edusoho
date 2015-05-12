@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\BlockToolkit;
 
  class EduSohoUpgrade
  {
@@ -44,6 +45,12 @@ use Symfony\Component\Filesystem\Filesystem;
             $updater->execute();
         }
 
+        $this->initBlock();
+    }
+
+    protected function initBlock()
+    {
+        BlockToolkit::init(__DIR__ . '/block.json', null, __DIR__ . '/blocks/');
     }
 
     protected function upgradeUpdate()
