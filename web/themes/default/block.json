@@ -2,6 +2,7 @@
     "home_top_banner":
     {
         "title": "默认主题：首页头部图片轮播",
+        "category": "default",
         "templateName": "@theme/default/block/home_top_banner.template.html.twig",
         "items": {
             "carousel":
@@ -13,19 +14,19 @@
                 "default": [
                     {
                         "src": "/assets/img/placeholder/carousel-1200x256-1.png",
-                        "alt": "轮播图１描述",
+                        "alt": "轮播图1描述",
                         "href": "#",
                         "target": "_blank"
                     },
                     {
                         "src": "/assets/img/placeholder/carousel-1200x256-2.png",
-                        "alt": "轮播图２描述",
+                        "alt": "轮播图2描述",
                         "href": "#",
                         "target": "_blank"
                     },
                     {
                         "src": "/assets/img/placeholder/carousel-1200x256-3.png",
-                        "alt": "轮播图３描述",
+                        "alt": "轮播图3描述",
                         "href": "#",
                         "target": "_blank"
                     }
