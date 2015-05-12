@@ -287,7 +287,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
         }
 
-        if (!SimpleValidator::nickname($nickname)) {
+        if ($nickname && !SimpleValidator::nickname($nickname)) {
             return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
         }
 
@@ -298,7 +298,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
             return $this->createErrorResponse('email_exist', '该邮箱已被注册');
         }
-        
+
         if (! $nickname) {
             $nickname = "ES" . time();
             while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
