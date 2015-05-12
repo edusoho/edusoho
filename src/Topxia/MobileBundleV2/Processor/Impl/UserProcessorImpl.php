@@ -298,9 +298,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
             return $this->createErrorResponse('email_exist', '该邮箱已被注册');
         }
-
-        if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+        
+        if (! $nickname) {
+            $nickname = "ES" . time();
+            while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+                $nickname = "ES". time();
+            }
+        } else {
+            if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+                return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+            }
         }
 
         $user = $this->controller->getAuthService()->register(array(
