@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class BlockToolkit
 {
-    public static function init($category, $jsonFile, $container = null, $blocksFolder = null)
+    public static function init($jsonFile, $container = null, $blocksFolder = null)
     {
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);

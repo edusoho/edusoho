@@ -49,7 +49,7 @@ class PluginRegisterCommand extends BaseCommand
         PluginUtil::refresh();
         $output->writeln("<comment>  - 刷新插件缓存...</comment><info>OK</info>");
 
-        $this->initBlock('system', $pluginDir . '/block.json', $this->getContainer());
+        $this->initBlock($pluginDir . '/block.json', $this->getContainer());
         $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
 
         $output->writeln("<info>注册成功....</info>");
@@ -96,9 +96,9 @@ class PluginRegisterCommand extends BaseCommand
         return $meta;
     }
 
-    private function initBlock($category, $jsonFile, $container)
+    private function initBlock($jsonFile, $container)
     {
-        BlockToolkit::init($category, $jsonFile, $container);
+        BlockToolkit::init($jsonFile, $container);
     }
 
     protected function getAppService()

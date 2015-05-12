@@ -51,7 +51,7 @@ use Topxia\Common\BlockToolkit;
     protected function initBlock()
     {
         $pluginMeta = json_decode(file_get_contents(__DIR__ . '/plugin.json'), true);
-        BlockToolkit::init($pluginMeta['code'], __DIR__ . '/block.json', null, __DIR__ . '/blocks/');
+        BlockToolkit::init(__DIR__ . '/block.json', null, __DIR__ . '/blocks/');
     }
 
     protected function upgradeUpdate()

@@ -46,7 +46,7 @@ class ThemeRegisterCommand extends BaseCommand
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
 
-        $this->initBlock($code, $themeDir . '/block.json', $this->getContainer());
+        $this->initBlock($themeDir . '/block.json', $this->getContainer());
         $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
         
         PluginUtil::refresh();
@@ -96,9 +96,9 @@ class ThemeRegisterCommand extends BaseCommand
         return $meta;
     }
 
-    private function initBlock($code, $jsonFile, $container)
+    private function initBlock($jsonFile, $container)
     {
-        BlockToolkit::init($code, $jsonFile, $container);
+        BlockToolkit::init($jsonFile, $container);
     }
 
     protected function getAppService()

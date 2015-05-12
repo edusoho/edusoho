@@ -377,13 +377,13 @@ EOD;
     {
         $output->write('  初始化编辑区');
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/block.json';
-        BlockToolkit::init('system', $json, $this->getContainer());
+        BlockToolkit::init($json, $this->getContainer());
 
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/default/block.json';
-        BlockToolkit::init('default', $json, $this->getContainer());
+        BlockToolkit::init($json, $this->getContainer());
 
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
-        BlockToolkit::init('autumn', $json, $this->getContainer());
+        BlockToolkit::init($json, $this->getContainer());
 
     }
 
