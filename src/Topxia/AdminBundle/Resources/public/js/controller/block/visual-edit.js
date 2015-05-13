@@ -45,6 +45,7 @@ define(function(require, exports, module) {
                     $model.find('input').attr('value', '');
                     $model.find('textarea').attr('html', '');
                     $model.find('.title-label').html('');
+                    $model.find('.js-img-preview').attr('href', '');
                     var headingId = new Date().getTime() + '-heading';
                     $model.find('.panel-heading').attr('id', headingId);
                     var collapseId = new Date().getTime() + '-collapse';
