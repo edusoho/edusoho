@@ -2,6 +2,7 @@
     "bill_banner":
     {
         "title": "我的账户Banner",
+        "category": "system",
         "templateName": "TopxiaWebBundle:Block:bill_banner.template.html.twig",
         "items": {
             "carousel":
@@ -25,6 +26,7 @@
     "live_top_banner":
     {
         "title": "直播频道 - 首页 - 头部轮播图",
+        "category": "system",
         "templateName": "TopxiaWebBundle:Block:live_top_banner.template.html.twig",
         "items": {
             "carousel":

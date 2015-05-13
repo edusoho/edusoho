@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Topxia\System;
+use Topxia\Common\BlockToolkit;
 
 class BuildPluginAppCommand extends BaseCommand
 {
@@ -39,6 +40,7 @@ class BuildPluginAppCommand extends BaseCommand
         $distDir = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
+        $this->_generateBlocks($pluginDir, $distDir, $this->getContainer());
         $this->_copyMeta($pluginDir, $distDir);
         $this->_cleanGit($sourceDistDir);
         $this->_zipPackage($distDir);
@@ -121,6 +123,14 @@ class BuildPluginAppCommand extends BaseCommand
         $this->filesystem->mkdir($distDir);
 
         return realpath($distDir);
+    }
+
+    private function _generateBlocks($pluginDir, $distDir, $container)
+    {
+        if (file_exists($pluginDir . '/block.json')) {
+            $this->filesystem->copy($pluginDir . '/block.json', $distDir . '/block.json');
+            BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $distDir . '/blocks', $container);
+        }
     }
 
     private function getPluginVersion($name, $pluginDir)

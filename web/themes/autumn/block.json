@@ -2,6 +2,7 @@
     "autumn:home_top_banner":
     {
         "title": "清秋主题：首页头部图片轮播",
+        "category": "autumn",
         "templateName": "@theme/autumn/block/carousel.template.html.twig",
         "items": {
             "carousel":
