@@ -41,8 +41,7 @@ define(function(require, exports, module) {
         crop: function(postData){
             var self = this;
 
-            var path = require.resolve("jquery.jcrop").match(/[^?#]*\//)[0];
-        	var cropImgUrl = path+'../../../../../file/img/crop';
+        	var cropImgUrl = app.imgCropUrl;
         	if(!postData) {
         		postData = {};
         	}
