@@ -8,6 +8,13 @@ use Topxia\Service\Common\ServiceEvent;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
+
+    public function getAnnouncement($id)
+    {
+
+    }
+
+
 	public function searchAnnouncements($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
@@ -20,11 +27,6 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function searchAnnouncementsCount($conditions)
     {
         return $this->getAnnouncementDao()->searchAnnouncementsCount($conditions);
-    }
-
-    public function deleteAnnouncement($id)
-    {
-        return $this->getAnnouncementDao()->deleteAnnouncement($id);
     }
 
     public function createAnnouncement($announcement)
