@@ -394,9 +394,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             "username" => $username
         ));
 
-        $response = $this->controller->createJson($this->request, $result);
-        $response->headers->setCookie(new Cookie("token", $token, 0, "/", "trymob.edusoho.cn"));
-        return $response;
+        return $result;
     }
     
     private function loadUserByUsername($request, $username)
