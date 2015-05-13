@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     require('webuploader');
-    //require('jquery.colorbox');
+    require('jquery.sortable');
     exports.run = function() {
         var editForm = Widget.extend({
             uploaders: [],
@@ -19,6 +19,7 @@ define(function(require, exports, module) {
                 this._bindUploader(this.element);                
                 this._initForm();
                 this._bindCollapseEvent(this.element);
+                this._bindSortable(this.element);
             },
             _initForm: function() {
                 $form = this.element;
@@ -87,13 +88,22 @@ define(function(require, exports, module) {
             },
             onChangeLabel: function(e) {
                 var $target = $(e.currentTarget);
-                console.log($target.closest('.panel.panel-default').find('.js-title-label').html($target.val()));
+                $target.closest('.panel.panel-default').find('.js-title-label').html($target.val());
             },
             refreshIndex: function($panelGroup) {
                 this._destoryUploader(this.element);
                 $prefixCode = $panelGroup.data('prefix');
                 $panels = $panelGroup.children('.panel.panel-default');
                 $panels.each(function(index, object){
+                    $(this).find('input[type=text]').each(function(element){
+                        $(this).attr('value', $(this).val());
+                    });
+                    $(this).find('input[type=radio]').each(function(element){
+                        if ($(this).prop('checked')) {
+                            $(this).attr('checked', 'checked');
+                        }
+                    });
+
                     $(this).find('.webuploader-container').html('上传');
                     var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g, $prefixCode + "[" + index + "]");
                     $(this).replaceWith(replace);
@@ -144,13 +154,34 @@ define(function(require, exports, module) {
             _bindCollapseEvent: function($element) {
                 $element.find('[data-role=collapse]').each(function(){
                     $(this).on('shown.bs.collapse', function(e){
+                        $(e.target).siblings('.panel-heading').find('.js-expand-icon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
                         $(e.target).find('.webuploader-container div:eq(1)').css({width:46, height:30});
                     });
                     $(this).on('hidden.bs.collapse', function(e){
+                        $(e.target).siblings('.panel-heading').find('.js-expand-icon').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
                         $(e.target).find('.webuploader-container div:eq(1)').css({width:1, height:1});
                     });
                 });
                
+            },
+            _bindSortable: function($element)
+            {
+                var self = this;
+                $element.find('.panel-group').each(function(){
+                    var $group = $(this);
+                    $(this).sortable({
+                        itemSelector: '.panel.panel-default',
+                        handle: '.js-move-seq',
+                        serialize: function(parent, children, isContainer) {
+                            return isContainer ? children : parent.attr('id');
+                        },
+                        onDrop: function ($item, container, _super, event) {
+                            $item.removeClass("dragged").removeAttr("style");
+                            $("body").removeClass("dragging");
+                            self.refreshIndex($group);
+                        }
+                    });
+                })
             },
             _destoryUploader: function($element) {
             
