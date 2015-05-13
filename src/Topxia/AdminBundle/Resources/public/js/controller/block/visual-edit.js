@@ -2,6 +2,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     require('webuploader');
+    require('jquery.sortable');
     //require('jquery.colorbox');
     exports.run = function() {
         var editForm = Widget.extend({
@@ -157,7 +158,21 @@ define(function(require, exports, module) {
             },
             _bindSortable: function($element)
             {
+                var self = this;
                 $element.find('.panel-group').each(function(){
+                    var $group = $(this);
+                    $(this).sortable({
+                        itemSelector: '.panel.panel-default',
+                        handle: '.js-move-seq',
+                        serialize: function(parent, children, isContainer) {
+                            return isContainer ? children : parent.attr('id');
+                        },
+                        onDrop: function ($item, container, _super, event) {
+                            $item.removeClass("dragged").removeAttr("style");
+                            $("body").removeClass("dragging");
+                            self.refreshIndex($group);
+                        }
+                    });
                 })
             },
             _destoryUploader: function($element) {
