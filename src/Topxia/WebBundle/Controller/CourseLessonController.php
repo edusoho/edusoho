@@ -540,31 +540,16 @@ class CourseLessonController extends BaseController
         return false;
     }
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    private function getDiskService()
-    {
-        return $this->getServiceKernel()->createService('User.DiskService');
     }
 
     private function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
-
-    private function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content.FileService');
-    }
-
+    
     private function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');

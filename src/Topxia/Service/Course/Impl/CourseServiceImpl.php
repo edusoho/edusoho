@@ -818,36 +818,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->clearCourseDiscountPrice($discountId);
 	}
 
-	private function autosetCourseFields($courseId)
-	{
-		$fields = array('type' => 'text', 'lessonNum' => 0);
-		$lessons = $this->getCourseLessons($courseId);
-		if (empty($lessons)) {
-			$this->getCourseDao()->updateCourse($courseId, $fields);
-			return ;
-		}
-
-        $counter = array('text' => 0, 'video' => 0);
-
-        foreach ($lessons as $lesson) {
-            $counter[$lesson['type']] ++;
-            $fields['lessonNum'] ++;
-        }
-
-        $percents = array_map(function($value) use ($fields) {
-        	return $value / $fields['lessonNum'] * 100;
-        }, $counter);
-
-        if ($percents['video'] > 50) {
-            $fields['type'] = 'video';
-        } else {
-            $fields['type'] = 'text';
-        }
-
-		$this->getCourseDao()->updateCourse($courseId, $fields);
-
-	}
-
 	/**
 	 * Lesslon API
 	 */
@@ -1193,7 +1163,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"courseId"=>$courseId, 
 			"lessonId"=>$lessonId
 		));
-		// $this->autosetCourseFields($courseId);
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
@@ -2481,11 +2450,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course.CourseDao');
     }
 
-    private function getOrderDao ()
-    {
-        return $this->createDao('Course.OrderDao');
-    }
-
     private function getFavoriteDao ()
     {
         return $this->createDao('Course.FavoriteDao');
@@ -2509,11 +2473,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     private function getLessonLearnDao ()
     {
         return $this->createDao('Course.LessonLearnDao');
-    }
-
-    private function getLessonViewedDao ()
-    {
-        return $this->createDao('Course.LessonViewedDao');
     }
 
     private function getLessonViewDao ()
@@ -2551,19 +2510,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     	return $this->createService('Vip:Vip.VipService');
     }
 
-    private function getReviewService()
-    {
-    	return $this->createService('Course.ReviewService');
-    }
-
     protected function getLogService()
     {
         return $this->createService('System.LogService');        
-    }
-
-    private function getDiskService()
-    {
-        return $this->createService('User.DiskService');
     }
 
     private function getUploadFileService()
@@ -2579,20 +2528,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->createService('System.SettingService');
     }
-
-    private function getLevelService()
-    {
-    	return $this->createService('User.LevelService');
-    }
     
     private function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
-    }
-
-    private function getStatusService()
-    {
-        return $this->createService('User.StatusService');
     }
 
     private function getNoteDao()

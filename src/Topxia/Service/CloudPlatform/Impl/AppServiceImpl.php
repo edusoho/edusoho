@@ -645,22 +645,6 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getDownloadDirectory(). '/' . $package['fileName'];
     }   
 
-    private function getCachePath(){
-        $realPath = $this->getKernel()->getParameter('kernel.root_dir');
-        $realPath .= DIRECTORY_SEPARATOR.'cache';   
-        return  $realPath;
-    }
-
-    private function hasEduSohoMainApp($apps)
-    {
-        foreach ($apps as $app) {
-            if($app['code'] === 'MAIN') {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private function addEduSohoMainApp()
     {
         $app = array(

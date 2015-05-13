@@ -384,13 +384,6 @@ class CourseController extends BaseController
 
 	}
 
-	private function canShowCourse($course, $user)
-	{
-		return ($course['status'] == 'published') or 
-			$user->isAdmin() or 
-			$this->getCourseService()->isCourseTeacher($course['id'],$user['id']) ;
-	}
-
 	private function previewAsMember($as, $member, $course)
 	{
 		$user = $this->getCurrentUser();
@@ -952,13 +945,6 @@ class CourseController extends BaseController
 		return array();
 	}
 
-	private function createCourseForm()
-	{
-		return $this->createNamedFormBuilder('course')
-			->add('title', 'text')
-			->getForm();
-	}
-
 	protected function getUserService()
 	{
 		return $this->getServiceKernel()->createService('User.UserService');
@@ -977,11 +963,6 @@ class CourseController extends BaseController
 	private function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
-
-	private function getOrderService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseOrderService');
 	}
 
 	private function getCategoryService()

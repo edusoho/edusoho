@@ -335,21 +335,6 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    private function getNoteService()
-    {
-        return $this->getServiceKernel()->createService('Course.NoteService');
-    }
-
-    private function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
