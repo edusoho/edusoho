@@ -9,7 +9,7 @@ define(function(require, exports, module) {
             events: {
                 'click .js-add-btn': 'onClickAddBtn',
                 'click .js-remove-btn': 'onClickRemoveBtn',
-                'click .js-title-label': 'onClickTitleLabel',
+                'click a.js-title-label': 'onClickTitleLabel',
                 'click .js-img-preview': 'onClickPicPreview',
                 'change .js-label-input': 'onChangeLabel'
             },
