@@ -575,3 +575,9 @@ input.LargeInput {width: 600px;}
 .visual-block-history-table {
   margin-top: 15px;
 }
+
+@media (max-width: 1198px) {
+  .img-upload {
+    margin-left: -12px;
+  }
+}
