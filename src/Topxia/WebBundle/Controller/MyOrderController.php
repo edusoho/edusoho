@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class MyOrderController extends BaseController
 {
@@ -128,13 +129,15 @@ class MyOrderController extends BaseController
 
     public function cancelRefundAction(Request $request, $id)
     {
-        $this->getCourseOrderService()->cancelRefundOrder($id);
+        $order = $this->getOrderService()->getOrder($id);
+        $processor = OrderRefundProcessorFactory::create($order['targetType']);
+        $processor->cancelRefundOrder($id);
         return $this->createJsonResponse(true);
     }
 
     public function cancelAction(Request $request, $id)
     {
-        $this->getCourseOrderService()->cancelOrder($id);
+        $this->getOrderService()->cancelOrder($id);
         return $this->createJsonResponse(true);
     }
 
@@ -146,11 +149,6 @@ class MyOrderController extends BaseController
     private function getCourseOrderService()
     {
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
-    }
-
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }
