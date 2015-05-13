@@ -28,10 +28,10 @@
       </div>
       <div class="col-md-8 controls">
         <div id="live-course-logo-container">{% if courseSetting.live_logo|default(false) %}<img src="{{ asset(courseSetting.live_logo) }}">{% endif %}</div>
-        <button class="btn btn-default btn-sm" id="live-course-logo-upload" type="button" 
+        <a class="btn btn-default btn-sm" id="live-course-logo-upload"
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-url="{{ path('admin_setting_live_logo_upload') }}"
-        >上传</button>
+        >上传</a>
         <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not courseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>删除</button>
         <p class="help-block">
           <b>只针对直播新方案。</b><br>
