@@ -25,10 +25,12 @@ define(function(require, exports, module) {
 
         setup: function() {
         	var self = this;
+        	var path = require.resolve("webuploader").match(/[^?#]*\//)[0];
+       		console.log(path);
         	var formData = $.extend(self.get("formData"), {token: self.element.data("uploadToken")});
 		    var uploader = WebUploader.create({
-		        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-		        server: '../../../file/upload',
+		        swf: path + "Uploader.swf",
+		        server: path+'../../../../../file/upload',
 		        pick: {
 		        	id: '#'+self.element.attr("id"),
 		        	multiple:false
