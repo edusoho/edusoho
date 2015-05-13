@@ -30,15 +30,15 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function createAnnouncement($announcement)
     {
-        if (!isset($announcement['title']) or empty($announcement['title'])) {
+        if (!isset($announcement['title']) || empty($announcement['title'])) {
             throw $this->createServiceException("公告内容不能为空！");
         }
 
-        if (!isset($announcement['startTime']) or empty($announcement['startTime'])) {
+        if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
             throw $this->createServiceException("发布时间不能为空！");
         }
 
-        if (!isset($announcement['endTime']) or empty($announcement['endTime'])) {
+        if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
             throw $this->createServiceException("结束时间不能为空！");
         }
 
@@ -57,15 +57,15 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function updateAnnouncement($id, $announcement)
     {   
-        if (!isset($announcement['title']) or empty($announcement['title'])) {
+        if (!isset($announcement['title']) || empty($announcement['title'])) {
             throw $this->createServiceException("公告内容不能为空！");
         }
 
-        if (!isset($announcement['startTime']) or empty($announcement['startTime'])) {
+        if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
             throw $this->createServiceException("发布时间不能为空！");
         }
 
-        if (!isset($announcement['endTime']) or empty($announcement['endTime'])) {
+        if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
             throw $this->createServiceException("结束时间不能为空！");
         }
 
