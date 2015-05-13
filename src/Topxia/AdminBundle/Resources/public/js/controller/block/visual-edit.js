@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     require('webuploader');
     require('jquery.sortable');
-    //require('jquery.colorbox');
     exports.run = function() {
         var editForm = Widget.extend({
             uploaders: [],
