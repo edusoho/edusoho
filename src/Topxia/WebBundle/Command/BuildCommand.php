@@ -7,6 +7,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Topxia\System;
+use Topxia\Common\BlockToolkit;
+
 
 class BuildCommand extends BaseCommand
 {
@@ -29,6 +31,7 @@ class BuildCommand extends BaseCommand
 		$this->buildWebDirectory();
 		$this->buildPluginsDirectory();
 		$this->buildFixPdoSession();
+		$this->buildDefaultBlocks();
 		$this->cleanMacosDirectory();
 
 		$this->package();
@@ -302,6 +305,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/autumn", "{$this->distDirectory}/web/themes/autumn");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
+		$this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
 		$this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");
@@ -340,6 +344,45 @@ class BuildCommand extends BaseCommand
 		$targetPath = "{$this->distDirectory}/vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php";
 		$sourcePath = __DIR__ . "/Fixtures/PdoSessionHandler.php";
 		$this->filesystem->copy($sourcePath, $targetPath, true);
+	}
+
+	public function buildDefaultBlocks()
+	{
+		$this->output->writeln('build default blocks .');
+
+        $themeDir = realpath(__DIR__ . '/../../../../web/themes/');
+
+        $html =  $this->generateBlcokContent("{$themeDir}/block.json");
+        $this->generateBlcokContent("{$themeDir}/default/block.json");
+        $this->generateBlcokContent("{$themeDir}/autumn/block.json");
+
+	}
+
+	private function generateBlcokContent($metaFilePath)
+	{
+		$metas = file_get_contents($metaFilePath);
+		$metas = json_decode($metas, true);
+		if (empty($metas)) {
+			throw new \RuntimeException("插件元信息文件{$metaFilePath}格式不符合JSON规范，解析失败，请检查元信息文件格式");
+		}
+
+		foreach ($metas as $code => $meta) {
+			$data = array();
+			foreach ($meta['items'] as $key => $item) {
+				$data[$key] = $item['default'];
+			}
+			$block = array('templateName' => $meta['templateName'], 'data' => $data);
+			$html = BlockToolkit::render($block, $this->getContainer());
+
+			$filename = "block-" . md5($code) . '.html';
+			$folder = "{$this->distDirectory}/web/install/blocks/";
+			if (!file_exists($folder)) {
+				mkdir($folder);
+			}
+			$filename = $folder . $filename;
+
+			file_put_contents($filename, $html);
+		}
 	}
 
 	public function cleanMacosDirectory()

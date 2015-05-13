@@ -9,11 +9,11 @@
   {% if course.status == 'published' %}
   	<div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}昵称</label>
+        <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="student-nickname" name="nickname" class="form-control" 
-        data-url="{{ path('course_manage_student_check_nickname',{id:course.id})}}" >
+        <input type="text" id="student-nickname" name="queryfield" class="form-control" 
+        data-url="{{ path('course_manage_student_check',{id:course.id})}}" placeholder='邮箱/手机/昵称' >
       	<div class="help-block">只能添加系统中已注册的用户</div>
     	</div>
     </div>

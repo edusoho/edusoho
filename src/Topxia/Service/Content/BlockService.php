@@ -8,9 +8,9 @@ interface BlockService
 
 	public function getBlockByCode($code);
 
-	public function searchBlocks($start, $limit);
+	public function searchBlocks($condition, $sorty, $start, $limit);
 
-	public function searchBlockCount();
+	public function searchBlockCount($condition);
 
 	public function findBlockHistorysByBlockId($blockId, $start, $limit);
 
@@ -29,6 +29,8 @@ interface BlockService
 	public function deleteBlock($id);
 
 	public function updateContent($id, $content);
+
+	public function recovery($blockId, $history);
 
 	/**
 	 * 批量获取指定code的，编辑区块内容。

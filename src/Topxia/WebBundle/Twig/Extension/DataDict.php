@@ -141,50 +141,51 @@ class DataDict
             'flash' => 'Flash',
             'text' => '图文',
             'ppt' => 'PPT',
-            'document' => '文档',
-        ),
-        'videoStorageType' => array(
-            'local' => '本地视频',
-            'cloud' => '云视频',
-            'net' => '网络视频',
-        ),
-        'userRole' => array(
-            'ROLE_USER' => '学员',
-            'ROLE_TEACHER' => '教师',
-            'ROLE_ADMIN' => '管理员',
-            'ROLE_SUPER_ADMIN' => '超级管理员',
-        ),
-        'memberLevel' => array(
-            '1' => '银牌会员',
-            '2' => '金牌会员',
-            '3' => '钻石会员',
-        ),
-        'duration_unit' => array(
-            'month' => '个月',
-            'year' => '年',
-        ),
-        'boughtType' => array(
-            'new' => '购买',
-            'renew' => '续费',
-            'upgrade' => '升级',
-            'edit' => '编辑',
-            'cancel' => '取消会员',
-        ),
-        'userKeyWordType' => array(
-            'nickname' => '用户名',
-            'email' => '邮件地址',
-            'loginIp' => '登录IP',
-        ),
-        'logLevel' => array(
-            'info' => '提示',
-            'warning' => '警告',
-            'error' => '错误',
-        ),
-        'logLevel:html' => array(
-            'info' => '<span>提示</span>',
-            'warning' => '<span class="text-warning">警告</span>',
-            'error' => '<span class="text-danger">错误</span>',
-        ),
+            'document' => '文档'
+		),
+		'videoStorageType' =>array(
+			'local'=>'本地视频',
+			'cloud'=>'云视频',
+			'net'=>'网络视频',
+		),
+		'userRole' => array(
+			'ROLE_USER' => '学员',
+			'ROLE_TEACHER' => '教师',
+			'ROLE_ADMIN' => '管理员',
+			'ROLE_SUPER_ADMIN' => '超级管理员'
+		),
+		'memberLevel' => array(
+			'1' => '银牌会员',
+			'2' => '金牌会员',
+			'3' => '钻石会员'
+		),
+		'duration_unit' => array(
+			'month' => '个月',
+			'year' => '年'
+		),
+		'boughtType' => array(
+			'new' => '购买',
+			'renew' => '续费',
+			'upgrade' => '升级',
+			'edit' => '编辑',
+			'cancel' => '取消会员'
+		),
+		'userKeyWordType' => array(
+			'nickname' => '用户名',
+			'verifiedMobile' => '手机号',
+			'email' => '邮件地址',
+			'loginIp' => '登录IP'
+		),		
+		'logLevel' => array(
+			'info' => '提示',
+			'warning' => '警告',
+			'error' => '错误'
+		),
+		'logLevel:html' => array(
+			'info' => '<span>提示</span>',
+			'warning' => '<span class="text-warning">警告</span>',
+			'error' => '<span class="text-danger">错误</span>'
+		),
 
         'analysisDateType' => array(
             'register' => '新注册用户数',

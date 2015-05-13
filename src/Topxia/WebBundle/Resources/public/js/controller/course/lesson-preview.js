@@ -107,7 +107,12 @@ define(function(require, exports, module) {
                             element: '#lesson-preview-doucment',
                             swfFileUrl:response.swfUri,
                             pdfFileUrl:response.pdfUri,
-                            watermark: watermark
+                            watermark: {
+                                'xPosition': 'center',
+                                'yPosition': 'center',
+                                'rotate': 45,
+                                'contents': watermark
+                            }
                         });
                     });
                 } else {

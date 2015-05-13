@@ -510,3 +510,64 @@ input.LargeInput {width: 600px;}
   font-size: 12px;
 }
 
+.visual-edit-form .item-title {
+  padding: 10px;
+}
+
+.visual-edit-form .item-title p {
+  margin: 0;
+}
+
+.visual-edit-form .alert-success {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.visual-edit-form .panel-group .panel-title {
+  cursor: pointer;
+}
+
+.ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visual-edit-form .panel-group .panel-title .panel-item-title {
+  max-width: 40%;
+  float: left;
+}
+
+.visual-edit-form .panel-group .panel-title .title-label {
+  max-width: 40%;
+  float: left;
+}
+
+.block-affix-nav {
+  max-height: 450px;
+  min-width: 150px;
+  max-width: 250px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.block-picture-preview {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -200px 0 0 -200px;
+  text-align: center;
+}
+
+.block-picture-preview img {
+  width: 350px;
+  height: 350px;
+  margin-top: 25px;
+}
+
+.visual-block-history-table {
+  margin-top: 15px;
+}

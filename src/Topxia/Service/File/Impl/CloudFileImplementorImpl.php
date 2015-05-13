@@ -63,7 +63,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
 
-        $uploadFile['type'] = FileToolkit::getFileTypeByMimeType($fileInfo['mimeType']);
+        $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
         $uploadFile['storage'] = 'cloud';
         $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
@@ -173,34 +173,58 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function deleteFile($file, $deleteSubFile = true)
+    public function deleteFile($file)
     {
         $keys = array($file['hashId']);
         $keyPrefixs = array();
 
-        if ($deleteSubFile) {
-            foreach (array('sd', 'hd', 'shd', 'pdf') as $key) {
-                if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
-                    continue ;
-                }
+        foreach (array('sd', 'hd', 'shd') as $key) {
+            if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
+                continue ;
+            }
 
-                // 防错
-                if (strlen($file['metas2'][$key]['key']) < 5) {
-                    continue;
-                }
+            // 防错
+            if (strlen($file['metas2'][$key]['key']) < 5) {
+                continue;
+            }
 
-                $keyPrefixs[] = $file['metas2'][$key]['key'];
+            $keyPrefixs[] = $file['metas2'][$key]['key'];
+        }
+
+        if (!empty($file['metas2']['imagePrefix']) && (strlen($file['metas2']['imagePrefix']) > 5)) {
+            $keyPrefixs[] = $file['metas2']['imagePrefix'];
+        }
+
+        if (!empty($file['metas2']['thumb'])) {
+            $keys[] = $file['metas2']['thumb'];
+        }
+
+        if (!empty($file['metas2']['pdf']) && !empty($file['metas2']['pdf']['key'])) {
+            $keys[] = $file['metas2']['pdf']['key'];
+        }
+
+        if (!empty($file['metas2']['swf']) && !empty($file['metas2']['swf']['key'])) {
+            $keys[] = $file['metas2']['swf']['key'];
+        }
+
+        $result1 = $this->getCloudClient()->deleteFilesByKeys('private', $keys);
+        if ($result1['status'] !== 'ok') {
+            return false;
+        }
+
+        if (!empty($keyPrefixs)) {
+            if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+                $result2 = $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
+            } else {
+                $result2 = $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
+            }
+
+            if ($result2['status'] !== 'ok') {
+                return false;
             }
         }
 
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
-            $this->getCloudClient()->deleteFilesByKeys('private', $keys);
-            $this->getCloudClient()->deleteFilesByPrefixs('public', $keyPrefixs);
-        } else {
-            $this->getCloudClient()->deleteFilesByKeys('private', $keys);
-            $this->getCloudClient()->deleteFilesByPrefixs('private', $keyPrefixs);
-        }
-
+        return true;
     }
 
     public function makeUploadParams($rawParams)

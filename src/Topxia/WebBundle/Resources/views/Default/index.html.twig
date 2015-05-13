@@ -283,6 +283,7 @@
                 </div>
               </div>
               {% endfor %}
+
             </div>
           </div>
         </div>
@@ -298,7 +299,7 @@
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}">
+        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
         <div class="course-price-info">
@@ -337,7 +338,7 @@
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ default_path('avatar', teacher.smallAvatar, '') }}" class="teacher-avatar"></a>
+              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
               <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               <span class="teacher-title ellipsis">{{ teacher.title }}</span>
             </div>

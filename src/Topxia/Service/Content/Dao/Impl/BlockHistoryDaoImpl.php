@@ -9,10 +9,15 @@ class BlockHistoryDaoImpl extends BaseDao implements BlockHistoryDao
 {
     protected $table = 'block_history';
 
+    private $serializeFields = array(
+        'data' => 'json'
+    );
+
     public function getBlockHistory($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $history = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $history ? $this->createSerializer()->unserialize($history, $this->serializeFields) : null;
     }
 
     public function getLatestBlockHistory()
@@ -23,6 +28,7 @@ class BlockHistoryDaoImpl extends BaseDao implements BlockHistoryDao
 
     public function addBlockHistory($blockHistory)
     {
+        $this->createSerializer()->serialize($blockHistory, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $blockHistory);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Block History error.');
@@ -44,7 +50,8 @@ class BlockHistoryDaoImpl extends BaseDao implements BlockHistoryDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE blockId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($blockId));
+        $historys = $this->getConnection()->fetchAll($sql, array($blockId));
+        return $historys ? $this->createSerializer()->unserializes($historys, $this->serializeFields) : array();
     }
 
     public function findBlockHistoryCountByBlockId($blockId)
