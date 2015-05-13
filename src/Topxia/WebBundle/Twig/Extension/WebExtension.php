@@ -427,7 +427,7 @@ class WebExtension extends \Twig_Extension
 
     public function tagsJoinFilter($tagIds)
     {
-        if (empty($tagIds) or !is_array($tagIds)) {
+        if (empty($tagIds) || !is_array($tagIds)) {
             return '';
         }
 
@@ -444,7 +444,7 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        if (!empty($url[0]) and ($url[0] == '/')) {
+        if (!empty($url[0]) && ($url[0] == '/')) {
             return $url;
         }
 
@@ -943,8 +943,8 @@ class WebExtension extends \Twig_Extension
             $coinSettings['coin_enabled'] = 0;
         }
 
-        if($coinSettings['coin_enabled'] == 1 and $coinSettings['price_type'] == 'coin'){
-                if ($order['amount'] == 0  and $order['coinAmount'] == 0 ){
+        if($coinSettings['coin_enabled'] == 1 && $coinSettings['price_type'] == 'coin'){
+                if ($order['amount'] == 0  && $order['coinAmount'] == 0 ){
                     $default = "无";
                 }
                 else{
@@ -952,7 +952,7 @@ class WebExtension extends \Twig_Extension
                 }
         }
 
-        if ($coinSettings['coin_enabled'] != 1 or $coinSettings['price_type'] != 'coin') {
+        if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
                 if ($order['coinAmount'] > 0) {
                     $default = "余额支付";
                 }
@@ -971,7 +971,7 @@ class WebExtension extends \Twig_Extension
 
     public function calculatePercent($number, $total)
     {
-        if ($number == 0 or $total == 0) {
+        if ($number == 0 || $total == 0) {
             return '0%';
         }
 

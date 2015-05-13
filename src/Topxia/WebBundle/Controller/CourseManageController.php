@@ -319,40 +319,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
-	private function createCourseBaseForm($course)
-	{
-		$builder = $this->createNamedFormBuilder('course', $course)
-			->add('title', 'text')
-			->add('subtitle', 'textarea')
-			->add('tags', 'tags')
-            ->add('expiryDay', 'text')
-			->add('categoryId', 'default_category', array(
-				'empty_value' => '请选择分类'
-			));
-
-	    return $builder->getForm();
-	}
-
-    private function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['lessonNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
-
-        return array (
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['lessonNum']
-        );
-    }
-
-    private function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -372,12 +338,7 @@ class CourseManageController extends BaseController
     {
         return $this->container->get('topxia.twig.web_extension');
     }
-
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
+    
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');

@@ -16,7 +16,7 @@ class CoinOrderController extends BaseController
         $conditions=array();
         if(!empty($fields)){
           $conditions =$fields;
-        };
+        }
         if  (isset($conditions['keywordType'])) {
           if ($conditions['keywordType'] == 'userName'){
             $conditions['keywordType'] = 'userId';
