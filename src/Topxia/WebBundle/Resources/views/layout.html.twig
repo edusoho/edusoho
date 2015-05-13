@@ -28,9 +28,8 @@
     <!-- <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" /> -->
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/es-icon.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/main.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/main.css') }}" />
     <!--[if lt IE 8]>
       <link href="{{ asset('assets/css/oldie.css') }}" rel="stylesheet">
     <![endif]-->
@@ -51,6 +50,7 @@
 {% block body %}
   
   {% include 'TopxiaWebBundle::email-setting.html.twig' %}
+
   <header class="es-header navbar">
     <div class="container">
       <div class="navbar-header">
@@ -135,14 +135,13 @@
 
   {% block main_header %} {% endblock %}
 
-  {% block main_content %}
-  <div id="content-container" class="container">
-    {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
-    
-    {% block content %}{% endblock %}
-    
-  </div><!-- /container -->
-
+  {% block full_content %}
+    {% block main_content %}
+      <div id="content-container" class="container">
+        {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
+        {% block content %}{% endblock %}
+      </div><!-- /container -->
+    {% endblock %}
   {% endblock %}
     
   <footer class="es-footer">

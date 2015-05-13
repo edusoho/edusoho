@@ -1,0 +1,23 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      <!-- 折扣 -->
+      <!-- <span class="tag-discount"></span> -->
+      <!-- 限免 -->
+      <span class="tag-discount free"></span>
+      <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}">
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a href="show.php?page=Course/course-detail.html.twig">
+        Android UiAutomator UiScrollable API 详细介绍
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="num"><i class="es-icon es-icon-people"></i>100</span>
+      <span class="comment"><i class="es-icon es-icon-textsms"></i>100</span>
+      {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {mode:'full'} %}
+    </div>
+  </div>
+</div>
