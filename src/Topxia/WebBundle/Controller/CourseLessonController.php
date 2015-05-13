@@ -40,7 +40,7 @@ class CourseLessonController extends BaseController
         }
 
         $hasVideoWatermarkEmbedded = 0;
-        if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -89,7 +89,7 @@ class CourseLessonController extends BaseController
             'course' => $course,
             'lesson' => $lesson,
             'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
-            'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
+            'hlsUrl' => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
         ));
     }
 
@@ -332,7 +332,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
+        if ($lesson['type'] != 'ppt' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
 
@@ -375,7 +375,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        if ($lesson['type'] != 'document' or empty($lesson['mediaId'])) {
+        if ($lesson['type'] != 'document' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
 
