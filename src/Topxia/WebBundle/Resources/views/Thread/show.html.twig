@@ -13,46 +13,78 @@
       {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-body.html.twig' %}
 
 
-    <div class="panel-footer clearfix">
-      <div class="pull-right">
+    <div class="topic-action">
         {% if service.canAccess('thread.update', thread) %}
-          <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+          <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><i class="es-icon es-icon-edit"></i> 编辑</a>
         {% endif %}
         {% if service.canAccess('thread.delete', thread) %}
-          <a href="javascript:;" class="btn btn-link" data-url="{{ path('thread_delete', {threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+          <a href="javascript:;"data-url="{{ path('thread_delete', {threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？">删除</a>
         {% endif %}
 
         {% if service.canAccess('thread.sticky', thread) %}
           {% if thread.sticky %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_cancel_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+            <a href="javascript:" data-url="{{ path('thread_cancel_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"> 取消置顶</a>
           {% else %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_set_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
+            <a href="javascript:"  data-url="{{ path('thread_set_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？">置顶</a>
           {% endif %}
         {% endif %}
 
         {% if service.canAccess('thread.sticky', thread) %}
           {% if thread.nice %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+            <a href="javascript:" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？">取消加精</a>
           {% else %}
-            <a href="javascript:" class="btn btn-link" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
+            <a href="javascript:" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><i class="es-icon es-icon-thumbup"></i>加精</a>
           {% endif %}
         {% endif %}
 
         {% if thread.type == 'event' %}
           {% if service.canAccess('thread.update', thread) %}
-            <a href="{{ path('thread_export_members', {threadId:thread.id}) }}" class="btn btn-link" target="_balnk"><span class="glyphicon glyphicon-export"></span> 导出成员</a>
+            <a href="{{ path('thread_export_members', {threadId:thread.id}) }}" target="_balnk"><i class="es-icon es-icon-fileupdate"></i> 导出成员</a>
           {% endif %}
         {% endif %}
-      </div>
+    </div>
+
+    <div class="top-reply">
+      <div class="page-header">教师回复<span class="badge">4</span></div>
+      <ul class="comment-list">
+        <li class="media media-comment">
+          <div class="media-left">
+            <a href="">
+              <img src="img-temp/avatar_1.jpg" alt="">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title"><a href="">老大</a>·<span class="date">10小时前</span></div>
+            <p>很不错的文章</p>
+            <div class="comment-sns">
+              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="点赞"><i class="es-icon es-icon-thumbup"></i>10</a>
+              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="回复"><i class="es-icon es-icon-reply"></i></a>
+            </div>
+          </div>
+        </li>
+        <li class="media media-comment">
+          <div class="media-left">
+            <a href="">
+              <img src="img-temp/avatar_1.jpg" alt="">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title"><a href="">老大</a>·<span class="date">10小时前</span></div>
+            <p>很不错的文章</p>
+            <div class="comment-sns">
+              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="点赞"><i class="es-icon es-icon-thumbup"></i>10</a>
+              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="回复"><i class="es-icon es-icon-reply"></i></a>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
 
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <span class="thread-post-num">{{ thread.postNum }}</span> 回复
-    </div>
+  <div class="top-reply">
+    <div class="page-header">所有回复<span class="badge">{{ thread.postNum }}</span></div>
     <div class="panel-body">
-      <ul class="media-list thread-post-list thread-pripost-list">
+      <ul class="comment-list">
         {% for post in posts %}
           {% set author = users[post.userId] %}
           {% include 'TopxiaWebBundle:Thread:post-item.html.twig' %}
@@ -61,7 +93,12 @@
         {% endfor %}
       </ul>
 
+      <nav class="text-center">
+        <ul class="pagination">
       {{ web_macro.paginator(paginator) }}
+        </ul>
+      </nav>
+
     </div>
   </div>
 

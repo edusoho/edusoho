@@ -17,15 +17,13 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(e.currentTarget);
                 if ($target.data('expandAll')) {
-                    this.$('ul.user-grids').fadeIn(500);
+                    this.$('div.join-members').fadeIn(500);
                     this.$('.js-members-expand').hide();
                     this.$('.js-members-collapse').show();
                 } else {
                     $.get($target.data('url'), {page:this.currentPage + 1}, function(result){
-                        self.$('ul.user-grids').append(result);
-                        var length = self.$('ul.user-grids > li').length;
-                        console.log(length);
-                        console.log(self.sum);
+                        self.$('div.join-members').append(result);
+                        var length = self.$('div.join-members > span').length;
                         if (self.sum == length) {
                             $target.data('expandAll', true);
                             $target.hide();
@@ -36,7 +34,7 @@ define(function(require, exports, module) {
             
             },
             collapse: function(e) {
-                this.$('ul.user-grids').fadeOut(500);
+                this.$('div.join-members').fadeOut(500);
                 this.$('.js-members-expand').show();
                 this.$('.js-members-collapse').hide();
             }

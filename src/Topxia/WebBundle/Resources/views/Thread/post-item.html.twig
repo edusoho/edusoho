@@ -1,6 +1,6 @@
 <li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media">
   <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
-    <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
+    <img class="img-circle" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
   </a>
   <div class="media-body">
     <div class="metas">
@@ -11,7 +11,7 @@
       {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ author.badgeTitle }}) </span>{% endif %}
     </div>
     <div class="thread-post-content">{{ post.content|at(post.ats)|raw }}</div>
-    <div>
+    <div class="comment-sns">
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>
     <div class="thread-subpost-container clearfix {% if not post.subposts %}hide{% endif %}">
