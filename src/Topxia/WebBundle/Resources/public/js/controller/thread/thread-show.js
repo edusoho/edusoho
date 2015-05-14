@@ -227,7 +227,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var postList = new ThreadShow({
-            element: '.thread-show'
+            element: '.class-detail-content'
         });
 
     };

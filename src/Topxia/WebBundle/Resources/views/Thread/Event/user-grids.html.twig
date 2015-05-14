@@ -15,7 +15,7 @@
       {% include 'TopxiaWebBundle:Thread/Event:user-grids-li.html.twig' %}
     </ul>
     <div class="text-center">
-    {% if membersCount|default(0) > 16 %}
+    {% if membersCount|default(0) > 1 %}
       <span class="glyphicon glyphicon-chevron-down js-members-expand" style="cursor: pointer;" data-url="{{ path('ajax_thread_member_show', {threadId:threadId}) }}"></span>
       <span class="glyphicon glyphicon-chevron-up js-members-collapse" style="cursor: pointer; display:none"></span>
     {% endif %}

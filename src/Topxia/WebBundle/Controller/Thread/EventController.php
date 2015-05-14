@@ -15,6 +15,7 @@ class EventController extends BaseController
         return $this->render('TopxiaWebBundle:Thread/Event:title-bar.html.twig', array(
             'thread' => $thread,
             'member' => $member,
+            'author' => $this->getUserService()->getUser($thread['userId']),
         ));
     }
 

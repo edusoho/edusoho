@@ -1,25 +1,17 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div class="thread-show">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="thread-breadcrumb">
-        <a href="{{ path(thread.targetType ~ '_threads', {(thread.targetType~'Id'): thread.targetId}) }}" class="text-muted">话题</a> <span class="text-muted">&raquo; 正文</span>
-      </div>
+  <ol class="breadcrumb">
+    <li><a href="{{ path(thread.targetType ~ '_threads', {(thread.targetType~'Id'): thread.targetId}) }}">话题</a></li>
+    <li class="active">正文</li>
+  </ol>
+
+  <div class="class-detail-content">
+    <div class="topic-detail">
 
       {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-title-bar.html.twig' %}
 
-      <div class="thread-metas">
-        {{  web_macro.user_link(author, 'link-muted') }}
-        <span class="bullet mhs">•</span>
-        {{ thread.createdTime|smart_time }}
-        <span class="bullet mhs">•</span>
-        {{ thread.hitNum}} 次浏览
-      </div>
-    </div>
-    <div class="panel-body">
       {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-body.html.twig' %}
-    </div>
+
 
     <div class="panel-footer clearfix">
       <div class="pull-right">
@@ -53,7 +45,7 @@
         {% endif %}
       </div>
     </div>
-  </div>
+
 
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -80,4 +72,6 @@
       {{ render(controller('TopxiaWebBundle:Thread:post', {request:app.request, threadId:thread.id})) }}
     </div>
   </div>
+
+</div>
 </div>

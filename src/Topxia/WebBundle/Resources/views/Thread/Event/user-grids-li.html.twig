@@ -1,10 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 {% for member in members %}
-  <li style="width:10%;">
-    {{ web_macro.user_avatar(member , 'pull-left media-object media-object-small ')}}
-      <p>
-      {{ web_macro.user_link(member , 'link-muted') }}
-      </p>
-  </li>
+{{ web_macro.classroom_user_avatar(member) }}
 {% endfor %}

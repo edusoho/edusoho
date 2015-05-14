@@ -24,6 +24,8 @@ define(function(require, exports, module) {
                     $.get($target.data('url'), {page:this.currentPage + 1}, function(result){
                         self.$('ul.user-grids').append(result);
                         var length = self.$('ul.user-grids > li').length;
+                        console.log(length);
+                        console.log(self.sum);
                         if (self.sum == length) {
                             $target.data('expandAll', true);
                             $target.hide();
