@@ -9,12 +9,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId)
     {
-        if (!isset($groupId) || !isset($parentId)) {
+        if (!isset($groupId) || !isset($parentId) || $groupId < 0 ||  $parentId < 0) {
             return array();
         }
-        if ($groupId < 0 ||  $parentId < 0 ) {
-            return array();
-        }
+        
         return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($groupId, $parentId);
     }
 
