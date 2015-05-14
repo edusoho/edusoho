@@ -682,6 +682,24 @@ EOD;
                 $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
                 if (file_exists($filename)) {
                     $content = file_get_contents($filename);
+                    $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
+                        preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $matches[0], $srcs);
+                        preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $matches[0], $alts);
+                        $URI = preg_replace('/\/install\/start-install.php.*/i', '', $_SERVER['REQUEST_URI']);
+                        $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
+                        $src = $URI . trim($src);
+                         
+                        $img = "<img src='{$src}'";
+                        if (isset($alts[1][0])) {
+                            $alt = $alts[1][0];
+                            $img .= " alt='{$alt}'>";
+                        } else {
+                            $img .= ">";
+                        }
+                         
+                        return $img;
+                    
+                    }, $content);
                 } else {
                     $content = '';
                 }
