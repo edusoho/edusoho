@@ -67,11 +67,126 @@
           {% endfor %}
         </div>
         <div class="course-more">
-          <a href="show.php?page=Course/explore.html.twig" data-toggle="tooltip" data-placement="top" title="更多"><i class="es-icon es-icon-morehoriz"></i></a>
+          <a href="{{ path('course_explore') }}" data-toggle="tooltip" data-placement="top" title="更多"><i class="es-icon es-icon-morehoriz"></i></a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- 特性 -->
+  <section class="introduction-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12 introduction-item">
+          <img class="img-responsive" src="assets/v2/img/icon_introduction_1.png">
+          <h4>体系化学习</h4>
+          <h5>体系化学习，掌握完整知识结构</h5>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 introduction-item">
+          <img class="img-responsive" src="assets/v2/img/icon_introduction_2.png">
+          <h4>教与学结合</h4>
+          <h5>教学结合，提高学习质量</h5>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 introduction-item">
+          <img class="img-responsive" src="assets/v2/img/icon_introduction_3.png">
+          <h4>与代码为伍</h4>
+          <h5>学得怎么样？考试结果告诉你</h5>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 推荐班级 -->
+  <section class="class-section">
+    <div class="container">
+      <div class="index-class-header">
+        <div class="text-line">
+          <h5><span>推荐班级</span></h5>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="recommend-class-list row">
+        <div class="col-md-3 col-sm-6">
+          {# {% include 'Classroom/class-grid.html.twig' %} #}
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 小组动态 -->
+  <section class="group-dynamic">
+    <div class="container">
+      <div class="group-dynamic-header">
+        <div class="text-line gray">
+          <h5><span>小组动态</span></h5>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="group-dynamic-body row">
+        <div class="col-md-6">
+          <div class="panel panel-default index-group">
+            <div class="panel-heading">
+              <a href="javascript:;" class="more">...</a>
+              <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>推荐小组</h3>
+            </div>
+            <div class="panel-body row">
+
+
+              <div class="media group-item col-md-6 col-sm-4">
+                <div class="media-left">
+                  <a href="javascript:;">
+                    <img src="assets/v2/img/course_1.jpg">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="title"><a href="">保护地球组织</a></div>
+                  <div class="metas">
+                    <span><i class="es-icon es-icon-people"></i>100</span>
+                    <span><i class="es-icon es-icon-textsms"></i>100</span>
+                  </div>
+                </div>
+              </div>
+              
+
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="panel panel-default index-dynamic">
+            <div class="panel-heading">
+              <h3 class="panel-title"><i class="es-icon es-icon-recentactors pull-left"></i>学员动态</h3>
+              <!-- <a href="javascript:;" class="more">...</a> -->
+            </div>
+            <div class="panel-body">
+              <div class="media">
+                <div class="media-left">
+                  <a href="javascript:;">
+                    <img class="img-circle" src="assets/dev/img-temp/user_avatar.png">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="title">
+                    <a href="">李小龙</a>
+                  </div>
+                  <div class="content">
+                    加入了课程<a href="javascript:;">《十分钟掌握HTML5基础》</a>课程
+                  </div>
+                  <span class="date">111小时前</span>
+                </div>
+              </div>
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
 
 
 
