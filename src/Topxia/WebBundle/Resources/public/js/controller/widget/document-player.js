@@ -203,7 +203,7 @@ define(function(require, exports, module) {
             $("html").attr('dir','ltr');
             var jsPath = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'+self.attrs.pdfFileUrl.value;
             if(app.lessonCopyEnabled==1){
-                jsPath = jsPath+'#false';
+                jsPath = jsPath+'#true';
             }
 
             $('#viewerIframe').attr('src', jsPath);
