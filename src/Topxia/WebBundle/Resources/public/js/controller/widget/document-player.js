@@ -205,6 +205,7 @@ define(function(require, exports, module) {
             if(app.lessonCopyEnabled==1){
                 jsPath = jsPath+'#true';
             }
+            console.log(jsPath);
 
             $('#viewerIframe').attr('src', jsPath);
 
