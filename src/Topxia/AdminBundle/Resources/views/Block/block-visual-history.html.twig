@@ -1,0 +1,33 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_block_visual_edit_history' %}
+{% block page_title %} 编辑内容 {% endblock %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+  <table id="block-history-table" class="visual-block-history-table table table-striped table-condensed">
+    <thead>
+      <th>修改时间</th>
+      <th>修改用户</th>
+      <th>操作</th>
+    </thead>
+    <tbody>
+      {% for blockHistory in blockHistorys %}
+        <tr id="{{ blockHistory.id }}">
+          <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
+          <td>{{ historyUsers[blockHistory.userId].nickname|default('用户已删除') }}</td>
+          <td>
+            <a class="btn btn-xs btn-default edit-btn" 
+            href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
+            
+            {% if blockHistory.data %}
+              <a class="btn btn-xs btn-default edit-btn" href="{{ path('admin_block_recovery', {blockId:block.id, historyId:blockHistory.id})}}">恢复此内容</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  {{ web_macro.paginator(paginator) }} 
+{% endblock %}

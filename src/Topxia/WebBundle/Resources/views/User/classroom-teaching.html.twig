@@ -14,7 +14,7 @@
             {% set teachers = classroom['teachers']|default(null) %}
             <li class="course-item clearfix">
               <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
-                <img class="course-picture" src="{{ default_path('classroomPicture',classroom.middlePicture, 'large') }}" alt="{{ classroom.title }}">
+                <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
               </a>
               <div class="course-body">
 

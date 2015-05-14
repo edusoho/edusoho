@@ -164,7 +164,7 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('User.TokenService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

@@ -61,6 +61,7 @@ class PhpwindAuthProvider implements AuthProvider
         return $this->convertApiResult($result);
     }
 
+
     public function checkEmail($email)
     {
         $api = $this->getWindidApi('user');
@@ -71,6 +72,11 @@ class PhpwindAuthProvider implements AuthProvider
         return $this->convertApiResult($result);
     }
 
+    public function checkMobile($mobile)
+    {
+        return array('success', '');
+    }
+    
     public function checkPassword($userId, $password)
     {
         $api = $this->getWindidApi('user');

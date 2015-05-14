@@ -12,7 +12,6 @@ class DiscuzAuthProvider implements AuthProvider
         }
 
         $result = uc_user_register($registration['nickname'], $registration['password'], $registration['email']);
-
         if ($result < 0) {
             $result = $this->convertApiResult($result);
             throw new \RuntimeException("{$result[0]}:{$result[1]}");
@@ -37,7 +36,8 @@ class DiscuzAuthProvider implements AuthProvider
 
     public function changeNickname($userId, $newName)
     {
-        return true;
+        $this->initDiscuzApi();
+        return uc_user_renameuser($userId, $newName);
     }
 
     public function changeEmail($userId, $password, $newEmail)
@@ -74,6 +74,12 @@ class DiscuzAuthProvider implements AuthProvider
         $result = uc_user_checkemail($email);
         return $this->convertApiResult($result);
     }
+
+    public function checkMobile($mobile)
+    {
+        return array('success', '');
+    }
+
 
     public function checkPassword($userId, $password)
     {

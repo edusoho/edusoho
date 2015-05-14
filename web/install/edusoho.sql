@@ -52,29 +52,34 @@ CREATE TABLE `article_category` (
 
 DROP TABLE IF EXISTS `block`;
 CREATE TABLE `block` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编辑区ID',
-  `userId` int(11) NOT NULL COMMENT '编辑区创建人ID',
-  `title` varchar(255) NOT NULL COMMENT '编辑区名称',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL COMMENT '用户Id',
+  `title` varchar(255) NOT NULL COMMENT '编辑时的题目',
   `mode` enum('html','template') NOT NULL DEFAULT 'html' COMMENT '模式',
   `template` text COMMENT '模板',
+  `templateName` varchar(255) DEFAULT NULL COMMENT '编辑区模板名字',
   `templateData` text COMMENT '模板数据',
-  `content` text COMMENT '编辑区内容',
-  `code` varchar(64) NOT NULL DEFAULT '' COMMENT '编辑区编码',
-  `tips` text COMMENT '编辑区编辑提示',
-  `createdTime` int(11) unsigned NOT NULL COMMENT '编辑区创建时间',
-  `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '编辑区最后更新时间',
+  `content` text COMMENT '编辑区的内容',
+  `code` varchar(255) NOT NULL DEFAULT '',
+  `meta` text COMMENT '编辑区元信息',
+  `data` text COMMENT '编辑区内容',
+  `tips` text,
+  `createdTime` int(11) unsigned NOT NULL,
+  `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `category` varchar(60) NOT NULL DEFAULT 'system' COMMENT '分类(系统/主题)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `block_history`;
 CREATE TABLE `block_history` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编辑区历史记录ID',
-  `blockId` int(11) NOT NULL COMMENT '编辑区ID',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `blockId` int(11) NOT NULL COMMENT 'blockId',
   `templateData` text COMMENT '模板历史数据',
-  `content` text COMMENT '编辑区历史内容',
-  `userId` int(11) NOT NULL COMMENT '编辑区编辑人ID',
-  `createdTime` int(11) unsigned NOT NULL COMMENT '编辑区历史记录创建时间',
+  `data` text COMMENT 'block数据',
+  `content` text COMMENT 'content',
+  `userId` int(11) NOT NULL COMMENT 'userId',
+  `createdTime` int(11) unsigned NOT NULL COMMENT 'createdTime',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='历史表';
 

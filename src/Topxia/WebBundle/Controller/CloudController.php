@@ -147,6 +147,22 @@ class CloudController extends BaseController
         return new Response($watermark);
     }
 
+    public function testpaperWatermarkAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return new Response('');
+        }
+
+        $pattern = $this->setting('magic.testpaper_watermark');
+        if ($pattern) {
+            $watermark = $this->parsePattern($pattern, $user->toArray());
+        } else {
+            $watermark = '';
+        }
+  
+        return $this->createJsonResponse($watermark);
+    }
 
     private function parsePattern($pattern, $user)
     {
@@ -156,7 +172,6 @@ class CloudController extends BaseController
         $values = array_filter($values, function($value){
             return !is_array($value);
         });
-
         return $this->get('topxia.twig.web_extension')->simpleTemplateFilter($pattern, $values);
     }
 

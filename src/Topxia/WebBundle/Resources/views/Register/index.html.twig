@@ -4,6 +4,8 @@
 {% set script_controller = 'auth/register' %}
 
 {% block content %}
+<link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/auth.css') }}" />
+
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3 ptl">
     {% if isRegisterEnabled %}
@@ -18,30 +20,39 @@
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">姓名</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control es-form-control" placeholder='请输入姓名'>
+                </div>
+              </div>
+            {% elseif field == 'emailOrMobile' %}
+              <div class="form-group">
+                <label class="control-label required" for="register_{{ field }}">邮箱或手机</label>
+
+                <div class="controls">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_email_or_mobile_check')}}" data-explain="填写你常用的邮箱或者手机作为登录帐号" placeholder='请输入邮箱/手机'>
+                  <p class="help-block"></p>
                 </div>
               </div>
             {% elseif field == 'email' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">邮箱地址</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_email_check')}}" data-explain="填写你常用的邮箱作为登录帐号">
-                  <p class="help-block">填写你常用的邮箱作为登录帐号</p>
+                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_email_check')}}" data-explain="填写你常用的邮箱作为登录帐号" placeholder='请输入邮箱'>
+                  <p class="help-block"></p>
                 </div>
               </div>
               {% elseif field == 'nickname' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">昵称</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字">
-                  <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
+                  <input type="text" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字" placeholder='请输入昵称'>
+                  <p class="help-block"></p>
                 </div>
               </div>
             {% elseif field == 'job' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">职业</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" placeholder='请输入职业'>
                 </div>
               </div>
             {% elseif field == 'gender' %}
@@ -58,15 +69,15 @@
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">公司</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" placeholder='请输入公司'>
                 </div>
               </div>
-            {% elseif field == 'mobile' and (setting('cloud_sms.sms_enabled', '0') == '1' and setting('cloud_sms.sms_registration', 'off') == 'on') %}
+            {% elseif field == 'mobile' and (setting('cloud_sms.sms_enabled', '0') == '1' and setting('cloud_sms.sms_registration', 'off') == 'on')%}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">手机号码</label>
                 <div class="controls" >
-                    <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" data-role="mobile">
-                    <p class="help-block">输入手机号码</p>
+                    <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" data-role="mobile" placeholder='请输入手机号码'>
+                    <p class="help-block"></p>
                 </div>
               </div>
 
@@ -74,8 +85,8 @@
                 <label class="control-label required" for="sms_code">短信验证码</label>
                 <div class="controls row" >
                   <div class = "col-md-8" >
-                    <input type="text" class="form-control" id="sms-code" name="sms_code" data-explain="输入短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
-                    <p class="help-block">输入短信验证码</p> 
+                    <input type="text" class="form-control" id="sms-code" name="sms_code" placeholder="请输入短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                    <p class="help-block"> </p> 
                   </div>
                   <div class="col-md-4">
                     <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
@@ -90,40 +101,42 @@
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">手机号码</label>
                 <div class="controls " >
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" >
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control" placeholder='请输入手机号码'>
                 </div>
               </div>
             {% elseif field == 'idcard' %}
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">身份证号</label>
                 <div class="controls">
-                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control">
+                  <input type="text" id="register_{{ field }}" name="{{ field }}"  class="form-control"  placeholder='请输入身份证号'>
                 </div>
               </div>           
               {% elseif field == 'password' %}   
               <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">密码</label>
                 <div class="controls">
-                  <input type="password" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-explain="5-20位英文、数字、符号，区分大小写">
-                  <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+                  <input type="password" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-explain="5-20位英文、数字、符号，区分大小写" placeholder='请输入密码'>
+                  <p class="help-block"></p>
                 </div>
               </div>
               {% elseif field == 'confirmPassword' %}
-              <div class="form-group">
+              {# <div class="form-group">
                 <label class="control-label required" for="register_{{ field }}">确认密码</label>
                 <div class="controls">
                   <input type="password" id="register_{{ field }}" name="{{ field }}" required="required" class="form-control" data-explain="再输入一次密码">
                   <p class="help-block">再输入一次密码</p>
                 </div>
-              </div>
+              </div> #}
             {% endif %}
+          
+
             {% for userField in userFields %}
               {% if field==userField.fieldName %}
-                 {% if userField.type=="text" %}             
+                 {% if userField.type=="text" %}              
                   <div class="form-group">
                     <label for="{{userField.fieldName}}" class="control-label ">{{userField.title}}</label>
                     <div class="controls">
-                      <textarea id="{{userField.fieldName}}" name="{{userField.fieldName}}" class=" form-control "></textarea>
+                      <textarea id="{{userField.fieldName}}" name="{{userField.fieldName}}" class=" form-control " placeholder="输入{{userField.title}}"></textarea>
                       <div class="help-block" style="display:none;"></div>
                     </div>
                   </div>
@@ -131,7 +144,7 @@
                   <div class="form-group">
                     <label for="{{userField.fieldName}}" class=" control-label">{{userField.title}}</label>
                     <div class="controls">
-                      <input type="text" id="{{userField.fieldName}}" placeholder="最大值为9位整数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="">
+                      <input type="text" id="{{userField.fieldName}}" placeholder="最大值为9位整数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" placeholder="请输入{{userField.title}}">
                       <div class="help-block" style="display:none;"></div>
                     </div>
                   </div>
@@ -139,7 +152,7 @@
                   <div class="form-group">
                     <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
                     <div class=" controls">
-                      <input type="text" id="{{userField.fieldName}}" placeholder="保留到2位小数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" >
+                      <input type="text" id="{{userField.fieldName}}" placeholder="保留到2位小数" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain=""  placeholder="请输入{{userField.title}}">
                       <div class="help-block" style="display:none;"></div>
                     </div>
                   </div>
@@ -147,7 +160,7 @@
                   <div class="form-group">
                     <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
                     <div class=" controls">
-                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" >
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="{{userField.type}} form-control" data-widget-cid="widget-5" data-explain="" placeholder="请输入{{userField.title}}" >
                       <div class="help-block" style="display:none;"></div>
                     </div>
                   </div>
@@ -155,7 +168,7 @@
                   <div class="form-group">
                     <label for="{{userField.fieldName}}" class="control-label">{{userField.title}}</label>
                     <div class=" controls">
-                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="form-control" data-widget-cid="widget-5" data-explain="" >
+                      <input type="text" id="{{userField.fieldName}}" name="{{userField.fieldName}}" class="form-control" data-widget-cid="widget-5" data-explain=""  placeholder="请输入{{userField.title}}">
                       <div class="help-block" style="display:none;"></div>
                     </div>
                   </div>
@@ -167,44 +180,60 @@
            <div class="form-group">
                 <label class="control-label required" for="register_email">邮箱地址</label>
                 <div class="controls">
-                  <input type="text" id="register_email" name="email" required="required" class="form-control" data-url="{{path('register_email_check')}}" data-explain="填写你常用的邮箱作为登录帐号">
-                  <p class="help-block">填写你常用的邮箱作为登录帐号</p>
+                  <input type="text" id="register_email" name="email" required="required" class="form-control" data-url="{{path('register_email_check')}}" placeholder="填写你常用的邮箱作为登录帐号">
+                  <p class="help-block"></p>
                 </div>
            </div>
            <div class="form-group">
                 <label class="control-label required" for="register_nickname">昵称</label>
                 <div class="controls">
-                  <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" data-explain="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字">
-                  <p class="help-block">该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字</p>
+                  <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" placeholder="该怎么称呼你？ 中、英文均可，最长14个英文或7个汉字">
+                  <p class="help-block"></p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label required" for="register_password">密码</label>
                 <div class="controls">
-                  <input type="password" id="register_password" name="password" required="required" class="form-control" data-explain="5-20位英文、数字、符号，区分大小写">
-                  <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+                  <input type="password" id="register_password" name="password" required="required" class="form-control" placeholder="5-20位英文、数字、符号，区分大小写">
+                  <p class="help-block"></p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label required" for="register_confirmPassword">确认密码</label>
                 <div class="controls">
-                  <input type="password" id="register_confirmPassword" name="confirmPassword" required="required" class="form-control" data-explain="再输入一次密码">
-                  <p class="help-block">再输入一次密码</p>
+                  <input type="password" id="register_confirmPassword" name="confirmPassword" required="required" class="form-control" placeholder="再输入一次密码">
+                  <p class="help-block"></p>
                 </div>
             </div>
           {% endif %}
-
+            {% if setting('auth.register_mode') == 'email_or_mobile' %}
+               <div class="form-group hidden email_mobile_msg">
+                <label class="control-label required" for="em_sms_code">短信验证码</label>
+                <div class="controls row" >
+                  <div class = "col-md-8" >
+                    <input type="text" class="form-control" id="em_sms-code" name="em_sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                    <p class="help-block"> </p> 
+                  </div>
+                  <div class="col-md-4">
+                    <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+                      <span id="js-time-left"></span>
+                      <span id="js-fetch-btn-text">获取短信验证码</span>
+                   </span> 
+                  </div>
+                </div>
+              </div>
+               {% endif %}
           {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
             <div class="form-group">
               <label class="control-label required" for="captcha_num">验证码</label>
               <div class="controls row" >
                 <div class = "col-md-7" >
-                  <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="5" data-explain="输入验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
+                  <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="5" placeholder="验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
                 </div>
                 <div class="col-md-5">
                   <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;" >
                 </div>
-                <div class="col-md-12 help-block">输入验证码</div>  
+                <div class="col-md-12 help-block"></div>  
               </div>
               
             </div>    

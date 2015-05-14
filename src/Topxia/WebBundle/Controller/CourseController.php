@@ -315,7 +315,7 @@ class CourseController extends BaseController
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-
+			$lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $course['id']);
 			if($coursesPrice ==1){
 				$course['price'] =0;
 				$course['coinPrice'] =0;
@@ -327,6 +327,7 @@ class CourseController extends BaseController
 				'member' => $member,
 				'items' => $items,
 				'learnStatuses' => $learnStatuses,
+				'lessonLearns' => $lessonLearns,
 				'currentTime' => $currentTime,
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
@@ -381,13 +382,6 @@ class CourseController extends BaseController
 			'classrooms'=> $classrooms
 		));
 
-	}
-
-	private function canShowCourse($course, $user)
-	{
-		return ($course['status'] == 'published') or 
-			$user->isAdmin() or 
-			$this->getCourseService()->isCourseTeacher($course['id'],$user['id']) ;
 	}
 
 	private function previewAsMember($as, $member, $course)
@@ -952,13 +946,6 @@ class CourseController extends BaseController
 		return array();
 	}
 
-	private function createCourseForm()
-	{
-		return $this->createNamedFormBuilder('course')
-			->add('title', 'text')
-			->getForm();
-	}
-
 	protected function getUserService()
 	{
 		return $this->getServiceKernel()->createService('User.UserService');
@@ -977,11 +964,6 @@ class CourseController extends BaseController
 	private function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
-
-	private function getOrderService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseOrderService');
 	}
 
 	private function getCategoryService()

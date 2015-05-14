@@ -436,7 +436,9 @@ class CourseLessonManageController extends BaseController
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 		if($course['type']=='live'){
 			$client = LiveClientFactory::createClient();
-			$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
+			if ($lesson['type'] == 'live') {
+				$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
+			}
 			$this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
 		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);

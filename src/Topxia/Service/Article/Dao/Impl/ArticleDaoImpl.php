@@ -45,7 +45,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	{
 		$this->filterStartLimit($start, $limit);
 
-		if(empty($categoryIds)){ return array(); };
+		if(empty($categoryIds)){ return array(); }
 
         $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
         $sql = "SELECT * FROM {$this->table} WHERE categoryId in ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
@@ -56,7 +56,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
 	public function findArticlesCount(array $categoryIds)
 	{
-		if(empty($categoryIds)){ return array(); };
+		if(empty($categoryIds)){ return array(); }
         $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
 		$sql = "SELECT COUNT(id) FROM {$this->table} WHERE categoryId in ({$marks})";
 
