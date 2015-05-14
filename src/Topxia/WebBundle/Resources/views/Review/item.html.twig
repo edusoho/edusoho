@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="title"><a href="">{{ users[review.id].nickname}}</a> {{review.createdTime|smart_time}}</div>
 
-    {% include 'TopxiaWebBundle:Review:star.html.twig' with {score:review.rating} %}
+    {% include 'TopxiaWebBundle:Review/Widget:star.html.twig' with {score:review.rating} %}
 
     <div class="content">
       {{ review.content }}
