@@ -30,13 +30,18 @@ class CourseController extends BaseController
 		
 
 		$sort = $request->query->get('sort', 'latest');
+
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
 			'categoryId' => $category['id'],
-			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
-			'price' => ($sort == 'free') ? '0.00' : null
+			'recommended' => ($sort == 'recommendedSeq') ? 1 : null
 		);
+
+		if ($sort == 'free') {
+			$conditions['price'] = '0.00';
+			$conditions['coinPrice'] = '0.00';
+		}
 
 		$paginator = new Paginator(
 			$this->get('request'),
