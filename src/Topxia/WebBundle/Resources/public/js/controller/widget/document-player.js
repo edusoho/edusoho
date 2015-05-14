@@ -201,7 +201,12 @@ define(function(require, exports, module) {
         initPDFJSViewer: function($thiz) {
             self=this;
             $("html").attr('dir','ltr');
-            $('#viewerIframe').attr('src', 'http://opencdn.edusoho.net/pdf.js/v2/viewer.html#'+self.attrs.pdfFileUrl.value);
+            var jsPath = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'+self.attrs.pdfFileUrl.value;
+            if(app.lessonCopyEnabled==1){
+                jsPath = jsPath+'#false';
+            }
+
+            $('#viewerIframe').attr('src', jsPath);
 
             if (this.get('watermark')) {
                 this.element.WaterMark(this.get('watermark'));
