@@ -1,0 +1,13 @@
+{% if score|number_format == 0 %}
+{% else %}
+    {% for i in  1.. (classroom.rating)|number_format %}
+        <i class="es-icon es-icon-star"></i>
+    {% endfor %}
+{% endif %}
+
+{% if (classroom.rating)|number_format == 5 %}
+{% else %}
+    {% for i in  (classroom.rating)|number_format..4  %}
+        <i class="es-icon es-icon-staroutline"></i>
+    {% endfor %}
+{% endif %}

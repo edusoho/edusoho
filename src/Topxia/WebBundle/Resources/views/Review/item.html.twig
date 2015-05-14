@@ -1,0 +1,19 @@
+<div class="media media-evaluate">
+  <div class="media-left">
+    <a href=""><img class="avatar-sm" src="{{ filepath(sers[review.id].smallAvatar, 'avatar.png') }}" alt=""></a>
+  </div>
+  <div class="media-body">
+    <div class="title"><a href="">{{ users[review.id].nickname}}</a> {{review.createdTime|smart_time}}</div>
+    {% include 'TopxiaWebBundle:Review:star.html.twig' with {score:review.rating} %}
+    <div class="score">
+      <i class="es-icon es-icon-star"></i>
+      <i class="es-icon es-icon-star"></i>
+      <i class="es-icon es-icon-star"></i>
+      <i class="es-icon es-icon-starhalf"></i>
+      <i class="es-icon es-icon-staroutline"></i>
+    </div>
+    <div class="content">
+      {{ review.content }}
+    </div>
+  </div>
+</div>

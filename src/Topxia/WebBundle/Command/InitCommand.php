@@ -308,40 +308,59 @@ EOD;
 		}
 
 		$this->getFileService()->addFileGroup(array(
-			'name' => '默认文件组',
-			'code' => 'default',
-			'public' => 1,
-		));
+            'name' => '默认文件组',
+            'code' => 'default',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '缩略图',
-			'code' => 'thumb',
-			'public' => 1,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '缩略图',
+            'code' => 'thumb',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '课程',
-			'code' => 'course',
-			'public' => 1,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '课程',
+            'code' => 'course',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '用户',
-			'code' => 'user',
-			'public' => 1,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '用户',
+            'code' => 'user',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '课程私有文件',
-			'code' => 'course_private',
-			'public' => 0,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '课程私有文件',
+            'code' => 'course_private',
+            'public' => 0,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
+        $this->getFileService()->addFileGroup(array(
             'name' => '资讯',
             'code' => 'article',
             'public' => 1,
         ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '临时目录',
+            'code' => 'tmp',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '全局设置文件',
+            'code' => 'system',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '小组',
+            'code' => 'group',
+            'public' => 1,
+        ));
+
 
         $directory = $this->getContainer()->getParameter('topxia.disk.local_directory');
         chmod($directory, 0777);

@@ -128,7 +128,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['targetId'])) {
             throw $this->createServiceException(' Id不能为空！');
         }
-        if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question'))) {
+        if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question'))) {
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
 
@@ -327,7 +327,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $parent = null;
         if ($fields['parentId'] > 0) {
             $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
-            if (empty($parent) or ($parent['threadId'] != $fields['threadId'])) {
+            if (empty($parent) || ($parent['threadId'] != $fields['threadId'])) {
                 throw $this->createServiceException("parentId参数不正确！");
             }
 
@@ -355,11 +355,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $atUserIds = array_values($post['ats']);
-        if ($post['parentId'] == 0 and ($thread['userId'] != $post['userId']) and (!in_array($thread['userId'], $atUserIds))) {
+        if ($post['parentId'] == 0 && ($thread['userId'] != $post['userId']) && (!in_array($thread['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
-        if ($post['parentId'] > 0 and ($parent['userId'] != $post['userId']) and (!in_array($parent['userId'], $atUserIds))) {
+        if ($post['parentId'] > 0 && ($parent['userId'] != $post['userId']) && (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
 
@@ -483,7 +483,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     private function getTargetFirewall($resource)
     {
-        if (empty($resource['targetType']) or empty($resource['targetId'])) {
+        if (empty($resource['targetType']) || empty($resource['targetId'])) {
             throw new \InvalidArgumentException("Resource  targetType or targetId argument missing."); 
         }
 
