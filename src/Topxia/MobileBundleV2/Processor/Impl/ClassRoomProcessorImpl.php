@@ -77,6 +77,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 			unset($classroom["about"]);
 			unset($classroom["teacherIds"]);
 			unset($classroom["service"]);
+			$classroom["createdTime"] = date("c", $classroom["createdTime"]);
 			return $classroom;
 		}, $classrooms);
 	}
