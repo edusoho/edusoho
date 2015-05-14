@@ -50,7 +50,9 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	        }
 
 	        $classrooms = $this->filterMyClassRoom($classrooms,$progresses);
-	        return array_values($classrooms);
+	        return array(
+	        	"data"=>array_values($classrooms)
+	        	)
 	}
 
 	private function filterMyClassRoom($classrooms, $progresses)
