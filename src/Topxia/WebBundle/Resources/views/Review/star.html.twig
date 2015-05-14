@@ -1,13 +1,39 @@
-{% if score|number_format == 0 %}
-{% else %}
-    {% for i in  1.. (classroom.rating)|number_format %}
-        <i class="es-icon es-icon-star"></i>
-    {% endfor %}
-{% endif %}
-
-{% if (classroom.rating)|number_format == 5 %}
-{% else %}
-    {% for i in  (classroom.rating)|number_format..4  %}
-        <i class="es-icon es-icon-staroutline"></i>
-    {% endfor %}
-{% endif %}
+<div class="score">
+  {% if score|number_format == 0 %}
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 1 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 2 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 3 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 4 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 5 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+  {% endif %}
+</div>
