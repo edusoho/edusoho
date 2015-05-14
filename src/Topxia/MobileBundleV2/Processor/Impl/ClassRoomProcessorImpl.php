@@ -15,6 +15,76 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+	public function myClassRooms()
+	{
+		$user = $this->controller->getUserByToken($this->request);
+       		 if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
+        		}
+	        $progresses = array();
+	        $classrooms=array();
+
+	        $studentClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'student','userId'=>$user->id),array('createdTime','desc'),0,9999);
+	        $auditorClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'auditor','userId'=>$user->id),array('createdTime','desc'),0,9999);
+
+	        $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
+
+	        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+	        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+	        foreach ($classrooms as $key => $classroom) {
+	            
+	            $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+	            $coursesCount=count($courses);
+
+	            $classrooms[$key]['coursesCount']=$coursesCount;
+	            
+	            $classroomId= array($classroom['id']);
+	            $member=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomId);
+	            $time=time()-$member[$classroom['id']]['createdTime'];
+	            $day=intval($time/(3600*24));
+
+	            $classrooms[$key]['day']=$day;
+
+	            $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
+	        }
+
+	        return array(
+	            'classrooms'=>array_values($classrooms),
+	            'progresses'=>array_values($progresses),
+	        );
+	}
+
+
+	private function calculateUserLearnProgress($classroom, $userId)
+	    {
+	        $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+	        $courseIds = ArrayToolkit::column($courses,'id');
+	        $findLearnedCourses = array();
+	        foreach ($courseIds as $key => $value) {
+	            $LearnedCourses=$this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value,$userId);
+	            if (!empty($LearnedCourses)) {
+	                $findLearnedCourses[] = $LearnedCourses;
+	            }
+	        }
+
+	        $learnedCoursesCount = count($findLearnedCourses);
+	        $coursesCount=count($courses);
+
+	        if ($coursesCount == 0) {
+	            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+	        }
+
+	        $percent = intval($learnedCoursesCount / $coursesCount * 100) . '%';
+
+	        return array (
+	            'percent' => $percent,
+	            'number' => $learnedCoursesCount,
+	            'total' => $coursesCount
+	        );
+	    }
+
 	public function getClassRooms()
 	{
 		$start = (int) $this->getParam("start", 0);
