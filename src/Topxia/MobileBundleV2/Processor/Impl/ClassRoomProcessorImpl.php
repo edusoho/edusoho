@@ -16,7 +16,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	}
 
 	public function myClassRooms()
-	{
+	{	
+		$start  = (int) $this->getParam("start", 0);
+        		$limit  = (int) $this->getParam("limit", 10);
+
 		$user = $this->controller->getUserByToken($this->request);
        		 if (!$user->isLogin()) {
             		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
@@ -27,6 +30,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	        $studentClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'student','userId'=>$user->id),array('createdTime','desc'),0,9999);
 	        $auditorClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'auditor','userId'=>$user->id),array('createdTime','desc'),0,9999);
 
+	        $total  = 0;
+	        $total += $this->getClassroomService()->searchMemberCount(array('role'=>'student','userId'=>$user->id),array('createdTime','desc'),0,9999);
+	        $total += $this->getClassroomService()->searchMemberCount(array('role'=>'auditor','userId'=>$user->id),array('createdTime','desc'),0,9999);
+	        
 	        $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
 
 	        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
@@ -51,6 +58,9 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
 	        $classrooms = $this->filterMyClassRoom($classrooms,$progresses);
 	        return array(
+	        	"start"=>$start,
+	        	"total"=>$total,
+	        	"limit"=>$total,
 	        	"data"=>array_values($classrooms)
 	        	);
 	}
