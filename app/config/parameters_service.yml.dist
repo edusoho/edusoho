@@ -1,0 +1,6 @@
+parameters:
+    topxia_services:
+        'User.UserService': 'Custom\\Serivce\\User\\UserService'
+
+
+    topxia_daos:
