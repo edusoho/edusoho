@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class MyOrderController extends BaseController
@@ -137,8 +138,44 @@ class MyOrderController extends BaseController
 
     public function cancelAction(Request $request, $id)
     {
-        $this->getOrderService()->cancelOrder($id);
+
+        $order = $this->getOrderService()->getOrder($id);
+
+        $options = $this->getPaymentOptions($order['payment']);
+        $request = Payment::createCloseTradeRequest($order['payment'], $options);
+        $request->setParams($order);
+        $request->closeTrade();
+
         return $this->createJsonResponse(true);
+    }
+
+    private function getPaymentOptions($payment)
+    {
+        $settings = $this->setting('payment');
+
+        if (empty($settings)) {
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings['enabled'])) {
+            throw new \RuntimeException("支付模块未开启，请先开启。");
+        }
+
+        if (empty($settings[$payment. '_enabled'])) {
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+
+        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+        }
+
+        $options = array(
+            'key' => $settings["{$payment}_key"],
+            'secret' => $settings["{$payment}_secret"],
+            'type' => $settings["{$payment}_type"]
+        );
+
+        return $options;
     }
 
     private function getOrderService()
