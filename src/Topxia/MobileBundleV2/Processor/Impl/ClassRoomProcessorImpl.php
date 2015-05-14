@@ -46,16 +46,28 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	            $day=intval($time/(3600*24));
 
 	            $classrooms[$key]['day']=$day;
-
 	            $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
 	        }
 
-	        return array(
-	            'classrooms'=>array_values($classrooms),
-	            'progresses'=>array_values($progresses),
-	        );
+	        $classrooms = $this->filterMyClassRoom($classrooms,$progresses);
+	        return array_values($classrooms);
 	}
 
+	private function filterMyClassRoom($classrooms, $progresses)
+	{
+		return array_map(function($classroom) use($progresses) {
+			$progresse = $progresses[$classroom["id"]];
+			$classroom["percent"] = $progresse["percent"];
+		           $classroom["number"] = $progresse["number"];
+		           $classroom["total"] = $progresse["total"];
+
+			unset($classroom["description"]);
+			unset($classroom["about"]);
+			unset($classroom["teacherIds"]);
+			unset($classroom["service"]);
+			return $classroom;
+		}, $classrooms);
+	}
 
 	private function calculateUserLearnProgress($classroom, $userId)
 	    {
