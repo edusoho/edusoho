@@ -202,8 +202,8 @@ define(function(require, exports, module) {
             self=this;
             $("html").attr('dir','ltr');
             var jsPath = 'http://opencdn.edusoho.net/pdf.js/v3/viewer.html#'+self.attrs.pdfFileUrl.value;
-            if(app.lessonCopyEnabled==1){
-                jsPath = jsPath+'#true';
+            if(app.lessonCopyEnabled==0){
+                jsPath = jsPath+'#false';
             }
             console.log(jsPath);
 
