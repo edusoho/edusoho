@@ -62,7 +62,7 @@ class OrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
-        return $this->render('TopxiaAdminBundle:Order:detail-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:MyOrder:detail-modal.html.twig', array(
             'order' => $order,
             'user' => $user,
             'orderLogs' => $orderLogs,
