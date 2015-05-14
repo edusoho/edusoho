@@ -42,7 +42,7 @@ define(function(require, exports, module) {
                     Notify.danger('最多只能添加' + $panelGroup.data('count') + '个!');
                 } else {
                     $model = $($panels[0]).clone();
-                    $model.find('input').attr('value', '');
+                    $model.find('input').attr('value', '').val('');
                     $model.find('textarea').attr('html', '');
                     $model.find('.title-label').html('');
                     $model.find('.js-img-preview').attr('href', '');
@@ -110,8 +110,8 @@ define(function(require, exports, module) {
                     $(this).replaceWith(replace);
                 });
 
-                this._bindUploader(this.element);
-                this._bindCollapseEvent(this.element); 
+                this._bindUploader($panelGroup);
+                this._bindCollapseEvent($panelGroup); 
             },
             _bindImgPreview: function($element) {
                 $element.find('.js-img-preview').colorbox({rel:'group1', photo:true, current:'{current} / {total}', title:function() {
