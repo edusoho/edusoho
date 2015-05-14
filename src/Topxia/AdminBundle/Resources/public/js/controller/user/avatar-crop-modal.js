@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             var url = $("#upload-avatar-btn").data("url");
             $.post(url, {images: response}, function(){
                 Notify.success('头像更新成功！', 1);
-                $('#modal').modal('hide');
+                $('#modal').load($("#upload-avatar-btn").data("gotoUrl"));
             });
         });
 
