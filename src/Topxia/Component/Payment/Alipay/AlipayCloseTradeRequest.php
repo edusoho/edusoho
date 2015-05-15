@@ -18,10 +18,33 @@ class AlipayCloseTradeRequest {
         return $this;
     }
 
-    public function closeTrade() {
+    public function closeTrade() 
+    {
         $result = $this->postRequest($this->url, $this->convertParams($this->params));
-        var_dump($result);
-        return json_decode($result);
+        return $this->parseResponse($result);
+    }
+
+
+    private function parseResponse($result)
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $doc->loadXML($result);
+
+        if( ! empty($doc->getElementsByTagName( "alipay" )->item(0)->nodeValue) ) {
+            $success = $doc->getElementsByTagName( "is_success" )->item(0)->nodeValue;
+            if('F' == $success) {
+                return array(
+                    'success' => false,
+                    'msg' => $doc->getElementsByTagName( "error" )->item(0)->nodeValue
+                );
+            } else if('T' == $success){
+                return array(
+                    'success' => true
+                );
+            }
+
+        }
+        return array();
     }
 
     private function postRequest($url, $params)
@@ -38,7 +61,7 @@ class AlipayCloseTradeRequest {
         if (!empty($params)) {
             $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
         }
-var_dump($url);
+
         curl_setopt($curl, CURLOPT_URL, $url );
 
         $response = curl_exec($curl);
@@ -75,11 +98,11 @@ var_dump($url);
         $converted['partner'] = $this->options['key'];
         $converted['trade_role'] = 'B';
         $converted['sign_type'] = 'MD5';
-        $converted['out_trade_no'] = $params['sn'];
+        $converted['out_order_no'] = $params['sn'];
         $converted['service'] = 'close_trade';
 
         $converted['sign'] = $this->signParams($converted);
-var_dump(json_encode($converted));
+
         return $converted;
     }
 
