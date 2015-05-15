@@ -273,6 +273,12 @@ class DataDict
             'isStick' => '置顶',
             'isElite' => '加精',
         ),
+        'passedStatus' => array(
+        	'excellent' => '优秀',
+        	'good' => '良好',
+        	'passed' => '合格',
+        	'unpassed' => '不合格',
+        ),
 	);
 
 	public static function dict($type)
