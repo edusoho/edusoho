@@ -359,6 +359,9 @@ course_lesson_watch_num:
     defaults: { _controller: TopxiaWebBundle:CourseLesson:watchNum }
     methods: [POST]
 
+course_lesson_list:
+    pattern:  /course/{courseId}/lesson/list
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:list }
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list

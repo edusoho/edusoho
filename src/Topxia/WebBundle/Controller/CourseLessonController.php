@@ -540,6 +540,11 @@ class CourseLessonController extends BaseController
         return false;
     }
 
+    public function listAction(Request $request, $courseId)
+    {
+        
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
