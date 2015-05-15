@@ -191,7 +191,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        $fields['startTime'] = strtotime($fields['startTime']);
+        if (!empty($fields['startTime'])) {
+            $fields['startTime'] = strtotime($fields['startTime']);
+        }
 
         return $this->getThreadDao()->updateThread($id, $fields);
     }

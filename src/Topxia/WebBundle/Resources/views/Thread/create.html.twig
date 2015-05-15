@@ -15,44 +15,38 @@
       <input type="type" id="title" class="form-control" placeholder="标题" ata-display="标题" name= "title" value="{{ thread.title|default('') }}">
       </div>
   </div>
-
-  <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
-    <div class="form-group">
-       <label for="startTime" class="col-sm-2 control-label">活动时间</label>
-      <div class="col-sm-10">
-        <input type="type" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d H:i') }}{% endif %}">
+  
+  {% if type == 'event' %}
+    <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="startTime">活动时间</label>
         </div>
-    </div>
-
-    <div class="form-group">
-        <label for="location" class="col-sm-2 control-label">活动地点</label>
-      <div class="col-sm-10">
-        <input type="type" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="maxUsers" class="col-sm-2 control-label">名额限制</label>
-      <div class="col-sm-3">
-        <input type="type" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
-        </div>
-        <label class="control-label">人</label>
-    </div>
-
-  <!--     <div class="form-group">
-        <label for="inputTitle" class="col-sm-2 control-label">封面图片</label>
-        <div class="col-sm-2">
-          <a href="" class="btn btn-default btn-block">浏览...</a>
-        </div>
-      </div> -->
-
-      <div class="alert alert-info" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        提示：报名参加时需要提供姓名、手机号码。活动创建后将会给所有{{ setting('classroom.name')|default("班级") }}学员群发系统通知。
+        <div class="col-md-7 controls">
+          <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d H:i') }}{% endif %}">
+          </div>
       </div>
 
-  </div>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="location">活动地点</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
+          </div>
+      </div>
 
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="maxUsers">最大人数</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
+          </div>
+      </div>
+    </div>
+  {% endif %}
+ 
   <div class="form-group">
     <div class="controls col-md-12">
       <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content"
