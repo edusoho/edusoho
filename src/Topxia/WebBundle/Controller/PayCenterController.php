@@ -168,7 +168,7 @@ class PayCenterController extends BaseController
 
         if($payData['status'] == "closed") {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->cancelOrder($order["id"], '支付宝交易关闭', $payData);
+            $this->getOrderService()->cancelOrder($order["id"], '支付宝交易订单已关闭', $payData);
             return new Response('success');
         }
 

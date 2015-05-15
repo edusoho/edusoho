@@ -9,6 +9,17 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
+	public function closeTrade($sn)
+	{
+		$result = array();
+        if($this->getSettingService()->get("payment.close_trade_enabled", 0) == 1){
+            $options = $this->getPaymentOptions($order['payment']);
+            $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
+            $closeTradeRequest->setParams($order);
+            $result = $closeTradeRequest->closeTrade();
+        }
+	}
+
 	public function pay($payData)
 	{
 		if ($payData['status'] != 'success') {
