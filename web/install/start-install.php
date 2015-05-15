@@ -9,6 +9,8 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
 ));
 
+define("INSTALL_URI", "\/install\/start-install.php");
+
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
 $step =intval(empty($_GET['step']) ? 0 : $_GET['step']);
@@ -685,7 +687,7 @@ EOD;
                     $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
                         preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
                         preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/\/install\/start-install.php.*/i', '', $_SERVER['REQUEST_URI']);
+                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
                         $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
                         $src = $URI . trim($src);
                          
