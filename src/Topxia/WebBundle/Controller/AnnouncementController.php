@@ -49,6 +49,8 @@ class AnnouncementController extends BaseController
 	    	$data = $request->request->all();
 	    	$data['targetType'] = $targetType;
 	    	$data['targetId'] = $targetId;
+	    	$data['startTime'] = isset($data['startTime']) ? $data['startTime'] : time();
+	    	$data['endTime'] = isset($data['endTime']) ? $data['endTime'] : time();
 
         	$announcement = $this->getAnnouncementService()->createAnnouncement($data);
 
@@ -80,6 +82,8 @@ class AnnouncementController extends BaseController
 	    	$data = $request->request->all();
 	    	$data['targetType'] = $targetType;
 	    	$data['targetId'] = $targetId;
+	    	$data['startTime'] = isset($data['startTime']) ? $data['startTime'] : time();
+	    	$data['endTime'] = isset($data['endTime']) ? $data['endTime'] : time();
 
         	$this->getAnnouncementService()->updateAnnouncement($id, $data);
 	        return $this->createJsonResponse(true);

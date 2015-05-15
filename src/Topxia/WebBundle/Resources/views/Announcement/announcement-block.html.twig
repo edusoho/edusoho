@@ -15,7 +15,7 @@
                       <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetId:targetObject.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
 
                       {% if canManage %}
-                          <a class="text-muted text-sm mrm action" href="javascript:;" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:'classroom',  targetId:targetObject.id}) }}">
+                          <a class="text-muted text-sm mrm action" href="javascript:;" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetObject.id}) }}">
                             <span class="glyphicon glyphicon-pencil"></span> 修改</a>
                           <a class="text-muted text-sm action" href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}">
                             <span class="glyphicon glyphicon-trash"></span> 删除</a>
@@ -23,7 +23,7 @@
 
                 </li>
             {% else %}
-                <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}公告</div>
+                <div class="empty">暂无公告</div>
             {% endfor %}
         </ul>
 

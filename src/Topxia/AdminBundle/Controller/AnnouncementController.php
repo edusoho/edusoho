@@ -40,6 +40,11 @@ class AnnouncementController extends BaseController
 
         if ($request->getMethod() == "POST" ) {
 
+            $announcement['targetType'] = 'global';
+            $announcement['targetId'] = 0;
+            $announcement['startTime'] = strtotime($announcement['startTime']);
+            $announcement['endTime'] = strtotime($announcement['endTime']);
+
             $this->getAnnouncementService()->createAnnouncement($announcement);
             
         }
@@ -54,6 +59,8 @@ class AnnouncementController extends BaseController
         if ($request->getMethod() == "POST" ) {
 
             $announcement = $request->request->all();
+            $announcement['startTime'] = strtotime($announcement['startTime']);
+            $announcement['endTime'] = strtotime($announcement['endTime']);
 
             $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $announcement);
             
