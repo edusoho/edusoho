@@ -182,6 +182,15 @@ class OrderServiceImpl extends BaseService implements OrderService
         return  $prefix . date('YmdHis', time()) . mt_rand(10000,99999);
     }
 
+    public function createOrderLog($orderId, $type, $message = '', array $data = array())
+    {
+        $order = $this->getOrder($orderId);
+        if(empty($order)){
+            throw $this->createServiceException("订单不存在，获取订单日志失败！");
+        }
+        return $this->_createLog($orderId, $type, $message, $data);
+    }
+
     private function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();
