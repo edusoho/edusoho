@@ -683,8 +683,8 @@ EOD;
                 if (file_exists($filename)) {
                     $content = file_get_contents($filename);
                     $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
-                        preg_match_all('/< *img[^>]*src *= *["\']?([^"\']*)/is', $matches[0], $srcs);
-                        preg_match_all('/< *img[^>]*alt *= *["\']?([^"\']*)/is', $matches[0], $alts);
+                        preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
+                        preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
                         $URI = preg_replace('/\/install\/start-install.php.*/i', '', $_SERVER['REQUEST_URI']);
                         $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
                         $src = $URI . trim($src);
