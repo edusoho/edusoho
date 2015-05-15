@@ -141,6 +141,7 @@ class MyOrderController extends BaseController
 
         $order = $this->getOrderService()->getOrder($id);
 
+        $result = array();
         if($this->setting("payment.close_trade_enabled", 0) == 1){
             $options = $this->getPaymentOptions($order['payment']);
             $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
@@ -148,9 +149,7 @@ class MyOrderController extends BaseController
             $result = $closeTradeRequest->closeTrade();
         }
 
-        if(!isset($result) || $result["success"]) {
-            $order = $this->getOrderService()->cancelOrder($id);
-        }
+        $order = $this->getOrderService()->cancelOrder($id, '取消订单', $result);
 
         return $this->createJsonResponse(true);
     }
