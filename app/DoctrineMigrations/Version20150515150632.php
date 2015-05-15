@@ -16,7 +16,7 @@ class Version20150515150632 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyday', '01:00:00', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '0', '0', '0', '0');");
+        $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '0', '0', '0', '0');");
     }
 
     /**
