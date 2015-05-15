@@ -158,7 +158,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread['courseId'])) {
 			throw $this->createServiceException('Course ID can not be empty.');
 		}
-		if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question'))) {
+		if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question'))) {
 			throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
 		}
 
@@ -206,7 +206,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+		($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($courseId);
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
 		if (empty($fields)) {
@@ -328,7 +328,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
-		if (empty($post) or $post['courseId'] != $courseId) {
+		if (empty($post) || $post['courseId'] != $courseId) {
 			return null;
 		}
 		return $post;
@@ -375,7 +375,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+		($user->isLogin() && $user->id == $post['userId']) || $this->getCourseService()->tryManageCourse($courseId);
 
 
 		$fields  = ArrayToolkit::parts($fields, array('content'));

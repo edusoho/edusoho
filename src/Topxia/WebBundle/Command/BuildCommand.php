@@ -375,7 +375,11 @@ class BuildCommand extends BaseCommand
 			$html = BlockToolkit::render($block, $this->getContainer());
 
 			$filename = "block-" . md5($code) . '.html';
-			$filename = "{$this->distDirectory}/web/install/blocks/" . $filename;
+			$folder = "{$this->distDirectory}/web/install/blocks/";
+			if (!file_exists($folder)) {
+				mkdir($folder);
+			}
+			$filename = $folder . $filename;
 
 			file_put_contents($filename, $html);
 		}

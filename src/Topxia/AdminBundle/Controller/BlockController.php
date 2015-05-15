@@ -110,7 +110,7 @@ class BlockController extends BaseController
                 foreach ($fields as $key => $value) {   
                     $content = str_replace('(('.$key.'))', $value, $template);
                     break;
-                };
+                }
                 foreach ($fields as $key => $value) {   
                     $content = str_replace('(('.$key.'))', $value, $content);
                 }
