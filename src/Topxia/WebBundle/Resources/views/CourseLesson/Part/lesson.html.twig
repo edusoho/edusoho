@@ -1,0 +1,8 @@
+{% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+<li class="period">
+  <a href="{{ lessonUrl }}">
+    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+    <span class="title">课时{{ item.number }}:{{ item.title }}</span>
+    {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+  </a>
+</li>
