@@ -129,7 +129,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->addOrderLog($order['id'],"pay_success", "当前用户已经是课程学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'],"pay_success", "当前用户已经是课程学员，支付宝支付成功。", $order);
             $this->getLogService()->warning("course_order", "pay_success", "当前用户已经是课程学员，支付宝支付成功。", $order);
         }
 
