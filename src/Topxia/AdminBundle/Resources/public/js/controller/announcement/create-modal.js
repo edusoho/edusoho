@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=title]',
+            element: '[name=content]',
             required: true,
             rule: 'minlength{min:2}'
         });

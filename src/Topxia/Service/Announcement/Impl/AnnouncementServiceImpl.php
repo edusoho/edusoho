@@ -11,7 +11,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function getAnnouncement($id)
     {
-
+        return $this->getAnnouncementDao()->getAnnouncement($id);
     }
 
 
@@ -31,7 +31,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
     public function createAnnouncement($announcement)
     {
-        if (!isset($announcement['title']) || empty($announcement['title'])) {
+        if (!isset($announcement['content']) || empty($announcement['content'])) {
             throw $this->createServiceException("公告内容不能为空！");
         }
 
@@ -43,15 +43,19 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             throw $this->createServiceException("结束时间不能为空！");
         }
 
-		$fields['userId'] = $this->getCurrentUser()->id;
-		$fields['createdTime'] = time();
+        if (isset($announcement['notify'])){
+            unset($announcement['notify']);
+        }
 
-		return $this->getAnnouncementDao()->addAnnouncement($fields);
+		$announcement['userId'] = $this->getCurrentUser()->id;
+		$announcement['createdTime'] = time();
+
+		return $this->getAnnouncementDao()->addAnnouncement($announcement);
 	}
 
     public function updateAnnouncement($id, $announcement)
     {   
-        if (!isset($announcement['title']) || empty($announcement['title'])) {
+        if (!isset($announcement['content']) || empty($announcement['content'])) {
             throw $this->createServiceException("公告内容不能为空！");
         }
 
@@ -63,9 +67,8 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             throw $this->createServiceException("结束时间不能为空！");
         }
 
-        return $this->getAnnouncementDao()->updateAnnouncement($id, array(
-        	'content' => $fields['content']
-    	));
+        $announcement['updatedTime'] = time();
+        return $this->getAnnouncementDao()->updateAnnouncement($id, $announcement);
 	}
 
 	public function deleteAnnouncement($id)
