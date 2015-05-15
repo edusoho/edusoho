@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 
 class FileController extends BaseController
 {
@@ -83,7 +84,9 @@ class FileController extends BaseController
 
     private function isGroup($group)
     {
-        return in_array($group, array("default", "user", "course", "system", "article", "tmp", "group"));
+        $groups = $this->getFileService()->getAllFileGroups();
+        $codes = ArrayToolkit::column($groups, "code");
+        return in_array($group, $codes);
     }
 
     private function tryUploadFile($request)
