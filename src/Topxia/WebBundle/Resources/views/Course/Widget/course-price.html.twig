@@ -52,5 +52,13 @@
       </span>
     {% endif %}
 
+    {% if 'originPrice' in shows %}
+      {% if priceType == 'coin' %}
+        <span class="origin-price">{{course.originCoinPrice}}</span>
+      {% else %}
+        <span class="origin-price">{{course.originPrice}}</span>
+      {% endif %}
+    {% endif %}
+
   {% endif %}
 </span>
