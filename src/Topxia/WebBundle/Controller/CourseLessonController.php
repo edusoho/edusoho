@@ -543,11 +543,11 @@ class CourseLessonController extends BaseController
     public function listAction(Request $request, $courseId)
     {
         $user = $this->getCurrentUser();
-        $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-        $items = $this->getCourseService()->getCourseItems($course['id']);
-        $course = $this->getCourse()->getCourse($courseId);
-        return $this->Render('TopxiaWebBundle:Course/Widget:lesson-list.html.twig', array(
-            'items' => $item,
+        $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        $items = $this->getCourseService()->getCourseItems($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
+            'items' => $items,
             'course' => $course,
             'learnStatuses' => $learnStatuses
         ));

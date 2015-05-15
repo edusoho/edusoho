@@ -1,9 +1,12 @@
 {% set learnStatuses = learnStatuses|default([]) %}
-<ul class="period-list">
-{% for id, item in items %}
-  {% if 'chapter' in id %}
-    {% include 'TopxiaWebBundle:CourseLesson\Part:chapter.html.twig' %}
-  {% elseif 'lesson' in id %}
-    {% include 'TopxiaWebBundle:CourseLesson\Part:lesson.html.twig'%}
-  {% endif %}
-{% endfor %}
+{% if items %}
+  <ul class="period-list">
+  {% for id, item in items %}
+    {% if 'chapter' in id %}
+      {% include 'TopxiaWebBundle:CourseLesson/Part:chapter.html.twig' %}
+    {% elseif 'lesson' in id %}
+      {% include 'TopxiaWebBundle:CourseLesson/Part:lesson.html.twig'%}
+    {% endif %}
+  {% endfor %}
+
+{% endif %}

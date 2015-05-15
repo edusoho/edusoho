@@ -360,7 +360,7 @@ course_lesson_watch_num:
     methods: [POST]
 
 course_lesson_list:
-    pattern:  /course/{courseId}/lesson/list
+    pattern:  /course/{courseId}/lessons/list
     defaults: { _controller: TopxiaWebBundle:CourseLesson:list }
 
 course_lesson_plugin_lesson_list:
