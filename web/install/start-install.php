@@ -600,6 +600,11 @@ EOD;
             'public' => 1,
         ));
 
+        $this->getFileService()->addFileGroup(array(
+            'name' => '编辑区',
+            'code' => 'block',
+            'public' => 1,
+        ));
     }
 
     public function initPages()
