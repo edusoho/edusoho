@@ -58,13 +58,12 @@ class CrontabServiceImpl extends BaseService implements CrontabService
                 $this->getJobDao()->deleteJob($job['id']);
             }
 
-
-            if ($job['cycle'] == 'loop') {
+            if ($job['cycle'] == 'everyday') {
                 $time = time();
                 $this->getJobDao()->updateJob($job['id'], array(
                     'executing' => '0',
                     'latestExecutedTime' => $time,
-                    'nextExcutedTime' => $time+$job['frequence']
+                    'nextExcutedTime' => strtotime(date('Y-m-d', strtotime('+1 day',$time)).' '.$job['cycleTime'])
                 ));
             }
 

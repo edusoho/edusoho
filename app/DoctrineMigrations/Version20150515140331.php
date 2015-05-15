@@ -16,9 +16,9 @@ class Version20150515140331 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `crontab_job` CHANGE `cycle` `cycle` ENUM('once','loop') NOT NULL DEFAULT 'once' COMMENT '任务执行周期的类型，分为执行一次还是多次';");
+        $this->addSql("ALTER TABLE `crontab_job` CHANGE `cycle` `cycle` ENUM('once','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期';");
 
-        $this->addSql("ALTER TABLE `crontab_job` ADD `frequence` INT(10) NOT NULL DEFAULT '0' COMMENT '任务执行频率' AFTER `cycle`;");
+        $this->addSql("ALTER TABLE `crontab_job` ADD `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间' AFTER `cycle`;");
     }
 
     /**

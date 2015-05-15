@@ -210,7 +210,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('当前订单状态不能取消订单！');
         }
 
-        if($this->getSettingService()->get("payment.close_trade_enabled", 0) == 1){
+        $payment = $this->getSettingService()->get("payment");
+        if(isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1){
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
 
@@ -594,6 +595,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getCouponService()
     {
         return $this->createService('Coupon:Coupon.CouponService');
+    }
+
+    private function getPayCenterService()
+    {
+        return $this->createService('PayCenter.PayCenterService');
     }
 
 }

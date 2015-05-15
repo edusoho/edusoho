@@ -9,7 +9,7 @@ class CancelOrderJob implements Job
 	public function execute($params)
     {
     	$conditions = array(
-    		"status"=>"created",
+    		"status" => "created",
     		"createdTime_LT" => time()-48*60*60
     	);
 
