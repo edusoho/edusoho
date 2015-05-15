@@ -4,6 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
+/**
+ * @todo  去除，采用LatestCourseThreadsDataTag
+ */
 class LatestCourseQuestionsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**

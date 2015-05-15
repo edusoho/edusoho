@@ -4,6 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
+/**
+ * @todo  加入type参数
+ */
 class LatestCourseThreadsDataTag extends CourseBaseDataTag implements DataTag  
 {
     
