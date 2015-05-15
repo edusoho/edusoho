@@ -9,6 +9,8 @@ class VipLevelsDataTag extends CourseBaseDataTag implements DataTag
     /**
      * 获取一个VIP等级
      *
+     * @todo  要挪到Vip插件中去
+     *
      * @param  array $arguments 参数
      * @return array vip等级
      */

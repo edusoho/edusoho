@@ -37,6 +37,7 @@ class PopularCoursesDataTag extends CourseBaseDataTag implements DataTag
             $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
         }
 
+        // @todo 应该有３种模式： 全部、免费、收费
         if (isset($arguments['price'])) {
             $conditions['price_GT'] = '0.00';
         } else {

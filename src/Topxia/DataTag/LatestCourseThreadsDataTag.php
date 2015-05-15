@@ -25,6 +25,8 @@ class LatestCourseThreadsDataTag extends CourseBaseDataTag implements DataTag
 
         $conditions = array( 'courseId' => $arguments['courseId']);
     	$threads = $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
+
+        //@todo $threads['course'] 可以去除 by zhang
         $threads['course'] = $this->getCourseService()->getCourse($arguments['courseId']);
 
         return $threads;

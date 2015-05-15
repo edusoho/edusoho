@@ -32,6 +32,7 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
             $conditions['categoryId'] = empty($category) ? -1 : $category['id'];
         }
 
+        // @todo 规则应该调整为 price > 0 and coinPrice > 0 .
         if (!empty($arguments['notFree'])) {
             $conditions['originPrice_GT'] = '0.00';
         }
