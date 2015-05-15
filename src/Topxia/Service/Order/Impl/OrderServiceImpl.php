@@ -5,7 +5,6 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Component\Payment\Payment;
 
 class OrderServiceImpl extends BaseService implements OrderService
 {
@@ -211,7 +210,9 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('当前订单状态不能取消订单！');
         }
 
-        
+        if($this->getSettingService()->get("payment.close_trade_enabled", 0) == 1){
+            $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
+        }
 
         $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
 
@@ -482,35 +483,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->searchOrderCount($conditions);
     }
 
-    private function getPaymentOptions($payment)
-    {
-        $settings = $this->getSettingService()->get('payment');
-
-        if (empty($settings)) {
-            throw new \RuntimeException('支付参数尚未配置，请先配置。');
-        }
-
-        if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
-        }
-
-        if (empty($settings[$payment. '_enabled'])) {
-            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
-        }
-
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
-        }
-
-        $options = array(
-            'key' => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
-        );
-
-        return $options;
-    }
-    
     private function _prepareSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);

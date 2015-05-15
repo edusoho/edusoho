@@ -6,18 +6,16 @@ use Topxia\Service\PayCenter\PayCenterService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Topxia\Component\Payment\Payment;
 
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
-	public function closeTrade($sn)
+	public function closeTrade($order)
 	{
-		$result = array();
-        if($this->getSettingService()->get("payment.close_trade_enabled", 0) == 1){
-            $options = $this->getPaymentOptions($order['payment']);
-            $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
-            $closeTradeRequest->setParams($order);
-            $result = $closeTradeRequest->closeTrade();
-        }
+        $options = $this->getPaymentOptions($order['payment']);
+        $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
+        $closeTradeRequest->setParams($order);
+        return $closeTradeRequest->closeTrade();
 	}
 
 	public function pay($payData)
@@ -94,6 +92,35 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         
         return array(false, array());
 	}
+
+	private function getPaymentOptions($payment)
+    {
+        $settings = $this->getSettingService()->get('payment');
+
+        if (empty($settings)) {
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings['enabled'])) {
+            throw new \RuntimeException("支付模块未开启，请先开启。");
+        }
+
+        if (empty($settings[$payment. '_enabled'])) {
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+
+        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+        }
+
+        $options = array(
+            'key' => $settings["{$payment}_key"],
+            'secret' => $settings["{$payment}_secret"],
+            'type' => $settings["{$payment}_type"]
+        );
+
+        return $options;
+    }
 
 	private function useCoupon($order){
 		$couponApp = $this->getAppService()->findInstallApp("Coupon");
