@@ -10,6 +10,9 @@ interface CourseProcessor
 	public function getLearnedCourse();
 	public function getFavoriteCoruse();
 
+	public function getFavoriteLiveCoruse();
+	public function getFavoriteNormalCoruse();
+
 	/**
 	* tagId    	标签id 
 	* search 	搜索内容

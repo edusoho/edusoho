@@ -669,6 +669,41 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }, $posts);
     }
     
+    public function getFavoriteLiveCoruse()
+    {
+        $result = $this->getFavoriteCoruse();
+        $courses = $result["data"];
+
+        for ($i=0; $i < count($courses); $i++) {
+            $course = $courses[$i];
+            if ($course["type"] != "live") {
+                unset($courses[$i]);
+            } 
+        }
+
+        $result["data"] = $courses;
+        $result["total"] = count($courses);
+        return $result;
+    }
+
+    public function getFavoriteNormalCoruse()
+    {
+        $result = $this->getFavoriteCoruse();
+        $courses = $result["data"];
+
+        for ($i=0; $i < count($courses); $i++) {
+            $course = $courses[$i];
+            if ($course["type"] != "normal") {
+                unset($courses[$i]);
+            } 
+        }
+
+        $result["data"] = $courses;
+        $result["total"] = count($courses);
+
+        return $result;
+    }
+
     public function getFavoriteCoruse()
     {
         $user  = $this->controller->getUserByToken($this->request);
