@@ -938,6 +938,14 @@ class CourseController extends BaseController
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
 
+	public function listViewAction(Request $request, $courseId)
+	{
+
+		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
+
+		));
+	}
+
 	private function getClassroomMembersByCourseId($id) {
 
 		if ($this->isPluginInstalled("Classroom")) {
