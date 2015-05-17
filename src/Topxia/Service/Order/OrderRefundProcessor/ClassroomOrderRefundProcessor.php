@@ -29,6 +29,11 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
         );
 	}
 
+    public function removeStudent($targetId, $userId)
+    {
+        $this->getClassroomService()->removeStudent($targetId, $userId);
+    }
+
 	public function auditRefundOrder($id, $pass, $data)
 	{
 		$order = $this->getOrderService()->getOrder($id);

@@ -34,9 +34,14 @@ class OrderRefundController extends BaseController
             $data = $request->request->all();
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
-            $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
 
-            return $this->createJsonResponse($refund);
+            if(isset($data["applyRefund"]) && $data["applyRefund"] ){
+                $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+            } else {
+                $processor->removeStudent($order['targetId'], $user['id']);
+            }
+
+            return $this->createJsonResponse(true);
         }
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
