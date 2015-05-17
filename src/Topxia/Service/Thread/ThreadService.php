@@ -111,4 +111,6 @@ interface ThreadService
     */
 
     public function setUserBadgeTitle($thread, $users);
+
+    public function findTeacherIds($thread);
 }

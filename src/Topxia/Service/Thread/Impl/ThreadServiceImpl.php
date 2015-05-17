@@ -562,6 +562,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $users;
     }
 
+    public function findTeacherIds($thread)
+    {
+        $namespace = ucfirst($thread['targetType']);
+        $teachers = $this->createService("{$namespace}:{$namespace}.{$namespace}Service")->findClassroomMembersByRole($thread['targetId'], 'teacher', 0, PHP_INT_MAX);
+
+        return ArrayToolkit::column($teachers, 'userId');
+    }
+
     public function findMembersCountByThreadId($threadId)
     {
         return $this->getThreadMemberDao()->findMembersCountByThreadId($threadId);
