@@ -24,6 +24,26 @@ class AnnouncementController extends BaseController
 		));
 	}
 
+	public function listAction($id, $targetType, $targetId){
+		$conditions = array(
+			'targetType' => $targetType,
+			'targetId' => $targetId
+		);
+
+		$processor = $this->getAnnouncementProcessor($targetType);
+		$canManage = $processor->checkManage($targetId);
+
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
+
+		return $this->render('TopxiaWebBundle:Announcement:announcement-list-modal.html.twig',array(
+			'announcements' => $announcements,
+			'currentId'=> $id,
+			'targetType' => $targetType,
+			'targetId' => $targetId,
+			'canManage' => $canManage
+		));
+	}
+
 	public function showAllAction(Request $request, $targetType, $targetId)
 	{
 		$conditions = array(
@@ -117,7 +137,7 @@ class AnnouncementController extends BaseController
 		$canManage = $processor->checkManage($targetObject['id']);
 		$canTake = $processor->checkTake($targetObject['id']);
 
-		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 1);
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-block.html.twig',array(
 			'targetObject' => $targetObject,

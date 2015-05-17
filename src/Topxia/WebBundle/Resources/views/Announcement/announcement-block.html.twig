@@ -1,30 +1,26 @@
-{% do load_script('announcement/announcement') %}
+{% if not announcements and canManage %}
+    <div class="alert alert-info" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <i class="es-icon es-icon-info"></i>
+      当前课程没有任何公告，
+      <a class="underline" href="#modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}" data-toggle="modal">点击添加</a>
+    </div>
 
-    {% if canManage %}
-      <div class="pull-right">
-        <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}" class="btn btn-link btn-xs">
-          <i class="md md-add"></i>添加公告
-        </a>
+  {% elseif announcements %}
+    {% for announcement in announcements %}
+      <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button> 
+        <i class="es-icon es-icon-notifications"></i>
+        <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_list', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
       </div>
-    {% endif %}
+    {% endfor %}
+  {% endif %}
 
-        <ul class="media-list announcement-list">
-            {% for announcement in announcements %}
-                <li>
-                <i class="es-icon es-icon-notifications"></i>
-                      <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetId:targetObject.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
 
-                      {% if canManage %}
-                          <a class="text-muted text-sm mrm action" href="javascript:;" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetObject.id}) }}">
-                            <span class="glyphicon glyphicon-pencil"></span> 修改</a>
-                          <a class="text-muted text-sm action" href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}">
-                            <span class="glyphicon glyphicon-trash"></span> 删除</a>
-                      {% endif %}
-
-                </li>
-            {% else %}
-                <div class="empty">暂无公告</div>
-            {% endfor %}
-        </ul>
+  
 
 
