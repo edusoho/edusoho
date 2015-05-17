@@ -10,7 +10,7 @@ class CancelOrderJob implements Job
     {
     	$conditions = array(
     		"status" => "created",
-    		"createdTime_LT" => time()-48*60*60
+    		"createdTime_LT" => time()-47*60*60
     	);
 
         $orders = $this->getOrderService()->searchOrders($conditions, $sort = 'latest', 0, 10);
