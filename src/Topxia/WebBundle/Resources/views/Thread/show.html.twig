@@ -8,107 +8,17 @@
   <div class="class-detail-content">
     <div class="topic-detail">
 
-      {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-title-bar.html.twig' %}
+    {% include 'TopxiaWebBundle:Thread/Part:thread-header.html.twig' %}
 
-      {% include 'TopxiaWebBundle:Thread/Widget:thread-' ~ thread.type ~ '-body.html.twig' %}
+    {% include 'TopxiaWebBundle:Thread/Part:thread-action.html.twig' %}
 
+    {% if teacherPosts|default(null) %}  
+      {% include 'TopxiaWebBundle:Thread/Part:teacher-post.html.twig' %}
+    {% endif %}
 
-    <div class="topic-action">
-        {% if service.canAccess('thread.update', thread) %}
-          <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><i class="es-icon es-icon-edit"></i> 编辑</a>
-        {% endif %}
-        {% if service.canAccess('thread.delete', thread) %}
-          <a href="javascript:;"data-url="{{ path('thread_delete', {threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？">删除</a>
-        {% endif %}
+    {% include 'TopxiaWebBundle:Thread/Part:all-post.html.twig' %}
+    
+    {% include 'TopxiaWebBundle:Thread/Part:post-form.html.twig' %}
 
-        {% if service.canAccess('thread.sticky', thread) %}
-          {% if thread.sticky %}
-            <a href="javascript:" data-url="{{ path('thread_cancel_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"> 取消置顶</a>
-          {% else %}
-            <a href="javascript:"  data-url="{{ path('thread_set_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？">置顶</a>
-          {% endif %}
-        {% endif %}
-
-        {% if service.canAccess('thread.sticky', thread) %}
-          {% if thread.nice %}
-            <a href="javascript:" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？">取消加精</a>
-          {% else %}
-            <a href="javascript:" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><i class="es-icon es-icon-thumbup"></i>加精</a>
-          {% endif %}
-        {% endif %}
-
-        {% if thread.type == 'event' %}
-          {% if service.canAccess('thread.update', thread) %}
-            <a href="{{ path('thread_export_members', {threadId:thread.id}) }}" target="_balnk"><i class="es-icon es-icon-fileupdate"></i> 导出成员</a>
-          {% endif %}
-        {% endif %}
-    </div>
-
-    <div class="top-reply">
-      <div class="page-header">教师回复<span class="badge">4</span></div>
-      <ul class="comment-list">
-        <li class="media media-comment">
-          <div class="media-left">
-            <a href="">
-              <img src="img-temp/avatar_1.jpg" alt="">
-            </a>
-          </div>
-          <div class="media-body">
-            <div class="title"><a href="">老大</a>·<span class="date">10小时前</span></div>
-            <p>很不错的文章</p>
-            <div class="comment-sns">
-              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="点赞"><i class="es-icon es-icon-thumbup"></i>10</a>
-              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="回复"><i class="es-icon es-icon-reply"></i></a>
-            </div>
-          </div>
-        </li>
-        <li class="media media-comment">
-          <div class="media-left">
-            <a href="">
-              <img src="img-temp/avatar_1.jpg" alt="">
-            </a>
-          </div>
-          <div class="media-body">
-            <div class="title"><a href="">老大</a>·<span class="date">10小时前</span></div>
-            <p>很不错的文章</p>
-            <div class="comment-sns">
-              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="点赞"><i class="es-icon es-icon-thumbup"></i>10</a>
-              <a href="" data-toggle="tooltip" data-placement="top" title="" data-original-title="回复"><i class="es-icon es-icon-reply"></i></a>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-
-  <div class="top-reply">
-    <div class="page-header">所有回复<span class="badge">{{ thread.postNum }}</span></div>
-    <div class="panel-body">
-      <ul class="comment-list">
-        {% for post in posts %}
-          {% set author = users[post.userId] %}
-          {% include 'TopxiaWebBundle:Thread:post-item.html.twig' %}
-        {% else %}
-          <li class="empty">一个回复都没有！</li>
-        {% endfor %}
-      </ul>
-
-      <nav class="text-center">
-        <ul class="pagination">
-      {{ web_macro.paginator(paginator) }}
-        </ul>
-      </nav>
-
-    </div>
   </div>
-
-
-  <div class="panel panel-default">
-    <div class="panel-heading">发表回复</div>
-    <div class="panel-body">
-      {{ render(controller('TopxiaWebBundle:Thread:post', {request:app.request, threadId:thread.id})) }}
-    </div>
-  </div>
-
-</div>
 </div>
