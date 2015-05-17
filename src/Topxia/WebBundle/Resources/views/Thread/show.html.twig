@@ -13,7 +13,7 @@
     {% include 'TopxiaWebBundle:Thread/Part:thread-action.html.twig' %}
 
     {% if teacherPosts|default(null) %}  
-      {% include 'TopxiaWebBundle:Thread/Part:teacher-post.html.twig' %}
+      {% include 'TopxiaWebBundle:Thread/Part:teacher-post.html.twig' with {posts:teacherPosts} %}
     {% endif %}
 
     {% include 'TopxiaWebBundle:Thread/Part:all-post.html.twig' %}

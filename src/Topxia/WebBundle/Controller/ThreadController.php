@@ -49,6 +49,20 @@ class ThreadController extends BaseController
             'parentId' => 0,
         );
 
+        $teacherPosts = array();
+        if ($thread['type'] == 'question') {
+            $teacherIds = $this->getThreadService()->findTeacherIds($thread);
+            $conditions['userIds'] = $teacherIds;
+            $teacherPosts = $this->getThreadService()->searchPosts(
+                $conditions,
+                array('createdTime', 'asc'),
+                0,
+                PHP_INT_MAX
+            );
+            unset($conditions['userIds']);
+            $conditions['notUserIds'] = $teacherIds;
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchPostsCount($conditions),
@@ -62,11 +76,9 @@ class ThreadController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column(array_merge($posts, $teacherPosts), 'userId'));
         $users = $this->getThreadService()->setUserBadgeTitle($thread, $users);
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
-
-        list($posts, $teacherPosts) = $this->_extractPosts($posts, $thread);
 
         return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
             'target' => $target,
@@ -311,11 +323,6 @@ class ThreadController extends BaseController
             'currentThread' => $thread,
             'threads' => $threads,
         ));
-    }
-
-    private function _extractPosts($posts, $thread)
-    {
-        return array($posts, null);
     }
 
     protected function getThreadService()
