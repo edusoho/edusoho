@@ -3,10 +3,20 @@
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ExtensionManager;
 
 class AppKernel extends Kernel
 {
     protected $plugins = array();
+
+    protected $extensionManger;
+
+    public function __construct($environment, $debug)
+    {
+        parent::__construct($environment, $debug);
+        date_default_timezone_set('Asia/Shanghai');
+        $this->extensionManger = ExtensionManager::init($this);
+    }
 
     public function registerBundles ()
     {
@@ -63,12 +73,6 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
-    }
-
-    public function init ()
-    {
-        date_default_timezone_set('Asia/Shanghai');
-        parent::init();
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

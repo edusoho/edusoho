@@ -2,8 +2,14 @@
 
 namespace Topxia\WebBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Topxia\Common\ExtensionalBundle;
 
-class TopxiaWebBundle extends Bundle
+class TopxiaWebBundle extends ExtensionalBundle
 {
+
+    public function getEnabledExtensions()
+    {
+        return array('DataTag', 'StatusTemplate', 'DataDict');
+    }
+
 }
