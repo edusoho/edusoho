@@ -857,6 +857,10 @@ course_manage_publish:
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
     methods: [POST]
 
+announcement_list:
+    pattern: /announcement/{id}/{targetType}/{targetId}/list
+    defaults: {_controller:TopxiaWebBundle:Announcement:list }
+
 announcement_show_all:
     pattern:  /announcement/{targetType}/{targetId}/all
     defaults: { _controller: TopxiaWebBundle:Announcement:showAll }
