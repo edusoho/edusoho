@@ -10,27 +10,11 @@
 </div> -->
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-  <div class="media topic-header">
-    <div class="media-left media-middle">
-    <a href="{{ url('user_show', {id:author.id}) }}"><img class="img-circle" src="{{ default_path('avatar', author.smallAvatar, '') }}"></a>
-    </div>
-    <div class="media-body">
-      <div class="title">
-        <a href="">{{ thread.title }}</a>
-      </div>
-      <div class="metas">
-        <a href="">{{  web_macro.user_link(author, 'link-muted') }}</a>发起了活动 ·<span>{{ thread.createdTime|smart_time }}</span>
-      </div> 
-    </div>
-    <div class="media-data">
-      <span>{{ thread.postNum }}<br>回复</span>
-      <span>{{ thread.hitNum}}<br>浏览</span>
-    </div>
-  </div>
+  {% include 'TopxiaWebBundle:Thread/Part:common-header.html.twig' %}
 
   <div class="media topic-body">
     <div class="media-left">
-      <a href=""><img src="img-temp/course_1.jpg" alt=""></a>
+      <a href=""><img src="https://ss3.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/super/whfpf%3D425%2C260%2C50/sign=f958bc440f46f21fc9610d1390195f52/f636afc379310a559d8b2c4bb24543a9832610e5.jpg" alt=""></a>
     </div>
     <div class="media-body">
       <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('dateType',thread.startTime|date('N')) ~ thread.startTime|date(' H:i') }}</p>

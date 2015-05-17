@@ -66,11 +66,14 @@ class ThreadController extends BaseController
         $users = $this->getThreadService()->setUserBadgeTitle($thread, $users);
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
 
+        list($posts, $teacherPosts) = $this->_extractPosts($posts, $thread);
+
         return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
             'target' => $target,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
+            'teacherPosts' => $teacherPosts,
             'users' => $users,
             'paginator' => $paginator,
             'service' => $this->getThreadService(),
@@ -308,6 +311,11 @@ class ThreadController extends BaseController
             'currentThread' => $thread,
             'threads' => $threads,
         ));
+    }
+
+    private function _extractPosts($posts, $thread)
+    {
+        return array($posts, null);
     }
 
     protected function getThreadService()
