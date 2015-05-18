@@ -161,22 +161,26 @@
               <!-- <a href="javascript:;" class="more">...</a> -->
             </div>
             <div class="panel-body">
-              <div class="media">
-                <div class="media-left">
-                  <a href="javascript:;">
-                    <img class="img-circle" src="assets/dev/img-temp/user_avatar.png">
-                  </a>
-                </div>
-                <div class="media-body">
-                  <div class="title">
-                    <a href="">李小龙</a>
+              {% set statuses = data('LatestStatuses', {mode:'simple', count: 4}) %}
+
+              {% for status in statuses %}
+                <div class="media">
+                  <div class="media-left">
+                    {{ web_macro.user_avatar(status.user, '', 'img-circle') }}
                   </div>
-                  <div class="content">
-                    加入了课程<a href="javascript:;">《十分钟掌握HTML5基础》</a>课程
+                  <div class="media-body">
+                    <div class="title">
+                      {{ web_macro.user_link(status.user) }}
+                    </div>
+                    <div class="content">
+                      {{ status.message|raw }}
+                    </div>
+                    <span class="date">111小时前</span>
                   </div>
-                  <span class="date">111小时前</span>
                 </div>
-              </div>
+              {% endfor %}
+
+
               
 
             </div>

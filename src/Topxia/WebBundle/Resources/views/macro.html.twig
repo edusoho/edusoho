@@ -1,7 +1,13 @@
-{%- macro user_avatar(user, class) -%}
-  <a class="user-link user-avatar-link {{ class }} js-user-card" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}">
-    <img src="{{ default_path('avatar', user.smallAvatar, '') }}">
+{%- macro user_avatar(user, class, imgClass, card = true) -%}
+  {% if user %}
+  <a class="user-link user-avatar-link {{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+    <img class="{{ imgClass }}" src="{{ filepath(user.smallAvatar, 'user.png') }}">
   </a>
+  {% else %}
+    <a class="user-link user-avatar-link {{ class }}" href="javascript:;">
+      <img class="{{ imgClass }}"  src="{{ filepath('', 'user.png') }}">
+    </a>
+  {% endif %}
 {%- endmacro -%}
 
 {%- macro classroom_user_avatar(user, class) -%}
@@ -10,13 +16,13 @@
   </a>
 {%- endmacro -%}
 
-{% macro user_link(user, class) %}
+{%- macro user_link(user, class, card = true) -%}
   {% if user %}
-    <a {% if class %}class="{{ class }}"{% endif %} href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+    <a class="user-link {{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-user-id="{{ user.id }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}">{{ user.nickname }}</a>
   {% else %}
-    <span class="text-muted">用户已删除</span>
+    <a class="user-link {{ class }}" href="javascript:;"><del>用户不存在</del></a>
   {% endif %}
-{% endmacro %}
+{%- endmacro -%}
 
 {% macro flash_messages() %}
   {% for type, flashMessages in app.session.flashbag.all() %}
