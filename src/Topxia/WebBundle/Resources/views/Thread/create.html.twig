@@ -11,7 +11,7 @@
 
   <div class="form-group">
       <label for="title" class="col-sm-2 control-label">活动标题</label>
-    <div class="col-sm-10">
+    <div class="col-sm-7">
       <input type="type" id="title" class="form-control" placeholder="标题" ata-display="标题" name= "title" value="{{ thread.title|default('') }}">
       </div>
   </div>
@@ -34,6 +34,16 @@
         <div class="col-md-7 controls">
           <input type="text" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
           </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputTitle" class="col-sm-2 control-label">封面图片</label>
+        <div class="col-md-7 controls">
+          <input type="text" class="form-control" name="actvityPicture" value="{{ thread.actvityPicture|default('') }}">
+        </div>
+        <div class="col-sm-2">
+          <a class="btn btn-default btn-block" id="js-activity-uploader" data-upload-token="{{ upload_token('classroom', 'image') }}">浏览...</a>
+        </div>
       </div>
 
       <div class="form-group">
