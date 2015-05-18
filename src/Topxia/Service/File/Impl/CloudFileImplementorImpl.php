@@ -50,7 +50,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
             $uploadFile['convertParams'] = '';
-        } else if($fileInfo['mimeType']=="application/msword" || $fileInfo['mimeType']=="application/pdf" || $fileInfo['mimeType']=="application/vnd.openxmlformats-officedocument.wordprocessingml.document" ) {
+        } else if('document' == FileToolkit::getFileTypeByExtension($uploadFile['ext'])) {
 
             $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
             $uploadFile['convertStatus'] = 'none';

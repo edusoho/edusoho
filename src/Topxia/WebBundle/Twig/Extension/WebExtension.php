@@ -9,6 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
+use Topxia\Common\ExtensionManager;
 
 class WebExtension extends \Twig_Extension
 {
@@ -1002,12 +1003,18 @@ class WebExtension extends \Twig_Extension
 
     public function getDict($type)
     {
-        return DataDict::dict($type);
+        return ExtensionManager::instance()->getDataDict($type);
     }
 
     public function getDictText($type, $key)
     {
-        return DataDict::text($type, $key);
+        $dict = $this->getDict($type);
+
+        if (empty($dict) || !isset($dict[$key])) {
+            return '';
+        }
+
+        return $dict[$key];
     }
 
     public function getUploadMaxFilesize($formated = true)

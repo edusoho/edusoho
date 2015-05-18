@@ -38,6 +38,7 @@ define(function(require, exports, module) {
         },
 
         onClickPostMore: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             $btn.parents('.thread-subpost-moretext').addClass('hide');
             $btn.parents('.thread-post').find('.thread-subpost').removeClass('hide');
@@ -45,6 +46,7 @@ define(function(require, exports, module) {
         },
 
         onPostDelete: function(e) {
+            e.stopPropagation();
             var that = this;
             var $btn = $(e.currentTarget);
             if (!confirm('真的要删除该回复吗？')) {
@@ -64,6 +66,7 @@ define(function(require, exports, module) {
         },
 
         onPostUp: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             $.post($btn.data('url'), function(response) {
                 if (response.status == 'ok') {
@@ -78,6 +81,7 @@ define(function(require, exports, module) {
         },
 
         onConfirmBtn: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             if (!confirm($btn.data('confirmMessage'))) {
                 return ;
@@ -153,7 +157,6 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
-                        console.log(response);
                         $btn.button('reset');
                         $form.parents('.thread-subpost-container').find('.thread-subpost-list').append(response);
                         $form.find('textarea').val('');

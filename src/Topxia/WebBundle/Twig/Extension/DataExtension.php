@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ExtensionManager;
 
 class DataExtension extends \Twig_Extension
 {
@@ -19,14 +20,8 @@ class DataExtension extends \Twig_Extension
 
     public function getData($name, $arguments)
     {
-        $class = '\\Topxia\\DataTag\\' . $name . 'DataTag';
-
-        if (!class_exists($class)) {
-            throw new \RuntimeException("尚未定义'{$name}'数据标签");
-        }
-
-        $obj = new $class();
-        return $obj->getData($arguments);
+        $datatag = ExtensionManager::instance()->getDataTag($name);
+        return $datatag->getData($arguments);
     }
 
     public function getDatas($name, $conditions, $sort = null, $start = null, $limit = null)
