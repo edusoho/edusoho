@@ -675,7 +675,7 @@ define(function(require, exports, module) {
 
     var DurationStorage = {
         set: function(userId,mediaId,duration) {
-            var durationTmps = localStorage.getItem("durations");
+            var durationTmps = Store.get("durations");
             if(durationTmps){
                 durations = new Array();
                 var durationTmpArray = durationTmps.split(",");
@@ -694,10 +694,10 @@ define(function(require, exports, module) {
                 durations.shift();
             }
             durations.push(value);
-            localStorage["durations"] = durations;
+            Store.set("durations", durations);
         },
         get: function(userId,mediaId) {
-            var durationTmps = localStorage.getItem("durations");
+            var durationTmps = Store.get("durations");
             if(durationTmps){
                 var durationTmpArray = durationTmps.split(",");
                 for(var i = 0; i<durationTmpArray.length; i++){
@@ -712,7 +712,7 @@ define(function(require, exports, module) {
         },
         del: function(userId,mediaId) {
             var key = userId+"-"+mediaId;
-            var durationTmps = localStorage.getItem("durations");
+            var durationTmps = Store.get("durations");
             var durationTmpArray = durationTmps.split(",");
             for(var i = 0; i<durationTmpArray.length; i++){
                 var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
@@ -720,7 +720,7 @@ define(function(require, exports, module) {
                     durationTmpArray.splice(i,1);
                 }
             }
-            localStorage.setItem("durations", durationTmpArray);
+            Store.set("durations", durationTmpArray);
         }
     };
 
