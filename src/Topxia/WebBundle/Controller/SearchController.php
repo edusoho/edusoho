@@ -42,15 +42,13 @@ class SearchController extends BaseController
         $categoryId = $request->query->get('categoryIds');
         $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
 
-        if (!$keywords) {
-            goto response;
-        }
 
         $conditions = array(
             'status' => 'published',
             'title' => $keywords,
             'categoryId' => $categoryId
         );
+
         if ($coursesTypeChoices == 'vipCourses') {
             $conditions['vipLevelIds'] = $vipLevelIds;
         } else if ($coursesTypeChoices == 'liveCourses') {
@@ -59,9 +57,10 @@ class SearchController extends BaseController
             $conditions['price'] = '0.00';
         }
 
+        $count = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
+            $count
             , 10
         );
         $courses = $this->getCourseService()->searchCourses(
@@ -72,7 +71,6 @@ class SearchController extends BaseController
         );
 
 
-        response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
@@ -80,7 +78,8 @@ class SearchController extends BaseController
             'isShowVipSearch' => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
             'categoryIds' => $categoryIds,
-            'coursesTypeChoices' => $coursesTypeChoices
+            'coursesTypeChoices' => $coursesTypeChoices,
+            'count' => $count,
         ));
     }
 
