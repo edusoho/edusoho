@@ -18,6 +18,8 @@ class ExtensionManager
 
     protected $dataDict;
 
+    protected $dataTags;
+
     private static $_instance;
 
     private function __construct($kernel)
@@ -31,6 +33,7 @@ class ExtensionManager
         $this->booted = false;
         $this->statusTemplates = array();
         $this->dataDict = array();
+        $this->dataTags = array();
     }
 
     public static function init($kernel)
@@ -54,7 +57,6 @@ class ExtensionManager
 
     public function renderStatus($status, $mode)
     {
-        $this->boot();
         $this->loadStatusTemplates();
 
         if (!isset($this->statusTemplates[$status['type']])) {
@@ -69,7 +71,6 @@ class ExtensionManager
 
     public function getDataDict($type)
     {
-        $this->boot();
         $this->loadDataDict();
 
         if (empty($this->dataDict[$type])) {
@@ -77,6 +78,14 @@ class ExtensionManager
         }
 
         return $this->dataDict[$type];
+    }
+
+    public function getDataTag($name)
+    {
+        $this->loadDataTags();
+
+        
+
     }
 
     private function boot()
@@ -88,8 +97,20 @@ class ExtensionManager
         $this->getExtensionalBundles();
     }
 
+    private function loadDataTags()
+    {
+        $this->boot();
+
+
+
+    }
+
+
+
     private function loadDataDict()
     {
+        $this->boot();
+
         if (!empty($this->dataDict)) {
             return $this->dataDict;
         }
@@ -108,6 +129,8 @@ class ExtensionManager
 
     private function loadStatusTemplates()
     {
+        $this->boot();
+
         if (!empty($this->statusTemplates)) {
             return $this->statusTemplates;
         }
