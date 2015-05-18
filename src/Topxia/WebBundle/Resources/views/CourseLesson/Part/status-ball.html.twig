@@ -1,0 +1,9 @@
+ {% if learnStatuses[item.id]|default(null) %}
+  {% if learnStatuses[item.id] == 'finished' %}
+    <i class="es-icon es-icon-doing color-p"></i>
+  {% else %}
+    <i class="es-icon es-icon-doing color-p"></i>
+  {% endif %}
+{% else %}
+  <i class="es-icon es-icon-undone"></i>
+{% endif %}

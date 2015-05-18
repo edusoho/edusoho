@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -45,11 +44,24 @@ class ThreadController extends BaseController
 
     public function showAction(Request $request, $target, $thread)
     {
-        
-        $conditions = array (
-            'threadId'=>$thread['id'],
-            'parentId'=>0
+        $conditions = array(
+            'threadId' => $thread['id'],
+            'parentId' => 0,
         );
+
+        $teacherPosts = array();
+        if ($thread['type'] == 'question') {
+            $teacherIds = $this->getThreadService()->findTeacherIds($thread);
+            $conditions['userIds'] = $teacherIds;
+            $teacherPosts = $this->getThreadService()->searchPosts(
+                $conditions,
+                array('createdTime', 'asc'),
+                0,
+                PHP_INT_MAX
+            );
+            unset($conditions['userIds']);
+            $conditions['notUserIds'] = $teacherIds;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -57,15 +69,15 @@ class ThreadController extends BaseController
             20
         );
 
-        $posts=$this->getThreadService()->searchPosts(
+        $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime','asc'),
+            array('createdTime', 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
-
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column(array_merge($posts, $teacherPosts), 'userId'));
+        $users = $this->getThreadService()->setUserBadgeTitle($thread, $users);
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
 
         return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
@@ -73,6 +85,7 @@ class ThreadController extends BaseController
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
+            'teacherPosts' => $teacherPosts,
             'users' => $users,
             'paginator' => $paginator,
             'service' => $this->getThreadService(),
@@ -105,16 +118,15 @@ class ThreadController extends BaseController
         ));
     }
 
-
-    public function createAction(Request $request, $target, $thread = null)
+    public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $data['type'] = 'discussion';
             $data['targetType'] = $target['type'];
             $data['targetId'] = $target['id'];
+
             $thread = $this->getThreadService()->createThread($data);
-            return $this->redirect($this->generateUrl( "{$target['type']}_thread_show", array(
+            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
                "{$target['type']}Id" => $thread['targetId'],
                'threadId' => $thread['id'],
             )));
@@ -122,17 +134,18 @@ class ThreadController extends BaseController
 
         return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
             'target' => $target,
-            'thread' => $thread
+            'thread' => $thread,
+            'type' => $type,
         ));
     }
 
-    public function updateAction(Request $request,  $target, $thread)
+    public function updateAction(Request $request, $target, $thread)
     {
         if ($request->getMethod() == 'POST') {
             $user = $this->getCurrentUser();
             $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
-            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId'=>$thread['id']), true);
+            $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
+            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId' => $thread['id']), true);
             if ($thread['userId'] != $user['id']) {
                 $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
             }
@@ -155,7 +168,7 @@ class ThreadController extends BaseController
         $this->getThreadService()->deleteThread($threadId);
 
         $user = $this->getCurrentUser();
-        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
+        $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
         if ($thread['userId'] != $user['id']) {
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<strong>“{$thread['title']}”</strong>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除");
         }
@@ -198,24 +211,24 @@ class ThreadController extends BaseController
     public function postAction(Request $request, $threadId)
     {
         $user = $this->getCurrentUser();
+        $thread = $this->getThreadService()->getThread($threadId);
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $fields['threadId'] = $threadId;
 
             $post = $this->getThreadService()->createPost($fields);
-
-            return $this->render('TopxiaWebBundle:Thread:post-item.html.twig' , array(
+            $authors = $this->getThreadService()->setUserBadgeTitle($thread, array($user['id'] => $user->toArray()));
+            return $this->render('TopxiaWebBundle:Thread:post-item.html.twig', array(
                 'post' => $post,
-                'author' => $this->getCurrentUser(),
+                'author' => $authors[$user['id']],
                 'service' => $this->getThreadService(),
             ));
         }
 
         return $this->render("TopxiaWebBundle:Thread:post.html.twig", array(
-            'thread' => $this->getThreadService()->getThread($threadId),
+            'thread' => $thread,
             'service' => $this->getThreadService(),
-       ));
-
+        ));
     }
 
     public function postReplyAction(Request $request, $threadId, $postId)
@@ -224,9 +237,10 @@ class ThreadController extends BaseController
         $fields['content'] = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
         $fields['parentId'] = $postId;
+
         $post = $this->getThreadService()->createPost($fields);
 
-        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig',array(
+        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(
             'post' => $post,
             'author' => $this->getCurrentUser(),
             'service' => $this->getThreadService(),
@@ -236,12 +250,14 @@ class ThreadController extends BaseController
     public function postDeleteAction(Request $request, $threadId, $postId)
     {
         $this->getThreadService()->deletePost($postId);
+
         return $this->createJsonResponse(true);
     }
 
     public function postUpAction(Request $request, $threadId, $postId)
     {
         $result = $this->getThreadService()->voteUpPost($postId);
+
         return $this->createJsonResponse($result);
     }
 
@@ -285,13 +301,14 @@ class ThreadController extends BaseController
             "{$thread['targetType']}Id" => $thread['targetId'],
             'threadId' => $thread['id'],
             'page' => $page,
-        )) . "#post-{$post['id']}");
+        ))."#post-{$post['id']}");
     }
 
     public function userOtherThreadsBlockAction(Request $request, $thread, $userId)
     {
         $threads = $this->getThreadService()->findThreadsByTargetAndUserId(array('type' => $thread['targetType'], 'id' => $thread['targetId']), $userId, 0, 11);
-        return $this->render('TopxiaWebBundle:Thread:user-threads-block.html.twig' , array(
+
+        return $this->render('TopxiaWebBundle:Thread:user-threads-block.html.twig', array(
             'currentThread' => $thread,
             'threads' => $threads,
         ));
@@ -301,7 +318,8 @@ class ThreadController extends BaseController
     {
         $target = array('type' => $thread['targetType'], 'id' => $thread['targetId']);
         $threads = $this->getThreadService()->findZeroPostThreadsByTarget($target, 0, 11);
-        return $this->render('TopxiaWebBundle:Thread:zero-post-threads-block.html.twig' , array(
+
+        return $this->render('TopxiaWebBundle:Thread:zero-post-threads-block.html.twig', array(
             'currentThread' => $thread,
             'threads' => $threads,
         ));
@@ -325,9 +343,9 @@ class ThreadController extends BaseController
             default:
                 break;
         }
+
         return $conditions;
     }
-
 
     /**
      * This function is from Cakephp TextHelper Class
@@ -340,10 +358,11 @@ class ThreadController extends BaseController
             $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
             $text = '';
             foreach ($texts as $txt) {
-                $text .= '<p>' . nl2br(trim($txt, "\n")) . "</p>\n";
+                $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
             }
             $text = preg_replace('|<p>\s*</p>|', '', $text);
         }
+
         return $text;
     }
 
@@ -351,5 +370,4 @@ class ThreadController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
-
 }

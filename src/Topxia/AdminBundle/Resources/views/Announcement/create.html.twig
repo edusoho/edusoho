@@ -12,7 +12,7 @@
       <label for="title">公告内容</label>
     </div>
     <div class="col-md-8 controls">
-      <input type="text" id="title"  name="title" class="form-control" value="{% if announcement|default(null) %}{{announcement.title}}{% endif %}">
+      <input type="text" id="title"  name="content" class="form-control" value="{% if announcement|default(null) %}{{announcement.content}}{% endif %}">
     </div>
   </div>
 

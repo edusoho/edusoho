@@ -130,9 +130,13 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 	    $builder = $this->createDynamicQueryBuilder($conditions)
 	        ->from($this->table,$this->table)
 	        ->andWhere('userId = :userId')
+            ->andWhere('userId NOT IN (:notUserIds)')
+            ->andWhere('userId IN (:userIds)')
 	        ->andWhere('id < :id')
 	        ->andWhere('parentId = :parentId')
-	        ->andWhere('threadId = :threadId');
+	        ->andWhere('threadId = :threadId')
+                    ->andWhere('targetId = :targetId')
+                    ->andWhere('targetType = :targetType');
 	    return $builder;
 	}
 

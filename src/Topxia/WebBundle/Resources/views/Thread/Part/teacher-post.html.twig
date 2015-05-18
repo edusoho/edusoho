@@ -1,0 +1,11 @@
+<div class="top-reply">
+  <div class="page-header">教师答案<span class="badge">{{ posts|length }}</span></div>
+  <ul class="comment-list">
+   {% for post in posts %}
+     {% set author = users[post.userId] %}
+     {% include 'TopxiaWebBundle:Thread/Part:post-item.html.twig' %}
+   {% else %}
+     <li class="empty">一个回复都没有！</li>
+   {% endfor %}
+  </ul>
+</div>

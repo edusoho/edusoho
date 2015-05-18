@@ -1,0 +1,26 @@
+{% if not announcements and canManage %}
+    <div class="alert alert-info" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+      <i class="es-icon es-icon-info"></i>
+      当前课程没有任何公告，
+      <a class="underline" href="#modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}" data-toggle="modal">点击添加</a>
+    </div>
+
+  {% elseif announcements %}
+    {% for announcement in announcements %}
+      <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button> 
+        <i class="es-icon es-icon-notifications"></i>
+        <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_list', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|plain_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+
+  
+
+

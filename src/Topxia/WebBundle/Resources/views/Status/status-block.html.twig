@@ -1,0 +1,96 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<div class="panel panel-default student-dynamic">
+
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>学员动态</h3>
+  </div>
+
+  <div class="panel-body">
+  {% if learns %}
+      {% for key,learn in learns %}
+      {% if loop.index < 7 %}
+        <div class="media media-number-o">
+        {% if learn.type == "finished_testpaper" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
+         </div>
+          
+
+        {% elseif learn.type == "finished_homework" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
+        </div>
+
+
+        {% elseif learn.type == "finished_exercise" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
+        </div>
+
+        {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的学员
+         </div>
+
+        {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          成为了班级 {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+         </div>
+        
+        {% elseif learn.type == "learned_lesson" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+           完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
+        </div>
+       
+        {% elseif learn.type == "favorite_course" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          收藏了课程 {{learn.properties.course.title|plain_text(15)}}
+        </div>
+
+        {% elseif learn.type == "start_learn_lesson" %}
+        <div class="media-left">
+          <span class="num">{{key+1}}</span>
+        </div>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
+          开始学习课时 {{ learn.properties.lesson.title|plain_text(15) }}
+        </div>
+        
+        {% endif %}
+     </div>
+       {% endif %}
+      {% endfor %}
+    {% else %}
+     <div class="empty">还没有动态</div>
+    {% endif %}
+  </div>
+
+</div>

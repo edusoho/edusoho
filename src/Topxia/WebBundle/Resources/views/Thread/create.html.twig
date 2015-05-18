@@ -1,37 +1,71 @@
 {% set thread = thread|default(null) %}
 
-<form id="thread-form" class="form-vertical" method="post" 
+
+<form id="thread-form" class="form-horizontal" method="post" 
   {% if thread %}
     action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
   {% else %}
-    action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id}) }}"
+    action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id, type:type}) }}"
     {% endif %}
   >
 
   <div class="form-group">
-    <div class="controls">
-      <input class="form-control" type="text" placeholder="标题" data-display="标题" name= "title" value="{{ thread.title|default('') }}">
-    </div>
+      <label for="title" class="col-sm-2 control-label">活动标题</label>
+    <div class="col-sm-10">
+      <input type="type" id="title" class="form-control" placeholder="标题" ata-display="标题" name= "title" value="{{ thread.title|default('') }}">
+      </div>
   </div>
+  
+  {% if type == 'event' %}
+    <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="startTime">活动时间</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="startTime" class="form-control" placeholder="活动开始时间" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d H:i') }}{% endif %}">
+          </div>
+      </div>
 
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="location">活动地点</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="location" class="form-control" placeholder="活动地点" name= "location" value="{{ thread.location|default('') }}">
+          </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="maxUsers">最大人数</label>
+        </div>
+        <div class="col-md-7 controls">
+          <input type="text" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
+          </div>
+      </div>
+    </div>
+  {% endif %}
+ 
   <div class="form-group">
-    <div class="controls">
+    <div class="controls col-md-12">
       <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content"
         data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
     </div>
   </div>
 
-  <div class="form-group clearfix">
-    <div class="controls pull-right">
+  <div class="clearfix">
       {% if thread %}
-        <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link">取消</a>
-        <button type="submit" class="btn btn-primary btn-fat">保存</button>
+        <button type="submit" class="btn btn-primary pull-right">保存</button>
+        <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link pull-right color-gray">取消</a>
+
       {% else %}
-        <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link">取消</a>
-        <button type="submit" class="btn btn-primary">发表</button>
+        <button type="submit" class="btn btn-primary pull-right">发表</button>
+        <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right color-gray">取消</a>
+
       {% endif  %}
-    </div>
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name="type" value="{{ type }}">
 </form>

@@ -1,0 +1,28 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      {% if course.discountId > 0 %}
+        {% if course.discount == 0 %}
+          <!-- 限免 -->
+          <span class="tag-discount free"></span>
+        {% else %}
+          <!-- 折扣 -->
+          <span class="tag-discount"></span>
+        {% endif %}
+      {% endif %}
+      <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a href="{{ path('course_show', {id:course.id}) }}">
+        {{ course.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
+      {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+    </div>
+  </div>
+</div>

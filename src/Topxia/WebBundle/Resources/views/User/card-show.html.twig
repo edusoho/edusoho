@@ -1,0 +1,23 @@
+<div class="panel">
+  <div class="panel-body">
+    <div class="media">
+      <div class="pull-left">
+        <a href="">
+          <img src="{{ default_path('avatar', user.smallAvatar, '') }}" alt="" style="width:48px;height:48px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <p class="clearfix">
+          {{ user.nickname }}
+          <span class="pull-right">{{ user.title }}</span>
+        </p>
+        <p>在学{{ user.learningNum }}｜关注{{ user.followingNum }}｜粉丝{{ user.followerNum }}</p>
+      </div>
+    </div>
+    <p>{{ profile.signature }}</p>
+    <p class="text-right">
+      <a href="" class="btn btn-default">私信</a>   
+      <a href="" class="btn btn-default">＋关注</a>
+    </p>
+  </div>
+</div>

@@ -202,6 +202,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('smallPicture = :smallPicture')
             ->andWhere('categoryId IN ( :categoryIds )')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('parentId = :parentId')
+            ->andWhere('parentId IN ( :parentIds )')
+            ->andWhere('id NOT IN ( :excludeIds )')
             ->andWhere('id NOT IN ( :courseIds )');
 
         return $builder;

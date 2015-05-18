@@ -60,7 +60,7 @@ class MyTeachingController extends BaseController
         
         foreach ($classrooms as $key => $classroom) {
             
-            $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+            $courses=$this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
             $courseIds=ArrayToolkit::column($courses,'courseId');
 
             $coursesCount=count($courses);

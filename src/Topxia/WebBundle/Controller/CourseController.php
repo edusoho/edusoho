@@ -819,7 +819,8 @@ class CourseController extends BaseController
 
 
 		$conditions = array(
-			'status' => 'published'
+			'status' => 'published',
+			'parentId' => 0,
 		);
 
 		$paginator = new Paginator(
@@ -845,7 +846,7 @@ class CourseController extends BaseController
 
 		$users = $this->getUserService()->findUsersByIds($userIds);
 
-		return $this->render("TopxiaWebBundle:Course:course-select.html.twig", array(
+		return $this->render("TopxiaWebBundle:Course:course-pick.html.twig", array(
 			'users'=>$users,
 			'url'=>$url,
 			'courses'=>$courses,
@@ -935,6 +936,14 @@ class CourseController extends BaseController
 		$this->getCourseService()->removeStudent($courseId, $user['id']);
 
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
+	}
+
+	public function listViewAction(Request $request, $courseId)
+	{
+
+		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
+
+		));
 	}
 
 	private function getClassroomMembersByCourseId($id) {

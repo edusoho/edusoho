@@ -330,19 +330,6 @@ interface CourseService
 
 	public function hasFavoritedCourse($courseId);
 
-	/*announcement*/
-	public function createAnnouncement($courseId, $fields);
-
-	public function getCourseAnnouncement($courseId, $id);
-
-	public function deleteCourseAnnouncement($courseId, $id);
-
-	public function findAnnouncements($courseId, $start, $limit);
-
-	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
-
-	public function updateAnnouncement($courseId, $id, $fields);
-
 	public function generateLessonReplay($courseId,$lessonId);
 
 	public function entryReplay($lessonId, $courseLessonReplayId);

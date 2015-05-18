@@ -540,6 +540,19 @@ class CourseLessonController extends BaseController
         return false;
     }
 
+    public function listAction(Request $request, $courseId)
+    {
+        $user = $this->getCurrentUser();
+        $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+        $items = $this->getCourseService()->getCourseItems($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
+            'items' => $items,
+            'course' => $course,
+            'learnStatuses' => $learnStatuses
+        ));
+    }
+
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

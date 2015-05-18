@@ -696,8 +696,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'noteNumGreaterThan' => 0
         );
         
-        $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, 'updated', 0, 1);
-        $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, 'created', 0, 1);
+        $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, array('updatedTime' => 'DESC'), 0, 1);
+        $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, array('createdTime' => 'DESC'), 0, 1);
 
         $lastestNote     = array();
         if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) > 0){

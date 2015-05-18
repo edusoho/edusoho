@@ -359,6 +359,9 @@ course_lesson_watch_num:
     defaults: { _controller: TopxiaWebBundle:CourseLesson:watchNum }
     methods: [POST]
 
+course_lesson_list:
+    pattern:  /course/{courseId}/lessons/list
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:list }
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list
@@ -854,25 +857,29 @@ course_manage_publish:
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
     methods: [POST]
 
-course_announcement_show_all:
-    pattern:  /course/{courseId}/announcement/all
-    defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:showAll }
+announcement_list:
+    pattern: /announcement/{id}/{targetType}/{targetId}/list
+    defaults: {_controller:TopxiaWebBundle:Announcement:list }
 
-course_announcement_add:
-    pattern:  /course/{courseId}/announcement/create
-    defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:create }
+announcement_show_all:
+    pattern:  /announcement/{targetType}/{targetId}/all
+    defaults: { _controller: TopxiaWebBundle:Announcement:showAll }
 
-course_announcement_show:
-    pattern:  /course/{courseId}/announcement/{id}
-    defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:show }
+announcement_add:
+    pattern:  /announcement/{targetType}/{targetId}/create
+    defaults: { _controller: TopxiaWebBundle:Announcement:create }
 
-course_announcement_update:
-    pattern:  /course/{courseId}/announcement/{id}/update
-    defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:update }
+announcement_show:
+    pattern:  /announcement/{id}/{targetId}/show
+    defaults: { _controller: TopxiaWebBundle:Announcement:show }
 
-course_announcement_delete:
-    pattern:  /course/{courseId}/announcement/{id}/delete
-    defaults: { _controller: TopxiaWebBundle:CourseAnnouncement:delete }
+announcement_update:
+    pattern:  /announcement/{id}/{targetType}/{targetId}/update
+    defaults: { _controller: TopxiaWebBundle:Announcement:update }
+
+announcement_delete:
+    pattern:  /announcement/{id}/{targetType}/{targetId}/delete
+    defaults: { _controller: TopxiaWebBundle:Announcement:delete }
     methods: [POST]
 
 testpaper_user_result_json:
@@ -1194,6 +1201,10 @@ user_teaching_classrooms:
 user_learning_classrooms: 
     pattern:  /user/{id}/learning/classrooms
     defaults: { _controller: TopxiaWebBundle:User:learning }
+
+user_card_show:
+    pattern:  /user/{userId}/card/show
+    defaults: { _controller: TopxiaWebBundle:User:cardShow }
 
 message_create:
     pattern: /message/create/{toId}
@@ -1578,6 +1589,10 @@ thread_post_subposts:
     pattern:  /thread/{threadId}/post/{postId}/subposts
     defaults: { _controller: TopxiaWebBundle:Thread:subposts }
 
+article_post_subposts:
+    pattern:  /article/{targetId}/post/{postId}/subposts
+    defaults: { _controller: TopxiaWebBundle:Article:subposts }
+
 thread_post_delete:
     pattern:  /thread/{threadId}/post/{postId}/delete
     defaults: { _controller: TopxiaWebBundle:Thread:postDelete }
@@ -1612,6 +1627,15 @@ thread_cancel_nice:
     pattern: /thread/{threadId}/cancel_nice
     defaults: { _controller: TopxiaWebBundle:Thread:cancelNice }
     methods: [POST]
+
+thread_export_members:
+    pattern: /thread/{threadId}/export/members
+    defaults: { _controller: TopxiaWebBundle:Thread\Member:export }
+
+ajax_thread_member_show:
+    pattern: /ajax/thread/{threadId}/members
+    defaults: { _controller: TopxiaWebBundle:Thread\Member:ajaxFindMembers }
+    methods: [GET]
 
 #占位
 vip:
@@ -1660,5 +1684,15 @@ order_pay_sms_verification:
 edu_cloud_sms_callback:
     pattern:  /edu_cloud/sms_callback
     defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
+    methods: [POST]
+
+course_note_like:
+    pattern:  /course/note/{noteId}/like
+    defaults: { _controller: TopxiaWebBundle:Course/Note:like }
+    methods: [POST]
+
+course_note_cancel_like:
+    pattern:  /course/note/{noteId}/cancel_like
+    defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 

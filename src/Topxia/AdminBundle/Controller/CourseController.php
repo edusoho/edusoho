@@ -8,39 +8,46 @@ use Topxia\Common\ArrayToolkit;
 class CourseController extends BaseController
 {
 
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
-  
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
         $courseSetting = $this->getSettingService()->get('course', array());
-        if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
+        if (!isset($courseSetting['live_course_enabled'])) {
+            $courseSetting['live_course_enabled'] = "";
+        }
 
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
-            'courses' => $courses ,
+            'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator,
             'liveSetEnabled' => $courseSetting['live_course_enabled'],
-            'default'=> $default
+            'default' => $default,
         ));
     }
 
-    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request,$twigToRender)
+    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
     {
         $key = $request->request->get("key");
-        
-        $conditions = array( "title"=>$key );
+
+        $conditions = array( "title" => $key );
         $conditions['status'] = 'published';
         $conditions['type'] = 'normal';
 
@@ -48,10 +55,15 @@ class CourseController extends BaseController
 
         $paginator = new Paginator($this->get('request'), $count, 6);
 
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
-  
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
         return $this->render($twigToRender, array(
@@ -59,35 +71,38 @@ class CourseController extends BaseController
             'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
     public function searchAction(Request $request)
     {
-        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search.html.twig');
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'TopxiaAdminBundle:Course:search.html.twig');
     }
 
     public function searchToFillBannerAction(Request $request)
     {
-        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
 
     public function deleteAction(Request $request, $id)
     {
         $result = $this->getCourseService()->deleteCourse($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function publishAction(Request $request, $id)
     {
         $this->getCourseService()->publishCourse($id);
+
         return $this->renderCourseTr($id);
     }
 
     public function closeAction(Request $request, $id)
     {
         $this->getCourseService()->closeCourse($id);
+
         return $this->renderCourseTr($id);
     }
 
@@ -96,7 +111,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
-            'course' => $course ,
+            'course' => $course,
         ));
     }
 
@@ -105,32 +120,9 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $conditions = $request->request->all();
-        $course['title']=$conditions['title'];
-        
-        $newCourse = $this->getCourseCopyService()->copyCourse($course);
-        
-        $newTeachers = $this->getCourseCopyService()->copyTeachers($course['id'], $newCourse);
+        $course['title'] = $conditions['title'];
 
-        $newChapters = $this->getCourseCopyService()->copyChapters($course['id'], $newCourse);
-
-        $newLessons = $this->getCourseCopyService()->copyLessons($course['id'], $newCourse, $newChapters);
-
-        $newQuestions = $this->getCourseCopyService()->copyQuestions($course['id'], $newCourse, $newLessons);
-
-        $newTestpapers = $this->getCourseCopyService()->copyTestpapers($course['id'], $newCourse, $newQuestions);
-
-        $this->getCourseCopyService()->convertTestpaperLesson($newLessons, $newTestpapers);
-        
-        $newMaterials = $this->getCourseCopyService()->copyMaterials($course['id'], $newCourse, $newLessons);
-        
-        $code = 'Homework';
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
-
-        if($isCopyHomework){
-            $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
-            $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
-        }
+        $this->getCourseCopyService()->copy($course);
 
         return $this->redirect($this->generateUrl('admin_course'));
     }
@@ -151,29 +143,29 @@ class CourseController extends BaseController
             if ($ref == 'recommendList') {
                 return $this->render('TopxiaAdminBundle:Course:course-recommend-tr.html.twig', array(
                     'course' => $course,
-                    'user' => $user
+                    'user' => $user,
                 ));
             }
-
 
             return $this->renderCourseTr($id);
         }
 
-
         return $this->render('TopxiaAdminBundle:Course:course-recommend-modal.html.twig', array(
             'course' => $course,
-            'ref' => $ref
+            'ref' => $ref,
         ));
     }
 
     public function cancelRecommendAction(Request $request, $id)
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
+
         return $this->renderCourseTr($id);
     }
 
     public function recommendListAction(Request $request)
     {
+
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
         $conditions['recommended'] = 1;
@@ -196,10 +188,9 @@ class CourseController extends BaseController
         return $this->render('TopxiaAdminBundle:Course:course-recommend-list.html.twig', array(
             'courses' => $courses,
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
-
 
     public function categoryAction(Request $request)
     {
@@ -210,85 +201,93 @@ class CourseController extends BaseController
     }
 
     public function dataAction(Request $request)
-    {   
-        $cond=array('type'=>'normal');
+    {
+        $cond = array('type' => 'normal');
 
         $conditions = $request->query->all();
 
-        $conditions=array_merge($cond,$conditions);
+        $conditions = array_merge($cond, $conditions);
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         foreach ($courses as $key => $course) {
-            $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$course['id']));
+            $isLearnedNum = $this->getCourseService()->searchMemberCount(array('isLearned' => 1, 'courseId' => $course['id']));
 
+            $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id']));
 
-            $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$course['id']));
+            $lessonCount = $this->getCourseService()->searchLessonCount(array('courseId' => $course['id']));
 
-            $lessonCount=$this->getCourseService()->searchLessonCount(array('courseId'=>$course['id']));
-            
-            $courses[$key]['isLearnedNum']=$isLearnedNum;
-            $courses[$key]['learnTime']=$learnTime;
-            $courses[$key]['lessonCount']=$lessonCount;
-
+            $courses[$key]['isLearnedNum'] = $isLearnedNum;
+            $courses[$key]['learnTime'] = $learnTime;
+            $courses[$key]['lessonCount'] = $lessonCount;
         }
 
         return $this->render('TopxiaAdminBundle:Course:data.html.twig', array(
-            'courses'=>$courses,
-            'paginator'=>$paginator,
+            'courses' => $courses,
+            'paginator' => $paginator,
         ));
     }
 
     public function lessonDataAction($id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        
-        $lessons=$this->getCourseService()->searchLessons(array('courseId'=>$id),array('createdTime', 'ASC'),0,1000);
+
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
 
         foreach ($lessons as $key => $value) {
-            $lessonLearnedNum=$this->getCourseService()->findLearnsCountByLessonId($value['id']);
+            $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
 
-            $finishedNum=$this->getCourseService()->searchLearnCount(array('status'=>'finished','lessonId'=>$value['id']));
-            
-            $lessonLearnTime=$this->getCourseService()->searchLearnTime(array('lessonId'=>$value['id']));
-            $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
+            $finishedNum = $this->getCourseService()->searchLearnCount(array('status' => 'finished', 'lessonId' => $value['id']));
 
-            $lessonWatchTime=$this->getCourseService()->searchWatchTime(array('lessonId'=>$value['id']));
-            $lessonWatchTime=$lessonWatchTime==0 ? 0 : intval($lessonWatchTime/$lessonLearnedNum);
+            $lessonLearnTime = $this->getCourseService()->searchLearnTime(array('lessonId' => $value['id']));
+            $lessonLearnTime = $lessonLearnedNum == 0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
 
-            $lessons[$key]['LearnedNum']=$lessonLearnedNum;
-            $lessons[$key]['length']=intval($lessons[$key]['length']/60);
-            $lessons[$key]['finishedNum']=$finishedNum;
-            $lessons[$key]['learnTime']=$lessonLearnTime;
-            $lessons[$key]['watchTime']=$lessonWatchTime;
+            $lessonWatchTime = $this->getCourseService()->searchWatchTime(array('lessonId' => $value['id']));
+            $lessonWatchTime = $lessonWatchTime == 0 ? 0 : intval($lessonWatchTime/$lessonLearnedNum);
 
-            if($value['type']=='testpaper'){
-                $paperId=$value['mediaId'];
-                $score=$this->getTestpaperService()->searchTestpapersScore(array('testId'=>$paperId));
-                $paperNum=$this->getTestpaperService()->searchTestpaperResultsCount(array('testId'=>$paperId));
-                
-                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$paperNum);
+            $lessons[$key]['LearnedNum'] = $lessonLearnedNum;
+            $lessons[$key]['length'] = intval($lessons[$key]['length']/60);
+            $lessons[$key]['finishedNum'] = $finishedNum;
+            $lessons[$key]['learnTime'] = $lessonLearnTime;
+            $lessons[$key]['watchTime'] = $lessonWatchTime;
+
+            if ($value['type'] == 'testpaper') {
+                $paperId = $value['mediaId'];
+                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
+                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
+
+                $lessons[$key]['score'] = $finishedNum == 0 ? 0 : intval($score/$paperNum);
             }
         }
 
         return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
             'course' => $course,
-            'lessons'=>$lessons,
+            'lessons' => $lessons,
         ));
     }
 
-    public function chooserAction (Request $request)
-    {   
+    public function chooserAction(Request $request)
+    {
         $conditions = $request->query->all();
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $courses = $this->getCourseService()->searchCourses($conditions, null, $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
@@ -296,10 +295,10 @@ class CourseController extends BaseController
 
         return $this->render('TopxiaAdminBundle:Course:course-chooser.html.twig', array(
             'conditions' => $conditions,
-            'courses' => $courses ,
+            'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
@@ -312,11 +311,12 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
+
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
-            'course' => $course ,
-            'default'=>$default
+            'course' => $course,
+            'default' => $default,
         ));
     }
 

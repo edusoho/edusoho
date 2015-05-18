@@ -9,11 +9,11 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     public function accessThreadRead($thread)
     {
-        return $this->getClassroomService()->canLookClassroom($post['targetId']);
+        return $this->getClassroomService()->canLookClassroom($thread['targetId']);
     }
 
     public function accessThreadCreate($thread)
-    {   
+    {
         return $this->getClassroomService()->canLookClassroom($thread['targetId']);
     }
 
@@ -57,6 +57,25 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         return $this->getClassroomService()->canLookClassroom($post['targetId']);
     }
 
+    public function accessEventCreate($resource)
+    {
+        return $this->getClassroomService()->canCreateThreadEvent($resource);
+    }
+
+    public function accessMemberDelete($member)
+    {
+        if ($this->getClassroomService()->canManageClassroom($member['targetId'])) {
+            return true;
+        }
+
+        $user = $this->getCurrentUser();
+        if ($member['userId'] == $user['id']) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function hasManagePermission($resource, $ownerCanManage = false)
     {
         if ($this->getClassroomService()->canManageClassroom($resource['targetId'])) {
@@ -85,5 +104,4 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
     {
         return $this->getKernel()->getCurrentUser();
     }
-
 }

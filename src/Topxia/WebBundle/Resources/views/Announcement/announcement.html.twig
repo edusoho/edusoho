@@ -9,11 +9,11 @@
           {% if announcement.url %}
           <a class="open-article-link" href="{{announcement.url}}" target="_blank">
             <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.title|sub_text(50)}}
+            {{announcement.content|sub_text(50)}}
           </a>
           {% else %}
             <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.title|sub_text(50)}}
+            {{announcement.content|sub_text(50)}}
           {% endif %}
         </div>
         {% endfor %}

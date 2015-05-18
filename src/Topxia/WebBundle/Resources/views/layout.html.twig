@@ -22,13 +22,14 @@
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
   {% block stylesheets %}
-    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ asset('bundles/topxiaweb/css/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
+    <!-- <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" /> -->
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/main.css') }}" />
     <!--[if lt IE 8]>
       <link href="{{ asset('assets/css/oldie.css') }}" rel="stylesheet">
     <![endif]-->
@@ -50,112 +51,162 @@
   
   {% include 'TopxiaWebBundle::email-setting.html.twig' %}
 
-  <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
-
+  <header class="es-header navbar">
     <div class="container">
-      <div class="container-gap">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          {% if setting('site.logo') %}
-            <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
-          {% else %}
-            <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
-          {% endif %}
+      <div class="navbar-header">
+        <div class="visible-xs navbar-mobile">
+          <a href="javascript:;" class="navbar-more js-navbar-more">
+            <i class="es-icon es-icon-menu"></i>
+          </a>
+          <div class="nav-mobile">
+            <form class="navbar-form">
+              <div class="form-group">
+                <input class="form-control" placeholder="搜索" name="q">
+                <button class="button es-icon es-icon-search"></button>
+              </div>
+            </form>
+            <ul class="nav navbar-nav">
+              {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+            </ul>
+          </div>
         </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
+        <a href="javascript:;" class="navbar-brand">
+          {% if setting('site.logo') %}
+            <img src="{{ asset(setting('site.logo')) }}">
+          {% else %}
+            <img src="{{ asset('bundles/topxiaweb/img/logo.png') }}">    
+          {% endif %}
+        </a>
+      </div>
+      <ul class="nav navbar-nav clearfix hidden-xs" id="nav">
+        {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
       </ul>
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
-          <ul class="nav navbar-nav navbar-right">
-            {% if app.user %}
-              <li><a href="{{ path('my') }}"> 我的课程 </a></li>
-              {% if setting('mobile.enabled') %}
-                <li><a href="{{ path('mobile') }}" class="mobile-badge-container">
-                  <span class="glyphicon glyphicon-phone"></span>
-                  <span class="badge">v2</span>
-                </a></li>
+      <div class="navbar-user">
+        <ul class="nav user-nav">
+          {% if app.user %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <img class="user-avatar" src="{{ default_path('avatar', app.user.smallAvatar, '') }}">
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
+              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>个人主页</a></li>
+              <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
+              <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
+              {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>管理后台</a></li>
               {% endif %}
-              <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span></a></li>
-              <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
-                <span class="glyphicon glyphicon-bullhorn hidden-lt-ie8"></span>
-                <span class="visible-lt-ie8">通知</span>
-                {% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
-              <li>
-                <a href="{{ path('message') }}" class="badge-container message-badge-container">
-                <span class="glyphicon glyphicon-envelope hidden-lt-ie8"></span>
-                <span class="visible-lt-ie8">私信</span>
-                {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
-                </a>
+              <li class="visible-sm visible-xs">
+                <a href="{{ path('my') }}"><i class="es-icon es-icon-study"></i>学习中心</a>
               </li>
-              <li><a href="{% if setting('coin.coin_enabled') %}
-                      {{path('my_coin')}}
-                     {% else %}
-                      {{path('my_bill')}}
-                     {% endif %}" class="qiandai" >
-                <img src="{{default_path('qiandai.png')}}"/>
-              </a>
-              </li>
-              <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
-              <li class="dropdown hidden-lt-ie8">
-                <a href="javascript:;" class="dropdown-toggle"  data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> 我的主页</a></li>
-                  <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> 个人中心</a></li>
-                  <li class="divider"></li>
-                  {% if is_granted('ROLE_BACKEND') %}
-                    <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
-                    <li class="divider"></li>
-                  {% endif %}
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
-                </ul>
-              </li>
+              <li class="visible-sm visible-xs"><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
+              <li class="visible-sm visible-xs"><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+              <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登陆</a></li>
+            </ul>
+          </li>
+          <li class="hidden-sm hidden-xs">
+            <a href="{{ path('my') }}">学习中心</a>
+          </li>
+          <li class="hidden-sm hidden-xs">
+            {% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}
+              <a class="hasmessage" href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
             {% else %}
-              {% if setting('mobile.enabled') %}
-                <li><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> 手机版</a></li>
-              {% endif %}
-              <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span> 搜索</a></li>
-              <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
-              <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+              <a href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i></a>
             {% endif %}
-          </ul>
-        </div><!--/.navbar-collapse -->
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
+              <li><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+            </ul>
+          </li>
+          {% else %}
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登陆</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+          {% endif %}
+        </ul>
+        <form class="navbar-form pull-right hidden-xs">
+          <div class="form-group">
+            <input class="form-control js-search" name="q">
+            <button class="button es-icon es-icon-search"></button>
+          </div>
+        </form>
       </div>
     </div>
-  </div>
+  </header>
 
+  {% block main_header %} {% endblock %}
 
-  <div id="content-container" class="container">
-    {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
+  {% block full_content %}
+    {% block main_content %}
+      <div id="content-container" class="container">
+        {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
+        {% block content %}{% endblock %}
+      </div><!-- /container -->
+    {% endblock %}
+  {% endblock %}
     
-    {% block content %}{% endblock %}
-    
-  </div><!-- /container -->
-
-  <div class="site-footer container clearfix">
-
-    {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-
-    <div class="text-gray" data-role="default-foot-bar">
-      {% include "TopxiaWebBundle::powered-by.html.twig" %}
-      {{ setting('site.analytics')|raw }}
-      <div class="pull-right">{% if setting('site.copyright') %}课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有{% endif %}&nbsp;{% if setting('site.icp') %}<a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a>{% endif %}</div>
-
-      <div class="pull-right mhs"><a href="{{ path('course_archive') }}">课程存档</a></div>
+  <footer class="es-footer">
+    <div class="footer-link">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 footer-main clearfix">
+            <div class="link-item">
+              <h3>我是学生</h3>
+              <a href="javascript:;">如何注册</a>
+              <a href="javascript:;">如何学习</a>
+              <a href="javascript:;">如何互动</a>
+            </div>
+            <div class="link-item">
+              <h3>我是老师</h3>
+              <a href="javascript:;">发布课程</a>
+              <a href="javascript:;">使用题库</a>
+              <a href="javascript:;">教学资料库</a>
+            </div>
+            <div class="link-item">
+              <h3>我是管理员</h3>
+              <a href="javascript:;">系统设置</a>
+              <a href="javascript:;">课程设置</a>
+              <a href="javascript:;">用户管理</a>
+            </div>
+            <div class="link-item hidden-xs">
+              <h3>商业应用</h3>
+              <a href="javascript:;">会员专区</a>
+              <a href="javascript:;">题库增强版</a>
+              <a href="javascript:;">用户导入导出</a>
+            </div>
+            <div class="link-item hidden-xs">
+              <h3>关于我们</h3>
+              <a href="javascript:;">ES官网</a>
+              <a href="javascript:;">官方微博</a>
+              <a href="javascript:;">加入我们</a>
+            </div>
+          </div>
+          <div class="col-md-4 footer-logo">
+            <img src="{{ asset('bundles/topxiaweb/img/bottom_logo.png') }}">
+            <div class="footer-partner">
+              <a href="javascript:;"><i class="es-icon es-icon-weibo"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
+              <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <div class="copyright">
+      <div class="container">
+        <span>Powered by EduSoho v4.7.9 ©2014-2015</span>
+        <span>课程内容版权均归杭州阔知网络科技有限公司所有   浙ICP备13006852号-1</span>
+      </div>
+    </div>
+  </footer>
 
   {% block bottom %}{% endblock %}
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
-<div id="modal" class="modal"></div>
+  <div id="modal" class="modal"></div>
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-
 
 </body>
 </html>

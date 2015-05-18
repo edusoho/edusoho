@@ -1,0 +1,43 @@
+<div class="score">
+  {% if score|number_format == 0 %}
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 1 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 2 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 3 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 4 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-staroutline"></i>
+  {% elseif score|number_format == 5 %}
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+    <i class="es-icon es-icon-star"></i>
+  {% endif %}
+  {% if num is defined %}
+    <span>({{ num }}评价)</span>
+  {% endif %}
+</div>
+  

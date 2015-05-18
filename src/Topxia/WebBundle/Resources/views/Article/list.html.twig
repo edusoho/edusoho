@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{% if category.seoTitle %}{{ category.seoTitle }}{% else %}{{ category.name }}{% endif %} - {{ parent() }}{% endblock %}
 
@@ -6,60 +6,101 @@
 
 {% block description %}{{ category.seoDesc }}{% endblock %}
 
-{% block article_main %}
-
-  {% include 'TopxiaWebBundle:Article:nav.html.twig' %}
-  {% if articles %}
-    <ul class="article-wide-list">
-      {% for article in articles %}
-        <li class="media article-item clearfix">
-          <div class="article-title text-muted">
-            <div class="pull-left">
-              {% for category in categories %}
-                {% if article.categoryId == category.id %}
-                  <span><a href="{{ path('article_category', { categoryCode:category.code }) }}">{{ category.name }} </a>
-                  </span>
-                {% endif %}
-              {% endfor %}
-            </div>
-            <div class="published-time">{{ article.publishedTime|date('Y-m-d H:i') }}</div>
-          </div>
-          {% if article.thumb %}
-            <a class="hidden-xs pull-right article-picture-link" href="{{ path('article_detail', { id:article.id }) }}">
-              <img class="article-picture" src="{{ filepath(article.thumb) }}" alt="资讯缩略图">
-            </a>
-          {% endif %}
-          <div class="media-body">
-            <h4 class="media-heading"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title }}</a></h4>
-            {{ article.body|plain_text(150) }}
-          </div>
-        </li>
+{% block content %}
+<div id="content-container" class="container">
+  <!-- 资讯 -->
+  <div class="es-tabs article-list-header">
+    <div class="tab-header">
+    {% set currentNavCategory = categoryCode|default(null) %}
+    {% set rootCategory = rootCategory.code|default(null) %}
+    <ul class="clearfix">
+        <li {% if not currentNavCategory %}  class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
+      {% for cat in categoryTree %}
+        {% if cat.parentId == 0 and cat.published == 1 %}
+           <li class="{% if rootCategory == cat.code %}active{% endif %}" ><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
+        {% endif %}
       {% endfor %}
     </ul>
-  {% else %}
-    <div class="empty tac text-muted mvl">还没有任何资讯</div>
-  {% endif %}
-  {{ web_macro.paginator(paginator) }}
-
-{% endblock %}
-
-{% block article_side %}
-
-	<ul class="nav nav-pills nav-stacked article-sub">
-		{% for cat in subCategories %}
-      {% if cat.published == 1 %}
-  		  <li {% if category.id == cat.id %}class="active"{% endif %}>
-  		    <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
-  		    {% if cat.depth > 1 %}
-  		      {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
-  		    {% endif %}
-  		    {{ cat.name }}</a>
-  		  </li>
+    </div>
+    <div class="tab-body">
+      <ul class="clearfix">
+    {% for cat in subCategories %}
+      {% if cat.published == 1 and cat.depth < 3 %}
+        <li {% if category.id == cat.id %}class="active"{% endif %}>
+          <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
+          {% if cat.depth > 1 %}
+            {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
+          {% endif %}
+          {{ cat.name }}</a>
+        </li>
       {% endif %}
-		{% endfor %}
-	</ul>
+    {% endfor %}
+      </ul>
 
-  {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
-  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
+      <ul class="clearfix">
+          {% for cat in subCategories %}
+            {% if cat.published == 1 and 2 < cat.depth and cat.depth < 4 %}
+              <li {% if category.id == cat.id %}class="active"{% endif %}>
+                <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
+                {{ cat.name }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+      </ul>
+
+    </div>
+  </div>
+
+  <div class="article-list-body row">
+    <!-- list主内容-->
+    <div class="col-md-8 article-list-mian">
+      <section class="es-section">
+      {% if articles %}
+        {% for article in articles %}
+        <article class="article-item">
+          <div class="article-metas clearfix">
+            <div class="pull-left">
+              <div class="date">
+                <div class="day">{{day[article.id]}}</div>
+                <div class="month">{{month[article.id]}}月</div>
+              </div>
+            </div>
+            <div class="metas-body">
+              <p>
+                  {% for category in categories %}
+                    {% if article.categoryId == category.id %}
+                      {{ category.name }} 
+                    {% endif %}
+                  {% endfor %}
+              </p>
+              <h2 class="title"><a href="{{ path('article_detail', { id:article.id }) }}" >{{ article.title }}</a></h2>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-left">
+                  {% if article.thumb %}
+                    <a href="{{ path('article_detail', { id:article.id }) }}">
+                      <img class="media-object" src="{{ file_url(article.thumb) }}" alt="资讯缩略图">
+                    </a>
+                  {% endif %}
+            </div>
+            <div class="media-body">
+                   {{ article.body|plain_text(150) }}
+            </div>
+          </div>
+        </article>
+          {% endfor %}
+        <nav>
+            {{ web_macro.paginator(paginator) }}
+        </nav>
+        {% else %}
+          <div class="empty tac text-muted mvl">还没有任何资讯</div>
+        {% endif %}
+      </section>
+    </div>
+        {% include 'TopxiaWebBundle:Article:sidebar.html.twig' %}
+
+    </div>
+    </div>
 
 {% endblock %}
