@@ -18,6 +18,8 @@ class ExtensionManager
 
     protected $dataDict;
 
+    protected $dataTagClassmap;
+
     protected $dataTags;
 
     private static $_instance;
@@ -33,6 +35,7 @@ class ExtensionManager
         $this->booted = false;
         $this->statusTemplates = array();
         $this->dataDict = array();
+        $this->dataTagClassmap = array();
         $this->dataTags = array();
     }
 
@@ -82,10 +85,23 @@ class ExtensionManager
 
     public function getDataTag($name)
     {
-        $this->loadDataTags();
+        if (isset($this->dataTags[$name])) {
+            return $this->dataTags[$name];
+        }
 
-        
+        $this->loadDataTagClassmap();
 
+
+
+        if (!isset($this->dataTagClassmap[$name])) {
+            throw new \RuntimeException("数据标签`{$name}`尚未定义。");
+        }
+
+        $class = $this->dataTagClassmap[$name];
+
+        $this->dataTags[$name] = new $class();
+
+        return $this->dataTags[$name];
     }
 
     private function boot()
@@ -97,15 +113,37 @@ class ExtensionManager
         $this->getExtensionalBundles();
     }
 
-    private function loadDataTags()
+    private function loadDataTagClassmap()
     {
         $this->boot();
 
+        if (!empty($this->dataTagClassmap)) {
+            return $this->dataTagClassmap;
+        }
 
+        $finder = new Finder();
+        $finder->files()->name('*DataTag.php')->depth('== 0');
 
+        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir') . '/../');
+
+        $dirNamespaces = array();
+        foreach($this->bundles['DataTag'] as $bundle) {
+            $directory = $bundle->getPath() . '/Extensions/DataTag';
+            if (!is_dir($directory)) {
+                continue;
+            }
+            $dirNamespaces[$directory] = $bundle->getNamespace() . "\\Extensions\\DataTag";
+
+            $finder->in($directory);
+        }
+
+        foreach ($finder as $file) {
+            $name = $file->getBasename('DataTag.php');
+            $this->dataTagClassmap[$name] = $dirNamespaces[$file->getPath()] . "\\{$name}DataTag";
+        }
+
+        return $this->dataTagClassmap;
     }
-
-
 
     private function loadDataDict()
     {
