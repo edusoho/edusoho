@@ -4,6 +4,7 @@ namespace Topxia\Common;
 
 use Symfony\Component\Finder\Finder;
 use Topxia\Common\ExtensionalBundle;
+use Symfony\Component\Yaml\Yaml;
 
 class ExtensionManager
 {
@@ -14,6 +15,10 @@ class ExtensionManager
     protected $booted;
 
     protected $statusTemplates;
+
+    protected $dataDict;
+
+    protected $dataTags;
 
     private static $_instance;
 
@@ -27,6 +32,8 @@ class ExtensionManager
         );
         $this->booted = false;
         $this->statusTemplates = array();
+        $this->dataDict = array();
+        $this->dataTags = array();
     }
 
     public static function init($kernel)
@@ -50,7 +57,6 @@ class ExtensionManager
 
     public function renderStatus($status, $mode)
     {
-        $this->boot();
         $this->loadStatusTemplates();
 
         if (!isset($this->statusTemplates[$status['type']])) {
@@ -63,6 +69,25 @@ class ExtensionManager
         );
     }
 
+    public function getDataDict($type)
+    {
+        $this->loadDataDict();
+
+        if (empty($this->dataDict[$type])) {
+            return array();
+        }
+
+        return $this->dataDict[$type];
+    }
+
+    public function getDataTag($name)
+    {
+        $this->loadDataTags();
+
+        
+
+    }
+
     private function boot()
     {
         if ($this->booted) {
@@ -72,8 +97,40 @@ class ExtensionManager
         $this->getExtensionalBundles();
     }
 
+    private function loadDataTags()
+    {
+        $this->boot();
+
+
+
+    }
+
+
+
+    private function loadDataDict()
+    {
+        $this->boot();
+
+        if (!empty($this->dataDict)) {
+            return $this->dataDict;
+        }
+
+        $files = array();
+        foreach($this->bundles['DataDict'] as $bundle) {
+            $file = $bundle->getPath() . '/Extensions/data_dict.yml';
+            if (!file_exists($file)) {
+                continue;
+            }
+            $this->dataDict = array_merge($this->dataDict, Yaml::parse(file_get_contents($file)));
+        }
+
+        return $this->dataDict;
+    }
+
     private function loadStatusTemplates()
     {
+        $this->boot();
+
         if (!empty($this->statusTemplates)) {
             return $this->statusTemplates;
         }
