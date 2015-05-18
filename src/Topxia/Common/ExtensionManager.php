@@ -4,6 +4,7 @@ namespace Topxia\Common;
 
 use Symfony\Component\Finder\Finder;
 use Topxia\Common\ExtensionalBundle;
+use Symfony\Component\Yaml\Yaml;
 
 class ExtensionManager
 {
@@ -14,6 +15,8 @@ class ExtensionManager
     protected $booted;
 
     protected $statusTemplates;
+
+    protected $dataDict;
 
     private static $_instance;
 
@@ -27,6 +30,7 @@ class ExtensionManager
         );
         $this->booted = false;
         $this->statusTemplates = array();
+        $this->dataDict = array();
     }
 
     public static function init($kernel)
@@ -63,6 +67,18 @@ class ExtensionManager
         );
     }
 
+    public function getDataDict($type)
+    {
+        $this->boot();
+        $this->loadDataDict();
+
+        if (empty($this->dataDict[$type])) {
+            return array();
+        }
+
+        return $this->dataDict[$type];
+    }
+
     private function boot()
     {
         if ($this->booted) {
@@ -70,6 +86,24 @@ class ExtensionManager
         }
 
         $this->getExtensionalBundles();
+    }
+
+    private function loadDataDict()
+    {
+        if (!empty($this->dataDict)) {
+            return $this->dataDict;
+        }
+
+        $files = array();
+        foreach($this->bundles['DataDict'] as $bundle) {
+            $file = $bundle->getPath() . '/Extensions/data_dict.yml';
+            if (!file_exists($file)) {
+                continue;
+            }
+            $this->dataDict = array_merge($this->dataDict, Yaml::parse(file_get_contents($file)));
+        }
+
+        return $this->dataDict;
     }
 
     private function loadStatusTemplates()
