@@ -1,13 +1,3 @@
-<!-- <div class="thread-event-title-bar">
-  <span class="label label-success" title="活动">活动</span>
-  <h1 class="thread-title">{{ thread.title }}</h1>
-  {% if thread.sticky %}
-    <span class="label label-danger" title="置顶帖">置顶</span>
-  {% endif %}
-  {% if thread.nice %}
-    <span class="label label-warning" title="精华帖">精</span>
-  {% endif %}
-</div> -->
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
   {% include 'TopxiaWebBundle:Thread/Part:common-header.html.twig' %}
@@ -28,12 +18,12 @@
       </p>
     </div>
     {% if thread.maxUsers == thread.memberNum and thread.maxUsers != 0 %}
-      <a class="btn btn-danger btn-sm disabled">名额已满</a>
+      <a class="btn btn-danger btn-sm disabled btn-apply">名额已满</a>
     {% elseif member is empty %}
-      <a class="btn btn-primary btn-apply js-event-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">我要报名</a>
+      <a class="btn btn-primary btn-apply js-event-apply btn-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">我要报名</a>
     {% else %}
-      <a class="btn btn-success btn-sm js-event-apply disabled" data-toggle="modal" data-target="#modal">已报名</a>
-      <a class="btn btn-link js-event-cancel" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">取消报名</a>
+      <a class="btn btn-success btn-sm js-event-apply disabled btn-apply" data-toggle="modal" data-target="#modal" style="right:120px;">已报名</a>
+      <a class="btn btn-link js-event-cancel btn-apply" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">取消报名</a>
     {% endif %}
   </div>
 
