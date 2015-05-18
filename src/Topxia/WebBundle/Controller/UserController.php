@@ -263,13 +263,16 @@ class UserController extends BaseController
     public function cardShowAction(Request $request, $userId)
     {
         $user = $this->tryGetUser($userId);
+        $currentUser = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($userId);
+        $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
         $user['learningNum'] = $this->getCourseService()->findUserLearnCourseCount($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
         return $this->render('TopxiaWebBundle:User:card-show.html.twig', array(
             'user' => $user,
-            'profile' => $profile
+            'profile' => $profile,
+            'isFollowed' => $isFollowed
         ));
     }
 

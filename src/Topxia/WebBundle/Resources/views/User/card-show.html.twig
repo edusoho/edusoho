@@ -1,23 +1,42 @@
-<div class="panel">
-  <div class="panel-body">
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div id="user-card-{{ user.id }}" class="user-card top">
+  <div class="card-header">
     <div class="media">
-      <div class="pull-left">
-        <a href="">
-          <img src="{{ default_path('avatar', user.smallAvatar, '') }}" alt="" style="width:48px;height:48px;">
-        </a>
+      <div class="media-left">
+        {{ web_macro.user_avatar(user, '', 'avatar-md', true) }}
       </div>
       <div class="media-body">
-        <p class="clearfix">
-          {{ user.nickname }}
-          <span class="pull-right">{{ user.title }}</span>
+        {% if app.user.id != user.id %}
+          <a class="btn btn-default btn-xs pull-right" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
+        {% endif %}
+        <div class="title">
+          {{ web_macro.user_link(user, 'name', false) }}
+          {% if app.user.id != user.id %}
+            <a class="follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注" {% if isFollowed %} style="display:none;"{% endif %}><i class="es-icon es-icon-addbox"></i></a> 
+            <a class="unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %}style="display:none;"{% endif %}><i class="es-icon es-icon-checkbox"></i></a>
+          {% endif %}           
+        </div>
+        <p>
+          {% if user.title %}
+            {{ user.title }}
+          {% else %}
+            还没有头衔
+          {% endif %}
         </p>
-        <p>在学{{ user.learningNum }}｜关注{{ user.followingNum }}｜粉丝{{ user.followerNum }}</p>
       </div>
     </div>
-    <p>{{ profile.signature }}</p>
-    <p class="text-right">
-      <a href="" class="btn btn-default">私信</a>   
-      <a href="" class="btn btn-default">＋关注</a>
-    </p>
+  </div>
+  <div class="card-body">
+    {% if profile.signature %}
+      {{ profile.signature }}
+    {% else %}
+      还没有签名
+    {% endif %}
+  </div>
+  <div class="card-footer clearfix">
+    <span>{{ user.learningNum }}<br>在学</span>
+    <span>{{ user.followingNum }}<br>关注</span>
+    <span>{{ user.followerNum }}<br>粉丝</span>
   </div>
 </div>

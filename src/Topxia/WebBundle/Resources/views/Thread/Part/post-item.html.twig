@@ -1,8 +1,6 @@
 <li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media media-comment">
   <div class="media-left">
-    <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
-      <img class="img-circle" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" >
-    </a>
+    {{ web_macro.user_avatar(author, 'user-avatar', 'img-circle', true) }}
   </div>
 
   <div class="media-body">
@@ -11,7 +9,7 @@
       <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
       <span class="bullet">•</span>
       <span class="text-muted">{{post.createdTime|smart_time}} </span>
-      {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ author.badgeTitle }}) </span>{% endif %}
+      {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
     <p class="thread-post-content">{{ post.content|at(post.ats)|raw }}</p>
     <div class="comment-sns">
