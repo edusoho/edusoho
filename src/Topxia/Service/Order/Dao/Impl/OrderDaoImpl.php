@@ -125,7 +125,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('paidTime >= :paidStartTime')
             ->andWhere('paidTime < :paidEndTime')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime < :endTime')           
+            ->andWhere('createdTime < :endTime')
+            ->andWhere('createdTime < :createdTime_LT')       
             ->andWhere('title LIKE :title');
     }
 
