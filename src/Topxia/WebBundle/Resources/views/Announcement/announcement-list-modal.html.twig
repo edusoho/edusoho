@@ -7,9 +7,10 @@
 {% endblock %}
 
 {% block body %}
-
-	{% for announcement in announcements %}
-        <div class="alert alert-default alert-edit" role="alert">
+	<div class="announcement-list">
+	{% if announcements %}
+		{% for announcement in announcements %}
+        <div class="alert alert-default alert-edit" role="alert" id="announcement-list-{{ announcement.id }}">
           <a href="javascript:;" class="click"><i class="es-icon {% if announcement.id == currentId %}es-icon-keyboardarrowdown{% else %}es-icon-chevronright{% endif %}"></i></a>
           <span class="title">
             {{ announcement.content|plain_text(40) }}
@@ -29,8 +30,11 @@
 	          </div>
         	{% endif %}
         </div>
-  {% endfor %}    
-
+  	{% endfor %}    
+  {% else %}
+		<div class="alert alert-edit">暂无公告</div>
+	{% endif %}
+</div>
 	<script>
 		app.load('announcement/announcement');
 	</script>
