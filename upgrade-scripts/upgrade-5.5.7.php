@@ -53,7 +53,7 @@ use Topxia\Service\Common\ServiceKernel;
         }
 
         if(!$this->isCrontabJobExist('CancelOrderJob')) {
-            $connection->exec("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '0', '0', '0', '0');");
+            $connection->exec("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '".time()."', '0', '0', '0');");
         }
 
         $this->getSettingService()->set("crontab_next_executed_time", time());
