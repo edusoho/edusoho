@@ -16,7 +16,7 @@
   {% set title = article.title %}
   {% set summary = article.body|plain_text(50) %}
   {% set message = setting('default.articleShareContent')|default('我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。')|simple_template({articletitle: '「' ~ article.title ~ '」' , sitename: '「' ~ setting('site.name') ~ '」' }) %}
-  {% set url = url('article_show', {id:article.id}) %}
+  {% set url = url('article_detail', {id:article.id}) %}
   {% set picture = '' %}
 {% elseif type == 'group_thread' %}
   {% set title = thread.title %}
