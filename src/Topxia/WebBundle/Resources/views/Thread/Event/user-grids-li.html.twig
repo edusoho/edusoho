@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 {% for member in members %}
-<span>{{ web_macro.classroom_user_avatar(member) }}</span>
+<span>{{ web_macro.user_avatar(member, '', '', true) }}</span>
 {% endfor %}

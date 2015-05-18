@@ -1,19 +1,13 @@
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
   <a class="user-link user-avatar-link {{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
-    <img class="{{ imgClass }}" src="{{ filepath(user.smallAvatar, 'user.png') }}">
+    <img class="{{ imgClass }}" src="{{ filepath(user.smallAvatar, 'avatar.png') }}">
   </a>
   {% else %}
     <a class="user-link user-avatar-link {{ class }}" href="javascript:;">
-      <img class="{{ imgClass }}"  src="{{ filepath('', 'user.png') }}">
+      <img class="{{ imgClass }}"  src="{{ filepath('', 'avatar.png') }}">
     </a>
   {% endif %}
-{%- endmacro -%}
-
-{%- macro classroom_user_avatar(user, class) -%}
-  <a class="user-link user-avatar-link {{ class }} js-user-card" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}">
-    <img class="img-circle" src="{{ default_path('avatar', user.smallAvatar, '') }}">
-  </a>
 {%- endmacro -%}
 
 {%- macro user_link(user, class, card = true) -%}

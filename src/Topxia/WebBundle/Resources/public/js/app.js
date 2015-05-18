@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+    require('./util/card');
 	var Cookie = require('cookie');
 	var Announcement = require('../../topxiaweb/js/controller/widget/announcement.js');
 
@@ -120,21 +121,12 @@ define(function(require, exports, module) {
     	$(this).removeClass("md-spin");
     });
 
-    $('.js-user-card').hover(function() {
-            var e=$(this);
-            if (e.data('bind')) {
-                return;
-            } else {
-                e.data('bind', true);
-                $.get(e.data('cardUrl'),function(d) {
-                    e.popover({
-                        html: true,
-                        trigger: 'hover',
-                        content: d
-                    }).popover('show');
-                });
-            }
-    });
+    $('.js-user-card').each(function(){
+        $(this).cardTip({
+            Event : "mouseover"
+        });
+    }); 
+   
 
     if($(".set-email-alert").length>0){
     	$(".set-email-alert .close").click(function(){
