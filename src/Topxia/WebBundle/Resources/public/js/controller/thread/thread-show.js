@@ -93,8 +93,8 @@ define(function(require, exports, module) {
 
         onClickPagination: function(e) {
             e.preventDefault();
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
-
             $.get($btn.attr('href'), function(response) {
                 var pos = $btn.parents('.thread-subpost-container').offset();
                 $btn.parents('.thread-subpost-container').find('.thread-subpost-list').replaceWith(response);
@@ -104,6 +104,7 @@ define(function(require, exports, module) {
         },
 
         onClickReply: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             var inSubpost = $btn.parents('.thread-subpost-list').length > 0;
             var $container = $btn.parents('.thread-post').find('.thread-subpost-container');
@@ -124,6 +125,7 @@ define(function(require, exports, module) {
         },
 
         onClickToggleSubpostForm: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             var $form = $btn.parents('.thread-subpost-container').find('.thread-subpost-form');
             $form.toggleClass('hide');
