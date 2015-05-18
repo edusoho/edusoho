@@ -15,7 +15,7 @@ class CancelOrderJob implements Job
 
         $orders = $this->getOrderService()->searchOrders($conditions, $sort = 'latest', 0, 10);
         foreach ($orders as $key => $order) {
-        	$this->getOrderService()->cancelOrder($order["id"],"系统取消过期订单");
+        	$this->getOrderService()->cancelOrder($order["id"],"系统自动取消");
         }
 
     }
