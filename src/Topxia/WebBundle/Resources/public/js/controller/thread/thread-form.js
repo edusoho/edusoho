@@ -1,7 +1,9 @@
 define(function(require, exports, module) {
 
     require('ckeditor');
+    var WebUploader = require('edusoho.webuploader');
     var Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
     Validator.addRule(
          'time_check',
          /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/, 
@@ -20,6 +22,7 @@ define(function(require, exports, module) {
             setup: function() {
                 this._initValidator();
                 this._initDatetimepicker();
+                this._initUploader();
             },
             _initValidator: function() {
                 var editor = CKEDITOR.replace('thread-content-field', {
@@ -93,6 +96,21 @@ define(function(require, exports, module) {
                     format: 'yyyy-mm-dd hh:ii',
                     minView: 'hour'
                 }); 
+            },
+            _initUploader: function() {
+                var self = this;
+                var $uploadBtn = this.$('#js-activity-uploader');
+                if ($uploadBtn.length > 0) {
+                    var uploader = new WebUploader({
+                       element: '#js-activity-uploader'
+                    });
+
+                   uploader.on('uploadSuccess', function(file, response ) {
+                        self.$('[name=actvityPicture]').val(response.url);
+                        Notify.success('上传成功！', 1);
+                   });
+
+                }
             }
         });
         

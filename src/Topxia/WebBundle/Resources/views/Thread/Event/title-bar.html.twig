@@ -3,9 +3,11 @@
   {% include 'TopxiaWebBundle:Thread/Part:common-header.html.twig' %}
 
   <div class="media topic-body">
-    <div class="media-left">
-      <a href=""><img src="https://ss3.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/super/whfpf%3D425%2C260%2C50/sign=f958bc440f46f21fc9610d1390195f52/f636afc379310a559d8b2c4bb24543a9832610e5.jpg" alt=""></a>
-    </div>
+    {% if thread.actvityPicture %}
+      <div class="media-left">
+        <img src="{{ thread.actvityPicture }}" alt="">
+      </div>
+    {% endif %}
     <div class="media-body">
       <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('dateType',thread.startTime|date('N')) ~ thread.startTime|date(' H:i') }}</p>
       <p>地点： {{ thread.location }}</p>
