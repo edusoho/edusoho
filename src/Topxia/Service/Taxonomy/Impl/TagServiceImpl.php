@@ -115,7 +115,7 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag;
     }
 
-	private function getTagDao()
+	protected function getTagDao()
 	{
         return $this->createDao('Taxonomy.TagDao');
 	}
