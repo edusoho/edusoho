@@ -180,6 +180,7 @@ function install_step3()
         $init->initRefundSetting();
         $init->initArticleSetting();
         $init->initDefaultSetting();
+        $init->initCrontabJob();
 
         header("Location: start-install.php?step=4");
         exit();
@@ -727,9 +728,26 @@ EOD;
 
     }
 
+    public function initCrontabJob()
+    {
+        $this->getCrontabService()->createJob(array(
+            'name'=>'CancelOrderJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+    }
+
     public function initLockFile()
     {
         file_put_contents(__DIR__ . '/../../app/data/install.lock', '');
+    }
+
+    private function getCrontabService()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 
     private function getUserService()

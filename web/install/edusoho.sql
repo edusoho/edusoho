@@ -1355,7 +1355,8 @@ DROP TABLE IF EXISTS `crontab_job`;
 CREATE TABLE `crontab_job` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `name` varchar(1024) NOT NULL COMMENT '任务名称',
-  `cycle` enum('once') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
+  `cycle` enum('once','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
+  `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间',
   `jobClass` varchar(1024) NOT NULL COMMENT '任务的Class名称',
   `jobParams` text NOT NULL COMMENT '任务参数',
   `executing` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行状态',
