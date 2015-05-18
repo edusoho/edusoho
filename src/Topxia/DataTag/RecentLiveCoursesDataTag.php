@@ -11,6 +11,8 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
     /**
      * 获取最新课程列表
      *
+     * @todo  一个课程下有２个直播课时的话，会返回２个相同的课程
+     *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
      * 

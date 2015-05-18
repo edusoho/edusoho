@@ -9,7 +9,8 @@ class TeacherCoursesDataTag extends CourseBaseDataTag implements DataTag
 
     /**
      * 获取特定老师的课程列表
-     *
+     * @todo  逻辑有问题，应该是取老师所在的所有课程，而不是创建者创建的所有课程
+     * 
      * 可传入的参数：
      *   userId   必需 老师ID
      *   count    必需 课程数量，取值不能超过100

@@ -4,6 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
+/**
+ * @todo  可去除，直接使用PopularCoursesDataTag
+ */
 class PopularCoursesByCategoryDataTag extends CourseBaseDataTag implements DataTag  
 {
 

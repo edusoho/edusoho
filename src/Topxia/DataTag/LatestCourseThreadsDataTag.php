@@ -4,6 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
+/**
+ * @todo  加入type参数
+ */
 class LatestCourseThreadsDataTag extends CourseBaseDataTag implements DataTag  
 {
     
@@ -25,6 +28,8 @@ class LatestCourseThreadsDataTag extends CourseBaseDataTag implements DataTag
 
         $conditions = array( 'courseId' => $arguments['courseId']);
     	$threads = $this->getThreadService()->searchThreads($conditions, 'created', 0, $arguments['count']);
+
+        //@todo $threads['course'] 可以去除 by zhang
         $threads['course'] = $this->getCourseService()->getCourse($arguments['courseId']);
 
         return $threads;

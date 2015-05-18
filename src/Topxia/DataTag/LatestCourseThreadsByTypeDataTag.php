@@ -5,6 +5,9 @@ namespace Topxia\DataTag;
 use Topxia\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
+/**
+ * @todo  去除，采用LatestCourseThreadsDataTag
+ */
 class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag  
 {
     
