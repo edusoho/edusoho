@@ -23,6 +23,8 @@ interface CategoryService
 
     public function findAllCategories();
 
+    public function makeNavCategories($categoryId, $groupCode);
+
     public function isCategoryCodeAvaliable($code, $exclude = null);
 
     public function createCategory(array $category);

@@ -65,7 +65,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         public function findAllCategoriesByParentId($parentId)
     {   
-        return $this->getCategoryDao()->findAllCategoriesByParentId($parentId);
+        return ArrayToolkit::index($this->getCategoryDao()->findAllCategoriesByParentId($parentId), 'id');
     }
 
     public function findGroupRootCategories($groupCode)
@@ -103,6 +103,30 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         return $childrenIds;
+    }
+
+    public function makeNavCategories($code, $groupCode)
+    {
+       
+        $rootCagoies = $this->findGroupRootCategories($groupCode);
+        if (empty($code)) {
+            return array($rootCagoies, array(), array()); 
+        } else {
+            $category = $this->getCategoryByCode($code);
+            $parentId = $category['id'];
+            $categories = array();
+            $activeIds = array();
+            $activeIds[] = $category['id'];
+            while ($parentId) {
+                $activeIds[] = $parentId;
+                $categories[] = $this->findAllCategoriesByParentId($parentId);
+                $parent = $this->getCategory($parentId);
+                $parentId = $parent['parentId'];
+            }
+
+            $categories = array_reverse($categories);
+            return array($rootCagoies, $categories, $activeIds);
+        }
     }
 
     public function findCategoriesByIds(array $ids)
