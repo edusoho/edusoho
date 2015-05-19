@@ -259,6 +259,7 @@ class WebExtension extends \Twig_Extension
         $names[] = "customadmin";
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
+        $names[] = 'classroom';
 
         $paths = array(
             'common' => 'common',
