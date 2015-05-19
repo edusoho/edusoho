@@ -69,6 +69,7 @@ class AnnouncementController extends BaseController
 	    	$data = $request->request->all();
 	    	$data['targetType'] = $targetType;
 	    	$data['targetId'] = $targetId;
+	    	$data['url'] = isset($data['url']) ? $data['url'] : '';
 	    	$data['startTime'] = isset($data['startTime']) ? $data['startTime'] : time();
 	    	$data['endTime'] = isset($data['endTime']) ? $data['endTime'] : time();
 
