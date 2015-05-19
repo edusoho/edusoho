@@ -30,7 +30,7 @@
         <div class="class-item">
 
           <div class="class-img">
-            <a href="">
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}">
               <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
               <h3>{{ classroom.title }}</h3>
               <div class="image-overlay"></div>
