@@ -27,7 +27,7 @@ class ClassroomController extends BaseController
         if (!empty($code)) {
             $category = $this->getCategoryService()->getCategoryByCode($code);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
-            $categoryIds = $childrenIds + $category['id'];
+            $categoryIds = array_merge($childrenIds, array($category['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
 
