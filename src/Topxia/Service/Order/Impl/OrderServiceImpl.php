@@ -107,7 +107,6 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $this->getOrderDao()->updateOrder($order['id'], array(
                     'status' => 'paid',
                     'paidTime' => $payData['paidTime'],
-                    'data' => $payData
                 ));
                 $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
                 $success = true;
