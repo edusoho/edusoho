@@ -85,6 +85,7 @@
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
   app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
+  app.jsPaths.classroombundle="\/bundles\/classroom\/js";
 
   app.crontab = '{{ path('common_crontab') }}';
   {% set crontabNextExecutedTime = setting('crontab_next_executed_time', 0) %}
