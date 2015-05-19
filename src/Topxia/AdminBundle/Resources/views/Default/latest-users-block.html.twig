@@ -3,16 +3,16 @@
  	<div class="panel panel-default">
 	
 	 	<div class="panel-heading">
-	 		<h3 class="panel-title">新注册用户</h3>
+	 		<h3 class="panel-title">{{'新注册用户'|trans}}</h3>
 	 	</div>
 
     {% if users %}
   		<table class="table table-condensed table-striped table-hover">
         <thead>
           <tr>
-            <th width="40%">用户名</th>
-            <th width="25%" >注册来源</th>
-            <th width="25%">注册时间</th>
+            <th width="40%">{{'用户名'|trans}}</th>
+            <th width="25%" >{{'注册来源'|trans}}</th>
+            <th width="25%">{{'注册时间'|trans}}</th>
           </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
         </tbody>
       </table>
     {% else %}
-      <div class="empty">暂无新注册用户</div>
+      <div class="empty">{{'暂无新注册用户'|trans}}</div>
     {% endif %}
 	</div>
 </div>
