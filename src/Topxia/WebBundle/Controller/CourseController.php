@@ -291,7 +291,7 @@ class CourseController extends BaseController
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
 		}
 
-		if($this->isPluginInstalled("Classroom") && empty($member)) {
+		if(empty($member)) {
 			$addCount=0;
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
@@ -305,16 +305,15 @@ class CourseController extends BaseController
 
 		$classrooms=array();
 		$isLearnInClassrooms=array();
-		if ($this->isPluginInstalled("Classroom")) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-			foreach ($classroomIds as $key => $value) {
-				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 
-				if ($this->getClassroomService()->isClassroomStudent($value, $user->id) or $this->getClassroomService()->isClassroomTeacher($value, $user->id)) {
+		$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
+		foreach ($classroomIds as $key => $value) {
+			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 
-					$isLearnInClassrooms[] = $classrooms[$value];
+			if ($this->getClassroomService()->isClassroomStudent($value, $user->id) or $this->getClassroomService()->isClassroomTeacher($value, $user->id)) {
 
-				}
+				$isLearnInClassrooms[] = $classrooms[$value];
+
 			}
 		}
 
@@ -771,18 +770,15 @@ class CourseController extends BaseController
 			$userIds = array_merge($userIds, $course['teacherIds']);
 
 			$classrooms = array();
-			if ($this->isPluginInstalled("Classroom")) {
-				$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
+			$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
 
-				$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+			$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 
-				$courses[$key]['classroomCount']=count($classroomIds);
+			$courses[$key]['classroomCount']=count($classroomIds);
 
-				if(count($classroomIds)>0){
-
-					$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
-					$courses[$key]['classroom']=$classroom;
-				}
+			if(count($classroomIds)>0){
+				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
+				$courses[$key]['classroom']=$classroom;
 			}
 		}
 		
@@ -860,22 +856,20 @@ class CourseController extends BaseController
 	private function getClassroomCourseIds($request,$courseIds)
 	{	
 		$unEnabledCourseIds=array();
-		if($request->query->get('type') !="classroom")
+		if($request->query->get('type') !="classroom"){
 			return $unEnabledCourseIds;
+		}
 
-		if ($this->isPluginInstalled("Classroom")) {
-			
-			$classroomId=$request->query->get('classroomId');
+		$classroomId=$request->query->get('classroomId');
 
-	        foreach ($courseIds as $key => $value) {
-	        	$course=$this->getCourseService()->getCourse($value);
-	        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
-	        	if($course && count($classrooms)==0){
-	        		unset($courseIds[$key]);
-	        	}
+        foreach ($courseIds as $key => $value) {
+        	$course=$this->getCourseService()->getCourse($value);
+        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
+        	if($course && count($classrooms)==0){
+        		unset($courseIds[$key]);
+        	}
 
-	        }
-	    }
+        }
         $unEnabledCourseIds = $courseIds;
 
         return $unEnabledCourseIds;
@@ -948,15 +942,12 @@ class CourseController extends BaseController
 
 	private function getClassroomMembersByCourseId($id) {
 
-		if ($this->isPluginInstalled("Classroom")) {
-			$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-			$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
-			$user=$this->getCurrentUser();
+		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
+		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
+		$user=$this->getCurrentUser();
 
-			$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-			return $members;
-		}
-		return array();
+		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
+		return $members;
 	}
 
 	protected function getUserService()

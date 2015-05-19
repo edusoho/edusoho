@@ -171,7 +171,7 @@
   </section>
 
   <!-- 推荐班级 -->
-{% if  is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+{% if setting('classroom.enabled') %}
 {% set items = data('RecommendClassrooms',{'count':4}) %}
   <section class="index-class">
     <div class="container">

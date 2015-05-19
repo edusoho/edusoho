@@ -13,6 +13,14 @@ topxia_mobile_v2:
     resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
     prefix:   /mapi_v2
 
+classroom_web:
+    resource: "@ClassroomBundle/Resources/config/routing.yml"
+    prefix:   /
+
+classroom_admin:
+    resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
     prefix:   /
