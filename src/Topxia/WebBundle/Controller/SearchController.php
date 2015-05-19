@@ -33,10 +33,8 @@ class SearchController extends BaseController
         $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
         
         $categoryIds=array();
-        for($i=0;$i<count($categories);$i++){
-            $id = $categories[$i]['id'];
-            $name = $categories[$i]['name'];
-            $categoryIds[$id] = $name;
+        foreach ($categories as $key => $category) {
+            $categoryIds[$key] = $category['name'];
         }
 
         $categoryId = $request->query->get('categoryIds');

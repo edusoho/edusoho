@@ -1,0 +1,52 @@
+{% set categoriesFirst = data('Categories',{'group':'course'})%}
+<div class="container">
+  <div class="cuorse-filter" id="cuorse-filter">
+    <ul class="nav nav-pills hidden-xs" role="tablist">
+      <li role="presentation" class="{% if (categoryId|default('ALL') == 'ALL') %}active {% endif %} js-search"data-url="{{path('homepage_category',{categoryId : 'ALL',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+      {% if categoriesFirst%}
+        {% for category in categoriesFirst  if (category.parentId == 0) %}
+          {% if ( loop.index0 < 4 ) %}
+            <li role="presentation" class="{% if (categoryId|default('ALL') == category.id) %}active {% endif %} js-search"data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </ul>
+    <div class="btn-group visible-xs">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
+      <ul class="dropdown-menu js-cuorse-filter" role="menu">
+        <li role="presentation" class="js-search"data-url="{{path('homepage_category',{categoryId : 'ALL',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+        {% if categoriesFirst%}
+          {% for category in categoriesFirst  if (category.parentId == 0) %}
+            {% if ( loop.index0 < 4 ) %}
+              <li role="presentation" class = "js-search" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+    <div class="course-sort">
+      <a href="javascript:;" class="btn-circle {% if (orderBy|default('latest') == 'latest') %} active {% endif %}js-search" data-toggle="tooltip" data-placement="top" data-url="{{path('homepage_category',{categoryId : categoryId|default('ALL'), orderBy : 'latest'}) }}" title="按时间排序">
+        <i class="es-icon es-icon-accesstime"></i>
+      </a>
+      <a href="javascript:;" class="btn-circle {% if (orderBy|default('latest') == 'studentNum') %} active {% endif %}js-search" data-toggle="tooltip" data-url="{{path('homepage_category',{categoryId : categoryId|default('ALL'), orderBy : 'studentNum'}) }}" data-placement="top" title="最热">
+        <i class="es-icon es-icon-whatshot"></i>
+      </a>
+      <a href="javascript:;" class="btn-circle {% if (orderBy|default('latest') == 'recommendedSeq') %} active {% endif %}js-search" data-toggle="tooltip" data-
+      placement="top" data-url="{{path('homepage_category',{categoryId : categoryId|default('ALL'), orderBy : 'recommendedSeq'}) }}" title="点赞">
+        <i class="es-icon es-icon-thumbup"></i>
+      </a>
+    </div>
+  </div>
+  <div class="course-list">
+    <div class="row">
+      {% for course in courses %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="course-more">
+      <a href="{{ path('course_explore') }}" data-toggle="tooltip" data-placement="top" title="更多"><i class="es-icon es-icon-morehoriz"></i></a>
+    </div>
+  </div>
+</div>

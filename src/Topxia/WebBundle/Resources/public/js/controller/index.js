@@ -87,6 +87,13 @@ define(function(require, exports, module) {
                 }
             }()
 
+        $("#course-list").on('click','.js-search',function(){
+             var $btn = $(this);
+             $.get($btn.data('url'),function(html){
+               $('#course-list').html(html);
+            })
+        })
+        
     };
 
 });

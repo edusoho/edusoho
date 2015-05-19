@@ -1,0 +1,21 @@
+<div class="col-md-8 footer-main clearfix">
+  {{ _self.footer_div(firstColumnText|first, firstColumnLinks) }}
+  {{ _self.footer_div(secondColumnText|first, secondColumnLinks) }}
+  {{ _self.footer_div(thirdColumnText|first, thirdColumnLinks) }}
+  {{ _self.footer_div(fourthColumnText|first, fourthColumnLinks) }}
+  {{ _self.footer_div(fifthColumnText|first, fifthColumnLinks) }}
+</div>
+
+<div class="col-md-4 footer-logo">
+  <a class="" href="{{ bottomLogo[0].href|default('') }}" target="{{ bottomLogo[0].target|default('') }}"><img src="{{ asset(bottomLogo[0].src|default('')) }}" alt="{{ bottomLogo[0].alt|default('') }}"></a>
+</div>
+
+
+{% macro footer_div(title, links) %}
+<div class="link-item pull-left">
+  <h3>{{ title.value|default('') }}</h3>
+  {% for link in links|default(null) %}
+    <a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a>
+  {% endfor %}
+</div>
+{% endmacro %}

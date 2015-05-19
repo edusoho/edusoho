@@ -42,16 +42,11 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
                 $classroomTeacherIds=$classroom['teacherIds'];
             }
 
-            $users[$classroom['id']] = $this->getUserService()->findUsersByIds($classroomTeacherIds);
-
+            $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+            $classroom['users'] = $users;
         }
-
-        $allClassrooms = ArrayToolkit::index($classrooms,'id');
-
-        return array('classrooms'=>$classrooms,
-            'users'=>$users,
-            'allClassrooms'=>$allClassrooms
-            );
+        
+        return $classrooms;
     }
 
     protected function getClassroomService()

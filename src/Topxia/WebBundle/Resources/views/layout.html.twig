@@ -143,60 +143,36 @@
       </div><!-- /container -->
     {% endblock %}
   {% endblock %}
-    
+  
   <footer class="es-footer">
     <div class="footer-link">
       <div class="container">
         <div class="row">
-          <div class="col-md-8 footer-main clearfix">
-            <div class="link-item">
-              <h3>我是学生</h3>
-              <a href="javascript:;">如何注册</a>
-              <a href="javascript:;">如何学习</a>
-              <a href="javascript:;">如何互动</a>
-            </div>
-            <div class="link-item">
-              <h3>我是老师</h3>
-              <a href="javascript:;">发布课程</a>
-              <a href="javascript:;">使用题库</a>
-              <a href="javascript:;">教学资料库</a>
-            </div>
-            <div class="link-item">
-              <h3>我是管理员</h3>
-              <a href="javascript:;">系统设置</a>
-              <a href="javascript:;">课程设置</a>
-              <a href="javascript:;">用户管理</a>
-            </div>
-            <div class="link-item hidden-xs">
-              <h3>商业应用</h3>
-              <a href="javascript:;">会员专区</a>
-              <a href="javascript:;">题库增强版</a>
-              <a href="javascript:;">用户导入导出</a>
-            </div>
-            <div class="link-item hidden-xs">
-              <h3>关于我们</h3>
-              <a href="javascript:;">ES官网</a>
-              <a href="javascript:;">官方微博</a>
-              <a href="javascript:;">加入我们</a>
-            </div>
-          </div>
-          <div class="col-md-4 footer-logo">
-            <img src="{{ asset('bundles/topxiaweb/img/bottom_logo.png') }}">
-            <div class="footer-partner">
-              <a href="javascript:;"><i class="es-icon es-icon-weibo"></i></a>
-              <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
-              <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
-              <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
-            </div>
-          </div>
+          {{ block_show('default:bottom_info') }}
         </div>
       </div>
     </div>
 
     <div class="copyright">
       <div class="container">
-        <span>Powered by EduSoho v4.7.9 ©2014-2015</span>
-        <span>课程内容版权均归杭州阔知网络科技有限公司所有   浙ICP备13006852号-1</span>
+        {% include "TopxiaWebBundle::powered-by.html.twig" %}
+        {{ setting('site.analytics')|raw }} 
+        <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
+        <div class="mts">
+          {% if setting('site.copyright') %}
+            课程内容版权均归
+            <a href="/">
+              {{ setting('site.copyright') }}
+            </a>
+            所有
+          {% endif %}
+            &nbsp;
+            {% if setting('site.icp') %}
+              <a href="http://www.miibeian.gov.cn/" target="_blank">
+                {{ setting('site.icp') }}
+              </a>
+          {% endif %}
+        </div>
       </div>
     </div>
   </footer>
