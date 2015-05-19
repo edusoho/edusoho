@@ -8,32 +8,19 @@ use Topxia\Common\ArrayToolkit;
 
 class NoteController extends BaseController
 {
-    public function listAction(Request $request, $courseIds)
+    public function listAction(Request $request, $courseIds, $filters)
     {
-        if (!is_array($courseIds)) {
-            $courseIds = array($courseIds);
-        }
+       $user = $this->getCurrentUser();
 
-        $user = $this->getCurrentUser();
-
-        if (empty($courseIds)) {
-            $courseIds = array(-1);
-        }
-        
-        $conditions = array(
-            'status' => 1,
-            'courseIds' => $courseIds,
-        );
+        $conditions = $this->convertFiltersToConditions($courseIds, $filters);
 
         $paginator = new Paginator(
             $request,
             $this->getNoteService()->searchNoteCount($conditions),
             20
         );
-        $orderBy = array(
-            'likeNum' => 'DESC',
-            'createdTime' => 'DESC',
-        );
+        $orderBy = $this->convertFiltersToOrderBy($filters);
+
         $notes = $this->getNoteService()->searchNotes(
             $conditions,
             $orderBy,
@@ -52,7 +39,7 @@ class NoteController extends BaseController
             'noteLikes' => $noteLikes,
             'users' => $users,
             'paginator' => $paginator,
-            'courses' => $courses
+            'courses' => $courses,
         ));
     }
 
@@ -71,6 +58,44 @@ class NoteController extends BaseController
         $note = $this->getNoteService()->getNote($noteId);
         
         return $this->createJsonResponse($note);
+    }
+
+    private function convertFiltersToConditions($courseIds, $filters)
+    {
+        $conditions = array(
+            'status' => 1,
+        );
+
+        if (is_numeric($courseIds)) {
+            $conditions['courseId'] = $courseIds;
+        }
+
+        if (!empty($filters['courseId'])) {
+            $conditions['courseId'] = $filters['courseId'];
+        }
+
+        if (is_array($courseIds) && empty($filters['courseId'])) {
+            $conditions['courseIds'] = $courseIds;
+        }
+
+        return $conditions;
+    }
+
+    private function convertFiltersToOrderBy($filters)
+    {
+        $orderBy = array();
+        switch ($filters['sort']) {
+            case 'latest':
+                $orderBy['updatedTime'] = 'DESC';
+                break;
+            case 'likeNum':
+                $orderBy['likeNum'] = 'DESC';
+                break;
+            default:
+                $orderBy['updatedTime'] = 'DESC';
+                break;
+        }
+        return $orderBy;
     }
 
     private function getClassroomService()

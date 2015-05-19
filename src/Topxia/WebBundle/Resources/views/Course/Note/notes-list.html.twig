@@ -1,7 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% do load_script('course/note/like')%}
 
-
 <div class="note-list" id="note-list">
   {% for note in notes %}
     {% set user = users[note.userId]|default(null) %}

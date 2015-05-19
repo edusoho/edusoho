@@ -3,9 +3,13 @@
     {{ web_macro.user_avatar(user, '', 'avatar-sm', true) }}
   </div>
   <div class="media-body">
-    <div class="content">
-      <p>{{ note.content }}</p>
-      <a href="javascript:;" class="more more-show">[展开全文]</a>
+    <div class="short-long-text">
+      <div class="short-text">
+        {{ note.content|plain_text(50) }} <span class="trigger">(展开)</span>
+      </div>
+      <div class="long-text">
+       {{ note.content|raw }} <span class="trigger">(收起)</span>
+      </div>
     </div>
     <div class="metas clearfix">
       {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span> ·

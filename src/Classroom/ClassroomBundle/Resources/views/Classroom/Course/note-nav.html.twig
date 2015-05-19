@@ -10,6 +10,9 @@
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
+      <li class="{% if filters.courseId|default('') == '' %}active{% endif %}">
+        <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:''})) }}">全部课程</a>
+      </li>
       {% for course in courses %}
         <li class="{% if filters.courseId == course.id %}active{% endif %}">
           <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}">{{ course.title }}</a>
@@ -30,8 +33,8 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu hidden-xs">
-        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'latest'})) }}">最新笔记</a></li>
-        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'likeNum'})) }}">点赞最多</a></li>
+        <li class="{% if filters.sort == 'latest' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'latest'})) }}">最新笔记</a></li>
+        <li class="{% if filters.sort == 'likeNum' %}active{% endif %}"><a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'likeNum'})) }}">点赞最多</a></li>
       </ul>
     </li>
   </ul>
