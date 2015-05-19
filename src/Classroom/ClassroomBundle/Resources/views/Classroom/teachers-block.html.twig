@@ -1,39 +1,37 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 {% do load_script('classroombundle/controller/classroom/teachers') %}
+
 <div class="panel panel-default serve-team" id="class-teacher-column">
   <div class="panel-heading">
-    <i class="es-icon es-icon-school"></i>班主任</h3>
+    <h3 class="panel-title"> <i class="es-icon es-icon-assignmentind"></i>
+      班主任
+    </h3>
   </div>
   <div class="panel-body">
-
-    <div class="media">
-
     {% if headTeacher %}
-            <div class="media-left">
-                    <a class="user-link user-avatar-link js-user-card" data-card-url="{{ path('user_card_show', {userId:headTeacher.id}) }}" href="{{ path('user_show', {id:headTeacher.id}) }}" target="_blank">
-                      <img class="img-circle" src="{{ filepath(headTeacher.smallAvatar, 'avatar.png') }}" >
-                    </a>
-            </div>
+    <div class="media">
+      <div class="media-left">
+        {{ web_macro.user_avatar(headTeacher) }}
+      </div>
+      
+      <div class="media-body">
+        <a class="btn btn-default btn-xs pull-right" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('message_create',{toId:headTeacher.id}) }}">私信</a>
+        <div class="title">
+          <a class="name" href="{{ path('user_show', {id:headTeacher.id}) }}">{{ headTeacher.nickname }}</a>
+        </div>
 
-            <div class="media-body">
-                  <div class="title">
-                    <a  class="name" href="{{ path('user_show', {id:headTeacher.id}) }}" target="_blank">{{ headTeacher.nickname }}</a>
-                  </div>
-                      
-                      {% if headTeacherprofiles %}
-                      <p>
-                       {{ headTeacherprofiles.about | raw }}
-                      </p>
-                      {% endif %}
-            </div>
-
-    {% endif %}
-          </div>
-
-    {% if headTeacher is empty %}
+        {% if headTeacherprofiles %}
+          <p>
+           {{ headTeacherprofiles.about | raw }}
+          </p>
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
       <div class="empty">该{{ setting('classroom.name')|default("班级") }}尚未设置班主任</div>
     {% endif %}
 
   </div>
 </div>
+
