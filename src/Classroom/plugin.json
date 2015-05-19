@@ -1,0 +1,9 @@
+{
+    "code": "Classroom",
+    "name": "班级",
+    "description": "班级是现代最具代表性的一种教育形态，可以满足网校构建课程体系的需求，又为班级学员提供一个可以学习交流的圈子，让学习变得更加有趣，更有成效。",
+    "author": "EduSoho官方",
+    "version": "1.1.1",
+    "supprot_version": "5.0.0+",
+    "manage_index": "admin_classroom"
+}

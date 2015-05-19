@@ -1,0 +1,18 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'admin_order' %}
+{% set side_menus = menus('admin', 'admin_order') %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+          {% include 'TopxiaAdminBundle::side.html.twig' with {menus:side_menus, nav:menu} %}
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+    <div class="page-header">
+      <h4>{{ page_title('admin', menu) }}</h4>
+    </div>
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

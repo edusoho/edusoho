@@ -1,0 +1,25 @@
+<div class="col-lg-4 col-md-6 col-sm-6">
+    <div class="teacher-item">
+      <a class="teacher-img" href="">
+        <img class="avatar-lg" src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" alt="">
+        <div class="mask">
+          {{ profiles[teacher.id].about|raw }}
+        </div>
+      </a>
+      <div class="teacher-info">
+        <div class="title">
+          <a class="name" href="">{{ teacher.nickname }}</a>
+          <i class="es-icon es-icon-assignmentind color-i" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
+          <a class="follow-btn" href=""><i class="es-icon es-icon-addbox" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注"></i></a>
+        </div>
+        <div class="position">
+          {% if teacher.title %}
+            {{ teacher.title }}
+          {% else %}
+            暂无头衔
+          {% endif %}
+        </div>
+        <a class="btn btn-default btn-xs text-center" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
+      </div>
+    </div>
+  </div>

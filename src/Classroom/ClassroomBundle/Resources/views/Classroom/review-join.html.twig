@@ -1,0 +1,84 @@
+{% extends 'ClassroomBundle:Classroom:join-layout.html.twig' %}
+{% block main %}
+
+    <div class="panel panel-default">
+    <div class="panel-body">
+        {% include 'ClassroomBundle:Classroom:dashboard-nav.html.twig' with {nav:'review'} %}
+
+
+    {% if member.role != 'auditor' %}
+
+      <div id="review" class="clearfix">
+        {% if not review %}
+        <a style="display:none;float:right;" href="javascript:" class="review" >评价</a><a href="javascript:" class="unreview" style="float:right;"  >收起</a>
+        {% else %}
+        <a href="javascript:" class="review btn btn-primary pull-right" >重新评价</a><a href="javascript:" class="unreview" style="float:right;display:none;"  >收起</a>
+        {% endif %}
+              
+      </div>
+
+        <div >
+         <form id="review-form" method="post" action="{{ path('classroom_reviews', {id:classroom.id}) }}" {% if review %} style="display:none;"{% endif %}>
+          {{ web_macro.flash_messages() }}
+
+        <div class="form-group clearfix">
+          <div class="controls pull-left">
+            请打分： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('classroom_reviews', {id: classroom.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
+            {{ form_widget(form.rating) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="controls">
+            {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'评价详细内容', 'data-display':'评价详细内容', rows:6}}) }}
+          </div>
+        </div>
+
+        {{ form_rest(form) }}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <div class="reviewDiv"></div>
+        <button class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#review-form" style="float:right;">保存</button><br>
+      </form>
+    </div>
+    {% endif %}
+
+                {% if reviews is empty %}
+                  <ul class="media-list">
+                    <li class="mvl tac text-muted">暂无评价</li>
+                  </ul>
+                {% else %}
+
+                <div class="class-content">
+                  <ul class="evaluste-list">
+                    {% for review in reviews %}
+                    <li class="evaluste-item clearfix">
+                      <a class="evaluste-avatar" href=""><img src="{{ filepath(reviewUsers[review.id].largeAvatar, 'avatar.png') }}"></a>
+                      <div class="evaluste-body">
+                        <div class="user-name">
+                          <span class="evaluste-date">{{review.createdTime|smart_time}}</span>
+                        </div>
+                          <div>{{reviewUsers[review.id].nickname}}</div>
+
+                        <div class="stars-{{ (review.rating)|number_format }}"></div>
+
+                        <div class="evaluste-content" >
+                          <p>
+                            {{review.content}}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                      <hr align="center" width="710" size="1" color="#0000FF"/>
+                  {% endfor %}
+
+                  </ul>
+
+                  <ul class="pagination">
+                     {{ web_macro.paginator(paginator) }}
+                  </ul>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+  {% endblock %}

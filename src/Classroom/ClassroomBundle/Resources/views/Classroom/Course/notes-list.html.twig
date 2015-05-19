@@ -1,0 +1,8 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% set nav = 'note' %}
+{% block main %}
+
+  {{ render(controller('TopxiaWebBundle:Course/Note:list', {request:app.request, courseIds:courseIds})) }}
+
+{% endblock %}

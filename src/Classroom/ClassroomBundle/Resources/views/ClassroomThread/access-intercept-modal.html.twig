@@ -1,0 +1,16 @@
+<div class="modal access-intercept-modal" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">提示</h4>
+      </div>
+      <div class="modal-body">
+        <h4>您尚未成为{{ setting('classroom.name')|default("班级") }}成员，请先成为{{ setting('classroom.name')|default("班级") }}成员。</h4>
+      </div>
+      
+      <div class="modal-footer">
+        <a href="{{ path('classroom_become_auditor', {id:classroom.id}) }}" class="btn btn-primary">加入旁听生</a>
+      </div>
+    </div>
+  </div>
+</div>

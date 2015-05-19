@@ -1,0 +1,87 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'review/list' %}
+
+{% set menu = 'admin_classroom_review_tab' %}
+
+{% block main %}
+
+  <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+
+    <div class="form-group">
+      <select class="form-control" name="rating">
+        {{ select_options({1:'1星', 2:'2星', 3:'3星', 4:'4星', 5:'5星'}, app.request.get('rating'), '评分') }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="班级名" name="classroomTitle" value="{{ app.request.get('classroomTitle') }}">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="作者" name="author" value="{{ app.request.get('author') }}">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="评价内容关键词" name="content" value="{{ app.request.get('content') }}">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+  </form>
+
+  <div id="review-table-container">
+    <table class="table table-striped table-hover" id="review-table">
+      <thead>
+        <tr>
+          <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
+          <th width="60%">评价内容</th>
+          <th width="8">评分</th>
+          <th width="20%">作者</th>
+          <th width="8%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for review in reviews %}
+          {% set author = users[review.userId]|default(null) %}
+          {% set classroom = classrooms[review.classroomId]|default(null) %}
+          <tr id="review-table-tr-{{review.id}}" data-role="item">
+            <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
+            <td>
+              <div class="short-long-text">
+                <div class="short-text">
+                  {{ review.content|plain_text(60) }} <span class="text-muted trigger">(展开)</span>
+                </div>
+                <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">(收起)</span></div>
+              </div>
+              <div class="mts">
+                {% if classroom %}
+                  <a class="text-success text-sm" href="{{ path('course_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
+                {% else %}
+                  <span class="text-muted text-sm">班级已删除</span>
+                {% endif %}
+              </div>
+            </td>
+            <td>{{ review.rating }}星</td>
+            <td>
+              {{ admin_macro.user_link(author) }}<br>
+              <span class="text-muted">{{review.createdTime|date('Y-n-d H:i')}}</span>
+            </td>
+            <td>
+              <button class="btn btn-default btn-sm" data-role="item-delete" data-name="评价" data-url="{{ path('admin_classroom_review_delete', {id:review.id}) }}">删除</button>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20"><div class="empty">暂无评价记录</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+      <button class="btn btn-default btn-sm mlm" data-url="{{ path('admin_classroom_review_batch_delete') }}" data-role="batch-delete" data-name="评价">删除</button>
+    </div>
+  </div>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

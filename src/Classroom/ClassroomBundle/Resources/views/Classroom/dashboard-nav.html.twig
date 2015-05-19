@@ -1,0 +1,13 @@
+<ul class="nav nav-tabs" role="tablist">
+	<li role="presentation" class="{% if nav == 'introduction' %}active{% endif %}"><a  href="{{ path('classroom_introductions', {id:classroom.id}) }}">介绍</a></li>
+
+	<li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">课程<span class="badge">{{classroom.courseNum}}</span></a></li>
+
+	<li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">评价<span class="badge">{{classroom.ratingNum}}</span></a></li>
+
+	<li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">话题 <span class="badge">{{classroom.threadNum}}</span></a></li>
+
+	  <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">笔记 <span class="badge">{{ classroom.noteNum }}</span></a></li>
+
+  	<li role="presentation" class="{% if nav == 'teachers' %}active{% endif %}"><a href="{{ path('classroom_teachers', {classroomId:classroom.id}) }}">师资</a></li>
+</ul>

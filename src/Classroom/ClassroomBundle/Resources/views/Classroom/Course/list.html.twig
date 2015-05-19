@@ -1,0 +1,36 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% set nav = 'course' %}
+{% block main %}
+{% do load_script('classroombundle/controller/classroom/course/list') %}
+  <div class="class-course-list">
+    {% for course in courses %}
+      <div class="course-item">
+        <div class="media">
+          <a class="media-left" href="">
+            <img src="{{ file_path(course.middlePicture, 'course.png') }}" alt="">
+          </a>
+          <div class="media-body">
+            <div class="title">
+              <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a>
+              {% include 'TopxiaWebBundle:Review/Widget:star.html.twig' with {score:course.rating,num:course.ratingNum} %}  
+            
+              <div class="metas">
+                <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+              </div>
+              <div class="price hidden-xs">
+                原价：{% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %}
+              </div>
+              <span class="course-show">
+                <i class="es-icon es-icon-keyboardarrowup" data-lesson-url="{{ path('course_lesson_list', {courseId:course.id}) }}"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+    
+  </div>
+{% endblock %}
+   
