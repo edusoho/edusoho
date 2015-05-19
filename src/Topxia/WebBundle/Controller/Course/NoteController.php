@@ -44,12 +44,15 @@ class NoteController extends BaseController
         $noteLikes = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(ArrayToolkit::column($notes, 'id'), $user['id']);
         $userIds = ArrayToolkit::column($notes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
+        $courseIds = ArrayToolkit::column($notes, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:Course\Note:notes-list.html.twig', array(
             'notes' => $notes,
             'noteLikes' => $noteLikes,
             'users' => $users,
             'paginator' => $paginator,
+            'courses' => $courses
         ));
     }
 
@@ -78,5 +81,10 @@ class NoteController extends BaseController
     private function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

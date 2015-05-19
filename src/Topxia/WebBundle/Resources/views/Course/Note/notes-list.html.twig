@@ -1,6 +1,8 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% do load_script('course/note/like')%}
-<ul id="note-list" class="media-list note-list">
+
+
+<div class="note-list" id="note-list">
   {% for note in notes %}
     {% set user = users[note.userId]|default(null) %}
     {% set userLike = noteLikes[note.id]|default(null) %}
@@ -8,6 +10,9 @@
   {% else %}
     <div class="empty">暂无笔记记录</div>
   {% endfor %}
-</ul>
+</div>
 
-{{ web_macro.paginator(paginator) }} 
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>
+
