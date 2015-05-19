@@ -12,20 +12,28 @@
     {% if headTeacher %}
     <div class="media">
       <div class="media-left">
-        {{ web_macro.user_avatar(headTeacher) }}
+        {{ web_macro.user_avatar(headTeacher,'','img-circle') }}
       </div>
       
       <div class="media-body">
         <a class="btn btn-default btn-xs pull-right" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('message_create',{toId:headTeacher.id}) }}">私信</a>
         <div class="title">
           <a class="name" href="{{ path('user_show', {id:headTeacher.id}) }}">{{ headTeacher.nickname }}</a>
-        </div>
+          {% if headTeacher.id != app.user.id %}
+            <a class="follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:headTeacher.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注"><i class="es-icon es-icon-addbox" {% if isFollowed %}style="display:none"{% endif %}></i></a>
+            <a class="unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:headTeacher.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %} style="display:none;" {% endif %}><i class="es-icon es-icon-checkbox"></i></a>
+          {% endif %}
 
-        {% if headTeacherprofiles %}
+        </div>
+        
           <p>
-           {{ headTeacherprofiles.about | raw }}
+            {% if headTeacherprofiles %}
+              {{ headTeacherprofiles.about | raw }}
+            {% else %}
+              还没有头衔
+            {% endif %}
           </p>
-        {% endif %}
+        
       </div>
     </div>
     {% else %}
