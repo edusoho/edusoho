@@ -12,7 +12,8 @@ class NoteController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $classroom_courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($classroom_courses, 'id');
-        
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
@@ -24,14 +25,36 @@ class NoteController extends BaseController
 
         return $this->render('ClassroomBundle:Classroom\Course:notes-list.html.twig', array(
             'layout' => $layout,
+            'filters' => $this->getNoteSearchFilters($request),
             'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
             'classroom' => $classroom,
             'courseIds' => $courseIds,
+            'courses' => $courses,
         ));
     }
+
+        private function getNoteSearchFilters($request)
+    {
+        $filters = array();
+        
+        $filters['courseId'] = $request->query->get('courseId', '');
+        $filters['sort'] = $request->query->get('sort');
+
+        if (!in_array($filters['sort'], array('latest', 'likeNum'))) {
+            $filters['sort'] = 'latest';
+        }
+
+        return $filters;
+    }
+
 
     private function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

@@ -2,7 +2,9 @@
 
 {% set nav = 'note' %}
 {% block main %}
+  
+  {% include 'ClassroomBundle:Classroom/Course:note-nav.html.twig' %}
 
-  {{ render(controller('TopxiaWebBundle:Course/Note:list', {request:app.request, courseIds:courseIds})) }}
+  {{ render(controller('TopxiaWebBundle:Course/Note:list', {request:app.request, courseIds:courseIds, filters:filters})) }}
 
 {% endblock %}

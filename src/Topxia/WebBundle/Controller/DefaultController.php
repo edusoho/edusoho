@@ -191,6 +191,31 @@ class DefaultController extends BaseController
         exit();
     }
 
+    public function categoryAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $categoryId = $conditions['categoryId'];
+        if ($conditions['categoryId']  != 'ALL') {
+            $conditions['categoryId'] = intval($conditions['categoryId']);
+        }
+        else{
+            unset($conditions['categoryId']);
+        }
+        $orderBy = $conditions['orderBy'];
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+        }
+        unset($conditions['orderBy']);
+        $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
+
+        return $this->render('TopxiaWebBundle:Course:Widget/course-grid-with-condition.html.twig',array(
+            'orderBy' => $orderBy,
+            'categoryId' => $categoryId,
+            'courses' => $courses
+        ));
+    }
+
     private function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
