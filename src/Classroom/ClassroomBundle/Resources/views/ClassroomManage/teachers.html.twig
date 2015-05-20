@@ -39,7 +39,6 @@
 .ui-autocomplete-item-hl {
     background:#F6FF94;
 }
-
 </style>
        
 <div class="panel panel-default panel-col">
@@ -50,30 +49,44 @@
 
               {{ web_macro.flash_messages() }}
               {% if teacherIds %}
-              <div class="form-group" id="teachers-form-group">
-                <label class="col-md-2 control-label">
-                  设置教师
-                </label>
-                <div class="col-md-8 controls">
+                <div class="form-group" id="teachers-form-group">
+                  <label class="col-md-2 control-label">
+                    设置教师
+                  </label>
+                  <div class="col-md-8 controls">
+                    <ul class="teacher-list-group sortable-list list-group" id="teacher-list-group" data-role="list" >
+                    </ul>
 
-                      <ul class="teacher-list-group sortable-list course-wide-list" id="course-list-group" data-role="list" >
+                    <div class="input-group">
+                      {% set url = path('classroom_headteacher_match', {classroomId:classroom.id}) ~ '?q={{query}}' %}
+                      <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
+                      </span>
+                    </div>
 
-                        {% for teacherId in teacherIds %}
-                          <li class="list-group-item clearfix" data-role="item">
-                              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                              <img src="{{ filepath(teachers[teacherId].smallAvatar, 'avatar.png') }}" class="avatar-small">
-                              <span class="nickname">{{teachers[teacherId].nickname}}</span>
-                              <input type="hidden" name="teacherIds[]" value="{{teacherId}}">     
-                          </li>
-                        {% endfor %}
+                    <p class="help-block">
+                      <div>相关页面中的老师列举将会按照这里设定的顺序显示。</div>
+                      <div>教学服务团队成员有权制订学习计划、答疑、批改作业/试卷、发起活动。</div>
+                    </p>
 
-                        </ul>
-                  </div>  
-                </div>
+                  </div>
 
-                <div class="form-group">
-                  <div class="col-md-8  control-label">相关页面中的老师列举将会按照这里设定的顺序显示。</div>
+                  <script type="text/plain" data-role="model">
+                  {{ teacherItems|json_encode|raw }}
+                  </script>
+                  <script type="text/x-handlebars-template" data-role="item-template">
+                      {% verbatim %}
 
+                      <li class="list-group-item clearfix" data-role="item">
+                        <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                        <img src="{{ avatar }}" class="avatar-small">
+                        <span class="nickname">{{ nickname }}</span>
+                        <input type="hidden" name="teacherIds[]" value="{{ id }}">  
+                        <button  class="close delete-btn" data-role="item-delete" type="button" title="删除" >&times; </button>
+                      </li>
+                    {% endverbatim %}
+                  </script>
                 </div>
 
               {% else %}

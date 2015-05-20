@@ -8,12 +8,12 @@
       <a href="javascript:;" class="more more-show">[展开全文]</a>
     </div>
     <div class="metas clearfix">
-      {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span> ·
-      <a href="{{ path('course_show',{id:note.courseId}) }}" class="period">{{ courses[note.courseId].title }}</a>
+      {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span>
+      {% include 'TopxiaWebBundle:Course/Note:note-mates.html.twig' %}
       <span class="metas-sns">
-        <span class="{% if userLike is not empty %}color-p{% endif %}">
+        <span class="icon-favour">
           <a href="javascript:;" class="js-like" data-like-url="{{ path('course_note_like', {noteId:note.id}) }}" data-cancel-like-url="{{ path('course_note_cancel_like', {noteId:note.id}) }}">
-            <i class="es-icon es-icon-thumbup"></i>
+            <i class="es-icon es-icon-thumbup {% if userLike is not empty %}color-p{% endif %}"></i>
             <span class="js-like-num">{{ note.likeNum }}</span>
           </a>
         </span>

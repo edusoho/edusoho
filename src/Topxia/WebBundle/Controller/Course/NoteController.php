@@ -10,8 +10,6 @@ class NoteController extends BaseController
 {
     public function listAction(Request $request, $courseIds, $filters)
     {
-       $user = $this->getCurrentUser();
-
         $conditions = $this->convertFiltersToConditions($courseIds, $filters);
 
         $paginator = new Paginator(
@@ -28,20 +26,38 @@ class NoteController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $noteLikes = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(ArrayToolkit::column($notes, 'id'), $user['id']);
-        $userIds = ArrayToolkit::column($notes, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $courseIds = ArrayToolkit::column($notes, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $result = $this->makeNotesRelated($notes, $courseIds);
+        $result['paginator'] = $paginator;
+        $result['notes'] = $notes;
 
-        return $this->render('TopxiaWebBundle:Course\Note:notes-list.html.twig', array(
-            'notes' => $notes,
-            'noteLikes' => $noteLikes,
-            'users' => $users,
-            'paginator' => $paginator,
-            'courses' => $courses,
+        return $this->render('TopxiaWebBundle:Course\Note:notes-list.html.twig', $result);
+    }
+
+    public function showListAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(
+            'course' => $course,
+            'filters' => $this->getNoteSearchFilters($request),
+            'lessons' => $lessons
         ));
     }
+
+    private function getNoteSearchFilters($request)
+    {
+        $filters = array();
+        
+        $filters['lessonId'] = $request->query->get('lessonId', '');
+        $filters['sort'] = $request->query->get('sort');
+
+        if (!in_array($filters['sort'], array('latest', 'likeNum'))) {
+            $filters['sort'] = 'latest';
+        }
+
+        return $filters;
+    }
+
 
     public function likeAction(Request $request, $noteId)
     {
@@ -60,6 +76,27 @@ class NoteController extends BaseController
         return $this->createJsonResponse($note);
     }
 
+    private function makeNotesRelated($notes, $courseIds)
+    {
+        $user = $this->getCurrentUser();
+        $result = array();
+        $noteLikes = $this->getNoteService()->findNoteLikesByNoteIdsAndUserId(ArrayToolkit::column($notes, 'id'), $user['id']);
+        $userIds = ArrayToolkit::column($notes, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $result['noteLikes'] = $noteLikes;
+        $result['users'] = $users;
+        if (is_numeric($courseIds)) {
+            $lessonIds = ArrayToolkit::column($notes, 'lessonId');
+            $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+            $result['lessons'] = $lessons;
+        } else {
+            $courseIds = ArrayToolkit::column($notes, 'courseId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $result['courses'] = $courses;
+        }
+        return $result;
+    }
+
     private function convertFiltersToConditions($courseIds, $filters)
     {
         $conditions = array(
@@ -76,6 +113,10 @@ class NoteController extends BaseController
 
         if (is_array($courseIds) && empty($filters['courseId'])) {
             $conditions['courseIds'] = $courseIds;
+        }
+
+        if (!empty($filters['lessonId'])) {
+            $conditions['lessonId'] = $filters['lessonId'];
         }
 
         return $conditions;

@@ -20,14 +20,14 @@
       共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
     </div>
     <div class="course-cat-tags hidden-xs">
-      <a href="{{ path('search') }}" class="btn btn-default cat-tag">全部课程</a>
+      <a href="{{ path('search') }}" class="btn btn-default cat-tag {% if not coursesTypeChoices %}active{% endif %}">全部课程</a>
       {% if isShowVipSearch  %}
           {% if currentUserVipLevel  %}
-            <a href="{{ path('search',{'coursesTypeChoices':'vipCourses'}) }}" class="btn btn-default cat-tag">会员课程</a>
+            <a href="{{ path('search',{'coursesTypeChoices':'vipCourses'}) }}" class="btn btn-default cat-tag {% if coursesTypeChoices == 'vipCourses' %}active{% endif %}">会员课程</a>
           {% endif %}
       {% endif %}
-      <a href="{{ path('search',{'coursesTypeChoices':'freeCourses'}) }}" class="btn btn-default cat-tag">免费课程</a>
-      <a href="{{ path('search',{'coursesTypeChoices':'liveCourses'}) }}" class="btn btn-default cat-tag">直播课程</a>
+      <a href="{{ path('search',{'coursesTypeChoices':'freeCourses'}) }}" class="btn btn-default cat-tag {% if coursesTypeChoices == 'freeCourses' %}active{% endif %}">免费课程</a>
+      <a href="{{ path('search',{'coursesTypeChoices':'liveCourses'}) }}" class="btn btn-default cat-tag {% if coursesTypeChoices == 'liveCourses' %}active{% endif %}">直播课程</a>
     </div>
 
   </div>
