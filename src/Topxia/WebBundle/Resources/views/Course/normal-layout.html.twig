@@ -12,8 +12,9 @@
 
     <div class="col-lg-3 col-md-4  course-sidebar">
       {% block course_sidebar %}
-        {% include 'TopxiaWebBundle:Course:normal-sidebar-students.html.twig' %}
-        {% include 'TopxiaWebBundle:Course:normal-sidebar-teachers.html.twig' %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig' %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig' %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
 
       {% endblock %}
     </div>
