@@ -1,6 +1,9 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <div class="panel panel-default new-student">
   <div class="panel-heading">
-    <a href="javascript:;" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+    {% if students|length >= 15 %}
+      <a href="javascript:;" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+    {% endif %}
     <h3 class="panel-title">
       <i class="es-icon es-icon-personadd"></i>
       新加学员
@@ -8,66 +11,11 @@
   </div>
   <div class="panel-body">
     <ul class="student-list list-unstyled">
-      <li>
-        <a href="" class="cardtip">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="" class="cardtip">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="" class="cardtip">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
-      <li>
-        <a href="">
-          <img class="img-circle" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </li>
+      {% for student in students %}
+        <li>
+          {{ web_macro.user_avatar(student, 'cardtip', 'img-circle') }}
+        </li>
+      {% endfor %}
     </ul>
   </div>
 </div>

@@ -12,8 +12,8 @@
 
     <div class="col-lg-3 col-md-4  course-sidebar">
       {% block course_sidebar %}
-        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig' %}
-        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig' %}
+        {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
+        {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
         {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
 
       {% endblock %}
