@@ -117,9 +117,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $categories = array();
             $activeIds = array();
             $activeIds[] = $category['id'];
+            $level = 1;
             while ($parentId) {
                 $activeIds[] = $parentId;
-                $categories[] = $this->findAllCategoriesByParentId($parentId);
+                $categories[$level++] = $this->findAllCategoriesByParentId($parentId);
                 $parent = $this->getCategory($parentId);
                 $parentId = $parent['parentId'];
             }

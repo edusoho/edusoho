@@ -1,12 +1,12 @@
 {% do load_script('category/nav') %}
-
+{% set nextCode = '' %}
 <div class="es-tabs">
 
   <div class="tab-header">
     <ul class="clearfix">
       <li class="{% if code == '' %}active{% endif %}"><a href="{{ path(path, {code:''}) }}">全部</a></li>
       {% for cateogory in rootCategories %}
-        <li class="{% if cateogory.id in activeIds %}active{% endif %}"><a href="{{ path(path, {code:cateogory.code}) }}">{{ cateogory.name }}</a></li>
+        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path(path, {code:cateogory.code}) }}">{{ cateogory.name }}</a></li>
       {% endfor %}
     </ul>
   </div>
@@ -14,13 +14,13 @@
   
   {% if categories %}
     <div class="tab-body">
-      {% for cs in categories if cs %}
+      {% for l,cs in categories if cs %}
         <ul class="clearfix">
           {% for c in cs %}
             {% if loop.index == 1 %}
-              <li class="all"><a href="{{ path(path, {code:code}) }}">全部</a></li>
+              <li class="all"><a href="{{ path(path, {code:nextCode}) }}">全部</a></li>
             {% endif %}
-            <li class="{% if c.id in activeIds %}active{% endif %}"><a href="{{ path(path, {code:c.code}) }}">{{ c.name }}</a></li>
+            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path(path, {code:c.code}) }}">{{ c.name }}</a></li>
           {% endfor %}
         </ul>
       {% endfor %}
