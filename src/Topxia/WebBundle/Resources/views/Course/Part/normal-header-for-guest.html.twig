@@ -38,13 +38,15 @@
               <label>原价</label>
               {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
             </p>
-            <p class="activity">
-              <label>活动</label>
-              <span class="name">{{ (course.discountObj.name)|default('') }}</span>
-              <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted"
-        data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
-          ></span></span>
-            </p>
+            {% if course.discountObj|default(null) %}
+              <p class="activity">
+                <label>活动</label>
+                <span class="name">{{ course.discountObj.name }}</span>
+                <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted"
+          data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
+            ></span></span>
+              </p>
+            {% endif %}
           {% endif %}
         </div>
       </div>
