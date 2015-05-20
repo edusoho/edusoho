@@ -14,6 +14,7 @@ class CourseController extends BaseController
         $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig', array(
+            'course' => $course,
             'teachers' => $teachers,
         ));
     }
@@ -25,8 +26,15 @@ class CourseController extends BaseController
         $students = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
+            'course' => $course,
             'students' => $students,
         ));
+    }
+
+    public function favoriteAction($course)
+    {
+        $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
+        
     }
 
     protected function getCourse($course)

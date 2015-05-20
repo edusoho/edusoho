@@ -221,8 +221,14 @@ class CourseController extends BaseController
             $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
         }
 
+        $items = $this->getCourseService()->getCourseItems($course['id']);
+
+        $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
+
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show-for-guest.html.twig", array(
 			'course' => $course,
+			'items' => $items,
+			'hasFavorited' => $hasFavorited,
 		));
 
 	}

@@ -1,6 +1,6 @@
 <div class="nav-btn-tab">
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" {% if tab == 'info' %}class="active"{% endif %}><a href="javascript:;">课程概览</a></li>
+    <li role="presentation" {% if tab == 'info' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">课程概览</a></li>
     <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}> <a href="javascript:;"> 课程评价 <span class="badge">20</span> </a> </li>
     <li role="presentation" {% if tab == 'note' %}class="active"{% endif %}> <a href="{{ path('course_notes', {courseId:course.id}) }}"> 课程笔记 <span class="badge">{{ course.noteNum }}</span> </a> </li>
   </ul>

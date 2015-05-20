@@ -4,6 +4,8 @@
 {% set bodyClass = 'course-dashboard-page' %}
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
+{% set script_controller = 'course/show' %}
+
 {% block content %}
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
