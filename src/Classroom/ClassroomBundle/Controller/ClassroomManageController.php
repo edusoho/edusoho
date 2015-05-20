@@ -489,9 +489,11 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $assistants = $this->getClassroomService()->findAssistants($id);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
-        $assistants = array();
-        foreach ($users as $key => $user) {
-            $assistants[] = array(
+        $users = ArrayToolkit::index($users,"id");
+        $sortedAssistants = array();
+        foreach ($assistants as $key => $assistant) {
+            $user = $users[$assistant["userId"]];
+            $sortedAssistants[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
@@ -500,7 +502,7 @@ class ClassroomManageController extends BaseController
 
         return $this->render("ClassroomBundle:ClassroomManage:assistants.html.twig", array(
             'classroom' => $classroom,
-            'assistants' => $assistants,
+            'assistants' => $sortedAssistants,
         ));
     }
 
