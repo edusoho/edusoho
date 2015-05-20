@@ -113,10 +113,6 @@ class Version20150519141733 extends AbstractMigration
             $this->addSql("ALTER TABLE `classroom` ADD `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级笔记数量' AFTER `threadNum`;");
         }
 
-        if (!$this->isFieldExist('classroom', 'categoryId')) {
-            $this->addSql("ALTER TABLE `classroom` ADD `categoryId` INT(10) NOT NULL DEFAULT '0' COMMENT '分类id' AFTER `about`;");
-        }
-
     }
 
     protected function isFieldExist($table, $filedName)
