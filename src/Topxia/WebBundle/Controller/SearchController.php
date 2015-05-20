@@ -44,7 +44,8 @@ class SearchController extends BaseController
         $conditions = array(
             'status' => 'published',
             'title' => $keywords,
-            'categoryId' => $categoryId
+            'categoryId' => $categoryId,
+            'parentId' => 0
         );
 
         if ($coursesTypeChoices == 'vipCourses') {

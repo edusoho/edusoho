@@ -35,6 +35,7 @@ class CourseController extends BaseController
 			'status' => 'published',
 			'type' => 'normal',
 			'categoryId' => $category['id'],
+			'parentId' => 0,
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null
 		);
 

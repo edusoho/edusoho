@@ -38,44 +38,7 @@
           </div>
 
           <div class="class-serve">
-            {% set services = classroom.service %}
-            <ul class="list-unstyled clearfix">
-                <li class="one {% if 'studyPlan' in services %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="学习计划指导" data-content="精心制定的系统化学习计划让您的学习循序渐进、有条不紊，老师根据您的学习进度情况能随时给予指导。">
-                    <i class="es-icon es-icon-assignment1"></i>
-                  </a>
-                </li>
-                <li class="two {% if  'homeworkReview' in services %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="24小时作业批改" data-content="24小时内完成作业批改，即时反馈并巩固您的学习效果">
-                    <i class="es-icon es-icon-doneall"></i>
-                  </a>
-                </li>
-                <li class="three {% if  'testpaperReview' in services  %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="24小时阅卷点评" data-content="教师提供直播答疑，帮助学生">
-                    <i class="es-icon es-icon-findinpage"></i>
-                  </a>
-                </li>
-                <li class="four {% if  'teacherAnswer' in services  %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="提问必答" data-content="对于提问做到有问必答，帮您扫清学习过程中的种种障碍">
-                    <i class="es-icon es-icon-help1"></i>
-                  </a>
-                </li>
-                <li class="five {% if  'event' in services  %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="班级活动" data-content="不定期组织各种线上或线下的班级活动，让学习更加生动有趣，同学关系更为紧密">
-                    <i class="es-icon es-icon-landscape"></i>
-                  </a>
-                </li>
-                <li class="six {% if 'liveAnswer' in services %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="一对一在线答疑" data-content="提供专属的一对一在线答疑，快速答疑解惑">
-                    <i class="es-icon es-icon-headset"></i>
-                  </a>
-                </li>
-                <li class="seven {% if  'workAdvise' in services  %}active{% endif %}">
-                  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" title="就业指导" data-content="完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导">
-                    <i class="es-icon es-icon-flag"></i>
-                  </a>
-                </li>
-            </ul>
+            {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
           </div>
 
           <ul class="class-data clearfix">

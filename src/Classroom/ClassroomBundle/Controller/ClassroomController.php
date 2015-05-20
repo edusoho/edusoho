@@ -279,6 +279,8 @@ class ClassroomController extends BaseController
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
         $headTeacherprofiles = $this->getUserService()->getUserProfile($classroom['headTeacherId']);
         $profiles = $this->getUserService()->findUserProfilesByIds($classroomTeacherIds);
+        $currentUser = $this->getCurrentUser();
+        $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $headTeacher['id']);
 
         if($headTeacher && !(in_array($headTeacher, $users))){
             $teachersCount = 1 + count($users);
@@ -293,6 +295,7 @@ class ClassroomController extends BaseController
             'headTeacher' => $headTeacher,
             'headTeacherprofiles' => $headTeacherprofiles,
             'teachersCount'=>$teachersCount,
+            'isFollowed' => $isFollowed,
         ));
     }
 
