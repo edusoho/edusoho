@@ -1,0 +1,96 @@
+<section class="course-detail-header before">
+  <div class="container">
+    <div class="es-section clearfix">
+      <div class="course-img">
+        <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" alt="{{ course.title }}">
+        <div class="tags">
+          {% if course.serializeMode == 'serialize' %}
+            <span class="tag-serialing"></span>
+          {% endif %}
+          {% if course.type == 'live' %}
+            <span class="tag-live"></span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="course-info">
+        <h2 class="title">{{ course.title }}</h2>
+        <div class="subtitle">{{ course.subtitle }}</div>
+        <div class="metas">
+          <div class="score">
+            {{ web_macro.star(course.rating) }}
+            <span>({{ course.ratingNum }}人)</span>
+          </div>
+          {% if course.expiryDay %}
+            <p class="expiry-date hidden-sm">
+              <label for="">有效期</label><span>{{ course.expiryDay }}天</span>
+            </p>
+          {% endif %}
+          <p class="discount-price">
+            {% if course.discountId == 0 %}
+              <label>原价</label>
+            {% else %}
+              <label>折后价</label>
+            {% endif %}
+            {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
+          </p>
+          {% if course.discountId >= 0 %}
+            <p class="old-price hidden-sm">
+              <label>原价</label>
+              {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
+            </p>
+            <p class="activity">
+              <label>活动</label>
+              <span class="name">{{ (course.discountObj.name)|default('') }}</span>
+              <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted"
+        data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
+          ></span></span>
+            </p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="course-operation">
+        <div class="student-num hidden-xs">
+          <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
+        </div>
+        <ul class="course-data clearfix">
+          <li data-toggle="tooltip" data-placement="top" title="" data-original-title="收藏课程"><a href=""><i class="es-icon es-icon-bookmarkoutline"></i><br>收藏</a></li>
+          <!-- <li data-toggle="tooltip" data-placement="top" title="" data-original-title="取消收藏"><a href=""><i class="es-icon es-icon-bookmark"></i><br>收藏</a></li> -->
+          <li>
+            <span class="es-share top">
+              <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+                <i class="es-icon es-icon-share"></i>
+                <br>
+                分享
+              </a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <div class="bdsharebuttonbox bdshare-button-style0-24" style="padding:1px;" data-bd-bind="1429085802250">
+                  <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weixin"></i></a>
+                  <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weibo"></i></a>
+                  <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qzone"></i></a>
+                  <a href="#" class="bds_qq" data-cmd="qq" title="分享到QQ" style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qq"></i></a>
+                </div>
+              </ul>
+            </span>
+          </li>
+          <li class="hidden-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="会员免费学">
+            <i class="es-icon es-icon-crown"></i><br>会员
+          </li>
+          <!-- <li class="active" data-toggle="tooltip" data-placement="top" title="" data-original-title="会员免费学">
+            <i class="es-icon es-icon-crown"></i><br>会员
+          </li> -->
+        </ul>
+        <div class="buy">
+          <a class="btn btn-primary btn-lg" href="">购买课程</a>
+        </div>
+      </div>
+
+      {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('course_manage', {id:course.id}) }}" class="setting" title="课程管理">
+          <i class="es-icon es-icon-setting"></i>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' %}

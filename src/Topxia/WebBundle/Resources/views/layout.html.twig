@@ -133,9 +133,12 @@
     </div>
   </header>
 
+  {# main_header　即将废除 #}
   {% block main_header %} {% endblock %}
 
   {% block full_content %}
+    {% block top_content %}{% endblock %}
+    {# main_content 即将废除  #}
     {% block main_content %}
       <div id="content-container" class="container">
         {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}

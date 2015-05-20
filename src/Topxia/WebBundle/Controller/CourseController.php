@@ -209,11 +209,25 @@ class CourseController extends BaseController
 		));
 	}
 
+	public function showAction(Request $request, $id)
+	{
+		$course = $this->getCourseService()->getCourse($id);
+
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
+            $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
+        }
+
+		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show-for-guest.html.twig", array(
+			'course' => $course,
+		));
+
+	}
+
 	/**
 	 * 如果用户已购买了此课程，或者用户是该课程的教师，则显示课程的Dashboard界面。
 	 * 如果用户未购买该课程，那么显示课程的营销界面。
 	 */
-	public function showAction(Request $request, $id)
+	public function show2Action(Request $request, $id)
 	{
 		$course = $this->getCourseService()->getCourse($id);
 
@@ -280,17 +294,6 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 
-		$homeworkLessonIds =array();
-		$exercisesLessonIds =array();
-		if($this->isPluginInstalled("Homework")) {
-            $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-            $lessonIds = ArrayToolkit::column($lessons, 'id');
-            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
-            $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
-            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
-            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
-		}
-
 		if($this->isPluginInstalled("Classroom") && empty($member)) {
 			$addCount=0;
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
@@ -321,10 +324,6 @@ class CourseController extends BaseController
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
 			$lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $course['id']);
-			if($coursesPrice ==1){
-				$course['price'] =0;
-				$course['coinPrice'] =0;
-			}
 
 			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
 				'course' => $course,
@@ -337,8 +336,6 @@ class CourseController extends BaseController
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
 				'ChargeCoin'=> $ChargeCoin,
-				'homeworkLessonIds' => $homeworkLessonIds,
-				'exercisesLessonIds' => $exercisesLessonIds,
 				'isLearnInClassrooms'=> $isLearnInClassrooms
 			));
 		}
@@ -361,11 +358,6 @@ class CourseController extends BaseController
 
 		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
 		if($freeLesson)$freeLesson=$freeLesson[0];
-		
-		if($coursesPrice == 1){
-			$course['price'] =0;
-			$course['coinPrice'] =0;
-		}
 
 		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
 			'course' => $course,

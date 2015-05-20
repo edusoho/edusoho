@@ -22,9 +22,9 @@
 
     {% if 'full' in shows or 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price"><del>{{course.originCoinPrice}}</del></span>
+        <span class="origin-price"><del>{{course.originCoinPrice}} {{setting('coin.coin_name', '虚拟币')}}</del></span>
       {% else %}
-        <span class="origin-price"><del>{{course.originPrice}}</del></span>
+        <span class="origin-price"><del>{{course.originPrice}} 元</del></span>
       {% endif %}
     {% endif %}
 
@@ -54,7 +54,7 @@
 
     {% if 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price">{{course.originCoinPrice}}</span>
+        <span class="origin-price">{{course.originCoinPrice}} {{setting('coin.coin_name', '虚拟币')}}</span>
       {% else %}
         ¥<span class="origin-price">{{course.originPrice}}</span>
       {% endif %}
