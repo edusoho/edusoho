@@ -1,0 +1,45 @@
+{% extends 'ClassroomBundle:Classroom:layout.html.twig' %}
+{% block main %}
+
+    <div class="panel panel-default">
+    <div class="panel-body">
+        {% include 'ClassroomBundle:Classroom:dashboard-nav.html.twig' with {nav:'review'} %}
+                {% if reviews is empty %}
+                  <ul class="media-list">
+                    <li class="mvl tac text-muted">暂无评价</li>
+                  </ul>
+                {% else %}
+                  <div class="class-content">
+                    <ul class="evaluste-list">
+                      {% for review in reviews %}
+                    <li class="evaluste-item clearfix">
+                      <a class="evaluste-avatar" href=""><img src="{{ filepath(reviewUsers[review.id].largeAvatar, 'avatar.png') }}"></a>
+                      <div class="evaluste-body">
+                        <div class="user-name">
+                          <span class="evaluste-date">{{review.createdTime|smart_time}}</span>
+                        </div>
+                          <div>{{reviewUsers[review.id].nickname}}</div>
+
+                        <div class="stars-{{ (review.rating)|number_format }}"></div>
+
+                        <div class="evaluste-content" >
+                          <p>
+                            {{review.content}}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                      <hr align="center" width="710" size="1" color="#0000FF"/>
+                  {% endfor %}
+
+                    </ul>
+
+                    <ul class="pagination">
+                       {{ web_macro.paginator(paginator) }}
+                    </ul>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+  {% endblock %}

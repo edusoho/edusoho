@@ -1,0 +1,13 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+
+{% block main %}
+  {{ load_script('thread/thread-show') }}
+
+  {{ render(controller('TopxiaWebBundle:Thread:show', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread})) }}
+
+
+{% endblock %}
+
+

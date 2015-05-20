@@ -12,66 +12,70 @@ use Topxia\Service\Util\LiveClientFactory;
 
 class CourseController extends BaseController
 {
-	public function exploreAction(Request $request, $category)
+	public function exploreAction(Request $request)
 	{
-		if (!empty($category)) {
-			if (ctype_digit((string) $category)) {
-				$category = $this->getCategoryService()->getCategory($category);
-			} else {
-				$category = $this->getCategoryService()->getCategoryByCode($category);
-			}
-
-			if (empty($category)) {
-				throw $this->createNotFoundException();
-			}
-		} else {
-			$category = array('id' => null);
+		$conditions = $request->query->all();
+		if(!isset($conditions['code'])){
+			$conditions['code'] = '';
 		}
-		
 
-		$sort = $request->query->get('sort', 'latest');
-
-		$conditions = array(
-			'status' => 'published',
-			'type' => 'normal',
-			'categoryId' => $category['id'],
-			'recommended' => ($sort == 'recommendedSeq') ? 1 : null
-		);
-
-		if ($sort == 'free') {
+        if (!empty($conditions['code'])) {
+            $category = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
+            $categoryIds = array_merge($childrenIds, array($category['id']));
+            $conditions['categoryIds'] = $categoryIds;
+        }
+		if(!isset($conditions['sort'])){
+			$conditions['sort'] ='ALL';
+		}
+		elseif ($conditions['sort'] == 'free') {
 			$conditions['price'] = '0.00';
 			$conditions['coinPrice'] = '0.00';
 		}
+		elseif ($conditions['sort'] == 'live'){
+			$conditions['type'] = 'live';
+		}
+		$sort = $conditions['sort'];
+		unset($conditions['sort']);
+		if(!isset($conditions['orderBy'])){
+			$conditions['orderBy'] = 'latest';
+		}
 
+		$conditions['recommended'] = ($conditions['orderBy'] == 'recommendedSeq') ? 1 : null;
+		$code = $conditions['code'];
+		unset($conditions['code']);
+		$orderBy = $conditions['orderBy'];
+		unset($conditions['orderBy']);
+
+		$conditions['parentId'] = 0;
 		$paginator = new Paginator(
 			$this->get('request'),
-			$this->getCourseService()->searchCourseCount($conditions)
-			, 10
+			$this->getCourseService()->searchCourseCount($conditions),
+			12
 		);
-
 		$courses = $this->getCourseService()->searchCourses(
-			$conditions, $sort,
+			$conditions, 
+			$orderBy,
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
-
 		$group = $this->getCategoryService()->getGroupByCode('course');
 		if (empty($group)) {
 			$categories = array();
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-		
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
-			'category' => $category,
+			'code' => $code,
 			'sort' => $sort,
+			'orderBy' => $orderBy,
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			'path' => 'course_explore'
 			
-
-		));
+		));	
 	}
 
 	public function archiveAction(Request $request)
@@ -294,7 +298,19 @@ class CourseController extends BaseController
 
 		$member = $this->previewAsMember($previewAs, $member, $course);
 
-		if($this->isPluginInstalled("Classroom") && empty($member)) {
+
+		$homeworkLessonIds =array();
+		$exercisesLessonIds =array();
+		if($this->isPluginInstalled("Homework")) {
+            $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+            $lessonIds = ArrayToolkit::column($lessons, 'id');
+            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+            $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
+            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
+            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+		}
+
+		if(empty($member)) {
 			$addCount=0;
 			$classroomMembers = $this->getClassroomMembersByCourseId($id);
 			foreach ($classroomMembers as $classroomMember) {
@@ -308,16 +324,15 @@ class CourseController extends BaseController
 
 		$classrooms=array();
 		$isLearnInClassrooms=array();
-		if ($this->isPluginInstalled("Classroom")) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-			foreach ($classroomIds as $key => $value) {
-				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 
-				if ($this->getClassroomService()->isClassroomStudent($value, $user->id) or $this->getClassroomService()->isClassroomTeacher($value, $user->id)) {
+		$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
+		foreach ($classroomIds as $key => $value) {
+			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 
-					$isLearnInClassrooms[] = $classrooms[$value];
+			if ($this->getClassroomService()->isClassroomStudent($value, $user->id) or $this->getClassroomService()->isClassroomTeacher($value, $user->id)) {
 
-				}
+				$isLearnInClassrooms[] = $classrooms[$value];
+
 			}
 		}
 
@@ -763,18 +778,15 @@ class CourseController extends BaseController
 			$userIds = array_merge($userIds, $course['teacherIds']);
 
 			$classrooms = array();
-			if ($this->isPluginInstalled("Classroom")) {
-				$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
+			$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
 
-				$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+			$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 
-				$courses[$key]['classroomCount']=count($classroomIds);
+			$courses[$key]['classroomCount']=count($classroomIds);
 
-				if(count($classroomIds)>0){
-
-					$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
-					$courses[$key]['classroom']=$classroom;
-				}
+			if(count($classroomIds)>0){
+				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
+				$courses[$key]['classroom']=$classroom;
 			}
 		}
 		
@@ -852,22 +864,20 @@ class CourseController extends BaseController
 	private function getClassroomCourseIds($request,$courseIds)
 	{	
 		$unEnabledCourseIds=array();
-		if($request->query->get('type') !="classroom")
+		if($request->query->get('type') !="classroom"){
 			return $unEnabledCourseIds;
+		}
 
-		if ($this->isPluginInstalled("Classroom")) {
-			
-			$classroomId=$request->query->get('classroomId');
+		$classroomId=$request->query->get('classroomId');
 
-	        foreach ($courseIds as $key => $value) {
-	        	$course=$this->getCourseService()->getCourse($value);
-	        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
-	        	if($course && count($classrooms)==0){
-	        		unset($courseIds[$key]);
-	        	}
+        foreach ($courseIds as $key => $value) {
+        	$course=$this->getCourseService()->getCourse($value);
+        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
+        	if($course && count($classrooms)==0){
+        		unset($courseIds[$key]);
+        	}
 
-	        }
-	    }
+        }
         $unEnabledCourseIds = $courseIds;
 
         return $unEnabledCourseIds;
@@ -940,15 +950,12 @@ class CourseController extends BaseController
 
 	private function getClassroomMembersByCourseId($id) {
 
-		if ($this->isPluginInstalled("Classroom")) {
-			$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-			$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
-			$user=$this->getCurrentUser();
+		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
+		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
+		$user=$this->getCurrentUser();
 
-			$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-			return $members;
-		}
-		return array();
+		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
+		return $members;
 	}
 
 	protected function getUserService()

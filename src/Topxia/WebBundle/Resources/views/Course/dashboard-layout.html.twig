@@ -25,7 +25,7 @@
     </div>
     <div class="col-md-4 course-dashboard-side">
 
-      {% if is_plugin_installed('Classroom') and setting('classroom.enabled')|default(0) and isLearnInClassrooms|default(null) %}
+      {% if setting('classroom.enabled')|default(0) and isLearnInClassrooms|default(null) %}
       <div class="panel panel-default go-class">
         <div class="panel-body ">
           <p>您正在以下{{ setting('classroom.name')|default("班级") }}学习此课程</p>

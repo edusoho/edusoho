@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ setting('classroom.name')|default("班级") }} -{{classroom.title}}  {{ parent() }}{% endblock %}
+{% block keywords %} {{classroom.title}} {% endblock %}
+{% do load_script('classroombundle/controller/classroom/unjoin') %}
+
+
+{% block main_header %}
+
+{{ render(controller('ClassroomBundle:Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
+
+{% endblock %}
+
+{% block content %}
+  {% include 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends layout|default('ClassroomBundle:Classroom:layout.html.twig') %}
+
+{% block content %}
+<div class="class-detail row">
+  <div class="col-lg-9 col-md-8 class-detail-main">
+
+    {# <section class="alert alert-warning" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> #}
+            {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:classroom,targetType:'classroom'})) }}
+    {# </section> #}
+
+    <section class="es-section">
+      {% if nav is defined %}
+        {% include 'ClassroomBundle:Classroom:dashboard-nav.html.twig' %}
+      {% endif %}
+      <div class="class-detail-content">
+        {% block main %}
+        {% endblock %}
+      </div>
+    </section>
+  </div>
+
+  <aside class="col-lg-3 col-md-4 class-sidebar">
+    {% block side %}
+      {% if member.role|default(null) == 'auditor' or member.role|default(null) == 'student' %}
+        {{ render(controller('ClassroomBundle:Classroom:signPage',{classroomId:classroom.id})) }}
+      {% endif %}
+
+      {{ render(controller('ClassroomBundle:Classroom:teachersBlock',{classroom:classroom})) }}
+
+      {{ render(controller('ClassroomBundle:Classroom:latestMembersBlock',{classroom:classroom})) }}
+
+      {{ render(controller('ClassroomBundle:Classroom:classroomStatusBlock',{classroom:classroom})) }}
+    {% endblock %}
+  </aside>
+
+  {% if not canLook|default(false) %}
+    <input type="hidden" name="access-intercept-check" value="{{ path('classroom_canview', {classroomId:classroom.id}) }}">
+    {% include 'ClassroomBundle:ClassroomThread:access-intercept-modal.html.twig' %}
+  {% endif %}
+</div>
+{% endblock %}

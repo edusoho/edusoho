@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ setting('classroom.name')|default("班级") }} -{{classroom.title}} {{ parent() }}{% endblock %}
+
+{% do load_script('classroombundle/controller/classroom/classroom-join') %}
+
+{% block main_header %}
+
+{{ render(controller('ClassroomBundle:Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
+
+{% endblock %}
+
+
+{% block content %}
+  <div class="class-detail row">
+    {% block main %} {% endblock %}
+  </div>
+{% endblock %}

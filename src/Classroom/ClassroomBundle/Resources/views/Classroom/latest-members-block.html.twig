@@ -1,0 +1,21 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% if students %}
+      <div class="panel panel-default new-student">
+	<div class="panel-heading">
+	          <h3 class="panel-title"><i class="es-icon es-icon-personadd"></i>新加学员</h3>
+	</div>
+	<div class="panel-body">
+	          <ul class="student-list list-unstyled">
+		{% for  student in students %}
+			{% set user = users[student.userId] %}
+			{% if loop.index < 16%}
+			<li>
+			{{ web_macro.user_avatar(user, '', 'img-circle', true) }}
+			</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	</div>
+</div>
+
+{% endif %}

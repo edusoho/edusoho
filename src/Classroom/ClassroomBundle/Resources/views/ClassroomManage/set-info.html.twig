@@ -1,0 +1,78 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'classroombundle/controller/classroom/set-info' %}
+
+{% block title %}基本信息 - {{ parent() }}{% endblock %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">基本信息</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="title">名称</label>
+        </div>
+        <div class="controls col-md-8">
+          <input name="title" type="text"  id="title" class="form-control" value="{{classroom.title}}"/>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >简介</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea name="about" class="form-control" rows="6">{{ classroom.about|raw }}</textarea>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >课程说明</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea name="description" rows="10" class="form-control" 
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+          id="description">{{classroom.description}}</textarea>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >是否开放加入</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          {{ radios('private', {'0':'是', '1':'否'}, classroom.private|default('0') ) }}
+          <div class="help-block">选择“否”，将不允许自行加入，适用于封闭教学</div>
+        </div>
+
+      </div>
+      
+      <div class="form-group">
+        <label class="col-md-2 control-label">分类</label>
+        <div class="col-md-8 controls">
+          <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+            {{ select_options(category_choices('course'), classroom.categoryId, '分类') }}
+          </select>
+          <div class="help-block" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary" id="classroom-save">提交</button>  
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

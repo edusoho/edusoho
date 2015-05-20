@@ -23,7 +23,7 @@ class Version20150415103250 extends AbstractMigration
         $this->addSql("ALTER TABLE `course_announcement` CHANGE `courseId` `targetId`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告类型ID'");
 
         if($this->isTableExist("announcement")) {
-            $this->addSql("insert into `course_announcement` (content, url, startTime, endTime, userId, targetId, targetType) select title, url, startTime, endTime, userId, 0, 'global' from announcement");
+            $this->addSql("insert into `course_announcement` (content, url, startTime, endTime, userId, targetId, targetType, createdTime) select title, url, startTime, endTime, userId, 0, 'global', 0 from announcement");
             $this->addSql("drop TABLE `announcement`;");
         }
 

@@ -1,0 +1,26 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% set nav = 'review' %}
+
+{% block main %}
+  <section>
+    {% if member and member.role != 'auditor' %}
+      {% include 'ClassroomBundle:Classroom/Review:do.html.twig' %}
+    {% endif %}
+  </section>
+
+  <section>
+    <div class="course-evaluate">
+      {% for review in reviews %}
+        {% include 'TopxiaWebBundle:Review:item.html.twig' %}
+      {% else %}
+        <div class="empty text-muted">暂无评价</div>
+      {% endfor %}
+
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+    </div>
+  </section>
+
+{% endblock %}

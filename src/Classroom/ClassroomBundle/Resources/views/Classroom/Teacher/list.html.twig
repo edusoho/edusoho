@@ -1,0 +1,12 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% set nav = 'teachers' %}
+{% block main %}
+
+  <div class="teacher-list row">
+  {% for teacher in teachers %}
+    {% include 'ClassroomBundle:Classroom/Teacher:item.html.twig' %}
+  {% endfor %}
+  </div>
+
+{% endblock %}
