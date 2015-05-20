@@ -180,6 +180,7 @@ interface UserService
 
     public function findUserFollowerCount($userId);
     
+    //当前用户关注的人们
     public function findAllUserFollower($userId);
 
     /**
