@@ -12,6 +12,7 @@
   <section>
     <div class="course-evaluate">
       {% for review in reviews %}
+        {% set user = users[review.id] %}
         {% include 'TopxiaWebBundle:Review:item.html.twig' %}
       {% else %}
         <div class="empty text-muted">暂无评价</div>
