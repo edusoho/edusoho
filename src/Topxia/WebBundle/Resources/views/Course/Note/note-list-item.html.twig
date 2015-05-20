@@ -13,7 +13,7 @@
       <span class="metas-sns">
         <span class="icon-favour">
           <a href="javascript:;" class="js-like" data-like-url="{{ path('course_note_like', {noteId:note.id}) }}" data-cancel-like-url="{{ path('course_note_cancel_like', {noteId:note.id}) }}">
-            <i class="es-icon es-icon-thumbup {% if userLike is not empty %}color-p{% endif %}"></i>
+            <i class="es-icon es-icon-thumbup {% if userLike %}color-p{% endif %}"></i>
             <span class="js-like-num">{{ note.likeNum }}</span>
           </a>
         </span>
