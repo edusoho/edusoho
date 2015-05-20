@@ -4,7 +4,7 @@
   </div>
   <div class="media-body">
     <div class="title">
-      {{ web_macro.user_link(user, '', false) }} {{review.createdTime|smart_time}}</div>
+      {{ web_macro.user_link(user, '') }} {{review.createdTime|smart_time}}</div>
 
     {% include 'TopxiaWebBundle:Review/Widget:star.html.twig' with {score:review.rating} %}
    
