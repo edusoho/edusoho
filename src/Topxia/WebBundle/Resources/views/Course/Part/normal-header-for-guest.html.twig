@@ -48,11 +48,13 @@
           {% endif %}
         </div>
       </div>
+
       <div class="course-operation">
         <div class="student-num hidden-xs">
-          <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
+          <i class="es-icon es-icon-people"></i>283人
         </div>
-        <ul class="course-data clearfix">
+        <!-- 当属于会员班级时， ul中添加actvie这一class -->
+        <ul class="course-data clearfix active">
           <li data-toggle="tooltip" data-placement="top" title="" data-original-title="收藏课程"><a href=""><i class="es-icon es-icon-bookmarkoutline"></i><br>收藏</a></li>
           <!-- <li data-toggle="tooltip" data-placement="top" title="" data-original-title="取消收藏"><a href=""><i class="es-icon es-icon-bookmark"></i><br>收藏</a></li> -->
           <li>
@@ -72,17 +74,18 @@
               </ul>
             </span>
           </li>
-          <li class="hidden-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="会员免费学">
+          <li class="hidden-xs color-w icon-vip" title="" data-content="银牌会员免费学<br><a href=&quot;http://edusoho.com&quot;>加入会员</a>" data-original-title="会员课程">
             <i class="es-icon es-icon-crown"></i><br>会员
           </li>
-          <!-- <li class="active" data-toggle="tooltip" data-placement="top" title="" data-original-title="会员免费学">
-            <i class="es-icon es-icon-crown"></i><br>会员
-          </li> -->
         </ul>
         <div class="buy">
           <a class="btn btn-primary btn-lg" href="">购买课程</a>
         </div>
       </div>
+
+
+
+
 
       {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('course_manage', {id:course.id}) }}" class="setting" title="课程管理">
