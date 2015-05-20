@@ -417,7 +417,6 @@ class ClassroomManageController extends BaseController
             if ($fields) {
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
-
             $this->setFlashMessage('success', "保存成功！");
         }
 
@@ -425,13 +424,25 @@ class ClassroomManageController extends BaseController
 
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
+        $teacherItems = array();
+        foreach ($teacherIds as $key => $teacherId) {
+            $user = $teachers[$teacherId];
+            $teacherItems[] = array(
+                'id' => $user['id'],
+                'nickname' => $user['nickname'],
+                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+            );
+        }
+
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
 
         return $this->render("ClassroomBundle:ClassroomManage:teachers.html.twig", array(
             'classroom' => $classroom,
             'teachers' => $teachers,
             'teacherIds' => $teacherIds,
-            'headTeacher' => $headTeacher, ));
+            'headTeacher' => $headTeacher,
+            'teacherItems' => $teacherItems
+        ));
     }
 
     public function headteacherAction(Request $request, $id)
