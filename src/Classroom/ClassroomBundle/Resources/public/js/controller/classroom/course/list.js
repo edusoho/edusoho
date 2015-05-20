@@ -2,9 +2,11 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
+    var Lazyload = require('echo.js');
 
     exports.run = function() {
-       var courseList = Widget.extend({
+        Lazyload.init();
+        var courseList = Widget.extend({
             events: {
                 'click .es-icon-keyboardarrowup': 'onExpandCourse',
                 'click .es-icon-keyboardarrowdown': 'onCollapseCourse'

@@ -8,7 +8,7 @@
       <div class="course-item">
         <div class="media">
           <a class="media-left" href="{{ path('course_show', {id:course.id}) }}">
-            <img src="{{ file_path(course.middlePicture, 'course.png') }}" alt="">
+            {{ lazy_img(filepath(course.middlePicture, 'course.png'), '', '') }}
           </a>
           <div class="media-body">
             <div class="title">
