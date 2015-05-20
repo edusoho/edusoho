@@ -8,15 +8,33 @@
     action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id, type:type}) }}"
     {% endif %}
   >
-
-  <div class="form-group">
-      <label for="title" class="col-sm-2 control-label">活动标题</label>
-    <div class="col-sm-7">
-      <input type="type" id="title" class="form-control" placeholder="标题" ata-display="标题" name= "title" value="{{ thread.title|default('') }}">
-      </div>
-  </div>
   
+  {% if type =='question' %}
+    <div class="form-group">
+        <label for="title" class="col-sm-2 control-label">问题</label>
+      <div class="col-sm-7">
+        <input type="type" id="title" class="form-control" placeholder="问题" ata-display="问题" name= "title" value="{{ thread.title|default('') }}">
+        </div>
+    </div>
+  {% endif %}
+  
+  {% if type =='discussion' %}
+    <div class="form-group">
+        <label for="title" class="col-sm-2 control-label">话题标题</label>
+      <div class="col-sm-7">
+        <input type="type" id="title" class="form-control" placeholder="话题标题" ata-display="话题标题" name= "title" value="{{ thread.title|default('') }}">
+        </div>
+    </div>
+  {% endif %}
+
   {% if type == 'event' %}
+    <div class="form-group">
+        <label for="title" class="col-sm-2 control-label">活动标题</label>
+      <div class="col-sm-7">
+        <input type="type" id="title" class="form-control" placeholder="活动标题" ata-display="标题" name= "title" value="{{ thread.title|default('') }}">
+        </div>
+    </div>
+
     <div class="js-event-content" {% if type != 'event' %}style="display:none;" {% endif %}>
       <div class="form-group">
         <div class="col-md-2 control-label">

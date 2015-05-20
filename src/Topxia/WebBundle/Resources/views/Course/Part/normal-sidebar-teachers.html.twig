@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <div class="panel panel-default serve-team">
   <div class="panel-heading">
     <h3 class="panel-title"> <i class="es-icon es-icon-assignmentind"></i>
@@ -5,36 +6,18 @@
     </h3>
   </div>
   <div class="panel-body">
-    <div class="media">
-      <div class="media-left">
-        <a href="" class="cardtip">
-          <img class="avatar-md" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </div>
-      <div class="media-body">
-        <a class="btn btn-default btn-xs pull-right" herf="">私信</a>
-        <div class="title">
-          <a class="name" href="">贝克汉姆</a>
-          <a class="follow-btn" href=""> <i class="es-icon es-icon-addbox" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注"></i>
-          </a>
+    {% for teacher in teachers %}
+      <div class="media">
+        <div class="media-left">
+          {{ web_macro.user_avatar(teacher, 'cardtip', 'avatar-md') }}
         </div>
-        <p>微软认证工程师</p>
-      </div>
-    </div>
-    <div class="media">
-      <div class="media-left">
-        <a href="http://123.com" class="cardtip" data-coursenum="123" data-fallownum="13" data-fansnum="123">
-          <img class="avatar-md" src="{{ filepath('', 'avatar.png') }}" alt=""></a>
-      </div>
-      <div class="media-body">
-        <a class="btn btn-default btn-xs pull-right" herf="">私信</a>
-        <div class="title">
-          <a class="name" href="">贝克汉姆</a>
-          <a class="follow-btn" href="">
-            <i class="es-icon es-icon-addbox" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注"></i>
-          </a>
+        <div class="media-body">
+          <div class="title">
+            {{ web_macro.user_link(teacher , 'name') }}
+          </div>
+          <p>{{ teacher.title }}</p>
         </div>
-        <p>微软认证工程师</p>
       </div>
-    </div>
+    {% endfor %}
   </div>
 </div>

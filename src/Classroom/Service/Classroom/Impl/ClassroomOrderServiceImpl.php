@@ -42,8 +42,6 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 throw $this->createServiceException('该班级是封闭班级，学员不能自行加入！');
             }
 
-            $this->cancelOldOrders($classroom, $user);
-
             $order = array();
 
             $order['userId'] = $user['id'];
