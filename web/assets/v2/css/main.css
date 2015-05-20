@@ -208,6 +208,50 @@ a:focus {
 .gray-lighter {
   color: #f5f5f5 !important;
 }
+@keyframes rotate {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.5, 1.5);
+  }
+  100% {
+    -moz-transform: scale(1, 1);
+  }
+}
+@-moz-keyframes rotate {
+  0% {
+    -moz-transform: scale(1, 1);
+  }
+  50% {
+    -moz-transform: scale(1.5, 1.5);
+  }
+  100% {
+    -moz-transform: scale(1, 1);
+  }
+}
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: scale(1, 1);
+  }
+  50% {
+    -webkit-transform: scale(1.5, 1.5);
+  }
+  100% {
+    -webkit-transform: scale(1, 1);
+  }
+}
+@-o-keyframes rotate {
+  0% {
+    -o-transform: scale(1, 1);
+  }
+  50% {
+    -o-transform: scale(1.5, 1.5);
+  }
+  100% {
+    -o-transform: scale(1, 1);
+  }
+}
 .lg-p {
   line-height: 30px;
   margin-bottom: 30px;
@@ -1062,6 +1106,12 @@ body.nav-active {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+.note-list .note-item .metas .icon-favour.active > a > i {
+  animation: rotate 2s;
+  -moz-animation: rotate 2s;
+  -webkit-animation: rotate 2s;
+  -o-animation: rotate 2s;
 }
 .text-line {
   position: relative;

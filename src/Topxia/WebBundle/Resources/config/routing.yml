@@ -254,6 +254,10 @@ course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: TopxiaWebBundle:Course:info }
 
+course_notes:
+    pattern:  /course/{courseId}/notes
+    defaults: { _controller: TopxiaWebBundle:Course\Note:showList }
+
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }

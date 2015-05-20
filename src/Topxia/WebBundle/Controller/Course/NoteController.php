@@ -43,6 +43,12 @@ class NoteController extends BaseController
         ));
     }
 
+    public function showListAction(Request $request, $courseId)
+    {
+        return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig');
+    }
+
+
     public function likeAction(Request $request, $noteId)
     {
         $this->getNoteService()->like($noteId);
@@ -76,6 +82,10 @@ class NoteController extends BaseController
 
         if (is_array($courseIds) && empty($filters['courseId'])) {
             $conditions['courseIds'] = $courseIds;
+        }
+
+        if (!empty($filters['lessonId'])) {
+            $conditions['lessonId'] = $filters['lessonId'];
         }
 
         return $conditions;
