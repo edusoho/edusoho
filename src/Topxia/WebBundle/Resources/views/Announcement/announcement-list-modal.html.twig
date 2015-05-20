@@ -2,7 +2,8 @@
 
 {% block title %}公告
 	{% if canManage %}
-		<a href="#modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetId}) }}" data-toggle="modal" class="es-icon es-icon-anonymous-iconfont annoucement-add-btn"></a>
+		<a href="#modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetId}) }}" data-toggle="modal" class="annoucement-add-btn">
+    <i data-original-title="添加" class="es-icon es-icon-anonymous-iconfont" data-toggle="tooltip" data-placement="top" title=""></i>  </a>
 	{% endif %}
 {% endblock %}
 
