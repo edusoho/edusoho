@@ -1,0 +1,27 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back>
+</a>
+
+<h1 class="title">设 置</h1>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content>
+    <div class="list setting">
+      <a class="item item-icon-left item-icon-right lessonlabel" href="#">
+        <i class="icon"></i>
+        扫一扫
+          <span>
+            扫描进入网校
+          </span>
+        <i class="icon iconfont icon-chevronright"></i>
+      </a>
+
+      <a class="item btn" ng-if="isShowLogoutBtn">
+          <button class="button button-block button-assertive" ng-click="logout()">
+            退出账号
+          </button>
+      </a>
+  </div>
+  </ion-content>
+</ion-view>

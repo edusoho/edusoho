@@ -1,0 +1,94 @@
+
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back>
+</a>
+
+<h1 class="title">
+  <span>
+    分类搜索
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left courselist-tab">
+  <ion-tab class="ng-hide">
+  </ion-tab>
+  <ion-tab title="分类&#xe721;" class="iconfont">
+    <ion-nav-view>
+      <ion-view modal>
+                  <div class="content category-card">
+                      <category-tree ng-if="categoryTree" data="categoryTree" listener="categorySelectedListener">
+                      </category-tree>
+                  </div>
+                  <div class="backdrop-bg"></div>
+      </ion-view>
+    <ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="全部分类&#xe721;" class="iconfont">
+    <ion-nav-view>
+      <ion-view modal>
+                      <div class="content">
+                        <div class="list">
+                          <a class="item " ng-click="selectType(item.type)" ng-repeat="item in courseListTypes">
+                            {{ item.name }}
+                          </a>
+                        </div>
+                      </div>
+                      <div class="backdrop-bg"></div>
+      </ion-view>
+    <ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="综合排序&#xe721;" class="iconfont">
+    <ion-nav-view>
+      <ion-view modal>
+                    <div class="content">
+                      <div class="list">
+                        <a class="item " ng-click="selectSort(item.type)" ng-repeat="item in courseListSorts">
+                          {{ item.name }}
+                        </a>
+                      </div>
+                    </div>
+                    <div class="backdrop-bg"></div>
+      </ion-view>
+    <ion-nav-view>
+  </ion-tab>
+</ion-tabs>
+
+<ion-view title="分类">
+  <ion-content padding="true" class="courselist-padding">
+
+      <ion-refresher
+        pulling-text="下拉刷新"
+        pulling-icon="iconfont icon-dynamic"
+        on-refresh="onRefresh()">
+      </ion-refresher>
+
+      <div class="course-card">
+          <div class="list">
+
+              <a class="item item-thumbnail-left" href="#" ng-repeat="course in courses">
+                <img src="{{ course.middlePicture | coverPic}}">
+                <h2>{{ course.title }}</h2>
+                <p class="bottom">
+                  <span>
+                    <i class="iconfont icon-person"></i>
+                    {{ course.studentNum }}
+              </span>
+                  
+                  <span class="price light-color ">
+                    {{ course.price | formatPrice}}
+              </span>
+                </p>
+              </a>
+          </div>
+      </div>
+
+      <ion-infinite-scroll
+        ng-if="canLoad"
+        on-infinite="loadMore()"
+        distance="1%">
+      </ion-infinite-scroll>
+  </ion-content>
+</ion-view>

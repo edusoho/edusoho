@@ -1,0 +1,30 @@
+<ion-view>
+	<ion-content class="padding content-padding">
+
+		<div class="course-card">
+		          <div class="list">
+
+		              <a class="item item-thumbnail-left" href="#" ng-repeat="course in data.course.data">
+		                <img src="{{ course.middlePicture | coverPic}}">
+		                <h2>{{ course.title }}</h2>
+		                <p class="bottom">
+		                  	<span>
+				      <i class="iconfont icon-person"></i>
+				      {{ course.studentNum }}
+				</span>
+				
+			                <span class="price light-color ">
+					     ...
+				    </span>
+		                </p>
+		              </a>
+		          </div>
+		</div>
+
+		<ion-infinite-scroll
+		        ng-if="canLoadMore('course')"
+		        on-infinite="loadMore('course')"
+		        distance="1%">
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>

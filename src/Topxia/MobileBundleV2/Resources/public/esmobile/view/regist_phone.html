@@ -1,0 +1,23 @@
+<ion-view>
+  <ion-content class="padding content-padding">
+    <div class="list sign">
+      <label class="item item-input">
+        <span class="input-label">手机号</span>
+        <input type="text" placeholder="手机号" ng-blur="nkstyle=''" ng-focus="nkstyle='active'" ng-model="user.phone" ng-class="nkstyle">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">验证码</i></span>
+        <input type="password"  placeholder="密码" ng-blur="codestyle=''" ng-model="user.code" ng-focus="codestyle='active'" ng-class="codestyle">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">密码</i></span>
+        <input type="password"  placeholder="密码" ng-blur="passstyle=''" ng-model="user.password" ng-focus="passstyle='active'" ng-class="passstyle">
+      </label>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-green" ng-click="registWithPhone(user)">
+        注 册
+      </button>
+    </div>
+  </ion-content>
+</ion-view>

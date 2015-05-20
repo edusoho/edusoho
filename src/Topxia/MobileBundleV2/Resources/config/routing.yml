@@ -41,6 +41,10 @@ topxia_mobile_alipay_callback:
     pattern:  /pay/{name}/alipay_callback
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payCallBack }
 
+mapi_mobile_esmobile_app:
+    pattern:  /mobileApp
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:index }
+
 mapi_mobile_api:
     pattern:  /{service}/{method}
     defaults: { _controller: TopxiaMobileBundleV2:MobileApi:index }

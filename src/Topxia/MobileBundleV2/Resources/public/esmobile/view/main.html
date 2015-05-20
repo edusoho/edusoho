@@ -1,0 +1,44 @@
+<ion-content side-view class="side-content">
+    
+  <div id="st-container" class="st-container">
+
+      <nav class="st-menu st-effect-1 menu-content" id="menu-1">
+          <ul class="list">
+            <a class="item item-avatar" ng-click="showMyView('userinfo')">
+                <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
+                <div ng-if="user">
+                    <h3>{{ user.nickname }}</h3>
+                    <p>{{ user.title }}</p>
+                </div>
+                <div ng-if="!user">
+                    <h3>个人中心</h3>
+                    <p>登录/注册</p>
+                </div>
+            </a>
+            <a class="item item-icon-left" menu-toggle="left" ng-click="showMyView('mylearn')">
+                <i class="icon iconfont icon-school"></i>
+                我的学习
+            </a>
+            <a class="item item-icon-left" menu-toggle="left" ng-click="showMyView('myfavorite')">
+                <i class="icon iconfont icon-search"></i>
+                我的收藏
+            </a>
+            <a class="item item-icon-left" menu-toggle="left" ng-click="showMyView('mygroup')">
+                <i class="icon iconfont icon-send"></i>
+                我的发表
+            </a>
+            <a class="item item-icon-left" hmenu-toggle="left" href="#/setting">
+                <i class="icon iconfont icon-setting"></i>
+                设置
+            </a>
+        </ul>
+      </nav>
+
+        <div class="st-content">
+            <div class="st-pusher">
+            </div>
+            <ion-nav-view name="menuContent"></ion-nav-view>
+        </div>
+  </div>
+
+</ion-content>

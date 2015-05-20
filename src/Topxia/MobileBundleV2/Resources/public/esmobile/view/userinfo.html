@@ -1,0 +1,47 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back>
+</a>
+
+<h1 class="title">用户信息</h1>
+</ion-header-bar>
+<ion-content>
+    <div class="list userinfo-list">
+      <div class="item item-button-right">
+        <span class="face">
+            头像
+        </span>
+        <span class="item-note">
+          <img class="avatar" ng-src="{{ user.mediumAvatar | coverAvatar }}">
+        </span>
+
+      </div>
+
+      <div class="item item-button-right">
+        昵称
+        <span class="item-note">
+          {{ user.nickname }}
+        </span>
+      </div>
+
+      <div class="item item-button-right">
+        性别
+        <span class="item-note">
+          {{ user.gender | coverGender }}
+        </span>
+      </div>
+
+      <div class="item item-button-right">
+        <span>
+            个性签名
+        </span>
+
+        <span class="item-note">
+          <textarea row="2"  class="sign" maxlength="150" disabled="false">
+            {{ user.signature }}
+        </textarea>
+        </span>
+      </div>
+  </div>
+  </ion-content>
+
+</div>

@@ -1,0 +1,44 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back>
+</a>
+
+<h1 class="title">登 录</h1>
+<a class="button button-icon" href="#/regist">
+  注册
+</a>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content>
+    <div class="list sign">
+      <label class="item item-input">
+        <span class="input-label"><i class="iconfont icon-person"></i></span>
+        <input type="text" placeholder="手机号/邮箱/昵称" ng-model="user.username">
+      </label>
+      <label class="item item-input">
+        <span class="input-label"><i class="iconfont icon-lock"></i></span>
+        <input type="password"  placeholder="密码" ng-model="user.password">
+      </label>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-green" ng-click="login(user)">
+        登 录
+      </button>
+    </div>
+    <a class="button button-clear btn-right" href="#/courselist">忘记密码</a>
+
+    <div style="padding:32px;margin-top:16px;text-align: center;">
+      
+      <div class="shard-label">
+        <hr/>
+        <span>其他方式登录</span>
+      </div>
+      
+      <div class="row">
+        <div class="col-33"><i class="iconfont icon-weixin shard-login"></i></div>
+        <div class="col-33"><i class="iconfont icon-qq shard-login"></i></div>
+        <div class="col-33"><i class="iconfont icon-weibo shard-login"></i></div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

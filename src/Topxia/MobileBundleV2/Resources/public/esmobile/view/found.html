@@ -1,0 +1,28 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon icon" ng-click="toggle()">
+  <img class="avatar" ng-src="{{ user.mediumAvatar | coverAvatar }}">
+</a>
+
+<h1 class="title">
+  <span ng-click="openModal()">
+    分类<i class="iconfont icon-arrowdropdown"></i>
+  </span>
+</h1>
+
+</ion-header-bar>
+
+<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light">
+
+  <ion-tab title="课程" href="#/index/found/course">
+    <ion-nav-view name="found-course"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="直播课" href="#/index/found/live">
+    <ion-nav-view name="found-live"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab title="班级" href="#/index/found/classroom">
+    <ion-nav-view name="found-classroom"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs>

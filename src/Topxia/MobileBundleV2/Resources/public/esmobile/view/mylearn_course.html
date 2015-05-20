@@ -1,0 +1,28 @@
+<ion-view>
+	<ion-content class="padding content-padding">
+
+		<div class="course-card mylean-card">
+		          <div class="list">
+
+		              <a class="item item-thumbnail-left" href="#" ng-repeat="course in content.data">
+		                <img src="{{ course.middlePicture | coverPic}}">
+		                <h2>{{ course.title }}</h2>
+		                <p class="bottom">
+		                  <span>
+		                    上次学习时间:{{ course.startTime | coverLearnTime }}
+		                </span>
+		                </p>
+		                <span class="learn-prossbar">
+	              		<span class="learn-prossbar prossbar" ng-style="course | coverLearnProsser"></span>
+	                	     </span>
+		              </a>
+		          </div>
+		</div>
+
+		<ion-infinite-scroll
+		        ng-if="canLoadMore('course')"
+		        on-infinite="loadMore('course')"
+		        distance="1%">
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>

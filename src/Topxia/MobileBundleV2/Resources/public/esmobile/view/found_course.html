@@ -1,0 +1,43 @@
+<ion-view>
+  <ion-content class="padding content-padding">
+    
+    <ion-slide-box on-slide-changed="slideHasChanged($index)">
+	  <ion-slide ng-repeat="banner in banners"  slide-init>
+	    <div class="box banner">
+	    	<img src='{{ banner.url }}' />
+	    </div>
+	  </ion-slide>
+	</ion-slide-box>
+
+	<div class="course-card">
+		<h4>推荐</h4>
+		<div class="list">
+
+		    <a class="item item-thumbnail-left" href="#" ng-repeat="recommendCourse in recommedCourses">
+		      <div class="page-pic">
+			      <img src="{{ recommendCourse.middlePicture }}">
+			      <div class="discount" ng-if="recommendCourse.discountId > 0">
+			      	<span ng-if="recommendCourse.discount == 0">限时免费</span>
+			      	<span ng-if="recommendCourse.discount > 0">限时打折</span>
+			      </div>
+		      </div>
+		      <h2>{{ recommendCourse.title }}</h2>
+		      <p class="bottom">
+		      	<span>
+			      <i class="iconfont icon-person"></i>
+			      {{ recommendCourse.studentNum }}
+			</span>
+		      	
+		      	<span class="price light-color" ng-class="recommendCourse.discountId > 0 ? 'discount-price' : ''">
+			      <s class="origin-price" ng-if="recommendCourse.discountId > 0">
+			      	{{ recommendCourse.originPrice | formatPrice }}
+			      </s>
+			      {{ recommendCourse.price | formatPrice }}
+			</span>
+		      </p>
+		    </a>
+		</div>
+		<a class="button button-clear more" href="#/courselist">查看更多</a>
+	</div>
+  </ion-content>
+</ion-view>

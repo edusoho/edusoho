@@ -1,0 +1,27 @@
+<ion-view>
+	<ion-content class="padding content-padding mygroup-card">
+
+		<div class="mygroup-content">
+		          <div class="list">
+			          	 <div class="card" ng-repeat="note in notes">
+					  <div class="item item-text-wrap">
+					    {{ note.content | blockStr }}
+					  </div>
+					  <div class="item tabs tabs-secondary tabs-icon-left">
+					    <a class="tab-item left" href="#">{{ note.courseTitle }}</a>
+					    <a class="tab-item right" href="#">
+					       {{ question.createdTime | coverLearnTime }}
+					    </a>
+					  </div>
+				</div>
+		              </a>
+		          </div>
+		</div>
+
+		<ion-infinite-scroll
+		        ng-if="canLoadMore('note')"
+		        on-infinite="loadMore('note')"
+		        distance="1%">
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>
