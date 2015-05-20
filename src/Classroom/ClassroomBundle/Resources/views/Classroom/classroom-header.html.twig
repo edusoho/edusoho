@@ -72,7 +72,6 @@
               </div>
               {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service }%}
             </div>
-
             <div class="btn-buy">
             {% if classroom.price > 0 and not canFreeJoin  %}
               <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
