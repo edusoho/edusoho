@@ -15,6 +15,12 @@ define(function(require, exports, module) {
             filebrowserFlashUploadUrl: $('#description').data('flashUploadUrl')
         });
 
+        var editor_classroom_about = CKEDITOR.replace('about', {
+            toolbar: 'Detail',
+            filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
+        });
+
         var validator = new Validator({
             element: '#classroom-set-form',
             onFormValidated: function(error){
