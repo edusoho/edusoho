@@ -94,8 +94,13 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $note = $event->getSubject();
         $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+        $course = $this->getCourseService()->getCourse($note['courseId']);
         if ($classroom && $note['status']) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
+        }
+
+        if ($course && $note['status']) {
+            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
         }
     }
 
@@ -104,6 +109,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $note = $event->getSubject();
         $preStatus = $event->getArgument('preStatus');
         $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
+        $course = $this->getCourseService()->getCourse($note['courseId']);
         if ($classroom && $note['status'] && !$preStatus) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
         }
@@ -111,6 +117,15 @@ class CourseEventSubscriber implements EventSubscriberInterface
         if ($classroom && !$note['status'] && $preStatus) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
         }
+
+        if ($course && $note['status'] && !$preStatus) {
+            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
+        }
+
+        if ($course && !$note['status'] && $preStatus) {
+            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
+        }
+
     }
 
     public function onCourseNoteDelete(ServiceEvent $event)
@@ -119,6 +134,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
         if ($classroom) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
+        }
+
+        $course = $this->getCourseService()->getCourse($note['courseId']);
+        if ($course) {
+            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
         }
     }
 
@@ -166,6 +186,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
     private function getNoteService()
     {
         return ServiceKernel::instance()->createService('Course.NoteService');
+    }
+
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
     private function getClassroomService()
