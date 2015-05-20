@@ -502,9 +502,9 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
 
-            $this->setFlashMessage('success', "基本信息设置成功！");
-
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
+            
+            $this->setFlashMessage('success', "基本信息设置成功！");
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
