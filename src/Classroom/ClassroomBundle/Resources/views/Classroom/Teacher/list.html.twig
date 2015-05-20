@@ -7,6 +7,7 @@
   <div class="teacher-list row">
   {% for teacher in teachers %}
     {% set isFollowed = Myfollowings[teacher.id]|default(false) %}
+    {% set member = members[teacher.id] %}
     {% include 'ClassroomBundle:Classroom/Teacher:item.html.twig' %}
   {% endfor %}
   </div>

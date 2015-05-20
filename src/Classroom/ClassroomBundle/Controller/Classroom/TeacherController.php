@@ -10,10 +10,12 @@ class TeacherController extends BaseController
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $headTheader = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTheader', 0, 1);
-        $teachers = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
-        $teachers = array_merge($headTheader, $teachers);
-        $teacherIds = ArrayToolkit::column($teachers, 'userId');
+        $headTheader = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
+        $assisants = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'assistant', 0, PHP_INT_MAX);
+        $members = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        $members = array_merge($headTheader, $members, $assisants);
+        $members = ArrayToolkit::index($members, 'userId');
+        $teacherIds = ArrayToolkit::column($members, 'userId');
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
@@ -33,6 +35,7 @@ class TeacherController extends BaseController
             'teachers' => $teachers,
             'profiles' => $profiles,
             'member' => $member,
+            'members' => $members,
             'Myfollowings' => $Myfollowings,
         ));
     }
