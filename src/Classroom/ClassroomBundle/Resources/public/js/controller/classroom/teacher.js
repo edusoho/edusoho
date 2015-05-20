@@ -2,8 +2,14 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('jquery.sortable');
+    var DynamicCollection = require('../../../../topxiaweb/js/controller/widget/dynamic-collection4');
 
     exports.run = function() {
+        var dynamicCollection = new DynamicCollection({
+            element: '#teachers-form-group',
+            onlyAddItemWithModel: true
+        });
+
         $(".teacher-list-group").sortable({
             'distance':20
         });

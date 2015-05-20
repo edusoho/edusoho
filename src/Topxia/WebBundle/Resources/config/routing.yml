@@ -3,7 +3,7 @@ homepage:
     defaults: { _controller: TopxiaWebBundle:Default:index }
 homepage_category:
     pattern: /course/search
-    defaults: { _controller: TopxiaWebBundle:Default:category }
+    defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
 live_jump:
     pattern: /live/jump
     defaults: { _controller: TopxiaWebBundle:Default:jump }

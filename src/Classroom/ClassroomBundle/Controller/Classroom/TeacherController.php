@@ -4,7 +4,6 @@ namespace Classroom\ClassroomBundle\Controller\Classroom;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
 
 class TeacherController extends BaseController
 {
@@ -19,6 +18,7 @@ class TeacherController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
+        $Myfollowings = $this->getUserService()->findAllUserFollowing($user['id']);
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -32,7 +32,8 @@ class TeacherController extends BaseController
             'classroom' => $classroom,
             'teachers' => $teachers,
             'profiles' => $profiles,
-            'member' => $member
+            'member' => $member,
+            'Myfollowings' => $Myfollowings,
         ));
     }
 
@@ -40,5 +41,4 @@ class TeacherController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
 }

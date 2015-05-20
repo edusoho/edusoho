@@ -31,12 +31,14 @@ define(function(require, exports, module) {
             $teacherDiv.on('click', '.follow-btn', function(){
                 var $btn = $(this);
                 $.post($btn.data('url'), function() {
+                }).always(function(){
                     $btn.hide();
                     $teacherDiv.find('.unfollow-btn').show();
                 });
             }).on('click', '.unfollow-btn', function(){
                 var $btn = $(this);
                 $.post($btn.data('url'), function() {
+                }).always(function(){
                     $btn.hide();
                     $teacherDiv.find('.follow-btn').show();
                 });
