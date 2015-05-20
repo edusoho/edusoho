@@ -26,6 +26,21 @@ define(function(require, exports, module) {
               }
               
             });
+
+            var $teacherDiv = $('#class-teacher-column');
+            $teacherDiv.on('click', '.follow-btn', function(){
+                var $btn = $(this);
+                $.post($btn.data('url'), function() {
+                    $btn.hide();
+                    $teacherDiv.find('.unfollow-btn').show();
+                });
+            }).on('click', '.unfollow-btn', function(){
+                var $btn = $(this);
+                $.post($btn.data('url'), function() {
+                    $btn.hide();
+                    $teacherDiv.find('.follow-btn').show();
+                });
+            });
     };
 
 });
