@@ -54,6 +54,7 @@
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
             </span>
           </div>
+          <p class="help-block">班主任负责管理整个{{setting("classroom.name","班级")}}，班主任只有一位，并且必须要由老师来担任。</p>
      
           <script type="text/plain" data-role="model">{{ headTeacher|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="item-template">

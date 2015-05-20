@@ -210,7 +210,7 @@ class DefaultController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
 
-        return $this->render('TopxiaWebBundle:Course:Widget/course-grid-with-condition.html.twig',array(
+        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
             'orderBy' => $orderBy,
             'categoryId' => $categoryId,
             'courses' => $courses
