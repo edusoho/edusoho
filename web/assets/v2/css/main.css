@@ -5019,7 +5019,7 @@ textarea.form-control-o {
 .cuorse-filter.search-filter .result-declare {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   line-height: 48px;
 }
 .cuorse-filter.search-filter .result-declare span {
