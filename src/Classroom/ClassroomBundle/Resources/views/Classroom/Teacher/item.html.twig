@@ -1,6 +1,6 @@
 <div class="col-lg-4 col-md-6 col-sm-6">
   <div class="teacher-item">
-    <a class="teacher-img" href="">
+    <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
       <img class="avatar-lg" src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" alt="">
       <div class="mask">
         {{ profiles[teacher.id].about|raw }}
@@ -9,7 +9,14 @@
     <div class="teacher-info">
       <div class="title">
         <a class="name" href="">{{ teacher.nickname }}</a>
-        <i class="es-icon es-icon-assignmentind color-i" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
+        {% if member.role == 'headTeacher' %}
+          <i class="es-icon es-icon-assignmentind color-i" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
+        {% endif %}
+
+        {% if member.role == 'assistant' %}
+          <i class="es-icon es-icon-accountcircle color-w" data-toggle="tooltip" data-placement="top" title="" data-original-title="助教"></i>
+        {% endif %}
+
         {% if teacher.id != app.user.id %}
           <a class="follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注" {% if isFollowed %} style="display:none;"{% endif %}><i class="es-icon es-icon-addbox"></i></a>
           <a class="unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %} style="display:none;" {% endif %}><i class="es-icon es-icon-checkbox"></i></a>
