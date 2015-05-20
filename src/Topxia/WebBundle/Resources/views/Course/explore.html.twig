@@ -19,31 +19,31 @@
 {% endblock %}
 
 {% block content %}
-  {% set sort = sort|default('ALL') %}
+  {% set fliter = fliter|default('all') %}
   {% set orderBy = orderBy|default('latest')%}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{code:code|default(''), path:'course_explore',sort:sort,orderBy:orderBy})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{code:code|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
   <div class="cuorse-filter" id="cuorse-filter">
     <ul class="nav nav-pills hidden-xs" role="tablist">
-      <li role="presentation" class="{% if (sort == 'ALL') %}active {% endif %}"><a href="{{ path('course_explore',{code:code, sort:'ALL',orderBy : orderBy}) }}">全部课程</a></li>
-      <li role="presentation"class="{% if (sort == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {code:code, sort:'free',orderBy: orderBy}) }}">免费课程</a></li>
-      <li role="presentation"class="{% if (sort == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {code:code, sort:'live',orderBy: orderBy}) }}">直播课程</a></li>
+      <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{code:code, fliter:'all',orderBy : orderBy}) }}">全部课程</a></li>
+      <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {code:code, fliter:'free',orderBy: orderBy}) }}">免费课程</a></li>
+      <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {code:code, fliter:'live',orderBy: orderBy}) }}">直播课程</a></li>
     </ul>
     <div class="btn-group visible-xs">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ path('course_explore',{code:code, sort:'ALL',orderBy : orderBy|default('latest')}) }}" class="cat-tag{% if (sort == 'ALL') %}active {% endif %}">全部课程</a></li>
-        <li><a href="{{ path('course_explore', {code:code, sort:'free',orderBy: orderBy|default('latest')}) }}" class="cat-tag{% if (sort == 'free') %}active {% endif %}">免费课程</a></li>
-        <li><a href="{{ path('course_explore', {code:code, sort:'live',orderBy: orderBy|default('latest')}) }}" class="cat-tag{% if (sort == 'live') %}active {% endif %}">直播课程</a></li>
+        <li><a href="{{ path('course_explore',{code:code, fliter:'all',orderBy : orderBy|default('latest')}) }}" class="cat-tag{% if (fliter == 'all') %}active {% endif %}">全部课程</a></li>
+        <li><a href="{{ path('course_explore', {code:code, fliter:'free',orderBy: orderBy|default('latest')}) }}" class="cat-tag{% if (fliter == 'free') %}active {% endif %}">免费课程</a></li>
+        <li><a href="{{ path('course_explore', {code:code, fliter:'live',orderBy: orderBy|default('latest')}) }}" class="cat-tag{% if (fliter == 'live') %}active {% endif %}">直播课程</a></li>
       </ul>
     </div>
     <div class="course-sort">
-      <a href="{{ path('course_explore', {code:code, sort:sort,orderBy: 'latest'}) }}" class="btn-circle {% if (orderBy == 'latest') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="按时间排序">
+      <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'latest'}) }}" class="btn-circle {% if (orderBy == 'latest') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="按时间排序">
         <i class="es-icon es-icon-accesstime"></i>
       </a>
-      <a href="{{ path('course_explore', {code:code, sort:sort,orderBy: 'studentNum'}) }}" class="btn-circle {% if (orderBy == 'studentNum') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="最热">
+      <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'studentNum'}) }}" class="btn-circle {% if (orderBy == 'studentNum') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="最热">
         <i class="es-icon es-icon-whatshot"></i>
       </a>
-      <a href="{{ path('course_explore', {code:code, sort:'free',orderBy: 'recommendedSeq'}) }}" class="btn-circle {% if (orderBy == 'recommendedSeq') %} active {% endif %}" data-toggle="tooltip" data-
+      <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class="btn-circle {% if (orderBy == 'recommendedSeq') %} active {% endif %}" data-toggle="tooltip" data-
       placement="top" title="点赞">
         <i class="es-icon es-icon-thumbup"></i>
       </a>

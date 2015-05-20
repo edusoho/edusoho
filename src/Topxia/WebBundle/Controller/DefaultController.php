@@ -191,7 +191,7 @@ class DefaultController extends BaseController
         exit();
     }
 
-    public function categoryAction(Request $request)
+    public function CoursesCategoryAction(Request $request)
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
