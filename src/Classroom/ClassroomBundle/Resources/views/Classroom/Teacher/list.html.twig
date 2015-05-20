@@ -1,10 +1,12 @@
 {% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
 
 {% set nav = 'teachers' %}
+{% do load_script('classroombundle/controller/classroom/detail/teacher-list') %}
 {% block main %}
 
   <div class="teacher-list row">
   {% for teacher in teachers %}
+    {% set isFollowed = Myfollowings[teacher.id]|default(false) %}
     {% include 'ClassroomBundle:Classroom/Teacher:item.html.twig' %}
   {% endfor %}
   </div>

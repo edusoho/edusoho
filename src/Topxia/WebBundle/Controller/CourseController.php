@@ -25,18 +25,18 @@ class CourseController extends BaseController
             $categoryIds = array_merge($childrenIds, array($category['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
-		if(!isset($conditions['sort'])){
-			$conditions['sort'] ='ALL';
+		if(!isset($conditions['fliter'])){
+			$conditions['fliter'] ='all';
 		}
-		elseif ($conditions['sort'] == 'free') {
+		elseif ($conditions['fliter'] == 'free') {
 			$conditions['price'] = '0.00';
 			$conditions['coinPrice'] = '0.00';
 		}
-		elseif ($conditions['sort'] == 'live'){
+		elseif ($conditions['fliter'] == 'live'){
 			$conditions['type'] = 'live';
 		}
-		$sort = $conditions['sort'];
-		unset($conditions['sort']);
+		$fliter = $conditions['fliter'];
+		unset($conditions['fliter']);
 		if(!isset($conditions['orderBy'])){
 			$conditions['orderBy'] = 'latest';
 		}
@@ -68,7 +68,7 @@ class CourseController extends BaseController
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'code' => $code,
-			'sort' => $sort,
+			'fliter' => $fliter,
 			'orderBy' => $orderBy,
 			'paginator' => $paginator,
 			'categories' => $categories,

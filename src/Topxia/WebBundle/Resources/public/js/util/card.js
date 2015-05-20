@@ -42,13 +42,13 @@ define(function (require, exports, module) {
                 $(this).hide();                                                     
             }).on('click', '.follow-btn', function(){
                 var $btn = $(this);
-                $.post($btn.data('url'), function() {
+                $.post($btn.data('url')).always(function(){
                     $btn.hide();
                     $card.find('.unfollow-btn').show();
                 });
             }).on('click', '.unfollow-btn', function(){
                 var $btn = $(this);
-                $.post($btn.data('url'), function() {
+                $.post($btn.data('url')).always(function(){
                     $btn.hide();
                     $card.find('.follow-btn').show();
                 });

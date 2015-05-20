@@ -76,7 +76,8 @@
   {% endif %}
  
   <div class="form-group">
-    <div class="controls col-md-12">
+    <div class="controls col-md-2"></div>
+    <div class="controls col-md-7">
       <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content"
         data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
     </div>
