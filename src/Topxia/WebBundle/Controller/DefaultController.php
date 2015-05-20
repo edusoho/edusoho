@@ -13,7 +13,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published', 'type' => 'normal');
+        $conditions = array('status' => 'published', 'type' => 'normal', 'parentId' => 0);
 
         $coinSetting=$this->getSettingService()->get('coin',array());
         if(isset($coinSetting['cash_rate'])){
