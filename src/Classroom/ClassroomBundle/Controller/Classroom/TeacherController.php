@@ -17,6 +17,7 @@ class TeacherController extends BaseController
         $members = ArrayToolkit::index($members, 'userId');
         $teacherIds = ArrayToolkit::column($members, 'userId');
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+        $teachers = $this->sort($teachers, $members);
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
@@ -38,6 +39,15 @@ class TeacherController extends BaseController
             'members' => $members,
             'Myfollowings' => $Myfollowings,
         ));
+    }
+
+    private function sort($teachers, $members)
+    {
+        $newTeachers = array();
+        foreach ($members as $key => $member) {
+            $newTeachers[$member['userId']] = $teachers[$member['userId']];
+        }
+        return $newTeachers;
     }
 
     private function getClassroomService()
