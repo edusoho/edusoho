@@ -280,8 +280,12 @@ class ClassroomController extends BaseController
         $headTeacherprofiles = $this->getUserService()->getUserProfile($classroom['headTeacherId']);
         $profiles = $this->getUserService()->findUserProfilesByIds($classroomTeacherIds);
         $currentUser = $this->getCurrentUser();
-        $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $headTeacher['id']);
 
+        $isFollowed = false;
+        if ($headTeacher) {
+            $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $headTeacher['id']);
+        }
+        
         if($headTeacher && !(in_array($headTeacher, $users))){
             $teachersCount = 1 + count($users);
         }else{

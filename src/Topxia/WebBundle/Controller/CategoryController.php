@@ -17,7 +17,7 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($data);
     }
 
-    public function treeNavAction(Request $request, $code, $path)
+    public function treeNavAction(Request $request, $code, $path, $sort = 'ALL', $orderBy = 'latest')
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($code, 'course');
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
@@ -25,7 +25,9 @@ class CategoryController extends BaseController
             'categories' => $categories,
             'code' => $code,
             'path' => $path,
-            'activeIds' => $activeIds
+            'activeIds' => $activeIds,
+            'sort' => $sort,
+            'orderBy' => $orderBy
         ));
     }
 

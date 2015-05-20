@@ -73,6 +73,7 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			'path' => 'course_explore'
 			
 		));	
 	}
