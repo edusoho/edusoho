@@ -1911,6 +1911,7 @@ textarea.form-control-o {
 }
 .alert-warning .close {
   color: #e28327;
+  right:0;
 }
 .alert-warning > a {
   color: #e28327;
@@ -1922,6 +1923,9 @@ textarea.form-control-o {
 }
 .alert-default > a {
   color: #9e9e9e;
+}
+.alert-default.alert-edit {
+  position: relative;
 }
 .alert-default.alert-edit:hover {
   border-color: #f3d6ba;
