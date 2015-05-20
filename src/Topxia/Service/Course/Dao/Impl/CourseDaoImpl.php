@@ -134,7 +134,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function waveCourse($id,$field,$diff)
     {
-        $fields = array('hitNum');
+        $fields = array('hitNum', 'noteNum');
 
         if (!in_array($field, $fields)) {
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));

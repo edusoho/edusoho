@@ -486,6 +486,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->waveCourse($id, 'hitNum', +1);
 	}
 
+	public function waveCourse($id, $field, $diff)
+	{
+		return $this->getCourseDao()->waveCourse($id, $field, $diff);
+	}
+
 	public function cancelRecommendCourse($id)
 	{
 		$course = $this->tryAdminCourse($id);
@@ -849,7 +854,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseLessons($courseId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
-		return LessonSerialize::unserializes($lessons);
+		return ArrayToolkit::index(LessonSerialize::unserializes($lessons), 'id');
 	}
 
 	public function deleteCourseDrafts($courseId,$lessonId, $userId)

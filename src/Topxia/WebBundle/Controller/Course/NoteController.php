@@ -35,7 +35,27 @@ class NoteController extends BaseController
 
     public function showListAction(Request $request, $courseId)
     {
-        return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $lessons = $this->getCourseService()->getCourseLessons($courseId);
+        return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(
+            'course' => $course,
+            'filters' => $this->getNoteSearchFilters($request),
+            'lessons' => $lessons
+        ));
+    }
+
+    private function getNoteSearchFilters($request)
+    {
+        $filters = array();
+        
+        $filters['lessonId'] = $request->query->get('lessonId', '');
+        $filters['sort'] = $request->query->get('sort');
+
+        if (!in_array($filters['sort'], array('latest', 'likeNum'))) {
+            $filters['sort'] = 'latest';
+        }
+
+        return $filters;
     }
 
 
@@ -67,7 +87,7 @@ class NoteController extends BaseController
         $result['users'] = $users;
         if (is_numeric($courseIds)) {
             $lessonIds = ArrayToolkit::column($notes, 'lessonId');
-            $lessons = $this->findLessonsByIds($lessonIds);
+            $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
             $result['lessons'] = $lessons;
         } else {
             $courseIds = ArrayToolkit::column($notes, 'courseId');

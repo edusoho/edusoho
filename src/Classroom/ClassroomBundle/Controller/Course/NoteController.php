@@ -33,7 +33,7 @@ class NoteController extends BaseController
         ));
     }
 
-        private function getNoteSearchFilters($request)
+    private function getNoteSearchFilters($request)
     {
         $filters = array();
         
