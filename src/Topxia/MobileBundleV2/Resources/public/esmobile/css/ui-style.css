@@ -2,6 +2,10 @@
 /*
   main
 */
+/* list */
+.list .item {
+  -webkit-transition: all 0.2s ease-in-out 200ms;
+}
 
 /* android title */
 .title.title-left {
