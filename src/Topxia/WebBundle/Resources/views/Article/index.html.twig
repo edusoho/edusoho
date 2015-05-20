@@ -33,7 +33,7 @@
               <a href="javascript:;" class="topic-post-small {% if loop.index < 2 %}one{% else %}two{% endif %}">
                 <div class="content">
                   <p>{{promotedCategories[promotedArticle['id']].name}}</p>
-                  <h4 class="text">{{promotedArticle.title}}</h4>
+                    <h4 class="text">{{promotedArticle.title|plain_text(125)}}</h4>
                 </div>
               </a>
           {% endfor %}
