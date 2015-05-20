@@ -72,6 +72,8 @@ interface CourseService
 
 	public function hitCourse($id);
 
+	public function waveCourse($id, $field, $diff);
+
 	public function cancelRecommendCourse($id);
 
 	public function analysisCourseDataByTime($startTime,$endTime);
