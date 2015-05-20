@@ -1,11 +1,13 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
 
 {% block content %}
   
+  {% do load_script('search/search') %}
+
   <!-- 通栏内容区 -->
-    <div class="course-banner es-banner">
+  <div class="course-banner es-banner">
     <div class="container">
       <div class="title">
         <span>搜索</span>SEARCH
