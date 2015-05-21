@@ -1,11 +1,13 @@
 {% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% block top_content %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:guestHeader',{course: course})) }}
 {% endblock %}
 
 
 {% block course_main %}
+
+
   {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' with {tab: 'info'} %}
   
   <div class="course-detail-content">
