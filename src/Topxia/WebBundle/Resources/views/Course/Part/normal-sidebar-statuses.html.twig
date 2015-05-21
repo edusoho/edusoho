@@ -1,3 +1,6 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% set statuses = data('LatestStatuses', {count:5, mode:'simple', objectType: 'course', objectId: course.id}) %}
+
 <div class="panel panel-default student-dynamic">
   <div class="panel-heading">
     <h3 class="panel-title">
@@ -6,54 +9,18 @@
     </h3>
   </div>
   <div class="panel-body">
-    <div class="media media-number-o">
-      <div class="media-left">
-        <span class="num">1</span>
+    {% for status in statuses %}
+      <div class="media media-number-o">
+        <div class="media-left">
+          <span class="num">{{ loop.index }}</span>
+        </div>
+        <div class="media-body">
+          {{ web_macro.user_link(status.user) }}
+          {{ status.message|raw }}
+        </div>
       </div>
-      <div class="media-body">
-        <a href="javascript:;">阿本</a>
-        加入了本班级
-      </div>
-    </div>
-    <div class="media media-number-o">
-      <div class="media-left">
-        <span class="num">2</span>
-      </div>
-      <div class="media-body">
-        教师
-        <a href="javascript:;">阿风</a>
-        回复了问题《求解答怎么...
-      </div>
-    </div>
-    <div class="media media-number-o">
-      <div class="media-left">
-        <span class="num">3</span>
-      </div>
-      <div class="media-body">
-        教师
-        <a href="javascript:;">阿风</a>
-        回复了问题《求解答怎么...
-      </div>
-    </div>
-    <div class="media media-number-o">
-      <div class="media-left">
-        <span class="num">4</span>
-      </div>
-      <div class="media-body">
-        教师
-        <a href="javascript:;">阿风</a>
-        回复了问题《求解答怎么...
-      </div>
-    </div>
-    <div class="media media-number-o">
-      <div class="media-left">
-        <span class="num">5</span>
-      </div>
-      <div class="media-body">
-        教师
-        <a href="javascript:;">阿风</a>
-        回复了问题《求解答怎么...
-      </div>
-    </div>
+    {% else %}
+      <div class="empty">暂无动态</div>
+    {% endfor %}
   </div>
 </div>

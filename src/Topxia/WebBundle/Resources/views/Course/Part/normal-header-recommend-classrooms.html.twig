@@ -1,95 +1,40 @@
+<!-- 推荐班级 -->
+
 <section class="recommend-class">
-    <div class="container">
-      <div class="class-label hidden-xs hidden-sm">
-        推荐班级
-      </div>
-      <div class="recommend-class-list" style="position: relative; overflow: hidden;"><div class="cycle-item cycle-slide cycle-sentinel" style="position: static; top: 0px; left: 0px; z-index: 100; opacity: 1; display: block; visibility: hidden; width: 280px;">
-          <div class="class-item" style="visibility: hidden;">
-  <a href="" style="visibility: hidden;">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="" style="visibility: hidden;">
-    <h3 style="visibility: hidden;">淘宝运营课程高级班</h3>
-    <div class="image-overlay" style="visibility: hidden;"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-carousel-wrap" style="margin: 0px; padding: 0px; top: 0px; left: -270px; position: absolute; white-space: nowrap;"><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 100; opacity: 1; display: inline-block; visibility: visible; width: 280px;">
+  <div class="container">
+    <div class="class-label hidden-xs hidden-sm">推荐班级</div>
+    <div class="recommend-class-list">
+
+      {% for classroom in classrooms %}
+        <div class="cycle-item">
           <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 99; display: inline-block; width: 280px;">
-          <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide cycle-slide-active" style="position: static; top: 0px; left: 0px; z-index: 97; display: inline-block; width: 280px;">
-          <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 96; display: inline-block; width: 280px;">
-          <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 95; display: inline-block; width: 280px;">
-          <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 94; display: inline-block; width: 280px;">
-          <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 93; display: inline-block; width: 280px;">
-          <div class="class-item">
-  <a href="">
-    <img class="img-responsive" src="{{ filepath('', 'classroom.png') }}" alt="">
-    <h3>淘宝运营课程高级班</h3>
-    <div class="image-overlay"></div>
-    <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
-    <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
-  </a>
-</div>        </div><div class="cycle-item cycle-slide" style="position: static; top: 0px; left: 0px; z-index: 92; display: inline-block; width: 280px;">
-          <div class="class-item item-default">
-            <img class="img-responsive" src="assets/img/class_default.png" alt="">
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+              <img class="img-responsive" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+              <h3>{{ classroom.title }}</h3>
+              <div class="image-overlay"></div>
+              <!-- 如该课程属于这个班级，则显示下面的提示，用于课程的推荐班级 -->
+              <!-- <div class="class-belong hidden-xs hidden-sm">所属班级</div> -->
+            </a>
           </div>
-        </div></div>
-        
-        
-        
-        
-         
-        
-        
-        
+        </div>
+      {% endfor %}
+
+      {% set emptyClassroomNum = 4 - classrooms|length %}
+      {% if emptyClassroomNum > 0 %}
+        {% for i in range(1, emptyClassroomNum) %}
+          <div class="cycle-item">
+            <div class="class-item item-default">
+              <img class="img-responsive" src="{{ asset('assets/v2/img/class_default.png') }}">
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if classrooms|length > 4 %}
         <div class="cycle-prev"><i class="es-icon es-icon-chevronleft"></i></div>
         <div class="cycle-next"><i class="es-icon es-icon-chevronright"></i></div>
-      </div>
+      {% endif %}
+
     </div>
-  </section>
+  </div>
+</section>

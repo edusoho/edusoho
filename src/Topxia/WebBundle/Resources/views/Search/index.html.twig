@@ -2,17 +2,19 @@
 
 {% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
 
-{% block content %}
-  
-  <!-- 通栏内容区 -->
-    <div class="course-banner es-banner">
+{% do load_script('search/search') %}
+
+{% block main_header %}
+  <div class="course-banner es-banner">
     <div class="container">
       <div class="title">
         <span>搜索</span>SEARCH
       </div>
     </div>
   </div>
-  <!-- /通栏内容区 -->
+{% endblock %}
+
+{% block content %}
   
   <!-- 核心内容区 -->
   <div class="container" id="content-container">  <div class="cuorse-filter search-filter" id="cuorse-filter">

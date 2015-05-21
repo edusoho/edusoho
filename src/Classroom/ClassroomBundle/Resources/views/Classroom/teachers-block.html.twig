@@ -16,20 +16,14 @@
       </div>
       
       <div class="media-body">
-        <a class="btn btn-default btn-xs pull-right" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('message_create',{toId:headTeacher.id}) }}">私信</a>
         <div class="title">
-          <a class="name" href="{{ path('user_show', {id:headTeacher.id}) }}">{{ headTeacher.nickname }}</a>
-
+          {{ web_macro.user_link(headTeacher , 'name') }}
         </div>
-        
-          <p>
-            {% if headTeacherprofiles %}
-              {{ headTeacherprofiles.about | raw }}
-            {% else %}
-              还没有头衔
-            {% endif %}
-          </p>
-        
+        {% if headTeacher.title|default('') %}
+          <p>{{ headTeacher.title }}</p>
+        {% else %}
+          <p>还没有头衔</p>
+        {% endif %}
       </div>
     </div>
     {% else %}

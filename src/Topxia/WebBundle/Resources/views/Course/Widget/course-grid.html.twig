@@ -10,7 +10,9 @@
           <span class="tag-discount"></span>
         {% endif %}
       {% endif %}
-      <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+      {# <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}"> #}
+      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive transform', '') }}
+      
     </a>
   </div>
   <div class="course-info">

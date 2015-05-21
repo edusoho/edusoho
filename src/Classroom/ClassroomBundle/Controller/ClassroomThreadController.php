@@ -26,7 +26,7 @@ class ClassroomThreadController extends BaseController
                 'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
                 'service' => $this->getThreadService(),
                 'layout' => $layout,
-                'member' => $member,
+                'member' => $member
         ));
     }
 

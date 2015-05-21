@@ -14,6 +14,7 @@ class CourseController extends BaseController
         $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig', array(
+            'course' => $course,
             'teachers' => $teachers,
         ));
     }
@@ -25,7 +26,20 @@ class CourseController extends BaseController
         $students = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
+            'course' => $course,
             'students' => $students,
+        ));
+    }
+
+    public function recommendClassroomsAction($course)
+    {
+        $course = $this->getCourse($course);
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(array('recommended' => 1), array('recommendedSeq', 'ASC'), 0, 11);
+
+        return $this->render('TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig', array(
+            'course' => $course,
+            'classrooms' => $classrooms,
         ));
     }
 
@@ -37,6 +51,11 @@ class CourseController extends BaseController
 
         $courseId = (int) $course;
         return $this->getCourseService()->getCourse($courseId);
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getCourseService()
