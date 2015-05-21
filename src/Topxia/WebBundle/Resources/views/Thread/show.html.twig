@@ -1,13 +1,13 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-  <div class="class-detail-content">
-    <div class="topic-detail">
+<div class="class-detail-content">
+  <div class="topic-detail">
 
     {% include 'TopxiaWebBundle:Thread/Part:' ~ thread.type ~ '-header.html.twig' %}
 
     {% include 'TopxiaWebBundle:Thread/Part:thread-action.html.twig' %}
 
-    {% if teacherPosts|default(null) %}  
+    {% if teacherPosts|default(null) %}
       {% include 'TopxiaWebBundle:Thread/Part:teacher-post.html.twig' with {posts:teacherPosts} %}
     {% endif %}
 
