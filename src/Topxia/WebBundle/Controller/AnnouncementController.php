@@ -121,7 +121,8 @@ class AnnouncementController extends BaseController
 		return $this->render('TopxiaWebBundle:Announcement:announcement-write-modal.html.twig',array(
 			'targetObject' => $targetObject,
 			'announcement' => $announcement,
-			'targetType' => $targetType
+			'targetType' => $targetType,
+			'targetId' => $targetId
 		));
 	}
 

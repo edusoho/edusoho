@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle:Announcement:announcement-modal-layout.html.twig' %}
 
+{% set tab="list" %}
+
 {% block body %}
 	<div class="announcement-list">
 	{% if announcements %}
@@ -30,7 +32,10 @@
   {% else %}
 		<div class="alert alert-edit">暂无公告</div>
 	{% endif %}
-</div>
+  </div>
+
+
+
 	<script>
 		app.load('announcement/announcement');
 	</script>
