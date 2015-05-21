@@ -156,23 +156,21 @@ define(function(require, exports, module) {
              });
         }
 
-
-        $(".recommend-class-list").cycle({
-            fx: "carousel",
-            slides: ".cycle-item",
-            carouselOffset: 10,
-            log: "false",
-            timeout: 0,
-            pauseOnHover: "true",
-            carouselVisible: 4,
-            carouselFluid: true,
-            prev: ".cycle-prev",
-            next: ".cycle-next",
-            allowWrap: false
-        });
-
-
-
+        if ($('.recommend-class-list .cycle-prev').length > 0) {
+            $(".recommend-class-list").cycle({
+                fx: "carousel",
+                slides: ".cycle-item",
+                carouselOffset: 10,
+                log: "false",
+                timeout: 0,
+                pauseOnHover: "true",
+                carouselVisible: 4,
+                carouselFluid: true,
+                prev: ".cycle-prev",
+                next: ".cycle-next",
+                allowWrap: false
+            });
+        }
 
 
     };

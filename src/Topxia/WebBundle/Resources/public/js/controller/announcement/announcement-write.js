@@ -13,6 +13,26 @@ define(function(require, exports, module) {
             element: '#announcement-content-field',
             required: true
         });
+        
+        var now = new Date();
+
+        $("[name=startTime]").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true
+        }).on('hide', function(ev){
+            validator.query('[name=startTime]').execute();
+        });
+
+        $('[name=startTime]').datetimepicker('setStartDate', now);
+
+        $("[name=endTime]").datetimepicker({
+            language: 'zh-CN',
+            autoclose: true
+        }).on('hide', function(ev){
+            validator.query('[name=endTime]').execute();
+        });
+
+        $('[name=endTime]').datetimepicker('setStartDate', now);
 
         // group: 'course'
         var editor = CKEDITOR.replace('announcement-content-field', {

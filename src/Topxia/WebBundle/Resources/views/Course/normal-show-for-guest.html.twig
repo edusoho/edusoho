@@ -1,13 +1,69 @@
 {% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% block top_content %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:guestHeader',{course: course})) }}
 {% endblock %}
 
 
 {% block course_main %}
+
+
   {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' with {tab: 'info'} %}
   
-  {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %}
+  <div class="course-detail-content">
+
+    <ul class="course-about">
+      <li>
+        <div class="course-about-header">
+          课程介绍
+        </div>
+        <div class="course-about-body">
+          {% if course.about %}
+            {{ course.about|raw }}
+          {% else %}
+            <p>暂无课程简介</p>
+          {% endif %}
+        </div>
+      </li>
+      {% if course.goals %}
+        <li>
+          <div class="course-about-header">
+            课程目标
+          </div>
+          <div class="course-about-body">
+            <ul class="list-unstyled">
+              {% for goal in course.goals %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+      {% endif %}
+      {% if course.audiences %}
+        <li>
+          <div class="course-about-header">
+            适合人群
+          </div>
+          <div class="course-about-body">
+            <ul class="list-unstyled">
+              {% for audience in course.audiences %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+      {% endif %}
+      <li>
+        <div class="course-about-header">
+          课时列表
+        </div>
+      </li>
+    </ul>
+    {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %}
+  </div>
 
 {% endblock %}

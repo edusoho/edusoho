@@ -1,10 +1,10 @@
 {% set announcements = data('Announcement',{ count:3 }) %}
 {% if announcements and not app.request.cookies.get('close_announcements_alert') %}
 <div class="alert alert-success alert-notice announcements-alert" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button> 
   <div class="container">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </button> 
     <div class="items">
       {% for announcement in announcements %}
       <div class="item">
@@ -14,9 +14,12 @@
           {{announcement.content|sub_text(50)}}
         </a>
         {% else %}
+        <a class="open-article-link" href="javascript:;" target="_blank">
           <i class="es-icon es-icon-notifications"></i>
           {{announcement.content|sub_text(50)}}
+        </a>
         {% endif %}
+
       </div>
       {% endfor %}
     </div>
