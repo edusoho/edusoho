@@ -1,11 +1,4 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
-{% block title %}公告
-	{% if canManage %}
-		<a href="#modal" data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetId}) }}" data-toggle="modal" class="annoucement-add-btn">
-    <i data-original-title="添加" class="es-icon es-icon-anonymous-iconfont" data-toggle="tooltip" data-placement="top" title=""></i>  </a>
-	{% endif %}
-{% endblock %}
+{% extends 'TopxiaWebBundle:Announcement:announcement-modal-layout.html.twig' %}
 
 {% block body %}
 	<div class="announcement-list">

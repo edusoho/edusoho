@@ -1,6 +1,4 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-
-{% block title %}{% if announcement.id %}编辑{% else %}添加{% endif %}公告{% endblock %}
+{% extends 'TopxiaWebBundle:Announcement:announcement-modal-layout.html.twig' %}
 
 {% block body %}
 	<form id="announcement-write-form" class="form-horizontal" method="post"

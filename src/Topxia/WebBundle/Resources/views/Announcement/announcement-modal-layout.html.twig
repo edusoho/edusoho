@@ -1,0 +1,6 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+	<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_add',{targetType:targetType, targetId:targetId})}}">{% if announcement.id|default(null) %}编辑{% else %}添加{% endif %}公告</a>
+	<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_list',{targetType:targetType, targetId:targetId})}}">公告列表</a>
+{% endblock %}

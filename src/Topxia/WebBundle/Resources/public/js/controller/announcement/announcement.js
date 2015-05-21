@@ -1,7 +1,8 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-
+        require("../../controller/announcement/announcement-manage").run();
+        
         $('.announcement-list').on('click', '[data-role=delete]', function(){
             if (confirm('真的要删除该公告吗？')) {
                 $.post($(this).data('url'), function(){

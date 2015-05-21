@@ -864,7 +864,7 @@ course_manage_publish:
     methods: [POST]
 
 announcement_list:
-    pattern: /announcement/{id}/{targetType}/{targetId}/list
+    pattern: /announcement/{targetType}/{targetId}/list
     defaults: {_controller:TopxiaWebBundle:Announcement:list }
 
 announcement_show_all:
@@ -878,6 +878,10 @@ announcement_add:
 announcement_show:
     pattern:  /announcement/{id}/{targetId}/show
     defaults: { _controller: TopxiaWebBundle:Announcement:show }
+
+announcement_manage:
+    pattern:  /announcement/{targetType}/{targetId}/manage
+    defaults: { _controller: TopxiaWebBundle:Announcement:manage }
 
 announcement_update:
     pattern:  /announcement/{id}/{targetType}/{targetId}/update
