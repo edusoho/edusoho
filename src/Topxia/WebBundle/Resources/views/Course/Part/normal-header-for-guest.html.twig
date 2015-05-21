@@ -96,4 +96,4 @@
   </div>
 </section>
 
-{% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' %}
+{{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}

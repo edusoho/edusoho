@@ -31,10 +31,16 @@ class CourseController extends BaseController
         ));
     }
 
-    public function favoriteAction($course)
+    public function recommendClassroomsAction($course)
     {
-        $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
-        
+        $course = $this->getCourse($course);
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(array('recommended' => 1), array('recommendedSeq', 'ASC'), 0, 11);
+
+        return $this->render('TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig', array(
+            'course' => $course,
+            'classrooms' => $classrooms,
+        ));
     }
 
     protected function getCourse($course)
@@ -45,6 +51,11 @@ class CourseController extends BaseController
 
         $courseId = (int) $course;
         return $this->getCourseService()->getCourse($courseId);
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getCourseService()
