@@ -34,8 +34,7 @@
             {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
           </div>
           <div class="class-auditor visible-sm">
-            您现在是<span class="color-w">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生：可以参与话题讨论，可以每日签到，但无法学习课程\n
-正式学员：可以完整地学习所有内容，享受所有教学服务"></i><br>
+            您现在是<span class="color-w">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
             <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a> <span>价格： {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                 {% if classroom.price > 0 %}
                {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
@@ -82,8 +81,7 @@
           </ul>
           {% if member.role == 'auditor'%}
           <div class="class-auditor hidden-sm">
-            您现在是<span class="color-w">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生：可以参与话题讨论，可以每日签到，但无法学习课程;
-正式学员：可以完整地学习所有内容，享受所有教学服务"></i><br>
+            您现在是<span class="color-w">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
             <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a>
           </div>
             {% endif %}
