@@ -60,6 +60,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
+    //TO-DO 班级课程表加了一个父课程Id字段,逻辑可以重构了! BY wenqin 2015-5-21
     public function addCoursesToClassroom($classroomId, $courseIds)
     {
         $this->tryManageClassroom($classroomId);
@@ -1064,9 +1065,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     private function addCourse($id, $courseId)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
         $classroomCourse = array(
             'classroomId' => $id,
-            'courseId' => $courseId, );
+            'courseId' => $courseId,
+            'parentCourseId' => $course['parentId']
+            );
 
         $this->getClassroomCourseDao()->addCourse($classroomCourse);
     }

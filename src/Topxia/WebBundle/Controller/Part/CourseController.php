@@ -8,6 +8,35 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class CourseController extends BaseController
 {
+    public function guestHeaderAction($course)
+    {
+
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
+            $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
+        }
+
+        $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(array('recommended' => 1), array('recommendedSeq', 'ASC'), 0, 11);
+
+        $user = $this->getCurrentUser();
+        $userVipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $userVipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig', array(
+            'course' => $course,
+            'hasFavorited' => $hasFavorited,
+            'classrooms' => $classrooms,
+            'courseVip' => $courseVip,
+            'userVipStatus' => $userVipStatus,
+        ));
+
+    }
     public function teachersAction($course)
     {
         $course = $this->getCourse($course);
@@ -28,18 +57,6 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
             'course' => $course,
             'students' => $students,
-        ));
-    }
-
-    public function recommendClassroomsAction($course)
-    {
-        $course = $this->getCourse($course);
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(array('recommended' => 1), array('recommendedSeq', 'ASC'), 0, 11);
-
-        return $this->render('TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig', array(
-            'course' => $course,
-            'classrooms' => $classrooms,
         ));
     }
 

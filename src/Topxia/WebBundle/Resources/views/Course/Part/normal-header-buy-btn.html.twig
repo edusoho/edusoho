@@ -2,7 +2,7 @@
   href="#modal" 
   data-toggle="modal" 
   data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-  {% if course.status != 'published' or (course.studentNum >= course.maxStudentNum) %}
+  {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
     disabled="disabled"
   {% endif %}
 >

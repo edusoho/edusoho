@@ -1,3 +1,5 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
 <section class="course-detail-header before">
   <div class="container">
     <div class="es-section clearfix">
@@ -64,8 +66,11 @@
         </div>
         <!-- 当属于会员班级时， ul中添加actvie这一class -->
         <ul class="course-data clearfix active">
+
           <li id="unfavorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="取消收藏" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}><a href=""><i class="es-icon es-icon-bookmark"></i><br>已收藏</a></li>
+
           <li id="favorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="收藏课程" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}><a href=""><i class="es-icon es-icon-bookmarkoutline"></i><br>收藏</a></li>
+
           <li>
             <span class="es-share top">
               <a class="dropdown-toggle" href="" data-toggle="dropdown">
@@ -96,4 +101,4 @@
   </div>
 </section>
 
-{{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
+{% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' with {type:'course'} %}
