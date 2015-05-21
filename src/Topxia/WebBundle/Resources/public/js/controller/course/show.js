@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     require('jquery.countdown');
+    require('jquery.cycle2');
 
     exports.run = function() {
         $('#teacher-carousel').carousel({
@@ -154,6 +155,23 @@ define(function(require, exports, module) {
                 }, 2000);
              });
         }
+
+
+        $(".recommend-class-list").cycle({
+            fx: "carousel",
+            slides: ".cycle-item",
+            carouselOffset: 10,
+            log: "false",
+            timeout: 0,
+            pauseOnHover: "true",
+            carouselVisible: 4,
+            carouselFluid: true,
+            prev: ".cycle-prev",
+            next: ".cycle-next",
+            allowWrap: false
+        });
+
+
 
 
 

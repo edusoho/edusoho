@@ -1,4 +1,5 @@
 <!-- 推荐班级 -->
+
 <section class="recommend-class">
   <div class="container">
     <div class="class-label hidden-xs hidden-sm">推荐班级</div>
@@ -7,7 +8,7 @@
       {% for classroom in classrooms %}
         <div class="cycle-item">
           <div class="class-item">
-            <a href="">
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}">
               <img class="img-responsive" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt="{{ classroom.title }}">
               <h3>{{ classroom.title }}</h3>
               <div class="image-overlay"></div>
@@ -20,14 +21,20 @@
 
       {% set emptyClassroomNum = 4 - classrooms|length %}
       {% if emptyClassroomNum > 0 %}
-        <div class="class-item item-default">
-          <img class="img-responsive" src="{{ asset('assets/v2/img/class_default.png') }}">
-        </div>
+        {% for i in range(1, emptyClassroomNum) %}
+          <div class="cycle-item">
+            <div class="class-item item-default">
+              <img class="img-responsive" src="{{ asset('assets/v2/img/class_default.png') }}">
+            </div>
+          </div>
+        {% endfor %}
       {% endif %}
 
+      {% if classrooms|length > 4 %}
+        <div class="cycle-prev"><i class="es-icon es-icon-chevronleft"></i></div>
+        <div class="cycle-next"><i class="es-icon es-icon-chevronright"></i></div>
+      {% endif %}
 
-      <div class="cycle-prev"><i class="es-icon es-icon-chevronleft"></i></div>
-      <div class="cycle-next"><i class="es-icon es-icon-chevronright"></i></div>
     </div>
   </div>
 </section>
