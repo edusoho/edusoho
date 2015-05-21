@@ -1,0 +1,33 @@
+<section class="es-section">
+  {% for article in latestArticles %}
+    {% set category = categories[article.categoryId] %}
+    <article class="article-item">
+      <div class="article-metas clearfix">
+        <div class="pull-left">
+          <div class="date">
+            <div class="day">{{ article.publishedTime|date('d') }}</div>
+            <div class="month">{{ article.publishedTime|date('m') }}月</div>
+          </div>
+        </div>
+        <div class="metas-body">
+          <p>{{ category.name }} </p>
+          <h2 class="title"><a href="{{ path('article_detail', {id:article.id}) }}">{{ article.title }}</a></h2>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-left">
+          <a href="{{ path('article_detail', { id:article.id }) }}">
+            <img class="media-object" src="{{ filepath(article.thumb, 'article-thumb.png') }}" alt="{{ article.title }}">
+          </a>
+        </div>
+        <div class="media-body">
+          {{ article.body|plain_text(150) }}
+        </div>
+      </div>
+    </article>
+  {% else %}
+     <div class="empty tac text-muted mvl">还没有任何资讯</div>
+  {% endfor %}
+  
+  {% include 'TopxiaWebBundle:Article/Part:paginator.html.twig' %}
+</section>

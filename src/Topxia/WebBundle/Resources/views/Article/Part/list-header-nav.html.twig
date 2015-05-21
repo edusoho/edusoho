@@ -1,0 +1,10 @@
+{% set currentNavCategory = categoryCode|default(null) %}
+{% set rootCategory = rootCategory.code|default(null) %}
+<ul class="nav nav-tabs" role="tablist">
+  <li {% if not currentNavCategory %} role="presentation" class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
+  {% for cat in categoryTree %}
+    {% if cat.parentId == 0 and cat.published == 1 %}
+       <li class="{% if rootCategory == cat.code %}active{% endif %}" role="presentation"><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
