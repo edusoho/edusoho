@@ -7,12 +7,12 @@
         {{ web_macro.user_avatar(user, '', 'avatar-md', true) }}
       </div>
       <div class="media-body">
-        {% if app.user.id != user.id %}
+        {% if not app.user or (app.user.id != user.id) %}
           <a class="btn btn-default btn-xs pull-right" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
         {% endif %}
         <div class="title">
           {{ web_macro.user_link(user, 'name', false) }}
-          {% if app.user.id != user.id %}
+          {% if not app.user or (app.user.id != user.id) %}
             <a class="follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注" {% if isFollowed %} style="display:none;"{% endif %}><i class="es-icon es-icon-addbox"></i></a> 
             <a class="unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %}style="display:none;"{% endif %}><i class="es-icon es-icon-checkbox"></i></a>
           {% endif %}           
