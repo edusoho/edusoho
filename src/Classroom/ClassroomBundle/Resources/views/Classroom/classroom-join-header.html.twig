@@ -11,19 +11,19 @@
           <h2 class="title">{{ classroom.title }}</h2>
           <div class="metas">
             <div class="score">
-                  {% if ( classroom.rating )|number_format == 0 %}
-                          {% else %}
-                              {% for i in  1.. (classroom.rating)|number_format %}
-                                  <i class="es-icon es-icon-star"></i>
-                              {% endfor %}
-                          {% endif %}
+              {% if ( classroom.rating )|number_format == 0 %}
+              {% else %}
+                {% for i in  1.. (classroom.rating)|number_format %}
+                  <i class="es-icon es-icon-star"></i>
+                {% endfor %}
+              {% endif %}
 
-                          {% if (classroom.rating)|number_format == 5 %}
-                          {% else %}
-                              {% for i in  (classroom.rating)|number_format..4  %}
-                                  <i class="es-icon es-icon-staroutline"></i>
-                              {% endfor %}
-                  {% endif %}
+              {% if (classroom.rating)|number_format == 5 %}
+              {% else %}
+                {% for i in  (classroom.rating)|number_format..4  %}
+                  <i class="es-icon es-icon-staroutline"></i>
+                {% endfor %}
+              {% endif %}
               <span>({{classroom.ratingNum}}评价)</span>
             </div>
           </div>
@@ -57,11 +57,11 @@
               <span class="es-share top">
                 <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
                   <i class="es-icon es-icon-share"></i>
+                  <br>
+                  分享
                 </a>
-                    {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
+                {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
-              <br>
-              分享
             </li>
             <li>
           {% if member.role != "teacher" and member.role != "headTeacher" %}
