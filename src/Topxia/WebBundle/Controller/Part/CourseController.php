@@ -8,7 +8,7 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class CourseController extends BaseController
 {
-    public function guestHeaderAction($course)
+    public function headerAction($course, $member)
     {
 
         if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
@@ -28,15 +28,36 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig', array(
+        $nextLearnLesson = $member ? $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']) : null;
+        $learnProgress = $member ? $this->calculateUserLearnProgress($course, $member) : null;
+
+        return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'hasFavorited' => $hasFavorited,
             'classrooms' => $classrooms,
             'courseVip' => $courseVip,
             'userVipStatus' => $userVipStatus,
+            'nextLearnLesson' => $nextLearnLesson,
+            'learnProgress' => $learnProgress,
         ));
-
     }
+
+    private function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
+    }
+
     public function teachersAction($course)
     {
         $course = $this->getCourse($course);

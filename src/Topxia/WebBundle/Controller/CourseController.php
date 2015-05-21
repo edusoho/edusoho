@@ -215,18 +215,32 @@ class CourseController extends BaseController
 
 	public function showAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
+		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
-
-
-		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show-for-guest.html.twig", array(
+		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,
+			'member' => $member,
 			'items' => $items,
-
 		));
 
+	}
+
+	protected function buildCourseLayoutData($request, $id)
+	{
+		$course = $this->getCourseService()->getCourse($id);
+		if (empty($course)) {
+			throw $this->createNotFoundException("课程不存在");
+		}
+
+		$previewAs = $request->query->get('previewAs');
+		$user = $this->getCurrentUser();
+		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+
+		$member = $this->previewAsMember($previewAs, $member, $course);
+
+		return array($course, $member);
 	}
 
 	/**

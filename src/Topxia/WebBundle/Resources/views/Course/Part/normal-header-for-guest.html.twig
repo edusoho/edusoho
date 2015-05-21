@@ -1,104 +1,33 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% extends 'TopxiaWebBundle:Course:Part/normal-header-layout.html.twig' %}
 
-<section class="course-detail-header before">
-  <div class="container">
-    <div class="es-section clearfix">
-      <div class="course-img">
-        <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" alt="{{ course.title }}">
-        <div class="tags">
-          {% if course.serializeMode == 'serialize' %}
-            <span class="tag-serialing"></span>
-          {% endif %}
-          {% if course.type == 'live' %}
-            <span class="tag-live"></span>
-          {% endif %}
-        </div>
-      </div>
-      <div class="course-info">
-        <h2 class="title">{{ course.title }}</h2>
-        <div class="subtitle">{{ course.subtitle }}</div>
-        <div class="metas">
-          <div class="score">
-            {{ web_macro.star(course.rating) }}
-            <span>({{ course.ratingNum }}人)</span>
-          </div>
-          {% if course.expiryDay %}
-            <p class="expiry-date hidden-sm">
-              <label for="">有效期</label><span>{{ course.expiryDay }}天</span>
-            </p>
-          {% endif %}
-          <p class="discount-price">
-            {% if course.discountId == 0 %}
-              <label>原价</label>
-            {% else %}
-              <label>折后价</label>
-            {% endif %}
-            {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
-          </p>
-          {% if course.discountId >= 0 %}
-            <p class="old-price hidden-sm">
-              <label>原价</label>
-              {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
-            </p>
-            {% if course.discountObj|default(null) %}
-              <p class="activity">
-                <label>活动</label>
-                <span class="name">{{ course.discountObj.name }}</span>
-                <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted"
-          data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
-            ></span></span>
-              </p>
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
+{% set layoutClass = 'before' %}
 
-      <div class="course-operation">
-        <div class="student-num hidden-xs">
-          <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
-          {% if course.maxStudentNum > 0 %}
-            {% if course.studentNum >= course.maxStudentNum %}
-              <small>(名额已满)</small>
-            {% else %}
-              <small>({{ course.maxStudentNum }}名额)</small>
-            {% endif %}
-          {% endif %}
-        </div>
-        <!-- 当属于会员班级时， ul中添加actvie这一class -->
-        <ul class="course-data clearfix active">
+{% block content %}
 
-          <li id="unfavorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="取消收藏" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}><a href=""><i class="es-icon es-icon-bookmark"></i><br>已收藏</a></li>
+  {{ header_macro.picture(course) }}
 
-          <li id="favorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="收藏课程" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}><a href=""><i class="es-icon es-icon-bookmarkoutline"></i><br>收藏</a></li>
+  {{ header_macro.info(course, member) }}
 
-          <li>
-            <span class="es-share top">
-              <a class="dropdown-toggle" href="" data-toggle="dropdown">
-                <i class="es-icon es-icon-share"></i>
-                <br>
-                分享
-              </a>
-              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
-            </span>
-          </li>
-          {% if courseVip %}
-            <li class="hidden-xs color-w icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
-              <i class="es-icon es-icon-crown"></i><br>会员
-            </li>
-          {% endif %}
-        </ul>
-        <div class="buy">
-          {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
-        </div>
-      </div>
-
-      {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('course_manage', {id:course.id}) }}" class="setting" title="课程管理">
-          <i class="es-icon es-icon-setting"></i>
-        </a>
+  <div class="course-operation">
+    {{ header_macro.student_num(course) }}
+    <ul class="course-data clearfix active">
+      {{ header_macro.favorite_btn(course, hasFavorited) }}
+      {{ header_macro.share_btn(course) }}
+      {% if courseVip %}
+        <li class="hidden-xs color-w icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+          <i class="es-icon es-icon-crown"></i><br>会员
+        </li>
       {% endif %}
+    </ul>
+    <div class="buy">
+      {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
     </div>
   </div>
-</section>
 
-{% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' with {type:'course'} %}
+{% endblock %}
+
+{% block after_content %}
+  {% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' with {type:'course'} %}
+{% endblock %}
+
+

@@ -72,21 +72,23 @@
               </div>
               {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service }%}
             </div>
-            <div class="btn-buy">
-            {% if classroom.price > 0 and not canFreeJoin  %}
-              <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
-              <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
-            {% else %}
-              <a class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
-              {% if canFreeJoin %}
-              data-toggle="tooltip"
-              data-placement="top"
-              title="您之前已购买了本{{setting('classroom.name')}}的所有收费课程，可免费学习！"
-              {% endif %}
-              >免费加入</a>
+            {% if not classroom.private %}
+              <div class="btn-buy">
+                {% if classroom.price > 0 and not canFreeJoin  %}
+                  <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
+                  <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
+                {% else %}
+                  <a class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
+                  {% if canFreeJoin %}
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="您之前已购买了本{{setting('classroom.name')}}的所有收费课程，可免费学习！"
+                  {% endif %}
+                  >免费加入</a>
+                {% endif %}
+              </div>
             {% endif %}
-            </div>
-
+            
           </div>
         </div>
         <div class="price">

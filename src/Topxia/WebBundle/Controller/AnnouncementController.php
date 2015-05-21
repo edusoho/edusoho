@@ -77,8 +77,8 @@ class AnnouncementController extends BaseController
 	    	$data['targetType'] = $targetType;
 	    	$data['targetId'] = $targetId;
 	    	$data['url'] = isset($data['url']) ? $data['url'] : '';
-	    	$data['startTime'] = isset($data['startTime']) ? $data['startTime'] : time();
-	    	$data['endTime'] = isset($data['endTime']) ? $data['endTime'] : time();
+	    	$data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
+	    	$data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
         	$announcement = $this->getAnnouncementService()->createAnnouncement($data);
 
@@ -111,8 +111,8 @@ class AnnouncementController extends BaseController
 	    	$data = $request->request->all();
 	    	$data['targetType'] = $targetType;
 	    	$data['targetId'] = $targetId;
-	    	$data['startTime'] = isset($data['startTime']) ? $data['startTime'] : time();
-	    	$data['endTime'] = isset($data['endTime']) ? $data['endTime'] : time();
+	    	$data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
+	    	$data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
         	$this->getAnnouncementService()->updateAnnouncement($id, $data);
 	        return $this->createJsonResponse(true);
@@ -121,7 +121,8 @@ class AnnouncementController extends BaseController
 		return $this->render('TopxiaWebBundle:Announcement:announcement-write-modal.html.twig',array(
 			'targetObject' => $targetObject,
 			'announcement' => $announcement,
-			'targetType' => $targetType
+			'targetType' => $targetType,
+			'targetId' => $targetId
 		));
 	}
 
@@ -139,14 +140,15 @@ class AnnouncementController extends BaseController
 	{
 		$conditions = array(
 			'targetType' => $targetType,
-			'targetId' => $targetObject['id']
+			'targetId' => $targetObject['id'],
+			'endTime' => time()
 		);
 
 		$processor = $this->getAnnouncementProcessor($targetType);
 		$canManage = $processor->checkManage($targetObject['id']);
 		$canTake = $processor->checkTake($targetObject['id']);
 
-		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 1);
+		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-block.html.twig',array(
 			'targetObject' => $targetObject,
