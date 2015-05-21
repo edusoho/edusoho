@@ -2,7 +2,7 @@
 
 {% set tab="manage" %}
 
-{% block body %}
+{% block content %}
 	<form id="announcement-write-form" class="form-horizontal" method="post"
 	  {% if announcement.id %}
 			action="{{ path('announcement_update',{id:announcement.id, targetType:targetType,targetId:targetObject.id, }) }}"
@@ -12,10 +12,19 @@
 	>
 		<div class="row form-group">
 		    <div class="col-md-2 control-label">
+		      <label for="content">公告内容</label>
+		    </div>
+			<div class="col-md-9 controls">
+				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
+			</div>
+		</div>
+
+		<div class="row form-group">
+		    <div class="col-md-2 control-label">
 		      <label for="startTime">发布时间</label>
 		    </div>
 		    <div class="col-md-9 controls" style="z-index:2000;">
-		      <input type="text" id="startTime"  name="startTime" class="form-control" value="{% if announcement.startTime|default(null) %}{{announcement.startTime|date("Y-m-d H:i")}}{% endif %}">
+		      <input type="text" id="startTime"  name="startTime" class="form-control" value="{% if announcement.startTime|default('now') %}{{announcement.startTime|default('now')|date("Y-m-d H:i")}}{% endif %}">
 		    </div>
 	  	</div>
 
@@ -28,14 +37,6 @@
 		    </div>
 	  	</div>
 
-		<div class="row form-group">
-		    <div class="col-md-2 control-label">
-		      <label for="content">公告内容</label>
-		    </div>
-			<div class="col-md-9 controls">
-				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
-			</div>
-		</div>
 		{% if not announcement.id %}
 		<div class="row form-group">
 		    <div class="col-md-2 control-label">
