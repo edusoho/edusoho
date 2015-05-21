@@ -1,7 +1,1 @@
-{% set props = status.properties %}
-
-{% if mode == 'simple' %}
-  成为 <a href="{{ path('course_show', {id: props.course.id}) }}" title="来自《{{ props.course.title }}》">{{ props.lesson.title|plain_text(15)}} 的旁听生</a>
-{% elseif mode == 'full' %}
-
-{% endif %}
+type: {{ status.type }}该动态尚未声明，请先声明。
