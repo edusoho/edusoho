@@ -1,0 +1,38 @@
+<div class="es-section article-list-header">
+  {% include 'TopxiaWebBundle:Article/Part:list-header-nav.html.twig' %}
+
+  {% if not featuredArticles and is_granted('ROLE_ADMIN') %}
+    <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
+  {% else %}
+
+    <div class="row">
+      <!-- 轮播图 -->
+      <div class="aricle-carousel carousel slide col-md-8" id="aricle-carousel" data-ride="carousel">
+        <ol class="carousel-indicators"></ol>
+        <div class="carousel-inner" role="listbox">
+          {% for index,featuredArticle in featuredArticles %}
+              <div class="item {% if loop.index == 1 %}active{% endif %}">
+                <a href="{{ path('article_detail', {id:featuredArticle.id}) }}">
+                  <img src="{{ asset(featuredArticle.picture) }}"  alt="{{ featuredArticle.title }}">
+                </a>
+                <div class="carousel-caption">
+                 {{ featuredArticle.title }}
+                </div>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-4 article-header-right hidden-sm hidden-xs">
+        {% for index,promotedArticle in promotedArticles %}
+        <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small one">
+          <div class="content">
+            <p>{{ promotedCategories[promotedArticle['id']].name }}</p>
+            <h4 class="title">J{{ promotedArticle.title|plain_text(125) }}</h4>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+  {% endif %}
+</div>
