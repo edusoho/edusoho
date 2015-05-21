@@ -10,7 +10,6 @@ class CourseController extends BaseController
 {
     public function headerAction($course, $member)
     {
-
         if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
             $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
         }
