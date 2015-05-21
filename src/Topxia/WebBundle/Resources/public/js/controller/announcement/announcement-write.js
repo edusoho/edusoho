@@ -1,8 +1,11 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
+    require('jquery.bootstrap-datetimepicker');
     require('ckeditor');
 
     exports.run = function() {
+
+        require("../../controller/announcement/announcement-manage").run();
 
         var validator = new Validator({
             element: '#announcement-write-form',
