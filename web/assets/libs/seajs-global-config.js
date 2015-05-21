@@ -24,6 +24,7 @@ seajs.config({
 		"mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
 		'echo.js': 'echo.js/1.7.0/index',
+		'swiper': 'swiper/2.7.6/index',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.1.0/upload',
 		'bootstrap.validator': 'common/validator',
