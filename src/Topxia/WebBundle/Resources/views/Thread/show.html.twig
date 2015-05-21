@@ -10,8 +10,10 @@
     {% if teacherPosts|default(null) %}
       {% include 'TopxiaWebBundle:Thread/Part:teacher-post.html.twig' with {posts:teacherPosts} %}
     {% endif %}
-
-    {% include 'TopxiaWebBundle:Thread/Part:all-post.html.twig' %}
+    
+    {% if thread.postNum - teacherPosts|length|default(0) %}
+      {% include 'TopxiaWebBundle:Thread/Part:all-post.html.twig' %}
+    {% endif %}
     
     {% include 'TopxiaWebBundle:Thread/Part:post-form.html.twig' %}
 
