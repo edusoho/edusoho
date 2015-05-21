@@ -22,12 +22,14 @@ define(function (require, exports, module) {
             
         }).on("mouseleave", function(){
             var $card = $("#user-card-"+ $this.data('userId'));
-            setTimeout(function () {
-                if(!$card.is(":hover")) {
-                    $card.hide();
-                }
-            },100); 
-
+            if ($card.length > 0) {
+                setTimeout(function () {
+                    if(!$card.is(":hover")) {
+                        $card.hide();
+                    }
+                },100); 
+            }
+     
         });
 
         function displayCard($card)
