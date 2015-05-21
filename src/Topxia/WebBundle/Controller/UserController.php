@@ -265,7 +265,10 @@ class UserController extends BaseController
         $user = $this->tryGetUser($userId);
         $currentUser = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($userId);
-        $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
+        $isFollowed = false;
+        if ($currentUser->isLogin()) {
+            $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
+        }
         $user['learningNum'] = $this->getCourseService()->findUserLearnCourseCount($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
