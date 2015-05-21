@@ -102,8 +102,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND userId IN ({$marks});";
 
         $userIds = array_merge(array($classroomId), $userIds);
-        
-        return $this->getConnection()->fetchAll($sql, $userIds) ? : array();
+
+        return $this->getConnection()->fetchAll($sql, $userIds) ?: array();
     }
 
     public function deleteMember($id)

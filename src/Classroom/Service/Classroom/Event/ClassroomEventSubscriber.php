@@ -3,8 +3,6 @@ namespace Classroom\Service\Classroom\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Common\StringToolkit;
-use Topxia\WebBundle\Util\TargetHelper;
-
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -32,7 +30,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
             'userId' => $userId,
             'properties' => array(
                 'classroom' => $this->simplifyClassroom($classroom),
-            )
+            ),
         ));
     }
 
@@ -49,7 +47,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
             'userId' => $userId,
             'properties' => array(
                 'classroom' => $this->simplifyClassroom($classroom),
-            )
+            ),
         ));
     }
 

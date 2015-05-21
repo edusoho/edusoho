@@ -6,12 +6,11 @@ use Topxia\AdminBundle\Controller\BaseController;
 
 class ClassroomOrderAdminController extends BaseController
 {
-	public function manageAction(Request $request)
+    public function manageAction(Request $request)
     {
         return $this->forward('TopxiaAdminBundle:Order:manage', array(
             'request' => $request,
             'type' => 'classroom',
         ));
     }
-
 }

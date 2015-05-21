@@ -3,8 +3,6 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\FileToolkit;
-use Imagine\Gd\Imagine;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Controller\BaseController;
@@ -264,7 +262,7 @@ class ClassroomManageController extends BaseController
     }
 
     public function checkStudentAction(Request $request, $id)
-    {   
+    {
         $this->getClassroomService()->tryManageClassroom($id);
 
         $keyWord = $request->query->get('value');
@@ -441,7 +439,7 @@ class ClassroomManageController extends BaseController
             'teachers' => $teachers,
             'teacherIds' => $teacherIds,
             'headTeacher' => $headTeacher,
-            'teacherItems' => $teacherItems
+            'teacherItems' => $teacherItems,
         ));
     }
 
@@ -477,7 +475,7 @@ class ClassroomManageController extends BaseController
     public function assistantsAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        
+
         if ($request->getMethod() == "POST") {
             $data = $request->request->all();
             $userIds = empty($data['ids']) ? array() : $data['ids'];
@@ -489,7 +487,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $assistants = $this->getClassroomService()->findAssistants($id);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
-        $users = ArrayToolkit::index($users,"id");
+        $users = ArrayToolkit::index($users, "id");
         $sortedAssistants = array();
         foreach ($assistants as $key => $assistant) {
             $user = $users[$assistant["userId"]];
@@ -516,14 +514,13 @@ class ClassroomManageController extends BaseController
             $class = $request->request->all();
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
-            
+
             $this->setFlashMessage('success', "基本信息设置成功！");
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:set-info.html.twig", array(
             'classroom' => $classroom, ));
     }
-
 
     public function setPriceAction(Request $request, $id)
     {
@@ -558,7 +555,6 @@ class ClassroomManageController extends BaseController
         }
         $courseNum = count($courses);
 
-
         return $this->render("ClassroomBundle:ClassroomManage:set-price.html.twig", array(
             'levels' => $this->makeLevelChoices($levels),
             'price' => $price,
@@ -572,10 +568,10 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom=$this->getClassroomService()->getClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
 
-        return $this->render("ClassroomBundle:ClassroomManage:set-picture.html.twig",array(
-            'classroom'=>$classroom
+        return $this->render("ClassroomBundle:ClassroomManage:set-picture.html.twig", array(
+            'classroom' => $classroom,
         ));
     }
 
@@ -583,11 +579,12 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom=$this->getClassroomService()->getClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
             $this->getClassroomService()->changePicture($classroom['id'], $options["images"]);
+
             return $this->redirect($this->generateUrl('classroom_manage_set_picture', array('id' => $classroom['id'])));
         }
 
@@ -718,7 +715,7 @@ class ClassroomManageController extends BaseController
     public function excelDataImportAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $classroom=$this->getClassroomService()->getClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
 
         return $this->render('ClassroomBundle:ClassroomManage:import.step3.html.twig', array(
             'classroom' => $classroom,

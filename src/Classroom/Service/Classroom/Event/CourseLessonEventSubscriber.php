@@ -19,34 +19,34 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     }
 
     public function onCourseLessonCreate(ServiceEvent $event)
-	{
-		$context = $event->getSubject();
+    {
+        $context = $event->getSubject();
 
-		$id = $context["courseId"];
+        $id = $context["courseId"];
 
-		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-		$classroomIds = ArrayToolkit::column($classrooms,'classroomId');
-		foreach ($classroomIds as $key => $value) {
-			$classroom=$this->getClassroomService()->getClassroom($value);
-			$lessonNum=$classroom['lessonNum']+1;
-			$this->getClassroomService()->updateClassroom($value,array("lessonNum"=>$lessonNum));
-		}
-	}
+        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
+        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        foreach ($classroomIds as $key => $value) {
+            $classroom = $this->getClassroomService()->getClassroom($value);
+            $lessonNum = $classroom['lessonNum']+1;
+            $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
+        }
+    }
 
-	public function onCourseLessonDelete(ServiceEvent $event)
-	{
-		$context = $event->getSubject();
+    public function onCourseLessonDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
 
-		$courseId = $context["courseId"];
+        $courseId = $context["courseId"];
 
-		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
-		$classroomIds = ArrayToolkit::column($classrooms,'classroomId');
-		foreach ($classroomIds as $key => $value) {
-			$classroom = $this->getClassroomService()->getClassroom($value);
-			$lessonNum = $classroom['lessonNum']-1;
-			$this->getClassroomService()->updateClassroom($value,array("lessonNum"=>$lessonNum));
-		}
-	}
+        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
+        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        foreach ($classroomIds as $key => $value) {
+            $classroom = $this->getClassroomService()->getClassroom($value);
+            $lessonNum = $classroom['lessonNum']-1;
+            $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
+        }
+    }
 
     public function onCourseTeacherUpdate(ServiceEvent $event)
     {
@@ -54,16 +54,15 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $courseId = $context["courseId"];
 
-        $findClassroomsByCourseId =  ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($courseId),'classroomId');
+        $findClassroomsByCourseId =  ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($courseId), 'classroomId');
 
-        foreach ($findClassroomsByCourseId as $key => $value) 
-        {
+        foreach ($findClassroomsByCourseId as $key => $value) {
             $this->getClassroomService()->updateClassroomTeachers($value);
         }
     }
 
-    private function getClassroomService(){
-		return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    private function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
-
 }
