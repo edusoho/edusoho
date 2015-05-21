@@ -7,7 +7,5 @@ return array(
     ),
     'thread.event_processor' => array(
         'classroom' => 'Classroom\\Service\\Classroom\\Event\\ClassroomThreadEventProcessor',
-    )
+    ),
 );
-
-

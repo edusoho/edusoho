@@ -17,9 +17,10 @@ class MemberController extends BaseController
         if (empty($member)) {
             $this->createAccessDeniedException('不是本班成员!不能加入活动!');
         }
+
         return $this->forward('TopxiaWebBundle:Thread/Member:become', array(
             'request' => $request,
-            'threadId' => $threadId
+            'threadId' => $threadId,
         ));
     }
 

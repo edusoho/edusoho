@@ -6,10 +6,6 @@ use Topxia\Service\Common\BaseService;
 use Classroom\Service\Classroom\ClassroomService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Symfony\Component\HttpFoundation\File\File;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -129,7 +125,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service'));
 
         if (empty($fields)) {
@@ -252,7 +247,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->updateClassroom($id, array("status" => "closed"));
     }
 
-    public function changePicture ($id, $data)
+    public function changePicture($id, $data)
     {
         $classroom = $this->getClassroomDao()->getClassroom($id);
         if (empty($classroom)) {
@@ -268,14 +263,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields = array(
             'smallPicture' => $files[$fileIds["small"]["id"]]["uri"],
             'middlePicture' => $files[$fileIds["middle"]["id"]]["uri"],
-            'largePicture' => $files[$fileIds["large"]["id"]]["uri"]
+            'largePicture' => $files[$fileIds["large"]["id"]]["uri"],
         );
 
         $this->deleteNotUsedPictures($classroom);
 
         $this->getLogService()->info('classroom', 'update_picture', "更新课程《{$classroom['title']}》(#{$classroom['id']})图片", $fields);
-        
-        return $this->updateClassroom($id,$fields);
+
+        return $this->updateClassroom($id, $fields);
     }
 
     private function deleteNotUsedPictures($classroom)
@@ -283,12 +278,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $oldPictures = array(
             'smallPicture' => $classroom['smallPicture'] ? $classroom['smallPicture'] : null,
             'middlePicture' => $classroom['middlePicture'] ? $classroom['middlePicture'] : null,
-            'largePicture' => $classroom['largePicture'] ? $classroom['largePicture'] : null
+            'largePicture' => $classroom['largePicture'] ? $classroom['largePicture'] : null,
         );
 
-
-        array_map(function($oldPicture){
-            if (!empty($oldPicture)){
+        array_map(function ($oldPicture) {
+            if (!empty($oldPicture)) {
                 $this->getFileService()->deleteFileByUri($oldPicture);
             }
         }, $oldPictures);
@@ -999,7 +993,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getClassroomMemberDao()->updateMember($member['id'], array('locked' => 0));
     }
 
-
     public function recommendClassroom($id, $number)
     {
         $this->tryAdminClassroom($id);
@@ -1010,7 +1003,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroomDao()->updateClassroom($id, array(
             'recommended' => 1,
-            'recommendedSeq' => (int)$number,
+            'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         ));
 
@@ -1053,8 +1046,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
-    private function updateStudentNumAndAudtorNum($classroomId){
-
+    private function updateStudentNumAndAudtorNum($classroomId)
+    {
         $fields = array(
             'studentNum' => $this->getClassroomStudentCount($classroomId),
             'auditorNum' => $this->getClassroomAuditorCount($classroomId),
@@ -1069,7 +1062,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroomCourse = array(
             'classroomId' => $id,
             'courseId' => $courseId,
-            'parentCourseId' => $course['parentId']
+            'parentCourseId' => $course['parentId'],
             );
 
         $this->getClassroomCourseDao()->addCourse($classroomCourse);
