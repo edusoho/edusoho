@@ -2,16 +2,13 @@
 
 {% block title %}{{ setting.name }} - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/article.css') }}" />
-{% endblock %}
-
 {% set bodyClass = 'articlepage' %}
 
-{% set script_controller = 'index' %}
+{% set script_controller = 'article/index' %}
 
 {% block content %}
+  
+  {% include 'TopxiaWebBundle:Article:article-list-header.html.twig' %}
 
   <div class="es-row-wrap container-gap">
 
