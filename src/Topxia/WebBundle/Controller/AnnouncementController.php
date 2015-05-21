@@ -24,7 +24,7 @@ class AnnouncementController extends BaseController
 		));
 	}
 
-	public function listAction($id, $targetType, $targetId){
+	public function listAction(Request $request, $targetType, $targetId){
 		$conditions = array(
 			'targetType' => $targetType,
 			'targetId' => $targetId
@@ -37,7 +37,6 @@ class AnnouncementController extends BaseController
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-list-modal.html.twig',array(
 			'announcements' => $announcements,
-			'currentId'=> $id,
 			'targetType' => $targetType,
 			'targetId' => $targetId,
 			'canManage' => $canManage
@@ -57,6 +56,14 @@ class AnnouncementController extends BaseController
 		return $this->render('TopxiaWebBundle:Announcement:announcement-show-all-modal.html.twig',array(
 			'announcements'=>$announcements,
 			'users'=>$users
+		));
+	}
+
+	public function manageAction(Request $request, $targetType, $targetId)
+	{
+		return $this->render('TopxiaWebBundle:Announcement:announcement-manage-modal.html.twig',array(
+			'targetId' => $targetId,
+			'targetType' => $targetType,
 		));
 	}
 
@@ -89,6 +96,7 @@ class AnnouncementController extends BaseController
 			'announcement' => array('id' => '', 'content' => ''),
 			'targetObject' => $targetObject,
 			'targetType' => $targetType,
+			'targetId' => $targetId
 		));
 	}
 	
