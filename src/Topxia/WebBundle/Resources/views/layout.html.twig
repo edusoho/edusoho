@@ -101,7 +101,7 @@
               </li>
               <li class="visible-sm visible-xs"><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
               <li class="visible-sm visible-xs"><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
-              <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登陆</a></li>
+              <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
             </ul>
           </li>
           <li class="hidden-sm hidden-xs">
@@ -119,7 +119,7 @@
             </ul>
           </li>
           {% else %}
-            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登陆</a></li>
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
             <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
           {% endif %}
         </ul>

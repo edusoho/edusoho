@@ -26,7 +26,9 @@
           <label >简介</label>
         </div>
         <div class="controls col-md-8">
-          <textarea name="about" class="form-control" rows="6">{{ classroom.about|raw }}</textarea>
+          <textarea name="about" class="form-control" rows="6" 
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}" id="about">{{ classroom.about|raw }}</textarea>
         </div>
       </div>
 

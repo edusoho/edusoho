@@ -5,9 +5,9 @@
 {% block main %}
   <div class="class-about">
         {% if introduction is empty %}
-            <li class="mvl tac text-muted">暂无介绍</li>
+            <p class="mvl tac text-muted">暂无介绍</p>
         {% else %}
-              {{ introduction}}
+              {{ introduction|raw }}
         {% endif %}
   </div>
     

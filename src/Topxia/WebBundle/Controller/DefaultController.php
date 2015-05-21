@@ -13,7 +13,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published', 'type' => 'normal');
+        $conditions = array('status' => 'published', 'type' => 'normal', 'parentId' => 0);
 
         $coinSetting=$this->getSettingService()->get('coin',array());
         if(isset($coinSetting['cash_rate'])){
@@ -191,7 +191,7 @@ class DefaultController extends BaseController
         exit();
     }
 
-    public function categoryAction(Request $request)
+    public function CoursesCategoryAction(Request $request)
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';

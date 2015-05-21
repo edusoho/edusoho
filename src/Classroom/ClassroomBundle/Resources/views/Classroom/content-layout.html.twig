@@ -4,10 +4,7 @@
 <div class="class-detail row">
   <div class="col-lg-9 col-md-8 class-detail-main">
 
-    {# <section class="alert alert-warning" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> #}
-            {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:classroom,targetType:'classroom'})) }}
-    {# </section> #}
+    {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:classroom,targetType:'classroom'})) }}
 
     <section class="es-section">
       {% if nav is defined %}

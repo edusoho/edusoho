@@ -1,9 +1,10 @@
 <div class="media media-evaluate">
   <div class="media-left">
-    <a href=""><img class="avatar-sm" src="{{ filepath(users[review.id].smallAvatar, 'avatar.png') }}" alt=""></a>
+    {{ web_macro.user_avatar(user, '', 'avatar-sm') }}
   </div>
   <div class="media-body">
-    <div class="title"><a href="">{{ users[review.id].nickname}}</a> {{review.createdTime|smart_time}}</div>
+    <div class="title">
+      {{ web_macro.user_link(user, '') }} {{review.createdTime|smart_time}}</div>
 
     {% include 'TopxiaWebBundle:Review/Widget:star.html.twig' with {score:review.rating} %}
    
