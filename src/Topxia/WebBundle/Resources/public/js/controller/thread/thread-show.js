@@ -72,9 +72,9 @@ define(function(require, exports, module) {
                 if (response.status == 'ok') {
                     $btn.find(".post-up-num").text(parseInt($btn.find(".post-up-num").text()) + 1);
                 } else if (response.status == 'votedError') {
-                    Notify.danger('您已投过票了！');
+                    Notify.danger('您已点过赞了！');
                 } else {
-                    alert('投票失败，请重试！');
+                    alert('点赞失败，请重试！');
                 }
             }, 'json');
 

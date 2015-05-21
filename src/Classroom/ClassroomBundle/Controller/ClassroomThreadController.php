@@ -15,6 +15,10 @@ class ClassroomThreadController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
+        if ($classroom['private'] && (!$member || ($member && $member['locked']))) {
+            return $this->createMessageResponse('error', '该班级是封闭班级,您无权查看');
+        }
+
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && $member['locked'] == '0') {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
@@ -26,7 +30,7 @@ class ClassroomThreadController extends BaseController
                 'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
                 'service' => $this->getThreadService(),
                 'layout' => $layout,
-                'member' => $member
+                'member' => $member,
         ));
     }
 
@@ -79,7 +83,7 @@ class ClassroomThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        
+
         if (empty($thread)) {
             return $this->createMessageResponse('error', '帖子已不存在');
         }

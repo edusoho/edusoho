@@ -5,15 +5,9 @@ namespace Classroom\Service\Classroom\Impl;
 use Topxia\Service\Common\BaseService;
 use Classroom\Service\Classroom\ClassroomReviewService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Imagine\Image\ImageInterface;
-use Symfony\Component\HttpFoundation\File\File;
 
 
-class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService 
+class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
 {
     public function getReview($id)
     {
@@ -23,14 +17,16 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     public function searchReviews($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
-        return $this->getClassroomReviewDao()->searchReviews($conditions,$orderBy,$start,$limit);
+
+        return $this->getClassroomReviewDao()->searchReviews($conditions, $orderBy, $start, $limit);
     }
 
     public function searchReviewCount($conditions)
     {
-         $conditions = $this->_prepareReviewSearchConditions($conditions);
-         $count= $this->getClassroomReviewDao()->searchReviewCount($conditions);
-         return $count;
+        $conditions = $this->_prepareReviewSearchConditions($conditions);
+        $count = $this->getClassroomReviewDao()->searchReviewCount($conditions);
+
+        return $count;
     }
 
     public function getUserClassroomReview($userId, $classroomId)
@@ -38,20 +34,22 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $user = $this->getUserService()->getUser($userId);
 
         $classroom = $this->getClassroomDao()->getClassroom($classroomId);
-        if(empty($classroom)){
+        if (empty($classroom)) {
             throw $this->createServiceException("Classroom is not Exist!");
         }
+
         return $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($userId, $classroomId);
     }
 
     private function _prepareReviewSearchConditions($conditions)
     {
-        $conditions = array_filter($conditions, function($value){
-            if(is_array($value)){
+        $conditions = array_filter($conditions, function ($value) {
+            if (is_array($value)) {
                 return true;
-            }elseif (ctype_digit((string)$value)) {
+            } elseif (ctype_digit((string) $value)) {
                 return true;
             }
+
             return !empty($value);
         });
 
@@ -129,17 +127,17 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $this->getLogService()->info('classroom_review', 'delete', "删除评价#{$id}");
     }
 
-    protected function getClassroomReviewDao() 
+    protected function getClassroomReviewDao()
     {
         return $this->createDao('Classroom:Classroom.ClassroomReviewDao');
     }
 
-    private function getClassroomService() 
+    private function getClassroomService()
     {
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
-    protected function getClassroomDao() 
+    protected function getClassroomDao()
     {
         return $this->createDao('Classroom:Classroom.ClassroomDao');
     }

@@ -10,6 +10,7 @@ class NoteController extends BaseController
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
         $classroom_courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($classroom_courses, 'id');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -17,6 +18,10 @@ class NoteController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+
+        if ($classroom['private'] && (!$member || ($member && $member['locked']))) {
+            return $this->createMessageResponse('error', '该班级是封闭班级,您无权查看');
+        }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
@@ -30,13 +35,14 @@ class NoteController extends BaseController
             'classroom' => $classroom,
             'courseIds' => $courseIds,
             'courses' => $courses,
+            'member' => $member,
         ));
     }
 
     private function getNoteSearchFilters($request)
     {
         $filters = array();
-        
+
         $filters['courseId'] = $request->query->get('courseId', '');
         $filters['sort'] = $request->query->get('sort');
 
@@ -46,7 +52,6 @@ class NoteController extends BaseController
 
         return $filters;
     }
-
 
     private function getClassroomService()
     {

@@ -17,35 +17,41 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function getClassroom($id)
     {
         $that = $this;
-        return $this->fetchCached('id', $id, function($id) use ($that) {
+
+        return $this->fetchCached('id', $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
             $classroom = $that->getConnection()->fetchAssoc($sql, array($id));
+
             return $classroom ? $that->createSerializer()->unserialize($classroom, $that->getSerializeFields()) : null;
         });
     }
-    
-    public function searchClassrooms($conditions,$orderBy,$start,$limit)
+
+    public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime','recommendedSeq'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq'));
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->addOrderBy($orderBy[0], $orderBy[1]);
-        
-        $classrooms=$builder->execute()->fetchAll();
+
+        $classrooms = $builder->execute()->fetchAll();
+
         return $classrooms ? $this->createSerializer()->unserializes($classrooms, $this->serializeFields) : array();
     }
 
-    public function findClassroomsByIds(array $ids) 
+    public function findClassroomsByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        if (empty($ids)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
 
-        $classrooms= $this->getConnection()->fetchAll($sql, $ids);
+        $classrooms = $this->getConnection()->fetchAll($sql, $ids);
+
         return $classrooms ? $this->createSerializer()->unserializes($classrooms, $this->serializeFields) : array();
     }
 
@@ -53,7 +59,8 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     {
         $builder = $this->_createClassroomSearchBuilder($conditions)
                          ->select('count(id)');
-        return $builder->execute()->fetchColumn(0); 
+
+        return $builder->execute()->fetchColumn(0);
     }
 
     private function _createClassroomSearchBuilder($conditions)
@@ -63,13 +70,12 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table,$this->table)
+            ->from($this->table, $this->table)
             ->andWhere('status = :status')
             ->andWhere('title like :title')
             ->andWhere('private = :private')
             ->andWhere('categoryId IN (:categoryIds)')
             ->andWhere('recommended = :recommended');
-
 
         return $builder;
     }
@@ -80,7 +86,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
         $affected = $this->getConnection()->insert($this->table, $classroom);
         if ($affected <= 0) {
-
             throw $this->createDaoException('Insert Classroom error.');
         }
 
@@ -91,21 +96,22 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     {
         $sql = "SELECT * FROM {$this->table} where title=? LIMIT 1";
 
-        $classroom= $this->getConnection()->fetchAssoc($sql, array($title));
+        $classroom = $this->getConnection()->fetchAssoc($sql, array($title));
+
         return $classroom ? $this->createSerializer()->unserialize($classroom, $this->serializeFields) : array();
-   
     }
-     public function findClassroomsByLikeTitle($title)
+    public function findClassroomsByLikeTitle($title)
     {
-        if(empty($title)){
+        if (empty($title)) {
             return array();
         }
-        $sql ="SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
+        $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
+
         return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
     }
 
-    public function updateClassroom($id,$fields)
-    {   
+    public function updateClassroom($id, $fields)
+    {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
@@ -130,6 +136,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function deleteClassroom($id)
     {
         $this->clearCached();
+
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
@@ -142,5 +149,4 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     {
         return $this->serializeFields;
     }
-
 }

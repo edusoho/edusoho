@@ -7,6 +7,12 @@ define(function(require, exports, module) {
     var $modal = $('#join-event-form').parents('.modal');
 
     exports.run = function() {
+        $form = $('#join-event-form');
+        $('#join-event-form').find('input').keypress(function(e) {
+            if(e.which == 10 || e.which == 13) {
+                submitForm($form);
+            }
+        });
         var validator = new Validator({
             element: '#join-event-form',
             failSilently: true,
@@ -15,10 +21,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                $modal.find('[type=submit]').button('loading').addClass('disabled');
-                $.post($form.attr('action'), $form.serialize(), function(result){
-                    window.location.reload();
-                });
+                submitForm($form);
             }
         });
 
@@ -34,6 +37,13 @@ define(function(require, exports, module) {
             required: true
         });
 
+        function submitForm($form)
+        {
+            $modal.find('[type=submit]').button('loading').addClass('disabled');
+            $.post($form.attr('action'), $form.serialize(), function(result){
+                window.location.reload();
+            });
+        }
     };
 
 });

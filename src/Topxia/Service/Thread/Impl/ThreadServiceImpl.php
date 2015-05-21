@@ -116,6 +116,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
         }
+        $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
+        
         $thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
 
         if (empty($thread['content'])) {

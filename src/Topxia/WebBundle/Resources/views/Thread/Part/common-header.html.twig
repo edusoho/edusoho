@@ -1,6 +1,6 @@
 <div class="media topic-header">
   <div class="media-left media-middle">
-    <a href="{{ path('user_show', {id:author.id}) }}"><img class="img-circle" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" alt=""></a>
+    {{ web_macro.user_avatar(author, '', 'img-circle')}}
   </div>
   <div class="media-body">
     <div class="title">
@@ -17,7 +17,7 @@
     </div> 
   </div>
   <div class="media-data">
-    <span>{{ thread.postNum }}<br>回复</span>
+    <span><span class="thread-post-num">{{ thread.postNum }}</span><br>回复</span>
     <span>{{ thread.hitNum }}<br>浏览</span>
   </div>
 </div>
