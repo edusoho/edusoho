@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media media-comment">
   <div class="media-left">
     {{ web_macro.user_avatar(author, 'user-avatar', 'img-circle', true) }}

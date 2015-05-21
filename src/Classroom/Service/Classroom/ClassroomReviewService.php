@@ -3,7 +3,7 @@
 namespace Classroom\Service\Classroom;
 
 interface ClassroomReviewService
-{   
+{
     public function getReview($id);
 
     public function searchReviews($conditions, $orderBy, $start, $limit);

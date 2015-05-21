@@ -10,11 +10,11 @@ class MemberController extends BaseController
 {
     public function becomeAction(Request $request, $threadId)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录!不能加入活动!');
+        }
         if ($request->getMethod() == 'POST') {
-            $user = $this->getCurrentUser();
-            if (!$user->isLogin()) {
-                $this->createAccessDeniedException('未登录,不能操作!');
-            }
             $data = $request->request->all();
             $member = array(
                 'threadId' => $threadId,
@@ -30,9 +30,10 @@ class MemberController extends BaseController
         }
 
         $thread = $this->getThreadService()->getThread($threadId);
-
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         return $this->render('TopxiaWebBundle:Thread/Widget:user-info-modal.html.twig', array(
             'thread' => $thread,
+            'userProfile' => $userProfile
         ));
     }
 

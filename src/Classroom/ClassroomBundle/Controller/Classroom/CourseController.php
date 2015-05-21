@@ -55,32 +55,31 @@ class CourseController extends BaseController
 
     public function listAction(Request $request, $classroomId)
     {
-        $classroom=$this->getClassroomService()->getClassroom($classroomId);
-        $previewAs="";
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $previewAs = "";
 
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
 
         if (empty($classroom['teacherIds'])) {
-            $classroomTeacherIds=array();
-        }else{
-            $classroomTeacherIds=$classroom['teacherIds'];
+            $classroomTeacherIds = array();
+        } else {
+            $classroomTeacherIds = $classroom['teacherIds'];
         }
 
         $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
 
-        $courses=$this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $currentUser = $this->getUserService()->getCurrentUser();
-        $courseMembers=array();
+        $courseMembers = array();
         $teachers = array();
 
         foreach ($courses as $key => $course) {
-         
             $courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $currentUser->id);
-            
+
             $course['teachers'] = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
-            $teachers[$course['id']] = $course['teachers'] ;
+            $teachers[$course['id']] = $course['teachers'];
         }
         $coursesNum = count($courses);
 
@@ -89,21 +88,19 @@ class CourseController extends BaseController
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($request->query->get('previewAs')) {
-
             if ($this->getClassroomService()->canManageClassroom($classroomId)) {
-
-                $previewAs=$request->query->get('previewAs');
+                $previewAs = $request->query->get('previewAs');
             }
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
         $reviewsNum = $this->getClassroomReviewService()->searchReviewCount(array(
-            'classroomId' => $classroomId
+            'classroomId' => $classroomId,
         ));
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
-        if ($member && !$member["locked"]){
+        if ($member && !$member["locked"]) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
 
@@ -111,11 +108,10 @@ class CourseController extends BaseController
             'classroom' => $classroom,
             'member' => $member,
             'teachers' => $teachers,
-            'courses'=> $courses,
-            'courseMembers'=> $courseMembers,
-            'layout' => $layout
+            'courses' => $courses,
+            'courseMembers' => $courseMembers,
+            'layout' => $layout,
         ));
-
     }
 
     public function searchAction(Request $request, $classroomId)
@@ -152,7 +148,7 @@ class CourseController extends BaseController
     private function _findCoursesInClassrooms($courseIds)
     {
         $conditions = array(
-            'parentIds' => $courseIds
+            'parentIds' => $courseIds,
         );
         $childCourses = $this->getCourseService()->searchCourses(
             $conditions,
@@ -181,35 +177,31 @@ class CourseController extends BaseController
         return array($mapping, $classrooms);
     }
 
-    private function previewAsMember($previewAs="", $member, $classroom)
-    {   
+    private function previewAsMember($previewAs = "", $member, $classroom)
+    {
         $user = $this->getCurrentUser();
 
-        if (in_array($previewAs, array('guest','auditor','member'))) {
-
+        if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
             if ($previewAs == 'guest') {
-
-                return null;
+                return;
             }
 
             $member = array(
-                'id'=>0,
-                'classroomId'=>$classroom['id'],
-                'userId'=>$user['id'],
-                'orderId'=>0,
-                'levelId'=>0,
-                'noteNum'=>0,
-                'threadNum'=>0,
-                'remark'=>'',
-                'role'=>'auditor',
-                'locked'=>0,
-                'createdTime'=>0
+                'id' => 0,
+                'classroomId' => $classroom['id'],
+                'userId' => $user['id'],
+                'orderId' => 0,
+                'levelId' => 0,
+                'noteNum' => 0,
+                'threadNum' => 0,
+                'remark' => '',
+                'role' => 'auditor',
+                'locked' => 0,
+                'createdTime' => 0,
             );
 
             if ($previewAs == 'member') {
-
                 $member['role'] = 'member';
-
             }
         }
 

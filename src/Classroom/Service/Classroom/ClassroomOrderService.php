@@ -3,7 +3,7 @@
 namespace Classroom\Service\Classroom;
 
 interface ClassroomOrderService
-{   
+{
     public function createOrder($id);
 
     public function doSuccessPayOrder($id);

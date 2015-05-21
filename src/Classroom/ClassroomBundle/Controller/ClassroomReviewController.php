@@ -6,24 +6,24 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\AdminBundle\Controller\BaseController;
 
-class ClassroomReviewController extends BaseController {
+class ClassroomReviewController extends BaseController
+{
 
-    public function indexAction (Request $request)
-    {   
+    public function indexAction(Request $request)
+    {
         $conditions = $request->query->all();
 
-        if (!empty($conditions['classroomTitle'])){
-            
+        if (!empty($conditions['classroomTitle'])) {
             $classrooms = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
             $conditions['classroomIds'] = ArrayToolkit::column($classrooms, 'id');
-            if (count($conditions['classroomIds']) == 0){
+            if (count($conditions['classroomIds']) == 0) {
                 return $this->render('ClassroomBundle:ClassroomReview:index.html.twig', array(
                 'reviews' => array(),
-                'users'=>array(),
-                'classrooms'=>array(),
-                'paginator' => new Paginator($request,0,20)
+                'users' => array(),
+                'classrooms' => array(),
+                'paginator' => new Paginator($request, 0, 20),
                 ));
-            }                 
+            }
         }
 
         $paginator = new Paginator(
@@ -33,17 +33,17 @@ class ClassroomReviewController extends BaseController {
         );
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,
-            array('createdTime','DESC' ),
+            array('createdTime', 'DESC' ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-        ); 
+        );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
-        return $this->render('ClassroomBundle:ClassroomReview:index.html.twig',array(
+        return $this->render('ClassroomBundle:ClassroomReview:index.html.twig', array(
             'reviews' => $reviews,
-            'users'=>$users,
-            'classrooms'=>$classrooms,
+            'users' => $users,
+            'classrooms' => $classrooms,
             'paginator' => $paginator,
             ));
     }
@@ -51,9 +51,9 @@ class ClassroomReviewController extends BaseController {
     public function deleteAction(Request $request, $id)
     {
         $this->getClassroomReviewService()->deleteReview($id);
+
         return $this->createJsonResponse(true);
     }
-
 
     public function batchDeleteAction(Request $request)
     {
@@ -61,6 +61,7 @@ class ClassroomReviewController extends BaseController {
         foreach ($ids as $id) {
             $this->getClassroomReviewService()->deleteReview($id);
         }
+
         return $this->createJsonResponse(true);
     }
 
@@ -78,6 +79,4 @@ class ClassroomReviewController extends BaseController {
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
     }
-
-
 }
