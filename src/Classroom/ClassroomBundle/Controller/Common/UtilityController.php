@@ -13,7 +13,7 @@ class UtilityController extends BaseController
         $users = $this->getUserService()->searchUsers(array(
             'nickname' => $likeString,
             'roles' => 'ROLE_TEACHER',
-            'excludeIds' => $this->_getExcludeIds($classroomId) 
+            'excludeIds' => $this->_getExcludeIds($classroomId),
             ), array('createdTime', 'DESC'), 0, 10
         );
 
@@ -22,7 +22,7 @@ class UtilityController extends BaseController
             $newUsers[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png')
+                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
             );
         }
 
@@ -34,7 +34,7 @@ class UtilityController extends BaseController
         $likeString = $request->query->get('q');
         $users = $this->getUserService()->searchUsers(array(
             'nickname' => $likeString,
-            'excludeIds' => $this->_getExcludeIds($classroomId)
+            'excludeIds' => $this->_getExcludeIds($classroomId),
             ), array('createdTime', 'DESC'), 0, 10
         );
 
@@ -43,7 +43,7 @@ class UtilityController extends BaseController
             $newUsers[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png')
+                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
             );
         }
 
@@ -56,7 +56,8 @@ class UtilityController extends BaseController
         $assistants = $this->getClassroomService()->findAssistants($classroomId);
         $assistantIds = ArrayToolkit::column($assistants, 'userId');
         $excludeIds = array_merge($classroom['teacherIds'], $assistantIds);
-        $excludeIds[] = $classroom['headTeacherId']; 
+        $excludeIds[] = $classroom['headTeacherId'];
+
         return $excludeIds;
     }
 
@@ -69,5 +70,4 @@ class UtilityController extends BaseController
     {
         return $this->container->get('topxia.twig.web_extension');
     }
-
 }

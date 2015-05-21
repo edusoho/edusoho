@@ -77,7 +77,7 @@ class ReviewController extends BaseController
             'users' => $reviewUsers,
             'member' => $member,
             'form' => $form,
-            'layout' => $layout
+            'layout' => $layout,
         ));
     }
 

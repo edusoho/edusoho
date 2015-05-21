@@ -8,15 +8,14 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
-
-class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderService 
+class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderService
 {
-	public function createOrder($info)
+    public function createOrder($info)
     {
         $connection = ServiceKernel::instance()->getConnection();
         try {
             $connection->beginTransaction();
-            
+
             $user = $this->getCurrentUser();
             if (!$user->isLogin()) {
                 throw $this->createServiceException('用户未登录，不能创建订单');
@@ -38,7 +37,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 throw $this->createServiceException('班级不存在，创建课程订单失败。');
             }
 
-            if($classroom['private'] == 1) {
+            if ($classroom['private'] == 1) {
                 throw $this->createServiceException('该班级是封闭班级，学员不能自行加入！');
             }
 
@@ -49,7 +48,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $order['targetType'] = 'classroom';
             $order['targetId'] = $classroom['id'];
             $order['payment'] = $info['payment'];
-            $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
+            $order['amount'] = empty($info['amount']) ? 0 : $info['amount'];
             $order['priceType'] = $info['priceType'];
             $order['totalPrice'] = $info["totalPrice"];
             $order['coinRate'] = $info['coinRate'];
@@ -74,9 +73,9 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             if (intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon'])) {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
                     'sn' => $order['sn'],
-                    'status' => 'success', 
-                    'amount' => $order['amount'], 
-                    'paidTime' => time()
+                    'status' => 'success',
+                    'amount' => $order['amount'],
+                    'paidTime' => time(),
                 ));
 
                 $info = array(
@@ -93,7 +92,6 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $connection->rollBack();
             throw $e;
         }
-
     }
 
     public function doSuccessPayOrder($id)
@@ -111,11 +109,11 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'],"pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
             $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
         }
 
-        return ;
+        return;
     }
 
     public function applyRefundOrder($id, $amount, $reason, $container)
@@ -135,18 +133,16 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $classroom = $this->getClassroomService()->getCourse($order["targetId"]);
                 $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
                 $variables = array(
-                    'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>"
+                    'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
                 );
                 $message = StringToolkit::template($message, $variables);
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
-
         } elseif ($refund['status'] == 'success') {
             $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);
         }
 
         return $refund;
-
     }
 
     public function getOrder($id)
@@ -166,7 +162,6 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->unlockStudent($order['targetId'], $order['userId']);
         }
-
     }
 
     protected function getOrderService()
@@ -203,5 +198,4 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
     {
         return $this->createService('System.LogService');
     }
-
 }

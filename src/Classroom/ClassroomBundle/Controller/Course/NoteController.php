@@ -42,7 +42,7 @@ class NoteController extends BaseController
     private function getNoteSearchFilters($request)
     {
         $filters = array();
-        
+
         $filters['courseId'] = $request->query->get('courseId', '');
         $filters['sort'] = $request->query->get('sort');
 
@@ -52,7 +52,6 @@ class NoteController extends BaseController
 
         return $filters;
     }
-
 
     private function getClassroomService()
     {

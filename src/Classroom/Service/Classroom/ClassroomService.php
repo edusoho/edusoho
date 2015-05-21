@@ -3,7 +3,7 @@
 namespace Classroom\Service\Classroom;
 
 interface ClassroomService
-{   
+{
     public function getClassroom($id);
 
     public function updateClassroom($id, $fields);
@@ -22,16 +22,15 @@ interface ClassroomService
 
     public function addCoursesToClassroom($classroomId, $courseIds);
 
-
     /**
      * 是否可参与班级的活动，只有正式学员、教师、网站管理员才能参与班级的活动，旁听生不能参与活动
-     *   
+     *
      */
     public function canTakeClassroom($id);
 
     public function tryTakeClassroom($id);
 
-    /**  
+    /**
      * 是否可查看班级，　所有班级成员、网站管理员都可以查看
      */
     public function canLookClassroom($id);
@@ -39,10 +38,10 @@ interface ClassroomService
     public function tryLookClassroom($id);
 
     public function deleteClassroom($id);
-    
+
     public function exitClassroom($classroomId, $userId);
 
-    public function searchClassrooms($conditions,$orderBy,$start,$limit);
+    public function searchClassrooms($conditions, $orderBy, $start, $limit);
 
     public function searchClassroomsCount($condtions);
 
@@ -57,9 +56,9 @@ interface ClassroomService
     public function publishClassroom($id);
 
     /**
-    * 班级课程API
-    *
-    */
+     * 班级课程API
+     *
+     */
     public function updateClassroomCourses($classroomId, $activeCourseIds);
 
     public function findCoursesByCoursesIds($courseIds);
@@ -67,12 +66,12 @@ interface ClassroomService
     // 内部方法
     public function updateClassroomTeachers($id);
 
-    public function changePicture ($id, $data);
+    public function changePicture($id, $data);
 
     public function isCourseInClassroom($courseId, $classroomId);
 
     public function setClassroomCourses($classroomId, array $courseIds);
-    
+
     public function deleteClassroomCourses($classroomId, array $courseIds);
 
     public function isClassroomStudent($classroomId, $studentId);
@@ -102,7 +101,7 @@ interface ClassroomService
     public function isClassroomTeacher($classroomId, $userId);
 
     public function findClassroomsByCourseId($courseId);
-    
+
     public function findClassroomByCourseId($courseId);
 
     public function findCoursesByClassroomId($classroomId);
@@ -110,7 +109,7 @@ interface ClassroomService
     public function findActiveCoursesByClassroomId($classroomId);
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds);
-    
+
     public function findClassroomStudents($classroomId, $start, $limit);
 
     public function lockStudent($classroomId, $userId);
@@ -122,5 +121,4 @@ interface ClassroomService
     public function cancelRecommendClassroom($id);
 
     public function tryAdminClassroom($classroomId);
-
 }

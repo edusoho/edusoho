@@ -30,7 +30,7 @@ class ClassroomThreadController extends BaseController
                 'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
                 'service' => $this->getThreadService(),
                 'layout' => $layout,
-                'member' => $member
+                'member' => $member,
         ));
     }
 
@@ -83,7 +83,7 @@ class ClassroomThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        
+
         if (empty($thread)) {
             return $this->createMessageResponse('error', '帖子已不存在');
         }

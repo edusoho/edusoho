@@ -47,6 +47,7 @@ class TeacherController extends BaseController
         foreach ($members as $key => $member) {
             $newTeachers[$member['userId']] = $teachers[$member['userId']];
         }
+
         return $newTeachers;
     }
 

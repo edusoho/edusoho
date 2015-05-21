@@ -105,7 +105,7 @@
             {% endif %}</span>
         </div>
         {% endif %}
-      {% if is_granted('ROLE_ADMIN') %}
+      {% if canManage %}
         <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
