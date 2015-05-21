@@ -9,8 +9,7 @@ class ArticleController extends BaseController
 {
 
     public function indexAction(Request $request)
-    {   
-
+    {
         $setting = $this->getSettingService()->get('article', array());
         if (empty($setting)) {
             $setting = array('name' => '资讯频道', 'pageNums' => 20);
@@ -29,7 +28,7 @@ class ArticleController extends BaseController
         );
 
         $latestArticles = $this->getArticleService()->searchArticles(
-            $conditions, 'published', 
+            $conditions, 'published',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
