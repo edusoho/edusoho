@@ -53,41 +53,39 @@
 
       <div class="course-operation">
         <div class="student-num hidden-xs">
-          <i class="es-icon es-icon-people"></i>283人
+          <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
+          {% if course.maxStudentNum > 0 %}
+            {% if course.studentNum >= course.maxStudentNum %}
+              <small>(名额已满)</small>
+            {% else %}
+              <small>({{ course.maxStudentNum }}名额)</small>
+            {% endif %}
+          {% endif %}
         </div>
         <!-- 当属于会员班级时， ul中添加actvie这一class -->
         <ul class="course-data clearfix active">
-          <li data-toggle="tooltip" data-placement="top" title="" data-original-title="收藏课程"><a href=""><i class="es-icon es-icon-bookmarkoutline"></i><br>收藏</a></li>
-          <!-- <li data-toggle="tooltip" data-placement="top" title="" data-original-title="取消收藏"><a href=""><i class="es-icon es-icon-bookmark"></i><br>收藏</a></li> -->
+          <li id="unfavorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="取消收藏" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}><a href=""><i class="es-icon es-icon-bookmark"></i><br>已收藏</a></li>
+          <li id="favorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="收藏课程" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}><a href=""><i class="es-icon es-icon-bookmarkoutline"></i><br>收藏</a></li>
           <li>
             <span class="es-share top">
-              <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+              <a class="dropdown-toggle" href="" data-toggle="dropdown">
                 <i class="es-icon es-icon-share"></i>
                 <br>
                 分享
               </a>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <div class="bdsharebuttonbox bdshare-button-style0-24" style="padding:1px;" data-bd-bind="1429085802250">
-                  <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weixin"></i></a>
-                  <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="margin:3px 2px 2px 6px;"><i class="es-icon es-icon-weibo"></i></a>
-                  <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qzone"></i></a>
-                  <a href="#" class="bds_qq" data-cmd="qq" title="分享到QQ" style="margin:3px 1px 2px 6px;"><i class="es-icon es-icon-qq"></i></a>
-                </div>
-              </ul>
+              {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
             </span>
           </li>
-          <li class="hidden-xs color-w icon-vip" title="" data-content="银牌会员免费学<br><a href=&quot;http://edusoho.com&quot;>加入会员</a>" data-original-title="会员课程">
-            <i class="es-icon es-icon-crown"></i><br>会员
-          </li>
+          {% if courseVip %}
+            <li class="hidden-xs color-w icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+              <i class="es-icon es-icon-crown"></i><br>会员
+            </li>
+          {% endif %}
         </ul>
         <div class="buy">
-          <a class="btn btn-primary btn-lg" href="">购买课程</a>
+          {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
         </div>
       </div>
-
-
-
-
 
       {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('course_manage', {id:course.id}) }}" class="setting" title="课程管理">
@@ -98,4 +96,4 @@
   </div>
 </section>
 
-{% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' %}
+{{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
