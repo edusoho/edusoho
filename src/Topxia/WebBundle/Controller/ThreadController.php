@@ -218,7 +218,7 @@ class ThreadController extends BaseController
 
             $post = $this->getThreadService()->createPost($fields);
             $authors = $this->getThreadService()->setUserBadgeTitle($thread, array($user['id'] => $user->toArray()));
-            return $this->render('TopxiaWebBundle:Thread:post-item.html.twig', array(
+            return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
                 'post' => $post,
                 'author' => $authors[$user['id']],
                 'service' => $this->getThreadService(),
