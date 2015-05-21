@@ -162,6 +162,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
 		}
 
+		$thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
+
 		list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
 		$thread['userId'] = $this->getCurrentUser()->id;
