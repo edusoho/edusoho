@@ -1,23 +1,25 @@
 {% set announcements = data('Announcement',{ count:3 }) %}
 {% if announcements and not app.request.cookies.get('close_announcements_alert') %}
-  <div class="announcement announcements-alert" >
-    <div class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      <div class="items">
-        {% for announcement in announcements %}
-        <div class="item">
-          {% if announcement.url %}
-          <a class="open-article-link" href="{{announcement.url}}" target="_blank">
-            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.content|sub_text(50)}}
-          </a>
-          {% else %}
-            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.content|sub_text(50)}}
-          {% endif %}
-        </div>
-        {% endfor %}
+<div class="alert alert-success alert-notice announcements-alert" role="alert">
+  <div class="container">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button> 
+    <div class="items">
+      {% for announcement in announcements %}
+      <div class="item">
+        {% if announcement.url %}
+        <a class="open-article-link" href="{{announcement.url}}" target="_blank">
+          <i class="es-icon es-icon-notifications"></i>
+          {{announcement.content|sub_text(50)}}
+        </a>
+        {% else %}
+          <i class="es-icon es-icon-notifications"></i>
+          {{announcement.content|sub_text(50)}}
+        {% endif %}
       </div>
+      {% endfor %}
     </div>
   </div>
+</div>
 {% endif %}
