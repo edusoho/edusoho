@@ -12,7 +12,7 @@ class ArticleController extends BaseController
     {
         $setting = $this->getSettingService()->get('article', array());
         if (empty($setting)) {
-            $setting = array('name' => '资讯频道', 'pageNums' => 20);
+            $setting = array('name' => '资讯频道', 'pageNums' => 10);
         }
         
         $categoryTree = $this->getCategoryService()->getCategoryTree();
@@ -28,23 +28,12 @@ class ArticleController extends BaseController
         );
 
         $latestArticles = $this->getArticleService()->searchArticles(
-            $conditions, 'published',
+            $conditions,
+            'published',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        foreach ($latestArticles as $key => $value) {
-            $publishedTime[$value['id']] = date('Y-m-d',$value['publishedTime']);
-        }
-        $month=array();
-        $day=array();
-        if(isset($publishedTime)){
-            foreach ($publishedTime as $key => $value) {
-                $first = strpos($value,"-");
-                $last = strrpos($value,"-");
-                $month[$key] = substr($value,$first+1,2);
-                $day[$key] = substr($value,$last+1,2);
-            }
-        }
+
         $categoryIds = ArrayToolkit::column($latestArticles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
@@ -56,18 +45,21 @@ class ArticleController extends BaseController
         );
 
         $featuredArticles = $this->getArticleService()->searchArticles(
-            $featuredConditions,'normal',
-            0, 5
+            $featuredConditions,
+            'normal',
+            0,
+            5
         );
-
         $promotedConditions = array(
             'status' => 'published',
             'promoted' => 1,
         );
 
         $promotedArticles = $this->getArticleService()->searchArticles(
-            $promotedConditions,'normal',
-            0, 2
+            $promotedConditions,
+            'normal',
+            0,
+            2
         );
 
         $promotedCategories = array();
@@ -107,8 +99,6 @@ class ArticleController extends BaseController
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories,
-            'month' => $month,
-            'day' => $day,
             'allPosts' => $allPosts,
             'popularUsers' => $popularUsers,
             'popularPosts' => $popularPosts,

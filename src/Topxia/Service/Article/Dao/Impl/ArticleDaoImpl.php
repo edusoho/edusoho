@@ -151,7 +151,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 		}
 
 		if(array_key_exists('hasPicture',$conditions)){
-			if ($conditions['hasPicture'] == true) {
+			if ($conditions['hasPicture']) {
 				$conditions['pictureNull'] = "";		
 				unset($conditions['hasPicture']);
 			}
