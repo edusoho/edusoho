@@ -117,7 +117,7 @@ abstract class BaseDao
         if (!in_array($orderBy[0], $allowedOrderByFields)){
             throw new \RuntimeException("不允许对{$orderBy[0]}字段进行排序", 1);
         }
-        if (!in_array($orderBy[1], array('ASC','DESC'))){
+        if (!in_array(strtoupper($orderBy[1]), array('ASC','DESC'))){
             throw new \RuntimeException("orderBy排序方式错误", 1);
         }
 
