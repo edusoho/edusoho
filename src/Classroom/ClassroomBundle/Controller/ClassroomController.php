@@ -282,7 +282,7 @@ class ClassroomController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $isFollowed = false;
-        if ($headTeacher) {
+        if ($headTeacher && $currentUser->isLogin()) {
             $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $headTeacher['id']);
         }
         
