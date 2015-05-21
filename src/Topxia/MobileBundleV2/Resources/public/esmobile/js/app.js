@@ -311,7 +311,8 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
 }]);
 
 app.run(["applicationProvider", "$rootScope", function(applicationProvider, $rootScope) {
-  applicationProvider.init("http://trymob.edusoho.cn");
+  //console.log(window.location.origin);
+  applicationProvider.init(app.host);
   applicationProvider.updateScope($rootScope);
   angular.$client = {};
 }]);

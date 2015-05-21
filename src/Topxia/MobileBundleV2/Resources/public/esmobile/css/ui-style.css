@@ -9,6 +9,8 @@
 
 /* android title */
 .title.title-left {
+  width: 100%;
+  margin: 0;
   text-align: center ! important;
   left: 0 ! important;
 }

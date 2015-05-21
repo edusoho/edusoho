@@ -32,13 +32,17 @@ app.directive('onContentLoaded', function ($parse) {
         }
     };
 }).
-directive('back', function($state) {
+directive('back', function($ionicHistory, $state) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
             return { 
                 post: function postLink(scope, element, attributes) {
                   element.on("click", function(){
+                    if (attributes["back"] == "go" && $ionicHistory.backView()) {
+                      $ionicHistory.goBack();
+                      return ;
+                    }
                     $state.go("slideView.mainTab.found");
                   });
                 }
@@ -75,6 +79,21 @@ directive('modal', function ($ionicTabsDelegate) {
     },
     link : function(scope, element, attrs) {
       attrs.nsShow = "$parent.$tabSelected";
+      element[0].addEventListener('click', function(event) {
+        $ionicTabsDelegate.select(0);
+        scope.$apply(function() {
+          scope.$parent.$tabSelected = false;
+        });
+      });
+    }
+  }
+}).
+directive('listEmptyView', function () {
+  return {
+    restrict: 'EA',
+    controller : function($scope, $element) {
+    },
+    link : function(scope, element, attrs) {
       element[0].addEventListener('click', function(event) {
         $ionicTabsDelegate.select(0);
         scope.$apply(function() {

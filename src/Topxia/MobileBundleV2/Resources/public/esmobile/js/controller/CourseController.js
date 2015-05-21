@@ -6,6 +6,10 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
 	$scope.courses = [];
 	$scope.canLoad = true;
 	$scope.start = $scope.start || 0;
+      var callbackType = {
+        infinite : 'scroll.infiniteScrollComplete',
+        refresh  : 'scroll.refreshComplete'
+      };
 
 	console.log("CourseListController");
 	$scope.canLoadMore = function() {
@@ -13,10 +17,10 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   	};
 
   	$scope.loadMore = function(){
-  		$scope.loadCourseList($stateParams.sort);
+  		$scope.loadCourseList($stateParams.sort, callbackType.infinite);
   	};
 
-  	$scope.loadCourseList = function(sort) {
+  	$scope.loadCourseList = function(sort, callbackType) {
   		CourseService.getCourses({
   			limit : 10,
 			start: $scope.start,
@@ -30,7 +34,7 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
 	    		$scope.courses = $scope.courses.concat(data.data);
 	    		$scope.start += data.limit;
 
-	    		$scope.$broadcast('scroll.infiniteScrollComplete');
+	    		$scope.$broadcast(callbackType);
   		});
   	}
 
@@ -54,17 +58,18 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   	$scope.selectSort = function(sort) {
   		$scope.sort = sort;
   		clearData();
-  		$scope.loadCourseList(sort);
+  		$scope.loadCourseList(sort, callbackType.infinite);
   	}
 
   	$scope.onRefresh = function() {
   		clearData();
-  		$scope.loadCourseList($scope.sort);
+  		$scope.loadCourseList($scope.sort, callbackType.refresh);
   	}
 
-  	$scope.categorySelectedListener = function() {
+  	$scope.categorySelectedListener = function(category) {
   		clearData();
-  		$scope.loadCourseList($scope.sort);
+           $stateParams.categoryId  =category.id;
+  		$scope.loadCourseList($scope.sort, callbackType.infinite);
   	}
 
 }
