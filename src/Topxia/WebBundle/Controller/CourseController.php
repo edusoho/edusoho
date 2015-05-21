@@ -216,6 +216,7 @@ class CourseController extends BaseController
 	public function showAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->getCourse($id);
+		$user = $this->getCurrentUser();
 
         if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
             $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
@@ -225,10 +226,20 @@ class CourseController extends BaseController
 
         $hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
 
+		$userVipStatus = $courseVip = null;
+		if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+			$courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+			if ($courseVip) {
+				$userVipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+			}
+		}
+
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show-for-guest.html.twig", array(
 			'course' => $course,
 			'items' => $items,
 			'hasFavorited' => $hasFavorited,
+			'courseVip' => $courseVip,
+			'userVipStatus' => $userVipStatus,
 		));
 
 	}
