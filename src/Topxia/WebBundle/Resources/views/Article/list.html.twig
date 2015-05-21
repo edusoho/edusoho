@@ -9,47 +9,7 @@
 {% block content %}
 <div id="content-container" class="container">
   <!-- 资讯 -->
-  <div class="es-tabs article-list-header">
-    <div class="tab-header">
-    {% set currentNavCategory = categoryCode|default(null) %}
-    {% set rootCategory = rootCategory.code|default(null) %}
-    <ul class="clearfix">
-        <li {% if not currentNavCategory %}  class="active" {% endif %}><a href="{{ path('article_show') }}">{{ setting.name }}</a></li>
-      {% for cat in categoryTree %}
-        {% if cat.parentId == 0 and cat.published == 1 %}
-           <li class="{% if rootCategory == cat.code %}active{% endif %}" ><a href="{{ path('article_category', {categoryCode:cat.code}) }}">{{ cat.name }}</a></li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-    </div>
-    <div class="tab-body">
-      <ul class="clearfix">
-    {% for cat in subCategories %}
-      {% if cat.published == 1 and cat.depth < 3 %}
-        <li {% if category.id == cat.id %}class="active"{% endif %}>
-          <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
-          {% if cat.depth > 1 %}
-            {% for i in 0..(cat.depth-1) %}&nbsp;&nbsp;{% endfor %}
-          {% endif %}
-          {{ cat.name }}</a>
-        </li>
-      {% endif %}
-    {% endfor %}
-      </ul>
-
-      <ul class="clearfix">
-          {% for cat in subCategories %}
-            {% if cat.published == 1 and 2 < cat.depth and cat.depth < 4 %}
-              <li {% if category.id == cat.id %}class="active"{% endif %}>
-                <a href="{{ path('article_category', {categoryCode:cat.code}) }}">
-                {{ cat.name }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-      </ul>
-
-    </div>
-  </div>
+  {{ render(controller('TopxiaWebBundle:Article:categoryNav', {categoryCode:categoryCode})) }}
 
   <div class="article-list-body row">
     <!-- list主内容-->

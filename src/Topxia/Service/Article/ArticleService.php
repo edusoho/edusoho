@@ -3,45 +3,45 @@ namespace Topxia\Service\Article;
 
 interface ArticleService
 {
-	public function getArticle($id);
-	
-	public function getArticlePrevious($currentArticleId);
+    public function getArticle($id);
 
-	public function getArticleNext($currentArticleId);
+    public function getArticlePrevious($currentArticleId);
 
-	public function getArticleByAlias($alias);
+    public function getArticleNext($currentArticleId);
 
-	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit);
+    public function getArticleByAlias($alias);
 
-	public function findArticlesCount(array $categoryIds);
+    public function findArticlesByCategoryIds(array $categoryIds, $start, $limit);
 
-	public function searchArticles(array $conditions, $sort, $start, $limit);
+    public function findArticlesCount(array $categoryIds);
 
-	public function searchArticlesCount($conditions);
+    public function searchArticles(array $conditions, $sort, $start, $limit);
 
-	public function createArticle($article);
+    public function searchArticlesCount($conditions);
 
-	public function updateArticle($id, $Article);
+    public function createArticle($article);
 
-	public function hitArticle($id);
+    public function updateArticle($id, $Article);
 
-	public function setArticleProperty($id, $property);
+    public function hitArticle($id);
 
-	public function cancelArticleProperty($id, $property);
-	
-	public function trashArticle($id);
-	
-	public function removeArticlethumb($id);
+    public function setArticleProperty($id, $property);
 
-	public function deleteArticle($id);
+    public function cancelArticleProperty($id, $property);
 
-	public function deleteArticlesByIds($ids);
-	
-	public function publishArticle($id);
-	
-	public function unpublishArticle($id);
+    public function trashArticle($id);
 
-	public function changeIndexPicture($options);
+    public function removeArticlethumb($id);
 
-	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count);
+    public function deleteArticle($id);
+
+    public function deleteArticlesByIds($ids);
+
+    public function publishArticle($id);
+
+    public function unpublishArticle($id);
+
+    public function changeIndexPicture($options);
+
+    public function findPublishedArticlesByTagIdsAndCount($tagIds, $count);
 }
