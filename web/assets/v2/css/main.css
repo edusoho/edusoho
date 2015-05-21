@@ -3338,6 +3338,39 @@ textarea.form-control-o {
 .course-detail-header .course-img {
   position: relative;
   float: left;
+  display: block;
+}
+.course-detail-header .course-img .course-img-cover {
+  background: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.course-detail-header .course-img .course-img-cover:hover {
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.course-detail-header .course-img .course-img-cover .es-icon {
+  color: white;
+  font-size: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: -72px;
 }
 .course-detail-header .course-img .course-img-cover {
   width: 480px;

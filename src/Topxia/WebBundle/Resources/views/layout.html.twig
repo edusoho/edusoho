@@ -49,7 +49,7 @@
 
 {% block body %}
   
-  {% include 'TopxiaWebBundle::email-setting.html.twig' %}
+  {% include 'TopxiaWebBundle::site-hint.html.twig' %}
 
   <header class="es-header navbar">
     <div class="container">
@@ -141,7 +141,6 @@
     {# main_content 即将废除  #}
     {% block main_content %}
       <div id="content-container" class="container">
-        {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
         {% block content %}{% endblock %}
       </div><!-- /container -->
     {% endblock %}
