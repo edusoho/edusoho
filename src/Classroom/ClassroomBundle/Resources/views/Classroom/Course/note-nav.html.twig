@@ -15,7 +15,7 @@
       </li>
       {% for course in courses %}
         <li class="{% if filters.courseId == course.id %}active{% endif %}">
-          <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}">{{ course.title }}</a>
+          <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}">{{ course.title|sub_text(10) }}</a>
         </li>
       {% endfor %}
     </ul>
