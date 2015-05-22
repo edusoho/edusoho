@@ -4634,7 +4634,7 @@ textarea.form-control-o {
   position: relative;
   padding: 10px 100px 10px 45px;
 }
-.period-list .period:hover {
+.period-list .period:hover,.item-active {
   background-color: #f2fae3;
 }
 .period-list .period.disable {
