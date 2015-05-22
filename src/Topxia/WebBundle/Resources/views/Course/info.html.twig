@@ -1,62 +1,73 @@
-{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
-{% set script_controller = 'course/dashboard' %}
-{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
+{% block top_content %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+{% endblock %}
 
-{% block dashboard_main %}
-  {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'info'} %}
+{% block course_main %}
+  {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' with {tab: 'info'} %}
 
-  <dl class="course-infos" style="width:100%">
-    {% if not course.about and not category and not course.tags and not course.goals and not course.audiences %}
-      <div class="empty">暂无课程信息</div>
-    {% endif %}
-    {% if course.about %}
-    <dt>简介</dt>
-    <dd >{{ course.about|raw }}</dd>
-    {% endif %}
-    {% if category %}
-    <dt>分类</dt>
-    <dd>
-      <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
-    </dd>
-    {% endif %}
 
-    {% if course.tags %}
-      <dt>标签</dt>
-      <dd>
-        <ul class="list-inline">
-          {% for tag in tags %}
-            <li><a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a></li>
+  <div class="course-detail-content">
+
+    <ul class="course-about">
+      <li>
+        <div class="course-about-header">
+          课程介绍
+        </div>
+        <div class="course-about-body">
+          {% if course.about %}
+            {{ course.about|raw }}
           {% else %}
-            <li>暂无标签</li>
-          {% endfor %}
-        </ul>
-      </dd>
-    {% endif %}
+            <p>暂无课程简介</p>
+          {% endif %}
 
-    {% if course.goals %}
-      <dt>课程目标</dt>
-      <dd>
-        <ul>
-          {% for goal in course.goals %}
-            <li>{{ goal }}</li>
-          {% endfor %}
-        </ul>
-      </dd>
-    {% endif %}
+          {% if category %}
+            <p><strong>分类：</strong><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></p>
+          {% endif %}
 
-    {% if course.audiences %}
-      <dt>适合人群</dt>
-      <dd>
-        <ul>
-          {% for audience in course.audiences %}
-            <li>{{ audience }}</li>
-          {% endfor %}
-        </ul>
-      </dd>
-    {% endif %}
-  </dl>
-
-
+          {% if tags %}
+            <p><strong>标签：</strong>
+              {% for tag in tags %}
+                <a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a>
+              {% endfor %}
+            </p>
+          {% endif %}
+        </div>
+      </li>
+      {% if course.goals %}
+        <li>
+          <div class="course-about-header">
+            课程目标
+          </div>
+          <div class="course-about-body">
+            <ul class="list-unstyled">
+              {% for goal in course.goals %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+      {% endif %}
+      {% if course.audiences %}
+        <li>
+          <div class="course-about-header">
+            适合人群
+          </div>
+          <div class="course-about-body">
+            <ul class="list-unstyled">
+              {% for audience in course.audiences %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
 
 {% endblock %}
