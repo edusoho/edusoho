@@ -1346,6 +1346,11 @@ article_category:
     pattern: /article/category/{categoryCode}
     defaults: { _controller: TopxiaWebBundle:Article:category, category:'' }
 
+article_post:
+    pattern: /article/{id}/post
+    defaults: { _controller: TopxiaWebBundle:Article:post }
+    methods: [POST]
+
 mobile:
     pattern: /mobile/
     defaults: { _controller: TopxiaWebBundle:Mobile:index }
@@ -1597,7 +1602,7 @@ thread_post_reply:
 
 thread_post_subposts:
     pattern:  /thread/{threadId}/post/{postId}/subposts
-    defaults: { _controller: TopxiaWebBundle:Thread:subposts }
+    defaults: { _controller: TopxiaWebBundle:Thread:subposts, threadId:0 }
 
 article_post_subposts:
     pattern:  /article/{targetId}/post/{postId}/subposts

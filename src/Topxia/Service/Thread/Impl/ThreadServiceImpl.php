@@ -366,8 +366,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createPost($fields)
     {
         $user = $this->getCurrentUser();
-
-        if (isset($fields['threadId']) && $fields['threadId'] != 0 ) {
+        $thread = null;
+        if (!empty($fields['threadId'])) {
 
             $thread = $this->getThread($fields['threadId']);
 
@@ -396,16 +396,16 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $post = $this->getThreadPostDao()->addPost($fields);
 
-        if ($fields['targetType'] == "article") return $post;
+        if (!empty($fields['threadId'])) {
+            $this->getThreadDao()->updateThread($thread['id'], array(
+                'lastPostUserId' => $post['userId'],
+                'lastPostTime' => $post['createdTime'],
+            ));
 
-        $this->getThreadDao()->updateThread($thread['id'], array(
-            'lastPostUserId' => $post['userId'],
-            'lastPostTime' => $post['createdTime'],
-        ));
+            $this->getThreadDao()->waveThread($thread['id'], 'postNum', +1);
+        }
 
-        $this->getThreadDao()->waveThread($thread['id'], 'postNum', +1);
-
-        $notifyData = $this->getPostNotifyData($post, $thread, $user);
+        $notifyData = $this->getPostNotifyData($post, $thread , $user);
 
         if (!empty($post['ats'])) {
             foreach ($post['ats'] as $userId) {
@@ -416,11 +416,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             }
         }
 
+        //给主贴主人发通知
         $atUserIds = array_values($post['ats']);
-        if ($post['parentId'] == 0 && ($thread['userId'] != $post['userId']) && (!in_array($thread['userId'], $atUserIds))) {
+        if ($post['parentId'] == 0 && $thread && ($thread['userId'] != $post['userId']) && (!in_array($thread['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
+        //回复的回复的人给该回复的作者发通知
         if ($post['parentId'] > 0 && ($parent['userId'] != $post['userId']) && (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
@@ -435,7 +437,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return array(
             'id' => $post['id'],
             'content' => TextHelper::truncate($post['content'], 50),
-            'thread' => array('id' => $thread['id'], 'title' => $thread['title']),
+            'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => $thread['title']),
             'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),
         );
     }

@@ -130,20 +130,6 @@ class ArticleController extends BaseController
     {
         $article = $this->getArticleService()->getArticle($id);
 
-        if ($request->getMethod() == "POST") {
-            $fields = $request->request->all();
-
-            $post['content'] = $fields['content'];
-            $post['targetType'] = 'article';
-            $post['targetId'] = $id;
-
-            $user = $this->getCurrentUser();
-
-            if ($user->isLogin()) {
-                $this->getThreadService()->createPost($post);
-            }
-        }
-
         if (empty($article)) {
             throw $this->createNotFoundException('文章已删除或者未发布！');
         }
@@ -251,6 +237,30 @@ class ArticleController extends BaseController
             'tagNames' => $tagNames,
             'sameTagArticles' => $sameTagArticles,
         ));
+    }
+
+    public function postAction(Request $request, $id)
+    {
+        if ($request->getMethod() == "POST") {
+            $fields = $request->request->all();
+
+            $post['content'] = $fields['content'];
+            $post['targetType'] = 'article';
+            $post['targetId'] = $id;
+
+            $user = $this->getCurrentUser();
+
+            if (!$user->isLogin()) {
+                $this->createAccessDeniedException('用户没有登录,不能评论!');
+            }
+
+            $post = $this->getThreadService()->createPost($post);
+            return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
+                'post' => $post,
+                'author' => $user,
+                'service' => $this->getThreadService(),
+            ));
+        }
     }
 
     public function subpostsAction(Request $request, $targetId, $postId, $less = false)

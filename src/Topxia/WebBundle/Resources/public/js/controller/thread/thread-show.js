@@ -33,7 +33,9 @@ define(function(require, exports, module) {
 
                 }, 'json');
             }
+
             this._initPostForm();
+            
         },
 
         onClickPostMore: function(e) {
@@ -166,7 +168,7 @@ define(function(require, exports, module) {
 
         _initPostForm: function() {
             var $list = this.$('.thread-pripost-list');
-            var $form = this.$('.thread-post-form');
+            var $form = this.$('#thread-post-form');
             var that = this;
 
             if ($form.length == 0) {
@@ -174,11 +176,13 @@ define(function(require, exports, module) {
             }
 
             var $textarea = $form.find('textarea[name=content]');
-            var editor = CKEDITOR.replace($textarea.attr('id'), {
-                toolbar: 'Simple',
-                filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
-            });
-
+            if($textarea.data('imageUploadUrl')) {
+                var editor = CKEDITOR.replace($textarea.attr('id'), {
+                    toolbar: 'Simple',
+                    filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
+                });
+            }
+           
             var validator = new Validator({
                 element: $form,
                 autoSubmit: false,
@@ -189,9 +193,15 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
-                        $list.append(response);
                         $btn.button('reset');
-                        editor.setData('');
+                        if ($textarea.data('imageUploadUrl')) {
+                            $list.append(response);
+                            editor.setData('');
+                        } else {
+                            $list.prepend(response);
+                            $textarea.html('');
+                        }
+                        
                         var pos = $list.find('li:last-child').offset();
                         $('body').scrollTop(pos.top);
                         that.$('.thread-post-num').text(parseInt(that.$('.thread-post-num').text()) + 1);
@@ -209,9 +219,12 @@ define(function(require, exports, module) {
                 required: true
             });
 
-            validator.on('formValidate', function(element, event) {
-                editor.updateElement();
-            });
+            if (editor) {
+                validator.on('formValidate', function(element, event) {
+                    editor.updateElement();
+                });
+            }
+       
 
         }
     });
@@ -219,7 +232,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var postList = new ThreadShow({
-            element: '.class-detail-content'
+            element: '#detail-content'
         });
 
     };

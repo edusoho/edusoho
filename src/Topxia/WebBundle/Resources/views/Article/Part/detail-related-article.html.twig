@@ -1,3 +1,4 @@
+{% if sameTagArticles %}
 <div class="related-artcile">
   <div class="row">
     {% for sameTagArticle in sameTagArticles%}
@@ -9,8 +10,8 @@
         </div>
       </div>
     </a>
-    {% else %}
-      <div class="empty">暂无类似资讯！</div>
     {% endfor %}
   </div>
 </div>
+
+{% endif %}

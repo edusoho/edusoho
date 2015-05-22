@@ -17,7 +17,7 @@
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>
     <div class="thread-subpost-container subcomments clearfix {% if not post.subposts %}hide{% endif %}">
-      {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId, postId:post.id, less:true})) }}
+      {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId|default(0), postId:post.id, less:true})) }}
       <div class="thread-subpost-morebar clearfix {% if not post.subposts %}hide{% endif %}">
         {% if service.canAccess('post.create', post) %}
           <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">我也说一句</button>

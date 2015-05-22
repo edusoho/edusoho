@@ -1,0 +1,14 @@
+<ul class="comment-list thread-pripost-list">
+  {% for post in posts %}
+    {% set author = users[post.userId] %}
+    {% include 'TopxiaWebBundle:Thread/Part:post-item.html.twig' %}
+  {% else %}
+    <li class="empty">一个回复都没有！</li>
+  {% endfor %}
+</ul>
+
+<nav class="text-center">
+  <ul class="pagination">
+    {{ web_macro.paginator(paginator) }}
+  </ul>
+</nav>
