@@ -368,15 +368,14 @@ class ClassroomController extends BaseController
 
         $manager = ExtensionManager::instance();
 
-        foreach ($learns as $key=> $learn) {
-            $learns[$key]['user'] = $owners[$learn['userId']];
-            $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
-            unset($learn);
+        if ($learns) {
+            foreach ($learns as $key => $learn) {
+                $learns[$key]['user'] = $owners[$learn['userId']];
+                $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
+                unset($learn);
+            }
         }
-
-        foreach ($learns as $key => $learn) {
-            $learns[$key]['user'] = $owners[$learn['userId']];
-        }
+        
 
         return $this->render('TopxiaWebBundle:Status:status-block.html.twig', array(
             'learns' => $learns,
