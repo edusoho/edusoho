@@ -529,8 +529,7 @@ class ClassroomController extends BaseController
 
     public function classroomBlockAction($courseId)
     {
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
-        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
         $classroom = empty($classroomIds) || count($classroomIds) == 0 ? null : $this->getClassroomService()->getClassroom($classroomIds[0]);
 

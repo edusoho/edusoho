@@ -49,7 +49,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
-    public function findClassroomsByCourseId($courseId)
+    public function findClassroomIdsByCourseId($courseId)
     {
         $sql = "SELECT classroomId FROM {$this->table} where courseId=? ";
 

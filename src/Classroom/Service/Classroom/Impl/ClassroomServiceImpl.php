@@ -28,9 +28,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $count;
     }
 
+    public function findClassroomIdsByCourseId($courseId)
+    {
+        $results = $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
+        return ArrayToolkit::column($results, 'classroomId');
+    }
+
     public function findClassroomsByCourseId($courseId)
     {
-        return $this->getClassroomCourseDao()->findClassroomsByCourseId($courseId);
+        $classroomIds = $this->findClassroomIdsByCourseId($courseId);
+        return $this->findClassroomsByIds($classroomIds);
     }
 
     public function findClassroomByCourseId($courseId)
@@ -896,9 +903,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 continue;
             }
 
-            $classroomIds = $this->getClassroomCourseDao()->findClassroomsByCourseId($courseId);
-
-            $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
+            $classroomIds = $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
 
             foreach ($classroomIds as $value) {
                 if ($classroomId == $value) {

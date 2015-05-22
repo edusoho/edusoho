@@ -14,6 +14,9 @@
 
     <div class="col-lg-3 col-md-4  course-sidebar">
       {% block course_sidebar %}
+        {% if member|default(null) %}
+          {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
+        {% endif %}
         {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
         {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
         {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
