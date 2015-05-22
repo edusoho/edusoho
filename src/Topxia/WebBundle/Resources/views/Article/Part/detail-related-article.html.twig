@@ -1,0 +1,16 @@
+<div class="related-artcile">
+  <div class="row">
+    {% for sameTagArticle in sameTagArticles%}
+    <a class="col-sm-4" href="{{ path('article_detail', { id:sameTagArticle.id }) }}">
+      <div class="related-item">
+        <img class="img-responsive" src="{{ filepath(sameTagArticle.thumb) }}" alt="{{ sameTagArticle.title }}">
+        <div class="title">
+          {{ sameTagArticle.title }}
+        </div>
+      </div>
+    </a>
+    {% else %}
+      <div class="empty">暂无类似资讯！</div>
+    {% endfor %}
+  </div>
+</div>
