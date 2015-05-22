@@ -138,8 +138,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
             ->andWhere('createdTime >= :GTEcreatedTime')
 	        ->andWhere('parentId = :parentId')
 	        ->andWhere('threadId = :threadId')
-                    ->andWhere('targetId = :targetId')
-                    ->andWhere('targetType = :targetType');
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('adopted = :adopted');
 	    return $builder;
 	}
 

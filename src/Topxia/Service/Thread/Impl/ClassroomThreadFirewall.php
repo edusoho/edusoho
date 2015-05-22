@@ -37,6 +37,11 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         return $this->hasManagePermission($thread, false);
     }
 
+    public function accessThreadSolved($thread)
+    {
+        return $this->hasManagePermission($thread, false);
+    }
+
     public function accessPostCreate($post)
     {
         return $this->getClassroomService()->canLookClassroom($post['targetId']);
@@ -57,6 +62,12 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         return $this->getClassroomService()->canLookClassroom($post['targetId']);
     }
 
+    public function accessPostAdopted($post)
+    {
+        return $this->getClassroomService()->canLookClassroom($post['targetId']);
+    }
+    
+    
     public function accessEventCreate($resource)
     {
         return $this->getClassroomService()->canCreateThreadEvent($resource);

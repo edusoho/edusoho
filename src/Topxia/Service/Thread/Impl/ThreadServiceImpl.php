@@ -281,6 +281,35 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('thread.nice', new ServiceEvent($thread, array('nice' => 'cancel')));
     }
 
+    public function setThreadSolved($threadId)
+    {
+        $thread = $this->getThreadDao()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+        }
+
+        $this->tryAccess('thread.solved', $thread);
+
+        $this->getThreadDao()->updateThread($thread['id'], array('solved' => 1, 'updateTime' => time()));
+
+        // $this->dispatchEvent('thread.solved', new ServiceEvent($thread, array('nice' => 'set')));
+    }
+
+    public function cancelThreadSolved($threadId)
+    {
+        $thread = $this->getThreadDao()->getThread($threadId);
+        if (empty($thread)) {
+            throw $this->createServiceException(sprintf('话题(ID: %s)不存在。', $thread['id']));
+        }
+
+        $this->tryAccess('thread.solved', $thread);
+
+        $this->getThreadDao()->updateThread($thread['id'], array('solved' => 0, 'updateTime' => time()));
+
+        // $this->dispatchEvent('thread.solved', new ServiceEvent($thread, array('nice' => 'cancel')));
+    }
+
+
     public function hitThread($targetId, $threadId)
     {
         $this->getThreadDao()->waveThread($threadId, 'hitNum', +1);
@@ -481,6 +510,30 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return array('status' => 'ok');
     }
 
+    public function setPostAdopted($postId)
+    {
+        $post = $this->getThreadPostDao()->getPost($postId);
+        if (empty($post)) {
+            throw $this->createServiceException(sprintf('话题回复(ID: %s)不存在。', $post['id']));
+        }
+
+        $this->tryAccess('post.adopted', $post);
+
+        $this->getThreadPostDao()->updatePost($post['id'], array('adopted' => 1));
+    }
+
+    public function cancelPostAdopted($postId)
+    {
+        $post = $this->getThreadDao()->getPost($postId);
+        if (empty($post)) {
+            throw $this->createServiceException(sprintf('话题回复(ID: %s)不存在。', $post['id']));
+        }
+
+        $this->tryAccess('post.adopted', $post);
+
+        $this->getThreadPostDao()->updatePost($post['id'], array('adopted' => 0));
+    }
+
     public function canAccess($permision, $resource)
     {
         $permisions = array(
@@ -490,10 +543,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'thread.delete' => 'accessThreadDelete',
             'thread.sticky' => 'accessThreadSticky',
             'thread.nice' => 'accessThreadNice',
+            'thread.solved' => 'accessThreadSolved',
             'post.create' => 'accessPostCreate',
             'post.update' => 'accessPostUpdate',
             'post.delete' => 'accessPostDelete',
             'post.vote' => 'accessPostVote',
+            'post.adopted' => 'accessPostAdopted',
             'thread.event.create' => 'accessEventCreate',
             'thread.member.delete' => 'accessMemberDelete',
         );

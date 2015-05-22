@@ -57,9 +57,11 @@
             课时列表
           </div>
         </li>
+
       </ul>
     {% endif %}
-    {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %}
+    {# {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %} #}
+    {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id})) }}
   </div>
 
 {% endblock %}
