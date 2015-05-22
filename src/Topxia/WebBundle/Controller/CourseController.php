@@ -151,11 +151,14 @@ class CourseController extends CourseBaseController
 
 	public function infoAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
+		list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
 		$tags = $this->getTagService()->findTagsByIds($course['tags']);
+
 		return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
 			'course' => $course,
+			'member' => $member,
 			'category' => $category,
 			'tags' => $tags,
 		));
