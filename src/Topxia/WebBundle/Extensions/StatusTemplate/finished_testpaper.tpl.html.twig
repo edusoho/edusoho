@@ -1,7 +1,7 @@
 {% set props = status.properties %}
 
 {% if mode == 'simple' %}
-  学完了试卷 <a href="{{ path('course_show', {id: props.course.id}) }}" title="来自《{{ props.course.title }}》">{{ props.lesson.title|plain_text(15)}}</a>
+  完成了考试 {{ props.testpaper.name|plain_text(15)}}</a>
 {% elseif mode == 'full' %}
 
 {% endif %}
