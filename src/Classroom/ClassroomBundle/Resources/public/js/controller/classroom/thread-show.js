@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         
         threadShowWidget.element.on('click','.js-only-teacher',function(){
             var $self = $(this);
-            var $filter = $self.hasClass('active')? '?adopted=0' : '?adopted=1';
+            var $filter = $self.hasClass('active')? '' : '?adopted=1';
             var $url = $self.data('url')+$filter;
             document.location.href = $url;
         });
