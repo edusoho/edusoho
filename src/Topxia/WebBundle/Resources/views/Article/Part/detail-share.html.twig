@@ -1,0 +1,9 @@
+<div class="article-sns">
+  <a class="love" href=""><i class="es-icon es-icon-favorite"></i>{{ article.upsNum }}</a>
+  <span class="es-share right open">
+    <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
+      <i class="es-icon es-icon-share"></i>
+    </a>
+    {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
+  </span>
+</div>
