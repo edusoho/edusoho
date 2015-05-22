@@ -36,6 +36,10 @@ interface ThreadService
 
     public function cancelThreadNice($threadId);
 
+    public function setThreadSolved($threadId);
+
+    public function cancelThreadSolved($threadId);
+
     /**
      * 点击查看话题
      *
@@ -88,6 +92,10 @@ interface ThreadService
     public function searchPosts($conditions, $orderBy, $start, $limit);
 
     public function voteUpPost($id);
+
+    public function setPostAdopted($postId);
+
+    public function cancelPostAdopted($postId);
 
     /**
      * 话题成员

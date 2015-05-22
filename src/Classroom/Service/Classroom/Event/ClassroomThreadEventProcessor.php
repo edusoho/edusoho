@@ -27,8 +27,8 @@ class ClassroomThreadEventProcessor
         
         $isTeacher = $this->getClassroomService()->isClassroomTeacher($post['targetId'],$post['userId']);
         if ($isTeacher) {
-            $this->getThreadPostDao()->updatePost($post['id'], array('adopted' => 1));
-            $this->getThreadDao()->updateThread($post['threadId'], array('solved' => 1));
+            $this->getThreadService()->setPostAdopted($post['id']);
+            $this->getThreadService()->setThreadSolved($post['threadId']);
         }
     }
 
@@ -36,6 +36,14 @@ class ClassroomThreadEventProcessor
     {
         $post = $event->getSubject();
         $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', 0-$event->getArgument('deleted'));
+        
+        $adoptedPostCount = $this->getThreadService()->searchPostsCount(array(
+            'threadId' => $post['threadId'],
+            'adopted' => 1
+        ));
+        if (empty($adoptedPostCount)) {
+            $this->getThreadService()->cancelThreadSolved($post['threadId']);
+        }
     }
 
     private function getClassroomService()
@@ -43,13 +51,8 @@ class ClassroomThreadEventProcessor
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 
-    private function getThreadDao()
+    private function getThreadService()
     {
-        return ServiceKernel::instance()->createDao('Thread.ThreadDao');
-    }
-
-    private function getThreadPostDao()
-    {
-        return ServiceKernel::instance()->createDao('Thread.ThreadPostDao');
+        return ServiceKernel::instance()->createDao('Thread.ThreadService');
     }
 }
