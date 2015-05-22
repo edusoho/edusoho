@@ -256,7 +256,7 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
                     'title' => "购买班级《{$targetObject['title']}》(管理员添加)",
                     'targetType' => 'classroom',
                     'targetId' => $targetObject['id'],
-                    'amount' => $targetObject['price'],
+                    'amount' => 0,
                     'payment' => 'none',
                     'snPrefix' => 'CR',
                 ));
@@ -264,7 +264,7 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
                 $this->getOrderService()->payOrder(array(
                     'sn' => $order['sn'],
                     'status' => 'success', 
-                    'amount' => $order['amount'], 
+                    'amount' => 0, 
                     'paidTime' => time(),
                 ));
 
