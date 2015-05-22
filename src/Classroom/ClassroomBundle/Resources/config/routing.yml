@@ -204,3 +204,7 @@ classroom_course_notes_list:
 classroom_teachers:
     pattern: /classroom/{classroomId}/teachers/list
     defaults: { _controller: ClassroomBundle:Classroom/Teacher:list }
+
+classroom_teacherIds_catch:
+    pattern: /classroom/{classroomId}/teacherIds/catch
+    defaults: { _controller: ClassroomBundle:Classroom/Teacher:catchIds }
