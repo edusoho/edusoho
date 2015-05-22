@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
 
-    var ThreadShow = Widget.extend({
+    var ThreadShowWidget = Widget.extend({
 
         attrs: {
             
@@ -216,11 +216,6 @@ define(function(require, exports, module) {
         }
     });
 
-    exports.run = function() {
-
-        var postList = new ThreadShow({
-            element: '.class-detail-content'
-        });
-
-    };
+    module.exports = ThreadShowWidget;
+    
 });
