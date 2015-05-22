@@ -61,7 +61,8 @@
         </div>
       </li>
     </ul>
-    {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %}
+    {# {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %} #}
+    {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id})) }}
   </div>
 
 {% endblock %}
