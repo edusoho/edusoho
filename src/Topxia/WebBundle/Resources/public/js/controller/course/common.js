@@ -14,8 +14,6 @@ define(function(require, exports, module) {
         	});
         });
 
-        $('#next-learn-btn').tooltip({placement: 'top'});
-        $('#question-sign').tooltip({placement: 'right'});
     };
 
 });

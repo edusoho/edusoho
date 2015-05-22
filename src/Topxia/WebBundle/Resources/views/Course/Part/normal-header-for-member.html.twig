@@ -2,7 +2,9 @@
 
 {% set layoutClass = 'after' %}
 
+
 {% block content %}
+  {{ load_script('course/common') }}
 
   <div class="course-header-top clearfix">
 
@@ -15,9 +17,22 @@
       <ul class="course-data clearfix">
         {{ header_macro.favorite_btn(course, hasFavorited) }}
         {{ header_macro.share_btn(course) }}
-        <li>
-          <a data-url="{{ path('course_exit', {id:course.id}) }}"><i class="es-icon es-icon-exit"></i><br>退出</a>
-        </li>
+        {% if member.joinedType == 'course' %}
+          <li>
+            {% if member.orderId  %}
+              <a href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
+                <p><i class="es-icon es-icon-exit"></i><p>
+                <p>退出</p>
+              </a>
+
+            {% else %}
+              <a id="exit-course-learning" class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}" {% if member.role != 'student' %} disabled {% endif %}>
+                <p><i class="es-icon es-icon-exit"></i><p>
+                <p>退出</p>
+              </a>
+            {% endif %}
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>
@@ -31,7 +46,7 @@
     <span class="pull-left">完成课时： {{ learnProgress.number }}/{{ learnProgress.total }}</span>
     {% if nextLearnLesson %}
       <a class="btn btn-lg btn-primary" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
-      <span class="next-class hidden-xs">下一课时：<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">使用photoShop笔刷</a></span>
+      <span class="next-class hidden-xs">下一课时：<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title }}</a></span>
     {% endif %}
   </div>
 

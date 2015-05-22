@@ -18,7 +18,6 @@ define(function(require, exports, module) {
             'click .js-post-delete': 'onPostDelete',
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
-            'click .pagination a': 'onClickPagination',
             'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
             'click .js-event-cancel': 'onClickEventCancelBtn'
         },
@@ -92,18 +91,6 @@ define(function(require, exports, module) {
                     return ;
                 }
                 window.location.reload();
-            });
-        },
-
-        onClickPagination: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var $btn = $(e.currentTarget);
-            $.get($btn.attr('href'), function(response) {
-                var pos = $btn.parents('.thread-subpost-container').offset();
-                $btn.parents('.thread-subpost-container').find('.thread-subpost-list').replaceWith(response);
-                $btn.parents('.pagination').remove();
-                $('body').scrollTop(pos.top);
             });
         },
 
