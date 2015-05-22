@@ -1,13 +1,9 @@
 {% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
-{% block top_content %}
-  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
-{% endblock %}
+{% set tab = 'overview' %}
 
 {% block course_main %}
 
-  {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' with {tab: 'overview'} %}
-  
   <div class="course-detail-content">
 
     {% if not member %}

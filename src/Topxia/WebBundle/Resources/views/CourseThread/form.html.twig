@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% set thread = thread|default(null) %}
 
@@ -6,7 +6,9 @@
 
 {% set script_controller = 'course/thread-form' %}
 
-{% block dashboard_main %}
+{% set tab = 'thread' %}
+
+{% block course_main %}
 
 <ul class="breadcrumb">
   <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
