@@ -134,6 +134,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
             ->andWhere('userId NOT IN (:notUserIds)')
             ->andWhere('userId IN (:userIds)')
 	        ->andWhere('id < :id')
+            ->andWhere('ups >= :ups_GT')
             ->andWhere('id NOT IN (:excludeIds)')
             ->andWhere('createdTime >= :GTEcreatedTime')
 	        ->andWhere('parentId = :parentId')
