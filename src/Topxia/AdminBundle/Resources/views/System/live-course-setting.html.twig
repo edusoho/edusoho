@@ -21,7 +21,7 @@
       </div>
     </div>
     
-    {% if capacity.code == 2 %}
+    {% if capacity.code|default(0) == 2 %}
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label for="logo">直播LOGO</label>
