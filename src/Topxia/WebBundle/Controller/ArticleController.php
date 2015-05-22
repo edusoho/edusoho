@@ -218,24 +218,6 @@ class ArticleController extends BaseController
             'targetType' => 'article',
         );
 
-        $popularPaginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchPostsCount($conditions),
-            4
-        );
-
-        $allPosts = $this->getThreadService()->searchPosts(
-            $conditions,
-            array('ups' => 'desc'),
-            $popularPaginator->getOffsetCount(),
-            $popularPaginator->getPerPageCount()
-        );
-        $popularUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($allPosts, 'userId'));
-
-        $popularPosts =  array();
-        foreach ($allPosts as $key => $value) {
-            $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
-        }
 
         $conditions = array(
             'targetId' => $id,
@@ -277,9 +259,6 @@ class ArticleController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'service' => $this->getThreadService(),
-            'allPosts' => $allPosts,
-            'popularUsers' => $popularUsers,
-            'popularPosts' => $popularPosts,
             'count' => $count,
             'tagNames' => $tagNames,
             'sameTagArticles' => $sameTagArticles,
