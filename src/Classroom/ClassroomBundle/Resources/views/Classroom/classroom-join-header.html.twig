@@ -51,7 +51,11 @@
           </div>
         </div>
         <div class="class-operation">
-          <ul class="class-data clearfix">
+          <ul class='class-data clearfix 
+          {% if not (member.role != "teacher" and member.role != "headTeacher") %}
+          two-col
+          {% endif %}
+          '>
             <li><i class="es-icon es-icon-person"></i><br>学员({{classroom.studentNum + classroom.auditorNum }})</li>
             <li>
               <span class="es-share top">
