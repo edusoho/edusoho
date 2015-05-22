@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% block top_content %}
-  {{ render(controller('TopxiaWebBundle:Part/Course:guestHeader',{course: course})) }}
+  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
 {% endblock %}
 
 

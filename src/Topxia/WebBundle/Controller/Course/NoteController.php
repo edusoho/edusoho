@@ -2,11 +2,11 @@
 namespace Topxia\WebBundle\Controller\Course;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Topxia\WebBundle\Controller\CourseBaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
-class NoteController extends BaseController
+class NoteController extends CourseBaseController
 {
     public function listAction(Request $request, $courseIds, $filters)
     {
@@ -35,10 +35,11 @@ class NoteController extends BaseController
 
     public function showListAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
         return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'filters' => $this->getNoteSearchFilters($request),
             'lessons' => $lessons
         ));
@@ -149,8 +150,4 @@ class NoteController extends BaseController
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
 }
