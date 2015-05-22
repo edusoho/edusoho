@@ -10,10 +10,6 @@ class ArticleController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('article', array());
-        if (empty($setting)) {
-            $setting = array('name' => '资讯频道', 'pageNums' => 10);
-        }
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
@@ -24,7 +20,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            $setting['pageNums']
+            10
         );
 
         $latestArticles = $this->getArticleService()->searchArticles(
@@ -74,7 +70,6 @@ class ArticleController extends BaseController
             'promotedArticles' => $promotedArticles,
             'promotedCategories' => $promotedCategories,
             'paginator' => $paginator,
-            'setting' => $setting,
             'categories' => $categories,
         ));
     }
