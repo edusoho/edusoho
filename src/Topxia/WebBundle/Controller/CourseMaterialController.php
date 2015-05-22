@@ -85,26 +85,12 @@ class CourseMaterialController extends CourseBaseController
         return $this->createJsonResponse(true);
     }
 
-	public function latestBlockAction($course)
-	{
-        $materials = $this->getCourseService()->findMaterials($course['id'], 0, 10);
-		return $this->render('TopxiaWebBundle:CourseMaterial:latest-block.html.twig', array(
-			'course' => $course,
-            'materials' => $materials,
-		));
-	}
-
-    private function getMaterialService()
+    protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
-    private function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content.FileService');
-    }
-
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
@@ -114,7 +100,7 @@ class CourseMaterialController extends CourseBaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
-    private function createPrivateFileDownloadResponse(Request $request, $file)
+    protected function createPrivateFileDownloadResponse(Request $request, $file)
     {
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
