@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ExtensionManager;
 
 class ClassroomController extends BaseController
 {
@@ -363,8 +364,15 @@ class ClassroomController extends BaseController
         );
 
         $ownerIds = ArrayToolkit::column($learns, 'userId');
-
         $owners = $this->getUserService()->findUsersByIds($ownerIds);
+
+        $manager = ExtensionManager::instance();
+
+        foreach ($learns as $key=> $learn) {
+            $learns[$key]['user'] = $owners[$learn['userId']];
+            $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
+            unset($learn);
+        }
 
         foreach ($learns as $key => $learn) {
             $learns[$key]['user'] = $owners[$learn['userId']];
