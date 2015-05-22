@@ -10,7 +10,7 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\LiveClientFactory;
 
-class CourseController extends BaseController
+class CourseController extends CourseBaseController
 {
 	public function exploreAction(Request $request)
 	{
@@ -227,21 +227,7 @@ class CourseController extends BaseController
 
 	}
 
-	protected function buildCourseLayoutData($request, $id)
-	{
-		$course = $this->getCourseService()->getCourse($id);
-		if (empty($course)) {
-			throw $this->createNotFoundException("课程不存在");
-		}
 
-		$previewAs = $request->query->get('previewAs');
-		$user = $this->getCurrentUser();
-		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
-
-		$member = $this->previewAsMember($previewAs, $member, $course);
-
-		return array($course, $member);
-	}
 
 	/**
 	 * 如果用户已购买了此课程，或者用户是该课程的教师，则显示课程的Dashboard界面。
@@ -410,46 +396,6 @@ class CourseController extends BaseController
 			'classrooms'=> $classrooms
 		));
 
-	}
-
-	private function previewAsMember($as, $member, $course)
-	{
-		$user = $this->getCurrentUser();
-		if (empty($user->id)) {
-			return null;
-		}
-
-
-		if (in_array($as, array('member', 'guest'))) {
-			if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-				$member = array(
-					'id' => 0,
-					'courseId' => $course['id'],
-					'userId' => $user['id'],
-					'levelId' => 0,
-					'learnedNum' => 0,
-					'isLearned' => 0,
-					'seq' => 0,
-					'isVisible' => 0,
-					'role' => 'teacher',
-					'locked' => 0,
-					'createdTime' => time(),
-					'deadline' => 0
-				);
-			}
-
-			if (empty($member) or $member['role'] != 'teacher') {
-				return $member;
-			}
-
-			if ($as == 'member') {
-				$member['role'] = 'student';
-			} else {
-				$member = null;
-			}
-		}
-
-		return $member;
 	}
 
 	private function groupCourseItems($items)
@@ -983,11 +929,6 @@ class CourseController extends BaseController
 	protected function getVipService()
 	{
 		return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-	}
-
-	private function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 
 	private function getCategoryService()
