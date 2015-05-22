@@ -64,8 +64,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $builder=$this->_createThreadSearchBuilder($conditions)
         ->select('*')
         ->setFirstResult($start)
-        ->setMaxResults($limit)
-        ->orderBy($orderBy[0],$orderBy[1]);
+        ->setMaxResults($limit);
+        
+        $builder = $this->addOrderBy($builder, $orderBy);
         
         $posts = $builder->execute()->fetchAll() ? : array(); 
         return $this->createSerializer()->unserializes($posts, $this->serializeFields);
@@ -133,6 +134,8 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
             ->andWhere('userId NOT IN (:notUserIds)')
             ->andWhere('userId IN (:userIds)')
 	        ->andWhere('id < :id')
+            ->andWhere('id NOT IN (:excludeIds)')
+            ->andWhere('createdTime >= :GTEcreatedTime')
 	        ->andWhere('parentId = :parentId')
 	        ->andWhere('threadId = :threadId')
                     ->andWhere('targetId = :targetId')

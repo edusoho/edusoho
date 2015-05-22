@@ -24,8 +24,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $id = $context["courseId"];
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
         foreach ($classroomIds as $key => $value) {
             $classroom = $this->getClassroomService()->getClassroom($value);
             $lessonNum = $classroom['lessonNum']+1;
@@ -39,8 +38,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $courseId = $context["courseId"];
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
-        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
         foreach ($classroomIds as $key => $value) {
             $classroom = $this->getClassroomService()->getClassroom($value);
             $lessonNum = $classroom['lessonNum']-1;
@@ -54,7 +52,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $courseId = $context["courseId"];
 
-        $findClassroomsByCourseId =  ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($courseId), 'classroomId');
+        $findClassroomsByCourseId =  $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
         foreach ($findClassroomsByCourseId as $key => $value) {
             $this->getClassroomService()->updateClassroomTeachers($value);

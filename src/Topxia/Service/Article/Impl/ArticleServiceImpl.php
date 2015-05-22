@@ -64,6 +64,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 		return $this->getArticleDao()->findArticlesByCategoryIds($categoryIds, $start, $limit);
 	}
 
+	public function findArticlesByIds($ids)
+	{
+		return ArrayToolkit::index($this->getArticleDao()->findArticlesByIds($ids), 'id');
+	}
+
 	public function findArticlesCount(array $categoryIds)
 	{
 		return $this->getArticleDao()->findArticlesCount($categoryIds);

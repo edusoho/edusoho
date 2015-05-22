@@ -341,7 +341,7 @@ class CourseController extends BaseController
 		$classrooms=array();
 		$isLearnInClassrooms=array();
 
-		$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
+		$classroomIds=$this->getClassroomService()->findClassroomIdsByCourseId($id);
 		foreach ($classroomIds as $key => $value) {
 			$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
 
@@ -793,10 +793,7 @@ class CourseController extends BaseController
 		foreach ($courses as $key => $course) {
 			$userIds = array_merge($userIds, $course['teacherIds']);
 
-			$classrooms = array();
-			$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
-
-			$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+			$classroomIds=$this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
 			$courses[$key]['classroomCount']=count($classroomIds);
 
@@ -811,7 +808,7 @@ class CourseController extends BaseController
 		return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
 			'courses' => $courses,
 			'users' => $users,
-			'classrooms'=>$classrooms,
+			'classroomIds'=>$classroomIds,
 			'mode' => $mode,
 		));
 	}
@@ -888,7 +885,7 @@ class CourseController extends BaseController
 
         foreach ($courseIds as $key => $value) {
         	$course=$this->getCourseService()->getCourse($value);
-        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
+        	$classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($value);
         	if($course && count($classrooms)==0){
         		unset($courseIds[$key]);
         	}
@@ -966,8 +963,7 @@ class CourseController extends BaseController
 
 	private function getClassroomMembersByCourseId($id) {
 
-		$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-		$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
+		$classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
 		$user=$this->getCurrentUser();
 
 		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);

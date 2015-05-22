@@ -94,6 +94,17 @@ abstract class BaseDao
        $limit = (int) $limit; 
     }
 
+    protected function addOrderBy($builder, $orderBy)
+    {
+        foreach ($orderBy as $column => $order) {
+            if (in_array($column, array('createdTime', 'ups')) && in_array($order, array('DESC', 'ASC'))) {
+                $builder->addOrderBy($column, $order);
+            }
+        }
+
+        return $builder;
+    }
+
     protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
     {
         $keys = array_keys($orderBy);

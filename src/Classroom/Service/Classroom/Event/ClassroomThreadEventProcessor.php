@@ -24,6 +24,12 @@ class ClassroomThreadEventProcessor
     {
         $post = $event->getSubject();
         $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', +1);
+        
+        $isTeacher = $this->getClassroomService()->isClassroomTeacher($post['targetId'],$post['userId']);
+        if ($isTeacher) {
+            $this->getThreadPostDao()->updatePost($post['id'], array('adopted' => 1));
+            $this->getThreadDao()->updateThread($post['threadId'], array('solved' => 1));
+        }
     }
 
     public function onPostDelete(ServiceEvent $event)
@@ -35,5 +41,15 @@ class ClassroomThreadEventProcessor
     private function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getThreadDao()
+    {
+        return ServiceKernel::instance()->createDao('Thread.ThreadDao');
+    }
+
+    private function getThreadPostDao()
+    {
+        return ServiceKernel::instance()->createDao('Thread.ThreadPostDao');
     }
 }
