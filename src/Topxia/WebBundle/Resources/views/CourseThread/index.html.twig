@@ -1,10 +1,10 @@
-{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% set script_controller = 'course/common' %}
 
-{% block dashboard_main %}
+{% set tab = 'thread' %}
 
-{% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'thread'} %}
+{% block course_main %}
 
   <div class="pull-right">
     <a class="btn btn-sm btn-info" href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">发话题</a>

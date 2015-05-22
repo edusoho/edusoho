@@ -6,10 +6,18 @@
 
 {% set script_controller = 'course/show' %}
 
+
+{% block top_content %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+{% endblock %}
+
 {% block content %}
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
-      <section class="es-section">{% block course_main %}{% endblock %}</section>
+      <section class="es-section">
+        {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' %}
+        {% block course_main %}{% endblock %}
+      </section>
     </div>
 
     <div class="col-lg-3 col-md-4  course-sidebar">

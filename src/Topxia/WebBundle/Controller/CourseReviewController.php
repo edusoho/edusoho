@@ -6,15 +6,12 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\ReviewType;
 
-class CourseReviewController extends BaseController
+class CourseReviewController extends CourseBaseController
 {
 
     public function listAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
-
-        $previewAs = $request->query->get('previewAs');
-        $isModal = $request->query->get('isModal');
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -32,9 +29,9 @@ class CourseReviewController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'reviews' => $reviews,
             'users' => $users,
-            'isModal' => $isModal,
             'paginator' => $paginator
         ));
     }
@@ -65,24 +62,7 @@ class CourseReviewController extends BaseController
         ));
     }
 
-	public function latestBlockAction($course)
-	{
-        $reviews = $this->getReviewService()->findCourseReviews($course['id'], 0, 10);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-    	return $this->render('TopxiaWebBundle:CourseReview:latest-block.html.twig', array(
-    		'course' => $course,
-            'reviews' => $reviews,
-            'users' => $users,
-		));
-
-	}
-
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    private function getReviewService()
+    protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
     }

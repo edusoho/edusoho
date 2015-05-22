@@ -40,7 +40,7 @@
               </span>
               <br>分享
             </li>
-          {% if classroomMemberLevel %}
+          {% if classroomMemberLevel and not classroom.private %}
 
             {% if checkMemberLevelResult == 'not_login' %}
               <li class="active" data-toggle="tooltip" data-placement="top" title="{{ classroomMemberLevel.name }}免费学">

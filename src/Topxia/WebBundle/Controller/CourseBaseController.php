@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Topxia\Common\Paginator;
@@ -27,6 +28,23 @@ abstract class CourseBaseController extends BaseController
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         return array($course, $member);
+    }
+
+    protected function buildLayoutDataWithTakenAccess($request, $id)
+    {
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
+        $response = null;
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $response = $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            $response = $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+        }
+
+        return array($course, $member, $response);
     }
 
     protected function previewAsMember($as, $member, $course)

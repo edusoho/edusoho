@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class CourseThreadController extends BaseController
+class CourseThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $id)
     {
@@ -14,10 +14,7 @@ class CourseThreadController extends BaseController
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        $course = $this->getCourseService()->getCourse($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
             return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
@@ -51,6 +48,7 @@ class CourseThreadController extends BaseController
         $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
         return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'threads' => $threads,
             'users' => $users,
             'paginator' => $paginator,
@@ -67,10 +65,7 @@ class CourseThreadController extends BaseController
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
+        list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
 
         if (!$this->getCourseService()->canTakeCourse($course)) {
             return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
@@ -119,6 +114,7 @@ class CourseThreadController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'lesson' => $lesson,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
@@ -133,6 +129,7 @@ class CourseThreadController extends BaseController
 
     public function createAction(Request $request, $id)
     {
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
@@ -165,6 +162,7 @@ class CourseThreadController extends BaseController
 
         return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'form' => $form->createView(),
             'type' => $type,
         ));
@@ -172,6 +170,8 @@ class CourseThreadController extends BaseController
 
     public function editAction(Request $request, $courseId, $id)
     {
+        list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
+
         $thread = $this->getThreadService()->getThread($courseId, $id);
         if (empty($thread)) {
             throw $this->createNotFoundException();
@@ -205,6 +205,7 @@ class CourseThreadController extends BaseController
         return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
             'form' => $form->createView(),
             'course' => $course,
+            'member' => $member,
             'thread' => $thread,
             'type' => $thread['type'],
         ));
@@ -476,11 +477,6 @@ class CourseThreadController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     private function getThreadSearchFilters($request)
