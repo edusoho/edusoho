@@ -108,7 +108,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            1
+            10
         );
 
         $articles = $this->getArticleService()->searchArticles(
