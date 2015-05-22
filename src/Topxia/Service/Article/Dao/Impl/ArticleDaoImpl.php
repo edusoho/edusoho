@@ -37,9 +37,21 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	public function getArticleByAlias($alias)
 	{
         $sql = "SELECT * FROM {$this->table} WHERE alias = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($alias)) ? : null;
+        $article = $this->getConnection()->fetchAssoc($sql, array($alias));
         return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : null;
 	}
+
+    public function findArticlesByIds($ids)
+    {
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $articles =  $this->getConnection()->fetchAll($sql, $ids);
+
+        return $articles ? $this->createSerializer()->unserializes($articles, $this->serializeFields) : array();
+    }
 
 	public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
 	{
