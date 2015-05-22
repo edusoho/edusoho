@@ -63,21 +63,21 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
-            <li>
           {% if member.role != "teacher" and member.role != "headTeacher" %}
-            <a type="button" 
-            {% if  member.role == "student" and member.orderId > 0 %}
-            href="#modal" 
-            data-toggle="modal" 
-            data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
-            {% else %}
-            href="{{path('classroom_exit', {id:classroom.id})}}" id ="quit" 
-            {% endif %}
-            >
-             <i class="es-icon es-icon-exit"></i><br>退出
-            </a>
-          {% endif %}
+            <li>
+              <a type="button" 
+              {% if  member.role == "student" and member.orderId > 0 %}
+              href="#modal" 
+              data-toggle="modal" 
+              data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
+              {% else %}
+              href="{{path('classroom_exit', {id:classroom.id})}}" id ="quit" 
+              {% endif %}
+              >
+               <i class="es-icon es-icon-exit"></i><br>退出
+              </a>
             </li>
+          {% endif %}
           </ul>
           {% if member.role == 'auditor'%}
           <div class="class-auditor hidden-sm">
