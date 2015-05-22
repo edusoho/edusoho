@@ -14,49 +14,15 @@
     <!-- 主内容 -->
     <div class="col-md-8 article-detail-main">
       <section class="es-section article-content">
-        <ol class="breadcrumb">
-          <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
-          {% for breadcrumb in breadcrumbs %}
-            <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
-          {% endfor %}
-          <li class="active">正文</li>
-        </ol>
-        <div class="article-metas">
-          <div class="pull-left">
-            <div class="date">
-              <div class="day">{{day}}</div>
-              <div class="month">{{month}}月</div>
-            </div>
-          </div>
-          <div class="metas-body">
-            <h2 class="title">
-              <a href="javascript:;">
-                {{article.title}}
-              </a>
-            </h2>
-            <div class="sns">
-              <span class="views-num"><i class="es-icon es-icon-visibility"></i>{{ article.hits|default(0) }}</span>
-              <span class="comment-num"><i class="es-icon es-icon-textsms"></i>{{count}}</span>
-            </div>
-          </div>
-        </div>
-        <div class="article-text">
-            {{article.body |raw }}
-        </div>
-        <div class="article-tags">
-          标签：
-          {% for tagName in tagNames %}
-          <a class="btn-tag" href="">{{tagName}}</a>
-          {% endfor %}
-        </div>
-        <div class="article-sns">
-          <span class="es-share right open">
-            <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
-              <i class="es-icon es-icon-share"></i>
-            </a>
-            {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
-          </span>
-        </div>
+        {% include 'TopxiaWebBundle:Article/Part:detail-breadcrumb.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-metas.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-boy.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-tags.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-share.html.twig' %}
 
         <div class="related-artcile">
           <div class="row">
