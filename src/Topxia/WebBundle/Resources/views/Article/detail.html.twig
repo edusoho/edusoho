@@ -24,37 +24,11 @@
 
         {% include 'TopxiaWebBundle:Article/Part:detail-share.html.twig' %}
 
-        <div class="related-artcile">
-          <div class="row">
-            {% if sameTagArticles %}
-              {% for sameTagArticle in sameTagArticles%}
-            <a class="col-sm-4" href="{{ path('article_detail', { id:sameTagArticle.id }) }}">
-              <div class="related-item">
-                <img class="img-responsive" src="{{ file_url(sameTagArticle.thumb) }}" alt="">
-                <div class="title">
-                  {{sameTagArticle.title}}
-                </div>
-              </div>
-            </a>
-              {% endfor %}
-            {% else %}
-                  <li class="empty">暂无类似资讯！</li>
-            {% endif %}
-          </div>
-        </div>
+        {% include 'TopxiaWebBundle:Article/Part:detail-related-article.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-post.html.twig' %}
 
-        <form class="es-commet" method="post">
-          <div class="es-commet-header">
-            文章评论<span class="badge badge-primary">{{count}}</span>
-          </div>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <textarea class="form-control" rows="6" placeholder="您的想法" name="content" {% if not app.user %}disabled=true{% endif %}></textarea>
-          
-          <div class="form-group clearfix">
-            {% if not app.user %}<a href="{{ path('login') }}">登录</a> 后发表看法{% endif %}
-            <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" >发表评论</button>
-          </div>
-        </form>
+        {% include 'TopxiaWebBundle:Article/Part:detail-post-list.html.twig' %}
         <div class="thread-show">
           <div class="panel panel-default">
             <div class="panel-body">
