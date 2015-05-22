@@ -11,12 +11,12 @@
         {% if announcement.url %}
         <a class="open-article-link" href="{{announcement.url}}" target="_blank">
           <i class="es-icon es-icon-notifications"></i>
-          {{announcement.content|sub_text(150)}}
+          {{announcement.content|sub_text(50)}}
         </a>
         {% else %}
         <a class="open-article-link" href="javascript:;" target="_blank">
           <i class="es-icon es-icon-notifications"></i>
-          {{announcement.content|sub_text(150)}}
+          {{announcement.content|sub_text(50)}}
         </a>
         {% endif %}
 
