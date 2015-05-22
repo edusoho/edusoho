@@ -100,8 +100,13 @@ interface ClassroomService
 
     public function isClassroomTeacher($classroomId, $userId);
 
+    public function findClassroomIdsByCourseId($courseId);
+
     public function findClassroomsByCourseId($courseId);
 
+    /**
+     * @FIXME 这个方法要纠正
+     */
     public function findClassroomByCourseId($courseId);
 
     public function findCoursesByClassroomId($classroomId);

@@ -96,7 +96,6 @@ class WebExtension extends \Twig_Extension
             'sub_str' => new \Twig_Function_Method($this, 'subStr'),
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
-            'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
         );
     }
@@ -166,17 +165,6 @@ class WebExtension extends \Twig_Extension
     {
         $user = $this->getUserById($userId);
         return $user['nickname'];
-    }
-    
-    public function getClassroomsByCourseId($courseId)
-    {   
-        $classrooms=array();
-        $classroomIds=ArrayToolkit::column(ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->findClassroomsByCourseId($courseId),'classroomId');
-        foreach ($classroomIds as $key => $value) {
-            $classrooms[$value]=ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->getClassroom($value);
-        }
-
-        return $classrooms;
     }
 
     private function getUserById($userId)

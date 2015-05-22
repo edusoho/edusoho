@@ -314,7 +314,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->setClassroomCourses($classroom['id'], array(1, 2));
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCourseId(1);
+        $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId(1);
 
         $this->assertEquals(2, count($classrooms));
     }
