@@ -29,6 +29,8 @@ class NoteController extends CourseBaseController
         $result = $this->makeNotesRelated($notes, $courseIds);
         $result['paginator'] = $paginator;
         $result['notes'] = $notes;
+        $lessonIds = ArrayToolkit::column($notes, "lessonId");
+        $result['lessons'] = $this->getCourseService()->findLessonsByIds($lessonIds);
 
         return $this->render('TopxiaWebBundle:Course\Note:notes-list.html.twig', $result);
     }

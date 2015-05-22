@@ -1,5 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% set script_controller = 'importer/lead-excel' %}
+{# {% set script_controller = 'importer/lead-excel' %} #}
+{% do load_script('importer/lead-excel') %}
   
 <div class="panel panel-default panel-col">
   <div class="panel-heading">学员批量导入</div>

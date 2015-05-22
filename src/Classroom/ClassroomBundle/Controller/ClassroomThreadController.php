@@ -81,6 +81,11 @@ class ClassroomThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($threadId);
         $author = $this->getUserService()->getUser($thread['userId']);
         $user = $this->getCurrentUser();
+        $adopted = $request->query->get('adopted');
+        $filter = array();
+        if (!empty($adopted)) {
+            $filter = array('adopted' => $adopted);
+        }
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
@@ -99,6 +104,7 @@ class ClassroomThreadController extends BaseController
             'author' => $author,
             'member' => $member,
             'layout' => $layout,
+            'filter' => $filter,
             'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
         ));
     }

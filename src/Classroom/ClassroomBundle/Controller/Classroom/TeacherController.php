@@ -40,7 +40,23 @@ class TeacherController extends BaseController
             'Myfollowings' => $Myfollowings,
         ));
     }
-
+    public function catchIdsAction(Request $request,$classroomId)
+    {
+        $ids = $request->query->get('ids');
+        $ids = explode(',', $ids);
+        $ids = array_unique($ids);
+        $teacherIds = '';
+        foreach ($ids as $id) {
+            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroomId, $id);
+            if ($isTeacher) {
+                $teacherIds.=$id.',';
+            }
+        }
+        if (!empty($teacherIds)) {
+            $teacherIds = substr($teacherIds,0,strlen($teacherIds)-1); ;
+        }
+        return $this->createJsonResponse($teacherIds);
+    }
     private function sort($teachers, $members)
     {
         $newTeachers = array();
