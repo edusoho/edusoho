@@ -152,12 +152,6 @@ class ArticleController extends BaseController
             return $this->createMessageResponse('error', '文章不是发布状态，请查看！');
         }
 
-        $setting = $this->getSettingService()->get('article', array());
-
-        if (empty($setting)) {
-            $setting = array('name' => '资讯频道', 'pageNums' => 20);
-        }
-
         $conditions = array(
             'status' => 'published',
         );
@@ -197,7 +191,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchPostsCount($conditions),
-            20
+            10
         );
 
         $posts = $this->getThreadService()->searchPosts(
@@ -209,10 +203,7 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $first = strpos(date('Y-m-d', $article['publishedTime']), "-");
-        $last = strrpos(date('Y-m-d', $article['publishedTime']), "-");
-        $month = substr(date('Y-m-d', $article['publishedTime']), $first+1, 2);
-        $day = substr(date('Y-m-d', $article['publishedTime']), $last+1, 2);
+   
 
         $conditions = array(
             'targetType' => 'article',
@@ -247,14 +238,11 @@ class ArticleController extends BaseController
             'article' => $article,
             'articleNext' => $articleNext,
             'tags' => $tags,
-            'setting' => $setting,
             'seoKeyword' => $seoKeyword,
             'seoDesc' => $article['body'],
             'breadcrumbs' => $breadcrumbs,
             'categoryName' => $category['name'],
             'categoryCode' => $category['code'],
-            'day' => $day,
-            'month' => $month,
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,

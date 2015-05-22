@@ -1,3 +1,5 @@
+{% set tab = tab|default(null) %}
+
 <div class="nav-btn-tab">
   <ul class="nav nav-tabs" role="tablist">
     {% if not member %}
@@ -6,9 +8,9 @@
       <li role="presentation" {% if tab == 'note' %}class="active"{% endif %}><a href="{{ path('course_notes', {courseId:course.id}) }}"> 笔记 <span class="badge">{{ course.noteNum }}</span></a></li>
     {% else %}
       <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">课时</a></li>
-      <li role="presentation" {% if tab == 'thread' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">讨论区</a></li>
-      <li role="presentation" {% if tab == 'material' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">资料区</a></li>
-      <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}><a href="javascript:;">评价</a></li>
+      <li role="presentation" {% if tab == 'thread' %}class="active"{% endif %}><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
+      <li role="presentation" {% if tab == 'material' %}class="active"{% endif %}><a href="{{ path('course_materials', {id:course.id}) }}">资料区</a></li>
+      <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}><a href="{{ path('course_review_list', {id:course.id}) }}">评价</a></li>
       <li role="presentation" {% if tab == 'note' %}class="active"{% endif %}><a href="{{ path('course_notes', {courseId:course.id}) }}"> 笔记 <span class="badge">{{ course.noteNum }}</span></a></li>
       <li role="presentation" {% if tab == 'info' %}class="active"{% endif %}><a href="{{ path('course_info', {id:course.id}) }}">概览</a></li>
     {% endif %}
