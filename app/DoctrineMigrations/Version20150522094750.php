@@ -17,7 +17,7 @@ class Version20150522094750 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `thread` ADD `solved` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否有老师回答(已被解决)' AFTER `sticky`;");
-        $this->addSql("ALTER TABLE `thread` ADD `adopted` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否被采纳(是老师回答)' AFTER `content`;");
+        $this->addSql("ALTER TABLE `thread_post` ADD `adopted` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否被采纳(是老师回答)' AFTER `content`;");
     }
 
     /**

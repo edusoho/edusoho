@@ -42,21 +42,6 @@ class CourseController extends BaseController
         ));
     }
 
-    private function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['lessonNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
-
-        return array (
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['lessonNum']
-        );
-    }
-
     public function teachersAction($course)
     {
         $course = $this->getCourse($course);
@@ -77,6 +62,16 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
             'course' => $course,
             'students' => $students,
+        ));
+    }
+
+    public function belongClassroomsAction($course)
+    {
+        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($course['id']);
+
+        return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-belong-classrooms.html.twig', array(
+            'course' => $course,
+            'classrooms' => $classrooms,
         ));
     }
 
@@ -103,6 +98,21 @@ class CourseController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function calculateUserLearnProgress($course, $member)
+    {
+        if ($course['lessonNum'] == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+
+        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
+
+        return array (
+            'percent' => $percent,
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum']
+        );
     }
 
 }
