@@ -12,7 +12,7 @@
 
     <!-- list主内容-->
     <div class="col-md-8 article-list-mian">
-      {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' %}
+      {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' with {articles:latestArticles} %}
     </div>
 
     <aside class="col-md-4 article-sidebar">

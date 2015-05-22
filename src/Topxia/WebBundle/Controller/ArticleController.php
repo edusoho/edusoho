@@ -67,29 +67,6 @@ class ArticleController extends BaseController
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-        $conditions = array(
-            'targetType' => 'article',
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchPostsCount($conditions),
-            4
-        );
-
-        $allPosts = $this->getThreadService()->searchPosts(
-            $conditions,
-            array('ups', 'desc'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $popularUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($allPosts, 'userId'));
-
-        $popularPosts =  array();
-        foreach ($allPosts as $key => $value) {
-            $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
-        }
-
         return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
             'categoryTree' => $categoryTree,
             'latestArticles' => $latestArticles,
@@ -99,9 +76,6 @@ class ArticleController extends BaseController
             'paginator' => $paginator,
             'setting' => $setting,
             'categories' => $categories,
-            'allPosts' => $allPosts,
-            'popularUsers' => $popularUsers,
-            'popularPosts' => $popularPosts,
         ));
     }
 
@@ -131,21 +105,10 @@ class ArticleController extends BaseController
             'status' => 'published',
         );
 
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
-
-        $rootCategory = $this->getRootCategory($categoryTree, $category);
-
-        $subCategories = $this->getSubCategories($categoryTree, $rootCategory);
-
-        $setting = $this->getSettingService()->get('article', array());
-        if (empty($setting)) {
-            $setting = array('name' => '资讯频道', 'pageNums' => 20);
-        }
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            $setting['pageNums']
+            1
         );
 
         $articles = $this->getArticleService()->searchArticles(
@@ -155,62 +118,16 @@ class ArticleController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        foreach ($articles as $key => $value) {
-            $publishedTime[$value['id']] = date('Y-m-d', $value['publishedTime']);
-        }
-        $month = array();
-        $day = array();
-        if (isset($publishedTime)) {
-            foreach ($publishedTime as $key => $value) {
-                $first = strpos($value, "-");
-                $last = strrpos($value, "-");
-                $month[$key] = substr($value, $first+1, 2);
-                $day[$key] = substr($value, $last+1, 2);
-            }
-        }
-
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
-        $conditions = array(
-            'targetType' => 'article',
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getThreadService()->searchPostsCount($conditions),
-            4
-        );
-
-        $allPosts = $this->getThreadService()->searchPosts(
-            $conditions,
-            array('ups', 'desc'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $popularUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($allPosts, 'userId'));
-
-        $popularPosts =  array();
-        foreach ($allPosts as $key => $value) {
-            $popularPosts[$value['targetId']] = $this->getArticleService()->getArticle($value['targetId']);
-        }
-
         return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
-            'categoryTree' => $categoryTree,
             'categoryCode' => $categoryCode,
             'category' => $category,
-            'rootCategory' => $rootCategory,
             'articles' => $articles,
             'paginator' => $paginator,
-            'setting' => $setting,
             'categories' => $categories,
-            'subCategories' => $subCategories,
-            'month' => $month,
-            'day' => $day,
-            'allPosts' => $allPosts,
-            'popularUsers' => $popularUsers,
-            'popularPosts' => $popularPosts,
         ));
     }
 
@@ -290,7 +207,7 @@ class ArticleController extends BaseController
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime', 'asc'),
+            array('createdTime' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -314,7 +231,7 @@ class ArticleController extends BaseController
 
         $allPosts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('ups', 'desc'),
+            array('ups' => 'desc'),
             $popularPaginator->getOffsetCount(),
             $popularPaginator->getPerPageCount()
         );

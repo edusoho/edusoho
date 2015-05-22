@@ -1,3 +1,4 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 <!-- 热门资讯 -->
     {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
   <!-- 热门标签 -->
@@ -23,28 +24,30 @@
     <div class="panel-heading"><i class="es-icon es-icon-textsms"></i>热门评论</div>
     <div class="panel-body">
 
-  {% if allPosts %} 
-    {% for post in allPosts %}
-    {% set author = popularUsers[post.userId] %}     
-    {% set article = popularPosts[post.targetId] %}     
-          <div class="media media-comment">
-            <div class="media-body">
-              <div class="pull-left">
-                <a href="{{ path('user_show', {id:author.id}) }}"><img src="{{ default_path('avatar', author.smallAvatar, '') }}" class="img-circle"></a>
-              </div>
-              <div class="comments-info">
-                <p><a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a><span>评论于</span></p>
-                <h5><a href="{{ path('article_detail', { id:article.id }) }}">{{ article.title }}</a></h5>
-              </div>
-              <div class="comments-content">
-               {{ post.content|at(post.ats)|raw }}
-              </div>
-            </div>
+    {% set posts = data('PopularArticlePosts',{'count':10}) %}
+    {% for post in posts %}
+      <div class="media media-comment">
+        <div class="media-body">
+          <div class="pull-left">
+            {{ web_macro.user_avatar(post.user, '','img-circle') }}
           </div>
-    {% endfor %}
+          <div class="comments-info">
+            <p>
+              {{ web_macro.user_link(post.user, '') }}
+              <span>评论于</span>
+            </p>
+            <h5>
+              <a href="{{ path('article_detail', { id:article.id }) }}">{{ article.title }}</a>
+            </h5>
+          </div>
+          <div class="comments-content">
+           {{ post.content|at(post.ats)|raw }}
+          </div>
+        </div>
+      </div>
   {% else %}
     <div class="empty">一个评论都没有！</div>
-  {% endif %}
+  {% endfor %}
 
   </div>
 </div>

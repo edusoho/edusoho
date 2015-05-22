@@ -107,6 +107,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $conditions['userId'] = $author ? $author['id'] : -1;
         }
 
+        if (!empty($conditions['latest'])) {
+            if ($conditions['latest'] == 'week') {
+                $conditions['GTEcreatedTime'] = mktime(0, 0, 0, date('m'), date('d') - 7,   date('Y'));
+            }
+        }
+
         return $conditions;
     }
 

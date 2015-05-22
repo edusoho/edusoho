@@ -55,7 +55,7 @@ class ThreadController extends BaseController
             $conditions['userIds'] = $teacherIds;
             $teacherPosts = $this->getThreadService()->searchPosts(
                 $conditions,
-                array('createdTime', 'asc'),
+                array('createdTime' => 'asc'),
                 0,
                 PHP_INT_MAX
             );
