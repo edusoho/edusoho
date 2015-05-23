@@ -47,4 +47,5 @@ app.controller('ContactTabController', ['$scope', ContactTabController]);
 function ContactTabController($scope)
 {
 	console.log("ContactTabController");
+	console.log($scope);
 }

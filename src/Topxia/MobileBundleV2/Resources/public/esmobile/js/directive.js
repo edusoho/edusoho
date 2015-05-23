@@ -29,7 +29,7 @@ app.directive('onContentLoaded', function ($parse) {
                     });
                 }  
             };
-        }
+        } 
     };
 }).
 directive('back', function($ionicHistory, $state) {

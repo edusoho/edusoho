@@ -310,8 +310,24 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             $urlRouterProvider.when("/regist", "/regist/phone");
 }]);
 
-app.run(["applicationProvider", "$rootScope", function(applicationProvider, $rootScope) {
-  //console.log(window.location.origin);
+app.run(["applicationProvider", "$rootScope", '$ionicConfig', function(applicationProvider, $rootScope, $ionicConfig) {
+  
+  var browser={
+      v: (function(){
+          var u = navigator.userAgent;
+          return {
+              native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
+          };
+      })()
+  };
+
+  $ionicConfig.platform.native = browser.v.native;
+
+  if ($ionicConfig.platform.android) {
+    $ionicConfig.setPlatformConfig('android', {});
+  }
+  
+  $rootScope.platform = $ionicConfig.platform;
   applicationProvider.init(app.host);
   applicationProvider.updateScope($rootScope);
   angular.$client = {};
