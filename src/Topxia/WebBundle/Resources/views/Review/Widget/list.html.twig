@@ -23,12 +23,12 @@
 </div>
 
 <form id="review-form" method="post" action="{{ reviewSaveUrl }}" {% if userReview %}style="display:none;"{% endif %}>
-  <div class="form-group">
+  <div class="form-group controls">
     请打分： <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
     <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">
   </div>
 
-  <div class="form-group">
+  <div class="form-group controls">
     <textarea class="form-control" rows="8" data-display="评价详细内容" name="content">{{ userReview.content|default('') }}</textarea>
   </div>
 

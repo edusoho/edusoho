@@ -2,9 +2,10 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('jquery.raty');
-    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
+
+        Validator.addRule('star', /^[1-5]$/, '请打分');
 
         var $form = $('#review-form');
 
@@ -25,10 +26,17 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=rating]',
+            element: $form.find('[name=rating]'),
             required: true,
+            rule: 'star',
             errormessageRequired: '请打分'
         });
+
+        validator.addItem({
+            element: $form.find('[name=content]'),
+            required: true
+        });
+
 
         validator.on('formValidated', function(error, msg, $form) {
             if (error) {
