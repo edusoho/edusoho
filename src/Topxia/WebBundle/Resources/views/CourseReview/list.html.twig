@@ -10,6 +10,9 @@
 
 {% block course_main %}
 
+  {% include 'TopxiaWebBundle:CourseReview:review-form.html.twig' %}
+
+
   <ul class="media-list">
   	{% for review in reviews %}
   	  {% set user = users[review.userId] %}

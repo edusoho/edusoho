@@ -409,9 +409,10 @@ course_lesson_plugin_note_save:
 course_review_create:
     pattern:  /course/{id}/review/create
     defaults: { _controller: TopxiaWebBundle:CourseReview:create }
+    methods: [POST]
 
 course_review_list:
-    pattern:  /course/{id}/review/list
+    pattern:  /course/{id}/reviews/
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
 
 course_teacher_info:
