@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
 
-    var ThreadShowWidget = Widget.extend({
+    var articleDetail = Widget.extend({
 
         attrs: {
             
@@ -33,9 +33,7 @@ define(function(require, exports, module) {
 
                 }, 'json');
             }
-
             this._initPostForm();
-            
         },
 
         onClickPostMore: function(e) {
@@ -168,21 +166,13 @@ define(function(require, exports, module) {
 
         _initPostForm: function() {
             var $list = this.$('.thread-pripost-list');
-            var $form = this.$('#thread-post-form');
+            var $form = this.$('.thread-post-form');
             var that = this;
 
             if ($form.length == 0) {
                 return ;
             }
 
-            var $textarea = $form.find('textarea[name=content]');
-            if($textarea.data('imageUploadUrl')) {
-                var editor = CKEDITOR.replace($textarea.attr('id'), {
-                    toolbar: 'Simple',
-                    filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
-                });
-            }
-           
             var validator = new Validator({
                 element: $form,
                 autoSubmit: false,
@@ -193,15 +183,9 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
+                        $list.prepend(response);
                         $btn.button('reset');
-                        if ($textarea.data('imageUploadUrl')) {
-                            $list.append(response);
-                            editor.setData('');
-                        } else {
-                            $list.prepend(response);
-                            $textarea.html('');
-                        }
-                        
+                        editor.setData('');
                         var pos = $list.find('li:last-child').offset();
                         $('body').scrollTop(pos.top);
                         that.$('.thread-post-num').text(parseInt(that.$('.thread-post-num').text()) + 1);
@@ -219,24 +203,18 @@ define(function(require, exports, module) {
                 required: true
             });
 
-            if (editor) {
-                validator.on('formValidate', function(element, event) {
-                    editor.updateElement();
-                });
-            }
-       
+            validator.on('formValidate', function(element, event) {
+                editor.updateElement();
+            });
 
         }
     });
 
     exports.run = function() {
 
-        var postList = new ThreadShow({
-            element: '#detail-content'
+        var postList = new articleDetail({
+            element: '.article-detail'
         });
 
     };
-
-    module.exports = ThreadShowWidget;
-    
 });

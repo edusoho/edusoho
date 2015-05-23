@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-<li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media media-comment">
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-post-{{ post.id }} media media-comment user-id-{{author.id}}">
   <div class="media-left">
     {{ web_macro.user_avatar(author, 'user-avatar', 'img-circle', true) }}
   </div>
@@ -17,7 +17,7 @@
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>
     <div class="thread-subpost-container subcomments clearfix {% if not post.subposts %}hide{% endif %}">
-      {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId, postId:post.id, less:true})) }}
+      {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId|default(0), postId:post.id, less:true})) }}
       <div class="thread-subpost-morebar clearfix {% if not post.subposts %}hide{% endif %}">
         {% if service.canAccess('post.create', post) %}
           <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">我也说一句</button>

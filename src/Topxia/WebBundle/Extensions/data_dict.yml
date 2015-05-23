@@ -131,7 +131,7 @@ lessonType:
     flash: Flash
     text: 图文
     ppt: PPT
-    document: 文档'
+    document: 文档
 
 videoStorageType:
     local: 本地视频
@@ -142,39 +142,39 @@ userRole:
     ROLE_USER: 学员
     ROLE_TEACHER: 教师
     ROLE_ADMIN: 管理员
-    ROLE_SUPER_ADMIN: 超级管理员'
+    ROLE_SUPER_ADMIN: 超级管理员
 
 memberLevel:
     1: 银牌会员
     2: 金牌会员
-    3: 钻石会员'
+    3: 钻石会员
 
 duration_unit:
     month: 个月
-    year: 年'
+    year: 年
 
 boughtType:
     new: 购买
     renew: 续费
     upgrade: 升级
     edit: 编辑
-    cancel: 取消会员'
+    cancel: 取消会员
 
 userKeyWordType:
     nickname: 用户名
     verifiedMobile: 手机号
     email: 邮件地址
-    loginIp: 登录IP'
+    loginIp: 登录IP
 
 logLevel:
     info: 提示
     warning: 警告
-    error: 错误'
+    error: 错误
 
 logLevel:html:
     info: <span>提示</span>
     warning: <span class="text-warning">警告</span>
-    error: <span class="text-danger">错误</span>'
+    error: <span class="text-danger">错误</span>
 
 
 analysisDateType:

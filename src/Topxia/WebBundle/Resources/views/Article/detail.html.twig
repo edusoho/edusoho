@@ -10,7 +10,7 @@
 
   {{ load_script('thread/thread-show') }}
 
-  <div class="article-detail row">
+  <div class="article-detail row" id="detail-content">
     <!-- 主内容 -->
     <div class="col-md-8 article-detail-main">
       <section class="es-section article-content">
@@ -26,67 +26,10 @@
 
         {% include 'TopxiaWebBundle:Article/Part:detail-related-article.html.twig' %}
         
-        {% include 'TopxiaWebBundle:Article/Part:detail-post.html.twig' %}
+        {% include 'TopxiaWebBundle:Article/Part:detail-post-form.html.twig' %}
 
         {% include 'TopxiaWebBundle:Article/Part:detail-post-list.html.twig' %}
-        <div class="thread-show">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <ul class="media-list thread-post-list thread-pripost-list">
-                {% for post in posts %}
-                  {% set author = users[post.userId] %}
-                  <li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media">
-                      <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
-                        <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
-                      </a>
-                      <div class="media-body">
-                        <div class="metas">
-                          {% include 'TopxiaWebBundle:Thread:post-manage-menu.html.twig' %}
-                          <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
-                          <span class="bullet">•</span>
-                          <span class="text-muted">{{post.createdTime|smart_time}} </span>
-                        </div>
-                        <div class="thread-post-content">{{ post.content|at(post.ats)|raw }}</div>
-                        <div>
-                          {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
-                        </div>
-                        <div class="thread-subpost-container clearfix {% if not post.subposts %}hide{% endif %}">
-                          {{ render(controller('TopxiaWebBundle:Article:subposts', {targetId: post.threadId, postId:post.id, less:true})) }}
-                          <div class="thread-subpost-morebar clearfix {% if not post.subposts %}hide{% endif %}">
-                            {% if service.canAccess('post.create', post) %}
-                              <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">我也说一句</button>
-                            {% endif %}
-                            <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="text-muted">还有{{ post.subposts - 5 }}条回复，</span><a href="javascript:;" class="js-post-more">点击查看</a></span>
-                          </div>
-
-                          {% if service.canAccess('post.create', post) %}
-                            <form method="post" action="{{ path('thread_post_reply', {postId:post.id, threadId:0}) }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
-                              <input type="hidden" name="targetId" value="{{ post.targetId }}">
-                              <input type="hidden" name="targetType" value="article">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <textarea class="form-control" name="content" data-display="内容"></textarea>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-                                <button type="submit" data-loading-text="正在发表" class="btn btn-primary btn-sm pull-right">发表</button>
-                              </div>
-                            </form>
-                          {% endif %}
-
-                        </div>
-                      </div>
-                    </li>
-                {% else %}
-                  <li class="empty">一个回复都没有！</li>
-                {% endfor %}
-              </ul>
-
-              {{ web_macro.paginator(paginator) }}
-            </div>
-          </div>
-        </div>
+        
       </section>
     </div>
     

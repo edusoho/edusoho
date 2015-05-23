@@ -26,7 +26,7 @@
 
     {% set posts = data('PopularArticlePosts',{'count':10}) %}
     {% for post in posts %}
-      <div class="media media-comment">
+      <div class="media media-hot-comment">
         <div class="media-body">
           <div class="pull-left">
             {{ web_macro.user_avatar(post.user, '','img-circle') }}
@@ -37,7 +37,7 @@
               <span>评论于</span>
             </p>
             <h5>
-              <a href="{{ path('article_detail', { id:article.id }) }}">{{ article.title }}</a>
+              <a href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
             </h5>
           </div>
           <div class="comments-content">

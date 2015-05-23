@@ -42,50 +42,44 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function showAction(Request $request, $target, $thread)
+    public function showAction(Request $request, $target, $thread, $filter = array())
     {
         $conditions = array(
             'threadId' => $thread['id'],
             'parentId' => 0,
         );
-
-        $teacherPosts = array();
-        if ($thread['type'] == 'question') {
-            $teacherIds = $this->getThreadService()->findTeacherIds($thread);
-            $conditions['userIds'] = $teacherIds;
-            $teacherPosts = $this->getThreadService()->searchPosts(
-                $conditions,
-                array('createdTime' => 'asc'),
-                0,
-                PHP_INT_MAX
-            );
-            unset($conditions['userIds']);
-            $conditions['notUserIds'] = $teacherIds;
-        }
-
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchPostsCount($conditions),
-            20
+            $this->getThreadService()->searchPostsCount(array_merge($conditions,$filter)),
+            10
         );
 
         $posts = $this->getThreadService()->searchPosts(
-            $conditions,
+            array_merge($conditions,$filter),
             array('createdTime', 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        
+        $conditions['ups_GT'] = 5;
+        $goodPosts = $this->getThreadService()->searchPosts(
+            $conditions,
+            array('ups' => 'DESC'),
+            0,
+            3
+        );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column(array_merge($posts, $teacherPosts), 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column(array_merge($goodPosts,$posts), 'userId'));
+        
         $users = $this->getThreadService()->setUserBadgeTitle($thread, $users);
         $this->getThreadService()->hitThread($target['id'], $thread['id']);
-
+        
         return $this->render("TopxiaWebBundle:Thread:show.html.twig", array(
             'target' => $target,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
             'posts' => $posts,
-            'teacherPosts' => $teacherPosts,
+            'goodPosts' => $goodPosts,
             'users' => $users,
             'paginator' => $paginator,
             'service' => $this->getThreadService(),
@@ -94,7 +88,7 @@ class ThreadController extends BaseController
 
     public function subpostsAction(Request $request, $threadId, $postId, $less = false)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
+        $post = $this->getThreadService()->getPost($postId);
 
         $paginator = new Paginator(
             $request,
@@ -102,14 +96,13 @@ class ThreadController extends BaseController
             10
         );
 
-        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $thread['id'], 'postId' => $postId)));
+        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $post['threadId'], 'postId' => $postId)));
 
         $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
             'parentId' => $postId,
-            'thread' => $thread,
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,

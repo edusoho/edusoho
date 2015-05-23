@@ -1,6 +1,6 @@
 {% if app.user %}
   {% if service.canAccess('post.create', thread) %}
-    <form class="thread-post-form" method="post" action="{{path('thread_post', {threadId:thread.id})}}">
+    <form class="thread-post-form" id="thread-post-form" method="post" action="{{path('thread_post', {threadId:thread.id})}}">
       <div class="form-group">
         <div class="controls">
           <textarea
