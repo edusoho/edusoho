@@ -30,9 +30,10 @@ class CourseReviewController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
-        return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:reviews.html.twig', array(
             'course' => $course,
             'member' => $member,
+            'reviewSaveUrl' => $this->generateUrl('course_review_create', array('id' => $course['id'])),
             'userReview' => $userReview,
             'reviews' => $reviews,
             'users' => $users,
