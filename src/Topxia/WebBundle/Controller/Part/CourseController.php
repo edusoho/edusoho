@@ -105,6 +105,16 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }
 
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
