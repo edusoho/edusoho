@@ -5,9 +5,9 @@
 {% block main %}
 
       <div class="btn-group">
-          <a type="button" class="btn btn-default btn-sm btn-primary" href="{{ path('admin_approval_approving') }}">审核中</a>
+          <a type="button" class="btn btn-default btn-sm btn-primary" href="{{ path('admin_approval_approving') }}"> {{'审核中'|trans}}</a>
 
-          <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_approval_approved') }}">审核成功</a>
+          <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_approval_approved') }}"> {{'审核成功'|trans}}</a>
 
       </div>
 
@@ -16,12 +16,12 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>用户昵称</th>
-      <th>真实姓名</th>
-      <th>身份证号码</th>
-      <th>邮件</th>
-      <th>申请时间</th>
-      <th>操作</th>
+      <th> {{'用户昵称'|trans}}</th>
+      <th> {{'真实姓名'|trans}}</th>
+      <th> {{'身份证号码'|trans}}</th>
+      <th> {{'邮件'|trans}}</th>
+      <th> {{'申请时间'|trans}}</th>
+      <th> {{'操作'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -34,7 +34,7 @@
         <td>{{user.email }}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
-         <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}" class="btn btn-default btn-sm">审核</a>
+         <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}" class="btn btn-default btn-sm"> {{'审核'|trans}}</a>
         </td>
     </tr>
   {% endfor %}
@@ -43,7 +43,7 @@
 
 {{ web_macro.paginator(paginator) }}
 {% else %}
-  <div class="empty">暂无需要审核中的实名认证用户</div>
+  <div class="empty"> {{'暂无需要审核中的实名认证用户'|trans}}</div>
 {% endif %}
 
 {% endblock %}
