@@ -100,6 +100,11 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
+    protected function getDiscountService()
+    {
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+    }
+
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
