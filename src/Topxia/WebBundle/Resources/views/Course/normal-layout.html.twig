@@ -4,9 +4,6 @@
 {% set bodyClass = 'course-dashboard-page' %}
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
-{% set script_controller = 'course/show' %}
-
-
 {% block top_content %}
   {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
 {% endblock %}
