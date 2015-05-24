@@ -7,9 +7,6 @@ a:focus {
 .caret {
   margin-left: 5px;
 }
-.bdsharebuttonbox {
-  min-width: 130px;
-}
 .form-control:focus {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -1069,33 +1066,16 @@ body.nav-active {
   float: left;
 }
 .nav-filter .nav.nav-pills > li {
-  float: left;
   margin: 0 10px;
 }
-.nav-filter .nav.nav-pills > li.dropdown {
-  margin-left: 15px;
-}
 .nav-filter .nav.nav-pills > li.dropdown > a {
+  font-size: 14px;
   color: #616161;
   border: none;
+  background: none;
 }
 .nav-filter .nav.nav-pills > li.dropdown > a:hover {
   color: #37b97d;
-}
-.nav-filter .nav.nav-pills > li > a {
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-}
-@media (min-width: 768px) {
-  .nav-filter .nav.nav-pills > li > a {
-    padding: 5px 13px;
-  }
-}
-@media (max-width: 767px) {
-  .nav-filter .nav.nav-pills > li > a {
-    padding: 4px 8px;
-  }
 }
 .topic-list .topic-item {
   position: relative;
@@ -1669,6 +1649,17 @@ body.nav-active {
 }
 .media-evaluate .title .date {
   margin-left: 5px;
+}
+.media-evaluate .actions {
+  margin-top: 10px;
+}
+.media-evaluate .actions .show-full-btn,
+.media-evaluate .actions .show-short-btn {
+  visibility: hidden;
+}
+.media-evaluate:hover .actions .show-full-btn,
+.media-evaluate:hover .actions .show-short-btn {
+  visibility: visible;
 }
 .breadcrumb li.active {
   color: #616161;
@@ -2631,6 +2622,20 @@ textarea.form-control-o {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+.nav.nav-pills.nav-pills-sm > li > a {
+  font-size: 12px;
+  line-height: 1.5;
+}
+@media (min-width: 768px) {
+  .nav.nav-pills.nav-pills-sm > li > a {
+    padding: 5px 13px;
+  }
+}
+@media (max-width: 767px) {
+  .nav.nav-pills.nav-pills-sm > li > a {
+    padding: 4px 8px;
+  }
 }
 .es-tag {
   background: #fff;
