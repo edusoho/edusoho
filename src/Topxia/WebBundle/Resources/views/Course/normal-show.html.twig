@@ -9,61 +9,61 @@
   <div class="course-detail-content">
 
     {% if not member %}
-      <ul class="course-about">
-        <li>
-          <div class="course-about-header">
-            课程介绍
-          </div>
-          <div class="course-about-body">
-            {% if course.about %}
-              {{ course.about|raw }}
-            {% else %}
-              <div class="text-muted">暂无课程简介</div>
-            {% endif %}
-          </div>
-        </li>
-        {% if course.goals %}
-          <li>
-            <div class="course-about-header">
-              课程目标
-            </div>
-            <div class="course-about-body">
-              <ul class="list-unstyled">
-                {% for goal in course.goals %}
-                <li>
-                  <i class="es-icon es-icon-chevronright"></i> {{ goal }}
-                </li>
-                {% endfor %}
-              </ul>
-            </div>
-          </li>
-        {% endif %}
-        {% if course.audiences %}
-          <li>
-            <div class="course-about-header">
-              适合人群
-            </div>
-            <div class="course-about-body">
-              <ul class="list-unstyled">
-                {% for audience in course.audiences %}
-                <li>
-                  <i class="es-icon es-icon-chevronright"></i> {{ audience }}
-                </li>
-                {% endfor %}
-              </ul>
-            </div>
-          </li>
-        {% endif %}
-        <li>
-          <div class="course-about-header">
-            课时列表
-          </div>
-        </li>
+      <div class="es-piece">
+        <div class="piece-header">
+          课程介绍
+        </div>
+        <div class="piece-body p-lg">
+          {% if course.about %}
+            {{ course.about|raw }}
+          {% else %}
+            <div class="text-muted">暂无课程简介</div>
+          {% endif %}
+        </div>
+      </div>
 
-      </ul>
+      {% if course.goals %}
+        <div class="es-piece">
+          <div class="piece-header">
+            课程目标
+          </div>
+          <div class="piece-body">
+            <ul class="piece-body-list">
+              {% for goal in course.goals %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if course.audiences %}
+        <div class="es-piece">
+          <div class="piece-header">
+            适合人群
+          </div>
+          <div class="piece-body">
+            <ul class="piece-body-list">
+              {% for audience in course.audiences %}
+              <li>
+                <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
     {% endif %}
-    {# {% include 'TopxiaWebBundle:CourseLesson:Widget/list.html.twig' %} #}
-    {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id})) }}
+
+    <div class="es-piece">
+      <div class="piece-header">课时列表</div>
+      <div class="piece-body">
+        {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id})) }}
+      </div>
+    </div>
+    
   </div>
 
 {% endblock %}
