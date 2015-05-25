@@ -4,6 +4,11 @@
     <strong>  
       <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
     </strong>
+    <br>
+    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    {% if classroom.recommended %}
+      <span class="label label-default">荐:{{ classroom.recommendedTime|date('Y-m-d') }} / 序号:{{ classroom.recommendedSeq }}</span>
+    {% endif %}
     </td>
 
     <td>

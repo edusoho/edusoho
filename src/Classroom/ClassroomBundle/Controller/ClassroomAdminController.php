@@ -54,12 +54,15 @@ class ClassroomAdminController extends BaseController
             $priceAll[$value] = $price;
         }
 
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
+
         return $this->render('ClassroomBundle:ClassroomAdmin:index.html.twig', array(
             'classroomInfo' => $classroomInfo,
             'paginator' => $paginator,
             'classroomCoursesNum' => $classroomCoursesNum,
             'priceAll' => $priceAll,
             'coinPriceAll' => $coinPriceAll,
+            'categories' => $categories,
             ));
     }
 
@@ -254,5 +257,10 @@ class ClassroomAdminController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 }

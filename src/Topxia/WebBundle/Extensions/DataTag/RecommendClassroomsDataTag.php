@@ -8,27 +8,26 @@ use Topxia\Common\ArrayToolkit;
 class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
-     * 获取最新课程列表
+     * 获取推荐班级列表
      *
      * 可传入的参数：
-     *   count    必需 课程数量，取值不能超过100
+     *   count    必需 班级数量，取值不能超过100
      * 
      * @param  array $arguments 参数
-     * @return array 班级列表
+     * @return array 班级推荐列表
      */
     public function getData(array $arguments)
     {	
         $this->checkCount($arguments);
         
         $conditions = array(
-            'status' => 'published'
+            'status' => 'published',
+            'private' => 0
         );
-        
-        $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
-                array('status' => 'published','private' => 0),
-                array('createdTime','desc'),
+                $conditions,
+                array('recommendedSeq','ASC'),
                 0,
                 $arguments['count']
         );
