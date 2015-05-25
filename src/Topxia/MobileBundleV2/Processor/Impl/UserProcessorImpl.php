@@ -335,8 +335,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             );
 
         $result['meta'] = $this->createMeta(200, "注册成功");
-        $result['data'] = array(
-            'user' => $this->controller->filterUser($user),
+        $result['data'] = array('user' => $this->controller->filterUser($user),
             'token' => $token);
         return  $result;
 
