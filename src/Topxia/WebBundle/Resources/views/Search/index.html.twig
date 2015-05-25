@@ -1,10 +1,10 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
 
 {% do load_script('search/search') %}
 
-{% block main_header %}
+{% block top_content %}
   <div class="course-banner es-banner">
     <div class="container">
       <div class="title">
@@ -17,19 +17,47 @@
 {% block content %}
   
   <!-- 核心内容区 -->
-  <div class="container" id="content-container">  <div class="cuorse-filter search-filter" id="cuorse-filter">
+
+  <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
       共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
     </div>
-    <div class="course-cat-tags hidden-xs">
-      <a href="{{ path('search') }}" class="btn btn-default cat-tag {% if not coursesTypeChoices %}active{% endif %}">全部课程</a>
+    <ul class="nav nav-pills hidden-xs" role="tablist">
+      <li role="presentation" class="{% if not coursesTypeChoices %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
       {% if isShowVipSearch  %}
-          {% if currentUserVipLevel  %}
-            <a href="{{ path('search',{'coursesTypeChoices':'vipCourses'}) }}" class="btn btn-default cat-tag {% if coursesTypeChoices == 'vipCourses' %}active{% endif %}">会员课程</a>
-          {% endif %}
+        {% if currentUserVipLevel  %}
+          <li role="presentation" class="{% if coursesTypeChoices == 'vipCourses' %}active{% endif %}">
+            <a href="{{ path('search',{'coursesTypeChoices':'vipCourses'}) }}">会员课程</a>
+          </li>
+        {% endif %}
       {% endif %}
-      <a href="{{ path('search',{'coursesTypeChoices':'freeCourses'}) }}" class="btn btn-default cat-tag {% if coursesTypeChoices == 'freeCourses' %}active{% endif %}">免费课程</a>
-      <a href="{{ path('search',{'coursesTypeChoices':'liveCourses'}) }}" class="btn btn-default cat-tag {% if coursesTypeChoices == 'liveCourses' %}active{% endif %}">直播课程</a>
+      <li role="presentation" class="{% if coursesTypeChoices == 'freeCourses' %}active{% endif %}">
+          <a href="{{ path('search',{'coursesTypeChoices':'freeCourses'}) }}">免费课程</a>
+      </li>
+      <li role="presentation" class="{% if coursesTypeChoices == 'liveCourses' %}active{% endif %}">
+          <a href="{{ path('search',{'coursesTypeChoices':'liveCourses'}) }}">直播课程</a>
+      </li>
+    </ul>
+    <div class="btn-group visible-xs">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',coursesTypeChoices|default('default')) }} 
+      <span class="caret"></span></button>
+
+      <ul class="dropdown-menu" role="menu">
+        <li role="presentation" class="{% if not coursesTypeChoices %}active{% endif %}"><a href="{{ path('search') }}" class="cat-tag">全部课程</a></li>
+        {% if isShowVipSearch  %}
+            {% if currentUserVipLevel  %}
+              <li role="presentation" class="{% if coursesTypeChoices == 'vipCourses' %}active{% endif %}">
+                <a href="{{ path('search',{'coursesTypeChoices':'vipCourses'}) }}" class="cat-tag">会员课程</a>
+              </li>
+          {% endif %}
+        {% endif %}
+        <li role="presentation" class="{% if coursesTypeChoices == 'freeCourses' %}active{% endif %}">
+            <a href="{{ path('search',{'coursesTypeChoices':'freeCourses'}) }}" class="cat-tag">免费课程</a>
+        </li>
+        <li role="presentation" class="{% if coursesTypeChoices == 'liveCourses' %}active{% endif %}">
+            <a href="{{ path('search',{'coursesTypeChoices':'liveCourses'}) }}" class="cat-tag">直播课程</a>
+        </li>
+      </ul>
     </div>
 
   </div>
@@ -55,7 +83,7 @@
     {{ web_macro.paginator(paginator) }} 
     {% endif %}
   </nav>
-</div>
+
   <!-- /核心内容区 -->
 
 {% endblock %}

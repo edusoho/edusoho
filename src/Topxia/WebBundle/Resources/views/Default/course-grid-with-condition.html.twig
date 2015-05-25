@@ -1,6 +1,6 @@
 {% set categoriesFirst = data('Categories',{'group':'course'})%}
 <div class="container">
-  <div class="cuorse-filter" id="cuorse-filter">
+  <div class="course-filter" id="course-filter">
     <ul class="nav nav-pills hidden-xs" role="tablist">
       <li role="presentation" class="{% if (categoryId|default('all') == 'all') %}active {% endif %} js-search"data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
       {% if categoriesFirst%}
