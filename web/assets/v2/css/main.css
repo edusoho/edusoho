@@ -849,7 +849,7 @@ body {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #f5f5f5;
+  background-color: #fafafa;
 }
 body.nav-active {
   position: relative;
@@ -1955,7 +1955,7 @@ textarea.form-control-o {
 }
 .es-tabs {
   background: #fff;
-  margin-bottom: 20px;
+  margin: 10px 0 30px 0;
   border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -2899,7 +2899,7 @@ textarea.form-control-o {
 .course-filter {
   position: relative;
   min-height: 48px;
-  margin: 0 0 10px 0;
+  margin: 0 0 20px 0;
   padding-right: 150px;
 }
 .course-filter .nav-pills > li {
