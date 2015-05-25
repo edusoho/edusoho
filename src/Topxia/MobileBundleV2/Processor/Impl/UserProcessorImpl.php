@@ -250,7 +250,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
-        return true;
+        return $this->createMeta(200, "退出成功");
     }
 
     private function filterUserProfile($userProfile)
