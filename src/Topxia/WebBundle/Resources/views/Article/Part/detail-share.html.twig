@@ -1,5 +1,5 @@
 <div class="article-sns">
-  <a class="love" href=""><i class="es-icon es-icon-favorite"></i>{{ article.upsNum }}</a>
+  <a href="javascript:;" class="love js-article-like {% if userLike %}color-p{% endif %}" data-like-url="{{ path('article_like', {articleId:article.id}) }}" data-cancel-like-url="{{ path('article_cancel_like', {articleId:article.id}) }}"><i class="es-icon es-icon-favorite"></i>{{ article.upsNum }}</a>
   <span class="es-share right">
     <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
       <i class="es-icon es-icon-share"></i>

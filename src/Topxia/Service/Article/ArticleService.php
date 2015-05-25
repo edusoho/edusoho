@@ -27,6 +27,8 @@ interface ArticleService
 
     public function hitArticle($id);
 
+    public function likeArticle($id);
+
     public function setArticleProperty($id, $property);
 
     public function cancelArticleProperty($id, $property);
