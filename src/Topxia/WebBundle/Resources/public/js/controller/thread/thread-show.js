@@ -35,7 +35,6 @@ define(function(require, exports, module) {
             }
 
             this._initPostForm();
-            
         },
 
         onClickPostMore: function(e) {
@@ -199,7 +198,7 @@ define(function(require, exports, module) {
                             editor.setData('');
                         } else {
                             $list.prepend(response);
-                            $textarea.html('');
+                            $textarea.val('');
                         }
                         
                         var pos = $list.find('li:last-child').offset();
@@ -228,14 +227,6 @@ define(function(require, exports, module) {
 
         }
     });
-
-    exports.run = function() {
-
-        var postList = new ThreadShow({
-            element: '#detail-content'
-        });
-
-    };
 
     module.exports = ThreadShowWidget;
     
