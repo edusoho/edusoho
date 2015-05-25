@@ -57,6 +57,12 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->fetchColumn($sql, array($threadId, $parentId, $id));
     }
 
+    public function getPostPostionInArticle($articleId, $postId)
+    {
+        $sql = "SELECT COUNT(1) FROM {$this->table} WHERE targetType = 'article' AND targetId = ? AND parentId = 0 AND id >= ? ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchColumn($sql, array($articleId, $postId));
+    }
+
     public function searchPosts($conditions,$orderBy,$start,$limit)
     {
         $this->filterStartLimit($start,$limit);
