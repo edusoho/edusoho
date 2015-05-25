@@ -21,6 +21,23 @@ define(function(require, exports, module) {
             });
         });
 
+        $("#favorite-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#unfavorite-btn").show();
+            });
+        });
+
+        $("#unfavorite-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#favorite-btn").show();
+            });
+        });
+
+
     };
 
 });
