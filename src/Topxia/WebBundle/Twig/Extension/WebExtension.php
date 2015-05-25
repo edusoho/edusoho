@@ -623,6 +623,9 @@ class WebExtension extends \Twig_Extension
 
     public function exportScripts()
     {
+        if (empty($this->pageScripts)) {
+            $this->pageScripts = array();
+        }
         return array_values(array_unique($this->pageScripts));
     }
 
