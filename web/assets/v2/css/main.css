@@ -425,6 +425,7 @@ Pagination Styles
   -moz-border-radius: 0;
   border-radius: 0;
   border: none;
+  z-index: 99;
 }
 .es-header .container {
   position: relative;
@@ -1835,6 +1836,50 @@ textarea.form-control-o {
   background-color: #37b97d;
   color: #fff;
 }
+.btn.btn-success {
+  border-color: #1abc9c;
+  background: none;
+  color: #1abc9c;
+}
+.btn.btn-success:hover,
+.btn.btn-success.active {
+  border-color: #1abc9c;
+  background-color: #1abc9c;
+  color: #fff;
+}
+.btn.btn-info {
+  border-color: #39aef1;
+  background: none;
+  color: #39aef1;
+}
+.btn.btn-info:hover,
+.btn.btn-info.active {
+  border-color: #39aef1;
+  background-color: #39aef1;
+  color: #fff;
+}
+.btn.btn-warning {
+  border-color: #e67e22;
+  background: none;
+  color: #e67e22;
+}
+.btn.btn-warning:hover,
+.btn.btn-warning.active {
+  border-color: #e67e22;
+  background-color: #e67e22;
+  color: #fff;
+}
+.btn.btn-danger {
+  border-color: #e74c3c;
+  background: none;
+  color: #e74c3c;
+}
+.btn.btn-danger:hover,
+.btn.btn-danger.active {
+  border-color: #e74c3c;
+  background-color: #e74c3c;
+  color: #fff;
+}
 .btn-circle {
   display: inline-block;
   width: 38px;
@@ -2649,6 +2694,25 @@ textarea.form-control-o {
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   border-left: 2px solid #37b97d;
+}
+.es-piece {
+  margin-bottom: 30px;
+}
+.es-piece .piece-header {
+  margin: 5px auto 20px auto;
+  padding: 0 10px;
+  color: #616161;
+  font-size: 16px;
+  border-left: 2px solid #37b97d;
+}
+.es-piece .piece-body .piece-body-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+.es-piece .piece-body .piece-body-list > li {
+  padding: 15px 0;
+  border-bottom: 1px solid #f5f5f5;
 }
 .poster {
   position: relative;
@@ -3976,28 +4040,6 @@ textarea.form-control-o {
 }
 .recommend-class-list .arrow-next {
   right: -10px;
-}
-.course-detail-content .course-about {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-.course-detail-content .course-about > li {
-  margin-bottom: 30px;
-}
-.course-detail-content .course-about .course-about-header {
-  margin: 5px auto 20px auto;
-  padding: 0 10px;
-  color: #616161;
-  font-size: 16px;
-  border-left: 2px solid #37b97d;
-}
-.course-detail-content .course-about .course-about-header i {
-  margin-right: 10px;
-}
-.course-detail-content .course-about .course-about-body > ul > li {
-  padding: 15px 0;
-  border-bottom: 1px solid #f5f5f5;
 }
 .course-material input {
   margin-right: 10px;
