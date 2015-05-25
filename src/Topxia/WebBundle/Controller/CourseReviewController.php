@@ -25,11 +25,16 @@ class CourseReviewController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
+        $user = $this->getCurrentUser();
+        $userReview = $user->isLogin() ? $this->getReviewService()->getUserCourseReview($user['id'], $course['id']) : null;
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
-        return $this->render('TopxiaWebBundle:CourseReview:list.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:reviews.html.twig', array(
             'course' => $course,
             'member' => $member,
+            'reviewSaveUrl' => $this->generateUrl('course_review_create', array('id' => $course['id'])),
+            'userReview' => $userReview,
             'reviews' => $reviews,
             'users' => $users,
             'paginator' => $paginator
@@ -38,28 +43,14 @@ class CourseReviewController extends CourseBaseController
 
     public function createAction(Request $request, $id)
     {
-        $currentUser = $this->getCurrentUser();
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $review = $this->getReviewService()->getUserCourseReview($currentUser['id'], $course['id']);
-        $form = $this->createForm(new ReviewType(), $review ? : array());
+        $user = $this->getCurrentUser();
+ 
+        $fields = $request->request->all();
+        $fields['userId']= $user['id'];
+        $fields['courseId']= $id;
+        $this->getReviewService()->saveReview($fields);
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $fields = $form->getData();
-                $fields['rating'] = $fields['rating'];
-                $fields['userId']= $currentUser['id'];
-                $fields['courseId']= $id;
-                $this->getReviewService()->saveReview($fields);
-                return $this->createJsonResponse(true);
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:CourseReview:write-modal.html.twig', array(
-            'form' => $form->createView(),
-            'course' => $course,
-            'review' => $review,
-        ));
+        return $this->createJsonResponse(true);
     }
 
     protected function getReviewService()

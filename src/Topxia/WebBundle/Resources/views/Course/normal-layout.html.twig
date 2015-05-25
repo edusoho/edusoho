@@ -4,9 +4,6 @@
 {% set bodyClass = 'course-dashboard-page' %}
 {% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
 
-{% set script_controller = 'course/show' %}
-
-
 {% block top_content %}
   {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
 {% endblock %}
@@ -15,7 +12,7 @@
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
       <section class="es-section">
-        {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
         {% block course_main %}{% endblock %}
       </section>
     </div>

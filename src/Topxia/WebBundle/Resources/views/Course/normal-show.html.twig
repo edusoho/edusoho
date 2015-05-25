@@ -2,6 +2,8 @@
 
 {% set tab = 'overview' %}
 
+{% do load_script('course/show') %}
+
 {% block course_main %}
 
   <div class="course-detail-content">
@@ -16,7 +18,7 @@
             {% if course.about %}
               {{ course.about|raw }}
             {% else %}
-              <p>暂无课程简介</p>
+              <div class="text-muted">暂无课程简介</div>
             {% endif %}
           </div>
         </li>

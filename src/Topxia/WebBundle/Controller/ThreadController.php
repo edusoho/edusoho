@@ -88,7 +88,7 @@ class ThreadController extends BaseController
 
     public function subpostsAction(Request $request, $threadId, $postId, $less = false)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
+        $post = $this->getThreadService()->getPost($postId);
 
         $paginator = new Paginator(
             $request,
@@ -96,14 +96,13 @@ class ThreadController extends BaseController
             10
         );
 
-        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $thread['id'], 'postId' => $postId)));
+        $paginator->setBaseUrl($this->generateUrl('thread_post_subposts', array('threadId' => $post['threadId'], 'postId' => $postId)));
 
         $posts = $this->getThreadService()->findPostsByParentId($postId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
             'parentId' => $postId,
-            'thread' => $thread,
             'posts' => $posts,
             'users' => $users,
             'paginator' => $paginator,

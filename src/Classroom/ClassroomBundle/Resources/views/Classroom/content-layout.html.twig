@@ -1,7 +1,7 @@
 {% extends layout|default('ClassroomBundle:Classroom:layout.html.twig') %}
 
 {% block content %}
-<div class="class-detail row">
+<div class="class-detail row" id="detail-content">
   <div class="col-lg-9 col-md-8 class-detail-main">
 
     {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:classroom,targetType:'classroom'})) }}

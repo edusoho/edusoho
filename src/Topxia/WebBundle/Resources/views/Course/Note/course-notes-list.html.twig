@@ -1,12 +1,10 @@
 {% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
-{% block top_content %}
-  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
-{% endblock %}
+{% set tab = 'note' %}
 
 
 {% block course_main %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-nav-for-guest.html.twig' with {tab: 'note'} %}
+
   
   {% include 'TopxiaWebBundle:Course/Note:course-note-nav.html.twig' %}
 

@@ -9,18 +9,10 @@ class CourseThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $id);
+        if ($response) {
+            return $response;
         }
-
-        list($course, $member) = $this->buildCourseLayoutData($request, $id);
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
@@ -45,8 +37,7 @@ class CourseThreadController extends CourseBaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
-        return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
+        return $this->render("TopxiaWebBundle:CourseThread:index.html.twig", array(
             'course' => $course,
             'member' => $member,
             'threads' => $threads,
@@ -60,21 +51,10 @@ class CourseThreadController extends CourseBaseController
     public function showAction(Request $request, $courseId, $id)
     {
 
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
-        list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-            // return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
             $isMemberNonExpired = false;
         } else {
             $isMemberNonExpired = true;
@@ -129,8 +109,7 @@ class CourseThreadController extends CourseBaseController
 
     public function createAction(Request $request, $id)
     {
-        list($course, $member) = $this->buildCourseLayoutData($request, $id);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $id);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
@@ -170,7 +149,7 @@ class CourseThreadController extends CourseBaseController
 
     public function editAction(Request $request, $courseId, $id)
     {
-        list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
 
         $thread = $this->getThreadService()->getThread($courseId, $id);
         if (empty($thread)) {
@@ -220,16 +199,6 @@ class CourseThreadController extends CourseBaseController
             ->add('type', 'hidden')
             ->add('courseId', 'hidden')
             ->getForm();
-    }
-
-    public function latestBlockAction($course)
-    {
-    	$threads = $this->getThreadService()->searchThreads(array('courseId' => $course['id']), 'createdNotStick', 0, 10);
-
-    	return $this->render('TopxiaWebBundle:CourseThread:latest-block.html.twig', array(
-    		'course' => $course,
-            'threads' => $threads,
-		));
     }
 
     public function deleteAction(Request $request, $courseId, $id)
@@ -450,36 +419,12 @@ class CourseThreadController extends CourseBaseController
         return $this->createJsonResponse(true);
     }
 
-    public function questionBlockAction(Request $request, $course)
-    {
-        $threads = $this->getThreadService()->searchThreads(
-            array('courseId' => $course['id'], 'type'=> 'question'),
-            'createdNotStick',
-            0,
-            8
-        );
-
-        return $this->render('TopxiaWebBundle:CourseThread:question-block.html.twig', array(
-            'course' => $course,
-            'threads' => $threads,
-        ));
-    }
-
-    private function createPostForm($data = array())
-    {
-        return $this->createNamedFormBuilder('post', $data)
-            ->add('content', 'textarea')
-            ->add('courseId', 'hidden')
-            ->add('threadId', 'hidden')
-            ->getForm();
-    }
-
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getThreadSearchFilters($request)
+    protected function getThreadSearchFilters($request)
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
@@ -494,7 +439,7 @@ class CourseThreadController extends CourseBaseController
         return $filters;
     }
 
-    private function convertFiltersToConditions($course, $filters)
+    protected function convertFiltersToConditions($course, $filters)
     {
         $conditions = array('courseId' => $course['id']);
         switch ($filters['type']) {
@@ -510,7 +455,7 @@ class CourseThreadController extends CourseBaseController
         return $conditions;
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
@@ -518,5 +463,15 @@ class CourseThreadController extends CourseBaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-    } 
+    }
+
+    private function createPostForm($data = array())
+    {
+        return $this->createNamedFormBuilder('post', $data)
+            ->add('content', 'textarea')
+            ->add('courseId', 'hidden')
+            ->add('threadId', 'hidden')
+            ->getForm();
+    }
+
 }

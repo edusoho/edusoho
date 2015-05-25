@@ -1,7 +1,5 @@
 {% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
-{% set script_controller = 'course/common' %}
-
 {% set tab = 'thread' %}
 
 {% block course_main %}
@@ -12,12 +10,10 @@
   </div>
 
   <div class="thread-filters clearfix">
-    <ul class="nav nav-pills nav-mini pull-left">
+    <ul class="nav nav-pills nav-pills-sm pull-left">
       <li{% if filters.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
       <li{% if filters.type == 'question' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
       <li{% if filters.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
-
-      <li><span class="mhm text-muted">|</span></li>
 
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -34,7 +30,6 @@
           <li class="{% if filters.sort == 'created' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
         </ul>
       </li>
-
 
     </ul>
 

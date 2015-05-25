@@ -84,29 +84,28 @@ define(function(require, exports, module) {
             });
         });
 
-        $(".icon-vip").popover({
-            trigger: 'manual',
-            placement: 'top',
-            html: 'true',
-            animation: false
-        }).on("mouseenter", function () {
-            var _this = $(this);
-            _this.popover("show");
-            $(this).siblings(".popover").on("mouseleave", function () {
-                $(_this).popover('hide');
-            });
-        }).on("mouseleave", function () {
-            var _this = $(this);
-            setTimeout(function () {
-                if (!$(".popover:hover").length) {
-                    _this.popover("hide")
-                }
-            }, 100);
-        });
-
-
-
-
+        if ($('.icon-vip').length > 0) {
+           $(".icon-vip").popover({
+                trigger: 'manual',
+                placement: 'auto top',
+                html: 'true',
+                container: 'body',
+                animation: false
+            }).on("mouseenter", function () {
+                var _this = $(this);
+                _this.popover("show");
+                $(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+            }).on("mouseleave", function () {
+                var _this = $(this);
+                setTimeout(function () {
+                    if (!$(".popover:hover").length) {
+                        _this.popover("hide")
+                    }
+                }, 100);
+            }); 
+        }
 
 
         $(".cancel-refund").on('click', function() {
@@ -119,7 +118,7 @@ define(function(require, exports, module) {
             });
         });
 
-        $('.become-use-member-btn').on('click', function() {
+        $('#vip-join-course').on('click', function() {
             $.post($(this).data('url'), function(result) {
                 if (result == true) {
                     window.location.reload();
@@ -156,21 +155,24 @@ define(function(require, exports, module) {
              });
         }
 
-        if ($('.recommend-class-list .cycle-prev').length > 0) {
-            $(".recommend-class-list").cycle({
-                fx: "carousel",
-                slides: ".cycle-item",
-                carouselOffset: 10,
-                log: "false",
-                timeout: 0,
-                pauseOnHover: "true",
-                carouselVisible: 4,
-                carouselFluid: true,
-                prev: ".cycle-prev",
-                next: ".cycle-next",
-                allowWrap: false
-            });
-        }
+        var swiper = new Swiper('.swiper-container', {
+            loop:true,
+            grabCursor: true,
+            paginationClickable: true,
+            spaceBetween: 10,
+            slidesPerView: 4
+        });
+
+        $('.arrow-prev').on('click', function(e){
+            e.preventDefault();
+            swiper.swipePrev();
+        })
+        $('.arrow-next').on('click', function(e){
+            e.preventDefault();
+            swiper.swipeNext();
+        })
+
+
 
 
     };

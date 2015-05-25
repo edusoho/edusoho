@@ -51,4 +51,4 @@ web/assets/img/default/video.png
 .buildpath
 .phpintel*
 /src/Tests/*
-
+/web/assets/v2/bootstrap/less
