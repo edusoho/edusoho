@@ -376,6 +376,10 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
+        if (!$this->isPluginInstalled('ClassroomPlan') and in_array('studyPlan',$classroom['service'])) {
+            unset($classroom['service']['studyPlan']);
+        }
+        
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
 
