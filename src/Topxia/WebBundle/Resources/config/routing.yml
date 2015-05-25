@@ -1371,6 +1371,10 @@ article_post_jump:
     pattern: /article/{articleId}/post/{postId}/jump
     defaults: { _controller: TopxiaWebBundle:Article:postJump }
 
+article_tag_show:
+    pattern: /article/tag/{name}
+    defaults: { _controller: TopxiaWebBundle:Article:tag }
+
 
 mobile:
     pattern: /mobile/

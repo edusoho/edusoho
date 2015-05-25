@@ -95,3 +95,18 @@ class PhpserializeSerializeAlgorithm implements SerializeAlgorithm
         return unserialize($value);
     }
 }
+
+class SawSerializeAlgorithm implements SerializeAlgorithm
+{
+    
+    public function serialize($value)
+    {
+        return '|' . implode('|', $value) . '|';
+    }
+
+    public function unserialize($value)
+    {
+
+        return explode('|', trim($value, '|'));
+    }
+}

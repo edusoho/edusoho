@@ -363,6 +363,42 @@ class ArticleController extends BaseController
         ));
     }
 
+    public function tagAction(Request $request, $name)
+    {
+        $tag = $this->getTagService()->getTagByName($name);
+        if (empty($tag)) {
+            $this->createAccessDeniedException('标签不存在!');
+        }
+        $conditions = array(
+            'status' => 'published',
+            'tagId' => $tag['id']
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getArticleService()->searchArticlesCount($conditions),
+            10
+        );
+
+        $articles = $this->getArticleService()->searchArticles(
+            $conditions,
+            'published',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categoryIds = ArrayToolkit::column($articles, 'categoryId');
+
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+
+        return $this->render('TopxiaWebBundle:Article:list-articles-by-tag.html.twig', array(
+            'articles' => $articles,
+            'tag' => $tag,
+            'categories' => $categories,
+            'paginator' => $paginator
+        ));
+    }
+
     private function autoParagraph($text)
     {
         if (trim($text) !== '') {
