@@ -567,8 +567,8 @@ class ClassroomController extends BaseController
         foreach ($courses as $course) {
             if (
                 !in_array($course["id"], $isJoinedCourseIds)
-                && (($priceType == "RMB" && $course["price"]>0)
-                || ($priceType == "Coin" && $course["coinPrice"]>0))) {
+                /*&& (($priceType == "RMB" && $course["price"]>0)
+                || ($priceType == "Coin" && $course["coinPrice"]>0))*/) {
                 return false;
             }
         }
