@@ -27,7 +27,7 @@ interface ArticleService
 
     public function hitArticle($id);
 
-    public function likeArticle($id);
+    public function getArticleLike($articleId, $userId);
 
     public function setArticleProperty($id, $property);
 
@@ -37,9 +37,11 @@ interface ArticleService
 
     public function removeArticlethumb($id);
 
-    public function deleteArticle($id);
+    public function like($articleId);
 
-    public function deleteArticlesByIds($ids);
+    public function cancelLike($articleId);
+
+    public function count($articleId, $field, $diff);
 
     public function publishArticle($id);
 

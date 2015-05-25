@@ -1352,6 +1352,16 @@ article_post:
     defaults: { _controller: TopxiaWebBundle:Article:post }
     methods: [POST]
 
+article_like:
+    pattern: /article/{articleId}/like
+    defaults: { _controller: TopxiaWebBundle:Article:like }
+    methods: [POST]
+
+article_cancel_like:
+    pattern: /article/{articleId}/canceLike
+    defaults: { _controller: TopxiaWebBundle:Article:cancelLike }
+    methods: [POST]
+
 mobile:
     pattern: /mobile/
     defaults: { _controller: TopxiaWebBundle:Mobile:index }

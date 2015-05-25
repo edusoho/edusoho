@@ -111,7 +111,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
 	public function waveArticle($id,$field,$diff)
 	{
-		$fields = array('hits');
+		$fields = array('hits' , 'upsNum');
 
 		if (!in_array($field, $fields)) {
 			throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));

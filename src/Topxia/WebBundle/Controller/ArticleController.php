@@ -189,8 +189,6 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-   
-
         $conditions = array(
             'targetType' => 'article',
         );
@@ -217,6 +215,9 @@ class ArticleController extends BaseController
             }
         }
 
+        $user = $this->getCurrentUser();
+        $userLike = $this->getArticleService()->getArticleLike($id, $user['id']);
+
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
             'articleSetting' => $articleSetting,
@@ -236,6 +237,7 @@ class ArticleController extends BaseController
             'count' => $count,
             'tagNames' => $tagNames,
             'sameTagArticles' => $sameTagArticles,
+            'userLike' => $userLike
         ));
     }
 
@@ -352,6 +354,23 @@ class ArticleController extends BaseController
         }
 
         return $categories;
+    }
+
+    public function likeAction(Request $request, $articleId)
+    {
+        $this->getArticleService()->like($articleId);
+        $article = $this->getArticleService()->getArticle($articleId);
+        
+        return $this->createJsonResponse($article);
+    }
+
+    public function cancelLikeAction(Request $request, $articleId)
+    {
+
+        $this->getArticleService()->cancelLike($articleId);
+        $article = $this->getArticleService()->getArticle($articleId);
+        
+        return $this->createJsonResponse($article);
     }
 
     private function getCategoryService()
