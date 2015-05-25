@@ -1,4 +1,4 @@
- <div class="top-reply">
+ <div class="top-reply {% if not posts|length|default(0) %}hidden{% endif %}">
   <div class="js-all-post-head page-header">
     所有回复
   </div>

@@ -196,6 +196,7 @@ define(function(require, exports, module) {
                         $('body').scrollTop(pos.top);
                         that.$('.thread-post-num').text(parseInt(that.$('.thread-post-num').text()) + 1);
                         $list.find('li.empty').remove();
+                        $list.closest('.top-reply').removeClass('hidden');
                     }).error(function(){
                         $btn.button('reset');
                         Notify.danger('发表回复失败，请重试');
