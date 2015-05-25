@@ -134,7 +134,7 @@ class ClassroomController extends BaseController
 
         $canFreeJoin = $this->canFreeJoin($courses, $user);
         $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
-if ($classroom['price'] > 0 && ( !$canFreeJoin or $checkMemberLevelResult == 'level_low' or in_array($checkMemberLevelResult,array('not_member', 'member_expired'))) )
+if ($classroom['price'] > 0 && !$canFreeJoin)
 {
     var_dump(1);
 } else {
