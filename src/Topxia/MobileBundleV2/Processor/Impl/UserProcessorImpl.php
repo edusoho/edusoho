@@ -412,9 +412,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = array_merge($user, $userProfile);
         
         $result['meta'] = $this->createMeta(200, "登录成功");
-        $result['data'] = $this->controller->filterUser($user);
-        $result['data']['token'] = $token;
-        
+        $result['data'] = array(
+            'user' => $this->controller->filterUser($user),
+            'token' => $token);
+
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
         ));
