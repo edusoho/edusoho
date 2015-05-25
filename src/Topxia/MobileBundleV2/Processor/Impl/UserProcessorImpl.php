@@ -248,6 +248,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $this->log("user_logout", "用户退出",  array(
                 "userToken" => $user)
             );
+        }else{
+            return array(
+                'meta' => $this->createMeta(500, "您尚未登录")
+                );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
         return array(
