@@ -6,6 +6,8 @@
 
 {% block description %}{{ category.seoDesc }}{% endblock %}
 
+{% set bodyClass = 'artcile-cat-page' %}
+
 {% block content %}
   <!-- 资讯 -->
   {{ render(controller('TopxiaWebBundle:Article:categoryNav', {categoryCode:categoryCode})) }}
