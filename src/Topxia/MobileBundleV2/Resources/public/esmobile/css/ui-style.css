@@ -7,6 +7,14 @@
   -webkit-transition: all 0.2s ease-in-out 200ms;
 }
 
+.tabs-hide>.tabs {
+    display: none;
+}
+
+.tabs-hide .content-padding {
+  margin-bottom: 0;
+}
+
 /* android title */
 .title.title-left {
   width: 100%;

@@ -7,7 +7,6 @@ var app = angular.module('EduSohoApp', [
 	]);
 
 app.viewFloder = "/bundles/topxiamobilebundlev2/esmobile/";
-app.host = "http://trymob.edusoho.cn";
 
 app.config(function($httpProvider) {
     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -328,6 +327,7 @@ app.run(["applicationProvider", "$rootScope", '$ionicConfig', function(applicati
   }
   
   $rootScope.platform = $ionicConfig.platform;
+  app.host = window.location.origin;
   applicationProvider.init(app.host);
   applicationProvider.updateScope($rootScope);
   angular.$client = {};
