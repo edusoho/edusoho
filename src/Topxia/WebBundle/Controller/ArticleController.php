@@ -265,6 +265,51 @@ class ArticleController extends BaseController
         }
     }
 
+    public function postReplyAction(Request $request, $articleId, $postId)
+    {
+        $fields = $request->request->all();
+        $fields['content'] = $this->autoParagraph($fields['content']);
+        $fields['targetId'] = $articleId;
+        $fields['targetType'] = 'article';
+        $fields['parentId'] = $postId;
+
+        $post = $this->getThreadService()->createPost($fields);
+
+        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(
+            'post' => $post,
+            'author' => $this->getCurrentUser(),
+            'service' => $this->getThreadService(),
+        ));
+    }
+
+    public function postJumpAction(Request $request, $articleId, $postId)
+    {
+        $article = $this->getArticleService()->getArticle($articleId);
+        if (empty($article)) {
+            throw $this->createNotFoundException();
+        }
+
+        $post = $this->getThreadService()->getPost($postId);
+        if ($post and $post['parentId']) {
+            $post = $this->getArticleService()->getPost($post['parentId']);
+        }
+
+        if (empty($post)) {
+            return $this->redirect($this->generateUrl("article_detail", array(
+                "id" => $articleId,
+            )));
+        }
+
+        $position = $this->getThreadService()->getPostPostionInArticle($articleId, $postId);
+
+        $page = ceil($position / 10);
+
+        return $this->redirect($this->generateUrl("article_detail", array(
+            'id' => $articleId,
+            'page' => $page,
+        ))."#post-{$post['id']}");
+    }
+
     public function subpostsAction(Request $request, $targetId, $postId, $less = false)
     {
         $paginator = new Paginator(
@@ -316,6 +361,22 @@ class ArticleController extends BaseController
         return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
             'articles' => $articles,
         ));
+    }
+
+    private function autoParagraph($text)
+    {
+        if (trim($text) !== '') {
+            $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
+            $text = '';
+            foreach ($texts as $txt) {
+                $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
+            }
+            $text = preg_replace('|<p>\s*</p>|', '', $text);
+        }
+
+        return $text;
     }
 
     private function getRootCategory($categoryTree, $category)

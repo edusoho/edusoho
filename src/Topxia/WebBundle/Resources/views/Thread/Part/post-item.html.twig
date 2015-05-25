@@ -26,7 +26,10 @@
       </div>
 
       {% if service.canAccess('post.create', post) %}
-        <form method="post" action="{{ path('thread_post_reply', {threadId:post.threadId, postId:post.id}) }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
+        {% if not postReplyUrl is defined %}
+          {% set postReplyUrl =  path('thread_post_reply', {threadId:post.threadId, postId:post.id}) %}
+        {% endif %}
+        <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
           <div class="form-group">
             <div class="controls">
               <textarea class="form-control" name="content" data-display="内容"></textarea>
