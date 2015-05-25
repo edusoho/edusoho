@@ -38,7 +38,7 @@ class SearchController extends BaseController
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
+        $fliter = $request->query->get('fliter');       
 
 
         $conditions = array(
@@ -48,11 +48,11 @@ class SearchController extends BaseController
             'parentId' => 0
         );
 
-        if ($coursesTypeChoices == 'vipCourses') {
+        if ($fliter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } else if ($coursesTypeChoices == 'liveCourses') {
+        } else if ($fliter == 'live') {
             $conditions['type'] = 'live';
-        } else if ($coursesTypeChoices == 'freeCourses'){
+        } else if ($fliter == 'free'){
             $conditions['price'] = '0.00';
         }
 
@@ -77,7 +77,7 @@ class SearchController extends BaseController
             'isShowVipSearch' => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
             'categoryIds' => $categoryIds,
-            'coursesTypeChoices' => $coursesTypeChoices,
+            'fliter' => $fliter,
             'count' => $count,
         ));
     }

@@ -289,7 +289,7 @@ classroomRoles:
     assistantStudent: 助教
 
 searchCourseType:
-    'default': 全部课程
-    'vipCourses': 会员课程
-    'freeCourses': 免费课程
-    'liveCourses': 直播课程
+    'all': 全部课程
+    'vip': 会员课程
+    'free': 免费课程
+    'live': 直播课程
