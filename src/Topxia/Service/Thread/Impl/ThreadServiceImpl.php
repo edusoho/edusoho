@@ -353,6 +353,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $count + 1;
     }
 
+    public function getPostPostionInArticle($articleId, $postId)
+    {
+        return $this->getThreadPostDao()->getPostPostionInArticle($articleId, $postId);
+    }
+
     public function findPostsByParentId($parentId, $start, $limit)
     {
         return $this->getThreadPostDao()->findPostsByParentId($parentId, $start, $limit);
@@ -387,7 +392,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $parent = null;
         if ($fields['parentId'] > 0) {
             $parent = $this->getThreadPostDao()->getPost($fields['parentId']);
-            if (empty($parent) || ($parent['threadId'] != $fields['threadId'])) {
+            if (empty($parent)) {
                 throw $this->createServiceException("parentId参数不正确！");
             }
 
@@ -436,6 +441,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         return array(
             'id' => $post['id'],
+            'post' => $post,
             'content' => TextHelper::truncate($post['content'], 50),
             'thread' => empty($thread) ? null : array('id' => $thread['id'], 'title' => $thread['title']),
             'user' => array('id' => $user['id'], 'nickname' => $user['nickname']),

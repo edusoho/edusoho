@@ -50,4 +50,5 @@ interface ArticleService
     public function changeIndexPicture($options);
 
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count);
+
 }

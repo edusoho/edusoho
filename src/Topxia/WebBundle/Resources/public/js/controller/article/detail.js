@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var threadShowWidget = new ThreadShowWidget({
-            element: '#detail-content'
+            element: '#detail-content',
         });
 
         threadShowWidget.element.on('click', '.js-article-like', function() {
@@ -26,8 +26,7 @@ define(function(require, exports, module) {
                 });
                       
             }
-      });
-
+        });
 
     };
 
