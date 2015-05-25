@@ -562,7 +562,8 @@ class CourseLessonController extends BaseController
             'course' => $course,
             'learnStatuses' => $learnStatuses,
             'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds
+            'exercisesLessonIds' => $exercisesLessonIds,
+            'currentTime' => time()
         ));
     }
 
