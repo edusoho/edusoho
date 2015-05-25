@@ -278,6 +278,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
 
+        $result = array('meta' => null);
+
         $auth = $this->getSettingService()->get('auth', array());
         if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed' )
         {
@@ -297,7 +299,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
-            return $this->createErrorResponse('email_exist', '该邮箱已被注册');
+            $result['meta'] = $this->createMeta('email_exist', '该邮箱已被注册');
+            return $result;
         }
 
         if (! $nickname) {
@@ -321,10 +324,20 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $this->log("user_regist", "用户注册",  array(
                 "user" => $user)
             );
-        return array (
-            'user' => $this->controller->filterUser($user),
-            'token' => $token
-        );
+
+        $result['meta'] = $this->createMeta(200, "注册成功");
+        $result['user'] = $this->controller->filterUser($user);
+        $result['user']['token'] = $token;
+        return  $result;
+
+
+        // return array (
+        //     'meta'=> array(
+        //         'code' => 200,
+        //         'message' => "注册成功"),
+        //     'user' => $this->controller->filterUser($user),
+        //     'token' => $token
+        // );
     }
 
     public function loginWithToken()
