@@ -31,6 +31,14 @@
         {{ web_macro.star(course.rating) }}
         <span>({{ course.ratingNum }}人)</span>
       </div>
+
+      {% if member and member.deadline >0 %}
+        <p class="expiry-date hidden-sm">
+          <label for="">有效期</label><span>还有{{ member.deadline|remain_time }}</span>
+        </p>
+      {% endif %}
+
+
       {% if not member %}
         {% if course.expiryDay %}
           <p class="expiry-date hidden-sm">
