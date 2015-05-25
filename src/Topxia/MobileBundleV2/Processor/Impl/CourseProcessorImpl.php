@@ -950,7 +950,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         } else {
             $conditions['tagId'] = $tagId;
         }
-        return $this->findCourseByConditions($conditions,"");
+        return $this->findCourseByConditions($conditions, $type);
     }
     
     public function getCourses()
@@ -966,7 +966,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if(empty($type)){
             unset($conditions['type']);
         }else{
-            $conditions['type']   = 'normal';
+            $conditions['type']   = $type;
         }
         
         $start = (int) $this->getParam("start", 0);
