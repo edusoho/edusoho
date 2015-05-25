@@ -549,6 +549,7 @@ class ClassroomController extends BaseController
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
         if (!$classroomSetting['discount_buy']) {
+            echo '111';
             return false;
         }
 
