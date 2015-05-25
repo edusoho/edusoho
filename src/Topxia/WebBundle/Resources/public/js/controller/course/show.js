@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     require('jquery.countdown');
-    require('jquery.cycle2');
+    var Swiper = require('swiper');
 
     exports.run = function() {
         $('#teacher-carousel').carousel({
