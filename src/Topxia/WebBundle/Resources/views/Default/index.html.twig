@@ -12,17 +12,37 @@
 {% endblock %}
 
 {% block main_content %}
-
-  <!-- 公告 -->
-  <section class="notice-section">
-    <div class="container">
-      <div class="text-line small">
-        <h5><i class="es-icon es-icon-notifications"></i><span>EduSoho新版本上线咯，赶紧免费下载更新吧！</span></h5>
-        <div class="line"></div>
+  
+  <!-- 轮播 -->
+  <section class="poster swiper-container">
+    <div class="swiper-wrapper" style="width: 2530px; height: 570px;">
+      <div class="swiper-slide swiper-slide-visible swiper-slide-active" style="width: 1265px; height: 570px; background: rgb(63, 63, 63);">
+        <div class="container">
+          <img class="img-responsive" src="/assets/v2/img/poster_bg.jpg">
+          <div class="mask">
+            <div class="title"><span>全新改版</span><span>简约风格</span></div>
+            <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
+            <div class="item-mac">
+              <img class="img-responsive" src="/assets/v2/img/paster_mac.png">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-slide" style="width: 1265px; height: 570px; background: rgb(63, 63, 63);">
+        <div class="container">
+          <img class="img-responsive" src="/assets/v2/img/poster_bg.jpg">
+          <div class="mask">
+            <div class="title"><span>全新改版</span><span>简约风格</span></div>
+            <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
+            <div class="item-mac">
+              <img class="img-responsive" src="/assets/v2/img/paster_mac.png">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="swiper-pager"><span class="swiper-pagination-switch swiper-visible-switch swiper-active-switch"></span><span class="swiper-pagination-switch"></span></div>
   </section>
-
 
   <!-- 课程列表 -->
   <section class="course-list-section" id="course-list">

@@ -182,7 +182,7 @@ class ArticleController extends BaseController
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime' => 'ASC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -291,7 +291,7 @@ class ArticleController extends BaseController
 
         $post = $this->getThreadService()->getPost($postId);
         if ($post and $post['parentId']) {
-            $post = $this->getArticleService()->getPost($post['parentId']);
+            $post = $this->getThreadService()->getPost($post['parentId']);
         }
 
         if (empty($post)) {
@@ -300,7 +300,7 @@ class ArticleController extends BaseController
             )));
         }
 
-        $position = $this->getThreadService()->getPostPostionInArticle($articleId, $postId);
+        $position = $this->getThreadService()->getPostPostionInArticle($articleId, $post['id']);
 
         $page = ceil($position / 10);
 
