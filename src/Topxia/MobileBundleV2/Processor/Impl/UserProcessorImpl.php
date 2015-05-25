@@ -281,21 +281,24 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result = array('meta' => null);
 
         $auth = $this->getSettingService()->get('auth', array());
-        if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed' )
-        {
-            return $this->createErrorResponse(500, '系统暂时关闭注册，请联系管理员');
+        if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed'){
+            $result['meta'] = $this->createMeta(500, '系统暂时关闭注册，请联系管理员');
+            return $result;
         }
         
         if (!SimpleValidator::email($email)) {
-            return $this->createErrorResponse(500, '邮箱地址格式不正确');
+            $result['meta'] = $this->createMeta(500, '邮箱地址格式不正确');
+            return $result;
         }
 
         if ($nickname && !SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse(500, '昵称格式不正确');
+            $result['meta'] = $this->createMeta(500, '昵称格式不正确');
+            return $result;
         }
 
         if (!SimpleValidator::password($password)) {
-            return $this->createErrorResponse(500, '密码格式不正确');
+            $result['meta'] = $this->createMeta(500, '密码格式不正确');
+            return $result;
         }
 
         if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
@@ -303,14 +306,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $result;
         }
 
-        if (! $nickname) {
+        if (!$nickname) {
             $nickname = "ES" . time();
             while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
                 $nickname = "ES". time();
             }
         } else {
             if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                return $this->createErrorResponse(500, '该昵称已被注册');
+                return $this->createMeta(500, '该昵称已被注册');
             }
         }
 
@@ -384,13 +387,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
         $user  = $this->loadUserByUsername($this->request, $username);
-        
+
+        $result = array('meta' => null);
         if (empty($user)) {
-            return $this->createErrorResponse('username_error', '用户帐号不存在');
+            $result['meta'] = $this->createMeta(500, '用户帐号不存在');
+            return $result;
         }
         
         if (!$this->controller->getUserService()->verifyPassword($user['id'], $password)) {
-            return $this->createErrorResponse('password_error', '帐号密码不正确');
+            $result['meta'] = $this->createMeta(500, '帐号密码不正确');
+            return $result;
         }
         
         $token = $this->controller->createToken($user, $this->request);
@@ -399,10 +405,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
         
-        $result = array(
-            'token' => $token,
-            'user' => $this->controller->filterUser($user)
-        );
+        $result['meta'] = $this->createMeta(200, "登录成功");
+        $result['data'] = $this->controller->filterUser($user);
+        $result['data']['token'] = $token;
         
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
