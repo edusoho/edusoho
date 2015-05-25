@@ -23,9 +23,9 @@
 
   </ul>
   <div class="btnbar hidden-xs">
-    <a class="btn btn-link" href="javascript:;" data-toggle="modal" data-target="#add-notice">
-      <i class="es-icon es-icon-anonymous-iconfont"></i>
-      公告
-    </a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
+        <i class="es-icon es-icon-anonymous-iconfont"></i>
+        公告
+      </a>
   </div>
 </div>
