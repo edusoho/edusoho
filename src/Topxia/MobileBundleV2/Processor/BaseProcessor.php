@@ -190,6 +190,13 @@ class BaseProcessor {
         );
         return $error;
     }
+
+    public function createMeta($code, $message){
+        return array(
+                'code' => $code,
+                'message' => $message
+            );
+    }
     protected function previewAsMember($member, $courseId, $user) {
         if (empty($member)) {
             return null;
