@@ -45,6 +45,7 @@
   {% endif %}
 
   {% if item.type == 'live' %}
+    
     <span class="type">&nbsp;<i class="fa fa-video-camera"></i></span>
       {% if item.startTime > currentTime %}
     <small class="type">{{ item.startTime|date('m月d日') }} 
