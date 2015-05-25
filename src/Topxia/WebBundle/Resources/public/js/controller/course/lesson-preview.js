@@ -15,13 +15,17 @@ define(function(require, exports, module) {
 
 			if ($("#lesson-preview-video-player").data('hlsUrl')) {
 
-		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
+		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div><div><span class="text-success">您可以免费试看前5分钟，购买后可完整观看。</span><a href="#" class="text-danger">立即购买</a></div>');
 			        
         		var mediaPlayer = new MediaPlayer({
         			element: '#lesson-preview-video-player',
         			playerId: 'lesson-video-player',
         			height: '360px'
         		});
+
+                mediaPlayer.on('ended', function() {
+                    $('#lesson-preview-video-player').html('<div style="height:360px;background-color:black;">购买课程观看完整视频</div>');
+                });
 
         		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');
         		mediaPlayer.play();
