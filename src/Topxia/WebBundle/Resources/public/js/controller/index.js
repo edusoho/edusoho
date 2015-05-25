@@ -1,15 +1,15 @@
 define(function(require, exports, module) {
 
-    require('jquery.cycle2');
-
     var Lazyload = require('echo.js');
 
+    var Swiper = require('swiper');
+
     exports.run = function() {
-        $('.homepage-feature').cycle({
-            fx: "scrollHorz",
-            slides: "> a, > img",
-            log: "false",
-            pauseOnHover: "true"
+        var swiper = new Swiper('.poster.swiper-container', {
+            pagination: '.swiper-pager',
+            swipeToPrev : false,
+            swipeToNext : false,
+            paginationClickable: true
         });
 
         Lazyload.init();
@@ -91,6 +91,7 @@ define(function(require, exports, module) {
              var $btn = $(this);
              $.get($btn.data('url'),function(html){
                $('#course-list').html(html);
+               Lazyload.init();
             })
         })
         
