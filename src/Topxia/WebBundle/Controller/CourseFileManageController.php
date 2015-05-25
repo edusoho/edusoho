@@ -169,7 +169,6 @@ class CourseFileManageController extends BaseController
 
         $this->getUploadFileService()->deleteFiles($ids);
 
-
         return $this->createJsonResponse(true);
     }
 
