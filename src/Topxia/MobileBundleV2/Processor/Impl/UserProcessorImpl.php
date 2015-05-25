@@ -283,23 +283,23 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $auth = $this->getSettingService()->get('auth', array());
         if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed' )
         {
-            return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
+            return $this->createErrorResponse(500, '系统暂时关闭注册，请联系管理员');
         }
         
         if (!SimpleValidator::email($email)) {
-            return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
+            return $this->createErrorResponse(500, '邮箱地址格式不正确');
         }
 
         if ($nickname && !SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+            return $this->createErrorResponse(500, '昵称格式不正确');
         }
 
         if (!SimpleValidator::password($password)) {
-            return $this->createErrorResponse('password_invalid', '密码格式不正确');
+            return $this->createErrorResponse(500, '密码格式不正确');
         }
 
         if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
-            $result['meta'] = $this->createMeta('email_exist', '该邮箱已被注册');
+            $result['meta'] = $this->createMeta(500, '该邮箱已被注册');
             return $result;
         }
 
@@ -310,7 +310,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         } else {
             if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+                return $this->createErrorResponse(500, '该昵称已被注册');
             }
         }
 
