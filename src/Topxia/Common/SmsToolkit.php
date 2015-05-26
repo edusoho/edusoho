@@ -29,6 +29,9 @@ class SmsToolkit
      */
     private static function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
+        var_dump($sessionField);
+        var_dump($requestField);
+        exit();
         $smsType = $sessionField['sms_type'];
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
             return false;

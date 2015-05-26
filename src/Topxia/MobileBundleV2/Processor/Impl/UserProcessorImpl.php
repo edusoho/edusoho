@@ -434,8 +434,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 //$requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 //$this->request['']
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($this->request, $scenario = 'sms_registration');
-                var_dump($result);
-                exit();
                 if ($result) {
                     $user = $this->controller->getAuthService()->register(array(
                         'verifiedMobile' => $sessionField['to'],
