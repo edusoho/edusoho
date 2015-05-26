@@ -330,7 +330,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'to' => $phoneNumber,
                 'sms_code' => $smsCode,
                 'sms_last_time' => $currentTime
-            ));            
+            ));
 
             return $this->createMetaAndData($smsCode, 200, "发送成功");
         }
@@ -439,7 +439,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 var_dump($requestInfo);
-                var_dump($this->request->getSession('sms_registration'));
+                var_dump($this->request->getSession()->get('sms_registration'));
                 exit();
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
