@@ -437,13 +437,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
-                //$requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
-                //$this->request['']
-                var_dump($this->request->request->get('sms_code'));
-            var_dump($this->request->getSession()->get('sms_registration'));
-            exit();
-                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($this->request, $scenario = 'sms_registration');
+                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
+                    $this->clearSmsSession($this->request, 'sms_registration');
                     $user = $this->controller->getAuthService()->register(array(
                         'verifiedMobile' => $sessionField['to'],
                         'nickname' => $nickname,
@@ -456,15 +453,74 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $token = $this->controller->createToken($user, $this->request);
-        $this->log("user_regist", "用户注册", array(
-                "user" => $user)
-            );
+        $this->log("user_regist", "用户注册", array( "user" => $user));
 
         $result['meta'] = $this->createMeta(200, "注册成功");
         $result['data'] = array(
             'user' => $this->controller->filterUser($user),
             'token' => $token);
         return  $result;
+    }
+
+    private function smsCheck($request, $mobileInfo, $scenario)
+    {
+        $sessionField = $request->getSession()->get($scenario);
+        $sessionField['sms_type'] = $scenario;
+
+        $requestField['sms_code'] = $mobileInfo['sms_code'];
+        $requestField['mobile'] = $mobileInfo['mobile'];
+
+        $result = $this->checkSms($sessionField, $requestField, $scenario);
+        $this->clearSmsSession($request, $scenario);
+        return array($result, $sessionField);
+    }
+
+    private function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
+    {
+        $smsType = $sessionField['sms_type'];
+        if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
+            return false;
+        }
+        if ($smsType != $scenario) {
+            return false;
+        }
+
+        $currentTime = time();
+        $smsLastTime = $sessionField['sms_last_time'];
+        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
+            return false;
+        }
+
+        $smsCode = $sessionField['sms_code'];
+        $smsCodePosted = $requestField['sms_code'];
+        if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
+            return false;
+        }
+
+        if ($smsCode != $smsCodePosted) {
+            return false;
+        }
+
+        $toMobile = $sessionField['to'];
+        $mobile = $requestField['mobile'];
+        if ((strlen($toMobile) == 0) || (strlen($mobile) == 0)) {
+            return false;
+        }
+        if ($toMobile != $mobile) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function clearSmsSession($request, $scenario)
+    {
+        $request->getSession()->set($scenario, array(
+            'to' => '',
+            'sms_code' => '',
+            'sms_last_time' => '',
+            'sms_type' => ''
+        ));
     }
 
     public function loginWithToken(){
