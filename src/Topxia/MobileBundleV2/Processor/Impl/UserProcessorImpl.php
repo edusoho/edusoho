@@ -459,11 +459,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
-        $result['meta'] = $this->createMeta(200, "注册成功");
-        $result['data'] = array(
-            'user' => $this->controller->filterUser($user),
-            'token' => $token);
-        return  $result;
+        $data = $this->controller->filterUser($user);
+        return  $this->createMetaAndData($data, 200, '注册成功');
     }
 
     private function smsCheck($request, $mobileInfo, $scenario)
