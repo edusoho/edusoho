@@ -18,6 +18,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         $articlePosts = $this->getThreadService()->searchPosts(
             array(
                 'targetType' => 'article',
+                'parentId' => 0,
                 'latest' => 'week'
             ),
             array('ups' => 'DESC', 'createdTime' => 'DESC'),

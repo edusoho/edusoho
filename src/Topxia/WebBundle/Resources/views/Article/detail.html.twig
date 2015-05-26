@@ -6,6 +6,8 @@
 
 {% block description %}{{ seoDesc|plain_text(100) }}{% endblock %}
 
+{% set bodyClass = 'artcile-detail-page' %}
+
 {% block content %}
 
   {{ load_script('article/detail') }}

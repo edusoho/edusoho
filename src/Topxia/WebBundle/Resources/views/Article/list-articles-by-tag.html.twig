@@ -2,21 +2,21 @@
 
 {% block title %}{{ setting('article', '资讯频道') }} - {{ parent() }}{% endblock %}
 
-{% set bodyClass = 'artcile-list-page' %}
+{% set bodyClass = 'artcile-tag-page' %}
 
 {% block content %}
   <!-- 资讯头部 -->
-  {% include 'TopxiaWebBundle:Article/Part:list-header.html.twig' %}
+  {% include 'TopxiaWebBundle:Article/Part:tag-header.html.twig' %}
   
   <div class="article-list-body row">
 
     <!-- list主内容-->
     <div class="col-md-8 article-list-mian">
-      {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' with {articles:latestArticles} %}
+      {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' %}
     </div>
 
     <aside class="col-md-4 article-sidebar">
-      {% include 'TopxiaWebBundle:Article/Widget:sidebar.html.twig' %}
+      {% include 'TopxiaWebBundle:Article/Widget:tag-sidebar.html.twig' %}
     </aside>
   </div>
 

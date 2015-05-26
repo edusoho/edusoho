@@ -59,29 +59,11 @@ define(function(require, exports, module) {
 
         });
 
-
-
         $('#course-nav-tabs').on('click', '.btn-index', function(event) {
             event.preventDefault();
             var position = $($(this).data('anchor')).offset();
             var top = position.top - 50;
             $(document).scrollTop(top);
-        });
-
-        $("#favorite-btn").on('click', function() {
-            var $btn = $(this);
-            $.post($btn.data('url'), function() {
-                $btn.hide();
-                $("#unfavorite-btn").show();
-            });
-        });
-
-        $("#unfavorite-btn").on('click', function() {
-            var $btn = $(this);
-            $.post($btn.data('url'), function() {
-                $btn.hide();
-                $("#favorite-btn").show();
-            });
         });
 
         if ($('.icon-vip').length > 0) {
