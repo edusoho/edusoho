@@ -1,5 +1,5 @@
 <section class="poster swiper-container">
-  <div class="swiper-wrapper" style="width: 2530px; height: 570px;">
+  <div class="swiper-wrapper">
     {% for i in 1..3 %}
       {% set carouselground = _context['carousel' ~ i ~ 'ground']%}
       {% set title1 = _context['carousel' ~ i ~ 'title1']%}
@@ -7,7 +7,7 @@
       {% set subtitle1 = _context['carousel' ~ i ~ 'subtitle1']%}
       {% set subtitle2 = _context['carousel' ~ i ~ 'subtitle2']%}
       {% set carouselbanner =  _context['carousel' ~ i ~'banner'] %}
-      <div class="swiper-slide {% if loop.index == 1 %} swiper-slide-visible swiper-slide-active {% endif %}" style="width: 1265px; height: 570px; background: rgb(63, 63, 63);">
+      <div class="swiper-slide" style="background: #3f3f3f;">
         <div class="container">
           <img class="img-responsive" src="{{ carouselground[0].src|default('') }}">
           <div class="mask">
@@ -21,5 +21,5 @@
       </div>
     {% endfor %}
   </div>
-  <div class="swiper-pager"><span class="swiper-pagination-switch swiper-visible-switch swiper-active-switch"></span><span class="swiper-pagination-switch"></span></div>
+  <div class="swiper-pager"></div>
 </section>
