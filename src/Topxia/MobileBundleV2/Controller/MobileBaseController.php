@@ -531,4 +531,8 @@ class MobileBaseController extends BaseController
     public function getEduCloudService(){
         return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
     }
+
+    protected function getLogService(){
+        return $this->getServiceKernel()->createService('System.LogService');
+    }
 }

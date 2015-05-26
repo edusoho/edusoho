@@ -185,6 +185,10 @@ class BaseProcessor {
         return $this->controller->getService('EduCloud.EduCloudService');
     }
 
+    protected function getLogService(){
+        return $this->controller->getService('System.LogService');
+    }
+
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(

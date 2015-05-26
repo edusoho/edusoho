@@ -296,7 +296,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $allowedTime = 120;
 
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-                return $this->createMetaAndData(null, 500, "请等待120秒再申请, {$smsLastTime}|{$currentTime}");
+                return $this->createMetaAndData(null, 500, "请等待120秒再申请");
             }
 
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
@@ -325,7 +325,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         return $this->createMetaAndData(null, 500, "GET method");
     }
-    
+
     private function generateSmsCode($length = 6)
     {
         $code = rand(0, 9);
