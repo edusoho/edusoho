@@ -19,19 +19,10 @@ define(function(require, exports, module) {
 
         });
 
-        var sortList = function($list) {
-            var data = $list.sortable("serialize").get();
-            $.post($list.data('sortUrl'), {ids:data}, function(response){
-
-            });
-        };
-
-
         var $list = $(".course-list-group").sortable({
             distance: 20,
             onDrop: function (item, container, _super) {
                 _super(item, container);
-                sortList($list);
             }
         });
 
