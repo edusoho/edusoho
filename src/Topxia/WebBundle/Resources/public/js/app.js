@@ -145,4 +145,16 @@ define(function(require, exports, module) {
     	});
     }
 
+    var navHover = function() {
+        $("a[data-toggle='dropdown']").parent("li").mouseenter(function(event) {
+            $(this).addClass("open");
+        }).mouseleave(function(event) {
+            $(this).removeClass("open");
+        });
+    }
+
+    if($("a[data-toggle='dropdown']").length > 0){
+    	navHover();
+    }
+
 });

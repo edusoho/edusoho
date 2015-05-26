@@ -1325,7 +1325,7 @@ mark,
   text-transform: capitalize;
 }
 .text-muted {
-  color: #e0e0e0;
+  color: #9e9e9e;
 }
 .text-primary {
   color: #37b97d;
@@ -2233,7 +2233,7 @@ table {
 caption {
   padding-top: 8px;
   padding-bottom: 8px;
-  color: #e0e0e0;
+  color: #9e9e9e;
   text-align: left;
 }
 th {
@@ -3870,7 +3870,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  background-color: #3f3f3f;
+  background: none;
 }
 .nav > li.disabled > a {
   color: #e0e0e0;
@@ -3885,7 +3885,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-  background-color: #3f3f3f;
+  background: none;
   border-color: #37b97d;
 }
 .nav .nav-divider {
