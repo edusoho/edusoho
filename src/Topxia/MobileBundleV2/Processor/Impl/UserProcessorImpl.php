@@ -299,6 +299,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, "请等待120秒再申请");
             }
 
+            if (!$this->checkPhoneNum($phoneNumber)){
+                return $this->createMetaAndData(null, 500, "手机号格式错误");
+            }
+
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
                 return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
             }
@@ -378,6 +382,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $email = $this->getParam('email');
         $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
+        $phoneNumber = $this->getParam('phone');
 
         $result = array('meta' => null);
 
@@ -395,6 +400,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if ($nickname && !SimpleValidator::nickname($nickname)) {
             $result['meta'] = $this->createMeta(500, '昵称格式不正确');
             return $result;
+        }
+
+        if (!$this->checkPhoneNum($phoneNumber)){
+            return $this->createMetaAndData(null, 500, '手机号格式错误');
         }
 
         if (!SimpleValidator::password($password)) {
@@ -482,7 +491,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $result = array('meta' => null);
         if (empty($user)) {
-            $result['meta'] = $this->createMeta(500, '用户帐号不存在');
+            $result['meta'] = $this->createMeta(500, '用户名不能为空');
             return $result;
         }
         
@@ -513,7 +522,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->controller->getUserService()->getUserByEmail($username);
-        } else {
+        } else if($this->checkPhoneNum($username)){
+            $user = $this->controller->getUserService()->getUserByVerifiedMobile($username);
+        }else{
             $user = $this->controller->getUserService()->getUserByNickname($username);
         }
         
