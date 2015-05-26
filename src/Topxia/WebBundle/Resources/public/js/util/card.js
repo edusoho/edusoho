@@ -1,69 +1,55 @@
 define(function (require, exports, module) {
 
-    $.fn.cardTip = function(options) {
-        var defaults = {    
-            Event : "mouseover",                                 //触发响应事件
-        };
-        var $this = $(this);
-
-        var options = $.extend(defaults,options);
-        $this.on(options.Event, function(){
-            var $card = $("#user-card-"+ $this.data('userId'));
-            if ($card.length > 0) {
-                displayCard($card);
-            } else {
-                $.get($this.data('cardUrl'),function(html) {
-                    var $card = $(html);
-                    $("body").append($card);
-                    bindCardEvent($card);
-                    displayCard($card);
-                });         
-            }
-            
-        }).on("mouseleave", function(){
-            var $card = $("#user-card-"+ $this.data('userId'));
-            if ($card.length > 0) {
-                setTimeout(function () {
-                    if(!$card.is(":hover")) {
-                        $card.hide();
-                    }
-                },100); 
-            }
-     
-        });
-
-        function displayCard($card)
-        {
-            $('.user-card').hide();
-            var h = $card.height();
-            var w = $this.width();
-            var offset = $this.offset();
-            $card.css({
-                "left":offset.left+ w/2,
-                "top":offset.top - h
-            }).show();
+    $(".js-user-card").on("mouseenter", function () {
+        var _this = $(this);
+        if (_this.data('bind') !== 'true') {
+            $.get(_this.data('cardUrl'),function(html) {
+                _this.popover({
+                    trigger: 'manual',
+                    placement: 'auto top',
+                    html: 'true',
+                    content: html,
+                    template: '<div class="popover es-card"><div class="arrow"></div><class="popover-content">'+ html +'</div></div>',
+                    container: 'body',
+                    animation: false
+                });
+                _this.data('bind', 'true');
+                _this.popover("show");
+                bindCardEvent($('.user-card'));
+                $(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+            });         
+        } else {
+            _this.popover("show");
         }
+       
+    }).on("mouseleave", function () {
+        var _this = $(this);
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                _this.popover("hide")
+            }
+        }, 100);
+    });
 
-        function bindCardEvent($card)
-        {
-            $card.on(options.Event, function(){
-                $(this).show();                                  
-            }).on("mouseout", function(){               
-                $(this).hide();                                                     
-            }).on('click', '.follow-btn', function(){
-                var $btn = $(this);
-                $.post($btn.data('url')).always(function(){
-                    $btn.hide();
-                    $card.find('.unfollow-btn').show();
-                });
-            }).on('click', '.unfollow-btn', function(){
-                var $btn = $(this);
-                $.post($btn.data('url')).always(function(){
-                    $btn.hide();
-                    $card.find('.follow-btn').show();
-                });
+    
+    function bindCardEvent($card)
+    {
+        $card.on('click', '.follow-btn', function(){
+            console.log(2);
+            var $btn = $(this);
+            $.post($btn.data('url')).always(function(){
+                $btn.hide();
+                $card.find('.unfollow-btn').show();
             });
-        }
-
+        }).on('click', '.unfollow-btn', function(){
+            var $btn = $(this);
+            $.post($btn.data('url')).always(function(){
+                $btn.hide();
+                $card.find('.follow-btn').show();
+            });
+        });
     }
+
 });

@@ -121,13 +121,6 @@ define(function(require, exports, module) {
     	$(this).removeClass("md-spin");
     });
 
-    $('.js-user-card').each(function(){
-        $(this).cardTip({
-            Event : "mouseover"
-        });
-    }); 
-   
-
     if($(".set-email-alert").length>0){
     	$(".set-email-alert .close").click(function(){
     		Cookie.set("close_set_email_alert",'true');

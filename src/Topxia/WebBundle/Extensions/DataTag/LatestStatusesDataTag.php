@@ -27,26 +27,39 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
             'private' => 0,
         );
 
-        if (isset($arguments['objectType'])) {
-            $conditions['objectType'] = $arguments['objectType'];
+        if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
+            if ($arguments['objectType'] == 'course') {
+                $conditions['courseIds'] = array($arguments['objectId']);
+            } else {
+                $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+
+                if ($courses) {
+                    $courseIds = ArrayToolkit::column($courses, 'id');
+                    $conditions['classroomCourseIds'] = $courseIds;
+                    $conditions['classroomId'] = $arguments['objectId'];
+                } else {
+                    $conditions['onlyClassroomId'] = $arguments['objectId'];
+                }
+                
+            }
         }
 
-        if (isset($arguments['objectId'])) {
-            $conditions['objectId'] = $arguments['objectId'];
-        }
-
+        
         $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime', 'DESC'), 0, $arguments['count']);
 
-        $userIds = ArrayToolkit::column($statuses, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        if ($statuses) {
+            $userIds = ArrayToolkit::column($statuses, 'userId');
+            $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $manager = ExtensionManager::instance();
+            $manager = ExtensionManager::instance();
 
-        foreach ($statuses as &$status) {
-            $status['user'] = $users[$status['userId']];
-            $status['message'] = $manager->renderStatus($status, $arguments['mode']);
-            unset($status);
+            foreach ($statuses as &$status) {
+                $status['user'] = $users[$status['userId']];
+                $status['message'] = $manager->renderStatus($status, $arguments['mode']);
+                unset($status);
+            }
         }
+        
 
         return $statuses;
     }
@@ -59,6 +72,11 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
 }

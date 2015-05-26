@@ -923,6 +923,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
 
             $classroomIds = $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
+            $classroomIds = ArrayToolkit::column($classroomIds, "classroomId");
 
             foreach ($classroomIds as $value) {
                 if ($classroomId == $value) {
