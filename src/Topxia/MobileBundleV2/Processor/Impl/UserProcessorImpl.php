@@ -329,7 +329,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $this->request->getSession()->set($smsType, array(
                 'to' => $phoneNumber,
                 'sms_code' => $smsCode,
-                'sms_last_time' => $currentTime
+                'sms_last_time' => time()
             ));
 
             return $this->createMetaAndData($smsCode, 200, "发送成功");
