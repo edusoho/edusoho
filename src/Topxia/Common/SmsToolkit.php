@@ -43,6 +43,9 @@ class SmsToolkit
 
         $currentTime = time();
         $smsLastTime = $sessionField['sms_last_time'];
+        var_dump(date('c',$currentTime));
+        var_dump(date('c',$smsLastTime));
+        exit();
         if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
                             var_dump(3);
             return false;
