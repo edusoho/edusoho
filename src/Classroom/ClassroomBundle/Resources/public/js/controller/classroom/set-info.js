@@ -9,11 +9,11 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        var editor_classroom = CKEDITOR.replace('description', {
+/*        var editor_classroom = CKEDITOR.replace('description', {
             toolbar: 'Detail',
             filebrowserImageUploadUrl: $('#description').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#description').data('flashUploadUrl')
-        });
+        });*/
 
         var editor_classroom_about = CKEDITOR.replace('about', {
             toolbar: 'Detail',

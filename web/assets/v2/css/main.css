@@ -972,12 +972,28 @@ body.nav-active {
   border: none;
   color: #37b97d;
 }
-.alert-notice .container {
-  padding: 6px 10px;
+.alert-notice .swiper-container {
+  position: relative;
+  height: 28px;
+  line-height: 28px;
   overflow: hidden;
 }
-.alert-notice i {
-  margin-right: 10px;
+.alert-notice .swiper-wrapper {
+  padding-right: 30px;
+}
+.alert-notice .swiper-slide {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.alert-notice .close {
+  float: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
 }
 .alert-notice a {
   text-decoration: underline;
@@ -1548,6 +1564,7 @@ body.nav-active {
   line-height: 28px;
   padding: 0 5px;
   min-width: 30px;
+  text-align: center;
 }
 .pagination > li > a:hover,
 .pagination > li > span:hover {
@@ -2835,7 +2852,10 @@ textarea.form-control-o {
 }
 .introduction-section {
   position: relative;
+  background-image: linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-image: -webkit-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
+  background-image: -moz-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
+  background-image: -o-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-color: #ffffff;
 }
 .introduction-section h4,
@@ -3888,6 +3908,21 @@ textarea.form-control-o {
     margin: 0 5px;
   }
 }
+.recommend-class .class-belong {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  text-align: center;
+  background-color: #37b97d;
+  color: #fff;
+  font-size: 12px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
 .recommend-class .swiper-slide {
   width: 25%;
   float: left;
@@ -4524,7 +4559,7 @@ textarea.form-control-o {
 }
 .class-detail-main .nav.nav-tabs > li > a,
 .course-detail-main .nav.nav-tabs > li > a {
-  padding: 10px 30px;
+  padding: 10px 20px;
 }
 @media (max-width: 1199px) {
   .class-detail-main .nav.nav-tabs > li > a,

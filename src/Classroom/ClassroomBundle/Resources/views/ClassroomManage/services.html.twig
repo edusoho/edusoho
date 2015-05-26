@@ -16,6 +16,10 @@
             </label>
             <div class="col-md-3 controls checkboxs">
                   {{ checkboxs('service', dict('classroomService'), classroom.service|default(null)) }}
+                  
+                  {% if is_plugin_installed('ClassroomPlan') %}
+                    <label><input name="service[]" value="studyPlan" type="checkbox" {% if 'studyPlan' in classroom.service %}checked="checked"{% endif %}> 学习计划</label>
+                  {% endif %}
             </div>  
           </div>
 
