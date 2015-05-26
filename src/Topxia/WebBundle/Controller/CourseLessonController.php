@@ -27,12 +27,12 @@ class CourseLessonController extends BaseController
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
         }
 
-        if (empty($this->setting('magic.lesson_watch_time_limit')) && empty($lesson['free'])) {
+        if ($lesson['mediaSource'] != 'self' || (empty($this->setting('magic.lesson_watch_time_limit')) && empty($lesson['free']))) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-        }else{
+        } else {
             $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
             if (empty($allowAnonymousPreview) && !$user->isLogin()) {
                 throw $this->createAccessDeniedException();
@@ -40,9 +40,17 @@ class CourseLessonController extends BaseController
         }
 
         $hasVideoWatermarkEmbedded = 0;
+
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
+            if ($file['storage'] != 'cloud') {
+                if (!$user->isLogin()) {
+                    throw $this->createAccessDeniedException();
+                }
+                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+            }
+            
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();

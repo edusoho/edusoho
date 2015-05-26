@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
 			if ($("#lesson-preview-video-player").data('hlsUrl')) {
 
-		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div><div><span class="text-success">您可以免费试看前5分钟，购买后可完整观看。</span><a href="#" class="text-danger">立即购买</a></div>');
+		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
 			        
         		var mediaPlayer = new MediaPlayer({
         			element: '#lesson-preview-video-player',
@@ -23,9 +23,13 @@ define(function(require, exports, module) {
         			height: '360px'
         		});
 
-                mediaPlayer.on('ended', function() {
-                    $('#lesson-preview-video-player').html('<div style="height:360px;background-color:black;">购买课程观看完整视频</div>');
-                });
+                if ($("#lesson-preview-video-player").data('timelimit')) {
+                    $("#lesson-preview-video-player").append($('.js-buy-text').html());
+
+                    mediaPlayer.on('ended', function() {
+                        $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
+                    });
+                }
 
         		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');
         		mediaPlayer.play();
@@ -147,9 +151,8 @@ define(function(require, exports, module) {
             });
         }
 
-		$('#buy-btn').on('click', function(){
-			$modal = $('#modal');
-			$modal.modal('hide');
+		$modal = $('#modal');
+        $modal.on('click','.js-buy-btn', function(){
 			$.get($(this).data('url'), function(html) {
 				$modal.html(html);
 				$('#join-course-btn').click();
