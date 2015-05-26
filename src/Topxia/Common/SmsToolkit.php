@@ -14,8 +14,6 @@ class SmsToolkit
 	private static function paramForSmsCheck($request, $scenario)
     {
         $sessionField = $request->getSession()->get($scenario);
-        var_dump($sessionField);
-        exit();
         $sessionField['sms_type'] = $scenario;
 
         $requestField['sms_code'] = $request->request->get('sms_code');
