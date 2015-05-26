@@ -56,6 +56,13 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $articles ? $this->createSerializer()->unserializes($articles, $this->serializeFields) : array();
     }
 
+    public function findAllArticles()
+    {
+        $sql = "SELECT * FROM {$this->table};";
+        $articles = $this->getConnection()->fetchAssoc($sql, array());
+        return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : array();
+    }
+
     public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

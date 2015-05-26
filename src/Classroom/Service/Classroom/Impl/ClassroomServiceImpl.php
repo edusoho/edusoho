@@ -395,6 +395,26 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
+    public function isClassroomAssistent($classroomId, $userId)
+    {
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if (!$member) {
+            return false;
+        } else {
+            return empty($member) or !in_array($member['role'], array('assistant', 'studentAssistant')) ? false : true;
+        }
+    }
+
+    public function isClassroomHeadTeacher($classroomId, $userId)
+    {
+        $member = $this->getClassroomMember($classroomId, $userId);
+        if (!$member) {
+            return false;
+        } else {
+            return empty($member) or $member['role'] != 'headTeacher' ? false : true;
+        }
+    }
+
     // becomeStudent的逻辑条件，写注释
     public function becomeStudent($classroomId, $userId, $info = array())
     {
