@@ -431,8 +431,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
-                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
-                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($requestInfo, $scenario = 'sms_registration');
+                //$requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                //$this->request['']
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($this->request, $scenario = 'sms_registration');
                 if ($result) {
                     $user = $this->controller->getAuthService()->register(array(
                         'verifiedMobile' => $sessionField['to'],
