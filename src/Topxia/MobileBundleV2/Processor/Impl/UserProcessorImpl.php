@@ -380,39 +380,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function regist()
     {
         $email = $this->getParam('email');
-        $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
+        $nickname = $this->getParam('nickname');
         $phoneNumber = $this->getParam('phone');
+        $smsCode = $this->getParam('smsCode');
 
         $result = array('meta' => null);
 
         $auth = $this->getSettingService()->get('auth', array());
-        if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed'){
+        if (isset($auth['register_mode']) && $auth['register_mode'] == 'closed') {
             $result['meta'] = $this->createMeta(500, '系统暂时关闭注册，请联系管理员');
-            return $result;
-        }
-        
-        if (!SimpleValidator::email($email)) {
-            $result['meta'] = $this->createMeta(500, '邮箱地址格式不正确');
-            return $result;
-        }
-
-        if ($nickname && !SimpleValidator::nickname($nickname)) {
-            $result['meta'] = $this->createMeta(500, '昵称格式不正确');
-            return $result;
-        }
-
-        if (!$this->checkPhoneNum($phoneNumber)){
-            return $this->createMetaAndData(null, 500, '手机号格式错误');
-        }
-
-        if (!SimpleValidator::password($password)) {
-            $result['meta'] = $this->createMeta(500, '密码格式不正确');
-            return $result;
-        }
-
-        if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
-            $result['meta'] = $this->createMeta(500, '该邮箱已被注册');
             return $result;
         }
 
@@ -423,18 +400,52 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         } else {
             if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                return $this->createMeta(500, '该昵称已被注册');
+                return $this->createMetaAndData(null, 500, '该昵称已被注册');
             }
         }
 
-        $user = $this->controller->getAuthService()->register(array(
-            'email' => $email,
-            'nickname' => $nickname,
-            'password' => $password,
-        ));
+        $user = null;
+
+        if (!empty($email)) {
+            if (!SimpleValidator::email($email)) {
+                return $this->createMetaAndData(null, 500, '邮箱地址格式不正确');
+            }
+            if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
+                return $this->createMetaAndData(null, 500, '该邮箱已被注册');
+            }
+            if (!SimpleValidator::password($password)) {
+                return $this->createMetaAndData(null, 500, '密码格式不正确');
+            }
+            $user = $this->controller->getAuthService()->register(array(
+                'email' => $email,
+                'nickname' => $nickname,
+                'password' => $password,
+            ));
+        } else {
+            if (!$this->checkPhoneNum($phoneNumber)) {
+                return $this->createMetaAndData(null, 500, '手机号格式不正确');
+            }
+            if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
+                return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
+            }
+            if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
+                &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
+                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($requestInfo, $scenario = 'sms_registration');
+                if ($result) {
+                    $user = $this->controller->getAuthService()->register(array(
+                        'verifiedMobile' => $sessionField['to'],
+                        'nickname' => $nickname,
+                        'password' => $password,
+                    ));
+                } else {
+                    return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
+                }
+            }
+        }
 
         $token = $this->controller->createToken($user, $this->request);
-        $this->log("user_regist", "用户注册",  array(
+        $this->log("user_regist", "用户注册", array(
                 "user" => $user)
             );
 
@@ -522,9 +533,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->controller->getUserService()->getUserByEmail($username);
-        } else if($this->checkPhoneNum($username)){
+        } else if ($this->checkPhoneNum($username)) {
             $user = $this->controller->getUserService()->getUserByVerifiedMobile($username);
-        }else{
+        } else {
             $user = $this->controller->getUserService()->getUserByNickname($username);
         }
         
