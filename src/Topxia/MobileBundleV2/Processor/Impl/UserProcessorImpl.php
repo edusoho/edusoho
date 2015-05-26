@@ -281,7 +281,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function smsSend()
     {
         $phoneNumber = $this->getParam('phoneNumber');
-        if($this->request->getMethod() == 'POST'){
+        if ($this->request->getMethod() == 'POST') {
             if ($this->getCloudSmsKey('sms_enabled') != '1') {
                 return $this->createMetaAndData(null, 500, '短信服务被管理员关闭了');
             }
@@ -300,7 +300,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, "请等待120秒再申请");
             }
 
-            if (!$this->checkPhoneNum($phoneNumber)){
+            if (!$this->checkPhoneNum($phoneNumber)) {
                 return $this->createMetaAndData(null, 500, "手机号格式错误");
             }
 
@@ -327,10 +327,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$phoneNumber}发送用于{$smsType}的验证短信{$smsCode}", $result);
             $currentTime = time();
+            var_dump($currentTime);
             $this->request->getSession()->set($smsType, array(
                 'to' => $phoneNumber,
                 'sms_code' => $smsCode,
-                'sms_last_time' => time()
+                'sms_last_time' => $currentTime
             ));
 
             return $this->createMetaAndData($smsCode, 200, "发送成功");
