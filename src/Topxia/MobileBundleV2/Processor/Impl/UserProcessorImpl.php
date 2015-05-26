@@ -283,6 +283,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
 
+        if ($this->getCloudSmsKey('sms_enabled') != '1') {
+            return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
+        }
+
         $result = array('meta' => null);
 
         $auth = $this->getSettingService()->get('auth', array());
