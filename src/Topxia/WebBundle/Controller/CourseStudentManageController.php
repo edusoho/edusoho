@@ -15,8 +15,8 @@ class CourseStudentManageController extends BaseController
 
 		$fields = $request->query->all();
 		$condition = array();
-		if(isset($fields['nickName'])){
-            $condition['nickName'] = $fields['nickName'];
+		if(isset($fields['nickname'])){
+            $condition['nickname'] = $fields['nickname'];
         }
 
         $condition = array_merge($condition, array('courseId'=>$course['id'],'role'=>'student'));
