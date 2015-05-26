@@ -325,6 +325,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         return $this->createMetaAndData(null, 500, "GET method");
     }
+    
+    private function generateSmsCode($length = 6)
+    {
+        $code = rand(0, 9);
+        for ($i = 1; $i < $length; $i++) {
+            $code = $code . rand(0, 9);
+        }
+        return $code;
+    }
 
     private function checkPhoneNum($num)
     {
