@@ -22,16 +22,17 @@ define(function(require, exports, module) {
         			playerId: 'lesson-video-player',
         			height: '360px'
         		});
-
+                var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
                 if ($("#lesson-preview-video-player").data('timelimit')) {
                     $("#lesson-preview-video-player").append($('.js-buy-text').html());
 
                     mediaPlayer.on('ended', function() {
                         $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
                     });
+                    $hlsUrl+='?timeLimit='+$("#lesson-preview-video-player").data('timelimit');
                 }
 
-        		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');
+        		mediaPlayer.setSrc($hlsUrl, 'video');
         		mediaPlayer.play();
 
                 $('#modal').one('hidden.bs.modal', function () {
