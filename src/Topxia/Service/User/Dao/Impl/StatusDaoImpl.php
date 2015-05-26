@@ -71,6 +71,7 @@ class StatusDaoImpl extends BaseDao implements StatusDao
             ->from($this->table, $this->table)
             ->andWhere('courseId IN ( :courseIds )')
             ->andWhere('courseId IN ( :classroomCourseIds ) or classroomId = :classroomId')
+            ->andWhere('classroomId = :onlyClassroomId')
             ->andWhere('objectType = :objectType')
             ->andWhere('objectId = :objectId')
             ->andWhere('private = :private');
