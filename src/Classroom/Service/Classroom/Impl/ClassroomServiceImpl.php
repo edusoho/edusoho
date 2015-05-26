@@ -401,7 +401,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!$member) {
             return false;
         } else {
-            return empty($member) or $member['role'] != 'assistant' ? false : true;
+            return empty($member) or !in_array($member['role'], array('assistant', 'studentAssistant')) ? false : true;
         }
     }
 
