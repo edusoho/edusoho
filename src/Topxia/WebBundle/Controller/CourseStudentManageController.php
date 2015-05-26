@@ -14,23 +14,26 @@ class CourseStudentManageController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($id);
 
 		$fields = $request->query->all();
-		$nickname="";
+		$condition = array();
 		if(isset($fields['nickName'])){
-            $nickname =$fields['nickName'];
-        } 
+            $condition['nickName'] = $fields['nickName'];
+        }
+
+        $condition = array_merge($condition, array('courseId'=>$course['id'],'role'=>'student'));
 
 		$paginator = new Paginator(
 			$request,
-			$this->getCourseService()->searchMemberCount(array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname)),
+			$this->getCourseService()->searchMemberCount($condition),
 			20
 		);
 
 		$students = $this->getCourseService()->searchMembers(
-			array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname),
+			$condition,
 			array('createdTime','DESC'),
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+
 		$studentUserIds = ArrayToolkit::column($students, 'userId');
 		$users = $this->getUserService()->findUsersByIds($studentUserIds);
 		$followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
