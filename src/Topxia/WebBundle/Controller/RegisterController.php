@@ -26,8 +26,6 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $registration = $request->request->all();
-            var_dump($registration);
-            exit();
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
