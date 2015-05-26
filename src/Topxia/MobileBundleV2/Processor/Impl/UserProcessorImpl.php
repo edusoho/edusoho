@@ -280,7 +280,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function smsSend()
     {
         if($this->request->getMethod() == 'POST'){
-            if ($this->controller->getCloudSmsKey('sms_enabled') != '1') {
+            if ($this->getCloudSmsKey('sms_enabled') != '1') {
                 return $this->createMetaAndData(null, 500, '短信服务被管理员关闭了');
             }
 
