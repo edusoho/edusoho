@@ -30,37 +30,46 @@ class SmsToolkit
     private static function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
         $smsType = $sessionField['sms_type'];
+
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
+                    var_dump(1);
             return false;
         }
         if ($smsType != $scenario) {
+                            var_dump(2);
             return false;
         }
+
 
         $currentTime = time();
         $smsLastTime = $sessionField['sms_last_time'];
         if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
+                            var_dump(3);
             return false;
         }
 
         $smsCode = $sessionField['sms_code'];
         $smsCodePosted = $requestField['sms_code'];
         if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
+                            var_dump(4);
             return false;
         }
         if ($smsCode != $smsCodePosted){
+                                        var_dump(5);
             return false;
         }
 
         $to = $sessionField['to'];
         $mobile = $requestField['mobile'];
         if ((strlen($to) == 0) || (strlen($mobile) == 0)) {
+                                                    var_dump(6);
             return false;
         }
         if ($to != $mobile){
+                                                    var_dump(7);
             return false;
         }        
-
+                                        var_dump(8);
         return true;
     }    
 
