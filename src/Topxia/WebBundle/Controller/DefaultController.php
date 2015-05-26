@@ -195,6 +195,7 @@ class DefaultController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
         $categoryId = $conditions['categoryId'];
         if ($conditions['categoryId']  != 'all') {
             $conditions['categoryId'] = intval($conditions['categoryId']);
