@@ -24,6 +24,8 @@ interface ClassroomCourseDao
 
     public function findCoursesByClassroomIdAndCourseIds($classroomId, $courseIds);
 
+    public function findClassroomCourse($classroomId, $courseId);
+
     public function findCoursesByClassroomId($classroomId);
 
     public function findActiveCoursesByClassroomId($classroomId);

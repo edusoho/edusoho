@@ -109,6 +109,8 @@ interface ClassroomService
      */
     public function findClassroomByCourseId($courseId);
 
+    public function findClassroomCourse($classroomId, $courseId);
+
     public function findCoursesByClassroomId($classroomId);
 
     public function findActiveCoursesByClassroomId($classroomId);

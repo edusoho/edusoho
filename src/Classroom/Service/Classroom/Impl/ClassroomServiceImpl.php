@@ -87,10 +87,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getCourseService()->publishCourse($courseId);
             }
 
-            $courseIds = array_values(array_diff($courseIds, $sameCourseIds));
+            $diff = array_values(array_diff($courseIds, $sameCourseIds));
             //if new copy it
-            if (!empty($courseIds)) {
-                $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            if (!empty($diff)) {
+                $courses = $this->getCourseService()->findCoursesByIds($diff);
                 $newCourseIds = array();
                 foreach ($courses as $key => $course) {
                     $newCourse = $this->getCourseCopyService()->copy($course, true);
@@ -110,6 +110,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->updateClassroom($classroomId, array("courseNum" => $coursesNum, "lessonNum" => $lessonNum));
 
             $this->updateClassroomTeachers($classroomId);
+
+            $this->refreshCoursesSeq($classroomId, $courseIds);
 
             $this->getClassroomDao()->getConnection()->commit();
         } catch (\Exception $e) {
@@ -514,6 +516,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->updateClassroomTeachers($classroomId);
             }
 
+            $this->refreshCoursesSeq($classroomId, $activeCourseIds);
+
             $this->getClassroomDao()->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getClassroomDao()->getConnection()->rollback();
@@ -524,6 +528,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findCoursesByCoursesIds($courseIds)
     {
         return $this->getClassroomCourseDao()->findCoursesByCoursesIds($courseIds);
+    }
+
+    private function refreshCoursesSeq($classroomId, $courseIds)
+    {
+        $seq = 1;
+        foreach ($courseIds as $key => $courseId) {
+            $classroomCourse = $this->findClassroomCourse($classroomId, $courseId);
+            $this->getClassroomCourseDao()->update($classroomCourse['id'], array('seq' => $seq++));
+        }
+    }
+
+    public function findClassroomCourse($classroomId, $courseId)
+    {
+        return $this->getClassroomCourseDao()->findClassroomCourse($classroomId, $courseId);
     }
 
     public function findCoursesByClassroomId($classroomId)
