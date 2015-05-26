@@ -12,7 +12,7 @@
 
 <ul class="breadcrumb">
   <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
-  <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
+  <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
   <li class="active">编辑帖子</li>
 </ul>
 

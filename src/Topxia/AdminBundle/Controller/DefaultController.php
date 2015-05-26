@@ -356,7 +356,7 @@ class DefaultController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $question = $this->getThreadService()->getThread($courseId, $questionId);
-        $questionUrl = $this->generateUrl('course_thread_show', array('courseId'=>$course['id'], 'id'=> $question['id']), true);
+        $questionUrl = $this->generateUrl('course_thread_show', array('courseId'=>$course['id'], 'threadId'=> $question['id']), true);
         $questionTitle = strip_tags($question['title']);
         foreach ($course['teacherIds'] as $receiverId) {
             $result = $this->getNotificationService()->notify($receiverId, 'default',

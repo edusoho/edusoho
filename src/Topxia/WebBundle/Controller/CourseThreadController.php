@@ -29,6 +29,12 @@ class CourseThreadController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        foreach ($threads as $key => $thread) {
+            $threads[$key]['sticky'] = $thread['isStick'];
+            $threads[$key]['nice'] = $thread['isElite'];
+            $threads[$key]['lastPostTime'] = $thread['latestPostTime'];
+            $threads[$key]['lastPostUserId'] = $thread['latestPostUserId'];
+        }
 
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         $userIds = array_merge(
@@ -44,11 +50,12 @@ class CourseThreadController extends CourseBaseController
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
-            'lessons'=>$lessons
+            'lessons'=>$lessons,
+            'target' => array('type'=>'course','id'=>$id)
         ));
     }
 
-    public function showAction(Request $request, $courseId, $id)
+    public function showAction(Request $request, $courseId, $threadId)
     {
 
         list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
@@ -60,7 +67,7 @@ class CourseThreadController extends CourseBaseController
             $isMemberNonExpired = true;
         }
         
-        $thread = $this->getThreadService()->getThread($course['id'], $id);
+        $thread = $this->getThreadService()->getThread($course['id'], $threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException("话题不存在，或已删除。");
         }
@@ -87,7 +94,7 @@ class CourseThreadController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $this->getThreadService()->hitThread($courseId, $id);
+        $this->getThreadService()->hitThread($courseId, $threadId);
 
         $isManager = $this->getCourseService()->canManageCourse($course['id']);
 
@@ -134,7 +141,7 @@ class CourseThreadController extends CourseBaseController
                 $thread = $this->getThreadService()->createThread($form->getData());
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                    'courseId' => $thread['courseId'],
-                   'id' => $thread['id'], 
+                   'threadId' => $thread['id'], 
                 )));
             }
         }
@@ -170,13 +177,13 @@ class CourseThreadController extends CourseBaseController
                 $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
                 
                 if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$thread['id']), true);
+                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$thread['id']), true);
                     $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑");
                 }
 
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                    'courseId' => $thread['courseId'],
-                   'id' => $thread['id'], 
+                   'threadId' => $thread['id'], 
                 )));
             }
         }
@@ -208,7 +215,7 @@ class CourseThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员删除");
         }
 
@@ -222,7 +229,7 @@ class CourseThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员设为置顶");
         }
 
@@ -235,7 +242,7 @@ class CourseThreadController extends CourseBaseController
         $this->getThreadService()->unstickThread($courseId, $id);
         $user = $this->getCurrentUser();
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员取消置顶");
         }
 
@@ -249,7 +256,7 @@ class CourseThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员加精");
         }
 
@@ -263,7 +270,7 @@ class CourseThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员取消加精");
         }
 
@@ -290,7 +297,7 @@ class CourseThreadController extends CourseBaseController
              
                 $post = $this->getThreadService()->createPost($postData);
 
-                $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
                 $threadUrl .= "#post-". $post['id'];
 
                 if ($thread['userId'] != $currentUser->id) {
@@ -385,14 +392,14 @@ class CourseThreadController extends CourseBaseController
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
                 if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$threadId), true);
+                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$threadId), true);
                     $threadUrlAnchor = $threadUrl."#post-".$id;
                     $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
                     $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
                 }
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                     'courseId' => $post['courseId'],
-                    'id' => $post['threadId']
+                    'threadId' => $post['threadId']
                 )));
             }
         }
@@ -415,7 +422,7 @@ class CourseThreadController extends CourseBaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$threadId), true);
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$threadId), true);
             $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员删除。");
             $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员删除。");
         }
