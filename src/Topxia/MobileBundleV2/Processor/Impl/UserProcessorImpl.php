@@ -8,6 +8,7 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Cookie;
+use Topxia\Common\SmsToolkit;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
