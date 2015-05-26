@@ -326,6 +326,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 $result['nickname'] = $currentUser['nickname'];
             }
             $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$phoneNumber}发送用于{$smsType}的验证短信{$smsCode}", $result);
+            $currentTime = time();
             $this->request->getSession()->set($smsType, array(
                 'to' => $phoneNumber,
                 'sms_code' => $smsCode,
