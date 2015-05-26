@@ -44,4 +44,6 @@ interface UserProcessor
 	*获取学堂页面展示数据
 	*/
 	public function getSchoolRoom();
+
+	public function smsSend();
 }

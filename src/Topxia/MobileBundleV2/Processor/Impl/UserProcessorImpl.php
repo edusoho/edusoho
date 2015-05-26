@@ -277,15 +277,59 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $userProfile;
     }
 
+    public function smsSend()
+    {
+        if($this->request->getMethod() == 'POST'){
+            // if ($this->controller->getCloudSmsKey('sms_enabled') != '1') {
+            //     return $this->createMetaAndData(null, 500, '短信服务被管理员关闭了');
+            // }
+
+            $currentUser = $this->getUserService()->getCurrentUser();
+            $currentTime = time();
+
+            $smsType = $this->request->request->get('sms_type');
+            $this->checkSmsType($smsType, $currentUser);
+
+            $targetSession = $this->request->getSession()->get($smsType);
+            $smsLastTime = $targetSession['sms_last_time'];
+            $allowedTime = 120;
+        }
+
+        return array(
+            'data' => null,
+            'meta' => $this->createMeta(500, 'GET method')
+            );
+    }
+
+    private function getCloudSmsKey($key)
+    {
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        if (isset($setting[$key])){
+            return $setting[$key];
+        }
+        return null;
+    }
+
+    private function checkSmsType($smsType, $user)
+    {
+        if (!in_array($smsType, array('sms_bind','sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
+            throw new \RuntimeException('不存在的sms Type');
+        }
+
+        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
+            throw new \RuntimeException('用户未登陆');
+        }
+
+        if ($this->getCloudSmsKey($smsType) != 'on') {
+            throw new \RuntimeException('该使用场景未开启');
+        }
+    }
+
     public function regist()
     {
         $email = $this->getParam('email');
         $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
-
-        if ($this->controller->getCloudSmsKey('sms_enabled') != '1') {
-            return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
-        }
 
         $result = array('meta' => null);
 
