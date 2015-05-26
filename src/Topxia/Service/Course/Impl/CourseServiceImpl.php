@@ -176,7 +176,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 		}
 
-		if (isset($conditions['creator'])) {
+		if (isset($conditions['creator']) && !empty($conditions['creator'])) {
 			$user = $this->getUserService()->getUserByNickname($conditions['creator']);
 			$conditions['userId'] = $user ? $user['id'] : -1;
 			unset($conditions['creator']);
