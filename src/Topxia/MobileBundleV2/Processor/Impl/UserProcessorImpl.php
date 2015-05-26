@@ -288,7 +288,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $currentUser = $this->getUserService()->getCurrentUser();
             $currentTime = time();
 
-            //$smsType = $this->request->request->get('sms_type');
             $smsType = 'sms_registration';
             $this->checkSmsType($smsType, $currentUser);
 
@@ -300,22 +299,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, "请等待120秒再申请, {$smsLastTime}|{$currentTime}");
             }
 
-            if (in_array($smsType, array('sms_bind','sms_registration'))) {
-                $to = $this->request->request->get('to');
-
-                $hasVerifiedMobile = (isset($phoneNumber)&&(strlen($phoneNumber)>0));
-                if ($hasVerifiedMobile && ($to == $phoneNumber)){
-                    return $this->createMetaAndData(null, 500, "您已经绑定了该手机号码");
-                }
-
-                if (!$this->getUserService()->isMobileUnique($to)) {
-                    return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
-                }
+            if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
+                return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
             }
-
+            
             $smsCode = $this->generateSmsCode();
             try {
-                $result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
+                $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
                 if (isset($result['error'])) {
                     return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
                 }
@@ -324,13 +314,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, "发送失败, {$message}");
             }
 
-            $result['to'] = $to;
+            $result['to'] = $phoneNumber;
             $result['smsCode'] = $smsCode;
             $result['userId'] = $currentUser['id'];
             if ($currentUser['id'] != 0) {
                 $result['nickname'] = $currentUser['nickname'];
             }
-            $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
+            $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$phoneNumber}发送用于{$smsType}的验证短信{$smsCode}", $result);
         }
 
         return $this->createMetaAndData(null, 500, "GET method");
