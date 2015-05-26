@@ -32,11 +32,9 @@ class SmsToolkit
         $smsType = $sessionField['sms_type'];
 
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
-                    var_dump(1);
             return false;
         }
         if ($smsType != $scenario) {
-                            var_dump(2);
             return false;
         }
 
