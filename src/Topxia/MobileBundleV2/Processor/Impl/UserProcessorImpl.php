@@ -321,7 +321,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 $result['nickname'] = $currentUser['nickname'];
             }
             $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$phoneNumber}发送用于{$smsType}的验证短信{$smsCode}", $result);
-            return $this->createMetaAndData($smsCode, 200, "发送成功"));
+            return $this->createMetaAndData($smsCode, 200, "发送成功");
         }
 
         return $this->createMetaAndData(null, 500, "GET method");
