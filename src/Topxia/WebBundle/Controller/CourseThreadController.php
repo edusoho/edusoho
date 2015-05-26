@@ -323,6 +323,7 @@ class CourseThreadController extends CourseBaseController
 
         return $this->render('TopxiaWebBundle:CourseThread:post.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'thread' => $thread,
             'form' => $form->createView()
         ));
@@ -361,6 +362,8 @@ class CourseThreadController extends CourseBaseController
 
     public function editPostAction(Request $request, $courseId, $threadId, $id)
     {
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
+
         $post = $this->getThreadService()->getPost($courseId, $id);
         if (empty($post)) {
             throw $this->createNotFoundException();
@@ -396,6 +399,7 @@ class CourseThreadController extends CourseBaseController
 
         return $this->render('TopxiaWebBundle:CourseThread:post-form.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'form' => $form->createView(),
             'post' => $post,
             'thread' => $thread,

@@ -623,7 +623,10 @@ class WebExtension extends \Twig_Extension
 
     public function exportScripts()
     {
-        return $this->pageScripts;
+        if (empty($this->pageScripts)) {
+            $this->pageScripts = array();
+        }
+        return array_values(array_unique($this->pageScripts));
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)
