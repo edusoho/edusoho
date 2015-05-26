@@ -288,9 +288,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'largePicture' => $classroom['largePicture'] ? $classroom['largePicture'] : null,
         );
 
-        array_map(function ($oldPicture) {
+        $self = $this;
+        array_map(function ($oldPicture) use($self) {
             if (!empty($oldPicture)) {
-                $this->getFileService()->deleteFileByUri($oldPicture);
+                $self->getFileService()->deleteFileByUri($oldPicture);
             }
         }, $oldPictures);
     }
