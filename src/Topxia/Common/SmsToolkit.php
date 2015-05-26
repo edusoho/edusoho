@@ -43,6 +43,8 @@ class SmsToolkit
 
         $currentTime = time();
         $smsLastTime = $sessionField['sms_last_time'];
+                var_dump($currentTime);
+        var_dump($smsLastTime);
         var_dump(date('c',$currentTime));
         var_dump(date('c',$smsLastTime));
         exit();
