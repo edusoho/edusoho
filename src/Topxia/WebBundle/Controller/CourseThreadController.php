@@ -29,6 +29,12 @@ class CourseThreadController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        foreach ($threads as $key => $thread) {
+            $threads[$key]['sticky'] = $thread['isStick'];
+            $threads[$key]['nice'] = $thread['isElite'];
+            $threads[$key]['lastPostTime'] = $thread['latestPostTime'];
+            $threads[$key]['lastPostUserId'] = $thread['latestPostUserId'];
+        }
 
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         $userIds = array_merge(
@@ -60,7 +66,7 @@ class CourseThreadController extends CourseBaseController
         } else {
             $isMemberNonExpired = true;
         }
-        echo 'threadId='.$threadId;
+        
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException("话题不存在，或已删除。");
