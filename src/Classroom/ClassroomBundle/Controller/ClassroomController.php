@@ -352,22 +352,25 @@ class ClassroomController extends BaseController
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
 
+        $conditions = array(
+            'private' => 0,
+        );
+
         $learns = array();
         if ($courses) {
             $courseIds = ArrayToolkit::column($courses, 'id');
-            $conditions = array(
-                'private' => 0,
-                'classroomCourseIds' => $courseIds,
-                'classroomId' => $classroom['id']
-            );
-            
-            $learns = $this->getStatusService()->searchStatuses(
-                $conditions,
-                array('createdTime', 'DESC'),
-                0,
-                $count
-            );
+            $conditions['classroomCourseIds'] = $courseIds;
+            $conditions['classroomId'] = $classroom['id'];
+        } else {
+            $conditions['onlyClassroomId'] = $classroom['id'];
         }
+
+        $learns = $this->getStatusService()->searchStatuses(
+            $conditions,
+            array('createdTime', 'DESC'),
+            0,
+            $count
+        );
         
         if ($learns) {
             $ownerIds = ArrayToolkit::column($learns, 'userId');
