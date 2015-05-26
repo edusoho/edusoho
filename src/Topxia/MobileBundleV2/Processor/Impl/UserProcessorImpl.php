@@ -279,6 +279,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function smsSend()
     {
+        $phoneNumber = $this->getParam('phoneNumber');
         if($this->request->getMethod() == 'POST'){
             if ($this->getCloudSmsKey('sms_enabled') != '1') {
                 return $this->createMetaAndData(null, 500, '短信服务被管理员关闭了');
@@ -287,20 +288,65 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $currentUser = $this->getUserService()->getCurrentUser();
             $currentTime = time();
 
-            $smsType = $this->request->request->get('sms_type');
-            var_dump($smsType);
-            exit();
+            //$smsType = $this->request->request->get('sms_type');
+            $smsType = 'sms_registration';
             $this->checkSmsType($smsType, $currentUser);
 
             $targetSession = $this->request->getSession()->get($smsType);
             $smsLastTime = $targetSession['sms_last_time'];
             $allowedTime = 120;
+
+            if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
+                return $this->createMetaAndData(null, 500, "请等待120秒再申请, {$smsLastTime}|{$currentTime}");
+            }
+
+            if (in_array($smsType, array('sms_bind','sms_registration'))) {
+                $to = $this->request->request->get('to');
+
+                $hasVerifiedMobile = (isset($phoneNumber)&&(strlen($phoneNumber)>0));
+                if ($hasVerifiedMobile && ($to == $phoneNumber)){
+                    return $this->createMetaAndData(null, 500, "您已经绑定了该手机号码");
+                }
+
+                if (!$this->getUserService()->isMobileUnique($to)) {
+                    return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
+                }
+            }
+
+            $smsCode = $this->generateSmsCode();
+            try {
+                $result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
+                if (isset($result['error'])) {
+                    return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
+                }
+            } catch (\RuntimeException $e) {
+                $message = $e->getMessage();
+                return $this->createMetaAndData(null, 500, "发送失败, {$message}");
+            }
+
+            $result['to'] = $to;
+            $result['smsCode'] = $smsCode;
+            $result['userId'] = $currentUser['id'];
+            if ($currentUser['id'] != 0) {
+                $result['nickname'] = $currentUser['nickname'];
+            }
+            $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$to}发送用于{$smsType}的验证短信{$smsCode}", $result);
         }
 
-        return array(
-            'data' => null,
-            'meta' => $this->createMeta(500, 'GET method')
-            );
+        return $this->createMetaAndData(null, 500, "GET method");
+    }
+
+    private function checkPhoneNum($num)
+    {
+        return preg_match("/^1\d{10}$/", $num);
+    }
+
+    private function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
+    {
+        if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
+            return false;
+        }
+        return true;
     }
 
     private function getCloudSmsKey($key)

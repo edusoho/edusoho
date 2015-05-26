@@ -181,6 +181,10 @@ class BaseProcessor {
         return $this->controller->getService('Testpaper.TestpaperService');
     }
 
+    public function getEduCloudService(){
+        return $this->controller->getService('EduCloud.EduCloudService');
+    }
+
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(
@@ -203,7 +207,7 @@ class BaseProcessor {
             'data' => $data,
             'meta' => array('code' => $code, 'message' => $message));
     }
-    
+
     protected function previewAsMember($member, $courseId, $user) {
         if (empty($member)) {
             return null;
