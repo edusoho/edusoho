@@ -6,9 +6,6 @@ class SmsToolkit
     public static function smsCheck($request, $scenario)
     {
         list($sessionField, $requestField) = self::paramForSmsCheck($request, $scenario);
-        var_dump($sessionField);
-        var_dump($requestField);
-        exit();
         $result = self::checkSms($sessionField, $requestField, $scenario);
         self::clearSmsSession($request, $scenario);
         return array($result, $sessionField, $requestField);
@@ -17,6 +14,8 @@ class SmsToolkit
 	private static function paramForSmsCheck($request, $scenario)
     {
         $sessionField = $request->getSession()->get($scenario);
+        var_dump($sessionField);
+        exit();
         $sessionField['sms_type'] = $scenario;
 
         $requestField['sms_code'] = $request->request->get('sms_code');
@@ -32,7 +31,6 @@ class SmsToolkit
      */
     private static function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
     {
-
         $smsType = $sessionField['sms_type'];
         if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
             return false;
