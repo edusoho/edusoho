@@ -67,6 +67,9 @@ class RegisterController extends BaseController
                 }
             }
 
+            var_dump($registration);
+            exit();
+
             $user = $this->getAuthService()->register($registration);
 
             if($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed')){
