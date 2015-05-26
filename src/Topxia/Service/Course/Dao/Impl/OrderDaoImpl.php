@@ -82,6 +82,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('status = :status')
             ->andWhere('payment = :payment')
             ->andWhere('paidTime >= :paidStartTime')
+            ->andWhere('createdTime < :createdTime_LT')
             ->andWhere('paidTime < :paidEndTime');
     }
 
