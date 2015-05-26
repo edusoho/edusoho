@@ -15,6 +15,8 @@
     <div class="tags">
       {% if course.serializeMode == 'serialize' %}
         <span class="tag-serialing"></span>
+      {% elseif course.serializeMode == 'finished' %}
+        <span class="tag-finished"></span>
       {% endif %}
       {% if course.type == 'live' %}
         <span class="tag-live"></span>
@@ -68,7 +70,7 @@
           {% endif %}
           {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
         </p>
-        {% if course.discountId >= 0 %}
+        {% if course.discountId > 0 %}
           <p class="old-price hidden-sm">
             <label>原价</label>
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
@@ -86,7 +88,7 @@
       {% endif %}
     </div>
 
-    {% if member and member.role == 'student' and course.vipLevelId > 0 and userVipStatus != 'ok' %}
+    {% if not member.fake|default(false) and member and member.role == 'student' and course.vipLevelId > 0 and userVipStatus != 'ok' %}
       <div class="alert alert-danger">
         {% if userVipStatus == 'not_member' %}
           您已经不是会员，不能学习此课程！

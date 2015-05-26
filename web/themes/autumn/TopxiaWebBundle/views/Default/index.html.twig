@@ -194,7 +194,7 @@
                   <li class="col-md-6">
                     <div class="topic-item">
                       <h4>
-                        <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}">{{ thread.title|plain_text(28) }}</a>
+                        <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(28) }}</a>
                       </h4>
                       <div class="topic-body">
                         {% set user = thread.user %}

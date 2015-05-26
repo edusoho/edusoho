@@ -351,24 +351,30 @@ class ClassroomController extends BaseController
     public function classroomStatusBlockAction($classroom, $count = 10)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $conditions = array(
-            'private' => 0,
-            'courseIds' => $courseIds,
-        );
-        $learns = $this->getStatusService()->searchStatuses(
-            $conditions,
-            array('createdTime', 'DESC'),
-            0,
-            $count
-        );
 
-        $ownerIds = ArrayToolkit::column($learns, 'userId');
-        $owners = $this->getUserService()->findUsersByIds($ownerIds);
-
-        $manager = ExtensionManager::instance();
-
+        $learns = array();
+        if ($courses) {
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $conditions = array(
+                'private' => 0,
+                'classroomCourseIds' => $courseIds,
+                'classroomId' => $classroom['id']
+            );
+            
+            $learns = $this->getStatusService()->searchStatuses(
+                $conditions,
+                array('createdTime', 'DESC'),
+                0,
+                $count
+            );
+        }
+        
         if ($learns) {
+            $ownerIds = ArrayToolkit::column($learns, 'userId');
+            $owners = $this->getUserService()->findUsersByIds($ownerIds);
+
+            $manager = ExtensionManager::instance();
+        
             foreach ($learns as $key => $learn) {
                 $learns[$key]['user'] = $owners[$learn['userId']];
                 $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
