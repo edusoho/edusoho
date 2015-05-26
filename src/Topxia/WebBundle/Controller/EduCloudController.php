@@ -17,7 +17,6 @@ class EduCloudController extends BaseController
             $currentUser = $this->getCurrentUser();
             $currentTime = time();
 
-
             $smsType = $request->request->get('sms_type');
             $this->checkSmsType($smsType, $currentUser);
 
