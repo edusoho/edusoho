@@ -86,6 +86,7 @@ class CourseStudentManageController extends BaseController
 				'targetType' => 'course',
 				'targetId' => $course['id'],
 				'amount' => $data['price'],
+				'totalPrice' => $data['price'],
 				'payment' => 'none',
 				'snPrefix' => 'C',
 			));

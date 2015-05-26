@@ -51,7 +51,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
 
     public function findClassroomIdsByCourseId($courseId)
     {
-        $sql = "SELECT classroomId FROM {$this->table} where courseId=? ";
+        $sql = "SELECT classroomId FROM {$this->table} where courseId=?";
 
         return  $this->getConnection()->fetchAll($sql, array($courseId));
     }
@@ -61,6 +61,13 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $sql = "SELECT classroomId FROM {$this->table} where courseId = ? LIMIT 1";
 
         return $this->getConnection()->fetchAssoc($sql, array($courseId)) ?: null;
+    }
+
+    public function findClassroomCourse($classroomId, $courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} where classroomId = ? AND courseId = ? LIMIT 1";
+
+        return $this->getConnection()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
     }
 
     public function getCourseByClassroomIdAndCourseId($classroomId, $courseId)
@@ -85,6 +92,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
             ->select('*')
             ->setFirstResult($start)
             ->setMaxResults($limit)
+            ->addOrderBy('seq', 'ASC')
             ->addOrderBy($orderBy[0], $orderBy[1]);
 
         return $builder->execute()->fetchAll() ?: array();
@@ -96,7 +104,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
             return array();
         }
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND courseId IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND courseId IN ({$marks}) ORDER BY seq ASC;";
         $courseIds = array_merge(array($classroomId), $courseIds);
 
         return $this->getConnection()->fetchAll($sql, $courseIds) ?: array();
@@ -104,14 +112,14 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
 
     public function findCoursesByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ?;";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? ORDER BY seq ASC;";
 
         return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
     public function findActiveCoursesByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND disabled = 0;";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
 
         return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
     }
@@ -122,7 +130,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
             return array();
         }
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) ORDER BY seq ASC;";
 
         return $this->getConnection()->fetchAll($sql, $courseIds) ?: array();
     }

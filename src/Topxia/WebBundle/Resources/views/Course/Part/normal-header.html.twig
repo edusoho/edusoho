@@ -88,7 +88,7 @@
       {% endif %}
     </div>
 
-    {% if not member.fake|default(false) and member and member.role == 'student' and course.vipLevelId > 0 and userVipStatus != 'ok' %}
+    {% if not member.fake|default(false) and member and member.role == 'student' and member.levelId > 0 and userVipStatus != 'ok' %}
       <div class="alert alert-danger">
         {% if userVipStatus == 'not_member' %}
           您已经不是会员，不能学习此课程！
