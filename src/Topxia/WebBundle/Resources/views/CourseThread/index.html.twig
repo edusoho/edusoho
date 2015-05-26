@@ -4,39 +4,12 @@
 
 {% block course_main %}
 
-  <div class="pull-right">
-    <a class="btn btn-sm btn-info" href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">发话题</a>
-    <a class="btn btn-sm btn-info" href="{{ path('course_thread_create', {id:course.id, type:'question'}) }}">提问题</a> 
-  </div>
+  {% include 'TopxiaWebBundle:Course/Part:thread-list-header.html.twig' %}
+  
+  {# {{ render(controller('TopxiaWebBundle:Thread:list', {request:app.request, target:{type:'course', id:course.id}, filters:filters})) }} #}
+  {% include 'TopxiaWebBundle:Thread:list.html.twig' %}
 
-  <div class="thread-filters clearfix">
-    <ul class="nav nav-pills nav-pills-sm pull-left">
-      <li{% if filters.type == 'all' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
-      <li{% if filters.type == 'question' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
-      <li{% if filters.type == 'elite' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
-
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          <span class="text-muted">排序：</span>
-          {% if filters.sort == 'posted' %}
-            最后回复
-          {% elseif filters.sort == 'created'%} 
-            最新发帖
-          {% endif %}
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'posted'})) }}">最后回复</a></li>
-          <li class="{% if filters.sort == 'created' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
-        </ul>
-      </li>
-
-    </ul>
-
-
-  </div>
-
-  <ul class="media-list">
+  {# <ul class="media-list">
     {% for thread in threads %}
       {% set author = users[thread.userId] %}
       <li class="media">
@@ -52,7 +25,7 @@
               {% if thread.type == 'question' %}
                 <span class="label label-info" title="问答帖">问</span>
               {% endif  %}
-              <a class="js-nav" href="{{ path('course_thread_show', {courseId:course.id, id:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+              <a class="js-nav" href="{{ path('course_thread_show', {courseId:course.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 
               {% if thread.isElite %}
                 <span class="label label-warning" title="精华帖">精</span>
@@ -84,7 +57,7 @@
     {% else %}
       <li class="mvl tac text-muted">课程暂无话题</li>
     {% endfor %}
-  </ul>
+  </ul> #}
 
   {{ web_macro.paginator(paginator) }}
 

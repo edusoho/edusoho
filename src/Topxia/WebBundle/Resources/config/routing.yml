@@ -455,7 +455,7 @@ course_thread_create:
     defaults: { _controller: TopxiaWebBundle:CourseThread:create }
 
 course_thread_show:
-    pattern:  /course/{courseId}/thread/{id}
+    pattern:  /course/{courseId}/thread/{threadId}
     defaults: { _controller: TopxiaWebBundle:CourseThread:show }
 
 course_thread_post:
