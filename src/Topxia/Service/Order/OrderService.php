@@ -28,7 +28,7 @@ interface OrderService
 
     public function canOrderPay($order);
 
-    public function cancelOrder($id, $message = '');
+    public function cancelOrder($id, $message = '', $data);
 
     public function sumOrderPriceByTarget($targetType, $targetId);
 
@@ -73,4 +73,8 @@ interface OrderService
     public function analysisCourseAmountDataByTime($startTime,$endTime);
 
     public function updateOrderCashSn($id, $cashSn);
+
+    public function createPayRecord($id, $payDate);
+
+    public function createOrderLog($orderId, $type, $message = '', array $data = array());
 }
