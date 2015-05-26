@@ -25,8 +25,6 @@ class RegisterController extends BaseController
         
         if ($request->getMethod() == 'POST') {
 
-            $registration = $request->request->all();
-
             $authSettings = $this->getSettingService()->get('auth', array());
 
             if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
@@ -112,6 +110,10 @@ class RegisterController extends BaseController
             && !in_array('mobile', $auth['registerSort'])) {
             $auth['registerSort'][] = "mobile";
         }
+
+                    $registration = $request->request->all();
+            var_dump($registration);
+            exit();
 
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isRegisterEnabled' => $registerEnable,
