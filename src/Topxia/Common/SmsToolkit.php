@@ -46,9 +46,12 @@ class SmsToolkit
         if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
             return false;
         }
-                            var_dump(3);
+
         $smsCode = $sessionField['sms_code'];
         $smsCodePosted = $requestField['sms_code'];
+        var_dump($smsCode);
+        var_dump($smsCodePosted);
+        exit();
         if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
                             var_dump(4);
             return false;
