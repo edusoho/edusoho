@@ -43,14 +43,14 @@ define(function(require, exports, module) {
                 $.post($self.data('cancelLikeUrl'), function(note) {
                     $self.find('.js-like-num').html(note.likeNum);
                 }).always(function(){
-                    $icon.removeClass('color-p');
+                    $icon.closest('a').removeClass('color-p');
                     $self .closest('.icon-favour').removeClass('active');
                 });
             } else {
                 $.post($self.data('likeUrl'), function(note) {
                     $self.find('.js-like-num').html(note.likeNum);
                 }).always(function(){
-                    $icon.addClass('color-p');
+                    $icon.closest('a').addClass('color-p');
                     $self.closest('.icon-favour').addClass('active');
                 });
                 
