@@ -22,7 +22,8 @@
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
   {% block stylesheets %}
-    <link href="{{ asset('bundles/topxiaweb/css/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+    <!-- <link href="{{ asset('bundles/topxiaweb/css/bootstrap/css/bootstrap.css') }}" rel="stylesheet" /> -->
+    <link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
     <!-- <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" /> -->
@@ -97,26 +98,36 @@
               <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
               {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>管理后台</a></li>
               {% endif %}
-              <li class="visible-sm visible-xs">
+              <li class="hidden-lg">
                 <a href="{{ path('my') }}"><i class="es-icon es-icon-study"></i>学习中心</a>
               </li>
-              <li class="visible-sm visible-xs"><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
-              <li class="visible-sm visible-xs"><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+              <li class="hidden-lg"><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
+              <li class="hidden-lg"><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
               <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
             </ul>
           </li>
-          <li class="hidden-sm hidden-xs">
+          <li class="visible-lg">
             <a href="{{ path('my') }}">学习中心</a>
           </li>
-          <li class="hidden-sm hidden-xs">
+          <li class="visible-lg">
             {% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}
               <a class="hasmessage" href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
             {% else %}
               <a href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i></a>
             {% endif %}
             <ul class="dropdown-menu" role="menu">
-              <li><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
-              <li><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+              <li>
+                <a href="{{ path('notification') }}">
+                  <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
+                  <i class="es-icon es-icon-notificationson"></i>通知
+                </a>
+              </li>
+              <li>
+                <a href="{{ path('message') }}">
+                  <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
+                  <i class="es-icon es-icon-mail"></i>私信
+                </a>
+              </li>
             </ul>
           </li>
           {% else %}
@@ -124,7 +135,7 @@
             <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
           {% endif %}
         </ul>
-        <form class="navbar-form pull-right hidden-xs" action="{{ path('search') }}" method="get">
+        <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
           <div class="form-group">
             <input class="form-control js-search" name="q">
             <button class="button es-icon es-icon-search"></button>
