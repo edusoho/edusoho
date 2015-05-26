@@ -1074,7 +1074,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getClassroomCourseDao()->addCourse($classroomCourse);
     }
 
-    protected function getFileService()
+    public function getFileService()
     {
         return $this->createService('Content.FileService');
     }
