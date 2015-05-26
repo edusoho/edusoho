@@ -12,7 +12,7 @@
     
     <div class="form-group">
       <select class="form-control" name="roles">
-        {{ select_options(dict('userRole'), app.request.query.get('roles'), '-- {{'所有角色'|trans}}--') }}
+        {{ select_options(dict('userRole'), app.request.query.get('roles'), "-- {{'所有角色'|trans}}--") }}
       </select>
     </div>
 
@@ -20,7 +20,7 @@
     
     <div class="form-group">
       <select id="keywordType" name="keywordType" class="form-control">
-        {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), '-- {{'关键词类型'|trans}}--') }}
+        {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), "-- {{'关键词类型'|trans}}--") }}
       </select>
     </div>
 
