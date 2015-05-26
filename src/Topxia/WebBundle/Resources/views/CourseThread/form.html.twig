@@ -13,7 +13,7 @@
 <ul class="breadcrumb">
   <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
   {% if thread %}
-    <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
+    <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
     <li class="active">{% if type == 'question' %}编辑问题{% else %}编辑话题{% endif %}</li>
   {% else %}
     <li class="active">{% if type == 'question' %}提问题{% else %}发表话题{% endif %}</li>
@@ -46,7 +46,7 @@
     <div class="controls pull-right">
       {{ form_rest(form) }}
       {% if thread %}
-        <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}" class="btn btn-link">取消</a>
+        <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">取消</a>
         <button type="submit" class="btn btn-primary btn-fat">保存</button>
       {% else %}
         <a href="{{ path('course_threads', {id:course.id}) }}" class="btn btn-link">取消</a>
