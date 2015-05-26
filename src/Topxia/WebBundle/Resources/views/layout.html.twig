@@ -66,7 +66,7 @@
               </div>
             </form>
             <ul class="nav navbar-nav">
-              {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+              {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true})) }}
             </ul>
           </div>
         </div>
@@ -78,6 +78,7 @@
           {% endif %}
         </a>
       </div>
+      
       <ul class="nav navbar-nav clearfix hidden-xs" id="nav">
         {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
       </ul>
