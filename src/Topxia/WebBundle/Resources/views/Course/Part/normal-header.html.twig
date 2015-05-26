@@ -70,7 +70,7 @@
           {% endif %}
           {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
         </p>
-        {% if course.discountId >= 0 %}
+        {% if course.discountId > 0 %}
           <p class="old-price hidden-sm">
             <label>原价</label>
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
