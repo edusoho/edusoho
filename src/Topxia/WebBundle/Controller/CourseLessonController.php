@@ -27,7 +27,8 @@ class CourseLessonController extends BaseController
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
         }
 
-        if ($lesson['mediaSource'] != 'self' || (empty($this->setting('magic.lesson_watch_time_limit')) && empty($lesson['free']))) {
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+        if ($lesson['mediaSource'] != 'self' || (empty($timelimit) && empty($lesson['free']))) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
