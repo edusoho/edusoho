@@ -65,7 +65,10 @@ abstract class CourseBaseController extends BaseController
                     'isLearned' => 0,
                     'seq' => 0,
                     'isVisible' => 0,
+                    'orderId' => 0,
+                    'joinedType' => 'course',
                     'role' => 'teacher',
+                    'fake' => true,
                     'locked' => 0,
                     'createdTime' => time(),
                     'deadline' => 0
