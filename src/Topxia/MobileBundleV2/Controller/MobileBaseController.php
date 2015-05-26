@@ -137,7 +137,7 @@ class MobileBaseController extends BaseController
         return $token;
     }
 
-    private function getCloudSmsKey($key)
+    public function getCloudSmsKey($key)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         if (isset($setting[$key])){
