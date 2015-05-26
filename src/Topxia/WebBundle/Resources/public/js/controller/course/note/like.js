@@ -39,19 +39,18 @@ define(function(require, exports, module) {
 
         $ul.on('click', '.js-like', function() {
             var $self = $(this);
-            var $icon = $(this).find('.es-icon-thumbup'); 
-            if ($icon.hasClass('color-p')) {
+            if ($self.hasClass('color-p')) {
                 $.post($self.data('cancelLikeUrl'), function(note) {
                     $self.find('.js-like-num').html(note.likeNum);
                 }).always(function(){
-                    $icon.closest('a').removeClass('color-p');
-                    $self .closest('.icon-favour').removeClass('active');
+                    $self.removeClass('color-p');
+                    $self.closest('.icon-favour').removeClass('active');
                 });
             } else {
                 $.post($self.data('likeUrl'), function(note) {
                     $self.find('.js-like-num').html(note.likeNum);
                 }).always(function(){
-                    $icon.closest('a').addClass('color-p');
+                    $self.addClass('color-p');
                     $self.closest('.icon-favour').addClass('active');
                 });
                 
