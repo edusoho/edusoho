@@ -415,7 +415,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = null;
 
         if (!empty($email)) {
-            var_dump(1);
             if (!SimpleValidator::email($email)) {
                 return $this->createMetaAndData(null, 500, '邮箱地址格式不正确');
             }
