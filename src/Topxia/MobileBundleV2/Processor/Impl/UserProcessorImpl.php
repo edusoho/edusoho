@@ -243,20 +243,19 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function logout()
     {
         $token = $this->controller->getToken($this->request);
-        if (! empty($token)) {
+        $result = array('data' => null);
+        if (!empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
             $this->log("user_logout", "用户退出",  array(
                 "userToken" => $user)
             );
         }else{
-            return array(
-                'meta' => $this->createMeta(500, "您尚未登录")
-                );
+            $result['meta'] = $this->createMeta(500, "您尚未登录");
+            return $result;
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
-        return array(
-            'meta' => $this->createMeta(200, "退出成功")
-            );
+        $result['meta'] = $this->createMeta(200, "退出成功");
+        return $result;
     }
 
     private function filterUserProfile($userProfile)
@@ -335,22 +334,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             );
 
         $result['meta'] = $this->createMeta(200, "注册成功");
-        $result['data'] = array('user' => $this->controller->filterUser($user),
+        $result['data'] = array(
+            'user' => $this->controller->filterUser($user),
             'token' => $token);
         return  $result;
-
-
-        // return array (
-        //     'meta'=> array(
-        //         'code' => 200,
-        //         'message' => "注册成功"),
-        //     'user' => $this->controller->filterUser($user),
-        //     'token' => $token
-        // );
     }
 
-    public function loginWithToken()
-    {
+    public function loginWithToken(){
         $version = $this->request->query->get('version', 1);
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
