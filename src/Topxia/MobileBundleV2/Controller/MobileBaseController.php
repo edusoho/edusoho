@@ -501,7 +501,6 @@ class MobileBaseController extends BaseController
 
     public function getLogService()
     {
-        var_dump("mobile");
         return $this->getServiceKernel()->createService('System.LogService');
     }
 

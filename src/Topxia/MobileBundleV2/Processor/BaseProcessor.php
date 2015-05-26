@@ -186,7 +186,6 @@ class BaseProcessor {
     }
 
     protected function getLogService(){
-        var_dump("Base");
         return $this->controller->getService('System.LogService');
     }
 
