@@ -177,7 +177,8 @@ class HLSController extends BaseController
         if (!empty($timeLimit)) {
             $params['limitSecond'] = $timeLimit;
         }
-        
+        var_dump($params);
+        exit();
         $api = CloudAPIFactory::create();
 
         $stream = $api->get('/hls/stream', $params);
