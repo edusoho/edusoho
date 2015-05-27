@@ -464,8 +464,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     private function smsCheck($request, $mobileInfo, $scenario)
     {
         $sessionField = $request->getSession()->get($scenario);
-        var_dump($sessionField);
-        exit();
         $sessionField['sms_type'] = $scenario;
 
         $requestField['sms_code'] = $mobileInfo['sms_code'];
