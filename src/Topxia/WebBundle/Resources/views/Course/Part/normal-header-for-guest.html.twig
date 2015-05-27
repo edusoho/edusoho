@@ -10,7 +10,7 @@
 
   <div class="course-operation">
     {{ header_macro.student_num(course) }}
-    <ul class="course-data clearfix active">
+    <ul class="course-data clearfix {% if courseVip %}active{% endif %}">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
       {% if courseVip %}
