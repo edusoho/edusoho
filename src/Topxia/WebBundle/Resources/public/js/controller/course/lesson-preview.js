@@ -29,7 +29,6 @@ define(function(require, exports, module) {
                     mediaPlayer.on('ended', function() {
                         $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
                     });
-                    $hlsUrl+='?timeLimit='+$("#lesson-preview-video-player").data('timelimit');
                 }
 
         		mediaPlayer.setSrc($hlsUrl, 'video');

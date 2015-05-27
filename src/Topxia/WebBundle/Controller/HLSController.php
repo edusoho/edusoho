@@ -16,7 +16,7 @@ class HLSController extends BaseController
     {
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
-
+        $mode = $request->query->get('mode', null);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
         if (empty($token)) {
@@ -52,8 +52,11 @@ class HLSController extends BaseController
             if ($hideBeginning) {
                 $params['hideBeginning'] = 1;
             }
-
-            $streams[$level] = $this->generateUrl('hls_stream', $params, true);
+            if (empty($mode)) {
+                $streams[$level] = $this->generateUrl('hls_stream', $params, true);
+            } else {
+                $streams[$level] = $this->generateUrl('hls_stream_preview', $params, true);
+            }
         }
 
         $qualities = array(
@@ -114,8 +117,63 @@ class HLSController extends BaseController
         if (!empty($line)) {
             $params['line'] = $line;
         }
+        
+        $api = CloudAPIFactory::create();
 
-        $timeLimit = $request->query->get('timeLimit');
+        $stream = $api->get('/hls/stream', $params);
+
+        if (empty($stream['stream'])) {
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+        }
+
+        return new Response($stream['stream'], 200, array(
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"',
+        ));
+
+    }
+
+    public function streamPreviewAction(Request $request, $id, $level, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+
+        if (empty($token)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($token['data'] != ($id.$level)) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($id);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['metas2'][$level]['key'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $params = array();
+        $params['key'] = $file['metas2'][$level]['key'];
+
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
+
+        $hideBeginning = $request->query->get('hideBeginning');
+        if (empty($hideBeginning)) {
+            $beginning = $this->getVideoBeginning($level);
+            if ($beginning['beginningKey']) {
+                $params = array_merge($params, $beginning);
+            }
+        }
+
+        $line = $request->query->get('line');
+        if (!empty($line)) {
+            $params['line'] = $line;
+        }
+
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
         if (!empty($timeLimit)) {
             $params['limitSecond'] = $timeLimit;
         }
@@ -134,6 +192,7 @@ class HLSController extends BaseController
         ));
 
     }
+
 
     public function clefAction(Request $request, $id, $token)
     {
