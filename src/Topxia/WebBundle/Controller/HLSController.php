@@ -107,7 +107,7 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
         $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 1, 'duration' => 3600));
-        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => array('id' => $file['id'], 'mode' => 'preview'), 'token' => $token['token']), true);
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' =>  $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
         if (empty($hideBeginning)) {
