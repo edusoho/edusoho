@@ -38,12 +38,15 @@ define(function(require, exports, module) {
                 $target.addClass('es-icon-keyboardarrowup').removeClass('es-icon-keyboardarrowdown');
             },
             _lessonListSHow: function($list) {
-                $list.animate({
-                    visibility: 'toggle',
-                    opacity: 'toggle',
-                    easing: 'linear'
-                });
-                $list.height();
+                if ($list.length > 0) {
+                    $list.animate({
+                        visibility: 'toggle',
+                        opacity: 'toggle',
+                        easing: 'linear'
+                    });
+                    $list.height();
+                }
+          
               
             },
             _initChapter: function(e) {
