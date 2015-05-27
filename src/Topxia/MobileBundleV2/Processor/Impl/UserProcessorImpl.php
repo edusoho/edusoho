@@ -309,15 +309,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             
             $smsCode = $this->generateSmsCode();
-            try {
-                $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
-                if (isset($result['error'])) {
-                    return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
-                }
-            } catch (\RuntimeException $e) {
-                $message = $e->getMessage();
-                return $this->createMetaAndData(null, 500, "发送失败, {$message}");
-            }
+            // try {
+            //     $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
+            //     if (isset($result['error'])) {
+            //         return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
+            //     }
+            // } catch (\RuntimeException $e) {
+            //     $message = $e->getMessage();
+            //     return $this->createMetaAndData(null, 500, "发送失败, {$message}");
+            // }
 
             $result['to'] = $phoneNumber;
             $result['smsCode'] = $smsCode;
@@ -439,6 +439,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+            return $this->request->getSession()->get($scenario);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
                     $this->clearSmsSession($this->request, 'sms_registration');
