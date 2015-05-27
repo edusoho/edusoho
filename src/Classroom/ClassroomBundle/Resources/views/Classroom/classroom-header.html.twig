@@ -30,19 +30,21 @@
           </div>
           <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
             <li>
-              <i class="es-icon es-icon-person"></i><br>学员({{classroom.studentNum + classroom.auditorNum }})
+              <p><i class="es-icon es-icon-person"></i></p>
+              <p>学员({{classroom.studentNum + classroom.auditorNum }})</p>
             </li>
             <li>
-              <i class="es-icon es-icon-book"></i><br>课程({{classroom.courseNum}})
+              <p><i class="es-icon es-icon-book"></i></p>
+              <p>课程({{classroom.courseNum}})</p>
             </li>
             <li>
               <span class="es-share top">
                 <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
-                  <i class="es-icon es-icon-share"></i>
+                  <p><i class="es-icon es-icon-share"></i></p>
+                  <p>分享</p>
                 </a>
-                    {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %}
+                {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %}
               </span>
-              <br>分享
             </li>
           {% if classroomMemberLevel and not classroom.private %}
 

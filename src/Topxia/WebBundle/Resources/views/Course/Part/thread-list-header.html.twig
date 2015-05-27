@@ -9,12 +9,12 @@
   </div>
 
 
-  <ul class="nav nav-pills">
-    <li{% if filters.type == 'all' %} class="active"{% endif %}><a class="btn btn-default btn-sm" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
+  <ul class="nav nav-pills nav-pills-sm">
+    <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
     
-    <li{% if filters.type == 'question' %} class="active"{% endif %}><a class="btn btn-default btn-sm" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
+    <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
 
-    <li{% if filters.type == 'elite' %} class="active"{% endif %}><a class="btn btn-default btn-sm" data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
+    <li{% if filters.type == 'elite' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'elite'})) }}">精华</a></li>
 
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">
