@@ -106,6 +106,7 @@ class HLSController extends BaseController
         if ($mode == 'preview' && !empty($timelimit)) {
             $params['limitSecond'] = $timelimit;
         }
+
         $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 1, 'duration' => 3600));
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' =>  $file['id'], 'token' => $token['token']), true);
 
@@ -124,6 +125,7 @@ class HLSController extends BaseController
         
         $api = CloudAPIFactory::create();
         
+        $params['limitSecond'] = 120;
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
