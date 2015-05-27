@@ -35,6 +35,9 @@ class HLSController extends BaseController
 
         $streams = array();
         $mode = is_array($token['data']) ? $token['data']['mode'] : '';
+        var_dump($token['data']);
+        var_dump($mode);
+        exit();
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
