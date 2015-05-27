@@ -10,7 +10,6 @@ class ArticleController extends BaseController
 
     public function indexAction(Request $request)
     {
-
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         $conditions = array(
@@ -20,7 +19,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            10
+            $this->setting('article.pageNums', 10)
         );
 
         $latestArticles = $this->getArticleService()->searchArticles(
@@ -103,7 +102,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            10
+            $this->setting('article.pageNums', 10)
         );
 
         $articles = $this->getArticleService()->searchArticles(
@@ -377,7 +376,7 @@ class ArticleController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getArticleService()->searchArticlesCount($conditions),
-            10
+            $this->setting('article.pageNums', 10)
         );
 
         $articles = $this->getArticleService()->searchArticles(
