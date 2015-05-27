@@ -309,15 +309,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             
             $smsCode = $this->generateSmsCode();
-            try {
-                $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
-                if (isset($result['error'])) {
-                    return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
-                }
-            } catch (\RuntimeException $e) {
-                $message = $e->getMessage();
-                return $this->createMetaAndData(null, 500, "发送失败, {$message}");
-            }
+            // try {
+            //     $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
+            //     if (isset($result['error'])) {
+            //         return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
+            //     }
+            // } catch (\RuntimeException $e) {
+            //     $message = $e->getMessage();
+            //     return $this->createMetaAndData(null, 500, "发送失败, {$message}");
+            // }
 
             $result['to'] = $phoneNumber;
             $result['smsCode'] = $smsCode;
