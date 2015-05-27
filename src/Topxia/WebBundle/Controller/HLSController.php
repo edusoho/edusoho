@@ -174,10 +174,10 @@ class HLSController extends BaseController
         }
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
-        if (!empty($timeLimit)) {
+        if (intval($timelimit) >0) {
             $params['limitSecond'] = $timeLimit;
         }
-        var_dump(!empty($timeLimit));
+        var_dump(intval($timelimit) >0);
         var_dump($timelimit);
         var_dump($params);
         exit();
