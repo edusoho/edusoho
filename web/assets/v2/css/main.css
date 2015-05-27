@@ -7,6 +7,9 @@ a:focus {
 .caret {
   margin-left: 5px;
 }
+.form-control {
+  height: 38px;
+}
 .form-control:focus {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -2523,29 +2526,29 @@ textarea.form-control-o {
 .es-card .card-footer span:last-child {
   border: none;
 }
-.list-group .list-group-heading {
+.sidenav .list-group .list-group-heading {
   list-style-type: none;
   color: #9e9e9e;
   margin-bottom: 10px;
   margin-left: 20px;
 }
-.list-group .list-group-item {
+.sidenav .list-group .list-group-item {
   border: none;
   padding: 10px 15px 10px 35px;
   border-left: 2px solid transparent;
 }
-.list-group .list-group-item:hover {
+.sidenav .list-group .list-group-item:hover {
   background-color: #f5f5f5;
 }
-.list-group .list-group-item > a {
+.sidenav .list-group .list-group-item > a {
   display: block;
   color: #616161;
 }
-.list-group .list-group-item.active {
+.sidenav .list-group .list-group-item.active {
   border-left: 2px solid #37b97d;
   background: none;
 }
-.list-group .list-group-item.active > a {
+.sidenav .list-group .list-group-item.active > a {
   color: #37b97d;
 }
 .sidenav {
@@ -2557,6 +2560,9 @@ textarea.form-control-o {
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+.nav-pills > li {
+  margin-right: 5px;
 }
 .nav-pills > li > a {
   padding: 8px 24px;
@@ -5189,8 +5195,13 @@ textarea.form-control-o {
   top: 200px;
   right: 20px;
 }
+.panel-fixed .panel-heading {
+  position: relative;
+}
 .panel-fixed .pack-up {
-  float: right;
+  position: absolute;
+  top: 12px;
+  right: 0;
   margin-right: 0 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
