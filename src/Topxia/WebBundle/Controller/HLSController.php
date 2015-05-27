@@ -106,8 +106,8 @@ class HLSController extends BaseController
         if ($mode == 'preview' && !empty($timelimit)) {
             $params['limitSecond'] = $timelimit;
         }
-        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
-        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 1, 'duration' => 3600));
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => array('id' => $file['id'], 'mode' => 'preview'), 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
         if (empty($hideBeginning)) {
@@ -123,8 +123,7 @@ class HLSController extends BaseController
         }
         
         $api = CloudAPIFactory::create();
-        var_dump($params);
-        // exit();
+        
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
@@ -146,7 +145,8 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
-        if ($token['data'] != $id) {
+        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
+        if ($dataId != $id) {
             return new Response($fakeKey);
         }
 
