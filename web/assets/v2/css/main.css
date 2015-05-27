@@ -1124,10 +1124,8 @@ body.nav-active {
 .course-list .course-item .course-img .tag-discount.free {
   background: url("../img/tag_limitfree.png");
 }
-@media (max-width: 767px) {
-  .course-list .course-item .course-img .img-responsive {
-    width: 100%;
-  }
+.course-list .course-item .course-img .img-responsive {
+  width: 100%;
 }
 .course-list .course-item .course-img:hover {
   opacity: .9;
@@ -2472,11 +2470,12 @@ textarea.form-control-o {
   font-size: 12px;
   margin-left: 8px;
 }
-.cardtip {
-  display: block;
+.js-user-card {
+  display: inline-block;
 }
 .es-card {
   width: 330px;
+  z-index: 999;
 }
 .es-card .popover-content {
   padding: 0;
@@ -2942,10 +2941,8 @@ textarea.form-control-o {
   white-space: nowrap;
   word-wrap: normal;
 }
-@media (max-width: 767px) {
-  .recommend-class-list .class-item .img-responsive {
-    width: 100%;
-  }
+.recommend-class-list .class-item .img-responsive {
+  width: 100%;
 }
 .group-dynamic {
   padding-bottom: 30px;
