@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         	var self = this;
         	var path = require.resolve("webuploader").match(/[^?#]*\//)[0];
         	var formData = $.extend(self.get("formData"), {token: self.element.data("uploadToken")});
-		    var uploader = WebUploader.create({
+		    var uploader = new WebUploader.create({
 		        swf: path + "Uploader.swf",
 		        server: app.uploadUrl,
 		        pick: {
