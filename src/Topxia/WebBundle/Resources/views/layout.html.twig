@@ -101,8 +101,8 @@
               <li class="hidden-lg">
                 <a href="{{ path('my') }}"><i class="es-icon es-icon-study"></i>学习中心</a>
               </li>
-              <li class="hidden-lg"><a href="{{ path('notification') }}"><i class="es-icon es-icon-notificationson"></i>通知<span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span></a></li>
-              <li class="hidden-lg"><a href="{{ path('message') }}"><i class="es-icon es-icon-mail"></i>私信<span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span></a></li>
+              <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>通知</a></li>
+              <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>私信</a></li>
               <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
             </ul>
           </li>

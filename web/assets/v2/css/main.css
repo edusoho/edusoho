@@ -269,9 +269,37 @@ a:focus {
 .inline-block {
   display: inline-block;
 }
-.default-text {
+.text-default {
   text-align: center;
   color: #e0e0e0;
+}
+.link-dark {
+  color: #212121;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.link-dark:hover {
+  color: #37b97d;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.link-light {
+  color: #616161;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.link-light:hover {
+  color: #37b97d;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 a.transition {
   -webkit-transition: all 0.3s ease;
@@ -1432,6 +1460,12 @@ body.nav-active {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+.panel.panel-default > .panel-heading .panel-bar {
+  position: absolute;
+  top: 7px;
+  right: 0;
+  display: block;
 }
 .panel.panel-default > .panel-footer {
   background: none;
@@ -2856,7 +2890,7 @@ textarea.form-control-o {
   background-image: -webkit-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-image: -moz-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-image: -o-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
-  background-color: #ffffff;
+  background-color: #37b97d;
 }
 .introduction-section h4,
 .introduction-section h5 {
