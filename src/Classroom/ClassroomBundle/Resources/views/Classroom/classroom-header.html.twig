@@ -1,3 +1,4 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 
 {% if member.locked|default("0") == "1" %}
 <div class="row">
@@ -22,7 +23,10 @@
         <div class="class-info">
           <h2 class="title">{{ classroom.title }}</h2>
           <div class="metas">
-            {% include 'TopxiaWebBundle:Review/Widget:star.html.twig' with {score:classroom.rating, num:classroom.ratingNum} %}
+            <div class="score">
+              {{ web_macro.star(classroom.rating) }}
+              <span>({{ classroom.ratingNum }}评价)</span>
+            </div>
           </div>
           <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
             <li>
