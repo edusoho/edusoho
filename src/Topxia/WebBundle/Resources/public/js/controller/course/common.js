@@ -24,7 +24,7 @@ define(function(require, exports, module) {
         $("#favorite-btn").on('click', function() {
             var $btn = $(this);
             alert('url='+$btn.data('url'));
-            $.post($btn.data('url'), function() {
+            $.post($btn.data('url'), {'time':new Date().getTime()}, function() {
                 $btn.hide();
                 $("#unfavorite-btn").show();
             });
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
         $("#unfavorite-btn").on('click', function() {
             var $btn = $(this);
             alert('url='+$btn.data('url'));
-            $.post($btn.data('url'), function() {
+            $.post($btn.data('url'), {'time':new Date().getTime()}, function() {
                 $btn.hide();
                 $("#favorite-btn").show();
             });
