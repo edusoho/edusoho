@@ -93,7 +93,7 @@ class HLSController extends BaseController
         //     throw $this->createNotFoundException();
         // }
 
-        if ($token['data'] != $id) {
+        if ($token['data'] != ($id.$level)) {
             throw $this->createNotFoundException();
         }
 
