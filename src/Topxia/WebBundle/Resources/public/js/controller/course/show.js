@@ -2,8 +2,13 @@ define(function(require, exports, module) {
 
     require('jquery.countdown');
     var Swiper = require('swiper');
+    var chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
 
     exports.run = function() {
+        new chapterAnimate({
+            'element': '.course-detail-content'
+        });
+
         $('#teacher-carousel').carousel({
             interval: 0
         });
@@ -153,9 +158,6 @@ define(function(require, exports, module) {
             e.preventDefault();
             swiper.swipeNext();
         })
-
-
-
 
     };
 
