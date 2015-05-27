@@ -16,15 +16,14 @@ class HLSController extends BaseController
     {
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
+        $mode = $request->query->get('mode', null);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
         if (empty($token)) {
             throw $this->createNotFoundException();
         }
 
-        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
-        
-        if ($dataId != $id) {
+        if ($token['data'] != $id) {
             throw $this->createNotFoundException();
         }
 
@@ -34,13 +33,12 @@ class HLSController extends BaseController
         }
 
         $streams = array();
-        $mode = is_array($token['data']) ? $token['data']['mode'] : '';
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => 'preview') , 'times' => 1, 'duration' => 3600, 'mode' => $mode));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 1, 'duration' => 3600));
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
@@ -54,7 +52,11 @@ class HLSController extends BaseController
             if ($hideBeginning) {
                 $params['hideBeginning'] = 1;
             }
-            $streams[$level] = $this->generateUrl('hls_stream', $params, true);
+            if (empty($mode)) {
+                $streams[$level] = $this->generateUrl('hls_stream', $params, true);
+            } else {
+                $streams[$level] = $this->generateUrl('hls_stream_preview', $params, true);
+            }
         }
 
         $qualities = array(
@@ -84,8 +86,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
-        if ($dataId != ($id.$level)) {
+        if ($token['data'] != ($id.$level)) {
             throw $this->createNotFoundException();
         }
 
@@ -101,14 +102,8 @@ class HLSController extends BaseController
         $params = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        $mode = is_array($token['data']) ? $token['data']['mode'] : '';
-        $timelimit = $this->setting('magic.lesson_watch_time_limit');
-        if ($mode == 'preview' && !empty($timelimit)) {
-            $params['limitSecond'] = $timelimit;
-        }
-
-        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 1, 'duration' => 3600));
-        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' =>  $file['id'], 'token' => $token['token']), true);
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
         if (empty($hideBeginning)) {
@@ -124,8 +119,7 @@ class HLSController extends BaseController
         }
         
         $api = CloudAPIFactory::create();
-        
-        $params['limitSecond'] = 120;
+
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
@@ -139,6 +133,67 @@ class HLSController extends BaseController
 
     }
 
+    public function streamPreviewAction(Request $request, $id, $level, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+
+        if (empty($token)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($token['data'] != ($id.$level)) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($id);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['metas2'][$level]['key'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $params = array();
+        $params['key'] = $file['metas2'][$level]['key'];
+
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
+
+        $hideBeginning = $request->query->get('hideBeginning');
+        if (empty($hideBeginning)) {
+            $beginning = $this->getVideoBeginning($level);
+            if ($beginning['beginningKey']) {
+                $params = array_merge($params, $beginning);
+            }
+        }
+
+        $line = $request->query->get('line');
+        if (!empty($line)) {
+            $params['line'] = $line;
+        }
+
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+        if (!empty($timeLimit)) {
+            $params['limitSecond'] = $timeLimit;
+        }
+        
+        $api = CloudAPIFactory::create();
+
+        $stream = $api->get('/hls/stream', $params);
+
+        if (empty($stream['stream'])) {
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+        }
+
+        return new Response($stream['stream'], 200, array(
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"',
+        ));
+
+    }
+
+
     public function clefAction(Request $request, $id, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
@@ -147,8 +202,7 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
-        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
-        if ($dataId != $id) {
+        if ($token['data'] != $id) {
             return new Response($fakeKey);
         }
 

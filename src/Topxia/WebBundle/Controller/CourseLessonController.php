@@ -28,7 +28,6 @@ class CourseLessonController extends BaseController
         }
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
-
         if ($lesson['mediaSource'] != 'self' || (empty($timelimit) && empty($lesson['free']))) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
@@ -60,7 +59,7 @@ class CourseLessonController extends BaseController
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
 
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
                     $hls = array(
                         'url' => $this->generateUrl('hls_playlist', array(
                             'id' => $file['id'], 
@@ -94,7 +93,7 @@ class CourseLessonController extends BaseController
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         }
-
+        $hls['url'].='?mode=preview';
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
