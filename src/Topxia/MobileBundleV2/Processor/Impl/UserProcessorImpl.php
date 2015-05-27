@@ -309,15 +309,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             
             $smsCode = $this->generateSmsCode();
-            // try {
-            //     $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
-            //     if (isset($result['error'])) {
-            //         return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
-            //     }
-            // } catch (\RuntimeException $e) {
-            //     $message = $e->getMessage();
-            //     return $this->createMetaAndData(null, 500, "发送失败, {$message}");
-            // }
+            try {
+                $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
+                if (isset($result['error'])) {
+                    return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
+                }
+            } catch (\RuntimeException $e) {
+                $message = $e->getMessage();
+                return $this->createMetaAndData(null, 500, "发送失败, {$message}");
+            }
 
             $result['to'] = $phoneNumber;
             $result['smsCode'] = $smsCode;
@@ -441,7 +441,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
-                    // $this->clearSmsSession($this->request, 'sms_registration');
+                    $this->clearSmsSession($this->request, 'sms_registration');
                     $user = $this->controller->getAuthService()->register(array(
                         'emailOrMobile' => $sessionField['to'],
                         'nickname' => $nickname,
@@ -456,7 +456,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
-        return $this->createMetaAndData(array(
+        return  $this->createMetaAndData(array(
             'user' => $this->controller->filterUser($user),
             'token' => $token), 200, '注册成功');
     }
@@ -464,7 +464,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     private function smsCheck($request, $mobileInfo, $scenario)
     {
         $sessionField = $request->getSession()->get($scenario);
-        return $sessionField;
+        var_dump($sessionField);
+        exit();
         $sessionField['sms_type'] = $scenario;
 
         $requestField['sms_code'] = $mobileInfo['sms_code'];
