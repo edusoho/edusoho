@@ -13,7 +13,9 @@
           <div class="media-body">
             <div class="title">
               <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a>
-              {% include 'TopxiaWebBundle:Review/Widget:star.html.twig' with {score:course.rating,num:course.ratingNum} %}  
+              <div class="score">
+                {{ web_macro.star(course.rating) }}
+              </div>
             
 
               <div class="price hidden-xs">

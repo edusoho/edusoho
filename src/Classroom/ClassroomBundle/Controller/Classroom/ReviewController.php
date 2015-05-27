@@ -30,11 +30,13 @@ class ReviewController extends BaseController
         $reviewsNum = $this->getClassroomReviewService()->searchReviewCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $reviewsNum, 20
+            $reviewsNum,
+            20
         );
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
-            $conditions, array('createdTime', 'DESC'),
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -46,25 +48,10 @@ class ReviewController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
         $review = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
-        $form = $this->createForm(new ClassroomReviewType(), $review ?: array());
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $fields = $form->getData();
-                $fields['rating'] = $fields['rating'];
-                $fields['userId'] = $user['id'];
-                $fields['classroomId'] = $id;
-                $this->getClassroomReviewService()->saveReview($fields);
-
-                return $this->createJsonResponse(true);
-            }
-        }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
-            $form =  $form->createView();
         }
 
         return $this->render("ClassroomBundle:Classroom\Review:list.html.twig", array(
@@ -73,12 +60,24 @@ class ReviewController extends BaseController
             'paginator' => $paginator,
             'reviewsNum' => $reviewsNum,
             'reviews' => $reviews,
-            'review' => $review,
+            'userReview' => $review,
+            'reviewSaveUrl' => $this->generateUrl('classroom_review_create', array('id' => $id)),
             'users' => $reviewUsers,
             'member' => $member,
-            'form' => $form,
             'layout' => $layout,
         ));
+    }
+
+    public function createAction(Request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+        $fields = $request->request->all();
+        $fields['rating'] = $fields['rating'];
+        $fields['userId'] = $user['id'];
+        $fields['classroomId'] = $id;
+        $this->getClassroomReviewService()->saveReview($fields);
+
+        return $this->createJsonResponse(true);
     }
 
     private function getClassroomService()
