@@ -28,6 +28,7 @@ class CourseLessonController extends BaseController
         }
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
+
         if ($lesson['mediaSource'] != 'self' || (empty($timelimit) && empty($lesson['free']))) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();

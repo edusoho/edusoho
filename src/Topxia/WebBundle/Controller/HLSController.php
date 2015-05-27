@@ -174,13 +174,9 @@ class HLSController extends BaseController
         }
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
-        var_dump($timelimit);
-        var_dump(!empty($timeLimit));
-        if (!empty($timeLimit)) {
-            $params['limitSecond'] = $timeLimit;
+        if (!empty($timelimit)) {
+            $params['limitSecond'] = $timelimit;
         }
-        var_dump($params);
-        exit();
         $api = CloudAPIFactory::create();
 
         $stream = $api->get('/hls/stream', $params);
