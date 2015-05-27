@@ -35,15 +35,13 @@ class HLSController extends BaseController
 
         $streams = array();
         $mode = is_array($token['data']) ? $token['data']['mode'] : '';
-        var_dump($token['data']);
-        var_dump($mode);
-        exit();
+
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => 'preview') , 'times' => 1, 'duration' => 3600, 'mode' => $mode));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 1, 'duration' => 3600));
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
@@ -110,7 +108,7 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
 
-        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 1, 'duration' => 3600));
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => $mode), 'times' => 1, 'duration' => 3600));
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' =>  $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
