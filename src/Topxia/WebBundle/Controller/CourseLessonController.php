@@ -548,7 +548,7 @@ class CourseLessonController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
 
         $homeworkLessonIds = array();
-        $exerciseLessonIds = array();
+        $exercisesLessonIds = array();
         if ($this->isPluginInstalled("Homework")) {
             $lessonIds = ArrayToolkit::column($items, 'id');
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
