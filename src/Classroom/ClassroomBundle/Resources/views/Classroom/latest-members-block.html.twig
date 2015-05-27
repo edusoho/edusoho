@@ -10,7 +10,7 @@
 			{% set user = users[student.userId] %}
 			{% if loop.index < 16%}
 			<li>
-			{{ web_macro.user_avatar(user, '', 'img-circle', true) }}
+			{{ web_macro.user_avatar(user, 'user-link user-avatar-link pull-left', 'img-circle', true) }}
 			</li>
 			{% endif %}
 		{% endfor %}
