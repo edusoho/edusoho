@@ -456,7 +456,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
-        $result['data'] = array(
+        $data['data'] = array(
             'user' => $this->controller->filterUser($user),
             'token' => $token);
 
