@@ -439,9 +439,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
-                // var_dump($requestInfo);
-                // var_dump($this->request->getSession()->get('sms_registration'));
-                // exit();
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
                     $this->clearSmsSession($this->request, 'sms_registration');
@@ -459,7 +456,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
-        $data = $this->controller->filterUser($user);
+        $result['data'] = array(
+            'user' => $this->controller->filterUser($user),
+            'token' => $token);
+
         return  $this->createMetaAndData($data, 200, '注册成功');
     }
 
