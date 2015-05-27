@@ -1,6 +1,4 @@
 {% set learnStatuses = learnStatuses|default([]) %}
-{% set homeworkLessonIds = homeworkLessonIds|default([]) %}
-{% set exerciseLessonIds = exerciseLessonIds|default([]) %}
 {% if items %}
   <ul class="period-list" id="course-item-list">
   {% for id, item in items %}

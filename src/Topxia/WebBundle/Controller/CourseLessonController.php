@@ -547,22 +547,10 @@ class CourseLessonController extends BaseController
         $items = $this->getCourseService()->getCourseItems($courseId);
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $homeworkLessonIds = array();
-        $exercisesLessonIds = array();
-        if ($this->isPluginInstalled("Homework")) {
-            $lessonIds = ArrayToolkit::column($items, 'id');
-            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
-            $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
-            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
-            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
-        }
-
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
             'learnStatuses' => $learnStatuses,
-            'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds,
             'currentTime' => time()
         ));
     }
