@@ -124,7 +124,7 @@ class HLSController extends BaseController
         
         $api = CloudAPIFactory::create();
         var_dump($params);
-        exit();
+        // exit();
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
