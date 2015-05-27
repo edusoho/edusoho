@@ -14,7 +14,11 @@
         {% endif %}
 
         {% if member.role == 'assistant' %}
-          <i class="es-icon es-icon-accountcircle color-w" data-toggle="tooltip" data-placement="top" title="" data-original-title="助教"></i>
+          <i class="es-icon es-icon-permcontactcal color-i" data-toggle="tooltip" data-placement="top" title="" data-original-title="助教"></i>
+        {% endif %}
+
+        {% if member.role == 'teacher' %}
+          <i class="es-icon es-icon-accountcircle color-i" data-toggle="tooltip" data-placement="top" title="" data-original-title="教师"></i>
         {% endif %}
 
         {% if not app.user or (teacher.id != app.user.id) %}

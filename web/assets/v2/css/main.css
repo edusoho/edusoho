@@ -1124,8 +1124,10 @@ body.nav-active {
 .course-list .course-item .course-img .tag-discount.free {
   background: url("../img/tag_limitfree.png");
 }
-.course-list .course-item .course-img .img-responsive {
-  width: 100%;
+@media (max-width: 767px) {
+  .course-list .course-item .course-img .img-responsive {
+    width: 100%;
+  }
 }
 .course-list .course-item .course-img:hover {
   opacity: .9;
@@ -1195,21 +1197,27 @@ body.nav-active {
 }
 .nav-filter .btn-group {
   float: right;
-  margin-top: -4px;
+  margin-top: -5px;
 }
-.nav-filter .nav.nav-pills {
+.nav-filter .nav-pills {
   float: left;
 }
-.nav-filter .nav.nav-pills > li {
-  margin: 0 10px;
+.nav-filter .nav-pills > li {
+  margin-right: 15px;
 }
-.nav-filter .nav.nav-pills > li.dropdown > a {
+@media (max-width: 767px) {
+  .nav-filter .nav-pills > li {
+    margin-right: 10px;
+  }
+}
+.nav-filter .nav-pills > li.dropdown > a {
   font-size: 14px;
   color: #616161;
   border: none;
   background: none;
+  padding: 4px 0;
 }
-.nav-filter .nav.nav-pills > li.dropdown > a:hover {
+.nav-filter .nav-pills > li.dropdown > a:hover {
   color: #37b97d;
 }
 .topic-list .topic-item {
@@ -2551,7 +2559,7 @@ textarea.form-control-o {
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
-.nav.nav-pills > li > a {
+.nav-pills > li > a {
   padding: 8px 24px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -2563,7 +2571,7 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.nav.nav-pills > li > a:hover {
+.nav-pills > li > a:hover {
   background: none;
   color: #37b97d;
   border-color: #37b97d;
@@ -2572,7 +2580,7 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.nav.nav-pills > li.active > a {
+.nav-pills > li.active > a {
   color: #fff;
   border-color: #37b97d;
   background: #37b97d;
@@ -2581,19 +2589,10 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.nav.nav-pills.nav-pills-sm > li > a {
+.nav-pills.nav-pills-sm > li > a {
   font-size: 12px;
   line-height: 1.5;
-}
-@media (min-width: 768px) {
-  .nav.nav-pills.nav-pills-sm > li > a {
-    padding: 5px 13px;
-  }
-}
-@media (max-width: 767px) {
-  .nav.nav-pills.nav-pills-sm > li > a {
-    padding: 4px 8px;
-  }
+  padding: 4px 13px;
 }
 .es-tag {
   background: #fff;
@@ -2837,7 +2836,7 @@ textarea.form-control-o {
 .course-filter .course-sort {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 5px;
 }
 .course-filter .course-sort .btn-circle {
   margin-left: 10px;
@@ -2943,8 +2942,10 @@ textarea.form-control-o {
   white-space: nowrap;
   word-wrap: normal;
 }
-.recommend-class-list .class-item .img-responsive {
-  width: 100%;
+@media (max-width: 767px) {
+  .recommend-class-list .class-item .img-responsive {
+    width: 100%;
+  }
 }
 .group-dynamic {
   padding-bottom: 30px;
@@ -5032,10 +5033,10 @@ textarea.form-control-o {
 }
 .class-signin .btn-signin {
   position: absolute;
-  padding: 30px 25px;
+  padding: 20px 25px;
+  line-height: 24px;
   text-align: center;
   font-size: 16px;
-  vertical-align: middle;
   top: 0;
   bottom: 0;
   right: 0;
@@ -5045,7 +5046,7 @@ textarea.form-control-o {
   border-bottom-right-radius: 4px;
 }
 .class-signin .btn-signin.after {
-  padding: 20px 15px;
+  padding: 8px 15px;
 }
 .class-banner {
   background: url("../img/class_banner.jpg") center center;
