@@ -22,9 +22,13 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
+        // $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
         
-        if ($dataId != $id) {
+        // if ($dataId != $id) {
+        //     throw $this->createNotFoundException();
+        // }
+
+        if ($token['data'] != $id) {
             throw $this->createNotFoundException();
         }
 
@@ -34,13 +38,13 @@ class HLSController extends BaseController
         }
 
         $streams = array();
-        $mode = is_array($token['data']) ? $token['data']['mode'] : '';
+        // $mode = is_array($token['data']) ? $token['data']['mode'] : '';
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => 'preview') , 'times' => 1, 'duration' => 3600, 'mode' => $mode));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id']. $level, 'times' => 1, 'duration' => 3600));
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
@@ -84,8 +88,12 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
-        if ($dataId != ($id.$level)) {
+        // $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
+        // if ($dataId != ($id.$level)) {
+        //     throw $this->createNotFoundException();
+        // }
+
+        if ($token['data'] != $id) {
             throw $this->createNotFoundException();
         }
 
@@ -101,11 +109,13 @@ class HLSController extends BaseController
         $params = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        $mode = is_array($token['data']) ? $token['data']['mode'] : '';
+        // $mode = is_array($token['data']) ? $token['data']['mode'] : '';
+        // $timelimit = $this->setting('magic.lesson_watch_time_limit');
+        // if ($mode == 'preview' && !empty($timelimit)) {
+        //     $params['limitSecond'] = $timelimit;
+        // }
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
-        if ($mode == 'preview' && !empty($timelimit)) {
-            $params['limitSecond'] = $timelimit;
-        }
+        $params['limitSecond'] = $timelimit;
         $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
