@@ -10,7 +10,7 @@
 		<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_add',{targetType:targetType, targetId:targetId})}}">{% if announcement.id|default(null) %}编辑{% else %}添加{% endif %}公告</a>
 	</li>
 	<li {% if tab == "list" %}class="active"{% endif %}>
-		<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_list',{targetType:targetType, targetId:targetId})}}">公告列表</a>
+		<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_list',{targetType:targetType, targetId:targetId})}}">历史公告</a>
 	</li>
 </ul>
 {% block content %}{% endblock %}

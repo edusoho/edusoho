@@ -41,6 +41,8 @@
               <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
             {% elseif order.targetType == 'vip' %}
               <a href="{{ path('vip', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+            {% elseif order.targetType == 'classroom' %}
+              <a href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
             {% else %}
               {{ order.title }}
             {% endif %}

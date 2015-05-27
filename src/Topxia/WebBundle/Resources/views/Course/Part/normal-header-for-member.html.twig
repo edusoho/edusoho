@@ -14,7 +14,7 @@
 
     <div class="course-operation">
       {{ header_macro.student_num(course) }}
-      <ul class="course-data clearfix">
+      <ul class="course-data clearfix {% if not ( not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course') %}two-col{% endif %}">
         {{ header_macro.favorite_btn(course, hasFavorited) }}
         {{ header_macro.share_btn(course) }}
         {% if not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course' %}

@@ -1,4 +1,4 @@
-<a class="btn btn-primary btn-lg" 
+<a class="btn btn-primary btn-lg btn-high" 
   {% if userVipStatus == 'ok' %}
     id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
   {% elseif setting("course.buy_fill_userinfo")|default(false) or (course.approval and (app.user.approvalStatus == 'unapprove' or app.user.approvalStatus == 'approve_fail')) %}

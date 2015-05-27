@@ -37,7 +37,7 @@
       </ul>
     </div>
     <div class="course-sort">
-      <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'latest'}) }}" class="btn-circle {% if (orderBy == 'latest') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="按时间排序">
+      <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'latest'}) }}" class="btn-circle {% if (orderBy == 'latest') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="最新">
         <i class="es-icon es-icon-accesstime"></i>
       </a>
       <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'studentNum'}) }}" class="btn-circle {% if (orderBy == 'studentNum') %} active {% endif %}" data-toggle="tooltip" data-placement="top" title="最热">
