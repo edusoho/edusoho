@@ -64,6 +64,14 @@ class ClassroomThreadController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
 
+        $user = $this->getCurrentUser();
+        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+
+        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        if ($member && !$member['locked']) {
+            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+        }
+
         if ($request->getMethod() == 'POST') {
             return $this->forward('TopxiaWebBundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
         }
@@ -72,6 +80,7 @@ class ClassroomThreadController extends BaseController
             'classroom' => $classroom,
             'thread' => $thread,
             'type' => $thread['type'],
+            'member' => $member
         ));
     }
 
