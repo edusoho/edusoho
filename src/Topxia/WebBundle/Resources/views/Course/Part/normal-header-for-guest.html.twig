@@ -21,7 +21,11 @@
       {% endif %}
     </ul>
     <div class="buy">
-      {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
+      {% if source|default("") == "classroom" %}
+        {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: course.id})) }}
+      {% else %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
+      {% endif %}
     </div>
   </div>
 
