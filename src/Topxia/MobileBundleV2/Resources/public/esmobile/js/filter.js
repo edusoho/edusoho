@@ -30,6 +30,16 @@ filter('coverLearnProsser', ['$rootScope', function($rootScope){
 		}
 	}
 }]).
+filter('formatChapterNumber', ['$rootScope', function($rootScope){
+
+	return function(chapter) {
+		if (chapter.type != "chapter" && chapter.type != "unit") {
+			return "";
+		}
+		var number = chapter.number;
+		return "第" + number + (chapter.type == "chapter" ?  "章" : "节");
+	}
+}]).
 filter('coverLearnTime', ['$rootScope', function($rootScope){
 
 	Date.prototype.Format = function(fmt) 
@@ -74,7 +84,7 @@ filter('coverPic', ['$rootScope', function($rootScope){
 		if (src) {
 			return src;
 		}
-		return "img/course_default.jpg";
+		return app.viewFloder  + "img/course_default.jpg";
 	}
 }]).
 filter('coverAvatar', ['$rootScope', function($rootScope){
@@ -83,6 +93,6 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 		if (src) {
 			return src;
 		}
-		return "img/avatar.png";
+		return app.viewFloder  + "img/avatar.png";
 	}
 }]);

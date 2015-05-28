@@ -1,9 +1,65 @@
 app.controller('CourseListController', ['$scope', '$stateParams', 'AppUtil', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
+app.controller('CourseController', ['$scope', '$stateParams', 'CourseService', 'AppUtil', 'LessonService', CourseListController]);
 
+function CourseController($scope, $stateParams, CourseService, AppUtil, LessonService, $ionicScrollDelegate)
+{
+    CourseService.getCourse({
+      courseId : $stateParams.courseId,
+      token : $scope.token
+    }, function(data) {
+      $scope.ratingArray = AppUtil.createArray(5);
+      $scope.vipLevels = data.vipLevels;
+      $scope.course = data.course;
+    });
+
+    LessonService.getCourseLessons({
+      courseId : $stateParams.courseId,
+      token : $scope.token
+    }, function(data) {
+      $scope.lessons = data.lessons;
+    });
+
+    CourseService.getReviews({
+      courseId : $stateParams.courseId,
+      token : $scope.token,
+      limit : 1
+    }, function(data) {
+      $scope.reviews = data.data;
+    });
+
+    var mainHandle = $ionicScrollDelegate.$getByHandle("mainScroll");
+    var tabScroll = $ionicScrollDelegate.$getByHandle("tabScroll");
+
+    var lastScrollTop = 0;
+
+    $scope.xscroll = function(event, scrollTop, scrollLeft) {
+
+      var position = mainHandle.getScrollPosition();
+      var chlidPosition = tabScroll.getScrollPosition();
+
+      if (position.top == 302 ) {
+        if (scrollTop > lastScrollTop) {
+          lastScrollTop = scrollTop;
+          console.log("up");
+          return;
+        }
+        if (scrollTop < lastScrollTop) {
+          console.log("down");
+          lastScrollTop = scrollTop;
+        }
+
+        return;
+      }
+
+      var scroll = event.srcElement.querySelector(".scroll");
+      scroll.style.webkitTransform = "translate3d(0px, " + "0px, 0px) scale(1)";
+      mainHandle.scrollTo(scrollLeft, scrollTop * 3);
+      lastScrollTop = scrollTop;
+    }
+}
 
 function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)
 {
-	$scope.courses = [];
 	$scope.canLoad = true;
 	$scope.start = $scope.start || 0;
       var callbackType = {
@@ -21,17 +77,18 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   	};
 
   	$scope.loadCourseList = function(sort, callbackType) {
-  		CourseService.getCourses({
+  		CourseService.searchCourse({
   			limit : 10,
 			start: $scope.start,
 			categoryId : $stateParams.categoryId,
-			sort : sort
+			sort : sort,
+                 type : $stateParams.type
   		}, function(data) {
   			if (!data || data.data.length == 0 ) {
 	    			$scope.canLoad = false;
 	    		}
 
-	    		$scope.courses = $scope.courses.concat(data.data);
+	    		$scope.courses = $scope.courses ? $scope.courses.concat(data.data) : data.data;
 	    		$scope.start += data.limit;
 
 	    		$scope.$broadcast(callbackType);
@@ -46,8 +103,10 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
 		$scope.categoryTree = data;
 	});
 
-  	$scope.selectType = function(item) {
-  		console.log(item);
+  	$scope.selectType = function(type) {
+  		clearData();
+           $stateParams.type  = type;
+           $scope.loadCourseList($scope.sort, callbackType.infinite);
   	}
 
   	function clearData() {
@@ -68,6 +127,7 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
 
   	$scope.categorySelectedListener = function(category) {
   		clearData();
+           $stateParams.type = null;
            $stateParams.categoryId  =category.id;
   		$scope.loadCourseList($scope.sort, callbackType.infinite);
   	}

@@ -18,7 +18,7 @@ appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', function($rootScope,
 		createModal : function($scope, templateUrl, modalInitFunc) {
 			$ionicModal.fromTemplateUrl(templateUrl, {
 			    	scope: $scope,
-			    	animation: 'slide-in-down'
+			    	animation: 'none'
 			}).then(function(modal) {
 				if (modalInitFunc) {
 					modalInitFunc(modal);
@@ -84,7 +84,7 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 			return [
 		  		{
 		  			name : "课程",
-		  			type : "course"
+		  			type : "normal"
 		  		},
 		  		{
 		  			name : "班级",

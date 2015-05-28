@@ -1,6 +1,6 @@
 
 <ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-arrowback" back>
+<a class="button button-icon iconfont icon-arrowback" back="go">
 </a>
 
 <h1 class="title">
@@ -13,7 +13,7 @@
 <ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left courselist-tab">
   <ion-tab class="ng-hide">
   </ion-tab>
-  <ion-tab title="分类&#xe721;" class="iconfont">
+  <ion-tab title="分类&#xe613;" class="iconfont">
     <ion-nav-view>
       <ion-view modal>
                   <div class="content category-card">
@@ -25,7 +25,7 @@
     <ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="全部分类&#xe721;" class="iconfont">
+  <ion-tab title="全部分类&#xe613;" class="iconfont">
     <ion-nav-view>
       <ion-view modal>
                       <div class="content">
@@ -40,7 +40,7 @@
     <ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="综合排序&#xe721;" class="iconfont">
+  <ion-tab title="综合排序&#xe613;" class="iconfont">
     <ion-nav-view>
       <ion-view modal>
                     <div class="content">
@@ -66,9 +66,11 @@
       </ion-refresher>
 
       <div class="course-card">
-          <div class="list" list-empty-view>
+          <div class="list">
+              <list-empty-view data="courses">
+              </list-empty-view>
 
-              <a class="item item-thumbnail-left" ng-repeat="course in courses">
+              <a class="item item-thumbnail-left" collection-repeat="course in courses">
                 <img src="{{ course.middlePicture | coverPic}}">
                 <h2>{{ course.title }}</h2>
                 <p class="bottom">

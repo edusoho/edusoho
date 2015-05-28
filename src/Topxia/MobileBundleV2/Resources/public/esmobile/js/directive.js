@@ -91,14 +91,16 @@ directive('modal', function ($ionicTabsDelegate) {
 directive('listEmptyView', function () {
   return {
     restrict: 'EA',
-    controller : function($scope, $element) {
-    },
     link : function(scope, element, attrs) {
-      element[0].addEventListener('click', function(event) {
-        $ionicTabsDelegate.select(0);
-        scope.$apply(function() {
-          scope.$parent.$tabSelected = false;
-        });
+      var html = '<div class="list-empty">' + 
+      '<a> <i class="icon iconfont icon-ebook"></i> <span>该分类下暂时没有课程</span> </a>' +
+      '</div>';
+      scope.$watch("courses", function(newValue) {
+        if (newValue && newValue.length == 0) {
+          element.html(html);
+        } else {
+          element.html("");
+        }
       });
     }
   }
@@ -120,7 +122,14 @@ directive('categoryTree', function () {
                 categoryCols[i] = [];
             };
 
-            categoryCols[0] = categoryTree.childs;
+            var getRootCategory = function(categoryId) {
+              return {
+                name : "全部",
+                id : categoryId ? categoryId : 0
+              }
+            };
+
+            categoryCols[0] = [getRootCategory()].concat(categoryTree.childs);
             $scope.categoryCols = categoryCols;
 
             $scope.selectCategory = function($event, category) {
@@ -132,7 +141,7 @@ directive('categoryTree', function () {
                       if (category.depth > 2) {
                         categoryColIndex = 2;
                       }
-                      $scope.categoryCols[categoryColIndex] = category.childs;
+                      $scope.categoryCols[categoryColIndex] = [getRootCategory(category.id)].concat(category.childs);
                       $event.stopPropagation();
                     } else {
                       $scope.listener(category);

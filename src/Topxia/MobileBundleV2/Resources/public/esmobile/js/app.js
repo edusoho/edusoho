@@ -306,6 +306,16 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               }
             });
 
+            $stateProvider.state('course', {
+              url: "/course/:courseId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/course.html",
+                  controller : CourseController
+                }
+              }
+            });
+
             $urlRouterProvider.when("/regist", "/regist/phone");
 }]);
 

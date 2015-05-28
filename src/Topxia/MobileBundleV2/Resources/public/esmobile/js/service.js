@@ -30,6 +30,20 @@ service('CategoryService', ['httpService', function(httpService) {
 		});
 	}
 }]).
+service('LessonService', ['httpService', function(httpService) {
+
+	this.getCourseLessons = function(params, callback) {
+		httpService.get({
+			url : app.host + '/mapi_v2/Lesson/getCourseLessons',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+			}
+		});
+	}
+}]).
 service('NoteService', ['httpService', function(httpService) {
 
 	this.getNoteList = function(params, callback) {
@@ -52,7 +66,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				applicationProvider.setUser(data.user, data.token);
+				applicationProvider.setUser(data.data, data.data.token);
 			},
 			error : function(data) {
 			}
@@ -154,6 +168,17 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 
+	this.getReviews = function(params, callback) {
+		httpService.get({
+			url : app.host + '/mapi_v2/Course/getReviews',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+			}
+		});
+	}
 	this.getLiveCourses = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/Course/getLiveCourses',
@@ -198,6 +223,44 @@ service('CourseService', ['httpService', function(httpService) {
 				callback(data);
 			},
 			error : function(data) {
+			}
+		});
+	}
+
+	this.searchCourse = function(params, callback, error) {
+		httpService.get({
+			url : app.host + '/mapi_v2/Course/searchCourse',
+			params : {
+				limit : params.limit,
+				start: params.start,
+				categoryId : params.categoryId,
+				sort : params.sort,
+				type : params.type
+			},
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+				if (error) {
+					error(data)
+				}
+			}
+		});
+	}
+
+	this.getCourse  = function(params, callback) {
+		httpService.get({
+			url : app.host + '/mapi_v2/Course/getCourse',
+			params : {
+				courseId : params.courseId
+			},
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+				if (error) {
+					error(data)
+				}
 			}
 		});
 	}

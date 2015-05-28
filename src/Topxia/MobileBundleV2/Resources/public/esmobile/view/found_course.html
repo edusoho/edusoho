@@ -13,7 +13,7 @@
 		<h4>推荐</h4>
 		<div class="list">
 
-		    <a class="item item-thumbnail-left" href="#" ng-repeat="recommendCourse in recommedCourses">
+		    <a class="item item-thumbnail-left" href="#/course/{{ recommendCourse.id }}" ng-repeat="recommendCourse in recommedCourses">
 		      <div class="page-pic">
 			      <img src="{{ recommendCourse.middlePicture }}">
 			      <div class="discount" ng-if="recommendCourse.discountId > 0">
