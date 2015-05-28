@@ -446,18 +446,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                         'nickname' => $nickname,
                         'password' => $password,
                     ));
-                    return $user;
                     $this->clearSmsSession($this->request, 'sms_registration');
-                    return array('test' => false);
-                    exit();
                 } else {
                     return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
                 }
             }
         }
-
-        return array('test' => register);
-        exit();
 
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
