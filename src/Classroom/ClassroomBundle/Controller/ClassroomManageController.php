@@ -735,6 +735,7 @@ class ClassroomManageController extends BaseController
     public function importUsersAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         return $this->render('ClassroomBundle:ClassroomManage:import.html.twig', array(
@@ -745,7 +746,11 @@ class ClassroomManageController extends BaseController
     public function excelDataImportAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom = $this->getClassroomService()->getClassroom($id);
+        if ($classroom['status'] != 'published') {
+            throw $this->createNotFoundException("未发布班级不能导入学员!");
+        }
 
         return $this->render('ClassroomBundle:ClassroomManage:import.step3.html.twig', array(
             'classroom' => $classroom,
