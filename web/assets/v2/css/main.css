@@ -81,6 +81,9 @@ a:focus {
 .userpage #content-container {
   width: 1140px;
 }
+.lesson-dashboard .back-course-btn {
+  left: -5px;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
