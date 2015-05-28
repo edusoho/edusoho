@@ -340,8 +340,10 @@ interface CourseService
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
-	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+	public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info);
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
+	public function becomeStudentByClassroomJoined($courseId, $userId);
 
 }

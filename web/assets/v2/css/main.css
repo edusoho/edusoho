@@ -68,6 +68,9 @@ a:focus {
 .group-search button {
   border: 1px solid #e0e0e0 !important;
 }
+.homepage-feature-slides {
+  z-index: auto;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
