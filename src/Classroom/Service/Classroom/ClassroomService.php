@@ -31,6 +31,14 @@ interface ClassroomService
     public function tryTakeClassroom($id);
 
     /**
+     * 是否可处理班级事务（批改作业，试卷等）
+     *
+     */
+    public function canHandleClassroom($id);
+
+    public function tryHandleClassroom($id);
+
+    /**
      * 是否可查看班级，　所有班级成员、网站管理员都可以查看
      */
     public function canLookClassroom($id);
@@ -62,6 +70,8 @@ interface ClassroomService
     public function updateClassroomCourses($classroomId, $activeCourseIds);
 
     public function findCoursesByCoursesIds($courseIds);
+
+    public function findClassroomsByCoursesIds($courseIds);
 
     // 内部方法
     public function updateClassroomTeachers($id);
