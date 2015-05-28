@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 {% block title %}师资介绍 - {{ parent() }}{% endblock %}
 
 {% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
@@ -23,14 +24,12 @@
         {% for teacher in teachers %}
           {% set profile = profiles[teacher.id] %}
           <li class="media teacher">
-            <a class="pull-left" href="{{ path('user_show', {id:teacher.id}) }}">
-              <img class="media-object" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
-            </a>
+            {{ web_macro.user_avatar(teacher, 'pull-left', 'avatar-lg media-object') }}
             <div class="media-body">
               <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>
 
               <h4 class="media-heading">
-                <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                {{ web_macro.user_link(teacher, '') }}
               </h4>
               <div class="teacher-title">
                 {% if teacher.title %}

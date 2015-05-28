@@ -2745,6 +2745,7 @@ textarea.form-control-o {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+  height: 20px;
 }
 .poster {
   position: relative;
@@ -4994,7 +4995,7 @@ textarea.form-control-o {
   font-size: 16px;
   top: 0;
   bottom: 0;
-  right: 0;
+  right: -15px;
   color: #fff;
   background-color: #37b97d;
   border-top-right-radius: 4px;
