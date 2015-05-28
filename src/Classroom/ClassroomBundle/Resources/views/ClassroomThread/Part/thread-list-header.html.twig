@@ -1,8 +1,8 @@
-<div class="topic-filter nav-filter clearfix">
+<div class="nav-filter clearfix">
   
   {% if service.canAccess('thread.create', {targetType:'classroom', targetId:classroom.id}) %}
     <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">发话题 <span class="caret"></span></button>
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">发话题 <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">发话题</a></li>
         <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">提问题</a></li>

@@ -2745,6 +2745,7 @@ textarea.form-control-o {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+  height: 20px;
 }
 .poster {
   position: relative;
