@@ -139,8 +139,8 @@
           {% for member in recentlyJoinMember %}
             <li>
               {{ web_macro.user_avatar(members[member.userId] ,'', 'avatar-sm') }}
-              <div class="name link-light-wrap">
-                {{ web_macro.user_link(members[member.userId] , 'link-muted') }}
+              <div class="name">
+                {{ web_macro.user_link(members[member.userId] , '') }}
               </div>
             </li>
           {% endfor %}
