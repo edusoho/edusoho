@@ -8,6 +8,7 @@
 
 
 {% set bodyClass = 'teacherpage' %}
+{% do load_script('teacher/explore') %}
 
 {% block content %}
 
@@ -15,6 +16,7 @@
   <div class="teacher-list row">
     {% for teacher in teachers %}
     {% set profile = profiles[teacher.id] %}
+    {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
     {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
     {% endfor %}
   </div>
