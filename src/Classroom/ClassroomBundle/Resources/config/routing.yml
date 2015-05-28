@@ -107,6 +107,10 @@ classroom_reviews:
     pattern:  /classroom/{id}/review
     defaults: { _controller: ClassroomBundle:Classroom/Review:list }
 
+classroom_review_create:
+    pattern:  /classroom/{id}/review/create
+    defaults: { _controller: ClassroomBundle:Classroom/Review:create }
+
 classroom_introductions:
     pattern:  /classroom/{id}/introduction
     defaults: { _controller: ClassroomBundle:Classroom:introduction }
@@ -208,3 +212,11 @@ classroom_teachers:
 classroom_teacherIds_catch:
     pattern: /classroom/{classroomId}/teacherIds/catch
     defaults: { _controller: ClassroomBundle:Classroom/Teacher:catchIds }
+
+classroom_course_lessons_preview:
+    pattern: /classroom/{classroomId}/course/{courseId}/lessons/preview
+    defaults: { _controller: ClassroomBundle:Course/Lesson:preview }
+
+classrom_course_lessons_list:
+    pattern: /classroom/{classroomId}/course/{courseId}/lessons/list
+    defaults: { _controller: ClassroomBundle:Course/Lesson:list }

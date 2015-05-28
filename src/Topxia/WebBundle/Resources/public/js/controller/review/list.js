@@ -9,83 +9,87 @@ define(function(require, exports, module) {
 
         var $form = $('#review-form');
 
-        $form.find('.rating-btn').raty({
-            path: $form.find('.rating-btn').data('imgPath'),
-            hints: ['很差', '较差', '还行', '推荐', '力荐'],
-            score: function() {
-                return $(this).attr('data-rating');
-            },
-            click: function(score, event) {
-                $form.find('[name=rating]').val(score);
-            }
-        });
+        if ($form.length > 0) {
+            $form.find('.rating-btn').raty({
+                path: $form.find('.rating-btn').data('imgPath'),
+                hints: ['很差', '较差', '还行', '推荐', '力荐'],
+                score: function() {
+                    return $(this).attr('data-rating');
+                },
+                click: function(score, event) {
+                    $form.find('[name=rating]').val(score);
+                }
+            });
 
-        var validator = new Validator({
-            element: $form,
-            autoSubmit: false
-        });
+            var validator = new Validator({
+                element: $form,
+                autoSubmit: false
+            });
 
-        validator.addItem({
-            element: $form.find('[name=rating]'),
-            required: true,
-            rule: 'star',
-            errormessageRequired: '请打分'
-        });
+            validator.addItem({
+                element: $form.find('[name=rating]'),
+                required: true,
+                rule: 'star',
+                errormessageRequired: '请打分'
+            });
 
-        validator.addItem({
-            element: $form.find('[name=content]'),
-            required: true
-        });
+            validator.addItem({
+                element: $form.find('[name=content]'),
+                required: true
+            });
 
 
-        validator.on('formValidated', function(error, msg, $form) {
-            if (error) {
-                return;
-            }
+            validator.on('formValidated', function(error, msg, $form) {
+                if (error) {
+                    return;
+                }
 
-            $form.find('[type=submit]').button('loading');
+                $form.find('[type=submit]').button('loading');
 
-            $.post($form.attr('action'), $form.serialize(), function(json) {
-                $form.find('.text-success').fadeIn('fast', function(){
-                    window.location.reload();
+                $.post($form.attr('action'), $form.serialize(), function(json) {
+                    $form.find('.text-success').fadeIn('fast', function(){
+                        window.location.reload();
+                    });
+                }, 'json');
+
+            });
+
+
+            $('.js-hide-review-form').on('click', function(){
+                $(this).hide();
+                $('.js-show-review-form').show();
+                $form.hide();
+            });
+
+            $('.js-show-review-form').on('click', function(){
+                $(this).hide();
+                $('.js-hide-review-form').show();
+                $form.show();
+            });
+
+
+            var $reviews = $('.js-reviews');
+
+            $reviews.on('click', '.show-full-btn', function(){
+                var $review = $(this).parents('.media');
+                $review.find('.short-content').slideUp('fast', function(){
+                    $review.find('.full-content').slideDown('fast');
                 });
-            }, 'json');
-
-        });
-
-
-        $('.js-hide-review-form').on('click', function(){
-            $(this).hide();
-            $('.js-show-review-form').show();
-            $form.hide();
-        });
-
-        $('.js-show-review-form').on('click', function(){
-            $(this).hide();
-            $('.js-hide-review-form').show();
-            $form.show();
-        });
-
-
-        var $reviews = $('.js-reviews');
-
-        $reviews.on('click', '.show-full-btn', function(){
-            var $review = $(this).parents('.media');
-            $review.find('.short-content').slideUp('fast', function(){
-                $review.find('.full-content').slideDown('fast');
+                $(this).hide();
+                $review.find('.show-short-btn').show();
             });
-            $(this).hide();
-            $review.find('.show-short-btn').show();
-        });
 
-        $reviews.on('click', '.show-short-btn', function(){
-            var $review = $(this).parents('.media');
-            $review.find('.full-content').slideUp('fast', function(){
-                $review.find('.short-content').slideDown('fast');
+            $reviews.on('click', '.show-short-btn', function(){
+                var $review = $(this).parents('.media');
+                $review.find('.full-content').slideUp('fast', function(){
+                    $review.find('.short-content').slideDown('fast');
+                });
+                $(this).hide();
+                $review.find('.show-full-btn').show();
             });
-            $(this).hide();
-            $review.find('.show-full-btn').show();
-        });
+        }
+
+      
 
     };
 

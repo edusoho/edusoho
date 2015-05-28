@@ -27,7 +27,7 @@
         <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small one">
           <div class="content">
             <p>{{ promotedCategories[promotedArticle['id']].name }}</p>
-            <h4 class="title">J{{ promotedArticle.title|plain_text(125) }}</h4>
+            <h4 class="title">{{ promotedArticle.title|plain_text(125) }}</h4>
           </div>
         </a>
         {% endfor %}

@@ -272,7 +272,6 @@ threadProperty:
     isElite: 加精
 
 classroomService:
-    studyPlan: 学习计划
     homeworkReview: 作业快速批改
     testpaperReview: 试卷阅卷
     teacherAnswer: 教师答疑

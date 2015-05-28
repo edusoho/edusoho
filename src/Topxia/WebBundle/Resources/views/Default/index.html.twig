@@ -3,47 +3,14 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
+{% set siteNav = "/" %}
 {% set bodyClass = 'homepage' %}
 {% set script_controller = 'index' %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/class-default.css') }}" />
-{% endblock %}
 
 {% block main_content %}
   
   <!-- 轮播 -->
-  <section class="poster swiper-container">
-    <div class="swiper-wrapper" style="width: 2530px; height: 570px;">
-      <div class="swiper-slide swiper-slide-visible swiper-slide-active" style="width: 1265px; height: 570px; background: rgb(63, 63, 63);">
-        <div class="container">
-          <img class="img-responsive" src="/assets/v2/img/poster_bg.jpg">
-          <div class="mask">
-            <div class="title"><span>全新改版</span><span>简约风格</span></div>
-            <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
-            <div class="item-mac">
-              <img class="img-responsive" src="/assets/v2/img/paster_mac.png">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide" style="width: 1265px; height: 570px; background: rgb(63, 63, 63);">
-        <div class="container">
-          <img class="img-responsive" src="/assets/v2/img/poster_bg.jpg">
-          <div class="mask">
-            <div class="title"><span>全新改版</span><span>简约风格</span></div>
-            <div class="subtitle"><span>专注学习内容</span><span>提升用户体验</span></div>
-            <div class="item-mac">
-              <img class="img-responsive" src="/assets/v2/img/paster_mac.png">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="swiper-pager"><span class="swiper-pagination-switch swiper-visible-switch swiper-active-switch"></span><span class="swiper-pagination-switch"></span></div>
-  </section>
-
+  {{ block_show('default:home_top_banner') }}
   <!-- 课程列表 -->
   <section class="course-list-section" id="course-list">
     {% include 'TopxiaWebBundle:Default:course-grid-with-condition.html.twig' %}

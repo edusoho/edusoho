@@ -57,7 +57,7 @@
       <div class="form-group">
         <label for="inputTitle" class="col-sm-2 control-label">封面图片</label>
         <div class="col-md-7 controls">
-          <input type="text" class="form-control" name="actvityPicture" value="{{ thread.actvityPicture|default('') }}">
+          <input type="text" class="form-control" name="actvityPicture" value="{{ thread.actvityPicture|default('') }}" placeholder="推荐图片大小200*112">
         </div>
         <div class="col-sm-2">
           <a class="btn btn-default btn-block" id="js-activity-uploader" data-upload-token="{{ upload_token('classroom', 'image') }}">浏览...</a>

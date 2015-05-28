@@ -20,12 +20,17 @@ define(function(require, exports, module) {
                     easing: 'linear'
                 });
 
+            var $icon = $target.find(".period-show .es-icon");
+            if ($icon.hasClass('es-icon-remove')) {
+                $icon.removeClass('es-icon-remove').addClass('es-icon-anonymous-iconfont');
+            } else {
+                $icon.removeClass('es-icon-anonymous-iconfont').addClass('es-icon-remove');
+            }
+
             if($target.data('toggle') && $target.nextUntil(".chapter").height()) {
-                $target.find(" >.period-show >.es-icon").addClass('es-icon-anonymous-iconfont').removeClass('es-icon-remove');
                 $target.data('toggle', false);
 
             } else {
-                $target.find(" >.period-show >.es-icon").addClass('es-icon-remove').removeClass('es-icon-anonymous-iconfont');
                 $target.data('toggle', true);
             }
         }

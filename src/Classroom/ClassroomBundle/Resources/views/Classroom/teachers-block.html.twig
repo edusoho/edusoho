@@ -4,15 +4,15 @@
 
 <div class="panel panel-default serve-team" id="class-teacher-column">
   <div class="panel-heading">
-    <h3 class="panel-title"> <i class="es-icon es-icon-assignmentind"></i>
-      班主任
+    <h3 class="panel-title"> 
+      <i class="es-icon es-icon-assignmentind"></i>班主任
     </h3>
   </div>
   <div class="panel-body">
     {% if headTeacher %}
     <div class="media">
       <div class="media-left">
-        {{ web_macro.user_avatar(headTeacher,'','img-circle') }}
+        {{ web_macro.user_avatar(headTeacher,'user-link user-avatar-link pull-left','img-circle') }}
       </div>
       
       <div class="media-body">

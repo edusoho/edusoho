@@ -3,7 +3,7 @@
   <i class="es-icon es-icon-filedownload" title="资料"></i>
 {% endif %}
 
-{% if item.id in homeworkLessonIds or item.id in exerciseLessonIds %}
+{% if item.homeworkId or item.exerciseId %}
   <i class="es-icon es-icon-description" title="作业、练习"></i>
 {% endif %}
 

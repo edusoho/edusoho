@@ -25,7 +25,7 @@
   </form>
 {% endif %}
 
-{% for review in reviews %}
+{% for review in reviews if users[review.userId]|default(false) %}
   {% set user = users[review.userId] %}
   <div class="js-reviews">
     <div class="media media-evaluate">

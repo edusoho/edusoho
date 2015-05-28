@@ -10,12 +10,13 @@
 
   <div class="course-operation">
     {{ header_macro.student_num(course) }}
-    <ul class="course-data clearfix active">
+    <ul class="course-data clearfix {% if courseVip %}active{% endif %}">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
       {% if courseVip %}
         <li class="hidden-xs color-w icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
-          <i class="es-icon es-icon-crown"></i><br>会员
+          <i class="es-icon es-icon-crown"></i><br>
+          {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus} %}
         </li>
       {% endif %}
     </ul>

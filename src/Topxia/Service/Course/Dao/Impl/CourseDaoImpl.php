@@ -177,6 +177,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagIds']);
         }
 
+        if(empty($conditions['status']) || $conditions['status']=="") {
+            unset($conditions['status']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
