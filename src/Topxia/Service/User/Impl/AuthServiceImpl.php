@@ -12,8 +12,9 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
-
+return 1;
         $registration = $this->refillFormData($registration);
+        return 2;
         $authUser = $this->getAuthProvider()->register($registration);
 
         if ($type == 'default') {
