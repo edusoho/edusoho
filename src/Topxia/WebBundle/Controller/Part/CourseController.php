@@ -76,6 +76,15 @@ class CourseController extends BaseController
         ));
     }
 
+    public function classroomInfoAction($courseId)
+    {
+        $classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+        $classroom = $this->getClassroomService()->getClassroom($classroom["classroomId"]);
+        return $this->render('TopxiaWebBundle:Course/Part:normal-header-classroom-info.html.twig', array(
+            'classroom' => $classroom
+        ));
+    }
+
     protected function getCourse($course)
     {
         if (is_array($course)) {

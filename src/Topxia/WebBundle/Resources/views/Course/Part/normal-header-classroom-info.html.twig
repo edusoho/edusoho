@@ -1,0 +1,6 @@
+{% if classroom %}
+该课程属于
+<a href="{{path('classroom_show', {id:classroom.id})}}">{{classroom.title}}</a>
+</br>
+请加入后再学习
+{% endif %}
