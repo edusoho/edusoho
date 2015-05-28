@@ -21,6 +21,13 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+        $classrooms = ArrayToolkit::index($classrooms,'courseId');
+        foreach ($classrooms as $key => $classroom) {
+            $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+        } 
+
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
@@ -40,6 +47,7 @@ class CourseController extends BaseController
             'paginator' => $paginator,
             'liveSetEnabled' => $courseSetting['live_course_enabled'],
             'default' => $default,
+            'classrooms' => $classrooms
         ));
     }
 
@@ -343,5 +351,10 @@ class CourseController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }
