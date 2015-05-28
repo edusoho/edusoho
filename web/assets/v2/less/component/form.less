@@ -1,0 +1,27 @@
+.form-horizontal {
+  .form-group {
+    margin-bottom: 30px;
+  }
+  .form-control {
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.form-control {
+  .box-shadow(none);
+  border-color: @gray-light;
+  &::-webkit-input-placeholder { 
+    color: @gray;
+  }
+  &:-moz-placeholder {
+    color: @gray;
+  }
+  &::-moz-placeholder {
+    color: @gray;
+  }
+  &:-ms-input-placeholder { 
+    color: @gray;
+  }
+}
