@@ -69,7 +69,17 @@ a:focus {
   border: 1px solid #e0e0e0 !important;
 }
 .homepage-feature-slides {
-  z-index: auto;
+  z-index: 9;
+}
+.list-group-panel .list-group-item.active,
+.list-group-panel .list-group-item.active:hover {
+  background: #f3f3f3;
+  color: #37b97d;
+  font-weight: bold;
+  border-left: 3px solid #37b97d;
+}
+.userpage #content-container {
+  width: 1140px;
 }
 @keyframes fadeInLeft {
   0% {
