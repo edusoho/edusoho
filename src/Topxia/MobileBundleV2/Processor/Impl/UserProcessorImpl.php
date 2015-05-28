@@ -438,7 +438,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
-                return array('test' => 1);
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 return array('test' => $result);
@@ -472,12 +471,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function smsCheck($request, $mobileInfo, $scenario)
     {
+        var_dump(1);
         $sessionField = $request->getSession()->get($scenario);
         $sessionField['sms_type'] = $scenario;
+                
 
         $requestField['sms_code'] = $mobileInfo['sms_code'];
         $requestField['mobile'] = $mobileInfo['mobile'];
-
+var_dump(2);
         $result = $this->checkSms($sessionField, $requestField, $scenario);
         return array($result, $sessionField);
     }
