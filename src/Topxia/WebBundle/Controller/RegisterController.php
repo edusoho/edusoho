@@ -52,12 +52,15 @@ class RegisterController extends BaseController
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
+            var_dump("----->".$registration);
                 if ($result){
                     $registration['verifiedMobile'] = $sessionField['to'];
                 }else{
                     return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
                 }
             }
+
+            var_dump("----->".$registration);
 
             $registration['createdIp'] = $request->getClientIp();
             if(isset($authSettings['register_protective'])){
@@ -66,6 +69,8 @@ class RegisterController extends BaseController
                     return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
                 }
             }
+
+            var_dump("----->".$registration);
 
             $user = $this->getAuthService()->register($registration);
 
