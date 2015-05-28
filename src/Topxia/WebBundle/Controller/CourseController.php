@@ -48,6 +48,7 @@ class CourseController extends CourseBaseController
 		unset($conditions['orderBy']);
 
 		$conditions['parentId'] = 0;
+		$conditions['status'] = 'published';
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions),
