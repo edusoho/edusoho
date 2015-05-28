@@ -48,8 +48,6 @@
         <li{% if condition.type == 'reward' %} class="active"{% endif %}><a class="js-nav" data-target="#thread-pane" href="{{path('group_show',{id:id,type:'reward',num:condition.num,sort:condition.sort})}}">悬赏</a></li>
         {% endif %}
         
-        <li><span class="mhm text-muted">|</span></li>
-
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="text-muted">排序：</span>
@@ -62,22 +60,18 @@
             {% endif %}
             <span class="caret"></span>
           </a>
-
           <ul class="dropdown-menu">
             <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">最新发帖</a></li>
             <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">最后回复</a></li>
             <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">回复数</a></li>
           </ul>
-
         </li>
-
       </ul>
 
       {% if is_groupmember !=0 %}
           <div class="pull-right"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm " role="button">发话题</a>
           </div>
       {% endif %}
-
       </div>
 
       {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {users:owner} %}
