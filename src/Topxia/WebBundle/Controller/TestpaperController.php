@@ -399,7 +399,9 @@ class TestpaperController extends BaseController
             'total' => $total,
             'types' => $types,
             'student' => $student,
-            'questionsSetting' => $questionsSetting
+            'questionsSetting' => $questionsSetting,
+            'source' => $request->query->get('source','course'),
+            'targetId' => $request->query->get('targetId',0)
         ));
     }
 

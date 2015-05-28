@@ -249,6 +249,21 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $sortedCourses;
 	}
 
+
+	public function becomeStudentByClassroomJoined($courseId, $userId){
+		$classroomMembers = $this->getClassroomService()->getClassroomMembersByCourseId($courseId, $userId);
+		$isCourseStudent = $this->isCourseStudent($courseId, $userId);
+
+		foreach ($classroomMembers as $classroomMember) {
+			if(in_array($classroomMember["role"], array("student")) && !$isCourseStudent) {
+				$member = $this->createMemberByClassroomJoined($courseId, $userId, $classroomMember["classroomId"]);
+				return $member;
+			}
+		}
+
+		return array();
+	}
+
 	public function findUserLeanedCourseCount($userId, $filters = array())
 	{
 		if (isset($filters["type"])) {
@@ -1997,7 +2012,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $member;
 	}
 
-	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
+	public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
 	{
 		$fields = array(
 			'courseId' => $courseId,
