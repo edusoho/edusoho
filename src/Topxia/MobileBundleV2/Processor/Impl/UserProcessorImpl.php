@@ -427,7 +427,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $user = $this->controller->getAuthService()->register(array(
                 'emailOrMobile' => $email,
                 'nickname' => $nickname,
-                'password' => $password,
+                'password' => $password
             ));
         } else {
             if (!$this->checkPhoneNum($phoneNumber)) {
@@ -444,7 +444,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     $user = $this->controller->getAuthService()->register(array(
                         'emailOrMobile' => $sessionField['to'],
                         'nickname' => $nickname,
-                        'password' => $password,
+                        'password' => $password
                     ));
                     $this->clearSmsSession($this->request, 'sms_registration');
                 } else {
