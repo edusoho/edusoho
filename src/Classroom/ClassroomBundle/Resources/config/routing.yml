@@ -95,6 +95,10 @@ classroom_manage_student_to_base:
     defaults: { _controller: ClassroomBundle:ClassroomManage:excelDataImport }
     methods: [POST]
 
+classroom_manage_testpaper:
+    pattern:  /classroom/{id}/manage/testpaper/{status}
+    defaults: { _controller: ClassroomBundle:ClassroomManage:testpaper }
+
 classroom_explore:
     pattern:  /classroom/explore
     defaults: { _controller: ClassroomBundle:Classroom:explore }

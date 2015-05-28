@@ -774,55 +774,6 @@
   padding-left: 0;
 }
 
-// 班级侧边栏、课程侧边栏－－－－－－－－－－－－－－－
-.class-sidebar,
-.course-sidebar {
-  .serve-team {
-    .media-body {
-      border-bottom: 1px solid @gray-lighter;
-      >.title {
-        .es-icon-assignmentind,
-        .es-icon-portrait {
-          color: @brand-info;
-        }
-        >.name {
-          color: @gray-dark;
-          .es-transition;
-          &:hover {
-            color: @brand-primary;
-            .es-transition;
-          }
-        }
-      }
-      >p {
-        margin-top: 10px;
-        color: @gray;
-      }
-    }
-    .media:last-child .media-body {
-      border: none;
-    }  
-  }
-  .new-student {
-    .student-list {
-      overflow: hidden;
-      li {
-        float: left;
-        width: 20%;
-        margin: 10px auto;
-        text-align: center;
-        @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-          width: 10%;
-        }
-        img {
-          width: 40px;
-          height: 40px;
-        }
-      }
-    }
-  }
-}
-
 // 签到
 .class-signin {
   position: relative;
