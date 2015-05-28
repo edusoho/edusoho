@@ -46,7 +46,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $lessonNote['lessonTitle'] = $lesson['title'];
         $lessonNote['lessonNum']   = $lesson['number'];
         $content  = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
-        ;
         $content  = $this->filterNote($content);
         $lessonNote['content'] = $content;
         return $lessonNote;

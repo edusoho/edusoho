@@ -15,6 +15,14 @@
   </td>
 
   <td>
+    {% if user.verifiedMobile %}
+      {{ user.verifiedMobile }}
+    {% else %}
+       -- 
+    {% endif %}
+  </td>
+
+  <td>
     {{ user.email }}
     <br>
     {% if user.emailVerified %}

@@ -21,4 +21,5 @@ interface FileDao
 
 	public function deleteFile($id);
 
+	public function deleteFileByUri($uri);
 }

@@ -37,7 +37,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#student-nickname',
             required: true,
-            rule: 'chinese_alphanumeric remote'
+            rule: 'remote'
         });
 
         validator.addItem({

@@ -185,6 +185,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('price > :price_GT')
             ->andWhere('originPrice > :originPrice_GT')
             ->andWhere('coinPrice > :coinPrice_GT')
+            ->andWhere('coinPrice = :coinPrice')
             ->andWhere('originCoinPrice > :originCoinPrice_GT')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')

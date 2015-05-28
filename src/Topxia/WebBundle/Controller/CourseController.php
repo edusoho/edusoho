@@ -30,13 +30,18 @@ class CourseController extends BaseController
 		
 
 		$sort = $request->query->get('sort', 'latest');
+
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
 			'categoryId' => $category['id'],
-			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
-			'price' => ($sort == 'free') ? '0.00' : null
+			'recommended' => ($sort == 'recommendedSeq') ? 1 : null
 		);
+
+		if ($sort == 'free') {
+			$conditions['price'] = '0.00';
+			$conditions['coinPrice'] = '0.00';
+		}
 
 		$paginator = new Paginator(
 			$this->get('request'),
@@ -315,7 +320,7 @@ class CourseController extends BaseController
 
 		if ($member && empty($member['locked'])) {
 			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-
+			$lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $course['id']);
 			if($coursesPrice ==1){
 				$course['price'] =0;
 				$course['coinPrice'] =0;
@@ -327,6 +332,7 @@ class CourseController extends BaseController
 				'member' => $member,
 				'items' => $items,
 				'learnStatuses' => $learnStatuses,
+				'lessonLearns' => $lessonLearns,
 				'currentTime' => $currentTime,
 				'weeks' => $weeks,
 				'files' => ArrayToolkit::index($files,'id'),
@@ -381,13 +387,6 @@ class CourseController extends BaseController
 			'classrooms'=> $classrooms
 		));
 
-	}
-
-	private function canShowCourse($course, $user)
-	{
-		return ($course['status'] == 'published') or 
-			$user->isAdmin() or 
-			$this->getCourseService()->isCourseTeacher($course['id'],$user['id']) ;
 	}
 
 	private function previewAsMember($as, $member, $course)
@@ -951,13 +950,6 @@ class CourseController extends BaseController
 		return array();
 	}
 
-	private function createCourseForm()
-	{
-		return $this->createNamedFormBuilder('course')
-			->add('title', 'text')
-			->getForm();
-	}
-
 	protected function getUserService()
 	{
 		return $this->getServiceKernel()->createService('User.UserService');
@@ -976,11 +968,6 @@ class CourseController extends BaseController
 	private function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
-
-	private function getOrderService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseOrderService');
 	}
 
 	private function getCategoryService()

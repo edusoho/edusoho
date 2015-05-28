@@ -428,10 +428,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadDao()->waveThread($id, $field, $diff);
 
     }
-    private function getLogService() 
-    {
-        return $this->createService('System.LogService');
-    }
 
     public function getTradeByUserIdAndThreadId($userId,$threadId)
     {
@@ -456,10 +452,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createService('Group.GroupService');
     }
-    private function getUserService()
-    {
-        return $this->createService('User.UserService');
-    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
@@ -472,8 +465,5 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createDao('Group.ThreadCollectDao');
     }
-    private function getMessageService() 
-    {
-        return $this->createService('User.MessageService');
-    }
+
 }

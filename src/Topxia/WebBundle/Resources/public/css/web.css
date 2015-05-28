@@ -1822,7 +1822,7 @@ body {
   left: 0;
   right: 0;
   background: #e5e5e5;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .lesson-dashboard .dashboard-content {
@@ -5405,6 +5405,14 @@ a.homework-essay-textarea-pack-up{
   color:#999;
 }
 
+.panel.testpaper-question-block .testpaper-question{
+  position: relative;
+
+}
+.panel.testpaper-question-block .panel-body{
+  position:relative;
+  z-index:1;
+}
 
 /* =========================== color =========================== */
 /* =========================== media =========================== */
@@ -6413,4 +6421,20 @@ a:focus {
   padding: 5px 10px;
   white-space: nowrap;
   border-radius: 2px;
+}
+
+.watermark.active {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: center;
+  display: none; 
+  position: absolute;
+  width: 500px;
+  height: 20px;
+  vertical-align: middle;
+  opacity: 0.8;
 }

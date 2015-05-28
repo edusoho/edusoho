@@ -193,6 +193,11 @@ class usermodel {
 		}
 	}
 
+	function rename_user($uidsarr, $username){
+		$this->db->query("UPDATE ".UC_DBTABLEPRE."members SET username='$username' WHERE uid='$uidsarr'");
+		return $this->db->affected_rows();
+	}
+
 	function get_total_num($sqladd = '') {
 		$data = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."members $sqladd");
 		return $data;

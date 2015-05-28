@@ -45,6 +45,7 @@
 {% if block.mode == 'html' %}
 <form id="block-image-upload-form" action="{{ path('file_upload', {group:'default'}) }}" method="post" enctype="multipart/form-data">
   <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;">
+  <input type="hidden" name="token" value="{{ upload_token('block', 'image') }}" />
   <button class="btn btn-default btn-sm">上传图片</button>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
@@ -60,7 +61,7 @@
       {% set templateData = blockHistory.templateData %}
         <tr id="{{ blockHistory.id }}">
           <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
-          <td>{{ historyUsers[blockHistory.userId].nickname }}</td>
+          <td>{{ historyUsers[blockHistory.userId].nickname|default('用户已删除') }}</td>
           <td>
             <a class="btn btn-xs btn-default edit-btn" 
             href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>

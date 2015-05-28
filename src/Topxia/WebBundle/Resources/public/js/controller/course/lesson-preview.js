@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
 	var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
-
+    var DocumentPlayer = require('../widget/document-player');
 
     exports.run = function() {
 
@@ -86,6 +86,44 @@ define(function(require, exports, module) {
 
             }, 'json');
 		}
+
+        if ($("#lesson-preview-doucment").length > 0) {
+
+            var $player = $("#lesson-preview-doucment");
+            $.get($player.data('url'), function(response) {
+                if (response.error) {
+                    var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+                    $("#lesson-preview-doucment").html(html);
+                    return ;
+                }
+
+                var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'400px\'></iframe>';
+                $("#lesson-preview-doucment").html(html);
+
+                var watermarkUrl = $("#lesson-preview-doucment").data('watermarkUrl');
+                if (watermarkUrl) {
+                    $.get(watermarkUrl, function(watermark) {
+                        var player = new DocumentPlayer({
+                            element: '#lesson-preview-doucment',
+                            swfFileUrl:response.swfUri,
+                            pdfFileUrl:response.pdfUri,
+                            watermark: {
+                                'xPosition': 'center',
+                                'yPosition': 'center',
+                                'rotate': 45,
+                                'contents': watermark
+                            }
+                        });
+                    });
+                } else {
+                    var player = new DocumentPlayer({
+                        element: '#lesson-preview-doucment',
+                        swfFileUrl:response.swfUri,
+                        pdfFileUrl:response.pdfUri
+                    });
+                }
+            }, 'json');
+        }
 
 		if ($("#lesson-preview-swf-player").length > 0) {
 			swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '360', "9.0.0", null, null, {wmode: 'transparent'});

@@ -6,7 +6,7 @@ interface BlockDao
 {
     public function getBlock($id);
 
-    public function searchBlockCount();
+    public function searchBlockCount($condition);
 
     public function addBlock($Block);
 
@@ -14,7 +14,7 @@ interface BlockDao
 
     public function getBlockByCode($code);
 
-    public function findBlocks($start, $limit);
+    public function findBlocks($condition, $sort, $start, $limit);
 
     public function updateBlock($id, array $fields);
 }

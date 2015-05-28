@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Util\CloudClientFactory;
@@ -317,6 +318,11 @@ class UploadFileController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     private function createFilesJsonResponse($files)

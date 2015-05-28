@@ -175,7 +175,7 @@
         <div class="panel-body">
             <ul class="media-list">
               <li class="media">
-                <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ default_path('avatar', postMember[isAdopt[0].userId].smallAvatar, '') }}" class="media-object"></a>
+                <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ filepath(postMember[isAdopt[0].userId].smallAvatar, 'avatar.png') }}" class="media-object"></a>
                 <div class="media-body">
                     <div class="metas">
                       <strong>{{ web_macro.user_link(postMember[isAdopt[0].userId]) }}</strong>
@@ -203,7 +203,7 @@
         {% for post in post %}
           {% set subPosts = postReply[post.id]|default(null) %}
           <li id="post-{{post.id}}" class="media">
-            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ default_path('avatar', postMember[post.userId].smallAvatar, '') }}" class="media-object"></a>
+            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="media-object"></a>
             <div class="media-body">
               <div class="metas">
                 <span class="floor">
@@ -356,7 +356,7 @@
     <div class="panel-body">
       <div class="media">
         <a class="pull-left" href="{{ path('user_show', {id:owner.id}) }}">
-          <img src="{{ default_path('avatar',owner.smallAvatar, '') }}" class="media-object">
+          <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="media-object">
         </a>
         <div class="media-body">
           <div class="metas mbm">

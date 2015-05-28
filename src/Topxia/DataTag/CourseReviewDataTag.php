@@ -20,14 +20,17 @@ class CourseReviewDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkReviewId($arguments);
 
-    	$courseReview = $this->getReviewService()->getReview($arguments['reviewId']);
-        $courseReview['reviewer'] = $this->getUserService()->getUser($courseReview['userId']);
-        $Reviewer = &$courseReview['reviewer'];
+    	$review = $this->getReviewService()->getReview($arguments['reviewId']);
+        if (empty($review)) {
+            return null;
+        }
+        $review['reviewer'] = $this->getUserService()->getUser($review['userId']);
+        $Reviewer = &$review['reviewer'];
         unset($Reviewer['password']);
         unset($Reviewer['salt']);
-        $courseReview['course'] = $this->getCourseService()->getCourse($courseReview['courseId']);
+        $review['course'] = $this->getCourseService()->getCourse($review['courseId']);
 
-        return $courseReview;
+        return $review;
 
     }
 

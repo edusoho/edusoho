@@ -6,19 +6,6 @@ define(function(require, exports, module) {
   exports.run = function() {
 
 
-    var $avatarForm = $("#avatar-form");
-
-    avatarValidator = new Validator({
-      element: $avatarForm
-    })
-
-    avatarValidator.addItem({
-      element: '#avatar-field',
-      required: true,
-      rule: 'maxsize_image',
-      errormessageRequired: '请选择要上传的默认头像文件'
-    });
-
 
     var $defaultAvatar = $("[name=defaultAvatar]");
 
