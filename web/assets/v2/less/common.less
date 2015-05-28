@@ -1,0 +1,85 @@
+@font-face {font-family: 'webfont';
+  src: url('fonts/webfont.eot'); /* IE9*/
+  src: url('fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('fonts/webfont.woff') format('woff'), /* chrome、firefox */
+  url('fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('fonts/webfont.svg#webfont') format('svg'); /* iOS 4.1- */
+}
+
+.webfont {
+  font-family: 'webfont' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html { 
+  overflow-x: hidden;
+}
+
+html.html-nav-active {
+  overflow: hidden;
+}
+
+body {
+  .es-transition;
+  background-color: @background-color;
+}
+
+body.nav-active {
+  position: relative;
+  margin-left: 60%;
+  width: 100%;
+}
+
+.html-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  .opacity(0.2);
+  background: #000;
+}
+
+.tooltip {
+  min-width:40px;
+}
+
+#content-container {
+  margin-top: 30px;
+}
+
+// 全站公告
+.alert-notice {
+  .border-radius(none);
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
+  color: @brand-primary;
+  .swiper-container {
+    position: relative;
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+  }
+  .swiper-wrapper {
+    padding-right: 30px;
+  }
+  .swiper-slide {
+    display: block;
+    .text-overflow;
+  }
+  .close {
+    float: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+  }
+  a {
+    text-decoration: underline;
+  }
+}

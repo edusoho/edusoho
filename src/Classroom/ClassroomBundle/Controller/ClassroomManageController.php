@@ -78,8 +78,8 @@ class ClassroomManageController extends BaseController
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
         }
-        $canManage = $this->getClassroomService()->canManageClassroom($user['id']);
-        $canHandle = $this->getClassroomService()->canHandleClassroom($user['id']);
+        $canManage = $this->getClassroomService()->canManageClassroom($classroom['id']);
+        $canHandle = $this->getClassroomService()->canHandleClassroom($classroom['id']);
 
         return $this->render('ClassroomBundle:ClassroomManage:menu.html.twig', array(
             'canManage' => $canManage,
@@ -762,6 +762,62 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function testpaperAction(Request $request,$id,$status)
+    {
+        $this->getClassroomService()->tryHandleClassroom($id);
+        $user = $this->getCurrentUser();
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+        
+        $courseIds=ArrayToolkit::column($courses,'id');
+        $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
+        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'reviewing'),
+            10
+        );
+
+        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
+            $testpaperIds,
+            $status,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        
+        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
+        $userIds = ArrayToolkit::column($paperResults, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $targets = ArrayToolkit::column($testpapers, 'target');
+        $courseIds = array_map(function($target){
+            $course = explode('/', $target);
+            $course = explode('-', $course[0]);
+            return $course[1];
+        }, $targets);
+
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+
+        return $this->render('ClassroomBundle:ClassroomManage/Testpaper:layout.html.twig',array(
+            'classroom' => $classroom,
+            'status' => $status,
+
+            'users' => ArrayToolkit::index($users, 'id'),
+            'paperResults' => $paperResults,
+            'courses' => ArrayToolkit::index($courses, 'id'),
+            'testpapers' => ArrayToolkit::index($testpapers, 'id'),
+            'teacher' => $user,
+            'paginator' => $paginator
+        ));
+    }
+
     private function calculateUserLearnProgress($classroom, $member)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
@@ -853,5 +909,10 @@ class ClassroomManageController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 }

@@ -1,0 +1,48 @@
+.class-serve {
+	>ul {
+    padding: 20px 10px;
+    >li {
+      float: left;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      margin: 0 5px;
+      color: #fff;
+      background-color: @gray-light;
+      text-align: center;
+      .border-radius;
+      @media (max-width: @screen-md-max) {
+        margin: 0 2px;
+      }
+      &.active.one {
+        background-color: @brand-primary;
+      }
+      &.active.two {
+        background-color: @brand-danger;
+      }
+      &.active.three {
+        background-color: @brand-warning;
+      }
+      &.active.four {
+        background-color: @brand-info;
+      }
+      &.active.five {
+        background-color: #fbc02d;
+      }
+      &.active.six {
+        background-color: #673ab7;
+      }
+      &.active.seven {
+        background-color: #f473c5;
+      }
+      >a {
+        display: block;
+        color: #fff;
+        &:focus {
+          box-shadow: none;
+          border: none;
+        }
+      }
+    }
+  }
+}

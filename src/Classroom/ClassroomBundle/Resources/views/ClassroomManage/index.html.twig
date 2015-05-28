@@ -164,7 +164,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;<time>{{review.createdTime|smart_time}}</time>                                                    
                     <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:reviewUsers[review.userId].id})}}" style="float:right;">私信</button>
                   </div>
-                  <p>{{review.content}}</p>
+                  <p>{{ review.content|plain_text(40) }}</p>
                 </div>
               {% endif %}
             {% endfor %}

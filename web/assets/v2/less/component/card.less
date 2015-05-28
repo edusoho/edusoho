@@ -1,0 +1,48 @@
+.js-user-card {
+  display: inline-block;
+}
+
+.es-card {
+  width: 330px;
+  z-index: 999;
+  .popover-content {
+    padding: 0;
+    border: none;
+  }
+  .card-header {
+    padding: 15px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #e0e0e0;
+  }
+  .title > .name {
+    color: @gray-dark;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+  .media-body > p {
+    margin-top: 10px;
+    color: @gray;
+  }
+  .card-body {
+    line-height: 24px;
+    padding: 20px;
+  }
+  .card-footer {
+    border-top: 1px solid @gray-lighter;
+    span {
+      float: left;
+      width: 33.33%;
+      margin: 5px auto;
+      text-align: center;
+      line-height: 24px;
+      border-right: 1px solid @gray-lighter;
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+}
