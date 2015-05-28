@@ -487,7 +487,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => empty($order) ? 0 : $order['id'],
                     'orderNote' => empty($order['note']) ? '' : $order['note'],
                 );
-                $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $userId, $classroomId, $info);
+                $this->getCourseService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
         }
 
@@ -1125,6 +1125,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return $classroom;
+    }
+
+    public function getClassroomMembersByCourseId($courseId, $userId) {
+
+        $classroomIds = $this->findClassroomIdsByCourseId($courseId);
+        $members = $this->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
+        return $members;
     }
 
     private function updateStudentNumAndAudtorNum($classroomId)

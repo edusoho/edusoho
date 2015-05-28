@@ -97,6 +97,14 @@ class CourseLessonController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
+        if(empty($member)) {
+            $user = $this->getCurrentUser();
+            $joinedByClassroomMember = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user->id);
+            if(isset($joinedByClassroomMember["id"])) {
+                $member = $joinedByClassroomMember;
+            }
+        }
+        
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
         $json['number'] = $lesson['number'];
