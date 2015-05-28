@@ -456,6 +456,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         }
 
+        return array('test' => register);
+        exit();
+
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
@@ -466,15 +469,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function smsCheck($request, $mobileInfo, $scenario)
     {
-        return array('test' => $request,
-            'mobileInfo' => $mobileInfo,
-            'scenario' => $scenario);
         $sessionField = $request->getSession()->get($scenario);
         $sessionField['sms_type'] = $scenario;
 
-
         $requestField['sms_code'] = $mobileInfo['sms_code'];
         $requestField['mobile'] = $mobileInfo['mobile'];
+
         $result = $this->checkSms($sessionField, $requestField, $scenario);
         return array($result, $sessionField);
     }
