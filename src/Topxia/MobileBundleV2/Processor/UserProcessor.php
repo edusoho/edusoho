@@ -46,4 +46,6 @@ interface UserProcessor
 	public function getSchoolRoom();
 
 	public function smsSend();
+
+	public function getCourseTeachers();
 }

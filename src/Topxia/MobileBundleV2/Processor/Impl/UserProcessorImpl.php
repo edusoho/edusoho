@@ -451,6 +451,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
                 }
             }
+
+        if ($nickname && !SimpleValidator::nickname($nickname)) {
+            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
         }
         
         $token = $this->controller->createToken($user, $this->request);
@@ -489,6 +492,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return false;
         }
 
+<<<<<<< HEAD
         $smsCode = $sessionField['sms_code'];
         $smsCodePosted = $requestField['sms_code'];
         if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
@@ -498,6 +502,24 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if ($smsCode != $smsCodePosted) {
             return false;
         }
+=======
+        if (! $nickname) {
+            $nickname = "ES" . time();
+            while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+                $nickname = "ES". time();
+            }
+        } else {
+            if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+                return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+            }
+        }
+        
+        $user = $this->controller->getAuthService()->register(array(
+            'email' => $email,
+            'nickname' => $nickname,
+            'password' => $password,
+        ));
+>>>>>>> master
 
         $toMobile = $sessionField['to'];
         $mobile = $requestField['mobile'];
