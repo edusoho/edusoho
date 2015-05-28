@@ -135,7 +135,7 @@ class CourseController extends BaseController
             $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId'])), array('recommendedSeq', 'ASC'), 0, 8));
         }
 
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1), array('recommendedSeq', 'ASC'), 0, 11));
+        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0), array('recommendedSeq', 'ASC'), 0, 11));
 
         $recommends = array();
         foreach ($classrooms as $classroom) {
