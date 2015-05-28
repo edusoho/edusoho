@@ -62,18 +62,22 @@
               </div>
               <div class="panel-body row">
                 {% for group in groups %}
-                  <div class="media group-item col-md-6 col-sm-4">
+                  <div class="media media-group col-md-6 col-sm-4">
                     <div class="media-left">
                       <a href="{{ path('group_show',{id:group.id}) }}">
                         {% if group.logo %}
-                          <img src="{{file_path(group.logo)}}">
+                          <img class="group-avatar-md" src="{{file_path(group.logo)}}">
                         {% else %}
-                          <img src="{{asset('assets/img/default/group.png')}}">
+                          <img class="group-avatar-md" src="{{asset('assets/img/default/group.png')}}">
                         {% endif %}
                       </a>
                     </div>
                     <div class="media-body">
-                      <div class="title"><a href="{{ path('group_show',{id:group.id}) }}">{{ group.title }}</a></div>
+                      <div class="title">
+                        <a class="link-light" href="{{ path('group_show',{id:group.id}) }}">
+                          {{ group.title }}
+                        </a>
+                      </div>
                       <div class="metas">
                         <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
                         <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
@@ -87,16 +91,17 @@
           <div class="col-md-6">
             <div class="panel panel-default index-dynamic">
               <div class="panel-heading">
-                <h3 class="panel-title"><i class="es-icon es-icon-recentactors pull-left"></i>学员动态</h3>
-                <!-- <a href="javascript:;" class="more">...</a> -->
+                <h3 class="panel-title">
+                  <i class="es-icon es-icon-recentactors pull-left"></i>学员动态
+                </h3>
               </div>
               <div class="panel-body">
                 {% set statuses = data('LatestStatuses', {mode:'simple', count: 4}) %}
 
                 {% for status in statuses %}
-                  <div class="media">
+                  <div class="media media-dynamic">
                     <div class="media-left">
-                      {{ web_macro.user_avatar(status.user, '', 'img-circle') }}
+                      {{ web_macro.user_avatar(status.user, '', 'avatar-sm') }}
                     </div>
                     <div class="media-body">
                       <div class="title">
@@ -116,9 +121,4 @@
       </div>
     </section>
   {% endif %}
-
-
-
-
-
 {% endblock %}
