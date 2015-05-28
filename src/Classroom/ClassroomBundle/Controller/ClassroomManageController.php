@@ -802,7 +802,7 @@ class ClassroomManageController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
 
-        return $this->render('ClassroomBundle:ClassroomManage/Testpaper:layout.html.twig',array(
+        return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig',array(
             'classroom' => $classroom,
             'status' => $status,
 
