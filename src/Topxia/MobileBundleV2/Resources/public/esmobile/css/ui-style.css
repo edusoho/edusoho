@@ -846,6 +846,14 @@ modal
   z-index: 4;
 }
 
+.course-detail .card {
+  padding: 8px;
+}
+
+.course-detail .detail-content {
+  color: #333;
+}
+
 .slide-in-down {
   -webkit-transform: translate3d(0,-100%,0);
   transform: translate3d(0,-100%,0);

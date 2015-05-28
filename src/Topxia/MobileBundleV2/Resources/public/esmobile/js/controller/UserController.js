@@ -1,4 +1,10 @@
 app.controller('UserInfoController', ['$scope', 'httpService', '$ionicLoading', '$stateParams', UserInfoController]);
+app.controller('TeacherListController', ['$scope', 'CourseService', '$stateParams', TeacherListController]);
+
+function TeacherListController($scope, CourseService, $stateParams)
+{
+	
+}
 
 function UserInfoController($scope, httpService, $ionicLoading, $stateParams) 
 {

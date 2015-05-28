@@ -1,5 +1,16 @@
 app.controller('CourseListController', ['$scope', '$stateParams', 'AppUtil', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
 app.controller('CourseController', ['$scope', '$stateParams', 'CourseService', 'AppUtil', 'LessonService', CourseListController]);
+app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
+
+function CourseDetailController($scope, $stateParams, CourseService)
+{
+  CourseService.getCourse({
+      courseId : $stateParams.courseId,
+      token : $scope.token
+    }, function(data) {
+      $scope.course = data.course;
+    });
+}
 
 function CourseController($scope, $stateParams, CourseService, AppUtil, LessonService, $ionicScrollDelegate)
 {

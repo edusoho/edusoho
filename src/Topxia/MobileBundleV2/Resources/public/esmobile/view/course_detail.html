@@ -1,0 +1,32 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back="go">
+</a>
+
+<h1 class="title">
+  <span>
+    课程概览
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content class="padding course-detail">
+  	<div class="card">
+	    <h5>课程简介</h5>
+	    <div class="detail-content" ng-bind-html="course.about"></div>
+	</div>
+	<div class="card">
+	    <h5>课程目标</h5>
+	    <div class="detail-content">
+	    	<li ng-repeat="goal in course.goals">{{ goal }}</li>
+	    </div>
+	</div>
+
+	<div class="card">
+	    <h5>适合人群</h5>
+	    <div class="detail-content">
+	    	<li ng-repeat="audience in course.audiences">{{ audience }}</li>
+	    </div>
+	</div>
+   </ion-content>
+</ion-view>
