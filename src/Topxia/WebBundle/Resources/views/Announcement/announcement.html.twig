@@ -5,15 +5,15 @@
     <div class="swiper-wrapper">
       {% for announcement in announcements %}
         {% if announcement.url %}
-        <span class="swiper-slide">
+        <div class="swiper-slide">
           <a href="{{announcement.url}}" target="_blank">
           {{announcement.content|sub_text(50)}}
           </a>
-        </span>
+        </div>
         {% else %}
-        <span class="swiper-slide">
+        <div class="swiper-slide">
           {{announcement.content|sub_text(50)}}
-        </span>
+        </div>
         {% endif %}
       {% endfor %}
 
