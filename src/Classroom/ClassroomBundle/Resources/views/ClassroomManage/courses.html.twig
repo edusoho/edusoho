@@ -25,7 +25,7 @@
 {% set url = path('classroom_courses_select',{id:classroom.id}) %}       
 <div class="panel panel-default panel-col">
   <div class="panel-heading">课程管理
-    <button class="btn btn-success pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">添加课程</button></div>
+    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">添加课程</button></div>
   <div class="panel-body">
 
         <form id="courses-form" class="form-horizontal" method="post">
