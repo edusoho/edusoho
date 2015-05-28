@@ -505,16 +505,21 @@ class ClassroomManageController extends BaseController
     public function assistantsAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ($request->getMethod() == "POST") {
-            $data = $request->request->all();
-            $userIds = empty($data['ids']) ? array() : $data['ids'];
-            $this->getClassroomService()->updateAssistants($id, $userIds);
+            if ($classroom['status'] != 'published') {
+                $this->setFlashMessage('danger', "班级还未发布,不能管理助教.");
+            } else {
+                $data = $request->request->all();
+                $userIds = empty($data['ids']) ? array() : $data['ids'];
+                $this->getClassroomService()->updateAssistants($id, $userIds);
 
-            $this->setFlashMessage('success', "保存成功！");
+                $this->setFlashMessage('success', "保存成功！");
+            }
+            
         }
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
         $assistants = $this->getClassroomService()->findAssistants($id);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
         $users = ArrayToolkit::index($users, "id");
@@ -735,6 +740,7 @@ class ClassroomManageController extends BaseController
     public function importUsersAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         return $this->render('ClassroomBundle:ClassroomManage:import.html.twig', array(
@@ -745,7 +751,11 @@ class ClassroomManageController extends BaseController
     public function excelDataImportAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
+
         $classroom = $this->getClassroomService()->getClassroom($id);
+        if ($classroom['status'] != 'published') {
+            throw $this->createNotFoundException("未发布班级不能导入学员!");
+        }
 
         return $this->render('ClassroomBundle:ClassroomManage:import.step3.html.twig', array(
             'classroom' => $classroom,

@@ -6,6 +6,7 @@ a:focus {
 }
 .caret {
   margin-left: 5px;
+  border-top: 4px solid;
 }
 .form-control {
   height: 38px;

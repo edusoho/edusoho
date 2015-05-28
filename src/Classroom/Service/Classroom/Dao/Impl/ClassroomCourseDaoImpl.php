@@ -135,6 +135,17 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         return $this->getConnection()->fetchAll($sql, $courseIds) ?: array();
     }
 
+    public function findClassroomsByCoursesIds($courseIds)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) and disabled=0 ORDER BY seq ASC;";
+
+        return $this->getConnection()->fetchAll($sql, $courseIds) ?: array();
+    }
+
     private function _createSearchBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)

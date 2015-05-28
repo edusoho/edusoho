@@ -9,7 +9,18 @@
       <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }} / 序号:{{ course.recommendedSeq }}</span>
     {% endif %}
   </td>
-  <td>{% if  course.serializeMode =="none" %}<span class="text-info">非连载课程</span>{% elseif course.serializeMode =="serialize" %}<span class="text-success">连载中</span>{% elseif course.serializeMode =="finished" %}<span class="text-danger">已完结</span>{% endif %}</td>
+  <td>
+    {% set classroom = classrooms[course.id]|default(null) %}
+    {% if classroom %} 
+      <div class="label btn-primary">班级课程</div><br/>
+      <a href="{{ path('classroom_show',{id:classroom.id}) }}" target="_blank">{{ classroom.classroomTitle }}</a>
+    {% else %}
+      {% if  course.serializeMode =="none" %}<span class="text-info">非连载课程</span>
+      {% elseif course.serializeMode =="serialize" %}<span class="text-success">连载中</span>
+      {% elseif course.serializeMode =="finished" %}<span class="text-danger">已完结</span>{% endif %}
+    {% endif %}
+    
+  </td>
   <td>{{ course.studentNum }}</td>
   <td><span class="money-text">{{ course.income }}</span></td>
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>

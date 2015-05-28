@@ -4,7 +4,14 @@
 {% set side_nav = 'students' %}
 
 {% block main %}
- 
-{{ render(controller('TopxiaWebBundle:Importer:ValidateExcelInfo',{request:app.request, target:{type:'classroom', id:classroom.id}})) }}
+ {% if classroom.status == 'published' %}
+	{{ render(controller('TopxiaWebBundle:Importer:ValidateExcelInfo',{request:app.request, target:{type:'classroom', id:classroom.id}})) }}
+ {% else %}
+	<div class="panel panel-default panel-col">
+		<div class="panel-heading">学员批量导入</div>
+ 	 	<div class="panel-body">未发布班级不能导入学员!</div>
+ 	</div>
+ {% endif %}
+
 
 {% endblock %}
