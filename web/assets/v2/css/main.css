@@ -1001,6 +1001,7 @@ Pagination Styles
 }
 html {
   overflow-x: hidden;
+  word-wrap: break-word;
 }
 html.html-nav-active {
   overflow: hidden;
