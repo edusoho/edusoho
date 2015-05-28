@@ -11,9 +11,12 @@ use Topxia\Service\Util\CloudClientFactory;
 class CourseLessonController extends BaseController
 {
 
-    public function previewAction(Request $request, $courseId, $lessonId)
+    public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($lessonId)) {
+            $lessonId = $request->query->get('lessonId');
+        }
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
