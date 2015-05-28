@@ -5,8 +5,10 @@
 		  <span aria-hidden="true">×</span>
 		</button> 
 		{% for announcement in announcements %}
-		<i class="es-icon es-icon-notifications"></i>
-		<a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|sub_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
+		<div class="swiper-container">
+			<i class="es-icon es-icon-notifications"></i>
+			<a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|sub_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
+		</div>
 		{% endfor %}
 	</div>
 
