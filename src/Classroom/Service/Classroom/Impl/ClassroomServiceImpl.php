@@ -876,7 +876,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (in_array($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+        if (in_array($member['role'], array('studentAssistant', 'assistant', 'teacher', 'headTeacher'))) {
             return true;
         }
 
