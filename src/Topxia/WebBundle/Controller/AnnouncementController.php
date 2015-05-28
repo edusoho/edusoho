@@ -16,9 +16,7 @@ class AnnouncementController extends BaseController
         $processor = $this->getAnnouncementProcessor($announcement['targetType']);
         $targetObject = $processor->getTargetObject($targetId);
 
-        $showPageName = $processor->getShowPageName($targetId);
-
-		return $this->render('TopxiaWebBundle:Announcement:'.$showPageName,array(
+		return $this->render('TopxiaWebBundle:Announcement:announcement-show-modal.html.twig',array(
 			'announcement' => $announcement,
 			'targetObject' => $targetObject,
 		));
