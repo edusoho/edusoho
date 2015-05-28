@@ -27,7 +27,10 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
+        {% if not user.promoted %}
         <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐教师</a></li>
+        {% endif %}
+        
         {% if user.promoted %}
           <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
         {% endif %}

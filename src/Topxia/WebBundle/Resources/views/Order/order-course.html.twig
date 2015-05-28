@@ -1,0 +1,27 @@
+<div class="order-detail">
+  {% for course in courses %}
+  <div class="col-md-4">
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+    </a>
+  </div>
+  <div class="col-md-8">
+    <h3>
+      <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+    </h3>
+    {% if course.discountId %}
+    <span class="course-text">
+        价&nbsp;&nbsp;&nbsp;&nbsp;格：
+        {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows:["price", "discount"]}%}
+    </span>
+    {% endif %}
+    {% set teacher = users[course.teacherIds|first]|default(null) %}
+    {% if teacher %}
+      <span class="course-text">
+        教&nbsp;&nbsp;&nbsp;&nbsp;师：<a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+      </span>
+    {% endif %}
+    <span class="course-text">课时数：{{ course.lessonNum }}</span>
+  </div>
+  {% endfor %}
+</div>

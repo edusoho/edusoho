@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
     var BaseQuestion = require('./question-base');
-    var EditorFactory = require('common/kindeditor-factory');
     var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
     require('webuploader');
+    require('ckeditor');
 
     var EssayQuestion = BaseQuestion.extend({
         setup: function() {
@@ -18,9 +18,14 @@ define(function(require, exports, module) {
                 required: true
             });
 
-            var editor = EditorFactory.create('#question-answer-field', 'simple_noimage');
+            // group: 'default'
+            var editor = CKEDITOR.replace('question-answer-field', {
+                toolbar: 'Minimal',
+                height: 120
+            });
+
             this.get('validator').on('formValidate', function(elemetn, event) {
-                editor.sync();
+                editor.updateElement();
             });
 
             var $trigger = this.$('[data-role=answer-uploader]');

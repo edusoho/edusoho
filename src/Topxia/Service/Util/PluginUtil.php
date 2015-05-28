@@ -29,7 +29,7 @@ class PluginUtil
 	public static function refreshMetaFile($apps)
     {
         $pluginMetas = array(
-            'protocol' => '1.0',
+            'protocol' => '2.0',
             'installed' => array()
         );
 
@@ -38,7 +38,11 @@ class PluginUtil
                 continue;
             }
 
-            $pluginMetas['installed'][] = $app['code'];
+            $pluginMetas['installed'][$app['code']] = array(
+                'code' => $app['code'],
+                'version' => $app['version'],
+                'type' => $app['type'],
+            );
         }
 
         $dataDirectory = realpath(self::$kernel->getParameter('kernel.root_dir') . '/data/');

@@ -40,26 +40,29 @@ class LogDaoImpl extends BaseDao implements LogDao
 	protected function createLogQueryBuilder($conditions)
 	{
 		$conditions = array_filter($conditions);
-		return $this->createDynamicQueryBuilder($conditions)
+
+
+		$builder = $this->createDynamicQueryBuilder($conditions)
 			->andWhere('module = :module')
 			->andWhere('action = :action')
 			->andWhere('level = :level')
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
-			->andWhere('createdTime < :endDateTime');
+			->andWhere('createdTime < :endDateTime')
+			->andWhere('userId IN ( :userIds )');
+
+		return $builder;
 	}
 
 	public function analysisLoginNumByTime($startTime,$endTime)
 	{
-	              $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' and  `createdTime`>={$startTime} and `createdTime`<={$endTime}  ";
-
-        		return $this->getConnection()->fetchColumn($sql);
+        $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' and  `createdTime`>= ? and `createdTime`<= ?  ";
+		return $this->getConnection()->fetchColumn($sql, array($startTime, $endTime));
 	}
 
 	public function analysisLoginDataByTime($startTime,$endTime)
 	{
-	              $sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' and `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-
-     		return $this->getConnection()->fetchAll($sql);
+		$sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' and `createdTime`>= ? and `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+		return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
 	}
 }

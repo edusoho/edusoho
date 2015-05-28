@@ -2,6 +2,7 @@
 namespace Topxia\Service\Common;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Finder\Finder;
 
 class ServiceKernel
 {
@@ -9,6 +10,10 @@ class ServiceKernel
     private static $_instance;
 
     private static $_dispatcher;
+
+    protected $_moduleDirectories = array();
+
+    protected $_moduleConfig = array();
 
     protected $environment;
     protected $debug;
@@ -20,6 +25,8 @@ class ServiceKernel
 
     protected $pool = array();
 
+    protected $classMaps = array();
+
     public static function create($environment, $debug)
     {
         if (self::$_instance) {
@@ -29,6 +36,7 @@ class ServiceKernel
         $instance = new self();
         $instance->environment = $environment;
         $instance->debug = (Boolean) $debug;
+        $instance->registerModuleDirectory(realpath(__DIR__ . '/../../../'));
 
         self::$_instance = $instance;
 
@@ -60,6 +68,44 @@ class ServiceKernel
         if (true === $this->booted) {
             return;
         }
+        $this->booted = true;
+
+        $moduleConfigCacheFile = $this->getParameter('kernel.root_dir') . '/cache/' . $this->environment . '/modules_config.php';
+
+        if (file_exists($moduleConfigCacheFile)) {
+            $this->_moduleConfig = include $moduleConfigCacheFile;
+        } else {
+            $finder = new Finder();
+            $finder->directories()->depth('== 0');
+
+            foreach ($this->_moduleDirectories as $dir) {
+
+                if(glob($dir . '/*/Service', GLOB_ONLYDIR)){
+
+                    $finder->in($dir . '/*/Service');
+                }       
+                
+            }
+
+            foreach ($finder as $dir) {
+                $filepath = $dir->getRealPath() . '/module_config.php';
+
+                if (file_exists($filepath)) {
+                    $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
+                }
+            }
+
+            if (!$this->debug) {
+                $cache = "<?php \nreturn " . var_export($this->_moduleConfig, true) . ';';
+                file_put_contents($moduleConfigCacheFile, $cache);
+            }
+        }
+
+        $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
+        foreach ($subscribers as $subscriber) {
+            $this->dispatcher()->addSubscriber(new $subscriber());
+        }
+
     }
 
     public function setParameterBag($parameterBag)
@@ -73,6 +119,14 @@ class ServiceKernel
             throw new \RuntimeException('尚未初始化ParameterBag');
         }
         return $this->parameterBag->get($name);
+    }
+
+    public function hasParameter($name)
+    {
+        if (is_null($this->parameterBag)) {
+            throw new \RuntimeException('尚未初始化ParameterBag');
+        }
+        return $this->parameterBag->has($name);
     }
 
     public function setCurrentUser($currentUser)
@@ -152,8 +206,27 @@ class ServiceKernel
         return $this->debug;
     }
 
+    public function registerModuleDirectory($dir)
+    {
+        $this->_moduleDirectories[] = $dir;
+    }
+
+    public function getModuleConfig($key, $default = null)
+    {
+        if (!isset($this->_moduleConfig[$key])) {
+            return $default;
+        }
+        return $this->_moduleConfig[$key];
+    }
+
     private function getClassName($type, $name)
     {
+        $classMap = $this->getClassMap($type);
+
+        if (isset($classMap[$name])) {
+            return $classMap[$name];
+        }
+
         if (strpos($name, ':') > 0) {
             list($namespace, $name) = explode(':', $name, 2);
             $namespace .= '\\Service';
@@ -167,6 +240,22 @@ class ServiceKernel
             return $namespace . '\\' . $module. '\\Dao\\Impl\\' . $className . 'Impl';
         }
         return $namespace . '\\' . $module. '\\Impl\\' . $className . 'Impl';
+    }
+
+    private function getClassMap($type)
+    {
+        if (isset($this->classMaps[$type])) {
+            return $this->classMaps[$type];
+        }
+
+        $key = ($type == 'dao') ? 'topxia_daos' : 'topxia_services';
+        if (!$this->hasParameter($key)) {
+            $this->classMaps[$type] = array();
+        } else {
+            $this->classMaps[$type] = $this->getParameter($key);
+        }
+
+        return $this->classMaps[$type];
     }
 
 }

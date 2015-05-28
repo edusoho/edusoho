@@ -3,11 +3,15 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-    var EditorFactory = require('common/kindeditor-factory');
+    require('ckeditor');
 
     exports.run = function() {
 
-        var editor = EditorFactory.create('#about', 'simple', {extraFileUploadParams:{group:'course'}});
+        // group: 'course'
+        var editor = CKEDITOR.replace('about', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#about').data('imageUploadUrl')
+        });
 
         var $modal = $('#user-edit-form').parents('.modal');
 
@@ -20,7 +24,6 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $('#edit-user-btn').button('submiting').addClass('disabled');
-                editor.sync();
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
@@ -32,6 +35,11 @@ define(function(require, exports, module) {
                 });
             }
         });
+
+        validator.on('formValidate', function(elemetn, event) {
+            editor.updateElement();
+        });
+
 
         validator.addItem({
             element: '[name="truename"]',

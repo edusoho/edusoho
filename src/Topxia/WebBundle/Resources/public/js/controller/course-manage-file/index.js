@@ -26,10 +26,6 @@ define(function(require, exports, module) {
             show: false
         });
 
-        $("#modal").on("hidden.bs.modal", function(){
-            window.location.reload();
-        })
-
         $("button", ".panel-heading").on('click',function(){
             var url="";
             if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
@@ -44,6 +40,7 @@ define(function(require, exports, module) {
             });
         })
 
+        $("[rel='tooltip']").tooltip();
 
 
     };

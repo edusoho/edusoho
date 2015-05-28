@@ -1,0 +1,57 @@
+<div class="order-item clearfix">
+  <div class="order-item-title">
+    <i class="order-item-title-icon">
+      <img 
+      {% if setting("coin.coin_picture") %}
+      src="{{asset(setting("coin.coin_picture"))}}"
+      {% else %}
+      src="/bundles/topxiaweb/img/order-pay/iconfont-coin.png" 
+      {% endif %}
+      width="25px">
+    </i>
+    <h4 class="title">{{ setting("coin.coin_name") }}</h4>
+    <span class="text-muted">（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
+    <div class="price_r">
+      <span class="price_r_mark">-</span>
+      <span class="order-price" role="cash-discount"></span>
+      <span>{% if priceType == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
+    </div>
+  </div>
+  <div class="order-item-detail">
+    
+    <div class="coin-detail">
+      账户余额：<span role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}
+      {% if hasPayPassword %}，
+      本次使用
+
+      <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
+      <input id="coinPayAmount" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
+      {{setting("coin.coin_name")}}
+      {% endif %}
+    </div>
+    <div class="pay-password">
+      <input style="display:none">{# Prevent autocompleting #}
+      <input type="password" style="display:none">{# Prevent autocompleting #}
+      {% if not hasPayPassword %}
+      <div>
+        <span class="text-danger">为了保障账户资金安全，请先</span>
+        <a class="btn-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">设置支付密码</a>
+        {# <a href="{{path('settings_pay_password')}}" target='_blank' class="btn-link">设置支付密码</a> #}
+      </div>
+      {% else %}
+      <div role="password-input" style="display:none">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="controls">
+              <input id="payPassword" class="form-control input-sm" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
+            </div>
+            <div>
+              <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>   

@@ -1,0 +1,14 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<ul class="media-list thread-post-list thread-subpost-list">
+  {% for post in posts  %}
+    {% set author = users[post.userId] %}
+    {% include 'TopxiaWebBundle:Thread:subpost-item.html.twig' %}
+  {% endfor %}
+</ul>
+
+{% if less %}
+  {{ web_macro.paginator(paginator, 'pagination-sm hide') }}
+{% else %}
+  {{ web_macro.paginator(paginator, 'pagination-sm') }}
+{% endif %}

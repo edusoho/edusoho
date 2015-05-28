@@ -5,7 +5,7 @@ use Topxia\DataTag\DataTag;
 
 class BlocksDataTag extends BaseDataTag implements DataTag
 {
-	/**
+    /**
      * 获取所有Blocks
      * 
      * 可传入的参数：
@@ -16,16 +16,13 @@ class BlocksDataTag extends BaseDataTag implements DataTag
      * @return array Blocks
      */
 
-	public function getData(array $arguments)
-    {  
-    	if(empty($arguments)) {
-    		return array();
-    	}else {
+    public function getData(array $arguments)
+    {
+        if (empty($arguments['codes'])) {
+            return array();
+        }
 
-        $BlockContents = $this->getBlockService()->getContentsByCodes($arguments['codes']);
-
-        return $BlockContents;
-    	}
+        return $this->getBlockService()->getContentsByCodes($arguments['codes']);
     }
 
     protected function getBlockService()

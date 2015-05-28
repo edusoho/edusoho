@@ -38,9 +38,13 @@ class PopularCoursesDataTag extends CourseBaseDataTag implements DataTag
         }
 
         if (isset($arguments['price'])) {
-            $conditions['notFree'] = true;
+            $conditions['price_GT'] = '0.00';
         } else {
             $conditions['price'] = '0.00';
+        }
+
+        if(!isset($arguments["type"])) {
+            $arguments['type'] = 'hitNum';
         }
 
         $courses = $this->getCourseService()->searchCourses($conditions, $arguments['type'], 0, $arguments['count']);

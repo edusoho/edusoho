@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %} 申请云短信 {% endblock %}
+
+{% block body %}
+	<form id="apply-sms-form" class="form-horizontal" data-url="{{ path('admin_edu_cloud_apply_for_sms') }}">
+		<fieldset>
+			<div class="row form-group">
+		      <div class="col-md-3 control-label">
+		        <label>提醒</label>
+		      </div>
+		      <div class="col-md-7 controls" style="padding-top: 5px;">
+		      	{% if (setting('cloud_sms.sms_school_name')|default('')) == '' %}
+		      		<span>初次开启，需填写网校名称，审核需24小时，开启成功后，短信0.07元/条</span>
+		      	{% else %}
+		      		<span>审核需24小时，期间短信验证功能仍可以正常使用</span>
+		      	{% endif %}
+
+		      </div>
+		    </div>
+
+			<div class="row form-group">
+		      <div class="col-md-3 control-label">
+		        <label for="name">网校名称</label>
+		      </div>
+		      <div class="col-md-7 controls">
+		        <input type="text" name="name" class="form-control" id="name">
+		        <p>短信内容：“【<span id="js-school-name"></span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
+		      </div>
+		    </div>
+		</fieldset>
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+{% endblock %}
+
+{% block footer %}
+	<button class="btn btn-default col-md-offset-7" data-dismiss="modal">关闭</button>
+	<button class="btn btn-primary col-md-offset-2" id="js-submit">提交</button>
+	<script>app.load('educloud/apply-sms')</script>
+{% endblock %}

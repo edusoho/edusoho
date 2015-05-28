@@ -77,8 +77,4 @@ class QqOAuthClient extends AbstractOAuthClient
         return $userInfo;
     }
 
-    public function getClientInfo()
-    {
-        return array('type' => 'qq','name' => 'QQ');
-    }
 }

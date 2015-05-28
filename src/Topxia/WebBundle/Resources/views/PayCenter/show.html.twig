@@ -1,0 +1,56 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %} 支付中心 - {{ parent() }}{% endblock %}
+
+
+{% block content %}
+<div class="container order-pay pay-center">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 ptl">
+      <div class="panel panel-default panel-page">
+        <div class="panel-heading"><h4>收银台</h4></div>
+        <hr/>
+        <div class="panel-body">
+          <div class="alert alert-success">
+            <span class="pull-right"><span style="color:#f60; font-size: 24px;">{{order.amount}}</span> 元</span>
+            <p> 订单已提交，请在４８小时内完成支付！<small class="text-muted">逾期订单将被取消。</small></p>
+            <p class="">
+              <small>订单号：{{order.sn}}</small>
+              <small class="mll">订单名称：{{ order.title }}</small>
+            </p>
+          </div>
+          
+          <form method="post" action="{{path('pay_center_pay')}}">
+            <input type="hidden" name="orderId" value="{{order.id}}"/>
+            
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <div class="row">
+              
+            	<div class="form-group">
+                <div class="col-md-7">
+                  <div class="pay-type-lable">支付方式</div>
+                  {% for payment, options in payments %}
+                  <div class="check">
+                    <img src="{{ asset('assets/img/order/alipay.gif') }}" width="100px"/>
+                    <span class="icon"></span>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <hr/>
+            <div class="form-group pay pay-amount">
+    
+
+              <div>
+                <button class="pay-button btn btn-fat btn-primary btn-lg"  type="submit">去支付</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

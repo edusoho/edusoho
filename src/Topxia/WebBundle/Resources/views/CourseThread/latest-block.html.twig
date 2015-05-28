@@ -10,7 +10,15 @@
 					<li class="clearfix">
 						
 						<span class="text-muted pull-right">{{ thread.createdTime|date('Y-m-d') }}</span>
-						<a href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id}) }}" >{{ thread.title|plain_text(15) }}</a>	
+						<a 
+						{% if setting("course.buy_fill_userinfo")|default(false) %}
+						href="#modal" 
+						data-toggle="modal" 
+						data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+						{% else %}
+						href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+						{% endif %}
+						>{{ thread.title|plain_text(15) }}</a>	
 
 					</li>
 				{% endfor %}

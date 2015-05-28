@@ -35,10 +35,16 @@ define(function(require, exports, module) {
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 sortList($list);
-
             },
             serialize: function(parent, children, isContainer) {
                 return isContainer ? children : parent.attr('id');
+            },
+            isValidTarget:function (item, container) {
+                if(item.has('li').length){ 
+                    return true;
+                }else{
+                    return false;
+                }
             }
         });
 
@@ -55,14 +61,16 @@ define(function(require, exports, module) {
         });
 
         $list.on('click', '.delete-chapter-btn', function(e) {
-            if (!confirm('您真的要删除该章节吗？')) {
+            var chapter_name = $(this).data('chapter') ;
+            var part_name = $(this).data('part') ; 
+            if (!confirm('您真的要删除该'+chapter_name+''+part_name+'吗？')) {
                 return ;
             }
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(response) {
                 $btn.parents('.item-chapter').remove();
                 sortList($list);
-                Notify.success('章节已删除！');
+                Notify.success(''+chapter_name+''+part_name+'已删除！');
             }, 'json');
         });
 
@@ -88,7 +96,9 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
+                $(id).find('.item-content .unpublish-warning').remove();
+                $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
+                $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时发布成功！');
             });
@@ -98,7 +108,9 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).replaceWith(html);
+                $(id).find('.item-content').append('<span class="unpublish-warning text-warning">(未发布)</span>');
+                $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
+                $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时已取消发布！');
             });

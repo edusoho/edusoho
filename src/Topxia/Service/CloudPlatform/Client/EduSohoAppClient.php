@@ -7,7 +7,7 @@ use Topxia\System;
 class EduSohoAppClient implements AppClient
 {
 
-    protected $userAgent = 'Open Edusoho App Client 1.0';
+    protected $userAgent = 'Open EduSoho App Client 1.0';
 
     protected $connectTimeout = 5;
 
@@ -32,7 +32,14 @@ class EduSohoAppClient implements AppClient
     public function getApps()
     {
         $args = array();
-        return $this->callRemoteApi('GET', 'GetApps', $args);
+        //GetAppCenter
+        return $this->callRemoteApi('GET', 'GetAppCenter', $args);
+    }
+
+    public function getBinded()
+    {
+        $args = array();
+        return $this->callRemoteApi('GET', 'HasBinded', $args);
     }
 
     public function getMessages()
@@ -78,6 +85,12 @@ class EduSohoAppClient implements AppClient
         $args = array('token' => $token);
         return $this->callRemoteApi('POST', 'RepairProblem', $args);
 
+    }
+
+    public function getLoginToken()
+    {
+        $args = array();
+        return $this->callRemoteApi('POST', 'GetLoginToken', $args);
     }
 
     private function callRemoteApi($httpMethod, $action, array $args)

@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var AutoComplete = require('autocomplete');
-    var DynamicCollection = require('../widget/dynamic-collection3');
+    var DynamicCollection = require('../widget/dynamic-collection4');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
 
@@ -11,7 +11,15 @@ define(function(require, exports, module) {
     	
         var dynamicCollection = new DynamicCollection({
             element: '#teachers-form-group',
-            onlyAddItemWithModel: true
+            onlyAddItemWithModel: true,
+            beforeDeleteItem: function(e){
+            	var teacherCounts=$("#teacher-list-group").children("li").length;
+	            if(teacherCounts <= 1){
+	                Notify.danger("课程至少需要一个教师！");
+	                return false;
+	            }
+	            return true;
+            }
         });
 
 	    var autocomplete = new AutoComplete({

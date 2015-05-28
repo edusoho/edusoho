@@ -1,7 +1,13 @@
   <div class="question-set-item">
 
     <div class="question-set-item-side">
-      <span class="question-set-item-seq">{{ item.seq }}</span>
+      <span class="question-set-item-seq">
+      {% if item.parentId %}
+        {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}  
+      {% else %}
+        {{ item.seq }}
+      {% endif %}
+      </span>
       {% if item.score > 0 %}
         <span class="question-set-item-score">{{ item.score }}</span>
       {% endif %}

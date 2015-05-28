@@ -6,6 +6,7 @@ class TudouVideoItemParser extends AbstractItemParser
 	private $patterns = array(
 		'p1' => '/^http:\/\/www\.tudou\.com\/programs\/view\/.*/s',
         'p2' => '/^http:\/\/www\.tudou\.com\/listplay\/(.*?)\/(.*?)\.html/s',
+        'p3' => '/^http:\/\/www\.tudou\.com\/albumplay\/(.*?)\/(.*?)/s',
 	);
 
 	public function parse($url)
@@ -21,7 +22,12 @@ class TudouVideoItemParser extends AbstractItemParser
             throw $this->createParseException("获取土豆视频({$url})页面内容失败！");
         }
 
-        $matched = preg_match('/,iid:\s*(\d+).*?,icode:\s*\'(.*?)\'.*?,pic:\s*\'(.*?)\'.*?,kw:\s*\'(.*?)\'/s', $response['content'], $matches);
+        $p3matched = preg_match($this->patterns['p3'], $url, $matches);
+        if(preg_match($this->patterns['p3'], $url, $matches)){
+            $matched = preg_match('/,iid:\s*(\d+).*?,icode:\s*\'(.*?)\'.*?,kw:\s*\'(.*?)\'.*?,pic:\s*\'(.*?)\'/s', $response['content'], $matches);
+        } else {
+            $matched = preg_match('/,iid:\s*(\d+).*?,icode:\s*\'(.*?)\'.*?,pic:\s*\'(.*?)\'.*?,kw:\s*\'(.*?)\'/s', $response['content'], $matches);
+        }
         if (!$matched) {
             throw $this->createParseException("解析土豆视频信息失败");
         }
@@ -31,12 +37,19 @@ class TudouVideoItemParser extends AbstractItemParser
         $item['type'] = 'video';
         $item['source'] = 'tudou';
         $item['uuid'] = 'tudou:' . $videoId;
-
-        $item['name'] = $matches[4];
         $item['page'] = "http://www.tudou.com/programs/view/{$videoId}/";
-        $item['pictures'] = array(
-            array('url' => $matches[3])
-        );
+
+        if($p3matched){
+            $item['name'] = $matches[3];
+            $item['pictures'] = array(
+                array('url' => $matches[4])
+            );
+        } else {
+            $item['name'] = $matches[4];
+            $item['pictures'] = array(
+                array('url' => $matches[3])
+            );
+        }
 
         $item['files'] = array(
             array('type' => 'swf', 'url' => "http://www.tudou.com/v/{$videoId}/v.swf"),
@@ -58,6 +71,9 @@ class TudouVideoItemParser extends AbstractItemParser
         if ($matched) {
             return true;
         }
-
+        $matched = preg_match($this->patterns['p3'], $url);
+        if ($matched) {
+            return true;
+        }
     }
 }

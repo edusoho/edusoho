@@ -1,0 +1,30 @@
+<ul class="price-info">
+  <li>
+    {% if course.discountId == 0 %}
+      <span class="price-info-label">价格</span>
+    {% else  %}
+      <span class="price-info-label">折后价</span>
+    {% endif %}
+    <span class="price-info-content">
+      {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows: ['price', 'discount']} %}
+    </span>
+  </li>
+  {% if course.discountId > 0 %}
+    <li>
+      <span class="price-info-label">原价</span>
+      <span class="price-info-content">
+        {% include 'TopxiaWebBundle:Course:price-widget.html.twig' with {shows: ['originPrice']} %}
+      </span>
+    </li>
+    <li>
+      <span class="price-info-label">活动</span>
+      <span class="price-info-content">
+        <span class="activity">{{ (course.discountObj.name)|default('') }}</span>
+        <span class="glyphicon glyphicon-time text-muted"></span>
+        <span id="discount-endtime-countdown" class="text-muted"
+        data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
+          ></span>
+      </span>
+    </li>
+  {% endif %}
+</ul>

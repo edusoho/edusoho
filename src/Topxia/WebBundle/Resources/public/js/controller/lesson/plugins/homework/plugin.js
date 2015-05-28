@@ -24,6 +24,16 @@ define(function(require, exports, module) {
 		},
 		onChangeLesson: function() {
 			this.pane.show();
+		},
+		onChangeHomeworkOrExercise: function(lesson) {	
+			if(!lesson){
+				return;
+			}
+			if(lesson.homeworkOrExerciseNum>0){
+				$('.glyphicon-list-alt').addClass('text-success');
+			}else{
+				$('.glyphicon-list-alt').removeClass('text-success');
+			}
 		}
 		
 	});

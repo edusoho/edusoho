@@ -33,9 +33,7 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
         }
 
         if (!empty($arguments['notFree'])) {
-            if ($arguments['notFree'] == 1) {
-                $conditions['notFree'] = 1;
-            }
+            $conditions['originPrice_GT'] = '0.00';
         }
 
     	$courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);

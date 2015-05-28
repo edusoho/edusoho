@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+{% block title %}场景未开启 - 安全设置 - {{ parent() }}{% endblock %}
+{% set script_controller = 'settings/bind-mobile' %} 
+{% set side_nav = 'security' %} 
+
+{% block main %} 
+ {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}场景未开启{% endblock %}
+    {% block body %}
+
+		<div class="text-center">
+		  <h1 class="text-muted">该使用场景未开启</h1>
+		</div>
+		
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

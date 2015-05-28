@@ -14,6 +14,19 @@ class MoneyCardDaoImpl extends BaseDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+    public function getMoneyCardByCardId($cardId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE cardId = ? LIMIT 1";
+
+        return $this->getConnection()->fetchAssoc($sql, array($cardId)) ? : null;
+    }    
+    public function getMoneyCardByPassword($password)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE password = ? LIMIT 1";
+
+        return $this->getConnection()->fetchAssoc($sql, array($password)) ? : null;
+    }       
+
 	public function searchMoneyCards($conditions, $orderBy, $start, $limit)
     {
         $this->checkOrderBy($orderBy, array('id','createdTime'));
@@ -45,7 +58,7 @@ class MoneyCardDaoImpl extends BaseDao
             $moneyCardsForSQL = array_merge($moneyCardsForSQL, array_values($value));
         }
 
-        $sql = "INSERT INTO $this->table (cardId, password, deadline, cardStatus, batchId)     VALUE ";
+        $sql = "INSERT INTO $this->table (cardId, password, deadline, cardStatus, batchId )     VALUE ";
         for ($i=0; $i < count($moneyCards); $i++) {
             $sql .= "(?, ?, ?, ?, ?),";
         }
@@ -55,14 +68,11 @@ class MoneyCardDaoImpl extends BaseDao
         return $this->getConnection()->executeUpdate($sql, $moneyCardsForSQL);
     }
 
-    public function isCardIdAvaliable ($moneyCardIds)
+    public function isCardIdAvaliable($moneyCardIds)
     {
-        $str = implode(',', array_map(function($value){ return "'".$value."'"; },
-            array_keys($moneyCardIds)));
-
-        $sql = "select COUNT(id) from ".$this->table." where cardId in (".$str.")";
-
-        $result = $this->getConnection()->fetchAll($sql);
+        $marks = str_repeat('?,', count($moneyCardIds) - 1) . '?';
+        $sql = "select COUNT(id) from ".$this->table." where cardId in (".$marks.")";
+        $result = $this->getConnection()->fetchAll($sql, $moneyCardIds);
 
         return $result[0]["COUNT(id)"] == 0 ? true : false;
     }
@@ -96,7 +106,9 @@ class MoneyCardDaoImpl extends BaseDao
             ->from($this->table, 'money_card')
             ->andWhere('cardId = :cardId')
             ->andWhere('deadline = :deadline')
-            ->andWhere('batchId = :batchId');
+            ->andWhere('batchId = :batchId')
+            ->andWhere('deadline <= :deadlineSearchEnd')
+            ->andWhere('deadline >= :deadlineSearchBegin');
     }
 
 }

@@ -10,15 +10,18 @@ define(function(require, exports, module) {
 
         $list.on('click', '.student-remove', function(){
             var $tr = $(this).parents('tr');
-            if (!confirm('您真的要移除该学员吗？')) {
+            var user_name = $('.student-remove').data('user') ;
+            if (!confirm('您真的要移除该'+user_name+'吗？')) {
                 return ;
             }
 
             $.post($(this).data('url'), function(){
-                Notify.success('移除学员成功！');
+            	var user_name = $('.student-remove').data('user') ;
+                Notify.success('移除'+user_name+'成功！');
                 $tr.remove();
             }).error(function(){
-                Notify.danger('移除学员失败，请重试！');
+            	var user_name = $('.student-remove').data('user') ;
+                Notify.danger('移除'+user_name+'失败，请重试！');
             });
         });
 

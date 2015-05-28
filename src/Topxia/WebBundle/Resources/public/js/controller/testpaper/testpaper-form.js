@@ -2,12 +2,12 @@ define(function(require, exports, module) {
 
     var Widget     = require('widget');
     var Notify = require('common/bootstrap-notify');
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('jquery.nouislider');
     require('jquery.nouislider-css');
     require('jquery.sortable');
+    require('ckeditor');
 
     var TestpaperForm = Widget.extend({
 
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            'click [name=mode]': 'onClickModeField',
+            'click [name=mode]': 'onClickModeField'
         },
 
         setup:function() {
@@ -31,15 +31,22 @@ define(function(require, exports, module) {
 
         createValidator: function() {
             this.set('validator', new Validator({
-                element: this.element,
+                element: this.element
             }));
         },
 
         initBaseFields: function() {
             var validator = this.get('validator');
-            var editor = EditorFactory.create('#testpaper-description-field', 'simple_noimage');
+
+            // group: 'default'
+            var editor = CKEDITOR.replace('testpaper-description-field', {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $('#testpaper-description-field').data('imageUploadUrl'),
+                height: 100
+            });
+
             validator.on('formValidate', function(elemetn, event) {
-                editor.sync();
+                editor.updateElement();
             });
 
             validator.addItem({
@@ -242,6 +249,39 @@ define(function(require, exports, module) {
             });
         },
 
+        getQuestionNums: function(){
+            var rangeValue = $('input[name=range]:checked').val();
+            var startLessonId = $("#testpaper-range-start").val();
+            var endLessonId = $("#testpaper-range-end").val();
+
+            var options = $("#testpaper-range-start").children();
+            var status = false;
+            var targets = "";
+            $.each(options,function(i,n){
+                var option = $(n);
+                var value = option.attr("value");
+                if(value == startLessonId){
+                    status = true;
+                    targets += value+",";
+                    if(value == endLessonId){
+                        status = false;
+                    }
+                } else if(value == endLessonId){
+                    status = false;
+                    targets += value+",";
+                } else if(status){
+                    targets += value+",";
+                }
+            });
+            var courseId = $("#testpaper-form").data("courseId");
+            $.get('../../../../../course/'+courseId+'/manage/testpaper/get_question_num', {range: rangeValue, targets:targets}, function(data){
+                $('[role="questionNum"]').text(0);
+                $.each(data,function(i,n){
+                    $("[type='"+i+"']").text(n.questionNum);
+                });
+            });
+        },
+
         initRangeField: function() {
             var self = this;
             $('input[name=range]').on('click', function() {
@@ -252,6 +292,7 @@ define(function(require, exports, module) {
                 }
 
                 self._refreshRangesValue();
+                self.getQuestionNums();
             });
 
             $("#testpaper-range-start").change(function() {
@@ -260,10 +301,12 @@ define(function(require, exports, module) {
                 self._resetRangeEndOptions(startIndex);
 
                 self._refreshRangesValue();
+                self.getQuestionNums();
             });
 
             $("#testpaper-range-end").change(function() {
                 self._refreshRangesValue();
+                self.getQuestionNums();
             });
 
         },
@@ -329,13 +372,15 @@ define(function(require, exports, module) {
             });
 
             return index;
-        },
+        }
     });
 
     exports.run = function() {
         new TestpaperForm({
             element: '#testpaper-form'
         });
+
+
     }
 
 });

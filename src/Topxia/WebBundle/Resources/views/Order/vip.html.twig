@@ -1,0 +1,38 @@
+
+<input type="hidden" name="buyType" value="{{buyType}}"/>
+<input type="hidden" name="duration" value="{{duration|default('')}}"/>
+<input type="hidden" name="unitType" value="{{unitType|default('')}}"/>
+<input type="hidden" name="type" value="{{type|default('')}}"/>
+{# <ul class="course-wide-list">
+	{% set vipBuyType = setting("vip.buyType")|default(10) %}
+	{% include "VipBundle:Vip:vip-level.html.twig" with { buyButtonStatus: "hidden", buyType: vipBuyType } %}
+</ul>
+<br>
+<div class="row">
+
+</div> #}
+
+
+<div class="order-detail">
+    <div class="col-md-4">
+        <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+          <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="">
+        </a>
+    </div>
+    <div class="col-md-8">
+        <h3><a href="{{ path('vip_course_explore', {levelId:level.id}) }}">{{ level.name}}</a></h3>
+        <span class="course-text">    
+        <h4 class="buy-vip-num" style="float:left;">
+        {% if type|default(true) %}
+            {% if buyType == "upgrade" %}
+            会员升级为：{{level.name}}
+            {% elseif buyType == "renew" %}
+            会员续费：{{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年{% endif %}
+            {% else %}
+            购买会员：{{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年{% endif %}
+            {% endif %}
+        {% endif %}
+        </h4>
+        </span>
+    </div>
+</div>

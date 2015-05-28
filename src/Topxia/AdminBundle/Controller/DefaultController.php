@@ -77,7 +77,7 @@ class DefaultController extends BaseController
 
     public function getCloudNoticesAction(Request $request)
     {
-        $userAgent = 'Open Edusoho App Client 1.0';
+        $userAgent = 'Open EduSoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
         $url = "http://open.edusoho.com/api/v1/context/notice";
@@ -130,6 +130,8 @@ class DefaultController extends BaseController
                 $mainAppUpgrade = $value;
             }
         }
+        
+        $liveCourseStatus = $this->getEduCloudService()->getLiveCourseStatus();
 
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
             "apps"=>$apps,
@@ -137,6 +139,7 @@ class DefaultController extends BaseController
             "mainAppUpgrade"=>$mainAppUpgrade,
             "app_count"=>$app_count,
             "unInstallAppCount"=>$unInstallAppCount,
+            "liveCourseStatus" => $liveCourseStatus
         ));
     }
 
@@ -146,6 +149,24 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:latest-users-block.html.twig', array(
             'users'=>$users,
         ));
+    }
+
+    public function userCoinsRecordsBlockAction(Request $request)
+    {   
+        $userIds=$this->getCashService()->findUserIdsByFlows(
+            "outflow","","DESC",           
+            0,
+            5
+          );
+
+        $userIds =  ArrayToolkit::column($userIds, 'userId');
+
+        $users=$this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('TopxiaAdminBundle:Default:user-coins-block.html.twig', array(
+            'userIds'=>$userIds,
+            'users'=>$users
+            ));
     }
 
     public function operationAnalysisDashbordBlockAction(Request $request)
@@ -282,10 +303,26 @@ class DefaultController extends BaseController
     public function unsolvedQuestionsBlockAction(Request $request)
     {
         $questions = $this->getThreadService()->searchThreads(
-            array('type' => 'question', 'postNum' => 0),
+            array('type' => 'question'),
             'createdNotStick',
             0,5
         );
+
+        $unPostedQuestion = array();
+        foreach ($questions as $key => $value) {
+            if ($value['postNum'] == 0) {
+                $unPostedQuestion[] = $value;
+            }else{
+                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
+                $userPostsNum = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'],$value['id']);
+                    if($userPostsNum == $threadPostsNum){
+                        $unPostedQuestion[] = $value;
+                    }
+            }
+        }
+
+        $questions = $unPostedQuestion;
+
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $askers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
@@ -329,6 +366,11 @@ class DefaultController extends BaseController
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
+    protected function getEduCloudService()
+    {
+        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -369,4 +411,8 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
+    protected function getCashService(){
+      
+        return $this->getServiceKernel()->createService('Cash.CashService');
+    }
 }

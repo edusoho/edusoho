@@ -47,13 +47,14 @@ class CourseLessonManageController extends BaseController
 				$courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
 			}
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
 			'course' => $course,
 			'items' => $courseItems,
 			'exercises' => empty($exercises) ? array() : $exercises,
 			'homeworks' => empty($homeworks) ? array() : $homeworks,
-			'files' => ArrayToolkit::index($files,'id')
+			'files' => ArrayToolkit::index($files,'id'),
+			'default'=> $default
 		));
 	}
 
@@ -85,6 +86,7 @@ class CourseLessonManageController extends BaseController
 	            $lessonId = $formData['lessonId'];
 	        } else {
 	            $lessonId = 0;
+	            $formData['lessonId'] = 0;
 	        }
 
 	        $content = $formData['content'];
@@ -103,10 +105,10 @@ class CourseLessonManageController extends BaseController
 	public function createAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-						$parentId = $request->query->get('parentId');
-					if($request->getMethod() == 'POST') {
-						$lesson = $request->request->all();
-					   $lesson['courseId'] = $course['id'];
+		$parentId = $request->query->get('parentId');
+			if($request->getMethod() == 'POST') {
+				$lesson = $request->request->all();
+				$lesson['courseId'] = $course['id'];
 
 			if ($lesson['media']) {
 				$lesson['media'] = json_decode($lesson['media'], true);
@@ -121,14 +123,24 @@ class CourseLessonManageController extends BaseController
 			$file = false;
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+				if($file['type']=="document" && $file['convertStatus'] == "none" ){
+
+		            $convertHash = $this->getUploadFileService()->reconvertFile(
+		                $file['id'],
+		                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+		            );
+				}
+
 				$lesson['mediaStatus'] = $file['convertStatus'];
 			}
 					  //  if ($shortcut == 'true') 
 							  //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();                        
 						//else
 			$lessonId =0;
-        			$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
-			  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+        	$this->getCourseService()->deleteCourseDrafts($id,$lessonId,$this->getCurrentUser()->id);
+			
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
 				'file' => $file
@@ -201,6 +213,13 @@ class CourseLessonManageController extends BaseController
 			if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 				$lesson['mediaStatus'] = $file['convertStatus'];
+				if($file['type']=="document" && $file['convertStatus'] == "none" ){
+
+		            $convertHash = $this->getUploadFileService()->reconvertFile(
+		                $file['id'],
+		                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+		            );
+				}
 			}
 			
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
@@ -258,7 +277,7 @@ class CourseLessonManageController extends BaseController
 		$lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
@@ -417,11 +436,14 @@ class CourseLessonManageController extends BaseController
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 		if($course['type']=='live'){
 			$client = LiveClientFactory::createClient();
-			$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
+			if ($lesson['type'] == 'live') {
+				$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
+			}
 			$this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
 		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
+		
 		return $this->createJsonResponse(true);
 	}
 
@@ -440,6 +462,10 @@ class CourseLessonManageController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    
+    private function getAppService(){
+		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
     
     private function getTestpaperService()
@@ -465,6 +491,16 @@ class CourseLessonManageController extends BaseController
     private function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
 }

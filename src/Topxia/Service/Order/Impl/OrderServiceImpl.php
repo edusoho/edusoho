@@ -14,9 +14,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrder($id);
     }
 
-    public function getOrderBySn($sn)
+    public function getOrderBySn($sn, $lock=false)
     {
-        return $this->getOrderDao()->getOrderBySn($sn);
+        return $this->getOrderDao()->getOrderBySn($sn, $lock);
     }
 
     public function findOrdersByIds(array $ids)
@@ -31,14 +31,33 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('创建订单失败：缺少参数。');
         }
 
-        $order = ArrayToolkit::parts($order, array('userId', 'title', 'amount', 'targetType', 'targetId', 'payment', 'note', 'snPrefix', 'data', 'couponCode'));
+        $order = ArrayToolkit::parts($order, array(
+            'userId', 
+            'title', 
+            'amount', 
+            'targetType', 
+            'targetId', 
+            'payment', 
+            'note', 
+            'snPrefix', 
+            'data', 
+            'couponCode', 
+            'coinAmount', 
+            'coinRate',
+            'priceType',
+            'totalPrice',
+            'coupon',
+            'couponDiscount',
+            'discountId',
+            'discount'
+        ));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
         if (empty($orderUser)) {
             throw $this->createServiceException("订单用户(#{$order['userId']})不存在，不能创建订单。");
         }
 
-        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay'))) {
+        if (!in_array($order['payment'], array('none', 'alipay', 'alipaydouble', 'tenpay','coin'))) {
             throw $this->createServiceException('创建订单失败：payment取值不正确。');
         }
 
@@ -50,11 +69,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             if ($couponInfo['useable'] != 'yes') {
                 throw $this->createServiceException("优惠码不可用");            
             }
-
-            $order['couponDiscount'] = $order['amount'] - $couponInfo['afterAmount'];
-            $order['amount'] = $couponInfo['afterAmount'];
         }
-        $order['coupon'] = empty($order['couponCode']) ? '' : $order['couponCode'];
+        
         unset($order['couponCode']);
 
         $order['amount'] = number_format($order['amount'], 2, '.', '');
@@ -64,11 +80,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $order['status'] = 'created';
         $order['createdTime'] = time();
-        $order = $this->getOrderDao()->addOrder($order);
 
-        if ($order['coupon']) {
-            $this->getCouponService()->useCoupon($order['coupon'], $order);
-        }
+        $order = $this->getOrderDao()->addOrder($order);
 
         $this->_createLog($order['id'], 'created', '创建订单');
         return $order;
@@ -168,6 +181,15 @@ class OrderServiceImpl extends BaseService implements OrderService
         return  $prefix . date('YmdHis', time()) . mt_rand(10000,99999);
     }
 
+    public function createOrderLog($orderId, $type, $message = '', array $data = array())
+    {
+        $order = $this->getOrder($orderId);
+        if(empty($order)){
+            throw $this->createServiceException("订单不存在，获取订单日志失败！");
+        }
+        return $this->_createLog($orderId, $type, $message, $data);
+    }
+
     private function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();
@@ -185,7 +207,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->addLog($log);
     }
 
-    public function cancelOrder($id, $message = '')
+    public function cancelOrder($id, $message = '', $data = array())
     {
         $order = $this->getOrder($id);
         if (empty($order)) {
@@ -196,16 +218,27 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('当前订单状态不能取消订单！');
         }
 
+        $payment = $this->getSettingService()->get("payment");
+        if(isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1){
+            $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
+        }
+
         $order = $this->getOrderDao()->updateOrder($order['id'], array('status' => 'cancelled'));
 
-        $this->_createLog($order['id'], 'cancelled', $message);
+        $this->_createLog($order['id'], 'cancelled', $message, $data);
 
         return $order;
     }
 
+    public function createPayRecord($id, $payDate)
+    {
+        $this->getOrderService()->updateOrder($id, array('data'=>json_encode($payData)));
+        $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
+    }
+
     public function sumOrderPriceByTarget($targetType, $targetId)
     {
-        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'cancelled'));
+        return $this->getOrderDao()->sumOrderPriceByTargetAndStatuses($targetType, $targetId, array('paid', 'refunding', 'refunded'));
     }
 
     public function sumCouponDiscountByOrderIds($orderIds)
@@ -289,7 +322,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'updatedTime' => time(),
             'createdTime' => time(),
         ));
-        
+
         $this->getOrderDao()->updateOrder($order['id'], array(
             'status' => ($refund['status'] == 'success') ? 'cancelled' : 'refunding',
             'refundId' => $refund['id'],
@@ -425,6 +458,29 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function searchBill($conditions, $sort = 'latest', $start, $limit)
+    {
+        $orderBy = array();
+        if ($sort == 'latest') {
+            $orderBy =  array('createdTime', 'DESC');
+        }  elseif ($sort == 'early') {
+            $orderBy =  array('createdTime', 'ASC');
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        $conditions = $this->_prepareSearchConditions($conditions);
+        $orders = $this->getOrderDao()->searchBill($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::index($orders, 'id');
+    }
+
+    public function countUserBillNum($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->countUserBillNum($conditions);
+    }
+
     public function sumOrderAmounts($startTime,$endTime,array $courseId)
     {
         return $this->getOrderDao()->sumOrderAmounts($startTime,$endTime,$courseId);
@@ -493,8 +549,25 @@ class OrderServiceImpl extends BaseService implements OrderService
             $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
-
+        
         return $conditions;
+    }
+
+    public function updateOrderCashSn($id, $cashSn) 
+    {
+        $order = $this->getOrder($id);
+        if(empty($order)) {
+            throw $this->createServiceException('更新订单失败：订单不存在。');
+        }
+        if(empty($cashSn)) {
+            throw $this->createServiceException('更新订单失败：支付流水号不存在。');
+        }
+        $this->getOrderDao()->updateOrder($id, array("cashSn" => $cashSn));
+    }
+
+    public function updateOrder($id, $orderFileds)
+    {
+        return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
     private function getLogService()
@@ -530,6 +603,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     private function getCouponService()
     {
         return $this->createService('Coupon:Coupon.CouponService');
+    }
+
+    private function getPayCenterService()
+    {
+        return $this->createService('PayCenter.PayCenterService');
     }
 
 }

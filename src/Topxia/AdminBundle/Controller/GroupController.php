@@ -46,19 +46,9 @@ class GroupController extends BaseController
 
     public function threadAction(Request $request)
     {
-        $fields = $request->query->all();
+        $conditions = $request->query->all();
+        $conditions = $this->prepareThreadConditions($conditions);
 
-        $conditions = array(
-            'status'=>'',
-            'title'=>'',
-            'groupName'=>'',
-            'userName'=>'',
-        );
-
-        if(!empty($fields)){
-            $conditions =$fields;
-        }
-        
         $paginator = new Paginator(
             $this->get('request'),
             $this->getThreadService()->searchThreadsCount($conditions),
@@ -92,6 +82,8 @@ class GroupController extends BaseController
     {
         $threadIds=$request->request->all();
         foreach ($threadIds['ID'] as $threadId) {
+            $thread=$this->getThreadService()->getThread($threadId);
+            $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<strong>“{$thread['title']}”</strong>被管理员删除。");
             $this->getThreadService()->deleteThread($threadId); 
         }
         return new Response('success');
@@ -133,6 +125,7 @@ class GroupController extends BaseController
     public function transferGroupAction(Request $request,$groupId)
     {
         $data=$request->request->all();
+        $currentUser = $this->getCurrentUser();
 
         $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
 
@@ -144,7 +137,19 @@ class GroupController extends BaseController
 
         $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
 
+        if ($currentUser['id'] != $group['ownerId'] ) {
+
+            $this->getNotifiactionService()->notify($group['ownerId'],'default',"您的小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a> 被管理员转移给了用户 <a href=\"/user/{$user['id']}\">'{$user['nickname']}'</a>");
+            
+        }
+
         $this->getGroupService()->updateGroup($groupId,array('ownerId'=>$user['id']));
+
+        if ($currentUser['id'] != $user['id']) {
+
+            $this->getNotifiactionService()->notify($user['id'],'default',"您获得了小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a>的管理权限");
+            
+        }
 
         $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$user['id']);
 
@@ -157,17 +162,6 @@ class GroupController extends BaseController
         return new Response("success");
     }
 
-    public function setAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $set=$request->request->all();
-
-            $this->getSettingService()->set('group', $set);
-        }
-
-        return $this->render('TopxiaAdminBundle:Group:set.html.twig', array(
-        ));
-    }
     public function removeEliteAction($threadId)
     {
         return $this->postAction($threadId,'removeElite');
@@ -309,6 +303,40 @@ class GroupController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function prepareThreadConditions($conditions)
+    {
+
+        if (isset($conditions['threadType']) && !empty($conditions['threadType'])) {
+            $conditions[$conditions['threadType']] = 1;
+            unset($conditions['threadType']);
+        }
+
+        if (isset($conditions['groupName']) && $conditions['groupName'] !== "") {
+            $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
+            if (!empty($group)) {
+              $conditions['groupId']=$group[0]['id'];  
+            } else {
+              $conditions['groupId']=0;  
+            }
+        }
+        
+
+        if (isset($conditions['userName']) && $conditions['userName'] !== "") {
+            $user=$this->getUserService()->getUserByNickname($conditions['userName']);
+            if (!empty($user)) {
+              $conditions['userId']=$user['id'];  
+            } else {
+              $conditions['userId']=0;  
+            } 
+        }
+        
+        if (empty($conditions['status'])) {
+            unset($conditions['status']);
+        }
+
+        return $conditions;
     }
 
 }

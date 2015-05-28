@@ -13,13 +13,13 @@
 
 		<div class="form-group">
 			<div class="controls">
-				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容">{{ announcement.content }}</textarea>
+				<textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
 			</div>
 		</div>
 		{% if not announcement.id %}
 		<div class="checkbox">
     		<label>
-      			<input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的学员
+      			<input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的{{ setting('default.user_name', '学员') }}
     		</label>
 		</div>
 		{% endif %}

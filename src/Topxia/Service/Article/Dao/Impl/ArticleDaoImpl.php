@@ -45,7 +45,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	{
 		$this->filterStartLimit($start, $limit);
 
-		if(empty($categoryIds)){ return array(); };
+		if(empty($categoryIds)){ return array(); }
 
         $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
         $sql = "SELECT * FROM {$this->table} WHERE categoryId in ({$marks}) ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
@@ -56,13 +56,14 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
 	public function findArticlesCount(array $categoryIds)
 	{
-		if(empty($categoryIds)){ return array(); };
+		if(empty($categoryIds)){ return array(); }
         $marks = str_repeat('?,', count($categoryIds) - 1) . '?';
 		$sql = "SELECT COUNT(id) FROM {$this->table} WHERE categoryId in ({$marks})";
 
         return $this->getConnection()->fetchColumn($sql, $categoryIds);
 	}
 
+	//@todo:sql
 	public function searchArticles($conditions, $orderBys, $start, $limit)
 	{
 		$this->filterStartLimit($start, $limit);
@@ -118,6 +119,26 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 	public function deleteArticle($id)
 	{
 		return $this->getConnection()->delete($this->table, array('id' => $id));
+	}
+    
+	public function findPublishedArticlesByTagIdsAndCount($tagIds,$count)
+	{
+		$sql ="SELECT * FROM {$this->table} WHERE status = 'published'";
+		$length=count($tagIds);
+		$tagArray = array();
+		$sql .=" AND (";
+		for ($i=0; $i < $length ; $i++) { 
+			$sql .= "  tagIds LIKE  ? ";
+			if($i != $length-1){
+				$sql .=" OR ";
+			}
+			$tagArray[] = '%|'.$tagIds[$i].'|%';
+		}
+		$sql .=" ) ";
+
+		$sql .= " ORDER BY publishedTime DESC LIMIT 0, {$count}";
+		
+		return $this->getConnection()->fetchAll($sql, $tagArray);
 	}	
 
 	private function _createSearchQueryBuilder($conditions)
@@ -149,20 +170,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 			->andWhere('sticky = :sticky')
 			->andWhere('title LIKE :keywords')
 			->andWhere('picture != :pictureNull')
-			->andWhere('categoryId = :categoryId');
-
-        if (isset($conditions['categoryIds'])) {
-            $categoryIds = array();
-            foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit((string)abs($categoryId))) {
-                    $categoryIds[] = $categoryId;
-                }
-            }
-            if ($categoryIds) {
-                $categoryIds = join(',', $categoryIds);
-                $builder->andStaticWhere("categoryId IN ($categoryIds)");
-            }
-        }
+			->andWhere('categoryId = :categoryId')
+			->andWhere('categoryId IN (:categoryIds)');
 
 		return $builder;
 	}

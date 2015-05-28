@@ -5,11 +5,11 @@
     </div>
     <div class="es-box-body user-learn clearfix">
       <a href="{{ path('course_show', {id:course.id}) }}">
-        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+        <img src="{{ filepath(course.largePicture, 'avatar.png') }}"  class="img-responsive thumb pull-left">
       </a>
       <p>《{{ course.title }}》</p>
       {% set teacher = teachers|first %}
-      <p class="teacher-name">教师：{{ teacher.nickname }}</p>
+      <p class="teacher-name">教师：{{ teacher.nickname|default("") }}</p>
       <div class="progress-block clearfix">
         <div class="progress" style="width:90%">
           <span class="progress-bar" style="width: {{ progress.percent }};"></span>

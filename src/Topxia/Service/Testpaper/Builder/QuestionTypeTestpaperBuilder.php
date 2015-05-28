@@ -85,8 +85,11 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
                 continue;
             }
 
-            $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
-            $selectedQuestions = array_merge($selectedQuestions, $questions);
+            if (!empty($difficultiedQuestions[$difficulty])) {
+                $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
+                $selectedQuestions = array_merge($selectedQuestions, $questions);
+            }
+
         }
 
         return $selectedQuestions;
@@ -105,8 +108,17 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
             if (empty($questions[$type])) {
                 $missing[$type] = $needCount;
                 continue;
+            }            
+            if ($type == "material"){
+                $validatedMaterialQuestionNum = 0;
+                foreach ($questions["material"] as $materialQuestion ){
+                    if ($materialQuestion['subCount'] > 0){$validatedMaterialQuestionNum += 1;}
+                }               
+                if ($validatedMaterialQuestionNum < $needCount){
+                    $missing["material"] = $needCount - $validatedMaterialQuestionNum;
+                }            
+                continue;
             }
-
             if (count($questions[$type]) < $needCount) {
                 $missing[$type] = $needCount - count($questions[$type]);
             }

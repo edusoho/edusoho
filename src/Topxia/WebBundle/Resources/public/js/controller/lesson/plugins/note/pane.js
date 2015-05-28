@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
-    var EditorFactory = require('common/kindeditor-factory');
+    require('ckeditor');
+
     var Widget = require('widget');
     Validator = require('bootstrap.validator');
 
@@ -24,17 +25,23 @@ define(function(require, exports, module) {
             }, function(html) {
                 pane.element.html(html);
 
-                var editorHeight = $("#lesson-note-plugin-form .note-content").outerHeight();
+                var editorHeight = $("#lesson-note-plugin-form .note-content").height() - 50;
 
-                var editor = EditorFactory.create('#note_content', 'simple', {extraFileUploadParams:{group:'course'}, height: editorHeight});
-                editor.focus();
+                // group: 'default'
+                var editor = CKEDITOR.replace('note_content', {
+                    toolbar: 'Simple',
+                    filebrowserImageUploadUrl: $('#note_content').data('imageUploadUrl'),
+                    height: editorHeight
+                });
+
+                editor.focusManager.focus();
                 pane.set('editor', editor);
-                pane.set('content', editor.html());
+                pane.set('content', editor.getData());
                 
                 $("#lesson-note-plugin-form").on('submit', function() {
                     pane.$('[data-role=saved-message]').html('正在保存').show();
-                    editor.sync();
-                    var content = editor.html();
+                    editor.updateElement();
+                    var content = editor.getData();
                     $.post($(this).attr('action'), $(this).serialize(), function(response) {
                         pane.set('content', content);
                         pane.$('[data-role=saved-message]').html('已保存');
@@ -58,7 +65,7 @@ define(function(require, exports, module) {
             };
 
             var timer = setInterval(function() {
-                if (pane.get('editor').html() != pane.get('content')) {
+                if (pane.get('editor').getData() != pane.get('content')) {
                     $("#lesson-note-plugin-form").trigger('submit');
                 }
             }, 10000);

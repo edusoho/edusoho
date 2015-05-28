@@ -6,6 +6,14 @@ interface ThreadService
 {
     public function getThread($id);
 
+    public function isCollected($userId, $threadId);
+
+    public function threadCollect($userId, $threadId);
+    
+    public function unThreadCollect($userId, $threadId);
+
+    public function searchThreadCollectCount($conditions);
+
     public function getThreadsByIds($ids);
     
     public function addThread($thread);
@@ -21,6 +29,8 @@ interface ThreadService
     public function searchThreadsCount($conditions);
 
     public function searchPostsThreadIds($conditions,$orderBy,$start,$limit);
+    
+    public function searchThreadCollects($conditions,$orderBy,$start,$limit);
 
     public function searchPostsThreadIdsCount($conditions);
 
@@ -45,5 +55,29 @@ interface ThreadService
     public function removeStick($threadId);
 
     public function waveHitNum($threadId);
+
+    public function updatePost($id,$fields);
+
+    public function getTrade($id);
+
+    public function getGoods($id);
+
+    public function addTrade($fields);
+
+    public function sumGoodsCoinsByThreadId($id);
+
+    public function getTradeByUserIdAndThreadId($userId,$threadId);
+
+    public function getTradeByUserIdAndGoodsId($userId,$goodsId);
+
+    public function addAttach($files,$threadId);
+
+    public function addPostAttach($files,$threadId,$postId);
+
+    public function searchGoods($conditions,$orderBy,$start,$limit);
+
+    public function deleteGoods($id);
+
+    public function waveGoodsHitNum($goodsId);
 
 }

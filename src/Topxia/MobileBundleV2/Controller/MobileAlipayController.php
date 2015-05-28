@@ -28,28 +28,8 @@ class MobileAlipayController extends MobileBaseController
 
         if($verify_result) {
             //验证成功
-            $controller = $this;
             try {
-                $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-                     if (!$success) {
-                            return ;
-                     }
-                     if ($order['targetType'] != 'course') {
-                            throw \RuntimeException('非课程订单，加入课程失败。');
-                     }
-
-                     $info = array(
-                             'orderId' => $order['id'],
-                             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-                     );
-
-                     if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                        $controller->getLogService()->info('notify', 'success', "paynotify action");
-                        $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-                     }
-
-                     return ;
-              });
+                $status = $this->doPayNotify($request, $name);
             }catch(\Exception $e) {
                 error_log($e->getMessage(), 0);
             }
@@ -64,33 +44,13 @@ class MobileAlipayController extends MobileBaseController
 
     public function payCallBackAction(Request $request, $name)
     {
-        $controller = $this;
-        $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-            if (!$success) {
-                return ;
-            }
-            if ($order['targetType'] != 'course') {
-                throw \RuntimeException('非课程订单，加入课程失败。');
-            }
-
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-
-            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-                $controller->getLogService()->info('order', 'callback_success', "paycalknotify action");
-            }
-
-            return ;
-        });
+        $status = $this->doPayNotify($request, $name);
         $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
         return new Response($callback);
     }
 
     //支付校验
-    protected function doPayNotify(Request $request, $name, $successCallback = null)
+    protected function doPayNotify(Request $request, $name)
     {
         if ($request->getMethod() == "GET") {
             $requestParams = $request->query->all();
@@ -117,11 +77,7 @@ class MobileAlipayController extends MobileBaseController
         $payData = $this->createPaymentResponse($requestParams);
         
         try {
-            list($success, $order) = $this->getOrderService()->payOrder($payData);
-            if ($order['status'] == 'paid' and $successCallback) {
-                $successCallback($success, $order);
-            }
-
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
             return "success";
         } catch (\Exception $e) {
             return "fail";
@@ -195,6 +151,11 @@ class MobileAlipayController extends MobileBaseController
         );
 
         return $options;
+    }
+
+    protected function getPayCenterService()
+    {
+        return $this->getServiceKernel()->createService('PayCenter.PayCenterService');
     }
 
     protected function getOrderService()

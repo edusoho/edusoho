@@ -7,7 +7,9 @@ use Symfony\Component\Console\Input\InputArgument;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Topxia\Common\BlockToolkit;
 use Topxia\System;
+use ZipArchive;
 
 class BuildThemeAppCommand extends BaseCommand
 {
@@ -31,21 +33,51 @@ class BuildThemeAppCommand extends BaseCommand
         $this->_buildDistPackage($name);
     }
 
+    private function _copyScript($themeDir, $distDir)
+    {
+        $scriptDir = "{$themeDir}/Scripts";
+        $distScriptDir = "{$distDir}/Scripts";
+        if ($this->filesystem->exists($scriptDir)) {
+            $this->filesystem->mirror($scriptDir, $distScriptDir);
+            $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
+        } else {
+            $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
+        }
+
+        $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
+
+        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+    }
+
+    private function _generateBlocks($themeDir, $distDir, $container)
+    {
+        if (file_exists($themeDir . '/block.json')) {
+            $this->filesystem->copy($themeDir . '/block.json', $distDir . '/block.json');
+            BlockToolkit::generateBlcokContent($themeDir . '/block.json', $distDir . '/blocks', $container);
+        }
+    }
+
     private function _buildDistPackage($name)
     {
         $themeDir = $this->getThemeDirectory($name);
 
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
+        $this->_copyScript($themeDir, $distDir);
+        $this->_generateBlocks($themeDir, $distDir, $this->getContainer());
+        $this->_copyMeta($themeDir, $distDir);
+        file_put_contents($distDir . '/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
-        $this->_zipPackage($distDir);
+        $this->_zip($distDir);
     }
 
     private function _copySource($name, $themeDir, $distDir)
     {
-        $sourceTargetDir = $distDir . '/source/web/themes/' . $name;
+        $sourceTargetDir = $distDir . '/source/' . $name;
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
+
+        $this->filesystem->remove($sourceTargetDir . '/dev' );
 
         return $sourceTargetDir;
     }
@@ -58,6 +90,13 @@ class BuildThemeAppCommand extends BaseCommand
         } else {
             $this->output->writeln("<comment>    * 移除'.git'目录： 无");
         }
+    }
+
+    private function _copyMeta($themeDir, $distDir)
+    {
+        $source = "{$themeDir}/theme.json";
+        $target = "{$distDir}/theme.json";
+        $this->filesystem->copy($source, $target);
     }
 
     private function _zipPackage($distDir)
@@ -78,6 +117,44 @@ class BuildThemeAppCommand extends BaseCommand
         $zipPath = "{$buildDir}/{$filename}.zip";
         $this->output->writeln("<question>    * ZIP包大小：" . intval(filesize($zipPath)/1024) . ' Kb');
     }
+
+    private function _zip($distDir)
+    {   
+        $buildDir = dirname($distDir);
+        $filename = basename($distDir);
+
+        if ($this->filesystem->exists("{$buildDir}/{$filename}.zip")) {
+            $this->filesystem->remove("{$buildDir}/{$filename}.zip");
+        }
+
+        $this->output->writeln("<info>    * 制作ZIP包：{$buildDir}/{$filename}.zip</info>");
+
+        $z = new ZipArchive(); 
+        $z->open("{$buildDir}/{$filename}.zip", ZIPARCHIVE::CREATE); 
+        $z->addEmptyDir($filename); 
+        self::folderToZip($distDir, $z, strlen("$buildDir/")); 
+        $z->close(); 
+    }
+
+    private static function folderToZip($folder, &$zipFile, $exclusiveLength) { 
+
+        $handle = opendir($folder); 
+        while (false !== $f = readdir($handle)) { 
+          if ($f != '.' && $f != '..') { 
+            $filePath = "$folder/$f"; 
+           
+            $localPath = substr($filePath, $exclusiveLength); 
+            if (is_file($filePath)) { 
+              $zipFile->addFile($filePath, $localPath); 
+            } elseif (is_dir($filePath)) { 
+ 
+              $zipFile->addEmptyDir($localPath); 
+              self::folderToZip($filePath, $zipFile, $exclusiveLength); 
+            } 
+          } 
+        } 
+        closedir($handle); 
+    } 
 
     private function _makeDistDirectory($name)
     {

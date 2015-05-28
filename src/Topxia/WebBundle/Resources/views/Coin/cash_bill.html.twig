@@ -1,0 +1,79 @@
+{% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
+
+{# {% set script_controller = 'my/orders' %} #}
+
+{% set side_nav = 'my-bill' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
+
+  {# <div class="panel-heading">我的现金消费账单</div> #}
+    <div class="panel-body">
+      
+    <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+      <div class="form-group">
+        <select class="form-control" name="lastHowManyMonths"  onchange="submit();">
+          {% set options = {'':'全部记录','oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月'} %}
+          {{ select_options(options, app.request.get('lastHowManyMonths')) }}
+        </select>
+      </div>
+
+      {#<button class="btn btn-primary">搜索</button>#}
+       <div class="control-label pull-right" style="padding-top: 8px;">
+        收入：<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;元
+        </div>
+    </form>
+
+        <br>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        {% if cashes %}
+        <tr>
+          <th><span class="text-sm">流水号</span></th>
+          <th><span class="text-sm">名称</span></th>          
+          <th><span class="text-sm">成交时间</span></th>
+          <th class="text-right" style="padding-right: 60px;"><span class="text-sm">收支</span></th>
+          
+          <th><span class="text-sm">支付方式</span></th>
+        </tr>
+        {% for cash in cashes %}
+           <tr>
+            <td><span class="text-sm">{{cash.sn}}</span></td>
+            <td><span class="text-sm">{{cash.name}}</span><br>
+                <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>            
+            <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td>
+
+            {% if cash.type =="inflow" %}
+            <td class="text-right" style="color:#1bb974;padding-right: 50px;">
+               {{cash.amount}} 
+            </td>
+            {% endif %}
+            {% if cash.type =="outflow" %}
+            <td  class="text-right" style="color:#ff7b0e;padding-right: 50px;">
+               -&nbsp;{{cash.amount}}               
+            </td>
+            {% endif %}
+           
+            <td>
+              <span class="text-sm">
+                {% if cash.type =="inflow" %}
+                  支付宝 
+                {% else %}
+                  网校支付
+                {% endif %}
+              </span>
+            </td> 
+          </tr>
+        {% endfor %}
+        {% else %}
+        <div class="empty">暂无记录</div>
+        {% endif %}
+      </table>
+    </div>
+ {{ web_macro.paginator(paginator) }}
+  </div>
+</div>
+
+{% endblock %}

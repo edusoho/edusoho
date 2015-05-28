@@ -22,8 +22,6 @@ abstract class AbstractOAuthClient
 
     abstract public function getUserInfo($token);
 
-    abstract public function getClientInfo();
-
     /**
      * HTTP POST
      * @param  string 	$url    要请求的url地址

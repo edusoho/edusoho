@@ -34,7 +34,15 @@ class AlipayResponse extends Response
         $data = array();
         $data['payment'] = 'alipay';
         $data['sn'] = $params['out_trade_no'];
-        $data['status'] = in_array($params['trade_status'], array('TRADE_SUCCESS', 'TRADE_FINISHED')) ? 'success' : 'unknown';
+        if(in_array($params['trade_status'], array('TRADE_SUCCESS', 'TRADE_FINISHED'))) {
+            $data['status'] = 'success';
+        } else if (in_array($params['trade_status'], array('TRADE_CLOSED'))) {
+            $data['status'] = 'closed';
+        } else if (in_array($params['trade_status'], array('WAIT_BUYER_PAY'))) {
+            $data['status'] = 'created';
+        } else {
+            $data['status'] = 'unknown';
+        }
         $data['amount'] = $params['total_fee'];
 
         if (!empty($params['gmt_payment'])) {
@@ -57,8 +65,7 @@ class AlipayResponse extends Response
         if ($this->params['sign'] !== $sign) {
             return 'sign_error';
         }
-
-        if (!empty($this->params['notify_id'])) {
+        if(!empty($this->params['notify_id'])){
             $notifyResult = $this->getRequest('https://mapi.alipay.com/gateway.do', array(
                 'notify_id' => $this->params['notify_id'],
                 'service' => 'notify_verify',
@@ -69,7 +76,7 @@ class AlipayResponse extends Response
                 return 'notify_verify_error';
             }
         }
-
+        
         return false;
     }
 

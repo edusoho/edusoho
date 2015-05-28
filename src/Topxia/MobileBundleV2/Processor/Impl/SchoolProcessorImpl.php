@@ -9,7 +9,7 @@ use Topxia\Common\ArrayToolkit;
 class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public $banner;
-    
+
     public function loginSchoolWithSite()
     {
         $version = $this->request->query->get('version', 1);
@@ -26,6 +26,37 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getSchoolApps()
+    {
+        $host = $this->request->getSchemeAndHttpHost();
+        $article = array(
+            "code"=>"Article",
+            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/article.png",
+            "name"=>"网校资讯",
+            "description"=>"EduSoho官方应用，网校资讯。",
+            "author"=>"官方",
+            "version"=>"1.0.0",
+            "support_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>"articleApp"
+        );
+
+        $group = array(
+            "code"=>"Group",
+            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/group.png",
+            "name"=>"网校小组社区",
+            "description"=>"网校小组社区",
+            "author"=>"官方",
+            "version"=>"1.0.0",
+            "support_version"=>"2.4.0+",
+            "action"=>array(),
+            "url"=>""
+        );
+        return array(
+            $article, $group
+            );
+    }
+    
     public function registDevice()
     {
         $result = false;
@@ -63,9 +94,17 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getDownloadUrl()
     {
-        $code = $this->request->get("code", "edusoho");
-        $client = $this->request->get("client", "android");
+        $code = $this->fixHttpHeaderInject($this->request->get("code", "edusoho"));
+        $client = $this->fixHttpHeaderInject($this->request->get("client", "android"));
         return $this->controller->redirect("http://www.edusoho.com/download/mobile?client={$client}&code=" . $code);
+    }
+
+    private function fixHttpHeaderInject($str)
+    {
+        if(empty($str)){
+            return $str;
+        }
+        return trim(strip_tags(preg_replace('/( |\t|\r|\n|\')/', '', $str)));
     }
 
     public function getClientVersion()
@@ -164,9 +203,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $sortedCourses = array();
         foreach ( $courseIds as $value){
             if(!empty($value))
-                $sortedCourses[] = $courses[$value];
-        }
-
+                if(array_key_exists($value, $courses)){
+                    $sortedCourses[] = $courses[$value];
+                }
+        } 
+         
         $result = array(
             "start"=>0,
             "limit"=>3,
@@ -224,22 +265,39 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $banner = array();
         $mobile = $this->getSettingService()->get('mobile', array());
         $baseUrl = $this->request->getSchemeAndHttpHost();
-        $keys = array_keys($mobile);
-        for ($i=0; $i < count($keys); $i++) {
-            $result = stripos($keys[$i], 'banner');
-            if (is_numeric($result)) {
-                $bannerClick = $mobile[$keys[$i]];
-                $i = $i +1;
-                $bannerParams = $mobile[$keys[$i]];
-                $i = $i +1;
-                $bannerUrl = $mobile[$keys[$i]];
-                if (!empty($bannerUrl)) {   
+        for ($i=1; $i < 6; $i++) {
+            $bannerIndex = $mobile["banner" . $i];
+            if (!empty($bannerIndex)) { 
+                    $bannerClick = $mobile["bannerClick" . $i];
+                    $bannerParams = null;
+                    $action = "none";
+                    switch ($bannerClick) {
+                        case 0:
+                            $action = "none";
+                            $bannerParams = null;
+                            break;
+                        case 1:
+                            $action = "webview";
+                            if(array_key_exists("bannerUrl" . $i, $mobile)){
+                                $bannerParams = $mobile["bannerUrl" . $i];
+                            } else {
+                                $bannerParams = "";
+                            }
+                            break;
+                        case 2:
+                            $action = "course";
+                            if(array_key_exists("bannerJumpToCourseId" . $i, $mobile)){
+                                $bannerParams = $mobile["bannerJumpToCourseId" . $i];
+                            } else {
+                                $bannerParams = "";
+                            }
+                            break;
+                    }
                     $banner[] = array(
-                        "url"=>$baseUrl . '/' . $bannerUrl,
-                        "action"=>$bannerClick == 0 ? "none" : "webview",
+                        "url"=>$baseUrl . '/' . $bannerIndex,
+                        "action"=> $action,
                         "params"=>$bannerParams
                     );
-                }
             }
         }
         return $banner;

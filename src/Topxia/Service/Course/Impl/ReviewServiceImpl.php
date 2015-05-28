@@ -55,7 +55,12 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
 	private function prepareReviewSearchConditions($conditions)
 	{
-		$conditions = array_filter($conditions);
+		$conditions = array_filter($conditions, function($value){
+			if (ctype_digit((string)$value)) {
+				return true;
+			}
+			return !empty($value);
+		});
 
         if (isset($conditions['author'])) {
         	$author = $this->getUserService()->getUserByNickname($conditions['author']);
@@ -89,6 +94,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 				'userId' => $fields['userId'],
 				'courseId' => $fields['courseId'],
 				'rating' => $fields['rating'],
+				'private' => $course['status'] == 'published' ? 0 : 1,
 				'content' => empty($fields['content']) ? '' : $fields['content'],
 				'createdTime' => time(),
 			));

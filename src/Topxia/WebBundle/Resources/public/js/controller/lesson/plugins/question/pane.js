@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    var EditorFactory = require('common/kindeditor-factory');
     var Widget = require('widget'),
     Validator = require('bootstrap.validator'),
     ThreadShowWidget = require('../../../course-thread/show-widget');
     require('jquery.perfect-scrollbar');
+    require('ckeditor');
 
     var QuestionPane = Widget.extend({
         _dataInitialized: false,
@@ -53,7 +53,12 @@ define(function(require, exports, module) {
             }
             $form.addClass('form-expanded');
 
-            var editor = EditorFactory.create('#question_content', 'simple', {extraFileUploadParams:{group:'course'}});
+            // group: 'course'
+            var editor = CKEDITOR.replace('question_content', {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $('#question_content').data('imageUploadUrl')
+            });
+
             this.set('editor', editor);
 
             var validator = new Validator({
@@ -68,7 +73,7 @@ define(function(require, exports, module) {
             });
 
             validator.on('formValidate', function(elemetn, event) {
-                editor.sync();
+                editor.updateElement();
             });
 
             validator.on('formValidated', function(err, msg, ele) {
@@ -88,7 +93,7 @@ define(function(require, exports, module) {
         collapseForm: function() {
             this.createFormElement.removeClass('form-expanded');
             if (this.get('editor')) {
-                this.get('editor').remove();
+                this.get('editor').destroy();
             }
 
             Validator.query(this.createFormElement).destroy();

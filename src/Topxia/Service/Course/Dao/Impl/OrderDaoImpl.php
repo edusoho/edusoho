@@ -16,9 +16,14 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-	public function getOrderBySn($sn)
-	{
-        $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1";
+	public function getOrderBySn($sn, $lock = false)
+	{   
+        $forUpdate = "";
+        if($lock){
+            $forUpdate = "FOR UPDATE";
+        }
+        $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1 {$forUpdate}";
+
         return $this->getConnection()->fetchAssoc($sql, array($sn));
 	}
 
@@ -73,9 +78,11 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             ->andWhere('sn = :sn')
             ->andWhere('courseId = :courseId')
             ->andWhere('userId = :userId')
+            ->andWhere('title like :title')
             ->andWhere('status = :status')
             ->andWhere('payment = :payment')
             ->andWhere('paidTime >= :paidStartTime')
+            ->andWhere('createdTime < :createdTime_LT')
             ->andWhere('paidTime < :paidEndTime');
     }
 

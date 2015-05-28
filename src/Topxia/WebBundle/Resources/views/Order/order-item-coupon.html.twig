@@ -1,0 +1,34 @@
+<div class="order-item clearfix">
+  <div class="order-item-title">
+    <i class="order-item-title-icon">
+      <img src="/bundles/topxiaweb/img/order-pay/iconfont-coupon.png" width="25px">
+    </i>
+    <h4 class="title">优惠码</h4>
+    <a id="coupon-code-btn" class="add-coun btn" href="javascript:;">输入优惠码</a>
+    <a href="javascript:;" class="cancel" role="cancel-coupon" style="display: none;">取消使用</a>
+    <div class="price_r" role="coupon-price">
+        <span class="price_r_mark">-</span>
+        <span role="price" class="order-price">0.00</span>
+        <span>{% if priceType|default("RMB") == "RMB" %} 元 {% else %} {{ setting("coin.coin_name") }} {% endif %}</span>
+    </div>
+  </div>
+  <div class="coupon-detail" >
+    {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
+    <div class="row">
+      <div class="col-sm-4">
+        <div role="coupon-code" class="input-group" style="display: none;">
+          <input role="coupon-code-verified" name="couponCode" type="hidden"/>
+          <input role="coupon-code-input" type="text" class="form-control input-sm" placeholder="请输入优惠码" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+           {{ totalPrice }}  {# {{courses[0]['price']}} #}
+          "/> 
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-sm" type="button" role="coupon-use">使用</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <span role="code-notify" class="code-notify"></span>
+    <div role="no-use-coupon-code" style="display: block;">没有使用优惠码</div>
+  </div>
+</div>

@@ -21,5 +21,7 @@ interface NavigationService
 
     public function updateNavigation($id, $fields);
 
+    public function updateNavigationsSequenceByIds($ids);
+
     public function deleteNavigation($id);
 }

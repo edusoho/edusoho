@@ -6,7 +6,7 @@
     {% endif %}
     <li class="media">
       <a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
-        <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="media-object">
+        <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="media-object">
       </a>
       <div class="media-body">
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
@@ -17,6 +17,12 @@
           <a class="title" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isElite %}
             <span class="label label-warning">精</span>
+          {% endif %}
+
+          {% if is_feature_enabled('group_reward') %}
+            {% if thread.type == 'reward' and thread.rewardCoin > 0 %}
+              <span class="label label-danger">奖</span>
+            {% endif %}
           {% endif %}
         </div>
         

@@ -24,7 +24,7 @@ class LatestCourseThreadsByTypeDataTag extends CourseBaseDataTag implements Data
         $this->checkCount($arguments);
 
         if (empty($arguments['type'])){
-            $type = array();
+            $type = "";
         } else {
             $type = $arguments['type'];
         }

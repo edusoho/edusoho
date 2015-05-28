@@ -13,14 +13,30 @@ class UserApprovalController extends BaseController
 
     public function approvingAction(Request $request)
     {
-    	$paginator = new Paginator(
+        $fields = $request->query->all();
+
+        $conditions = array(
+            'roles'=>'',
+            'keywordType'=>'',
+            'keyword'=>'',
+            'approvalStatus' => 'approving'
+        );
+
+        if(empty($fields)){
+            $fields = array();
+        }
+
+        $conditions = array_merge($conditions, $fields);
+
+        $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->getUserCountByApprovalStatus('approving'),
+            $this->getUserService()->searchUserCount($conditions),
             20
         );
 
-    	$users = $this->getUserService()->getUsersByApprovalStatus(
-            'approving',
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -37,14 +53,30 @@ class UserApprovalController extends BaseController
     
     public function approvedAction(Request $request)
     {
+        $fields = $request->query->all();
+
+        $conditions = array(
+            'roles'=>'',
+            'keywordType'=>'',
+            'keyword'=>'',
+            'approvalStatus' => 'approved'
+        );
+
+        if(empty($fields)){
+            $fields = array();
+        }
+
+        $conditions = array_merge($conditions, $fields);
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->getUserCountByApprovalStatus('approved'),
+            $this->getUserService()->searchUserCount($conditions),
             20
         );
 
-        $users = $this->getUserService()->getUsersByApprovalStatus(
-            'approved',
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -60,9 +92,7 @@ class UserApprovalController extends BaseController
 
     public function approveAction(Request $request, $id)
     {
-        $user = $this->getUserService()->getUser($id);
-
-        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
 
         if ($request->getMethod() == 'POST') {
             
@@ -79,9 +109,27 @@ class UserApprovalController extends BaseController
         return $this->render("TopxiaAdminBundle:User:user-approve-modal.html.twig",
             array(
                 'user' => $user,
-                'userApprovalInfo' => $userApprovalInfo
+                'userApprovalInfo' => $userApprovalInfo,
             )
         );
+    }
+
+    public function viewApprovalInfoAction(Request $request, $id){
+        list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
+
+        return $this->render("TopxiaAdminBundle:User:user-approve-info-modal.html.twig",
+            array(
+                'user' => $user,
+                'userApprovalInfo' => $userApprovalInfo,
+            )
+        );
+    }
+
+    protected function getApprovalInfo(Request $request, $id){
+        $user = $this->getUserService()->getUser($id);
+
+        $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+        return array($user, $userApprovalInfo);
     }
 
     public function showIdcardAction($userId, $type)

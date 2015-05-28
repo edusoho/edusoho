@@ -72,7 +72,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
         }
 
         try {
-            if ($this->getAuthService()->hasPartnerAuth()) {
+            if ($this->getAuthService()->hasPartnerAuth() && $this->getAuthService()->isRegisterEnabled()) {
                 try {
                     $user = $this->userProvider->loadUserByUsername($username);
                     $bind = $this->getUserService()->getUserBindByTypeAndUserId($this->getAuthService()->getPartnerName(), $user['id']);

@@ -56,6 +56,8 @@ interface FileService
 	 */
 	public function deleteFile($id);
 
+	public function deleteFileByUri($uri);
+
 	/**
 	 * 绑定文件到目标对象
 	 * 
@@ -151,4 +153,10 @@ interface FileService
 	 * @return [type]
 	 */
 	public function thumbnailFile(array $file, array $options);
+
+	public function getFile($id);
+
+	public function getFilesByIds($ids);
+
+	public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight);
 }

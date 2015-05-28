@@ -35,10 +35,20 @@ class AppKernel extends Kernel
 
             if (is_array($pluginMeta)) {
                 foreach ($pluginMeta['installed'] as $c) {
-                    $c = ucfirst($c);
-                    $p = base64_decode('QnVuZGxl');
-                    $cl = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
-                    $bundles[] = new $cl();
+                    if ($pluginMeta['protocol'] == '1.0') {
+                        $c = ucfirst($c);
+                        $p = base64_decode('QnVuZGxl');
+                        $cl = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $bundles[] = new $cl();
+                    } elseif ($pluginMeta['protocol'] == '2.0') {
+                        if ($c['type'] != 'plugin') {
+                            continue;
+                        }
+                        $c = ucfirst($c['code']);
+                        $p = base64_decode('QnVuZGxl');
+                        $cl = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $bundles[] = new $cl();
+                    }
                 }
             }
         }

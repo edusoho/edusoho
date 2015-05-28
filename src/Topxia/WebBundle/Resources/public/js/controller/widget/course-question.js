@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 	var CourseQuestionWidget = Widget.extend({
 		template: '<h3>xxx</h3>',
 		events: {
-			'submit .course-question-widget-form': 'createQuestion',
+			'submit .course-question-widget-form': 'createQuestion'
 		},
 
         parseElement: function() {
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 			var source   = $("#course-question-widget-template").html();
 			var template = Handlebars.compile(source);
 			var modal = {
-				createUrl: element.data('createUrl'),
+				createUrl: element.data('createUrl')
 			};
 			this.element.html(template(modal));
 		},

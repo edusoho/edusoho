@@ -372,6 +372,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                                 return $this->getVideoLesson($lesson);
                                     case 'testpaper':
                                                 return $this->getTestpaperLesson($lesson);
+                                    case 'document':
+                                                return $this->getDocumentLesson($lesson);
 			default:
 				$lesson['content'] = $this->wrapContent($lesson['content']);
 		}
@@ -403,20 +405,35 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
 
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hlsvideo.view', array('data' => $lesson['id'], 'times' => 1, 'duration' => 3600));
-                            $hlsKeyUrl = $this->controller->generateUrl('course_lesson_hlskeyurl', array('courseId' => $lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => $token['token']), true);
                             $headLeaderInfo = $this->getHeadLeaderInfo();
-                            if($headLeaderInfo){
-                                //var_dump($headLeaderInfo);exit();
-                                $headLeaderHlsKeyUrl = $this->controller->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-                                $headUrl = $client->generateHLSEncryptedListUrl($headLeaderInfo['convertParams'], $headLeaderInfo['metas2'], $headLeaderHlsKeyUrl, '', '', 3600);
-                                $lesson['headUrl'] = (isset($headUrl) and is_array($headUrl) and !empty($headUrl['url'])) ? $headUrl['url'] : '';
+                            if($headLeaderInfo) {
+                                $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $headLeaderInfo['id'], 'times' => 2, 'duration' => 3600));
+                                $headUrl = array(
+                                    'url' => $this->controller->generateUrl('hls_playlist', array(
+                                        'id' => $headLeaderInfo['id'], 
+                                        'token' => $token['token'],
+                                        'line' => $this->request->get('line'),
+                                        'hideBeginning' => 1,
+                                    ), true)
+                                );
+                                
+                                $lesson['headUrl'] = $headUrl['url'];
                             }
 
-                            $url = $client->generateHLSEncryptedListUrl($file['convertParams'], $file['metas2'], $hlsKeyUrl, '', '', 3600);
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 2, 'duration' => 3600));
+                            $url = array(
+                                'url' => $this->controller->generateUrl('hls_playlist', array(
+                                    'id' => $file['id'], 
+                                    'token' => $token['token'],
+                                    'line' => $this->request->get('line'),
+                                    'hideBeginning' => 1,
+                                ), true)
+                            );
+
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
+
                         $lesson['mediaUri'] = (isset($url) and is_array($url) and !empty($url['url'])) ? $url['url'] : '';
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -488,6 +505,83 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         		return $lesson;
 	}
+
+            public function test()
+            {
+                $user = $this->controller->getUserByToken($this->request);
+                $lesson = $this->controller->getCourseService()->getCourseLesson(11, 185);
+                
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                if (empty($file)) {
+                    return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
+                }
+
+                if ($file['convertStatus'] != 'success') {
+                    if ($file['convertStatus'] == 'error') {
+                        return $this->createErrorResponse('not_document', '文档转换失败，请联系管理员!');
+                    } else {
+                        return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等!');
+                    }
+                }
+
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+
+                $metas2=$file['metas2'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+                $pdfUri = $url['url'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+                $swfUri = $url['url'];
+
+                $content = $lesson['content'];
+                $content= $this->controller->convertAbsoluteUrl($this->request, $content);
+                $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
+                            'pdfUri' => $pdfUri,
+                            'swfUri' => $swfUri,
+                            'title'=>$lesson['title']
+                        ));
+
+                $lesson['content'] = $render->getContent();
+                return $render;
+            }
+
+            private function getDocumentLesson($lesson)
+            {
+
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                if (empty($file)) {
+                    return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
+                }
+
+                if ($file['convertStatus'] != 'success') {
+                    if ($file['convertStatus'] == 'error') {
+                        return $this->createErrorResponse('not_document', '文档转换失败，请联系管理员!');
+                    } else {
+                        return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等!');
+                    }
+                }
+
+                $factory = new CloudClientFactory();
+                $client = $factory->createClient();
+
+                $metas2=$file['metas2'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+                $pdfUri = $url['url'];
+                $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+                $swfUri = $url['url'];
+
+                $content = $lesson['content'];
+                $content= $this->controller->convertAbsoluteUrl($this->request, $content);
+                $render = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
+                            'pdfUri' => $pdfUri,
+                            'swfUri' => $swfUri,
+                            'title'=>$lesson['title']
+                        ));
+
+                $lesson['content'] = $render->getContent();
+
+                return $lesson;
+            }
 
             private function getHeadLeaderInfo()
             {

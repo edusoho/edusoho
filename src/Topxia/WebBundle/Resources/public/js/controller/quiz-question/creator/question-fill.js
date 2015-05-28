@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var FillQuestion = BaseQuestion.extend({
         attrs: {
-            stemEditorName: 'question'
+            stemEditorName: 'Question'
         },
         setup: function() {
             FillQuestion.superclass.setup.call(this);

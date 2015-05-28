@@ -22,17 +22,21 @@ class CourseController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         if(!isset($courseSetting['live_course_enabled']))$courseSetting['live_course_enabled']="";
+
+        $default = $this->getSettingService()->get('default', array());
+
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses ,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator,
-            'liveSetEnabled' => $courseSetting['live_course_enabled']
+            'liveSetEnabled' => $courseSetting['live_course_enabled'],
+            'default'=> $default
         ));
     }
 
-    public function searchAction(Request $request)
+    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request,$twigToRender)
     {
         $key = $request->request->get("key");
         
@@ -50,13 +54,23 @@ class CourseController extends BaseController
   
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        return $this->render('TopxiaAdminBundle:Course:search.html.twig', array(
+        return $this->render($twigToRender, array(
             'key' => $key,
             'courses' => $courses,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator
         ));
+    }
+
+    public function searchAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search.html.twig');
+    }
+
+    public function searchToFillBannerAction(Request $request)
+    {
+        return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request,'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
 
     public function deleteAction(Request $request, $id)
@@ -75,6 +89,50 @@ class CourseController extends BaseController
     {
         $this->getCourseService()->closeCourse($id);
         return $this->renderCourseTr($id);
+    }
+
+    public function copyAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        return $this->render('TopxiaAdminBundle:Course:copy.html.twig', array(
+            'course' => $course ,
+        ));
+    }
+
+    public function copingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        $conditions = $request->request->all();
+        $course['title']=$conditions['title'];
+        
+        $newCourse = $this->getCourseCopyService()->copyCourse($course);
+        
+        $newTeachers = $this->getCourseCopyService()->copyTeachers($course['id'], $newCourse);
+
+        $newChapters = $this->getCourseCopyService()->copyChapters($course['id'], $newCourse);
+
+        $newLessons = $this->getCourseCopyService()->copyLessons($course['id'], $newCourse, $newChapters);
+
+        $newQuestions = $this->getCourseCopyService()->copyQuestions($course['id'], $newCourse, $newLessons);
+
+        $newTestpapers = $this->getCourseCopyService()->copyTestpapers($course['id'], $newCourse, $newQuestions);
+
+        $this->getCourseCopyService()->convertTestpaperLesson($newLessons, $newTestpapers);
+        
+        $newMaterials = $this->getCourseCopyService()->copyMaterials($course['id'], $newCourse, $newLessons);
+        
+        $code = 'Homework';
+        $homework = $this->getAppService()->findInstallApp($code);
+        $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+
+        if($isCopyHomework){
+            $newHomeworks = $this->getCourseCopyService()->copyHomeworks($course['id'], $newCourse, $newLessons,$newQuestions);
+            $newExercises = $this->getCourseCopyService()->copyExercises($course['id'], $newCourse, $newLessons);
+        }
+
+        return $this->redirect($this->generateUrl('admin_course'));
     }
 
     public function recommendAction(Request $request, $id)
@@ -116,10 +174,9 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions = array(
-            'status' => 'published',
-            'recommended'=> 1
-        );
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $conditions['recommended'] = 1;
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -148,7 +205,7 @@ class CourseController extends BaseController
     {
         return $this->forward('TopxiaAdminBundle:Category:embed', array(
             'group' => 'course',
-            'layout' => 'TopxiaAdminBundle:Course:layout.html.twig',
+            'layout' => 'TopxiaAdminBundle::layout.html.twig',
         ));
     }
 
@@ -254,11 +311,12 @@ class CourseController extends BaseController
     private function renderCourseTr($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-
+        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course' => $course ,
+            'default'=>$default
         ));
     }
 
@@ -267,28 +325,23 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
+    private function getCourseCopyService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseCopyService');
+    }
+
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    private function getNoteService()
-    {
-        return $this->getServiceKernel()->createService('Course.NoteService');
-    }
-
-    private function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
     private function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }

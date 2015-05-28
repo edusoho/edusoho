@@ -158,7 +158,12 @@ define(function(require, exports, module) {
             'float',
             /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
             '请输入正确的小数,只保留到两位小数'
-        ],  
+        ],
+        [
+            'decimal',
+            /^(([+]?[1-9]{1}\d*)|([+]?[0]{1}))(\.(\d){1})?$/i,
+            '请输入正确的小数,只保留到一位小数'
+        ],    
         [
             'int',
             /^[+-]?\d{1,9}$/,
@@ -210,6 +215,28 @@ define(function(require, exports, module) {
             }
         ],
         [
+            'nickname_remote',
+            function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    value = element.val().replace(/\./g, "!");
+                $.get(url, {value:value, randomName:element.data('randmo')}, function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
+        ],
+        [
+            'email_or_mobile_remote',
+            function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    value = element.val().replace(/\./g, "!");
+                $.get(url, {value:value}, function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
+        ],
+        [
             'date_check',
             function() {
 
@@ -226,7 +253,81 @@ define(function(require, exports, module) {
                     return false;
                 }
             },"开始时间必须小于或等于结束时间"
-        ]
+        ],
+        
+
+
+
+        [
+            'date_and_time',
+            /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/,
+            '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss'
+        ],        
+
+        [
+            'date_and_time_check',
+            function() {
+                var startTime = $('[name=startTime]').val();
+                var endTime = $('[name=endTime]').val();
+                return (startTime < endTime);
+            },"结束时间不能早于或等于开始时间"
+        ],        
+
+        [
+            'deadline_date_check',
+            function(opt) {
+                var now = new Date;
+                var v = opt.element.val();
+
+                if( parseInt(now.getFullYear()) > parseInt(v.split('-')[0]) ){
+                    return false;
+                }else if( parseInt(now.getFullYear()) < parseInt(v.split('-')[0]) ){
+                    return true;
+                }
+                
+                if( parseInt(now.getMonth()+1) > parseInt(v.split('-')[1]) ){
+                    return false;
+                }else if( parseInt(now.getMonth()+1) < parseInt(v.split('-')[1]) ){
+                    return true;
+                }
+                if( parseInt(now.getDate()) > parseInt(v.split('-')[2]) ){
+                    return false;
+                }else if( parseInt(now.getDate()) < parseInt(v.split('-')[2]) ){
+                    return true;
+                }
+                return true;
+            },"有效期必须大于等于当前日期"
+        ],
+        [
+            'fixedLength',
+            function(options) {
+                var element = options.element;
+                var l = element.val().length;
+                return l == Number(options.len);
+            },"{{display}}的长度必须等于{{len}}"
+        ],
+        [
+            'email_or_mobile',
+             function(options){
+               var emailOrMobile = options.element.val();
+               var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+               var reg_mobile = /^1\d{10}$/;
+               var result =false;
+               var isEmail = reg_email.test(emailOrMobile);
+               var isMobile = reg_mobile.test(emailOrMobile);
+               if(isMobile){
+                    $(".email_mobile_msg").removeClass('hidden');
+               }else {
+                    $(".email_mobile_msg").addClass('hidden');
+               }
+               if (isEmail || isMobile) {
+                    result = true;
+                }
+                return  result;  
+             },
+             "{{display}}格式错误"
+        ]        
+
     ];
 
     exports.inject = function(Validator) {

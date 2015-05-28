@@ -10,6 +10,11 @@ interface UserService
 
     public function getUserByNickname($nickname);
 
+    //根据用户名/邮箱/手机号精确查找用户
+    public function getUserByLoginField($keyword);
+
+    public function getUserByVerifiedMobile($mobile);
+    
     public function getUserByEmail($email);
 
     public function findUsersByIds(array $ids);
@@ -26,16 +31,32 @@ interface UserService
 
     public function changeEmail($userId, $email);
 
-    public function changeAvatar($userId, $filePath, array $options);
+    public function changeAvatar($userId, $data);
 
     public function isNicknameAvaliable($nickname);
 
     public function isEmailAvaliable($email);
 
+    public function isMobileAvaliable($mobile);
+
     public function hasAdminRoles($userId);
 
     public function rememberLoginSessionId($id, $sessionId);
 
+    public function changePayPassword($userId, $newPayPassword);
+
+    public function verifyPayPassword($id, $payPassword);
+
+    public function getUserSecureQuestionsByUserId($userId);
+
+    public function addUserSecureQuestionsWithUnHashedAnswers($userId,$fieldsWithQuestionTypesAndUnHashedAnswers);
+
+    public function verifyInSaltOut($in,$salt,$out);
+
+    public function isMobileUnique($mobile);
+
+    public function changeMobile($id, $mobile);
+    
     /**
      * 变更密码
      * 
@@ -150,12 +171,16 @@ interface UserService
     public function isFollowed($fromId, $toId);
 
     public function findUserFollowing($userId, $start, $limit);
+    
+    public function findAllUserFollowing($userId);
 
     public function findUserFollowingCount($userId);
 
     public function findUserFollowers($userId, $start, $limit);
 
     public function findUserFollowerCount($userId);
+    
+    public function findAllUserFollower($userId);
 
     /**
      * 过滤得到用户关注中的用户ID列表
@@ -172,10 +197,6 @@ interface UserService
     
     public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
 
-    public function getUsersByApprovalStatus($approvalStatus, $start, $limit);
-
-    public function getUserCountByApprovalStatus($approvalStatus);
-
     public function findUserApprovalsByUserIds($userIds);
 
     public function passApproval($userId, $note = null);
@@ -189,5 +210,16 @@ interface UserService
     public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
+
+    public function userLoginFail($user,$failAllowNum = 3, $temporaryMinutes = 20);
+
+    public function isUserTemporaryLockedOrLocked($user);
+
+    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
+
+    /**
+     * 解析文本中@(提)到的用户
+     */
+    public function parseAts($text);
 
 }

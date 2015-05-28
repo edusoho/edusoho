@@ -10,7 +10,7 @@
 
   <div class="form-group">
     <div class="controls">
-      <input class="form-control" type="text" name="_username" placeholder="Email地址 / 用户昵称" data-display="Email地址 / 用户昵称" />
+      <input class="form-control" type="text" name="_username" placeholder="邮箱/手机/昵称" data-display="请输入邮箱/手机/昵称" />
     </div>
   </div>
 
@@ -44,6 +44,11 @@
   <a href="{{ path('register', {goto:_target_path}) }}">立即注册</a>
 </div>
 
- {% include 'TopxiaWebBundle:Login:social-logins-block.html.twig' %}
+{% if setting('login_bind.enabled') %}
+  <div class="social-logins">
+    {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+  </div>
+{% endif %}
+
  
 {% endblock %}

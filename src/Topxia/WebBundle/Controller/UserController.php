@@ -49,6 +49,74 @@ class UserController extends BaseController
         return $this->_teachAction($user);
     }
 
+    public function learningAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        $classrooms=array();
+
+        $studentClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'student','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+        $auditorClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'auditor','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        foreach ($classrooms as $key => $classroom) {
+            if (empty($classroom['teacherIds'])) {
+                $classroomTeacherIds=array();
+            }else{
+                $classroomTeacherIds=$classroom['teacherIds'];
+            }
+
+            $teachers = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+            $classrooms[$key]['teachers']=$teachers;
+        }
+
+        $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
+
+        return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig",array(
+            'classrooms'=>$classrooms,
+            'members'=>$members,
+            'user'=>$user,
+        )); 
+    }
+
+    public function teachingAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+
+        $classrooms=array();
+        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
+        
+        foreach ($classrooms as $key => $classroom) {
+            if (empty($classroom['teacherIds'])) {
+                $classroomTeacherIds=array();
+            }else{
+                $classroomTeacherIds=$classroom['teacherIds'];
+            }
+
+            $teachers = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+            $classrooms[$key]['teachers']=$teachers;
+        }
+
+        return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
+            'classrooms'=>$classrooms,
+            'members'=>$members,
+            'user'=>$user,
+            ));
+    }
+
     public function favoritedAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
@@ -111,19 +179,7 @@ class UserController extends BaseController
     public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowingCount($user['id']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->findUserFollowingCount($user['id']),
-            10
-        );
-
-        $followings = $this->getUserService()->findUserFollowing(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $followings = $this->getUserService()->findAllUserFollowing($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
@@ -136,19 +192,7 @@ class UserController extends BaseController
     public function followerAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-        $this->getUserService()->findUserFollowerCount($user['id']);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->findUserFollowerCount($user['id']),
-            10
-        );
-
-        $followers = $this->getUserService()->findUserFollowers(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $followers=$this->getUserService()->findAllUserFollower($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
@@ -197,6 +241,23 @@ class UserController extends BaseController
         $this->getNotificationService()->notify($id, 'default', $message);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function checkPasswordAction(Request $request)
+    {
+        $password = $request->query->get('value');
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            $response = array('success' => false, 'message' => '请先登入');
+        }
+
+        if (!$this->getUserService()->verifyPassword($currentUser['id'], $password)) {
+            $response = array('success' => false, 'message' => '输入的密码不正确');
+        }else{
+            $response = array('success' => true, 'message' => '');
+        }
+        return $this->createJsonResponse($response);
     }
 
     protected function getUserService()
@@ -280,6 +341,11 @@ class UserController extends BaseController
     private function getGroupService() 
     {   
         return $this->getServiceKernel()->createService('Group.GroupService');
+    }
+
+    protected function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
 }

@@ -9,6 +9,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\BlockToolkit;
 
 class InitCommand extends BaseCommand
 {
@@ -37,7 +38,9 @@ class InitCommand extends BaseCommand
 		$this->initRefundSetting($output);
 		$this->initThemes($output);
 		$this->initFile($output);
+        $this->initDefaultSetting($output);
         $this->initInstallLock($output);
+        $this->initBlock($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
@@ -119,7 +122,8 @@ class InitCommand extends BaseCommand
 		);
 		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
 
-		$user = $this->getUserService()->getUserByEmail('test@edusoho.com');
+        $user = $this->getUserService()->getUserByEmail('test@edusoho.com');
+
 		if (!$user) {
 			$user = $this->getUserService()->register($fields);
 		}
@@ -160,7 +164,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'opened',
+            'register_mode'=>'email',
             'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
@@ -208,6 +212,23 @@ EOD;
 
 		$output->writeln(' ...<info>成功</info>');
 	}
+
+	private function initDefaultSetting($output)
+    {
+    	$output->write('  初始化章节的默认设置');
+        $settingService = $this->getSettingService();
+
+        $defaultSetting = array();
+        $defaultSetting['user_name'] ='学员';
+        $defaultSetting['chapter_name'] ='章';
+        $defaultSetting['part_name'] ='节';
+
+        $default = $settingService->get('default', array());
+        $defaultSetting = array_merge($default, $defaultSetting);
+
+        $settingService->set('default', $defaultSetting);
+        $output->writeln(' ...<info>成功</info>');
+    }
 
 	private function initStorageSetting($output)
 	{
@@ -287,34 +308,59 @@ EOD;
 		}
 
 		$this->getFileService()->addFileGroup(array(
-			'name' => '默认文件组',
-			'code' => 'default',
-			'public' => 1,
-		));
+            'name' => '默认文件组',
+            'code' => 'default',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '缩略图',
-			'code' => 'thumb',
-			'public' => 1,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '缩略图',
+            'code' => 'thumb',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '课程',
-			'code' => 'course',
-			'public' => 1,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '课程',
+            'code' => 'course',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '用户',
-			'code' => 'user',
-			'public' => 1,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '用户',
+            'code' => 'user',
+            'public' => 1,
+        ));
 
-		$this->getFileService()->addFileGroup(array(
-			'name' => '课程私有文件',
-			'code' => 'course_private',
-			'public' => 0,
-		));
+        $this->getFileService()->addFileGroup(array(
+            'name' => '课程私有文件',
+            'code' => 'course_private',
+            'public' => 0,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '临时目录',
+            'code' => 'tmp',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '全局设置文件',
+            'code' => 'system',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '小组',
+            'code' => 'group',
+            'public' => 1,
+        ));
+
 
         $directory = $this->getContainer()->getParameter('topxia.disk.local_directory');
         chmod($directory, 0777);
@@ -346,9 +392,25 @@ EOD;
         $output->writeln(' ...<info>成功</info>');
     }
 
+    public function initBlock($output)
+    {
+        $output->write('  初始化编辑区');
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/block.json';
+        BlockToolkit::init($json, $this->getContainer());
+
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/default/block.json';
+        BlockToolkit::init($json, $this->getContainer());
+
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
+        BlockToolkit::init($json, $this->getContainer());
+
+    }
+
 	private function initServiceKernel()
 	{
 		$serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+
 		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
 		$currentUser = new CurrentUser();
 		$currentUser->fromArray(array(

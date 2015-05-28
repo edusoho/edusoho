@@ -2,67 +2,24 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}用户认证审核{% endblock %}
+{% block title %}
+    用户认证审核
+{% endblock %}
 {% block body %}
 
 <form id="approve-form" class="form-horizontal" method="post" action="{{ path('admin_approval_approve', {id:user.id}) }}">
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="nickname">用户名</label>
-    </div>
-    <div style="margin-top: 7px;">
-    {{ user.nickname }}
-    </div>
-  </div>
-
-   <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="truename">真实姓名</label>
-    </div>
-    <div style="margin-top: 7px;">
-      {{userApprovalInfo.truename}}
-    </div>
-  </div>
+  {% include 'TopxiaAdminBundle:User:user-approval-form-content.html.twig' %}
 
   <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="idcard">身份证号码</label>
-    </div>
-    <div style="margin-top: 7px;">
-      {{userApprovalInfo.idcard}}
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="faceImg">身份证正面照</label>
-    </div>
-    <div>
-     <a href="{{ url('show_idcard', {userId: user.id, type:'face'})}}" target="_blank">
-     <img src="{{url('show_idcard', {userId: user.id, type:'face'})}}" width="400" />
-     </a>
-    </div>
-  </div>
-
-    <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="faceImg">身份证反面照</label>
-    </div>
-    <div>
-     <a href="{{url('show_idcard', {userId: user.id, type: 'back'})}}" target="_blank">
-          <img src="{{url('show_idcard', {userId: user.id, type: 'back'})}}" width="400" />
-      </a>
-    </div>
-  </div>
-    <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="note">备注</label>
     </div>
     <div class="col-md-8">
     <textarea id="note" name="note" class="form-control" rows="3"></textarea>
     </div>
-  </div>
+</div>
+
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   <input id="form_status" type="hidden" name="form_status" >
@@ -73,6 +30,8 @@
 <div class="pull-right">
 
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+
+
   <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">审核失败</button>
   <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">审核成功</button>
 

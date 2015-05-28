@@ -47,12 +47,15 @@ define(function(require, exports, module) {
           $('#course-chapter-btn').button('submiting').addClass('disabled');
 
           $.post($form.attr('action'), $form.serialize(), function(html) {
+
               var id = '#' + $(html).attr('id'),
                   $item = $(id);
               var $parent = $('#'+$form.data('parentid'));
+              var $panel = $('.lesson-manage-panel');
+              $panel.find('.empty').remove();
               if ($item.length) {
                   $item.replaceWith(html);
-                  Notify.success('章节信息已保存');
+                  Notify.success('信息已保存');
               } else {
                  if($parent.length){
                   var add = 0;
@@ -72,14 +75,16 @@ define(function(require, exports, module) {
                    
                  }else{
                     $("#course-item-list").append(html);
+                    $(".lesson-manage-panel").find('.empty').remove();
                  }
-                    
-                  Notify.success('章节添加成功');
+
+                  Notify.success('添加成功');
+
               }
               $(id).find('.btn-link').tooltip();
               $form.parents('.modal').modal('hide');
           });
-
+	
         });
 
 	};

@@ -22,7 +22,7 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="group_about">小组介绍</label>
           <div class="col-md-7 controls">
-            <textarea name="group[about]" rows="10" id="group" class="form-control"></textarea>
+            <textarea name="group[about]" rows="10" id="group" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
           </div>
         </div>
         

@@ -23,4 +23,6 @@ interface CourseMaterialDao
 
     public function getLessonMaterialCount($courseId,$lessonId);
 
+    public function getMaterialCountByFileId($fileId);
+
 }

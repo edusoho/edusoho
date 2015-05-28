@@ -1,0 +1,48 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set showSms = ( verifiedMobile|length > 0) %}
+
+{% block title %} 短信验证码 {% endblock %}
+
+{% block body %}
+{% if showSms %}  
+    <form id = "js-sms-modal-form">
+      <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
+      <div class = "form-group">
+        <div class = "controls row" >
+          <div class = "col-md-5 col-md-offset-2" >
+            <label class="control-label">已绑定手机号码 {{ blur_phone_number(verifiedMobile) }}</label>
+          </div>
+          <div class = "col-md-3" >
+            <a class="text-sm text-muted" href="{{path('settings_bind_mobile')}}" target="_blank">修改手机号码</a>
+          </div>
+        </div>
+        <br>
+        <div class="controls row" >
+          <div class = "col-md-5 col-md-offset-2" >
+            <input type="text" class="form-control" id="sms-code-modal" name="sms_code_modal" {# data-explain="输入短信验证码" #} required="required" placeholder="输入短信验证码" data-url="{{path('edu_cloud_sms_check',{type:'sms_user_pay'})}}">
+          </div>
+          <div class="col-md-5">
+            <span class="btn btn-default btn-sm js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+              <span id="js-time-left"></span>
+              <span id="js-fetch-btn-text">获取短信验证码{# 秒后重新获取 #}</span>
+           </span> 
+          </div>
+          <div class="col-md-12 col-md-offset-2">
+            <div class="help-block"></div> 
+          </div>
+        </div>
+
+      </div>
+    </form>
+{% else %}
+  <span>&nbsp;&nbsp;您还未绑定手机号<a class="btn btn-link" href="{{path('settings_bind_mobile')}}" target="_blank">去绑定</a></span>  
+{% endif %}
+
+{% endblock %}
+
+{% if showSms %}
+  {% block footer %}
+       <button class="btn btn-primary pull-right js-confirm">确定</button>
+       <script>app.load('order/order-create-sms');</script>
+  {% endblock %}
+{% endif %}

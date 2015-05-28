@@ -1,6 +1,6 @@
 {% if not role|default(null) == 'teacher' %}
 
-<div class="testpaper-question testpaper-question-fill" id="question{{ item.question.id }}">
+<div class="testpaper-question testpaper-question-fill {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ item.question.id }}">
 	<div class="testpaper-question-body">
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
@@ -15,14 +15,24 @@
 			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 			    	  {% if userAnswer == '' %}
 			    	  。你未回答
-			    	  {% elseif userAnswer in answer %}
-			    	  。回答正确
+			    	  {% elseif item.question.testResult.status == "right" %}
+			    	  ，你的答案　<strong class="text-success">{{ userAnswer }}</strong>。 
+			    	  {% elseif item.question.testResult.status == "partRight" %}
+			    	  ，你的答案　<strong class="text-warning">{{ userAnswer }}</strong>。 
 			    	  {% else %}
-			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。回答错误
+			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。 
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}
 		    </ul>
+
+		    {% if item.question.testResult.status == "right" %}
+			    <p class="text-success">回答正确。</p>
+			  {% elseif item.question.testResult.status == "partRight" %}
+			    <p class="text-warning">回答部分正确，本题得分：{{ item.question.testResult.score }}分。</p>
+			  {% else %}
+			    <p class="text-danger">回答错误。</p>
+			  {% endif %}
 			</div>
 
 			<div class="testpaper-question-actions pull-right">

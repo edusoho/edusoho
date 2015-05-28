@@ -6,7 +6,7 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
 
-    static $apiVersionRange = "2.3.2";
+    const API_VERSIN_RANGE = '2.3.2';
     public $formData;
     public $controller;
     public $request;
@@ -23,7 +23,7 @@ class BaseProcessor {
         return $processorDelegator;
     }
     protected function getParam($name, $default = null) {
-        $result = $this->request->request->get($name, $default);
+        $result = $this->request->get($name, $default);
         return $result;
     }
 
@@ -55,9 +55,19 @@ class BaseProcessor {
         return $this->controller->getContainer();
     }
 
+    protected function getCashAccountService()
+    {
+        return $this->controller->getService('Cash.CashAccountService');
+    }
+
     protected function getAppService()
     {
         return $this->controller->getService('CloudPlatform.AppService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->controller->getService('Cash.CashOrdersService');
     }
 
     protected function getBlockService()
@@ -138,6 +148,11 @@ class BaseProcessor {
         return $this->controller->getService('Course.CourseService');
     }
 
+    protected function getPayCenterService()
+    {
+        return $this->controller->getService('PayCenter.PayCenterService');
+    }
+
     protected function getTestpaperService()
     {
         return $this->controller->getService('Testpaper.TestpaperService');
@@ -216,7 +231,7 @@ class BaseProcessor {
             'splashs' => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => BaseProcessor::$apiVersionRange
+                "max" => BaseProcessor::API_VERSIN_RANGE
             ) ,
         );
     }

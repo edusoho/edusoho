@@ -108,9 +108,9 @@ define(function(require, exports, module) {
                         $subItems.detach().insertAfter(item);
                     }
                     Test.sortable();
-                },
+                }
             });
-        },
+        }
     	
 
     };

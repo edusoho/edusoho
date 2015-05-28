@@ -3,12 +3,24 @@
     var Validator = require('bootstrap.validator');
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
-    var EditorFactory = require('common/kindeditor-factory');
+    require('ckeditor');
 
     exports.run = function() {
 
-        var editor = EditorFactory.create('#profile_about', 'simple', {extraFileUploadParams:{group:'user'}});
-        EditorFactory.create('.text', 'simple', {extraFileUploadParams:{group:'user'}});
+        var editor = CKEDITOR.replace('profile_about', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
+        });
+
+        $('.text').each(function() {
+            var id = $(this).attr('id');
+            CKEDITOR.replace(id, {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $(this).data('imageUploadUrl'),
+                height: 100
+            });
+        });
+
         $(".date").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
@@ -84,7 +96,7 @@
         }
 
         validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
+            editor.updateElement();
         });
 
         if ($('.form-iam-group').length>=1) {

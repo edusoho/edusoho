@@ -38,6 +38,60 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    public function classroomsAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $classrooms=array();
+        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
+
+        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+
+        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
+        
+        foreach ($classrooms as $key => $classroom) {
+            
+            $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+            $courseIds=ArrayToolkit::column($courses,'courseId');
+
+            $coursesCount=count($courses);
+
+            $classrooms[$key]['coursesCount']=$coursesCount;
+
+            $studentCount=$this->getClassroomService()->searchMemberCount(array('role'=>'student','classroomId'=>$classroom['id'],'startTimeGreaterThan'=>strtotime(date('Y-m-d'))));
+            $auditorCount=$this->getClassroomService()->searchMemberCount(array('role'=>'auditor','classroomId'=>$classroom['id'],'startTimeGreaterThan'=>strtotime(date('Y-m-d'))));
+            
+
+            $allCount=$studentCount+$auditorCount;
+
+            $classrooms[$key]['allCount']=$allCount;
+
+            $todayTimeStart=strtotime(date("Y-m-d",time()));
+            $todayTimeEnd=strtotime(date("Y-m-d",time()+24*3600));
+            $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("targetType"=>"classroom","courseIds"=>$courseIds,"startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
+
+            $threadCount=$this->getThreadService()->searchThreadCount(array('targetType'=>'classroom','targetId'=>$classroom['id'],'type'=>'discussion',"startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"open"));
+
+            $classrooms[$key]['threadCount']=$threadCount;
+
+            $classrooms[$key]['todayFinishedLessonNum']=$todayFinishedLessonNum;
+        }
+
+        return $this->render('TopxiaWebBundle:MyTeaching:classroom.html.twig', array(
+            'classrooms'=>$classrooms,
+            'members'=>$members,
+            ));
+    }
+
 	public function threadsAction(Request $request, $type)
 	{
 		$user = $this->getCurrentUser();
@@ -51,6 +105,7 @@ class MyTeachingController extends BaseController
         if (empty($myTeachingCourseCount)) {
             return $this->render('TopxiaWebBundle:MyTeaching:threads.html.twig', array(
                 'type'=>$type,
+                'threadType' => 'course',
                 'threads' => array()
             ));
         }
@@ -63,11 +118,11 @@ class MyTeachingController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchThreadCountInCourseIds($conditions),
+            $this->getCourseThreadService()->searchThreadCountInCourseIds($conditions),
             20
         );
 
-        $threads = $this->getThreadService()->searchThreadInCourseIds(
+        $threads = $this->getCourseThreadService()->searchThreadInCourseIds(
             $conditions,
             'createdNotStick',
             $paginator->getOffsetCount(),
@@ -84,11 +139,12 @@ class MyTeachingController extends BaseController
             'users'=> $users,
             'courses' => $courses,
             'lessons' => $lessons,
-            'type'=>$type
+            'type'=>$type,
+            'threadType' => 'course',
     	));
 	}
 
-	protected function getThreadService()
+    protected function getCourseThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
@@ -108,4 +164,14 @@ class MyTeachingController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
+    protected function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+     protected function getThreadService()
+     {
+          return $this->getServiceKernel()->createService('Thread.ThreadService');
+     }
+    
 }

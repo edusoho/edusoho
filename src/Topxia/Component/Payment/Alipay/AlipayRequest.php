@@ -41,6 +41,8 @@ class AlipayRequest extends Request {
 
         if ($this->getPaymentType() == 'dualfun') {
             $converted['service'] = 'trade_create_by_buyer';
+        } elseif ($this->getPaymentType() == 'escow') {
+            $converted['service'] = 'create_partner_trade_by_buyer';
         } else {
             $converted['service'] = 'create_direct_pay_by_user';
         }
@@ -53,7 +55,7 @@ class AlipayRequest extends Request {
         $converted['subject'] = $this->filterText($params['title']);
         $converted['seller_id'] = $this->options['key'];
 
-        if ($this->getPaymentType() == 'dualfun') {
+        if (in_array($this->getPaymentType(), array('dualfun', 'escow'))) {
             $converted['price'] = $params['amount'];
             $converted['quantity'] = 1;
             $converted['logistics_type'] = 'POST';

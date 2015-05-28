@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     require('jquery.sortable');
+    require('ckeditor');
 	exports.run = function() {
        
          var sortList = function($list) {
@@ -198,12 +198,18 @@ define(function(require, exports, module) {
         });
         $('[name=startTime]').datetimepicker('setStartDate', now);
 
-        var editor = EditorFactory.create('#live_lesson-content-field', 'standard', {extraFileUploadParams:{group:'course'}, height: '300px'});
-        
+        // course
+        var editor = CKEDITOR.replace('live_lesson-content-field', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#live_lesson-content-field').data('imageUploadUrl'),
+            height: 300
+        });
+
+
         validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
-            var z = editor.html();
-            var x = editor.html().match(/<embed[\s\S]*?\/>/g);
+            editor.updateElement();
+            var z = editor.getData();
+            var x = editor.getData().match(/<embed[\s\S]*?\/>/g);
             if (x) {
                 for (var i = x.length - 1; i >= 0; i--) {
                    var y = x[i].replace(/\/>/g,"wmode='Opaque' \/>");

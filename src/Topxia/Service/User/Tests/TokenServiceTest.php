@@ -52,67 +52,6 @@ class TokenServiceTest extends BaseTestCase
         $this->assertGreaterThan(time(), $token['expiredTime']);
     }
 
-    public function testVerifyToken()
-    {
-        $token = $this->getTokenService()->makeToken('test_token');
-
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token2', $token['token']));
-    }
-
-    public function testVerifyTimesToken()
-    {
-        $token = $this->getTokenService()->makeToken('test_token', array('times' => 1));
-
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token', $token['token']));
-
-        $token = $this->getTokenService()->makeToken('test_token', array('times' => 2));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token', $token['token']));
-    }
-
-    public function testVerifyDurationToken()
-    {
-        $token = $this->getTokenService()->makeToken('test_token', array('duration' => 2));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        sleep(3);
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token', $token['token']));
-
-        $token = $this->getTokenService()->makeToken('test_token', array('duration' => 3600));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-    }
-
-
-    public function testVerifyDurationAndTimesToken()
-    {
-        $token = $this->getTokenService()->makeToken('test_token', array('duration' => 2, 'times' => 2));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        sleep(3);
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token', $token['token']));
-
-        $token = $this->getTokenService()->makeToken('test_token', array('duration' => 3600, 'times' => 2));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token', $token['token']));
-    }
-
-    public function testDestoryToken()
-    {
-        $token = $this->getTokenService()->makeToken('test_token');
-        $this->getTokenService()->destoryToken($token['token']);
-        $this->assertFalse($this->getTokenService()->verifyToken('test_token', $token['token']));
-
-        $token = $this->getTokenService()->makeToken('test_token');
-        $this->getTokenService()->destoryToken($token['token']. 'not_exist');
-        $this->assertTrue($this->getTokenService()->verifyToken('test_token', $token['token']));
-    }
-
     private function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');

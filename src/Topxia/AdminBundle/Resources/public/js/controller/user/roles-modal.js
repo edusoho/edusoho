@@ -15,7 +15,8 @@ define(function(require, exports, module) {
         $form.find('input[value=ROLE_USER]').on('change', function(){
             if ($(this).prop('checked') === false) {
                 $(this).prop('checked', true);
-                Notify.info('用户必须拥有学员角色');
+                var user_name = $('#change-user-roles-btn').data('user') ;
+                Notify.info('用户必须拥有'+user_name+'角色');
             }
         });
 
@@ -29,7 +30,8 @@ define(function(require, exports, module) {
             });
 
             if ($.inArray('ROLE_USER', roles) < 0) {
-                Notify.danger('用户必须拥有学员角色');
+            	   var user_name = $('#change-user-roles-btn').data('user') ;
+                Notify.danger('用户必须拥有'+user_name+'角色');
                 return false;
             }
 

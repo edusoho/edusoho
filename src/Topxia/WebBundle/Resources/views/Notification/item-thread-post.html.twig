@@ -6,7 +6,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
       您的{% if data.threadType == 'question' %}问题{% else %}话题{% endif %}
-      <a href="{{ path('course_thread_show', {courseId:data.courseId, id:data.threadId}) }}#post-{{ data.postId }}"  target="_blank"><strong>{{ data.threadTitle }}</strong></a> 有了<strong>{{ data.postUserNickname }}</strong>的新回复。
+      <a href="{{ path('course_thread_show', {courseId:data.courseId, id:data.threadId}) }}#post-{{ data.postId }}"  target="_blank"><strong>{{ data.threadTitle|purify_html  }}</strong></a> 有了<strong>{{ data.postUserNickname }}</strong>的新回复。
     </div>
     <div class="notification-footer">
       {{ notification.createdTime | date('Y-n-d H:i:s') }}

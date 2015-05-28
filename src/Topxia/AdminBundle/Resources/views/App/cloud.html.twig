@@ -1,0 +1,123 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_my_cloud' %}
+{% set submenu = 'cloud-introduction' %}
+
+{% block main %}
+
+      <ul class="nav nav-tabs mbl">
+
+        <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
+          <a href="{{ url('admin_my_cloud') }}">产品简介
+          </a>
+        </li>
+
+        <li class="{% if submenu == 'service-information' %}active{% endif %}">
+          <a href="{{ url('admin_my_cloud_overview') }}">服务概况
+          </a>
+        </li>
+
+      </ul>
+
+      <!-- 广告页面开始 -->
+      <div class="es-eduyun-ad">
+        <div class="es-poster hidden-xs hidden-sm">
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <!--
+            <ol class="carousel-indicators">
+              <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            </ol>
+
+            <a class="left carousel-control" href="javascript:;" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="javascript:;" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+            -->
+            <div class="carousel-inner" role="listbox">
+              <div class="item active">
+                <img class="img-responsive" src="{{ default_path('banner.jpg') }}">
+                <a href="" class="btn btn-warning" disabled>接入教育云<span
+                  class="glyphicon glyphicon-circle-arrow-right"></span></a>
+                  <div class="images-content"> 
+                      即将上线，去了解详情
+                      <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=800023860&site=qq&menu=yes" >
+                        <img border="0" src="{{ default_path('qq_logo.png') }}"/>
+                      </a>
+                  </div> 
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row es-row">
+          <div class="col-md-4">
+            <h3 class="es-ad-title">视频安全，四重保护一步到位</h3>
+
+            <div class="es-ad-info">
+                <p>自主研发TLP2.0技术</p>
+
+                <p>上万家机构使用安全零事故</p>
+            </div>
+            <div class="media">
+              <div class="pull-left">
+                <a>
+                  <img class="media-object" src="{{ default_path('icon_1.png') }}">
+                </a>
+              </div>
+              <div class="media-body">
+                  <h4 class="media-heading">认识教育云</h4>
+                  <a href="http://www.edusoho.com/videos/cloud.mp4" target="_blank">什么是教育云</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <h3 class="es-ad-title">万人直播，电视、移动端全面覆盖</h3>
+
+            <div class="es-ad-info">
+                <p>500+加速节点 更流畅</p>
+
+                <p>淘宝大学、新东方在线等大型客户共同选择</p>
+            </div>
+            <div class="media">
+              <div class="pull-left">
+                <a>
+                  <img class="media-object" src="{{ default_path('icon_2.png') }}">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading"><a href="http://open.edusoho.com/article" target="_blank">最新资讯</a></h4>
+                <a href="{{articles[0]['articleUrl']}}" target="_blank">{{articles[0]['title']}}</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <h3 class="es-ad-title">一次接入，云短信随心选择</h3>
+
+            <div class="es-ad-info">
+              <p>及时发送通知，实用便捷 </p> 
+              <p>获得精准信息，实现高效营销</p>
+
+            </div>
+            <div class="media">
+              <div class="pull-left">
+                <a>
+                  <img class="media-object" src="{{ default_path('icon_3.png') }}">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading"><span>3分钟接入教育云</span></h4>
+                <span style="color:#f8ae64;">即将上线</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 广告页面结束 -->
+
+{% endblock %}

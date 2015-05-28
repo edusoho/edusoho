@@ -23,28 +23,30 @@ define(function(require, exports, module) {
                     required: true,
                     rule:'integer',
                     errormessageRequired: '请输入SMTP端口号'
-                })
+                });
                 validator.addItem({
                     element: '[name="username"]',
                     required: true,
+                    rule: 'email',
                     errormessageRequired: '请输入SMTP用户名'
-                })
+                });
                 validator.addItem({
                     element: '[name="password"]',
                     required: true,
                     rule:'password',
                     errormessageRequired: '请输入SMTP密码'
-                })
+                });
                 validator.addItem({
                     element: '[name="from"]',
                     required: true,
+                    rule: 'email',
                     errormessageRequired: '请输入发信人地址'
-                })
+                });
                 validator.addItem({
                     element: '[name="name"]',
                     required: true,
                     errormessageRequired: '请输入发信人名称'
-                })
+                });
             } else {
                 validator.removeItem('[name="host"]');
                 validator.removeItem('[name="port"]');

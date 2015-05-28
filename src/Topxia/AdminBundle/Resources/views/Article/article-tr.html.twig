@@ -32,7 +32,7 @@
 			    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_article_publish', {id:article.id}) }}">发布</a></li>
 		    {% endif %}
 	     	{% if article.status == 'published' %}
-			    <li><a href="javascript:" data-role="unpublish-item" data-url="{{ path('admin_article_unpublish', {id:article.id}) }}">未发布</a></li>
+			    <li><a href="javascript:" data-role="unpublish-item" data-url="{{ path('admin_article_unpublish', {id:article.id}) }}">取消发布</a></li>
 		    {% endif %}
 		    {% if article.status != 'trash' %}
 			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_article_trash', {id:article.id}) }}">移至回收站</a></li>

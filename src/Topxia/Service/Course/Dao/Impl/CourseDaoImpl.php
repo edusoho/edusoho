@@ -36,6 +36,25 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByCourseIds(array $ids, $start, $limit)
+    {
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findCoursesByLikeTitle($title)
+    {
+        if(empty($title)){
+            return array();
+        }
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE `title` LIKE ?; ";
+        return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
+    }
+
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
     {
 
@@ -125,6 +144,12 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
+    public function clearCourseDiscountPrice($discountId)
+    {
+        $sql = "UPDATE course SET price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
+        return $this->getConnection()->executeQuery($sql, array($discountId));
+    }
+
     private function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
@@ -151,58 +176,33 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $conditions['tagsLike'] .= '%';
             unset($conditions['tagIds']);
         }
-        
-        if (isset($conditions['notFree'])) {
-            $conditions['notFree'] = 0;
-        }
-        
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
             ->andWhere('type = :type')
             ->andWhere('price = :price')
-            ->andWhere('price > :notFree')
+            ->andWhere('price > :price_GT')
+            ->andWhere('originPrice > :originPrice_GT')
+            ->andWhere('coinPrice > :coinPrice_GT')
+            ->andWhere('coinPrice = :coinPrice')
+            ->andWhere('originCoinPrice > :originCoinPrice_GT')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
             ->andWhere('tags LIKE :tagsLike')
             ->andWhere('startTime >= :startTimeGreaterThan')
             ->andWhere('startTime < :startTimeLessThan')
-            ->andWhere('freeStartTime < :freeStartTimeLessThan')
-            ->andWhere('freeEndTime > :freeEndTimeGreaterThan')
-            ->andWhere('freeStartTime > :freeStartTimeGreaterThan')
             ->andWhere('rating > :ratingGreaterThan')
             ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
             ->andWhere('vipLevelId = :vipLevelId')
             ->andWhere('createdTime >= :startTime')
-            ->andWhere('createdTime <= :endTime');
-
-        if (isset($conditions['categoryIds'])) {
-            $categoryIds = array();
-            foreach ($conditions['categoryIds'] as $categoryId) {
-                if (ctype_digit((string)abs($categoryId))) {
-                    $categoryIds[] = $categoryId;
-                }
-            }
-            if ($categoryIds) {
-                $categoryIds = join(',', $categoryIds);
-                $builder->andStaticWhere("categoryId IN ($categoryIds)");
-            }
-        }
-
-        if (isset($conditions['vipLevelIds'])) {
-
-            $vipLevelIds = array();
-            foreach ($conditions['vipLevelIds'] as $vipLevelId) {
-                if (ctype_digit((string)$vipLevelId)) {
-                    $vipLevelIds[] = $vipLevelId;
-                }
-            }
-            if ($vipLevelIds) {
-                $vipLevelIds = join(',', $vipLevelIds);
-                $builder->andStaticWhere("vipLevelId IN ($vipLevelIds)");
-            }
-        }
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('categoryId = :categoryId')
+            ->andWhere('smallPicture = :smallPicture')
+            ->andWhere('categoryId IN ( :categoryIds )')
+            ->andWhere('vipLevelId IN ( :vipLevelIds )')
+            ->andWhere('id NOT IN ( :courseIds )');
 
         return $builder;
     }
@@ -221,7 +221,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchColumn($sql);
     }
 
-        public function analysisCourseSumByTime($endTime)
+    public function analysisCourseSumByTime($endTime)
     {
          $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
          return $this->getConnection()->fetchAll($sql);

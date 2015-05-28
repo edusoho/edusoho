@@ -15,9 +15,15 @@ interface AuthService
 
     public function changePassword($userId, $oldPassword, $newPassword);
 
-    public function checkUsername($username);
+    public function changePayPassword($userId, $userLoginPassword, $newPayPassword);
+
+    public function checkUsername($username,$randomName='');
+
+    public function checkEmailOrMobile($emailOrMobile);
 
     public function checkEmail($email);
+
+    public function checkMobile($mobile);
 
     public function checkPassword($userId, $password);
 
@@ -32,4 +38,6 @@ interface AuthService
     public function hasPartnerAuth();
 
     public function getPartnerName();
+
+    public function isRegisterEnabled();
 }

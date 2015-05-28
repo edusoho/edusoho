@@ -1,13 +1,16 @@
 define(function(require, exports, module) {
 
-
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
+    require('ckeditor');
 
     exports.run = function() {
         require('./common').run();
 
-        var editor = EditorFactory.create('#post_content', 'simple', {extraFileUploadParams:{group:'course'}});
+        // group: 'course'
+        var editor =  CKEDITOR.replace('post_content', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
+        });
 
         var validator = new Validator({
             element: '#thread-post-form'
@@ -19,7 +22,7 @@ define(function(require, exports, module) {
         });
 
         Validator.query('#thread-post-form').on('formValidate', function(elemetn, event) {
-            editor.sync();
+            editor.updateElement();
         });
 
         Validator.query('#thread-post-form').on('formValidated', function(err, msg, ele) {
@@ -34,7 +37,7 @@ define(function(require, exports, module) {
             $.post($form.attr('action'), $form.serialize(), function(html) {
                 $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
                 var id = $(html).appendTo('.thread-post-list').attr('id');
-                editor.html('');
+                editor.setData('');
 
                 $form.find('[type=submit]').removeAttr('disabled');
 

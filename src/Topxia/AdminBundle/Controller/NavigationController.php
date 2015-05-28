@@ -46,7 +46,6 @@ class NavigationController extends BaseController
             'id' => 0,
             'name' => '',
             'url' => '',
-            'sequence' => 1,
             'isNewWin'=>0,
             'isOpen'=>1,
             'type'=>$request->query->get('type'),
@@ -74,6 +73,14 @@ class NavigationController extends BaseController
             'navigation'=>$navigation,
             'parentNavigation' => $parentNavigation
         ));
+    }
+
+    public function updateSeqsAction(Request $request)
+    {
+        $data = $request->request->get('data');
+        $ids = ArrayToolkit::column($data, 'id');
+        $this->getNavigationService()->updateNavigationsSequenceByIds($ids);
+        return $this->createJsonResponse(true);
     }
 
     private function renderTbody($type)

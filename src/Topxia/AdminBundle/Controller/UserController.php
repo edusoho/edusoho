@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -22,15 +23,18 @@ class UserController extends BaseController
     public function indexAction (Request $request)
     {
         $fields = $request->query->all();
+
         $conditions = array(
             'roles'=>'',
             'keywordType'=>'',
             'keyword'=>''
         );
 
-        if(!empty($fields)){
-            $conditions =$fields;
+        if(empty($fields)){
+            $fields = array();
         }
+
+        $conditions = array_merge($conditions, $fields);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -45,9 +49,17 @@ class UserController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $app = $this->getAppService()->findInstallApp("UserImporter");
+        
+        $showUserExport = false;
+        if(!empty($app) && array_key_exists('version', $app)){
+            $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+        }
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+            'showUserExport' => $showUserExport
         ));
     }
 
@@ -56,35 +68,37 @@ class UserController extends BaseController
         $email = $request->query->get('value');
         $email = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '该Email地址可以使用');
-        } else {
-            $response = array('success' => false, 'message' => $message);
-        }
-        return $this->createJsonResponse($response);
+        return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+        return $this->validateResult($result, $message);
+    }
+
+    public function emailOrMobileCheckAction(Request $request){
+        $emailOrMobile = $request->query->get('value');
+        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
+        list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
+        return $this->validateResult($result, $message);
+    }
+
+    private function validateResult($result, $message){
         if ($result == 'success') {
-            $response = array('success' => true, 'message' => '该昵称可以使用');
+           $response = array('success' => true, 'message' => '');
         } else {
-            $response = array('success' => false, 'message' => $message);
+           $response = array('success' => false, 'message' => $message);
         }
         return $this->createJsonResponse($response);
     }
-
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $userData['email'] = $formData['email'];
-            $userData['nickname'] = $formData['nickname'];
-            $userData['password'] = $formData['password'];
-            $userData['createdIp'] = $request->getClientIp();
-            $user = $this->getAuthService()->register($userData);
+          
+            $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
             $this->get('session')->set('registed_email', $user['email']);
 
             if(isset($formData['roles'])){
@@ -97,23 +111,46 @@ class UserController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
-        return $this->render('TopxiaAdminBundle:User:create-modal.html.twig');
+        return $this->render($this->getCreateUserModal());
     }
 
+    private function getRegisterData($formData, $clientIp){
+        if(isset($formData['email'])){
+            $userData['email'] = $formData['email'];
+        }
+        if(isset($formData['emailOrMobile'])){
+            $userData['emailOrMobile'] = $formData['emailOrMobile'];
+        }
+        $userData['nickname'] = $formData['nickname'];
+        $userData['password'] = $formData['password'];
+        $userData['createdIp'] = $clientIp;
+        return $userData;
+    }
+
+    private function getCreateUserModal(){
+        $auth = $this->getSettingService()->get('auth');
+        if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
+            return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
+        }else{
+            return 'TopxiaAdminBundle:User:create-modal.html.twig';
+        }
+    }
     public function editAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
-
         if ($request->getMethod() == 'POST') {
-            $profile = $this->getUserService()->updateUserProfile($user['id'], $request->request->all());
+            $profile = $request->request->all();
+            if (!( (strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']) )) {
+                $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
+                $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
+            } else {
+                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+            }
 
-            $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
-
-
-            return $this->redirect($this->generateUrl('settings'));
+            return $this->redirect($this->generateUrl('admin_user'));
         }
 
         $fields=$this->getFields();
@@ -179,9 +216,10 @@ class UserController extends BaseController
             'user' => $user,
             ));
         }
-           
+        $default = $this->getSettingService()->get('default', array());     
         return $this->render('TopxiaAdminBundle:User:roles-modal.html.twig', array(
             'user' => $user,
+            'default'=> $default
         ));
     }
 
@@ -193,40 +231,6 @@ class UserController extends BaseController
 
         $user = $this->getUserService()->getUser($id);
 
-        $form = $this->createFormBuilder()
-            ->add('avatar', 'file')
-            ->getForm();
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $file = $data['avatar'];
-
-                if (!FileToolkit::isImageFile($file)) {
-                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-                }
-
-                $filenamePrefix = "user_{$user['id']}_";
-                $hash = substr(md5($filenamePrefix . time()), -8);
-                $ext = $file->getClientOriginalExtension();
-                $filename = $filenamePrefix . $hash . '.' . $ext;
-
-                $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-                $file = $file->move($directory, $filename);
-
-                $fileName = str_replace('.', '!', $file->getFilename());
-
-                $avatarData = $this->avatar_2($id, $fileName);
-                return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
-                    'user' => $user,
-                    'filename' => $fileName,
-                    'pictureUrl' => $avatarData['pictureUrl'],
-                    'naturalSize' => $avatarData['naturalSize'],
-                    'scaledSize' => $avatarData['scaledSize']
-                ));
-            }
-        }
-
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
         if ($hasPartnerAuth) {
             $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
@@ -235,8 +239,7 @@ class UserController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:User:user-avatar-modal.html.twig', array(
-            'form' => $form->createView(),
-            'user' => $this->getUserService()->getUser($user['id']),
+            'user' => $user,
             'partnerAvatar' => $partnerAvatar,
         ));
     }
@@ -255,36 +258,6 @@ class UserController extends BaseController
         return $fields;
     }
 
-    private function avatar_2 ($id, $filename)
-    {
-        if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $currentUser = $this->getCurrentUser();
-
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        try {
-            $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = 'tmp/' . $filename;
-
-        return array(
-            'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
-            'pictureUrl' => $pictureUrl
-        );
-    }
 
     public function avatarCropAction(Request $request, $id)
     {
@@ -292,19 +265,28 @@ class UserController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $user = $this->getUserService()->getUser($id);
+
+
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $filename = $request->query->get('filename');
-            $filename = str_replace('!', '.', $filename);
-            $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-            $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-            $this->getUserService()->changeAvatar($id, realpath($pictureFilePath), $options);
 
-            // return $this->redirect($this->generateUrl('admin_user'));
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($id, $options["images"]);
+
             return $this->createJsonResponse(true);
         }
 
-        
+        $fileId = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        return $this->render('TopxiaAdminBundle:User:user-avatar-crop-modal.html.twig', array(
+            'user' => $user,
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize
+        ));
+
     }
 
     public function lockAction($id)
@@ -361,14 +343,29 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
         $auth = $this->getSettingService()->get('auth', array());
+        
+        $site = $this->getSettingService()->get('site', array());
+        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+
+        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
+        $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url'], $verifyurl);
+        $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
+
+        if (!empty($emailBody)) {
+            $emailBody = $emailBody;
+        }else{
+             $emailBody = $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(  
+                'user' => $user,  
+                'token' => $token,  
+                )) ;
+        }
+
         try {
             $this->sendEmail(
                 $user['email'],
-                "请激活你的帐号，完成注册",
-                $this->renderView('TopxiaWebBundle:Register:email-verify.txt.twig', array(
-                    'user' => $user,
-                    'token' => $token,
-                ))
+                '请激活你的帐号 完成注册',
+                $emailBody
             );
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch(\Exception $e) {
@@ -424,6 +421,11 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
@@ -432,5 +434,10 @@ class UserController extends BaseController
     protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 }

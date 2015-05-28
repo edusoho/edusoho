@@ -1,20 +1,24 @@
 define(function(require, exports, module) {
 
-    var EditorFactory = require('common/kindeditor-factory');
-    var DynamicCollection = require('../widget/dynamic-collection3');
+    var DynamicCollection = require('../widget/dynamic-collection4');
     require('jquery.sortable');
+    require('ckeditor');
 
     exports.run = function() {
         require('./header').run();
 
-        var editor = EditorFactory.create('#course-about-field', 'simple', {extraFileUploadParams:{group:'course'}});
+        // group:'course'
+        CKEDITOR.replace('course-about-field', {
+            toolbar: 'Detail',
+            filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
+        });
 
         var goalDynamicCollection = new DynamicCollection({
-            element: '#course-goals-form-group',
+            element: '#course-goals-form-group'
         });
 
         var audiencesDynamicCollection = new DynamicCollection({
-            element: '#course-audiences-form-group',
+            element: '#course-audiences-form-group'
         });
 
         $(".sortable-list").sortable({

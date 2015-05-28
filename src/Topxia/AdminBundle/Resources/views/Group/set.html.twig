@@ -1,12 +1,10 @@
-{% extends 'TopxiaAdminBundle:Group:layout.html.twig' %}
-{% set menu = 'set' %}
-{% block title %}小组设置{% endblock %}
-    {% block main %}
-      {{ web_macro.flash_messages() }}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-            <div class="page-header clearfix">
-              <h1 class="pull-left">小组设置</h1>
-            </div>
+{% set menu = 'admin_group_set' %}
+
+{% block main %}
+
+      {{ web_macro.flash_messages() }}
             <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
            
             <div class="row form-group">
@@ -20,11 +18,11 @@
             </div>
 
            <div class="row form-group">
-              <div class="col-md-2 control-label">
+              <div class="col-md-2 control-label" style="white-space:nowrap;">
                 <label >最热话题的时间范围</label>
               </div>
               <div class="controls col-md-7 radios">
-                {{ radios('threadTime_range', {'1':'天', '7':'周','30':'月'}, setting('group').threadTime_range|default('7')) }}
+                {{ radios('threadTime_range', {'1':'天', '7':'周','14':'两周','30':'月'}, setting('group').threadTime_range|default('7')) }}
                 <div class="help-block"></div>
               </div>
             </div>

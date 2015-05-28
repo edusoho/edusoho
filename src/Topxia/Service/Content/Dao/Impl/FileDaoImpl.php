@@ -15,6 +15,17 @@ class FileDaoImpl extends BaseDao implements FileDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+    public function getFilesByIds($ids)
+    {
+        if(empty($ids)) { 
+            return array(); 
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
 	public function findFiles($start, $limit)
 	{
         $this->filterStartLimit($start, $limit);
@@ -54,4 +65,8 @@ class FileDaoImpl extends BaseDao implements FileDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+	public function deleteFileByUri($uri)
+	{
+		return $this->getConnection()->delete($this->table, array('uri' => $uri));
+	}
 }

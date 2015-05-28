@@ -40,6 +40,13 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
     }
 
+    protected function checkCategoryId(array $arguments)
+    {
+        if (empty($arguments['categoryId'])) {
+            throw new \InvalidArgumentException("categoryId参数缺失");            
+        }
+    }
+
     protected function checkCount(array $arguments)
     {
         if (empty($arguments['count'])) {
@@ -78,13 +85,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     {
         if (empty($arguments['reviewId'])) {
             throw new \InvalidArgumentException("reviewId参数缺失");
-        }
-    }
-
-    protected function checkCategoryId(array $arguments)
-    {
-        if (empty($arguments['categoryId'])) {
-            throw new \InvalidArgumentException("categoryId参数缺失");
         }
     }
 

@@ -3,6 +3,11 @@ namespace Topxia\Common;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Topxia\Service\Common\ServiceKernel;
+
+use Imagine\Gd\Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 
 class FileToolkit
 {
@@ -88,27 +93,6 @@ class FileToolkit
     public static function getImageExtensions()
     {
         return 'bmp jpg jpeg gif png ico';
-    }
-
-    public static function getFileTypeByMimeType($mimeType)
-    {
-        if (strpos($mimeType, 'video') === 0) {
-            return 'video';
-        } elseif (strpos($mimeType, 'audio') === 0) {
-            return 'audio';
-        } elseif (strpos($mimeType, 'image') === 0) {
-            return 'image';
-        } elseif (in_array($mimeType, array(
-            'application/vnd.ms-powerpoint',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation'))) {
-            return 'ppt';
-        } elseif (strpos($mimeType, 'application/vnd.ms-') === 0 
-            or strpos($mimeType, 'application/vnd.openxmlformats-officedocument') === 0
-            or strpos($mimeType, 'application/pdf') === 0) {
-            return 'document';
-        }
-
-        return 'other';
     }
 
     public static function getMimeTypeByExtension($extension)
@@ -885,16 +869,22 @@ class FileToolkit
     }
 
     public static function getFileTypeByExtension($extension)
-    {
+    {   
+        $extension = strtolower($extension);
+
         if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';
         } elseif (in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))) {
             return 'image';
-        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx'))) {
+        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf'))) {
             return 'document';
-        } else {
+        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+            return 'ppt';
+        } elseif (in_array($extension, array('swf'))) {
+            return 'flash';
+        }else {
             return 'other';
         }
     }
@@ -904,10 +894,10 @@ class FileToolkit
         $currentValue = $currentUnit = null;
         $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
         foreach ($unitExps as $unit => $exp) {
-            $divisor = pow(1000, $exp);
+            $divisor = pow(1024, $exp);
             $currentUnit = $unit;
             $currentValue = $size / $divisor;
-            if ($currentValue < 1000) {
+            if ($currentValue < 1024) {
                 break;
             }
         }
@@ -931,6 +921,84 @@ class FileToolkit
         }
 
         return 0;
+    }
+
+    public static function moveFile($originFile, $targetGroup)
+    {
+        $targetFilenamePrefix = rand(10000,99999);
+        $hash = substr(md5($targetFilenamePrefix . time()), -8);
+        $ext = $originFile->getClientOriginalExtension();
+        $filename = $targetFilenamePrefix . $hash . '.' . $ext;
+
+        $directory = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/'.$targetGroup;
+        $file = $originFile->move($directory, $filename);
+
+        return $file;
+    }
+
+    public static function crop($rawImage, $targetPath, $x, $y, $width, $height, $resizeWidth=0, $resizeHeight=0)
+    {
+        $image = $rawImage->copy();
+        $image->crop(new Point($x, $y), new Box($width, $height));
+        if($resizeWidth>0 && $resizeHeight>0){
+            $image->resize(new Box($resizeWidth, $resizeHeight));
+        }
+        $image->save($targetPath, array('quality' => 90));
+
+        return $image;
+    }
+
+    public static function resize($image, $targetPath, $resizeWidth=0, $resizeHeight=0)
+    {
+        $image->resize(new Box($resizeWidth, $resizeHeight));
+        $image->save($targetPath, array('quality' => 90));
+        return $image;
+    }
+
+
+    public static function cropImages($filePath, $options)
+    {
+        $pathinfo = pathinfo($filePath);
+        $imagine = new Imagine();
+        $rawImage = $imagine->open($filePath);
+
+        $naturalSize = $rawImage->getSize();
+        $rate = $naturalSize->getWidth()/$options["width"];
+        $options["w"] = $rate*$options["w"];
+        $options["h"] = $rate*$options["h"];
+        $options["x"] = $rate*$options["x"];
+        $options["y"] = $rate*$options["y"];
+
+        $filePaths = array();
+        if(!empty($options["imgs"]) && count($options["imgs"])>0) {
+            foreach ($options["imgs"] as $key => $value) {
+                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                $image = self::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
+                $filePaths[$key] = $savedFilePath;
+            }
+        } else {
+            $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}.{$pathinfo['extension']}";
+            $image = self::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h']);
+            $filePaths[] = $savedFilePath;
+        }
+
+        return $filePaths;
+
+    }
+
+    public static function getImgInfo($fullPath, $width, $height)
+    {
+        try {
+            $imagine = new Imagine();
+            $image = $imagine->open($fullPath);
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+        }
+
+        $naturalSize = $image->getSize();
+        $scaledSize = $naturalSize->widen($width)->heighten($height);
+
+        return array($naturalSize, $scaledSize);
     }
 
 }

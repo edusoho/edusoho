@@ -1,7 +1,7 @@
 <tr id="tag-tr-{{ lesson.id }}">
   {% set lessonUrl = path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id %}
   <td>
-  	<a href="{{ lessonUrl }}">{{ lesson.title }}</a>
+  	<a href="{{ lessonUrl }}" target="_blank">{{ lesson.title }}</a>
   	<div class="mts">
 	    {% if course %}
 	      <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>

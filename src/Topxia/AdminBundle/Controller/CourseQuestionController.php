@@ -11,11 +11,22 @@ class CourseQuestionController extends BaseController
     public function indexAction (Request $request, $postStatus)
     {
 
-		$conditions = $request->query->all();        
+		$conditions = $request->query->all(); 
+        if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
+            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+            if (count($conditions['courseIds']) == 0){
+                return $this->render('TopxiaAdminBundle:CourseQuestion:index.html.twig', array(
+                    'paginator' =>  new Paginator($request,0,20),
+                    'questions' => array(),
+                    'users'=> array(),
+                    'courses' => array(),
+                    'lessons' => array(),
+                    'type' => $postStatus                    
+                ));
+            }  
+        }               
         $conditions['type'] = 'question';
-        if($postStatus == 'unPosted'){
-            $conditions['postNum'] = 0;
-        }
 
         $paginator = new Paginator(
             $request,
@@ -29,6 +40,23 @@ class CourseQuestionController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $unPostedQuestion = array();
+        foreach ($questions as $key => $value) {
+            if ($value['postNum'] == 0) {
+                $unPostedQuestion[] = $value;
+            }else{
+                $threadPostsNum = $this->getThreadService()->getThreadPostCountByThreadId($value['id']);
+                $userPostsNum = $this->getThreadService()->getPostCountByuserIdAndThreadId($value['userId'],$value['id']);
+                    if($userPostsNum == $threadPostsNum){
+                        $unPostedQuestion[] = $value;
+                    }
+            }
+        }
+        
+          if($postStatus == 'unPosted'){
+                $questions = $unPostedQuestion;
+          }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));

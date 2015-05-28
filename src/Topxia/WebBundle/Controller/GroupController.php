@@ -18,7 +18,7 @@ class GroupController extends BaseController
         $mycreatedGroup = array();
         $myJoinGroup = array();
 
-        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
+        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 8);
     
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
@@ -95,7 +95,7 @@ class GroupController extends BaseController
             );
 
             $group = $this->getGroupService()->addGroup($user,$group);
-            return $this->redirect($this->generateUrl('group_show',array('id'=>$group['id'])));
+            return $this->redirect($this->generateUrl('group_logo_set',array('id'=>$group['id'])));
         }
 
         return $this->render("TopxiaWebBundle:Group:groupadd.html.twig");
@@ -117,6 +117,21 @@ class GroupController extends BaseController
         $groupIds = ArrayToolkit::column($ownThreads, 'groupId');
         $threadsCount=$this->getThreadService()->searchThreadsCount(array('userId'=>$user['id']));
         $groupsAsOwnThreads=$this->getGroupService()->getGroupsByids($groupIds);
+        
+        $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        $collectThreadsIds=$this->getThreadService()->searchThreadCollects(array('userId'=>$user['id']),array('id',"DESC"), 0,10);
+        $collectThreads = array();
+        foreach ($collectThreadsIds as $collectThreadsId) {
+            $collectThreads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
+        }
+        $collectCount=$this->getThreadService()->searchThreadCollectCount(array('userId'=>$user['id']));
+        
+        $groupIdsAsCollectThreads = ArrayToolkit::column($collectThreads, 'groupId');
+        $groupsAsCollectThreads=$this->getGroupService()->getGroupsByids($groupIdsAsCollectThreads);
+
+        $userIds =  ArrayToolkit::column($collectThreads, 'lastPostMemberId');
+        $collectLastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
         $userIds = ArrayToolkit::column($ownThreads, 'lastPostMemberId');
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
@@ -130,6 +145,7 @@ class GroupController extends BaseController
         }
 
         $postsCount=$this->getThreadService()->searchPostsThreadIdsCount(array('userId'=>$user['id']));
+            
 
         $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
         $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
@@ -143,6 +159,10 @@ class GroupController extends BaseController
             'threads'=>$threads,
             'threadsCount'=>$threadsCount,
             'postsCount'=>$postsCount,
+            'collectCount'=>$collectCount,
+            'groupsAsCollectThreads'=>$groupsAsCollectThreads,
+            'collectLastPostMembers'=>$collectLastPostMembers,
+            'collectThreads'=>$collectThreads,
             'postLastPostMembers'=>$postLastPostMembers,
             'groupsAsPostThreads'=>$groupsAsPostThreads,
             'lastPostMembers'=>$lastPostMembers,
@@ -269,6 +289,42 @@ class GroupController extends BaseController
             'groups'=>$groupsAsPostThreads,
             ));
 
+    }
+
+    public function collectingAction()
+    {
+        $user=$this->getCurrentUser();
+
+        $threads=array();
+        $paginator=new Paginator(
+            $this->get('request'),
+            $this->getThreadService()->searchThreadCollectCount(array('userId'=>$user['id'])),
+            12
+            );
+
+        $collectThreadsIds=$this->getThreadService()->searchThreadCollects(
+            array('userId'=>$user['id']),
+            array('id',"DESC"),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+            );
+
+        foreach ($collectThreadsIds as $collectThreadsId) {
+            $threads[]=$this->getThreadService()->getThread($collectThreadsId['threadId']);  
+        }
+        
+        $groupIdsAsPostThreads = ArrayToolkit::column($threads, 'groupId');
+        $groupsAsPostThreads=$this->getGroupService()->getGroupsByids($groupIdsAsPostThreads);
+
+        $userIds =  ArrayToolkit::column($threads, 'lastPostMemberId');
+        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        return $this->render("TopxiaWebBundle:Group:group-member-collect.html.twig",array(
+            'user'=>$user,
+            'paginator'=>$paginator,
+            'threads'=>$threads,
+            'lastPostMembers'=>$lastPostMembers,
+            'groups'=>$groupsAsPostThreads,
+            ));
     }
 
     public function groupIndexAction(Request $request,$id) 
@@ -509,7 +565,7 @@ class GroupController extends BaseController
 
     }
 
-    public function groupSetLogoCropAction(Request $request,$file,$id)
+    public function logoCropAction(Request $request,$id)
     {
 
         $group = $this->getGroupService()->getGroup($id);
@@ -519,49 +575,30 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        $filename = $file;
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-        
         if($request->getMethod() == 'POST') {
 
             $options = $request->request->all();
             if($request->query->get('page')=="backGroundLogoCrop"){
-               $this->getGroupService()->changeGroupBackgroundLogo($id, $pictureFilePath, $options);
+               $this->getGroupService()->changeGroupImg($id, "backgroundLogo", $options["images"]);
             }else{
-               $this->getGroupService()->changeGroupLogo($id, $pictureFilePath, $options);
+               $this->getGroupService()->changeGroupImg($id, "logo", $options["images"]);
             }
           
-        return $this->redirect($this->generateUrl('group_show', array(
-                    'id'=>$id,
-                    )));
+            return $this->redirect($this->generateUrl('group_show', array(
+                'id'=>$id,
+            )));
         }
-        try {
-
-            $imagine = new Imagine(); 
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {          
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('info', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        if($request->query->get('page')=="backGroundLogoCrop"){
-              $scaledSize = $naturalSize->widen(1070)->heighten(240);
-        }else{
-              $scaledSize = $naturalSize->widen(270)->heighten(270);
-        }
-      
-        $pictureUrl = 'tmp/' . $filename;
+        
+        $fileId = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,));
+            'scaledSize' => $scaledSize,
+        ));
 
     }
 
@@ -600,19 +637,6 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        if ($request->getMethod() == 'POST') {
-
-            $fileName=$this->setLogo($request,$user);
-            
-            return $this->redirect($this->generateUrl('group_setLogoCrop', array(
-                'file' => $fileName,
-                'id'=>$id,
-                'page'=>'logoCrop',
-                'type'=>'logo'
-                )
-            ));
-        }
-
         return $this->render("TopxiaWebBundle:Group:setting-logo.html.twig", array(
                 'groupinfo' => $group,
                 'is_groupmember' => $this->getGroupMemberRole($id),
@@ -629,18 +653,6 @@ class GroupController extends BaseController
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
-        }
-        if ($request->getMethod() == 'POST') {
-
-            $fileName=$this->setLogo($request,$user);
-
-            return $this->redirect($this->generateUrl('group_setLogoCrop', array(
-                'file' => $fileName,
-                'id'=>$id,
-                'page'=>'backGroundLogoCrop',
-                'type'=>'background',
-                )
-            ));       
         }
 
         return $this->render("TopxiaWebBundle:Group:setting-background.html.twig", array(
@@ -707,8 +719,12 @@ class GroupController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
-       
-        $this->getGroupService()->joinGroup($user,$id);
+        
+        try{
+            $this->getGroupService()->joinGroup($user,$id);
+        }catch (\Exception $e){
+            $this->setFlashMessage("danger",$e->getMessage());
+        }
         
         return $this->redirect($this->generateUrl('group_show', array(
             'id'=>$id,
@@ -798,7 +814,8 @@ class GroupController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+            
+                throw $this->createNotFoundException('参数sort不正确。');
         }
         return $orderBys;
     }
@@ -806,7 +823,7 @@ class GroupController extends BaseController
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
-        if (!in_array($filters['type'], array('all','elite'))) {
+        if (!in_array($filters['type'], array('all','elite','reward'))) {
             $filters['type'] = 'all';
         }
         $filters['sort'] = $request->query->get('sort');
@@ -822,12 +839,25 @@ class GroupController extends BaseController
         return $filters;
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
+    }
+    
     private function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('groupId' => $id,'num'=>10,'status'=>'open');
         switch ($filters['type']) {
             case 'elite':
                 $conditions['isElite'] = 1;
+                break;
+            case 'reward':
+                $conditions['type'] = 'reward';
                 break;
             default:
                 break;

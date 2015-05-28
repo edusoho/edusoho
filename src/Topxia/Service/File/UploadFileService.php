@@ -41,5 +41,22 @@ interface UploadFileService
     public function getMediaInfo($key, $type);
 
     public function getFileByTargetType($targetType);
+    	
+    public function findMySharingContacts($targetUserId);
+    
+    public function shareFiles($sourceUserId, $targetUserIds);
 
+    public function addShare($sourceUserId, $targetUserId);
+
+    public function updateShare($shareHistoryId);
+
+    public function findShareHistoryByUserId($sourceUserId, $targetUserId);
+    
+    public function findShareHistory($sourceUserId);
+    
+    public function cancelShareFile($sourceUserId, $targetUserId);
+
+    public function increaseFileUsedCount($fileId);
+
+    public function decreaseFileUsedCount($fileId);
 }

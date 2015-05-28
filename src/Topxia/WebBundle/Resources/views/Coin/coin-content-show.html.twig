@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{setting('coin.coin_name')}}说明 - {{ parent() }}{% endblock %}
+{% block description %}{{ coinSetting.coin_content|plain_text(100) }}{% endblock %}
+
+
+{% set bodyClass = 'contentpage' %}
+{% block content %}
+<div class="es-row-wrap container-gap">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header"><h1>{{setting('coin.coin_name')}}说明</h1></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      {% if coinSetting.coin_content %}
+      	{{ coinSetting.coin_content|raw }}
+      {% else %}
+        <div class="empty">当前页面尚未编辑内容，请在管理后台编辑。</div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

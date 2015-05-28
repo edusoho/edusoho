@@ -1,0 +1,14 @@
+{% for latestArticle in latestArticles %}
+      <li class="table-view-cell media" style="padding-right:45px;">
+        <a href="/mapi_v2/articleApp/detail/{{ latestArticle.id }}" data-transition="slide-in">
+          {% if latestArticle.thumb %} 
+            <img class="media-object pull-right" width="114" height="65" src="{{ latestArticle.thumb }}">
+          {% endif%} 
+          <div class="media-body">
+            <p class="body-title">{{ latestArticle.title }}</p>
+            <p class="subtitle">{{ latestArticle.body|plain_text(150) }}</p>
+            <p class="small">{{ latestArticle.publishedTime|date('Y-m-d H:i') }}</p>
+          </div>
+        </a>
+      </li>
+{% endfor %}

@@ -19,8 +19,4 @@ interface CloudAppDao
     public function updateApp($id,$App);
 
     public function deleteApp($id);
-    
-    public function updateAppVersion($code,$version);
-    
-    public function updateAppFromVersion($code,$fromVersion);
 }

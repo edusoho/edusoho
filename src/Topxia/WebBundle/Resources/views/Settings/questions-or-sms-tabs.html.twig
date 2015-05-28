@@ -1,0 +1,24 @@
+      <ul class="nav nav-tabs mbl">
+        {% if hasSecurityQuestions %}
+          <li class="js-find-by-question
+          {% if type == 'questions' %}
+            active
+          {% endif %}
+          ">
+            <a href="{{ path('settings_find_pay_password') }}" style="cursor: pointer;">通过安全问题找回
+            </a>
+          </li>
+        {% endif %}
+
+        {% if hasVerifiedMobile and ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_forget_pay_password')|default('')) == 'on') %}
+          <li class="js-find-by-mobile
+          {% if type == 'sms' %}
+            active
+          {% endif %}
+          ">
+            <a href="{{ path('settings_find_pay_password_by_sms') }}" style="cursor: pointer;">通过手机找回
+            </a>
+          </li>
+        {% endif %}
+
+      </ul>

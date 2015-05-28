@@ -1,0 +1,25 @@
+{% if app.user %}
+  {% if service.canAccess('post.create', thread) %}
+  <form class="thread-post-form" method="post" action="{{path('thread_post', {threadId:thread.id})}}">
+    <div class="form-group">
+      <div class="controls">
+        <textarea
+          id="thread-{{ thread.id }}-post-form"
+          name="content" value="" rows="10" id="post_content" class="form-control" data-display="回复内容"
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+        ></textarea>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <button class="btn btn-primary pull-right" type="submit" data-loading-text="正在回复">发表</button>
+    </div>
+  </form>
+  {% else %}
+    <div class="empty">只有学员才能回复！</div>
+  {% endif %}
+{% else %}
+  <div class="empty">
+    你还没有登录，请先<a href="{{ path('login') }}">登录</a>或<a href="{{ path('register') }}">注册</a>！
+  </div>
+{% endif %}

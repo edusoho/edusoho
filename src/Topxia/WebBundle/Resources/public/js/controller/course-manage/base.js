@@ -90,11 +90,6 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=daysOfNotifyBeforeDeadline]',
-            rule: 'integer'
-        });
-
-        validator.addItem({
             element: '[name=maxStudentNum]',
             rule: 'integer',
             onItemValidated: function(error, message, elem) {
@@ -119,17 +114,6 @@ define(function(require, exports, module) {
 
             }
         });
-
-        $("input[name='deadlineNotify']").change(function(){
-            var element = $(this);
-            if(element.val()=='active') {
-                $("#courseDaysOfNotifyBeforeDeadline").show();
-                $("#deadlineNotifyBlock").hide();
-            } else {
-                $("#courseDaysOfNotifyBeforeDeadline").hide();
-                $("#deadlineNotifyBlock").show();
-            }
-        })
 
     };
 

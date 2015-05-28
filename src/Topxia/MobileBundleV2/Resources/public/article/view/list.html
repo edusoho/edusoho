@@ -1,0 +1,23 @@
+<ion-content>
+	<ion-list>
+  <div collection-repeat="article in articles" >
+
+	    <a class="item item-thumbnail-left article-list-item" href="#/detail/{{ article.id}}" ng-style="{ 'padding-left' : article.thumb ? auto : '10px'}">
+	      <img ng-src="{{ article.thumb }}" ng-style="{ 'width' : article.thumb ? auto : 0}">
+	      <h2>{{ article.title | limitTo:15}}</h2>
+		 <p>{{ article.body | blockStr:80 }}</p>
+	    </a>
+  </div>
+</ion-list>
+	
+	<div class="ui-more-content" ng-show="isShowLoadMore">
+		<button class="button button-outline button-positive" ng-click="loadMore()">
+		  加载更多
+		</button>
+	</div>
+</ion-content>
+
+<section class="ui-notice" ng-show="isEmpty">
+      <i></i>
+      <p>没有相关资讯</p>
+</section>

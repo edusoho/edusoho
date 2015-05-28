@@ -230,7 +230,7 @@ class QuestionServiceTest extends BaseTestCase
         $result = $this->getQuestionService()->judgeQuestions(array(
             $question['id'] => array('answer'),
         ));
-        $this->assertEquals('unableJudge', $result[$question['id']]['status']);
+        $this->assertEquals('none', $result[$question['id']]['status']);
     }
 
 

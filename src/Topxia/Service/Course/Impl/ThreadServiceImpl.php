@@ -123,8 +123,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			unset($conditions['keywordType']);
 		}
 
+		if(empty($conditions['threadType'])){
+			unset($conditions['threadType']);
+		}
+
+		if(isset($conditions['threadType'])){
+			$conditions[$conditions['threadType']] = 1;
+			unset($conditions['threadType']);
+		}
+
 		if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId'))) {
+			if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
 				throw $this->createServiceException('keywordType参数不正确');
 			}
 			$conditions[$conditions['keywordType']] = $conditions['keyword'];
@@ -149,20 +158,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread['courseId'])) {
 			throw $this->createServiceException('Course ID can not be empty.');
 		}
-		if (empty($thread['type']) or !in_array($thread['type'], array('discussion', 'question'))) {
+		if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question'))) {
 			throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
 		}
 
 		list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
 		$thread['userId'] = $this->getCurrentUser()->id;
-		$thread['title'] = empty($thread['title']) ? '' : $thread['title'];
+		$thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
 
 		//创建thread过滤html
 		$thread['content'] = $this->purifyHtml($thread['content']);
 		$thread['createdTime'] = time();
 		$thread['latestPostUserId'] = $thread['userId'];
 		$thread['latestPostTime'] = $thread['createdTime'];
+		$thread['private'] = $course['status'] == 'published' ? 0 : 1;
 		$thread = $this->getThreadDao()->addThread($thread);
 
 		foreach ($course['teacherIds'] as $teacherId) {
@@ -196,7 +206,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $thread['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+		($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($courseId);
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
 		if (empty($fields)) {
@@ -305,10 +315,20 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadPostDao()->findPostsByThreadIdAndIsElite($threadId, 1, $start, $limit);
 	}
 
+	public function getPostCountByuserIdAndThreadId($userId,$threadId)
+	{
+		return $this->getThreadPostDao()->getPostCountByuserIdAndThreadId($userId,$threadId);
+	}
+
+	public function getThreadPostCountByThreadId($threadId)
+	{
+		return $this->getThreadPostDao()->getPostCountByThreadId($threadId);
+	}
+
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
-		if (empty($post) or $post['courseId'] != $courseId) {
+		if (empty($post) || $post['courseId'] != $courseId) {
 			return null;
 		}
 		return $post;
@@ -355,7 +375,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() and $user->id == $post['userId']) or $this->getCourseService()->tryManageCourse($courseId);
+		($user->isLogin() && $user->id == $post['userId']) || $this->getCourseService()->tryManageCourse($courseId);
 
 
 		$fields  = ArrayToolkit::parts($fields, array('content'));

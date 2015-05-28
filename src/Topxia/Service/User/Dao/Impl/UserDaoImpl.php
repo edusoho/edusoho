@@ -32,11 +32,30 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAssoc($sql, array($nickname));
     }
 
+    public function findUserByVerifiedMobile($mobile)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($mobile));
+    }
+
+    public function findUsersByNicknames(array $nicknames)
+    {
+        if(empty($nicknames)) { 
+            return array(); 
+        }
+
+        $marks = str_repeat('?,', count($nicknames) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE nickname IN ({$marks});";
+        
+        return $this->getConnection()->fetchAll($sql, $nicknames);
+    }
+
     public function findUsersByIds(array $ids)
     {
         if(empty($ids)){ return array(); }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
@@ -95,13 +114,15 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('roles = :role')
             ->andWhere('nickname LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
+            ->andWhere('createdIp = :createdIp')
             ->andWhere('approvalStatus = :approvalStatus')
             ->andWhere('email = :email')
             ->andWhere('level = :level')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
             ->andWhere('locked = :locked')
-            ->andWhere('level >= :greatLevel');
+            ->andWhere('level >= :greatLevel')
+            ->andWhere('verifiedMobile = :verifiedMobile');
     }
 
     public function addUser($user)
@@ -141,22 +162,20 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
-        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-        return $this->getConnection()->fetchAll($sql);
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? and `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisUserSumByTime($endTime)
     {
-         $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  {$this->table}   i   WHERE   i.createdTime<=o.createdTime  )  as Count from {$this->table}  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
-         return $this->getConnection()->fetchAll($sql);
+         $sql="select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
+         return $this->getConnection()->fetchAll($sql, array($endTime));
     }
 
-        public function findUsersCountByLessThanCreatedTime($endTime)
+    public function findUsersCountByLessThanCreatedTime($endTime)
     {
-         
-        $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<={$endTime}  ";
-
-        return $this->getConnection()->fetchColumn($sql);
+        $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
+        return $this->getConnection()->fetchColumn($sql, array($endTime));
     }
 
 }

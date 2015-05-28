@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs mbl">
+  <li class="{% if submenu == 'settings' %}active{% endif %}"> <a href="{{ url('admin_coin_settings') }}">虚拟币设置</a></li>
+  <li class="{% if submenu == 'model' %}active{% endif %}"> <a href="{{ url('admin_coin_model') }}">使用方式设置</a></li>
+  <li class="{% if submenu == 'user-records' %}active{% endif %}"> <a href="{{ url('admin_coin_user_records') }}">用户虚拟币</a></li>
+  <li class="{% if submenu == 'orders' %}active{% endif %}"> <a href="{{ url('admin_coin_orders') }}">充值订单</a></li>
+</ul>

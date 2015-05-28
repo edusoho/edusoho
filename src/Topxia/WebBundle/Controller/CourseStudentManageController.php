@@ -42,7 +42,7 @@ class CourseStudentManageController extends BaseController
 
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
 			'course' => $course,
 			'students' => $students,
@@ -52,6 +52,7 @@ class CourseStudentManageController extends BaseController
 			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
 			'paginator' => $paginator,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
+			'default'=>$default
 		));
 
 	}
@@ -70,7 +71,7 @@ class CourseStudentManageController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$data = $request->request->all();
-			$user = $this->getUserService()->getUserByNickname($data['nickname']);
+			$user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 			if (empty($user)) {
 				throw $this->createNotFoundException("用户{$data['nickname']}不存在");
 			}
@@ -85,6 +86,7 @@ class CourseStudentManageController extends BaseController
 				'targetType' => 'course',
 				'targetId' => $course['id'],
 				'amount' => $data['price'],
+				'totalPrice' => $data['price'],
 				'payment' => 'none',
 				'snPrefix' => 'C',
 			));
@@ -116,11 +118,14 @@ class CourseStudentManageController extends BaseController
 
 			return $this->createStudentTrResponse($course, $member);
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:create-modal.html.twig',array(
-			'course'=>$course
+			'course'=>$course,
+		             'default'=> $default
 		));
 	}
+
+    
 
 	public function removeAction(Request $request, $courseId, $userId)
 	{
@@ -186,7 +191,6 @@ class CourseStudentManageController extends BaseController
 		foreach ($fields as $key => $value) {
 			$str.=",".$value;
 		}
-
 		$str.="\r\n";
 
 		$students = array();
@@ -238,22 +242,22 @@ class CourseStudentManageController extends BaseController
 			$member = $this->getCourseService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 			return $this->createStudentTrResponse($course, $member);
 		}
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:remark-modal.html.twig',array(
 			'member'=>$member,
 			'user'=>$user,
-			'course'=>$course
+			'course'=>$course,
+			'default'=>$default
 		));
 	}
 
-	public function checkNicknameAction(Request $request, $id)
+	public function checkStudentAction(Request $request, $id)
 	{
-		$nickname = $request->query->get('value');
-		$result = $this->getUserService()->isNicknameAvaliable($nickname);
-		if ($result) {
+		$keyword = $request->query->get('value');
+		$user = $this->getUserService()->getUserByLoginField($keyword);
+		if (!$user) {
 			$response = array('success' => false, 'message' => '该用户不存在');
 		} else {
-			$user = $this->getUserService()->getUserByNickname($nickname);
 			$isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
 			if($isCourseStudent){
 				$response = array('success' => false, 'message' => '该用户已是本课程的学员了');
@@ -343,7 +347,7 @@ class CourseStudentManageController extends BaseController
 		$user = $this->getUserService()->getUser($student['userId']);
 		$isFollowing = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $student['userId']);
 		$progress = $this->calculateUserLearnProgress($course, $student);
-
+		$default = $this->getSettingService()->get('default', array());
 		return $this->render('TopxiaWebBundle:CourseStudentManage:tr.html.twig', array(
 			'course' => $course,
 			'student' => $student,
@@ -351,6 +355,7 @@ class CourseStudentManageController extends BaseController
 			'progress' => $progress,
 			'isFollowing' => $isFollowing,
 			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
+			'default'=>$default
 		));
 	}
 

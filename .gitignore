@@ -1,3 +1,4 @@
+/.idea
 /web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
@@ -23,6 +24,7 @@
 /etc/sublimetext2/edusoho.sublime-workspace
 /etc/UpgradeScripts
 /web/files/*
+/web/files2/*
 !/web/files/.gitkeep
 /web/customize/*
 /web/windid_client_old
@@ -32,11 +34,22 @@
 src/Topxia/Service/Util/DirectCloudClient.php
 src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
-app/data/install.lock
+/app/data/install.lock
+/app/data/dev.lock
 app/data/plugin_installed.php
 /web/themes/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
+!/web/themes/block.json
 edusoho.komodoproject
+.project
+.settings
+composer.sublime-workspace
+web/assets/img/default/video.png
 .publish
+.buildpath
+.phpintel*
+/src/Tests/*
+/src/Classroom
+

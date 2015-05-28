@@ -10,6 +10,12 @@ class DataDict
 			'closed' => '已关闭'
 		),
 
+		'classroomStatus' => array(
+			'draft' => '未发布',
+			'published' => '已发布',
+			'closed' => '已关闭'
+		),
+
 		'courseStatus:html' => array(
 			'draft' => '<span class="text-muted">未发布</span>',
 			'published' => '<span class="text-success">已发布</span>',
@@ -29,6 +35,7 @@ class DataDict
 			'document' => '文档',
 			'image' => '图片',
             'ppt' => 'PPT',
+            'flash' => 'Flash',
 			'other' => '其他'
 		),
 		'fileType:html' => array(
@@ -46,8 +53,10 @@ class DataDict
 			'cancelled' => '已关闭',
 		),
 		'orderStatus:html' => array(
-			'created' => '<span class="text-muted">未付款</span>',
-			'paid' => '<span class="text-success">已付款</span>',
+			'created' => '<span class="label label-danger">未付款</span>',
+			// 'created' => '<span class="text-muted">未付款</span>',
+			'paid' => '<span class="label label-success">已付款</span>',
+			// 'paid' => '<span class="text-success">已付款</span>',
 			'refunding' => '<span class="text-warning">退款中</span>',
             'refunded' => '<span class="text-danger">已退款</span>',
 			'cancelled' => '<span class="text-muted">已关闭</span>',
@@ -121,8 +130,10 @@ class DataDict
     	'lessonType'=> array(
     		'video' => '视频',
     		'audio' => '音频',
+            'flash' => 'Flash',
     		'text' => '图文',
             'ppt' => 'PPT',
+            'document' => '文档'
 		),
 		'videoStorageType' =>array(
 			'local'=>'本地视频',
@@ -153,9 +164,10 @@ class DataDict
 		),
 		'userKeyWordType' => array(
 			'nickname' => '用户名',
+			'verifiedMobile' => '手机号',
 			'email' => '邮件地址',
 			'loginIp' => '登录IP'
-		),
+		),		
 		'logLevel' => array(
 			'info' => '提示',
 			'warning' => '警告',
@@ -193,6 +205,10 @@ class DataDict
 			'qq' => 'QQ登录',
 			'douban' => '豆瓣连接'
 		),
+		'userKeyWordTypes' => array(
+			'nickname' => '用户名',
+			'email' => '邮件地址',
+		),
 		'questionType' => array(
 	    	'single_choice' => '单选题',
 	    	'choice' => '多选题',
@@ -209,12 +225,55 @@ class DataDict
         ),
         'targetName' => array(
         	'course' => '课程',
-        	'vip' => '会员'
+        	'vip' => '会员',
+        	'classroom' => '班级'
     	),
     	'groupstatus'=>array(
     		'open'=>'开启',
     		'close'=>'关闭',
     	),
+    	'secureQuestion' => array(
+    		'parents' => '你的父母名字', 
+    		'teacher' => '你的老师名字', 
+    		'lover' => '你的爱人的名字', 
+    		'schoolName' => '你的母校名字', 
+    		'firstTeacher' => '你的启蒙老师', 
+    		'hobby' => '你的爱好', 
+    		'notSelected' => '不指定问题类型'
+    	),
+        'coinRecordType'=>array(
+            'sn'=>'流水号',
+            'orderSn'=>'订单号',
+            'userName'=>'用户名',
+        ),
+        'coinOrderType'=>array(
+            'userName'=>'用户名',
+        ),
+        'discountType' => array(
+            'discount' => '限时打折',
+            'free' => '限时免费',
+            'global' => '全站打折',
+        ),
+        'discountStatus' => array(
+            'unstart' => '未开始',
+            'running' => '进行中',
+            'finished' => '已结束',
+        ),
+        'discountStatus:html' => array(
+            'unstart' => '<span class="text-muted">未开始</span>',
+            'running' => '<span class="text-success">进行中</span>',
+            'finished' => '<span class="text-muted">已结束</span>',
+        ),
+        'discountAuditStatus' => array(
+            'passed' => '已通过',
+            'rejected' => '未通过',
+            'pending' => '待审核',
+            'creation' => '编辑中',
+        ),
+        'threadProperty' => array(
+            'isStick' => '置顶',
+            'isElite' => '加精',
+        ),
 	);
 
 	public static function dict($type)

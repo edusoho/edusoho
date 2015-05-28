@@ -44,6 +44,18 @@ class FriendDaoImpl extends BaseDao implements FriendDao
         return $this->getConnection()->fetchAll($sql, array($fromId));
     }
 
+    public function findAllUserFollowingByFromId($fromId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime DESC ";
+        return $this->getConnection()->fetchAll($sql, array($fromId));
+    }
+
+    public function findAllUserFollowerByToId($toId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC ";
+        return $this->getConnection()->fetchAll($sql, array($toId));
+    }
+
     public function findFriendCountByFromId($fromId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE fromId = ?";

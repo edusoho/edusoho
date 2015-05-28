@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+
+<title>{% block title %}{% endblock %}</title>
+<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+{% block stylesheets %}
+<link href="{{ asset('bundles/topxiamobilebundlev2/AmazeUI/css/amazeui.min.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/AmazeUI/css/app.css') }}" rel="stylesheet" />
+{% endblock %}
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova.js') }}"></script>
+
+</head>
+
+<body unresolved  onload="onLoad()">
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 不提供支持。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<script type="text/javascript">
+	window.onLoad = function() {
+        		document.addEventListener("deviceready", onDeviceReady, false);
+    	}
+
+  	window.onDeviceReady = function() {
+        		navigator.cordovaUtil.createMenu();
+        		console.log("createMenu");
+  	}
+</script>
+{% block content %}
+
+{% block head_scripts %}
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/AmazeUI/js/jquery.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/AmazeUI/js/amazeui.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/AmazeUI/js/handlebars.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/AmazeUI/js/amazeui.widgets.helper.js') }}"></script>
+
+{% endblock %}
+
+{% endblock %}
+</body>
+
+</html>

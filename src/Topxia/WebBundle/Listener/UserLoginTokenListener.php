@@ -29,8 +29,44 @@ class UserLoginTokenListener
         $userLoginToken = $request->getSession()->getId();
         $user = $this->getUserService()->getCurrentUser();
 
+        if(isset($user['locked']) && $user['locked'] == 1){
+            $this->container->get("security.context")->setToken(null);
+            setcookie("REMEMBERME");
+            return;
+        }
+
         if (!$user->islogin()) {
             return;
+        }
+
+        $auth = $this->getSettingService()->get('auth');
+        $route = $request->get('_route');
+
+        if (  $auth 
+             && array_key_exists('email_enabled',$auth) 
+            	&& $user["createdTime"] > $auth["setting_time"] 
+             && $user["emailVerified"] == 0 
+            	&& ($user['type'] == 'default'||$user['type'] == 'discuz'||$user['type'] == 'phpwind')
+            	&& ($auth['email_enabled'] == 'opened'  &&  empty($user['verifiedMobile']))
+             && (isset($route))
+             && ($route != '')
+             && ($route != 'register_email_verify')
+             && ($route != 'register_submited')
+             && ($route != 'register')
+             && ($request->getMethod() !=  'POST') 
+            )
+        {
+                $request->getSession()->invalidate();
+                $this->container->get("security.context")->setToken(null);
+
+                $goto = $this->container->get('router')->generate('register_submited', array(
+                    'id' => $user['id'], 'hash' => $this->makeHash($user)
+                ));
+
+                $response = new RedirectResponse($goto, '302');
+                $response->headers->setCookie(new Cookie("REMEMBERME", ''));
+
+                $event->setResponse($response);
         }
 
         $loginBind = $this->getSettingService()->get('login_bind');
@@ -56,6 +92,12 @@ class UserLoginTokenListener
 
     		$event->setResponse($response);
     	}
+    }
+
+    private function makeHash($user)
+    {
+        $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
+        return md5($string);
     }
 
     protected function getUserService()

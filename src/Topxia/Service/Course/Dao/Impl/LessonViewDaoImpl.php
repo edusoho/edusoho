@@ -52,9 +52,23 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
 
 	public function searchLessonViewGroupByTime($startTime,$endTime,$conditions)
 	{
-        $conditions = $this->_filterConditions($conditions);
-		$sql="SELECT count(`id`) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} {$conditions} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
-        return $this->getConnection()->fetchAll($sql);
+        $params = array($startTime, $endTime);
+
+        $conditionStr = "";
+
+        if (array_key_exists("fileType", $conditions)) {
+            $conditionStr .= " and `fileType` = ? ";
+            $params[] = $conditions['fileType'];
+        }
+        
+        if (array_key_exists("fileStorage", $conditions)) {
+            $conditionStr .= " and `fileStorage` = ? ";
+            $params[] = $conditions['fileStorage'];
+        }
+
+		$sql="SELECT count(`id`) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? and `createdTime`<=? {$conditionStr} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+
+        return $this->getConnection()->fetchAll($sql, $params);
 	}
 
     private function _createSearchQueryBuilder($conditions)
@@ -75,20 +89,5 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         }
 
         return "";
-    }
-
-    private function _filterConditions($conditions)
-    {
-        $conditionStr = "";
-
-        if (array_key_exists("fileType", $conditions)) {
-            $conditionStr .= " and `fileType` = '".$conditions['fileType']."'";
-        }
-        
-        if (array_key_exists("fileStorage", $conditions)) {
-            $conditionStr .= " and `fileStorage` = '".$conditions['fileStorage']."'";
-        }
-
-        return $conditionStr;
     }
 }

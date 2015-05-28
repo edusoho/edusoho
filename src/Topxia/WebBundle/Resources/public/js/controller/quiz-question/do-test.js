@@ -6,7 +6,8 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
 
-    var EditorFactory = require('common/kindeditor-factory');
+    require('ckeditor');
+    require('../widget/document-player');
 
     var AudioPlayer = require('./audioplayer');
     var playedQuestions = [];
@@ -21,6 +22,21 @@ define(function(require, exports, module) {
     var isAjaxing = 0;
 
     exports.run = function() {
+        /* init testpaper watermark */
+        var $watermark = $('.testpaper-question.testpaper-watermark');
+        if ($watermark.length > 0) {
+            $.get($watermark.data('watermarkUrl'), function(response){
+                $watermark.each(function(){
+                    $(this).WaterMark({
+                        'yPosition': 'center',
+                        'style': {'font-size':10},
+                        'opacity': 0.6,
+                        'contents': response
+                    });
+                })
+            });
+        }
+   
 
         $('#testpaper-navbar').affix({
             offset: {
@@ -222,9 +238,10 @@ define(function(require, exports, module) {
                 }
                 //essay
                 if ($(this).data('type') == 'essay') {
-                    if ($(this).val() != "") {
-                        values.push($(this).val());
-                    }     
+                    var $this = $(this);
+                    if ($this.val() != "") {
+                        values.push($this.val());
+                    }
                 }
 
                 changeAnswers[name] = values;
@@ -433,32 +450,47 @@ define(function(require, exports, module) {
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
-            var editor = EditorFactory.create($longTextarea, 'simple', {
+            var editor = CKEDITOR.replace($longTextarea.attr('id'), {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
+            });
 
-                extraFileUploadParams:{group:'default'},
-
-                afterBlur: function() {
-                    editor.sync();
-                },
-
-                afterCreate: function() {
-                    this.focus();
-
-                    $textareaBtn.click(function(){
-                        editor.remove();
-                        $shortTextarea.val(editor.text());
-                        $longTextarea.hide();
-                        $textareaBtn.hide();
-                        $shortTextarea.show();
-                    });
-
-                },
-
-                afterChange: function(){
-                    this.sync();
+            editor.on('blur', function(e) {
+                editor.updateElement();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
                     $longTextarea.change();
-                }
-            });        
+                }, 1);
+            });
+
+            editor.on('instanceReady', function(e) {
+                this.focus();
+
+                $textareaBtn.one('click', function() {
+                    $shortTextarea.val($(editor.getData()).text());
+                    editor.destroy();
+                    $longTextarea.hide();
+                    $textareaBtn.hide();
+                    $shortTextarea.show();
+                });
+            });
+
+            editor.on('key', function(){
+                editor.updateElement();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
+                    $longTextarea.change();
+                }, 1);
+            });
+
+            editor.on('insertHtml', function(e) {
+                editor.updateElement();
+                setTimeout(function() {
+                    $longTextarea.val(editor.getData());
+                    $longTextarea.change();
+                }, 1);
+            });
+
         });
 
 
@@ -472,31 +504,31 @@ define(function(require, exports, module) {
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-long').show();
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-teacherSay-btn').show();
 
-            var editor = EditorFactory.create($longTextarea, 'simple', {
 
-                extraFileUploadParams:{group:'default'},
+            var editor = CKEDITOR.replace($longTextarea.attr('id'), {
+                toolbar: 'Simple',
+                filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
+            });
 
+            editor.on('blur', function(e) {
+                editor.updateElement();
+            });
 
-                afterCreate: function() {
-                    this.focus();
-                    $textareaBtn.click(function(){
-                        editor.remove();
-                        $shortTextarea.val(editor.text());
-                        $longTextarea.hide();
-                        $textareaBtn.hide();
-                        $shortTextarea.show();
-                    });
-                },
+            editor.on('instanceReady', function(e){
+                this.focus();
 
-                afterBlur: function() {
-                    this.sync();
-                },
+                $textareaBtn.one('click', function(){
+                    $shortTextarea.val($(editor.getData()).text());
+                    editor.destroy();
+                    $longTextarea.hide();
+                    $textareaBtn.hide();
+                    $shortTextarea.show();
+                });
+            });
 
-
-                afterChange: function(){
-                    this.sync();
-                    $longTextarea.change();
-                }
+            editor.on('key', function(){
+                editor.updateElement();
+                $longTextarea.change();
             });
 
         });
@@ -520,7 +552,7 @@ define(function(require, exports, module) {
                     return false;
                 }
 
-                if (parseInt(element.val()) <= parseInt(element.data('score'))) {
+                if (Number(element.val()) <= Number(element.data('score'))) {
                     return true;
                 } else {
                     return false;

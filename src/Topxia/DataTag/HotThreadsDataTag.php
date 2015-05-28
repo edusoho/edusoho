@@ -6,7 +6,18 @@ use Topxia\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
 class HotThreadsDataTag extends BaseDataTag implements DataTag  
-{
+{   
+        /**
+     * 获取最热话题
+     * 
+     * 可传入的参数：
+     *
+     *   count 必需 话题数量，取值不能超过100
+     * 
+     * @param  array $arguments 参数
+     * @return array 最热话题
+     */
+
     public function getData(array $arguments)
     {   
         $groupSetting=$this->getSettingService()->get('group', array());

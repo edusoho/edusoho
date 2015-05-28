@@ -1,0 +1,46 @@
+  {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+  <ul class="media-list thread-list-default">
+    {% for thread in threads %}
+      {% set author = users[thread.userId] %}
+      <li class="media">
+        {{ web_macro.user_avatar(author, 'pull-left media-object media-object-small')}}
+          <div class="media-body">
+            {% if thread.postNum > 0 %}
+              <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
+            {% endif %}
+            <div class="mbm">
+              {% if thread.sticky %}
+                <span class="label label-danger" title="置顶帖">置顶</span>
+              {% endif %}
+              {% if thread.type == 'question' %}
+                <span class="label label-info" title="问答帖">问</span>
+              {% endif  %}
+              <a class="thread-item-title" href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+
+              {% if thread.nice %}
+                <span class="label label-warning" title="精华帖">精</span>
+              {% endif %}
+            </div>
+            
+            <div class="text-muted text-normal">
+              by {{ web_macro.user_link(author, 'link-muted') }}
+
+              {% if thread.postNum > 0 %}
+                {% set poster = users[thread.lastPostUserId] %}
+                <span class="bullet">•</span>
+                <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
+              {% endif %}
+              <span class="bullet">•</span>
+              <span>{{ thread.lastPostTime|smart_time }}</span>
+              <span class="bullet">•</span>
+              <span>{{ thread.hitNum }}浏览</span>
+            </div>
+          </div>
+      </li>
+    {% else %}
+      <li class="mvl tac text-muted">暂无话题</li>
+    {% endfor %}
+  </ul>
+
+  {{ web_macro.paginator(paginator) }}

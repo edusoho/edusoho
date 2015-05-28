@@ -6,6 +6,7 @@ use Topxia\Service\Testpaper\TestpaperService;
 use Topxia\Service\Testpaper\Builder\TestpaperBuilderFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Question\Type\QuestionTypeFactory;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -248,7 +249,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets(array($target));
     }
 
-
+    public function findAllTestpapersByTargets(array $ids)
+    {
+        $targets=array();
+        foreach ($ids as $id) {
+            $targets[]='course-'.$id;
+        }
+        return $this->getTestpaperDao()->findTestpaperByTargets($targets);
+    }
 
 
 
@@ -509,8 +517,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if ($answer['status'] == 'right') {
                 $answers[$questionId]['score'] = $items[$questionId]['score'];
             } elseif ($answer['status'] == 'partRight') {
+
+                if ($items[$questionId]['questionType'] == 'fill') {
+                    $answers[$questionId]['score'] = ($items[$questionId]['score'] * $answer['percentage']) /100 ;
+                    $answers[$questionId]['score'] = number_format($answers[$questionId]['score'], 1, '.', '');
+                } else {
+                    $answers[$questionId]['score'] = $items[$questionId]['missScore'];
+                }
    
-                $answers[$questionId]['score'] = $items[$questionId]['missScore'];
             } else {
                 $answers[$questionId]['score'] = 0;
             }
@@ -553,15 +567,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
 
-        $this->getStatusService()->publishStatus(array(
-            'type' => 'finished_testpaper',
-            'objectType' => 'testpaper',
-            'objectId' => $testpaper['id'],
-            'properties' => array(
-                'testpaper' => $this->simplifyTestpaper($testpaper),
-                'result' => $this->simplifyTestpaperResult($testpaperResult),
-            )
-        ));
+        $this->dispatchEvent(
+            'testpaper.finish', 
+            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
+        );
 
         return $testpaperResult;
     }
@@ -734,7 +743,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $existItems = ArrayToolkit::index($existItems, 'questionId');
 
-
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($items, 'questionId'));
         if (count($items) != count($questions)) {
             throw $this->createServiceException('数据缺失');
@@ -885,30 +893,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     private function getMemberDao ()
     {
         return $this->createDao('Course.CourseMemberDao');
-    }
-
-    private function simplifyTestpaper($testpaper)
-    {
-        return array(
-            'id' => $testpaper['id'],
-            'name' => $testpaper['name'],
-            'description' => StringToolkit::plain($testpaper['description'], 100),
-            'score' => $testpaper['score'],
-            'passedScore' => $testpaper['passedScore'],
-            'itemCount' => $testpaper['itemCount'],
-        );
-    }
-
-    private function simplifyTestpaperResult($testpaperResult)
-    {
-        return array(
-            'id' => $testpaperResult['id'],
-            'score' => $testpaperResult['score'],
-            'objectiveScore' => $testpaperResult['objectiveScore'],
-            'subjectiveScore' => $testpaperResult['subjectiveScore'],
-            'teacherSay' => StringToolkit::plain($testpaperResult['teacherSay'], 100),
-            'passedStatus' => $testpaperResult['passedStatus'],
-        );
     }
 
     private function getStatusService()

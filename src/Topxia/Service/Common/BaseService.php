@@ -40,6 +40,17 @@ abstract class BaseService
         return ServiceKernel::dispatcher();
     }
 
+    protected function dispatchEvent($eventName, $subject)
+    {
+        if ($subject instanceof ServiceEvent) {
+            $event = $subject;
+        } else {
+            $event = new ServiceEvent($subject);
+        }
+
+        $this->getDispatcher()->dispatch($eventName, $event);
+    }
+
     protected function purifyHtml($html, $trusted = false)
     {
         if (empty($html)) {

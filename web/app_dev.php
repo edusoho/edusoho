@@ -17,8 +17,10 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
     || !in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', 'fe80::1', '::1'))
 ) {
-    // header('HTTP/1.0 403 Forbidden');
-    // exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+  if (!file_exists(__DIR__ . '/../app/data/dev.lock')) {
+    header('HTTP/1.0 403 Forbidden');
+    exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+  }
 }
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
@@ -41,8 +43,8 @@ $serviceKernel->setEnvVariable(array(
     'basePath' => $request->getBasePath(),
     'baseUrl' =>  $request->getSchemeAndHttpHost() . $request->getBasePath(),
 ));
-
 $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
+$serviceKernel->registerModuleDirectory(dirname(__DIR__). '/plugins');
 $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
 $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
@@ -59,7 +61,7 @@ $serviceKernel->setCurrentUser($currentUser);
 // NOTICE: 防止请求捕捉失败而做异常处理 
 // 包括：数据库连接失败等
 try {
-	$response = $kernel->handle($request);
+    $response = $kernel->handle($request);
 } catch (\RuntimeException $e) {
     echo "Error!  ". $e->getMessage();
     die();

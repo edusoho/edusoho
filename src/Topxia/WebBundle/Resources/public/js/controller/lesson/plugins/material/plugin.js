@@ -31,8 +31,10 @@ define(function(require, exports, module) {
 			}
 			if(lesson.materialNum>0){
 				$('.glyphicon-download-alt').addClass('text-success');
+				$('.toolbar-nav .glyphicon-download-alt').html('<span class="badge">'+lesson.materialNum+'</span>');
 			}else{
 				$('.glyphicon-download-alt').removeClass('text-success');
+				$('.badge').remove();
 			}
 		}
 	});

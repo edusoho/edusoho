@@ -1,15 +1,19 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/class-defaultb.css') }}" />
+{% endblock %}
+
 {% block content %}
+
   <div class="es-row-wrap container-gap">
 
-    {% if blocks.home_top_banner %}
-      <div class="homepage-feature homepage-feature-slides">
-        <div class="cycle-pager"></div>
-        {{ blocks.home_top_banner|raw }}
-      </div>
-    {% endif %}
-
+    <div class="homepage-feature homepage-feature-slides">
+      <div class="cycle-pager"></div>
+      {{ block_show('home_top_banner') }}
+    </div>
+    
     <ul class="homepage-category-nav">
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
@@ -19,12 +23,75 @@
 
     <div class="row row-9-3">
       <div class="col-md-9">
+
+        {% if is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+        {% set items = data('RecommendClassrooms',{'count':6}) %}
+          <div class="es-box">
+              <div class="es-box-heading">
+                <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
+                <h2>最新{{ setting('classroom.name')|default("班级") }}</h2>
+              </div>
+              <div class="es-box-body">
+                <ul class="home-class-list">
+                  {% for classroom in items.classrooms %}
+                 {% set teachers = items.users[classroom.id]|default(null) %}
+                 {% if loop.index <= 5%}
+                  <li class="class-item">
+                    <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                      <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                    </a>
+                    <div class="class-body">
+                      <h3 class="class-title">
+                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                      </h3>
+                      <div class="class-metas">
+                        {% if teachers %}
+                      <span class="class-teacher">
+                        <i class="fa fa-user"></i>
+                        {% for teacher in teachers %}
+                          {% if loop.index <= 5%}
+                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                           {% endif %}
+                        {% endfor %}
+                      </span>
+                    {% endif %}
+                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
+                        <span class="class-price">
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if classroom.price > 0 %}
+                               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                              {% else %}
+                                免费
+                              {% endif %}
+                          {% else %}
+                              {% if classroom.price > 0 %}
+                                {{ classroom.price }}元
+                              {% else %}
+                                免费
+                              {% endif %}
+                          {% endif %}
+
+                        </span>
+                      </div>
+                      <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
+                    </div>
+                  </li>
+                   {% endif %}
+                 {% endfor %}
+                </ul>
+              </div>
+            </div>
+            {% endif %}
+
+
+
         {# 推荐课程 #}
         {% set recommendCourses = data('RecommendCourses', {count:3}) %}
         {% if recommendCourses %}
           <div class="es-box">
-            <div class="es-box-heading"><h2>推荐课程</h2>
+            <div class="es-box-heading">
               <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
+              <h2>推荐课程</h2>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}            
@@ -36,8 +103,9 @@
         {% set latestCourses = data('LatestCourses', {count:6}) %}
         {% if latestCourses %}
           <div class="es-box">
-            <div class="es-box-heading"><h2>最新课程</h2>
+            <div class="es-box-heading">
               <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
+              <h2>最新课程</h2>
             </div>
             <div class="es-box-body">
               {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
@@ -51,8 +119,8 @@
           {% if recentLiveCourses %}
             <div class="es-box">
               <div class="es-box-heading">
-                <h2>最新直播</h2>
                 <a class="pull-right" href="{{ path('live_course_explore') }}">更多&gt;</a>
+                <h2>最新直播</h2>
               </div>
               <div class="es-box-body">
                 {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
@@ -66,8 +134,8 @@
         {% if articles %}
           <div class="es-box news">
             <div class="es-box-heading">
-              <h2>最新资讯</h2>
               <a class="pull-right" href="{{ path('article_show') }}">更多&gt;</a>
+              <h2>最新资讯</h2>
             </div>
             <div class="es-box-body">
               <ul class="row">
@@ -103,7 +171,7 @@
                         <div class="topic-body">
                           {% set user = thread.user %}
                           {% set latestPostUser = thread.latestPostUser %}
-                          <img src="{{ default_path('avatar',thread.user.mediumAvatar, '') }}" class="pull-left">
+                          <img src="{{ filepath(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
                           <h3>{{ user.nickname }}</h3>
                           <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
                         </div>
@@ -137,7 +205,7 @@
                     <li class="col-sm-6 col-md-4">
                       <div class="teachers-item">
                         <a href="{{ path('user_show', {id:teacher.id}) }}">
-                         <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
+                         <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
                         </a>
                  
                           <span>{{ web_macro.user_link(teacher) }}</span>
@@ -153,13 +221,13 @@
         {% endif %}
 
         {# vip #}
-        {% if setting('vip.enabled') %}
+        {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
           {% set levels = data('VipLevels',{'count':100}) %}
           {% if levels %}
             <div class="es-box vip">
               <div class="es-box-heading">
-                <h2>会员专区</h2>
                 <a class="pull-right" href="{{ path('vip') }}">更多&gt;</a>
+                <h2>会员专区</h2>
               </div>
               <div class="es-box-body">
                 <ul class="row vip-lists">
@@ -178,7 +246,11 @@
                               <p>{{ level.description|plain_text(40) }}</p>
                             </div>
                             <div class="vip-price col-sm-3 col-md-3">
-                              <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+                                <h4> {{ set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
+                               {% else %}
+                                  <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                               {% endif %}
                               <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
                             </div>
                           </div>
@@ -197,7 +269,7 @@
           {% set groups = data('HotGroup', {'count':15}) %}
           {% if groups %}
             <div class="es-box hot-group">
-              <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
+              <div class="es-box-heading"><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a><h2>最热小组</h2></div>
               <div class="es-box-body">
                  <ul class="list-unstyled">
                   {% for group in groups %}
@@ -235,7 +307,7 @@
       <div class="col-md-3">
         {# 在学课程 #}
         {% if app.user %}
-          {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+          {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
         {% endif %}
 
         {# 热门标签 #}    
@@ -271,7 +343,7 @@
                     <li class="media">
                       <a href="{{ path('course_show', {id:course.id}) }}">
                         <div class="course-item">
-                          <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+                          <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
                           <div class="course-title">{{ course.title }}</div>
                         </div>
                       </a>
@@ -288,23 +360,41 @@
         {% if learns %}
           <div class="es-box status-side">
             <div class="es-box-heading">
-              <h2>学员动态</h2>
+              <h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态</h2>
             </div>
             <div class="es-box-body">
               <ul class="media-list">
                 {% for learn in learns %}
                   <li class="media">
                     <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                     </a>
                     <div class="media-body">
                       <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                       {% if learn.type == "finished_testpaper" %}
                       完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
-                      {% elseif learn.type == "become_student" %}
+
+                      {% elseif learn.type == "finished_homework" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
+
+                      {% elseif learn.type == "finished_exercise" %}
+                      完成了课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
+
+                      {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                       加入了课程 {{learn.properties.course.title|plain_text(15)}}
+                     
+                     {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
+                      {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
+                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
+
+
                       {% elseif learn.type == "learned_lesson" %}
                       完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
+                      {% elseif learn.type == "favorite_course" %}
+                      收藏了课程 {{learn.properties.course.title|plain_text(15)}}
+                      {% elseif learn.type == "start_learn_lesson" %}
+                      开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
                       {% endif %}
                     </div>
                   </li>
@@ -356,7 +446,7 @@
     {% for course in courses %}
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-          <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb">
+          <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
             {% if course.status == 'draft' %}
               <span class="label  label-warning course-status">未发布</span>
             {% elseif course.status == 'closed' %}
@@ -391,23 +481,13 @@
             {% endif %}
 
             <span class="metas clearfix">
-              <span class="price-col">
-                <span class="meta-label">价格</span>
-                {% if course.price > 0 %}
-                  <span class="price-num">{{ course.price }}元</span>
-                {% else %}
-                  <span class="price-num">免费</span>
-                {% endif %}
-              </span>
+            {% if setting('course.coursesPrice') == 0 %}
+              <div class="price-block">
+                 {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+              </div>
+            {% endif %}
 
-              {% if course.showStudentNumType == 'opened' %}
-              <span class="student-col">
-                <span class="meta-label">学生</span>
-                <span class="student-num">{{ course.studentNum }}人</span>
-              </span>
-              {% endif %}
-
-              <span class="review-col">
+              <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
                   <span class="review-rating">
@@ -421,6 +501,13 @@
                 {% endif %}
               </span>
 
+              {% if course.showStudentNumType == 'opened' %}
+              <span class="student-col">
+                <span class="meta-label">学生</span>
+                <span class="student-num">{{ course.studentNum }}人</span>
+              </span>
+              {% endif %}
+
             </span>
           {% endif %}
 
@@ -428,7 +515,7 @@
             {% set user = users[course.teacherIds|first]|default(null) %}
             {% if user %}
               <span class="teacher clearfix">
-                <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="thumb">
+                <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="thumb">
                 <span class="nickname ellipsis">{{ user.nickname }}</span>
                 <span class="user-title ellipsis">{{ user.title }}</span>
               </span>

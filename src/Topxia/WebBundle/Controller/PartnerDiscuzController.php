@@ -100,6 +100,10 @@ class PartnerDiscuzController extends BaseController
                 'token' => array('userId' => $get['uid'])
             );
 
+            if(!$this->getAuthService()->isRegisterEnabled()){
+                return API_RETURN_FORBIDDEN;
+            }
+
             $user = $this->getUserService()->register($registration, 'discuz');
         } else {
             $user = $this->getUserService()->getUser($bind['toId']);

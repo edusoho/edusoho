@@ -32,10 +32,26 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsbyTypes($types, $start, $limit); 
     }
 
+    public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit)
+    {
+        return $this->getQuestionDao()->findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit);
+    }
+
+    public function findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId)
+    {
+        return $this->getQuestionDao()->findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($types, $start, $limit, $questionSource, $courseId, $lessonId); 
+    }
+
     public function findQuestionsCountbyTypes($types)
     {
         return $this->getQuestionDao()->findQuestionsCountbyTypes($types);
     }
+
+    public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId)
+    {
+        return $this->getQuestionDao()->findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
+    }
+    
 
     public function findQuestionsByParentIds($ids)
     {
@@ -262,6 +278,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         );
 
         return $this->getQuestionFavoriteDao()->deleteFavorite($favorite);
+    }
+
+    public function getQuestionCountGroupByTypes($conditions)
+    {
+        return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
     private function getQuestionDao()

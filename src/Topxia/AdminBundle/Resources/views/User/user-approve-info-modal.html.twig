@@ -1,0 +1,19 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}
+    用户认证查看
+{% endblock %}
+
+{% block body %}
+  <div class="form-horizontal">
+  {% include 'TopxiaAdminBundle:User:user-approval-form-content.html.twig' %}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="pull-right">
+    <button type="button" class="btn btn-primary " data-dismiss="modal">关闭</button>    
+  </div>
+{% endblock %}

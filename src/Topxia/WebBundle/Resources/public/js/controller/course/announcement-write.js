@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
-    var EditorFactory = require('common/kindeditor-factory');
     var Validator = require('bootstrap.validator');
+    require('ckeditor');
 
     exports.run = function() {
 
@@ -14,10 +14,14 @@ define(function(require, exports, module) {
             required: true
         });
 
-        var editor = EditorFactory.create('#announcement-content-field', 'simple', {extraFileUploadParams:{group:'course'}});
+        // group: 'course'
+        var editor = CKEDITOR.replace('announcement-content-field', {
+            toolbar: 'Simple',
+            filebrowserImageUploadUrl: $('#announcement-content-field').data('imageUploadUrl')
+        });
 
         validator.on('formValidate', function(elemetn, event) {
-            editor.sync();
+            editor.updateElement();
         });
 
         validator.on('formValidated', function(error, msg, $form) {

@@ -56,6 +56,12 @@ class CloudSettingController extends BaseController
 
         $currentHost = $request->server->get('HTTP_HOST');
 
+        if(isset($info['licenseDomains'])) {
+
+            $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+
+        }
+        
         return $this->render('TopxiaAdminBundle:CloudSetting:key-license-info.html.twig', array(
             'info' => $info,
             'currentHost' => $currentHost,
@@ -97,6 +103,12 @@ class CloudSettingController extends BaseController
 
             if (isset($result['error'])) {
                 $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
+                goto render;
+            }
+
+            $user = $api->get('/me');
+            if ($user['edition'] != 'opensource') {
+                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
                 goto render;
             }
 
@@ -172,7 +184,11 @@ class CloudSettingController extends BaseController
         );
 
         if ($request->getMethod() == 'POST') {
-            $storageSetting = array_merge($default, $storageSetting, $request->request->all());
+
+            $set = $request->request->all();
+            $set['cloud_bucket'] = trim($set['cloud_bucket']);
+
+            $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
             $this->setFlashMessage('success', '云视频设置已保存！');
         } else {

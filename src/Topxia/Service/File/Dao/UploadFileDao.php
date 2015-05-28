@@ -24,5 +24,7 @@ interface UploadFileDao
 
     public function updateFile($id, array $fields);
 
+    public function updateFileUsedCount($fileIds, $offset);
+
     public function getFileByTargetType($targetType);
 }
