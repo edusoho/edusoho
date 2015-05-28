@@ -69,7 +69,17 @@ a:focus {
   border: 1px solid #e0e0e0 !important;
 }
 .homepage-feature-slides {
-  z-index: auto;
+  z-index: 9;
+}
+.list-group-panel .list-group-item.active,
+.list-group-panel .list-group-item.active:hover {
+  background: #f3f3f3;
+  color: #37b97d;
+  font-weight: bold;
+  border-left: 3px solid #37b97d;
+}
+.userpage #content-container {
+  width: 1140px;
 }
 @keyframes fadeInLeft {
   0% {
@@ -2768,7 +2778,7 @@ textarea.form-control-o {
 }
 @media (max-width: 767px) {
   .poster {
-    height: 180px;
+    height: 150px;
   }
 }
 .poster .swiper-slide {
@@ -2827,7 +2837,7 @@ textarea.form-control-o {
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 30px;
+    font-size: 26px;
   }
   .poster .swiper-slide .title span {
     display: inline-block;
@@ -2856,7 +2866,7 @@ textarea.form-control-o {
     left: 0;
     right: 0;
     text-align: center;
-    top: 100px;
+    top: 80px;
   }
   .poster .swiper-slide .subtitle span {
     margin: 0 10px;
@@ -5237,7 +5247,7 @@ textarea.form-control-o {
   width: 100%;
   height: 100%;
   padding: 30px;
-  color: #fff;
+  color: #fff !important;
   font-size: 12px;
   line-height: 20px;
   text-align: left;

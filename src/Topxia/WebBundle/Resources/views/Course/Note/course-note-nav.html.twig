@@ -4,7 +4,7 @@
       {% if filters.lessonId|default('') == '' %}
         全部课时
       {% else %} 
-        {{ lessons[filters.lessonId]['title'] }}
+        {{ lessons[filters.lessonId]['title']|sub_text(10) }}
       {% endif %}
        
       <span class="caret"></span>

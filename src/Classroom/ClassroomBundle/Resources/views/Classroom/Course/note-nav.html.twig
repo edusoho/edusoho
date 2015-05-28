@@ -4,7 +4,7 @@
       {% if filters.courseId|default('') == '' %}
         全部课程
       {% else %} 
-        {{ courses[filters.courseId]['title'] }}
+        {{ courses[filters.courseId]['title']|sub_text(10) }}
       {% endif %}
        
       <span class="caret"></span>
