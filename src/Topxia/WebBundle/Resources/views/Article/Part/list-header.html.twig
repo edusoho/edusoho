@@ -24,7 +24,7 @@
       </div>
       <div class="col-md-4 article-header-right hidden-sm hidden-xs">
         {% for index,promotedArticle in promotedArticles %}
-        <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small one">
+        <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small {% if loop.index == 1 %}one{% else %}two{% endif %}">
           <div class="content">
             <p>{{ promotedCategories[promotedArticle['id']].name }}</p>
             <h4 class="title">{{ promotedArticle.title|plain_text(125) }}</h4>
