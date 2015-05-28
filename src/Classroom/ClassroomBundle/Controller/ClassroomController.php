@@ -11,6 +11,17 @@ use Topxia\Common\ExtensionManager;
 
 class ClassroomController extends BaseController
 {
+    public function dashboardAction($nav, $classroom, $member)
+    {
+        $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroom["id"]);
+        return $this->render("ClassroomBundle:Classroom:dashboard-nav.html.twig",array(
+            'canManageClassroom' => $canManageClassroom,
+            'classroom' => $classroom,
+            'nav' => $nav,
+            'member' => $member
+        ));
+    }
+
     public function exploreAction(Request $request)
     {
         $code = $request->query->get('code', '');
