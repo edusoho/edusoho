@@ -470,7 +470,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $requestField['mobile'] = $mobileInfo['mobile'];
 
         $result = $this->checkSms($sessionField, $requestField, $scenario);
-        $this->clearSmsSession($request, $scenario);
         return array($result, $sessionField);
     }
 
