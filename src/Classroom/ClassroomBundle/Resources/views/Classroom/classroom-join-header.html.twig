@@ -58,7 +58,7 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
-          {% if member.role != "teacher" and member.role != "headTeacher" %}
+          {% if member.role == "student" or member.role == "auditor" %}
             <li>
               <a type="button" 
               {% if  member.role == "student" and member.orderId > 0 %}
