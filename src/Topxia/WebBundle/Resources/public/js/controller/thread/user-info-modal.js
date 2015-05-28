@@ -20,16 +20,16 @@ define(function(require, exports, module) {
             }
         });
         validator.addItem({
+            element: '[name="truename"]',
+            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}',
+            required: true
+        });
+        validator.addItem({
             element: '[name="mobile"]',
             rule: 'phone',
             required: true
         });
 
-        validator.addItem({
-            element: '[name="truename"]',
-            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}',
-            required: true
-        });
 
         $('body').keypress(function(e) {
             if(e.which == 10 || e.which == 13) {
@@ -37,7 +37,6 @@ define(function(require, exports, module) {
                     if (error) {
                         return false;
                     }
-                    submitForm($form);
                 });
             }
         });
