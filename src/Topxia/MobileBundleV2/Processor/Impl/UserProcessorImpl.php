@@ -440,9 +440,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
+                return array('1'=>$result,'2'=>$sessionField);
                 if ($result) {
-                    $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-                    $email = 'user_' . substr($randString, 0, 9) . '@edusoho.net';
                     $user = $this->controller->getAuthService()->register(array(
                         'emailOrMobile' => $sessionField['to'],
                         'nickname' => $nickname,
