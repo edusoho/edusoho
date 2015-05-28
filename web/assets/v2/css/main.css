@@ -292,6 +292,7 @@ a:focus {
   text-align: center;
   color: #e0e0e0;
 }
+.link-dark-wrap > a,
 .link-dark {
   color: #212121;
   -webkit-transition: all 0.3s ease;
@@ -299,6 +300,7 @@ a:focus {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.link-dark-wrap > a:hover,
 .link-dark:hover {
   color: #37b97d;
   -webkit-transition: all 0.3s ease;
@@ -306,6 +308,7 @@ a:focus {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.link-light-wrap > a,
 .link-light {
   color: #616161;
   -webkit-transition: all 0.3s ease;
@@ -313,6 +316,7 @@ a:focus {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.link-light-wrap > a:hover,
 .link-light:hover {
   color: #37b97d;
   -webkit-transition: all 0.3s ease;
@@ -2734,6 +2738,14 @@ textarea.form-control-o {
     width: 10%;
   }
 }
+.user-avatar-list .name {
+  margin-top: 10px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
 .poster {
   position: relative;
   background: #fff;
@@ -3132,7 +3144,7 @@ textarea.form-control-o {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #21aa68\9;
+  background-color: #21aa68;
   background: -webkit-linear-gradient(top, #cced6a, #21aa68);
   background: -o-linear-gradient(top, #cced6a, #21aa68);
   background: -webkit-gradient(top, #cced6a, #21aa68);
@@ -3152,7 +3164,7 @@ textarea.form-control-o {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #6124bd\9;
+  background-color: #6124bd;
   background-image: -webkit-linear-gradient(top, #d987eb, #6124bd);
   background-image: -o-linear-gradient(top, #d987eb, #6124bd);
   background-image: -webkit-gradient(top, #d987eb, #6124bd);
