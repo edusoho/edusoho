@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function() {
             }).always(function(){
-                $btn.hide();console.log($btn.closest('.teacher-item').find('.follow-btn'));
+                $btn.hide();
                 $btn.closest('.teacher-item').find('.follow-btn').show();
             });
         });
