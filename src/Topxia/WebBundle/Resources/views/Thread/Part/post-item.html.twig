@@ -1,7 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-post-{{ post.id }} media media-comment user-id-{{author.id}}">
   <div class="media-left">
-    {{ web_macro.user_avatar(author, 'user-avatar', 'img-circle', true) }}
+    {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
   </div>
 
   <div class="media-body">

@@ -131,7 +131,7 @@ define(function(require, exports, module) {
             speed: 300,
             loop: true,
             mode: 'vertical',
-            autoplay: 3000
+            autoplay: 5000
         });
 
     	$(".announcements-alert .close").click(function(){
