@@ -381,7 +381,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if ($this->getCloudSmsKey($smsType) != 'on') {
-            throw new \RuntimeException('该使用场景未开启');
+            throw new \RuntimeException('网站未开启短信验证');
         }
     }
 
@@ -425,7 +425,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, '密码格式不正确');
             }
             $user = $this->controller->getAuthService()->register(array(
-                'emailOrMobile' => $email,
+                'email' => $email,
                 'nickname' => $nickname,
                 'password' => $password,
             ));
@@ -441,12 +441,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
-                    $this->clearSmsSession($this->request, 'sms_registration');
+                    $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+                    $email = 'user_' . substr($randString, 0, 9) . '@edusoho.net';
                     $user = $this->controller->getAuthService()->register(array(
-                        'emailOrMobile' => $sessionField['to'],
+                        'verifiedMobile' => $sessionField['to'],
                         'nickname' => $nickname,
                         'password' => $password,
+                        'email' => $email
                     ));
+                    $this->clearSmsSession($this->request, 'sms_registration');
                 } else {
                     return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
                 }
