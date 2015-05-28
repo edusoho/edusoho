@@ -1,3 +1,15 @@
+// 默认
+.media-default {
+  .media-body {
+    >.title {
+      margin-bottom: 10px;
+    }
+    >.content {
+      color: @gray;
+    }
+  }
+}
+
 // 用于热门资讯等
 .media {
   &.media-number {
@@ -187,5 +199,61 @@
     .actions .show-short-btn {
       visibility: visible;
     }
+  }
+}
+
+// 小组
+.media-group {
+  margin-top: 20px;
+  &:first-child {
+    margin-top: 20px;
+  }
+  .media-left {
+    margin-left: 10px;
+  }
+  .title {
+    margin-bottom: 10px;
+  }
+  .metas {
+    color: @gray;
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+// 动态
+.media-dynamic {
+  &:last-child .media-body {
+    border: none;
+  }
+  .media-body {
+    position: relative;
+    padding-right: 80px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid @gray-lighter;
+    .title a {
+      font-size: 12px;
+    }
+    .content { 
+      height: 20px;
+      overflow: hidden;
+      display: block;
+      color: @gray;
+      a {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+  }
+  .date {
+    position: absolute;
+    right: 0px;
+    top: 15px;
+    color: @gray-light;
   }
 }
