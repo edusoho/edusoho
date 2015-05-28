@@ -413,7 +413,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $user = null;
-        return array('test' => 2);
 
         if (!empty($email)) {
             if (!SimpleValidator::email($email)) {
