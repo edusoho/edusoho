@@ -10,9 +10,14 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default panel-lg">
-        <div class="panel-heading"><h1>成员列表</h1></div>
         <div class="panel-body">
-
+          <ul class="nav nav-tabs">
+        <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
+        <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+          <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">小组设置</a></li>
+        {% endif %}
+      </ul>
         <h4>组长</h4>
         <div class="clearfix">
           <div class="grouplist" >  

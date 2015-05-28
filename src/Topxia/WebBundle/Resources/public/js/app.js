@@ -3,9 +3,8 @@ define(function(require, exports, module) {
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
     require('./util/card');
+    var Swiper=require('swiper');
 	var Cookie = require('cookie');
-	var Announcement = require('../../topxiaweb/js/controller/widget/announcement.js');
-
 
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
@@ -128,10 +127,12 @@ define(function(require, exports, module) {
     }
 
     if($(".announcements-alert").length>0){
-
-    	new Announcement({
-    		element:'.announcements-alert'
-    	});
+    	var noticeSwiper = new Swiper('.alert-notice .swiper-container', {
+            speed: 300,
+            loop: true,
+            mode: 'vertical',
+            autoplay: 3000
+        });
 
     	$(".announcements-alert .close").click(function(){
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
