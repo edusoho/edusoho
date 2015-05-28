@@ -10,8 +10,5 @@ define(function(require, exports, module) {
             autoplay: 5000
         });
 		
-		$(".announcements .close").click(function(){
-    		Cookie.set("close_" + $(this).data("targetType") + "_announcements_alert",'true',{path: '/'});
-    	});
 	}
 });

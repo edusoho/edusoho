@@ -1054,6 +1054,7 @@ body.nav-active {
   padding-right: 30px;
 }
 .alert-notice .swiper-slide {
+  float: none;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1069,6 +1070,27 @@ body.nav-active {
 }
 .alert-notice a {
   text-decoration: underline;
+}
+.aside-notice {
+  padding: 0;
+}
+.aside-notice .swiper-container {
+  position: relative;
+  padding: 0 15px;
+  height: 38px;
+  line-height: 38px;
+  overflow: hidden;
+}
+.aside-notice .swiper-slide {
+  float: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.aside-notice .swiper-slide a {
+  color: #e67e22;
 }
 .class-serve > ul {
   padding: 20px 10px;
