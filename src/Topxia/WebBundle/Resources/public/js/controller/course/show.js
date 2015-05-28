@@ -142,10 +142,11 @@ define(function(require, exports, module) {
              });
         }
 
-        var swiper = new Swiper('.swiper-container', {
-            loop:true,
-            grabCursor: true,
-            paginationClickable: true,
+        var swiper = new Swiper('.recommend-class-list .swiper-container', {
+            // loop:true,
+            // grabCursor: true,
+            // paginationClickable: true,
+            simulateTouch: false,
             spaceBetween: 10,
             slidesPerView: 4
         });
