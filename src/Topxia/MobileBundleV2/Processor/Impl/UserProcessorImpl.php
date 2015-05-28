@@ -401,8 +401,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $result;
         }
 
-        return array('test' => 1);
-
         if (!$nickname) {
             $nickname = "ES" . time();
             while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
@@ -415,7 +413,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $user = null;
-                return array('test' => 2);
+        return array('test' => 2);
 
         if (!empty($email)) {
             if (!SimpleValidator::email($email)) {
