@@ -67,8 +67,6 @@
                 {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult == 'level_low' or checkMemberLevelResult in ['not_member', 'member_expired']) %}
                   <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
                   <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
-                {% elseif checkMemberLevelResult == 'not_login' %}
-                  <a href="{{ path('login') }}"  class="btn btn-primary btn-lg" >{{ classroomMemberLevel.name }}，免费学</a>  
                 {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
                   <a href="{{ path('vip_buy') }}"  class="btn btn-primary btn-lg" >{{ classroomMemberLevel.name }}，免费学</a>  
                 {% elseif checkMemberLevelResult == 'level_low' %}
@@ -77,7 +75,7 @@
                   <a  class="btn btn-primary btn-lg"  href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
                 {% else %}
                   <a  class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
-                    {% if canFreeJoin %}
+                    {% if canFreeJoin and app.user %}
                     data-toggle="tooltip"
                     data-placement="top"
                     title="您之前已购买了本班级{{setting('classroom.name')}}的所有收费课程，可免费学习！"
