@@ -326,8 +326,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function register($registration, $type = 'default')
     {
-        var_dump($registration['email']);
-        exit();
+
         if (!SimpleValidator::email($registration['email'])) {
             throw $this->createServiceException('email error!');
         }
