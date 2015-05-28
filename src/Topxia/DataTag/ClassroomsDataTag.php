@@ -5,6 +5,9 @@ namespace Topxia\DataTag;
 use Topxia\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
+/**
+ * @todo  rename LatestClassroomsDataTag
+ */
 class ClassroomsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**

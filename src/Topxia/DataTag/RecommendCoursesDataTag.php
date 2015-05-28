@@ -12,6 +12,8 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   categoryId 可选 分类ID
+     *   categoryCode 可选　分类CODE
+     *   type 可选　课程类型：live直播, normal 普通
      *   count    必需 课程数量，取值不能超过100
      * 
      * @param  array $arguments 参数
@@ -20,15 +22,20 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {	
         $this->checkCount($arguments);
-        if (empty($arguments['categoryId'])){
-            $conditions = array('status' => 'published', 'recommended' => 1 );
-        } else {
-            $conditions = array('status' => 'published', 'recommended' => 1 ,'categoryId' => $arguments['categoryId']);
+
+        $conditions = array('status' => 'published', 'recommended' => 1 );
+
+        if (!empty($arguments['categoryId'])) {
+            $conditions['categoryId'] = $arguments['categoryId'];
         }
-        
+
         if (!empty($arguments['categoryCode'])) {
             $category = $this->getCategoryService()->getCategoryByCode($arguments['categoryCode']);
             $conditions['categoryId'] = empty($category) ? -1 : $category['id'];
+        }
+
+        if (!empty($arguments['type'])) {
+            $conditions['type'] = $arguments['type'];
         }
         
         $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);

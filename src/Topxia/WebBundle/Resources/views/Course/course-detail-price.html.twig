@@ -21,7 +21,9 @@
       <span class="price-info-content">
         <span class="activity">{{ (course.discountObj.name)|default('') }}</span>
         <span class="glyphicon glyphicon-time text-muted"></span>
-        <span id="discount-endtime-countdown" class="text-muted" data-endtime="{{ course.discountObj.endTime|date('Y/m/d H:i:s') }}"></span>
+        <span id="discount-endtime-countdown" class="text-muted"
+        data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
+          ></span>
       </span>
     </li>
   {% endif %}

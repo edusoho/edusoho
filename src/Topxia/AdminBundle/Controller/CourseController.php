@@ -174,10 +174,9 @@ class CourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions = array(
-            'status' => 'published',
-            'recommended'=> 1
-        );
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $conditions['recommended'] = 1;
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -334,21 +333,6 @@ class CourseController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    private function getNoteService()
-    {
-        return $this->getServiceKernel()->createService('Course.NoteService');
-    }
-
-    private function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
     private function getTestpaperService()

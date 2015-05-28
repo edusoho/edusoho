@@ -169,7 +169,7 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('用户未登陆');
         }
 
-        if ($this->getCloudSmsKey($smsType) != 'on') {
+        if ($this->getCloudSmsKey($smsType) != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
     }

@@ -1,26 +1,20 @@
 define(function(require, exports, module) {
-
-	var Validator = require('bootstrap.validator');
-	require('common/validator-rules').inject(Validator);
+	var Notify = require('common/bootstrap-notify');
+	var WebUploader = require('edusoho.webuploader');
 
 	exports.run = function() {
 
 		require('./header').run();
 
-		var $form = $("#course-picture-form");
-
-		validator = new Validator({
-			element: $form
+		var uploader = new WebUploader({
+			element: '#upload-picture-btn'
 		});
 
-		validator.addItem({
-			element: '#course-picture-field',
-			required: true,
-			rule: 'maxsize_image',
-			errormessageRequired: '请选择要上传的课程图片'
+		uploader.on('uploadSuccess', function(file, response ) {
+			var url = $("#upload-picture-btn").data("gotoUrl");
+			Notify.success('上传成功！', 1);
+			document.location.href = url;
 		});
-
-		
 
 	};
 

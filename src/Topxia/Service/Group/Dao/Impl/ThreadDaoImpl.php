@@ -83,7 +83,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             foreach ($orderBys as $orderBy) 
         {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
-        };
+        }
  
         return $builder->execute()->fetchAll() ? : array();  
     }

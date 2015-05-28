@@ -88,6 +88,7 @@
 
   app.crontab = '{{ path('common_crontab') }}';
   {% set crontabNextExecutedTime = setting('crontab_next_executed_time', 0) %}
+
   {% if crontabNextExecutedTime > 0 %}
     {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
       app.scheduleCrontab = '{{ path('common_crontab') }}';
@@ -122,6 +123,10 @@
   {% endif %}
   
   app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+  
+  app.uploadUrl = '{{path("file_upload")}}';
+  app.imgCropUrl = '{{path("file_img_crop")}}';
+  app.lessonCopyEnabled = '{{setting("course.copy_enabled","0")}}';
 
   app.mainScript = '{{ script_main }}';
 </script>

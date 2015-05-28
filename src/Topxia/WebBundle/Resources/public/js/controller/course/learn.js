@@ -561,7 +561,12 @@ define(function(require, exports, module) {
                                         element: '#lesson-document-content',
                                         swfFileUrl:response.swfUri,
                                         pdfFileUrl:response.pdfUri,
-                                        watermark: watermark
+                                        watermark: {
+                                            'xPosition': 'center',
+                                            'yPosition': 'center',
+                                            'rotate': 45,
+                                            'contents': watermark
+                                        }
                                     });
                                 });
                             } else {
@@ -670,13 +675,10 @@ define(function(require, exports, module) {
 
     var DurationStorage = {
         set: function(userId,mediaId,duration) {
-            var durationTmps = localStorage.getItem("durations");
-            if(durationTmps){
-                durations = new Array();
-                var durationTmpArray = durationTmps.split(",");
-                for(var i = 0; i<durationTmpArray.length; i++){
-                    durations.push(durationTmpArray[i]);
-                }
+            var durations = Store.get("durations");
+            console.log(durations);
+            if(durations){
+                
             } else {
                 durations = new Array();
             }
@@ -689,12 +691,11 @@ define(function(require, exports, module) {
                 durations.shift();
             }
             durations.push(value);
-            localStorage["durations"] = durations;
+            Store.set("durations", durations);
         },
         get: function(userId,mediaId) {
-            var durationTmps = localStorage.getItem("durations");
-            if(durationTmps){
-                var durationTmpArray = durationTmps.split(",");
+            var durationTmpArray = Store.get("durations");
+            if(durationTmpArray){
                 for(var i = 0; i<durationTmpArray.length; i++){
                     var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
                     if(index>-1){
@@ -707,15 +708,14 @@ define(function(require, exports, module) {
         },
         del: function(userId,mediaId) {
             var key = userId+"-"+mediaId;
-            var durationTmps = localStorage.getItem("durations");
-            var durationTmpArray = durationTmps.split(",");
+            var durationTmpArray = Store.get("durations");
             for(var i = 0; i<durationTmpArray.length; i++){
                 var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
                 if(index>-1){
                     durationTmpArray.splice(i,1);
                 }
             }
-            localStorage.setItem("durations", durationTmpArray);
+            Store.set("durations", durationTmpArray);
         }
     };
 

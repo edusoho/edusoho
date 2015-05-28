@@ -2,7 +2,7 @@
 {% if not role|default(null) == 'teacher' %}
 
 
-<div class="testpaper-question testpaper-question-choice" id="question{{ item.questionId }}">
+<div class="testpaper-question testpaper-question-choice {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ item.questionId }}">
 
 	{% set keys = [] %}
 	{% set keys_answer = [] %}

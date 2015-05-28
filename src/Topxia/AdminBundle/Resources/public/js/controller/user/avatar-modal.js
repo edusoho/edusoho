@@ -1,37 +1,28 @@
 define(function(require, exports, module) {
-    var Validator = require('bootstrap.validator');
-    require('common/validator-rules').inject(Validator);
-    require('jquery.form');
+
+    var WebUploader = require('edusoho.webuploader');
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        var validator = new Validator({
-            element: '#user-avatar-form'
+        
+        var uploader = new WebUploader({
+            element: '#upload-picture-btn'
         });
 
-        validator.addItem({
-            element: '[name="form[avatar]"]',
-            required: true,
-            requiredErrorMessage: '请选择要上传的头像文件。'
+        uploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#upload-picture-btn").data("gotoUrl");
+
+            $('#modal').load(url);
+            Notify.success('上传成功！', 1);
+            
         });
+
 
         $('.use-partner-avatar').on('click', function(){
             var goto = $(this).data('goto');
             $.post($(this).data('url'), function(){
                 window.location.href = goto;
             });
-        });
-
-        $("#avatar-upload-btn").click(function() {
-
-            var $form = $('#user-avatar-form');
-
-            $form.ajaxSubmit({
-                clearForm: true,
-                success: function(html){
-                    $('#modal').html(html);
-                }
-            });
-
         });
 
     };

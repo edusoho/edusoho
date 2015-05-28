@@ -29,12 +29,12 @@
       <div class="col-md-3 mbl">
         <div class="thumbnail file-thumbnail">
           {% if 'image/' in file.mime %}
-            <img src="{{ file_path(file.uri) }}" style="max-height:160px;">
+            <img src="{{ filepath(file.uri) }}" style="max-height:160px;">
           {% else %}
             <i class="glyphicon glyphicon-file"></i>
           {% endif %}
           <div class="caption">
-            <p><a href="{{ file_path(file.uri) }}" target="_blank">{{ fileUri.name }}</a></p>
+            <p><a href="{{ filepath(file.uri) }}" target="_blank">{{ fileUri.name }}</a></p>
             <p>
               <span class="text-muted">{{ file.size|file_size }}</span>
               <a href="javascript:" class="delete pull-right btn btn-danger btn-sm" data-url="{{ path('admin_file_delete', {id:file.id}) }}">删除</a>

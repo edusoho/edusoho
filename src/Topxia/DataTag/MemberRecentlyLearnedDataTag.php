@@ -5,6 +5,9 @@ namespace Topxia\DataTag;
 use Topxia\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
+/**
+ * @todo
+ */
 class MemberRecentlyLearnedDataTag extends BaseDataTag implements DataTag  
 {
     /**

@@ -65,4 +65,8 @@ class FileDaoImpl extends BaseDao implements FileDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+	public function deleteFileByUri($uri)
+	{
+		return $this->getConnection()->delete($this->table, array('uri' => $uri));
+	}
 }

@@ -2,31 +2,21 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('jquery.form');
-     var Uploader = require('upload');
+    var WebUploader = require('edusoho.webuploader');
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        var validator = new Validator({
-            element: '#aticel-picture-form'
-        });
-        $("#article-upload-btn").attr({"disabled":"disabled"});
-
-        $("#article-picture-upload").click(function() {
-             $("#article-upload-btn").removeAttr("disabled");
+        var uploader = new WebUploader({
+            element: '#article-upload-btn',
         });
 
-        $("#article-upload-btn").click(function() {
+        uploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#article-upload-btn").data("gotoUrl");
+            Notify.success('上传成功！', 1);
 
-            var $form = $('#aticel-picture-form');
-            $(this).html('图片上传中...请稍等');
-            $(this).attr({"disabled":"disabled"});
-            $form.ajaxSubmit({
-                clearForm: true,
-                success: function(html){
-                    $('#modal').html(html);
-                }
-            });
-
+            $('#modal').load(url);
         });
+
        
     };
 
