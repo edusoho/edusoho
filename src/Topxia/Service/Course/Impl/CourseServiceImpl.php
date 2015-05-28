@@ -2210,6 +2210,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return array($course, $member);
 		}
 
+		if (empty($member) && $this->isClassroomMember($course, $user['id'])) {
+			if (!$this->isCourseTeacher($course['id'], $user['id']) && !$this->isCourseStudent($course['id'], $user['id'])) {
+				$member = $this->becomeStudent($course['id'], $user['id']);
+				return array($course, $member); 
+			}
+		}
+
 		if (empty($member) || !in_array($member['role'], array('teacher', 'student'))) {
 			throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
 		}
@@ -2258,6 +2265,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
 		if ($member && in_array($member['role'], array('teacher', 'student'))) {
+			return true;
+		}
+
+		if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
 			return true;
 		}
 
@@ -2432,6 +2443,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $courseMembers;
 	}
 
+	private function isClassroomMember($course, $userId)
+	{
+		$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+		if ($classroom['classroomId']) {
+			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
+			if ($member['role'] != 'auditor') {
+				return true;
+			}
+		}
+
+		return true; 
+	}
+
 	private function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
@@ -2449,6 +2473,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		return false;
+	}
+
+	private function getClassroomService()
+	{
+		return $this->createService('Classroom:Classroom.ClassroomService');
 	}
 
     private function getCourseDao ()
