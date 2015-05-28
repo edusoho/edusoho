@@ -71,8 +71,9 @@ class EduCloudController extends BaseController
             }
 
             $smsCode = $this->generateSmsCode();
+            var_dump($sms_code);
             try {
-                $result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
+                //$result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
                 if (isset($result['error'])) {
                     return $this->createJsonResponse(array('error' => "发送失败, {$result['error']}"));
                 }

@@ -26,8 +26,6 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $registration = $request->request->all();
-            var_dump($registration);
-            exit();
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
@@ -62,6 +60,10 @@ class RegisterController extends BaseController
             }
 
             $registration['createdIp'] = $request->getClientIp();
+            
+            var_dump($registration);
+            exit();
+
             if(isset($authSettings['register_protective'])){
                 $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
                 if(!$status){
