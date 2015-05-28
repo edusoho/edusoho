@@ -135,15 +135,18 @@
     <div class="panel-heading">最近加入</div>
     <div class="panel-body">
       {% if recentlyJoinMember %}
-        <ul class="student-list list-unstyled">
+        <ul class="user-avatar-list clearfix">
           {% for member in recentlyJoinMember %}
             <li>
-              {{ web_macro.user_avatar(members[member.userId] , 'cardtip js-user-card') }}<p >{{ web_macro.user_link(members[member.userId] , 'link-muted') }}</p>
+              {{ web_macro.user_avatar(members[member.userId] ,'', 'avatar-sm') }}
+              <div class="name">
+                {{ web_macro.user_link(members[member.userId] , '') }}
+              </div>
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        还没有小组成员！
+        <div class="empty">还没有小组成员！</div>
       {% endif %}
     </div>
   </div>
