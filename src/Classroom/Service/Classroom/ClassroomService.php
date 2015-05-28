@@ -142,4 +142,6 @@ interface ClassroomService
     public function cancelRecommendClassroom($id);
 
     public function tryAdminClassroom($classroomId);
+
+    public function getClassroomMembersByCourseId($courseId, $userId);
 }
