@@ -2,8 +2,8 @@
   {{ _self.footer_div(firstColumnText|first, firstColumnLinks) }}
   {{ _self.footer_div(secondColumnText|first, secondColumnLinks) }}
   {{ _self.footer_div(thirdColumnText|first, thirdColumnLinks) }}
-  {{ _self.footer_div(fourthColumnText|first, fourthColumnLinks) }}
-  {{ _self.footer_div(fifthColumnText|first, fifthColumnLinks) }}
+  {{ _self.footer_div(fourthColumnText|first, fourthColumnLinks, 'hidden-xs') }}
+  {{ _self.footer_div(fifthColumnText|first, fifthColumnLinks, 'hidden-xs') }}
 </div>
 
 <div class="col-md-4 footer-logo">
@@ -11,8 +11,8 @@
 </div>
 
 
-{% macro footer_div(title, links) %}
-<div class="link-item pull-left">
+{% macro footer_div(title, links, className) %}
+<div class="link-item {% if className %}{{className}}{% endif %}">
   <h3>{{ title.value|default('') }}</h3>
   {% for link in links|default(null) %}
     <a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a>
