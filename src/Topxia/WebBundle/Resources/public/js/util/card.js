@@ -24,6 +24,8 @@ define(function (require, exports, module) {
             _this.popover("show");
         }
        
+        bindMsgBtn($('.user-card'), _this);
+
     }).on("mouseleave", function () {
         var _this = $(this);
         setTimeout(function () {
@@ -34,7 +36,7 @@ define(function (require, exports, module) {
     });
 
     
-    function bindCardEvent($card)
+    function bindCardEvent($card, self)
     {
         $card.on('click', '.follow-btn', function(){
             console.log(2);
@@ -49,7 +51,14 @@ define(function (require, exports, module) {
                 $btn.hide();
                 $card.find('.follow-btn').show();
             });
-        });
+        })
     }
+
+    function bindMsgBtn($card, self){
+        $card.on('click','.direct-message-btn', function(){
+            $(self).popover('hide');
+        })
+    }
+    
 
 });
