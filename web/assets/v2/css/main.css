@@ -53,6 +53,21 @@ a:focus {
 .question-set-item:first-child {
   border: none;
 }
+.group-item .media-object img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.group-search {
+  margin-bottom: 20px;
+}
+.group-search .form-control {
+  border-bottom-left-radius: 20px !important;
+  border-top-left-radius: 20px !important;
+}
+.group-search button {
+  border: 1px solid #e0e0e0 !important;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
