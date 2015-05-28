@@ -145,7 +145,7 @@ class ClassroomController extends BaseController
 
         $canFreeJoin = $this->canFreeJoin($courses, $user);
         $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
-
+        $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
         if ($member && !$member["locked"]) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom' => $classroom,
@@ -155,6 +155,7 @@ class ClassroomController extends BaseController
                 'price' => $price,
                 'member' => $member,
                 'canManage' => $canManage,
+                'canHandle' => $canHandle,
                 'checkMemberLevelResult' => $checkMemberLevelResult,
                 'classroomMemberLevel' => $classroomMemberLevel,
                 'coursesNum' => $coursesNum,

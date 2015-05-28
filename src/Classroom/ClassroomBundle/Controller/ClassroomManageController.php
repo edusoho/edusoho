@@ -817,6 +817,67 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    // public function homeworkAction(Request $request,$id,$status)
+    // {
+    //     $this->getClassroomService()->tryHandleClassroom($id);
+    //     $classroom = $this->getClassroomService()->getClassroom($id);
+
+    //     $currentUser = $this->getCurrentUser();
+    //     if (empty($currentUser)) {
+    //         throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+    //     }
+        
+    //     $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
+    //     $courseIds=ArrayToolkit::column($courses,'id');
+    //     $homeworksResultsCounts = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds,$status);
+    //     $paginator = new Paginator(
+    //         $this->get('request'),
+    //         $homeworksResultsCounts
+    //         , 5
+    //     );
+
+    //     if ($status == 'reviewing') {
+    //         $orderBy = array('usedTime','DESC');
+    //     }
+
+    //     if ($status == 'finished') {
+    //         $orderBy = array('checkedTime','DESC');
+    //     }
+
+    //     $homeworksResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
+    //         $courseIds,$status,$orderBy,
+    //         $paginator->getOffsetCount(),
+    //         $paginator->getPerPageCount()
+    //     );
+
+    //     if ($status == 'reviewing') {
+    //         $reviewingCount = $homeworksResultsCounts;
+    //         $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds,'finished');
+    //     }
+
+    //     if ($status == 'finished') {
+    //         $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds,'reviewing');
+    //         $finishedCount = $homeworksResultsCounts;
+    //     }
+
+    //     $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($homeworksResults,'courseId'));
+    //     $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($homeworksResults,'lessonId'));
+        
+    //     $usersIds = ArrayToolkit::column($homeworksResults,'userId');
+    //     $users = $this->getUserService()->findUsersByIds($usersIds);
+    //     return $this->render('ClassroomBundle:ClassroomManage/Homework:index.html.twig', array(
+    //         'classroom' => $classroom,
+    //         'status' => $status,
+    //         'users' => $users,
+    //         'homeworksResults' => $homeworksResults,
+    //         'paginator' => $paginator,
+    //         'courses' => $courses,
+    //         'lessons' => $lessons,
+    //         'reviewingCount' => $reviewingCount,
+    //         'finishedCount' => $finishedCount
+    //     ));
+    // }
+
     private function calculateUserLearnProgress($classroom, $member)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
@@ -913,5 +974,10 @@ class ClassroomManageController extends BaseController
     protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 }
