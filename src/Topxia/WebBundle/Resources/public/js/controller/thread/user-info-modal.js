@@ -32,11 +32,12 @@ define(function(require, exports, module) {
 
 
         $('body').keypress(function(e) {
-            if(e.which == 10 || e.which == 13) {
+            if(e.which == 10 || e.which == 13 ) {
                 validator.execute(function(error, results, element){
                     if (error) {
                         return false;
                     }
+                    $modal.find('[type=submit]').button('loading').addClass('disabled');
                 });
             }
         });
