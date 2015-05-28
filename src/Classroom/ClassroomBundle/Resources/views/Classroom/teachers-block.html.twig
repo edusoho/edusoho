@@ -12,17 +12,17 @@
     {% if headTeacher %}
     <div class="media">
       <div class="media-left">
-        {{ web_macro.user_avatar(headTeacher,'user-link user-avatar-link pull-left','img-circle') }}
+        {{ web_macro.user_avatar(headTeacher,'','avatar-md') }}
       </div>
       
       <div class="media-body">
         <div class="title">
-          {{ web_macro.user_link(headTeacher , 'name') }}
+          {{ web_macro.user_link(headTeacher , 'link-light') }}
         </div>
         {% if headTeacher.title|default('') %}
-          <p>{{ headTeacher.title }}</p>
+          <div class="content">{{ headTeacher.title }}</p>
         {% else %}
-          <p>还没有头衔</p>
+          <div class="content">还没有头衔</div>
         {% endif %}
       </div>
     </div>
