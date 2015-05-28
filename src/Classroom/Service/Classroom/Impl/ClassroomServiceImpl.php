@@ -834,6 +834,41 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
+    public function canHandleClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        $member = $this->getClassroomMember($id, $user['id']);
+        if (empty($member)) {
+            return false;
+        }
+
+        if (in_array($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function tryHandleClassroom($id)
+    {
+        if (!$this->canTakeClassroom($id)) {
+            throw $this->createAccessDeniedException('您无权操作！');
+        }
+    }
+
     public function canLookClassroom($id)
     {
         $classroom = $this->getClassroom($id);
