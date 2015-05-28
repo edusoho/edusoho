@@ -401,8 +401,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $result;
         }
 
-        return $auth;
-
         if (!$nickname) {
             $nickname = "ES" . time();
             while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
