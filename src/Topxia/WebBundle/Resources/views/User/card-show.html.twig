@@ -8,7 +8,7 @@
       </div>
       <div class="media-body">
         {% if not app.user or (app.user.id != user.id) %}
-          <a class="btn btn-default btn-xs pull-right direct-message-btn" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
+          <a class="btn btn-primary btn-xs pull-right direct-message-btn" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
         {% endif %}
         <div class="title">
           {{ web_macro.user_link(user, 'name', false) }}
@@ -17,11 +17,11 @@
             <a class="unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %}style="display:none;"{% endif %}><i class="es-icon es-icon-checkbox"></i></a>
           {% endif %}           
         </div>
-        <p>
+        <div class="content">
           {% if user.title %}
             {{ user.title }}
           {% endif %}
-        </p>
+        </div>
       </div>
     </div>
   </div>
@@ -29,12 +29,12 @@
     {% if profile.signature %}
       {{ profile.signature }}
     {% else %}
-      还没有签名
+      <div class="text-muted">还没有签名</div>
     {% endif %}
   </div>
   <div class="card-footer clearfix">
-    <span><a href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>在学</a></span>
-    <span><a href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
-    <span><a href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
+    <span><a class="link-light" href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>在学</a></span>
+    <span><a class="link-light" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
+    <span><a class="link-light" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
   </div>
 </div>
