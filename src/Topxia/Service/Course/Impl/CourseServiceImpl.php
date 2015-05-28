@@ -2263,12 +2263,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return true;
 		}
 
-		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
-		if ($member && in_array($member['role'], array('teacher', 'student'))) {
+		if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
 			return true;
 		}
 
-		if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+		if ($member && in_array($member['role'], array('teacher', 'student'))) {
 			return true;
 		}
 
@@ -2453,7 +2453,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 		}
 
-		return true; 
+		return false; 
 	}
 
 	private function getCourseLessonReplayDao()
