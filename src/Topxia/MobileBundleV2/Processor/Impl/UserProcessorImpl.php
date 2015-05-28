@@ -309,15 +309,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             
             $smsCode = $this->generateSmsCode();
-            // try {
-            //     $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
-            //     if (isset($result['error'])) {
-            //         return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
-            //     }
-            // } catch (\RuntimeException $e) {
-            //     $message = $e->getMessage();
-            //     return $this->createMetaAndData(null, 500, "发送失败, {$message}");
-            // }
+            try {
+                $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
+                if (isset($result['error'])) {
+                    return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
+                }
+            } catch (\RuntimeException $e) {
+                $message = $e->getMessage();
+                return $this->createMetaAndData(null, 500, "发送失败, {$message}");
+            }
 
             $result['to'] = $phoneNumber;
             $result['smsCode'] = $smsCode;
@@ -381,7 +381,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if ($this->getCloudSmsKey($smsType) != 'on') {
-            throw new \RuntimeException('该使用场景未开启');
+            throw new \RuntimeException('网站未开启短信验证');
         }
     }
 
@@ -425,7 +425,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, '密码格式不正确');
             }
             $user = $this->controller->getAuthService()->register(array(
-                'emailOrMobile' => $email,
+                'email' => $email,
                 'nickname' => $nickname,
                 'password' => $password,
             ));
@@ -439,15 +439,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
-            return $this->request->getSession()->get('sms_registration');
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
-                    $this->clearSmsSession($this->request, 'sms_registration');
+                    $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+                    $email = 'user_' . substr($randString, 0, 9) . '@edusoho.net';
                     $user = $this->controller->getAuthService()->register(array(
-                        'emailOrMobile' => $sessionField['to'],
+                        'verifiedMobile' => $sessionField['to'],
                         'nickname' => $nickname,
                         'password' => $password,
+                        'email' => $email
                     ));
+                    $this->clearSmsSession($this->request, 'sms_registration');
                 } else {
                     return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
                 }
@@ -471,7 +473,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $requestField['mobile'] = $mobileInfo['mobile'];
 
         $result = $this->checkSms($sessionField, $requestField, $scenario);
-        $this->clearSmsSession($request, $scenario);
         return array($result, $sessionField);
     }
 
