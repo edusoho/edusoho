@@ -28,11 +28,11 @@
     {% endif %}
 
     {% if canHandle %}
-      <a class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}" href="{{path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">试卷批阅</a>
+      <a class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}" href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">试卷批阅</a>
      
-      {% if is_plugin_installed('Homework') %}
-        <a class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}" href="{{path('my_teaching_homework_list') }}">作业批改</a>
-      {% endif %}
+      {# {% if is_plugin_installed('Homework') %}
+        <a class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}" href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">作业批改</a>
+      {% endif %} #}
     {% endif %}
 
   </div>
