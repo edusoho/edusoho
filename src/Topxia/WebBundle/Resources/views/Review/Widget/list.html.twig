@@ -1,6 +1,6 @@
 {% do load_script('review/list') %}
 
-{% if member %}
+{% if member and member.role != 'auditor' %}
   <div class="clearfix">
     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>重新评价</button>
   </div>

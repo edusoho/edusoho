@@ -508,15 +508,11 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ($request->getMethod() == "POST") {
-            if ($classroom['status'] != 'published') {
-                $this->setFlashMessage('danger', "班级还未发布,不能管理助教.");
-            } else {
-                $data = $request->request->all();
-                $userIds = empty($data['ids']) ? array() : $data['ids'];
-                $this->getClassroomService()->updateAssistants($id, $userIds);
+            $data = $request->request->all();
+            $userIds = empty($data['ids']) ? array() : $data['ids'];
+            $this->getClassroomService()->updateAssistants($id, $userIds);
 
-                $this->setFlashMessage('success', "保存成功！");
-            }
+            $this->setFlashMessage('success', "保存成功！");
             
         }
 
