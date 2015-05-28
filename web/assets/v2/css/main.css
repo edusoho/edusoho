@@ -1436,7 +1436,7 @@ body.nav-active {
 .panel.panel-default > .panel-heading {
   position: relative;
   padding: 15px 0;
-  background: none;
+  background: #fff;
   border-bottom: 1px solid #e0e0e0;
 }
 .panel.panel-default > .panel-heading .panel-title > i {
@@ -1477,9 +1477,11 @@ body.nav-active {
   display: block;
 }
 .panel.panel-default > .panel-footer {
+  padding: 15px 0;
   background: none;
 }
 .panel.panel-default > .panel-body {
+  position: relative;
   padding: 15px 0;
 }
 .panel.panel-primary > .panel-heading {

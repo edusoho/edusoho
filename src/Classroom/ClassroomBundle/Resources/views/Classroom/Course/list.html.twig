@@ -22,7 +22,7 @@
                 原价：{% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %}
               </div>
               <span class="course-show">
-                <i class="es-icon es-icon-keyboardarrowup" data-lesson-url="{{ path('course_lesson_list', {courseId:course.id}) }}"></i>
+                <i class="es-icon es-icon-keyboardarrowup" data-lesson-url="{{ path('classrom_course_lessons_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>
               </span>
             </div>
           </div>

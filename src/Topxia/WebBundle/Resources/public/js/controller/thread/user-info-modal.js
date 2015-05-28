@@ -8,11 +8,6 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         $form = $('#join-event-form');
-        $('#join-event-form').find('input').keypress(function(e) {
-            if(e.which == 10 || e.which == 13) {
-                submitForm($form);
-            }
-        });
         var validator = new Validator({
             element: '#join-event-form',
             failSilently: true,
@@ -24,19 +19,27 @@ define(function(require, exports, module) {
                 submitForm($form);
             }
         });
-
+        validator.addItem({
+            element: '[name="truename"]',
+            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}',
+            required: true
+        });
         validator.addItem({
             element: '[name="mobile"]',
             rule: 'phone',
             required: true
         });
 
-        validator.addItem({
-            element: '[name="truename"]',
-            rule: 'chinese byte_minlength{min:4} byte_maxlength{max:10}',
-            required: true
-        });
 
+        $('body').keypress(function(e) {
+            if(e.which == 10 || e.which == 13) {
+                validator.execute(function(error, results, element){
+                    if (error) {
+                        return false;
+                    }
+                });
+            }
+        });
         function submitForm($form)
         {
             $modal.find('[type=submit]').button('loading').addClass('disabled');

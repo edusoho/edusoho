@@ -57,7 +57,6 @@ class ClassroomManageController extends BaseController
 
         $userIds = ArrayToolkit::column($reviews, 'userId');
         $reviewUsers = $this->getUserService()->findUsersByIds($userIds);
-
         return $this->render("ClassroomBundle:ClassroomManage:index.html.twig", array(
             'classroom' => $classroom,
             'studentCount' => $studentCount,
@@ -71,6 +70,23 @@ class ClassroomManageController extends BaseController
             'todayThreadCount' => $todayThreadCount,
             'yesterdayThreadCount' => $yesterdayThreadCount,
             ));
+    }
+
+    public function menuAction($classroom,$sideNav)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
+        }
+        $canManage = $this->getClassroomService()->canManageClassroom($user['id']);
+        $canHandle = $this->getClassroomService()->canHandleClassroom($user['id']);
+
+        return $this->render('ClassroomBundle:ClassroomManage:menu.html.twig', array(
+            'canManage' => $canManage,
+            'canHandle' => $canHandle,
+            'side_nav' => $sideNav,
+            'classroom' => $classroom
+        ));
     }
 
     public function studentsAction(Request $request, $id, $role = 'student')
