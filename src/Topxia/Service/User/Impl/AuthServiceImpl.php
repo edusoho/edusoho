@@ -4,7 +4,6 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\AuthService;
-use Topxia\Common\SimpleValidator;
 
 class AuthServiceImpl extends BaseService implements AuthService
 {
@@ -12,9 +11,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
-return 1;
-        $registration = $this->refillFormData($registration);
-        return 2;
         $authUser = $this->getAuthProvider()->register($registration);
 
         if ($type == 'default') {
@@ -35,18 +31,6 @@ return 1;
         return $newUser;
     }
 
-    private function refillFormData($registration){
-        $registration = $this->getUserService()->parseEmailOrMobile($registration);
-        if(!isset($registration['nickname']) || empty($registration['nickname'])){
-            $registration['nickname'] = $this->getUserService()->generateNickname($registration);
-        }
-
-        if($this->getUserService()->isMobileRegisterMode() && !isset($registration['email'])){
-           $registration['email'] = $this->getUserService()->generateEmail($registration);   
-        }
-        return $registration;
-    }
-    
     public function syncLogin($userId)
     {
         $providerName = $this->getAuthProvider()->getProviderName();
@@ -124,23 +108,21 @@ return 1;
 
 
 
-    public function checkUsername($username, $randomName='')
-    {     
-        //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
-        if(empty($randomName)|| $username != $randomName){
-            try {
-                $result = $this->getAuthProvider()->checkUsername($username);
-            } catch (\Exception $e) {
-                return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
-            }
+    public function checkUsername($username)
+    {   
+        try {
+            $result = $this->getAuthProvider()->checkUsername($username);
+        } catch (\Exception $e) {
+            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
+        }
 
-            if ($result[0] != 'success') {
-                return $result;
-            }
-            $avaliable = $this->getUserService()->isNicknameAvaliable($username);
-            if (!$avaliable) {
-                return array('error_duplicate', '名称已存在!');
-            }
+        if ($result[0] != 'success') {
+            return $result;
+        }
+
+        $avaliable = $this->getUserService()->isNicknameAvaliable($username);
+        if (!$avaliable) {
+            return array('error_duplicate', '名称已存在!');
         }
 
         return array('success', '');
@@ -162,33 +144,6 @@ return 1;
         }
         
         return array('success', '');
-    }
-
-    public function checkMobile($mobile){
-        try {
-            $result = $this->getAuthProvider()->checkMobile($mobile);
-        } catch (\Exception $e) {
-            return array('error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）');
-        }
-        if ($result[0] != 'success') {
-            return $result;
-        }
-        $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
-        if (!$avaliable) {
-            return array('error_duplicate', '手机号码已存在!');
-        }
-        
-        return array('success', '');
-    }
-
-    public function checkEmailOrMobile($emailOrMobile){
-        if(SimpleValidator::email($emailOrMobile)){
-           return $this->checkEmail($emailOrMobile);
-        }else if(SimpleValidator::mobile($emailOrMobile)){
-           return $this->checkMobile ($emailOrMobile);
-        }else {
-           return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
-        }
     }
 
     public function checkPassword($userId, $password)
@@ -253,7 +208,7 @@ return 1;
     {
         $auth = $this->getSettingService()->get('auth');
         if($auth && array_key_exists('register_mode',$auth)){
-            return (in_array($auth['register_mode'], array('email', 'email_or_mobile')));
+            return ($auth['register_mode'] == 'opened');
         }
         return true;
     }
@@ -276,6 +231,7 @@ return 1;
 
             $this->partner = new $class();
         }
+
         return $this->partner;
     }
 
