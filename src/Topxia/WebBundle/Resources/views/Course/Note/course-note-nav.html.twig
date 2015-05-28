@@ -1,6 +1,6 @@
 <div class="note-filter nav-filter clearfix">
   <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
       {% if filters.lessonId|default('') == '' %}
         全部课时
       {% else %} 
@@ -15,7 +15,7 @@
       </li>
       {% for lesson in lessons %}
         <li class="{% if filters.lessonId == lesson.id %}active{% endif %}">
-          <a href="{{ path('course_notes', {courseId:course.id}|merge(filters)|merge({lessonId:lesson.id})) }}">{{ lesson.title }}</a>
+          <a href="{{ path('course_notes', {courseId:course.id}|merge(filters)|merge({lessonId:lesson.id})) }}" title="{{ lesson.title }}">{{ lesson.title|sub_text(10) }}</a>
         </li>
       {% endfor %}
     </ul>
