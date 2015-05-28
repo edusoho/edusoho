@@ -60,10 +60,8 @@ class RegisterController extends BaseController
             }
 
             $registration['createdIp'] = $request->getClientIp();
-            
             var_dump($registration);
             exit();
-
             if(isset($authSettings['register_protective'])){
                 $status=$this->protectiveRule($authSettings['register_protective'],$registration['createdIp']);
                 if(!$status){
@@ -72,8 +70,6 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
-            var_dump($user);
-            exit();
 
             if($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed')){
                  $this->authenticateUser($user);
