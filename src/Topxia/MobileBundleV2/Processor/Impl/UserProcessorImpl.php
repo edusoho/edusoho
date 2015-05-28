@@ -401,6 +401,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $result;
         }
 
+        return $auth;
+
         if (!$nickname) {
             $nickname = "ES" . time();
             while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
@@ -440,7 +442,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
-                return array('1'=>$result,'2'=>$sessionField);
                 if ($result) {
                     $user = $this->controller->getAuthService()->register(array(
                         'emailOrMobile' => $sessionField['to'],
