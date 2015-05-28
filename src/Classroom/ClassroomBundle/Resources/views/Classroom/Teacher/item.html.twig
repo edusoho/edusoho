@@ -3,12 +3,12 @@
     <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
       <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
       <div class="mask">
-        {{ profiles[teacher.id].about|raw }}
+        {{ profiles[teacher.id].about|plain_text(60) }}
       </div>
     </a>
     <div class="teacher-info">
       <div class="title">
-        <a class="name" href="">{{ teacher.nickname }}</a>
+        <a class="name" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
         {% if member.role == 'headTeacher' %}
           <i class="es-icon es-icon-assignmentind color-i" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
         {% endif %}
@@ -36,4 +36,4 @@
       <a class="btn btn-default btn-xs text-center" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
     </div>
   </div>
-  </div>
+</div>

@@ -2765,7 +2765,7 @@ textarea.form-control-o {
 }
 @media (max-width: 767px) {
   .poster {
-    height: 180px;
+    height: 150px;
   }
 }
 .poster .swiper-slide {
@@ -2824,7 +2824,7 @@ textarea.form-control-o {
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 30px;
+    font-size: 26px;
   }
   .poster .swiper-slide .title span {
     display: inline-block;
@@ -2853,7 +2853,7 @@ textarea.form-control-o {
     left: 0;
     right: 0;
     text-align: center;
-    top: 100px;
+    top: 80px;
   }
   .poster .swiper-slide .subtitle span {
     margin: 0 10px;
@@ -5234,7 +5234,7 @@ textarea.form-control-o {
   width: 100%;
   height: 100%;
   padding: 30px;
-  color: #fff;
+  color: #fff !important;
   font-size: 12px;
   line-height: 20px;
   text-align: left;

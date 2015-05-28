@@ -8,45 +8,19 @@
 
 
 {% set bodyClass = 'teacherpage' %}
+
 {% block content %}
 
-<div class="es-row-wrap container-gap">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-header"><h1>师资介绍</h1></div>
-    </div>
+<div class="es-section">
+  <div class="teacher-list row">
+    {% for teacher in teachers %}
+    {% set profile = profiles[teacher.id] %}
+    {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
+    {% endfor %}
   </div>
-
-  <div class="row">
-    <div class="col-md-12">
-
-      <ul class="media-list">
-        {% for teacher in teachers %}
-          {% set profile = profiles[teacher.id] %}
-          <li class="media teacher">
-            {{ web_macro.user_avatar(teacher, 'pull-left', 'avatar-lg media-object') }}
-            <div class="media-body">
-              <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>
-
-              <h4 class="media-heading">
-                {{ web_macro.user_link(teacher, '') }}
-              </h4>
-              <div class="teacher-title">
-                {% if teacher.title %}
-                  {{ teacher.title }}
-                {% else %}
-                  <span class="text-muted">请设置头衔</span>
-                {% endif %}
-              </div>
-              <div class="teacher-about">{{ profile.about|raw }}</div>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-      {{ web_macro.paginator(paginator) }}
-      
-    </div>
-  </div>
-
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
 </div>
+
 {% endblock %}
