@@ -811,7 +811,9 @@ class ClassroomManageController extends BaseController
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'teacher' => $user,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'source' => 'classroom',
+            'targetId' => $classroom['id']
         ));
     }
 
