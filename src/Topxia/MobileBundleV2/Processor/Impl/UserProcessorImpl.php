@@ -425,7 +425,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, '密码格式不正确');
             }
             $user = $this->controller->getAuthService()->register(array(
-                'email' => $email,
+                'emailOrMobile' => $email,
                 'nickname' => $nickname,
                 'password' => $password,
             ));
@@ -444,10 +444,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
                     $email = 'user_' . substr($randString, 0, 9) . '@edusoho.net';
                     $user = $this->controller->getAuthService()->register(array(
-                        'verifiedMobile' => $sessionField['to'],
+                        'emailOrMobile' => $sessionField['to'],
                         'nickname' => $nickname,
                         'password' => $password,
-                        'email' => $email
                     ));
                     $this->clearSmsSession($this->request, 'sms_registration');
                 } else {
