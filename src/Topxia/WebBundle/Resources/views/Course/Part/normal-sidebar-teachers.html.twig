@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-<div class="panel panel-default serve-team">
+<div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title"> <i class="es-icon es-icon-assignmentind"></i>
       授课老师
@@ -7,15 +7,15 @@
   </div>
   <div class="panel-body">
     {% for teacher in teachers %}
-      <div class="media">
+      <div class="media media-default">
         <div class="media-left">
-          {{ web_macro.user_avatar(teacher, 'cardtip', 'avatar-md') }}
+          {{ web_macro.user_avatar(teacher, '', 'avatar-md') }}
         </div>
         <div class="media-body">
           <div class="title">
-            {{ web_macro.user_link(teacher , 'name') }}
+            {{ web_macro.user_link(teacher , 'link-light') }}
           </div>
-          <p>{{ teacher.title }}</p>
+          <div class="content">{{ teacher.title }}</div>
         </div>
       </div>
     {% endfor %}

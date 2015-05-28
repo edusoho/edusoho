@@ -33,8 +33,8 @@
     {% endif %}
   </div>
   <div class="card-footer clearfix">
-    <span>{{ user.learningNum }}<br><a href="{{ path('user_learn',{id:user.id}) }}">在学</a></span>
-    <span>{{ user.followingNum }}<br><a href="{{ path('user_following',{id:user.id}) }}">关注</a></span>
-    <span>{{ user.followerNum }}<br><a href="{{ path('user_follower',{id:user.id}) }}">粉丝</a></span>
+    <span><a href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>在学</a></span>
+    <span><a href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
+    <span><a href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
   </div>
 </div>
