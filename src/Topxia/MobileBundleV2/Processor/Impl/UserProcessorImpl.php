@@ -456,12 +456,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
                 }
             }
+        }
 
         if ($nickname && !SimpleValidator::nickname($nickname)) {
             return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
         }
 
-        return array('1');
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
@@ -498,7 +498,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return false;
         }
 
-<<<<<<< HEAD
         $smsCode = $sessionField['sms_code'];
         $smsCodePosted = $requestField['sms_code'];
         if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
@@ -508,24 +507,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if ($smsCode != $smsCodePosted) {
             return false;
         }
-=======
-        if (! $nickname) {
-            $nickname = "ES" . time();
-            while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                $nickname = "ES". time();
-            }
-        } else {
-            if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
-            }
-        }
-        
-        $user = $this->controller->getAuthService()->register(array(
-            'email' => $email,
-            'nickname' => $nickname,
-            'password' => $password,
-        ));
->>>>>>> master
 
         $toMobile = $sessionField['to'];
         $mobile = $requestField['mobile'];
@@ -1003,4 +984,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $result;
     }
     
+    public function getCourseTeachers()
+    {
+        $courseId = $this->getParam("courseId");
+        $course   = $this->controller->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return $this->createErrorResponse('not_found', "课程不存在");
+        }
+
+        $users = $this->controller->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return array_values($this->filterUsersFiled($users));
+    }
 }

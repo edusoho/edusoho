@@ -933,10 +933,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "course" => $this->controller->filterCourse($course),
             "userFavorited" => $userFavorited,
             "member" => $this->checkMemberStatus($member),
-            "vipLevels" => $vipLevels
+            "vipLevels" => $vipLevels,
+            "discount" => $this->getCourseDiscount($course["discountId"])
         );
     }
     
+    private function getCourseDiscount($discountId)
+    {
+        if ($this->controller->isinstalledPlugin("Discount")) {
+            return $this->getDiscountService()->getDiscount($discountId);
+        }
+        return null;
+    }
+
     public function searchCourse()
     {
         $search = $this->getParam("search", '');
@@ -1277,4 +1286,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "data" => $this->controller->filterCourses($liveCourses));
         return $result;
     }
+
+    protected function getDiscountService() 
+    {
+        return $this->controller->getService('Discount:Discount.DiscountService');
+    } 
 }
