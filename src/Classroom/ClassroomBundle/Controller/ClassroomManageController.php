@@ -783,7 +783,8 @@ class ClassroomManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+        var_dump($paperResults);
+        exit();
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
