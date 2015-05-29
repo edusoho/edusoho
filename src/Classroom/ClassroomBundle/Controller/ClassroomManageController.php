@@ -802,7 +802,8 @@ class ClassroomManageController extends BaseController
 
         $teacherIds = ArrayToolkit::column($paperResults, 'checkTeacherId');
         $teachers = $this->getUserService()->findUsersByIds($userIds);
-
+        var_dump($teachers);
+        exit();
         return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig',array(
             'classroom' => $classroom,
             'status' => $status,
