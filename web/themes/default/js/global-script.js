@@ -39,7 +39,10 @@ define(function(require, exports, module) {
         removeNavMobile();
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
+    if ($('[data-toggle="tooltip"]').length > 0) {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    
 
 
   }
