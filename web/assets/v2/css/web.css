@@ -3614,16 +3614,31 @@ body {
   width: 970px;
 }*/
 
-.userpage-header {
+/*.userpage-header {
   border-radius: 5px;
-}
+}*/
 
-.userpage-header .row {
+.userpage-header .media {
   padding-top: 25px;
   padding-bottom: 25px;
 }
 
-.lt-ie8 .userpage-header {
+.userpage-header .media-left {
+  padding-right: 30px;
+}
+
+.userpage-header h2 {
+  margin-top: 0px;
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+
+.userpage-header h2 small {
+  font-size: 16px;
+  color: #096;
+}
+
+/*.lt-ie8 .userpage-header {
   zoom:1;
 }
 
@@ -3631,39 +3646,25 @@ body {
   margin-top: 25px;
   margin-bottom: 25px;
   zoom:1;
-}
+}*/
 
-.userpage-header .avatar {
+/*.userpage-header .avatar {
   float: left;
   width: 128px;
   height: 128px;
   border-radius: 50%;
-}
+}*/
 
-.userpage-header-info {
+/*.userpage-header-info {
   margin-left: 150px;
-}
+}*/
 
-.userpage-header-info h1 {
-  margin-top: 0px;
-  margin-bottom: 15px;
-  font-size: 28px;
-}
-
-.userpage-header-info h1 small {
-  font-size: 16px;
-  color: #096;
-}
-
-.userpage-header-info .about {
+/*.userpage-header-info .about {
   color: #777;
   word-break: break-all;
   word-wrap: break-word
-}
+}*/
 
-.userpage-header-info .actions {
-  float: right;
-}
 
 .userpage-body {
   border-radius: 5px;
