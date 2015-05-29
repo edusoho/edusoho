@@ -605,9 +605,10 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public function makeLazyImg($src, $class='', $alt = '')
+    public function makeLazyImg($src, $class='', $alt = '', $img = 'lazyload_course.png')
     {
-        return sprintf('<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="%s" class="%s" data-echo="%s" />', $alt, $class, $src);
+        $imgpath = $path = $this->container->get('templating.helper.assets')->getUrl('assets/img/default/' . $img);
+        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
 
     public  function loadScript($js)
