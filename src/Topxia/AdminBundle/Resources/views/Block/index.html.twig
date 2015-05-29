@@ -16,7 +16,9 @@
   <tbody>
     {% if blocks %}
       {% for block in blocks %}
+        {% set latestUpdateUser = users[tatestHistories[block.id].userId] %}
         {% include 'TopxiaAdminBundle:Block:list-tr.html.twig' %}
+        
       {% endfor %}
   {% else %}
         <tr><td colspan="20"><div class="empty">暂无编辑区记录</div></td></tr>
