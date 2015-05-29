@@ -130,11 +130,13 @@ define(function(require, exports, module) {
             });
         },
         onClickSubpost: function(e) {
-            e.preventdefault();
+            e.preventDefault();
+            var $pageBtn = $(e.currentTarget);
 
-            $.post($(e.currentTarget).href(), function(result){
-               $('.thread-subpost-container').html(result);
+            $.post($pageBtn.attr('href'), function(result){
+               $pageBtn.closest('.thread-subpost-container').html(result);
             });
+            
         },
 
         _initSubpostForm: function($form) {
