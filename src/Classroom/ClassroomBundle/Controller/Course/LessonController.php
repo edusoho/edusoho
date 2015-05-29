@@ -17,6 +17,13 @@ class LessonController extends BaseController
         $user = $this->getCurrentUser();
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
+        if (!$user->isLogin()) {
+            return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
+                'courseId' => $courseId,
+                'lessonId' => $lessonId
+            ));
+        }
+        
         if ($lesson['free'] || ($member && !$member['locked'])) {
             return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
                 'courseId' => $courseId,
