@@ -19,7 +19,8 @@ define(function(require, exports, module) {
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
             'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
-            'click .js-event-cancel': 'onClickEventCancelBtn'
+            'click .js-event-cancel': 'onClickEventCancelBtn',
+            'click .thread-subpost-container .pagination a' : 'onClickSubpost'
         },
 
         setup:function() {
@@ -127,6 +128,15 @@ define(function(require, exports, module) {
             $.post($(e.currentTarget).data('url'), function(result){
                 window.location.reload();
             });
+        },
+        onClickSubpost: function(e) {
+            e.preventDefault();
+            var $pageBtn = $(e.currentTarget);
+
+            $.post($pageBtn.attr('href'), function(result){
+               $pageBtn.closest('.thread-subpost-container').html(result);
+            });
+            
         },
 
         _initSubpostForm: function($form) {
