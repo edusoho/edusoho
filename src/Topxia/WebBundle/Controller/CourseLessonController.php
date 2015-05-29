@@ -27,12 +27,14 @@ class CourseLessonController extends BaseController
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
         }
 
-        if (empty($lesson['free'])) {
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+
+        if ($lesson['mediaSource'] != 'self' || (empty($timelimit) && empty($lesson['free']))) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-        }else{
+        } else {
             $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
             if (empty($allowAnonymousPreview) && !$user->isLogin()) {
                 throw $this->createAccessDeniedException();
@@ -40,9 +42,17 @@ class CourseLessonController extends BaseController
         }
 
         $hasVideoWatermarkEmbedded = 0;
+
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
+            if ($file['storage'] != 'cloud') {
+                if (!$user->isLogin()) {
+                    throw $this->createAccessDeniedException();
+                }
+                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+            }
+            
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -50,7 +60,7 @@ class CourseLessonController extends BaseController
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
 
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
                     $hls = array(
                         'url' => $this->generateUrl('hls_playlist', array(
                             'id' => $file['id'], 
@@ -83,7 +93,8 @@ class CourseLessonController extends BaseController
             } else {
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
-        } 
+        }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
