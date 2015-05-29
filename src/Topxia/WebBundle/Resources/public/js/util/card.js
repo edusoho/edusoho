@@ -2,23 +2,34 @@ define(function (require, exports, module) {
 
     $(".js-user-card").on("mouseenter", function () {
         var _this = $(this);
-        if (_this.data('bind') !== 'true') {
+        var loadingHtml = '<div class="user-card"><div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div></div>';
+        if (!_this.data('html')) {
+            _this.popover({
+                trigger: 'manual',
+                placement: 'auto top',
+                html: 'true',
+                content: function(){
+                   if (!_this.data('html')) {
+                        return loadingHtml;
+                   }  else {
+                        return _this.data('html')
+                   }
+                },
+                template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
+                container: 'body',
+                animation: true
+            });
+            _this.popover("show");
             $.get(_this.data('cardUrl'),function(html) {
-                _this.popover({
-                    trigger: 'manual',
-                    placement: 'auto top',
-                    html: 'true',
-                    content: html,
-                    template: '<div class="popover es-card"><div class="arrow"></div><class="popover-content">'+ html +'</div></div>',
-                    container: 'body',
-                    animation: false
-                });
-                _this.data('bind', 'true');
-                _this.popover("show");
+                _this.data('html', html);
                 bindCardEvent($('.user-card'));
                 $(".popover").on("mouseleave", function () {
                     $(_this).popover('hide');
                 });
+                setTimeout(function(){
+                    _this.popover("show");
+                }, 400);
+               
             });         
         } else {
             _this.popover("show");
