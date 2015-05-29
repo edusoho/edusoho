@@ -46,8 +46,13 @@ class CourseController extends BaseController
     public function teachersAction($course)
     {
         $course = $this->getCourse($course);
-        $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $teachers_no_sort = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
+        $teachers = array();
+        foreach ($course['teacherIds'] as $key => $teacherId) {
+            $teachers[$teacherId] = $teachers_no_sort[$teacherId];
+        }
+        
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers,
