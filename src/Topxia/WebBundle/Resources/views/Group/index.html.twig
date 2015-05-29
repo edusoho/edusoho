@@ -15,10 +15,10 @@
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
                 <p>
                   <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
-                    <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="logo">
+                    <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="group-avatar-sm">
                   </a>
                 </p>
-                <p class="title"><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
+                <p class="title"><a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
               </div>
             {% else %}
               <div class="empty">暂无小组信息！</div>
@@ -83,7 +83,7 @@
                     </a>
                   </p>
                   <p class="title">
-                    <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                    <a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
                   </p>
                 </div>
               {% endfor %}

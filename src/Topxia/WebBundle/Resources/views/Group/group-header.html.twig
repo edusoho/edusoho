@@ -1,20 +1,19 @@
- {% set groupNav = groupNav|default(null) %} 
+{% set groupNav = groupNav|default(null) %} 
 
-  <div class="row group-header">
-    <div class="col-md-12"  >
-      <div class="group-header-inner" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
-        <div class="media">
-          <a class="pull-left" href="#">
-            <img src="{{filepath(groupinfo.logo, 'group.png')}}" alt="" class="media-object" >
-          </a>
-          <div class="media-body">
-            <h1 class="media-heading">{{groupinfo.title}}</h1>
-            <div class="media-metas">
-              {{groupinfo.memberNum}}个成员
-            </div>
-          </div>
+<div class="group-header">
+  <div class="group-header-inner" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img src="{{filepath(groupinfo.logo, 'group.png')}}" alt="" class="group-avatar-sm" >
+        </a>
+      </div>
+      <div class="media-body">
+        <h2 class="media-heading">{{groupinfo.title}}</h2>
+        <div class="media-metas">
+          {{groupinfo.memberNum}}个成员
         </div>
-
       </div>
     </div>
   </div>
+</div>
