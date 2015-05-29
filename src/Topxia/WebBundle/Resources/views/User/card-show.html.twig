@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div id="user-card-{{ user.id }}" class="user-card top">
+<div id="user-card-{{ user.id }}" class="user-card">
   <div class="card-header">
     <div class="media">
       <div class="media-left">
@@ -37,4 +37,5 @@
     <span><a class="link-light" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
     <span><a class="link-light" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
   </div>
+  
 </div>

@@ -1,22 +1,19 @@
 
-{% if announcements and not app.request.cookies.get('close_' ~ targetType ~ '_' ~ targetObject.id ~ '_announcements_alert')%}
-	<div class="alert alert-warning announcements" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close" data-target-type="{{targetType}}_{{targetObject.id}}">
-		  <span aria-hidden="true">×</span>
-		</button> 
-		<div class="swiper-container">
-			<div class="swiper-wrapper">
-			{% for announcement in announcements %}
-				<div class="swiper-slide">
-					<i class="es-icon es-icon-notifications"></i>
-					<a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|sub_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
-				</div>
-			{% endfor %}
-			</div>
-		</div>
-	</div>
+{% if announcements %}
+  <div class="alert alert-warning announcements aside-notice" role="alert">
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+      {% for announcement in announcements %}
+        <div class="swiper-slide">
+          <i class="es-icon es-icon-notifications"></i>
+          <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|sub_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
 
-	{% do load_script('announcement/announcement-swiper-slide') %}
+  {% do load_script('announcement/announcement-swiper-slide') %}
 
 {% endif %}
 

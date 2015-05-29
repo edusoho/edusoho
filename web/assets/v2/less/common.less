@@ -70,7 +70,7 @@ body.nav-active {
     padding-right: 30px;
   }
   .swiper-slide {
-    display: block;
+    float: none;
     .text-overflow;
   }
   .close {
@@ -82,5 +82,23 @@ body.nav-active {
   }
   a {
     text-decoration: underline;
+  }
+}
+
+.aside-notice {
+  padding: 0;
+  .swiper-container {
+    position: relative;
+    padding: 0 15px;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+    a {
+      color: @brand-warning;
+    }
   }
 }

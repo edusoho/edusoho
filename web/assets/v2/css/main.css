@@ -81,6 +81,9 @@ a:focus {
 .userpage #content-container {
   width: 1140px;
 }
+.lesson-dashboard .back-course-btn {
+  left: -5px;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
@@ -277,6 +280,67 @@ a:focus {
   100% {
     -o-transform: scale(1, 1);
   }
+}
+@-webkit-keyframes loader-scale {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+  45% {
+    -webkit-transform: scale(0.1);
+    transform: scale(0.1);
+    opacity: 0.7;
+  }
+  80% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes loader-scale {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+  45% {
+    -webkit-transform: scale(0.1);
+    transform: scale(0.1);
+    opacity: 0.7;
+  }
+  80% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.card-loader {
+  color: #9e9e9e;
+  line-height: 20px;
+  text-align: center;
+}
+.loader-inner > span {
+  background-color: #37b97d;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  margin: 2px;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  display: inline-block;
+}
+.loader-inner > span.nth-child(1) {
+  -webkit-animation: loader-scale 0.75s 0.12s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+  animation: loader-scale 0.75s 0.12s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+}
+.loader-inner > span:nth-child(2) {
+  -webkit-animation: loader-scale 0.75s 0.24s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+  animation: loader-scale 0.75s 0.24s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+}
+.loader-inner > span:nth-child(3) {
+  -webkit-animation: loader-scale 0.75s 0.36s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+  animation: loader-scale 0.75s 0.36s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
 }
 .p-lg {
   line-height: 30px;
@@ -1054,6 +1118,7 @@ body.nav-active {
   padding-right: 30px;
 }
 .alert-notice .swiper-slide {
+  float: none;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1069,6 +1134,27 @@ body.nav-active {
 }
 .alert-notice a {
   text-decoration: underline;
+}
+.aside-notice {
+  padding: 0;
+}
+.aside-notice .swiper-container {
+  position: relative;
+  padding: 0 15px;
+  height: 38px;
+  line-height: 38px;
+  overflow: hidden;
+}
+.aside-notice .swiper-slide {
+  float: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.aside-notice .swiper-slide a {
+  color: #e67e22;
 }
 .class-serve > ul {
   padding: 20px 10px;
@@ -4920,7 +5006,7 @@ textarea.form-control-o {
   padding-right: 100px;
 }
 .topic-detail .topic-header .title {
-  font-size: 22px;
+  font-size: 16px;
   margin-bottom: 10px;
 }
 .topic-detail .topic-header .title > a {
