@@ -3346,7 +3346,7 @@ body {
 
 .course-wide-list .teacher {
   float: left;
-  width: 70%;
+  width: 80%;
 }
 
 .course-wide-list .teacher-avatar {
@@ -3604,15 +3604,15 @@ body {
 }
 
 
-@media (min-width: 1200px) {
-    .userpage #content-container {
-         width: 970px;
-    }
+/*@media (min-width: 1200px) {
+  .userpage #content-container {
+    width: 970px;
+  }
 }
 
 .lt-ie9 .userpage #content-container {
   width: 970px;
-}
+}*/
 
 .userpage-header {
   border-radius: 5px;
