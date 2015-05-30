@@ -31,6 +31,8 @@ class CourseController extends BaseController
 
         $classrooms = $this->findCourseRecommendClassrooms($course);
 
+        $previewLesson = $this->getCourseService()->searchLessons(array('type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
+
         return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
             'course' => $course,
             'member' => $member,
@@ -40,6 +42,7 @@ class CourseController extends BaseController
             'userVipStatus' => $userVipStatus,
             'nextLearnLesson' => $nextLearnLesson,
             'learnProgress' => $learnProgress,
+            'previewLesson' => empty($previewLesson) ? null : $previewLesson[0],
         ));
     }
 
