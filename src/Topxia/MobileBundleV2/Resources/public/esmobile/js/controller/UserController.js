@@ -1,9 +1,14 @@
 app.controller('UserInfoController', ['$scope', 'httpService', '$ionicLoading', '$stateParams', UserInfoController]);
-app.controller('TeacherListController', ['$scope', 'CourseService', '$stateParams', TeacherListController]);
+app.controller('TeacherListController', ['$scope', 'UserService', '$stateParams', TeacherListController]);
 
-function TeacherListController($scope, CourseService, $stateParams)
+function TeacherListController($scope, UserService, $stateParams)
 {
-	
+	UserService.getCourseTeachers({
+		courseId : $stateParams.courseId
+	}, function(data) {
+		$scope.users = data;
+		console.log(data);
+	});
 }
 
 function UserInfoController($scope, httpService, $ionicLoading, $stateParams) 

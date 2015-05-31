@@ -1,5 +1,5 @@
 app.controller('CourseListController', ['$scope', '$stateParams', 'AppUtil', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
-app.controller('CourseController', ['$scope', '$stateParams', 'CourseService', 'AppUtil', 'LessonService', CourseListController]);
+app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$ionicScrollDelegate', '$state', CourseListController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
 
 function CourseDetailController($scope, $stateParams, CourseService)
@@ -12,32 +12,103 @@ function CourseDetailController($scope, $stateParams, CourseService)
     });
 }
 
-function CourseController($scope, $stateParams, CourseService, AppUtil, LessonService, $ionicScrollDelegate)
+function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScrollDelegate, $state)
 {
+    $scope.showLoad();
+
+    var CourseService = ServcieUtil.getService("CourseService");
+    var LessonService = ServcieUtil.getService("LessonService");
+
     CourseService.getCourse({
       courseId : $stateParams.courseId,
       token : $scope.token
     }, function(data) {
+      console.log(data);
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
       $scope.course = data.course;
+      $scope.isFavorited = data.userFavorited;
+      $scope.discount = data.discount;
+
+      if (data.member) {
+        $scope.learnProgress = (data.member.learnedNum / data.course.lessonNum * 100) + "%" ;
+      }
+      $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
+      $scope.hideLoad();
+      $scope.loadLessons();
     });
 
-    LessonService.getCourseLessons({
-      courseId : $stateParams.courseId,
-      token : $scope.token
-    }, function(data) {
-      $scope.lessons = data.lessons;
-    });
+    $scope.loadLessons = function() {
+      LessonService.getCourseLessons({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        $scope.lessons = data.lessons;
+        $scope.learnStatuses = data.learnStatuses;
+      });
+    }
 
-    CourseService.getReviews({
-      courseId : $stateParams.courseId,
-      token : $scope.token,
-      limit : 1
-    }, function(data) {
-      $scope.reviews = data.data;
-    });
+    $scope.loadReviews = function(){
+      CourseService.getReviews({
+        courseId : $stateParams.courseId,
+        token : $scope.token,
+        limit : 1
+      }, function(data) {
+        $scope.reviews = data.data;
+      });
+    }
 
+    $scope.favoriteCourse = function() {
+      var params = {
+          courseId : $stateParams.courseId,
+          token : $scope.token
+      };
+
+      if ($scope.isFavorited) {
+        CourseService.unFavoriteCourse(params, function(data) {
+          if (data == true) {
+            $scope.isFavorited = false;
+          }
+        });
+      } else {
+        CourseService.favoriteCourse(params, function(data) {
+          if (data == true) {
+            $scope.isFavorited = true;
+          }
+        });
+      }
+    }
+
+    var self = this;
+    this.payCourse = function() {
+      ServcieUtil.getService("OrderService").payCourse({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        if (data.paid == true) {
+          window.location.reload();
+        } else {
+          $scope.toast("加入学习失败!");
+        }
+      }, function(error) {
+        console.log(error);
+      });
+    }
+
+    $scope.joinCourse = function() {
+      if ($scope.course.price <= 0) {
+        self.payCourse();
+      } else {
+        $scope.$parent.stateParams["coursePay"] = {
+            course : $scope.course
+        };
+          
+        $state.go("coursePay");
+      }
+      
+    }
+
+    /*
     var mainHandle = $ionicScrollDelegate.$getByHandle("mainScroll");
     var tabScroll = $ionicScrollDelegate.$getByHandle("tabScroll");
 
@@ -67,6 +138,7 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, LessonSe
       mainHandle.scrollTo(scrollLeft, scrollTop * 3);
       lastScrollTop = scrollTop;
     }
+    */
 }
 
 function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)

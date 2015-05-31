@@ -1,0 +1,61 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back="go">
+</a>
+
+<h1 class="title">
+  <span>
+    确认订单
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content class="course-paybody">
+  	<div class="list">
+
+	  <a class="item item-divider">
+	    确认个人信息
+	  </a>
+	  <label class="item item-input item-icon-right">
+	    <span class="input-label">姓名</span>
+	    <input type="text" placeholder="姓名">
+	     <i class="icon iconfont icon-chevronright"></i>
+	  </label>
+
+	  <label class="item item-input item-icon-right">
+	    <span class="input-label">手机</span>
+	    <input type="text" placeholder="手机">
+	     <i class="icon iconfont icon-chevronright"></i>
+	  </label>
+
+	  <a class="item item-divider">
+	    购买课程/直播/班级
+	  </a>
+
+	  <a class="item item-thumbnail-left">
+	      <img ng-src="{{ course.middlePicture }}">
+	      <h2>{{ course.title }}</h2>
+	      <p class="pay-price">{{ course.price | formatPrice }}</p>
+	  </a>
+	  <div class="coupon">
+		  <a class="item item-divider">
+		    优惠信息
+		  </a>
+		  <a class="item item-icon-left item-icon-right" href="#/coursecoupon">
+		    <i></i>
+		    优惠
+		     <i class="icon iconfont icon-chevronright"></i>
+		  </a>
+	  </div>
+	  <a class="item item-divider">
+	  	<p>
+	  		需支付:<span class="pay-price right">{{ course.price | formatPrice }}</span>
+	  	</p>
+	    
+		<button class="button button-full button-yellow">
+		    去支付
+	  	</button>
+	  </a>
+	</div>
+   </ion-content>
+</ion-view>

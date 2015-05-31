@@ -941,7 +941,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     private function getCourseDiscount($discountId)
     {
         if ($this->controller->isinstalledPlugin("Discount")) {
-            return $this->getDiscountService()->getDiscount($discountId);
+            $discount = $this->getDiscountService()->getDiscount($discountId);
+            if (empty($discount)) {
+                return null;
+            }
+            $discount["startTime"] = date("c", $discount["startTime"]);
+            $discount["endTime"] = date("c", $discount["endTime"]);
+            $discount["changeTime"] = date("c", $discount["changeTime"]);
+            $discount["auditedTime"] = date("c", $discount["auditedTime"]);
+            $discount["createdTime"] = date("c", $discount["createdTime"]);
+
+            return $discount;
         }
         return null;
     }
