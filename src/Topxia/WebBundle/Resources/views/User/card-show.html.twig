@@ -1,41 +1,41 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div id="user-card-{{ user.id }}">
-  <div class="card-header">
-    <div class="media">
-      <div class="media-left">
-        {{ web_macro.user_avatar(user, '', 'avatar-md', true) }}
+<div class="card-header">
+  <div class="media">
+    <div class="media-left">
+      {{ web_macro.user_avatar(user, '', 'avatar-md', true) }}
+    </div>
+    <div class="media-body">
+      <div class="title">
+        {{ web_macro.user_link(user, '','link-light', false) }}
       </div>
-      <div class="media-body">
-        {% if not app.user or (app.user.id != user.id) %}
-          <a class="btn btn-primary btn-xs pull-right direct-message-btn" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
+      <div class="content">
+        {% if user.title %}
+          {{ user.title }}
         {% endif %}
-        <div class="title">
-          {{ web_macro.user_link(user, 'name', false) }}
-          {% if not app.user or (app.user.id != user.id) %}
-            <a class="follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注" {% if isFollowed %} style="display:none;"{% endif %}><i class="es-icon es-icon-addbox"></i></a> 
-            <a class="unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %}style="display:none;"{% endif %}><i class="es-icon es-icon-checkbox"></i></a>
-          {% endif %}           
-        </div>
-        <div class="content">
-          {% if user.title %}
-            {{ user.title }}
-          {% endif %}
-        </div>
       </div>
     </div>
   </div>
-  <div class="card-body">
-    {% if profile.signature %}
-      {{ profile.signature }}
-    {% else %}
-      <div class="text-muted">还没有签名</div>
+  <div class="metas">
+    {% if not app.user or (app.user.id != user.id) %}
+      <a class="btn btn-primary btn-high btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a> 
+      <a class="btn btn-default btn-high btn-xs unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %}style="display:none;"{% endif %}>已关注</a>
+    {% endif %} 
+    {% if not app.user or (app.user.id != user.id) %}
+      <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
     {% endif %}
   </div>
-  <div class="card-footer clearfix">
-    <span><a class="link-light" href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>在学</a></span>
-    <span><a class="link-light" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
-    <span><a class="link-light" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
-  </div>
-  
 </div>
+<div class="card-body">
+  {% if profile.signature %}
+    {{ profile.signature }}
+  {% else %}
+    还没有签名
+  {% endif %}
+</div>
+<div class="card-footer clearfix">
+  <span><a class="link-light" href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>在学</a></span>
+  <span><a class="link-light" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
+  <span><a class="link-light" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
+</div>
+  
