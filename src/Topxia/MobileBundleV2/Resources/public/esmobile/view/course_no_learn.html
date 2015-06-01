@@ -1,0 +1,52 @@
+<ion-view title="课程标题">
+  <ion-content class="course-body" delegate-handle="mainScroll">
+
+      <div class="course-content">
+      	<div class="course-head">
+		    <img class="full-image" ng-src="{{ course.largePicture }}" />
+		    <p class="mask">
+		      <a class="left">
+		      	<span>
+		      		<i class="iconfont icon-favorite" ng-class="course.ratingNum > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
+		      	</span>{{ course.rating }}
+		      </a>
+		      <a class="right">{{ course.studentNum }} 人在学</a>
+		    </p>
+		</div>
+
+	    <div class="item-body">
+	    	<p class="course-title">{{ course.title }}</p>
+	    	<p class="course-price">
+	    		<span class="price-block">{{ course.price | formatPrice }}</span>
+	    		<span ng-if="discount" class="discount-type discount">
+	    			{{ discount.type | coverDiscount : course.discount }}</span>
+	    		<span ng-if="discount" class="discount-type type">{{ discount.name }}</span>
+	    	</p>
+	    	<p ng-if="discount" class="discount-body">
+	    		<s class="price-block">{{ course.originPrice | formatPrice }}</s> 
+	    		<span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
+	    	</p>
+	    </div>
+
+	    <div ng-include=" 'view/course_nolearn_tab.html' | coverViewPath "></div>
+
+	</div>
+  </ion-content>
+  	<div class="course-tools row">
+  		<div class="col">
+  			<a class="button button-small button-icon iconfont icon-send"></a>
+  			<a ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="button button-small button-icon iconfont icon-favorite"></a>
+  		</div>
+
+  		<div class="col">
+  			<a class="button button-small button-balanced full" ng-click="joinCourse()">
+		  		立即加入
+	       	</a>
+  		</div>
+	  	<div class="col" ng-if="course.vipLevelId > 0">
+  			<a class="button button-small button-assertive full" href="#">
+		  		{{ vipLevels[course.vipLevelId - 1].name }}会员免费学
+	       	</a>
+  		</div>
+	</div>
+</ion-view>

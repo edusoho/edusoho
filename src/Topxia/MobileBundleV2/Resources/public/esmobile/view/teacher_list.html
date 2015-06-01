@@ -1,0 +1,29 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back="go">
+</a>
+
+<h1 class="title">
+  <span>
+    课程教师
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content class="teacher-list">
+
+  	<div class="list">
+	    <a class="item item-avatar" ng-repeat="user in users">
+	      <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
+	      <h3>{{ user.nickname }}</h3>
+	      <p>{{ user.title }}</p>
+	    </a>
+	</div>
+	<div class="list-empty" ng-if="users.length == 0">
+		<a>
+			<i class="icon iconfont icon-ebook"></i>
+			<span>该课程暂无教师</span>
+		</a>
+	</div>
+   </ion-content>
+</ion-view>

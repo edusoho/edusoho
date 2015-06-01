@@ -474,6 +474,12 @@
   color: #fff;
 }
 
+.button.button-yellow {
+  border-color: #E26904;
+  background-color: #F5780F;
+  color: #fff;
+}
+
 .button.button-gray {
   border-color: #383838;
   background-color: #5A5858;
@@ -624,7 +630,7 @@ modal
 /* sign */
 
 .tabs-green .tabs {
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .tabs-green.tabs-color-light .tab-item.tab-item-active {
@@ -664,19 +670,48 @@ modal
 
 /* course-body */
 .course-body .course-head {
-  margin-bottom: -45px;
+  margin-bottom: -35px;
 }
 
-.course-body .course-head>p{
-  text-align: right;
+.course-body .course-head .full-image {
+  display: block;;
+}
+
+.course-body .course-head .course-progress {
+  height: 5px;
+  width: 100%;
+  background: #999;
+  position: absolute;
+  bottom: 0;
+}
+
+.course-head .course-progress>span {
+  display: block;
+  height: 5px;
+  width: 0;
+  background: #37b97d;
+}
+
+.course-body .course-head .mask{
   width: 100%;
   color: #ffffff;
   position: relative;
-  bottom: 45px;
+  bottom: 35px;
   display: block;
-  height: 40px;
+  height: 35px;
   padding: 8px;
-  box-shadow: 0 -15px 20px 0 rgba(0,0,0,0.1) inset;
+  margin-bottom: 0;
+  box-shadow: 0 -20px 20px 0 rgba(0,0,0,0.2) inset;
+}
+
+.course-head .mask.learned {
+  padding: 0;
+}
+
+.mask.learned a {
+    position: relative;
+    padding: 8px;
+    top: 4px;
 }
 
 .course-body .scroll {
@@ -700,13 +735,43 @@ modal
   color: #37b97d;
 }
 
+.course-body .price-block {
+  display: inline-block;
+  width: 100px;
+}
+
+.course-body .discount-body {
+  color: #999;
+}
+
+.course-body .discount-type {
+  border-radius: 5px;
+  color: #fff;
+  padding: 3px 6px 3px 6px;
+  font-size: 12px;
+}
+
+.course-body .discount-type.type {
+  background: #3798F5;
+  border: solid 1px #3798F5;
+}
+
+.course-body .discount-type.discount {
+  background: #F55252;
+  border: solid 1px #F55252;
+}
+
 .course-body .item-body p {
   margin-top: 0;
   margin-bottom: 8px;
 }
 
-.course-body p>a:first-child{
+.course-body .left{
   float: left;
+}
+
+.course-body .right {
+  float: right;
 }
 
 .course-body .tabs {
@@ -747,14 +812,26 @@ modal
   background-color: #f5f5f5 ! important;
 }
 
-.course-body .lesson-list .lesson-title {
+.course-body .lesson-list .lesson-body {
   padding-left: 30px;
   padding-right: 48px;
   display: inline-block;
   width: 100%;
-  height: 60px;
-  line-height: 60px;
+  height: 50px;
+  line-height: 50px;
   border: solid 1px #ddd;
+}
+
+.lesson-list .lesson-title {
+  width: 80%;
+  white-space: nowrap;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 25px;
+  top: 5px;
+  position: relative;
+  line-height: 25px;
 }
 
 .course-body .lesson-list .item {
@@ -780,10 +857,11 @@ modal
 }
 
 .course-body .lesson-list .lesson-status>i {
-  font-size: 30px
+  font-size: 25px;
 }
 
 .course-body .lesson-list .lesson-length {
+  font-size: 12px;
   float: right;
 }
 
@@ -794,6 +872,10 @@ modal
   bottom: 0;
   background: #e5e5e5;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.course-tools .course-favorited {
+  color: #F2263D;
 }
 
 .course-tools .button.full {
@@ -817,6 +899,10 @@ modal
 
 .course-tab-content .body {
   margin-bottom: 44px;
+}
+
+.course-tab-content .body img {
+  width: 99%;
 }
 
 .course-tab-content .card-head {
@@ -852,6 +938,38 @@ modal
 
 .course-detail .detail-content {
   color: #333;
+}
+
+.course-paybody .item-divider{
+  color: #999;
+  font-weight: normal;
+}
+
+.course-paybody .item-thumbnail-left>img:first-child {
+  max-height: 70px;
+  width: inherit;
+  max-width: inherit;
+}
+
+.course-paybody .pay-price {
+  color: #F5780F;
+  font-size: 22px;
+}
+
+.course-paybody .input-label {
+  width: 20%;
+}
+
+.course-paybody .coupon .item {
+  padding-left: 16px;
+}
+
+.course-paybody .icon {
+  color: #ccc;
+}
+
+.course-paybody .right {
+  float: right;
 }
 
 .slide-in-down {

@@ -73,6 +73,11 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService($name);
     }
 
+    public function isinstalledPlugin($name)
+    {
+        return $this->isPluginInstalled($name);
+    }
+
     public function setCurrentUser($userId, $request)
     {
         $user = $this->getUserService()->getUser($userId);

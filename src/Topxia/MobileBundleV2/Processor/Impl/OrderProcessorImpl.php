@@ -170,7 +170,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
         }
 
-        return $this->payCourseByAlipay($order, $token);
+        return $this->payCourseByAlipay($order, $token["token"]);
     }
 
     private function payCourseByIAP($order, $userId)

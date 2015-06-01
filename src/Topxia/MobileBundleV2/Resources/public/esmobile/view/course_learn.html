@@ -1,0 +1,33 @@
+<ion-view title="课程标题">
+  <ion-content class="course-body" delegate-handle="mainScroll">
+
+      <div class="course-content">
+      	<div class="course-head">
+	    <img class="full-image" ng-src="{{ course.largePicture }}" />
+	    <div class="mask learned">
+	      <a>
+	      	已完成{{ learnProgress }}
+	      </a>
+	      <div class="course-progress">
+	      	<span ng-style="{ width : learnProgress }" ></span>
+	      </div>
+	    </div>
+	</div>
+
+	<div ng-include=" 'view/course_learn_tab.html' | coverViewPath "></div>
+
+	</div>
+  </ion-content>
+  	<div class="course-tools row">
+  		<div class="col">
+  			<a class="button button-small button-icon iconfont icon-send"></a>
+  			<a ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="button button-small button-icon iconfont icon-favorite"></a>
+  		</div>
+
+  		<div class="col">
+  			<a class="button button-small button-balanced full" ng-click="joinCourse()">
+		  		继续学习
+	       	</a>
+  		</div>
+	</div>
+</ion-view>	

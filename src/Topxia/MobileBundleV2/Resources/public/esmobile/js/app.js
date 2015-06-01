@@ -326,10 +326,41 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               }
             });
 
+            $stateProvider.state('teacherlist', {
+              url: "/teacherlist/:courseId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/teacher_list.html",
+                  controller : TeacherListController
+                }
+              }
+            });
+
+            $stateProvider.state('coursePay', {
+              url: "/coursepay",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/course_pay.html",
+                  controller : CoursePayController
+                }
+              }
+            });
+
+            $stateProvider.state('courseCoupon', {
+              url: "/coursecoupon",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/coupon.html",
+                  controller : CourseCouponController
+                }
+              }
+            });
+
             $urlRouterProvider.when("/regist", "/regist/phone");
 }]);
 
-app.run(["applicationProvider", "$rootScope", '$ionicConfig', function(applicationProvider, $rootScope, $ionicConfig) {
+app.run(["applicationProvider", "$rootScope", '$ionicConfig', '$ionicLoading', '$timeout',
+  function(applicationProvider, $rootScope, $ionicConfig, $ionicLoading, $timeout) {
   
   var browser={
       v: (function(){
@@ -347,8 +378,30 @@ app.run(["applicationProvider", "$rootScope", '$ionicConfig', function(applicati
   }
   
   $rootScope.platform = $ionicConfig.platform;
+  $rootScope.showLoad = function(template) {
+    $ionicLoading.show({
+            template: template || '加载中...',
+    });
+  };
+
+  $rootScope.toast = function(template) {
+    $ionicLoading.show({
+            template: template || '加载中...',
+    });
+
+    $timeout(function() {
+      $ionicLoading.hide();
+    }, 3000);
+  };
+
+  $rootScope.hideLoad = function() {
+    $ionicLoading.hide();
+  };
+
   app.host = window.location.origin;
   applicationProvider.init(app.host);
   applicationProvider.updateScope($rootScope);
+
+  $rootScope.stateParams = {};
   angular.$client = {};
 }]);

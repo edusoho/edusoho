@@ -1,5 +1,5 @@
 var appFactory = angular.module('AppFactory', []);
-appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', function($rootScope, $ionicModal) {
+appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', '$ionicPopup', function($rootScope, $ionicModal, $ionicPopup) {
 	var utils = {
 		createArray : function(count) {
 			var arr = [];
@@ -14,6 +14,18 @@ appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', function($rootScope,
 			for (var i = categoryTree.length - 1; i >= 0; i--) {
 				categorys.unshift(categoryTree[i]);
 			};
+		},
+		showPop : function(opts, callback) {
+			var confirmPopup = $ionicPopup.confirm({
+			     title: opts.title,
+			     template: opts.template,
+			     okText : opts.okText || "确定",
+			     cancelText : opts.cancelText || "取消"
+			});
+			
+			confirmPopup.then(function(res) {
+				callback(res);
+			});
 		},
 		createModal : function($scope, templateUrl, modalInitFunc) {
 			$ionicModal.fromTemplateUrl(templateUrl, {
@@ -45,6 +57,14 @@ appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', function($rootScope,
 	
 	return utils;
 }]).
+factory('ServcieUtil', function() {
+
+	return {
+		getService : function(name) {
+			return angular.injector(["AppService", "ng"]).get(name);
+		}
+	}
+}).
 factory('broadCast', ['$rootScope', function($rootScope) {
 	angular.broadQueue = [];
 	var broadCastService = {

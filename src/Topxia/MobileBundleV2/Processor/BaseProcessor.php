@@ -35,8 +35,8 @@ class BaseProcessor {
 
     protected function filterUsersFiled($users)
     {
-        $controller = $this->controller;
-        return array_map(function($user) use ($controller)
+        $container = $this->controller->getContainer();
+        return array_map(function($user) use ($container)
         {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
@@ -44,6 +44,10 @@ class BaseProcessor {
                     unset($user[$key]);
                 }
             }
+
+            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             
             return $user;
         }, $users);

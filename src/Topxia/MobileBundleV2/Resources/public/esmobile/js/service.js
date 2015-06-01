@@ -44,6 +44,12 @@ service('LessonService', ['httpService', function(httpService) {
 		});
 	}
 }]).
+service('OrderService', ['httpService', function(httpService) {
+
+	this.payCourse = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Order/payCourse", arguments);
+	}
+}]).
 service('NoteService', ['httpService', function(httpService) {
 
 	this.getNoteList = function(params, callback) {
@@ -58,7 +64,25 @@ service('NoteService', ['httpService', function(httpService) {
 		});
 	}
 }]).
+service('CouponService', ['httpService', function(httpService) {
+
+	this.checkCoupon = function() {
+		httpService.simpleGet('/mapi_v2/Course/coupon', arguments);
+	}
+}]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
+
+	this.getCourseTeachers = function(params, callback) {
+		httpService.get({
+			url : app.host + '/mapi_v2/User/getCourseTeachers',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+			}
+		});
+	}
 
 	this.login = function(params, callback) {
 		httpService.post({
@@ -168,6 +192,14 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 
+	this.favoriteCourse = function(params, callback) {
+		httpService.simpleGet('/mapi_v2/Course/favoriteCourse', arguments);
+	}
+
+	this.unFavoriteCourse = function(params, callback) {
+		httpService.simpleGet('/mapi_v2/Course/unFavoriteCourse', arguments);
+	}
+
 	this.getReviews = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/Course/getReviews',
@@ -258,9 +290,7 @@ service('CourseService', ['httpService', function(httpService) {
 				callback(data);
 			},
 			error : function(data) {
-				if (error) {
-					error(data)
-				}
+				console.log(data);
 			}
 		});
 	}
@@ -311,6 +341,28 @@ service('SchoolService', ['httpService', function(httpService) {
 }]).
 service('httpService', ['$http', function($http) {
 	this.options = {};
+
+	this.simpleGet = function(url) {
+		params  = arguments[1][0];
+		callback = arguments[1][1];
+		errorCallback = arguments[1][2];
+
+		options = {
+			method : "get",
+			url : app.host + url,
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+				if (errorCallback) {
+					errorCallback(data);
+				}
+			}
+		};
+
+		$http(options).success(options.success).error(options.error);
+	}
 
 	this.get = function(options) {
 		options.method  = "get";
