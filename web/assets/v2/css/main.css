@@ -47,6 +47,9 @@ a:focus {
   color: #fff;
   background-color: #37b97d;
 }
+.lesson-manage-panel .panel-heading {
+  z-index: 1;
+}
 .group-header-inner .media-body {
   width: auto;
 }
@@ -228,22 +231,22 @@ a:focus {
     -o-transform: translateX(0);
   }
 }
-.color-p {
+.color-primiay {
   color: #37b97d !important;
 }
-.color-w {
+.color-warning {
   color: #e67e22 !important;
 }
-.color-s {
+.color-success {
   color: #1abc9c !important;
 }
-.color-i {
+.color-info {
   color: #39aef1 !important;
 }
-.color-d {
+.color-danger {
   color: #e74c3c !important;
 }
-.color-y {
+.color-yellow {
   color: #fbc02d !important;
 }
 .gray-darker {
@@ -1634,12 +1637,6 @@ body.nav-active {
   vertical-align: middle;
   margin-right: 10px;
 }
-.panel.panel-default > .panel-heading span {
-  font-size: 16px;
-  margin-left: 10px;
-  display: inline-block;
-  vertical-align: middle;
-}
 .panel.panel-default > .panel-heading .more {
   position: absolute;
   top: 7px;
@@ -2017,6 +2014,8 @@ body.nav-active {
   margin-left: 10px;
 }
 .media-group .title {
+  height: 20px;
+  overflow: hidden;
   margin-bottom: 10px;
 }
 .media-group .metas {
@@ -2807,9 +2806,10 @@ textarea.form-control-o {
   position: absolute;
   top: 15px;
   right: 15px;
+  width: 70px;
+  text-align: right;
 }
 .es-card .metas .btn {
-  display: block;
   margin-bottom: 10px;
 }
 .es-card .card-body {
