@@ -3,7 +3,7 @@
 {% else %}
   {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id %}
 {% endif %}
-<li class="period lesson-item lesson-item-{{ item.id}}">
+<li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
   {% if item.status == 'published' %}
   <a {% if member %}href="{{ lessonUrl }}"{% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}>
     {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}

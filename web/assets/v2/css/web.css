@@ -3618,7 +3618,7 @@ body {
   border-radius: 5px;
 }*/
 
-.userpage-header .media {
+/*.userpage-header .media {
   padding-top: 25px;
   padding-bottom: 25px;
 }
@@ -3636,7 +3636,7 @@ body {
 .userpage-header h2 small {
   font-size: 16px;
   color: #096;
-}
+}*/
 
 /*.lt-ie8 .userpage-header {
   zoom:1;
@@ -5403,9 +5403,9 @@ a.homework-essay-textarea-pack-up{
   box-shadow: -1px -1px 2px #8e0000;
 }
 
-.my-wallet-panel img{
+/*.my-wallet-panel img{
   width: 100%;
-}
+}*/
 
 .table-striped .sort-handle{
   padding: 5px;

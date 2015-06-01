@@ -7,19 +7,22 @@
 
     <div class="row">
       <!-- 轮播图 -->
-      <div class="aricle-carousel carousel slide col-md-8" id="aricle-carousel" data-ride="carousel">
-        <ol class="carousel-indicators"></ol>
-        <div class="carousel-inner" role="listbox">
-          {% for index,featuredArticle in featuredArticles %}
-              <div class="item {% if loop.index == 1 %}active{% endif %}">
+      <div class="aricle-carousel col-md-8">
+        <div class="swiper-container">
+          <div class="swiper-wrapper">
+            {% for index,featuredArticle in featuredArticles %}
+              <div class="swiper-slide">
                 <a href="{{ path('article_detail', {id:featuredArticle.id}) }}">
                   <img src="{{ asset(featuredArticle.picture) }}"  alt="{{ featuredArticle.title }}">
                 </a>
-                <div class="carousel-caption">
+                <div class="swiper-caption">
                  {{ featuredArticle.title }}
                 </div>
+                <div class="image-overlay"></div>
               </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
+          <div class="swiper-pager"></div>
         </div>
       </div>
       <div class="col-md-4 article-header-right hidden-sm hidden-xs">
