@@ -60,7 +60,7 @@ class SearchController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $count
-            , 10
+            , 12
         );
         $courses = $this->getCourseService()->searchCourses(
             $conditions,

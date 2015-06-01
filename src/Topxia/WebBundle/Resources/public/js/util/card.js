@@ -20,6 +20,10 @@ define(function (require, exports, module) {
                 animation: true
             });
             _this.popover("show");
+            _this.on('show.bs.popover', function () {
+                $(".popover").hide();
+            });
+
             $.get(_this.data('cardUrl'),function(html) {
                 _this.data('html', html);
                 bindCardEvent($('.es-card'));
