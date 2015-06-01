@@ -13,10 +13,7 @@
     <div class="teacher-info">
       <div class="title">
         <a class="name" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-        {% if not app.user or (teacher.id != app.user.id) %}
-          <a class="follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="关注" {% if isFollowed %} style="display:none;"{% endif %}><i class="es-icon es-icon-addbox"></i></a>
-          <a class="unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" data-toggle="tooltip" data-placement="top" title="" data-original-title="取消关注" {% if not isFollowed %} style="display:none;" {% endif %}><i class="es-icon es-icon-checkbox"></i></a>
-        {% endif %}
+        
       </div>
       <div class="position">
         {% if teacher.title %}
@@ -25,7 +22,13 @@
           暂无头衔
         {% endif %}
       </div>
-      <a class="btn btn-default btn-xs text-center" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
+      <div class="metas">
+        {% if not app.user or (teacher.id != app.user.id) %}
+          <a class="btn btn-primary btn-high btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
+          <a class="btn btn-default btn-high btn-xs unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+        {% endif %}
+        <a class="btn btn-default btn-xs text-center" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
+      </div>
     </div>
   </div>
 </div>
