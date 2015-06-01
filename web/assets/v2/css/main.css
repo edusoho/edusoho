@@ -99,6 +99,20 @@ a:focus {
     padding-right: 0;
   }
 }
+.userpage-header .avatar-bg {
+  position: relative;
+}
+.userpage-header .media-left .icon-user-status {
+  position: absolute;
+  bottom: 0;
+  right: 8px;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+}
+.userpage-header .icon-user-status i {
+  font-size: 18px;
+}
 .userpage-header h2 {
   margin-top: 0px;
   margin-bottom: 15px;
@@ -905,6 +919,7 @@ Pagination Styles
   text-align: center;
   padding: 20px 0;
   line-height: 30px;
+  text-shadow: 0 1px 3px #000;
 }
 .es-footer .copyright span {
   margin-right: 30px;
@@ -1195,7 +1210,7 @@ body.nav-active {
 .alert-notice .close {
   float: none;
   position: absolute;
-  top: 0;
+  top: 2px;
   right: 0;
   width: 30px;
 }
@@ -1222,6 +1237,22 @@ body.nav-active {
 }
 .aside-notice .swiper-slide a {
   color: #e67e22;
+}
+.icon-user-status {
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 17px;
+  text-align: center;
+  border: 1px solid #fff;
+  background: #e74c3c;
+  color: #fff;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.icon-user-status i {
+  font-size: 12px;
 }
 .class-serve > ul {
   padding: 20px 10px;
@@ -2779,23 +2810,10 @@ textarea.form-control-o {
 .es-card .media-left {
   position: relative;
 }
-.es-card .user-status {
+.es-card .icon-user-status {
   position: absolute;
   bottom: 0;
   right: 5px;
-  width: 20px;
-  height: 20px;
-  line-height: 17px;
-  text-align: center;
-  border: 1px solid #fff;
-  background: #e74c3c;
-  color: #fff;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-}
-.es-card .user-status i {
-  font-size: 12px;
 }
 .es-card .content {
   font-size: 12px;

@@ -23,6 +23,7 @@
 .es-icon-addbox:before { content: "\e65f"; }
 .es-icon-checkbox:before { content: "\e660"; }
 .es-icon-forum:before { content: "\e662"; }
+.es-icon-history:before { content: "\e670"; }
 .es-icon-removecircle:before { content: "\e66c"; }
 .es-icon-thumbup:before { content: "\e659"; }
 .es-icon-reply:before { content: "\e65a"; }
@@ -51,7 +52,6 @@
 .es-icon-book:before { content: "\e609"; }
 .es-icon-bookmarkoutline:before { content: "\e60a"; }
 .es-icon-bookmark:before { content: "\e60b"; }
-.es-icon-check:before { content: "\e60c"; }
 .es-icon-graphicclass:before { content: "\e60e"; }
 .es-icon-description:before { content: "\e60f"; }
 .es-icon-phone:before { content: "\e610"; }
@@ -112,7 +112,6 @@
 .es-icon-renren:before { content: "\e646"; }
 .es-icon-weibo:before { content: "\e65d"; }
 .es-icon-weixin:before { content: "\e647"; }
-.es-icon-doing:before { content: "\e648"; }
 .es-icon-done1:before { content: "\e649"; }
 .es-icon-undone:before { content: "\e64a"; }
 .es-icon-whatshot:before { content: "\e64b"; }
@@ -127,3 +126,5 @@
 .es-icon-assignment1:before { content: "\e654"; }
 .es-icon-accountwallet:before { content: "\e655"; }
 .es-icon-dashboard:before { content: "\e656"; }
+.es-icon-check:before { content: "\e60c"; }
+.es-icon-doing:before { content: "\e648"; }

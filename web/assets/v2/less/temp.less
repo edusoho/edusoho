@@ -52,6 +52,7 @@
 }
 
 .userpage-header .media-left {
+  
   padding-right: 30px;
   @media (max-width: @screen-xs-max) {
     display: block;
@@ -59,6 +60,23 @@
     margin-bottom: 30px;
     padding-right: 0;
   }
+}
+
+.userpage-header .avatar-bg {
+  position: relative;
+}
+
+.userpage-header .media-left .icon-user-status {
+  position: absolute;
+  bottom: 0;
+  right: 8px;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+}
+
+.userpage-header .icon-user-status i {
+  font-size: 18px;
 }
 
 .userpage-header h2 {
