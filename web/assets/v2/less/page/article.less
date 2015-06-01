@@ -7,20 +7,41 @@
 // 轮播
 .aricle-carousel {
   padding: 0 5px;
-  .item {
+  .swiper-container {
+    position: relative;
+    height: 410px;
+    overflow: hidden;
+    @media (max-width: @screen-md-max) {
+      height: 338px;
+    }
+    @media (max-width: @screen-sm-max) {
+      height: 387px;
+    }
+    @media (max-width: @screen-xs-max) {
+      height: 150px;
+    }
+  }
+  .swiper-slide {
+    position: relative;
     img {
       width: 100%;
       max-height: 410px;
-      border-radius: 4px;
+      .border-radius(4px);
+    }
+    .image-overlay {
+      .border-radius(4px);
     }
   }
-  .carousel-caption {
+  .swiper-caption {
+    position: absolute;
     font-size: 24px;
     width: 100%;
     left: 0;
+    bottom: 40px;
     text-align: left;
-    padding-left: 20px;
-    text-shadow: 0 0 0;
+    padding: 0 20px;
+    color: #ffffff;
+    z-index: 1;
     @media (max-width: @screen-md-max) {
       font-size: 20px;
     }
@@ -31,14 +52,36 @@
       font-size: 16px;
     }
   }
-  .carousel-indicators {
+  .swiper-pager {
+    position: absolute;
     bottom: 10px;
-    li {
-      margin: 0 5px;
-    }
-    .active {
-      height: 10px;
-      width: 10px;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    span {
+      font-size: 0;
+      margin: 0 10px;
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      background: #fff;
+      .border-radius(50%);
+      @media (max-width: @screen-xs-max) {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+      }
+      &:hover {
+        cursor: pointer;
+        background: @brand-primary;
+        color: @brand-primary;
+        .opacity(1);
+      }
+      &.swiper-active-switch {
+        background: @brand-primary;
+        color: @brand-primary;
+        .opacity(1);
+      }
     }
   }
 }
