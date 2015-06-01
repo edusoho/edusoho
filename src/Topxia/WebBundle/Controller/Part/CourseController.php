@@ -97,13 +97,14 @@ class CourseController extends BaseController
         $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
 
         if ($course['categoryId'] > 0) {
-            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId'])), array('recommendedSeq', 'ASC'), 0, 8));
+            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId']),'private' => 0), array('recommendedSeq', 'ASC'), 0, 8));
         }
+
 
         $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0), array('recommendedSeq', 'ASC'), 0, 11));
 
         $recommends = array();
-        foreach ($classrooms as $classroom) {
+        foreach ($classrooms as $key =>  $classroom) {
             if (isset($recommends[$classroom['id']])) {
                 continue;
             }
@@ -120,7 +121,7 @@ class CourseController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Course/Part:normal-header-recommend-classrooms.html.twig', array(
-            'classrooms' => $classrooms
+            'classrooms' => $recommends
         ));
 
     }

@@ -5,15 +5,15 @@
     <div class="media-body">
       <div class="title">
         {% if thread.type == 'question'%}
-          <i class="es-icon es-icon-help1 color-d"></i>
+          <i class="es-icon es-icon-help1 color-danger"></i>
         {% endif %}
 
         {% if thread.type == 'event'%}
-          <i class="es-icon es-icon-landscape color-y"></i>
+          <i class="es-icon es-icon-landscape color-yellow"></i>
         {% endif %}
         
         {% if thread.type == 'discussion' %}
-          <i class="es-icon es-icon-done color-i"></i>
+          <i class="es-icon es-icon-done color-info"></i>
         {% endif %}
 
         <a  href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title }}
