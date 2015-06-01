@@ -13,7 +13,7 @@
       <div class="col-md-3 control-label"></div>
       <div class="controls col-md-8 radios" id="defaultCoursePicture">
         {{ radios('coursePicture', {1:'自定义默认课程图片', 0:'系统默认课程图片'}, defaultSetting.defaultCoursePicture|default(0)) }}
-        <p>网校内未上传图片的课程，都会显示该图片。推荐尺寸（360*180）</p>
+        <p>支持jpg、gif、png格式的图片，建议尺寸：480*270px.</p>
         {% include 'TopxiaAdminBundle:System:default-course-picture.html.twig' %}
       </div>
     </div>
