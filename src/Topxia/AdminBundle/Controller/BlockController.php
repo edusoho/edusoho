@@ -26,14 +26,14 @@ class BlockController extends BaseController
             $paginator->getPerPageCount());
         
         $blockIds = ArrayToolkit::column($findedBlocks, 'id');
-        $tatestHistories = $this->getBlockService()->getLatestBlockHistoriesByBlockIds($blockIds);
-        $userIds = ArrayToolkit::column($tatestHistories, 'userId');
+        $latestHistories = $this->getBlockService()->getLatestBlockHistoriesByBlockIds($blockIds);
+        $userIds = ArrayToolkit::column($latestHistories, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaAdminBundle:Block:index.html.twig', array(
             'blocks'=>$findedBlocks,
             'users'=>$users,
-            'tatestHistories' => $tatestHistories,
+            'latestHistories' => $latestHistories,
             'paginator' => $paginator,
             'type' => $category
         ));
