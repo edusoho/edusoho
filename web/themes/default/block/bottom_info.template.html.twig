@@ -29,8 +29,12 @@
 {% macro footer_div(title, links, className) %}
 <div class="link-item {% if className %}{{className}}{% endif %}">
   <h3>{{ title.value|default('') }}</h3>
-  {% for link in links|default(null) %}
-    <a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a>
-  {% endfor %}
+  <ul>
+    {% for link in links|default(null) %}
+      <li>
+        <a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endmacro %}

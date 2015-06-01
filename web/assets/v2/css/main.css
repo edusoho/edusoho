@@ -919,14 +919,10 @@ Pagination Styles
   text-align: center;
   padding: 20px 0;
   line-height: 30px;
-  text-shadow: 0 1px 3px #000;
-}
-.es-footer .copyright span {
-  margin-right: 30px;
   color: #bababa;
   text-shadow: 0 1px 3px #000;
 }
-.es-footer .copyright span a:hover {
+.es-footer .copyright a:hover {
   color: white;
 }
 .footer-link {
@@ -943,9 +939,20 @@ Pagination Styles
     width: 33.33%;
   }
 }
-.footer-main a {
-  display: block;
+.footer-main h3 {
+  color: #b1b1b1;
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+.footer-main ul {
+  padding: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.footer-main ul li {
   margin-top: 20px;
+}
+.footer-main a {
   color: #b1b1b1;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -958,11 +965,6 @@ Pagination Styles
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
-.footer-main h3 {
-  color: #b1b1b1;
-  margin-top: 0;
-  margin-bottom: 40px;
 }
 .footer-logo {
   margin-top: 20px;
