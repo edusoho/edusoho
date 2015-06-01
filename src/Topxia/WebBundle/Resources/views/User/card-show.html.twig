@@ -3,11 +3,16 @@
 <div class="card-header">
   <div class="media">
     <div class="media-left">
-      {{ web_macro.user_avatar(user, '', 'avatar-md', true) }}
+      {{ web_macro.user_avatar(user, '', 'avatar-md', false) }}
+      <!-- 如果身份为教师则显示 -->
+      {% if 'ROLE_TEACHER' in user.roles %}
+        <span class="user-status"><i class="es-icon es-icon-school"></i></span
+      >
+      {% endif %}
     </div>
     <div class="media-body">
       <div class="title">
-        {{ web_macro.user_link(user, '','link-light', false) }}
+        {{ web_macro.user_link(user, '', false) }}
       </div>
       <div class="content">
         {% if user.title %}

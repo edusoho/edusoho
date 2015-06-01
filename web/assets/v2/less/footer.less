@@ -6,13 +6,12 @@
     text-align: center;
     padding: 20px 0;
     line-height: 30px;
-    text-shadow: 0 1px 3px #000;
-    color: #bababa;
-    a {
-      .es-transition;
-      &:hover {
+    span {
+      margin-right: 30px;
+      color: #bababa;
+      text-shadow: 0 1px 3px #000;
+      a:hover {
         color: white;
-        .es-transition;
       }
     }
   }
@@ -109,6 +108,58 @@
       }
     }
 
+    .sns-apple {
+      position: relative;
+      .apple-popover {
+        background: url(../img/apple.png);
+        width: 194px;
+        height: 209px;
+        position: absolute;
+        left: -68px;
+        top: -220px;
+        opacity: 0;
+        transform: scale(0);
+        -webkit-transform: scale(0);
+        transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transition: transform ease .3s,opacity ease .3s;
+        -webkit-transition: all ease .3s;
+      }
+
+      &:hover .apple-popover{
+        display: block;
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .sns-android {
+      position: relative;
+      .android-popover {
+        background: url(../img/android.png);
+        width: 194px;
+        height: 209px;
+        position: absolute;
+        left: -68px;
+        top: -220px;
+        opacity: 0;
+        transform: scale(0);
+        -webkit-transform: scale(0);
+        transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transition: transform ease .3s,opacity ease .3s;
+        -webkit-transition: all ease .3s;
+      }
+
+      &:hover .android-popover{
+        display: block;
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        opacity: 1;
+      }
+    }
+
     i {
       display: inline-block;
       width: 40px;
@@ -137,20 +188,11 @@
       }
     }
 
-    i.es-icon-qq {
-      background: @brand-info;
-      border-color: @brand-info;
-      &:hover {
-        background: @brand-info - #222;
-        cursor: pointer;
-      }
-    }
-
     i.es-icon-weixin {
-      background: @brand-success;
-      border-color: @brand-success;
+      background: @brand-primary;
+      border-color: @brand-primary;
       &:hover {
-        background: @brand-success - #222;
+        background: @brand-primary - #222;
         .weixin-popover {
           display: block;
           transform: scale(1);
@@ -160,7 +202,15 @@
       }
     }
 
-    i.es-icon-phone {
+    i.es-icon-apple {
+      background: @brand-info;
+      border-color: @brand-info;
+      &:hover {
+        background: @brand-info - #222;
+      }
+    }
+
+    i.es-icon-android {
       background: @brand-warning;
       border-color: @brand-warning;
       &:hover {

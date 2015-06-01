@@ -232,6 +232,7 @@
     "default:middle_banner":
     {
         "title": "默认主题：首页中部.横幅",
+        "category": "default",
         "templateName": "@theme/default/block/middle_banner.template.html.twig",
         "items": {
             "icon1":
@@ -344,6 +345,7 @@
     "default:bottom_info":
     {
         "title": "默认主题: 首页底部.链接区域",
+        "category": "default",
         "templateName": "@theme/default/block/bottom_info.template.html.twig",
         "items": {
             "firstColumnText": {
