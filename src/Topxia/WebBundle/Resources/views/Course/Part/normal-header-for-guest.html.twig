@@ -4,7 +4,7 @@
 
 {% block content %}
 
-  {{ header_macro.picture(course) }}
+  {{ header_macro.picture(course, previewLesson) }}
 
   {{ header_macro.info(course, member, userVipStatus) }}
 
@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block after_content %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
 {% endblock %}
 
 

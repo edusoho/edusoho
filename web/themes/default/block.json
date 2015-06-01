@@ -529,6 +529,55 @@
                         "target": "_blank"
                     }
                 ]
+            },
+            "weibo": {
+                "title": "底部微博链接",
+                "desc": "填入网校的微博首页地址",
+                "count": 1,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "微博首页",
+                        "href": "http:\/\/weibo.com\/edusoho",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "weixin": {
+                "title": "底部微信公众号",
+                "desc": "上传网校的微信公众号的二维码",
+                "count": 1,
+                "type": "img",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/default\/weixin.png",
+                        "alt": "微信公众号"
+                    } 
+                ]
+            },
+            "apple": {
+                "title": "底部iOS版APP下载二维码",
+                "desc": "上传网校的iOS版APP下载二维码",
+                "count": 1,
+                "type": "img",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/default\/apple.png",
+                        "alt": "网校的iOS版APP"
+                    } 
+                ]
+            },
+            "android": {
+                "title": "底部Android版APP下载二维码",
+                "desc": "上传网校的Android版APP下载二维码",
+                "count": 1,
+                "type": "img",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/default\/android.png",
+                        "alt": "网校的Android版APP"
+                    }
+                ]
             }
         }
     }

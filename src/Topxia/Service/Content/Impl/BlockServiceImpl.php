@@ -23,6 +23,15 @@ class BlockServiceImpl extends BaseService implements BlockService
         return  $this->getBlockHistoryDao()->getLatestBlockHistory();
     }
 
+    public function getLatestBlockHistoriesByBlockIds($blockIds)
+    {
+        $blockHistories = array();
+        foreach ($blockIds as $key => $blockId) {
+            $blockHistories[] = $this->getBlockHistoryDao()->getLatestBlockHistoryByBlockId($blockId);
+        }
+        return ArrayToolkit::index($blockHistories, 'blockId');
+    }
+
     public function getBlock($id)
     {
         $result = $this->getBlockDao()->getBlock($id);

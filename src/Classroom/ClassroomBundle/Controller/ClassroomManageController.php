@@ -783,7 +783,7 @@ class ClassroomManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
@@ -801,7 +801,7 @@ class ClassroomManageController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $teacherIds = ArrayToolkit::column($paperResults, 'checkTeacherId');
-        $teachers = $this->getUserService()->findUsersByIds($userIds);
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
         return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig',array(
             'classroom' => $classroom,

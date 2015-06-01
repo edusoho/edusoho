@@ -2,7 +2,7 @@ define(function (require, exports, module) {
 
     $(".js-user-card").on("mouseenter", function () {
         var _this = $(this);
-        var loadingHtml = '<div class="user-card"><div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div></div>';
+        var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
         if (!_this.data('html')) {
             _this.popover({
                 trigger: 'manual',
@@ -22,7 +22,7 @@ define(function (require, exports, module) {
             _this.popover("show");
             $.get(_this.data('cardUrl'),function(html) {
                 _this.data('html', html);
-                bindCardEvent($('.user-card'));
+                bindCardEvent($('.es-card'));
                 $(".popover").on("mouseleave", function () {
                     $(_this).popover('hide');
                 });
@@ -35,7 +35,7 @@ define(function (require, exports, module) {
             _this.popover("show");
         }
        
-        bindMsgBtn($('.user-card'), _this);
+        bindMsgBtn($('.es-card'), _this);
 
     }).on("mouseleave", function () {
         var _this = $(this);

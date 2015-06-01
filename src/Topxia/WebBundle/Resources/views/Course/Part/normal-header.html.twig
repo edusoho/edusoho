@@ -11,8 +11,14 @@
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
 {% endif %}
 
-{% macro picture(course) %}
+{% macro picture(course, previewLesson) %}
   <div class="course-img">
+    {% if previewLesson %}
+      <a href="#modal" data-toggle="modal" data-url="{{ path('course_lessons_preview', {courseId: course.id, lessonId:previewLesson.id }) }}" class="course-img-cover">
+        <i class="es-icon es-icon-playcircleoutline"></i>
+      </a>
+    {% endif %}
+
     <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" alt="{{ course.title }}">
     <div class="tags">
       {% if course.serializeMode == 'serialize' %}

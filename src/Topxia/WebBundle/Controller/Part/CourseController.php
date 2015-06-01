@@ -29,17 +29,17 @@ class CourseController extends BaseController
         $nextLearnLesson = $member ? $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']) : null;
         $learnProgress = $member ? $this->calculateUserLearnProgress($course, $member) : null;
 
-        $classrooms = $this->findCourseRecommendClassrooms($course);
+        $previewLesson = $this->getCourseService()->searchLessons(array('type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
             'course' => $course,
             'member' => $member,
             'hasFavorited' => $hasFavorited,
-            'classrooms' => $classrooms,
             'courseVip' => $courseVip,
             'userVipStatus' => $userVipStatus,
             'nextLearnLesson' => $nextLearnLesson,
             'learnProgress' => $learnProgress,
+            'previewLesson' => empty($previewLesson) ? null : $previewLesson[0],
         ));
     }
 
@@ -90,6 +90,41 @@ class CourseController extends BaseController
         ));
     }
 
+    public function recommendClassroomsAction($course)
+    {
+        $classrooms = array();
+        $classrooms = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
+        $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
+
+        if ($course['categoryId'] > 0) {
+            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId'])), array('recommendedSeq', 'ASC'), 0, 8));
+        }
+
+        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0), array('recommendedSeq', 'ASC'), 0, 11));
+
+        $recommends = array();
+        foreach ($classrooms as $classroom) {
+            if (isset($recommends[$classroom['id']])) {
+                continue;
+            }
+
+            if (count($recommends) >= 8) {
+                break;
+            }
+
+            if (in_array($classroom['id'], $belongCourseClassroomIds)) {
+                $classroom['belogCourse'] = true;
+            }
+
+            $recommends[$classroom['id']] = $classroom;
+        }
+
+        return $this->render('TopxiaWebBundle:Course/Part:normal-header-recommend-classrooms.html.twig', array(
+            'classrooms' => $classrooms
+        ));
+
+    }
+
     protected function getCourse($course)
     {
         if (is_array($course)) {
@@ -128,38 +163,6 @@ class CourseController extends BaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-    }
-
-    protected function findCourseRecommendClassrooms($course)
-    {
-        $classrooms = array();
-        $classrooms = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
-        $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
-
-        if ($course['categoryId'] > 0) {
-            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId'])), array('recommendedSeq', 'ASC'), 0, 8));
-        }
-
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0), array('recommendedSeq', 'ASC'), 0, 11));
-
-        $recommends = array();
-        foreach ($classrooms as $classroom) {
-            if (isset($recommends[$classroom['id']])) {
-                continue;
-            }
-
-            if (count($recommends) >= 8) {
-                break;
-            }
-
-            if (in_array($classroom['id'], $belongCourseClassroomIds)) {
-                $classroom['belogCourse'] = true;
-            }
-
-            $recommends[$classroom['id']] = $classroom;
-        }
-
-        return array_values($recommends);
     }
 
     protected function calculateUserLearnProgress($course, $member)
