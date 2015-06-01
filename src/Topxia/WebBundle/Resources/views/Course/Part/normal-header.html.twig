@@ -5,12 +5,20 @@
 
 {% if member %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
+{% elseif course.parentId|default(false) %}
+  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
 {% else %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
 {% endif %}
 
-{% macro picture(course) %}
+{% macro picture(course, previewLesson) %}
   <div class="course-img">
+    {% if previewLesson %}
+      <a href="#modal" data-toggle="modal" data-url="{{ path('course_lessons_preview', {courseId: course.id, lessonId:previewLesson.id }) }}" class="course-img-cover">
+        <i class="es-icon es-icon-playcircleoutline"></i>
+      </a>
+    {% endif %}
+
     <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" alt="{{ course.title }}">
     <div class="tags">
       {% if course.serializeMode == 'serialize' %}
@@ -64,7 +72,7 @@
         {% endif %}
         <p class="discount-price">
           {% if course.discountId == 0 %}
-            <label>原价</label>
+            <label>价格</label>
           {% else %}
             <label>折后价</label>
           {% endif %}

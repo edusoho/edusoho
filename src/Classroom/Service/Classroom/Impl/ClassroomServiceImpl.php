@@ -487,7 +487,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => empty($order) ? 0 : $order['id'],
                     'orderNote' => empty($order['note']) ? '' : $order['note'],
                 );
-                $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $userId, $classroomId, $info);
+                $this->getCourseService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
         }
 
@@ -731,10 +731,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createNotFoundException();
         }
 
-        if ($classroom['status'] != 'published') {
-            throw $this->createServiceException('不能加入未发布班级');
-        }
-
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
             throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
@@ -880,7 +876,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (in_array($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+        if (in_array($member['role'], array('studentAssistant', 'assistant', 'teacher', 'headTeacher'))) {
             return true;
         }
 
@@ -889,7 +885,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function tryHandleClassroom($id)
     {
-        if (!$this->canTakeClassroom($id)) {
+        if (!$this->canHandleClassroom($id)) {
             throw $this->createAccessDeniedException('您无权操作！');
         }
     }
@@ -1129,6 +1125,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return $classroom;
+    }
+
+    public function getClassroomMembersByCourseId($courseId, $userId) {
+
+        $classroomIds = $this->findClassroomIdsByCourseId($courseId);
+        $members = $this->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
+        return $members;
     }
 
     private function updateStudentNumAndAudtorNum($classroomId)

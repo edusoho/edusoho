@@ -1,7 +1,7 @@
 
 {% if user %}
   <div class="col-md-7 col-md-offset-2">
-    <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="avatar-small">
+    <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="avatar-small">
     <span class="nickname mlm">{{user.nickname}}</span>
     <input type="hidden" name="headTeacherId" value="{{user.id}}" />
   <div>

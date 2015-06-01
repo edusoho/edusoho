@@ -2,17 +2,32 @@
   {{ _self.footer_div(firstColumnText|first, firstColumnLinks) }}
   {{ _self.footer_div(secondColumnText|first, secondColumnLinks) }}
   {{ _self.footer_div(thirdColumnText|first, thirdColumnLinks) }}
-  {{ _self.footer_div(fourthColumnText|first, fourthColumnLinks) }}
-  {{ _self.footer_div(fifthColumnText|first, fifthColumnLinks) }}
+  {{ _self.footer_div(fourthColumnText|first, fourthColumnLinks, 'hidden-xs') }}
+  {{ _self.footer_div(fifthColumnText|first, fifthColumnLinks, 'hidden-xs') }}
 </div>
 
-<div class="col-md-4 footer-logo">
+<div class="col-md-4 footer-logo hidden-sm hidden-xs">
   <a class="" href="{{ bottomLogo[0].href|default('') }}" target="{{ bottomLogo[0].target|default('') }}"><img src="{{ asset(bottomLogo[0].src|default('')) }}" alt="{{ bottomLogo[0].alt|default('') }}"></a>
+  <div class="footer-sns">
+    <a class="sns-weibo" href="{{ weibo[0].href|default('#') }}" target="{{ weibo[0].target|default('') }}"><i class="es-icon es-icon-weibo"></i></a>
+    <a class="sns-weixin">
+      <i class="es-icon es-icon-weixin"></i>
+      <div class="weixin-popover" style="background:url({{ asset(weixin[0].src|default('')) }});"></div>
+    </a>
+    <a class="sns-apple">
+      <i class="es-icon es-icon-apple"></i>
+      <div class="apple-popover" style="background:url({{ asset(apple[0].src|default('')) }});"></div>
+    </a>
+    <a class="sns-android">
+      <i class="es-icon es-icon-android"></i>
+      <div class="android-popover" style="background:url({{ asset(android[0].src|default('')) }});"></div>
+    </a>
+  </div>
 </div>
 
 
-{% macro footer_div(title, links) %}
-<div class="link-item pull-left">
+{% macro footer_div(title, links, className) %}
+<div class="link-item {% if className %}{{className}}{% endif %}">
   <h3>{{ title.value|default('') }}</h3>
   {% for link in links|default(null) %}
     <a href="{{ link.href }}" target="{{ link.target }}">{{ link.value }}</a>

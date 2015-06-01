@@ -3346,7 +3346,7 @@ body {
 
 .course-wide-list .teacher {
   float: left;
-  width: 180px;
+  width: 70%;
 }
 
 .course-wide-list .teacher-avatar {

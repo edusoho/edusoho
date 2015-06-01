@@ -11,9 +11,12 @@ use Topxia\Service\Util\CloudClientFactory;
 class CourseLessonController extends BaseController
 {
 
-    public function previewAction(Request $request, $courseId, $lessonId)
+    public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($lessonId)) {
+            $lessonId = $request->query->get('lessonId');
+        }
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
@@ -94,6 +97,14 @@ class CourseLessonController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
+        if(empty($member)) {
+            $user = $this->getCurrentUser();
+            $joinedByClassroomMember = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user->id);
+            if(isset($joinedByClassroomMember["id"])) {
+                $member = $joinedByClassroomMember;
+            }
+        }
+        
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
         $json['number'] = $lesson['number'];

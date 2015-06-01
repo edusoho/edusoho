@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div class="panel panel-default new-student">
+<div class="panel panel-default">
   <div class="panel-heading">
     {% if students|length >= 15 %}
       <a href="javascript:;" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
@@ -12,10 +12,10 @@
   </div>
   <div class="panel-body">
     {% if students %}
-      <ul class="student-list list-unstyled">
+      <ul class="user-avatar-list clearfix">
         {% for student in students %}
           <li>
-            {{ web_macro.user_avatar(student, 'cardtip', 'img-circle') }}
+            {{ web_macro.user_avatar(student, '', 'avatar-sm') }}
           </li>
         {% endfor %}
       </ul>

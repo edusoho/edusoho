@@ -11,7 +11,7 @@
       </div>
       <div class="course-more">
         <a class="btn-more" href="{{path('classroom_explore')}}">
-          查看<br>{{setting("classroom.name", "班级")}}
+          查看<br>{{ setting('classroom.name', '班级')|default('班级') }}
         </a>
       </div>
     </div>
@@ -44,7 +44,7 @@
         <i class="es-icon es-icon-whatshot"></i>
       </a>
       <a href="{{ path('course_explore', {code:code, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class="btn-circle {% if (orderBy == 'recommendedSeq') %} active {% endif %}" data-toggle="tooltip" data-
-      placement="top" title="点赞">
+      placement="top" title="推荐">
         <i class="es-icon es-icon-thumbup"></i>
       </a>
     </div>
@@ -63,8 +63,6 @@
     </div>
   </div>
   <nav class="text-center">
-    <ul class="pagination">
-      {{ web_macro.paginator(paginator) }}
-    </ul>
+    {{ web_macro.paginator(paginator) }}
   </nav>
 {% endblock %}

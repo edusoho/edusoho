@@ -1,0 +1,143 @@
+@import "mixins/fadeinleft.less";
+@import "mixins/fadeinup.less";
+@import "mixins/fadeinright.less";
+@import "mixins/color.less";
+@import "mixins/scale.less";
+@import "mixins/loader-inner.less";
+
+.p-lg {
+  line-height: 30px;
+  margin-bottom: 30px;
+  text-indent: 2em;
+}
+
+.ml10 {
+  margin-left: 10px;
+}
+
+.ml25 {
+  margin-left: 25px;
+}
+
+.mr25 {
+  margin-right: 25px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.text-default {
+  text-align: center;
+  color: @gray-light;
+}
+
+.link-dark-wrap>a,
+.link-dark {
+  color: @gray-darker;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.link-light-wrap>a,
+.link-light {
+  color: @gray-dark;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+a.transition {
+  .es-transition;
+  &:hover {
+    .es-transition;
+  }
+}
+
+.underline {
+  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.es-border {
+  border: 1px solid @gray-light;
+  .border-radius;
+  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+.img-responsive(@display: block) {
+  display: @display;
+  max-width: 100%;
+  height: auto;
+}
+
+.es-transform(@x:1.1 , @y:1.1) {
+  -webkit-transform: scale(@x, @y);
+     -moz-transform: scale(@x, @y);
+      -ms-transform: scale(@x, @y);
+       -o-transform: scale(@x, @y);
+          transform: scale(@x, @y);
+}
+
+.es-transition(@time:.3s) {
+  -webkit-transition: all @time ease;
+     -moz-transition: all @time ease;
+       -o-transition: all @time ease;
+          transition: all @time ease;
+}
+
+.box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+     -moz-box-shadow: @box-shadow;
+          box-shadow: @box-shadow;
+}
+
+.border-radius(@border-radius:4px) {
+  -webkit-border-radius: @border-radius;
+     -moz-border-radius: @border-radius;
+          border-radius: @border-radius;
+}
+
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+}
+
+.transform(@transform) {
+  -webkit-transform: @transform;
+     -moz-transform: @transform;
+       -o-transform: @transform;
+          transform: @transform;
+}

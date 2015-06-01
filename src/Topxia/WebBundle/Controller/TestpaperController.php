@@ -171,17 +171,14 @@ class TestpaperController extends BaseController
     public function showTestAction (Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-        if (!$testpaperResult) {
-            throw $this->createNotFoundException('试卷不存在!');
-        }
-        if ($testpaperResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
-        }
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
             return $this->redirect($this->generateUrl('course_manage_test_results', array('id' => $testpaperResult['id'])));
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        
+        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($id);
+        
         $result = $this->getTestpaperService()->showTestpaper($id);
         $items = $result['formatItems'];
         $total = $this->makeTestpaperTotal($testpaper, $items);
@@ -202,24 +199,16 @@ class TestpaperController extends BaseController
     public function testResultAction (Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
-        if (!$testpaperResult) {
-            throw $this->createNotFoundException('试卷不存在!');
-        }
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))){
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($id);
 
-        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-       
-        if ($testpaperResult['userId'] != $this->getCurrentUser()->id){
-            $course = $this->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
-        }
-
-        if (empty($course) and $testpaperResult['userId'] != $this->getCurrentUser()->id) {
-            throw $this->createAccessDeniedException('不可以访问其他学生的试卷哦~');
+        if (!$canLookTestpaper) {
+            throw $this->createAccessDeniedException('无权查看试卷！');
         }
 
         $result = $this->getTestpaperService()->showTestpaper($id, true);
@@ -410,7 +399,9 @@ class TestpaperController extends BaseController
             'total' => $total,
             'types' => $types,
             'student' => $student,
-            'questionsSetting' => $questionsSetting
+            'questionsSetting' => $questionsSetting,
+            'source' => $request->query->get('source','course'),
+            'targetId' => $request->query->get('targetId',0)
         ));
     }
 

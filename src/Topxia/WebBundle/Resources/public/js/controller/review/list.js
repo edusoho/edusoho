@@ -55,6 +55,7 @@ define(function(require, exports, module) {
             });
 
 
+
             $('.js-hide-review-form').on('click', function(){
                 $(this).hide();
                 $('.js-show-review-form').show();
@@ -67,27 +68,28 @@ define(function(require, exports, module) {
                 $form.show();
             });
 
-
-            var $reviews = $('.js-reviews');
-
-            $reviews.on('click', '.show-full-btn', function(){
-                var $review = $(this).parents('.media');
-                $review.find('.short-content').slideUp('fast', function(){
-                    $review.find('.full-content').slideDown('fast');
-                });
-                $(this).hide();
-                $review.find('.show-short-btn').show();
-            });
-
-            $reviews.on('click', '.show-short-btn', function(){
-                var $review = $(this).parents('.media');
-                $review.find('.full-content').slideUp('fast', function(){
-                    $review.find('.short-content').slideDown('fast');
-                });
-                $(this).hide();
-                $review.find('.show-full-btn').show();
-            });
         }
+        
+        var $reviews = $('.js-reviews');
+
+        $reviews.on('click', '.show-full-btn', function(){
+            var $review = $(this).parents('.media');
+            $review.find('.short-content').slideUp('fast', function(){
+                $review.find('.full-content').slideDown('fast');
+            });
+            $(this).hide();
+            $review.find('.show-short-btn').show();
+        });
+
+        $reviews.on('click', '.show-short-btn', function(){
+            var $review = $(this).parents('.media');
+            $review.find('.full-content').slideUp('fast', function(){
+                $review.find('.short-content').slideDown('fast');
+            });
+            $(this).hide();
+            $review.find('.show-full-btn').show();
+        });
+  
 
       
 

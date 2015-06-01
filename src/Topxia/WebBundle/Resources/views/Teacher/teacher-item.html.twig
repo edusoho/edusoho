@@ -1,0 +1,34 @@
+<div class="col-lg-4 col-md-6 col-sm-6">
+  <div class="teacher-item">
+    <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
+      <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
+      <div class="mask">
+        {% if profile.about %}
+          {{ profile.about|plain_text(80) }}
+        {% else %}
+          暂无简介
+        {% endif %}
+      </div>
+    </a>
+    <div class="teacher-info">
+      <div class="title">
+        <a class="name" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+        
+      </div>
+      <div class="position">
+        {% if teacher.title %}
+          {{ teacher.title }}
+        {% else %}
+          暂无头衔
+        {% endif %}
+      </div>
+      <div class="metas">
+        {% if not app.user or (teacher.id != app.user.id) %}
+          <a class="btn btn-primary btn-high btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
+          <a class="btn btn-default btn-high btn-xs unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+        {% endif %}
+        <a class="btn btn-default btn-xs text-center" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
+      </div>
+    </div>
+  </div>
+</div>

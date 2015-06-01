@@ -13,7 +13,6 @@
       {% if live_course_enabled %}
         <a id="create-course" href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 创建直播课程</a>
       {% endif %}
-      
     </span>
     在教课程
   </div>
@@ -70,9 +69,9 @@
       {% endfor %}
     </tbody>
   </table>
-
-  {{ web_macro.paginator(paginator) }} 
-
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav> 
   </div>
 </div>
 

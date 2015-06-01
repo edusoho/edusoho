@@ -4,6 +4,7 @@ namespace Classroom\ClassroomBundle\Controller\Classroom;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\ClassroomReviewType;
 
 class ReviewController extends BaseController
@@ -41,10 +42,9 @@ class ReviewController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $reviewUsers = array();
-        foreach ($reviews as $review) {
-            $reviewUsers[$review['id']] =  $this->getUserService()->getUser($review['userId']);
-        }
+
+        $reviewUserIds = ArrayToolkit::column($reviews, 'userId');
+        $reviewUsers = $this->getUserService()->findUsersByIds($reviewUserIds);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
         $review = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);

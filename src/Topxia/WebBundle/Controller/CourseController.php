@@ -48,6 +48,7 @@ class CourseController extends CourseBaseController
 		unset($conditions['orderBy']);
 
 		$conditions['parentId'] = 0;
+		$conditions['status'] = 'published';
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions),
@@ -202,17 +203,12 @@ class CourseController extends CourseBaseController
 	public function showAction(Request $request, $id)
 	{
 		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
-
 		if(empty($member)) {
-			$addCount=0;
-			$classroomMembers = $this->getClassroomMembersByCourseId($id);
-			foreach ($classroomMembers as $classroomMember) {
-				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
-					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
-					$addCount++;
-				}
+			$user = $this->getCurrentUser();
+			$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
+			if(isset($member["id"])) {
+				$course['studentNum'] ++ ;
 			}
-			$course['studentNum'] += $addCount;
 		}
 
 		$this->getCourseService()->hitCourse($id);
@@ -478,7 +474,7 @@ class CourseController extends CourseBaseController
 			$vipChecked = 'ok';
 		}
 
-		$classroomMembers = $this->getClassroomMembersByCourseId($course["id"]);
+		$classroomMembers = $this->getClassroomService()->getClassroomMembersByCourseId($course["id"], $user->id);
 		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
 		if((isset($member["role"]) && isset($member["joinedType"]) && $member["role"] == 'student' && $member["joinedType"] == 'course') 
 			|| (isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0))) {
@@ -710,15 +706,6 @@ class CourseController extends CourseBaseController
 		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
 
 		));
-	}
-
-	private function getClassroomMembersByCourseId($id) {
-
-		$classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
-		$user=$this->getCurrentUser();
-
-		$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-		return $members;
 	}
 
 	protected function getUserService()

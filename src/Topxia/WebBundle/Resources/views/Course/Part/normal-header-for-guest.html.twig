@@ -4,7 +4,7 @@
 
 {% block content %}
 
-  {{ header_macro.picture(course) }}
+  {{ header_macro.picture(course, previewLesson) }}
 
   {{ header_macro.info(course, member, userVipStatus) }}
 
@@ -14,21 +14,25 @@
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
       {% if courseVip %}
-        <li class="hidden-xs color-w icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+        <li class="hidden-xs color-warning icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
           <i class="es-icon es-icon-crown"></i><br>
           {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus} %}
         </li>
       {% endif %}
     </ul>
     <div class="buy">
-      {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
+      {% if source|default("") == "classroom" %}
+        {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: course.id})) }}
+      {% else %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' %}
+      {% endif %}
     </div>
   </div>
 
 {% endblock %}
 
 {% block after_content %}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-recommend-classrooms.html.twig' %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
 {% endblock %}
 
 

@@ -1,6 +1,8 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
 <div class="topic-detail">
+  
+	{% include 'TopxiaWebBundle:Thread/Part:thread-crumbs.html.twig' with {target:target, thread:thread,type:thread.type, isUpdate:false} %}
 
   {% include 'TopxiaWebBundle:Thread/Part:' ~ thread.type ~ '-header.html.twig' %}
 

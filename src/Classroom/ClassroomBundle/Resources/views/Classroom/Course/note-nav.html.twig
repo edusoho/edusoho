@@ -1,10 +1,10 @@
 <div class="note-filter nav-filter clearfix">
   <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
       {% if filters.courseId|default('') == '' %}
         全部课程
       {% else %} 
-        {{ courses[filters.courseId]['title'] }}
+        {{ courses[filters.courseId]['title']|sub_text(10) }}
       {% endif %}
        
       <span class="caret"></span>
@@ -15,7 +15,7 @@
       </li>
       {% for course in courses %}
         <li class="{% if filters.courseId == course.id %}active{% endif %}">
-          <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}">{{ course.title|sub_text(10) }}</a>
+          <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}</a>
         </li>
       {% endfor %}
     </ul>
