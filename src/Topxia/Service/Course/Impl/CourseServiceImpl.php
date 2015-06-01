@@ -251,12 +251,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 
 	public function becomeStudentByClassroomJoined($courseId, $userId){
-		$classroomMembers = $this->getClassroomService()->getClassroomMembersByCourseId($courseId, $userId);
 		$isCourseStudent = $this->isCourseStudent($courseId, $userId);
-
-		foreach ($classroomMembers as $classroomMember) {
-			if(in_array($classroomMember["role"], array("student")) && !$isCourseStudent) {
-				$member = $this->createMemberByClassroomJoined($courseId, $userId, $classroomMember["classroomId"]);
+		$classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+		if ($classroom['classroomId']) {
+			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
+			if(in_array($member['role'], array('student', 'teacher', 'headTeacher', 'studentAssistant', 'assistant')) && !$isCourseStudent) {
+				$member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"]);
 				return $member;
 			}
 		}
@@ -2227,7 +2227,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		if (empty($member) && $this->isClassroomMember($course, $user['id'])) {
 			if (!$this->isCourseTeacher($course['id'], $user['id']) && !$this->isCourseStudent($course['id'], $user['id'])) {
-				$member = $this->becomeStudent($course['id'], $user['id']);
+				$member = $this->becomeStudentByClassroomJoined($course['id'], $user['id']);
 				return array($course, $member); 
 			}
 		}
