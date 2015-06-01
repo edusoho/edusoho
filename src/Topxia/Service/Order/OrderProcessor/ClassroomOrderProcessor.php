@@ -32,6 +32,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+        $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $users = array();
         foreach ($courses as $key => $course) {
             $users = array_merge($this->getUserService()->findUsersByIds($course['teacherIds']), $users);
@@ -71,10 +74,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $discountRate = 0;
             if($coursesTotalPrice>0){
                 $discountRate = $totalPrice/$coursesTotalPrice;
-            }elseif ($coursesTotalPrice == 0) {
-                $totalPrice=0;
             }
-
 
             foreach ($paidCourses as $key => $paidCourse) {
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
@@ -117,8 +117,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $discountRate = 0;
         if($coursesTotalPrice>0){
             $discountRate = $totalPrice/$coursesTotalPrice;
-        }elseif ($coursesTotalPrice == 0) {
-            $totalPrice=0;
         }
 
         foreach ($paidCourses as $key => $paidCourse) {
@@ -196,6 +194,10 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         if(empty($courses) || count($courses) == 0){
             throw new Exception("班级中还未设置课程，请联系管理员!");
         }
+
+        $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
 
         $courseIds = ArrayToolKit::column($courses, "id");
