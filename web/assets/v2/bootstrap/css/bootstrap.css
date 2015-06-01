@@ -3342,7 +3342,7 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-xs,
 .btn-group-xs > .btn {
-  padding: 4px 12px;
+  padding: 2px 10px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 16px;

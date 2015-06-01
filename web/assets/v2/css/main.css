@@ -2741,8 +2741,8 @@ textarea.form-control-o {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  width: 56px !important;
-  height: 56px !important;
+  width: 60px !important;
+  height: 60px !important;
 }
 .avatar-lg {
   -webkit-border-radius: 50%;
@@ -2812,6 +2812,9 @@ textarea.form-control-o {
 .es-card .media-left {
   position: relative;
 }
+.es-card .avatar-md {
+  border: 2px solid #fff;
+}
 .es-card .icon-user-status {
   position: absolute;
   bottom: 0;
@@ -2819,7 +2822,7 @@ textarea.form-control-o {
 }
 .es-card .content {
   font-size: 12px;
-  margin-top: 10px;
+  margin-top: 6px;
   color: #9e9e9e;
 }
 .es-card .metas {
@@ -2830,7 +2833,10 @@ textarea.form-control-o {
   text-align: right;
 }
 .es-card .metas .btn {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+}
+.es-card .metas .btn:last-child {
+  margin-bottom: 0;
 }
 .es-card .card-body {
   line-height: 24px;

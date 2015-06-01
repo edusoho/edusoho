@@ -41,13 +41,6 @@ define(function (require, exports, module) {
        
         bindMsgBtn($('.es-card'), _this);
 
-    }).on("mouseleave", function () {
-        var _this = $(this);
-        setTimeout(function () {
-            if (!$(".popover:hover").length) {
-                _this.popover("hide")
-            }
-        }, 100);
     });
 
     
