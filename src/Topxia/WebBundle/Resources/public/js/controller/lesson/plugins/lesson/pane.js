@@ -45,8 +45,8 @@ define(function(require, exports, module) {
                         var status = data.status == 'learning' ? 'doing' : 'done1'; 
                         
                         $itemStatusIcon.removeClass('es-icon-doing').removeClass('es-icon-done1')
-                                    .removeClass('es-icon-undone').removeClass('color-p');
-                        $itemStatusIcon.addClass('color-p').addClass('es-icon-'+status);
+                                    .removeClass('es-icon-undone').removeClass('color-primiay');
+                        $itemStatusIcon.addClass('color-primiay').addClass('es-icon-'+status);
                   });
             },
 
