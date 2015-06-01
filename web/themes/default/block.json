@@ -556,14 +556,14 @@
                 ]
             },
             "apple": {
-                "title": "底部IOS版APP下载二维码",
-                "desc": "上传网校的IOS版APP下载二维码",
+                "title": "底部iOS版APP下载二维码",
+                "desc": "上传网校的iOS版APP下载二维码",
                 "count": 1,
                 "type": "img",
                 "default": [
                     {
                         "src": "\/assets\/img\/default\/apple.png",
-                        "alt": "网校的IOS版APP"
+                        "alt": "网校的iOS版APP"
                     } 
                 ]
             },

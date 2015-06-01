@@ -38,6 +38,10 @@ class ClassroomThreadController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
+        if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
+            throw $this->createAccessDeniedException('无权限创建活动!');
+        }
+
         if ($request->getMethod() == 'POST') {
             return $this->forward('TopxiaWebBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
         }
