@@ -260,6 +260,7 @@ class ArticleController extends BaseController
                 'post' => $post,
                 'author' => $user,
                 'service' => $this->getThreadService(),
+                'postReplyUrl' => $this->generateUrl('article_post_reply', array('articleId' => $id, 'postId' => $post['id'])),
             ));
         }
     }
