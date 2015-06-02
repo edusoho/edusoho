@@ -144,6 +144,7 @@ class ClassroomController extends BaseController
         }
 
         $canFreeJoin = $this->canFreeJoin($courses, $user);
+
         $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
         if ($member && !$member["locked"]) {
@@ -573,9 +574,11 @@ class ClassroomController extends BaseController
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($courses, "id");
+        $courseIds = ArrayToolkit::column($courses, "parentId");
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
         $priceType = "RMB";
@@ -586,11 +589,7 @@ class ClassroomController extends BaseController
         $classroomSetting = $this->getSettingService()->get("classroom");
 
         foreach ($courses as $course) {
-            
-            if (
-                !in_array($course["id"], $isJoinedCourseIds)
-                && (($priceType == "RMB" && $course["price"]>0)
-                || ($priceType == "Coin" && $course["coinPrice"]>0))) {
+            if (!in_array($course["id"], $isJoinedCourseIds)) {
                 return false;
             }
         }

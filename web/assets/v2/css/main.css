@@ -3383,33 +3383,35 @@ textarea.form-control-o {
 }
 .aricle-carousel {
   padding: 0 5px;
-}
-.aricle-carousel .swiper-container {
-  position: relative;
   height: 410px;
   overflow: hidden;
 }
 @media (max-width: 1199px) {
-  .aricle-carousel .swiper-container {
+  .aricle-carousel {
     height: 338px;
   }
 }
 @media (max-width: 991px) {
-  .aricle-carousel .swiper-container {
+  .aricle-carousel {
     height: 387px;
   }
 }
 @media (max-width: 767px) {
-  .aricle-carousel .swiper-container {
+  .aricle-carousel {
     height: 150px;
   }
+}
+.aricle-carousel .swiper-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 .aricle-carousel .swiper-slide {
   position: relative;
 }
 .aricle-carousel .swiper-slide img {
   width: 100%;
-  max-height: 410px;
+  height: auto;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -3594,12 +3596,12 @@ textarea.form-control-o {
   overflow: hidden;
 }
 .article-metas .date {
-  height: 40px;
-  width: 40px;
+  height: 45px;
+  width: 45px;
   margin-top: 10px;
   text-align: center;
-  color: #ccc;
-  border: 1px solid #ccc;
+  color: #e0e0e0;
+  border: 1px solid #e0e0e0;
   border-radius: 50%;
 }
 .article-metas .date .day {
@@ -3649,6 +3651,7 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .article-metas .metas-body .sns {
+  color: #9e9e9e;
   margin: 10px auto;
 }
 .article-metas .metas-body .sns span {
