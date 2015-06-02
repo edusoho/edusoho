@@ -560,9 +560,6 @@ Pagination Styles
 .es-header .container {
   position: relative;
 }
-.es-header .navbar-header {
-  height: 60px;
-}
 @media (max-width: 767px) {
   .es-header .navbar-header {
     text-align: center;
@@ -574,6 +571,7 @@ Pagination Styles
 }
 .es-header .navbar-header .navbar-brand {
   height: 60px;
+  line-height: 50px;
   padding: 5px 10px;
   color: #fff;
   -webkit-transition: all 0.3s ease;
@@ -588,25 +586,20 @@ Pagination Styles
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+@media (max-width: 767px) {
+  .es-header .navbar-header .navbar-brand {
+    padding: 10px;
+    line-height: 40px;
+  }
+}
 .es-header .navbar-header .navbar-brand img {
   height: 50px;
   width: auto;
 }
-.es-header .user-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.es-header .user-avatar:hover {
-  border-color: #37b97d;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+@media (max-width: 767px) {
+  .es-header .navbar-header .navbar-brand img {
+    height: 40px;
+  }
 }
 @media (max-width: 767px) {
   .es-header .nav.navbar-nav {
@@ -616,8 +609,8 @@ Pagination Styles
   }
 }
 .es-header .nav.navbar-nav > li > a {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 20px 30px;
+  line-height: 20px;
   color: #fff;
   background: none;
   -webkit-transition: all 0.3s ease;
@@ -666,7 +659,8 @@ Pagination Styles
 }
 .es-header .navbar-mobile .navbar-more {
   position: relative;
-  padding: 14px 10px;
+  padding: 20px 10px;
+  line-height: 20px;
   display: block;
   color: #fff;
   z-index: 999;
@@ -751,13 +745,12 @@ Pagination Styles
   background: none;
 }
 .nav > li.nav-more .more {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
   display: inline-block;
 }
 .nav > li.nav-more .more > i {
   font-size: 25px;
-}
-.nav > li.nav-more a {
-  padding: 19px 15px;
 }
 .nav > li.nav-more li .dropdown-menu {
   left: 100%;
@@ -868,9 +861,6 @@ Pagination Styles
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
-.nav.user-nav i {
-  line-height: 20px;
 }
 .es-footer {
   background: #3f3f3f;
@@ -1149,6 +1139,9 @@ body.nav-active {
 }
 .tooltip {
   min-width: 40px;
+}
+.collapse {
+  display: block;
 }
 #content-container {
   margin-top: 30px;
@@ -2712,6 +2705,13 @@ textarea.form-control-o {
 }
 .form-control:-ms-input-placeholder {
   color: #9e9e9e;
+}
+.avatar-xs {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  width: 30px !important;
+  height: 30px !important;
 }
 .avatar-sm {
   -webkit-border-radius: 50%;
