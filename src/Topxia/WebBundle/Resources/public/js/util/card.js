@@ -5,7 +5,7 @@ define(function (require, exports, module) {
         var _this = $(this);
         var userId = _this.data('userId');
         var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
-        if ($('#user-card-' + userId).length == 0) {
+        if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
             _this.popover({
                 trigger: 'manual',
                 placement: 'auto top',
@@ -22,6 +22,7 @@ define(function (require, exports, module) {
                 animation: true
             });
             _this.popover("show");
+            _this.data('popover', true);
             _this.on('show.bs.popover', function () {
                 $(".popover").hide();
             });
