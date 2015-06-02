@@ -160,8 +160,10 @@ class CourseStudentManageController extends BaseController
 		} else {
 			$course = $this->getCourseService()->tryAdminCourse($id);
 		}
+		if(isset($courseSetting['userinfoFields'])){
+			$userinfoFields=array_diff($courseSetting['userinfoFields'], array('truename','job','mobile','qq','company','gender','idcard','weixin'));
+		}
 
-		$userinfoFields=array_diff($courseSetting['userinfoFields'], array('truename','job','mobile','qq','company','gender','idcard','weixin'));
 		$courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
