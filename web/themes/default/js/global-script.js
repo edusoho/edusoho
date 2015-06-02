@@ -39,12 +39,6 @@ define(function(require, exports, module) {
         removeNavMobile();
     });
 
-    if ($('[data-toggle="tooltip"]').length > 0) {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-    
-
-
   }
 
 });
