@@ -52,7 +52,7 @@
 
 {% block body %}
 
-  {% include 'TopxiaWebBundle::email-setting.html.twig' %}
+  {% include 'TopxiaWebBundle::site-hint.html.twig' %}
   
   <div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
 
@@ -126,13 +126,18 @@
   </div>
 
 
-  {% block topbanner %}{% endblock %}
+  {# main_header　即将废除 #}
+  {% block main_header %} {% endblock %}
 
-  <div id="content-container" class="container">
-    {% include 'TopxiaWebBundle:Announcement:announcement.html.twig' %}
-    
-    {% block content %}{% endblock %}
-  </div><!-- /container -->
+  {% block full_content %}
+    {% block top_content %}{% endblock %}
+    {# main_content 即将废除  #}
+    {% block main_content %}
+      <div id="content-container" class="container">
+        {% block content %}{% endblock %}
+      </div><!-- /container -->
+    {% endblock %}
+  {% endblock %}
 
 
   <div class="footer-autumn">
