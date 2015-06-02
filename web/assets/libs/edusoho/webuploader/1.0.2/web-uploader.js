@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             formData: {},
             accept: {
 	            title: 'Images',
-	            extensions: 'gif,jpg,jpeg,png',
+	            extensions: 'gif,jpg,jpeg,png,ico',
 	            mimeTypes: 'image/*'
 	        },
 	        uploader: null,
