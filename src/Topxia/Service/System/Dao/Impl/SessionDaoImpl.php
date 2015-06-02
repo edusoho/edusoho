@@ -42,4 +42,11 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now())-?) AND (unix_timestamp(now())) AND `user_id` > 0";
 		return $this->getConnection()->fetchColumn($sql, array($retentionTime)) ? : null;	
 	}
+
+	public function deleteInvalidSession()
+	{
+		$time = time()-7200;
+		$sql = "DELETE FROM {$this->table} WHERE `session_time` < $time";
+		return $this->getConnection()->executeUpdate($sql);
+	}
 }
