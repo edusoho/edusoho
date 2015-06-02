@@ -22,9 +22,9 @@ class SessionServiceImpl extends BaseService implements SessionService
     	return $this->getSessionDao()->deleteSessionByUserId($userId);
 	}
 
-    public function deleteInvalidSession()
+    public function deleteInvalidSession($retentionTime)
     {
-        return $this->getSessionDao()->deleteInvalidSession();
+        return $this->getSessionDao()->deleteInvalidSession($retentionTime);
     }
 
 	private function getSessionDao()
