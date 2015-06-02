@@ -6,7 +6,7 @@
 <!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
@@ -25,9 +25,9 @@
     <link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
-    
     <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
+    <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/main.css') }}" />
     <!--[if lt IE 8]>
@@ -196,6 +196,15 @@
 {% endblock %}
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+
+<!--[if IE 8]>
+  <script src="{{ asset('assets/libs/jquery.placeholder.min.js') }}"></script>
+  <script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+  </script>
+<![endif]-->
 
 </body>
 </html>
