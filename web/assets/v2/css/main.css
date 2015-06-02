@@ -560,6 +560,38 @@ Pagination Styles
 .es-header .container {
   position: relative;
 }
+.es-header .navbar-header {
+  height: 60px;
+}
+@media (max-width: 767px) {
+  .es-header .navbar-header {
+    text-align: center;
+  }
+  .es-header .navbar-header .navbar-brand {
+    display: inline-block;
+    float: none;
+  }
+}
+.es-header .navbar-header .navbar-brand {
+  height: 60px;
+  padding: 5px 10px;
+  color: #fff;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-header .navbar-header .navbar-brand:hover {
+  color: #37b97d;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-header .navbar-header .navbar-brand img {
+  height: 50px;
+  width: auto;
+}
 .es-header .user-avatar {
   width: 30px;
   height: 30px;
@@ -681,43 +713,51 @@ Pagination Styles
 .es-header .navbar-mobile .navbar-form .form-control {
   width: 100%;
 }
-.navbar-header {
-  height: 60px;
+.es-header .navbar-form {
+  margin: 15px 10px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 @media (max-width: 767px) {
-  .navbar-header {
-    text-align: center;
-  }
-  .navbar-header .navbar-brand {
-    display: inline-block;
-    float: none;
+  .es-header .navbar-form {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
-.navbar-header .navbar-brand {
-  padding: 5px 10px;
-  line-height: 50px;
-  color: #fff;
+.es-header .navbar-form .form-group {
+  position: relative;
+}
+.es-header .navbar-form .form-control {
+  height: 30px;
+  width: 100px;
+  border-radius: 20px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.navbar-header .navbar-brand:hover {
-  color: #37b97d;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+.es-header .navbar-form .form-control.active {
+  width: 150px;
 }
-.navbar-header .navbar-brand img {
-  height: 50px;
-  width: auto;
+.es-header .navbar-form .form-control:focus {
+  border-color: #fff;
+}
+.es-header .navbar-form .button {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  border: none;
+  background: none;
 }
 .nav > li.nav-more .more {
   display: inline-block;
 }
 .nav > li.nav-more .more > i {
   font-size: 25px;
+}
+.nav > li.nav-more a {
+  padding: 19px 15px;
 }
 .nav > li.nav-more li .dropdown-menu {
   left: 100%;
@@ -732,46 +772,6 @@ Pagination Styles
 .nav > li.nav-more .open > a:focus {
   background: #37b97d !important;
   color: #fff !important;
-}
-.nav > li.nav-more > a {
-  padding: 19px 15px;
-}
-.navbar-form {
-  margin: 15px 10px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-@media (max-width: 767px) {
-  .navbar-form {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-.navbar-form .form-group {
-  position: relative;
-}
-.navbar-form .form-control {
-  height: 30px;
-  width: 100px;
-  border-radius: 20px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.navbar-form .form-control.active {
-  width: 150px;
-}
-.navbar-form .form-control:focus {
-  border-color: #fff;
-}
-.navbar-form .button {
-  position: absolute;
-  right: 5px;
-  top: 3px;
-  border: none;
-  background: none;
 }
 .navbar-user {
   z-index: 1;

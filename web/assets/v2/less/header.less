@@ -9,6 +9,31 @@
   .container {
     position: relative;
   }
+  .navbar-header {
+    height: 60px;
+    @media (max-width: @screen-xs-max) {
+      text-align: center;
+      .navbar-brand { 
+        display: inline-block;
+        float: none;
+      }
+    }
+    .navbar-brand {
+      height: 60px;
+      padding: 5px 10px;
+      // line-height: 50px;
+      color: #fff;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+      img {
+        height: 50px;
+        width: auto;
+      }
+    }
+  }
   .user-avatar {
     width: 30px;
     height: 30px;
@@ -115,41 +140,49 @@
       }
     }
   }
-}
-
-.navbar-header {
-  height: 60px;
-  @media (max-width: @screen-xs-max) {
-    text-align: center;
-    .navbar-brand { 
-      display: inline-block;
-      float: none;
+  // 搜索
+  .navbar-form {
+    margin: 15px 10px;
+    .box-shadow(none);
+    @media (max-width: @screen-xs-max) {
+      margin-left: 0;
+      margin-right: 0;
     }
-  }
-  .navbar-brand {
-    padding: 5px 10px;
-    line-height: 50px;
-    color: #fff;
-    .es-transition;
-    &:hover {
-      color: @brand-primary;
+    .form-group {
+      position: relative;
+    }
+    .form-control {
+      height: 30px;
+      width: 100px;
+      border-radius: 20px;
       .es-transition;
+      &.active {
+        width: 150px;
+      }
+      &:focus {
+        border-color: #fff;
+      }
     }
-    img {
-      height: 50px;
-      width: auto;
+    .button {
+      position: absolute;
+      right: 5px;
+      top: 3px;
+      border: none;
+      background: none;
     }
   }
 }
 
 // 隐藏菜单项
 .nav > li.nav-more {
-  // display: none;
   .more {
     display: inline-block;
     >i {
       font-size: 25px;
     }
+  }
+  a {
+    padding: 19px 15px;
   }
   li .dropdown-menu {
     left: 100%;
@@ -166,52 +199,13 @@
     color: #fff !important;
   }
 }
-.nav >li.nav-more > a {
-  padding: 19px 15px; 
-}
-
-// 搜索
-.navbar-form {
-  margin: 15px 10px;
-  .box-shadow(none);
-  @media (max-width: @screen-xs-max) {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .form-group {
-    position: relative;
-  }
-  .form-control {
-    height: 30px;
-    width: 100px;
-    border-radius: 20px;
-    .es-transition;
-    &.active {
-      width: 150px;
-    }
-    &:focus {
-      border-color: #fff;
-    }
-  }
-  .button {
-    position: absolute;
-    right: 5px;
-    top: 3px;
-    border: none;
-    background: none;
-  }
-}
 
 // 头部用户信息
 .navbar-user {
-  // background: #3f3f3f;
   z-index: 1;
-  // float: right;
-  // @media (max-width: @screen-xs-max) {
-    position: absolute;
-    top: 0;
-    right: 0;
-  // }
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .nav.user-nav {
