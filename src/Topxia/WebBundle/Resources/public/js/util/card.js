@@ -27,7 +27,13 @@ define(function (require, exports, module) {
             });
 
             $.get(_this.data('cardUrl'),function(html) {
-                $('body').append(html);
+                if ($('body').find('#user-card-store').length > 0) {
+                    $('#user-card-store').append(html);
+                } else {
+                    $('body').append('<div id="user-card-store" class="hidden"></div>');
+                    $('#user-card-store').append(html);
+                }
+                
                 $(".popover").on("mouseleave", function () {
                     $(_this).popover('hide');
                 });
