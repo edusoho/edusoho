@@ -18,13 +18,13 @@
 	  </a>
 	  <label class="item item-input item-icon-right">
 	    <span class="input-label">姓名</span>
-	    <input type="text" placeholder="姓名">
+	    <input type="text" placeholder="姓名" ng-model="data.userProfile.truename">
 	     <i class="icon iconfont icon-chevronright"></i>
 	  </label>
 
 	  <label class="item item-input item-icon-right">
 	    <span class="input-label">手机</span>
-	    <input type="text" placeholder="手机">
+	    <input type="text" placeholder="手机" ng-model="data.userProfile.mobile">
 	     <i class="icon iconfont icon-chevronright"></i>
 	  </label>
 
@@ -33,26 +33,27 @@
 	  </a>
 
 	  <a class="item item-thumbnail-left">
-	      <img ng-src="{{ course.middlePicture }}">
-	      <h2>{{ course.title }}</h2>
-	      <p class="pay-price">{{ course.price | formatPrice }}</p>
+	      <img ng-src="{{ data.course.middlePicture }}">
+	      <h2>{{ data.course.title }}</h2>
+	      <p class="pay-price">{{ data.course.price | formatPrice }}</p>
 	  </a>
-	  <div class="coupon">
+	  <div class="coupon" ng-if="data.isInstalledCoupon">
 		  <a class="item item-divider">
 		    优惠信息
 		  </a>
-		  <a class="item item-icon-left item-icon-right" href="#/coursecoupon">
+		  <a class="item item-icon-left item-icon-right" href="#/coursecoupon/{{ data.course.id }}">
 		    <i></i>
-		    优惠
+		    优惠 
+		    <span class="pay-price">{{ coupon.decreaseAmount }}</span>
 		     <i class="icon iconfont icon-chevronright"></i>
 		  </a>
 	  </div>
 	  <a class="item item-divider">
 	  	<p>
-	  		需支付:<span class="pay-price right">{{ course.price | formatPrice }}</span>
+	  		需支付:<span class="pay-price right">{{ data.course.price - coupon.decreaseAmount | formatPrice }}</span>
 	  	</p>
 	    
-		<button class="button button-full button-yellow">
+		<button class="button button-full button-yellow" ng-click="pay()">
 		    去支付
 	  	</button>
 	  </a>

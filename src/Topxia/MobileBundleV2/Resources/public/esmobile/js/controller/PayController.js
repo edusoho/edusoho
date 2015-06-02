@@ -1,16 +1,35 @@
-app.controller('CoursePayController', ['$scope', '$rootScope', CoursePayController]);
-app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', CourseCouponController]);
+app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', CoursePayController]);
+app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$ionicHistory', CourseCouponController]);
+app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
 
-function CourseCouponController($scope, CouponService, $stateParams)
+function VipListController($scope, $stateParams, SchoolService)
 {
+	SchoolService.getSchoolVipList({
+		userId : $scope.user.id
+	}, function(data) {
+		console.log(data);
+		$scope.data = data.data;
+	});
+}
+
+function CourseCouponController($scope, CouponService, $stateParams, $ionicHistory)
+{	
+	$scope.formData = { code : "" };
 	$scope.checkCoupon = function() {
+		$scope.formData.error = "";
 		$scope.showLoad();
 		CouponService.checkCoupon({
 			courseId : $stateParams.courseId,
 			type : "course",
-			code : $scope.code
+			code : $scope.formData.code
 		}, function(data) {
 			$scope.hideLoad();
+			if (data.meta.code != 200) {
+				$scope.formData.error = data.meta.message;
+				return;
+			}
+			$ionicHistory.goBack();
+			$scope.$emit("coupon", { coupon : data.data });
 		}, function(data) {
 			$scope.hideLoad();
 			$scope.toast("检验优惠码错误");
@@ -18,12 +37,29 @@ function CourseCouponController($scope, CouponService, $stateParams)
 	}
 }
 
-function CoursePayController($scope, $rootScope)
+function CoursePayController($scope, $stateParams, ServcieUtil)
 {
-	var params = $rootScope.stateParams["coursePay"];
-	$scope.course = params ? params.course : {};
+	ServcieUtil.getService("OrderService").getPayOrder({
+		courseId : $stateParams.courseId,
+		token : $scope.token
+	}, function(data) {
+		$scope.data = data;
+	});
 
-	$scope.payCourseByAlipay = function() {
+	$scope.$parent.$on("coupon", function(event, data) {
+		$scope.coupon = data.coupon;
+	});
 
+	$scope.pay = function() {
+		var CourseService = ServcieUtil.getService("CourseService");
+		ServcieUtil.getService("OrderService").payCourse({
+			courseId : $stateParams.courseId,
+        			token : $scope.token
+		}, function(data) {
+			console.log(data);
+			if (data.status == "ok" && data.payUrl != "") {
+				window.location.href = data.payUrl;
+			}
+		});
 	}
 }

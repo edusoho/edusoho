@@ -1,0 +1,36 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back="go">
+</a>
+
+<h1 class="title">
+  <span>
+    开通会员
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content class="viplist-body">
+  	<div class="list">
+  		<a class="item item-avatar" ng-click="showMyView('userinfo')">
+	                <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
+	                <div ng-if="user">
+	                    <h3>{{ data.user.nickname }}</h3>
+	                    <p>{{ data.user.vip ? data.vips[data.user.vip.levelId].name : "暂时还不是会员" }}</p>
+	                </div>
+	                <div ng-if="!user">
+	                    <h1>个人中心</h1>
+	                    <p>登录/注册</p>
+	                </div>
+	            </a>
+	            <a class="cut-line">
+			        	<span>其他方式登录</span>
+	            </a>
+	            <a class="item item-avatar viplist-item" ng-repeat="vip in data.vips">
+		      <img ng-src="{{ vip.picture }}">
+		      <h3>{{ vip.name }}</h3>
+		      <div class="vip-description" ng-bind-html="vip.description"></div>
+		</a>
+	</div>
+   </ion-content>
+</ion-view>

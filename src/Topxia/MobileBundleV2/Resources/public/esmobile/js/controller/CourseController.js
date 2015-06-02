@@ -23,7 +23,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       courseId : $stateParams.courseId,
       token : $scope.token
     }, function(data) {
-      console.log(data);
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
       $scope.course = data.course;
@@ -95,15 +94,26 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       });
     }
 
+    $scope.vipLeand = function() {
+      CourseService.vipLearn({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data){
+        if (data.meta.code == 200) {
+          window.location.reload();
+        } else {
+          $scope.toast(data.meta.message);
+        }
+      }, function(error) {
+        console.log(error);
+      });
+    }
+
     $scope.joinCourse = function() {
       if ($scope.course.price <= 0) {
         self.payCourse();
       } else {
-        $scope.$parent.stateParams["coursePay"] = {
-            course : $scope.course
-        };
-          
-        $state.go("coursePay");
+        $state.go("coursePay", { courseId : $scope.course.id });
       }
       
     }

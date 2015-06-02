@@ -33,7 +33,8 @@ filter('formatPrice', ['$rootScope', function($rootScope){
 
 	return function(price) {
 		if (price) {
-			return parseFloat(price) <= 0 ? "免费" : "¥" + price;
+			price = parseFloat(price);
+			return parseFloat(price) <= 0 ? "免费" : "¥" + price.toFixed(2);
 		}
 		return "";
 	}

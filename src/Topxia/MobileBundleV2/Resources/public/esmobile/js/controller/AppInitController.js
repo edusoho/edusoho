@@ -1,4 +1,4 @@
-app.controller('AppInitController', ['$scope', '$ionicHistory', '$state', 'sideDelegate', AppInitController]);
+app.controller('AppInitController', ['$scope', '$ionicHistory', '$state', 'sideDelegate', 'SchoolService', AppInitController]);
 
 function baseController($scope)
 {
@@ -7,7 +7,7 @@ function baseController($scope)
 	}
 }
 
-function AppInitController($scope, $ionicHistory, $state, sideDelegate)
+function AppInitController($scope, $ionicHistory, $state, sideDelegate, SchoolService)
 {	
 	$scope.toggle = function() {
 	    sideDelegate.toggleMenu();
@@ -20,4 +20,8 @@ function AppInitController($scope, $ionicHistory, $state, sideDelegate)
 			$state.go("login");
 		}
 	}
+
+	SchoolService.getSchoolPlugins(null, function(data) {
+		$scope.plugins = data;
+	});
 }

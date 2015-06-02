@@ -972,6 +972,65 @@ modal
   float: right;
 }
 
+.coupon-body .scroll, .list, .coupon-error {
+  height:  100%;
+}
+
+.coupon-body .coupon-error {
+  color: #F5780F;
+  font-size: 12px;
+}
+
+.viplist-body .list {
+  padding: 16px;
+}
+
+.viplist-body .list .viplist-item{
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #ddd;
+}
+
+.viplist-body .viplist-item img {
+  display: inline-block;
+  border: solid 1px #ddd;
+  padding: 3px;
+}
+
+.viplist-body .item {
+  border: 0;
+}
+
+.viplist-body .vip-description * {
+  font-size: 12px;
+  color: #666;
+  overflow: none;
+  white-space: normal;
+}
+
+.viplist-body .cut-line {
+  color: #ddd;
+  position: relative;
+  text-align: center;
+  height: 2px;
+  width: 100%;
+  display: inline-block;
+  background: none;
+  top: 20px;
+}
+
+.viplist-body .cut-line>span {
+  padding-left: 8px;
+  z-index: 5;
+  height: 20px;
+  display: inline-block;
+  line-height: 20px;
+  position: relative;
+  top: -10px;
+  background: #fff;
+  padding-right: 8px;
+}
+
 .slide-in-down {
   -webkit-transform: translate3d(0,-100%,0);
   transform: translate3d(0,-100%,0);

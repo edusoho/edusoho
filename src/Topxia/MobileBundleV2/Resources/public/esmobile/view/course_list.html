@@ -70,7 +70,7 @@
               <list-empty-view data="courses">
               </list-empty-view>
 
-              <a href="#/course/{{ course.id }}" class="item item-thumbnail-left" collection-repeat="course in courses">
+              <a href="#/course/{{ course.id }}" class="item item-thumbnail-left" ng-repeat="course in courses">
                 <img src="{{ course.middlePicture | coverPic}}">
                 <h2>{{ course.title }}</h2>
                 <p class="bottom">
