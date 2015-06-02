@@ -140,11 +140,15 @@ define(function(require, exports, module) {
     }
 
     var navHover = function() {
-        $("a[data-toggle='dropdown']").parent("li").mouseenter(function(event) {
+        $("li.nav-hover").mouseenter(function(event) {
             $(this).addClass("open");
         }).mouseleave(function(event) {
             $(this).removeClass("open");
         });
+    }
+
+    if ($('[data-toggle="tooltip"]').length > 0) {
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     if($("a[data-toggle='dropdown']").length > 0){

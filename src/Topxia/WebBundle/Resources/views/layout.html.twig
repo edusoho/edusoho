@@ -86,8 +86,8 @@
       <div class="navbar-user">
         <ul class="nav user-nav">
           {% if app.user %}
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+          <li class="dropdown nav-hover">
+            <a href="{{ path('user_show', {id:app.user.id}) }}" class="dropdown-toggle">
               <img class="user-avatar" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
             </a>
             <ul class="dropdown-menu" role="menu">
@@ -108,7 +108,7 @@
           <li class="visible-lg">
             <a href="{{ path('my') }}">学习中心</a>
           </li>
-          <li class="visible-lg">
+          <li class="visible-lg nav-hover">
             {% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}
               <a class="hasmessage" href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
             {% else %}
