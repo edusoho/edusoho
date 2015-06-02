@@ -592,12 +592,12 @@ Pagination Styles
     line-height: 40px;
   }
 }
-.es-header .navbar-header .navbar-brand img {
+.es-header .navbar-header .navbar-brand > img {
   height: 50px;
   width: auto;
 }
 @media (max-width: 767px) {
-  .es-header .navbar-header .navbar-brand img {
+  .es-header .navbar-header .navbar-brand > img {
     height: 40px;
   }
 }
