@@ -61,7 +61,7 @@
         <div class="navbar-header">
           
           {% if setting('site.logo') %}
-            <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
+            <a class="navbar-brand" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
           {% else %}
             <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
           {% endif %}
