@@ -126,11 +126,18 @@
   </div>
 
 
-  {% block topbanner %}{% endblock %}
+  {# main_header　即将废除 #}
+  {% block main_header %} {% endblock %}
 
-  <div id="content-container" class="container">
-    {% block content %}{% endblock %}
-  </div><!-- /container -->
+  {% block full_content %}
+    {% block top_content %}{% endblock %}
+    {# main_content 即将废除  #}
+    {% block main_content %}
+      <div id="content-container" class="container">
+        {% block content %}{% endblock %}
+      </div><!-- /container -->
+    {% endblock %}
+  {% endblock %}
 
 
   <div class="footer-autumn">
