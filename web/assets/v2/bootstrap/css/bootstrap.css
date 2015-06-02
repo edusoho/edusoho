@@ -2981,7 +2981,7 @@ select[multiple].form-group-lg .form-control {
   background-image: none;
   border: 1px solid transparent;
   white-space: nowrap;
-  padding: 8px 24px;
+  padding: 6px 24px;
   font-size: 14px;
   line-height: 1.42857143;
   border-radius: 20px;
@@ -3335,7 +3335,7 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-sm,
 .btn-group-sm > .btn {
-  padding: 6px 18px;
+  padding: 5px 18px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 16px;

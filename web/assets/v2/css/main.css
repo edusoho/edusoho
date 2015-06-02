@@ -1,52 +1,5 @@
 /* =========================== color =========================== */
 /* =========================== media =========================== */
-a:hover,
-a:focus {
-  text-decoration: none;
-}
-.caret {
-  margin-left: 5px;
-  border-top: 4px solid;
-}
-.form-control {
-  height: 38px;
-}
-.form-control:focus {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-.popover {
-  min-width: 200px;
-  border-color: #e0e0e0;
-}
-.popover.top > .arrow {
-  border-top-color: #e0e0e0;
-}
-.popover.right > .arrow {
-  border-right-color: #e0e0e0;
-}
-.popover.bottom > .arrow {
-  border-bottom-color: #e0e0e0;
-}
-.popover.left > .arrow {
-  border-left-color: #e0e0e0;
-}
-.popover .popover-content {
-  color: #616161;
-}
-.popover .popover-content > a {
-  display: inline-block;
-  color: #37b97d;
-}
-.page-header {
-  font-weight: bold;
-}
-.page-header .badge {
-  margin-left: 5px;
-  color: #fff;
-  background-color: #37b97d;
-}
 .lesson-manage-panel .panel-heading {
   z-index: 1;
 }
@@ -124,6 +77,14 @@ a:focus {
 }
 .userpage-header .actions {
   float: right;
+}
+.page-header {
+  font-weight: bold;
+}
+.page-header .badge {
+  margin-left: 5px;
+  color: #fff;
+  background-color: #37b97d;
 }
 @keyframes fadeInLeft {
   0% {
@@ -1191,6 +1152,14 @@ body.nav-active {
 }
 #content-container {
   margin-top: 30px;
+}
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+.caret {
+  margin-left: 5px;
+  border-top: 4px solid;
 }
 .alert-notice {
   -webkit-border-radius: none;
@@ -2430,9 +2399,9 @@ textarea.form-control-o {
 }
 .btn-circle {
   display: inline-block;
-  width: 38px;
-  height: 38px;
-  line-height: 36px;
+  width: 34px;
+  height: 34px;
+  line-height: 32px;
   border-radius: 50%;
   background: none;
   border: 1px solid #9e9e9e;
@@ -2727,6 +2696,11 @@ textarea.form-control-o {
   box-shadow: none;
   border-color: #e0e0e0;
 }
+.form-control:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
 .form-control::-webkit-input-placeholder {
   color: #9e9e9e;
 }
@@ -2905,7 +2879,7 @@ textarea.form-control-o {
   margin-right: 5px;
 }
 .nav-pills > li > a {
-  padding: 8px 24px;
+  padding: 6px 24px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -3058,6 +3032,29 @@ textarea.form-control-o {
 }
 .sign_main .signed_anime_day {
   background: url('/assets/img/default/sign_have_anime.gif') center no-repeat;
+}
+.popover {
+  min-width: 200px;
+  border-color: #e0e0e0;
+}
+.popover.top > .arrow {
+  border-top-color: #e0e0e0;
+}
+.popover.right > .arrow {
+  border-right-color: #e0e0e0;
+}
+.popover.bottom > .arrow {
+  border-bottom-color: #e0e0e0;
+}
+.popover.left > .arrow {
+  border-left-color: #e0e0e0;
+}
+.popover .popover-content {
+  color: #616161;
+}
+.popover .popover-content > a {
+  display: inline-block;
+  color: #37b97d;
 }
 .poster {
   position: relative;
