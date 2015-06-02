@@ -23,7 +23,7 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
     {	
         $this->checkCount($arguments);
 
-        $conditions = array('status' => 'published', 'recommended' => 1 );
+        $conditions = array('status' => 'published', 'recommended' => 1 ,'parentId' => 0);
 
         if (!empty($arguments['categoryId'])) {
             $conditions['categoryId'] = $arguments['categoryId'];
