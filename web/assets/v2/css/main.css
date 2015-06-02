@@ -3383,33 +3383,35 @@ textarea.form-control-o {
 }
 .aricle-carousel {
   padding: 0 5px;
-}
-.aricle-carousel .swiper-container {
-  position: relative;
   height: 410px;
   overflow: hidden;
 }
 @media (max-width: 1199px) {
-  .aricle-carousel .swiper-container {
+  .aricle-carousel {
     height: 338px;
   }
 }
 @media (max-width: 991px) {
-  .aricle-carousel .swiper-container {
+  .aricle-carousel {
     height: 387px;
   }
 }
 @media (max-width: 767px) {
-  .aricle-carousel .swiper-container {
+  .aricle-carousel {
     height: 150px;
   }
+}
+.aricle-carousel .swiper-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 .aricle-carousel .swiper-slide {
   position: relative;
 }
 .aricle-carousel .swiper-slide img {
   width: 100%;
-  max-height: 410px;
+  height: auto;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
