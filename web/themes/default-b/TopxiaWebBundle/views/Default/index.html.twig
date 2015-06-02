@@ -24,8 +24,8 @@
     <div class="row row-9-3">
       <div class="col-md-9">
 
-        {% if is_plugin_installed('Classroom') and setting('classroom.enabled') %}
-        {% set items = data('RecommendClassrooms',{'count':6}) %}
+        {% if setting('classroom.enabled') %}
+        {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           <div class="es-box">
               <div class="es-box-heading">
                 <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
@@ -33,8 +33,8 @@
               </div>
               <div class="es-box-body">
                 <ul class="home-class-list">
-                  {% for classroom in items.classrooms %}
-                 {% set teachers = items.users[classroom.id]|default(null) %}
+                  {% for classroom in classrooms %}
+                 {% set teachers = classroom.users|default(null) %}
                  {% if loop.index <= 5%}
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
@@ -73,7 +73,7 @@
 
                         </span>
                       </div>
-                      <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
+                      <div class="course-num">共{{classroom.courseNum}}课程</div>
                     </div>
                   </li>
                    {% endif %}
