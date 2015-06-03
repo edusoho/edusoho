@@ -95,6 +95,18 @@ define(function(require, exports, module) {
             }, 'json');
 		}
 
+
+        if($("#lesson-preview-flash").length>0){
+
+            $.get($player.data('url'), function(response) {
+                var html = '<div id="lesson-swf-player" ></div>';
+                $("#lesson-preview-flash").html(html);
+                swfobject.embedSWF(lesson.mediaUri, 
+                    'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                    {wmode:'opaque',allowFullScreen:'true'});
+            });
+        }
+
         if ($("#lesson-preview-doucment").length > 0) {
 
             var $player = $("#lesson-preview-doucment");

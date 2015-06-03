@@ -424,6 +424,40 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function flashAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        if ($lesson['type'] != 'flash' || empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+        
+        if ($file["key"]) {
+            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+            $result['mediaUri'] = $url['url'];
+        } else {
+            $result['mediaUri'] = '';
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
     public function fileAction(Request $request, $fileId, $isDownload = false)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
