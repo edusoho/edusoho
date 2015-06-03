@@ -16,7 +16,6 @@ class Version20150520165734 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("select 1 from dual");
 
         if (!$this->isFieldExist('classroom', 'rating')) {
             $this->addSql("
