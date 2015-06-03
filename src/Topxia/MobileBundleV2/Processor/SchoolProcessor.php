@@ -37,4 +37,6 @@ interface SchoolProcessor
 	public function getSchoolPlugins();
 
 	public function getSchoolVipList();
+
+	public function getVipPayInfo();
 }

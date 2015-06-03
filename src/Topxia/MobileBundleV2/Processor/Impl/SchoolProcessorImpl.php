@@ -26,6 +26,32 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getVipPayInfo()
+    {
+        if (! $this->controller->isinstalledPlugin("Vip")) {
+            return $this->createErrorResponse('no_vip', '网校未安装vip插件');
+        }
+
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+        
+        $levelId = $this->getParam("levelId");
+        $level = $this->getLevelService()->getLevel($levelId);
+        
+        $buyType = $this->controller->setting('vip.buyType');
+        if (empty($buyType)) {
+            $buyType = 10;
+        }
+
+        return $this->createMetaAndData(
+            array(
+                'level' => $level,
+                'buyType' => $buyType
+                ), 200, "ok");
+    }
+
     public function getSchoolVipList()
     {
         $userId = $this->getParam("userId");

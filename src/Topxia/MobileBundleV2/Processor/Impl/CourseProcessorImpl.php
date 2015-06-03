@@ -897,13 +897,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 "note" => $reason
             ), $this->getContainer());
             if (empty($refund) || $refund['status'] != "success") {
-                return false;
+                return $this->createMetaAndData(array(), 500, "退出课程失败");
             }
-            return true;
+            return $this->createMetaAndData(array(), 200, "ok");;
         }
         
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
-        return true;
+        return $this->createMetaAndData(array(), 200, "ok");
     }
     
     public function getCourse()
