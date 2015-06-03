@@ -26,7 +26,6 @@
     <link href="{{ asset('assets/v2/bootstrap/css/bootstrap-autumn.css') }}" rel="stylesheet" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/css/bootstrap-extends.css') }}" />
-    <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/web.css') }}" />
     <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/web.css') }}" />
     
     <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/member.css') }}" />
@@ -60,9 +59,8 @@
     <div class="container">
       <div class="container-gap">
         <div class="navbar-header">
-          
           {% if setting('site.logo') %}
-            <a class="navbar-brand" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
+            <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
           {% else %}
             <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
           {% endif %}

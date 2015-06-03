@@ -23,9 +23,9 @@ li.es-header {
 }
 
 .site-navbar .navbar-header a.navbar-brand {
-    font-size: 18px;
+  /*  font-size: 18px;
     color: #fff;
-    padding: 17px 15px;
+    padding: 17px 15px;*/
 }
 
 .site-navbar .navbar-collapse .navbar-nav > li > a {
