@@ -102,7 +102,7 @@ define(function(require, exports, module) {
             $.get($("#lesson-preview-flash").data('url'), function(response) {
                 var html = '<div id="lesson-swf-player" ></div>';
                 $("#lesson-preview-flash").html(html);
-                swfobject.embedSWF(lesson.mediaUri, 
+                swfobject.embedSWF(response.mediaUri, 
                     'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
                     {wmode:'opaque',allowFullScreen:'true'});
             });
