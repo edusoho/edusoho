@@ -448,8 +448,8 @@ class CourseLessonController extends BaseController
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
         
-        if ($file["key"]) {
-            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+        if ($file["hashId"]) {
+            $url = $client->generateFileUrl($client->getBucket(), $file["hashId"], 3600);
             $result['mediaUri'] = $url['url'];
         } else {
             $result['mediaUri'] = '';
