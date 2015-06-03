@@ -1,6 +1,6 @@
 <div class="course-item">
   <div class="course-img">
-    <a href="{{ path('course_show', {id:course.id}) }}">
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_bank">
       {% if course.discountId > 0 %}
         {% if course.discount == 0 %}
           <!-- 限免 -->
@@ -10,14 +10,12 @@
           <span class="tag-discount"></span>
         {% endif %}
       {% endif %}
-      {# <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}"> #}
       {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive transform', '') }}
-      
     </a>
   </div>
   <div class="course-info">
     <div class="title">
-      <a href="{{ path('course_show', {id:course.id}) }}">
+      <a href="{{ path('course_show', {id:course.id}) }}" target="_bank">
         {{ course.title }}
       </a>
     </div>
