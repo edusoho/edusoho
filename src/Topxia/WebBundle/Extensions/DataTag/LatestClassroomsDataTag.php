@@ -5,7 +5,7 @@ namespace Topxia\WebBundle\Extensions\DataTag;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
-class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag  
+class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
      * 获取推荐班级列表
@@ -22,8 +22,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         
         $conditions = array(
             'status' => 'published',
-            'private' => 0,
-            'recommended' =>1
+            'private' => 0
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
