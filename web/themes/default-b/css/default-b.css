@@ -304,6 +304,10 @@
   margin: 0;
   list-style-type: none;
 }
+.navbar-right .es-header{
+  background: #363e45
+}
+
 .home-class-list .class-item {
   padding: 15px;
   margin-bottom: 20px;
