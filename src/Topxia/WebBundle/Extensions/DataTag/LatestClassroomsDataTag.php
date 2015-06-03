@@ -27,7 +27,7 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('recommendedSeq','ASC'),
+                array('createdTime','DESC'),
                 0,
                 $arguments['count']
         );
