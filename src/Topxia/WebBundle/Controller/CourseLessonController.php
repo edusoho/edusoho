@@ -38,7 +38,7 @@ class CourseLessonController extends BaseController
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }
 
-        //载可预览情况下查看网站设置是否可匿名预览
+        //在可预览情况下查看网站设置是否可匿名预览
         $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
         if (empty($allowAnonymousPreview) && !$user->isLogin()) {
             throw $this->createAccessDeniedException();
