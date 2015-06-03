@@ -98,7 +98,6 @@ define(function(require, exports, module) {
 
         if($("#lesson-preview-flash").length>0){
             var player = $("#lesson-preview-flash");
-            player.css("height", '360px');
             $.get(player.data('url'), function(response) {
                 var html = '<div id="lesson-swf-player" ></div>';
                 $("#lesson-preview-flash").html(html);
@@ -106,6 +105,7 @@ define(function(require, exports, module) {
                     'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
                     {wmode:'opaque',allowFullScreen:'true'});
             });
+            player.css("height", '360px');
         }
 
         if ($("#lesson-preview-doucment").length > 0) {
