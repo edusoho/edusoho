@@ -547,9 +547,11 @@ Pagination Styles
 .swiper-visible-switch {
   /* Specific visible button style: */
 }
+.navbar {
+  margin-bottom: 0;
+}
 .es-header {
   background: #3f3f3f;
-  margin-bottom: 0;
   height: 60px;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -709,20 +711,23 @@ Pagination Styles
 }
 .es-header .navbar-form {
   margin: 15px 10px;
+}
+.navbar-form {
+  margin: 10px;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
 }
 @media (max-width: 767px) {
-  .es-header .navbar-form {
+  .navbar-form {
     margin-left: 0;
     margin-right: 0;
   }
 }
-.es-header .navbar-form .form-group {
+.navbar-form .form-group {
   position: relative;
 }
-.es-header .navbar-form .form-control {
+.navbar-form .form-control {
   height: 30px;
   width: 100px;
   border-radius: 20px;
@@ -731,13 +736,13 @@ Pagination Styles
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.es-header .navbar-form .form-control.active {
+.navbar-form .form-control.active {
   width: 150px;
 }
-.es-header .navbar-form .form-control:focus {
+.navbar-form .form-control:focus {
   border-color: #fff;
 }
-.es-header .navbar-form .button {
+.navbar-form .button {
   position: absolute;
   right: 5px;
   top: 3px;

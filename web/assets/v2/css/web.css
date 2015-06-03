@@ -216,7 +216,7 @@ textarea {
 
 
 /**
- * <global>
+ * <global> 用于老的主题
  */
 .site-navbar {
   border-radius: 0;
@@ -226,8 +226,6 @@ textarea {
 
 .site-navbar .navbar-brand {
   color: #fff;
-  padding-top: 17px;
-  padding-bottom: 17px;
 }
 
 .site-navbar .navbar-brand-logo {

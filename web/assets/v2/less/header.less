@@ -1,6 +1,9 @@
+.navbar {
+  margin-bottom: 0;
+}
+
 .es-header {
   background: #3f3f3f;
-  margin-bottom: 0;
   height: 60px;
   .border-radius(0);
   border: none;
@@ -134,36 +137,40 @@
       }
     }
   }
-  // 搜索
   .navbar-form {
     margin: 15px 10px;
-    .box-shadow(none);
-    @media (max-width: @screen-xs-max) {
-      margin-left: 0;
-      margin-right: 0;
+  }
+}
+
+// 搜索
+.navbar-form {
+  margin: 10px;
+  .box-shadow(none);
+  @media (max-width: @screen-xs-max) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .form-group {
+    position: relative;
+  }
+  .form-control {
+    height: 30px;
+    width: 100px;
+    border-radius: 20px;
+    .es-transition;
+    &.active {
+      width: 150px;
     }
-    .form-group {
-      position: relative;
+    &:focus {
+      border-color: #fff;
     }
-    .form-control {
-      height: 30px;
-      width: 100px;
-      border-radius: 20px;
-      .es-transition;
-      &.active {
-        width: 150px;
-      }
-      &:focus {
-        border-color: #fff;
-      }
-    }
-    .button {
-      position: absolute;
-      right: 5px;
-      top: 3px;
-      border: none;
-      background: none;
-    }
+  }
+  .button {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    border: none;
+    background: none;
   }
 }
 
