@@ -55,9 +55,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
 
             foreach ($paidCourses as $key => $paidCourse) {
-                $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
-                $paidCourses[$key]["deadline"] = $courseMembers[$paidCourse["id"]]["deadline"];
-                $paidCourses[$key]["deadlineDate"] = date('Y-m-d H:i', $courseMembers[$paidCourse["id"]]["deadline"]*1000);
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType);
             }
         }
