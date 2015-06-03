@@ -97,8 +97,9 @@ define(function(require, exports, module) {
 
 
         if($("#lesson-preview-flash").length>0){
-
-            $.get($player.data('url'), function(response) {
+            swfobject = require('swfobject');
+            
+            $.get($("#lesson-preview-flash").data('url'), function(response) {
                 var html = '<div id="lesson-swf-player" ></div>';
                 $("#lesson-preview-flash").html(html);
                 swfobject.embedSWF(lesson.mediaUri, 
