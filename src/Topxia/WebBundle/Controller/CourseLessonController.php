@@ -29,16 +29,16 @@ class CourseLessonController extends BaseController
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
-        if ($lesson['mediaSource'] != 'self' || (empty($timelimit) && empty($lesson['free']))) {
-            if (!$user->isLogin()) {
-                throw $this->createAccessDeniedException();
-            }
-            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-        } else {
+        if (!empty($lesson['free'])) {
             $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
             if (empty($allowAnonymousPreview) && !$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
+        } elseif (!($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException();
+            }
+            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
         }
 
         $hasVideoWatermarkEmbedded = 0;
