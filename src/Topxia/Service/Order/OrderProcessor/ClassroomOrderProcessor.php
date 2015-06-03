@@ -52,25 +52,18 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $paidCourses = array();
         if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
-            $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-            $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-
-            $courseIds = ArrayToolkit::column($courseMembers, "courseId");
-            $paidCourses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
 
             foreach ($paidCourses as $key => $paidCourse) {
-                $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
-                $paidCourses[$key]["deadline"] = $courseMembers[$paidCourse["id"]]["deadline"];
-                $paidCourses[$key]["deadlineDate"] = date('Y-m-d H:i', $courseMembers[$paidCourse["id"]]["deadline"]*1000);
                 $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType);
             }
         }
 
-        $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
+        $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, $priceType);
 
         if(!$coinEnable) {
             $totalPrice = $classroom["price"];
-            $totalPrice = $totalPrice-$coursesTotalPrice;
+            $totalPrice = $totalPrice-$paidCoursesTotalPrice;
             $totalPrice = NumberToolkit::roundUp($totalPrice);
 
             if($totalPrice < 0){
@@ -96,7 +89,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
 
-        $totalPrice = $totalPrice-$coursesTotalPrice;
+        $totalPrice = $totalPrice-$paidCoursesTotalPrice;
 
         if($totalPrice < 0){
             $totalPrice = 0;
@@ -169,11 +162,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCoursesTotalPrice = 0;
         $paidCourses = array();
         if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
-            $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-            $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-
-            $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
-            $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
+            $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
         }
 
         foreach ($paidCourses as $key => $paidCourse) {
@@ -236,6 +225,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         	empty($couponResult) ? null : $couponResult,
         );
 	}
+
+    private function getPaidCourses($currentUser, $courseIds){
+        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+        $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+        return $this->getCourseService()->findCoursesByIds($paidCourseIds);
+    }
 
 	public function createOrder($orderInfo, $fields) 
 	{
