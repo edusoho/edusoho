@@ -66,7 +66,7 @@
             {% if not classroom.private %}
               <div class="btn-buy">
                 {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'member_expired', 'level_low']) %}
-                  <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买 {{canFreeJoin}}</a>
+                  <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
                   <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
                 {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
                   <a href="{{ path('vip_buy') }}"  class="btn btn-primary btn-lg" >{{ classroomMemberLevel.name }}，免费学</a>  
