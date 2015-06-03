@@ -30,7 +30,7 @@
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>RecommendClasses</small></h2>
+              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>LatestClasses</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
