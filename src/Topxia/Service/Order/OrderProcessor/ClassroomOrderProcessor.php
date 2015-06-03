@@ -229,13 +229,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     private function getPaidCourses($currentUser, $courseIds){
         $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
         $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-
-        foreach ($courseMembers as $key => $courseMember) {
-            if($courseMember["levelId"]>0){
-                unset($courseMembers[$key]);
-            }
-        }
-
         $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         return $this->getCourseService()->findCoursesByIds($paidCourseIds);
     }
