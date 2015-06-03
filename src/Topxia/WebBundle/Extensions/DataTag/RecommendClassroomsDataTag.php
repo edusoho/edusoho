@@ -22,8 +22,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         
         $conditions = array(
             'status' => 'published',
-            'private' => 0,
-            'recommended' =>1
+            'private' => 0
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
