@@ -3056,47 +3056,47 @@ textarea.form-control-o {
   display: inline-block;
   color: #37b97d;
 }
-.poster {
+.es-poster {
   position: relative;
   background: #fff;
   height: 570px;
   margin: 0 auto;
 }
 @media (max-width: 1199px) {
-  .poster {
+  .es-poster {
     height: 470px;
   }
 }
 @media (max-width: 991px) {
-  .poster {
+  .es-poster {
     height: 360px;
   }
 }
 @media (max-width: 767px) {
-  .poster {
+  .es-poster {
     height: 150px;
   }
 }
-.poster .swiper-slide {
+.es-poster .swiper-slide {
   margin: 0 auto;
   width: 100%;
   height: 100%;
 }
-.poster .swiper-slide .container {
+.es-poster .swiper-slide .container {
   position: relative;
 }
-.poster .swiper-slide .mask {
+.es-poster .swiper-slide .mask {
   position: absolute;
   top: 0;
   left: 10px;
   right: 10px;
   height: 100%;
 }
-.poster .swiper-slide .mask .container {
+.es-poster .swiper-slide .mask .container {
   position: relative;
   height: 100%;
 }
-.poster .swiper-slide .title {
+.es-poster .swiper-slide .title {
   position: absolute;
   top: 130px;
   left: 50px;
@@ -3112,34 +3112,34 @@ textarea.form-control-o {
   opacity: 0;
   filter: alpha(opacity=100);
 }
-.poster .swiper-slide .title span {
+.es-poster .swiper-slide .title span {
   display: block;
 }
 @media (max-width: 1199px) {
-  .poster .swiper-slide .title {
+  .es-poster .swiper-slide .title {
     font-size: 60px;
   }
 }
 @media (max-width: 991px) {
-  .poster .swiper-slide .title {
+  .es-poster .swiper-slide .title {
     font-size: 40px;
     line-height: 50px;
     top: 100px;
   }
 }
 @media (max-width: 767px) {
-  .poster .swiper-slide .title {
+  .es-poster .swiper-slide .title {
     top: 20px;
     left: 0;
     right: 0;
     text-align: center;
     font-size: 26px;
   }
-  .poster .swiper-slide .title span {
+  .es-poster .swiper-slide .title span {
     display: inline-block;
   }
 }
-.poster .swiper-slide .subtitle {
+.es-poster .swiper-slide .subtitle {
   position: absolute;
   top: 320px;
   left: 50px;
@@ -3148,27 +3148,27 @@ textarea.form-control-o {
   opacity: 0;
   filter: alpha(opacity=100);
 }
-.poster .swiper-slide .subtitle span {
+.es-poster .swiper-slide .subtitle span {
   margin-right: 20px;
 }
 @media (max-width: 991px) {
-  .poster .swiper-slide .subtitle {
+  .es-poster .swiper-slide .subtitle {
     top: 220px;
     font-size: 18px;
   }
 }
 @media (max-width: 767px) {
-  .poster .swiper-slide .subtitle {
+  .es-poster .swiper-slide .subtitle {
     left: 0;
     right: 0;
     text-align: center;
     top: 80px;
   }
-  .poster .swiper-slide .subtitle span {
+  .es-poster .swiper-slide .subtitle span {
     margin: 0 10px;
   }
 }
-.poster .swiper-slide .item-mac {
+.es-poster .swiper-slide .item-mac {
   position: absolute;
   bottom: 50px;
   right: 0;
@@ -3176,39 +3176,39 @@ textarea.form-control-o {
   filter: alpha(opacity=100);
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-  .poster .swiper-slide .item-mac {
+  .es-poster .swiper-slide .item-mac {
     width: 550px;
   }
 }
 @media (max-width: 991px) {
-  .poster .swiper-slide .item-mac {
+  .es-poster .swiper-slide .item-mac {
     width: 400px;
   }
 }
 @media (max-width: 767px) {
-  .poster .swiper-slide .item-mac {
+  .es-poster .swiper-slide .item-mac {
     display: none;
   }
 }
-.poster .swiper-slide.swiper-slide-active .title {
+.es-poster .swiper-slide.swiper-slide-active .title {
   -webkit-animation: fadeInUp 1s 0.2s ease both;
   -moz-animation: fadeInUp 1s 0.2s ease both;
   -o-animation: fadeInUp 1s 0.2s ease both;
   animation: fadeInUp 1s 0.2s ease both;
 }
-.poster .swiper-slide.swiper-slide-active .subtitle {
+.es-poster .swiper-slide.swiper-slide-active .subtitle {
   -webkit-animation: fadeInLeft 1s 0.8s ease both;
   -moz-animation: fadeInLeft 1s 0.8s ease both;
   -o-animation: fadeInLeft 1s 0.8s ease both;
   animation: fadeInLeft 1s 0.8s ease both;
 }
-.poster .swiper-slide.swiper-slide-active .item-mac {
+.es-poster .swiper-slide.swiper-slide-active .item-mac {
   -webkit-animation: fadeInRight 1s 0.2s ease both;
   -moz-animation: fadeInRight 1s 0.2s ease both;
   -o-animation: fadeInRight 1s 0.2s ease both;
   animation: fadeInRight 1s 0.2s ease both;
 }
-.poster .swiper-pager {
+.es-poster .swiper-pager {
   position: absolute;
   bottom: 30px;
   z-index: 100;
@@ -3216,11 +3216,11 @@ textarea.form-control-o {
   text-align: center;
 }
 @media (max-width: 767px) {
-  .poster .swiper-pager {
+  .es-poster .swiper-pager {
     bottom: 20px;
   }
 }
-.poster .swiper-pager span {
+.es-poster .swiper-pager span {
   font-size: 0;
   margin: 0 10px;
   width: 15px;
@@ -3232,20 +3232,20 @@ textarea.form-control-o {
   border-radius: 50%;
 }
 @media (max-width: 767px) {
-  .poster .swiper-pager span {
+  .es-poster .swiper-pager span {
     width: 10px;
     height: 10px;
     margin: 0 5px;
   }
 }
-.poster .swiper-pager span:hover {
+.es-poster .swiper-pager span:hover {
   cursor: pointer;
   background: #37b97d;
   color: #37b97d;
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.poster .swiper-pager span.swiper-active-switch {
+.es-poster .swiper-pager span.swiper-active-switch {
   background: #37b97d;
   color: #37b97d;
   opacity: 1;
