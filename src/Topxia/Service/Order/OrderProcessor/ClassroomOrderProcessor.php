@@ -49,7 +49,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $currentUser = $this->getUserService()->getCurrentUser();
         
         $classroomSetting = $this->getSettingService()->get("classroom");
-        $paidCoursesTotalPrice = 0;
+
         $paidCourses = array();
         if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
             $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
@@ -62,26 +62,15 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
                 $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
                 $paidCourses[$key]["deadline"] = $courseMembers[$paidCourse["id"]]["deadline"];
                 $paidCourses[$key]["deadlineDate"] = date('Y-m-d H:i', $courseMembers[$paidCourse["id"]]["deadline"]*1000);
+                $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType);
             }
-            $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses, $priceType);
         }
-
 
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses, $priceType);
 
         if(!$coinEnable) {
             $totalPrice = $classroom["price"];
-            $discountRate = 1;
-
-            foreach ($paidCourses as $key => $paidCourse) {
-                $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
-                if($paidCourses[$key]["afterDiscountPrice"]>0) {
-                    $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
-                } else {
-                    unset($paidCourses[$key]);
-                }
-            }
-
+            $totalPrice = $totalPrice-$coursesTotalPrice;
             $totalPrice = NumberToolkit::roundUp($totalPrice);
 
             if($totalPrice < 0){
@@ -92,9 +81,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 				'totalPrice' => $totalPrice,
 				'targetId' => $targetId,
             	'targetType' => "classroom",
-                'coursesTotalPrice' => $coursesTotalPrice,
-                'paidCoursesTotalPrice' => $paidCoursesTotalPrice,
-                'discountRate' => $discountRate,
 
 				'classroom' => empty($classroom) ? null : $classroom,
                 'courses' => $courses,
@@ -110,31 +96,15 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
 
-        $afterCourseDiscountPrice = $totalPrice;
-        $discountRate = 1;
-
-        foreach ($paidCourses as $key => $paidCourse) {
-            $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
-            $paidCourses[$key]["afterDiscountPrice"] = $afterDiscountPrice;
-            if ($paidCourses[$key]["afterDiscountPrice"] > 0) {
-                $afterCourseDiscountPrice -= $paidCourses[$key]["afterDiscountPrice"];
-                $totalPrice -= $paidCourses[$key]["afterDiscountPrice"];
-            } else {
-                unset($paidCourses[$key]);
-            }
-        }
-
-        $totalPrice = NumberToolkit::roundUp($totalPrice);
+        $totalPrice = $totalPrice-$coursesTotalPrice;
 
         if($totalPrice < 0){
             $totalPrice = 0;
         }
 
-        if($afterCourseDiscountPrice<0){
-            $afterCourseDiscountPrice=0;
-        }
+        list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
-        list($afterCourseDiscountPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($afterCourseDiscountPrice, $priceType, $cashRate);
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
 
         return array(
             'classroom' => empty($classroom) ? null : $classroom,
@@ -142,9 +112,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             'paidCourses' => $paidCourses,
             'users' => $users,
             'headTeacher' => $headTeacher,
-            'coursesTotalPrice' => $coursesTotalPrice,
-            'paidCoursesTotalPrice' => $paidCoursesTotalPrice,
-            'discountRate' => $discountRate,
             
             'totalPrice' => $totalPrice,
             'targetId' => $targetId,
@@ -209,14 +176,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
         }
 
-        if($coursesTotalPrice>0){
-            $discountRate = $totalPrice/$coursesTotalPrice;
-        } else {
-            $discountRate = 1;
-        }
-
         foreach ($paidCourses as $key => $paidCourse) {
-            $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType, $discountRate);
+            $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType);
             $amount -= $afterDiscountPrice;
             $totalPrice -= $afterDiscountPrice;
         }
@@ -292,7 +253,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return ;
     }
 
-    private function afterDiscountPrice($course, $priceType, $discountRate)
+    private function afterDiscountPrice($course, $priceType)
     {
         $coursePrice = 0;
         if($priceType == "RMB") {
@@ -300,7 +261,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         } else if($priceType == "Coin") {
             $coursePrice = $course["originCoinPrice"];
         }
-        return floor(((float)$coursePrice)*$discountRate*100)/100;
+        return $coursePrice;
     }
 
     private function getCoursesTotalPrice($courses, $priceType)
