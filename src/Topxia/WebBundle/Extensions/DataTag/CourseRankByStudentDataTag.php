@@ -22,6 +22,7 @@ class CourseRankByStudentDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
      
         $conditions = array('status' => 'published');
+        $conditions['parentId'] = 0;
 
     	$courses = $this->getCourseService()->searchCourses($conditions,'studentNum', 0, $arguments['count']);
         
