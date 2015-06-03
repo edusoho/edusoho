@@ -27,7 +27,7 @@
     <div class="col-md-8">
 
       {% if setting('classroom.enabled') %}
-      {% set classrooms = data('LatestClassrooms',{'count':6}) %}
+      {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
               <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>LatestClasses</small></h2>
