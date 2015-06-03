@@ -89,7 +89,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
 
-        $totalPrice = $totalPrice-$paidCoursesTotalPrice;
+        $totalPrice = $totalPrice - $paidCoursesTotalPrice;
 
         if($totalPrice < 0){
             $totalPrice = 0;
