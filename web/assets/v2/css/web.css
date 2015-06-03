@@ -3340,7 +3340,8 @@ body {
 
 .course-wide-list .teacher {
   float: left;
-  width: 70%;
+  /*width: 70%;*/
+  width: 180px;
 }
 
 .course-wide-list .teacher-avatar {

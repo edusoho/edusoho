@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         });
         Lazyload.init();
 
-        $("#course-list").on('click','.js-search',function(){
+        $("#course-list").on('click','.js-course-filter',function(){
              var $btn = $(this);
              $.get($btn.data('url'),function(html){
                $('#course-list').html(html);
