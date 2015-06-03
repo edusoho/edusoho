@@ -23,6 +23,9 @@
   float: left;
   margin-right: 25px;
 }
+.navbar-right .es-header {
+  background-color: #363e45;
+}
 @media (max-width: 767px) {
   .home-class-list .class-picture-link {
     float: none;
@@ -85,3 +88,4 @@
     margin-right: 50px;
   }
 }
+
