@@ -2,21 +2,21 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/class-defaultb.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/default-b.css') }}" />
 {% endblock %}
 
 {% block content %}
 
   <div class="es-row-wrap container-gap">
 
-    <div class="homepage-feature homepage-feature-slides">
+    <div class="homepage-feature homepage-feature-slides ">
       <div class="cycle-pager"></div>
-      {{ block_show('home_top_banner') }}
+      {{ block_show('default-b:home_top_banner') }}
     </div>
     
     <ul class="homepage-category-nav">
       {% for category in categories %}
-        <li><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}">{{ category.name }}</a></li>
+        <li><a href="{{ path('course_explore', {code:category.code,fliter:'all',orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
         <li><a href="{{ path('course_explore') }}">更多</a></li>
     </ul>
@@ -24,16 +24,16 @@
     <div class="row row-9-3">
       <div class="col-md-9">
 
-        {% if is_plugin_installed('Classroom') and setting('classroom.enabled') %}
+        {% if setting('classroom.enabled') %}
         {% set items = data('RecommendClassrooms',{'count':6}) %}
           <div class="es-box">
               <div class="es-box-heading">
                 <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-                <h2>最新{{ setting('classroom.name')|default("班级") }}</h2>
+                <h2>推荐{{ setting('classroom.name')|default("班级") }}</h2>
               </div>
               <div class="es-box-body">
                 <ul class="home-class-list">
-                  {% for classroom in items.classrooms %}
+                  {% for classroom in items %}
                  {% set teachers = items.users[classroom.id]|default(null) %}
                  {% if loop.index <= 5%}
                   <li class="class-item">
@@ -55,7 +55,7 @@
                         {% endfor %}
                       </span>
                     {% endif %}
-                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
+                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }} 人</span>
                         <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                               {% if classroom.price > 0 %}
@@ -73,7 +73,7 @@
 
                         </span>
                       </div>
-                      <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
+                      <div class="course-num">共{{classroom.courseNum}}课程</div>
                     </div>
                   </li>
                    {% endif %}
