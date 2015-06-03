@@ -78,7 +78,17 @@
                   <span class="badge">v2</span>
                 </a></li>
               {% endif %}
-              <li><a href="{{ path('search') }}"><span class="glyphicon glyphicon-search"></span></a></li>
+              
+              <li class="es-header">
+                <form class="navbar-form navbar-right hidden-xs" action="/search" method="get">
+                  <div class="form-group">
+                    <input class="form-control js-search" name="q" placeholder="">
+                    <button class="button es-icon es-icon-search"></button>
+                  </div>
+                </form>
+              </li>
+
+
               <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
                 <span class="glyphicon glyphicon-bullhorn hidden-lt-ie8"></span>
                 <span class="visible-lt-ie8">通知</span>

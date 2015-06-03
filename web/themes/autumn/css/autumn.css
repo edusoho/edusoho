@@ -11,6 +11,10 @@ a:hover {
     color: #83BB36;
 }
 
+li.es-header {
+    background-color: transparent;
+}
+
 .site-navbar {
     background-color: #333;
     margin-bottom: 0px;
