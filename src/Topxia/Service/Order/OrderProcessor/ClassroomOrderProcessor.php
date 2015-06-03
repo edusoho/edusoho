@@ -302,9 +302,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $coursePrice = 0;
         if($priceType == "RMB") {
-            $coursePrice = $course["price"];
+            $coursePrice = $course["originPrice"];
         } else if($priceType == "Coin") {
-            $coursePrice = $course["coinPrice"];
+            $coursePrice = $course["originCoinPrice"];
         }
         return floor(((float)$coursePrice)*$discountRate*100)/100;
     }
@@ -314,9 +314,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $coursesTotalPrice = 0;
         foreach ($courses as $key => $course) {
             if($priceType == "RMB") {
-                $coursesTotalPrice += $course["price"];
+                $coursesTotalPrice += $course["originPrice"];
             } else if($priceType == "Coin") {
-                $coursesTotalPrice += $course["coinPrice"];
+                $coursesTotalPrice += $course["originCoinPrice"];
             }
         }
         return $coursesTotalPrice;

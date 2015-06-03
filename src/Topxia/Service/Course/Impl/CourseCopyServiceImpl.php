@@ -231,6 +231,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         } else {
             $fields['status'] = 'draft';
         }
+        $fields["coinPrice"] = $fields["originCoinPrice"];
+        $fields["price"] = $fields["originPrice"];
 
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }
