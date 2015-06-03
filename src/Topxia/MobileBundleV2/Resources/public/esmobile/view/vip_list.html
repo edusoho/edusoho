@@ -26,7 +26,7 @@
 	            <a class="cut-line">
 			        	<span>其他方式登录</span>
 	            </a>
-	            <a class="item item-avatar viplist-item" ng-repeat="vip in data.vips">
+	            <a href="#/vippay/{{ vip.id }}" class="item item-avatar viplist-item" ng-repeat="vip in data.vips">
 		      <img ng-src="{{ vip.picture }}">
 		      <h3>{{ vip.name }}</h3>
 		      <div class="vip-description" ng-bind-html="vip.description"></div>

@@ -196,6 +196,10 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 
+	this.unLearnCourse = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/unLearnCourse", arguments);
+	}
+	
 	this.vipLearn = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/Course/vipLearn", arguments);
 	}
@@ -314,6 +318,10 @@ service('CourseService', ['httpService', function(httpService) {
 }]).
 service('SchoolService', ['httpService', function(httpService) {
 
+	this.getVipPayInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/School/getVipPayInfo", arguments);
+	}
+	
 	this.getSchoolVipList = function(params, callback) {
 		httpService.simpleGet('/mapi_v2/School/getSchoolVipList', arguments);
 	}

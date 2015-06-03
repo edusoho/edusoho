@@ -1,30 +1,114 @@
-<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left">
-  <ion-tab title="课时">
-    <ion-nav-view>
-      <ion-view>
-      	<ion-content class="course-tab-content" on-scroll-complete="scrollComplete(scrollTop, scrollLeft)" on-scroll="scroll(event, scrollTop, scrollLeft)"  delegate-handle="tabScroll">
+<div class="course-tab-content">
+	<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left" delegate-handle="tabHandle">
+		<ion-tab title="课时" on-select="onTabSelected(this, index)">
+		</ion-tab>
+		<ion-tab title="课程详情" on-select="onTabSelected(this)">
+		</ion-tab>
+	</ion-tabs>
+      	<ion-pane ng-show="selectedIndex == 0">
                   <div class="list lesson-list">
 
-				  <a class="item" ng-class="lesson.type" ng-repeat="lesson in lessons">
-				    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
-		
-				    <span class="lesson-body">
-				    	<span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
-				
-				    	<span class="lesson-length">{{ lesson.length }}</span>
-				    </span>
-				  </a>
+			  <a class="item" ng-class="lesson.type" ng-repeat="lesson in lessons">
+			    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
+	
+			    <span class="lesson-body">
+			    	<span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
+			
+			    	<span class="lesson-length">{{ lesson.length }}</span>
+			    </span>
+			  </a>
 
+		</div>
+	</ion-pane>
+	<ion-pane ng-show="selectedIndex == 1">
+  		<div class="body">
+	      	<div class="card">
+	      		<span class="card-head">
+		      		<h5>课程概览</h5>
+		      		<a class="button button-icon iconfont icon-menu" href="#/coursedetail/{{ course.id }}"></a>
+		      	</span>
+	      		<div class="item item-text-wrap" ng-bind-html="course.about">
+				</div>
 			</div>
-		</ion-content>
+
+			<div class="card">
+				<span class="card-head">
+			      		<h5>课程教师 ({{ course.teachers.length }})</h5>
+			      		<a class="button button-icon iconfont icon-menu" href="#/teacherlist/{{ course.id }}">
+			      		</a>
+			      	</span>
+	      			<div class="list">
+				    <a class="item item-avatar" ng-if="course.teachers[0]">
+				      <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}">
+				      <h3>{{ course.teachers[0].nickname }} <span class="teacher-label">教师</span></h3>
+				      <p>{{ course.teachers[0].title }}</p>
+				    </a>
+				    <a class="item" ng-if="! course.teachers[0]">
+				      <p>该课程暂无教师</p>
+				    </a>
+				</div>
+			</div>
+
+			<div class="card">
+	      		<span class="card-head">
+		      		<h5>课程评价</h5>
+		      		<a class="button button-icon iconfont icon-menu"></a>
+		      	</span>
+	      			<div class="list">
+
+				    <a ng-if="reviews" class="item item-avatar">
+				      <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}">
+				      <div class="review-rating">
+				      	<h3>{{ reviews[0].user.nickname }}</h3>
+				      	<span>
+				      		<i class="iconfont icon-favorite" ng-class="reviews[0].rating > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
+				      	</span>
+				      </div>
+				      <p>{{ reviews[0].createdTime | coverLearnTime }}</p>
+				      <p>{{ reviews[0].content }}</p>
+				    </a>
+
+				    <a class="item" ng-if="! reviews">
+				      <p>该课程暂无评价</p>
+				    </a>
+				</div>
+			</div>
+		</div>
+	</ion-pane>
+</div>
+<!--
+<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left">
+  <ion-tab title="课时">
+    <ion-nav-view class="course-tab-content">
+      <ion-view>
+      	<ion-pane on-scroll-complete="scrollComplete(scrollTop, scrollLeft)" on-scroll="scroll(event, scrollTop, scrollLeft)"  delegate-handle="tabScroll">
+                  <div class="list lesson-list">
+
+			  <a class="item" ng-class="lesson.type" ng-repeat="lesson in lessons">
+			    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
+	
+			    <span class="lesson-body">
+			    	<span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
+			
+			    	<span class="lesson-length">{{ lesson.length }}</span>
+			    </span>
+			  </a>
+
+		</div>
+		<ion-infinite-scroll
+	        ng-if="! lessons || lessons.length == 0"
+	        on-infinite=""
+	        distance="1%">
+	      </ion-infinite-scroll>
+	</ion-pane>
       </ion-view>
     <ion-nav-view>
   </ion-tab>
 
   <ion-tab title="课程详情">
-    <ion-nav-view>
+    <ion-nav-view class="course-tab-content">
       <ion-view>
-      	<ion-content class="course-tab-content">
+      	<ion-pane>
       		<div class="body">
 		      	<div class="card">
 		      		<span class="card-head">
@@ -73,8 +157,9 @@
 					</div>
 				</div>
 			</div>
-		</ion-content>
+		</ion-pane>
       </ion-view>
     <ion-nav-view>
   </ion-tab>
 </ion-tabs>
+-->

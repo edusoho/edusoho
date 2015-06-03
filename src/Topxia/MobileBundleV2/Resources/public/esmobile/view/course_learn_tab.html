@@ -1,3 +1,31 @@
+<div class="course-tab-content">
+  <ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left" delegate-handle="tabHandle">
+    <ion-tab title="课时" on-select="onTabSelected(this, index)">
+    </ion-tab>
+    <ion-tab title="课程讨论区" on-select="onTabSelected(this)">
+    </ion-tab>
+  </ion-tabs>
+        <ion-pane ng-show="selectedIndex == 0">
+                 <div class="list lesson-list">
+
+                  <a class="item {{ lesson.type }}" ng-class="learnStatuses[lesson.id] == 'finished' ? 'activated' : '' " ng-repeat="lesson in lessons">
+                    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
+            
+                    <span class="lesson-body">
+                      <span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
+                      
+                      <span class="lesson-length">{{ lesson.length }}</span>
+                    </span>
+                  </a>
+
+              </div> 
+        </ion-pane>
+  <ion-pane ng-show="selectedIndex == 1">
+      <div class="body">
+      </div>
+  </ion-pane>
+</div>
+<!--
 <ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left">
   <ion-tab title="课时">
     <ion-nav-view>
@@ -32,3 +60,4 @@
     <ion-nav-view>
   </ion-tab>
 </ion-tabs>
+-->

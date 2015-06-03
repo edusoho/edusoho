@@ -28,6 +28,10 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 		}
 		return content;
 	};
+}]).filter('array', ['AppUtil', function(AppUtil) {
+	return function(num){
+		return AppUtil.createArray(num);
+	};
 }]).
 filter('formatPrice', ['$rootScope', function($rootScope){
 
