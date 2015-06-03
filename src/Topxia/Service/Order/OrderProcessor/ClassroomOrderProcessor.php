@@ -52,11 +52,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $paidCourses = array();
         if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
-            $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-            $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-
-            $courseIds = ArrayToolkit::column($courseMembers, "courseId");
-            $paidCourses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
 
             foreach ($paidCourses as $key => $paidCourse) {
                 $paidCourses[$key]["percent"] = $this->calculateUserLearnProgress($paidCourse, $courseMembers[$paidCourse["id"]]);
@@ -169,11 +165,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCoursesTotalPrice = 0;
         $paidCourses = array();
         if(!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
-            $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-            $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-
-            $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
-            $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
+            $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
         }
 
         foreach ($paidCourses as $key => $paidCourse) {
@@ -236,6 +228,20 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         	empty($couponResult) ? null : $couponResult,
         );
 	}
+
+    private function getPaidCourses($currentUser, $courseIds){
+        $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
+        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
+
+        foreach ($courseMembers as $key => $courseMember) {
+            if($courseMember["levelId"]>0){
+                unset($courseMembers[$key]);
+            }
+        }
+
+        $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+        return $this->getCourseService()->findCoursesByIds($paidCourseIds);
+    }
 
 	public function createOrder($orderInfo, $fields) 
 	{
