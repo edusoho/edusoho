@@ -25,7 +25,7 @@
   border: 1px solid #e0e0e0 !important;
 }
 .homepage-feature-slides {
-  z-index: 9;
+  z-index: 0;
 }
 .list-group-panel .list-group-item.active,
 .list-group-panel .list-group-item.active:hover {
@@ -1335,12 +1335,23 @@ a:focus {
   width: 100%;
 }
 .course-list .course-item .course-img:hover {
-  opacity: .9;
+  opacity: 0.9;
   filter: alpha(opacity=90);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+.course-list .course-item .tags {
+  position: absolute;
+  top: 0;
+  left: 10px;
+}
+.course-list .course-item .tags .tag-live {
+  display: inline-block;
+  width: 40px;
+  height: 50px;
+  background: url("../img/tag_live.png") no-repeat;
 }
 .course-list .course-item .title {
   height: 40px;
