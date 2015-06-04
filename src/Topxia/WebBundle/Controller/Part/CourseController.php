@@ -19,7 +19,7 @@ class CourseController extends BaseController
 
         $user = $this->getCurrentUser();
         $userVipStatus = $courseVip = null;
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member) {
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
             if ($courseVip) {
                 $userVipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
