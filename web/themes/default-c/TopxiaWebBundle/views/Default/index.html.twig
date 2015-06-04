@@ -45,6 +45,7 @@
                         <i class="fa fa-user"></i>
                         {% for teacher in teachers %}
                           {% if loop.index <= 5%}
+                             {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
                              <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                            {% endif %}
                         {% endfor %}
@@ -272,6 +273,7 @@
 {% endblock %}
 
 {% macro course_lists(courses) %}
+  {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   {% set mode = mode|default('default') %}
   <ul class="course-wide-list">
     {% for course in courses %}
@@ -316,7 +318,8 @@
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+              {# <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a> #}
+              {{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
               <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               <span class="teacher-title ellipsis">{{ teacher.title }}</span>
             </div>
