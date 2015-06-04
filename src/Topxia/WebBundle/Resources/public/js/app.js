@@ -143,20 +143,15 @@ define(function(require, exports, module) {
     	});
     }
 
-    var navHover = function() {
-        $("li.nav-hover").mouseenter(function(event) {
-            $(this).addClass("open");
-        }).mouseleave(function(event) {
-            $(this).removeClass("open");
-        });
-    }
+   
+    $("li.nav-hover").mouseenter(function(event) {
+        $(this).addClass("open");
+    }).mouseleave(function(event) {
+        $(this).removeClass("open");
+    });
 
     if ($('[data-toggle="tooltip"]').length > 0) {
         $('[data-toggle="tooltip"]').tooltip();
-    }
-
-    if($("a[data-toggle='dropdown']").length > 0){
-    	navHover();
     }
 
     $(".js-search").focus(function () {
