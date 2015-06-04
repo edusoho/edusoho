@@ -5,6 +5,17 @@
         "category": "default",
         "templateName": "@theme/default/block/carousel.template.html.twig",
         "items": {
+            "carousel1background":{
+                "title":"轮播图１背景颜色",
+                "desc":"例如#FFFFFF",
+                "count":1,
+                "type":"text",
+                "default":[
+                    {
+                        "value": "#3F3F3F"
+                    }
+                ]
+            },
             "carousel1ground":
             {
                 "title": "背景图１",
@@ -79,6 +90,17 @@
                     }
                 ]
             },
+            "carousel2background":{
+                "title":"轮播图２背景颜色",
+                "desc":"例如#FFFFFF",
+                "count":1,
+                "type":"text",
+                "default":[
+                    {
+                        "value": "#3F3F3F"
+                    }
+                ]
+            },
             "carousel2ground":
             {
                 "title": "背景图２",
@@ -150,6 +172,17 @@
                         "alt": "默认轮播图２",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
+                    }
+                ]
+            },
+            "carousel3background":{
+                "title":"轮播图３背景颜色",
+                "desc":"例如#FFFFFF",
+                "count":1,
+                "type":"text",
+                "default":[
+                    {
+                        "value": "#3F3F3F"
                     }
                 ]
             },
