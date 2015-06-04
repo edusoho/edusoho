@@ -68,8 +68,6 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `thread` ADD `endTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '结束时间' AFTER `startTIme`;");
         }
 
-        //////////////////////
-        
         if(!$this->isFieldExist('thread', 'maxUsers')){
             $connection->exec("ALTER TABLE `thread` ADD `maxUsers` INT(10) NOT NULL DEFAULT '0' COMMENT '最大人数' AFTER `hitNum`;");
         }
@@ -101,9 +99,6 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!$this->isFieldExist('course', 'parentId')){
             $connection->exec("ALTER TABLE `course` ADD `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id' AFTER `locationId`;");
         }
-
-        $connection->exec("ALTER TABLE `thread` CHANGE `maxUsers` `maxUsers` INT(10) NOT NULL DEFAULT '0' COMMENT '最大人数';");
-
 
         if(!$this->isFieldExist('course_announcement', 'targetType')){
             $connection->exec("ALTER TABLE `course_announcement` ADD COLUMN `targetType` varchar(64) NOT NULL DEFAULT 'course' COMMENT '公告类型' AFTER `userId`");
@@ -140,25 +135,27 @@ class EduSohoUpgrade extends AbstractUpdater
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `noteId` int(11) NOT NULL,
                 `userId` int(11) NOT NULL,
-                `truename` varchar(255) NOT NULL COMMENT '名称',
                 `createdTime` int(11) unsigned NOT NULL COMMENT '创建时间',
                 PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
 
+////done
         if(!$this->isFieldExist('status', 'courseId')){
             $connection->exec("ALTER TABLE `status` ADD `courseId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程Id' AFTER `userId`;");
         }
 
+////done
         if(!$this->isFieldExist('status', 'classroomId')){
             $connection->exec("ALTER TABLE `status` ADD `classroomId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级id' AFTER `courseId`;");
         }
 
+////done
         if(!$this->isFieldExist('course_lesson', 'homeworkId')){
             $connection->exec("ALTER TABLE `course_lesson` ADD `homeworkId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '作业iD' AFTER `mediaUri`;");
         }
-
+////done
         if(!$this->isFieldExist('course_lesson', 'exerciseId')){
             $connection->exec("ALTER TABLE `course_lesson` ADD `exerciseId` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '练习ID' AFTER `homeworkId`;");
         }
@@ -166,7 +163,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!$this->isFileGroupExist("classroom")){
             $connection->exec("INSERT INTO `file_group` (`id`, `name`, `code`, `public`) VALUES (NULL, '班级', 'classroom', '1');");
         }
-
+////是否需要多个
         if(!$this->isFieldExist('thread', 'actvityPicture')){
             $connection->exec("ALTER TABLE `thread` ADD `actvityPicture` VARCHAR(255) NULL DEFAULT NULL COMMENT '活动图片' AFTER `maxUsers`;");
         }
@@ -253,6 +250,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE classroom ADD COLUMN `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间';");
         }
 
+////done
         if (!$this->isFieldExist('course', 'noteNum')) {
             $connection->exec("ALTER TABLE `course` ADD `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量' AFTER `hitNum`;");
         }
@@ -279,23 +277,21 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('classroom_courses', 'disabled')) {
             $connection->exec("ALTER TABLE `classroom_courses` ADD `disabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否禁用' AFTER `courseId`;");
         }
-
+////done
         if (!$this->isFieldExist('classroom', 'noteNum')) {
             $connection->exec("ALTER TABLE `classroom` ADD `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级笔记数量' AFTER `threadNum`;");
         }
-
-        if ($this->isFieldExist('course_note_like', 'truename')) {
-            $connection->exec("ALTER TABLE course_note_like DROP COLUMN truename;");
-        }
-
+////done
         if (!$this->isFieldExist('classroom_courses', 'parentCourseId')) {
             $connection->exec("ALTER TABLE `classroom_courses` ADD `parentCourseId` INT(10) UNSIGNED NOT NULL COMMENT '父课程Id' AFTER `courseId`;");
         }
 
-        if (!$this->isFieldExist('classroom_courses', 'parentCourseId')) {
-            $connection->exec("ALTER TABLE `classroom_courses` ADD `parentCourseId` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否有老师回答(已被解决)' AFTER `sticky`;");
+////done
+        if (!$this->isFieldExist('thread', 'solved')) {
+            $connection->exec("ALTER TABLE `thread` ADD `solved` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否有老师回答(已被解决)' AFTER `sticky`;");
         }
 
+////done
         if (!$this->isFieldExist('thread_post', 'adopted')) {
             $connection->exec("ALTER TABLE `thread_post` ADD `adopted` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否被采纳(是老师回答)' AFTER `content`;");
         }
