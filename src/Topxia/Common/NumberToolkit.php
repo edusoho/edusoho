@@ -14,7 +14,10 @@ class NumberToolkit {
         }
 
         if(strlen($amt[1]) > $precision) {
-            $next = (int)substr($amt[1],$precision);
+            $floatStr = substr($amt[1],$precision);
+
+            $next = (int)$floatStr;
+
             $amt[1] = (float)(".".substr($amt[1],0,$precision));
             if($next != 0) {
                 $rUp = "";
