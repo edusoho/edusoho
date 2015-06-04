@@ -36,7 +36,10 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
         ///TODO：删除classroom插件
-        ///TODO：各个默认主题的编辑区
+        ///各个默认主题的编辑区
+        $connection->exec("UPDATE `block` SET `code` = 'default-b:home_top_banner' WHERE `code` = 'home_top_banner';");
+        $connection->exec("INSERT INTO `block`( `userId`, `title`, `mode`, `template`, `templateName`, `templateData`, `content`, `code`, `meta`, `data`, `tips`, `createdTime`, `updateTime`, `category`) select `userId`, `title`, `mode`, `template`, `templateName`, `templateData`, `content`, 'default-c:home_top_banner', `meta`, `data`, `tips`, `createdTime`, `updateTime`, `category` from `block` where `code`='default-b:home_top_banner';");
+
         ///TODO：老课程复制的内容
 
         $connection->exec("UPDATE status set courseId=objectId where objectType='course';");
