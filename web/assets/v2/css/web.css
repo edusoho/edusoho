@@ -1813,9 +1813,9 @@ body {
   background: #fff;
 }
 
-.lesson-dashboard-page .container {
+/*.lesson-dashboard-page .container {
   width: 100% !important;
-}
+}*/
 
 .lesson-dashboard-page .site-navbar {
   display: none;
@@ -1829,7 +1829,7 @@ body {
   left: 0;
   right: 0;
   background: #e5e5e5;
-  z-index: 999;
+  /*z-index: 999;*/
 }
 
 .lesson-dashboard .dashboard-content {
