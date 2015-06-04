@@ -55,7 +55,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
 
             foreach ($paidCourses as $key => $paidCourse) {
-                $paidCourses[$key]["afterDiscountPrice"] = $this->afterDiscountPrice($paidCourse, $priceType);
+                $afterDiscountPrice = $this->afterDiscountPrice($paidCourse, $priceType);
+                if($afterDiscountPrice<=0){
+                    unset($paidCourses[$key]);
+                }else{
+                    $paidCourses[$key]["afterDiscountPrice"] = $afterDiscountPrice;
+                }
             }
         }
 
