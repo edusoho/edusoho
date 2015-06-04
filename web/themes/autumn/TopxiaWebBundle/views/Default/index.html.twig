@@ -1,5 +1,5 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
-
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set bodyClass = 'homepage' %}
 {% block topbanner %}
   {% set top_banner = block_show('autumn:home_top_banner')%}
   {% if top_banner %}
