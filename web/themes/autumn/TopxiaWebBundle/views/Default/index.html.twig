@@ -289,7 +289,7 @@
 
       {# 小组 #}
       {% if setting('group').group_show|default(1) %}
-        {% set groups = data('HotGroup', {'count':15}) %}
+        {% set groups = data('HotGroup', {'count':10}) %}
         {% if groups %}
           <div class="panel panel-autumn panel-autumn-default hot-group">
             <div class="panel-heading panel-heading-important">

@@ -7,7 +7,8 @@
       {% set subtitle1 = _context['carousel' ~ i ~ 'subtitle1']%}
       {% set subtitle2 = _context['carousel' ~ i ~ 'subtitle2']%}
       {% set carouselbanner =  _context['carousel' ~ i ~'banner'] %}
-      <div class="swiper-slide" style="background: #3f3f3f;">
+      {% set carouselbackground = _context['carousel' ~ i ~ 'background']%}
+      <div class="swiper-slide" style="background: {{carouselbackground[0].value}};">
         <div class="container">
           <img class="img-responsive" src="{{ carouselground[0].src|default('') }}">
           <div class="mask">
