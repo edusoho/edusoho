@@ -43,9 +43,12 @@ class CourseAnnouncementController extends BaseController
 
 	        	$members = $this->getCourseService()->findCourseStudents($courseId, 0, $count);
 
-	        	$courseUrl = $this->generateUrl('course_show', array('id'=>$courseId), true);
+	        	$message = array(
+	        		'title'=> $course['title'],
+					'url' => $$this->generateUrl('course_show', array('id'=>$courseId), true),
+					'type'=>'course');
 	        	foreach ($members as $member) {
-		        	$result = $this->getNotificationService()->notify($member['userId'], 'default', "【课程公告】你正在学习的<a href='{$courseUrl}' target='_blank'>{$course['title']}</a>发布了一个新的公告，<a href='{$courseUrl}' target='_blank'>快去看看吧</a>");
+		        	$result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
 	        	}
 	        }
 
