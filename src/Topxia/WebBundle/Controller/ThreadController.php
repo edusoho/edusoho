@@ -136,7 +136,13 @@ class ThreadController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $user = $this->getCurrentUser();
-            $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
+            $data = $request->request->all();
+            
+            if(isset($data['maxUsers']) && !empty($data['maxUsers'])) {
+                $data['maxUsers'] = 0;
+            }
+
+            $thread = $this->getThreadService()->updateThread($thread['id'], $data);
             $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
             $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId' => $thread['id']), true);
             if ($thread['userId'] != $user['id']) {
