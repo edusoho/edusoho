@@ -2,8 +2,9 @@
 
 {% set bodyClass = 'homepage' %}
 
-{% block topbanner %}
+{% block content %}
   {% set top_banner = block_show('autumn:home_top_banner')%}
+
   {% if top_banner %}
     <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
       <ol class="carousel-indicators">
@@ -22,9 +23,6 @@
     </div>      
   {% endif %}
   
-{% endblock %}
-
-{% block content %}
   <div class="row">
     <div class="col-md-8">
 
