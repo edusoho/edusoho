@@ -1,21 +1,18 @@
+@import "temp/group.less";      //小组
+@import "temp/userpage.less";   //用户中心
+
+
 // 兼容性
 .lesson-manage-panel .panel-heading {
   z-index: 1;
 }
 
-
-.group-header-inner .media-body {
-  width: auto;
+.homepage-feature-slides {
+  z-index: 0;
 }
 
 .question-set-item:first-child {
   border: none;
-}
-
-.group-item .media-object img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
 }
 
 .group-search {
@@ -27,10 +24,6 @@
   button {
     border: 1px solid #e0e0e0 !important;
   }
-}
-
-.homepage-feature-slides {
-  z-index: 0;
 }
 
 .list-group-panel .list-group-item.active, 
@@ -52,7 +45,6 @@
 }
 
 .userpage-header .media-left {
-  
   padding-right: 30px;
   @media (max-width: @screen-xs-max) {
     display: block;
@@ -60,38 +52,6 @@
     margin-bottom: 30px;
     padding-right: 0;
   }
-}
-
-.userpage-header .avatar-bg {
-  position: relative;
-}
-
-.userpage-header .media-left .icon-user-status {
-  position: absolute;
-  bottom: 0;
-  right: 8px;
-  height: 30px;
-  width: 30px;
-  line-height: 30px;
-}
-
-.userpage-header .icon-user-status i {
-  font-size: 18px;
-}
-
-.userpage-header h2 {
-  margin-top: 0px;
-  margin-bottom: 15px;
-  font-size: 28px;
-}
-
-.userpage-header h2 small {
-  font-size: 16px;
-  color: #096;
-}
-
-.userpage-header .actions {
-  float: right;
 }
 
 .page-header {
