@@ -45,12 +45,21 @@
               </a>
             </li>
             <li><a href="{% if setting('coin.coin_enabled') %}
+<<<<<<< HEAD
                     {{path('my_coin')}}
                    {% else %}
                     {{path('my_bill')}}
                    {% endif %}" class="qiandai" >
               <img src="{{default_path('qiandai.png')}}"/>
             </a>
+=======
+                      {{path('my_coin')}}
+                     {% else %}
+                      {{path('my_bill')}}
+                     {% endif %}" class="qiandai" >
+                <img src="{{default_path('qiandai.png')}}"/>
+              </a>
+>>>>>>> c10f215ec62ffc6f5b623c294d062e7b80f1af4f
             </li>  
             <li class="visible-lt-ie8"><a href="{{ path('settings') }}">{{ app.user.nickname }}</a></li>
             <li class="dropdown hidden-lt-ie8">
@@ -62,7 +71,11 @@
                 {% if is_granted('ROLE_BACKEND') %}
                   <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> 管理后台</a></li>
                   <li class="divider"></li>
+<<<<<<< HEAD
                 {% endif %}
+=======
+                  {% endif %}
+>>>>>>> c10f215ec62ffc6f5b623c294d062e7b80f1af4f
                 <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
               </ul>
             </li>
