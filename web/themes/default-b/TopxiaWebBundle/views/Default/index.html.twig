@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
+
 {% set bodyClass = 'homepage' %}
+
 {% block stylesheets %}
   {{ parent() }}
   <link rel="stylesheet" media="screen" href="{{ asset('themes/default-b/css/default-b.css') }}" />
@@ -50,7 +52,7 @@
                         <i class="fa fa-user"></i>
                         {% for teacher in teachers %}
                           {% if loop.index <= 5%}
-                             <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                          <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                            {% endif %}
                         {% endfor %}
                       </span>
