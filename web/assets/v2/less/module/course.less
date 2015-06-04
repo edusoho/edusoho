@@ -40,9 +40,19 @@
         width: 100%;
       }
       &:hover {
-        opacity: .9;
-        filter: alpha(opacity=90);
+        .opacity(0.9);
         .es-transition;
+      }
+    }
+    .tags {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      .tag-live {
+        display: inline-block;
+        width: 40px;
+        height: 50px;
+        background: url("../img/tag_live.png") no-repeat;
       }
     }
     .title {
