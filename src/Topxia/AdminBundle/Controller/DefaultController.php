@@ -356,11 +356,17 @@ class DefaultController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $question = $this->getThreadService()->getThread($courseId, $questionId);
-        $questionUrl = $this->generateUrl('course_thread_show', array('courseId'=>$course['id'], 'threadId'=> $question['id']), true);
-        $questionTitle = strip_tags($question['title']);
+
+        $message =   array(
+              'courseTitle' =>$course['title'],
+              'courseId' => $course['id'],
+              'threadId' => $question['id'],
+              'questionTitle' => strip_tags($question['title'])
+            );
         foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getNotificationService()->notify($receiverId, 'default',
-                "课程《{$course['title']}》有新问题 <a href='{$questionUrl}' target='_blank'>{$questionTitle}</a>，请及时回答。");
+
+            $result = $this->getNotificationService()->notify($receiverId, 'course-question',
+                $message);
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
