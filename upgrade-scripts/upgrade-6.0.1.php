@@ -35,6 +35,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme()
     {
         $connection = $this->getConnection();
+        ///TODO：删除classroom插件
         ///TODO：各个默认主题的编辑区
         ///TODO：老课程复制的内容
 
