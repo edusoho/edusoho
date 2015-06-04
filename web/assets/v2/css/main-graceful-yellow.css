@@ -1396,30 +1396,13 @@ a:focus {
     margin: 0 2px;
   }
 }
-.class-serve > ul > li.active.one {
+.class-serve > ul > li.active {
   background-color: #ffae00;
-}
-.class-serve > ul > li.active.two {
-  background-color: #e74c3c;
-}
-.class-serve > ul > li.active.three {
-  background-color: #e67e22;
-}
-.class-serve > ul > li.active.four {
-  background-color: #39aef1;
-}
-.class-serve > ul > li.active.five {
-  background-color: #fbc02d;
-}
-.class-serve > ul > li.active.six {
-  background-color: #673ab7;
-}
-.class-serve > ul > li.active.seven {
-  background-color: #f473c5;
 }
 .class-serve > ul > li > a {
   display: block;
   color: #fff;
+  font-size: 12px;
 }
 .class-serve > ul > li > a:focus {
   box-shadow: none;
@@ -2576,6 +2559,30 @@ textarea.form-control-o {
   background: #ffae00;
   border: 1px solid #ffae00;
   color: #fff;
+}
+.btn-circle.danger {
+  color: #fff;
+  border-color: #e74c3c;
+  background: #e74c3c;
+}
+.btn-circle.primary {
+  color: #fff;
+  border-color: #ffae00;
+  background: #ffae00;
+}
+.btn-circle.info {
+  color: #fff;
+  border-color: #39aef1;
+  background: #39aef1;
+}
+.btn-circle.btn-circle-xs {
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  font-size: 12px;
+}
+.btn-circle.btn-circle-xs i {
+  font-size: 14px;
 }
 .btn-tag {
   padding: 6px 10px;
