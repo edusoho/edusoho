@@ -1,56 +1,151 @@
 /* =========================== color =========================== */
 /* =========================== media =========================== */
-.lesson-manage-panel .panel-heading {
-  z-index: 1;
+.group-page .grouplist {
+  height: 120px;
+  width: 76px;
+  float: left;
+  text-align: center;
+}
+.group-page .post-delete-btn {
+  visibility: hidden;
+}
+.group-page .media:hover .post-delete-btn {
+  visibility: visible;
+}
+.group-page .thread-img img {
+  height: 55px;
+  width: 55px;
+}
+.group-page .media-body img {
+  max-width: 100%;
+  height: auto;
+}
+.group-page .page img {
+  max-width: 100%;
+  height: auto;
+}
+.group-page .title-thread {
+  background: #fff6ee;
+}
+.group-page .bottom-thread-post {
+  margin-bottom: 0px;
+}
+.group-page .label {
+  padding: .2em .6em .2em;
+}
+.group-header {
+  margin-bottom: 20px;
+}
+.group-header .group-header-inner {
+  border-radius: 5px;
+  height: 150px;
+  position: relative;
+}
+.group-header .media {
+  background: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  border-radius: 3px;
+  padding: 10px;
+  min-width: 20%;
 }
 .group-header-inner .media-body {
   width: auto;
 }
-.question-set-item:first-child {
-  border: none;
-}
-.group-item .media-object img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-.group-search {
-  margin-bottom: 20px;
-}
-.group-search .form-control {
-  border-bottom-left-radius: 20px !important;
-  border-top-left-radius: 20px !important;
-}
-.group-search button {
-  border: 1px solid #e0e0e0 !important;
-}
-.homepage-feature-slides {
-  z-index: 0;
-}
-.list-group-panel .list-group-item.active,
-.list-group-panel .list-group-item.active:hover {
-  background: #f3f3f3;
-  color: #333333;
+.group-header .media-heading {
+  font-size: 18px;
   font-weight: bold;
-  border-left: 3px solid #333333;
 }
-.lesson-dashboard .back-course-btn {
-  left: -5px;
+.group-header .media-metas {
+  font-size: 12px;
+  color: #666;
 }
-.userpage-header .media {
-  padding-top: 25px;
-  padding-bottom: 25px;
+.group-header .nav {
+  position: absolute;
+  bottom: 0;
+  left: 15px;
 }
-.userpage-header .media-left {
-  padding-right: 30px;
+.group-main > .panel {
+  /*min-height: 500px;*/
 }
-@media (max-width: 767px) {
-  .userpage-header .media-left {
-    display: block;
-    text-align: center;
-    margin-bottom: 30px;
-    padding-right: 0;
-  }
+.group-page .group-grids .grid > p {
+  text-align: center;
+}
+.group-page .group-grids .grid > p.title {
+  height: 40px;
+  overflow: hidden;
+}
+.group-page .group-grids .logo {
+  width: 50px;
+  height: 50px;
+}
+.group-page .group-thread .panel-heading h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.group-page .group-thread .panel-heading .thread-list {
+  float: right;
+  margin-top: -9px;
+}
+.group-page .group-thread .panel-heading .metas {
+  font-size: 12px;
+  color: #888;
+}
+.group-page .group-thread .panel-heading .metas .divider {
+  color: #bbb;
+  margin: 0 5px;
+}
+.group-page .group-post-list .metas {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 10px;
+}
+.group-page .group-post-list .metas .floor {
+  float: right;
+}
+.group-page .group-post-list .content {
+  margin-bottom: 20px;
+  word-break: break-all;
+}
+.group-page .group-post-list .actions {
+  text-align: right;
+  font-size: 12px;
+  margin: 5px 0;
+}
+.group-page .group-post-list .well {
+  background: #f9f9f9;
+}
+.group-page .group-post-list .well .actions {
+  text-align: left;
+  margin: 15px 0;
+}
+#post-action img {
+  max-width: 100%;
+}
+#post-action {
+  word-break: break-all;
+}
+.group-page .group-logo-sm {
+  width: 50px;
+  height: 50px;
+}
+.group-page .alert {
+  word-break: break-all;
+}
+.group-page .alert img {
+  max-width: 100%;
+}
+.group-page .hideContent {
+  border: 1px solid #999;
+  padding: 10px;
+}
+.group-page .hideContent h4 {
+  color: #999;
+  text-align: center;
+  font-size: 14px;
 }
 .userpage-header .avatar-bg {
   position: relative;
@@ -78,6 +173,50 @@
 .userpage-header .actions {
   float: right;
 }
+.lesson-manage-panel .panel-heading {
+  z-index: 1;
+}
+.homepage-feature-slides {
+  z-index: 0;
+}
+.question-set-item:first-child {
+  border: none;
+}
+.group-search {
+  margin-bottom: 20px;
+}
+.group-search .form-control {
+  border-bottom-left-radius: 20px !important;
+  border-top-left-radius: 20px !important;
+}
+.group-search button {
+  border: 1px solid #e0e0e0 !important;
+}
+.list-group-panel .list-group-item.active,
+.list-group-panel .list-group-item.active:hover {
+  background: #f3f3f3;
+  color: #333333;
+  font-weight: bold;
+  border-left: 3px solid #333333;
+}
+.lesson-dashboard .back-course-btn {
+  left: -5px;
+}
+.userpage-header .media {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+.userpage-header .media-left {
+  padding-right: 30px;
+}
+@media (max-width: 767px) {
+  .userpage-header .media-left {
+    display: block;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-right: 0;
+  }
+}
 .page-header {
   font-weight: bold;
 }
@@ -85,6 +224,9 @@
   margin-left: 5px;
   color: #fff;
   background-color: #333333;
+}
+.mobile-download-panel .btn-lg .es-icon {
+  font-size: 24px;
 }
 @keyframes fadeInLeft {
   0% {
@@ -549,7 +691,7 @@ Pagination Styles
 }
 .navbar {
   margin-bottom: 0;
-  z-index: 2;
+  z-index: 99;
 }
 .es-header {
   background: #3f3f3f;
@@ -1254,30 +1396,13 @@ a:focus {
     margin: 0 2px;
   }
 }
-.class-serve > ul > li.active.one {
+.class-serve > ul > li.active {
   background-color: #333333;
-}
-.class-serve > ul > li.active.two {
-  background-color: #e74c3c;
-}
-.class-serve > ul > li.active.three {
-  background-color: #e67e22;
-}
-.class-serve > ul > li.active.four {
-  background-color: #39aef1;
-}
-.class-serve > ul > li.active.five {
-  background-color: #fbc02d;
-}
-.class-serve > ul > li.active.six {
-  background-color: #673ab7;
-}
-.class-serve > ul > li.active.seven {
-  background-color: #f473c5;
 }
 .class-serve > ul > li > a {
   display: block;
   color: #fff;
+  font-size: 12px;
 }
 .class-serve > ul > li > a:focus {
   box-shadow: none;
@@ -2434,6 +2559,30 @@ textarea.form-control-o {
   background: #333333;
   border: 1px solid #333333;
   color: #fff;
+}
+.btn-circle.danger {
+  color: #fff;
+  border-color: #e74c3c;
+  background: #e74c3c;
+}
+.btn-circle.primary {
+  color: #fff;
+  border-color: #333333;
+  background: #333333;
+}
+.btn-circle.info {
+  color: #fff;
+  border-color: #39aef1;
+  background: #39aef1;
+}
+.btn-circle.btn-circle-xs {
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  font-size: 12px;
+}
+.btn-circle.btn-circle-xs i {
+  font-size: 14px;
 }
 .btn-tag {
   padding: 6px 10px;

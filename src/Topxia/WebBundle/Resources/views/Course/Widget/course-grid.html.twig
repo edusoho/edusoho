@@ -1,6 +1,6 @@
 <div class="course-item">
   <div class="course-img">
-    <a href="{{ path('course_show', {id:course.id}) }}" target="_bank">
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
       {% if course.discountId > 0 %}
         {% if course.discount == 0 %}
           <!-- 限免 -->
@@ -20,7 +20,7 @@
   </div>
   <div class="course-info">
     <div class="title">
-      <a href="{{ path('course_show', {id:course.id}) }}" target="_bank">
+      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
         {{ course.title }}
       </a>
     </div>

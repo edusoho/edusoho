@@ -70,7 +70,7 @@
           <label for="maxUsers">最大人数</label>
         </div>
         <div class="col-md-7 controls">
-          <input type="text" id="maxUsers" class="form-control" placeholder="不限" name= "maxUsers" value="{{ thread.maxUsers|default('') }}">
+          <input type="text" id="maxUsers" class="form-control" placeholder="不限" name="maxUsers" value="{% if thread.maxUsers and thread.maxUsers != 0 %}{{ thread.maxUsers }}{% endif %}">
           </div>
       </div>
     </div>
