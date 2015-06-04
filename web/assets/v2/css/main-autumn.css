@@ -1,57 +1,42 @@
 /* =========================== color =========================== */
 /* =========================== media =========================== */
-.grouplist img {
-  border: 0px none;
-  width: 58px;
-  height: 58px;
-}
-.grouplist {
+.group-page .grouplist {
   height: 120px;
   width: 76px;
   float: left;
   text-align: center;
 }
-.mvs {
-  text-align: center;
-}
-.post-delete-btn {
+.group-page .post-delete-btn {
   visibility: hidden;
 }
-.media:hover .post-delete-btn {
+.group-page .media:hover .post-delete-btn {
   visibility: visible;
 }
-.thread-img img {
+.group-page .thread-img img {
   height: 55px;
   width: 55px;
 }
-.media-body img {
+.group-page .media-body img {
   max-width: 100%;
   height: auto;
 }
-.page img {
+.group-page .page img {
   max-width: 100%;
   height: auto;
 }
-.checkboxs {
-  height: 18px;
-  width: 18px;
-}
-.title-thread {
+.group-page .title-thread {
   background: #fff6ee;
 }
-.bottom-thread-post {
+.group-page .bottom-thread-post {
   margin-bottom: 0px;
 }
-.label {
+.group-page .label {
   padding: .2em .6em .2em;
-}
-.pagination li {
-  cursor: pointer;
 }
 .group-header {
   margin-bottom: 20px;
 }
-.group-header-inner {
+.group-header .group-header-inner {
   border-radius: 5px;
   height: 150px;
   position: relative;
@@ -82,74 +67,58 @@
   bottom: 0;
   left: 15px;
 }
-.group-header .nav-pills > li > a {
-  background-color: #fff;
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #444;
-  padding: 6px 15px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-.group-header .nav-pills > li.active > a,
-.group-header .nav-pills > li.active > a:hover,
-.group-header .nav-pills > li.active > a:focus {
-  background-color: #fff;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #444;
-  font-weight: bold;
-}
 .group-main > .panel {
   /*min-height: 500px;*/
 }
-.group-grids .grid > p {
+.group-page .group-grids .grid > p {
   text-align: center;
 }
-.group-grids .grid > p.title {
+.group-page .group-grids .grid > p.title {
   height: 40px;
   overflow: hidden;
 }
-.group-grids .logo {
+.group-page .group-grids .logo {
   width: 50px;
   height: 50px;
 }
-.group-thread .panel-heading h2 {
+.group-page .group-thread .panel-heading h2 {
   font-size: 16px;
   font-weight: bold;
   margin: 10px 0;
 }
-.group-thread .panel-heading .thread-list {
+.group-page .group-thread .panel-heading .thread-list {
   float: right;
   margin-top: -9px;
 }
-.group-thread .panel-heading .metas {
+.group-page .group-thread .panel-heading .metas {
   font-size: 12px;
   color: #888;
 }
-.group-thread .panel-heading .metas .divider {
+.group-page .group-thread .panel-heading .metas .divider {
   color: #bbb;
   margin: 0 5px;
 }
-.group-post-list .metas {
+.group-page .group-post-list .metas {
   font-size: 12px;
   color: #999;
   margin-bottom: 10px;
 }
-.group-post-list .metas .floor {
+.group-page .group-post-list .metas .floor {
   float: right;
 }
-.group-post-list .content {
+.group-page .group-post-list .content {
   margin-bottom: 20px;
   word-break: break-all;
 }
-.group-post-list .actions {
+.group-page .group-post-list .actions {
   text-align: right;
   font-size: 12px;
   margin: 5px 0;
 }
-.group-post-list .well {
+.group-page .group-post-list .well {
   background: #f9f9f9;
 }
-.group-post-list .well .actions {
+.group-page .group-post-list .well .actions {
   text-align: left;
   margin: 15px 0;
 }
@@ -159,25 +128,21 @@
 #post-action {
   word-break: break-all;
 }
-.group-logo-sm {
+.group-page .group-logo-sm {
   width: 50px;
   height: 50px;
 }
-.alert {
+.group-page .alert {
   word-break: break-all;
 }
-.alert img {
+.group-page .alert img {
   max-width: 100%;
 }
-.nav.nav-pills li {
-  background: #fff;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-.hideContent {
+.group-page .hideContent {
   border: 1px solid #999;
   padding: 10px;
 }
-.hideContent h4 {
+.group-page .hideContent h4 {
   color: #999;
   text-align: center;
   font-size: 14px;
@@ -259,6 +224,9 @@
   margin-left: 5px;
   color: #fff;
   background-color: #7cb132;
+}
+.mobile-download-panel .btn-lg .es-icon {
+  font-size: 24px;
 }
 @keyframes fadeInLeft {
   0% {

@@ -22,7 +22,9 @@
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
   
-  {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+  {% block stylesheets %}
+    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+  {% endblock %}
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
   <![endif]-->
