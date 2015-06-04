@@ -192,7 +192,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $user = $this->getCurrentUser();
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location'));
+        $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location', 'actvityPicture'));
         if (empty($fields)) {
             throw $this->createServiceException('参数缺失，更新失败。');
         }
