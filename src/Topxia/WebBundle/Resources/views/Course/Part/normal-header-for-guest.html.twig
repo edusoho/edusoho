@@ -16,7 +16,7 @@
       {% if courseVip %}
         <li class="hidden-xs color-warning icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
           <i class="es-icon es-icon-crown"></i><br>
-          {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus} %}
+          {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
         </li>
       {% endif %}
     </ul>
