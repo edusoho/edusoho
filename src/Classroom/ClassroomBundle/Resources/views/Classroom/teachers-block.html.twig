@@ -2,7 +2,7 @@
 
 {% do load_script('classroombundle/controller/classroom/teachers') %}
 
-<div class="panel panel-default serve-team" id="class-teacher-column">
+<div class="panel panel-default" id="class-teacher-column">
   <div class="panel-heading">
     <h3 class="panel-title"> 
       <i class="es-icon es-icon-assignmentind"></i>班主任
@@ -10,7 +10,7 @@
   </div>
   <div class="panel-body">
     {% if headTeacher %}
-    <div class="media">
+    <div class="media media-default">
       <div class="media-left">
         {{ web_macro.user_avatar(headTeacher,'','avatar-md') }}
       </div>

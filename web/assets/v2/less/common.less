@@ -6,6 +6,7 @@
   url('fonts/webfont.svg#webfont') format('svg'); /* iOS 4.1- */
 }
 
+// 思源极细字体
 .webfont {
   font-family: 'webfont' !important;
   font-style: normal;
@@ -49,8 +50,22 @@ body.nav-active {
   min-width:40px;
 }
 
+.collapse {
+  display: block;
+}
+
 #content-container {
   margin-top: 30px;
+}
+
+a:hover, 
+a:focus {
+  text-decoration: none;
+}
+
+.caret {
+  margin-left: 5px;
+  border-top: 4px solid;
 }
 
 // 全站公告
@@ -76,7 +91,7 @@ body.nav-active {
   .close {
     float: none;
     position: absolute;
-    top: 0;
+    top: 2px;
     right: 0;
     width: 30px;
   }
@@ -100,5 +115,20 @@ body.nav-active {
     a {
       color: @brand-warning;
     }
+  }
+}
+
+.icon-user-status {
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 17px;
+  text-align: center;
+  border: 1px solid #fff;
+  background: @brand-danger;
+  color: #fff;
+  .border-radius(50%);
+  i {
+    font-size: 12px;
   }
 }

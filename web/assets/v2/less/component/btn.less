@@ -191,9 +191,9 @@
 
 .btn-circle {
   display: inline-block;
-  width: 38px;
-  height: 38px;
-  line-height: 36px;
+  width: 34px;
+  height: 34px;
+  line-height: 32px;
   border-radius: 50%;
   background: none;
   border: 1px solid @gray;
@@ -209,6 +209,30 @@
     background: @brand-primary;
     border: 1px solid @brand-primary;
     color: #fff;
+  }
+  &.danger {
+    color: #fff;
+    border-color: @brand-danger;
+    background: @brand-danger;
+  }
+  &.primary {
+    color: #fff;
+    border-color: @brand-primary;
+    background: @brand-primary;
+  }
+  &.info {
+    color: #fff;
+    border-color: @brand-info;
+    background: @brand-info;
+  }
+  &.btn-circle-xs {
+    width: 20px;
+    height: 20px;
+    line-height: 18px;
+    font-size: 12px;
+    i {
+      font-size: 14px;
+    }
   }
 }
 

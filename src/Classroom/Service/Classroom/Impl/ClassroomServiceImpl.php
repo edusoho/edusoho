@@ -378,6 +378,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
         }
 
+        $this->removeStudentsFromClasroomCourses($classroomId, $userId);
+
         $this->getClassroomMemberDao()->deleteMember($member['id']);
 
         $classroom = $this->updateStudentNumAndAudtorNum($classroomId);
@@ -965,6 +967,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createAccessDeniedException('教师无法退出班级！');
         }
 
+        $this->removeStudentsFromClasroomCourses($classroomId, $userId);
+
+        $this->getClassroomMemberDao()->deleteMemberByClassroomIdAndUserId($classroomId, $userId);
+
+        $this->updateStudentNumAndAudtorNum($classroomId);
+    }
+
+    private function removeStudentsFromClasroomCourses($classroomId, $userId)
+    {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
@@ -1004,10 +1015,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getCourseService()->removeStudent($value, $userId);
             }
         }
-
-        $this->getClassroomMemberDao()->deleteMemberByClassroomIdAndUserId($classroomId, $userId);
-
-        $this->updateStudentNumAndAudtorNum($classroomId);
     }
 
     protected function isHeadTeacher($classroomId, $userId)

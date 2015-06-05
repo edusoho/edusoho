@@ -1,22 +1,46 @@
+.navbar {
+  margin-bottom: 0;
+  z-index: 99;
+}
+
 .es-header {
   background: #3f3f3f;
-  margin-bottom: 0;
   height: 60px;
-  // overflow: hidden;
   .border-radius(0);
   border: none;
   z-index: 99;
   .container {
     position: relative;
   }
-  .user-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    .es-transition;
-    &:hover {
-      border-color: @brand-primary;
+  .navbar-header {
+    @media (max-width: @screen-xs-max) {
+      text-align: center;
+      .navbar-brand { 
+        display: inline-block;
+        float: none;
+      }
+    }
+    .navbar-brand {
+      height: 60px;
+      line-height: 50px;
+      padding: 5px 10px;
+      color: #fff;
       .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 10px;
+        line-height: 40px;
+      }
+      >img {
+        height: 50px;
+        width: auto;
+        @media (max-width: @screen-xs-max) {
+          height: 40px;
+        }
+      }
     }
   }
   // 菜单
@@ -28,8 +52,8 @@
     }
     >li {
       >a {
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 20px 30px;
+        line-height: 20px;
         color: #fff;
         background: none;
         .es-transition;
@@ -63,8 +87,6 @@
     >li > .dropdown-menu {
       border-radius: 5px;
     }
-
-
   }
   // 手机端
   .navbar-mobile {
@@ -73,7 +95,8 @@
     left: 0;
     .navbar-more { 
       position: relative;
-      padding: 14px 10px;
+      padding: 20px 10px;
+      line-height: 20px;
       display: block;
       color: #fff;
       z-index: 999;
@@ -115,64 +138,14 @@
       }
     }
   }
-}
-
-.navbar-header {
-  height: 60px;
-  @media (max-width: @screen-xs-max) {
-    text-align: center;
-    .navbar-brand { 
-      display: inline-block;
-      float: none;
-    }
+  .navbar-form {
+    margin: 15px 10px;
   }
-  .navbar-brand {
-    padding: 5px 10px;
-    line-height: 50px;
-    color: #fff;
-    .es-transition;
-    &:hover {
-      color: @brand-primary;
-      .es-transition;
-    }
-    img {
-      height: 50px;
-      width: auto;
-    }
-  }
-}
-
-// 隐藏菜单项
-.nav > li.nav-more {
-  // display: none;
-  .more {
-    display: inline-block;
-    >i {
-      font-size: 25px;
-    }
-  }
-  li .dropdown-menu {
-    left: 100%;
-    top: 0;
-  }
-  &.open li:hover .dropdown-menu {
-    display: block;
-  }
-  .open>a,
-  .open.active >a,
-  .open>a:hover, 
-  .open>a:focus {
-    background: @brand-primary !important;
-    color: #fff !important;
-  }
-}
-.nav >li.nav-more > a {
-  padding: 19px 15px; 
 }
 
 // 搜索
 .navbar-form {
-  margin: 15px 10px;
+  margin: 10px;
   .box-shadow(none);
   @media (max-width: @screen-xs-max) {
     margin-left: 0;
@@ -202,16 +175,38 @@
   }
 }
 
+// 隐藏菜单项
+.nav > li.nav-more {
+  .more {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+    display: inline-block;
+    >i {
+      font-size: 25px;
+    }
+  }
+  li .dropdown-menu {
+    left: 100%;
+    top: 0;
+  }
+  &.open li:hover .dropdown-menu {
+    display: block;
+  }
+  .open>a,
+  .open.active >a,
+  .open>a:hover, 
+  .open>a:focus {
+    background: @brand-primary !important;
+    color: #fff !important;
+  }
+}
+
 // 头部用户信息
 .navbar-user {
-  // background: #3f3f3f;
   z-index: 1;
-  // float: right;
-  // @media (max-width: @screen-xs-max) {
-    position: absolute;
-    top: 0;
-    right: 0;
-  // }
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .nav.user-nav {
@@ -288,10 +283,6 @@
         .es-transition;
       }
     }
-  }
-
-  i {
-    line-height: 20px;
   }
 }
 

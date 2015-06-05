@@ -310,11 +310,14 @@ class WebExtension extends \Twig_Extension
     }
 
 
-    public function dataformatFilter ($time) {
+    public function dataformatFilter ($time, $format ='') {
         if (empty($time)) {
             return ;
         }
-        return date('Y-m-d H:i',$time);
+        if(empty($format)){
+            return date('Y-m-d H:i',$time);
+        }
+        return date($format,$time);
     }
 
     public function smarttimeFilter ($time) {
@@ -693,6 +696,7 @@ class WebExtension extends \Twig_Extension
         if ($cdnUrl) {
             $path = $cdnUrl . $path;
         } else if ($absolute) {
+            $request = $this->container->get('request');
             $path = $request->getSchemeAndHttpHost() . $path;
         }
         return $path;

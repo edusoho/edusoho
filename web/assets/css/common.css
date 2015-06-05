@@ -1809,7 +1809,17 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 .webuploader-container {
   position: relative;
+}
+
+.webuploader-for-glyphicon .webuploader-container {
+  position: relative;
   padding: 0;
+}
+
+.webuploader-for-glyphicon .webuploader-pick {
+  position: relative;
+  overflow: hidden;
+  padding: 5px 10px;
 }
 
 .webuploader-container label {
@@ -1832,7 +1842,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .webuploader-pick {
   position: relative;
   overflow: hidden;
-  padding: 5px 10px;
 }
 .webuploader-pick-hover {
 }

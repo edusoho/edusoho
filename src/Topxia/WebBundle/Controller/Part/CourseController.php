@@ -29,7 +29,7 @@ class CourseController extends BaseController
         $nextLearnLesson = $member ? $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']) : null;
         $learnProgress = $member ? $this->calculateUserLearnProgress($course, $member) : null;
 
-        $previewLesson = $this->getCourseService()->searchLessons(array('type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
+        $previewLesson = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
             'course' => $course,

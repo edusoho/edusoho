@@ -1,15 +1,18 @@
-.group-header-inner .media-body {
-  width: auto;
+@import "temp/group.less";      //小组
+@import "temp/userpage.less";   //用户中心
+
+
+// 兼容性
+.lesson-manage-panel .panel-heading {
+  z-index: 1;
+}
+
+.homepage-feature-slides {
+  z-index: 0;
 }
 
 .question-set-item:first-child {
   border: none;
-}
-
-.group-item .media-object img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
 }
 
 .group-search {
@@ -21,10 +24,6 @@
   button {
     border: 1px solid #e0e0e0 !important;
   }
-}
-
-.homepage-feature-slides {
-  z-index: 9;
 }
 
 .list-group-panel .list-group-item.active, 
@@ -55,17 +54,14 @@
   }
 }
 
-.userpage-header h2 {
-  margin-top: 0px;
-  margin-bottom: 15px;
-  font-size: 28px;
+.page-header {
+  font-weight: bold;
+  .badge {
+    margin-left: 5px;
+    color: #fff;
+    background-color: @brand-primary;
+  }
 }
 
-.userpage-header h2 small {
-  font-size: 16px;
-  color: #096;
-}
-
-.userpage-header .actions {
-  float: right;
-}
+// 手机二维码
+.mobile-download-panel .btn-lg .es-icon {font-size:24px;}

@@ -50,7 +50,7 @@
 
               <li class="hidden-xs color-warning icon-vip" title="会员班级" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员班级" title="会员班级">
                 <i class="es-icon es-icon-crown"></i><br>
-                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult} %}
+                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
               </li>
           {% endif %}
           </ul>
@@ -62,9 +62,10 @@
               </div>
               {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service }%}
             </div>
+
             {% if not classroom.private %}
               <div class="btn-buy">
-                {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult == 'level_low' or checkMemberLevelResult in ['not_member', 'member_expired']) %}
+                {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'member_expired', 'level_low']) %}
                   <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
                   <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
                 {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
