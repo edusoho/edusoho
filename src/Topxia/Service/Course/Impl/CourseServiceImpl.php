@@ -1443,12 +1443,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
 	    }
 		$memberFields['credit'] = $totalCredits;
+
+		$this->getMemberDao()->updateMember($member['id'], $memberFields);
+		
 		$this->dispatchEvent(
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
-
-		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
 	public function searchLearnCount($conditions)
