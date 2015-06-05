@@ -74,7 +74,8 @@
 .social-icon-weibo,
 .social-icon-qq,
 .social-icon-renren,
-.social-icon-douban
+.social-icon-douban,
+.social-icon-weixin
  {
 	width: 24px;
 	height: 24px;
@@ -101,6 +102,9 @@
 	background-position: 0 -120px;
 }
 
+.social-icon-weixin {
+  background-position: 0 -160px;
+}
 .stars-0, .stars-1, .stars-2, .stars-3, .stars-4, .stars-5 {
 	display:inline-block;
 	*display:inline;
