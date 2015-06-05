@@ -7,20 +7,43 @@
 // 轮播
 .aricle-carousel {
   padding: 0 5px;
-  .item {
+  height: 410px;
+  overflow: hidden;
+  @media (max-width: @screen-md-max) {
+    height: 338px;
+  }
+  @media (max-width: @screen-sm-max) {
+    height: 387px;
+  }
+  @media (max-width: @screen-xs-max) {
+    height: 150px;
+  }
+  .swiper-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .swiper-slide {
+    position: relative;
     img {
       width: 100%;
-      max-height: 410px;
-      border-radius: 4px;
+      height: auto;
+      .border-radius(4px);
+    }
+    .image-overlay {
+      .border-radius(4px);
     }
   }
-  .carousel-caption {
+  .swiper-caption {
+    position: absolute;
     font-size: 24px;
     width: 100%;
     left: 0;
+    bottom: 40px;
     text-align: left;
-    padding-left: 20px;
-    text-shadow: 0 0 0;
+    padding: 0 20px;
+    color: #ffffff;
+    z-index: 1;
     @media (max-width: @screen-md-max) {
       font-size: 20px;
     }
@@ -31,14 +54,36 @@
       font-size: 16px;
     }
   }
-  .carousel-indicators {
+  .swiper-pager {
+    position: absolute;
     bottom: 10px;
-    li {
-      margin: 0 5px;
-    }
-    .active {
-      height: 10px;
-      width: 10px;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    span {
+      font-size: 0;
+      margin: 0 10px;
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      background: #fff;
+      .border-radius(50%);
+      @media (max-width: @screen-xs-max) {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+      }
+      &:hover {
+        cursor: pointer;
+        background: @brand-primary;
+        color: @brand-primary;
+        .opacity(1);
+      }
+      &.swiper-active-switch {
+        background: @brand-primary;
+        color: @brand-primary;
+        .opacity(1);
+      }
     }
   }
 }
@@ -141,12 +186,12 @@
 .article-metas {
   overflow: hidden;
   .date {
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
     margin-top: 10px;
     text-align: center;
-    color: #ccc;
-    border: 1px solid #ccc;
+    color: @gray-light;
+    border: 1px solid @gray-light;
     border-radius: 50%;
     .day {
       margin-top: 2px;
@@ -185,6 +230,7 @@
       }
     }
     .sns {
+      color: @gray;
       margin: 10px auto;
       span {
         margin-right: 10px;

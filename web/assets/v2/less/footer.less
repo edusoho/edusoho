@@ -6,13 +6,10 @@
     text-align: center;
     padding: 20px 0;
     line-height: 30px;
-    span {
-      margin-right: 30px;
-      color: #bababa;
-      text-shadow: 0 1px 3px #000;
-      a:hover {
-        color: white;
-      }
+    color: #bababa;
+    text-shadow: 0 1px 3px #000;
+    a:hover {
+      color: white;
     }
   }
 }
@@ -31,20 +28,26 @@
       width: 33.33%;
     }
   }
+  h3 {
+    color: #b1b1b1;
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+  ul {
+    padding: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    li {
+      margin-top: 20px;
+    }
+  }
   a {
-    display: block;
-    margin-top: 20px;
     color: #b1b1b1;
     .es-transition;
     &:hover {
       color: @brand-primary;
       .es-transition;
     }
-  }
-  h3 {
-    color: #b1b1b1;
-    margin-top: 0;
-    margin-bottom: 40px;
   }
 }
 
@@ -65,7 +68,7 @@
         position: absolute;
         left: -68px;
         top: -220px;
-        opacity: 0;
+        .opacity(0);
         transform: scale(0);
         -webkit-transform: scale(0);
         transform-origin: 50% 100%;
@@ -78,7 +81,7 @@
         display: block;
         transform: scale(1);
         -webkit-transform: scale(1);
-        opacity: 1;
+        .opacity(1);
       }
     }
 
@@ -91,7 +94,7 @@
         position: absolute;
         left: -68px;
         top: -220px;
-        opacity: 0;
+        .opacity(0);
         transform: scale(0);
         -webkit-transform: scale(0);
         transform-origin: 50% 100%;
@@ -104,7 +107,7 @@
         display: block;
         transform: scale(1);
         -webkit-transform: scale(1);
-        opacity: 1;
+        .opacity(1);
       }
     }
 
@@ -117,7 +120,7 @@
         position: absolute;
         left: -68px;
         top: -220px;
-        opacity: 0;
+        .opacity(0);
         transform: scale(0);
         -webkit-transform: scale(0);
         transform-origin: 50% 100%;
@@ -130,7 +133,7 @@
         display: block;
         transform: scale(1);
         -webkit-transform: scale(1);
-        opacity: 1;
+        .opacity(1);
       }
     }
 
@@ -143,7 +146,7 @@
         position: absolute;
         left: -68px;
         top: -220px;
-        opacity: 0;
+        .opacity(0);
         transform: scale(0);
         -webkit-transform: scale(0);
         transform-origin: 50% 100%;
@@ -156,7 +159,7 @@
         display: block;
         transform: scale(1);
         -webkit-transform: scale(1);
-        opacity: 1;
+        .opacity(1);
       }
     }
 
@@ -169,7 +172,6 @@
       font-size: 24px;
       vertical-align: middle;
       border-radius: 50%;
-      // border: 1px solid #fff;
       color: #fff;
       text-align: center;
       box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
@@ -197,7 +199,7 @@
           display: block;
           transform: scale(1);
           -webkit-transform: scale(1);
-          opacity: 1;
+          .opacity(1);
         }
       }
     }

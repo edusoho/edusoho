@@ -4,12 +4,6 @@ define(function(require, exports, module) {
  
     var resizeTimer;
 
-    $(".js-search").focus(function () {
-        $(this).prop("placeholder", "搜索").addClass("active");
-    }).blur(function () {
-        $(this).prop("placeholder", "").removeClass("active");
-    });
-
     var removeNavMobile = function(){
         $(".nav-mobile").removeClass("active");
         $(".html-mask").hide();
@@ -38,12 +32,6 @@ define(function(require, exports, module) {
     $("body").on("click",".html-mask",function(e){
         removeNavMobile();
     });
-
-    if ($('[data-toggle="tooltip"]').length > 0) {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-    
-
 
   }
 

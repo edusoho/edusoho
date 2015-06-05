@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+    require("placeholder");
     require('./util/card');
     var Swiper=require('swiper');
 	var Cookie = require('cookie');
@@ -127,28 +128,36 @@ define(function(require, exports, module) {
     }
 
     if($(".announcements-alert").length>0){
-    	var noticeSwiper = new Swiper('.alert-notice .swiper-container', {
-            speed: 300,
-            loop: true,
-            mode: 'vertical',
-            autoplay: 5000
-        });
+
+        if($('.announcements-alert .swiper-container .swiper-wrapper').children().length>1){
+            var noticeSwiper = new Swiper('.alert-notice .swiper-container', {
+                speed: 300,
+                loop: true,
+                mode: 'vertical',
+                autoplay: 5000
+            });
+        }
 
     	$(".announcements-alert .close").click(function(){
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
 
-    var navHover = function() {
-        $("a[data-toggle='dropdown']").parent("li").mouseenter(function(event) {
-            $(this).addClass("open");
-        }).mouseleave(function(event) {
-            $(this).removeClass("open");
-        });
+   
+    $("li.nav-hover").mouseenter(function(event) {
+        $(this).addClass("open");
+    }).mouseleave(function(event) {
+        $(this).removeClass("open");
+    });
+
+    if ($('[data-toggle="tooltip"]').length > 0) {
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
-    if($("a[data-toggle='dropdown']").length > 0){
-    	navHover();
-    }
+    $(".js-search").focus(function () {
+        $(this).prop("placeholder", "搜索").addClass("active");
+    }).blur(function () {
+        $(this).prop("placeholder", "").removeClass("active");
+    });
 
 });

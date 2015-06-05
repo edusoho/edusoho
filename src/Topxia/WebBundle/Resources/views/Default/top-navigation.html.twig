@@ -1,8 +1,8 @@
 {% for nav in navigations if nav.isOpen %}
   {% set subNavs = nav.children|default([]) %}
   {% if  loop.index == 6  and not isMobile|default(false) %}
-    <li class="nav-more">
-      <a href="javascript:;" class="dropdown-toggle more" data-toggle="dropdown" role="button" aria-expanded="false">
+    <li class="nav-more nav-hover">
+      <a href="javascript:;" class="more" data-toggle='dropdown'>
         <i class="es-icon es-icon-morehoriz"></i>
       </a>
       <ul class="dropdown-menu" role="menu">

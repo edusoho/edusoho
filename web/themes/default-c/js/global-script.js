@@ -10,7 +10,6 @@ define(function(require, exports, module) {
             pauseOnHover: "true"
         });
 
-
     };
 
 });

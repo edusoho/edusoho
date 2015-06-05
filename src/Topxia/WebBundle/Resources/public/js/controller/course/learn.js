@@ -676,10 +676,7 @@ define(function(require, exports, module) {
     var DurationStorage = {
         set: function(userId,mediaId,duration) {
             var durations = Store.get("durations");
-            console.log(durations);
-            if(durations){
-                
-            } else {
+            if(!durations){
                 durations = new Array();
             }
 

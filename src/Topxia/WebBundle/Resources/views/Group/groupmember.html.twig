@@ -19,7 +19,7 @@
           <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
             <img src="{{ filepath(owner_info.largeAvatar, 'avatar.png') }}" alt="{{owner_info.nickname}}" class="avatar-sm">
           </a>
-          <p class="mvs"><a class="link-light" href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a>
+          <p class="text-center"><a class="link-light" href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}">{{owner_info.nickname}}</a>
           </p>
         </div>
       </div>
@@ -33,7 +33,7 @@
             {% for member in groupAdmin %}
               <div class="grouplist" style="width: 96px;" >
                 <p>{{ web_macro.user_avatar(usersLikeAdmin[member.userId] , '') }}</p>
-                <p class="mvs">{{ web_macro.user_link(usersLikeAdmin[member.userId] , 'link-muted') }}</p>
+                <p class="text-center">{{ web_macro.user_link(usersLikeAdmin[member.userId] , 'link-muted') }}</p>
                 {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
                   <input type="checkbox" value="{{member.userId}}" name="adminId[]"class="checkboxs">
                 {% endif %}
@@ -64,7 +64,7 @@
           {% for member in groupmember_info %}
             <div class="grouplist" style="width: 96px;" >
               <p>{{ web_macro.user_avatar(members[member.userId] , '') }}</p>
-              <p class="mvs">{{ web_macro.user_link(members[member.userId] , 'link-light') }}</p>
+              <p class="text-center">{{ web_macro.user_link(members[member.userId] , 'link-light') }}</p>
               {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
                 <input type="checkbox" value="{{member.userId}}" name="memberId[]"class="checkboxs">
               {% endif %}<br>

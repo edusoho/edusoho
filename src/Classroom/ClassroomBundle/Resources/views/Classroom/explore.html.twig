@@ -1,5 +1,8 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
-{% block main_header %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set script_controller = 'classroombundle/controller/classroom/explore' %}
+
+{% block top_content %}
   <div class="class-banner es-banner">
     <div class="container">
       <div class="title">
@@ -22,7 +25,7 @@
         <div class="col-md-4 col-sm-6">
           <div class="class-item">
             <div class="class-img">
-              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_bank">
                 {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                 <h3>{{ classroom.title }}</h3>
                 <div class="image-overlay"></div>

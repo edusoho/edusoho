@@ -28,9 +28,6 @@ class NoteController extends CourseBaseController
 
         $result = $this->makeNotesRelated($notes, $courseIds);
         $result['paginator'] = $paginator;
-        $result['notes'] = $notes;
-        $lessonIds = ArrayToolkit::column($notes, "lessonId");
-        $result['lessons'] = $this->getCourseService()->findLessonsByIds($lessonIds);
 
         return $this->render('TopxiaWebBundle:Course\Note:notes-list.html.twig', $result);
     }
@@ -88,15 +85,16 @@ class NoteController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
         $result['noteLikes'] = $noteLikes;
         $result['users'] = $users;
-        if (is_numeric($courseIds)) {
-            $lessonIds = ArrayToolkit::column($notes, 'lessonId');
-            $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
-            $result['lessons'] = $lessons;
-        } else {
+        $lessonIds = ArrayToolkit::column($notes, 'lessonId');
+        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $result['lessons'] = $lessons;
+        if (is_array($courseIds)) {
             $courseIds = ArrayToolkit::column($notes, 'courseId');
             $courses = $this->getCourseService()->findCoursesByIds($courseIds);
             $result['courses'] = $courses;
         }
+
+        $result['notes'] = $notes;
         return $result;
     }
 

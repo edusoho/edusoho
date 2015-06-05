@@ -155,7 +155,6 @@ class NoteServiceImpl extends BaseService implements NoteService
         $user = $this->getCurrentUser();
         if (empty($user)) {
             throw $this->createNotFoundException("用户还未登录,不能点赞。");
-            
         }
 
         $note = $this->getNote($noteId);

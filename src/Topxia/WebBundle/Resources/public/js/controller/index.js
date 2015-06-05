@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var Swiper = require('swiper');
 
     exports.run = function() {
-        var swiper = new Swiper('.poster.swiper-container', {
+        var swiper = new Swiper('.es-poster.swiper-container', {
             pagination: '.swiper-pager',
             swipeToPrev : false,
             swipeToNext : false,
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         });
         Lazyload.init();
 
-        $("#course-list").on('click','.js-search',function(){
+        $("#course-list").on('click','.js-course-filter',function(){
              var $btn = $(this);
              $.get($btn.data('url'),function(html){
                $('#course-list').html(html);

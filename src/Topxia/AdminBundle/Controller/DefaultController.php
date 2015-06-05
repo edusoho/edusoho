@@ -50,8 +50,6 @@ class DefaultController extends BaseController
 
         $sortedCourses = array();
 
-
-
         $orders = $this->getOrderService()->sumOrderAmounts($startTime,$endTime,$courseIds);
         $orders = ArrayToolkit::index($orders,"targetId");
 
@@ -61,7 +59,13 @@ class DefaultController extends BaseController
             $course['courseId'] = $courses[$value["courseId"]]['id'];
             $course['addedStudentNum'] = $value['co'];
             $course['studentNum'] = $courses[$value["courseId"]]['studentNum'];
-            $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
+
+            if(isset($orders[$value["courseId"]])) {
+                $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
+            } else {
+                $course['addedMoney'] = 0;
+            }
+
             $sortedCourses[] = $course;
       }
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(

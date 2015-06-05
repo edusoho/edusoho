@@ -143,7 +143,8 @@ class ClassroomController extends BaseController
             $price += $course['price'];
         }
 
-        $canFreeJoin = $this->canFreeJoin($courses, $user);
+        $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
+
         $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
         if ($member && !$member["locked"]) {
@@ -566,16 +567,18 @@ class ClassroomController extends BaseController
         ));
     }
 
-    private function canFreeJoin($courses, $user)
+    private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
         if (!$classroomSetting['discount_buy']) {
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($courses, "id");
+        $courseIds = ArrayToolkit::column($courses, "parentId");
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
         $priceType = "RMB";
@@ -583,19 +586,31 @@ class ClassroomController extends BaseController
             $priceType = $coinSetting["price_type"];
         }
 
-        $classroomSetting = $this->getSettingService()->get("classroom");
-
-        foreach ($courses as $course) {
-            
-            if (
-                !in_array($course["id"], $isJoinedCourseIds)
-                && (($priceType == "RMB" && $course["price"]>0)
-                || ($priceType == "Coin" && $course["coinPrice"]>0))) {
-                return false;
-            }
+        $totalPrice = $classroom["price"];
+        if($priceType == "Coin") {
+            $totalPrice = $totalPrice * $coinSetting["cash_rate"];
         }
 
-        return true;
+        $classroomSetting = $this->getSettingService()->get("classroom");
+
+        if($this->getCoursesTotalPrice($courses, $priceType) >= (float)$totalPrice) {
+            return true;
+        }
+        return false;
+
+    }
+
+    private function getCoursesTotalPrice($courses, $priceType)
+    {
+        $coursesTotalPrice = 0;
+        foreach ($courses as $key => $course) {
+            if($priceType == "RMB") {
+                $coursesTotalPrice += $course["originPrice"];
+            } else if($priceType == "Coin") {
+                $coursesTotalPrice += $course["originCoinPrice"];
+            }
+        }
+        return $coursesTotalPrice;
     }
 
     private function checkClassroomStatus($classroomId)
