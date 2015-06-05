@@ -138,7 +138,7 @@ class ThreadController extends BaseController
             $user = $this->getCurrentUser();
             $data = $request->request->all();
             
-            if(isset($data['maxUsers']) && !empty($data['maxUsers'])) {
+            if(isset($data['maxUsers']) && empty($data['maxUsers'])) {
                 $data['maxUsers'] = 0;
             }
 
