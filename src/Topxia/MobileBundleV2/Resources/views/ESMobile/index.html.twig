@@ -15,6 +15,7 @@
 {% endblock %}
 {% if clientType == 'Android' %}
     <script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/cordova_Android.js') }}"></script>
+    <link href="{{ asset('bundles/topxiamobilebundlev2/esmobile/css/android-style.css') }}" rel="stylesheet" />
 {%  elseif clientType == 'iOS' %} 
     <script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/cordova_iOS.js') }}"></script>
 {% endif %}

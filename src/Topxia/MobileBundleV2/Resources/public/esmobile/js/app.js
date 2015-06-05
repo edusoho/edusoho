@@ -409,6 +409,10 @@ app.run(["applicationProvider", "$rootScope", '$ionicConfig', '$ionicLoading', '
 
   if ($ionicConfig.platform.android) {
     $ionicConfig.setPlatformConfig('android', {
+      views: {
+        transition: 'android',
+        swipeBackEnabled: false
+      },
       tabs: {
         style: 'android',
         position: 'top'
