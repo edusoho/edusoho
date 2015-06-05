@@ -47,7 +47,7 @@ class GenerateNotificationHandler
 			$message = array(
 				'courseId' => $course['id'],
 				'courseTitle' => $course['title'],
-				'endtime' => date("Y年m月d日",$courseMembers[$course["id"]]["deadline"]) )
+				'endtime' => date("Y年m月d日",$courseMembers[$course["id"]]["deadline"]) );
 			$this->getNotificationService()->notify($user["id"], "course-deadline",$message);
 			$courseMemberId = $courseMembers[$course["id"]]["id"];
 			$this->getCourseService()->updateCourseMember($courseMemberId, array("deadlineNotified"=>1));
