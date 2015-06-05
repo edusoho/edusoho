@@ -126,7 +126,7 @@ class EduSohoUpgrade extends AbstractUpdater
         while ($article = $sth->fetch(PDO::FETCH_ASSOC)) {
             $tagIds = json_decode($article['tagIds'], true);
             $tagIds = '|' . implode('|', $tagIds) . '|';
-            $connection->exec("UPDATE article SET tagIds = {$tagIds} WHERE id = " . $article['id']);
+            $connection->exec("UPDATE article SET tagIds = \"{$tagIds}\" WHERE id = " . $article['id']);
         }
     }
 }

@@ -119,7 +119,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection->exec("ALTER TABLE `course_announcement` CHANGE `courseId` `targetId`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告类型ID'");
 
         if($this->isTableExist("announcement")) {
-            $connection->exec("insert into `course_announcement` (content, url, startTime, endTime, userId, targetId, targetType, createdTime) select title, url, startTime, endTime, userId, 0, 'global', 0 from announcement");
+            $connection->exec("insert into `course_announcement` 
+                (content, url, startTime, endTime, userId, targetId, targetType, createdTime) 
+                select title, url, startTime, endTime, userId, 0, 'global', 0 from announcement");
 
             $connection->exec("drop TABLE `announcement`;");
 
@@ -310,7 +312,7 @@ class EduSohoUpgrade extends AbstractUpdater
              `userId` int(10) unsigned NOT NULL COMMENT '用户id',
              `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞时间',
              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COMMENT='资讯点赞表';");
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='资讯点赞表';");
 
         if (!$this->isFieldExist('classroom_courses', 'seq')) {
             $connection->exec("ALTER TABLE `classroom_courses` ADD `seq` INT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级课程顺序' AFTER `parentCourseId`;");
