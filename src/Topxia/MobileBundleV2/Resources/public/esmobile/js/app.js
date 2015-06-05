@@ -408,7 +408,12 @@ app.run(["applicationProvider", "$rootScope", '$ionicConfig', '$ionicLoading', '
   $ionicConfig.platform.native = browser.v.native;
 
   if ($ionicConfig.platform.android) {
-    $ionicConfig.setPlatformConfig('android', {});
+    $ionicConfig.setPlatformConfig('android', {
+      tabs: {
+        style: 'android',
+        position: 'top'
+      }
+    });
   }
   
   $rootScope.platform = $ionicConfig.platform;
@@ -425,7 +430,7 @@ app.run(["applicationProvider", "$rootScope", '$ionicConfig', '$ionicLoading', '
 
     $timeout(function() {
       $ionicLoading.hide();
-    }, 3000);
+    }, 2000);
   };
 
   $rootScope.hideLoad = function() {

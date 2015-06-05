@@ -2,15 +2,29 @@
 /*
   main
 */
+
+/* android */
+
+.tabs-android>.tabs, .tabs.tabs-top
+{
+  top: 56px;
+}
+
+.platform-android .bar-header{
+  height: 56px;
+  line-height: 56px;
+}
+
+.platform-android .title {
+  height: 56px;
+  line-height: 56px ! important;
+}
+
 /* list */
 .list .item {
   -webkit-transition: all 0.2s ease-in-out 200ms;
 }
 
-
-.bar-header {
-  height: 56px;
-}
 .bar-positive {
   background-color: #fff ! important;
   border-color:#fff ! important;
