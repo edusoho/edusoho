@@ -18,6 +18,19 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 		return false;
 	};
 
+	$scope.sendSmsCode = function(phone) {
+		if (!parseInt(phone)) {
+			alert("手机格式不正确!");
+			return;
+		}
+
+		UserService.smsSend({
+			phoneNumber : phone
+		}, function(data) {
+			$scope.toast(data.meta.message);
+		});
+	}
+
 	$scope.registWithPhone = function(user) {
 		if (!parseInt(user.phone)) {
 			alert("手机格式不正确!");
@@ -32,6 +45,20 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 			alert("验证码不正确!");
 			return;
 		}
+
+		UserService.regist({
+			phone : user.email,
+			password : user.password,
+		}, function(data) {
+			if (data.meta.code == 500) {
+				$scope.toast(data.meta.message);
+				return;
+			}
+			$ionicLoading.hide();
+			$scope.jumpToMain();
+		}, function(error) {
+			$scope.toast("注册失败");
+		});
 	}
 
 	$scope.registWithEmail = function(user) {
@@ -55,7 +82,7 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 			$ionicLoading.hide();
 			$scope.jumpToMain();
 		}, function(error) {
-
+			$scope.toast("注册失败");
 		});
 	}
 }

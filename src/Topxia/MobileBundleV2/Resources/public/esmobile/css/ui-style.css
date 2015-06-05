@@ -665,6 +665,10 @@ modal
   width: 5%;
 }
 
+.sign .button-code {
+  margin-left: 55%;
+}
+
 .sign .item {
     margin-left: 16px;
     margin-right: 16px;

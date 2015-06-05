@@ -76,6 +76,18 @@ service('CouponService', ['httpService', function(httpService) {
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
 
+	this.smsSend = function(params, callback) {
+		httpService.post({
+			url : app.host + '/mapi_v2/User/smsSend',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+			}
+		});
+	}
+
 	this.getCourseTeachers = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/User/getCourseTeachers',
