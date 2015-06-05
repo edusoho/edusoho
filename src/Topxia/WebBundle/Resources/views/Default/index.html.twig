@@ -123,7 +123,7 @@
   {% endif %}
 
   <!-- 推荐教师 -->
-  {% set teachers = data('RecommendTeachers',{'count':4,'userId':app.user.id}) %}
+  {% set teachers = data('RecommendTeachers',{'count':4}) %}
   {% if teachers %}
   <section class="recommend-teacher">
     <div class="container">
