@@ -7,6 +7,10 @@
   -webkit-transition: all 0.2s ease-in-out 200ms;
 }
 
+.bar-header {
+  height: 56px;
+}
+
 .tabs-hide>.tabs {
     display: none;
 }
