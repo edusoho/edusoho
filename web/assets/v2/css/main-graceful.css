@@ -246,6 +246,45 @@
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
+.float-consult .btn {
+  padding: 6px 12px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  color: #fff;
+}
+.float-consult .btn:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.float-consult .btn:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.float-consult .btn-consult-default {
+  background: #02b980;
+  border-color: #00a86f;
+}
+.float-consult .btn-consult-default:hover {
+  background: #00a86f;
+  border-color: #00975e;
+}
+.float-consult .btn-consult-warning {
+  background: #e67e22;
+  border-color: #d56d11;
+}
+.float-consult .btn-consult-warning:hover {
+  background: #d56d11;
+  border-color: #c45c00;
+}
+.float-consult .btn-consult-danger {
+  background: #e74c3c;
+  border-color: #d63b2b;
+}
+.float-consult .btn-consult-danger:hover {
+  background: #d63b2b;
+  border-color: #c52a1a;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;

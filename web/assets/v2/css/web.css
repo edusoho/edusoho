@@ -4715,10 +4715,6 @@ a.homework-essay-textarea-pack-up{
   z-index: 999999;
 }
 
-.float-consult .btn {
-  padding: 6px 8px;
-}
-
 .float-consult .popover {
   width: 250px;
   color: #444;
@@ -4734,7 +4730,7 @@ a.homework-essay-textarea-pack-up{
 }
 
 .float-consult .btn-group-vertical .btn:active {
-  box-shadow: none;
+  /*box-shadow: none;*/
 }
 
 .float-consult .consult-contents {

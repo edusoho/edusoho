@@ -246,6 +246,15 @@
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
+.float-consult .btn {
+  -webkit-border-radius: none;
+  -moz-border-radius: none;
+  border-radius: none;
+  color: #fff;
+}
+.float-consult .btn-consult-default {
+  background: #009966;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
@@ -2992,6 +3001,8 @@ textarea.form-control-o {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+.progress.progress-sm {
   height: 11px;
 }
 .label {
