@@ -1,5 +1,5 @@
 <ion-view>
-  <ion-content class="content-padding">
+  <ion-content class="content-padding found-body">
     
     <ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide ng-repeat="banner in banners"  slide-init>
@@ -22,7 +22,7 @@
 			      </div>
 		      </div>
 		      <h2>{{ recommendCourse.title }}</h2>
-		      <p class="bottom">
+		      <p class="bottom price-body">
 		      	
 		      	<span class="origin-price">
 			      {{ recommendCourse.price | formatPrice }}

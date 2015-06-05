@@ -7,7 +7,7 @@
 		    <p class="mask">
 		      <a class="left">
 		      	<span>
-		      		<i class="iconfont icon-favorite" ng-class="course.ratingNum > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
+		      		<i class="iconfont icon-favorfill" ng-class="course.ratingNum > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
 		      	</span>{{ course.rating }}
 		      </a>
 		      <a class="right">{{ course.studentNum }} 人在学</a>
@@ -34,8 +34,8 @@
   </ion-content>
   	<div class="course-tools row">
   		<div class="col">
-  			<a class="button button-small button-icon iconfont icon-send"></a>
-  			<a ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="button button-small button-icon iconfont icon-favorite"></a>
+  			<a class="button button-small button-icon iconfont icon-fenxiang"></a>
+  			<a ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="button button-small button-icon iconfont icon-shoucang"></a>
   		</div>
 
   		<div class="col">
@@ -44,7 +44,7 @@
 	       	</a>
   		</div>
 	  	<div class="col" ng-if="course.vipLevelId > 0">
-  			<a class="button button-small button-assertive full" ng-click="vipLeand()">
+  			<a class="button button-small button-yellow full" ng-click="vipLeand()">
 		  		{{ vipLevels[course.vipLevelId - 1].name }}会员免费学
 	       	</a>
   		</div>
