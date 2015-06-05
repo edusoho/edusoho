@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 
 class CourseLessonController extends BaseController
@@ -608,6 +609,18 @@ class CourseLessonController extends BaseController
         $items = $this->getCourseService()->getCourseItems($courseId);
         $course = $this->getCourseService()->getCourse($courseId);
 
+        $homeworkPlugin = $this->getAppService()->findInstallApp('Homework');
+        $homeworkLessonIds =array();
+        $exercisesLessonIds =array();
+
+        if($homeworkPlugin) {
+            $lessonIds = ArrayToolkit::column($items, 'id');
+            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+            $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
+            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
+            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+        }
+
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
@@ -615,6 +628,8 @@ class CourseLessonController extends BaseController
             'previewUrl' => $previewUrl,
             'learnStatuses' => $learnStatuses,
             'currentTime' => time(),
+            'homeworkLessonIds' => $homeworkLessonIds,
+            'exercisesLessonIds' => $exercisesLessonIds,
         ));
     }
 
