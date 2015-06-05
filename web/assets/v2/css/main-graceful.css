@@ -5557,23 +5557,62 @@ textarea.form-control-o {
 .topic-detail .topic-body .media-left {
   padding-right: 50px;
 }
+@media (max-width: 1199px) {
+  .topic-detail .topic-body .media-left {
+    padding-right: 30px;
+  }
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-body .media-left {
+    display: block;
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+}
 .topic-detail .topic-body .media-left img {
   width: 200px;
   height: auto;
 }
+@media (max-width: 767px) {
+  .topic-detail .topic-body .media-left img {
+    width: 100%;
+  }
+}
 .topic-detail .topic-body .media-body {
   padding-right: 120px;
 }
+@media (max-width: 767px) {
+  .topic-detail .topic-body .media-body {
+    padding-right: 0;
+  }
+}
 .topic-detail .topic-body .media-body p {
   color: #9e9e9e;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   text-indent: 0;
+}
+@media (max-width: 1199px) {
+  .topic-detail .topic-body .media-body p {
+    margin-bottom: 10px;
+  }
 }
 .topic-detail .topic-body .btn-apply {
   position: absolute;
   top: 50%;
   margin-top: -20px;
   right: 20px;
+}
+@media (max-width: 1199px) {
+  .topic-detail .topic-body .btn-apply {
+    right: 10px;
+  }
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-body .btn-apply {
+    position: relative;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
 }
 .topic-detail .topic-num .num-list {
   height: 50px;
@@ -5621,6 +5660,11 @@ textarea.form-control-o {
 }
 .topic-detail .topic-action a {
   margin: 0 10px;
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-action a {
+    margin: 0;
+  }
 }
 .topic-detail .topic-action i {
   margin-right: 5px;
@@ -5870,6 +5914,22 @@ textarea.form-control-o {
   margin: 10px auto;
   text-align: center;
   border: 1px solid #e0e0e0;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.teacher-item:hover {
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .teacher-item:hover .metas {
   opacity: 1;
