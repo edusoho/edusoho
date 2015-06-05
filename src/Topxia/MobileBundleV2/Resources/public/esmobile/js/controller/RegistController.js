@@ -11,7 +11,7 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 	};
 
 	$scope.checkCode = function(code) {
-		return false;
+		return !code || code.length == 0;
 	};
 
 	$scope.checkEmail = function(code) {
@@ -47,7 +47,8 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 		}
 
 		UserService.regist({
-			phone : user.email,
+			phone : user.phone,
+			smsCode : user.code,
 			password : user.password,
 		}, function(data) {
 			if (data.meta.code == 500) {
