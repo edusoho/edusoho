@@ -173,6 +173,16 @@
 .userpage-header .actions {
   float: right;
 }
+.es-row-wrap {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
 .lesson-manage-panel .panel-heading {
   z-index: 1;
 }
@@ -1765,9 +1775,21 @@ a:focus {
   margin-left: -20px;
   width: 40px;
   text-align: center;
+  color: #9e9e9e;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.text-line .more:hover {
+  color: #616161;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .text-line .more > i {
-  font-size: 30px;
+  font-size: 24px;
 }
 .text-line.gray h5 > span {
   background: #fafafa;
@@ -1849,6 +1871,36 @@ a:focus {
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+.es-section .section-header {
+  position: relative;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.es-section .section-header h1 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.es-section .section-header .more {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  color: #9e9e9e;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-section .section-header .more:hover {
+  color: #616161;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-section .section-header .more > i {
+  font-size: 24px;
 }
 .nav.nav-tabs {
   margin-bottom: 15px;
@@ -3562,6 +3614,7 @@ textarea.form-control-o {
   margin-bottom: 20px;
 }
 .recommend-teacher {
+  padding-bottom: 50px;
   background: #fff;
 }
 .article-list-header .row {
