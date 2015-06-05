@@ -82,6 +82,10 @@ class ClassroomAdminController extends BaseController
 
     public function addClassroomAction(Request $request)
     {
+        if (!$this->setting('classroom.enabled')) {
+            return $this->createMessageResponse('info', '班级功能未开启，请先在 系统-课程设置-班级 中设置开启');
+        }
+
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
             return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
         }
