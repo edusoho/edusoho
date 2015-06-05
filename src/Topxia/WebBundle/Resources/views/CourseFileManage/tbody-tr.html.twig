@@ -45,7 +45,7 @@
     {% else %}
     <br>
     {% endif %}
-    {% if uploadFile.convertStatus == 'none' and uploadFile.type != 'flash' %}
+    {% if uploadFile.type == "cloud" and uploadFile.convertStatus == 'none' and uploadFile.type != 'flash' %}
       <span class="label label-default tip">未转码</span>
     {% endif %}
     {% if uploadFile.convertStatus == 'success' %}
