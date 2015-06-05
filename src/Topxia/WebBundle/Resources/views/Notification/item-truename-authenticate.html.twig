@@ -1,14 +1,16 @@
-<li class="media">
+ <li class="media">
   <div class="pull-left">
     <span class="glyphicon glyphicon-volume-down media-object"></span>
   </div>
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      <a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> 在话题 <a href="{{ path('thread_jump', {threadId:data.id}) }}" target="_blank">{{ data.title }}</a> 中提到了你。
-      <blockquote>
-        {{ data.content }}
-      </blockquote>
+      	{% if data.type == 'through'%}
+      	 	您的个人实名认证，审核已经通过！
+      	{% elseif data.type == 'reject'%}
+     		您的个人实名认证，审核未通过！
+      {% endif %}
+      {{data.note}}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|data_format }}  

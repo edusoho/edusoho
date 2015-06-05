@@ -38,7 +38,7 @@ class RecommendTeachersDataTagTest extends BaseTestCase
         $this->getUserService()->promoteUser($user2['id']);
         $this->getUserService()->promoteUser($user3['id']);
         $datatag = new RecommendTeachersDataTag();
-        $teacher = $datatag->getData(array('count' => 5));
+        $teacher = $datatag->getData(array('count' => 5,'userId'=>$user1['id']));
         $this->assertEquals(2,count($teacher));
 
     }

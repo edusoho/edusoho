@@ -31,6 +31,18 @@ class LessonController extends BaseController
             ));
         }
 
+        return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+    }
+
+    public function buyHintAction(Request $request, $courseId)
+    {
+        $classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
+
+        if(!empty($classrooms) && count($classrooms)>0){
+            $keys = array_keys($classrooms);
+            $classroom = $this->getClassroomService()->getClassroom($keys[0]);
+        }
+
         return $this->render('ClassroomBundle:Classroom:hint-modal.html.twig', array(
             'classroom' => $classroom
         ));

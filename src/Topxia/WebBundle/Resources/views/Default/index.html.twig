@@ -123,7 +123,7 @@
   {% endif %}
 
   <!-- 推荐教师 -->
-  {% set teachers = data('RecommendTeachers',{'count':4}) %}
+  {% set teachers = data('RecommendTeachers',{'count':4,'userId':app.user.id}) %}
   {% if teachers %}
   <section class="recommend-teacher">
     <div class="container">
@@ -134,15 +134,15 @@
           <a href="{{ path('teacher') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
         </div>
       </div>
-      {# <div class="row">
+      <div class="row">
         {% for teacher in teachers %}
-        {% set profile = profiles[teacher.id] %}
-        {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
+        {% set profile = teacher.profile %}
+        {% set isFollowed = teacher.isFollowed %}
           <div class="col-md-3 col-sm-6">
             {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
           </div>
         {% endfor %}
-      </div> #}
+      </div>
     </div>
   </section>
   {% endif %}
