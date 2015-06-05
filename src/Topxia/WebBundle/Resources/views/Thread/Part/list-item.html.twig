@@ -5,19 +5,19 @@
   <div class="media-body">
     <div class="title">
       {% if thread.type == 'question'%}
-        <span class="btn-circle danger btn-circle-xs">
-          问
+        <span class="btn-circle danger btn-circle-xs"  data-toggle="tooltip" data-placement="left" title="问答">
+          <i class="es-icon es-icon-wenhao"></i>
         </span>
       {% endif %}
       {% if thread.type == 'event'%}
-        <span class="btn-circle primary btn-circle-xs">
-          动
+        <span class="btn-circle primary btn-circle-xs" data-toggle="tooltip" data-placement="left" title="活动">
+          <i class="es-icon es-icon-flag"></i>
         </span>
       {% endif %}
       
       {% if thread.type == 'discussion' %}   
-        <span class="btn-circle info btn-circle-xs">
-          话
+        <span class="btn-circle info btn-circle-xs" data-toggle="tooltip" data-placement="left" title="话题">
+          <i class="es-icon es-icon-textsms"></i>
         </span>
       {% endif %}
       <a  href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title }}

@@ -1310,7 +1310,8 @@ body.nav-active {
   display: block;
 }
 #content-container {
-  margin-top: 30px;
+  margin: 30px auto;
+  min-height: 500px;
 }
 a:hover,
 a:focus {
@@ -2991,6 +2992,8 @@ textarea.form-control-o {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+.progress.progress-sm {
   height: 11px;
 }
 .label {
