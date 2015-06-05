@@ -4,23 +4,15 @@
 
 {% block content %}
 
-	<div class="es-row-wrap container-gap">
+  <div class="es-tag">直播频道</div>
 
-	    <div class="row">
-	        <div class="col-md-12">
-	          <div class="page-header"><h1>直播频道</h1></div>
-	        </div>
-	    </div>
-
-	    <div class="row article-row">
-	      <div class="col-md-8">
-	        {% block live_main %}{% endblock %}
-	      </div>
-	      <div class="col-md-4">
-	        {% block live_side %}{% endblock %}
-	      </div>
-	    </div>
-
-	</div>
+  <div class="live-course-body row">
+    <div class="col-md-8">
+      {% block live_main %}{% endblock %}
+    </div>
+    <aside class="col-md-4">
+      {% block live_side %}{% endblock %}
+    </aside>
+  </div>
 
 {% endblock %}
