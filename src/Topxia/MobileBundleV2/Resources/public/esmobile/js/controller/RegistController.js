@@ -46,16 +46,18 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 			return;
 		}
 
+		$scope.showLoad();
 		UserService.regist({
 			phone : user.phone,
 			smsCode : user.code,
 			password : user.password,
 		}, function(data) {
+			console.log(data);
 			if (data.meta.code == 500) {
 				$scope.toast(data.meta.message);
 				return;
 			}
-			$ionicLoading.hide();
+			$scope.hideLoad();
 			$scope.jumpToMain();
 		}, function(error) {
 			$scope.toast("注册失败");
@@ -72,6 +74,7 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 			return;
 		}
 
+		$scope.showLoad();
 		UserService.regist({
 			email : user.email,
 			password : user.password,
@@ -80,7 +83,7 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 				$scope.toast(data.meta.message);
 				return;
 			}
-			$ionicLoading.hide();
+			$scope.hideLoad();
 			$scope.jumpToMain();
 		}, function(error) {
 			$scope.toast("注册失败");
