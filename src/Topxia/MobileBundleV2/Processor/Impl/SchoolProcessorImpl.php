@@ -26,6 +26,76 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getVipPayInfo()
+    {
+        if (! $this->controller->isinstalledPlugin("Vip")) {
+            return $this->createErrorResponse('no_vip', '网校未安装vip插件');
+        }
+
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+        
+        $levelId = $this->getParam("levelId");
+        $level = $this->getLevelService()->getLevel($levelId);
+        
+        $buyType = $this->controller->setting('vip.buyType');
+        if (empty($buyType)) {
+            $buyType = 10;
+        }
+
+        return $this->createMetaAndData(
+            array(
+                'level' => $level,
+                'buyType' => $buyType
+                ), 200, "ok");
+    }
+
+    public function getSchoolVipList()
+    {
+        $userId = $this->getParam("userId");
+        if (! $this->controller->isinstalledPlugin("Vip")) {
+            return $this->createErrorResponse('no_vip', '网校未安装vip插件');
+        }
+
+        if (! $this->controller->setting('vip.enabled')) {
+            return $this->createMessageResponse('vip_closed', '会员专区已关闭');
+        }
+
+        $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+
+        $levels = array_map(function($level){
+            $level["picture"] = sprintf("/assets/img/default/vip_%d.png", $level["id"]);
+            return $level;
+        }, $levels);
+        $user = $this->controller->getUserService()->getUser($userId);
+        return $this->createMetaAndData(
+            array(
+                'user' => $this->controller->filterUser($user),
+                'vips' => $levels
+                ), 200, "ok");
+    }
+
+    public function getSchoolPlugins()
+    {
+        $appsInstalled = $this->getAppService()->findApps(0, 100);
+        $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
+
+        foreach ($appsInstalled as $key => $value) {
+            foreach ($value as $valueKey => $v) {
+                if (!in_array($valueKey, array(
+                    "id", "version", "type"))) {
+                    unset($value[$valueKey]);
+                }
+
+               $appsInstalled[$key] = $value;
+            }
+            
+        }
+        return $appsInstalled;
+    }
+
     public function getSchoolApps()
     {
         $host = $this->request->getSchemeAndHttpHost();
@@ -470,6 +540,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         curl_close($curl);
 
         return $response;
+    }
+
+    public function getLevelService()
+    {
+        return $this->controller->getService('Vip:Vip.LevelService');
     }
 }
 

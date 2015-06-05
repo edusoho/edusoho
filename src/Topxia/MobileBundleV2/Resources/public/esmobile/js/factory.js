@@ -65,6 +65,37 @@ factory('ServcieUtil', function() {
 		}
 	}
 }).
+factory('VipUtil', function() {
+
+	var payByYear = {
+		title : "按年支付",
+		type : 20
+	};
+
+	var payByMonth  ={
+		title : "按月支付",
+		type : 30
+	};
+
+	return {
+		getPayType : function() {
+			return {
+				byYead : 20,
+				byMonth : 30
+			}
+		},
+		getPayMode : function(buyType) {
+			
+			if (buyType == 10) {
+				return [payByYear, payByMonth];
+			} else if (buyType == 20) {
+				return [payByYear];
+			} else {
+				return [payByMonth];
+			}
+		}
+	}
+}).
 factory('broadCast', ['$rootScope', function($rootScope) {
 	angular.broadQueue = [];
 	var broadCastService = {

@@ -1,6 +1,27 @@
 app.controller('CourseListController', ['$scope', '$stateParams', 'AppUtil', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
-app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$ionicScrollDelegate', '$state', CourseListController]);
+app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$ionicScrollDelegate', '$state', '$ionicTabsDelegate', CourseController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
+app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$ionicHistory', CourseSettingController]);
+
+function CourseSettingController($scope, $stateParams, CourseService, $ionicHistory)
+{
+  $scope.isLearn = $stateParams.isLearn;
+  $scope.exitLearnCourse = function() {
+    $scope.showLoad();
+    CourseService.unLearnCourse({
+      courseId : $stateParams.courseId,
+      token : $scope.token
+    }, function(data) {
+      $scope.hideLoad();
+      if (data.meta.code == 200) {
+        $ionicHistory.goBack();
+        $scope.$emit("refresh");
+      } else {
+        $scope.toast(data.meta.message);
+      }
+    });
+  }
+}
 
 function CourseDetailController($scope, $stateParams, CourseService)
 {
@@ -12,7 +33,7 @@ function CourseDetailController($scope, $stateParams, CourseService)
     });
 }
 
-function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScrollDelegate, $state)
+function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScrollDelegate, $state, $ionicTabsDelegate)
 {
     $scope.showLoad();
 
@@ -27,6 +48,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
       $scope.course = data.course;
+      $scope.member = data.member;
       $scope.isFavorited = data.userFavorited;
       $scope.discount = data.discount;
 
@@ -36,6 +58,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
       $scope.hideLoad();
       $scope.loadLessons();
+      $scope.loadReviews();
     });
 
     $scope.loadLessons = function() {
@@ -54,6 +77,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
         token : $scope.token,
         limit : 1
       }, function(data) {
+        console.log(data.data);
         $scope.reviews = data.data;
       });
     }
@@ -67,13 +91,17 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       if ($scope.isFavorited) {
         CourseService.unFavoriteCourse(params, function(data) {
           if (data == true) {
-            $scope.isFavorited = false;
+            $scope.$apply(function() {
+              $scope.isFavorited = false;
+            });
           }
         });
       } else {
         CourseService.favoriteCourse(params, function(data) {
           if (data == true) {
-            $scope.isFavorited = true;
+            $scope.$apply(function() {
+              $scope.isFavorited = true;
+            });
           }
         });
       }
@@ -95,50 +123,37 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       });
     }
 
+    $scope.vipLeand = function() {
+      CourseService.vipLearn({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data){
+        if (data.meta.code == 200) {
+          window.location.reload();
+        } else {
+          $scope.toast(data.meta.message);
+        }
+      }, function(error) {
+        console.log(error);
+      });
+    }
+
     $scope.joinCourse = function() {
       if ($scope.course.price <= 0) {
         self.payCourse();
       } else {
-        $scope.$parent.stateParams["coursePay"] = {
-            course : $scope.course
-        };
-          
-        $state.go("coursePay");
+        $state.go("coursePay", { courseId : $scope.course.id });
       }
       
     }
 
-    /*
-    var mainHandle = $ionicScrollDelegate.$getByHandle("mainScroll");
-    var tabScroll = $ionicScrollDelegate.$getByHandle("tabScroll");
+    $scope.$parent.$on("refresh", function(event, data) {
+      window.location.reload();
+    });
 
-    var lastScrollTop = 0;
-
-    $scope.xscroll = function(event, scrollTop, scrollLeft) {
-
-      var position = mainHandle.getScrollPosition();
-      var chlidPosition = tabScroll.getScrollPosition();
-
-      if (position.top == 302 ) {
-        if (scrollTop > lastScrollTop) {
-          lastScrollTop = scrollTop;
-          console.log("up");
-          return;
-        }
-        if (scrollTop < lastScrollTop) {
-          console.log("down");
-          lastScrollTop = scrollTop;
-        }
-
-        return;
-      }
-
-      var scroll = event.srcElement.querySelector(".scroll");
-      scroll.style.webkitTransform = "translate3d(0px, " + "0px, 0px) scale(1)";
-      mainHandle.scrollTo(scrollLeft, scrollTop * 3);
-      lastScrollTop = scrollTop;
+    $scope.onTabSelected = function(tabScope) {
+      $scope.selectedIndex = $ionicTabsDelegate.$getByHandle("tabHandle").selectedIndex();
     }
-    */
 }
 
 function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)

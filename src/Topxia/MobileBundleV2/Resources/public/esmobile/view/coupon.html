@@ -13,7 +13,7 @@
 </ion-header-bar>
 
 <ion-view>
-  <ion-content class="course-paybody">
+  <ion-content class="course-paybody coupon-body">
   	<div class="list">
 
 	  <a class="item item-divider">
@@ -21,8 +21,11 @@
 	  </a>
 	  <label class="item item-input item-icon-right">
 	    <span class="input-label">优惠码</span>
-	    <input type="text" placeholder="优惠码">
+	    <input type="text" placeholder="优惠码" ng-model="formData.code">
 	  </label>
+	  <a class="item item-divider coupon-error">
+	    {{ formData.error }}
+	  </a>
 	</div>
    </ion-content>
 </ion-view>

@@ -1,0 +1,32 @@
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-arrowback" back="go">
+</a>
+
+<h1 class="title">
+  <span>
+    课程设置
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-view>
+  <ion-content class="course-setting">
+  	<ul class="list">
+	  <li class="item item-toggle">
+	     讨论组消息免打扰
+	     <label class="toggle toggle-calm">
+	       <input type="checkbox">
+	       <div class="track">
+	         <div class="handle"></div>
+	       </div>
+	     </label>
+	  </li>
+	  <a ng-if="isLearn" class="item item-button">
+	     <button class="button button-block button-assertive" ng-click="exitLearnCourse()">
+	            退出课程
+	     </button>
+	  </a>
+	</ul>
+	
+   </ion-content>
+</ion-view>

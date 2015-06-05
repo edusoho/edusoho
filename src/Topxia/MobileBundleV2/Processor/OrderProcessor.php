@@ -12,4 +12,6 @@ interface OrderProcessor
 	* (String)  payType  iap, alipay
 	*/
 	public function buyCoin();
+
+	public function getPayOrder();
 }

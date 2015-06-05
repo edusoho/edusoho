@@ -33,4 +33,10 @@ interface SchoolProcessor
 	public function loginSchoolWithSite();
 
 	public function getSchoolApps();
+
+	public function getSchoolPlugins();
+
+	public function getSchoolVipList();
+
+	public function getVipPayInfo();
 }

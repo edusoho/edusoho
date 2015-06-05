@@ -20,6 +20,47 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $this->requestReceiptData($user["id"], $amount, $receipt, false);
     }
 
+    public function getPayOrder()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录");
+        }
+
+        $courseId = $this->getParam("courseId");
+
+        if (empty($courseId)) {
+            return $this->createErrorResponse('not_courseId', "没有发现指定课程");
+        }
+
+        $course   = $this->controller->getCourseService()->getCourse($courseId);
+        $course  = $this->controller->filterCourse($course);
+        if ($course["status"] != "published") {
+            return $this->createErrorResponse('course_close', "课程已关闭");
+        }
+
+        foreach ($course as $key => $value) {
+            if (!in_array($key, array(
+                "id", "title", "price", "originPrice", "originCoinPrice", "middlePicture", "coinPrice"))) {
+                unset($course[$key]);
+            }
+        }
+
+        $userProfile = $this->controller->getUserService()->getUserProfile($user["id"]);
+        foreach ($userProfile as $key => $value) {
+            if (!in_array($key, array(
+                "truename", "id", "mobile", "qq", "weixin"))) {
+                unset($userProfile[$key]);
+            }
+        }
+
+        return array(
+            "userProfile" => $userProfile,
+            "course" => $course,
+            "isInstalledCoupon" => $this->controller->isinstalledPlugin("Coupon")
+            );
+    }
+
     private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)     
     {
         if ($isSandbox) {     
@@ -255,7 +296,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
         if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
             $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true);
-            $result['payUrl'] = $payUrl . '?token=' . $token;
+            $result['payUrl'] = $payUrl;
         } else {
             $result['payUrl'] = MobileAlipayConfig::createAlipayOrderUrl($this->request, 'edusoho', $order);
         }

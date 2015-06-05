@@ -7,6 +7,15 @@
     {{ course.title }}
   </span>
 </h1>
+
+<div ng-if="member" class="button button-clear">
+	<a class="button button-clear">
+	  <i class="iconfont icon-modecomment"></i>
+	</a>
+	<a class="button button-clear" href="#/coursesetting/{{ course.id }}/{{ member != null }}">
+	  <i class="iconfont icon-setting"></i>
+	</a>
+</div>
 </ion-header-bar>
 
 <div ng-include="courseView"></div>

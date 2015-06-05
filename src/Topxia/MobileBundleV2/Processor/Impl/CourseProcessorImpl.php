@@ -843,7 +843,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         catch (ServiceException $e) {
             return $this->createErrorResponse('runtime_error', $e->getMessage());
         }
-        return true;
+
+        return $this->createMetaAndData(
+            array(), 200, "ok");
     }
     
     public function coupon()
@@ -855,7 +857,19 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $course     = $this->controller->getCourseService()->getCourse($courseId);
         $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $courseId, $course['price']);
         
-        return $couponInfo;
+        $result["data"] = null;
+        if (empty($couponInfo)) {
+            $result['meta'] = $this->createMeta(500, "优惠码错误");
+            return $result;
+        } 
+
+        if ($couponInfo["useable"] == "no") {
+            $result['meta'] = $this->createMeta(500, "优惠码错误");
+            return $result;
+        }
+        $result['meta'] = $this->createMeta(200, "ok");
+        $result["data"] = $couponInfo;
+        return $result;
     }
     
     public function unLearnCourse()
@@ -883,13 +897,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 "note" => $reason
             ), $this->getContainer());
             if (empty($refund) || $refund['status'] != "success") {
-                return false;
+                return $this->createMetaAndData(array(), 500, "退出课程失败");
             }
-            return true;
+            return $this->createMetaAndData(array(), 200, "ok");;
         }
         
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
-        return true;
+        return $this->createMetaAndData(array(), 200, "ok");
     }
     
     public function getCourse()

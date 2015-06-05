@@ -49,6 +49,10 @@ service('OrderService', ['httpService', function(httpService) {
 	this.payCourse = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/Order/payCourse", arguments);
 	}
+
+	this.getPayOrder = function() {
+		httpService.simpleGet('/mapi_v2/Order/getPayOrder', arguments);
+	}
 }]).
 service('NoteService', ['httpService', function(httpService) {
 
@@ -90,7 +94,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				applicationProvider.setUser(data.data, data.data.token);
+				applicationProvider.setUser(data.data.user, data.data.token);
 			},
 			error : function(data) {
 			}
@@ -192,6 +196,14 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 
+	this.unLearnCourse = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/unLearnCourse", arguments);
+	}
+	
+	this.vipLearn = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/vipLearn", arguments);
+	}
+
 	this.favoriteCourse = function(params, callback) {
 		httpService.simpleGet('/mapi_v2/Course/favoriteCourse', arguments);
 	}
@@ -280,19 +292,8 @@ service('CourseService', ['httpService', function(httpService) {
 		});
 	}
 
-	this.getCourse  = function(params, callback) {
-		httpService.get({
-			url : app.host + '/mapi_v2/Course/getCourse',
-			params : {
-				courseId : params.courseId
-			},
-			success : function(data, status, headers, config) {
-				callback(data);
-			},
-			error : function(data) {
-				console.log(data);
-			}
-		});
+	this.getCourse = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getCourse", arguments);
 	}
 
 	this.getCourses = function(params, callback, error) {
@@ -316,6 +317,18 @@ service('CourseService', ['httpService', function(httpService) {
 	}
 }]).
 service('SchoolService', ['httpService', function(httpService) {
+
+	this.getVipPayInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/School/getVipPayInfo", arguments);
+	}
+	
+	this.getSchoolVipList = function(params, callback) {
+		httpService.simpleGet('/mapi_v2/School/getSchoolVipList', arguments);
+	}
+
+	this.getSchoolPlugins = function(params, callback) {
+		httpService.simpleGet('/mapi_v2/School/getSchoolPlugins', arguments);
+	}
 
 	this.getSchoolBanner = function(callback) {
 		httpService.get({

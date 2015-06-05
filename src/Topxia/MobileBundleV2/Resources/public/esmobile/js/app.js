@@ -8,7 +8,11 @@ var app = angular.module('EduSohoApp', [
 
 app.viewFloder = "/bundles/topxiamobilebundlev2/esmobile/";
 
-app.config(function($httpProvider) {
+app.config(['$httpProvider', '$ionicConfigProvider', function($httpProvider, $ionicConfigProvider) {
+
+    $ionicConfigProvider.views.maxCache(1); 
+    $ionicConfigProvider.views.forwardCache(false);
+
     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -55,7 +59,7 @@ app.config(function($httpProvider) {
                 ? param(data)
                 : data;
     }];
-});
+}]);
 
 app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
@@ -337,7 +341,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             });
 
             $stateProvider.state('coursePay', {
-              url: "/coursepay",
+              url: "/coursepay/:courseId",
               views: {
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/course_pay.html",
@@ -347,11 +351,40 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             });
 
             $stateProvider.state('courseCoupon', {
-              url: "/coursecoupon",
+              url: "/coursecoupon/:courseId",
               views: {
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/coupon.html",
                   controller : CourseCouponController
+                }
+              }
+            });
+
+            $stateProvider.state('viplist', {
+              url: "/viplist",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/vip_list.html",
+                  controller : VipListController
+                }
+              }
+            });
+
+            $stateProvider.state('courseSetting', {
+              url: "/coursesetting/:courseId/:isLearn",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/course_setting.html",
+                  controller : CourseSettingController
+                }
+              }
+            });
+            $stateProvider.state('vipPay', {
+              url: "/vippay/:levelId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/vip_pay.html",
+                  controller : VipPayController
                 }
               }
             });

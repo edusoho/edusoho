@@ -44,7 +44,7 @@
 	       	</a>
   		</div>
 	  	<div class="col" ng-if="course.vipLevelId > 0">
-  			<a class="button button-small button-assertive full" href="#">
+  			<a class="button button-small button-assertive full" ng-click="vipLeand()">
 		  		{{ vipLevels[course.vipLevelId - 1].name }}会员免费学
 	       	</a>
   		</div>

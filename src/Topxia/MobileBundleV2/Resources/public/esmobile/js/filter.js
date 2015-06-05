@@ -28,12 +28,17 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 		}
 		return content;
 	};
+}]).filter('array', ['AppUtil', function(AppUtil) {
+	return function(num){
+		return AppUtil.createArray(num);
+	};
 }]).
 filter('formatPrice', ['$rootScope', function($rootScope){
 
 	return function(price) {
 		if (price) {
-			return parseFloat(price) <= 0 ? "免费" : "¥" + price;
+			price = parseFloat(price);
+			return parseFloat(price) <= 0 ? "免费" : "¥" + price.toFixed(2);
 		}
 		return "";
 	}

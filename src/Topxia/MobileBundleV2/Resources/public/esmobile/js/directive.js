@@ -41,7 +41,7 @@ directive('back', function($ionicHistory, $state) {
                   element.on("click", function(){
                     if (attributes["back"] == "go" && $ionicHistory.backView()) {
                       $ionicHistory.goBack();
-                      return ;
+                      return;
                     }
                     $state.go("slideView.mainTab.found");
                   });

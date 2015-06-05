@@ -646,6 +646,7 @@ modal
 }
 
 .tabs-green.tabs-color-light .tab-item {
+  max-width: 100%;
   color: #555;
   opacity: 1;
 }
@@ -783,7 +784,7 @@ modal
   color: #F3BE5C;
 }
 
-.course-body .course-tab-content {
+.course-body .course-tab-content.pane {
   padding: 0;
   top: 44px;
   margin-bottom: 44px;
@@ -820,6 +821,16 @@ modal
   height: 50px;
   line-height: 50px;
   border: solid 1px #ddd;
+}
+
+.chapter .lesson-body {
+  height: 40px ! important;
+  line-height: 40px ! important;
+}
+
+.unit .lesson-body {
+  height: 40px ! important;
+  line-height: 40px ! important;
 }
 
 .lesson-list .lesson-title {
@@ -883,6 +894,13 @@ modal
   width: 100%;
 }
 
+.course-tab-content .pane {
+  position: relative;
+  display: block;
+  padding-top: 50px;
+  padding-bottom: 44px;
+}
+
 .course-tab-content .item-text-wrap {
   border: 0;
 }
@@ -901,6 +919,33 @@ modal
   margin-bottom: 44px;
 }
 
+.course-tab-content .teacher-label {
+  display: inline-block;
+  border: solid 1px #37b97d;
+  background: #A7F5D1;
+  color: #37b97d;
+  padding: 2px 4px 2px 4px;
+  font-size: 5px;
+  line-height: 10px;
+  border-radius: 3px;
+}
+
+.course-tab-content .review-rating {
+  height: 20px;
+  line-height: 20px;
+}
+
+.course-tab-content .review-rating h3{
+  display: inline-block;
+  height: 20px;
+  line-height: 20px;
+}
+
+.course-tab-content .review-rating span{
+  float: right;
+  display: inline-block;
+}
+
 .course-tab-content .body img {
   width: 99%;
 }
@@ -916,6 +961,10 @@ modal
   height: 30px;
   float: left;
   line-height: 30px;
+}
+
+.course-tab-content .item {
+  overflow: visible;
 }
 
 .course-tab-content .card-head .button{
@@ -970,6 +1019,115 @@ modal
 
 .course-paybody .right {
   float: right;
+}
+
+.coupon-body{
+  background: #f5f5f5;
+}
+
+.coupon-body .coupon-error {
+  color: #F5780F;
+  font-size: 12px;
+  border-bottom-width: 0;
+}
+
+.viplist-body .list {
+  padding: 16px;
+}
+
+.viplist-body .list .viplist-item{
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #ddd;
+}
+
+.viplist-body .viplist-item img {
+  display: inline-block;
+  border: solid 1px #ddd;
+  padding: 3px;
+}
+
+.viplist-body .item {
+  border: 0;
+}
+
+.viplist-body .vip-description * {
+  font-size: 12px;
+  color: #666;
+  overflow: none;
+  white-space: normal;
+}
+
+.viplist-body .cut-line {
+  color: #ddd;
+  position: relative;
+  text-align: center;
+  height: 2px;
+  width: 100%;
+  display: inline-block;
+  background: none;
+  top: 20px;
+}
+
+.viplist-body .cut-line>span {
+  padding-left: 8px;
+  z-index: 5;
+  height: 20px;
+  display: inline-block;
+  line-height: 20px;
+  position: relative;
+  top: -10px;
+  background: #fff;
+  padding-right: 8px;
+}
+
+.vippay-body .tabs {
+  padding: 8px 16px 8px 16px;
+  height: 100%;
+  border: 0;
+}
+
+.vippay-body .tabs .tab-item {
+  display: inline-block;
+  border: solid 1px #ddd;
+  height: 30px;
+  line-height: 30px;
+  font-size: 20px;
+  margin: 5px;
+  width: 30px;
+}
+
+.vippay-body .tabs .tab-item.right {
+  background: #37b97d;
+  color: #fff ! important;
+}
+
+.vippay-body .tabs .tab-item.left {
+  background: #ddd;
+  color: #fff ! important;
+}
+
+.vippay-body .item-padding, .row {
+  padding: 0
+}
+
+.vippay-body .col {
+  border: solid 1px #ddd;
+  border-top-width: 0;
+  border-bottom-width: 0;
+  border-right-width: 0;
+}
+
+.vippay-body .vip-paymode {
+  text-align: center;
+  border: 0;
+  color: #37b97d;
+}
+
+.course-setting .item-button {
+  border: 0;
+  margin-top: 1px;
+  padding-right: 16px;
 }
 
 .slide-in-down {
