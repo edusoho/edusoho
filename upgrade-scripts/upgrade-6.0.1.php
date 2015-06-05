@@ -10,6 +10,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $this->updateScheme();
+            $this->removeClassroomPlugin();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -32,10 +33,22 @@ class EduSohoUpgrade extends AbstractUpdater
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
     }
 
+    private function removeClassroomPlugin()
+    {
+        ///删除班级插件
+
+        $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../plugins/Classroom");
+        $filesystem = new Filesystem();
+
+        if (!empty($dir)) {
+            $filesystem->remove($dir);
+        }
+    }
+
     private function updateScheme()
     {
         $connection = $this->getConnection();
-        ///TODO：删除classroom插件
+
         ///各个默认主题的编辑区
         $connection->exec("UPDATE `block` SET `code` = 'default-b:home_top_banner' WHERE `code` = 'home_top_banner';");
         $connection->exec("INSERT INTO `block`( `userId`, `title`, `mode`, `template`, `templateName`, `templateData`, `content`, `code`, `meta`, `data`, `tips`, `createdTime`, `updateTime`, `category`) select `userId`, `title`, `mode`, `template`, `templateName`, `templateData`, `content`, 'default-c:home_top_banner', `meta`, `data`, `tips`, `createdTime`, `updateTime`, `category` from `block` where `code`='default-b:home_top_banner';");
@@ -45,6 +58,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         ///TODO：老课程复制的内容
 
+
+        ///数据升级
         $connection->exec("UPDATE status set courseId=objectId where objectType='course';");
         $connection->exec("UPDATE status s set s.courseId=(select courseId from course_lesson where id=s.objectId) where s.objectType='lesson';");
 

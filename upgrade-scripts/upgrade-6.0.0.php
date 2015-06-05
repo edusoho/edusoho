@@ -321,6 +321,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if(!$this->isCrontabJobExist("DeleteSessionJob")){
             $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\Service\\User\\Job\\DeleteSessionJob','','',".time().",0,0,0)");
         }
+
+        ///删除classroom插件
+        $connection->exec("DELETE from cloud_app where code='Classroom';");
     }
 
     protected function isFieldExist($table, $filedName)
