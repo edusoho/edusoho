@@ -993,19 +993,4 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         return array_values($this->filterUsersFiled($users));
     }
-
-    public function sendPushMsg() {
-        $toId = $this->getParam("toId");
-        $content = $this->getParam("content");
-        $title = $this->getParam("title");
-
-        // $push = new XingeApp(2100112657, '6ba7b4fca242b1cbe2ed0b117f559e29');
-        // $mess = new Message();
-        // $mess->setTitle($title);
-        // $mess->setContent($content);
-        // $mess->setType(Message::TYPE_MESSAGE);
-        // $ret = $push->PushSingleAccount(0,$toId, $mess);
-        // return $ret;
-        return XingeApp::PushAccountAndroid(2100112657, "6ba7b4fca242b1cbe2ed0b117f559e29", $title, $content, $toId);
-    }
 }
