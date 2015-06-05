@@ -1,10 +1,13 @@
 <ion-view>
   <ion-content class="padding content-padding">
     <div class="list sign">
-      <label class="item item-input">
+      <a class="item item-input">
         <span class="input-label">手机号</span>
-        <input type="text" placeholder="手机号" ng-blur="nkstyle=''" ng-focus="nkstyle='active'" ng-model="user.phone" ng-class="nkstyle">
-      </label>
+        <input type="text" maxlength="14" placeholder="手机号" ng-blur="nkstyle=''" ng-focus="nkstyle='active'" ng-model="user.phone" ng-class="nkstyle">
+        <button class="button button-green button-small button-code" ng-click="sendSmsCode(user.phone)">
+          发送验证码
+        </button>
+      </a>
       <label class="item item-input">
         <span class="input-label">验证码</i></span>
         <input type="password"  placeholder="密码" ng-blur="codestyle=''" ng-model="user.code" ng-focus="codestyle='active'" ng-class="codestyle">

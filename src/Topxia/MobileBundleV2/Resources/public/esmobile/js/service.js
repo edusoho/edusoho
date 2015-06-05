@@ -76,6 +76,18 @@ service('CouponService', ['httpService', function(httpService) {
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
 
+	this.smsSend = function(params, callback) {
+		httpService.post({
+			url : app.host + '/mapi_v2/User/smsSend',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+			},
+			error : function(data) {
+			}
+		});
+	}
+
 	this.getCourseTeachers = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/User/getCourseTeachers',
@@ -88,13 +100,30 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 		});
 	}
 
+	this.regist = function(params, callback) {
+		httpService.post({
+			url : app.host + '/mapi_v2/User/regist',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+				if (data.data) {
+					applicationProvider.setUser(data.data.user, data.data.token);
+				}
+			},
+			error : function(data) {
+			}
+		});
+	}
+
 	this.login = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/login',
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				applicationProvider.setUser(data.data.user, data.data.token);
+				if (data.data) {
+					applicationProvider.setUser(data.data.user, data.data.token);
+				}
 			},
 			error : function(data) {
 			}
@@ -321,7 +350,7 @@ service('SchoolService', ['httpService', function(httpService) {
 	this.getVipPayInfo = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/School/getVipPayInfo", arguments);
 	}
-	
+
 	this.getSchoolVipList = function(params, callback) {
 		httpService.simpleGet('/mapi_v2/School/getSchoolVipList', arguments);
 	}
@@ -352,7 +381,7 @@ service('SchoolService', ['httpService', function(httpService) {
 		});
 	}
 }]).
-service('httpService', ['$http', function($http) {
+service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 	this.options = {};
 
 	this.simpleGet = function(url) {

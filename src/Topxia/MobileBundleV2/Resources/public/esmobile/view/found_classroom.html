@@ -1,5 +1,5 @@
 <ion-view>
-  <ion-content class="padding content-padding">
+  <ion-content class="found-body content-padding">
     
     <ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide ng-repeat="banner in banners"  slide-init>
@@ -16,15 +16,19 @@
 		    <a class="item item-thumbnail-left" href="#" ng-repeat="classRoom in classRooms">
 		      <img src="{{ classRoom.middlePicture | coverPic}}">
 		      <h2>{{ classRoom.title }}</h2>
-		      <p class="bottom">
-		      	<span>
-				      <i class="iconfont icon-person"></i>
-				      {{ classRoom.studentNum }}
-				</span>
+		      <p class="bottom price-body">
 		      	
-		      	<span class="price light-color ">
-				      {{ classRoom.price | formatPrice}}
-				</span>
+		      	<span class="origin-price">
+			      {{ classRoom.price | formatPrice }}
+			      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
+			      	{{ classRoom.originPrice | formatPrice }}
+			      </s>
+			</span>
+
+			<span class="right">
+			      <i class="iconfont icon-person"></i>
+			      {{ classRoom.studentNum }}人在学
+			</span>
 		      </p>
 		    </a>
 		</div>

@@ -426,7 +426,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createMetaAndData(null, 500, '密码格式不正确');
             }
             $user = $this->controller->getAuthService()->register(array(
-                'emailOrMobile' => $email,
+                'email' => $email,
                 'nickname' => $nickname,
                 'password' => $password
             ));

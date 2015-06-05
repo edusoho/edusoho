@@ -7,9 +7,10 @@
 	</ion-tabs>
       	<ion-pane ng-show="selectedIndex == 0">
                   <div class="list lesson-list">
-
+                  		  <list-empty-view class="lesson-empty" data="lessons" title="暂无课时">
+              		  </list-empty-view>
 			  <a class="item" ng-class="lesson.type" ng-repeat="lesson in lessons">
-			    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
+			    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-roundcheck"></i></span>
 	
 			    <span class="lesson-body">
 			    	<span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
@@ -19,6 +20,11 @@
 			  </a>
 
 		</div>
+		<ion-infinite-scroll
+		   ng-if="! lessons"
+		   class="active"
+		   distance="1%">
+	      </ion-infinite-scroll>
 	</ion-pane>
 	<ion-pane ng-show="selectedIndex == 1">
   		<div class="body">

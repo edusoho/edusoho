@@ -7,8 +7,31 @@
   -webkit-transition: all 0.2s ease-in-out 200ms;
 }
 
+
 .bar-header {
   height: 56px;
+}
+.bar-positive {
+  background-color: #fff ! important;
+  border-color:#fff ! important;
+}
+
+.bar-positive>a:first-child {
+  line-height: 38px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-color: transparent;
+  padding: 0;
+}
+
+.bar-positive .button, .title{
+  color: #37b97d ! important;
+}
+
+.bar-positive i{
+  font-size: 24px;
 }
 
 .tabs-hide>.tabs {
@@ -65,7 +88,7 @@
 }
 
 .tab-item .icon {
-  font-size: 28px;
+  font-size: 18px;
   padding-top: 8px;
 }
 
@@ -109,7 +132,7 @@
 .bar.bar-positive {
   border-color: #37b97d;
   background-color: #37b97d;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   color: #fff;
 }
 
@@ -155,6 +178,11 @@
 
 /*menu-content*/
 
+.menu-content {
+  background-size: 100%, 100%;
+  background-image: url("../img/drawer_bg.png");
+}
+
 .menu-content a {
   margin: 0;
   border-right-width: 0;
@@ -163,12 +191,30 @@
 }
 
 .menu-content .item  {
+  color: #fff;
+  background : none;
   padding-left: 70px;
   font-size: 16px;
 }
 
 .menu-content .list  {
-  padding: 8px;
+  background:none;
+  padding: 20px;
+}
+
+.menu-content h3{
+  color: #999;
+  font-size: 16px;
+}
+
+.menu-content p{
+  color: #97989a;
+  font-size: 16px;
+}
+
+.menu-content .button.button-block {
+  height: 44px;
+  line-height: 44px;
 }
 
 .menu-content .item-icon-left  {
@@ -181,16 +227,23 @@
 }
 
 .menu-content .item-avatar{
-  height: 96px;
+  height: 110px;
   padding-left: 102px;
   padding-top: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .menu-content .item-avatar>img:first-child{
-  left : 32px;
-  max-width: 56px;
-  max-height: 56px;
+  left : 8px;
+  max-width: 70px;
+  max-height: 70px;
+}
+
+/* found-course */
+.found-body .slider {
+  background: #f7f7f7;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 /* setting */
@@ -463,6 +516,10 @@
   background: #37b97d;
 }
 
+.regist-card .tab-item{
+  border-bottom-width: 0px ! important;
+}
+
 /*
   login
 */
@@ -510,7 +567,7 @@ recommendCourse style --
 .item-thumbnail-left .page-pic {
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: 16px;
   max-width: 120px;
   max-height: 80px;
   width: 100%;
@@ -534,19 +591,27 @@ recommendCourse style --
   background-color: #e83939;
 }
 
-.discount-price {
-  color: #ed6161;
-}
-
-.discount-price .origin-price {
-  color: #cacaca;
-  margin-right: 10px;
-}
 
 /* course-card*/ 
 
-.course-card .price {
+.course-card .price-body {
+  color: #bbb;
+  font-size: 9px;
+}
+
+.course-card .discount-color {
+  font-size: 9px;
+  color: #bbb;
+}
+
+.course-card .right {
   float: right;
+}
+
+.course-card .origin-price {
+  color: #37b97d;
+  font-size: 16px;
+  margin-right: 10px;
 }
 
 .course-card .list {
@@ -559,7 +624,8 @@ recommendCourse style --
 }
 
 .course-card h4 {
-  padding-left: 10px;
+  font-size: 16px;
+  padding-left: 16px;
 }
 
 .course-card .more {
@@ -601,6 +667,10 @@ modal
 /* sign */
 .sign .input-label {
   width: 5%;
+}
+
+.sign .button-code {
+  margin-left: 55%;
 }
 
 .sign .item {
@@ -713,6 +783,10 @@ modal
   padding: 0;
 }
 
+.course-head .mask span {
+  display: inline-block;
+}
+
 .mask.learned a {
     position: relative;
     padding: 8px;
@@ -757,13 +831,13 @@ modal
 }
 
 .course-body .discount-type.type {
-  background: #3798F5;
-  border: solid 1px #3798F5;
+  background: #7db0ef;
+  border: solid 1px #7db0ef;
 }
 
 .course-body .discount-type.discount {
-  background: #F55252;
-  border: solid 1px #F55252;
+  background: #f47878;
+  border: solid 1px #f47878;
 }
 
 .course-body .item-body p {
@@ -889,6 +963,10 @@ modal
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
+.course-bar i{
+  font-size: 20px;
+}
+
 .course-tools .course-favorited {
   color: #F2263D;
 }
@@ -907,6 +985,10 @@ modal
 
 .course-tab-content .item-text-wrap {
   border: 0;
+}
+
+.course-tab-content .lesson-empty .list-empty {
+  padding-top: 30%;
 }
 
 .course-tab-content h5 {
@@ -1092,6 +1174,7 @@ modal
 }
 
 .vippay-body .tabs .tab-item {
+  opacity: 1;
   display: inline-block;
   border: solid 1px #ddd;
   height: 30px;

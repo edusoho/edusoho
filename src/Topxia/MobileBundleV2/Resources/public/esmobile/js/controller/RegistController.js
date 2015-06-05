@@ -1,6 +1,6 @@
-app.controller('RegistController', ['$scope', '$http', '$ionicHistory', RegistController]);
+app.controller('RegistController', ['$scope', '$http', '$ionicHistory', 'UserService', RegistController]);
 
-function RegistController($scope, $http, $ionicHistory)
+function RegistController($scope, $http, $ionicHistory, UserService)
 {
 	console.log("RegistController");
 
@@ -11,12 +11,25 @@ function RegistController($scope, $http, $ionicHistory)
 	};
 
 	$scope.checkCode = function(code) {
-		return false;
+		return !code || code.length == 0;
 	};
 
 	$scope.checkEmail = function(code) {
 		return false;
 	};
+
+	$scope.sendSmsCode = function(phone) {
+		if (!parseInt(phone)) {
+			alert("手机格式不正确!");
+			return;
+		}
+
+		UserService.smsSend({
+			phoneNumber : phone
+		}, function(data) {
+			$scope.toast(data.meta.message);
+		});
+	}
 
 	$scope.registWithPhone = function(user) {
 		if (!parseInt(user.phone)) {
@@ -28,10 +41,25 @@ function RegistController($scope, $http, $ionicHistory)
 			return;
 		}
 
-		if (!$scope.checkCode(user.code)) {
+		if ($scope.checkCode(user.code)) {
 			alert("验证码不正确!");
 			return;
 		}
+
+		UserService.regist({
+			phone : user.phone,
+			smsCode : user.code,
+			password : user.password,
+		}, function(data) {
+			if (data.meta.code == 500) {
+				$scope.toast(data.meta.message);
+				return;
+			}
+			$ionicLoading.hide();
+			$scope.jumpToMain();
+		}, function(error) {
+			$scope.toast("注册失败");
+		});
 	}
 
 	$scope.registWithEmail = function(user) {
@@ -43,5 +71,19 @@ function RegistController($scope, $http, $ionicHistory)
 			alert("密码格式不正确!");
 			return;
 		}
+
+		UserService.regist({
+			email : user.email,
+			password : user.password,
+		}, function(data) {
+			if (data.meta.code == 500) {
+				$scope.toast(data.meta.message);
+				return;
+			}
+			$ionicLoading.hide();
+			$scope.jumpToMain();
+		}, function(error) {
+			$scope.toast("注册失败");
+		});
 	}
 }
