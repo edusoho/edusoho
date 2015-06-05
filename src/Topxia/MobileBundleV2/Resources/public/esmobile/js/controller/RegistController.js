@@ -41,7 +41,7 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 			return;
 		}
 
-		if (!$scope.checkCode(user.code)) {
+		if ($scope.checkCode(user.code)) {
 			alert("验证码不正确!");
 			return;
 		}
