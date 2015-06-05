@@ -40,15 +40,12 @@ class CourseController extends BaseController
             $userIds = array_merge($userIds, $course['teacherIds']);
         }
 
-        list($mapping, $classrooms) = $this->_findCoursesInClassrooms($courseIds);
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("ClassroomBundle:ClassroomManage/Course:course-pick-modal.html.twig", array(
             'users' => $users,
             'courses' => $courses,
             'classroomId' => $classroomId,
-            'mapping' => $mapping,
-            'classrooms' => $classrooms,
             'paginator' => $paginator,
         ));
     }
