@@ -1,0 +1,24 @@
+/* android */
+
+.tabs-android>.tabs, .tabs.tabs-top
+{
+  top: 56px;
+}
+
+.bar.bar-header{
+  height: 56px;
+  line-height: 56px;
+}
+
+.platform-android .title {
+  height: 56px;
+  line-height: 56px ! important;
+}
+
+.ionic-scroll.has-tabs-top {
+	top: 105px;
+}
+
+.bar .button.button-icon:before {
+	line-height: 46px;
+}
