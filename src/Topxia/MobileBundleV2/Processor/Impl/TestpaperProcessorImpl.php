@@ -209,11 +209,15 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	            $course = $this->controller->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
 	            if ($this->getTestpaperService()->isExistsEssay($testResults)) {
-	            	$userUrl = $this->controller->generateUrl('user_show', array('id'=>$user['id']), true);
-                		$teacherCheckUrl = $this->controller->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
-
+                	$message = array(
+                		'id'=>$testpaperResult['id'],
+            			'name' => $testpaperResult['paperName'],
+            			'userId' =>$user['id'],
+            			'userName' =>$user['nickname'],
+            			'type' => 'perusal'
+            		);	
 		            foreach ($course['teacherIds'] as $receiverId) {
-		                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+		                $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
 		            }
 	            }
 

@@ -53,8 +53,11 @@ class LiveNotifyCommand extends BaseCommand
 		      }
 
 		      $minStartTime = date("Y-m-d H:i:s",$minStartTime[0]['startTime']);
+		      $message = array(
+		      	'noticeDay' => $noticeDay,
+		      	'minStartTime' => $minStartTime);
 
-		      $this->getNotificationService()->notify($value['userId'], $type="default",  $content = "【直播】您正在学习的《课程名称课程名称》即将于 {$noticeDay}{$minStartTime} 开始直播，请安排好时间准时参加。");
+		      $this->getNotificationService()->notify($value['userId'], "live-course",  $message);
 		    }
 
 		  	$output->writeln('<info>消息发布完成</info>');
