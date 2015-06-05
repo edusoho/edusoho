@@ -69,7 +69,7 @@
       <div class="course-card">
           <div class="list">
             
-              <list-empty-view data="courses">
+              <list-empty-view data="courses" title="该分类下暂时没有课程">
               </list-empty-view>
               
               <a href="#/course/{{ course.id }}" class="item item-thumbnail-left" ng-repeat="course in courses track by course.id">

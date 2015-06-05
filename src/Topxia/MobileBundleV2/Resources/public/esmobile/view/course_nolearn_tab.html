@@ -7,7 +7,8 @@
 	</ion-tabs>
       	<ion-pane ng-show="selectedIndex == 0">
                   <div class="list lesson-list">
-
+                  		  <list-empty-view data="lessons" title="暂无课时">
+              		  </list-empty-view>
 			  <a class="item" ng-class="lesson.type" ng-repeat="lesson in lessons">
 			    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-roundcheck"></i></span>
 	
