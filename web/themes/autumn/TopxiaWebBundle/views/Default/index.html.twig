@@ -214,7 +214,7 @@
       {% endif %}
       
       {# 讲师团 #}
-      {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
+      {% set teachers = data('RecommendTeachers',{'count':'3','userId':app.user.id}) %}
       {% if teachers %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">

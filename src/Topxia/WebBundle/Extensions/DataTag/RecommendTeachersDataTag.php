@@ -29,12 +29,17 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
         
     	$users = $this->getUserService()->searchUsers($conditions, array('promotedTime', 'DESC'), 0, $arguments['count']);
 
+        $user = $this->getUserService()->getUser($arguments['userId']);
+        
         $profiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users,'id'));
+        $Myfollowings = $this->getUserService()->filterFollowingIds($user['id'], ArrayToolkit::column($users, 'id'));
 
         foreach ($users as $key => $user) {
             if ($user['id'] == $profiles[$user['id']]['id']) {
                 $users[$key]['about'] = $profiles[$user['id']]['about'];
+                $users[$key]['profile'] = $profiles[$user['id']];
             }
+            $users[$key]['isFollowed'] = in_array($user['id'],$Myfollowings) ? 1 : 0;
         }
 
         return $this->unsetUserPasswords($users);
