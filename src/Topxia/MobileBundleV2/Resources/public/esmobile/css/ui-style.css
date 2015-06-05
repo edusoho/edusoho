@@ -979,6 +979,10 @@ modal
   border: 0;
 }
 
+.course-tab-content .lesson-empty .list-empty {
+  padding-top: 30%;
+}
+
 .course-tab-content h5 {
   padding-left: 16px;
   padding-right: 16px;

@@ -95,7 +95,7 @@ directive('listEmptyView', function () {
       var html = '<div class="list-empty">' + 
       '<a> <i class="icon iconfont icon-ebook"></i> <span>' + attrs.title + '</span> </a>' +
       '</div>';
-      scope.$watch("courses", function(newValue) {
+      scope.$watch(attrs.data, function(newValue) {
         if (newValue && newValue.length == 0) {
           element.html(html);
         } else {

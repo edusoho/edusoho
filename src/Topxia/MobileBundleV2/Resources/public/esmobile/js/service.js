@@ -88,13 +88,30 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 		});
 	}
 
+	this.regist = function(params, callback) {
+		httpService.post({
+			url : app.host + '/mapi_v2/User/regist',
+			params : params,
+			success : function(data, status, headers, config) {
+				callback(data);
+				if (data.data) {
+					applicationProvider.setUser(data.data.user, data.data.token);
+				}
+			},
+			error : function(data) {
+			}
+		});
+	}
+
 	this.login = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/login',
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				applicationProvider.setUser(data.data.user, data.data.token);
+				if (data.data) {
+					applicationProvider.setUser(data.data.user, data.data.token);
+				}
 			},
 			error : function(data) {
 			}

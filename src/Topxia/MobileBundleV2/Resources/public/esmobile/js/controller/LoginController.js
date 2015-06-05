@@ -25,6 +25,10 @@ function LoginController($scope, UserService, $state, $ionicLoading)
     			"_username": user.username,
 			"_password" : user.password
     		}, function(data) {
+    			if (data.meta.code == 500) {
+				$scope.toast(data.meta.message);
+				return;
+			}
 			$ionicLoading.hide();
 			$scope.jumpToMain();
     		});

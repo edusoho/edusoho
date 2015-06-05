@@ -1,6 +1,6 @@
-app.controller('RegistController', ['$scope', '$http', '$ionicHistory', RegistController]);
+app.controller('RegistController', ['$scope', '$http', '$ionicHistory', 'UserService', RegistController]);
 
-function RegistController($scope, $http, $ionicHistory)
+function RegistController($scope, $http, $ionicHistory, UserService)
 {
 	console.log("RegistController");
 
@@ -43,5 +43,19 @@ function RegistController($scope, $http, $ionicHistory)
 			alert("密码格式不正确!");
 			return;
 		}
+
+		UserService.regist({
+			email : user.email,
+			password : user.password,
+		}, function(data) {
+			if (data.meta.code == 500) {
+				$scope.toast(data.meta.message);
+				return;
+			}
+			$ionicLoading.hide();
+			$scope.jumpToMain();
+		}, function(error) {
+
+		});
 	}
 }

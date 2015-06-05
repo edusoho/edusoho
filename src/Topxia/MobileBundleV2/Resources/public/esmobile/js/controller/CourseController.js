@@ -55,7 +55,8 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       $scope.discount = data.discount;
 
       if (data.member) {
-        $scope.learnProgress = (data.member.learnedNum / data.course.lessonNum * 100) + "%" ;
+        var progress = data.course.lessonNum == 0 ? 0 : data.member.learnedNum / data.course.lessonNum;
+        $scope.learnProgress = (progress * 100) + "%" ;
       }
       $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
       $scope.hideLoad();
