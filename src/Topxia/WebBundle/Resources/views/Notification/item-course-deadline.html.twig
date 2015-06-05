@@ -8,7 +8,7 @@
       您加入的课程<a href='{{path('course_show',{id:data.courseId})}}'>《{{data.courseTitle}}》</a>将在{{data.endtime}}到期。
     </div>
     <div class="notification-footer">
-      {{ notification.createdTime | date('Y-n-d H:i:s') }}
+     {{ notification.createdTime|data_format }}  
     </div>
   </div>
 </li>

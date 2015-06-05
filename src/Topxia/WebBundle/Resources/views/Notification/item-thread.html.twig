@@ -11,7 +11,7 @@
       <a href="{{ path('course_thread_show', {courseId:data.courseId, threadId:data.threadId}) }}"  target="_blank">{{ data.threadTitle|purify_html }}</a>。
     </div>
     <div class="notification-footer">
-      {{ notification.createdTime | date('Y-n-d H:i:s') }}
+     {{ notification.createdTime|data_format }}  
     </div>
   </div>
 </li>
