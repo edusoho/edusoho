@@ -15,7 +15,10 @@ function CourseSettingController($scope, $stateParams, CourseService, $ionicHist
       $scope.hideLoad();
       if (data.meta.code == 200) {
         $ionicHistory.goBack();
-        $scope.$emit("refresh");
+        setTimeout(function() {
+          $scope.$emit("refresh", {});
+        }, 10);
+        
       } else {
         $scope.toast(data.meta.message);
       }
@@ -44,7 +47,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       courseId : $stateParams.courseId,
       token : $scope.token
     }, function(data) {
-      console.log(data);
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
       $scope.course = data.course;
@@ -175,6 +177,7 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   	};
 
   	$scope.loadCourseList = function(sort, callbackType) {
+           $scope.showLoad();
   		CourseService.searchCourse({
   			limit : 10,
 			start: $scope.start,
@@ -182,11 +185,17 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
 			sort : sort,
                  type : $stateParams.type
   		}, function(data) {
+                $scope.hideLoad();
   			if (!data || data.data.length == 0 ) {
 	    			$scope.canLoad = false;
 	    		}
 
-	    		$scope.courses = $scope.courses ? $scope.courses.concat(data.data) : data.data;
+                $scope.courses = $scope.courses || [];
+                for (var i = 0; i < data.data.length; i++) {
+                  $scope.courses.push(data.data[i]);
+                };
+
+	    		//$scope.courses = $scope.courses ? $scope.courses.concat(data.data) : data.data;
 	    		$scope.start += data.limit;
 
 	    		$scope.$broadcast(callbackType);
@@ -196,7 +205,6 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   	$scope.courseListSorts = CourseUtil.getCourseListSorts();
   	$scope.courseListTypes = CourseUtil.getCourseListTypes();
 
-
   	CategoryService.getCategorieTree(function(data) {
 		$scope.categoryTree = data;
 	});
@@ -204,12 +212,14 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   	$scope.selectType = function(type) {
   		clearData();
            $stateParams.type  = type;
-           $scope.loadCourseList($scope.sort, callbackType.infinite);
+           setTimeout(function(){
+              $scope.loadCourseList($scope.sort, callbackType.infinite);
+           }, 100);
   	}
 
   	function clearData() {
-  		$scope.courses = [];
-  		$scope.start = 0;
+              $scope.start = 0;
+              $scope.courses = null;
   	}
 
   	$scope.selectSort = function(sort) {
@@ -227,7 +237,6 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
   		clearData();
            $stateParams.type = null;
            $stateParams.categoryId  =category.id;
-  		$scope.loadCourseList($scope.sort, callbackType.infinite);
+           $scope.loadCourseList($scope.sort, callbackType.infinite);
   	}
-
 }

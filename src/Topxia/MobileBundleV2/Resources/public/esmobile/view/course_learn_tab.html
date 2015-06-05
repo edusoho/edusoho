@@ -8,17 +8,22 @@
         <ion-pane ng-show="selectedIndex == 0">
                  <div class="list lesson-list">
 
-                  <a class="item {{ lesson.type }}" ng-class="learnStatuses[lesson.id] == 'finished' ? 'activated' : '' " ng-repeat="lesson in lessons">
-                    <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
-            
-                    <span class="lesson-body">
-                      <span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
-                      
-                      <span class="lesson-length">{{ lesson.length }}</span>
-                    </span>
-                  </a>
+                    <a class="item {{ lesson.type }}" ng-class="learnStatuses[lesson.id] == 'finished' ? 'activated' : '' " ng-repeat="lesson in lessons">
+                      <span class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' "><i class="iconfont icon-help"></i></span>
+              
+                      <span class="lesson-body">
+                        <span class="lesson-title">{{ lesson | formatChapterNumber }} {{ lesson.title }}</span>
+                        
+                        <span class="lesson-length">{{ lesson.length }}</span>
+                      </span>
+                    </a>
 
-              </div> 
+              </div>
+              <ion-infinite-scroll
+               ng-if="! lessons || lessons.length == 0"
+               class="active"
+               distance="1%">
+              </ion-infinite-scroll>
         </ion-pane>
   <ion-pane ng-show="selectedIndex == 1">
       <div class="body">

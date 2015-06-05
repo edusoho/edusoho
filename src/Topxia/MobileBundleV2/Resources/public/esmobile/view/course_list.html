@@ -67,21 +67,22 @@
 
       <div class="course-card">
           <div class="list">
+            
               <list-empty-view data="courses">
               </list-empty-view>
-
-              <a href="#/course/{{ course.id }}" class="item item-thumbnail-left" ng-repeat="course in courses">
+              
+              <a href="#/course/{{ course.id }}" class="item item-thumbnail-left" ng-repeat="course in courses track by course.id">
                 <img src="{{ course.middlePicture | coverPic}}">
                 <h2>{{ course.title }}</h2>
                 <p class="bottom">
                   <span>
                     <i class="iconfont icon-person"></i>
-                    {{ course.studentNum }}
-              </span>
+                          {{ course.studentNum }}
+                    </span>
                   
                   <span class="price light-color ">
-                    {{ course.price | formatPrice}}
-              </span>
+                        {{ course.price | formatPrice}}
+                  </span>
                 </p>
               </a>
           </div>

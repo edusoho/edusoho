@@ -80,7 +80,6 @@ function VipListController($scope, $stateParams, SchoolService)
 	SchoolService.getSchoolVipList({
 		userId : $scope.user.id
 	}, function(data) {
-		console.log(data);
 		$scope.data = data.data;
 	});
 }

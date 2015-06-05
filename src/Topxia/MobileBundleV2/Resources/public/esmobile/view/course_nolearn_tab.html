@@ -19,6 +19,11 @@
 			  </a>
 
 		</div>
+		<ion-infinite-scroll
+		   ng-if="! lessons || lessons.length == 0"
+		   class="active"
+		   distance="1%">
+	      </ion-infinite-scroll>
 	</ion-pane>
 	<ion-pane ng-show="selectedIndex == 1">
   		<div class="body">

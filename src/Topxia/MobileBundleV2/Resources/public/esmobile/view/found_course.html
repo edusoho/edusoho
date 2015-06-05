@@ -1,5 +1,5 @@
 <ion-view>
-  <ion-content class="padding content-padding">
+  <ion-content class="content-padding">
     
     <ion-slide-box on-slide-changed="slideHasChanged($index)">
 	  <ion-slide ng-repeat="banner in banners"  slide-init>
@@ -23,16 +23,17 @@
 		      </div>
 		      <h2>{{ recommendCourse.title }}</h2>
 		      <p class="bottom">
-		      	<span>
-			      <i class="iconfont icon-person"></i>
-			      {{ recommendCourse.studentNum }}
-			</span>
 		      	
-		      	<span class="price light-color" ng-class="recommendCourse.discountId > 0 ? 'discount-price' : ''">
-			      <s class="origin-price" ng-if="recommendCourse.discountId > 0">
+		      	<span class="origin-price">
+			      {{ recommendCourse.price | formatPrice }}
+			      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
 			      	{{ recommendCourse.originPrice | formatPrice }}
 			      </s>
-			      {{ recommendCourse.price | formatPrice }}
+			</span>
+
+			<span class="right">
+			      <i class="iconfont icon-person"></i>
+			      {{ recommendCourse.studentNum }}人在学
 			</span>
 		      </p>
 		    </a>

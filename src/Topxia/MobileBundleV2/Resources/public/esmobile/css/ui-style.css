@@ -151,6 +151,11 @@
 
 /*menu-content*/
 
+.menu-content {
+  background-size: 100%, 100%;
+  background-image: url("../img/drawer_bg.png");
+}
+
 .menu-content a {
   margin: 0;
   border-right-width: 0;
@@ -159,12 +164,30 @@
 }
 
 .menu-content .item  {
+  color: #fff;
+  background : none;
   padding-left: 70px;
   font-size: 16px;
 }
 
 .menu-content .list  {
-  padding: 8px;
+  background:none;
+  padding: 20px;
+}
+
+.menu-content h3{
+  color: #999;
+  font-size: 16px;
+}
+
+.menu-content p{
+  color: #97989a;
+  font-size: 16px;
+}
+
+.menu-content .button.button-block {
+  height: 44px;
+  line-height: 44px;
 }
 
 .menu-content .item-icon-left  {
@@ -177,16 +200,16 @@
 }
 
 .menu-content .item-avatar{
-  height: 96px;
+  height: 110px;
   padding-left: 102px;
   padding-top: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .menu-content .item-avatar>img:first-child{
-  left : 32px;
-  max-width: 56px;
-  max-height: 56px;
+  left : 8px;
+  max-width: 70px;
+  max-height: 70px;
 }
 
 /* setting */

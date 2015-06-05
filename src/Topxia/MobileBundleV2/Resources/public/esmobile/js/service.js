@@ -321,7 +321,7 @@ service('SchoolService', ['httpService', function(httpService) {
 	this.getVipPayInfo = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/School/getVipPayInfo", arguments);
 	}
-	
+
 	this.getSchoolVipList = function(params, callback) {
 		httpService.simpleGet('/mapi_v2/School/getSchoolVipList', arguments);
 	}
@@ -352,7 +352,7 @@ service('SchoolService', ['httpService', function(httpService) {
 		});
 	}
 }]).
-service('httpService', ['$http', function($http) {
+service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 	this.options = {};
 
 	this.simpleGet = function(url) {

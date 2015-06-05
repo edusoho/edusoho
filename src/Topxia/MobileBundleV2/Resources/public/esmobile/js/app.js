@@ -3,7 +3,8 @@ var app = angular.module('EduSohoApp', [
     	       'AppService',
             'AppFactory',
             'AppProvider',
-            'ngSideView'
+            'ngSideView',
+            'pasvaz.bindonce'
 	]);
 
 app.viewFloder = "/bundles/topxiamobilebundlev2/esmobile/";
