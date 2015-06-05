@@ -290,7 +290,15 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
 
                 $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
                 
-                $this->getNotificationService()->notify($member['userId'], 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>加入班级<strong>{$targetObject['title']}</strong>成为正式学员");
+
+                $message = array(
+                    'classroomId' => $targetObject['id'], 
+                    'classroomTitle' => $targetObject['title'],
+                    'userId'=> $currentUser['id'],
+                    'userName' => $currentUser['nickname'],
+                    'opration' => 'create');
+
+                $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
                 $this->getLogService()->info('classroom', 'add_student', "班级《{$targetObject['title']}》(#{$targetObject['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加");
             }

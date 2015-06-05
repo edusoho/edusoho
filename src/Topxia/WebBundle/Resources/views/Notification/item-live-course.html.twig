@@ -5,8 +5,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      您的{% if data.threadType == 'question' %}问题{% else %}话题{% endif %}
-      <a href="{{ path('course_thread_show', {courseId:data.courseId, threadId:data.threadId}) }}#post-{{ data.postId }}"  target="_blank"><strong>{{ data.threadTitle|purify_html  }}</strong></a> 有了<strong>{{ data.postUserNickname }}</strong>的新回复。
+  	  【直播】您正在学习的《课程名称课程名称》即将于 {{data.noticeDay}}{{data.minStartTime}}开始直播，请安排好时间准时参加。
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|data_format }}  

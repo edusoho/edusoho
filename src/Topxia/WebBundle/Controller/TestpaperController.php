@@ -307,11 +307,15 @@ class TestpaperController extends BaseController
             if ($this->getTestpaperService()->isExistsEssay($testResults)) {
                 $user = $this->getCurrentUser();
 
-                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
-
+                $message = array(
+                    'id'=>$testpaperResult['id'],
+                    'name' => $testpaperResult['paperName'],
+                    'userId' =>$user['id'],
+                    'userName' =>$user['nickname'],
+                    'type' => 'perusal'
+                );  
                 foreach ($course['teacherIds'] as $receiverId) {
-                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+                    $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
                 }
             }
 
@@ -354,10 +358,15 @@ class TestpaperController extends BaseController
 
             $user = $this->getCurrentUser();
 
-            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-            $testpaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$testpaperResult['id']), true);
+            $message = array(
+                'id'=>$testpaperResult['id'],
+                'name' => $testpaperResult['paperName'],
+                'userId' =>$user['id'],
+                'userName' =>$user['nickname'],
+                'type' => 'read'
+            );  
 
-            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$testpaperResult['paperName']} ，<a href='{$testpaperResultUrl}' target='_blank'>请点击查看结果</a>");
+            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'test-paper', $message);
             
             return $this->createJsonResponse(true);
         }

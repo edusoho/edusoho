@@ -225,6 +225,10 @@ classroom_course_lessons_preview:
     pattern: /classroom/{classroomId}/course/{courseId}/lessons/preview
     defaults: { _controller: ClassroomBundle:Course/Lesson:preview }
 
+classroom_buy_hint:
+    pattern: /classroom/courses/{courseId}/buy/hint
+    defaults: { _controller: ClassroomBundle:Course/Lesson:buyHint }
+
 classrom_course_lessons_list:
     pattern: /classroom/{classroomId}/course/{courseId}/lessons/list
     defaults: { _controller: ClassroomBundle:Course/Lesson:list }
