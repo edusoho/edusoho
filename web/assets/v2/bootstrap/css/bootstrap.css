@@ -4153,9 +4153,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-brand {
   float: left;
-  padding: 15px 10px;
+  padding: 5px 15px;
   font-size: 18px;
-  line-height: 20px;
+  line-height: 40px;
   height: 50px;
 }
 .navbar-brand:hover,
@@ -4164,6 +4164,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-brand > img {
   display: block;
+  height: 40px;
+  width: auto;
 }
 @media (min-width: 768px) {
   .navbar > .container .navbar-brand,

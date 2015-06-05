@@ -35,8 +35,12 @@ class ClassroomAnnouncementProcessor implements AnnouncementProcessor
 
     	$result = false;
 		if ($members) {
+
+			$message = array('title'=> $targetObject['title'],
+				'url' => $targetObjectShowUrl,
+				'type'=>'classroom');
 			foreach ($members as $member) {
-        		$result = $this->getNotificationService()->notify($member['userId'], 'default', "【班级公告】你正在学习的<a href='{$targetObjectShowUrl}' target='_blank'>{$targetObject['title']}</a>发布了一个新的公告，<a href='{$targetObjectShowUrl}' target='_blank'>快去看看吧</a>");
+        		$result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
     		}
 		}
 		

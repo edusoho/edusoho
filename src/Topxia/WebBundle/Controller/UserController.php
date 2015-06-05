@@ -221,9 +221,10 @@ class UserController extends BaseController
 
         $this->getUserService()->unFollow($user['id'], $id);
 
-        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
-        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
-        $this->getNotificationService()->notify($id, 'default', $message);
+        $message = array('userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'unfollow');
+        $this->getNotificationService()->notify($id, 'user-follow', $message);
 
         return $this->createJsonResponse(true);
     }
@@ -236,9 +237,10 @@ class UserController extends BaseController
         }
         $this->getUserService()->follow($user['id'], $id);
 
-        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
-        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经关注了你！";
-        $this->getNotificationService()->notify($id, 'default', $message);
+        $message = array('userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'follow');
+        $this->getNotificationService()->notify($id, 'user-follow', $message);
 
         return $this->createJsonResponse(true);
     }

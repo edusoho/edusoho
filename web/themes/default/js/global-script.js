@@ -4,12 +4,6 @@ define(function(require, exports, module) {
  
     var resizeTimer;
 
-    $(".js-search").focus(function () {
-        $(this).prop("placeholder", "搜索").addClass("active");
-    }).blur(function () {
-        $(this).prop("placeholder", "").removeClass("active");
-    });
-
     var removeNavMobile = function(){
         $(".nav-mobile").removeClass("active");
         $(".html-mask").hide();

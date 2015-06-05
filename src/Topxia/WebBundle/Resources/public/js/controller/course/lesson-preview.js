@@ -95,6 +95,19 @@ define(function(require, exports, module) {
             }, 'json');
 		}
 
+
+        if($("#lesson-preview-flash").length>0){
+            var player = $("#lesson-preview-flash");
+            $.get(player.data('url'), function(response) {
+                var html = '<div id="lesson-swf-player" ></div>';
+                $("#lesson-preview-flash").html(html);
+                swfobject.embedSWF(response.mediaUri, 
+                    'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                    {wmode:'opaque',allowFullScreen:'true'});
+            });
+            player.css("height", '360px');
+        }
+
         if ($("#lesson-preview-doucment").length > 0) {
 
             var $player = $("#lesson-preview-doucment");

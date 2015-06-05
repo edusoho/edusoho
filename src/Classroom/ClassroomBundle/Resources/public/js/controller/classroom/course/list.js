@@ -8,8 +8,8 @@ define(function(require, exports, module) {
         Lazyload.init();
         var courseList = Widget.extend({
             events: {
-                'click .es-icon-keyboardarrowup': 'onExpandCourse',
-                'click .es-icon-keyboardarrowdown': 'onCollapseCourse'
+                'click .es-icon-keyboardarrowdown': 'onExpandCourse',
+                'click .es-icon-keyboardarrowup': 'onCollapseCourse'
             },
 
             setup: function() {
@@ -30,12 +30,12 @@ define(function(require, exports, module) {
                     });
                 }
                 
-                $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
+                $target.addClass('es-icon-keyboardarrowup').removeClass('es-icon-keyboardarrowdown');
             },
             onCollapseCourse: function(e) {
                 var $target = $(e.currentTarget);
                 this._lessonListSHow($target.parents(".media").siblings(".period-list"));
-                $target.addClass('es-icon-keyboardarrowup').removeClass('es-icon-keyboardarrowdown');
+                $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
             },
             _lessonListSHow: function($list) {
                 if ($list.length > 0) {
@@ -46,7 +46,6 @@ define(function(require, exports, module) {
                     });
                     $list.height();
                 }
-          
               
             },
             _initChapter: function(e) {

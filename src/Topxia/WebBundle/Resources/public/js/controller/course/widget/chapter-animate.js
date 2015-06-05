@@ -13,10 +13,8 @@ define(function(require, exports, module) {
         onClickChapter: function(e) {
             var $target = $(e.currentTarget);
             $target.nextUntil(".chapter").animate({
-                    // height:'toggle',
                     visibility: 'toggle',
                     opacity: 'toggle',
-                    // speed: 'fast',
                     easing: 'linear'
                 });
 

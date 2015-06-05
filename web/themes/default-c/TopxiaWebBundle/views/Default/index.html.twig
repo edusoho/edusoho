@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set bodyClass = 'homepage' %}
 
 {% block stylesheets %}
@@ -45,6 +45,7 @@
                         <i class="fa fa-user"></i>
                         {% for teacher in teachers %}
                           {% if loop.index <= 5%}
+                             {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
                              <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                            {% endif %}
                         {% endfor %}
@@ -218,7 +219,7 @@
       {{ render(controller('TopxiaWebBundle:Default:promotedTeacherBlock')) }}
 
       {# 学员动态 #}
-      {% set learns = data('PersonDynamic', {'count':5}) %}
+      {% set learns = data('LatestStatuses', {mode:'simple', count: 5}) %}
       {% if learns %}
         <div class="es-box status-side">
           <div class="es-box-heading">
@@ -227,106 +228,16 @@
             <div class="es-box-body">
               <ul class="media-list">
                 {% for learn in learns %}
-                  {% if learn.type == "finished_testpaper" %}
+
                   <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                    </a>
+                    {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
+
                     <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
+                      {{ web_macro.user_link(learn.user) }}
+                      {{ learn.message|raw }}
                     </div>
                   </li>
 
-                {% elseif learn.type == "finished_homework" %}
-                <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                  </a>
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
-                  </div>
-                </li>
-
-
-
-
-                {% elseif learn.type == "finished_exercise" %}
-                <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                  </a>
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
-                  </div>
-                </li>
-
-                  {% elseif learn.objectType == "course" and learn.type == "become_student" %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      加入了课程 {{learn.properties.course.title|plain_text(15)}}
-                    </div>
-                  </li>
-                  {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
-                    <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
-                    </div>
-                  </li>
-
-                      {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
-                       <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
-                    </div>
-                  </li>
- 
-                  
-                  {% elseif learn.type == "learned_lesson" %}
-                  <li class="media">
-                    <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                      <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                    </a>
-                    <div class="media-body">
-                      <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                      完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
-                    </div>
-                  </li>
-                  {% elseif learn.type == "favorite_course" %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        收藏了课程 {{learn.properties.course.title|plain_text(15)}}
-                      </div>
-                    </li>
-                    {% elseif learn.type == "start_learn_lesson" %}
-                    <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
-                      </a>
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
-                      </div>
-                    </li>
-                  {% endif %}
                 {% endfor %}
               </ul>
             </div>
@@ -362,6 +273,7 @@
 {% endblock %}
 
 {% macro course_lists(courses) %}
+  {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   {% set mode = mode|default('default') %}
   <ul class="course-wide-list">
     {% for course in courses %}
@@ -406,7 +318,7 @@
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
             <div class="teacher">
-              <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+              {{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
               <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               <span class="teacher-title ellipsis">{{ teacher.title }}</span>
             </div>
