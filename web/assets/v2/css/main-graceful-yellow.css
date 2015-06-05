@@ -2992,6 +2992,8 @@ textarea.form-control-o {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+.progress.progress-sm {
   height: 11px;
 }
 .label {

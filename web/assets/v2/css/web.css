@@ -4708,11 +4708,15 @@ a.homework-essay-textarea-pack-up{
  */
 
 .float-consult {
-    position: fixed;
-    right: 0;
-    top: 50%;
-    visibility: hidden;
-    z-index: 999999;
+  position: fixed;
+  right: 0;
+  top: 50%;
+  visibility: hidden;
+  z-index: 999999;
+}
+
+.float-consult .btn {
+  padding: 6px 8px;
 }
 
 .float-consult .popover {
