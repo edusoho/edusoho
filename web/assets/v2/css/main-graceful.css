@@ -238,6 +238,14 @@
 .mobile-download-panel .btn-lg .es-icon {
   font-size: 24px;
 }
+.homepage-feature {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
@@ -1302,7 +1310,8 @@ body.nav-active {
   display: block;
 }
 #content-container {
-  margin-top: 30px;
+  margin: 30px auto;
+  min-height: 500px;
 }
 a:hover,
 a:focus {
