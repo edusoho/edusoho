@@ -9,7 +9,7 @@ use Exception;
 
 class ClassroomUserImporterProcessor implements ImporterProcessor
 {
-	protected $necessaryFields = array('nickname' => '用户名');
+	protected $necessaryFields = array('nickname' => '用户名/邮箱');
 	protected $objWorksheet;
 	protected $rowTotal = 0;
 	protected $colTotal = 0;
@@ -89,7 +89,13 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
     {
     	$errorInfo = '';
 
-        if (!$this->getUserService()->getUserByNickname($userData['nickname'])) {
+        if (strpos($userData['nickname'], '@') > 0) {
+            $user = $this->getUserService()->getUserByEmail($userData['nickname']);
+        } else {
+            $user = $this->getUserService()->getUserByNickname($userData['nickname']);
+        }
+
+        if (!$user) {
             $errorInfo = "第 ".$row."行".$fieldCol["nickname"]." 列 的用户数据不存在，请检查。";
         }
 
@@ -241,7 +247,12 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         $successCount = 0;
 
 		foreach($userData as $key => $user){
-            $user = $this->getUserService()->getUserByNickname($user['nickname']);
+            if (strpos($user['nickname'],'@') > 0) {
+                $user = $this->getUserService()->getUserByEmail($user['nickname']);
+            } else {
+                $user = $this->getUserService()->getUserByNickname($user['nickname']);
+            }
+            
 
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($targetObject['id'], $user['id']);
             $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($targetObject['id'], $user['id']);
