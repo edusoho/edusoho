@@ -10,6 +10,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $this->updateScheme();
+
+            $this->initBlock();
+
             $this->removeClassroomPlugin();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
@@ -31,6 +34,73 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting['debug'] = 0;
 
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
+    }
+
+    private function initBlock()
+    {
+
+        $themeName = "jianmo";
+
+        if($this->isThemeBlockInit($themeName)){
+            return;
+        }
+
+        $themeDir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/theme");
+
+        $metaFiles = array(
+            $themeName => "{$themeDir}/".$themeName."/block.json",
+        );
+
+        foreach ($metaFiles as $category => $file) {
+            $metas = file_get_contents($file);
+            $metas = json_decode($metas, true);
+
+            foreach ($metas as $code => $meta) {
+
+                $data = array();
+                foreach ($meta['items'] as $key => $item) {
+                    $data[$key] = $item['default'];
+                }
+
+                $filename = $themeDir.'/'.$themeName.'/blocks/'."block-" . md5($code) . '.html';
+                if (file_exists($filename)) {
+                    $content = file_get_contents($filename);
+                    $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
+                        preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
+                        preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
+                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
+                        $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
+                        $src = $URI . trim($src);
+                         
+                        $img = "<img src='{$src}'";
+                        if (isset($alts[1][0])) {
+                            $alt = $alts[1][0];
+                            $img .= " alt='{$alt}'>";
+                        } else {
+                            $img .= ">";
+                        }
+                         
+                        return $img;
+                    
+                    }, $content);
+                } else {
+                    $content = '';
+                }
+
+                $this->getBlockService()->createBlock(array(
+                    'title' => $meta['title'] ,
+                    'mode' => 'template' ,
+                    'templateName' => $meta['templateName'],
+                    'content' => $content,
+                    'code' => $code,
+                    'meta' => $meta,
+                    'data' => $data,
+                    'category' => $category
+                ));
+            }
+
+        }
+
     }
 
     private function removeClassroomPlugin()
@@ -104,6 +174,16 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return empty($result) ? false : true;
     }
+
+    protected function isThemeBlockInit($code)
+    {
+        $sql = "select * from block where code='{$code}:home_top_banner';";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    
 
     protected function isTableExist($table)
     {
