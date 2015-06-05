@@ -62,7 +62,7 @@
 
       {% if paginator.currentPage != paginator.lastPage %}
         <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
-        <li><a  href="{{ paginator.getPageUrl(paginator.getPages()) }}">尾</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">尾</a></li>
       {% endif %}
     </ul>
   {% endif %}
