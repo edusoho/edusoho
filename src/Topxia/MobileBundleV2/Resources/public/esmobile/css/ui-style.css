@@ -890,7 +890,9 @@ modal
 }
 
 .course-body .lesson-list .lesson-body {
-  padding-left: 30px;
+  padding-left: 15px;
+  left: -30px;
+  position: relative;
   padding-right: 48px;
   display: inline-block;
   width: 100%;
@@ -900,11 +902,13 @@ modal
 }
 
 .chapter .lesson-body {
+  left: 0px ! important;
   height: 40px ! important;
   line-height: 40px ! important;
 }
 
 .unit .lesson-body {
+  left: 0px ! important;
   height: 40px ! important;
   line-height: 40px ! important;
 }
@@ -934,9 +938,10 @@ modal
 
 .course-body .lesson-list .lesson-status {
   background: #fff;
+  z-index: 4;
   display: inline-block;
   position: relative;
-  left: 20px;
+  left: -10px;
   text-align: center;
   height: 100%;
   line-height: 100%;

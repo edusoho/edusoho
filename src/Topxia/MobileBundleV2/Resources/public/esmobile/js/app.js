@@ -65,6 +65,7 @@ app.config(['$httpProvider', '$ionicConfigProvider', function($httpProvider, $io
 app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
 	$urlRouterProvider.when("/", "/index/found").
+      when("/index", "/index/found").
 	otherwise('/');
 
 	$stateProvider.
@@ -160,7 +161,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             });
 
             $stateProvider.state('login', {
-              url: "/login",
+              url: "/login/:goto",
               views: {
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/login.html",

@@ -1,6 +1,6 @@
-app.controller('RegistController', ['$scope', '$http', '$ionicHistory', 'UserService', RegistController]);
+app.controller('RegistController', ['$scope', '$http', '$ionicHistory', 'UserService', '$state', RegistController]);
 
-function RegistController($scope, $http, $ionicHistory, UserService)
+function RegistController($scope, $http, $ionicHistory, UserService, $state)
 {
 	console.log("RegistController");
 

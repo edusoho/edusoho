@@ -1,13 +1,9 @@
-app.controller('LoginController', ['$scope', 'UserService', '$state', '$ionicLoading', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$state', '$ionicHistory', '$stateParams', LoginController]);
 
-function LoginController($scope, UserService, $state, $ionicLoading)
+function LoginController($scope, UserService, $state, $ionicHistory, $stateParams)
 {	
-	var _super = new baseController($scope);
-	this.__proto__ = _super;
-
 	console.log("LoginController");
 
-	var localStore = this.getService("localStore");
 	$scope.user = {
 		username : null,
 		password : null
@@ -18,9 +14,7 @@ function LoginController($scope, UserService, $state, $ionicLoading)
 	}
 
     	$scope.login = function(user) {
-    		$ionicLoading.show({
-		        template:'加载中...',
-		});
+    		$scope.showLoad();
     		UserService.login({
     			"_username": user.username,
 			"_password" : user.password
@@ -29,8 +23,16 @@ function LoginController($scope, UserService, $state, $ionicLoading)
 				$scope.toast(data.meta.message);
 				return;
 			}
-			$ionicLoading.hide();
-			$scope.jumpToMain();
+			$scope.hideLoad();
+			if ($stateParams.goto) {
+				$ionicHistory.goBack();
+				setTimeout(function() {
+				         $scope.$emit("refresh", {});
+				}, 10);
+			} else {
+				$scope.jumpToMain();
+			}
+			
     		});
     	}
 }

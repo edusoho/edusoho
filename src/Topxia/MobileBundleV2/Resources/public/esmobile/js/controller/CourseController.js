@@ -142,6 +142,10 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
     }
 
     $scope.joinCourse = function() {
+      if ($scope.user == null) {
+        $state.go("login", { goto : "/course/" + $stateParams.courseId });
+        return;
+      }
       if ($scope.course.price <= 0) {
         self.payCourse();
       } else {
