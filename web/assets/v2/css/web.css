@@ -3277,7 +3277,7 @@ body {
 
 .course-wide-list .course-item:hover {
   background: #f9f9f9;
-  border-color: #ccc;
+  /*border-color: #ccc;*/
 }
 
 .course-wide-list .course-picture-link {
@@ -4903,10 +4903,6 @@ a.homework-essay-textarea-pack-up{
   height: 50px;
 }
 
-.course-wide-list .course-item:hover {
-  background: #f9f9f9;
-  border-color: #e57259;
-}
 
 .homepage .hot-group img {
   width: 58px;

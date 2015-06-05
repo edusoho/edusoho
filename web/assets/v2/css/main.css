@@ -1310,7 +1310,8 @@ body.nav-active {
   display: block;
 }
 #content-container {
-  margin-top: 30px;
+  margin: 30px auto;
+  min-height: 500px;
 }
 a:hover,
 a:focus {
