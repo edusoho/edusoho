@@ -1,4 +1,4 @@
-cordova.define("com.edusoho.kuozhi.webview.cordova.ESNativeCore", function(require, exports, module) {
+cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require, exports, module) {
     var exec = require('cordova/exec');
     module.exports = {
         showImages : function(index, images) {
@@ -9,6 +9,12 @@ cordova.define("com.edusoho.kuozhi.webview.cordova.ESNativeCore", function(requi
         },
         version : function(version) {
             exec(null, null, "ESNativeCore", "version", [version]);
+        },
+        openDrawer : function(action){
+            exec(null, null, "ESNativeCore", "open", [action]);
+        },
+        openCourseChat : function(data){
+            exec(null, null, "ESNativeCore", "Course", [data]);
         }
     };
 });
