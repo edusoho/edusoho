@@ -8,9 +8,12 @@ function MainTabController($scope, $ionicModal, sideDelegate, $state)
 	};
 
 	$scope.toggle = function() {
-		console.log(window.esNativeCore);
-		window.esNativeCore.openDrawer("open");
-	    	//sideDelegate.toggleMenu();
+		if ($scope.platform.native) {
+			window.esNativeCore.openDrawer("open");
+			return;
+		}
+
+		sideDelegate.toggleMenu();
 	};
 }
 

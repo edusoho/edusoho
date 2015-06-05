@@ -10,12 +10,12 @@ function RegistController($scope, $http, $ionicHistory, UserService)
 		password: null
 	};
 
+	$scope.jumpToMain = function() {
+		$state.go("slideView.mainTab");
+	}
+
 	$scope.checkCode = function(code) {
 		return !code || code.length == 0;
-	};
-
-	$scope.checkEmail = function(code) {
-		return false;
 	};
 
 	$scope.sendSmsCode = function(phone) {
