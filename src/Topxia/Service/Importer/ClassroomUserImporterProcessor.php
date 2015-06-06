@@ -285,7 +285,7 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
                     'classroomTitle' => $targetObject['title'],
                     'userId'=> $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'opration' => 'create');
+                    'type' => 'create');
 
                 $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 

@@ -14,7 +14,7 @@
         你正在学习的<a href='{{data.url}}' target='_blank'>{{data.title}}</a>发布了一个新的公告，<a href='{{data.url}}' target='_blank'>快去看看吧</a>
     </div>
     <div class="notification-footer">
-     {{ notification.createdTime|data_format }}  
+     {{ notification.createdTime|date_format }}  
     </div>
   </div>
 </li>
