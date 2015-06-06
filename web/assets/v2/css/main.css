@@ -873,7 +873,6 @@ Pagination Styles
   position: fixed;
   left: -250px;
   top: 0;
-  float: none;
   height: 100%;
   background: #3f3f3f;
   z-index: 999;
@@ -1320,6 +1319,9 @@ html.html-nav-active {
 }
 body {
   transform: translate3d(0px, 0px, 0px);
+  -webkit-transform: translate3d(0px, 0px, 0px);
+  -o-transform: translate3d(0px, 0px, 0px);
+  -moz-transform: translate3d(0px, 0px, 0px);
   background-color: #fafafa;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -1330,6 +1332,9 @@ body.nav-active {
   position: relative;
   width: 100%;
   transform: translate3d(250px, 0px, 0px);
+  -webkit-transform: translate3d(250px, 0px, 0px);
+  -o-transform: translate3d(250px, 0px, 0px);
+  -moz-transform: translate3d(250px, 0px, 0px);
 }
 .html-mask {
   position: absolute;

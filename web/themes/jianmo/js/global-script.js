@@ -22,7 +22,7 @@ define(function(require, exports, module) {
                 }else{
                     $maskItem.show()
                 }
-                 $("body").addClass("nav-active")
+                $("body").addClass("nav-active")
                 $("html").addClass("html-nav-active");
             }
         })
