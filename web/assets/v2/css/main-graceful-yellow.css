@@ -1311,7 +1311,6 @@ Pagination Styles
   -moz-osx-font-smoothing: grayscale;
 }
 body {
-  overflow-x: hidden;
   word-wrap: break-word;
 }
 html.html-nav-active {
@@ -1323,7 +1322,6 @@ html.html-nav-active {
   -webkit-transform: translate3d(0px, 0px, 0px);
   -o-transform: translate3d(0px, 0px, 0px);
   -moz-transform: translate3d(0px, 0px, 0px);
-  background-color: #fafafa;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1334,6 +1332,12 @@ html.html-nav-active {
   -webkit-transform: translate3d(250px, 0px, 0px);
   -o-transform: translate3d(250px, 0px, 0px);
   -moz-transform: translate3d(250px, 0px, 0px);
+}
+.lesson-dashboard-page .es-wrap {
+  transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -moz-transform: none;
 }
 .tooltip {
   min-width: 40px;
