@@ -16,7 +16,6 @@
 }
 
 body { 
-  overflow-x: hidden;
   word-wrap: break-word;
 }
 
@@ -30,7 +29,6 @@ html.html-nav-active {
   -webkit-transform: translate3d(0px, 0px, 0px);
   -o-transform: translate3d(0px, 0px, 0px);
   -moz-transform: translate3d(0px, 0px, 0px);
-  background-color: @background-color;
   .es-transition;
   &.nav-active {
     transform: translate3d(250px, 0px, 0px);
@@ -38,6 +36,13 @@ html.html-nav-active {
     -o-transform: translate3d(250px, 0px, 0px);
     -moz-transform: translate3d(250px, 0px, 0px);
   }
+}
+
+.lesson-dashboard-page .es-wrap {
+  transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -moz-transform: none;
 }
 
 .tooltip {
