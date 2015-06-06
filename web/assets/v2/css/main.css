@@ -1086,6 +1086,7 @@ Pagination Styles
 .footer-main .link-item {
   width: 20%;
   float: left;
+  padding: 0 10px;
   text-shadow: 0 1px 3px #000;
 }
 @media (max-width: 767px) {
