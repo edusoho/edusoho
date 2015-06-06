@@ -119,13 +119,17 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection->exec("ALTER TABLE `course_announcement` CHANGE `courseId` `targetId`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告类型ID'");
 
         if($this->isTableExist("announcement")) {
-            $connection->exec("insert into `course_announcement` 
+
+            if(!$this->isGlobalAnnouncementExist()) {
+                $connection->exec("insert into `course_announcement` 
                 (content, url, startTime, endTime, userId, targetId, targetType, createdTime) 
                 select title, url, startTime, endTime, userId, 0, 'global', 0 from announcement");
+            }
 
-            $connection->exec("drop TABLE `announcement`;");
-
-            $connection->exec("ALTER TABLE `course_announcement` RENAME TO `announcement`");
+            if(!$this->isTableExist("announcement_bak")) {
+                $connection->exec("ALTER TABLE `announcement` RENAME TO `announcement_bak`;");
+                $connection->exec("create table `announcement` like `course_announcement`;");
+            }
         }
 
         if(!$this->isFieldExist('course_note', 'likeNum')){
@@ -319,7 +323,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if(!$this->isCrontabJobExist("DeleteSessionJob")){
-            $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\Service\\User\\Job\\DeleteSessionJob','','',".time().",0,0,0)");
+            $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\Service\\User\\Job\\DeleteSessionJob','',0,".time().",0,0,0)");
         }
 
         ///删除classroom插件
@@ -337,6 +341,14 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function isTableExist($table)
     {
         $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
+    }
+
+    protected function isGlobalAnnouncementExist()
+    {
+        $sql = "select * from course_announcement where targetType='global';";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
@@ -370,7 +382,7 @@ class EduSohoUpgrade extends AbstractUpdater
         while ($article = $sth->fetch(PDO::FETCH_ASSOC)) {
             $tagIds = json_decode($article['tagIds'], true);
             $tagIds = '|' . implode('|', $tagIds) . '|';
-            $connection->exec("UPDATE article SET tagIds = {$tagIds} WHERE id = " . $article['id']);
+            $connection->exec("UPDATE article SET tagIds = '{$tagIds}' WHERE id = " . $article['id']);
         }
     }
 }

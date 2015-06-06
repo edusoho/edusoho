@@ -133,7 +133,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $connection->exec("UPDATE status set courseId=objectId where objectType='course';");
         $connection->exec("UPDATE status s set s.courseId=(select courseId from course_lesson where id=s.objectId) where s.objectType='lesson';");
 
-        $connection->exec("UPDATE status s set s.classroomId=(select classroomId from classroom_courses where courseId = s.courseId) where s.courseId in (select couresId from classroom_courses);");
+        $connection->exec("UPDATE status s set s.classroomId=(select classroomId from classroom_courses where courseId = s.courseId) where s.courseId in (select courseId from classroom_courses);");
         $connection->exec("UPDATE status s set s.classroomId=s.objectId where s.objectType='classroom';");
 
         $connection->exec("UPDATE course_lesson cl set homeworkId=(select id from homework where lessonId=cl.id) where cl.id in (select lessonId from homework);");
@@ -142,9 +142,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $connection->exec("UPDATE course c set c.noteNum=(select count(*) from course_note where courseId = c.id);");
 
-        $connection->exec("UPDATE classroom c set c.noteNum=(select sum(noteNum) from course where id in (select courseId from classroom_courses where classroomId = c.id))");
+        $connection->exec("UPDATE classroom c set c.noteNum=(
+            select sum(noteNum) from course where id in (
+                select courseId from classroom_courses where classroomId = c.id
+            )
+        ) where c.id in (select a.classroomId from (select sum(noteNum) as notNum,classroomId from classroom_courses left join course cc on courseId=cc.id) a where a.notNum>0 and a.notNum is not null)");
 
-        $connection->exec("UPDATE classroom_courses cc set parentCourseId=(select parentId from course where id=cc.courseId);");
+        $connection->exec("UPDATE classroom_courses cc set parentCourseId=(select parentId from course where id=cc.courseId) where courseId in (select id from course where parentId is not null);");
 
         $connection->exec("update thread set solved=1 where id in (
           select distinct(threadpost.threadId) from (
