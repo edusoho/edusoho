@@ -868,10 +868,10 @@ Pagination Styles
   z-index: 999;
 }
 .es-header .navbar-mobile .nav-mobile {
-  width: 0;
+  width: 250px;
   overflow: hidden;
   position: fixed;
-  left: 0;
+  left: -250px;
   top: 0;
   float: none;
   height: 100%;
@@ -885,7 +885,6 @@ Pagination Styles
 }
 .es-header .navbar-mobile .nav-mobile.active {
   visibility: visible;
-  width: 60%;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1320,16 +1319,17 @@ html.html-nav-active {
   overflow: hidden;
 }
 body {
+  transform: translate3d(0px, 0px, 0px);
+  background-color: #fafafa;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #fafafa;
 }
 body.nav-active {
   position: relative;
-  margin-left: 60%;
   width: 100%;
+  transform: translate3d(250px, 0px, 0px);
 }
 .html-mask {
   position: absolute;
@@ -5555,11 +5555,11 @@ textarea.form-control-o {
   border-radius: 4px;
 }
 .topic-detail .topic-body .media-left {
-  padding-right: 50px;
+  padding-right: 30px;
 }
 @media (max-width: 1199px) {
   .topic-detail .topic-body .media-left {
-    padding-right: 30px;
+    padding-right: 20px;
   }
 }
 @media (max-width: 767px) {
@@ -5579,7 +5579,7 @@ textarea.form-control-o {
   }
 }
 .topic-detail .topic-body .media-body {
-  padding-right: 120px;
+  padding-right: 180px;
 }
 @media (max-width: 767px) {
   .topic-detail .topic-body .media-body {
@@ -5596,23 +5596,25 @@ textarea.form-control-o {
     margin-bottom: 10px;
   }
 }
-.topic-detail .topic-body .btn-apply {
+.topic-detail .topic-body .metas {
   position: absolute;
   top: 50%;
   margin-top: -20px;
   right: 20px;
 }
 @media (max-width: 1199px) {
-  .topic-detail .topic-body .btn-apply {
+  .topic-detail .topic-body .metas {
     right: 10px;
   }
 }
 @media (max-width: 767px) {
-  .topic-detail .topic-body .btn-apply {
+  .topic-detail .topic-body .metas {
     position: relative;
     margin-top: 10px;
-    margin-left: 10px;
   }
+}
+.topic-detail .topic-body .metas .btn {
+  margin-left: 10px;
 }
 .topic-detail .topic-num .num-list {
   height: 50px;
@@ -5948,6 +5950,8 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .teacher-item .teacher-top {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   background-color: #fafafa;
   padding: 20px 10px;
 }

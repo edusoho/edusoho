@@ -25,14 +25,16 @@ html.html-nav-active {
 }
 
 body {
-  .es-transition;
+  transform: translate3d(0px, 0px, 0px);
   background-color: @background-color;
+  .es-transition;
 }
 
 body.nav-active {
   position: relative;
-  margin-left: 60%;
+  // margin-left: 60%;
   width: 100%;
+  transform: translate3d(250px, 0px, 0px);
 }
 
 .html-mask {

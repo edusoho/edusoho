@@ -5555,11 +5555,11 @@ textarea.form-control-o {
   border-radius: 4px;
 }
 .topic-detail .topic-body .media-left {
-  padding-right: 50px;
+  padding-right: 30px;
 }
 @media (max-width: 1199px) {
   .topic-detail .topic-body .media-left {
-    padding-right: 30px;
+    padding-right: 20px;
   }
 }
 @media (max-width: 767px) {
@@ -5579,7 +5579,7 @@ textarea.form-control-o {
   }
 }
 .topic-detail .topic-body .media-body {
-  padding-right: 120px;
+  padding-right: 180px;
 }
 @media (max-width: 767px) {
   .topic-detail .topic-body .media-body {
@@ -5596,23 +5596,25 @@ textarea.form-control-o {
     margin-bottom: 10px;
   }
 }
-.topic-detail .topic-body .btn-apply {
+.topic-detail .topic-body .metas {
   position: absolute;
   top: 50%;
   margin-top: -20px;
   right: 20px;
 }
 @media (max-width: 1199px) {
-  .topic-detail .topic-body .btn-apply {
+  .topic-detail .topic-body .metas {
     right: 10px;
   }
 }
 @media (max-width: 767px) {
-  .topic-detail .topic-body .btn-apply {
+  .topic-detail .topic-body .metas {
     position: relative;
     margin-top: 10px;
-    margin-left: 10px;
   }
+}
+.topic-detail .topic-body .metas .btn {
+  margin-left: 10px;
 }
 .topic-detail .topic-num .num-list {
   height: 50px;
@@ -5948,6 +5950,8 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .teacher-item .teacher-top {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   background-color: #fafafa;
   padding: 20px 10px;
 }
