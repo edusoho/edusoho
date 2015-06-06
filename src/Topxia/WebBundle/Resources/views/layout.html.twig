@@ -38,33 +38,33 @@
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
-<div class="es-wrap">
-
 {% block body %}
 
-  {% block header %}
-    {% include 'TopxiaWebBundle::site-hint.html.twig' %}
-    {% include 'TopxiaWebBundle:Default:header.html.twig' %}
-  {% endblock %}
-  
-  {% block full_content %}
-    {% block top_content %}{% endblock %}
-    
-    <div id="content-container" class="container">
-      {% block content %}{% endblock %}
-    </div><!-- /container -->
-  {% endblock %}
-  
-  {% block footer %}
-    {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
-  {% endblock %}
+  <div class="es-wrap">
 
-  {% block bottom %}{% endblock %}
+    {% block header %}
+      {% include 'TopxiaWebBundle::site-hint.html.twig' %}
+      {% include 'TopxiaWebBundle:Default:header.html.twig' %}
+    {% endblock %}
+    
+    {% block full_content %}
+      {% block top_content %}{% endblock %}
+      
+      <div id="content-container" class="container">
+        {% block content %}{% endblock %}
+      </div><!-- /container -->
+    {% endblock %}
+    
+    {% block footer %}
+      {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
+    {% endblock %}
+
+    {% block bottom %}{% endblock %}
+  </div> 
+
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
   <div id="modal" class="modal"></div>
 {% endblock %}
-
-</div> 
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 
