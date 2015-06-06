@@ -16,20 +16,21 @@ define(function(require, exports, module) {
             if($nav.hasClass("active")){
                 removeNavMobile();
             }else{
+                console.log($nav);
                 $nav.addClass("active");
-                if($maskItem.length == 0){
-                    $("body").append($mask);
-                }else{
-                    $maskItem.show();
-                }
+                // if($maskItem.length == 0){
+                //     $("body").append($mask);
+                // }else{
+                //     $maskItem.show();
+                // }
                 $("body").addClass("nav-active");
                 $("html").addClass("html-nav-active");
             }
         })
 
-        $("body").on("click",function(e){
-            removeNavMobile();
-        });
+        // $("html").on("click",'body.nav-active',function(e){
+        //     removeNavMobile();
+        // });
         
 
     }
