@@ -6,7 +6,7 @@ define(function(require, exports, module) {
             $(".nav-mobile").removeClass("active");
             // $(".html-mask").hide();
             $(".es-wrap").removeClass("nav-active")
-            $("body").removeClass("html-nav-active");
+            $("html").removeClass("html-nav-active");
         }
 
         $(".js-navbar-more").click(function(e){
@@ -16,7 +16,6 @@ define(function(require, exports, module) {
             if($nav.hasClass("active")){
                 removeNavMobile();
             }else{
-                console.log($nav);
                 $nav.addClass("active");
                 // if($maskItem.length == 0){
                 //     $("body").append($mask);
@@ -24,15 +23,9 @@ define(function(require, exports, module) {
                 //     $maskItem.show();
                 // }
                 $(".es-wrap").addClass("nav-active");
-                $("body").addClass("html-nav-active");
+                $("html").addClass("html-nav-active");
             }
-        })
-
-        // $("html").on("click",'body.nav-active',function(e){
-        //     removeNavMobile();
-        // });
-        
-
+        });
     }
 
 });
