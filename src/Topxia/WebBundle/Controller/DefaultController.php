@@ -145,13 +145,14 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function topNavigationAction($siteNav = null)
+    public function topNavigationAction($siteNav = null,$isMobile= false)
     {
         $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
         return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
             'navigations' => $navigations,
-            'siteNav' => $siteNav
+            'siteNav' => $siteNav,
+            'isMobile' => $isMobile
         ));
     }
 
