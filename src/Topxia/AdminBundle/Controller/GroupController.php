@@ -86,7 +86,7 @@ class GroupController extends BaseController
             $thread=$this->getThreadService()->getThread($threadId);
             $message = array(
                 'title' => $thread['title'],
-                'type' =>'delete'
+                'type' =>'delete',
                 'userId' => $user['id'],
                 'userName' => $user['nickname']);
             $this->getNotifiactionService()->notify($thread['userId'],'group-thread',

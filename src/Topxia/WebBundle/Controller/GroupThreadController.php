@@ -523,7 +523,7 @@ class GroupThreadController extends BaseController
                 'userId' => $user['id'],
                 'userName' => $user['nickname'],
                 'page' => $this->getPostPage($post['id'],$threadId),
-                'post' => $post['id']
+                'post' => $post['id'],
                 'type' => 'reply'
                 );
     
