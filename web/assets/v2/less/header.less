@@ -102,12 +102,11 @@
       z-index: 999;
     }
     .nav-mobile {
-      width: 0;
-      overflow: hidden;
+      width: 250px;
+      overflow-x: hidden;
       position: fixed;
-      left: 0;
+      left: -250px;
       top: 0;
-      float: none;
       height: 100%;
       background: #3f3f3f;
       z-index: 999;
@@ -115,7 +114,6 @@
       .es-transition;
       &.active {
         visibility: visible;
-        width: 60%;
         .es-transition;
       }
     }

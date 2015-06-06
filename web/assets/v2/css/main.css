@@ -238,6 +238,53 @@
 .mobile-download-panel .btn-lg .es-icon {
   font-size: 24px;
 }
+.homepage-feature {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+.float-consult .btn {
+  padding: 6px 12px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  color: #fff;
+}
+.float-consult .btn:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.float-consult .btn:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.float-consult .btn-consult-default {
+  background: #37b97d;
+  border-color: #26a86c;
+}
+.float-consult .btn-consult-default:hover {
+  background: #26a86c;
+  border-color: #15975b;
+}
+.float-consult .btn-consult-warning {
+  background: #e67e22;
+  border-color: #d56d11;
+}
+.float-consult .btn-consult-warning:hover {
+  background: #d56d11;
+  border-color: #c45c00;
+}
+.float-consult .btn-consult-danger {
+  background: #e74c3c;
+  border-color: #d63b2b;
+}
+.float-consult .btn-consult-danger:hover {
+  background: #d63b2b;
+  border-color: #c52a1a;
+}
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
@@ -821,12 +868,11 @@ Pagination Styles
   z-index: 999;
 }
 .es-header .navbar-mobile .nav-mobile {
-  width: 0;
-  overflow: hidden;
+  width: 250px;
+  overflow-x: hidden;
   position: fixed;
-  left: 0;
+  left: -250px;
   top: 0;
-  float: none;
   height: 100%;
   background: #3f3f3f;
   z-index: 999;
@@ -838,7 +884,6 @@ Pagination Styles
 }
 .es-header .navbar-mobile .nav-mobile.active {
   visibility: visible;
-  width: 60%;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1041,6 +1086,7 @@ Pagination Styles
 .footer-main .link-item {
   width: 20%;
   float: left;
+  padding: 0 10px;
   text-shadow: 0 1px 3px #000;
 }
 @media (max-width: 767px) {
@@ -1265,35 +1311,34 @@ Pagination Styles
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
-html {
-  overflow-x: hidden;
+body {
   word-wrap: break-word;
 }
 html.html-nav-active {
+  position: relative;
   overflow: hidden;
 }
-body {
+.es-wrap {
+  transform: translate3d(0px, 0px, 0px);
+  -webkit-transform: translate3d(0px, 0px, 0px);
+  -o-transform: translate3d(0px, 0px, 0px);
+  -moz-transform: translate3d(0px, 0px, 0px);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #fafafa;
 }
-body.nav-active {
-  position: relative;
-  margin-left: 60%;
-  width: 100%;
+.es-wrap.nav-active {
+  transform: translate3d(250px, 0px, 0px);
+  -webkit-transform: translate3d(250px, 0px, 0px);
+  -o-transform: translate3d(250px, 0px, 0px);
+  -moz-transform: translate3d(250px, 0px, 0px);
 }
-.html-mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
-  background: #000;
+.lesson-dashboard-page .es-wrap {
+  transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -moz-transform: none;
 }
 .tooltip {
   min-width: 40px;
@@ -1302,7 +1347,8 @@ body.nav-active {
   display: block;
 }
 #content-container {
-  margin-top: 30px;
+  margin: 30px auto;
+  min-height: 500px;
 }
 a:hover,
 a:focus {
@@ -2983,6 +3029,8 @@ textarea.form-control-o {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+.progress.progress-sm {
   height: 11px;
 }
 .label {
@@ -5505,25 +5553,66 @@ textarea.form-control-o {
   border-radius: 4px;
 }
 .topic-detail .topic-body .media-left {
-  padding-right: 50px;
+  padding-right: 30px;
+}
+@media (max-width: 1199px) {
+  .topic-detail .topic-body .media-left {
+    padding-right: 20px;
+  }
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-body .media-left {
+    display: block;
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
 }
 .topic-detail .topic-body .media-left img {
   width: 200px;
   height: auto;
 }
+@media (max-width: 767px) {
+  .topic-detail .topic-body .media-left img {
+    width: 100%;
+  }
+}
 .topic-detail .topic-body .media-body {
-  padding-right: 120px;
+  padding-right: 180px;
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-body .media-body {
+    padding-right: 0;
+  }
 }
 .topic-detail .topic-body .media-body p {
   color: #9e9e9e;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   text-indent: 0;
 }
-.topic-detail .topic-body .btn-apply {
+@media (max-width: 1199px) {
+  .topic-detail .topic-body .media-body p {
+    margin-bottom: 10px;
+  }
+}
+.topic-detail .topic-body .metas {
   position: absolute;
   top: 50%;
   margin-top: -20px;
   right: 20px;
+}
+@media (max-width: 1199px) {
+  .topic-detail .topic-body .metas {
+    right: 10px;
+  }
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-body .metas {
+    position: relative;
+    margin-top: 10px;
+  }
+}
+.topic-detail .topic-body .metas .btn {
+  margin-left: 10px;
 }
 .topic-detail .topic-num .num-list {
   height: 50px;
@@ -5571,6 +5660,11 @@ textarea.form-control-o {
 }
 .topic-detail .topic-action a {
   margin: 0 10px;
+}
+@media (max-width: 767px) {
+  .topic-detail .topic-action a {
+    margin: 0;
+  }
 }
 .topic-detail .topic-action i {
   margin-right: 5px;
@@ -5820,6 +5914,22 @@ textarea.form-control-o {
   margin: 10px auto;
   text-align: center;
   border: 1px solid #e0e0e0;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.teacher-item:hover {
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .teacher-item:hover .metas {
   opacity: 1;
@@ -5838,6 +5948,8 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .teacher-item .teacher-top {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   background-color: #fafafa;
   padding: 20px 10px;
 }

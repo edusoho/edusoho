@@ -3,7 +3,7 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/default-c/css/default-c.css') }}" />
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/default.css') }}" />
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
 
     <div class="homepage-feature homepage-feature-slides mbl">
       <div class="cycle-pager"></div>
-      {{ block_show('default-c:home_top_banner') }}
+      {{ block_show('default:home_top_banner') }}
     </div>
   
   <div class="row row-9-3">

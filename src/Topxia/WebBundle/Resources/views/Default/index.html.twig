@@ -10,14 +10,14 @@
 {% block full_content %}
   
   <!-- 轮播 -->
-  {{ block_show('default:home_top_banner') }}
+  {{ block_show('jianmo:home_top_banner') }}
   <!-- 课程列表 -->
   <section class="course-list-section" id="course-list">
     {% include 'TopxiaWebBundle:Default:course-grid-with-condition.html.twig' %}
   </section>
 
   <!-- 特性 -->
-  {{ block_show('default:middle_banner') }}
+  {{ block_show('jianmo:middle_banner') }}
 
 
   <!-- 推荐班级 -->
@@ -123,7 +123,7 @@
   {% endif %}
 
   <!-- 推荐教师 -->
-  {% set teachers = data('RecommendTeachers',{'count':4,'userId':app.user.id}) %}
+  {% set teachers = data('RecommendTeachers',{'count':4}) %}
   {% if teachers %}
   <section class="recommend-teacher">
     <div class="container">

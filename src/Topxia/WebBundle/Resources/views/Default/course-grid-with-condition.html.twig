@@ -18,13 +18,13 @@
       {% endif %}
     </ul>
     <div class="btn-group visible-xs">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
-        <li role="presentation" class="js-course-filter"data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+        <li role="presentation" class="js-course-filter {% if (categoryId|default('all') == 'all') %}active {% endif %}" data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
         {% if categoriesFirst%}
           {% for category in categoriesFirst  if (category.parentId == 0) %}
             {% if ( loop.index0 < 4 ) %}
-              <li role="presentation" class = "js-course-filter" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
+              <li role="presentation" class = "js-course-filter {% if (categoryId|default('all') == category.id) %}active {% endif %}" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
             {% endif %}
           {% endfor %}
         {% endif %}
