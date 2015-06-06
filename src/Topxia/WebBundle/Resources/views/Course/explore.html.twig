@@ -32,9 +32,9 @@
     <div class="btn-group visible-xs">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ path('course_explore',{code:code, fliter:'all',orderBy : orderBy|default('latest')}) }}" class="cat-tag{% if (fliter == 'all') %}active {% endif %}">全部课程</a></li>
-        <li><a href="{{ path('course_explore', {code:code, fliter:'free',orderBy: orderBy|default('latest')}) }}" class="cat-tag{% if (fliter == 'free') %}active {% endif %}">免费课程</a></li>
-        <li><a href="{{ path('course_explore', {code:code, fliter:'live',orderBy: orderBy|default('latest')}) }}" class="cat-tag{% if (fliter == 'live') %}active {% endif %}">直播课程</a></li>
+        <li><a href="{{ path('course_explore',{code:code, fliter:'all',orderBy : orderBy|default('latest')}) }}" class="{% if (fliter == 'all') %}active {% endif %}">全部课程</a></li>
+        <li><a href="{{ path('course_explore', {code:code, fliter:'free',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'free') %}active {% endif %}">免费课程</a></li>
+        <li><a href="{{ path('course_explore', {code:code, fliter:'live',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'live') %}active {% endif %}">直播课程</a></li>
       </ul>
     </div>
     <div class="course-sort">
