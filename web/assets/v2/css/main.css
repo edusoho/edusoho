@@ -1310,14 +1310,15 @@ Pagination Styles
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
-html {
+body {
   overflow-x: hidden;
   word-wrap: break-word;
 }
-html.html-nav-active {
+body.html-nav-active {
+  position: relative;
   overflow: hidden;
 }
-body {
+.es-wrap {
   transform: translate3d(0px, 0px, 0px);
   -webkit-transform: translate3d(0px, 0px, 0px);
   -o-transform: translate3d(0px, 0px, 0px);
@@ -1328,9 +1329,7 @@ body {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-body.nav-active {
-  position: relative;
-  width: 100%;
+.es-wrap.nav-active {
   transform: translate3d(250px, 0px, 0px);
   -webkit-transform: translate3d(250px, 0px, 0px);
   -o-transform: translate3d(250px, 0px, 0px);

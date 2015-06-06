@@ -15,16 +15,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html { 
+body { 
   overflow-x: hidden;
   word-wrap: break-word;
 }
 
-html.html-nav-active {
+body.html-nav-active {
+  position: relative;
   overflow: hidden;
 }
 
-body {
+.es-wrap {
   transform: translate3d(0px, 0px, 0px);
   -webkit-transform: translate3d(0px, 0px, 0px);
   -o-transform: translate3d(0px, 0px, 0px);
@@ -33,10 +34,10 @@ body {
   .es-transition;
 }
 
-body.nav-active {
-  position: relative;
+.es-wrap.nav-active {
+  // position: relative;
   // margin-left: 60%;
-  width: 100%;
+  // width: 100%;
   transform: translate3d(250px, 0px, 0px);
   -webkit-transform: translate3d(250px, 0px, 0px);
   -o-transform: translate3d(250px, 0px, 0px);

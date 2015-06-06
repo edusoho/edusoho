@@ -38,6 +38,8 @@
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
+<div class="es-wrap">
+
 {% block body %}
 
   {% block header %}
@@ -61,6 +63,8 @@
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
   <div id="modal" class="modal"></div>
 {% endblock %}
+
+</div> 
 
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 

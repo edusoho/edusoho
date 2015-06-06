@@ -5,8 +5,8 @@ define(function(require, exports, module) {
         var removeNavMobile = function(){
             $(".nav-mobile").removeClass("active");
             // $(".html-mask").hide();
-            $("body").removeClass("nav-active")
-            $("html").removeClass("html-nav-active");
+            $(".es-wrap").removeClass("nav-active")
+            $("body").removeClass("html-nav-active");
         }
 
         $(".js-navbar-more").click(function(e){
@@ -23,8 +23,8 @@ define(function(require, exports, module) {
                 // }else{
                 //     $maskItem.show();
                 // }
-                $("body").addClass("nav-active");
-                $("html").addClass("html-nav-active");
+                $(".es-wrap").addClass("nav-active");
+                $("body").addClass("html-nav-active");
             }
         })
 
