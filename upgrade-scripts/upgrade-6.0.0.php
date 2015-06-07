@@ -325,7 +325,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if(!$this->isCrontabJobExist("DeleteSessionJob")){
-            $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\Service\\User\\Job\\DeleteSessionJob','',0,".time().",0,0,0)");
+            $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob','',0,".time().",0,0,0)");
         }
 
         ///删除classroom插件
