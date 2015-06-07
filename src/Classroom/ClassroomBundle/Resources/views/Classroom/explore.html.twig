@@ -18,7 +18,7 @@
   
 {% endblock %}
 {% block content %}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{code:code, path:'classroom_explore'})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, path:'classroom_explore'})) }}
   <div class="class-list row">
     {% if classrooms %}
       {% for classroom in classrooms %}

@@ -10,15 +10,8 @@
 
   <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
    
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label >是否开启班级</label>
-      </div>
-      <div class="controls col-md-7 radios">
-        {{ radios('enabled', {1:'开启', 0:'关闭'}, setting('classroom').enabled|default(1)) }}
-      </div>
-    </div>
-
+    <input type="hidden" name="enabled" value="1"/>
+    
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label >班级称谓设置</label>

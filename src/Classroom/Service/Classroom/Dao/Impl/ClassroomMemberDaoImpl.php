@@ -132,6 +132,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->andWhere('classroomId = :classroomId')
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
+            ->andWhere('role IN (:roles)')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime < :startTimeLessThan');
 
