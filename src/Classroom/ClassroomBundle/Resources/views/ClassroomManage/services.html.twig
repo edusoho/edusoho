@@ -40,8 +40,8 @@
             <label class="col-md-2 control-label">
             </label>
             <div class="col-md-10 controls checkboxs">
-              <label><input type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %}checked='checked'{% endif %}> {{setting("classroom.name","班级")}}活动</label>
-              <p class="help-block">不定期组织各种线上或线下的{{setting("classroom.name","班级")}}活动，让学习更加生动有趣，同学关系更为紧密。
+              <label><input type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %}checked='checked'{% endif %}> {{setting("classroom.name")|default("班级")}}活动</label>
+              <p class="help-block">不定期组织各种线上或线下的{{setting("classroom.name")|default("班级")}}活动，让学习更加生动有趣，同学关系更为紧密。
 </p>
             </div>
             <label class="col-md-2 control-label">
