@@ -39,7 +39,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
     public function findAllCategoriesByParentId($parentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ";
+        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? order by weight";
         return $this->getConnection()->fetchAll($sql, array($parentId));
     }
     
