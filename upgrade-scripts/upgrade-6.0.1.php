@@ -45,10 +45,10 @@ class EduSohoUpgrade extends AbstractUpdater
             return;
         }
 
-        $themeDir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/theme");
+        $themeDir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes");
 
         $metaFiles = array(
-            $themeName => "{$themeDir}/".$themeName."/block.json",
+            $themeName => $themeDir."/".$themeName."/block.json",
         );
 
         foreach ($metaFiles as $category => $file) {
@@ -87,7 +87,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     $content = '';
                 }
 
-                $this->getBlockService()->createBlock(array(
+                $this->createService("Content.BlockService")->createBlock(array(
                     'title' => $meta['title'] ,
                     'mode' => 'template' ,
                     'templateName' => $meta['templateName'],
