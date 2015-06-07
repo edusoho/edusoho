@@ -160,6 +160,8 @@ class CourseStudentManageController extends BaseController
 		} else {
 			$course = $this->getCourseService()->tryAdminCourse($id);
 		}
+		
+		$userinfoFields=array();
 		if(isset($courseSetting['userinfoFields'])){
 			$userinfoFields=array_diff($courseSetting['userinfoFields'], array('truename','job','mobile','qq','company','gender','idcard','weixin'));
 		}

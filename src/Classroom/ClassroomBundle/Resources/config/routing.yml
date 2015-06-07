@@ -104,8 +104,8 @@ classroom_manage_homework:
     defaults: { _controller: ClassroomBundle:ClassroomManage:homework }
 
 classroom_explore:
-    pattern:  /classroom/explore
-    defaults: { _controller: ClassroomBundle:Classroom:explore }
+    pattern:  /classroom/explore/{category}
+    defaults: { _controller: ClassroomBundle:Classroom:explore, category:'' }
 
 classroom_show:
     pattern:  /classroom/{id}

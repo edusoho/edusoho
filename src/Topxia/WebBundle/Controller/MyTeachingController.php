@@ -46,11 +46,7 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $classrooms=array();
-        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
-        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
-
-        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+        $classrooms=$this->getClassroomService()->searchMembers(array('roles'=>array('teacher', 'headTeacher', 'assistant', 'studentAssistent'),'userId'=>$user->id),array('createdTime','desc'),0,9999);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 

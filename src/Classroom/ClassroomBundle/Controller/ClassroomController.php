@@ -22,19 +22,17 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function exploreAction(Request $request)
+    public function exploreAction(Request $request, $category)
     {
-        $code = $request->query->get('code', '');
-
         $conditions = array(
             'status' => 'published',
             'private' => 0,
         );
 
-        if (!empty($code)) {
-            $category = $this->getCategoryService()->getCategoryByCode($code);
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
-            $categoryIds = array_merge($childrenIds, array($category['id']));
+        if (!empty($category)) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
 
@@ -60,8 +58,8 @@ class ClassroomController extends BaseController
             'classrooms' => $classrooms,
             'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
-            'code' => $code,
-            ));
+            'category' => $category,
+        ));
     }
 
     public function myClassroomAction()
