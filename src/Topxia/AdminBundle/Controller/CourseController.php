@@ -11,6 +11,20 @@ class CourseController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+
+        if(isset($conditions["categoryId"]) && $conditions["categoryId"]==""){
+            unset($conditions["categoryId"]);
+        }
+        if(isset($conditions["status"]) && $conditions["status"]==""){
+            unset($conditions["status"]);
+        }
+        if(isset($conditions["title"]) && $conditions["title"]==""){
+            unset($conditions["title"]);
+        }
+        if(isset($conditions["creator"]) && $conditions["creator"]==""){
+            unset($conditions["creator"]);
+        }
+
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
