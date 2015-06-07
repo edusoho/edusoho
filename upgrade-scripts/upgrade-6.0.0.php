@@ -116,7 +116,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `course_announcement` ADD COLUMN `endTime` int(10) unsigned NOT NULL DEFAULT '0' AFTER `startTime`");
         }
 
-        $connection->exec("ALTER TABLE `course_announcement` CHANGE `courseId` `targetId`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告类型ID'");
+        if($this->isFieldExist('course_announcement', 'courseId')){
+            $connection->exec("ALTER TABLE `course_announcement` CHANGE `courseId` `targetId`  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告类型ID'");
+        }
 
         if($this->isTableExist("announcement")) {
 
