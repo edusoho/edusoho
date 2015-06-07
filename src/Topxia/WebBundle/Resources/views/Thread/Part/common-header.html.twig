@@ -10,7 +10,7 @@
       {% if thread.nice %}
         <span class="label label-warning" title="精华帖">精</span>
       {% endif %}
-      <a href="#">{{ thread.title }}</a>
+      {{ thread.title }}
     </div>
     <div class="metas">
       <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>发起了该{{ dict_text('threadType', thread.type) }} ·<span>{{ thread.createdTime|smart_time }}</span>
