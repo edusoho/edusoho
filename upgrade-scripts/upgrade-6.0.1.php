@@ -2,6 +2,7 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\BlockToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -38,69 +39,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function initBlock()
     {
-
-        $themeName = "jianmo";
-
-        if($this->isThemeBlockInit($themeName)){
-            return;
-        }
-
-        $themeDir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes");
-
-        $metaFiles = array(
-            $themeName => $themeDir."/".$themeName."/block.json",
-        );
-
-        foreach ($metaFiles as $category => $file) {
-            $metas = file_get_contents($file);
-            $metas = json_decode($metas, true);
-
-            foreach ($metas as $code => $meta) {
-
-                $data = array();
-                foreach ($meta['items'] as $key => $item) {
-                    $data[$key] = $item['default'];
-                }
-
-                $filename = $themeDir.'/'.$themeName.'/blocks/'."block-" . md5($code) . '.html';
-                if (file_exists($filename)) {
-                    $content = file_get_contents($filename);
-                    $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
-                        preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
-                        preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
-                        $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
-                        $src = $URI . trim($src);
-                         
-                        $img = "<img src='{$src}'";
-                        if (isset($alts[1][0])) {
-                            $alt = $alts[1][0];
-                            $img .= " alt='{$alt}'>";
-                        } else {
-                            $img .= ">";
-                        }
-                         
-                        return $img;
-                    
-                    }, $content);
-                } else {
-                    $content = '';
-                }
-
-                $this->createService("Content.BlockService")->createBlock(array(
-                    'title' => $meta['title'] ,
-                    'mode' => 'template' ,
-                    'templateName' => $meta['templateName'],
-                    'content' => $content,
-                    'code' => $code,
-                    'meta' => $meta,
-                    'data' => $data,
-                    'category' => $category
-                ));
-            }
-
-        }
-
+        global $kernel;
+        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"), $kernel->getContainer());
     }
 
     private function removeClassroomPlugin()
