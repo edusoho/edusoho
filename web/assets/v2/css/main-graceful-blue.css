@@ -1709,7 +1709,7 @@ a:focus {
   transition: all 0.3s ease;
 }
 .note-list .note-item .content.active {
-  max-height: 600px;
+  max-height: 3000px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;

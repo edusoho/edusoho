@@ -6,7 +6,9 @@
       <div class="class-bg-layer two"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
-          <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+          <a href="{{path('classroom_show',{id:classroom.id})}}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+          </a>
         </div>
         <div class="class-info">
           <h2 class="title">{{ classroom.title }}</h2>
