@@ -122,7 +122,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if($this->isTableExist("announcement")) {
 
-            if(!$this->isGlobalAnnouncementExist()) {
+            if(!$this->isGlobalAnnouncementExist() && $this->isFieldExist('announcement', 'title')) {
                 $connection->exec("insert into `course_announcement` 
                 (content, url, startTime, endTime, userId, targetId, targetType, createdTime) 
                 select title, url, startTime, endTime, userId, 0, 'global', 0 from announcement");

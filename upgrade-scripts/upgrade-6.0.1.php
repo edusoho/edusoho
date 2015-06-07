@@ -46,7 +46,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function removeClassroomPlugin()
     {
         ///删除班级插件
-        $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../plugins/Classroom");
+        $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../plugins/Classroom");
         $filesystem = new Filesystem();
 
         if (!empty($dir)) {
