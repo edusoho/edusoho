@@ -1339,9 +1339,6 @@ html.html-nav-active {
 .tooltip {
   min-width: 40px;
 }
-.collapse {
-  display: block;
-}
 #content-container {
   margin: 30px auto;
   min-height: 500px;
