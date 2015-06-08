@@ -1319,10 +1319,6 @@ html.html-nav-active {
   overflow: hidden;
 }
 .es-wrap {
-  transform: translate3d(0px, 0px, 0px);
-  -webkit-transform: translate3d(0px, 0px, 0px);
-  -o-transform: translate3d(0px, 0px, 0px);
-  -moz-transform: translate3d(0px, 0px, 0px);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1342,9 +1338,6 @@ html.html-nav-active {
 }
 .tooltip {
   min-width: 40px;
-}
-.collapse {
-  display: block;
 }
 #content-container {
   margin: 30px auto;
@@ -5429,7 +5422,8 @@ textarea.form-control-o {
   position: relative;
   padding: 10px 100px 10px 45px;
 }
-.period-list .period:hover {
+.period-list .period:hover,
+.period-list .period.item-active {
   background-color: #f2fae3;
 }
 .period-list .period.disable {
@@ -6003,4 +5997,8 @@ textarea.form-control-o {
 }
 .teacher-item .metas .btn {
   margin: 0 15px;
+}
+.custompage .es-section img {
+  max-width: 100%;
+  height: auto;
 }
