@@ -155,7 +155,7 @@
         {% endif %}
 
         {# 推荐话题 #}
-        {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
+        <!-- {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
         {% if threads %}
           <div class="es-box topic">
             <div class="es-box-heading">
@@ -190,7 +190,7 @@
               </ul>
             </div>
           </div>
-        {% endif %}
+        {% endif %} -->
 
         {# 讲师团 #}
         {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
