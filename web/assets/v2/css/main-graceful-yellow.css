@@ -6000,3 +6000,7 @@ textarea.form-control-o {
 .teacher-item .metas .btn {
   margin: 0 15px;
 }
+.custompage .es-section img {
+  max-width: 100%;
+  height: auto;
+}
