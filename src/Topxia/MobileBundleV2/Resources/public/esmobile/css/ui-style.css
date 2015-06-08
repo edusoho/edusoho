@@ -3,6 +3,17 @@
   main
 */
 
+.tab-item.line>span {
+  position: relative;
+  top: 15px;
+  height: 20px;
+  line-height: 20px;
+  display: block;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #ccc;
+}
+
 /* list */
 .list .item {
   -webkit-transition: all 0.2s ease-in-out 200ms;
@@ -119,12 +130,21 @@
 }
 
 .shard-login {
+    background: #fff;
     padding: 8px;
-    font-size: 42px !important;
-    border: solid 1px #37b97d;
-    border-radius: 50%;
-    color: #ffffff;
-    background: #37b97d;
+    font-size: 56px !important;
+}
+
+.weixin-login {
+    color: #37b97d;
+}
+
+.weibo-login {
+    color: #f58b5b;
+}
+
+.qq-login {
+    color: #4990e2;
 }
 
 .bar.bar-positive {
@@ -146,7 +166,6 @@
 
 .tab-item {
   color: #757575 ! important;
-  font-size: 15px ! important;
 }
 
 .noborder {
@@ -679,37 +698,54 @@ modal
 }
 
 .sign .button-code {
-  margin-left: 55%;
+  background: #f0f0f0;
+  border: 0;
+  top: 0;
+  right: 0;
+  position: absolute;
+  line-height: 44px;
+  min-height: 44px;
 }
 
 .sign .item {
-    margin-left: 16px;
-    margin-right: 16px;
-    padding-left: 0px;
-    border:0;
+  padding: 8px;
+  height: 44px;
+  display: block;
+  border: solid 1px #ccc;
+  margin: 16px;
 }
 
 .sign .active {
   border-color: green;
 }
 
+.sign i {
+  color: #ccc;
+  font-size: 20px;
+}
+
 .sign input {
-  display: block;
+  font-size: 15px;
+  display: table;
   position: absolute;
   left: 0;
-  padding-left: 60px;
-  border-bottom-width: 1px;
-  border-bottom-color: #ddd;
-  border-bottom-style: solid;
-  height: 48px;
+  top: 0;
+  padding-left: 16px;
+  height: 44px;
+  line-height: 44px;
 }
 
 .sign .input-label {
-  line-height: 48px;
-  height: 48px;
-  padding: 0;
+  padding: 0px;
+  line-height: 26px;
+  height: 26px;
+  width: 20px;
 }
 
+/** login **/
+.login input {
+  padding-left: 32px;
+}
 /* sign */
 
 .tabs-green .tabs {
@@ -875,6 +911,10 @@ modal
   padding: 0;
   top: 44px;
   margin-bottom: 44px;
+}
+
+.course-body .course-tab-content .tab-item {
+  font-size: 15px;
 }
 
 .course-body .lesson-list .item {

@@ -40,5 +40,37 @@
 		</div>
 		<a class="button button-clear more" href="#/courselist">查看更多</a>
 	</div>
+
+	<div class="course-card">
+		<h4>最新</h4>
+		<div class="list">
+
+		    <a class="item item-thumbnail-left" href="#/course/{{ recommendCourse.id }}" ng-repeat="recommendCourse in recommedCourses">
+		      <div class="page-pic">
+			      <img src="{{ recommendCourse.middlePicture }}">
+			      <div class="discount" ng-if="recommendCourse.discountId > 0">
+			      	<span ng-if="recommendCourse.discount == 0">限时免费</span>
+			      	<span ng-if="recommendCourse.discount > 0">限时打折</span>
+			      </div>
+		      </div>
+		      <h2>{{ recommendCourse.title }}</h2>
+		      <p class="bottom price-body">
+		      	
+		      	<span class="origin-price">
+			      {{ recommendCourse.price | formatPrice }}
+			      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
+			      	{{ recommendCourse.originPrice | formatPrice }}
+			      </s>
+			</span>
+
+			<span class="right">
+			      <i class="iconfont icon-person"></i>
+			      {{ recommendCourse.studentNum }}人在学
+			</span>
+		      </p>
+		    </a>
+		</div>
+		<a class="button button-clear more" href="#/courselist">查看更多</a>
+	</div>
   </ion-content>
 </ion-view>

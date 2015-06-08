@@ -19,6 +19,7 @@ function RegistController($scope, $http, $ionicHistory, UserService, $state)
 	};
 
 	$scope.sendSmsCode = function(phone) {
+			console.log(1111);
 		if (!parseInt(phone)) {
 			alert("手机格式不正确!");
 			return;
