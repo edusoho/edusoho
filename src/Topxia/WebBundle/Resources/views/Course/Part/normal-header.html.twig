@@ -120,14 +120,17 @@
 
 {% macro student_num(course) %}
   <div class="student-num hidden-xs">
-    <!-- <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人 -->
-    <i class="es-icon es-icon-accesstime"></i>{{ course.studentNum }}课时
-    {% if course.maxStudentNum > 0 %}
-      {% if course.studentNum >= course.maxStudentNum %}
-        <small>(名额已满)</small>
-      {% else %}
-        <small>({{ course.maxStudentNum }}名额)</small>
+    {% if setting('course.show_student_num_enabled', '1') == 1  %}
+      <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
+      {% if course.maxStudentNum > 0 %}
+        {% if course.studentNum >= course.maxStudentNum %}
+          <small>(名额已满)</small>
+        {% else %}
+          <small>({{ course.maxStudentNum }}名额)</small>
+        {% endif %}
       {% endif %}
+    {% else %}
+      <i class="es-icon es-icon-accesstime"></i>{{ course.lessonNum }}课时
     {% endif %}
   </div>
 {% endmacro %}
