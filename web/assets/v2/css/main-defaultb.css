@@ -5425,7 +5425,8 @@ textarea.form-control-o {
   position: relative;
   padding: 10px 100px 10px 45px;
 }
-.period-list .period:hover {
+.period-list .period:hover,
+.period-list .period.item-active {
   background-color: #f2fae3;
 }
 .period-list .period.disable {
@@ -5999,4 +6000,8 @@ textarea.form-control-o {
 }
 .teacher-item .metas .btn {
   margin: 0 15px;
+}
+.custompage .es-section img {
+  max-width: 100%;
+  height: auto;
 }
