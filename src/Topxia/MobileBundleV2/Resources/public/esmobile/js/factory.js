@@ -37,21 +37,6 @@ appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', '$ionicPopup', funct
 				}
 				$scope.modal = modal;
 			});
-
-			$scope.openModal = function() {
-				if ($scope.modal.isShown) {
-					$scope.modal.show();
-				} else {
-					$scope.modal.hide();
-				}
-			};
-			$scope.closeModal = function() {
-				$scope.modal.hide();
-			};
-
-			$scope.$on('$destroy', function() {
-				$scope.modal.remove();
-			});
 		}
 	};
 	

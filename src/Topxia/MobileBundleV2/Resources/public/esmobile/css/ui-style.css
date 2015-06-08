@@ -9,6 +9,7 @@
 }
 
 .bar-positive {
+  background-image : none ! important;
   background-color: #fff ! important;
   border-color:#fff ! important;
 }
@@ -145,6 +146,7 @@
 
 .tab-item {
   color: #757575 ! important;
+  font-size: 15px ! important;
 }
 
 .noborder {
@@ -174,6 +176,15 @@
 }
 
 /*menu-content*/
+
+.menu-content {
+  box-shadow: 0 0 0px 0 ! important;
+}
+
+
+.st-menu-open .menu-content {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
 
 .menu-content {
   border-right : 0 ! important;
@@ -534,8 +545,8 @@
 }
 
 .button.button-yellow {
-  border-color: #E26904;
-  background-color: #F5780F;
+  border-color: #ff884b;
+  background-color: #ff884b;
   color: #fff;
 }
 
@@ -1014,7 +1025,7 @@ modal
   background: #A7F5D1;
   color: #37b97d;
   padding: 2px 4px 2px 4px;
-  font-size: 5px;
+  font-size: 9px;
   line-height: 10px;
   border-radius: 3px;
 }

@@ -36,6 +36,22 @@ function FoundTabController($scope, CategoryService, AppUtil, $state)
 			$scope,
 			app.viewFloder + "view/category.html"
 		);
+		$scope.openModal = function($event) {
+			if ($scope.modal.isShown) {
+				$scope.modal.show();
+			} else {
+				$scope.modal.hide();
+			}
+			
+			$event.preventDefault();
+		};
+		$scope.closeModal = function() {
+			$scope.modal.hide();
+		};
+
+		$scope.$on('$destroy', function() {
+			$scope.modal.remove();
+		});
 	};
 }
 

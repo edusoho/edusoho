@@ -86,6 +86,10 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
     }
 
     $scope.favoriteCourse = function() {
+      if ($scope.user == null) {
+        $state.go("login", { goto : "/course/" + $stateParams.courseId });
+        return;
+      }
       var params = {
           courseId : $stateParams.courseId,
           token : $scope.token
@@ -159,6 +163,9 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
     });
 
     $scope.onTabSelected = function(tabScope) {
+      console.log($ionicScrollDelegate.$getByHandle("mainScroll"));
+      $ionicScrollDelegate.$getByHandle("mainScroll").resize();
+      //$ionicScrollDelegate.$getByHandle("mainScroll").scrollTop();
       $scope.selectedIndex = $ionicTabsDelegate.$getByHandle("tabHandle").selectedIndex();
     }
 }
