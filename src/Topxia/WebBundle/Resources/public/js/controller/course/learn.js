@@ -732,7 +732,7 @@ define(function(require, exports, module) {
             this.type = type;
             this.courseId = courseId;
             this.lessonId = lessonId;
-            this.interval = 120;
+            this.interval = 10;
             this.watched = false;
             this.watchLimit = watchLimit;
         },
@@ -779,24 +779,16 @@ define(function(require, exports, module) {
             var posted = false;
             if(learningCounter >= this.interval || (learningCounter>0 && paused)){
                 var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
-                $.post(url);
-                posted = true;
-                learningCounter = 0;
-            } else if(!paused){
-                learningCounter++;
-            }
-
-            if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
-                this.watched = true;
-                var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
-                $.post(url, function(result) {
-                    if (result.status == 'ok') {
-                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
-                    } else if (result.status == 'error') {
+                var self = this;
+                $.post(url, function(response) {
+                    if (self.watchLimit && response.watchLimited && self.type == 'MediaPlayer') {
                         window.location.reload();
                     }
-
                 }, 'json');
+                posted = true;
+                learningCounter = 0;
+            } else if(!paused) {
+                learningCounter++;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
