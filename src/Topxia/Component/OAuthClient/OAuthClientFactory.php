@@ -65,6 +65,16 @@ class OAuthClientFactory
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'http://wiki.dev.renren.com/wiki/WEB%E7%BD%91%E7%AB%99%E5%B8%90%E5%8F%B7%E7%99%BB%E5%BD%95%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B'
             ),
+            'weixin' => array(
+                'name' => '微信帐号',
+                'class' => 'Topxia\Component\OAuthClient\WeixinOAuthClient',
+                'icon_class' => 'social-icon social-icon-weixin',
+                'icon_img' => '',
+                'large_icon_img' => 'assets/img/social/weixn.png',
+                'key_setting_label' => 'App ID',
+                'secret_setting_label' => 'App Secret',
+                'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN'
+            ),
         );
 
         $kernel = ServiceKernel::instance();
