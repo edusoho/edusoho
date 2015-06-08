@@ -595,7 +595,7 @@ class CourseLessonController extends BaseController
         return false;
     }
 
-    public function listAction(Request $request, $courseId, $member, $previewUrl)
+    public function listAction(Request $request, $courseId, $member, $previewUrl, $mode = 'full')
     {
         $user = $this->getCurrentUser();
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
@@ -630,6 +630,7 @@ class CourseLessonController extends BaseController
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
+            'mode' => $mode,
         ));
     }
 
