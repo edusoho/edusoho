@@ -73,7 +73,7 @@ class OAuthClientFactory
                 'large_icon_img' => 'assets/img/social/weixn.png',
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Secret',
-                'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN'
+                'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/wx_login_tmpl&lang=zh_CN'
             ),
         );
 

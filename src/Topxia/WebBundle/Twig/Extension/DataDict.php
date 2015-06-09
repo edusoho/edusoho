@@ -117,7 +117,7 @@ class DataDict
             'unpublished' => '<span class="text-muted">未发布</span>',
             'trash' => '<span class="text-warning">回收站</span>',
     	),
-	'articleStatus' => array(
+		'articleStatus' => array(
             'published' => '已发布',
             'unpublished' => '未发布',
             'trash' => '回收站',
@@ -203,7 +203,8 @@ class DataDict
 			'weibo' => '微博登录',
 			'renren' => '人人连接',
 			'qq' => 'QQ登录',
-			'douban' => '豆瓣连接'
+			'douban' => '豆瓣连接',
+			'weixin' => '微信登录'
 		),
 		'userKeyWordTypes' => array(
 			'nickname' => '用户名',

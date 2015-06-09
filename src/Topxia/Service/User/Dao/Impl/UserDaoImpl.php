@@ -103,6 +103,11 @@ class UserDaoImpl extends BaseDao implements UserDao
             unset($conditions['keyword']);
         }
 
+        if (isset($conditions['keywordUserType'])) {
+            $conditions['type'] = $conditions['keywordUserType'];
+            unset($conditions['keywordUserType']);
+        }
+
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
@@ -122,7 +127,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('createdTime <= :endTime')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
-            ->andWhere('verifiedMobile = :verifiedMobile');
+            ->andWhere('verifiedMobile = :verifiedMobile')
+            ->andWhere('type = :type');
     }
 
     public function addUser($user)
