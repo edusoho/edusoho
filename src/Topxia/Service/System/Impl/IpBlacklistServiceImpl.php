@@ -12,8 +12,6 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
         $setting = $this->getSettingService()->get('login_bind', array());
         $setting = array_merge(array('temporary_lock_minutes' => 20), $setting);
 
-
-
         $existIp = $this->getIpBlacklistDao()->getIpByIpAndType($ip, 'failed');
         if (empty($existIp)) {
             $ip = array(

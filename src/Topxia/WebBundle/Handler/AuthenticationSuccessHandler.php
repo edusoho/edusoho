@@ -18,7 +18,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
         $forbidden =  AuthenticationHelper::checkLoginForbidden($request);
         if ($forbidden['status'] == 'error') {
-            $exception = new AuthenticationException($forbidden['message'] . '!');
+            $exception = new AuthenticationException($forbidden['message']);
             throw $exception;
         } else {
             $this->getUserService()->markLoginSuccess($userId, $request->getClientIp());

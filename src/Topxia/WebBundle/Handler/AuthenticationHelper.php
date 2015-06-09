@@ -18,10 +18,7 @@ class AuthenticationHelper
         $setting = array_merge($default, $setting);
 
         $username = $request->request->get('_username');
-        $user = self::getUserService()->getUserByNickname($username);
-        if (empty($user)) {
-            $user = self::getUserService()->getUserByEmail($username);
-        }
+        $user = self::getUserService()->getUserByLoginField($username);
 
         $result = self::getUserService()->checkLoginForbidden($user ? $user['id'] : 0, $request->getClientIp());
         if ($result['status'] == 'error') {
