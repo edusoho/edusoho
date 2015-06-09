@@ -405,7 +405,7 @@
     -o-transform: translateX(0);
   }
 }
-.color-primiay {
+.color-primary {
   color: #ffae00 !important;
 }
 .color-warning {
@@ -546,7 +546,6 @@
 .p-lg {
   line-height: 30px;
   margin-bottom: 30px;
-  text-indent: 2em;
 }
 .ml10 {
   margin-left: 10px;
@@ -749,18 +748,20 @@ Pagination Styles
 .navbar {
   margin-bottom: 0;
   z-index: 99;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 .es-header {
   background: #3f3f3f;
   height: 60px;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
   border: none;
-  z-index: 99;
 }
 .es-header .container {
   position: relative;
+}
+.es-header .collapse {
+  display: block;
 }
 @media (max-width: 767px) {
   .es-header .navbar-header {
@@ -865,17 +866,17 @@ Pagination Styles
   line-height: 20px;
   display: block;
   color: #fff;
-  z-index: 999;
+  z-index: 1001;
 }
 .es-header .navbar-mobile .nav-mobile {
   width: 250px;
   overflow-x: hidden;
+  overflow-y: auto;
   position: fixed;
   left: -250px;
   top: 0;
   height: 100%;
   background: #3f3f3f;
-  z-index: 999;
   visibility: hidden;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -892,10 +893,7 @@ Pagination Styles
 .es-header .navbar-mobile .nav {
   float: none;
   text-align: left;
-  padding-right: 20px;
-}
-.es-header .navbar-mobile .dropdown-menu {
-  padding-left: 20px;
+  padding: 0 20px;
 }
 .es-header .navbar-mobile .dropdown-menu > li > a {
   color: #fff;
@@ -1318,6 +1316,9 @@ html.html-nav-active {
   position: relative;
   overflow: hidden;
 }
+html.html-nav-active body {
+  overflow: hidden;
+}
 .es-wrap {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -1330,11 +1331,14 @@ html.html-nav-active {
   -o-transform: translate3d(250px, 0px, 0px);
   -moz-transform: translate3d(250px, 0px, 0px);
 }
-.lesson-dashboard-page .es-wrap {
-  transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -moz-transform: none;
+.html-mask.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.2);
 }
 .tooltip {
   min-width: 40px;
@@ -1460,11 +1464,13 @@ a:focus {
 .course-list .course-item {
   margin-bottom: 20px;
   border: 1px solid #e0e0e0;
-  border-shadow: 5px 5px 5px #666;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
 }
 .course-list .course-item a {
   color: #212121;
@@ -2253,10 +2259,10 @@ a:focus {
   visibility: visible;
 }
 .media-group {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 .media-group:first-child {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 .media-group .media-left {
   margin-left: 10px;
@@ -3650,6 +3656,9 @@ textarea.form-control-o {
   padding-bottom: 23px;
   margin-bottom: 20px;
 }
+.index-group .panel-body {
+  padding-bottom: 30px !important;
+}
 .index-dynamic {
   padding-bottom: 15px;
   margin-bottom: 20px;
@@ -4039,9 +4048,18 @@ textarea.form-control-o {
   border-top: 1px solid #f5f5f5;
 }
 .course-detail-header {
-  padding: 30px 0 10px 0;
+  position: relative;
   background: url("../img/course_detail_header.jpg");
   background-size: 100% 100%;
+  background-attachment: fixed;
+}
+.course-detail-header .course-header-wrap {
+  padding: 30px 0 10px 0;
+  filter: alpha(opacity=30);
+  background: #000\9;
+  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
 .course-detail-header .es-section {
   position: relative;
@@ -4663,6 +4681,10 @@ textarea.form-control-o {
 .course-material input {
   margin-right: 10px;
 }
+.course-detail-content img {
+  max-width: 100%;
+  height: auto;
+}
 .belongs-class .media-left img {
   width: 100px;
   height: auto;
@@ -4695,9 +4717,17 @@ textarea.form-control-o {
   background: url("../img/course_banner.jpg") center center;
 }
 .class-header {
-  padding: 30px 0 40px 0;
   background: url("../img/class_bg.jpg");
   background-size: 100% 100%;
+  background-attachment: fixed;
+}
+.class-header .class-header-wrap {
+  padding: 30px 0 40px 0;
+  filter: alpha(opacity=30);
+  background: #000\9;
+  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
 .class-header .class-header-mian {
   position: relative;
@@ -4844,31 +4874,9 @@ textarea.form-control-o {
 }
 .class-header .class-data > li .dropdown-toggle {
   color: #9e9e9e;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.class-header .class-data > li .dropdown-toggle > i {
-  color: #9e9e9e;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 .class-header .class-data > li .dropdown-toggle:hover {
   color: #ffae00;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.class-header .class-data > li .dropdown-toggle:hover > i {
-  color: #ffae00;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 .class-header .price {
   position: absolute;
@@ -5471,10 +5479,16 @@ textarea.form-control-o {
   right: 15px;
   color: #9e9e9e;
 }
+.class-detail-content {
+  min-height: 300px;
+}
 .class-detail-content .class-about p {
   line-height: 30px;
   margin-bottom: 30px;
-  text-indent: 2em;
+}
+.class-detail-content .class-about img {
+  max-width: 100%;
+  height: auto;
 }
 .topic-detail .topic-header {
   position: relative;

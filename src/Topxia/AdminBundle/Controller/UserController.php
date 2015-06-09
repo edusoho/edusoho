@@ -204,7 +204,11 @@ class UserController extends BaseController
                         $role .= "、";
                     }
                 }
-                $this->getNotifiactionService()->notify($user['id'],'default',"您被“{$currentUser['nickname']}”设置为“{$role}”身份。");
+                $message = array(
+                    'userId' =>$currentUser['id'],
+                    'userName' => $currentUser['nickname'],
+                    'role' => $role);
+                $this->getNotifiactionService()->notify($user['id'],'role',$message);
             }
 
             if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {

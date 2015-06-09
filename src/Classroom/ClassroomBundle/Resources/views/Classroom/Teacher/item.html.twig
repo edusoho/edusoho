@@ -8,7 +8,7 @@
       <div class="title">
         <a class="link-light" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
         {% if member.role == 'headTeacher' %}
-          <i class="es-icon es-icon-school color-primiay" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
+          <i class="es-icon es-icon-school color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
         {% endif %}
 
         {% if member.role == 'assistant' %}
