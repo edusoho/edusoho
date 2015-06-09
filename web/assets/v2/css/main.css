@@ -1337,16 +1337,14 @@ html.html-nav-active body {
   -o-transform: translate3d(250px, 0px, 0px);
   -moz-transform: translate3d(250px, 0px, 0px);
 }
-.html-mask {
-  position: absolute;
+.html-mask.active {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 999;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
-  background: #000;
+  z-index: 990;
+  background: rgba(0, 0, 0, 0.2);
 }
 .tooltip {
   min-width: 40px;
