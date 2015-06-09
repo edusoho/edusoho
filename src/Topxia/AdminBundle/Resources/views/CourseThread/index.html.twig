@@ -2,7 +2,7 @@
 
 {% set script_controller = 'course/threads' %}
 
-{% set menu = 'admin_course_thread' %}
+{% set menu = 'admin_course_thread_manage' %}
 
 {% block main %}
 
@@ -66,7 +66,7 @@
                 <span class="label label-info">问</span>
               {% endif %}
 
-              <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
+              <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
 
               <div class="short-long-text">
                 <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">(展开)</span></div>

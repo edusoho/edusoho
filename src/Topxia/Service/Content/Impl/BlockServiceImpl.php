@@ -8,9 +8,9 @@ use Topxia\Common\ArrayToolkit;
 class BlockServiceImpl extends BaseService implements BlockService
 {
 
-    public function searchBlockCount()
+    public function searchBlockCount($condition)
     {
-        return $this->getBlockDao()->searchBlockCount();
+        return $this->getBlockDao()->searchBlockCount($condition);
     }
 
     public function findBlockHistoryCountByBlockId($blockId)
@@ -21,6 +21,15 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function getLatestBlockHistory()
     {
         return  $this->getBlockHistoryDao()->getLatestBlockHistory();
+    }
+
+    public function getLatestBlockHistoriesByBlockIds($blockIds)
+    {
+        $blockHistories = array();
+        foreach ($blockIds as $key => $blockId) {
+            $blockHistories[] = $this->getBlockHistoryDao()->getLatestBlockHistoryByBlockId($blockId);
+        }
+        return ArrayToolkit::index($blockHistories, 'blockId');
     }
 
     public function getBlock($id)
@@ -74,9 +83,9 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
     }
 
-    public function searchBlocks($start, $limit)
+    public function searchBlocks($condition, $sort,$start, $limit)
     {
-        return $this->getBlockDao()->findBlocks($start, $limit);
+        return $this->getBlockDao()->findBlocks($condition, $sort, $start, $limit);
     }
 
     public function findBlockHistorysByBlockId($blockId, $start, $limit)
@@ -121,6 +130,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $blockHistoryInfo = array(
             'blockId'=>$updatedBlock['id'],
             'content'=>$updatedBlock['content'],
+            'data' => $updatedBlock['data'],
             'templateData'=>$updatedBlock['templateData'],
             'userId'=>$user['id'],
             'createdTime'=>time()
@@ -171,7 +181,28 @@ class BlockServiceImpl extends BaseService implements BlockService
         }
 
         // $content = $this->purifyHtml($content);
-        return $this->getBlockDao()->updateBlock($id, array('content'=>$content));
+        return $this->getBlockDao()->updateBlock($id, array(
+            'content'=>$content,
+            'updateTime' => time()
+        ));
+    }
+
+    public function recovery($blockId, $history)
+    {
+        $block = $this->getBlockDao()->getBlock($blockId);
+        if (!$block) {
+            throw $this->createServiceException("此编辑区不存在，更新失败!");
+        }
+
+        if ($block['mode'] == 'template' && empty($history['data'])) {
+            throw $this->createServiceException("此编辑区数据不存在，更新失败!");
+        }
+
+        // $content = $this->purifyHtml($content);
+        return $this->getBlockDao()->updateBlock($blockId, array(
+            'content' => $history['content'],
+            'data' => $history['data']
+        ));
     }
 
     private function getBlockDao()

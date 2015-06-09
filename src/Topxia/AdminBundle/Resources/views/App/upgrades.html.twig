@@ -5,6 +5,9 @@
 {% set menu = 'admin_app_upgrades' %}
 
 {% block main %}
+
+<div class="panel">
+  {% if apps %}<div class="panel-heading"><h4>{{ apps|length}}个可用更新</h4></div>{% endif %}
 {% if status|default(null) %}
   <div class="alert alert-danger">AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="{{path('admin_setting_cloud')}}">请修改设置。</a></div>
 {% else %}
@@ -22,7 +25,7 @@
 
          <td width="26%">
             <div class="mtm ">
-              <a href="#" class=""> <h4><strong class="text-primary">{{ app.name }}</strong></h4></a> {% if version_compare(app.package.edusohoMinVersion, version, ">") %}<div class="text-danger">需要主系统版本为{{app.package.edusohoMinVersion}}以上才能更新</div>{% endif %}
+              <a href="#" class=""> <h4><strong class="text-primary">{{ app.name }}</strong></h4></a> {% if version_compare(app.package.edusohoMinVersion, version, ">") %}<div class="text-danger">需要主系统{{app.package.edusohoMinVersion}}及更高版本</div>{% endif %}
            </div>
 
           <!-- <div class="info mtm mbm clearfix"> -->
@@ -59,4 +62,5 @@
 当前已是最新版本!
 {% endif %}
 {% endif %}
+</div>
 {% endblock %}

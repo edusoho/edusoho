@@ -32,13 +32,13 @@ class EduCloudController extends BaseController
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
 
-                if (!$this->getUserService()->isMobileUnique($to)) {
-                    return $this->createJsonResponse(array('error' => "这个手机已经被绑定"));
-                }
-
                 $hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
                 if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])){
-                    return $this->createJsonResponse(array('error' => "您已经绑定了这个手机"));
+                    return $this->createJsonResponse(array('error' => "您已经绑定了该手机号码"));
+                }
+
+                if (!$this->getUserService()->isMobileUnique($to)) {
+                    return $this->createJsonResponse(array('error' => "该手机号码已被其他用户绑定"));
                 }
             }
 
@@ -166,10 +166,10 @@ class EduCloudController extends BaseController
         }
 
         if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
-            throw new \RuntimeException('用户未登陆');
+            throw new \RuntimeException('用户未登录');
         }
 
-        if ($this->getCloudSmsKey($smsType) != 'on') {
+        if ($this->getCloudSmsKey($smsType) != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
     }

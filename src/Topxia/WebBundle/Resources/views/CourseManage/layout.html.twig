@@ -49,7 +49,7 @@
               <a class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}" href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">试卷管理</a>
               <a class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}" href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}">试卷批阅</a>
               {% if is_plugin_installed('Homework') %}
-                <a class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}" href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}">作业批阅</a>
+                <a class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}" href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}">作业批改</a>
               {% endif %}
             </div>
           </div>

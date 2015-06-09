@@ -14,23 +14,26 @@ class CourseStudentManageController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($id);
 
 		$fields = $request->query->all();
-		$nickname="";
-		if(isset($fields['nickName'])){
-            $nickname =$fields['nickName'];
-        } 
+		$condition = array();
+		if(isset($fields['nickname'])){
+            $condition['nickname'] = $fields['nickname'];
+        }
+
+        $condition = array_merge($condition, array('courseId'=>$course['id'],'role'=>'student'));
 
 		$paginator = new Paginator(
 			$request,
-			$this->getCourseService()->searchMemberCount(array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname)),
+			$this->getCourseService()->searchMemberCount($condition),
 			20
 		);
 
 		$students = $this->getCourseService()->searchMembers(
-			array('courseId'=>$course['id'],'role'=>'student','nickname'=>$nickname),
+			$condition,
 			array('createdTime','DESC'),
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+
 		$studentUserIds = ArrayToolkit::column($students, 'userId');
 		$users = $this->getUserService()->findUsersByIds($studentUserIds);
 		$followingIds = $this->getUserService()->filterFollowingIds($this->getCurrentUser()->id, $studentUserIds);
@@ -71,7 +74,7 @@ class CourseStudentManageController extends BaseController
 
 		if ('POST' == $request->getMethod()) {
 			$data = $request->request->all();
-			$user = $this->getUserService()->getUserByNickname($data['nickname']);
+			$user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 			if (empty($user)) {
 				throw $this->createNotFoundException("用户{$data['nickname']}不存在");
 			}
@@ -86,6 +89,7 @@ class CourseStudentManageController extends BaseController
 				'targetType' => 'course',
 				'targetId' => $course['id'],
 				'amount' => $data['price'],
+				'totalPrice' => $data['price'],
 				'payment' => 'none',
 				'snPrefix' => 'C',
 			));
@@ -124,6 +128,8 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
+    
+
 	public function removeAction(Request $request, $courseId, $userId)
 	{
 		$courseSetting = $this->getSettingService()->get('course', array());
@@ -154,8 +160,12 @@ class CourseStudentManageController extends BaseController
 		} else {
 			$course = $this->getCourseService()->tryAdminCourse($id);
 		}
+		
+		$userinfoFields=array();
+		if(isset($courseSetting['userinfoFields'])){
+			$userinfoFields=array_diff($courseSetting['userinfoFields'], array('truename','job','mobile','qq','company','gender','idcard','weixin'));
+		}
 
-		$userinfoFields=array_diff($courseSetting['userinfoFields'], array('truename','job','mobile','qq','company','gender','idcard','weixin'));
 		$courseMembers = $this->getCourseService()->searchMembers( array('courseId' => $course['id'],'role' => 'student'),array('createdTime', 'DESC'), 0, 1000);
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -248,14 +258,13 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	public function checkNicknameAction(Request $request, $id)
+	public function checkStudentAction(Request $request, $id)
 	{
-		$nickname = $request->query->get('value');
-		$result = $this->getUserService()->isNicknameAvaliable($nickname);
-		if ($result) {
+		$keyword = $request->query->get('value');
+		$user = $this->getUserService()->getUserByLoginField($keyword);
+		if (!$user) {
 			$response = array('success' => false, 'message' => '该用户不存在');
 		} else {
-			$user = $this->getUserService()->getUserByNickname($nickname);
 			$isCourseStudent = $this->getCourseService()->isCourseStudent($id, $user['id']);
 			if($isCourseStudent){
 				$response = array('success' => false, 'message' => '该用户已是本课程的学员了');

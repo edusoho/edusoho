@@ -245,7 +245,7 @@ class CoinController extends BaseController
 
         if(!empty($fields)){
           $conditions =$this->filterCondition($fields);
-        };
+        }
 
         $conditions['cashType']="Coin";
 
@@ -321,7 +321,7 @@ class CoinController extends BaseController
 
         if(!empty($fields)){
           $condition =$this->convertFiltersToCondition($fields);
-        };
+        }
 
         if(isset($condition['userId'])){
 

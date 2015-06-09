@@ -504,6 +504,10 @@ class AppServiceImpl extends BaseService implements AppService
 
         $this->getAppDao()->deleteApp($app['id']);
 
+        $cachePath = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+
     }
 
     public function updateAppVersion($id, $version)
@@ -640,22 +644,6 @@ class AppServiceImpl extends BaseService implements AppService
     {
         return $this->getDownloadDirectory(). '/' . $package['fileName'];
     }   
-
-    private function getCachePath(){
-        $realPath = $this->getKernel()->getParameter('kernel.root_dir');
-        $realPath .= DIRECTORY_SEPARATOR.'cache';   
-        return  $realPath;
-    }
-
-    private function hasEduSohoMainApp($apps)
-    {
-        foreach ($apps as $app) {
-            if($app['code'] === 'MAIN') {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private function addEduSohoMainApp()
     {

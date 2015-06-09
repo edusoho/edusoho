@@ -1,0 +1,13 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}提示{% endblock %}
+
+{% block body %}
+    <h4>您尚未成为{{ targetObject.name|default("班级") }}成员，请先成为{{ targetObject.name|default("班级") }}成员。</h4>
+{% endblock %}
+
+{% block footer %}
+    {% if not targetObject.private %}
+      <a href="{{ path('classroom_become_auditor', {id:targetObject.id}) }}" class="btn btn-primary">加入旁听生</a>
+   {% endif %}
+{% endblock %}

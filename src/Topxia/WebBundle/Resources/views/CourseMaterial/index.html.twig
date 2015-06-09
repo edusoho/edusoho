@@ -1,9 +1,10 @@
-{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% set script_controller = 'course/common' %}
 
-{% block dashboard_main %}
-	{% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'material'} %}
+{% set tab = 'material' %}
+
+{% block course_main %}
 
 	<ul class="media-list">
 	{% for material in materials %}

@@ -34,7 +34,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     public function executeJob($id)
     {
         try {
-
             // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
             $this->getSettingService()->set('crontab_next_executed_time', 0);
 
@@ -58,11 +57,29 @@ class CrontabServiceImpl extends BaseService implements CrontabService
                 $this->getJobDao()->deleteJob($job['id']);
             }
 
+            if ($job['cycle'] == 'everyhour') {
+                $time = time();
+                $this->getJobDao()->updateJob($job['id'], array(
+                    'executing' => '0',
+                    'latestExecutedTime' => $time,
+                    'nextExcutedTime' => strtotime('+1 hours',$time)
+                ));
+            }
+
+            if ($job['cycle'] == 'everyday') {
+                $time = time();
+                $this->getJobDao()->updateJob($job['id'], array(
+                    'executing' => '0',
+                    'latestExecutedTime' => $time,
+                    'nextExcutedTime' => strtotime(date('Y-m-d', strtotime('+1 day',$time)).' '.$job['cycleTime'])
+                ));
+            }
+
             $this->getJobDao()->getConnection()->commit();
 
             $this->refreshNextExecutedTime();
 
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             $this->getJobDao()->getConnection()->rollback();
             $message = $e->getMessage();
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}");

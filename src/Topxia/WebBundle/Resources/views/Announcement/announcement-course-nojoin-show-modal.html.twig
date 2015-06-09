@@ -1,0 +1,19 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}提示{% endblock %}
+
+{% block body %}
+    <h4>您尚未成为{{ targetObject.title|default('课程') }}学员，请先成为{{ targetObject.title|default('课程') }}学员。</h4>
+{% endblock %}
+
+{% block footer %}
+    <a id="course-buy-btn" class="btn btn-primary"
+      {% if setting("targetObject.buy_fill_userinfo")|default(false) %}
+      href="#modal" data-toggle="modal" 
+      data-url="{{ path('course_buy', {id:targetObject.id, targetType:'course'}) }}"
+      {% else %}
+      href="{{ path('order_show', {targetId:targetObject.id, targetType:'course'}) }}"
+      {% endif %}
+      >加入学习
+    </a>
+{% endblock %}

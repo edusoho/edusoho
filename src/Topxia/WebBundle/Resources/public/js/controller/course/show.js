@@ -1,8 +1,14 @@
 define(function(require, exports, module) {
 
     require('jquery.countdown');
+    var Swiper = require('swiper');
+    var chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
 
     exports.run = function() {
+        new chapterAnimate({
+            'element': '.course-detail-content'
+        });
+
         $('#teacher-carousel').carousel({
             interval: 0
         });
@@ -58,8 +64,6 @@ define(function(require, exports, module) {
 
         });
 
-
-
         $('#course-nav-tabs').on('click', '.btn-index', function(event) {
             event.preventDefault();
             var position = $($(this).data('anchor')).offset();
@@ -67,21 +71,29 @@ define(function(require, exports, module) {
             $(document).scrollTop(top);
         });
 
-        $("#favorite-btn").on('click', function() {
-            var $btn = $(this);
-            $.post($btn.data('url'), function() {
-                $btn.hide();
-                $("#unfavorite-btn").show();
-            });
-        });
+        if ($('.icon-vip').length > 0) {
+           $(".icon-vip").popover({
+                trigger: 'manual',
+                placement: 'auto top',
+                html: 'true',
+                container: 'body',
+                animation: false
+            }).on("mouseenter", function () {
+                var _this = $(this);
+                _this.popover("show");
+                $(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+            }).on("mouseleave", function () {
+                var _this = $(this);
+                setTimeout(function () {
+                    if (!$(".popover:hover").length) {
+                        _this.popover("hide")
+                    }
+                }, 100);
+            }); 
+        }
 
-        $("#unfavorite-btn").on('click', function() {
-            var $btn = $(this);
-            $.post($btn.data('url'), function() {
-                $btn.hide();
-                $("#favorite-btn").show();
-            });
-        });
 
         $(".cancel-refund").on('click', function() {
             if (!confirm('真的要取消退款吗？')) {
@@ -93,7 +105,7 @@ define(function(require, exports, module) {
             });
         });
 
-        $('.become-use-member-btn').on('click', function() {
+        $('#vip-join-course').on('click', function() {
             $.post($(this).data('url'), function(result) {
                 if (result == true) {
                     window.location.reload();
@@ -105,35 +117,48 @@ define(function(require, exports, module) {
             });
         });
 
-        $('.announcement-list').on('click', '[data-role=delete]', function() {
-            if (confirm('真的要删除该公告吗？')) {
-                $.post($(this).data('url'), function() {
-                    window.location.reload();
-                });
-            }
-            return false;
-        });
 
         // fix for youku iframe player in firefox.
         $('#modal').on('shown.bs.modal', function() {
             $('#modal').removeClass('in');
         });
 
-        var time = $('#discount-endtime-countdown').data('endtime');
-        $('#discount-endtime-countdown').countdown(time, function(event) {
-           var $this = $(this).html(event.strftime('剩余 '
-             + '<span>%D</span> 天 '
-             + '<span>%H</span> 时 '
-             + '<span>%M</span> 分 '
-             + '<span>%S</span> 秒'));
-         }).on('finish.countdown', function() {
-            $(this).html('活动时间到，正在刷新网页，请稍等...');
-            setTimeout(function() {
-                $.post(app.crontab, function(){
-                    window.location.reload();
-                });
-            }, 2000);
-         });
+        var remainTime = parseInt($('#discount-endtime-countdown').data('remaintime'));
+        if (remainTime >=0) {
+            var endtime = new Date(new Date().valueOf() + remainTime * 1000);
+            $('#discount-endtime-countdown').countdown(endtime, function(event) {
+               var $this = $(this).html(event.strftime('剩余 '
+                 + '<span>%D</span> 天 '
+                 + '<span>%H</span> 时 '
+                 + '<span>%M</span> 分 '
+                 + '<span>%S</span> 秒'));
+             }).on('finish.countdown', function() {
+                $(this).html('活动时间到，正在刷新网页，请稍等...');
+                setTimeout(function() {
+                    $.post(app.crontab, function(){
+                        window.location.reload();
+                    });
+                }, 2000);
+             });
+        }
+
+        var swiper = new Swiper('.recommend-class-list .swiper-container', {
+            // loop:true,
+            // grabCursor: true,
+            // paginationClickable: true,
+            simulateTouch: false,
+            spaceBetween: 10,
+            slidesPerView: 4
+        });
+
+        $('.arrow-prev').on('click', function(e){
+            e.preventDefault();
+            swiper.swipePrev();
+        })
+        $('.arrow-next').on('click', function(e){
+            e.preventDefault();
+            swiper.swipeNext();
+        })
 
     };
 

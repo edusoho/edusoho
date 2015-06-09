@@ -1,0 +1,5 @@
+{% for imglink in carousel|default(null) if imglink.src|default('') %}
+  <div class="item {% if loop.index == 1 %}active{% endif %}">
+    <a href="{{ asset(imglink.href|default('')) }}" target="{{ imglink.target }}"><img src="{{ asset(imglink.src|default('')) }}" alt="{{ imglink.alt|default('') }}"></a>
+  </div>
+{% endfor %}

@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
 	var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
-
+    var DocumentPlayer = require('../widget/document-player');
 
     exports.run = function() {
 
@@ -22,8 +22,16 @@ define(function(require, exports, module) {
         			playerId: 'lesson-video-player',
         			height: '360px'
         		});
+                var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
+                if ($("#lesson-preview-video-player").data('timelimit')) {
+                    $("#lesson-preview-video-player").append($('.js-buy-text').html());
 
-        		mediaPlayer.setSrc($("#lesson-preview-video-player").data('hlsUrl'), 'video');
+                    mediaPlayer.on('ended', function() {
+                        $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
+                    });
+                }
+
+        		mediaPlayer.setSrc($hlsUrl, 'video');
         		mediaPlayer.play();
 
                 $('#modal').one('hidden.bs.modal', function () {
@@ -87,6 +95,57 @@ define(function(require, exports, module) {
             }, 'json');
 		}
 
+
+        if($("#lesson-preview-flash").length>0){
+            var player = $("#lesson-preview-flash");
+            $.get(player.data('url'), function(response) {
+                var html = '<div id="lesson-swf-player" ></div>';
+                $("#lesson-preview-flash").html(html);
+                swfobject.embedSWF(response.mediaUri, 
+                    'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                    {wmode:'opaque',allowFullScreen:'true'});
+            });
+            player.css("height", '360px');
+        }
+
+        if ($("#lesson-preview-doucment").length > 0) {
+
+            var $player = $("#lesson-preview-doucment");
+            $.get($player.data('url'), function(response) {
+                if (response.error) {
+                    var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+                    $("#lesson-preview-doucment").html(html);
+                    return ;
+                }
+
+                var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'400px\'></iframe>';
+                $("#lesson-preview-doucment").html(html);
+
+                var watermarkUrl = $("#lesson-preview-doucment").data('watermarkUrl');
+                if (watermarkUrl) {
+                    $.get(watermarkUrl, function(watermark) {
+                        var player = new DocumentPlayer({
+                            element: '#lesson-preview-doucment',
+                            swfFileUrl:response.swfUri,
+                            pdfFileUrl:response.pdfUri,
+                            watermark: {
+                                'xPosition': 'center',
+                                'yPosition': 'center',
+                                'rotate': 45,
+                                'contents': watermark
+                            }
+                        });
+                    });
+                } else {
+                    var player = new DocumentPlayer({
+                        element: '#lesson-preview-doucment',
+                        swfFileUrl:response.swfUri,
+                        pdfFileUrl:response.pdfUri
+                    });
+                }
+            }, 'json');
+        }
+
 		if ($("#lesson-preview-swf-player").length > 0) {
 			swfobject.embedSWF($("#lesson-preview-swf-player").data('url'), 'lesson-preview-swf-player', '100%', '360', "9.0.0", null, null, {wmode: 'transparent'});
 
@@ -105,9 +164,8 @@ define(function(require, exports, module) {
             });
         }
 
-		$('#buy-btn').on('click', function(){
-			$modal = $('#modal');
-			$modal.modal('hide');
+		$modal = $('#modal');
+        $modal.on('click','.js-buy-btn', function(){
 			$.get($(this).data('url'), function(html) {
 				$modal.html(html);
 				$('#join-course-btn').click();

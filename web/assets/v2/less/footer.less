@@ -1,0 +1,224 @@
+
+.es-footer {
+  background: #3f3f3f;
+  .copyright {
+    border-top: 1px solid #2a2a2a;
+    text-align: center;
+    padding: 20px 0;
+    line-height: 30px;
+    color: #bababa;
+    text-shadow: 0 1px 3px #000;
+    a:hover {
+      color: white;
+    }
+  }
+}
+
+.footer-link {
+  padding: 55px 0;
+  border-bottom: 1px solid #5e5e5e;
+}
+
+.footer-main {
+  .link-item {
+    width: 20%;
+    float: left;
+    padding: 0 10px;
+    text-shadow: 0 1px 3px #000;
+    @media (max-width: @screen-xs-max) {
+      width: 33.33%;
+    }
+  }
+  h3 {
+    color: #b1b1b1;
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+  ul {
+    padding: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    li {
+      margin-top: 20px;
+    }
+  }
+  a {
+    color: #b1b1b1;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+}
+
+.footer-logo {
+  margin-top: 20px;
+  text-align: center;
+  @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+    padding: 0 0 30px 0;
+  }
+  .footer-sns {
+    margin-top: 30px;
+    .sns-weixin {
+      position: relative;
+      .weixin-popover {
+        background: url(../img/weixin.png);
+        width: 194px;
+        height: 209px;
+        position: absolute;
+        left: -68px;
+        top: -220px;
+        .opacity(0);
+        transform: scale(0);
+        -webkit-transform: scale(0);
+        transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transition: transform ease .3s,opacity ease .3s;
+        -webkit-transition: all ease .3s;
+      }
+
+      &:hover .weixin-popover{
+        display: block;
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        .opacity(1);
+      }
+    }
+
+    .sns-phone {
+      position: relative;
+      .phone-popover {
+        background: url(../img/phone.png);
+        width: 194px;
+        height: 209px;
+        position: absolute;
+        left: -68px;
+        top: -220px;
+        .opacity(0);
+        transform: scale(0);
+        -webkit-transform: scale(0);
+        transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transition: transform ease .3s,opacity ease .3s;
+        -webkit-transition: all ease .3s;
+      }
+
+      &:hover .phone-popover{
+        display: block;
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        .opacity(1);
+      }
+    }
+
+    .sns-apple {
+      position: relative;
+      .apple-popover {
+        background: url(../img/apple.png);
+        width: 194px;
+        height: 209px;
+        position: absolute;
+        left: -68px;
+        top: -220px;
+        .opacity(0);
+        transform: scale(0);
+        -webkit-transform: scale(0);
+        transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transition: transform ease .3s,opacity ease .3s;
+        -webkit-transition: all ease .3s;
+      }
+
+      &:hover .apple-popover{
+        display: block;
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        .opacity(1);
+      }
+    }
+
+    .sns-android {
+      position: relative;
+      .android-popover {
+        background: url(../img/android.png);
+        width: 194px;
+        height: 209px;
+        position: absolute;
+        left: -68px;
+        top: -220px;
+        .opacity(0);
+        transform: scale(0);
+        -webkit-transform: scale(0);
+        transform-origin: 50% 100%;
+        -webkit-transform-origin: 50% 100%;
+        transition: transform ease .3s,opacity ease .3s;
+        -webkit-transition: all ease .3s;
+      }
+
+      &:hover .android-popover{
+        display: block;
+        transform: scale(1);
+        -webkit-transform: scale(1);
+        .opacity(1);
+      }
+    }
+
+    i {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      margin: 0 10px;
+      font-size: 24px;
+      vertical-align: middle;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+    }
+
+    i.es-icon-weibo {
+      background: @brand-danger;
+      border-color: @brand-danger;
+      &:hover {
+        background: @brand-danger - #222;
+        cursor: pointer;
+      }
+    }
+
+    i.es-icon-weixin {
+      background: @brand-primary;
+      border-color: @brand-primary;
+      &:hover {
+        background: @brand-primary - #222;
+        .weixin-popover {
+          display: block;
+          transform: scale(1);
+          -webkit-transform: scale(1);
+          .opacity(1);
+        }
+      }
+    }
+
+    i.es-icon-apple {
+      background: @brand-info;
+      border-color: @brand-info;
+      &:hover {
+        background: @brand-info - #222;
+      }
+    }
+
+    i.es-icon-android {
+      background: @brand-warning;
+      border-color: @brand-warning;
+      &:hover {
+        background: @brand-warning - #222;
+      }
+    }
+  }
+}

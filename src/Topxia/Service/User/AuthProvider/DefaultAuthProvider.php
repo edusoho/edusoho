@@ -44,6 +44,11 @@ class DefaultAuthProvider implements AuthProvider
         return array('success', '');
     }
 
+    public function checkMobile($mobile)
+    {
+        return array('success', '');
+    }
+
     public function checkPassword($userId, $password)
     {
         return false;

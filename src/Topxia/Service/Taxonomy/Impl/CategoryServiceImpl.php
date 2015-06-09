@@ -9,9 +9,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId)
     {
-        if (empty($groupId) || empty($parentId)) {
+        if (!isset($groupId) || !isset($parentId) || $groupId < 0 ||  $parentId < 0) {
             return array();
         }
+        
         return $this->getCategoryDao()->findCategoriesByGroupIdAndParentId($groupId, $parentId);
     }
 
@@ -64,7 +65,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         public function findAllCategoriesByParentId($parentId)
     {   
-        return $this->getCategoryDao()->findAllCategoriesByParentId($parentId);
+        return ArrayToolkit::index($this->getCategoryDao()->findAllCategoriesByParentId($parentId), 'id');
     }
 
     public function findGroupRootCategories($groupCode)
@@ -102,6 +103,34 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         return $childrenIds;
+    }
+
+    public function makeNavCategories($code, $groupCode)
+    {
+       
+        $rootCagoies = $this->findGroupRootCategories($groupCode);
+        if (empty($code)) {
+            return array($rootCagoies, array(), array()); 
+        } else {
+            $category = $this->getCategoryByCode($code);
+            $parentId = $category['id'];
+            $categories = array();
+            $activeIds = array();
+            $activeIds[] = $category['id'];
+            $level = 1;
+            while ($parentId) {
+                $activeIds[] = $parentId;
+                $sibling = $this->findAllCategoriesByParentId($parentId);
+                if ($sibling) {
+                    $categories[$level++] = $sibling;
+                }
+                $parent = $this->getCategory($parentId);
+                $parentId = $parent['parentId'];
+            }
+
+            $categories = array_reverse($categories);
+            return array($rootCagoies, $categories, $activeIds);
+        }
     }
 
     public function findCategoriesByIds(array $ids)

@@ -42,8 +42,8 @@
             {% for course in courses %}
                 <tr>
                     <td>
-                      <img src="{{ default_path('coursePicture', course.smallPicture, '') }}" style="width:100px;"/>
-                      <a href="{{path('course_show',{id:course.id})}}" target=blank >{{course.title}}</a>                      
+                      <img src="{{ filepath(course.smallPicture, 'course.png') }}" style="width:100px;"/>
+                      <a href="{{path('course_show',{id:course.id})}}" target=blank >{{course.title}}</a>
                     </td>
                     <td>
 

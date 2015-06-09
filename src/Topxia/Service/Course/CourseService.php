@@ -66,11 +66,13 @@ interface CourseService
 
 	public function updateCourseCounter($id, $counter);
 
-	public function changeCoursePicture ($courseId, $filePath, array $options);
+	public function changeCoursePicture ($courseId, $files);
 
 	public function recommendCourse($id, $number);
 
 	public function hitCourse($id);
+
+	public function waveCourse($id, $field, $diff);
 
 	public function cancelRecommendCourse($id);
 
@@ -152,6 +154,8 @@ interface CourseService
 	public function getUserLearnLessonStatus($userId, $courseId, $lessonId);
 
 	public function getUserLearnLessonStatuses($userId, $courseId);
+
+	public function findUserLearnedLessons($userId, $courseId);
 
 	public function getUserNextLearnLesson($userId, $courseId);
 
@@ -328,19 +332,6 @@ interface CourseService
 
 	public function hasFavoritedCourse($courseId);
 
-	/*announcement*/
-	public function createAnnouncement($courseId, $fields);
-
-	public function getCourseAnnouncement($courseId, $id);
-
-	public function deleteCourseAnnouncement($courseId, $id);
-
-	public function findAnnouncements($courseId, $start, $limit);
-
-	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
-
-	public function updateAnnouncement($courseId, $id, $fields);
-
 	public function generateLessonReplay($courseId,$lessonId);
 
 	public function entryReplay($lessonId, $courseLessonReplayId);
@@ -349,8 +340,10 @@ interface CourseService
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
-	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+	public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info);
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
+	public function becomeStudentByClassroomJoined($courseId, $userId);
 
 }

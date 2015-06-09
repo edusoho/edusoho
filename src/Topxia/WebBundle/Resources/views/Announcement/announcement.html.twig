@@ -1,23 +1,26 @@
 {% set announcements = data('Announcement',{ count:3 }) %}
 {% if announcements and not app.request.cookies.get('close_announcements_alert') %}
-  <div class="announcement announcements-alert" >
-    <div class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      <div class="items">
-        {% for announcement in announcements %}
-        <div class="item">
-          {% if announcement.url %}
-          <a class="open-article-link" href="{{announcement.url}}" target="_blank">
-            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.title|sub_text(50)}}
+<div class="alert alert-success alert-notice announcements-alert" role="alert">
+  <div class="container swiper-container">
+    <div class="swiper-wrapper">
+      {% for announcement in announcements %}
+        {% if announcement.url %}
+        <div class="swiper-slide">
+          <a href="{{announcement.url}}" target="_blank">
+          {{announcement.content|sub_text(50)}}
           </a>
-          {% else %}
-            <span class="glyphicon glyphicon-volume-up banner-volume"></span>
-            {{announcement.title|sub_text(50)}}
-          {% endif %}
         </div>
-        {% endfor %}
-      </div>
+        {% else %}
+        <div class="swiper-slide">
+          {{announcement.content|sub_text(50)}}
+        </div>
+        {% endif %}
+      {% endfor %}
+
     </div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button> 
   </div>
+</div>
 {% endif %}

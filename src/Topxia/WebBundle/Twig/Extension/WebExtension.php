@@ -9,7 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
-use Topxia\WebBundle\Util\Permission;
+use Topxia\Common\ExtensionManager;
 
 class WebExtension extends \Twig_Extension
 {
@@ -48,6 +48,7 @@ class WebExtension extends \Twig_Extension
             'file_type' => new \Twig_Filter_Method($this, 'getFileType'),
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
+            'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
         );
     }
 
@@ -56,12 +57,17 @@ class WebExtension extends \Twig_Extension
         return array(
             'theme_global_script' => new \Twig_Function_Method($this, 'getThemeGlobalScript') ,
             'file_uri_parse'  => new \Twig_Function_Method($this, 'parseFileUri'),
-            // file_path即将废弃，不要再使用
+            // file_path 即将废弃，不要再使用
             'file_path'  => new \Twig_Function_Method($this, 'getFilePath'),
+            // default_path 即将废弃，不要再使用
             'default_path'  => new \Twig_Function_Method($this, 'getDefaultPath'),
-            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
-            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
+            // file_url 即将废弃，不要再使用
             'file_url'  => new \Twig_Function_Method($this, 'getFileUrl'),
+
+            'system_default_path' => new \Twig_Function_Method($this,'getSystemDefaultPath'),
+            'fileurl' => new \Twig_Function_Method($this, 'getFurl'),
+            'filepath' => new \Twig_Function_Method($this, 'getFpath'),
+            'lazy_img' => new \Twig_Function_Method($this, 'makeLazyImg', array('is_safe' => array('html'))),
             'object_load'  => new \Twig_Function_Method($this, 'loadObject'),
             'setting' => new \Twig_Function_Method($this, 'getSetting') ,
             'set_price' => new \Twig_Function_Method($this, 'getSetPrice') ,
@@ -90,11 +96,7 @@ class WebExtension extends \Twig_Extension
             'sub_str' => new \Twig_Function_Method($this, 'subStr'),
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
-            'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
-            'permissions' => new \Twig_Function_Method($this, 'permissions'),
-            'getTitle' => new \Twig_Function_Method($this, 'getTitle'),
-            'setItem' => new \Twig_Function_Method($this, 'setItem'),
-            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
+            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
         );
     }
 
@@ -109,18 +111,6 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getTitle($code)
-    {
-        $permission = new Permission();
-
-        return $permission->getTitle($code);
-    }
-
-    public function setItem($key, $value)
-    {
-        return array($key=>$value);
-    }
-
     public function getOutCash($userId, $timeType="oneWeek")
     {   
         $time=$this->filterTime($timeType);
@@ -132,14 +122,6 @@ class WebExtension extends \Twig_Extension
             );
 
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
-    }
-
-    public function permissions($parent='', $type=null)
-    {   
-        $permission = new Permission();
-        $permissions = $permission->getPermissions($parent, $type);
-        
-        return $permissions;
     }
 
     public function getInCash($userId,$timeType="oneWeek")
@@ -183,17 +165,6 @@ class WebExtension extends \Twig_Extension
     {
         $user = $this->getUserById($userId);
         return $user['nickname'];
-    }
-    
-    public function getClassroomsByCourseId($courseId)
-    {   
-        $classrooms=array();
-        $classroomIds=ArrayToolkit::column(ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->findClassroomsByCourseId($courseId),'classroomId');
-        foreach ($classroomIds as $key => $value) {
-            $classrooms[$value]=ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->getClassroom($value);
-        }
-
-        return $classrooms;
     }
 
     private function getUserById($userId)
@@ -274,6 +245,9 @@ class WebExtension extends \Twig_Extension
 
         $names[] = "customweb";
         $names[] = "customadmin";
+        $names[] = 'topxiaweb';
+        $names[] = 'topxiaadmin';
+        $names[] = 'classroom';
 
         $paths = array(
             'common' => 'common',
@@ -336,11 +310,14 @@ class WebExtension extends \Twig_Extension
     }
 
 
-    public function dataformatFilter ($time) {
+    public function dataformatFilter ($time, $format ='') {
         if (empty($time)) {
             return ;
         }
-        return date('Y-m-d H:i',$time);
+        if(empty($format)){
+            return date('Y-m-d H:i',$time);
+        }
+        return date($format,$time);
     }
 
     public function smarttimeFilter ($time) {
@@ -445,7 +422,7 @@ class WebExtension extends \Twig_Extension
 
     public function tagsJoinFilter($tagIds)
     {
-        if (empty($tagIds) or !is_array($tagIds)) {
+        if (empty($tagIds) || !is_array($tagIds)) {
             return '';
         }
 
@@ -462,7 +439,7 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        if (!empty($url[0]) and ($url[0] == '/')) {
+        if (!empty($url[0]) && ($url[0] == '/')) {
             return $url;
         }
 
@@ -565,10 +542,6 @@ class WebExtension extends \Twig_Extension
     {
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
-
-        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
-        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
-        
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
             $url = $assets->getUrl($publicUrlpath . $size . $category);
@@ -581,6 +554,10 @@ class WebExtension extends \Twig_Extension
                 if ($defaultSetting[$key] == 1) {
                     $url = $assets->getUrl($publicUrlpath . $size .$defaultSetting[$fileName]);
                 }
+            } else if(array_key_exists($key, $defaultSetting) && $defaultSetting[$key]){
+                $uri = $defaultSetting[$size."Default".ucfirst($category)."Uri"];
+            } else {
+                return $url;
             }
 
             if ($absolute) {
@@ -590,52 +567,51 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        $uri = $this->parseFileUri($uri);
-        if ($uri['access'] == 'public') {
-            
-            $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
-            $url = ltrim($url, ' /');
-            $url = $assets->getUrl($url);
-
-            if ($cdnUrl) {
-                $url = $cdnUrl . $url;
-            } else {
-                if ($absolute) {
-                    $url = $request->getSchemeAndHttpHost() . $url;
-                }
-            }
-
-            return $url;
-        }else{
-
-        }
-
+        return $this->parseUri($uri, $absolute);
     }
 
-    public function getSystemDefaultPath($category,$systemDefault = false)
+    private function parseUri($uri, $absolute = false)
     {
         $assets = $this->container->get('templating.helper.assets');
-        $publicUrlpath = 'assets/img/default/';
-
-        $defaultSetting = ServiceKernel::instance()->createService('System.SettingService')->get('default',array());
-
-        if($systemDefault && isset($defaultSetting)){
-            $fileName = 'default'.ucfirst($category).'FileName';
-            if (array_key_exists($fileName, $defaultSetting)) {
-                $url = $assets->getUrl($publicUrlpath .$defaultSetting[$fileName]);
-            } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+        $request = $this->container->get('request');
+        
+        if(strpos($uri, '://')) {
+            $uri = $this->parseFileUri($uri);
+            $url = "";
+            if ($uri['access'] == 'public') {
+                $url = $uri['path'];
             }
         } else {
-            $url = $assets->getUrl($publicUrlpath . $category);
+            $url = $uri;
         }
 
-        return $url;
+        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $url;
+        $url = ltrim($url, ' /');
+        $url = $assets->getUrl($url);
+
+        return $this->addHost($url, $absolute);
     }
 
-    public function makeLazyImg($src, $class='', $alt = '')
+    public function getSystemDefaultPath($defaultKey,$absolute = false)
     {
-        return sprintf('<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="%s" class="%s" data-echo="%s" />', $alt, $class, $src);
+        $assets = $this->container->get('templating.helper.assets');
+        $defaultSetting = $this->getSetting("default",array());
+
+        if(array_key_exists($defaultKey, $defaultSetting) 
+            && $defaultSetting[$defaultKey]
+            ) {
+            $path = $defaultSetting[$defaultKey];
+            return $this->parseUri($path, $absolute);
+        } else {
+            $path = $assets->getUrl('assets/img/default/' . $defaultKey);
+            return $this->addHost($path, $absolute);
+        }
+    }
+
+    public function makeLazyImg($src, $class='', $alt = '', $img = 'lazyload_course.png')
+    {
+        $imgpath = $path = $this->container->get('templating.helper.assets')->getUrl('assets/img/default/' . $img);
+        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
 
     public  function loadScript($js)
@@ -651,7 +627,10 @@ class WebExtension extends \Twig_Extension
 
     public function exportScripts()
     {
-        return $this->pageScripts;
+        if (empty($this->pageScripts)) {
+            $this->pageScripts = array();
+        }
+        return array_values(array_unique($this->pageScripts));
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)
@@ -676,6 +655,51 @@ class WebExtension extends \Twig_Extension
         }
 
         return $url;
+    }
+
+    public function getFurl($path, $defaultKey = false)
+    {
+        return $this->getPublicFilePath($path, $defaultKey, true);
+    }
+
+    public function getFpath($path, $defaultKey = false)
+    {
+        return $this->getPublicFilePath($path, $defaultKey, false);
+    }
+
+    private function getPublicFilePath($path, $defaultKey = false, $absolute = false)
+    {
+        $assets = $this->container->get('templating.helper.assets');
+        if(empty($path)){
+            $defaultSetting = $this->getSetting("default",array());
+
+            if((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture',$defaultSetting) && $defaultSetting['defaultCoursePicture']==1)
+                || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar',$defaultSetting) && $defaultSetting['defaultAvatar']==1))
+                && (array_key_exists($defaultKey, $defaultSetting) 
+                && $defaultSetting[$defaultKey])
+                ) {
+                $path = $defaultSetting[$defaultKey];
+                return $this->parseUri($path, $absolute);
+            } else {
+                $path = $assets->getUrl('assets/img/default/' . $defaultKey);
+                return $this->addHost($path, $absolute);
+            }
+        }
+
+        return $this->parseUri($path, $absolute);
+    }
+
+    private function addHost($path, $absolute)
+    {
+        $cdn = ServiceKernel::instance()->createService('System.SettingService')->get('cdn',array());
+        $cdnUrl = (empty($cdn['enabled'])) ? '' : rtrim($cdn['url'], " \/");
+        if ($cdnUrl) {
+            $path = $cdnUrl . $path;
+        } else if ($absolute) {
+            $request = $this->container->get('request');
+            $path = $request->getSchemeAndHttpHost() . $path;
+        }
+        return $path;
     }
 
     public function fileSizeFilter($size)
@@ -919,8 +943,8 @@ class WebExtension extends \Twig_Extension
             $coinSettings['coin_enabled'] = 0;
         }
 
-        if($coinSettings['coin_enabled'] == 1 and $coinSettings['price_type'] == 'coin'){
-                if ($order['amount'] == 0  and $order['coinAmount'] == 0 ){
+        if($coinSettings['coin_enabled'] == 1 && $coinSettings['price_type'] == 'coin'){
+                if ($order['amount'] == 0  && $order['coinAmount'] == 0 ){
                     $default = "无";
                 }
                 else{
@@ -928,7 +952,7 @@ class WebExtension extends \Twig_Extension
                 }
         }
 
-        if ($coinSettings['coin_enabled'] != 1 or $coinSettings['price_type'] != 'coin') {
+        if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
                 if ($order['coinAmount'] > 0) {
                     $default = "余额支付";
                 }
@@ -947,7 +971,7 @@ class WebExtension extends \Twig_Extension
 
     public function calculatePercent($number, $total)
     {
-        if ($number == 0 or $total == 0) {
+        if ($number == 0 || $total == 0) {
             return '0%';
         }
 
@@ -955,6 +979,12 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
         return intval($number / $total * 100) . '%';
+    }
+
+    public function arrayMerge($text,$content)
+    {
+        $array = array_merge($text,$content);
+        return $array;
     }
 
     public function getSetPrice($price)
@@ -970,12 +1000,18 @@ class WebExtension extends \Twig_Extension
 
     public function getDict($type)
     {
-        return DataDict::dict($type);
+        return ExtensionManager::instance()->getDataDict($type);
     }
 
     public function getDictText($type, $key)
     {
-        return DataDict::text($type, $key);
+        $dict = $this->getDict($type);
+
+        if (empty($dict) || !isset($dict[$key])) {
+            return '';
+        }
+
+        return $dict[$key];
     }
 
     public function getUploadMaxFilesize($formated = true)

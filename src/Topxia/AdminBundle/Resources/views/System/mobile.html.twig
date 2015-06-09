@@ -15,10 +15,60 @@
 #mobile-banner5-container img 
 {max-width: 80%; margin-bottom: 10px;}
 
+.course-grids {
+  margin:0 -15px 0 0;
+  padding:0;
+  list-style: none;
+}
+
+.course-grid {
+  display: inline-block;
+  vertical-align: top;
+  margin: 15px 15px 15px 0;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}
+
 .banner-course .course-grid {
   margin: 0 0 0 0;
   margin-left: 10px;
 }
+
+.course-grid .series-mode-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+}
+
+.course-grid .grid-body {
+  position: relative;
+  width: 170px;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  color: #353535;
+}
+
+.grid-body a{
+  text-decoration: none;
+}
+
+.course-grid .title {
+  display: block;
+  padding: 10px;
+  min-height: 52px;
+  color: #555;
+  font-weight: bold;
+}
+
+.course-grid .add-course {
+  font-size: 80px;
+  height: 148px;
+  text-align: center;
+  padding-top: 30px;
+}
+
 
 </style>
 {% if setting("mobile.enabled") == 1 %}

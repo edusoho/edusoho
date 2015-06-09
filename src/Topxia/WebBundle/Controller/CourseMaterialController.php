@@ -11,27 +11,14 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 
-class CourseMaterialController extends BaseController
+class CourseMaterialController extends CourseBaseController
 {
     public function indexAction(Request $request, $id)
     {
-
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $id);
+        if ($response) {
+            return $response;
         }
-
-        $course = $this->getCourseService()->getCourse($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        }
-
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $paginator = new Paginator(
             $request,
@@ -50,6 +37,7 @@ class CourseMaterialController extends BaseController
 
         return $this->render("TopxiaWebBundle:CourseMaterial:index.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'lessons'=>$lessons,
             'materials' => $materials,
             'paginator' => $paginator,
@@ -97,31 +85,12 @@ class CourseMaterialController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-	public function latestBlockAction($course)
-	{
-        $materials = $this->getCourseService()->findMaterials($course['id'], 0, 10);
-		return $this->render('TopxiaWebBundle:CourseMaterial:latest-block.html.twig', array(
-			'course' => $course,
-            'materials' => $materials,
-		));
-	}
-
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    private function getMaterialService()
+    protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
-    private function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content.FileService');
-    }
-
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
@@ -131,7 +100,7 @@ class CourseMaterialController extends BaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
-    private function createPrivateFileDownloadResponse(Request $request, $file)
+    protected function createPrivateFileDownloadResponse(Request $request, $file)
     {
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);

@@ -1,0 +1,11 @@
+<form class="es-commet" id="thread-post-form" method="POST" action="{{path('article_post', {id:article.id})}}">
+  <div class="es-commet-header">
+    文章评论<span class="badge badge-primary">{{ article.postNum }}</span>
+  </div>
+  <textarea class="form-control form-control-o" rows="6" placeholder="您的想法" {% if not app.user %}disabled{% endif %} name="content"></textarea>
+  <div class="form-group clearfix">
+    {% if not app.user %}<a href="{{ path('login') }}">登录</a> 后发表看法{% endif %}
+    <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" data-loading-text="正在评论">发表评论</button>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

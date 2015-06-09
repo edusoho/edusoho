@@ -46,7 +46,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $lessonNote['lessonTitle'] = $lesson['title'];
         $lessonNote['lessonNum']   = $lesson['number'];
         $content  = $this->controller->convertAbsoluteUrl($this->request, $lessonNote['content']);
-        ;
         $content  = $this->filterNote($content);
         $lessonNote['content'] = $content;
         return $lessonNote;
@@ -375,7 +374,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'noteNumGreaterThan' => 0
         );
         
-        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
+        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $lessons     = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
         for ($i = 0; $i < count($courseNotes); $i++) {
             $courseNote  = $courseNotes[$i];

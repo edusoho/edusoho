@@ -1,15 +1,18 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block topbanner %}
-  {% set blocks = data('Blocks',{'codes':['autumn:home_top_banner'] }) %}
-  {% if blocks['autumn:home_top_banner'] %}
+{% set bodyClass = 'homepage' %}
+
+{% block content %}
+  {% set top_banner = block_show('autumn:home_top_banner')%}
+
+  {% if top_banner %}
     <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
       <ol class="carousel-indicators">
           <li data-target="#autumn-carousel" data-slide-to="0" class="active"></li>
           <li data-target="#autumn-carousel" data-slide-to="1" class=""></li>
           <li data-target="#autumn-carousel" data-slide-to="2" class=""></li>
       </ol>
-      <div class="carousel-inner">{{ blocks['autumn:home_top_banner']|raw }}</div>
+      <div class="carousel-inner">{{ top_banner|raw }}</div>
       <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
@@ -20,32 +23,24 @@
     </div>      
   {% endif %}
   
-{% endblock %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/autumn/css/class-autumn.css') }}" />
-{% endblock %}
-
-{% block content %}
   <div class="row">
     <div class="col-md-8">
 
-      {% if  is_plugin_installed('Classroom') and setting('classroom.enabled') %}
-      {% set items = data('RecommendClassrooms',{'count':6}) %}
+      {% if setting('classroom.enabled') %}
+      {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>RecommendClasses</small></h2>
+              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>LatestClasses</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
               <ul class="home-class-list">
-                {% for classroom in items.classrooms %}
-                 {% set teachers = items.users[classroom.id]|default(null) %}
+                {% for classroom in classrooms %}
+                 {% set teachers = classroom.users|default(null) %}
                  {% if loop.index <= 5%}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                    <img src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                    <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
                   </a>
                   <div class="class-body">
                     <h3 class="class-title">
@@ -81,7 +76,7 @@
 
                       </span>
                     </div>
-                    <div class="course-num">共{{items.allClassrooms[classroom.id].courseNum}}课程</div>
+                    <div class="course-num">共{{classroom.courseNum}}课程</div>
                   </div>
                 </li>
                    {% endif %}
@@ -180,7 +175,7 @@
       {% endif %}
 
 
-      {# 课程讨论 #}
+      <!-- {# 课程讨论 #}
       {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
       {% if threads %}
         <div class="panel panel-autumn panel-autumn-primary">
@@ -194,12 +189,12 @@
                   <li class="col-md-6">
                     <div class="topic-item">
                       <h4>
-                        <a href="{{ path('course_thread_show', {courseId:thread.courseId, id:thread.id}) }}">{{ thread.title|plain_text(28) }}</a>
+                        <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(28) }}</a>
                       </h4>
                       <div class="topic-body">
                         {% set user = thread.user %}
                         {% set latestPostUser = thread.latestPostUser %}
-                        <img src="{{ default_path('avatar',thread.user.mediumAvatar, '') }}" class="pull-left">
+                        <img src="{{ filepath(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
                         <h3>{{ user.nickname }}</h3>
                         <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
                       </div>
@@ -216,7 +211,7 @@
             </ul>
           </div>
         </div>
-      {% endif %}
+      {% endif %} -->
       
       {# 讲师团 #}
       {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
@@ -233,7 +228,7 @@
                   <li class="col-sm-6 col-md-4">
                     <div class="teachers-item">
                       <a href="{{ path('user_show', {id:teacher.id}) }}">
-                       <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
+                       <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
                       </a>
                         <span>{{ web_macro.user_link(teacher) }}</span>
                           <i> {{ teacher.title }}</i>
@@ -248,7 +243,7 @@
       {% endif %}
 
       {# 会员专区 #}
-      {% if setting('vip.enabled') %}
+      {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
         {% set levels = data('VipLevels',{'count':100}) %}
         {% if levels %}
           <div class="panel panel-autumn panel-autumn-primary">
@@ -292,7 +287,7 @@
 
       {# 小组 #}
       {% if setting('group').group_show|default(1) %}
-        {% set groups = data('HotGroup', {'count':15}) %}
+        {% set groups = data('HotGroup', {'count':10}) %}
         {% if groups %}
           <div class="panel panel-autumn panel-autumn-default hot-group">
             <div class="panel-heading panel-heading-important">
@@ -307,7 +302,7 @@
                          <div class="media">
                             <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
                               {% if group.logo %}
-                              <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
+                              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}">
                               {%else%}
                               <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
                               {%endif%}
@@ -371,7 +366,7 @@
                   <li class="media">
                     <a href="{{ path('course_show', {id:course.id}) }}">
                       <div class="course-item">
-                        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+                        <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
                         <div class="course-title">{{ course.title }}</div>
                       </div>
                     </a>
@@ -395,34 +390,25 @@
               {% for learn in learns %}
                 {% if learn.type == "finished_testpaper" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
                   </div>
                 </li>
 
-
-
                 {% elseif learn.type == "finished_homework" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
                   </div>
                 </li>
 
-
                 {% elseif learn.type == "finished_exercise" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
@@ -431,9 +417,7 @@
                                   
                 {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     加入了课程 {{learn.properties.course.title|plain_text(15)}}
@@ -441,9 +425,7 @@
                 </li>
                 {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
@@ -451,9 +433,7 @@
                 </li>
                 {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
@@ -462,9 +442,7 @@
 
                 {% elseif learn.type == "learned_lesson" %}
                 <li class="media">
-                  <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
-                  </a>
+                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                     完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
@@ -472,9 +450,7 @@
                 </li>
                 {% elseif learn.type == "favorite_course" %}
                     <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                      </a>
+                      {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                         收藏了课程 {{learn.properties.course.title|plain_text(15)}}
@@ -482,9 +458,7 @@
                     </li>
                     {% elseif learn.type == "start_learn_lesson" %}
                     <li class="media">
-                      <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
-                      </a>
+                      {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
                         开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}

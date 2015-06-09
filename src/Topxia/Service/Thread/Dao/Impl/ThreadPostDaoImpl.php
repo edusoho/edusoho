@@ -57,6 +57,12 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->fetchColumn($sql, array($threadId, $parentId, $id));
     }
 
+    public function getPostPostionInArticle($articleId, $postId)
+    {
+        $sql = "SELECT COUNT(1) FROM {$this->table} WHERE targetType = 'article' AND targetId = ? AND parentId = 0 AND id >= ? ORDER BY createdTime DESC";
+        return $this->getConnection()->fetchColumn($sql, array($articleId, $postId));
+    }
+
     public function searchPosts($conditions,$orderBy,$start,$limit)
     {
         $this->filterStartLimit($start,$limit);
@@ -64,8 +70,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $builder=$this->_createThreadSearchBuilder($conditions)
         ->select('*')
         ->setFirstResult($start)
-        ->setMaxResults($limit)
-        ->orderBy($orderBy[0],$orderBy[1]);
+        ->setMaxResults($limit);
+        
+        $builder = $this->addOrderBy($builder, $orderBy);
         
         $posts = $builder->execute()->fetchAll() ? : array(); 
         return $this->createSerializer()->unserializes($posts, $this->serializeFields);
@@ -130,9 +137,17 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
 	    $builder = $this->createDynamicQueryBuilder($conditions)
 	        ->from($this->table,$this->table)
 	        ->andWhere('userId = :userId')
+            ->andWhere('userId NOT IN (:notUserIds)')
+            ->andWhere('userId IN (:userIds)')
 	        ->andWhere('id < :id')
+            ->andWhere('ups >= :ups_GT')
+            ->andWhere('id NOT IN (:excludeIds)')
+            ->andWhere('createdTime >= :GTEcreatedTime')
 	        ->andWhere('parentId = :parentId')
-	        ->andWhere('threadId = :threadId');
+	        ->andWhere('threadId = :threadId')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('adopted = :adopted');
 	    return $builder;
 	}
 

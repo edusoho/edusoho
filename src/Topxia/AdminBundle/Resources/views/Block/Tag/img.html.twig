@@ -1,0 +1,18 @@
+<div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">图片</label>
+    <div class="col-md-7 col-xs-7">
+      <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+    </div>
+    <div class="col-md-2 col-xs-2">
+      <button class="btn btn-default btn-sm img-upload" id="item-{{ code }}-uploadId-{{ dataId }}" type="button" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">上传</button>
+    </div>
+ </div>
+
+ <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">图片描述</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt|default('') }}" >
+    </div>
+    
+ </div>
+

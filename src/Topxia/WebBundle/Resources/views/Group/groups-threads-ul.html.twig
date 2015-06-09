@@ -5,9 +5,7 @@
     {% set user = users[thread.userId]|default(null) %}
     {% endif %}
     <li class="media">
-      <a class="pull-left" href="{{ path('user_show', {id:user.id}) }}">
-        <img src="{{ default_path('avatar',user.smallAvatar, '') }}" class="media-object">
-      </a>
+       {{ web_macro.user_avatar(user, 'pull-left', 'avatar-md') }}
       <div class="media-body">
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
         <div class="media-heading">

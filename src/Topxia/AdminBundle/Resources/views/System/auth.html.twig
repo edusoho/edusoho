@@ -10,10 +10,11 @@
 <form  id="auth-form" class="form-horizontal" method="post" novalidate>
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label >新用户注册</label>
+      <label >用户注册模式</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('register_mode', {'opened':'开启', 'closed':'关闭'}, auth.register_mode) }}
+      {{ radios('register_mode', {'email':'邮箱注册', 'email_or_mobile':'邮箱或手机注册', 'closed':'关闭'}, auth.register_mode) }}
+      <div class="help-block" >开启云短信后，才可使用“邮箱或手机注册”</div>
     </div>
   </div>
   <div class="form-group">
@@ -168,23 +169,26 @@
         </div>
         <div class="controls col-md-8 "  id="show-list">
         {% for sort in auth.registerSort%}
-            {% if sort=='email' %}
+            {% if sort=='email' and setting("auth.register_mode") == "email" %}
             <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
             {% endif %}
-            {% if sort=='nickname' %}
-            <button type="button" class="btn btn-default btn-xs">昵称</button>
+            {% if sort=='mobile' and setting("auth.register_mode") == "email" %}
+            <button type="button" class="btn btn-default btn-xs">手机号码</button>
+            {% endif %}
+            {% if sort=='emailOrMobile' and setting("auth.register_mode") == "email_or_mobile" %}
+            <button type="button" class="btn btn-default btn-xs">邮箱或者手机</button>
             {% endif %}
             {% if sort=='password' %}
             <button type="button" class="btn btn-default btn-xs">密码</button>
+            {% endif %}
+            {% if sort=='nickname' %}
+            <button type="button" class="btn btn-default btn-xs">昵称</button>
             {% endif %}
             {% if sort=='truename' %}
             <button type="button" class="btn btn-default btn-xs">姓名</button>
             {% endif %}
             {% if sort=='idcard' %}
             <button type="button" class="btn btn-default btn-xs">身份证号码</button>
-            {% endif %}
-             {% if sort=='mobile' %}
-            <button type="button" class="btn btn-default btn-xs">手机号码</button>
             {% endif %}
              {% if sort=='job' %}
             <button type="button" class="btn btn-default btn-xs">职业</button>
@@ -212,17 +216,24 @@
             <div class="form-group"><ul class="register-list sortable-list" data-role="list">
             {% if auth.registerFieldNameArray %}
             {% for sort in auth.registerFieldNameArray %}
-               {% if sort=='email' %}
+               {% if sort=='email' and setting("auth.register_mode") == "email"  %}
                 <li class="list-group-item clearfix" data-role="item" >
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                 &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
                 </li>
-                
                {% endif %}
+
+               {% if sort=='emailOrMobile' and setting("auth.register_mode") == "email_or_mobile" %}
+                <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="emailOrMobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱或手机<span class="text-muted"> (系统必需，不可取消)</span>
+                </li>
+               {% endif %}
+
                {% if sort=='nickname' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %} {% if sort == "nickname" %} checked =true {% endif %} {% endfor %} name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"></span>
                 </li>
                {% endif %}
                {% if sort=='password' %}
@@ -237,7 +248,7 @@
                   &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="truename"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="truename"></input><input type="hidden"  name="registerFieldNameArray[]" value="truename"></input> 姓名
                 </li>
                {% endif %}
-               {% if sort=='mobile' %}
+               {% if sort=='mobile' and setting("auth.register_mode") == "email" %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                   &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
@@ -446,6 +457,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
 </form>
 
 {% endblock %}

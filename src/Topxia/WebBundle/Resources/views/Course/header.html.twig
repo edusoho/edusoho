@@ -7,7 +7,7 @@
     <div class="panel panel-default  course-header">
       <div class="panel-body clearfix">
         <a href="{{ path('course_show', {id:course.id}) }}">
-            <img class="picture" src="{{ default_path('coursePicture',course.largePicture, '') }}" />
+            <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
         </a>
 
         <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
@@ -109,9 +109,7 @@
         {% else %}
           此课程已不支持会员免费学，<a class="btn-link js-exit-course" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">返回课程首页</a>
         {% endif %}
-
       </div>
-
     {% endif %}
 
     {% if not isNonExpired %}

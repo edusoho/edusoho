@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Topxia\Common\BlockToolkit;
 use Topxia\System;
 use ZipArchive;
 
@@ -48,6 +49,14 @@ class BuildThemeAppCommand extends BaseCommand
         $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
     }
 
+    private function _generateBlocks($themeDir, $distDir, $container)
+    {
+        if (file_exists($themeDir . '/block.json')) {
+            $this->filesystem->copy($themeDir . '/block.json', $distDir . '/block.json');
+            BlockToolkit::generateBlcokContent($themeDir . '/block.json', $distDir . '/blocks', $container);
+        }
+    }
+
     private function _buildDistPackage($name)
     {
         $themeDir = $this->getThemeDirectory($name);
@@ -55,6 +64,7 @@ class BuildThemeAppCommand extends BaseCommand
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
         $this->_copyScript($themeDir, $distDir);
+        $this->_generateBlocks($themeDir, $distDir, $this->getContainer());
         $this->_copyMeta($themeDir, $distDir);
         file_put_contents($distDir . '/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
@@ -66,6 +76,8 @@ class BuildThemeAppCommand extends BaseCommand
         $sourceTargetDir = $distDir . '/source/' . $name;
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
+
+        $this->filesystem->remove($sourceTargetDir . '/dev' );
 
         return $sourceTargetDir;
     }

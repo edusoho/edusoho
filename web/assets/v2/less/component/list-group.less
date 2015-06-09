@@ -1,0 +1,27 @@
+.sidenav .list-group {
+  .list-group-heading {
+    list-style-type: none;
+    color: @gray;
+    margin-bottom: 10px;
+    margin-left: 20px;
+  }
+  .list-group-item {
+    border: none;
+    padding: 10px 15px 10px 35px;
+    border-left: 2px solid transparent;
+    &:hover {
+      background-color: @gray-lighter;
+    }
+    >a {
+      display: block;
+      color: @gray-dark;
+    }
+    &.active {
+      border-left: 2px solid @brand-primary;
+      background: none;
+      >a {
+        color: @brand-primary;
+      }
+    }
+  }
+}

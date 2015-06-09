@@ -129,32 +129,6 @@ class SettingsController extends BaseController
 			->add('avatar', 'file')
 			->getForm();
 
-		if ($request->getMethod() == 'POST') {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$data = $form->getData();
-				$file = $data['avatar'];
-
-				if (!FileToolkit::isImageFile($file)) {
-					return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-				}
-
-				$filenamePrefix = "user_{$user['id']}_";
-				$hash = substr(md5($filenamePrefix . time()), -8);
-				$ext = $file->getClientOriginalExtension();
-				$filename = $filenamePrefix . $hash . '.' . $ext;
-
-				$directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-				$file = $file->move($directory, $filename);
-
-				$fileName = str_replace('.', '!', $file->getFilename());
-
-				return $this->redirect($this->generateUrl('settings_avatar_crop', array(
-					'file' => $fileName)
-				));
-			}
-		}
-
 		$hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
 		if ($hasPartnerAuth) {
 			$partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
@@ -175,29 +149,15 @@ class SettingsController extends BaseController
 	public function avatarCropAction(Request $request)
 	{
 		$currentUser = $this->getCurrentUser();
-		$filename = $request->query->get('file');
-		$filename = str_replace('!', '.', $filename);
-		$filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-		$pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
 
 		if($request->getMethod() == 'POST') {
 			$options = $request->request->all();
-			$this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
+			$this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
 			return $this->redirect($this->generateUrl('settings_avatar'));
 		}
 
-		try {
-			$imagine = new Imagine();
-			$image = $imagine->open($pictureFilePath);
-		} catch (\Exception $e) {
-			@unlink($pictureFilePath);
-			return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-		}
-
-		$naturalSize = $image->getSize();
-		$scaledSize = $naturalSize->widen(270)->heighten(270);
-		$pictureUrl = 'tmp/' . $filename;
+		$fileId = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
 		return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
 			'pictureUrl' => $pictureUrl,
@@ -288,7 +248,7 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
+					$this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
 					return $this->redirect($this->generateUrl('settings_pay_password'));
 				} else {
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
@@ -325,7 +285,7 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登陆密码不正确，请重试！'));
+					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
 				} else {
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 					return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
@@ -418,7 +378,7 @@ class SettingsController extends BaseController
 	                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
 	                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
 	            }else{
-	            	$this->setFlashMessage('danger', '用户登陆密码错误。');
+	            	$this->setFlashMessage('danger', '用户登录密码错误。');
 	            }
             }
         }
@@ -549,7 +509,7 @@ class SettingsController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			if (!$this->getAuthService()->checkPassword($user['id'],$request->request->get('userLoginPassword')) ){
-				$this->setFlashMessage('danger', '您的登陆密码错误，不能设置安全问题。');
+				$this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
 				return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 			}
 
@@ -607,7 +567,7 @@ class SettingsController extends BaseController
         if ($request->getMethod() == 'POST') {
         	$password = $request->request->get('password');
         	if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-				$this->setFlashMessage('danger', '您的登陆密码错误');
+				$this->setFlashMessage('danger', '您的登录密码错误');
 				SmsToolkit::clearSmsSession($request, $scenario);
 				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 			}
