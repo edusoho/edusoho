@@ -3657,7 +3657,7 @@ textarea.form-control-o {
   margin-bottom: 20px;
 }
 .index-group .panel-body {
-  padding-bottom: 30px;
+  padding-bottom: 30px !important;
 }
 .index-dynamic {
   padding-bottom: 15px;
