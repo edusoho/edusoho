@@ -9,7 +9,7 @@
           {% if messageFrom == 'me' %}
             <strong>我：</strong> 
           {% else %}
-            <strong>{{ web_macro.user_link(message.createdUser) }}：</strong> 
+            <strong>{{ web_macro.user_avatar(message.createdUser) }}：</strong> 
           {% endif %}
           {{ message.content|raw }}
         </div>
