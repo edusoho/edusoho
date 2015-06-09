@@ -365,11 +365,11 @@ class DefaultController extends BaseController
               'courseTitle' =>$course['title'],
               'courseId' => $course['id'],
               'threadId' => $question['id'],
-              'questionTitle' => strip_tags($question['title'])
+              'questionTitle' => strip_tags($question['title']),
             );
         foreach ($course['teacherIds'] as $receiverId) {
 
-            $result = $this->getNotificationService()->notify($receiverId, 'course-question',
+            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind',
                 $message);
         }
 
