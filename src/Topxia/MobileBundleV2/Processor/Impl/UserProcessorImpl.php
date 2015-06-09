@@ -295,9 +295,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
             $targetSession = $this->request->getSession()->get($smsType);
             $smsLastTime = $targetSession['sms_last_time'];
-            var_dump($targetSession);
-            var_dump($smsLastTime);
-            exit();
             $allowedTime = 120;
 
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
@@ -473,6 +470,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     private function smsCheck($request, $mobileInfo, $scenario)
     {
         $sessionField = $request->getSession()->get($scenario);
+        var_dump($sessionField);
+        exit();
         $sessionField['sms_type'] = $scenario;
 
         $requestField['sms_code'] = $mobileInfo['sms_code'];
