@@ -136,6 +136,14 @@ define(function(require, exports, module) {
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
-
+    is_weixn();
+    function is_weixn(){
+    	var ua = navigator.userAgent.toLowerCase();
+    	if(ua.match(/MicroMessenger/i)=="micromessenger") {
+        	console.log(1111);
+    	} else {
+        	return false;
+    	}
+	}
 
 });
