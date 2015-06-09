@@ -757,7 +757,6 @@ Pagination Styles
   -moz-border-radius: 0;
   border-radius: 0;
   border: none;
-  z-index: 99;
 }
 .es-header .container {
   position: relative;
@@ -868,7 +867,7 @@ Pagination Styles
   line-height: 20px;
   display: block;
   color: #fff;
-  z-index: 999;
+  z-index: 1001;
 }
 .es-header .navbar-mobile .nav-mobile {
   width: 250px;
@@ -1316,10 +1315,10 @@ body {
 }
 html.html-nav-active {
   position: relative;
-  overflow-y: auto;
+  overflow: hidden;
 }
 html.html-nav-active body {
-  position: fixed;
+  overflow: hidden;
 }
 .es-wrap {
   -webkit-transition: all 0.3s ease;
@@ -1339,7 +1338,7 @@ html.html-nav-active body {
   left: 0;
   right: 0;
   height: 100%;
-  z-index: 990;
+  z-index: 1000;
   background: rgba(0, 0, 0, 0.2);
 }
 .tooltip {

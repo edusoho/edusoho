@@ -4717,7 +4717,7 @@ a.homework-essay-textarea-pack-up{
   right: 0;
   top: 50%;
   visibility: hidden;
-  z-index: 999999;
+  z-index: 999;
 }
 
 .float-consult .popover {
