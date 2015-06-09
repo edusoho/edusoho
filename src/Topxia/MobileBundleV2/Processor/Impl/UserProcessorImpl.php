@@ -471,7 +471,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         var_dump($scenario);
         $sessionField = $request->getSession()->get($scenario);
-        var_dump($sessionField);
+        var_dump($request->getSession());
         exit();
         $sessionField['sms_type'] = $scenario;
 
