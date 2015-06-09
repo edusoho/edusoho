@@ -1124,7 +1124,12 @@ modal
 }
 
 .course-tab-content .body {
-  margin-bottom: 44px;
+  background: #f0f0f0;
+}
+
+.course-tab-content .body .card {
+  margin: 0px 0px 16px 0px;
+  box-shadow: none;
 }
 
 .course-tab-content .teacher-label {

@@ -57,7 +57,7 @@
 
 			<div class="card">
 	      		<span class="card-head">
-		      		<h5>课程评价</h5>
+		      		<h5>课程评价 ({{ reviews.length }})</h5>
 		      		<a class="button button-icon iconfont icon-menu"></a>
 		      	</span>
 	      			<div class="list">
@@ -67,10 +67,9 @@
 				      <div class="review-rating">
 				      	<h3>{{ reviews[0].user.nickname }}</h3>
 				      	<span>
-				      		<i class="iconfont icon-favorite" ng-class="reviews[0].rating > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
+				      		<i class="iconfont icon-favorfill" ng-class="reviews[0].rating > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
 				      	</span>
 				      </div>
-				      <p>{{ reviews[0].createdTime | coverLearnTime }}</p>
 				      <p>{{ reviews[0].content }}</p>
 				    </a>
 
