@@ -873,6 +873,7 @@ Pagination Styles
 .es-header .navbar-mobile .nav-mobile {
   width: 250px;
   overflow-x: hidden;
+  overflow-y: auto;
   position: fixed;
   left: -250px;
   top: 0;
