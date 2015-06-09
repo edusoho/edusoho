@@ -69,8 +69,10 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
         courseId : $stateParams.courseId,
         token : $scope.token
       }, function(data) {
-        $scope.lessons = data.lessons;
-        $scope.learnStatuses = data.learnStatuses;
+        $scope.$apply(function() {
+          $scope.lessons = data.lessons;
+          $scope.learnStatuses = data.learnStatuses;
+        });
       });
     }
 
@@ -131,6 +133,10 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
     }
 
     $scope.vipLeand = function() {
+      if ($scope.user == null) {
+        $state.go("login", { goto : "/course/" + $stateParams.courseId });
+        return;
+      }
       CourseService.vipLearn({
         courseId : $stateParams.courseId,
         token : $scope.token
@@ -162,11 +168,32 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       window.location.reload();
     });
 
-    $scope.onTabSelected = function(tabScope) {
-      console.log($ionicScrollDelegate.$getByHandle("mainScroll"));
+    $scope.onTabSelected = function(index) {
       $ionicScrollDelegate.$getByHandle("mainScroll").resize();
-      //$ionicScrollDelegate.$getByHandle("mainScroll").scrollTop();
-      $scope.selectedIndex = $ionicTabsDelegate.$getByHandle("tabHandle").selectedIndex();
+      
+      if ($scope.showTopTab) {
+        var topSelectedIndex = $ionicTabsDelegate.$getByHandle("topTabHandle").selectedIndex();
+        $scope.selectedIndex = topSelectedIndex;
+        $ionicTabsDelegate.$getByHandle("tabHandle").select(topSelectedIndex);
+      } else {
+        var selectedIndex = $ionicTabsDelegate.$getByHandle("tabHandle").selectedIndex();
+        $scope.selectedIndex = selectedIndex;
+        $ionicTabsDelegate.$getByHandle("topTabHandle").select(selectedIndex);
+      }
+      
+    }
+
+
+    var content, headBody;
+    $scope.contentMove = function(scrollTop, scrollLeft) {
+      if (headBody == null) {
+        content  =$ionicScrollDelegate.$getByHandle("mainScroll").getScrollView().__content;
+        headBody = content.querySelector('.course-head-body');
+      }
+      
+      $scope.$apply(function() {
+        $scope.showTopTab = scrollTop > headBody.offsetHeight;
+      });
     }
 }
 

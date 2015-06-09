@@ -14,7 +14,7 @@
   line-height: 46px;
 }
 
-.platform-android .title {
+.platform-android .bar-header .title {
   height: 56px;
   line-height: 56px ! important;
 }

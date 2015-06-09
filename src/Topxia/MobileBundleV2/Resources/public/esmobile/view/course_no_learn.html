@@ -1,8 +1,18 @@
 <ion-view title="课程标题">
-  <ion-content class="course-body" delegate-handle="mainScroll">
+<div ng-show="showTopTab">
+	<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light tabs-icon-left course-tab" delegate-handle="topTabHandle">
+		<ion-tab class="line" title="课时" on-select="onTabSelected()">
+		</ion-tab>
+		<ion-tab title="课程详情" on-select="onTabSelected()">
+		</ion-tab>
+	</ion-tabs>
+</div>
+
+  <ion-content class="course-body" delegate-handle="mainScroll" on-scroll="contentMove(scrollTop, scrollLeft, target)">
 
       <div class="course-content">
-      	<div class="course-head">
+      	<div class="course-head-body">
+	      	<div class="course-head">
 		    <img class="full-image" ng-src="{{ course.largePicture }}" />
 		    <p class="mask">
 		      <a class="left">
@@ -14,20 +24,20 @@
 		    </p>
 		</div>
 
-	    <div class="item-body">
-	    	<p class="course-title">{{ course.title }}</p>
-	    	<p class="course-price">
-	    		<span class="price-block">{{ course.price | formatPrice }}</span>
-	    		<span ng-if="discount" class="discount-type discount">
-	    			{{ discount.type | coverDiscount : course.discount }}</span>
-	    		<span ng-if="discount" class="discount-type type">{{ discount.name }}</span>
-	    	</p>
-	    	<p ng-if="discount" class="discount-body">
-	    		<s class="price-block">{{ course.originPrice | formatPrice }}</s> 
-	    		<span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
-	    	</p>
-	    </div>
-
+		    <div class="item-body">
+		    	<p class="course-title">{{ course.title }}</p>
+		    	<p class="course-price">
+		    		<span class="price-block">{{ course.price | formatPrice }}</span>
+		    		<span ng-if="discount" class="discount-type discount">
+		    			{{ discount.type | coverDiscount : course.discount }}</span>
+		    		<span ng-if="discount" class="discount-type type">{{ discount.name }}</span>
+		    	</p>
+		    	<p ng-if="discount" class="discount-body">
+		    		<s class="price-block">{{ course.originPrice | formatPrice }}</s> 
+		    		<span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
+		    	</p>
+		    </div>
+	</div>
 	    <div ng-include=" 'view/course_nolearn_tab.html' | coverViewPath "></div>
 
 	</div>

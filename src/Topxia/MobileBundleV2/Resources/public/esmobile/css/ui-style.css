@@ -19,6 +19,10 @@
   -webkit-transition: all 0.2s ease-in-out 200ms;
 }
 
+.bar-footer {
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
 .bar-positive {
   background-image : none ! important;
   background-color: #fff ! important;
@@ -35,8 +39,17 @@
   padding: 0;
 }
 
-.bar-positive .button, .title{
+.bar-positive .button, .bar-positive .title {
   color: #37b97d ! important;
+}
+
+.bar-positive .title>span{
+  display: inline-block;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 80%;
 }
 
 .bar-positive i{
@@ -940,8 +953,13 @@ modal
   margin-bottom: 44px;
 }
 
-.course-body .course-tab-content .tab-item {
+.course-tab .tab-item{
   font-size: 15px;
+}
+
+.course-tab-content .learn {
+  padding-top: 0 ! important;
+  padding-bottom: 1px ! important;
 }
 
 .course-body .lesson-list .item {
