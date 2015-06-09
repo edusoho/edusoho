@@ -1324,9 +1324,6 @@ html.html-nav-active {
 html.html-nav-active body {
   overflow: hidden;
 }
-html.html-nav-active .es-wrap {
-  overflow: hidden;
-}
 .es-wrap {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
