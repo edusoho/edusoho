@@ -732,7 +732,7 @@ define(function(require, exports, module) {
             this.type = type;
             this.courseId = courseId;
             this.lessonId = lessonId;
-            this.interval = 10;
+            this.interval = 120;
             this.watched = false;
             this.watchLimit = watchLimit;
         },
