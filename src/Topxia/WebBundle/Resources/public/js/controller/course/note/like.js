@@ -39,18 +39,18 @@ define(function(require, exports, module) {
 
         $ul.on('click', '.js-like', function() {
             var $self = $(this);
-            if ($self.hasClass('color-primiay')) {
+            if ($self.hasClass('color-primary')) {
                 $.post($self.data('cancelLikeUrl'), function(note) {
                     $self.find('.js-like-num').html(note.likeNum);
                 }).always(function(){
-                    $self.removeClass('color-primiay');
+                    $self.removeClass('color-primary');
                     $self.closest('.icon-favour').removeClass('active');
                 });
             } else {
                 $.post($self.data('likeUrl'), function(note) {
                     $self.find('.js-like-num').html(note.likeNum);
                 }).always(function(){
-                    $self.addClass('color-primiay');
+                    $self.addClass('color-primary');
                     $self.closest('.icon-favour').addClass('active');
                 });
                 

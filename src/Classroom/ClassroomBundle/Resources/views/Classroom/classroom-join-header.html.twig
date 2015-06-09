@@ -63,7 +63,7 @@
           </ul>
           {% if member.role == 'auditor'%}
             <div class="class-auditor hidden-sm">
-              您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primiay" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
+              您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
               <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a>
             </div>
           {% endif %}
