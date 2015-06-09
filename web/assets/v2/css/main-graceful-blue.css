@@ -762,6 +762,9 @@ Pagination Styles
 .es-header .container {
   position: relative;
 }
+.es-header .collapse {
+  display: block;
+}
 @media (max-width: 767px) {
   .es-header .navbar-header {
     text-align: center;
@@ -1330,11 +1333,16 @@ html.html-nav-active {
   -o-transform: translate3d(250px, 0px, 0px);
   -moz-transform: translate3d(250px, 0px, 0px);
 }
-.lesson-dashboard-page .es-wrap {
-  transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -moz-transform: none;
+.html-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  background: #000;
 }
 .tooltip {
   min-width: 40px;
