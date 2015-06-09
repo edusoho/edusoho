@@ -21,9 +21,11 @@ body {
 
 html.html-nav-active {
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow-y: auto;
   body {
-    overflow: hidden;
+    position: fixed;
+    // overflow: hidden;
   }
 }
 
@@ -41,7 +43,7 @@ html.html-nav-active {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 100%;
   z-index: 990;
   background: rgba(0, 0, 0, 0.2);

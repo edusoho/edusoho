@@ -879,7 +879,6 @@ Pagination Styles
   top: 0;
   height: 100%;
   background: #3f3f3f;
-  z-index: 1000;
   visibility: hidden;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -896,10 +895,7 @@ Pagination Styles
 .es-header .navbar-mobile .nav {
   float: none;
   text-align: left;
-  padding-right: 20px;
-}
-.es-header .navbar-mobile .dropdown-menu {
-  padding-left: 20px;
+  padding: 0 20px;
 }
 .es-header .navbar-mobile .dropdown-menu > li > a {
   color: #fff;
@@ -1320,10 +1316,10 @@ body {
 }
 html.html-nav-active {
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
 }
 html.html-nav-active body {
-  overflow: hidden;
+  position: fixed;
 }
 .es-wrap {
   -webkit-transition: all 0.3s ease;
@@ -1341,7 +1337,7 @@ html.html-nav-active body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 100%;
   z-index: 990;
   background: rgba(0, 0, 0, 0.2);
