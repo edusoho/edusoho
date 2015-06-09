@@ -292,6 +292,29 @@
   padding-bottom: 12px;
 }
 
+.found-body .slider .slide-index{
+  display: block;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+}
+
+.found-body .slider .point{
+  background: #fff;
+  border: solid 1px #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  margin: 0px 5px 5px 0px;
+}
+
+.found-body .slider .point.active{
+  border: 0;
+  background: #37b97d;
+}
+
 /* setting */
 .setting a {
   padding-left: 16px;

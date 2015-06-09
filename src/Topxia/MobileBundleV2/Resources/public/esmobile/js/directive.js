@@ -58,6 +58,53 @@ directive('slideInit', function() {
     }
   }
 }).
+directive('slideIndex', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+          var total = 0;
+          var $currentIndex = 0;
+          scope.slideHasChanged = function($index) {
+            $currentIndex = $index;
+            changeSlidePointStatus();
+          }
+
+          scope.$watch("banners", function(newValue) {
+            if (newValue && newValue.length > 0) {
+                total = newValue.length;
+                initSlideIndex();
+            }
+          });
+          
+          function changeSlidePointStatus()
+          {
+            angular.forEach(element[0].querySelectorAll('.point'), function(item, index){
+
+              if (index == $currentIndex) {
+                item.classList.add("active");
+              } else {
+                item.classList.remove("active");
+              }
+            });
+          }
+
+          function initSlideIndex() {
+                var points = "";
+            
+                for (var i = 0 ; i < total; i++) {
+                  if (i == $currentIndex) {
+                    points += "<span class='point active'></span>";
+                  } else {
+                    points += "<span class='point'></span>";
+                  }
+                  
+                };
+
+                element.append("<p class='slide-index'>" + points + "</p>");
+          }
+    }
+  }
+}).
 directive('lazyLoad', function () {
   return function(scope, elm, attr) {
             echo.init({

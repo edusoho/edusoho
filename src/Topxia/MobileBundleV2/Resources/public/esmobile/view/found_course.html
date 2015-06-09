@@ -1,7 +1,7 @@
 <ion-view>
   <ion-content class="content-padding found-body">
     
-    <ion-slide-box on-slide-changed="slideHasChanged($index)">
+    <ion-slide-box on-slide-changed="slideHasChanged($index)" slide-index="banners">
 	  <ion-slide ng-repeat="banner in banners"  slide-init>
 	    <div class="box banner">
 	    	<img src='{{ banner.url }}' />
