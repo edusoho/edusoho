@@ -268,6 +268,11 @@
 }
 
 /* found-course */
+
+.found-body {
+  background: #f7f7f7;
+}
+
 .found-body .slider {
   background: #f7f7f7;
   padding-top: 12px;
@@ -619,8 +624,12 @@ recommendCourse style --
   background-color: #e83939;
 }
 
-
 /* course-card*/ 
+
+.course-card {
+  margin-bottom: 16px;
+  background: #fff;
+}
 
 .course-card .price-body {
   color: #bbb;
@@ -653,7 +662,10 @@ recommendCourse style --
 
 .course-card h4 {
   font-size: 16px;
+  padding-top: 8px;
+  padding-bottom: 0px;
   padding-left: 16px;
+  margin: 0;
 }
 
 .course-card .more {
@@ -693,6 +705,11 @@ modal
 */
 
 /* sign */
+
+.sign {
+    margin-bottom: 0;
+}
+
 .sign .input-label {
   width: 5%;
 }
@@ -719,6 +736,14 @@ modal
   border-color: green;
 }
 
+.sign-padding {
+  padding: 16px;
+}
+
+.sign-padding .button{
+  margin-top: 0;
+}
+
 .sign i {
   color: #ccc;
   font-size: 20px;
@@ -743,9 +768,11 @@ modal
 }
 
 /** login **/
+
 .login input {
   padding-left: 32px;
 }
+
 /* sign */
 
 .tabs-green .tabs {
@@ -1202,7 +1229,8 @@ modal
   color: #ddd;
   position: relative;
   text-align: center;
-  height: 2px;
+  height: 20px;
+  line-height: 20px;
   width: 100%;
   display: inline-block;
   background: none;
@@ -1222,6 +1250,7 @@ modal
 }
 
 .vippay-body .tabs {
+  background-image : none;
   padding: 8px 16px 8px 16px;
   height: 100%;
   border: 0;
