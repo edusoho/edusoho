@@ -4407,6 +4407,11 @@ body {
   bottom: 50px;
 }
 
+.slide-player-body img.side {
+  max-width: 100%;
+  height: auto;
+}
+
 .loading-background  {
   background: #fff url(../img/loader.gif) no-repeat center center;
 }

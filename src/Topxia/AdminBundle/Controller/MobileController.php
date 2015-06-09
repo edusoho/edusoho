@@ -46,7 +46,7 @@ class MobileController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $operationMobile = $request->request->all();
-            $mobile = array_merge($operationMobile,$courseGrids,$settingMobile);
+            $mobile = array_merge($courseGrids,$settingMobile,$operationMobile);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
