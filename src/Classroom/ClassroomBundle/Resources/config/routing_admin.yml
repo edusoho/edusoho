@@ -1,0 +1,73 @@
+admin_classroom:
+    path:     /classroom/index
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:index }
+
+admin_classroom_setting:
+    path:     /setting/classroom
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:set }
+
+admin_classroom_create:
+    pattern:  /classroom/create
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:addClassroom }
+
+admin_classroom_close:
+    pattern:  /classroom/{id}/close
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:closeClassroom }
+    methods: [POST]
+
+admin_classroom_open:
+    pattern:  /classroom/{id}/open
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:openClassroom }
+    methods: [POST]
+
+admin_classroom_delete:
+    pattern:  /classroom/{id}/delete
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:deleteClassroom }
+    methods: [POST]
+
+admin_classroom_order:
+    path:     /classroom/order
+    defaults: { _controller: ClassroomBundle:ClassroomOrderAdmin:manage }
+
+admin_classroom_order_refunds:
+    path:     /classroom/order/refunds
+    defaults: { _controller: ClassroomBundle:ClassroomOrderAdmin:refunds }
+
+admin_classroom_thread:
+    path:     /classroom/thread
+    defaults: { _controller: ClassroomBundle:ClassroomThreadAdmin:index }
+
+admin_classroom_thread_delete:
+    path:     /classroom/thread/{threadId}/delete
+    defaults: { _controller: ClassroomBundle:ClassroomThreadAdmin:delete }
+    methods: [POST]
+
+admin_classroom_thread_batch_delete:
+    path:     /classroom/thread/batch_delete
+    defaults: { _controller: ClassroomBundle:ClassroomThreadAdmin:batchDelete }
+
+admin_classroom_set_recommend:
+    path:   /classroom/{id}/recommend
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:recommend }
+
+admin_classroom_cancel_recommend:
+    path:   /classroom/{id}/recommend/cancel
+    defaults: { _controller: ClassroomBundle:ClassroomAdmin:cancelRecommend }
+
+admin_classroom_recommend_list:
+    path:   /classroom/recommend/list
+    defaults : { _controller: ClassroomBundle:ClassroomAdmin:recommendList}
+
+admin_classroom_review:
+    pattern:  /classroom/review
+    defaults: { _controller: ClassroomBundle:ClassroomReview:index }
+
+admin_classroom_review_delete:
+    pattern:  /classroom/review/{id}/delete
+    defaults: { _controller: ClassroomBundle:ClassroomReview:delete }
+    methods: [POST]
+
+admin_classroom_review_batch_delete:
+    pattern:  /classroom/review/batch_delete
+    defaults: { _controller: ClassroomBundle:ClassroomReview:batchDelete }
+    methods: [POST]

@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 {% block title %}师资介绍 - {{ parent() }}{% endblock %}
 
 {% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
@@ -7,47 +8,23 @@
 
 
 {% set bodyClass = 'teacherpage' %}
+{% do load_script('teacher/explore') %}
+
 {% block content %}
 
-<div class="es-row-wrap container-gap">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-header"><h1>师资介绍</h1></div>
-    </div>
+<div class="es-section">
+  <div class="teacher-list row">
+    {% for teacher in teachers %}
+    {% set profile = profiles[teacher.id] %}
+    {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
+      <div class="col-lg-4 col-md-6 col-sm-6">
+        {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
+      </div>
+    {% endfor %}
   </div>
-
-  <div class="row">
-    <div class="col-md-12">
-
-      <ul class="media-list">
-        {% for teacher in teachers %}
-          {% set profile = profiles[teacher.id] %}
-          <li class="media teacher">
-            <a class="pull-left" href="{{ path('user_show', {id:teacher.id}) }}">
-              <img class="media-object" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
-            </a>
-            <div class="media-body">
-              <button class="btn btn-default pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</button>
-
-              <h4 class="media-heading">
-                <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-              </h4>
-              <div class="teacher-title">
-                {% if teacher.title %}
-                  {{ teacher.title }}
-                {% else %}
-                  <span class="text-muted">请设置头衔</span>
-                {% endif %}
-              </div>
-              <div class="teacher-about">{{ profile.about|raw }}</div>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-      {{ web_macro.paginator(paginator) }}
-      
-    </div>
-  </div>
-
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
 </div>
+
 {% endblock %}

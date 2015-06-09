@@ -8,31 +8,26 @@
 {% block content %}
 
 
-<div class="es-row-wrap testpaper-heading">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="testpaper-titlebar clearfix">
-        <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
-        <div class="testpaper-status">{% block testpaper_heading_status %}{% endblock %}</div>
-      </div>
-      {% block testpaper_heading_content %}{% endblock %}
-    </div>
-
-    {% if (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() %}
-
-    {% else %}
-      {% if showTestpaperNavbar|default('on') == 'on' %}
-        <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
-          <ul class="nav nav navbar-nav nav-pills">
-            {% for type in paper.metas.question_type_seq %}
-              <li><a href="#testpaper-questions-{{ type }}">{{dict('questionType')[type]}}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-    {% endif %}
-
+<div class="es-section testpaper-heading">
+  <div class="testpaper-titlebar clearfix">
+    <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
+    <div class="testpaper-status">{% block testpaper_heading_status %}{% endblock %}</div>
   </div>
+  {% block testpaper_heading_content %}{% endblock %}
+
+  {% if (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() %}
+
+  {% else %}
+    {% if showTestpaperNavbar|default('on') == 'on' %}
+      <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
+        <ul class="nav nav-pills clearfix">
+          {% for type in paper.metas.question_type_seq %}
+            <li><a href="#testpaper-questions-{{ type }}">{{dict('questionType')[type]}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endif %}
 </div>
 
 <div class="row">
@@ -103,7 +98,14 @@
             </div>
             <div class="modal-footer">
               <a href="javascript:;" class="btn btn-default" data-dismiss="modal">取消</a>
-              <button type="submit" class="btn btn-info" data-toggle="form-submit" data-target="#teacherCheckForm" id="testpaper-teacherSay-btn" data-post-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}">完成批阅</button>
+              <button type="submit" class="btn btn-info" data-toggle="form-submit" data-target="#teacherCheckForm" id="testpaper-teacherSay-btn" data-post-url="{{ path('course_manage_test_teacher_check', { id: id }) }}" 
+              {% if source|default('course') == 'classroom' %}
+                data-goto="{{ path('classroom_manage_testpaper',{id:targetId,status:'reviewing'}) }}"
+              {% else %}
+                data-goto="{{ path('course_manage_list_teacher_test_reviewing') }}"
+              {% endif %}
+
+              >完成批阅</button>
             </div>
           </div>
         </div>

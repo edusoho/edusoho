@@ -1,0 +1,11 @@
+<div class="top-reply {% if not posts|length|default(0) %}hidden{% endif %}">
+  <div class="page-header">精彩回复</div>
+  <ul class="comment-list">
+    {% for post in posts %}
+      {% set author = users[post.userId] %}
+      {% include 'TopxiaWebBundle:Thread/Part:post-item.html.twig' %}
+    {% else %}
+      <li class="empty">一个精彩回复都没有！</li>
+    {% endfor %}
+  </ul>
+</div>

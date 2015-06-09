@@ -9,6 +9,8 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
 ));
 
+define("INSTALL_URI", "\/install\/start-install.php");
+
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
 $step =intval(empty($_GET['step']) ? 0 : $_GET['step']);
@@ -178,6 +180,7 @@ function install_step3()
         $init->initRefundSetting();
         $init->initArticleSetting();
         $init->initDefaultSetting();
+        $init->initCrontabJob();
 
         header("Location: start-install.php?step=4");
         exit();
@@ -600,6 +603,11 @@ EOD;
             'public' => 1,
         ));
 
+        $this->getFileService()->addFileGroup(array(
+            'name' => '编辑区',
+            'code' => 'block',
+            'public' => 1,
+        ));
     }
 
     public function initPages()
@@ -682,6 +690,24 @@ EOD;
                 $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
                 if (file_exists($filename)) {
                     $content = file_get_contents($filename);
+                    $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
+                        preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
+                        preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
+                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
+                        $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
+                        $src = $URI . trim($src);
+                         
+                        $img = "<img src='{$src}'";
+                        if (isset($alts[1][0])) {
+                            $alt = $alts[1][0];
+                            $img .= " alt='{$alt}'>";
+                        } else {
+                            $img .= ">";
+                        }
+                         
+                        return $img;
+                    
+                    }, $content);
                 } else {
                     $content = '';
                 }
@@ -702,9 +728,26 @@ EOD;
 
     }
 
+    public function initCrontabJob()
+    {
+        $this->getCrontabService()->createJob(array(
+            'name'=>'CancelOrderJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+    }
+
     public function initLockFile()
     {
         file_put_contents(__DIR__ . '/../../app/data/install.lock', '');
+    }
+
+    private function getCrontabService()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 
     private function getUserService()

@@ -221,9 +221,10 @@ class UserController extends BaseController
 
         $this->getUserService()->unFollow($user['id'], $id);
 
-        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
-        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
-        $this->getNotificationService()->notify($id, 'default', $message);
+        $message = array('userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'unfollow');
+        $this->getNotificationService()->notify($id, 'user-follow', $message);
 
         return $this->createJsonResponse(true);
     }
@@ -236,9 +237,10 @@ class UserController extends BaseController
         }
         $this->getUserService()->follow($user['id'], $id);
 
-        $userShowUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
-        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经关注了你！";
-        $this->getNotificationService()->notify($id, 'default', $message);
+        $message = array('userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'follow');
+        $this->getNotificationService()->notify($id, 'user-follow', $message);
 
         return $this->createJsonResponse(true);
     }
@@ -258,6 +260,25 @@ class UserController extends BaseController
             $response = array('success' => true, 'message' => '');
         }
         return $this->createJsonResponse($response);
+    }
+
+    public function cardShowAction(Request $request, $userId)
+    {
+        $user = $this->tryGetUser($userId);
+        $currentUser = $this->getCurrentUser();
+        $profile = $this->getUserService()->getUserProfile($userId);
+        $isFollowed = false;
+        if ($currentUser->isLogin()) {
+            $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
+        }
+        $user['learningNum'] = $this->getCourseService()->findUserLearnCourseCount($userId);
+        $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
+        $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
+        return $this->render('TopxiaWebBundle:User:card-show.html.twig', array(
+            'user' => $user,
+            'profile' => $profile,
+            'isFollowed' => $isFollowed
+        ));
     }
 
     protected function getUserService()

@@ -15,6 +15,8 @@ interface CategoryDao
 	
 	public function getCategoryByParentId($parentId);
 
+	public function findAllCategoriesByParentId($parentId);
+
 	public function findAllCategories();
 
 	public function updateCategory($id, $category);

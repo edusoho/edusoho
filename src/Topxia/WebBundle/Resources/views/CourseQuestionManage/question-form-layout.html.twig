@@ -60,7 +60,7 @@
             {% set question_stem_help = question_stem_help|default('') %}
             {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
           </div>
-          <div class="col-md-2" style="padding-left:0;">
+          <div class="col-md-2 webuploader-for-glyphicon" style="padding-left:0;">
             <div id="question-stem-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-picture"></i></div>
             {% if enabledAudioQuestion|default(null) %}
               <div id="question-stem-audio-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-volume-up"></i></div>

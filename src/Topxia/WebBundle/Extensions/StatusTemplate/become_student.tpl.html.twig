@@ -1,0 +1,16 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+	{% if status.objectType == 'course' %}
+		加入课程 <a href="{{ path('course_show', {id: props.course.id}) }}" title="来自《{{ props.course.title }}》">{{ props.course.title|sub_text(15)}}</a>
+	{% else %}
+		加入班级 <a href="{{ path('classroom_show', {id: props.classroom.id}) }}" title="来自《{{ props.classroom.title }}》">{{ props.classroom.title|sub_text(15)}}</a>
+	{% endif %}
+  
+{% elseif mode == 'full' %}
+	{% if status.objectType == 'course' %}
+		
+	{% else %}
+		
+	{% endif %}
+{% endif %}

@@ -36,7 +36,14 @@ class HtmlExtension extends \Twig_Extension
     {
         $html = '';
         if (!is_null($empty)) {
-            $html .= "<option value=\"\">{$empty}</option>";
+            if(is_array($empty)){
+                foreach ($empty as $key => $value) {
+                    $html .= "<option value=\"{$key}\">{$value}</option>";
+                }
+            } else {
+                $html .= "<option value=\"\">{$empty}</option>";
+            }
+
         }
         foreach ($choices as $value => $name) {
             if ($selected == $value) {

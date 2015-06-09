@@ -1,0 +1,286 @@
+.navbar {
+  margin-bottom: 0;
+  z-index: 99;
+}
+
+.es-header {
+  background: #3f3f3f;
+  height: 60px;
+  .border-radius(0);
+  border: none;
+  z-index: 99;
+  .container {
+    position: relative;
+  }
+  .navbar-header {
+    @media (max-width: @screen-xs-max) {
+      text-align: center;
+      .navbar-brand { 
+        display: inline-block;
+        float: none;
+      }
+    }
+    .navbar-brand {
+      height: 60px;
+      line-height: 50px;
+      padding: 5px 10px;
+      color: #fff;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 10px;
+        line-height: 40px;
+      }
+      >img {
+        height: 50px;
+        width: auto;
+        @media (max-width: @screen-xs-max) {
+          height: 40px;
+        }
+      }
+    }
+  }
+  // 菜单
+  .nav.navbar-nav {
+    @media (max-width: @screen-xs-max) {
+      float: right;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    >li {
+      >a {
+        padding: 20px 30px;
+        line-height: 20px;
+        color: #fff;
+        background: none;
+        .es-transition;
+        @media (max-width: @screen-md-max) {
+          padding-left: 25px;
+          padding-right: 25px;
+        }
+        @media (max-width: @screen-sm-max) {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+      &.open.active >a,
+      &.open>a:hover, 
+      &.open>a:focus,
+      &.active >a,
+      >a:hover, 
+      >a:focus {
+        background: none;
+        color: @brand-primary;
+        .es-transition;
+      }
+    }
+    .navbar-toggle {
+      padding: 5px 15px;
+      background: #1abc9c;
+      .icon-bar {
+        background: #fff;
+      }
+    }
+    >li > .dropdown-menu {
+      border-radius: 5px;
+    }
+  }
+  // 手机端
+  .navbar-mobile {
+    position: absolute;
+    left: 0;
+    left: 0;
+    .navbar-more { 
+      position: relative;
+      padding: 20px 10px;
+      line-height: 20px;
+      display: block;
+      color: #fff;
+      z-index: 999;
+    }
+    .nav-mobile {
+      width: 250px;
+      overflow-x: hidden;
+      position: fixed;
+      left: -250px;
+      top: 0;
+      height: 100%;
+      background: #3f3f3f;
+      z-index: 999;
+      visibility: hidden;
+      .es-transition;
+      &.active {
+        visibility: visible;
+        .es-transition;
+      }
+    }
+    .nav { 
+      float: none;
+      text-align: left;
+      padding-right: 20px;
+    }
+    .dropdown-menu {
+      padding-left: 20px;
+      >li>a {
+        color: #fff;
+      }
+    }
+    .navbar-form {
+      width: 80%;
+      margin: 60px auto 20px auto;
+      .form-control {
+        width:100%;
+      }
+    }
+  }
+  .navbar-form {
+    margin: 15px 10px;
+  }
+}
+
+// 搜索
+.navbar-form {
+  margin: 10px;
+  .box-shadow(none);
+  @media (max-width: @screen-xs-max) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .form-group {
+    position: relative;
+  }
+  .form-control {
+    height: 30px;
+    width: 100px;
+    border-radius: 20px;
+    .es-transition;
+    &.active {
+      width: 150px;
+    }
+    &:focus {
+      border-color: #fff;
+    }
+  }
+  .button {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    border: none;
+    background: none;
+  }
+}
+
+// 隐藏菜单项
+.nav > li.nav-more {
+  .more {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+    display: inline-block;
+    >i {
+      font-size: 25px;
+    }
+  }
+  li .dropdown-menu {
+    left: 100%;
+    top: 0;
+  }
+  &.open li:hover .dropdown-menu {
+    display: block;
+  }
+  .open>a,
+  .open.active >a,
+  .open>a:hover, 
+  .open>a:focus {
+    background: @brand-primary !important;
+    color: #fff !important;
+  }
+}
+
+// 头部用户信息
+.navbar-user {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.nav.user-nav {
+  float: right;
+  >li {
+    float: left;
+    height: 60px;
+    >a {
+      display: block;
+      padding: 20px 15px;
+      color: #fff;
+      .es-transition;
+      &.dropdown-toggle { 
+        padding: 15px 15px;
+        @media (max-width: @screen-sm-max) {
+         padding: 15px 5px;
+        }
+      }
+      &:hover,
+      &:focus {
+        color: @brand-primary;
+        background: none;
+        .es-transition;
+      }
+      &.hasmessage {
+        position: relative;
+        display: block;
+        >.dot {
+          position: absolute;
+          display: block;
+          width: 5px;
+          height: 5px;
+          top: 22px;
+          right: 12px;
+          font-size: 20px;
+          .border-radius(50%);
+          background-color: @brand-danger;
+        }
+      }
+    }
+  }
+  .dropdown-menu {
+    margin-left: -50px;
+    @media(max-width:@screen-md-max){
+      width: 160px;
+      position: absolute;
+      top: 100%;
+      left: auto;
+      right: 0;
+      background: #fff;
+      li {
+        width: 100%;
+      }
+    }
+    >li {
+      > a { 
+        padding-left: 10px;
+        &:hover {
+          .num {
+            background: #fff;
+            color:@brand-primary;
+            .es-transition;
+          }
+        }
+      }
+      i { 
+        padding: 0 10px;
+      }
+      .num { 
+        background: #999;
+        padding: 0 10px;
+        border-radius: 20px;
+        color: #fff;
+        .es-transition;
+      }
+    }
+  }
+}
+

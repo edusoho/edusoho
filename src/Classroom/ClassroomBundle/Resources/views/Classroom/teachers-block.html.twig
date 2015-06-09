@@ -1,0 +1,35 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% do load_script('classroombundle/controller/classroom/teachers') %}
+
+<div class="panel panel-default" id="class-teacher-column">
+  <div class="panel-heading">
+    <h3 class="panel-title"> 
+      <i class="es-icon es-icon-assignmentind"></i>班主任
+    </h3>
+  </div>
+  <div class="panel-body">
+    {% if headTeacher %}
+    <div class="media media-default">
+      <div class="media-left">
+        {{ web_macro.user_avatar(headTeacher,'','avatar-md') }}
+      </div>
+      
+      <div class="media-body">
+        <div class="title">
+          {{ web_macro.user_link(headTeacher , 'link-light') }}
+        </div>
+        {% if headTeacher.title|default('') %}
+          <div class="content">{{ headTeacher.title }}</div>
+        {% else %}
+          <div class="content">还没有头衔</div>
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
+      <div class="empty">该{{ setting('classroom.name')|default("班级") }}尚未设置班主任</div>
+    {% endif %}
+
+  </div>
+</div>
+

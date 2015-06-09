@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
-use Topxia\Common\Paginator;
+
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends BaseController
 {
@@ -16,6 +17,20 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($data);
     }
 
+    public function treeNavAction(Request $request, $category, $path, $fliter = 'ALL', $orderBy = 'latest')
+    {
+        list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
+        return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
+            'rootCategories' => $rootCategories,
+            'categories' => $categories,
+            'category' => $category,
+            'path' => $path,
+            'activeIds' => $activeIds,
+            'fliter' => $fliter,
+            'orderBy' => $orderBy
+        ));
+    }
+
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
@@ -25,5 +40,4 @@ class CategoryController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-
 }

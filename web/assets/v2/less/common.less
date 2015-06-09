@@ -1,0 +1,130 @@
+@font-face {font-family: 'webfont';
+  src: url('fonts/webfont.eot'); /* IE9*/
+  src: url('fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('fonts/webfont.woff') format('woff'), /* chrome、firefox */
+  url('fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('fonts/webfont.svg#webfont') format('svg'); /* iOS 4.1- */
+}
+
+// 思源极细字体
+.webfont {
+  font-family: 'webfont' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body { 
+  word-wrap: break-word;
+}
+
+html.html-nav-active {
+  position: relative;
+  overflow: hidden;
+}
+
+.es-wrap {
+  .es-transition;
+  &.nav-active {
+    transform: translate3d(250px, 0px, 0px);
+    -webkit-transform: translate3d(250px, 0px, 0px);
+    -o-transform: translate3d(250px, 0px, 0px);
+    -moz-transform: translate3d(250px, 0px, 0px);
+  }
+}
+
+.lesson-dashboard-page .es-wrap {
+  transform: none;
+  -webkit-transform: none;
+  -o-transform: none;
+  -moz-transform: none;
+}
+
+.tooltip {
+  min-width:40px;
+}
+
+// .collapse {
+//   display: block;
+// }
+
+#content-container {
+  margin: 30px auto;
+  min-height: 500px;
+}
+
+a:hover, 
+a:focus {
+  text-decoration: none;
+}
+
+.caret {
+  margin-left: 5px;
+  border-top: 4px solid;
+}
+
+// 全站公告
+.alert-notice {
+  .border-radius(none);
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
+  color: @brand-primary;
+  .swiper-container {
+    position: relative;
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+  }
+  .swiper-wrapper {
+    padding-right: 30px;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+  }
+  .close {
+    float: none;
+    position: absolute;
+    top: 2px;
+    right: 0;
+    width: 30px;
+  }
+  a {
+    text-decoration: underline;
+  }
+}
+
+.aside-notice {
+  padding: 0;
+  .swiper-container {
+    position: relative;
+    padding: 0 15px;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+    a {
+      color: @brand-warning;
+    }
+  }
+}
+
+.icon-user-status {
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 17px;
+  text-align: center;
+  border: 1px solid #fff;
+  background: @brand-danger;
+  color: #fff;
+  .border-radius(50%);
+  i {
+    font-size: 12px;
+  }
+}

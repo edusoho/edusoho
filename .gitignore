@@ -41,6 +41,7 @@ app/data/plugin_installed.php
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
+!/web/themes/jianmo
 !/web/themes/block.json
 edusoho.komodoproject
 .project
@@ -51,4 +52,4 @@ web/assets/img/default/video.png
 .buildpath
 .phpintel*
 /src/Tests/*
-
+/web/assets/v2/bootstrap/less

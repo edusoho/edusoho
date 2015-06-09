@@ -7,8 +7,11 @@ define(function(require, exports, module) {
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
+        chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
 
     require('mediaelementplayer');
+
+
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
@@ -47,6 +50,7 @@ define(function(require, exports, module) {
             this._initToolbar();
             this._initRouter();
             this._initListeners();
+            this._initChapter();
 
             $('.prev-lesson-btn, .next-lesson-btn').tooltip();
         },
@@ -669,20 +673,19 @@ define(function(require, exports, module) {
             }
 
             return this._lessons[index-1];
+        },
+        _initChapter: function(e) {
+           this.chapterAnimate = new chapterAnimate({
+            'element': this.element
+           });
         }
 
     });
 
     var DurationStorage = {
         set: function(userId,mediaId,duration) {
-            var durationTmps = localStorage.getItem("durations");
-            if(durationTmps){
-                durations = new Array();
-                var durationTmpArray = durationTmps.split(",");
-                for(var i = 0; i<durationTmpArray.length; i++){
-                    durations.push(durationTmpArray[i]);
-                }
-            } else {
+            var durations = Store.get("durations");
+            if(!durations){
                 durations = new Array();
             }
 
@@ -694,12 +697,11 @@ define(function(require, exports, module) {
                 durations.shift();
             }
             durations.push(value);
-            localStorage["durations"] = durations;
+            Store.set("durations", durations);
         },
         get: function(userId,mediaId) {
-            var durationTmps = localStorage.getItem("durations");
-            if(durationTmps){
-                var durationTmpArray = durationTmps.split(",");
+            var durationTmpArray = Store.get("durations");
+            if(durationTmpArray){
                 for(var i = 0; i<durationTmpArray.length; i++){
                     var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
                     if(index>-1){
@@ -712,15 +714,14 @@ define(function(require, exports, module) {
         },
         del: function(userId,mediaId) {
             var key = userId+"-"+mediaId;
-            var durationTmps = localStorage.getItem("durations");
-            var durationTmpArray = durationTmps.split(",");
+            var durationTmpArray = Store.get("durations");
             for(var i = 0; i<durationTmpArray.length; i++){
                 var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
                 if(index>-1){
                     durationTmpArray.splice(i,1);
                 }
             }
-            localStorage.setItem("durations", durationTmpArray);
+            Store.set("durations", durationTmpArray);
         }
     };
 
@@ -803,7 +804,6 @@ define(function(require, exports, module) {
             return posted;
         }
     });
-
 
     exports.run = function() {
         

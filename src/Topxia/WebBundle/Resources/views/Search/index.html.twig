@@ -1,71 +1,89 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}搜索：{{ keywords }} - {{ parent() }}{% endblock %}
+{% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
+
+{% do load_script('search/search') %}
+
+{% block top_content %}
+  <div class="course-banner es-banner">
+    <div class="container">
+      <div class="title">
+        <span>搜索</span>SEARCH
+      </div>
+    </div>
+  </div>
+{% endblock %}
 
 {% block content %}
+  
+  <!-- 核心内容区 -->
 
-<div class="es-row-wrap container-gap">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-header"><h1>搜索</h1></div>
+  <div class="course-filter search-filter" id="course-filter">
+    <div class="result-declare">
+      共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
     </div>
-  </div>
-
-  <div class="row row-3-9">
-    <div class="col-md-9" style="min-height:300px;">
-        <form class="well well-sm" action="{{ path('search') }}" id="search_box">
-
-            <div style="float:left;">
-              <select  class="form-control searchSelect " name="categoryIds">
-                {{ select_options(categoryIds, app.request.query.get('categoryIds'), '课程分类') }}
-              </select>
-            </div>
-            <div class="input-group input-group-lg">
-              <input type="text" class="form-control" name="q" value="{{ keywords }}" id="searchText"  placeholder="请输入感兴趣的课程名">
-              <span class="input-group-btn">
-              <button class="btn btn-primary" type="submit">搜索</button>
-              </span>
-            </div>
-
-            <div class="checkbox-group coursesTypeChoices" RepeatDirection="Horizontal" id="coursesTypeChoices" name="coursesTypeChoices">
-              <div class="sortedCourses">
-                <label >筛选课程:</label>
-                {% if isShowVipSearch  %}
-                  {% if currentUserVipLevel  %}
-                    <input type="checkbox" name="coursesTypeChoices" id="vipCourses" 
-                       value="vipCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'vipCourses' %} checked{% endif %} /> 
-                    <label class="course-checkbox-label" for="vipCourses">仅显示会员课程</label>
-                 {% endif %}
-                {% endif %}
-                
-                <input type="checkbox" name="coursesTypeChoices" id="liveCourses" 
-                   value="liveCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'liveCourses' %} checked{% endif %} />
-                <label class="course-checkbox-label" for="liveCourses">仅显示直播课程</label>
-                
-                <input type="checkbox" name="coursesTypeChoices" id="freeCourses" 
-                   value="freeCourses" data-url="{{ path('search') }}" {% if coursesTypeChoices == 'freeCourses' %} checked{% endif %} />
-                <label class="course-checkbox-label" for="freeCourses">仅显示免费课程</label>
-              </div>
-            </div>
-        </form>
-
-      {% if keywords  %}
-        {% if courses %}
-          {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
-          {{ web_macro.paginator(paginator) }} 
-        {% else %}
-          <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
+    <ul class="nav nav-pills hidden-xs" role="tablist">
+      <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
+      {% if isShowVipSearch  %}
+        {% if currentUserVipLevel  %}
+          <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
+            <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
+          </li>
         {% endif %}
-      {% else %}
-
-        <div class="empty">请输入感兴趣的课程名！</div>
-
       {% endif %}
-    </div>
-    <div class="col-md-3">
+      <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
+          <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
+      </li>
+      <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
+          <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
+      </li>
+    </ul>
+    <div class="btn-group visible-xs">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} 
+      <span class="caret"></span></button>
 
+      <ul class="dropdown-menu" role="menu">
+        <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
+        {% if isShowVipSearch  %}
+            {% if currentUserVipLevel  %}
+              <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
+                <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
+              </li>
+          {% endif %}
+        {% endif %}
+        <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
+            <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
+        </li>
+        <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
+            <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
+        </li>
+      </ul>
     </div>
+
   </div>
 
-</div>
+    <!-- 课程列表 -->
+  <div class="course-list">
+      {% if courses %}
+        <div class="row">
+          {% for course in courses %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
+      {% endif %}
+
+  </div>
+
+  <nav class="text-center">
+    {% if courses %}
+    {{ web_macro.paginator(paginator) }} 
+    {% endif %}
+  </nav>
+
+  <!-- /核心内容区 -->
+
 {% endblock %}

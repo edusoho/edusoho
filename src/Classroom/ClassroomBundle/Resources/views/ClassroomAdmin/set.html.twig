@@ -1,0 +1,48 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_classroom_setting' %}
+
+{% set script_controller='classroombundle/controller/classroom-admin/set' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
+   
+    <input type="hidden" name="enabled" value="1"/>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >班级称谓设置</label>
+      </div>
+      <div class="controls col-md-4">
+        <input name="name" type="text" class="form-control" value="{{setting('classroom').name|default("")}}"/>
+        <div class="help-block">用户所能看到的是这里设置的称谓</div>
+      </div>
+    </div>
+
+    <div class="alert alert-warning col-md-offset-2" role="alert">请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label >课程重合时折价购买</label>
+      </div>
+      <div class="controls col-md-7 radios">
+        {{ radios('discount_buy', {1:'是', 0:'否'}, setting('classroom').discount_buy|default(1)) }}
+        <div class="help-block">学员在购买班级之前，如果已经购买了某个课程，班级价格将会扣除该课程的售价</div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary">提交</button>  
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+

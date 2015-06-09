@@ -34,7 +34,7 @@ class MobileOrderController extends MobileBaseController
             'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
         );
 
-        return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
+        return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
             'order' => $order,
             'requestParams' => $payRequestParams,
         ));

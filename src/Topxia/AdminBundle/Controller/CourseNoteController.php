@@ -33,7 +33,7 @@ class CourseNoteController extends BaseController
         );
         $notes = $this->getNoteService()->searchNotes(
             $conditions,
-            'created',
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

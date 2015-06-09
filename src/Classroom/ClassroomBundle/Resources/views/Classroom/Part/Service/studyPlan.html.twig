@@ -1,0 +1,5 @@
+{% if is_plugin_installed('classroomPlan') %}
+<li class="{% if active %}active{% endif %}">
+  <a tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="学习计划指导 {% if not active %}<small class='text-muted'>(暂未提供)</span>{% endif %}" data-content="精心制定的系统化学习计划让您的学习循序渐进、有条不紊，老师根据您的学习进度情况能随时给予指导">导</a>
+</li>
+{% endif %}

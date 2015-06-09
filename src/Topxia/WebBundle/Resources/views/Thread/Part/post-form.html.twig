@@ -1,0 +1,6 @@
+<div class="panel panel-default">
+  <div class="panel-heading">发表回复</div>
+  <div class="panel-body">
+    {{ render(controller('TopxiaWebBundle:Thread:post', {request:app.request, threadId:thread.id})) }}
+  </div>
+</div>

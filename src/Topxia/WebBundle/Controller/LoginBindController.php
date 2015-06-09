@@ -192,6 +192,11 @@ class LoginBindController extends BaseController
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
 
+        if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
+            $registration['emailOrMobile'] = $registration['email'];
+            unset($registration['email']);
+        }
+
         $user = $this->getAuthService()->register($registration, $type);
         return $user;
     }

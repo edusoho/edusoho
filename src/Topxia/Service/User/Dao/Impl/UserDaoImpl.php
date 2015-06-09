@@ -122,7 +122,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('createdTime <= :endTime')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
-            ->andWhere('verifiedMobile = :verifiedMobile');
+            ->andWhere('verifiedMobile = :verifiedMobile')
+            ->andWhere('id NOT IN ( :excludeIds )');
     }
 
     public function addUser($user)
