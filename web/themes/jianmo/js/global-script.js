@@ -30,7 +30,7 @@ define(function(require, exports, module) {
             }
         });
 
-        $("body").on("hover",".html-mask.active",function(e){
+        $("body").on("click",".html-mask.active",function(e){
             removeNavMobile();
         });
     }
