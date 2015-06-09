@@ -295,6 +295,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
             $targetSession = $this->request->getSession()->get($smsType);
             $smsLastTime = $targetSession['sms_last_time'];
+            var_dump($targetSession);
+            var_dump($smsLastTime);
+            exit();
             $allowedTime = 120;
 
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
