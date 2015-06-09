@@ -4854,31 +4854,9 @@ textarea.form-control-o {
 }
 .class-header .class-data > li .dropdown-toggle {
   color: #9e9e9e;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.class-header .class-data > li .dropdown-toggle > i {
-  color: #9e9e9e;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 .class-header .class-data > li .dropdown-toggle:hover {
   color: #ffae00;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.class-header .class-data > li .dropdown-toggle:hover > i {
-  color: #ffae00;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 .class-header .price {
   position: absolute;
@@ -5484,7 +5462,10 @@ textarea.form-control-o {
 .class-detail-content .class-about p {
   line-height: 30px;
   margin-bottom: 30px;
-  text-indent: 2em;
+}
+.class-detail-content .class-about img {
+  max-width: 100%;
+  height: auto;
 }
 .topic-detail .topic-header {
   position: relative;

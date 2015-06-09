@@ -5462,7 +5462,10 @@ textarea.form-control-o {
 .class-detail-content .class-about p {
   line-height: 30px;
   margin-bottom: 30px;
-  text-indent: 2em;
+}
+.class-detail-content .class-about img {
+  max-width: 100%;
+  height: auto;
 }
 .topic-detail .topic-header {
   position: relative;
