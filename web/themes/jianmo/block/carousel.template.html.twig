@@ -10,7 +10,7 @@
       {% set carouselbackground = _context['carousel' ~ i ~ 'background']%}
       <div class="swiper-slide" style="background: {{carouselbackground[0].value}};">
         <div class="container">
-          <a href="{{ carouselground[0].href|default('') }}"><img class="img-responsive" src="{{ carouselground[0].src|default('') }}">
+          <a href="{{ carouselground[0].href|default('') }}" target="{{ carouselground[0].target }}" }} ><img class="img-responsive" src="{{ carouselground[0].src|default('') }}">
             <div class="mask">
               <div class="title"><span>{{ title1[0].value|default('') }}</span><span>{{ title2[0].value|default('') }}</span></div>
               <div class="subtitle"><span>{{ subtitle1[0].value|default('') }}</span><span>{{ subtitle2[0].value|default('') }}</span></div>
