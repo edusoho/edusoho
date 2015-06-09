@@ -230,7 +230,9 @@ class MobileBaseController extends BaseController
 
             $course['teachers'] = array();
             foreach ($course['teacherIds'] as $teacherId) {
-                $course['teachers'][] = $teachers[$teacherId];
+                if (isset($teachers[$teacherId])) {
+                    $course['teachers'][] = $teachers[$teacherId];
+                }
             }
             unset($course['teacherIds']);
 
