@@ -878,7 +878,7 @@ Pagination Styles
   top: 0;
   height: 100%;
   background: #3f3f3f;
-  z-index: 999;
+  z-index: 1000;
   visibility: hidden;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -1319,6 +1319,12 @@ body {
 }
 html.html-nav-active {
   position: relative;
+  overflow: hidden;
+}
+html.html-nav-active body {
+  overflow: hidden;
+}
+html.html-nav-active .es-wrap {
   overflow: hidden;
 }
 .es-wrap {
