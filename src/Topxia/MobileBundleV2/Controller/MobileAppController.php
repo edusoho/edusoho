@@ -12,7 +12,7 @@ class MobileAppController extends MobileBaseController
 	{
 		$clientType = "pc";
 		$userAgent = $request->headers->get("user-agent");
-		if (strpos($userAgent, "kuozhi") ) {
+		if (!strpos($userAgent, "kuozhi") ) {
 			return $this->render('TopxiaMobileBundleV2:ESMobile:index.html.twig', array("clientType"=>$clientType));
 		}
 
