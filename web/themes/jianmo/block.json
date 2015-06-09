@@ -80,13 +80,11 @@
                 "title": "轮播图1",
                 "desc": "建议图片大小为764*412",
                 "count": 1,
-                "type": "imglink",  
+                "type": "img",  
                 "default":[
                     {
                         "src": "\/themes\/jianmo\/img\/poster_mac.png",
-                        "alt": "默认轮播图1",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
+                        "alt": "默认轮播图1"
                     }
                 ]
             },
@@ -165,13 +163,11 @@
                 "title": "轮播图1",
                 "desc": "建议图片大小为764*412",
                 "count": 1,
-                "type": "imglink",  
+                "type": "img",  
                 "default":[
                     {
                         "src": "\/themes\/jianmo\/img\/poster_mac.png",
-                        "alt": "默认轮播图２",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
+                        "alt": "默认轮播图２"
                     }
                 ]
             },
@@ -250,13 +246,11 @@
                 "title": "轮播图３",
                 "desc": "建议图片大小为764*412",
                 "count": 1,
-                "type": "imglink",  
+                "type": "img",  
                 "default":[
                     {
                         "src": "\/themes\/jianmo\/img\/poster_mac.png",
-                        "alt": "默认轮播图３",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
+                        "alt": "默认轮播图３"
                     }
                 ]
             }

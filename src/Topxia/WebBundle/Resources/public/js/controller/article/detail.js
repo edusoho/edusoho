@@ -10,18 +10,18 @@ define(function(require, exports, module) {
 
         threadShowWidget.element.on('click', '.js-article-like', function() {
             var $self = $(this);
-            if ($self.hasClass('color-primiay')) {
+            if ($self.hasClass('color-primary')) {
                 $.post($self.data('cancelLikeUrl'), function(article) {
                     $('.article-content').find('.js-like-num').html(article.upsNum);
                 }).always(function(){
-                    $self.removeClass('color-primiay');
+                    $self.removeClass('color-primary');
                     $self .closest('.icon-favour').removeClass('active');
                 });
             } else {
                 $.post($self.data('likeUrl'), function(article) {
                     $('.article-content').find('.js-like-num').html(article.upsNum);
                 }).always(function(){
-                    $self.addClass('color-primiay');
+                    $self.addClass('color-primary');
                     $self.closest('.icon-favour').addClass('active');
                 });
                       
