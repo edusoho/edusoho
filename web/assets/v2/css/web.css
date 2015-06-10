@@ -3695,14 +3695,14 @@ body {
 }
 
 @media (min-width: 1200px) {
-    .contentpage #content-container {
-         width: 970px;
-    }
+  .contentpage #content-container {
+    width: 970px;
+  }
 }
 
-.contentpage .es-row-wrap {
+/*.contentpage .es-row-wrap {
   padding-bottom: 20px;
-}
+}*/
 
 .friendcard {
   border: 1px solid #eee;
