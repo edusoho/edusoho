@@ -15,12 +15,12 @@
             {% for index,featuredArticle in featuredArticles %}
               <div class="swiper-slide">
                 <a href="{{ path('article_detail', {id:featuredArticle.id}) }}">
-                  <img src="{{ asset(featuredArticle.picture) }}"  alt="{{ featuredArticle.title }}">
-                  <div class="image-overlay"></div>
+                  <img class="img-responsive" src="{{ asset(featuredArticle.picture) }}"  alt="{{ featuredArticle.title }}">
+                  <div class="swiper-caption">
+                   {{ featuredArticle.title }}
+                  </div>
+                  <!-- <div class="image-overlay"></div> -->
                 </a>
-                <div class="swiper-caption">
-                 {{ featuredArticle.title }}
-                </div>
               </div>
             {% endfor %}
           </div>

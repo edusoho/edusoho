@@ -757,6 +757,11 @@ Pagination Styles
   height: 60px;
   border: none;
 }
+@media (min-width: 768px) {
+  .es-header {
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
 .es-header .container {
   position: relative;
 }
@@ -1785,6 +1790,11 @@ a:focus {
   position: relative;
   padding: 50px 0;
 }
+@media (max-width: 767px) {
+  .text-line {
+    padding: 30px 0;
+  }
+}
 .text-line .line {
   position: absolute;
   top: 50%;
@@ -1794,16 +1804,16 @@ a:focus {
   background: #f0f0f0;
   margin-top: -1px;
 }
-@media (max-width: 767px) {
-  .text-line .line {
-    display: none;
-  }
-}
 .text-line h5 {
   position: relative;
   text-align: center;
   font-size: 28px;
   z-index: 1;
+}
+@media (max-width: 767px) {
+  .text-line h5 {
+    font-size: 20px;
+  }
 }
 .text-line h5 > i {
   padding-left: 20px;
@@ -3335,22 +3345,27 @@ textarea.form-control-o {
 .es-poster {
   position: relative;
   background: #fff;
-  height: 570px;
+  max-height: 570px;
   margin: 0 auto;
 }
 @media (max-width: 1199px) {
   .es-poster {
-    height: 470px;
+    max-height: 470px;
   }
 }
 @media (max-width: 991px) {
   .es-poster {
-    height: 360px;
+    max-height: 360px;
   }
 }
 @media (max-width: 767px) {
   .es-poster {
-    height: 150px;
+    max-height: 200px;
+  }
+}
+@media (min-width: 768px) {
+  .es-poster {
+    margin-top: -60px;
   }
 }
 .es-poster .swiper-slide {
@@ -3493,7 +3508,7 @@ textarea.form-control-o {
 }
 @media (max-width: 767px) {
   .es-poster .swiper-pager {
-    bottom: 20px;
+    display: none;
   }
 }
 .es-poster .swiper-pager span {
@@ -3593,6 +3608,7 @@ textarea.form-control-o {
   background-image: -moz-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-image: -o-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-color: #7cb132;
+  min-height: 3px;
 }
 .introduction-section h4,
 .introduction-section h5 {
@@ -3672,22 +3688,22 @@ textarea.form-control-o {
 }
 .aricle-carousel {
   padding: 0 5px;
-  height: 410px;
   overflow: hidden;
+  max-height: 410px;
 }
 @media (max-width: 1199px) {
   .aricle-carousel {
-    height: 338px;
+    max-height: 338px;
   }
 }
 @media (max-width: 991px) {
   .aricle-carousel {
-    height: 387px;
+    max-height: 387px;
   }
 }
 @media (max-width: 767px) {
   .aricle-carousel {
-    height: 150px;
+    max-height: 150px;
   }
 }
 .aricle-carousel .swiper-container {
@@ -3697,10 +3713,26 @@ textarea.form-control-o {
 }
 .aricle-carousel .swiper-slide {
   position: relative;
+  width: 100%;
+  height: 410px;
+}
+@media (max-width: 1199px) {
+  .aricle-carousel .swiper-slide {
+    height: 338px;
+  }
+}
+@media (max-width: 991px) {
+  .aricle-carousel .swiper-slide {
+    height: 387px;
+  }
+}
+@media (max-width: 767px) {
+  .aricle-carousel .swiper-slide {
+    height: 150px;
+  }
 }
 .aricle-carousel .swiper-slide img {
   width: 100%;
-  height: auto;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -3734,6 +3766,7 @@ textarea.form-control-o {
 @media (max-width: 767px) {
   .aricle-carousel .swiper-caption {
     font-size: 16px;
+    bottom: 20px;
   }
 }
 .aricle-carousel .swiper-pager {
@@ -3756,9 +3789,7 @@ textarea.form-control-o {
 }
 @media (max-width: 767px) {
   .aricle-carousel .swiper-pager span {
-    width: 10px;
-    height: 10px;
-    margin: 0 5px;
+    display: none;
   }
 }
 .aricle-carousel .swiper-pager span:hover {
