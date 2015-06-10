@@ -8,7 +8,7 @@
 	</ion-tabs>
 </div>
 
-  <ion-content class="course-body" delegate-handle="mainScroll" on-scroll="contentMove(scrollTop, scrollLeft, target)">
+  <ion-content class="course-body" delegate-handle="mainScroll" on-scroll-complete="scrollComplete()"  on-scroll="contentMove(scrollTop, scrollLeft, target)">
 
       <div class="course-content">
       	<div class="course-head-body">

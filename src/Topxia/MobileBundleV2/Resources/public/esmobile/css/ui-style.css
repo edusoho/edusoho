@@ -186,6 +186,15 @@
   border-bottom-width: 1px;
 }
 
+.alipay-modal {
+  top: 0 ! important;
+  height:100%;
+}
+
+.alipay-modal .pane{
+  top: 44px;
+}
+
 .modal {
   top: 44px;
   right: 0;
@@ -1344,6 +1353,41 @@ modal
   border: 0;
   margin-top: 1px;
   padding-right: 16px;
+}
+
+.course-notice .item {
+  border-left-width: 0;
+  border-top-width: 0;
+  border-right-width: 0;
+  margin-top: 1px;
+}
+
+.course-notice .item h2 {
+  line-height: 30px;
+  height: 30px;
+}
+
+.course-notice .notice-icon {
+  border: solid 1px #ccc;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-block;
+  background-size: 20px 20px;
+  background-position: 9px 9px;
+  background-repeat: no-repeat;
+  background-image: url(../img/course_notice.png);
+}
+
+.course-notice .item-more {
+  padding: 0;
+  text-align: center;
+  line-height: 45px;
+  font-weight: normal;
+  color: #999999;
 }
 
 .slide-in-down {

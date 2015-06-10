@@ -37,6 +37,10 @@ topxia_mobile_alipay_pay:
     pattern:  /alipay_pay
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:pay }
 
+topxia_mobile_alipay_merchant:
+    pattern:  /pay/{name}/alipay_merchant
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payMerchant}
+
 topxia_mobile_alipay_callback:
     pattern:  /pay/{name}/alipay_callback
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payCallBack }

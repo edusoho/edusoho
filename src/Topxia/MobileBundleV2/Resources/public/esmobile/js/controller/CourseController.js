@@ -183,17 +183,26 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $ionicScro
       
     }
 
-
     var content, headBody;
-    $scope.contentMove = function(scrollTop, scrollLeft) {
+
+    function topTabChange(scrollTop) {
       if (headBody == null) {
         content  =$ionicScrollDelegate.$getByHandle("mainScroll").getScrollView().__content;
         headBody = content.querySelector('.course-head-body');
       }
-      
+
       $scope.$apply(function() {
         $scope.showTopTab = scrollTop > headBody.offsetHeight;
       });
+    }
+
+    $scope.contentMove = function(scrollTop, scrollLeft) {
+      topTabChange(scrollTop);
+    }
+
+    $scope.scrollComplete = function() {
+      var scrollTop = $ionicScrollDelegate.$getByHandle("mainScroll").getScrollView().__scrollTop
+      topTabChange(scrollTop);
     }
 }
 

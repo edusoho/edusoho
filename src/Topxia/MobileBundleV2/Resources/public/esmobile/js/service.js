@@ -225,6 +225,10 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 
+	this.getCourseNotices = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getCourseNotices", arguments);
+	}
+	
 	this.unLearnCourse = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/Course/unLearnCourse", arguments);
 	}

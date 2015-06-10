@@ -877,17 +877,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseId = $this->getParam("courseId");
         $user     = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+                return $this->createMetaAndData(array(), 500, "您尚未登录，不能查看该课时");
         }
         list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
         
         if (empty($member)) {
-            return $this->createErrorResponse('not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
+                return $this->createMetaAndData(array(), 500, "您不是课程的学员或尚未购买该课程，不能退学。");
         }
         if (!empty($member['orderId'])) {
             $order = $this->getOrderService()->getOrder($member['orderId']);
             if (empty($order)) {
-                return $this->createErrorResponse('order_error', '订单不存在，不能退学。');
+                return $this->createMetaAndData(array(), 500, "订单不存在，不能退学。");
             }
             
             $reason = $this->getParam("reason", "");
@@ -902,7 +902,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createMetaAndData(array(), 200, "ok");;
         }
         
-        $this->getCourseService()->removeStudent($course['id'], $user['id']);
+        try {
+            $this->getCourseService()->removeStudent($course['id'], $user['id']);
+        } catch(\Exception $e) {
+            return $this->createMetaAndData(array(), 500, $e->getMessage());
+        }
+        
         return $this->createMetaAndData(array(), 200, "ok");
     }
     

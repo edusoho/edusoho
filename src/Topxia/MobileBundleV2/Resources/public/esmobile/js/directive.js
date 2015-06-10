@@ -43,6 +43,10 @@ directive('back', function($ionicHistory, $state) {
                       $ionicHistory.goBack();
                       return;
                     }
+                    if (attributes["back"] == "close" && scope.close) {
+                      scope.close();
+                      return;
+                    }
                     $state.go("slideView.mainTab.found");
                   });
                 }

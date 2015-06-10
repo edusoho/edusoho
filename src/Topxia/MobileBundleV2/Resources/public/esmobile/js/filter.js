@@ -79,6 +79,11 @@ filter('coverViewPath', ['$rootScope', function($rootScope){
 		return app.viewFloder + path;
 	}
 }]).
+filter('coverNoticeIcon', ['$rootScope', function($rootScope){
+	return function(type) {
+		return app.viewFloder + "img/course_notice.png";
+	}
+}]).
 filter('coverGender', ['$rootScope', function($rootScope){
 
 	return function(gender) {

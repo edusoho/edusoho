@@ -42,6 +42,11 @@ class MobileAlipayController extends MobileBaseController
         return new Response("success");
     }
 
+    public function payMerchantAction(Request $request)
+    {
+        return new Response("<p>请点击返回按钮关闭!</p>");
+    }
+
     public function payCallBackAction(Request $request, $name)
     {
         $status = $this->doPayNotify($request, $name);

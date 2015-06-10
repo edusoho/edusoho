@@ -1,5 +1,6 @@
 
-@font-face {font-family: "iconfont";
+@font-face {
+  font-family: "iconfont";
   src: url('iconfont.eot'); /* IE9*/
   src: url('iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
   url('iconfont.woff') format('woff'), /* chrome、firefox */
@@ -8,7 +9,7 @@
 }
 
 .iconfont {
-  font-family:"iconfont" !important;
+  font-family:"iconfont" FontAwesome !important;
   font-size:16px;
   font-style:normal;
   -webkit-font-smoothing: antialiased;

@@ -1,0 +1,34 @@
+
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-fanhui" back="go">
+</a>
+
+<h1 class="title">
+  <span>
+      课程消息
+  </span>
+</h1>
+</ion-header-bar>
+
+<ion-view title="分类">
+  <ion-content>
+
+      <div class="course-notice">
+          <div class="list">
+            
+              <list-empty-view data="courses" title="暂时没有课程消息">
+              </list-empty-view>
+              
+              <a href="#/course/{{ course.id }}" class="item item-avatar" ng-repeat="notice in notices">
+                <span class="notice-icon"></span>
+                <h2>公告</h2>
+                <p ng-bind-html="notice.content"></p>
+              </a>
+
+              <a class="item item-divider item-more" ng-click="loadMore()" ng-if="showLoadMore">
+                查看更早消息...
+              </a>
+          </div>
+      </div>
+  </ion-content>
+</ion-view>

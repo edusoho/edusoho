@@ -32,10 +32,11 @@ appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', '$ionicPopup', funct
 			    	scope: $scope,
 			    	animation: 'none'
 			}).then(function(modal) {
+				$scope.modal = modal;
+				
 				if (modalInitFunc) {
 					modalInitFunc(modal);
 				}
-				$scope.modal = modal;
 			});
 		}
 	};

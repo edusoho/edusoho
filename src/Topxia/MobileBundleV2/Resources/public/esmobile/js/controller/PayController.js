@@ -1,4 +1,4 @@
-app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', CoursePayController]);
+app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', CoursePayController]);
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$ionicHistory', CourseCouponController]);
 app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
 app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', '$ionicPopover', 'VipUtil', VipPayController]);
@@ -109,7 +109,7 @@ function CourseCouponController($scope, CouponService, $stateParams, $ionicHisto
 	}
 }
 
-function CoursePayController($scope, $stateParams, ServcieUtil)
+function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
 {
 	ServcieUtil.getService("OrderService").getPayOrder({
 		courseId : $stateParams.courseId,
@@ -128,9 +128,19 @@ function CoursePayController($scope, $stateParams, ServcieUtil)
 			courseId : $stateParams.courseId,
         			token : $scope.token
 		}, function(data) {
-			console.log(data);
 			if (data.status == "ok" && data.payUrl != "") {
-				window.location.href = data.payUrl;
+				$scope.payUrl  = data.payUrl;
+				AppUtil.createModal(
+					$scope, 
+					app.viewFloder + "view/alipay_modal.html",
+					function(modal) {
+						modal.show();
+					}
+				);
+
+				$scope.close = function() {
+					$scope.modal.hide();
+				}
 			}
 		});
 	}
