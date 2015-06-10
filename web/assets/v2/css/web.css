@@ -3579,15 +3579,15 @@ body {
 
 }
 
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {
   .teacherpage #content-container {
-       width: 970px;
+    width: 970px;
   } 
-}
+}*/
 
-.lt-ie9 .teacherpage #content-container {
+/*.lt-ie9 .teacherpage #content-container {
   width: 970px;
-}
+}*/
 
 .teacherpage .teacher-title {
   color: #096;
