@@ -22,6 +22,11 @@ body {
 html.html-nav-active {
   position: relative;
   overflow: hidden;
+  // overflow-y: auto;
+  body {
+    // position: fixed;
+    overflow: hidden;
+  }
 }
 
 .es-wrap {
@@ -34,20 +39,19 @@ html.html-nav-active {
   }
 }
 
-.lesson-dashboard-page .es-wrap {
-  transform: none;
-  -webkit-transform: none;
-  -o-transform: none;
-  -moz-transform: none;
+.html-mask.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .tooltip {
   min-width:40px;
 }
-
-// .collapse {
-//   display: block;
-// }
 
 #content-container {
   margin: 30px auto;
