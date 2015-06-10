@@ -669,7 +669,7 @@ EOD;
 
     public function initThemes()
     {
-        $this->getSettingService()->set('theme', array('uri' => 'default'));
+        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
     }
 
     public function initBlocks()
