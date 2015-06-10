@@ -911,13 +911,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getCourses()
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
-        $conditions['categoryId'] = $categoryId;
+        $conditions               = array();
+        if($categoryId != 0) {
+            $conditions['categoryId'] = $categoryId;
+        }
         return $this->findCourseByConditions($conditions,"normal");
     }
     
     private function findCourseByConditions($conditions, $type)
     {
         $conditions['status'] = 'published';
+        $conditions['parentId'] = '0';
         if(empty($type)){
             unset($conditions['type']);
         }else{
