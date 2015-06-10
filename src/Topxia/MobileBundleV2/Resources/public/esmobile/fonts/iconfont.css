@@ -9,13 +9,26 @@
 }
 
 .iconfont {
-  font-family:"iconfont" FontAwesome !important;
+  font-family:"iconfont" ! important;
   font-size:16px;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@-webkit-keyframes iconfont-spin{
+  0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}
+}
+@keyframes iconfont-spin{
+  0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(359deg);transform:rotate(359deg)}
+}
+.iconfont-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+.iconfont-spin{-webkit-animation:iconfont-spin 2s infinite linear;animation:fa-spin 2s infinite linear}
+
 .icon-weixin:before { content: "\e63d"; }
 .icon-qq:before { content: "\e63e"; }
 .icon-icon:before { content: "\e650"; }
