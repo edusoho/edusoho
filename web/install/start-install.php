@@ -608,6 +608,12 @@ EOD;
             'code' => 'block',
             'public' => 1,
         ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '班级',
+            'code' => 'classroom',
+            'public' => 1,
+        ));
     }
 
     public function initPages()
@@ -673,7 +679,8 @@ EOD;
         $metaFiles = array(
             'system' => "{$themeDir}/block.json",
             'default' => "{$themeDir}/default/block.json",
-            'autumn' => "{$themeDir}/autumn/block.json"
+            'autumn' => "{$themeDir}/autumn/block.json",
+            'jianmo' => "{$themeDir}/jianmo/block.json"
         );
 
         foreach ($metaFiles as $category => $file) {
