@@ -28,7 +28,6 @@
 	"require" : {
 		"doctrine/doctrine-bundle" : "1.2.*",
 		"doctrine/doctrine-migrations-bundle" : "2.1.*@dev",
-		"doctrine/migrations" : "dev-master",
 		"doctrine/orm" : "v2.3.6",
 		"endroid/qrcode" : "1.2.4",
 		"ezyang/htmlpurifier" : "v4.5.0",
@@ -44,7 +43,8 @@
 		"symfony/monolog-bundle" : "2.3.*",
 		"symfony/swiftmailer-bundle" : "2.3.*",
 		"symfony/symfony" : "v2.3.18",
-		"twig/extensions" : "1.2.0"
+		"twig/extensions" : "1.2.0",
+		"silex/silex" : "1.3.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
