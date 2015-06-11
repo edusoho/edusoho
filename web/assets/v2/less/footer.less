@@ -1,22 +1,27 @@
 
 .es-footer {
-  background: #3f3f3f;
+  background: @gray-darker;
   .copyright {
-    border-top: 1px solid #2a2a2a;
+    border-top: 1px solid #444;
     text-align: center;
     padding: 20px 0;
     line-height: 30px;
     color: #bababa;
     text-shadow: 0 1px 3px #000;
-    a:hover {
+    a {
       color: white;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        color: @brand-primary;
+      }
     }
   }
 }
 
 .footer-link {
   padding: 55px 0;
-  border-bottom: 1px solid #5e5e5e;
+  border-bottom: 1px solid #111;
 }
 
 .footer-main {

@@ -753,14 +753,9 @@ Pagination Styles
   border-radius: 0;
 }
 .es-header {
-  background: #3f3f3f;
+  background: #212121;
   height: 60px;
   border: none;
-}
-@media (min-width: 768px) {
-  .es-header {
-    background: rgba(0, 0, 0, 0.6);
-  }
 }
 .es-header .container {
   position: relative;
@@ -1069,22 +1064,33 @@ Pagination Styles
   transition: all 0.3s ease;
 }
 .es-footer {
-  background: #3f3f3f;
+  background: #212121;
 }
 .es-footer .copyright {
-  border-top: 1px solid #2a2a2a;
+  border-top: 1px solid #444;
   text-align: center;
   padding: 20px 0;
   line-height: 30px;
   color: #bababa;
   text-shadow: 0 1px 3px #000;
 }
-.es-footer .copyright a:hover {
+.es-footer .copyright a {
   color: white;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-footer .copyright a:hover {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  color: #7cb132;
 }
 .footer-link {
   padding: 55px 0;
-  border-bottom: 1px solid #5e5e5e;
+  border-bottom: 1px solid #111;
 }
 .footer-main .link-item {
   width: 20%;
@@ -3363,11 +3369,6 @@ textarea.form-control-o {
     max-height: 200px;
   }
 }
-@media (min-width: 768px) {
-  .es-poster {
-    margin-top: -60px;
-  }
-}
 .es-poster .swiper-slide {
   margin: 0 auto;
   width: 100%;
@@ -3517,10 +3518,10 @@ textarea.form-control-o {
   width: 15px;
   height: 15px;
   display: inline-block;
-  background: #fff;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+  border: 2px solid #fff;
 }
 @media (max-width: 767px) {
   .es-poster .swiper-pager span {
@@ -3532,13 +3533,11 @@ textarea.form-control-o {
 .es-poster .swiper-pager span:hover {
   cursor: pointer;
   background: #7cb132;
-  color: #7cb132;
   opacity: 1;
   filter: alpha(opacity=100);
 }
 .es-poster .swiper-pager span.swiper-active-switch {
   background: #7cb132;
-  color: #7cb132;
   opacity: 1;
   filter: alpha(opacity=100);
 }

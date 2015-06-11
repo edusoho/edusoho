@@ -13,9 +13,6 @@
   @media(max-width:@screen-xs-max) {
     max-height: 200px;
   }
-  @media(min-width:@screen-sm-min) {
-    margin-top: -60px;
-  }
   .swiper-slide {
     margin: 0 auto;
     width: 100%;
@@ -138,8 +135,8 @@
       width: 15px;
       height: 15px;
       display: inline-block;
-      background: #fff;
       .border-radius(50%);
+      border: 2px solid #fff;
       @media (max-width: @screen-xs-max) {
         width: 10px;
         height: 10px;
@@ -148,12 +145,10 @@
       &:hover {
         cursor: pointer;
         background: @brand-primary;
-        color: @brand-primary;
         .opacity(1);
       }
       &.swiper-active-switch {
         background: @brand-primary;
-        color: @brand-primary;
         .opacity(1);
       }
     }
