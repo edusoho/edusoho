@@ -96,6 +96,7 @@ class UserController extends BaseController
         $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
         $conditions = array(
             'status'=>'published',
+            'private'=>'0',
             'classroomIds' => $classroomIds
         );
 
@@ -118,7 +119,7 @@ class UserController extends BaseController
             'classrooms'=>$classrooms,
             'members'=>$members,
             'user'=>$user,
-            ));
+        ));
     }
 
     public function favoritedAction(Request $request, $id)
