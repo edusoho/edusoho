@@ -86,12 +86,13 @@ class UserController extends BaseController
     public function teachingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-
-        $classrooms=array();
-        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
-        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
-
-        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+        
+        $conditions = array(
+            'status'=>'published', 
+            'roles'=>array('teacher', 'headTeacher'),
+            'userId'=>$user['id']
+        );
+        $classrooms=$this->getClassroomService()->searchMembers($conditions,array('createdTime','desc'),0,9999);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 
