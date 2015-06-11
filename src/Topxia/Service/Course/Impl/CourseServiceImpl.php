@@ -301,7 +301,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		unset($conditions['userId']);
 
 		$courseIds = ArrayToolkit::column($members, 'courseId');
-		$conditions["ids"] = $courseIds;
+		$conditions["courseIds"] = $courseIds;
 		if($onlyPublished) {
 			$conditions["status"] = 'published';
 		}
@@ -315,7 +315,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		unset($conditions['userId']);
 
 		$courseIds = ArrayToolkit::column($members, 'courseId');
-		$conditions["ids"] = $courseIds;
+		$conditions["courseIds"] = $courseIds;
 		
 		if($onlyPublished) {
 			$conditions["status"] = 'published';
