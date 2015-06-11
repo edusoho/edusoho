@@ -64,7 +64,7 @@ class CourseController extends BaseController
         $course = $this->getCourse($course);
         $members = $this->getCourseService()->findCourseStudents($course['id'], 0, 15);
         $students = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
-
+var_dump($members);
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
             'course' => $course,
             'students' => $students,
