@@ -339,14 +339,19 @@ class UserController extends BaseController
 
     private function _teachAction($user)
     {
+        $conditions = array(
+            'userId' => $user['id'],
+            'parentId' => 0
+        );
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount(array('userId'=>$user['id'])),
+            $this->getCourseService()->findUserTeachCourseCount($conditions),
             10
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
-            array('userId'=>$user['id']),
+            $conditions,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
