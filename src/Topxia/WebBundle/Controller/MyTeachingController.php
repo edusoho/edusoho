@@ -41,10 +41,21 @@ class MyTeachingController extends BaseController
             false
         );
 
+        $classrooms = array();
+        if($filter == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
+
         $courseSetting = $this->getSettingService()->get('course', array());
 
         return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
-            'courses'=>$courses,
+            'courses' => $courses,
+            'classrooms' => $classrooms,
             'paginator' => $paginator,
             'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled'],
             'filter' => $filter

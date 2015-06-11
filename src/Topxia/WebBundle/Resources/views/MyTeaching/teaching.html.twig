@@ -27,8 +27,12 @@
       <thead>
       <tr>
         <th width="50%">名称</th>
+        {% if filter == 'classroom' %}
+        <th >所属{{setting("classroom.name")|default("班级")}}</th>
+        {% else %}
         <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
         <th>价格(元)</th>
+        {% endif %}
         <th>状态</th>
         <th>操作</th>
       </tr>
@@ -50,8 +54,17 @@
               </div>
 
             </td>
+            {% if filter == 'classroom' %}
+            <td>
+              {% set classroom = classrooms[course.id]|default(null) %}
+              {% if classroom %} 
+                <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+              {% endif %}
+            </td>
+            {% else %}
             <td>{{ course.studentNum }}</td>
             <td>{{ course.price }}</td>
+            {% endif %}
             <td>{{ dict_text('courseStatus:html', course.status) }}</td>
             <td>
               <div class="btn-group">
