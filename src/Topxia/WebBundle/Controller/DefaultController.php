@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 use Topxia\Common\Paginator;
@@ -44,6 +45,18 @@ class DefaultController extends BaseController
             'consultDisplay' => true,
             'cashRate' => $cashRate
         ));
+    }
+
+    public function redirectAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $token = $request->getSession()->get('oauth_token');
+        if (($user->isLogin()) || (!empty($token)) ) {
+            return $this->createJsonResponse(true);
+        }
+        else{
+            return $this->redirect($this->generateUrl('login_bind',array('type' => 'weixin'),true));
+        }
     }
 
     public function userlearningAction()

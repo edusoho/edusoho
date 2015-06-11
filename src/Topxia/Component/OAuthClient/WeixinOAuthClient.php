@@ -15,7 +15,7 @@ class WeixinOAuthClient extends AbstractOAuthClient
         $params['appid'] = $this->config['key'];
         $params['response_type'] = 'code';
         $params['redirect_uri'] = $callbackUrl;
-        $params['status'] = 'pro';
+        $params['scope'] = 'snsapi_login';  
         return self::AUTHORIZE_URL . http_build_query($params);
     }
 
