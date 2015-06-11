@@ -1863,11 +1863,8 @@ a:focus {
 .text-line.small h5 > span {
   padding: 0 20px;
 }
-.panel {
-  border: none;
-  border: 1px solid transparent \9;
-}
 .panel.panel-default {
+  border: none;
   padding: 0 15px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -1917,6 +1914,9 @@ a:focus {
 .panel.panel-default > .panel-body {
   position: relative;
   padding: 15px 0;
+}
+.lt-ie9 .panel.panel-default {
+  border: 1px solid #e0e0e0;
 }
 .panel.panel-primary > .panel-heading {
   background-color: #02b980;
@@ -4408,6 +4408,7 @@ textarea.form-control-o {
   .course-detail-header.before .course-operation {
     float: none;
     width: 100%;
+    padding: 10px 10px 0 10px;
   }
 }
 .course-detail-header.before .course-operation .student-num {
@@ -4431,6 +4432,7 @@ textarea.form-control-o {
 }
 @media (max-width: 991px) {
   .course-detail-header.before .course-operation .buy {
+    padding: 15px 0 10px 0;
     float: left;
     width: 33.33%;
   }
