@@ -219,7 +219,7 @@ class ClassroomManageController extends BaseController
             'classroomTitle' => $classroom['title'],
             'userId'=> $user['id'],
             'userName' => $user['nickname'],
-            'opration' => 'remove');
+            'type' => 'remove');
         $this->getNotificationService()->notify($userId, 'classroom-student', $message);
 
         return $this->createJsonResponse(true);

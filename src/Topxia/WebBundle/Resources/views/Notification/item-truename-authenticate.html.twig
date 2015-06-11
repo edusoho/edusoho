@@ -8,12 +8,12 @@
       	{% if data.type == 'through'%}
       	 	您的个人实名认证，审核已经通过！
       	{% elseif data.type == 'reject'%}
-     		您的个人实名认证，审核未通过！
+     		  您的个人实名认证，审核未通过！
       {% endif %}
       {{data.note}}
     </div>
     <div class="notification-footer">
-     {{ notification.createdTime|data_format }}  
+     {{ notification.createdTime|date_format }}  
     </div>
   </div>
 </li>
