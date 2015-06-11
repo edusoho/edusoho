@@ -55,7 +55,7 @@ class WeixinOAuthClient extends AbstractOAuthClient
         $userInfo = array();
         $userInfo['id'] = $infos['openid'];
         $userInfo['name'] = $infos['nickname'];
-        $userInfo['smallAvatar'] = $infos['headimgurl'];
+        $userInfo['smallAvatar'] = $infos['headimgurl'].'64';
         if ( $infos['sex'] == 1 ){
             $userInfo['gender'] = 'male';
         }
