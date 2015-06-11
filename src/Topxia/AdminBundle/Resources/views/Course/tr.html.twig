@@ -34,7 +34,7 @@
   <td>
     {% set classroom = classrooms[course.id]|default(null) %}
     {% if classroom %} 
-      {{classroom.classroomTitle}}
+      <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
     {% endif %}
   </td>
   {% else %}
