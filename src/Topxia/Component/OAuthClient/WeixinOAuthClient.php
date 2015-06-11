@@ -3,9 +3,9 @@ namespace Topxia\Component\OAuthClient;
 
 class WeixinOAuthClient extends AbstractOAuthClient
 {   
-    CONST USERINFO_URL = 'https://api.weixin.qq.com/sns/userinfo?';
+    CONST USERINFO_URL = 'https://api.weixin.qq.com/sns/userinfo';
     CONST AUTHORIZE_URL = 'https://open.weixin.qq.com/connect/qrconnect?';
-    CONST OAUTH_TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
+    CONST OAUTH_TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token';
     CONST REFRESH_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?';
     CONST CHECK_ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/auth?';
 
