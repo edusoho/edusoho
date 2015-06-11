@@ -35,7 +35,8 @@ class WeixinOAuthClient extends AbstractOAuthClient
             'userId' => $userInfo['id'],
             'expiredTime' => $rawToken['expires_in'],
             'access_token' => $rawToken['access_token'],
-            'token' => $rawToken['access_token']
+            'token' => $rawToken['access_token'],
+            'openid' => $rawToken['openid']
         );
     }
 
