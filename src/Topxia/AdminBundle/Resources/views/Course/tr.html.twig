@@ -4,32 +4,44 @@
   <td>
     <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     
-    </br>
-    {% if course.type == 'live' %}<span class="label label-success live-label mls">直播</span>{% endif %}
-
-    {% set classroom = classrooms[course.id]|default(null) %}
-    {% if classroom %} 
-      <span class="label label-success mls">班级课程</span>
+    {% if course.type == 'live' %}
+      <span class="label label-success live-label mls">直播</span>
     {% endif %}
 
-    {% if  course.serializeMode =="none" %}
-    <span class="label label-info mls">非连载课程</span>
-    {% elseif course.serializeMode =="serialize" %}
-    <span class="label label-success mls">连载中</span>
-    {% elseif course.serializeMode =="finished" %}
-    <span class="label label-danger mls">已完结</span>
+    {% if filter == 'classroom' %} 
+      {% set classroom = classrooms[course.id]|default(null) %}
+      {% if not classroom %}
+        <span class="label label-danger live-label mls">已移除</span>
+      {% endif %}
     {% endif %}
-
     <br>
     <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
     {% if course.recommended %}
       <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }} / 序号:{{ course.recommendedSeq }}</span>
     {% endif %}
-
     
   </td>
+  <td>
+    {% if  course.serializeMode =="none" %}
+    <span class="text-info">非连载课程</span>
+    {% elseif course.serializeMode =="serialize" %}
+    <span class="text-info">连载中</span>
+    {% elseif course.serializeMode =="finished" %}
+    <span class="text-info">已完结</span>
+    {% endif %}
+  </td>
+  {% if not filter == 'classroom' %}
   <td>{{ course.studentNum }}</td>
   <td><span class="money-text">{{ course.income }}</span></td>
+  {% else %}
+  <td>
+    {% set classroom = classrooms[course.id]|default(null) %}
+    {% if classroom %} 
+      {{classroom.classroomTitle}}
+    {% endif %}
+  </td>
+  {% endif %}
+
   <td>{{ dict_text('courseStatus:html', course.status) }}</td>
   <td>
     {{ admin_macro.user_link(user) }}

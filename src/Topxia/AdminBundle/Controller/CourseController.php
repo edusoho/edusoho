@@ -42,12 +42,15 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
-        $classrooms = ArrayToolkit::index($classrooms,'courseId');
-        foreach ($classrooms as $key => $classroom) {
-            $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-        } 
+        $classrooms = array();
+        if($filter == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
