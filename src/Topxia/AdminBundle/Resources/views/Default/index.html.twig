@@ -9,7 +9,7 @@
 </div>
 
 {% if is_granted('ROLE_ADMIN') %}
-  
+
   <div class="row">
     <div class="col-md-12">
       <div id="app-upgrade-alert" class="alert alert-info alert-dismissable hide" data-url="{{path('admin_app_upgrades_count') }}" data-upgrade-url="{{ path('admin_app_upgrades') }}">
@@ -24,7 +24,7 @@
 
  <div class="col-md-6">
   <div class="panel panel-default">
-  
+
     <div class="panel-heading clearfix">
      <span class="pull-right" style="display:block">
          <span id="onlineNum" data-url="{{path('admin_online_count')}}">{{'正在载入在线人数'|trans}}...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">{{'正在载入登录人数'|trans}}...</span>）

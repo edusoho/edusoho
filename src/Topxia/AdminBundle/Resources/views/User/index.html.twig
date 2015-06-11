@@ -9,18 +9,18 @@
 {{ web_macro.flash_messages() }}
 
  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-    
+
     <div class="form-group">
       <select class="form-control" name="roles">
-        {{ select_options(dict('userRole'), app.request.query.get('roles'), "-- {{'所有角色'|trans}}--") }}
+        {{ select_options(dict('userRole'), app.request.query.get('roles'), "--所有角色--"|trans) }}
       </select>
     </div>
 
     <span class="divider"></span>
-    
+
     <div class="form-group">
       <select id="keywordType" name="keywordType" class="form-control">
-        {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), "-- {{'关键词类型'|trans}}--") }}
+        {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), "--关键词类型--"|trans) }}
       </select>
     </div>
 
@@ -55,5 +55,5 @@
     {% endfor %}
   </tbody>
 </table>
- {{ web_macro.paginator(paginator) }} 
+ {{ web_macro.paginator(paginator) }}
 {% endblock %}

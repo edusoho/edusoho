@@ -35,7 +35,7 @@
   </div>
 
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="idcard"> {{'身份证号'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -45,7 +45,7 @@
 
     {% if (user.verifiedMobile|length) > 0 %}
       <div class="row form-group">
-        <div class="col-md-2 control-label"> 
+        <div class="col-md-2 control-label">
           <label for="mobile"> {{'手机号码'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
@@ -54,7 +54,7 @@
       </div>
     {% else %}
       <div class="row form-group">
-        <div class="col-md-2 control-label"> 
+        <div class="col-md-2 control-label">
           <label for="mobile"> {{'手机号码'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
@@ -64,16 +64,16 @@
     {% endif %}
 
     <div class="row form-group">
-        <div class="col-md-2 control-label"> 
+        <div class="col-md-2 control-label">
           <label for="company"> {{'公司'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
           <input type="text" id="company" name="company" class="form-control" value="{{profile.company}}">
        </div>
     </div>
-    
+
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="job"> {{'职业'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -83,7 +83,7 @@
 
     <p></p>
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="title"> {{'头衔'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -92,7 +92,7 @@
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="signature"> {{'个人签名'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -101,7 +101,7 @@
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="about"> {{'自我介绍'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -110,7 +110,7 @@
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="site"> {{'个人主页'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -119,7 +119,7 @@
     </div>
     <p></p>
   <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="weibo"> {{'微博'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
@@ -128,7 +128,7 @@
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="qq">QQ</label>
       </div>
       <div class="col-md-7 controls">
@@ -137,15 +137,15 @@
     </div>
     <p></p>
     <div class="row form-group">
-      <div class="col-md-2 control-label"> 
+      <div class="col-md-2 control-label">
         <label for="weixin"> {{'微信'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="weixin" name="weixin" class="form-control" value="{{profile.weixin}}">
      </div>
-    </div> 
+    </div>
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">           
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 {% if fields %}
           <hr>
@@ -162,7 +162,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" placeholder=" {{'最大值为'|trans}}9 {{'位整数'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder=" {{'最大值为9 位整数'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
@@ -170,7 +170,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" placeholder=" {{'保留到'|trans}}2 {{'位小数'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder=" {{'保留到2 位小数'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
