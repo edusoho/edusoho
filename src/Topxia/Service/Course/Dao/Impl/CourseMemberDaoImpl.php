@@ -126,6 +126,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY createdTime, seq DESC LIMIT {$start}, {$limit}";
+        var_dump($sql);
         return $this->getConnection()->fetchAll($sql, array($courseId, $role));
     }
 
