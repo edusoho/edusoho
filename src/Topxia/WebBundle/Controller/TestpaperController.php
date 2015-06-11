@@ -454,7 +454,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, PHP_INT_MAX,false);
         $courseIds=ArrayToolkit::column($courses,'id');
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
@@ -508,7 +508,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, PHP_INT_MAX,false);
         $courseIds=ArrayToolkit::column($courses,'id');
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');

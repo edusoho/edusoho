@@ -753,7 +753,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($userId)) {
             return array();
         }
-        $courses = $this->controller->getCourseService()->findUserTeachCourses($userId, 0, 10);
+        $courses = $this->controller->getCourseService()->findUserTeachCourses(array('userId'=>$userId), 0, 10);
         $courses = $this->controller->filterCourses($courses);
         return $courses;
     }

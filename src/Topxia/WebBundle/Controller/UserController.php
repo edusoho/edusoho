@@ -341,12 +341,12 @@ class UserController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id']),
+            $this->getCourseService()->findUserTeachCourseCount(array('userId'=>$user['id'])),
             10
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
-            $user['id'],
+            array('userId'=>$user['id']),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
