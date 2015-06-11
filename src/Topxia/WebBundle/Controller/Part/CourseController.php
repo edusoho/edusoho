@@ -68,6 +68,7 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
             'course' => $course,
             'students' => $students,
+            'members' => $members
         ));
     }
 
