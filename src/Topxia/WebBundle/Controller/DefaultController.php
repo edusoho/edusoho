@@ -52,7 +52,7 @@ class DefaultController extends BaseController
         $user = $this->getCurrentUser();
         $token = $request->getSession()->get('oauth_token');
         if (($user->isLogin()) || (!empty($token)) ) {
-            $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->generateUrl('homepage'));
         }
         else{
             return $this->redirect($this->generateUrl('login_bind',array('type' => 'weixin'),true));
