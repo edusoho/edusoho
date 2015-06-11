@@ -2021,7 +2021,7 @@ a:focus {
   position: relative;
   padding-right: 100px;
   border-bottom: 1px solid #f5f5f5;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 @media (max-width: 767px) {
   .nav-btn-tab {
@@ -4093,14 +4093,7 @@ textarea.form-control-o {
   background: url("../img/course_detail_header.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
-}
-.course-detail-header .course-header-wrap {
   padding: 30px 0 10px 0;
-  filter: alpha(opacity=30);
-  background: #000\9;
-  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
 .course-detail-header .es-section {
   position: relative;
@@ -4553,6 +4546,7 @@ textarea.form-control-o {
   width: 50%;
 }
 .course-detail-header.after .progress {
+  height: 11px;
   margin-bottom: 0;
 }
 .course-detail-header.after .course-header-bottom {
@@ -4761,14 +4755,7 @@ textarea.form-control-o {
   background: url("../img/class_bg.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
-}
-.class-header .class-header-wrap {
   padding: 30px 0 40px 0;
-  filter: alpha(opacity=30);
-  background: #000\9;
-  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
 .class-header .class-header-mian {
   position: relative;
