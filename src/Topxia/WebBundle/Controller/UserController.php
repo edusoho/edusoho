@@ -91,9 +91,9 @@ class UserController extends BaseController
             'roles'=>array('teacher', 'headTeacher'),
             'userId'=>$user['id']
         );
-        $classrooms=$this->getClassroomService()->searchMembers($conditions,array('createdTime','desc'),0,9999);
+        $classroomMembers=$this->getClassroomService()->searchMembers($conditions,array('createdTime','desc'),0,9999);
 
-        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+        $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
         $conditions = array(
             'status'=>'published',
             'classroomIds' => $classroomIds
