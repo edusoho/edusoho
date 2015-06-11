@@ -1474,7 +1474,6 @@ a:focus {
 }
 .course-list .course-item {
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -1570,6 +1569,9 @@ a:focus {
 }
 .course-list .course-item .metas .free {
   color: #238312;
+}
+.lt-ie9 .course-list .course-item {
+  border: 1px solid #e0e0e0;
 }
 .es-banner {
   position: relative;
@@ -1861,6 +1863,10 @@ a:focus {
 .text-line.small h5 > span {
   padding: 0 20px;
 }
+.panel {
+  border: none;
+  border: 1px solid transparent \9;
+}
 .panel.panel-default {
   padding: 0 15px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -1925,7 +1931,6 @@ a:focus {
   background: #fff;
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -1962,6 +1967,9 @@ a:focus {
 }
 .es-section .section-header .more > i {
   font-size: 24px;
+}
+.lt-ie9 .es-section {
+  border: 1px solid #e0e0e0;
 }
 .nav.nav-tabs {
   margin-bottom: 15px;
@@ -3209,13 +3217,16 @@ textarea.form-control-o {
   background: #fff;
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-left: 2px solid #7cb132;
+}
+.lt-ie9 .es-tag {
+  border: 1px solid #e0e0e0;
   border-left: 2px solid #7cb132;
 }
 .es-piece {
@@ -5951,23 +5962,12 @@ textarea.form-control-o {
 .teacher-item {
   margin: 10px auto;
   text-align: center;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.teacher-item:hover {
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 .teacher-item:hover .metas {
   opacity: 1;
@@ -6012,16 +6012,15 @@ textarea.form-control-o {
 }
 .teacher-item .teacher-bottom {
   position: relative;
-  height: 50px;
-  margin: 20px;
+  height: 90px;
 }
 .teacher-item .about,
 .teacher-item .metas {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -6035,12 +6034,16 @@ textarea.form-control-o {
   filter: alpha(opacity=100);
 }
 .teacher-item .metas {
-  margin: 10px 0;
+  top: 30px;
+  bottom: 30px;
   opacity: 0;
   filter: alpha(opacity=0);
 }
 .teacher-item .metas .btn {
   margin: 0 15px;
+}
+.lt-ie9 .teacher-item {
+  border: 1px solid #e0e0e0;
 }
 .custompage .es-section img {
   max-width: 100%;

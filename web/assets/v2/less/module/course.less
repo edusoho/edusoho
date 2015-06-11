@@ -1,7 +1,6 @@
 .course-list {
   .course-item {
     margin-bottom: 20px;
-    border: 1px solid @gray-light;
     .border-radius(4px);
     .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
     background-color: #fff;
@@ -81,3 +80,6 @@
   }
 }
 
+.lt-ie9 .course-list .course-item {
+  border: 1px solid @gray-light;
+}
