@@ -137,4 +137,13 @@ define(function(require, exports, module) {
     	});
     }
 
+    is_weixn();
+    function is_weixn(){	 
+    $url = window.location.href;
+   	var ua = navigator.userAgent.toLowerCase();
+	if(ua.match(/MicroMessenger/i)=="micromessenger") {
+	    	window.location.href = '/redirect'; 
+   		}	 
+   	}
+
 });
