@@ -441,7 +441,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 
-    public function searchOrders($conditions, $sort = 'latest', $start, $limit)
+    public function searchOrders($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -458,7 +458,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
-    public function searchBill($conditions, $sort = 'latest', $start, $limit)
+    public function searchBill($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
