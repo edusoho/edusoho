@@ -1,11 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Debug\Debug;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
-
-fix_gpc_magic();
 
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
@@ -27,6 +21,13 @@ if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST
     include __DIR__ . '/../api/index.php';
     exit();
 }
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Debug\Debug;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
+
+fix_gpc_magic();
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 Debug::enable();

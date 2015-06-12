@@ -5,6 +5,10 @@
 				"src/",
 				"plugins/"
 			]
+		},
+
+		"psr-4": { 
+			"Topxia\\Api\\" : "api/src/Topxia/Api" 
 		}
 	},
 	"config" : {
