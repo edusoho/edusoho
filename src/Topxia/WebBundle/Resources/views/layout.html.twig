@@ -17,6 +17,7 @@
   <meta name="keywords" content="{% block keywords %}{% endblock %}" />
   <meta name="description" content="{% block description %}{% endblock %}" />
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <meta content="{{ app.user.isLogin() }}" name="is-login" />
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
