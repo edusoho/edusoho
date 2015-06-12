@@ -280,7 +280,7 @@ admin_note_batch_delete:
     methods: [POST]
 
 admin_course:
-    pattern:  /course/{filter}
+    pattern:  /course/{filter}/index
     defaults: { _controller: TopxiaAdminBundle:Course:index, filter:'normal' }
 
 admin_course_delete:
