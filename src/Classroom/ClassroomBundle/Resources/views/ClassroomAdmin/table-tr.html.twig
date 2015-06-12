@@ -1,0 +1,92 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="classroom-table-tr-{{ classroom.id }}">
+    <td>
+    <strong>  
+      <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
+    </strong>
+    <br>
+    <span class="text-muted text-sm">分类：{{ category.name|default('--') }}</span>
+    {% if classroom.recommended %}
+      <span class="label label-default">荐:{{ classroom.recommendedTime|date('Y-m-d') }} / 序号:{{ classroom.recommendedSeq }}</span>
+    {% endif %}
+    </td>
+
+    <td>
+    {{ classroomCoursesNum[classroom.id] }}
+
+    {% if classroomCoursesNum[classroom.id] > 0 %}
+    <strong>  
+      <a target="_blank" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">详情</a>
+    </strong>
+    {% endif %}
+    </td>
+
+    <td>
+    {{ classroom.studentNum }}
+    </td>
+
+    <td>
+    <span style="color: #F40; ">
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+            {% else %}
+                {{ classroom.price }}元
+            {% endif %}
+     </span>
+    &nbsp;
+
+
+    <span style="font-size: 13px;color: #666;">
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        原价 {{coinPriceAll[classroom.id|default(0)]}} {{setting('coin.coin_name')}}
+      {% else %}
+        原价 {{priceAll[classroom.id|default(0)]}}元
+      {% endif %}
+    </span>
+
+
+    </td>
+
+    <td>
+    {% if classroom.status=='published' %}
+    <span style="color: #090;">已发布</span>
+    {% elseif classroom.status=='closed'%}
+    
+    <span style="color: #900;">已关闭</span>
+    {% else %}
+    未发布
+    {% endif %}
+    </td>
+
+    <td>
+
+  <div class="btn-group">
+
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+      编辑
+      <span class="caret"></span>
+    </button>
+
+ <ul class="dropdown-menu">
+       <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> 管理班级</a></li>
+        
+        {% if classroom.recommended %}
+          <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'classroomList'}) }}" title="取消班级推荐"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+        {% else %}
+          <li><a class="recommend-classroom" href="#modal" data-toggle="modal" data-url="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:'classroomList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐班级</a></li>
+        {% endif %}
+          
+       {% if classroom.status=='published'%}
+       <li><a href="javascript:" class="close-classroom" title="关闭班级({{classroom.title}})" data-url="{{path('admin_classroom_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭班级</a></li>
+
+       {% else %}
+       <li><a href="javascript:" class="open-classroom" title="发布班级({{classroom.title}})" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>发布班级</a></li>
+
+       {% endif %}
+
+       {% if classroom.status=='draft'%}
+      <li><a href="javascript:" class="delete-classroom" title="删除班级({{classroom.title}})" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> 删除班级</a></li>
+      {% endif %}
+  </div>
+ </td>
+</tr>

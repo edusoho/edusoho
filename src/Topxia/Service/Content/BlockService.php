@@ -21,6 +21,8 @@ interface BlockService
 	public function getBlockHistory($id);
 
 	public function getLatestBlockHistory();
+
+	public function getLatestBlockHistoriesByBlockIds($blockIds);
 	
 	public function createBlock($block);
 

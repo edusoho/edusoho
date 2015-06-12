@@ -1,0 +1,26 @@
+{% if myFriends|default(null) %}
+  <div class="topic-num">
+    <div class="page-header">好友在参加</div>
+    <div class="num-list">
+      {% include 'TopxiaWebBundle:Thread/Event:user-grids-li.html.twig' with {members:myFriends} %}
+    </div>
+  </div>
+{% endif %}
+
+{% if members|default(null) %}
+{% do load_script('thread/utility/member') %}
+  <div class = "topic-num">
+  <div class="joined-users" data-sum="{{ membersCount|default(0) }}">
+    <div class="page-header">最新成员（{{ membersCount|default(0) }}）</div>
+    <div class="num-list join-members">
+      {% include 'TopxiaWebBundle:Thread/Event:user-grids-li.html.twig' %}
+    </div>
+    <div class="num-more">
+    {% if membersCount|default(0) > 16 %}
+      <span class="glyphicon glyphicon-chevron-down js-members-expand" style="cursor: pointer;" data-url="{{ path('ajax_thread_member_show', {threadId:threadId}) }}"></span>
+      <span class="glyphicon glyphicon-chevron-up js-members-collapse" style="cursor: pointer; display:none"></span>
+    {% endif %}
+    </div>
+  </div>
+  </div>
+{% endif %}

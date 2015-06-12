@@ -71,7 +71,11 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             
             $this->getChangeDao()->waveCashField($change['id'], $amount);
 
-            $this->getNotificationService()->notify($userId, 'default', "您已成功兑换".$coinAmount.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
+            $message = array(
+                'value' => $coinAmount,
+                'type' => 'changing'
+                );
+            $this->getNotificationService()->notify($userId, 'cash-account', $message);
            
             $this->getAccountDao()->getConnection()->commit();
 
@@ -104,7 +108,10 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         $coinSetting['coin_name'] = isset($coinSetting['coin_name'])? $coinSetting['coin_name']:"虚拟币";
 
         $account=$this->getAccount($id);
-        $this->getNotificationService()->notify($account['userId'], 'default', "您已成功充值".$value.",前往 <a href='/my/coin'>我的账户</a> 查看");
+        $message = array(
+            'value' => $value,
+            'type' => 'changeOk');
+        $this->getNotificationService()->notify($account['userId'], 'cash-account', $message);
            
         return $this->getAccountDao()->waveCashField($id, $value);
     }
@@ -119,7 +126,12 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         $coinSetting=$this->getSettingService()->get('coin',array());
         $coinSetting['coin_name'] = isset($coinSetting['coin_name'])? $coinSetting['coin_name']:"虚拟币";
         $account=$this->getAccountDao()->getAccount($id);
-        $this->getNotificationService()->notify($account['userId'], 'default', "您被扣除".$value.$coinSetting['coin_name'].",前往 <a href='/my/coin'>我的账户</a> 查看");
+
+        
+         $message = array(
+            'value' => $value,
+            'type' => 'deduct');
+        $this->getNotificationService()->notify($account['userId'], 'cash-account', $message);
 
         return $this->getAccountDao()->waveDownCashField($id, $value);
     }

@@ -166,7 +166,7 @@ class EduCloudController extends BaseController
         }
 
         if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
-            throw new \RuntimeException('用户未登陆');
+            throw new \RuntimeException('用户未登录');
         }
 
         if ($this->getCloudSmsKey($smsType) != 'on' && !$this->getUserService()->isMobileRegisterMode()) {

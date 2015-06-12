@@ -1,0 +1,45 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+  <!-- 热门资讯 -->
+    {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
+  <!-- 热门标签 -->
+  
+  {% include 'TopxiaWebBundle:Article/Widget:tag-sidebar.html.twig' %}
+  
+  <!-- 热门评论 -->
+  <div class="panel panel-default hot-comments">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="es-icon es-icon-textsms"></i>热门评论
+      </h3>
+    </div>
+    <div class="panel-body">
+
+    {% set posts = data('PopularArticlePosts',{'count':10}) %}
+    {% for post in posts %}
+      <div class="media media-hot-comment">
+        <div class="media-body">
+          <div class="pull-left">
+            {{ web_macro.user_avatar(post.user, '','avatar-sm') }}
+          </div>
+          <div class="comments-info">
+            <p>
+              {{ web_macro.user_link(post.user, '') }}
+              <span>评论于</span>
+            </p>
+            <h5>
+              <a href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
+            </h5>
+          </div>
+          <div class="comments-content">
+           {{ post.content|at(post.ats)|raw }}
+          </div>
+        </div>
+      </div>
+  {% else %}
+    <div class="empty">一个评论都没有！</div>
+  {% endfor %}
+
+  </div>
+</div>
+<!-- 推荐资讯 -->
+{{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}

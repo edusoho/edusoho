@@ -14,7 +14,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published', 'type' => 'normal');
+        $conditions = array('status' => 'published', 'parentId' => 0);
 
         $coinSetting=$this->getSettingService()->get('coin',array());
         if(isset($coinSetting['cash_rate'])){
@@ -158,13 +158,14 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function topNavigationAction($siteNav = null)
+    public function topNavigationAction($siteNav = null,$isMobile= false)
     {
         $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
         return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
             'navigations' => $navigations,
-            'siteNav' => $siteNav
+            'siteNav' => $siteNav,
+            'isMobile' => $isMobile
         ));
     }
 
@@ -202,6 +203,32 @@ class DefaultController extends BaseController
         }
         </script>";
         exit();
+    }
+
+    public function CoursesCategoryAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
+        $categoryId = $conditions['categoryId'];
+        if ($conditions['categoryId']  != 'all') {
+            $conditions['categoryId'] = intval($conditions['categoryId']);
+        }
+        else{
+            unset($conditions['categoryId']);
+        }
+        $orderBy = $conditions['orderBy'];
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+        }
+        unset($conditions['orderBy']);
+
+        $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
+        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
+            'orderBy' => $orderBy,
+            'categoryId' => $categoryId,
+            'courses' => $courses
+        ));
     }
 
     private function calculateUserLearnProgress($course, $member)

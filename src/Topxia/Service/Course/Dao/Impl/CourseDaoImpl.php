@@ -134,7 +134,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function waveCourse($id,$field,$diff)
     {
-        $fields = array('hitNum');
+        $fields = array('hitNum', 'noteNum');
 
         if (!in_array($field, $fields)) {
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
@@ -177,6 +177,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagIds']);
         }
 
+        if(empty($conditions['status']) || $conditions['status']=="") {
+            unset($conditions['status']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
@@ -202,7 +206,11 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('smallPicture = :smallPicture')
             ->andWhere('categoryId IN ( :categoryIds )')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
-            ->andWhere('id NOT IN ( :courseIds )');
+            ->andWhere('parentId = :parentId')
+            ->andWhere('parentId > :parentId_GT')
+            ->andWhere('parentId IN ( :parentIds )')
+            ->andWhere('id NOT IN ( :excludeIds )')
+            ->andWhere('id IN ( :courseIds )');
 
         return $builder;
     }

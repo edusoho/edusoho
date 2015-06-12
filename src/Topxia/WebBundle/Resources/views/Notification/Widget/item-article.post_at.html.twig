@@ -1,0 +1,5 @@
+{% set article = data('Article', {id:data.post.targetId})%}
+<a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> 在资讯 <a href="{{ path('article_post_jump', {articleId:data.post.targetId, postId:data.id}) }}" target="_blank">{{ article.title }}</a> 的回复中提到了你。
+<blockquote>
+  {{ data.content }}
+</blockquote>

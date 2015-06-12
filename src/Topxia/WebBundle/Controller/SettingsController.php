@@ -248,7 +248,7 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-					$this->setFlashMessage('danger', '当前用户登陆密码不正确，请重试！');
+					$this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
 					return $this->redirect($this->generateUrl('settings_pay_password'));
 				} else {
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
@@ -285,7 +285,7 @@ class SettingsController extends BaseController
 			if ($form->isValid()) {
 				$passwords = $form->getData();
 				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登陆密码不正确，请重试！'));
+					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
 				} else {
 					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 					return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
@@ -378,7 +378,7 @@ class SettingsController extends BaseController
 	                $this->getUserService()->deleteToken('pay-password-reset',$token['token']);
 	                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
 	            }else{
-	            	$this->setFlashMessage('danger', '用户登陆密码错误。');
+	            	$this->setFlashMessage('danger', '用户登录密码错误。');
 	            }
             }
         }
@@ -509,7 +509,7 @@ class SettingsController extends BaseController
 
 		if ($request->getMethod() == 'POST') {
 			if (!$this->getAuthService()->checkPassword($user['id'],$request->request->get('userLoginPassword')) ){
-				$this->setFlashMessage('danger', '您的登陆密码错误，不能设置安全问题。');
+				$this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
 				return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 			}
 
@@ -567,7 +567,7 @@ class SettingsController extends BaseController
         if ($request->getMethod() == 'POST') {
         	$password = $request->request->get('password');
         	if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-				$this->setFlashMessage('danger', '您的登陆密码错误');
+				$this->setFlashMessage('danger', '您的登录密码错误');
 				SmsToolkit::clearSmsSession($request, $scenario);
 				return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
 			}

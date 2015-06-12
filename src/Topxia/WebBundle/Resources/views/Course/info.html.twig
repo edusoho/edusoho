@@ -1,62 +1,69 @@
-{% extends 'TopxiaWebBundle:Course:dashboard-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
-{% set script_controller = 'course/dashboard' %}
-{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
+{% set tab = 'info' %}
 
-{% block dashboard_main %}
-  {% include 'TopxiaWebBundle:Course:dashboard-nav.html.twig' with {nav:'info'} %}
+{% block course_main %}
 
-  <dl class="course-infos" style="width:100%">
-    {% if not course.about and not category and not course.tags and not course.goals and not course.audiences %}
-      <div class="empty">暂无课程信息</div>
-    {% endif %}
-    {% if course.about %}
-    <dt>简介</dt>
-    <dd >{{ course.about|raw }}</dd>
-    {% endif %}
-    {% if category %}
-    <dt>分类</dt>
-    <dd>
-      <a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a>
-    </dd>
-    {% endif %}
+  <div class="course-detail-content">
 
-    {% if course.tags %}
-      <dt>标签</dt>
-      <dd>
-        <ul class="list-inline">
-          {% for tag in tags %}
-            <li><a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a></li>
-          {% else %}
-            <li>暂无标签</li>
-          {% endfor %}
-        </ul>
-      </dd>
-    {% endif %}
+    <div class="es-piece">
+      <div class="piece-header">
+        课程介绍
+      </div>
+      <div class="piece-body p-lg">
+        {% if course.about %}
+          {{ course.about|raw }}
+        {% else %}
+          <div class="text-muted">暂无课程简介</div>
+        {% endif %}
+
+        {% if category %}
+          <p><strong>分类：</strong><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></p>
+        {% endif %}
+
+        {% if tags %}
+          <p><strong>标签：</strong>
+            {% for tag in tags %}
+              <a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a>
+            {% endfor %}
+          </p>
+        {% endif %}
+
+      </div>
+    </div>
 
     {% if course.goals %}
-      <dt>课程目标</dt>
-      <dd>
-        <ul>
-          {% for goal in course.goals %}
-            <li>{{ goal }}</li>
-          {% endfor %}
-        </ul>
-      </dd>
+      <div class="es-piece">
+        <div class="piece-header">
+          课程目标
+        </div>
+        <div class="piece-body">
+          <ul class="piece-body-list">
+            {% for goal in course.goals %}
+            <li>
+              <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     {% endif %}
 
     {% if course.audiences %}
-      <dt>适合人群</dt>
-      <dd>
-        <ul>
-          {% for audience in course.audiences %}
-            <li>{{ audience }}</li>
-          {% endfor %}
-        </ul>
-      </dd>
+      <div class="es-piece">
+        <div class="piece-header">
+          适合人群
+        </div>
+        <div class="piece-body">
+          <ul class="piece-body-list">
+            {% for audience in course.audiences %}
+            <li>
+              <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     {% endif %}
-  </dl>
-
-
-
+  </div>
 {% endblock %}

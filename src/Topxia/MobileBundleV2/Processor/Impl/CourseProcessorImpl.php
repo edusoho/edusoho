@@ -374,7 +374,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'noteNumGreaterThan' => 0
         );
         
-        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
+        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $lessons     = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
         for ($i = 0; $i < count($courseNotes); $i++) {
             $courseNote  = $courseNotes[$i];
@@ -753,7 +753,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($userId)) {
             return array();
         }
-        $courses = $this->controller->getCourseService()->findUserTeachCourses($userId, 0, 10);
+        $courses = $this->controller->getCourseService()->findUserTeachCourses(array('userId'=>$userId), 0, 10);
         $courses = $this->controller->filterCourses($courses);
         return $courses;
     }
@@ -911,13 +911,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getCourses()
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
-        $conditions['categoryId'] = $categoryId;
+        $conditions               = array();
+        if($categoryId != 0) {
+            $conditions['categoryId'] = $categoryId;
+        }
         return $this->findCourseByConditions($conditions,"normal");
     }
     
     private function findCourseByConditions($conditions, $type)
     {
         $conditions['status'] = 'published';
+        $conditions['parentId'] = '0';
         if(empty($type)){
             unset($conditions['type']);
         }else{

@@ -129,6 +129,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('level >= :greatLevel')
             ->andWhere('verifiedMobile = :verifiedMobile')
             ->andWhere('type = :type');
+            ->andWhere('id NOT IN ( :excludeIds )');
     }
 
     public function addUser($user)

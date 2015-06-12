@@ -9,6 +9,7 @@ use Topxia\Common\NumberToolkit;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
+use Topxia\Common\ExtensionManager;
 
 class WebExtension extends \Twig_Extension
 {
@@ -25,7 +26,7 @@ class WebExtension extends \Twig_Extension
     {
         return array(
             'smart_time' => new \Twig_Filter_Method($this, 'smarttimeFilter') ,
-            'data_format' => new \Twig_Filter_Method($this, 'dataformatFilter') ,
+            'date_format' => new \Twig_Filter_Method($this, 'dateformatFilter') ,
             'time_range' => new \Twig_Filter_Method($this, 'timeRangeFilter'),
             'remain_time' => new \Twig_Filter_Method($this, 'remainTimeFilter'),
             'location_text' => new \Twig_Filter_Method($this, 'locationTextFilter'),
@@ -95,8 +96,7 @@ class WebExtension extends \Twig_Extension
             'sub_str' => new \Twig_Function_Method($this, 'subStr'),
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
-            'getClassroomsByCourseId' => new \Twig_Function_Method($this, 'getClassroomsByCourseId'),
-            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment') ,
+            'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
         );
     }
 
@@ -165,17 +165,6 @@ class WebExtension extends \Twig_Extension
     {
         $user = $this->getUserById($userId);
         return $user['nickname'];
-    }
-    
-    public function getClassroomsByCourseId($courseId)
-    {   
-        $classrooms=array();
-        $classroomIds=ArrayToolkit::column(ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->findClassroomsByCourseId($courseId),'classroomId');
-        foreach ($classroomIds as $key => $value) {
-            $classrooms[$value]=ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->getClassroom($value);
-        }
-
-        return $classrooms;
     }
 
     private function getUserById($userId)
@@ -256,6 +245,9 @@ class WebExtension extends \Twig_Extension
 
         $names[] = "customweb";
         $names[] = "customadmin";
+        $names[] = 'topxiaweb';
+        $names[] = 'topxiaadmin';
+        $names[] = 'classroom';
 
         $paths = array(
             'common' => 'common',
@@ -318,11 +310,14 @@ class WebExtension extends \Twig_Extension
     }
 
 
-    public function dataformatFilter ($time) {
+    public function dateformatFilter ($time, $format ='') {
         if (empty($time)) {
             return ;
         }
-        return date('Y-m-d H:i',$time);
+        if(empty($format)){
+            return date('Y-m-d H:i',$time);
+        }
+        return date($format,$time);
     }
 
     public function smarttimeFilter ($time) {
@@ -613,9 +608,10 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public function makeLazyImg($src, $class='', $alt = '')
+    public function makeLazyImg($src, $class='', $alt = '', $img = 'lazyload_course.png')
     {
-        return sprintf('<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="%s" class="%s" data-echo="%s" />', $alt, $class, $src);
+        $imgpath = $path = $this->container->get('templating.helper.assets')->getUrl('assets/img/default/' . $img);
+        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
 
     public  function loadScript($js)
@@ -631,7 +627,10 @@ class WebExtension extends \Twig_Extension
 
     public function exportScripts()
     {
-        return $this->pageScripts;
+        if (empty($this->pageScripts)) {
+            $this->pageScripts = array();
+        }
+        return array_values(array_unique($this->pageScripts));
     }
 
     public function getFileUrl($uri, $default = '', $absolute = false)
@@ -697,6 +696,7 @@ class WebExtension extends \Twig_Extension
         if ($cdnUrl) {
             $path = $cdnUrl . $path;
         } else if ($absolute) {
+            $request = $this->container->get('request');
             $path = $request->getSchemeAndHttpHost() . $path;
         }
         return $path;
@@ -1000,12 +1000,18 @@ class WebExtension extends \Twig_Extension
 
     public function getDict($type)
     {
-        return DataDict::dict($type);
+        return ExtensionManager::instance()->getDataDict($type);
     }
 
     public function getDictText($type, $key)
     {
-        return DataDict::text($type, $key);
+        $dict = $this->getDict($type);
+
+        if (empty($dict) || !isset($dict[$key])) {
+            return '';
+        }
+
+        return $dict[$key];
     }
 
     public function getUploadMaxFilesize($formated = true)

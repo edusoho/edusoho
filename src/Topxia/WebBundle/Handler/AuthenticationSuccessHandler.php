@@ -38,16 +38,16 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $this->getUserService()->clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
         }
 
+        $sessionId = $request->getSession()->getId();
+
+        $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
+
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => true
             );
             return new JsonResponse($content, 200);
         }
-
-        $sessionId = $request->getSession()->getId();
-
-        $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
 
         if ($this->getAuthService()->hasPartnerAuth()) {
             $url = $this->httpUtils->generateUri($request, 'partner_login');

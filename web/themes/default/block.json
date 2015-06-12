@@ -1,5 +1,5 @@
 {
-    "home_top_banner":
+    "default:home_top_banner":
     {
         "title": "默认主题：首页头部图片轮播",
         "category": "default",

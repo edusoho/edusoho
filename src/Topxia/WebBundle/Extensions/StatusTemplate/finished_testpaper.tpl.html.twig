@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  完成了考试 {{ props.testpaper.name|sub_text(15)}}</a>
+{% elseif mode == 'full' %}
+
+{% endif %}
