@@ -24,16 +24,16 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $this->getUserService()->markLoginSuccess($userId, $request->getClientIp());
         }
 
+        $sessionId = $request->getSession()->getId();
+
+        $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
+
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => true
             );
             return new JsonResponse($content, 200);
         }
-
-        $sessionId = $request->getSession()->getId();
-
-        $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
 
         if ($this->getAuthService()->hasPartnerAuth()) {
             $url = $this->httpUtils->generateUri($request, 'partner_login');

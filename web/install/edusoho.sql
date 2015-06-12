@@ -1,13 +1,3 @@
-DROP TABLE IF EXISTS `announcement`;
-CREATE TABLE IF NOT EXISTS `announcement` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,`url` varchar(255) NOT NULL,
-  `startTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `endTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0',
-  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
@@ -27,6 +17,8 @@ CREATE TABLE `article` (
   `featured` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否头条',
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '推荐',
   `sticky` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否置顶',
+  `postNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '回复数',
+  `upsNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '点赞数',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文章发布人的ID',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
@@ -251,14 +243,20 @@ CREATE TABLE `course` (
   `freeStartTime` int(10) NOT NULL DEFAULT '0',
   `freeEndTime` int(10) NOT NULL DEFAULT '0',
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
+  `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
+  `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
-DROP TABLE IF EXISTS `course_announcement`;
-CREATE TABLE `course_announcement` (
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE `announcement` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '课程公告ID',
   `userId` int(10) NOT NULL COMMENT '公告发布人ID',
-  `courseId` int(10) NOT NULL COMMENT '公告所属课程ID',
+  `targetType` varchar(64) NOT NULL DEFAULT 'course' COMMENT '公告类型',
+  `url` varchar(255) NOT NULL,
+  `startTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `endTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `targetId` int(10) NOT NULL COMMENT '所属ID',
   `content` text NOT NULL COMMENT '公告内容',
   `createdTime` int(10) NOT NULL COMMENT '公告创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告最后更新时间',
@@ -320,6 +318,8 @@ CREATE TABLE `course_lesson` (
   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
   `mediaName` varchar(255) NOT NULL DEFAULT '' COMMENT '媒体文件名称',
   `mediaUri` text COMMENT '媒体文件资源名',
+  `homeworkId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '作业iD',
+  `exerciseId` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '练习ID',
   `length` int(11) unsigned DEFAULT NULL COMMENT '时长',
   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
   `quizNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '测验题目数量',
@@ -431,11 +431,21 @@ CREATE TABLE `course_note` (
   `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时ID',
   `content` text NOT NULL COMMENT '笔记内容',
   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记内容的字数',
+  `likeNum` INT(6) UNSIGNED NOT NULL DEFAULT '0' COMMENT '点赞人数',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '笔记状态：0:私有, 1:公开',
   `createdTime` int(10) NOT NULL COMMENT '笔记创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `course_note_like`;
+CREATE TABLE `course_note_like` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `noteId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `createdTime` int(11) unsigned NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `course_review`;
 CREATE TABLE `course_review` (
@@ -816,6 +826,8 @@ DROP TABLE IF EXISTS `status`;
 CREATE TABLE `status` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userId` int(10) unsigned NOT NULL COMMENT '动态发布的人',
+  `courseId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程Id',
+  `classroomId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级id',
   `type` varchar(64) NOT NULL COMMENT '动态类型',
   `objectType` varchar(64) NOT NULL DEFAULT '' COMMENT '动态对象的类型',
   `objectId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '动态对象ID',
@@ -1267,13 +1279,20 @@ CREATE TABLE `thread` (
   `ats` TEXT NULL DEFAULT NULL COMMENT  '@(提)到的人',
   `nice` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加精',
   `sticky` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '置顶',
+  `solved` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否有老师回答(已被解决)',
   `lastPostUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复人ID',
   `lastPostTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '话题类型',
   `postNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复数',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
+  `memberNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '成员人数',
   `status` enum('open','closed') NOT NULL DEFAULT 'open' COMMENT '状态',
+  `startTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '开始时间',
+  `endTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '结束时间',
+  `maxUsers` INT(10) NOT NULL DEFAULT '0' COMMENT '最大人数',
+  `actvityPicture` VARCHAR(255) NULL DEFAULT NULL COMMENT '活动图片',
+  `location` VARCHAR(1024) DEFAULT NULL COMMENT '地点',
   `relationId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '从属ID' , 
   `categoryId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '分类ID' , 
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -1286,6 +1305,7 @@ CREATE TABLE `thread_post` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `threadId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题ID',
   `content` text NOT NULL COMMENT '内容',
+  `adopted` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否被采纳(是老师回答)',
   `ats` TEXT NULL DEFAULT NULL COMMENT  '@(提)到的人',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父ID',
@@ -1355,7 +1375,7 @@ DROP TABLE IF EXISTS `crontab_job`;
 CREATE TABLE `crontab_job` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `name` varchar(1024) NOT NULL COMMENT '任务名称',
-  `cycle` enum('once','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
+  `cycle` ENUM('once','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期',
   `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间',
   `jobClass` varchar(1024) NOT NULL COMMENT '任务的Class名称',
   `jobParams` text NOT NULL COMMENT '任务参数',
@@ -1366,3 +1386,97 @@ CREATE TABLE `crontab_job` (
   `createdTime` int(10) unsigned NOT NULL COMMENT '任务创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `thread_member`;
+CREATE TABLE `thread_member` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统Id',
+  `threadId` int(10) unsigned NOT NULL COMMENT '话题Id',
+  `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
+  `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
+  `truename` varchar(255) DEFAULT NULL COMMENT '真实姓名',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
+  `createdTIme` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
+
+DROP TABLE IF EXISTS `classroom`;
+CREATE TABLE `classroom` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `status` enum('closed','draft','published') NOT NULL DEFAULT 'draft' COMMENT '状态关闭，未发布，发布',
+  `about` text COMMENT '简介',
+  `categoryId` INT(10) NOT NULL DEFAULT '0' COMMENT '分类id',
+  `description` text COMMENT '课程说明',
+  `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
+  `vipLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '支持的vip等级',
+  `smallPicture` varchar(255) NOT NULL DEFAULT '' COMMENT '小图',
+  `middlePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '中图',
+  `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
+  `headTeacherId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班主任ID',
+  `teacherIds` varchar(255) NOT NULL DEFAULT '' COMMENT '教师IDs',
+  `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
+  `auditorNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '旁听生数',
+  `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
+  `courseNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程数',
+  `lessonNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时数',
+  `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
+  `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级笔记数量',
+  `postNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复数',
+  `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '收入',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `service` varchar(255) DEFAULT NULL COMMENT '班级服务',
+  `private` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否封闭班级',
+  `recommended` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐班级',
+  `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '100' COMMENT '推荐序号',
+  `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
+  `rating` FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '排行数值',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `classroom_courses`;
+CREATE TABLE `classroom_courses` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `classroomId` int(10) unsigned NOT NULL COMMENT '班级ID',
+  `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
+  `parentCourseId` INT(10) UNSIGNED NOT NULL COMMENT '父课程Id',
+  `disabled` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否禁用',
+  `seq` INT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级课程顺序',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `classroom_member`;
+CREATE TABLE `classroom_member` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `classroomId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单ID',
+  `levelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
+  `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数',
+  `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
+  `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
+  `remark` text COMMENT '备注',
+  `role` enum('auditor','student','teacher','headTeacher','assistant', 'studentAssistant') NOT NULL DEFAULT 'auditor' COMMENT '角色',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `classroom_review`;
+CREATE TABLE `classroom_review` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `classroomId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班级ID',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL COMMENT '内容',
+  `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评分0-5',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `article_like`;
+CREATE TABLE `article_like` (
+ `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统id',
+ `articleId` int(10) unsigned NOT NULL COMMENT '资讯id',
+ `userId` int(10) unsigned NOT NULL COMMENT '用户id',
+ `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞时间',
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='资讯点赞表';

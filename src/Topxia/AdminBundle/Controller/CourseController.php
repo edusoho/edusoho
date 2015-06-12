@@ -8,9 +8,16 @@ use Topxia\Common\ArrayToolkit;
 class CourseController extends BaseController
 {
 
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        if($filter == 'normal' ){
+            $conditions["parentId"] = 0;
+        }
+
+        if($filter == 'classroom'){
+            $conditions["parentId_GT"] = 0;
+        }
 
         if(isset($conditions["categoryId"]) && $conditions["categoryId"]==""){
             unset($conditions["categoryId"]);
@@ -35,12 +42,15 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
-        $classrooms = ArrayToolkit::index($classrooms,'courseId');
-        foreach ($classrooms as $key => $classroom) {
-            $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-        } 
+        $classrooms = array();
+        if($filter == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
@@ -61,7 +71,8 @@ class CourseController extends BaseController
             'paginator' => $paginator,
             'liveSetEnabled' => $courseSetting['live_course_enabled'],
             'default' => $default,
-            'classrooms' => $classrooms
+            'classrooms' => $classrooms,
+            'filter' => $filter
         ));
     }
 

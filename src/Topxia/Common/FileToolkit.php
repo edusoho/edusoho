@@ -988,12 +988,8 @@ class FileToolkit
 
     public static function getImgInfo($fullPath, $width, $height)
     {
-        try {
-            $imagine = new Imagine();
-            $image = $imagine->open($fullPath);
-        } catch (\Exception $e) {
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-        }
+        $imagine = new Imagine();
+        $image = $imagine->open($fullPath);
 
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen($width)->heighten($height);

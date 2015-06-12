@@ -8,7 +8,7 @@
 
   {{ header_macro.info(course, member, userVipStatus) }}
 
-  <div class="course-operation">
+  <div class="course-operation clearfix">
     {{ header_macro.student_num(course) }}
     <ul class="course-data clearfix {% if courseVip %}active{% endif %}">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
