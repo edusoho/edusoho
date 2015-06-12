@@ -4,7 +4,7 @@ namespace Topxia\Component\OAuthClient;
 class WeixinOAuthClient extends AbstractOAuthClient
 {   
     CONST USERINFO_URL = 'https://api.weixin.qq.com/sns/userinfo';
-    CONST AUTHORIZE_URL = 'https://open.weixin.qq.com/connect/qrconnect?';
+    CONST AUTHORIZE_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?';
     CONST OAUTH_TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token';
     CONST REFRESH_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?';
     CONST CHECK_ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/auth?';
@@ -15,8 +15,8 @@ class WeixinOAuthClient extends AbstractOAuthClient
         $params['appid'] = $this->config['key'];
         $params['response_type'] = 'code';
         $params['redirect_uri'] = $callbackUrl;
-        $params['scope'] = 'snsapi_login';  
-        return self::AUTHORIZE_URL . http_build_query($params);
+        $params['scope'] = 'snsapi_userinfo';  
+        return self::AUTHORIZE_URL . http_build_query($params) . '#wechat_redirect';
     }
 
     public function getAccessToken($code, $callbackUrl)
@@ -45,7 +45,8 @@ class WeixinOAuthClient extends AbstractOAuthClient
         $params = array('access_token' => $token['access_token']);
         $params = array(
             'openid' => $token['openid'] , 
-            'access_token' => $token['access_token']);
+            'access_token' => $token['access_token'],
+            'lang' => 'zh_CN');
         $result = $this->getRequest(self::USERINFO_URL, $params);
         $info = json_decode($result, true);
         return $this->convertUserInfo($info);
