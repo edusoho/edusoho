@@ -13,7 +13,8 @@
   <div class="panel-body">
     {% if students %}
       <ul class="user-avatar-list clearfix">
-        {% for student in students %}
+        {% for member in members %}
+        {% set student = students[member.userId] %}
           <li>
             {{ web_macro.user_avatar(student, '', 'avatar-sm') }}
           </li>
