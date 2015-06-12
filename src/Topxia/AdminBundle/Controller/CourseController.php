@@ -129,14 +129,14 @@ class CourseController extends BaseController
     {
         $this->getCourseService()->publishCourse($id);
 
-        return $this->renderCourseTr($id);
+        return $this->renderCourseTr($id,$request);
     }
 
     public function closeAction(Request $request, $id)
     {
         $this->getCourseService()->closeCourse($id);
 
-        return $this->renderCourseTr($id);
+        return $this->renderCourseTr($id,$request);
     }
 
     public function copyAction(Request $request, $id)
@@ -165,6 +165,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $ref = $request->query->get('ref');
+        $filter = $request->query->get('filter');
 
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
@@ -180,12 +181,13 @@ class CourseController extends BaseController
                 ));
             }
 
-            return $this->renderCourseTr($id);
+            return $this->renderCourseTr($id,$request);
         }
 
         return $this->render('TopxiaAdminBundle:Course:course-recommend-modal.html.twig', array(
             'course' => $course,
             'ref' => $ref,
+            'filter' => $filter
         ));
     }
 
@@ -193,7 +195,7 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
-        return $this->renderCourseTr($id);
+        return $this->renderCourseTr($id,$request);
     }
 
     public function recommendListAction(Request $request)
@@ -340,8 +342,9 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function renderCourseTr($courseId)
+    private function renderCourseTr($courseId,$request)
     {
+        $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
 
@@ -350,6 +353,7 @@ class CourseController extends BaseController
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course' => $course,
             'default' => $default,
+            'filter' => $fields["filter"]
         ));
     }
 
