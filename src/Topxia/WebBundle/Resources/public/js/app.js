@@ -136,13 +136,5 @@ define(function(require, exports, module) {
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
-    is_weixn();
-    function is_weixn(){
-    	$url = window.location.href;
-    	var ua = navigator.userAgent.toLowerCase();
-    	if(ua.match(/MicroMessenger/i)=="micromessenger") {
-    		window.location.href = '/redirect';
-    	}
-	}
 
 });
