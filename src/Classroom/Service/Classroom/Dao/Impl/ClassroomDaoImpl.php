@@ -75,6 +75,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('title like :title')
             ->andWhere('private = :private')
             ->andWhere('categoryId IN (:categoryIds)')
+            ->andWhere('id IN (:classroomIds)')
             ->andWhere('recommended = :recommended');
 
         return $builder;

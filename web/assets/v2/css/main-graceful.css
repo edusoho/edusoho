@@ -753,7 +753,7 @@ Pagination Styles
   border-radius: 0;
 }
 .es-header {
-  background: #3f3f3f;
+  background: #212121;
   height: 60px;
   border: none;
 }
@@ -1064,22 +1064,33 @@ Pagination Styles
   transition: all 0.3s ease;
 }
 .es-footer {
-  background: #3f3f3f;
+  background: #212121;
 }
 .es-footer .copyright {
-  border-top: 1px solid #2a2a2a;
+  border-top: 1px solid #444;
   text-align: center;
   padding: 20px 0;
   line-height: 30px;
   color: #bababa;
   text-shadow: 0 1px 3px #000;
 }
-.es-footer .copyright a:hover {
+.es-footer .copyright a {
   color: white;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.es-footer .copyright a:hover {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  color: #02b980;
 }
 .footer-link {
   padding: 55px 0;
-  border-bottom: 1px solid #5e5e5e;
+  border-bottom: 1px solid #111;
 }
 .footer-main .link-item {
   width: 20%;
@@ -1463,7 +1474,6 @@ a:focus {
 }
 .course-list .course-item {
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -1559,6 +1569,9 @@ a:focus {
 }
 .course-list .course-item .metas .free {
   color: #238312;
+}
+.lt-ie9 .course-list .course-item {
+  border: 1px solid #e0e0e0;
 }
 .es-banner {
   position: relative;
@@ -1785,6 +1798,11 @@ a:focus {
   position: relative;
   padding: 50px 0;
 }
+@media (max-width: 767px) {
+  .text-line {
+    padding: 30px 0;
+  }
+}
 .text-line .line {
   position: absolute;
   top: 50%;
@@ -1794,16 +1812,16 @@ a:focus {
   background: #f0f0f0;
   margin-top: -1px;
 }
-@media (max-width: 767px) {
-  .text-line .line {
-    display: none;
-  }
-}
 .text-line h5 {
   position: relative;
   text-align: center;
   font-size: 28px;
   z-index: 1;
+}
+@media (max-width: 767px) {
+  .text-line h5 {
+    font-size: 20px;
+  }
 }
 .text-line h5 > i {
   padding-left: 20px;
@@ -1846,6 +1864,7 @@ a:focus {
   padding: 0 20px;
 }
 .panel.panel-default {
+  border: none;
   padding: 0 15px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -1896,6 +1915,9 @@ a:focus {
   position: relative;
   padding: 15px 0;
 }
+.lt-ie9 .panel.panel-default {
+  border: 1px solid #e0e0e0;
+}
 .panel.panel-primary > .panel-heading {
   background-color: #02b980;
   color: #fff;
@@ -1909,7 +1931,6 @@ a:focus {
   background: #fff;
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -1946,6 +1967,9 @@ a:focus {
 }
 .es-section .section-header .more > i {
   font-size: 24px;
+}
+.lt-ie9 .es-section {
+  border: 1px solid #e0e0e0;
 }
 .nav.nav-tabs {
   margin-bottom: 15px;
@@ -1997,7 +2021,7 @@ a:focus {
   position: relative;
   padding-right: 100px;
   border-bottom: 1px solid #f5f5f5;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 @media (max-width: 767px) {
   .nav-btn-tab {
@@ -3193,13 +3217,16 @@ textarea.form-control-o {
   background: #fff;
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border-left: 2px solid #02b980;
+}
+.lt-ie9 .es-tag {
+  border: 1px solid #e0e0e0;
   border-left: 2px solid #02b980;
 }
 .es-piece {
@@ -3335,22 +3362,22 @@ textarea.form-control-o {
 .es-poster {
   position: relative;
   background: #fff;
-  height: 570px;
+  max-height: 570px;
   margin: 0 auto;
 }
 @media (max-width: 1199px) {
   .es-poster {
-    height: 470px;
+    max-height: 470px;
   }
 }
 @media (max-width: 991px) {
   .es-poster {
-    height: 360px;
+    max-height: 360px;
   }
 }
 @media (max-width: 767px) {
   .es-poster {
-    height: 150px;
+    max-height: 200px;
   }
 }
 .es-poster .swiper-slide {
@@ -3493,7 +3520,7 @@ textarea.form-control-o {
 }
 @media (max-width: 767px) {
   .es-poster .swiper-pager {
-    bottom: 20px;
+    display: none;
   }
 }
 .es-poster .swiper-pager span {
@@ -3502,10 +3529,10 @@ textarea.form-control-o {
   width: 15px;
   height: 15px;
   display: inline-block;
-  background: #fff;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+  border: 2px solid #fff;
 }
 @media (max-width: 767px) {
   .es-poster .swiper-pager span {
@@ -3517,13 +3544,11 @@ textarea.form-control-o {
 .es-poster .swiper-pager span:hover {
   cursor: pointer;
   background: #02b980;
-  color: #02b980;
   opacity: 1;
   filter: alpha(opacity=100);
 }
 .es-poster .swiper-pager span.swiper-active-switch {
   background: #02b980;
-  color: #02b980;
   opacity: 1;
   filter: alpha(opacity=100);
 }
@@ -3593,6 +3618,7 @@ textarea.form-control-o {
   background-image: -moz-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-image: -o-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-color: #02b980;
+  min-height: 3px;
 }
 .introduction-section h4,
 .introduction-section h5 {
@@ -3672,22 +3698,22 @@ textarea.form-control-o {
 }
 .aricle-carousel {
   padding: 0 5px;
-  height: 410px;
   overflow: hidden;
+  max-height: 410px;
 }
 @media (max-width: 1199px) {
   .aricle-carousel {
-    height: 338px;
+    max-height: 338px;
   }
 }
 @media (max-width: 991px) {
   .aricle-carousel {
-    height: 387px;
+    max-height: 387px;
   }
 }
 @media (max-width: 767px) {
   .aricle-carousel {
-    height: 150px;
+    max-height: 150px;
   }
 }
 .aricle-carousel .swiper-container {
@@ -3697,10 +3723,26 @@ textarea.form-control-o {
 }
 .aricle-carousel .swiper-slide {
   position: relative;
+  width: 100%;
+  height: 410px;
+}
+@media (max-width: 1199px) {
+  .aricle-carousel .swiper-slide {
+    height: 338px;
+  }
+}
+@media (max-width: 991px) {
+  .aricle-carousel .swiper-slide {
+    height: 387px;
+  }
+}
+@media (max-width: 767px) {
+  .aricle-carousel .swiper-slide {
+    height: 150px;
+  }
 }
 .aricle-carousel .swiper-slide img {
   width: 100%;
-  height: auto;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -3734,6 +3776,7 @@ textarea.form-control-o {
 @media (max-width: 767px) {
   .aricle-carousel .swiper-caption {
     font-size: 16px;
+    bottom: 20px;
   }
 }
 .aricle-carousel .swiper-pager {
@@ -3756,9 +3799,7 @@ textarea.form-control-o {
 }
 @media (max-width: 767px) {
   .aricle-carousel .swiper-pager span {
-    width: 10px;
-    height: 10px;
-    margin: 0 5px;
+    display: none;
   }
 }
 .aricle-carousel .swiper-pager span:hover {
@@ -4052,14 +4093,7 @@ textarea.form-control-o {
   background: url("../img/course_detail_header.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
-}
-.course-detail-header .course-header-wrap {
   padding: 30px 0 10px 0;
-  filter: alpha(opacity=30);
-  background: #000\9;
-  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
 .course-detail-header .es-section {
   position: relative;
@@ -4374,6 +4408,7 @@ textarea.form-control-o {
   .course-detail-header.before .course-operation {
     float: none;
     width: 100%;
+    padding: 10px 10px 0 10px;
   }
 }
 .course-detail-header.before .course-operation .student-num {
@@ -4397,6 +4432,7 @@ textarea.form-control-o {
 }
 @media (max-width: 991px) {
   .course-detail-header.before .course-operation .buy {
+    padding: 15px 0 10px 0;
     float: left;
     width: 33.33%;
   }
@@ -4512,6 +4548,7 @@ textarea.form-control-o {
   width: 50%;
 }
 .course-detail-header.after .progress {
+  height: 11px;
   margin-bottom: 0;
 }
 .course-detail-header.after .course-header-bottom {
@@ -4720,14 +4757,7 @@ textarea.form-control-o {
   background: url("../img/class_bg.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
-}
-.class-header .class-header-wrap {
   padding: 30px 0 40px 0;
-  filter: alpha(opacity=30);
-  background: #000\9;
-  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
 .class-header .class-header-mian {
   position: relative;
@@ -5921,23 +5951,12 @@ textarea.form-control-o {
 .teacher-item {
   margin: 10px auto;
   text-align: center;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.teacher-item:hover {
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 .teacher-item:hover .metas {
   opacity: 1;
@@ -5982,16 +6001,15 @@ textarea.form-control-o {
 }
 .teacher-item .teacher-bottom {
   position: relative;
-  height: 50px;
-  margin: 20px;
+  height: 90px;
 }
 .teacher-item .about,
 .teacher-item .metas {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -6005,12 +6023,16 @@ textarea.form-control-o {
   filter: alpha(opacity=100);
 }
 .teacher-item .metas {
-  margin: 10px 0;
+  top: 30px;
+  bottom: 30px;
   opacity: 0;
   filter: alpha(opacity=0);
 }
 .teacher-item .metas .btn {
   margin: 0 15px;
+}
+.lt-ie9 .teacher-item {
+  border: 1px solid #e0e0e0;
 }
 .custompage .es-section img {
   max-width: 100%;
