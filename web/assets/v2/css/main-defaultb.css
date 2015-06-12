@@ -2764,7 +2764,6 @@ textarea.form-control-o {
 .es-tabs {
   background: #fff;
   margin: 10px 0 30px 0;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -2859,6 +2858,9 @@ textarea.form-control-o {
 }
 .es-tabs .tab-body > ul + ul {
   border-top: 1px dashed #e0e0e0;
+}
+.lt-ie9 .es-tabs {
+  border: 1px solid #e0e0e0;
 }
 .image-overlay {
   position: absolute;
@@ -5749,7 +5751,6 @@ textarea.form-control-o {
 .class-list .class-item {
   background-color: #fff;
   margin: 10px auto;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -5801,6 +5802,9 @@ textarea.form-control-o {
 .class-list .class-item .class-serve {
   margin-bottom: 0;
   height: 70px;
+}
+.lt-ie9 .class-list .class-item {
+  border: 1px solid #e0e0e0;
 }
 .class-manage-page .container {
   width: 1170px !important;
