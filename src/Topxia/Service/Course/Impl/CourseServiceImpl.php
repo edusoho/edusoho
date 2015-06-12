@@ -302,6 +302,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$courseIds = ArrayToolkit::column($members, 'courseId');
 		$conditions["courseIds"] = $courseIds;
+
+		if(count($courseIds) == 0){
+			return 0;
+		}
+
 		if($onlyPublished) {
 			$conditions["status"] = 'published';
 		}
@@ -316,7 +321,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$courseIds = ArrayToolkit::column($members, 'courseId');
 		$conditions["courseIds"] = $courseIds;
-		
+
+		if(count($courseIds) == 0){
+			return array();
+		}
+
 		if($onlyPublished) {
 			$conditions["status"] = 'published';
 		} 
