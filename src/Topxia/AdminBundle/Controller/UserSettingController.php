@@ -134,6 +134,9 @@ class UserSettingController extends BaseController
                 if(!in_array('mobile', $auth['registerFieldNameArray'])) {
                     array_unshift($auth['registerFieldNameArray'], 'mobile');
                 }
+                if(!in_array('email', $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] =  'email';
+                }
             }
 
 
@@ -189,6 +192,9 @@ class UserSettingController extends BaseController
                 }
                 if(!in_array('mobile', $auth['registerFieldNameArray'])) {
                     array_unshift($auth['registerFieldNameArray'], 'mobile');
+                }
+                if(!in_array('email', $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] =  'email';
                 }
             }
 
