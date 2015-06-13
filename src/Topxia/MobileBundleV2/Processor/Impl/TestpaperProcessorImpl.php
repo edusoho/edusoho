@@ -326,12 +326,25 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
 	public function getTestpaperResult()
 	{
+	        $answerShowMode = $this->controller->setting('questions.testpaper_answers_show_mode','submitted');
+
+	        // 不显示题目
+	        if ($answerShowMode == "hide" ) {
+	        	return $this->createErrorResponse('error', '网校已关闭交卷后答案解析的显示!');
+	        }
+
 	        $id = $this->getParam("id");
 	        $user = $this->controller->getUserByToken($this->request);
 	        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 	        if (!$testpaperResult) {
 	            return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
 	        }
+
+	        //客观题自动批阅完后先显示答案解析
+	        if ($answerShowMode == "reviewed" && $testpaperResult["status"] != "finished") {
+	        	return $this->createErrorResponse('error', '试卷正在批阅，需要批阅完后才能显示答案解析!');
+	        }
+
 	        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
 	        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
