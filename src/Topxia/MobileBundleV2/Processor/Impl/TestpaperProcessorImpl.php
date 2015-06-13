@@ -409,7 +409,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			$item = array_map(function($itemValue) use ($controller){
 				$question = $itemValue['question'];
 				if (!$isShowTestResult && isset($question['testResult'])) {
-					unset($question['testResult']));
+					unset($question['testResult']);
 				}
 				if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
 					return null;
