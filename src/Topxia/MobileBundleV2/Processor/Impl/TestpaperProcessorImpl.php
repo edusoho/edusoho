@@ -364,29 +364,29 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 	        return array(
 	        	"testpaper"=>$testpaper,
-	        	"items"=>$this->filterResultItems($items),
+	        	"items"=>$this->filterResultItems($items, true),
 	        	"accuracy"=>$accuracy,
             	'paperResult' => $testpaperResult,
 		'favorites' => ArrayToolkit::column($favorites, 'questionId')
 	        	);
 	}
 
-	private function filterResultItems($items)
+	private function filterResultItems($items, $isShowTestResult)
 	{
 		$controller = $this;
 		$newItems = array_map(function($item){
 			return array_values($item);
 		}, $items);
 
-		return $this->coverTestpaperItems($newItems);
+		return $this->coverTestpaperItems($newItems, $isShowTestResult);
 	}
 
-	private function getTestpaperItem($testpaperResult)
+	private function getTestpaperItem($testpaperResult, $isShowTestResult = false)
 	{
 		$result = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
         		$items = $result['formatItems'];
 
-        		return $this->coverTestpaperItems($items);
+        		return $this->coverTestpaperItems($items, $isShowTestResult);
 	}
 
 	public function filterQuestionStem($stem)
@@ -402,12 +402,15 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         		return $stem;
 	}
 
-	private function coverTestpaperItems($items)
+	private function coverTestpaperItems($items, $isShowTestResult)
 	{
 		$controller = $this;
 		$result = array_map(function($item) use ($controller){
 			$item = array_map(function($itemValue) use ($controller){
 				$question = $itemValue['question'];
+				if (!$isShowTestResult && isset($question['testResult'])) {
+					unset($question['testResult']));
+				}
 				if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
 					return null;
 				}
