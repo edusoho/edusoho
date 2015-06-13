@@ -150,6 +150,7 @@ class LiveCourseController extends BaseController
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
                 'url' => $result['url'],
+                'param' => isset($result['param']) ? $result['param']:null
             ));
 
         }
