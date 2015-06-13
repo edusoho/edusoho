@@ -405,8 +405,8 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	private function coverTestpaperItems($items, $isShowTestResult)
 	{
 		$controller = $this;
-		$result = array_map(function($item) use ($controller){
-			$item = array_map(function($itemValue) use ($controller){
+		$result = array_map(function($item) use ($controller, $isShowTestResult){
+			$item = array_map(function($itemValue) use ($controller, $isShowTestResult){
 				$question = $itemValue['question'];
 				if (!$isShowTestResult && isset($question['testResult'])) {
 					unset($question['testResult']);
