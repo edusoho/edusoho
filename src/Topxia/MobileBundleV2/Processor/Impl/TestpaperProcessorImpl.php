@@ -408,20 +408,18 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		$result = array_map(function($item) use ($controller, $isShowTestResult){
 			$item = array_map(function($itemValue) use ($controller, $isShowTestResult){
 				$question = $itemValue['question'];
-				if (!$isShowTestResult && isset($question['testResult'])) {
-					unset($question['testResult']);
-				}
+				
 				if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
 					return null;
 				}
 				if (isset($itemValue['items'])) {
 					$filterItems = array_values($itemValue['items']);
 					$itemValue['items'] = array_map(function($filterItem)use ($controller){
-						return $controller->filterMetas($filterItem);
+						return $controller->filterMetas($filterItem, $isShowTestResult);
 					}, $filterItems);
 				}
 
-				$itemValue = $controller->filterMetas($itemValue);
+				$itemValue = $controller->filterMetas($itemValue, $isShowTestResult);
 				return $itemValue;
 				
 			}, $item);
@@ -449,10 +447,13 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		return true;
 	}
 
-	public function filterMetas($itemValue)
+	public function filterMetas($itemValue, $isShowTestResult)
 	{
 		$question = $itemValue['question'];
 		$question['stem'] = $this->filterQuestionStem($question['stem']);
+		if (!$isShowTestResult && isset($question['testResult'])) {
+			unset($question['testResult']);
+		}
 		$itemValue['question'] = $question;
 		if (isset($question['metas'])) {
 			$metas= $question['metas'];
@@ -472,7 +473,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			}, $answer);
 			return $itemValue;
 		}
-
+		
 		return $itemValue;
 	}
 }
