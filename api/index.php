@@ -1,7 +1,4 @@
 <?php
-
-
-
 date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor/autoload.php';
@@ -57,5 +54,7 @@ $app->view(function (array $result, Request $request) use ($app) {
 });
 
 $app->mount('/api/users', include __DIR__ . '/src/users.php' );
+$app->mount('/api/me', include __DIR__ . '/src/me.php' );
+$app->mount('/api/courses', include __DIR__ . '/src/courses.php' );
 
 $app->run();
