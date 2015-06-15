@@ -33,7 +33,7 @@ class UtilityController extends BaseController
     {
         $likeString = $request->query->get('q');
         $users = $this->getUserService()->searchUsers(array(
-            'nickname' => $likeString,
+            'nickname' => strtoupper($likeString),
             'excludeIds' => $this->_getExcludeIds($classroomId),
             ), array('createdTime', 'DESC'), 0, 10
         );
@@ -46,7 +46,6 @@ class UtilityController extends BaseController
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
             );
         }
-
         return $this->createJsonResponse($newUsers);
     }
 
