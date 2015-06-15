@@ -51,7 +51,7 @@ class WeixinwebOAuthClient extends AbstractOAuthClient
 
     private function convertUserInfo ($infos) {
         $userInfo = array();
-        $userInfo['id'] = $infos['openid'];
+        $userInfo['id'] = $infos['unionid'];
         $userInfo['name'] = $infos['nickname'];
         $userInfo['smallAvatar'] = $infos['headimgurl'].'64';
         if ( $infos['sex'] == 1 ){
