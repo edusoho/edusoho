@@ -148,7 +148,7 @@ define(function(require, exports, module) {
     $url = window.location.href;
    	var ua = navigator.userAgent.toLowerCase();
 	if(ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-login]').attr('content') == 0) {
-	    	window.location.href = '/login/bind/'+'weixin'; 
+	    	window.location.href = '/login/bind/weixin?_target_path=http%3A%2F%2Ftry4.edusoho.cn%2F'; 
    		}	 
    	}
    
