@@ -52,7 +52,7 @@ define(function(require, exports, module) {
                     });
                     validator.addItem({
                         element: '[name="location"]',
-                        required: true,
+                        required: false,
                         rule: 'visible_character'
                     });
                     validator.addItem({
