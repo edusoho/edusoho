@@ -104,7 +104,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
 
         if (isset($conditions['keywordUserType'])) {
-            $conditions['type'] = $conditions['keywordUserType'];
+            $conditions['type'] = "%{$conditions['keywordUserType']}%";
             unset($conditions['keywordUserType']);
         }
 
@@ -128,7 +128,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
             ->andWhere('verifiedMobile = :verifiedMobile')
-            ->andWhere('type = :type')
+            ->andWhere('type LIKE = :type')
             ->andWhere('id NOT IN ( :excludeIds )');
     }
 
