@@ -13,9 +13,10 @@ class WeixinOAuthClient extends AbstractOAuthClient
     {
         $params = array();
         $params['appid'] = $this->config['key'];
-        $params['response_type'] = 'code';
         $params['redirect_uri'] = $callbackUrl;
-        $params['scope'] = 'snsapi_userinfo';  
+        $params['response_type'] = 'code';
+        $params['state'] = '#123';
+        $params['scope'] = 'snsapi_userinfo';
         return self::AUTHORIZE_URL . http_build_query($params) . '#wechat_redirect';
     }
 
