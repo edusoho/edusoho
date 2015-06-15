@@ -47,18 +47,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function redirectAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $token = $request->getSession()->get('oauth_token');
-        if (($user->isLogin()) || (!empty($token)) ) {
-            return $this->createJsonResponse(true);
-        }
-        else{
-            return $this->redirect($this->generateUrl('login_bind',array('type' => 'weixin'),true));
-        }
-    }
-
     public function userlearningAction()
     {
         $user = $this->getCurrentUser();

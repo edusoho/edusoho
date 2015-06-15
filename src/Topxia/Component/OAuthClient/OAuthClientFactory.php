@@ -65,15 +65,25 @@ class OAuthClientFactory
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'http://wiki.dev.renren.com/wiki/WEB%E7%BD%91%E7%AB%99%E5%B8%90%E5%8F%B7%E7%99%BB%E5%BD%95%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B'
             ),
-            'weixin' => array(
-                'name' => '微信帐号',
-                'class' => 'Topxia\Component\OAuthClient\WeixinOAuthClient',
+            'weixinweb' => array(
+                'name' => '微信Web帐号',
+                'class' => 'Topxia\Component\OAuthClient\WeixinwebOAuthClient',
                 'icon_class' => 'social-icon social-icon-weixin',
                 'icon_img' => '',
                 'large_icon_img' => 'assets/img/social/weixn.png',
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/wx_login_tmpl&lang=zh_CN'
+            ),
+            'weixinmob' => array(
+                'name' => '微信服务号',
+                'class' => 'Topxia\Component\OAuthClient\WeixinmobOAuthClient',
+                'icon_class' => '',
+                'icon_img' => '',
+                'large_icon_img' => '',
+                'key_setting_label' => 'App ID',
+                'secret_setting_label' => 'App Secret',
+                'apply_url' => 'http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html'
             ),
         );
 
