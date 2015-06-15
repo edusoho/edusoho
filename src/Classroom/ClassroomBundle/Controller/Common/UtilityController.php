@@ -33,7 +33,7 @@ class UtilityController extends BaseController
     {
         $likeString = $request->query->get('q');
         $users = $this->getUserService()->searchUsers(array(
-            'nickname' => strtoupper($likeString),
+            'nickname' => $likeString,
             'excludeIds' => $this->_getExcludeIds($classroomId),
             ), array('createdTime', 'DESC'), 0, 10
         );
