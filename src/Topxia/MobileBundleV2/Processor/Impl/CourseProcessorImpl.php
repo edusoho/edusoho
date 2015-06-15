@@ -668,7 +668,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }, $posts);
     }
     
-    public function getFavoriteLiveCoruse()
+    public function getFavoriteLiveCourse()
     {
         $result = $this->getFavoriteCoruse();
         $courses = $result["data"];
@@ -680,12 +680,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             } 
         }
 
-        $result["data"] = $courses;
+        $result["data"] = array_values($courses);
         $result["total"] = count($courses);
         return $result;
     }
 
-    public function getFavoriteNormalCoruse()
+    public function getFavoriteNormalCourse()
     {
         $result = $this->getFavoriteCoruse();
         $courses = $result["data"];
@@ -697,7 +697,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             } 
         }
 
-        $result["data"] = $courses;
+        $result["data"] = array_values($courses);
         $result["total"] = count($courses);
 
         return $result;
