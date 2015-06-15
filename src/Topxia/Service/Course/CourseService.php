@@ -32,7 +32,7 @@ interface CourseService
 
 	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
+	public function searchCourses($conditions, $sort, $start, $limit);
 
 	public function searchCourseCount($conditions);
 
@@ -232,7 +232,7 @@ interface CourseService
 
 	public function getCourseMember($courseId, $userId);
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit);
+	public function searchMemberIds($conditions, $sort, $start, $limit);
 
 	public function updateCourseMember($id, $fields);
 
