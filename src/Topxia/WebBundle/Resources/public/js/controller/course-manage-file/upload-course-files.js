@@ -60,6 +60,9 @@ define(function(require, exports, module) {
 			init: {
 				FileUploaded: function(up, file, info) {
 					response = $.parseJSON(info.response);
+					if(response.indexOf("exceeds your upload_max_filesize") >= 0 ){
+						Notify.danger('文件大小超出上限,上传失败！');
+					}
 					var url = divData.callback;
 					if (url) {
 						if (file.type != 'audio/mpeg') {
