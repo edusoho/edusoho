@@ -147,7 +147,7 @@ define(function(require, exports, module) {
     function is_weixn(){	 
     $url = window.location.href;
    	var ua = navigator.userAgent.toLowerCase();
-	if(ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-login]').attr('content') == 0 && window.location.pathname != 'login/bind/weixin/choose') {
+	if(ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-login]').attr('content') == 0 && window.location.pathname != '/login/bind/weixin/choose') {
 	    	alert(window.location.pathname);
             window.location.href = '/login/bind/weixin'; 
    		}	 
