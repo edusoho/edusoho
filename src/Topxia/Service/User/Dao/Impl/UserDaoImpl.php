@@ -128,7 +128,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
             ->andWhere('verifiedMobile = :verifiedMobile')
-            ->andWhere('type LIKE = :type')
+            ->andWhere('type LIKE :type')
             ->andWhere('id NOT IN ( :excludeIds )');
     }
 
