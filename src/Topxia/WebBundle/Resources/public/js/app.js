@@ -146,9 +146,10 @@ define(function(require, exports, module) {
     is_weixn();
     function is_weixn(){	 
     $url = window.location.href;
+    $_target_path = $('input[name=_target_path]').val();
    	var ua = navigator.userAgent.toLowerCase();
 	if(ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-login]').attr('content') == 0 && window.location.pathname != '/login/bind/weixinmob/choose') {
-            window.location.href = '/login/bind/weixinmob'; 
+            window.location.href = '/login/bind/weixinmob'+$_target_path; 
    		}	 
    	}
    
