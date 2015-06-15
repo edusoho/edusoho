@@ -25,7 +25,12 @@ class LoginBindController extends BaseController
         $code = $request->query->get('code');
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
-        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $bind = $this->getUserService()->getUserBindByTypeAndFromId('weixinweb', $token['userId']);
+            if(!$bind){
+                $bind = $this->getUserService()->getUserBindByTypeAndFromId('weixinmob', $token['userId']);
+            }
+        }
         if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
