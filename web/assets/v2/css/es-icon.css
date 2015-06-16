@@ -29,6 +29,7 @@
 .es-icon-thumbup:before { content: "\e659"; }
 .es-icon-reply:before { content: "\e65a"; }
 .es-icon-textsms:before { content: "\e657"; }
+.es-icon-alarmon:before { content: "\e672"; }
 .es-icon-assignmentind:before { content: "\e661"; }
 .es-icon-keyboardarrowdown:before { content: "\e663"; }
 .es-icon-keyboardarrowup:before { content: "\e664"; }
@@ -37,6 +38,7 @@
 .es-icon-loyalty:before { content: "\e65c"; }
 .es-icon-morehoriz:before { content: "\e665"; }
 .es-icon-mylocation:before { content: "\e669"; }
+.es-icon-phone:before { content: "\e676"; }
 .es-icon-permcontactcal:before { content: "\e66f"; }
 .es-icon-publish:before { content: "\e66a"; }
 .es-icon-remove:before { content: "\e667"; }
@@ -55,7 +57,7 @@
 .es-icon-bookmark:before { content: "\e60b"; }
 .es-icon-graphicclass:before { content: "\e60e"; }
 .es-icon-description:before { content: "\e60f"; }
-.es-icon-phone:before { content: "\e610"; }
+.es-icon-phone1:before { content: "\e610"; }
 .es-icon-swaphoriz:before { content: "\e611"; }
 .es-icon-audioclass:before { content: "\e60d"; }
 .es-icon-flashclass:before { content: "\e612"; }
@@ -129,3 +131,6 @@
 .es-icon-dashboard:before { content: "\e656"; }
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
+.es-icon-music:before { content: "\e673"; }
+.es-icon-ppt:before { content: "\e674"; }
+.es-icon-flash:before { content: "\e675"; }

@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack2');
     require("placeholder");
     require('./util/card');
+    require('./util/es-bar');
     var Swiper=require('swiper');
 	var Cookie = require('cookie');
 
