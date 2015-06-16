@@ -1,6 +1,9 @@
 .panel {
   border: none;
-  border: 1px solid transparent \9;
+}
+
+.lt-ie9 .panel {
+  border: 1px solid @gray-light;
 }
 
 .panel.panel-default {
@@ -17,12 +20,6 @@
         margin-right: 10px;
       }
     }
-    // >span {
-    //   font-size: 16px;
-    //   margin-left: 10px;
-    //   display: inline-block;
-    //   vertical-align: middle;
-    // }
     .more {
       position: absolute;
       top: 7px;

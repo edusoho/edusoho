@@ -5,14 +5,15 @@
 {% block content %}
 <div class="row">
   <div class="col-md-6 col-md-offset-3 ptl">
-    <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>邮箱地址验证失败</h2></div>
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">邮箱地址验证失败</h3></div>
 
-      <p class="alert alert-danger">邮箱地址验证失败，请重试。</p>
+      <div class="panel-body">
+        <p class="alert alert-danger">邮箱地址验证失败，请重试。</p>
+        <p><a href="{{ path('homepage') }}" class="btn btn-primary">返回首页</a></p>
+      </div>
 
-      <p><a href="{{ path('homepage') }}" class="btn btn-primary">返回首页</a></p>
-
-    </div><!-- /panel -->
+    </div>
 
   </div>
 
