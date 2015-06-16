@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.0.0
+        assets_version: 6.0.4
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -51,15 +51,21 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  UTF8
-        mapping_types:
-            enum: string
+        default_connection: default
+        types:
+            enum: Topxia\Common\DoctrineEnumType
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+
+                mapping_types:
+                    enum: string
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%

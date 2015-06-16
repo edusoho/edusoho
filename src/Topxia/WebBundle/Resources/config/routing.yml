@@ -1069,8 +1069,8 @@ my:
     defaults: { _controller: TopxiaWebBundle:MyCourse:index }
 
 my_teaching_courses:
-    pattern: /my/teaching/courses
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses }
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses, filter:'normal' }
 
 my_teaching_threads:
     pattern: /my/teaching/threads/{type}

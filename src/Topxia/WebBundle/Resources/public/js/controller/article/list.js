@@ -5,10 +5,9 @@ define(function(require, exports, module) {
     exports.run = function() {
         var swiper = new Swiper('.aricle-carousel .swiper-container', {
             pagination: '.swiper-pager',
-            swipeToPrev : false,
-            swipeToNext : false,
+            calculateHeight: true,
             paginationClickable: true,
-            autoplay: 3000,
+            autoplay: 5000,
             autoplayDisableOnInteraction: false,
             loop: true
         });

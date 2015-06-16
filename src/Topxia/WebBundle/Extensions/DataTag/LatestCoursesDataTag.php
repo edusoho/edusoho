@@ -24,7 +24,6 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $conditions = array();
         $conditions['status'] = 'published';
-        $conditions['recommended'] = 0;
         $conditions['parentId'] = 0;
 
         if (!empty($arguments['categoryId'])) {
