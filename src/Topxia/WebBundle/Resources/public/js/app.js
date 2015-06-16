@@ -143,12 +143,14 @@ define(function(require, exports, module) {
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
-    is_weixn();
+    if ($('meta[name=is-open]').attr('content') != 0) {
+        is_weixn(); 
+    };
     function is_weixn(){	 
-    $url = window.location.href;
-    $_target_path = window.location.pathname;
-    var ua = navigator.userAgent.toLowerCase();
-    if(ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-login]').attr('content') == 0 && $_target_path != '/login/bind/weixinmob/choose') {
+        $url = window.location.href;
+        $_target_path = window.location.pathname;
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-login]').attr('content') == 0 && $_target_path != '/login/bind/weixinmob/choose') {
             window.location.href = '/login/bind/weixinmob'+'?_target_path='+$_target_path; 
    		}	 
    	}
