@@ -128,7 +128,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $this->getClassroomService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting = $this->getSettingService()->get('refund');
-            $message = empty($setting) || empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
+            $message = ( empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
             if ($message) {
                 $classroom = $this->getClassroomService()->getCourse($order["targetId"]);
                 $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));

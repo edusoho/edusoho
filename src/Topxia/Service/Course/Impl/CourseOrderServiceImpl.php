@@ -149,7 +149,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting = $this->getSettingService()->get('refund');
-            $message = empty($setting) || empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
+            $message = (empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
             if ($message) {
                 $course = $this->getCourseService()->getCourse($order["targetId"]);
                 $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
