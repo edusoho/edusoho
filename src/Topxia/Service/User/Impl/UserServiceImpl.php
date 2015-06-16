@@ -93,6 +93,26 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
+
+
+
+
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
+    {
+        $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
+        return $profiles;
+    }
+
+    public function searchUserProfileCount(array $conditions)
+    {
+        return $this->getProfileDao()->searchProfileCount($conditions);
+    }
+
+
+
+
+
+
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));

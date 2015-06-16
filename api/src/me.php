@@ -8,12 +8,6 @@ $api = $app['controllers_factory'];
 
 //获取当前用户信息
 /*
-** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| token | string | 是 | 当前登录用户token |
-
 ** 响应 **
 
 ```
@@ -21,10 +15,10 @@ $api = $app['controllers_factory'];
     "xxx": "xxx"
 }
 ```
-
 */
 $api->get('/', function (Request $request) {
-    $user = convert($request->query->get('token'),'me');
+    $user = getCurrentUser();
+    $user = is_array($user) ? $user : $user->toArray();
     return filter($user, 'me');
 });
 
@@ -36,7 +30,6 @@ $api->get('/', function (Request $request) {
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| token | string | 是 | 当前登录用户token |
 | type | string | 否 | 课程类型 |
 | relation | string | 否 | 用户相对于课程状态 |
 
@@ -63,37 +56,42 @@ $api->get('/', function (Request $request) {
 */
 $api->get('/courses', function (Request $request) {
     $conditions = $request->query->all();
-    $user = convert($conditions['token'],'me');
-    if ($conditions['relation'] == 'learning') {
+    $start = $request->query->get('start',0);
+    $limit = $request->query->get('limit',10);
+    $type = $request->query->get('type','');
+    $relation = $request->query->get('relation','');
+    $user = getCurrentUser();
+
+    if ($relation == 'learning') {
         $total = ServiceKernel::instance()->createService('Course.CourseService')->findUserLeaningCourseCount($user['id'],$conditions);
         $courses = ServiceKernel::instance()->createService('Course.CourseService')->findUserLeaningCourses(
             $user['id'], 
-            $conditions['start'], 
-            $conditions['limit'], 
-            array('type' => $conditions['type'])
+            $start, 
+            $limit, 
+            empty($type) ? array() : array('type' => $type)
         );
-    } elseif ($conditions['relation'] == 'learned') {
+    } elseif ($relation == 'learned') {
         $total = ServiceKernel::instance()->createService('Course.CourseService')->findUserLeanedCourseCount($user['id'],$conditions);
         $courses = ServiceKernel::instance()->createService('Course.CourseService')->findUserLeanedCourses(
             $user['id'], 
-            $conditions['start'], 
-            $conditions['limit'], 
-            array('type' => $conditions['type'])
+            $start, 
+            $limit, 
+            empty($type) ? array() : array('type' => $type)
         );
-    } elseif ($conditions['relation'] == 'teaching') {
+    } elseif ($relation == 'teaching') {
         $total = ServiceKernel::instance()->createService('Course.CourseService')->findUserTeachCourseCount(array('userId' => $user['id']), false);
         $courses = ServiceKernel::instance()->createService('Course.CourseService')->findUserTeachCourses(
             array('userId' => $user['id']),
-            $conditions['start'], 
-            $conditions['limit'], 
+            $start, 
+            $limit, 
             false
         );
-    } else if ($conditions['relation'] == 'favorited') {
+    } else if ($relation == 'favorited') {
         $total = ServiceKernel::instance()->createService('Course.CourseService')->findUserFavoritedCourseCount($user['id']);
         $courses = ServiceKernel::instance()->createService('Course.CourseService')->findUserFavoritedCourses(
             $user['id'],
-            $conditions['start'], 
-            $conditions['limit']
+            $start, 
+            $limit
         );
     } else {
         //全部
@@ -120,7 +118,7 @@ $api->get('/courses', function (Request $request) {
 
 */
 $api->get('/followers', function (Request $request) {
-    $user = convert($request->query->get('token'),'me');
+    $user = getCurrentUser();
     $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
     return $follwers;
 });
@@ -138,9 +136,20 @@ $api->get('/followers', function (Request $request) {
 
 */
 $api->get('/followings', function (Request $request) {
-    $user = convert($request->query->get('token'),'me');
+    $user = getCurrentUser();
     $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
     return $follwings;
+});
+
+
+//获得当前用户虚拟币账户信息
+$api->get('/accounts', function () {
+    $user = getCurrentUser();
+    $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
+    if (empty($accounts)) {
+        throw new \Exception('accounts not found');
+    }
+    return $accounts;
 });
 
 return $api;

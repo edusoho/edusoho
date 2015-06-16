@@ -2,6 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 use Silex\Application;
 
 $api = $app['controllers_factory'];
@@ -14,9 +15,42 @@ $api->get('/{id}', function ($id) {
 });
 
 //用户模糊查询(qq,手机,昵称)
-$api->get('/', function (Request $request) {
-    $field = $request->query->get('field');
+/*
+** 参数 **
 
+| 名称  | 类型  | 必需   | 说明 |
+| ---- | ----- | ----- | ---- |
+| q | string | 是 | 用于匹配的字段值,分别模糊匹配手机,qq,昵称,每种匹配返回一个列表,每个列表最多五个 |
+
+** 响应 **
+
+```
+{
+    "mobile": [
+        datalist
+    ],
+    "qq": [
+        datalist
+    ],
+    "nickname": [
+        datalist
+    ]
+}
+```
+*/
+$api->get('/', function (Request $request) {
+    $field = $request->query->get('q');
+    $mobileProfiles = ServiceKernel::instance()->createService('User.UserService')->searchUserProfiles(array('mobile' => $field), array('id','DESC'), 0, 5);
+    $qqProfiles = ServiceKernel::instance()->createService('User.UserService')->searchUserProfiles(array('qq' => $field), array('id','DESC'), 0, 5);
+    
+    $mobileList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($mobileProfiles,'id'));
+    $qqList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($qqProfiles,'id'));
+    $nicknameList = ServiceKernel::instance()->createService('User.UserService')->searchUsers(array('nickname' => $field), array('createdTime','DESC'), 0, 5);
+    return array(
+        'mobile' => $mobileList,
+        'qq' => $qqList,
+        'nickname' => $nicknameList
+    );
 });
 
 //注册
@@ -107,7 +141,7 @@ $api->post('/logout', function (Request $request) {
 
 ```
 {
-    "xxx": "xxx"
+    "success": bool
 }
 ```
 */
@@ -136,25 +170,21 @@ $api->post('/{id}/vips', function (Request $request, $id) {
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| userId | int | 否 | 发起关注操作的用户id |
-| token | string | 否 | 当前登陆用户token |
+| userId | int | 否 | 发起关注操作的用户id,未传则默认为当前用户 |
 | method | string | 否 | 值为delete,表明当前为delete方法 |
-
-`userId`和`token`两者必需且只能传一个
 
 ** 响应 **
 
 ```
 {
-    "xxx": "xxx"
+    "success": bool
 }
 ```
 */
 $api->post('/{id}/followers', function (Request $request, $id) {
-    $userId = $request->request->get('userId');
-    $token = $request->request->get('token');
+    $userId = $request->request->get('userId','');
     $method = $request->request->get('method');
-    $fromUser = empty($userId) ? convert($token,'me') : convert($userId,'user');
+    $fromUser = empty($userId) ? getCurrentUser() : convert($userId,'user');
     if (!empty($method) && $method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.UserService')->unFollow($fromUser['id'],$id);
     } else {
@@ -209,10 +239,7 @@ $api->get('/{id}/followings', function ($id) {
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| toId | int | 否 | 被选方的的用户id |
-| token | string | 否 | 当前登陆用户token |
-
-`toId`和`token`两者必需且只能传一个
+| toId | int | 否 | 被选方的的用户id,未传则默认为当前登录用户 |
 
 ** 响应 **
 
@@ -231,8 +258,7 @@ friend : 互相关注
 $api->get('/{id}/friendship', function (Request $request, $id) {
     $user = convert($id,'user');
     $toId = $request->query->get('toId');
-    $token = $request->query->get('token');
-    $toUser = empty($toId) ? convert($token,'me') : convert($toId,'user');
+    $toUser = empty($toId) ? getCurrentUser() : convert($toId,'user');
     //关注id的人
     $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
     //id关注的人
@@ -246,4 +272,11 @@ $api->get('/{id}/friendship', function (Request $request, $id) {
     return !empty($follwings[$toId]) ? array('friendship' => 'following') : array('friendship' => 'none');
 });
 
+
+//获得用户虚拟币账户信息
+$api->get('{id}/accounts', function ($id) {
+    $user = convert($id,'user');
+    $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
+    return $accounts;
+});
 return $api;

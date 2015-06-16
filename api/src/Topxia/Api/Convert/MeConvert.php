@@ -10,12 +10,22 @@ class MeConvert implements Convert
     {
         $token = ServiceKernel::instance()->createService('User.UserService')->getToken('login',$token);
         if (empty($token)) {
-            throw new \Exception('token not found');
+            return array(
+                'id' => 0,
+                'nickname' => '游客',
+                'currentIp' =>  '',
+                'roles' => array(),
+            );
         }
         
         $user = ServiceKernel::instance()->createService('User.UserService')->getUser($token['userId']);
         if (empty($user)) {
-            throw new \Exception('user not found');
+            return array(
+                'id' => 0,
+                'nickname' => '游客',
+                'currentIp' =>  '',
+                'roles' => array(),
+            );
         }
         return $user;
     }

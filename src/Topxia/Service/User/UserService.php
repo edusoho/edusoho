@@ -95,6 +95,10 @@ interface UserService
 
     public function getUserProfile($id);
 
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchUserProfileCount(array $conditions);
+
     public function changeUserRoles($id, array $roles);
 
     /**

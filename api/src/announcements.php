@@ -22,7 +22,7 @@ $api->get('/{id}', function ($id) {
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
 | targetId | int | 是 | 对象id |
-| targetType | string | 是 | 对象类型 |
+| targetType | string | 否 | 对象类型,默认为course |
 
 `targetType`的值有:
   
@@ -40,10 +40,10 @@ $api->get('/{id}', function ($id) {
 
 */
 $api->get('/', function (Request $request) {
-    $targetId = $request->query->get('targetId');
-    $targetType = $request->query->get('targetType');
-    $start = $request->query->get('start');
-    $limit = $request->query->get('limit');
+    $targetId = $request->query->get('targetId',0);
+    $targetType = $request->query->get('targetType','course');
+    $start = $request->query->get('start',0);
+    $limit = $request->query->get('limit',10);
 
     $announcements = ServiceKernel::instance()->createService('Announcement.AnnouncementService')->searchAnnouncements(array('targetType'=>$targetType,'targetId'=>$targetId),array('createdTime','DESC'),$start,$limit);
     return $announcements;

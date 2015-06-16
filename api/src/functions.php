@@ -16,9 +16,15 @@ function convert($data, $type)
     return $convert->convert($data);
 }
 
-function setCurrentUser($user)
+function setCurrentUser($token)
 {
-	$currentUser = new CurrentUser();
+    $currentUser = new CurrentUser();
+    $user = convert($token,'me');
     $currentUser->fromArray($user);
     ServiceKernel::instance()->setCurrentUser($currentUser);
+}
+
+function getCurrentUser()
+{
+    return ServiceKernel::instance()->getCurrentUser();
 }

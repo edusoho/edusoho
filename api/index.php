@@ -33,14 +33,6 @@ $serviceKernel->setParameterBag(new ParameterBag($config));
 $serviceKernel->setConnection($connection);
 // $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
-$currentUser = new CurrentUser();
-$currentUser->fromArray(array(
-    'id' => 0,
-    'nickname' => '游客',
-    'currentIp' =>  '',
-    'roles' => array(),
-));
-$serviceKernel->setCurrentUser($currentUser);
 
 include __DIR__ . '/src/functions.php';
 
@@ -51,6 +43,10 @@ $app['debug'] = true;
 
 $app->view(function (array $result, Request $request) use ($app) {
     return new JsonResponse($result);
+});
+
+$app->before(function (Request $request) {
+    setCurrentUser($request->query->get('token',''));
 });
 
 $app->mount('/api/users', include __DIR__ . '/src/users.php' );
