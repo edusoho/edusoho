@@ -886,7 +886,7 @@ Pagination Styles
 .es-header .collapse {
   display: block;
 }
-@media (max-width: 991px) {
+@media (max-width: 767px) {
   .es-header .navbar-header {
     text-align: center;
     float: none;
@@ -928,9 +928,8 @@ Pagination Styles
     height: 40px;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .es-header .nav.navbar-nav {
-    float: right;
     margin-left: 0;
     margin-right: 0;
   }

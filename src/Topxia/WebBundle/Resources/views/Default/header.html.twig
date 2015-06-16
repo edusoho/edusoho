@@ -1,6 +1,6 @@
 <header class="es-header navbar">
   <div class="navbar-header">
-    <div class="visible-xs visible-sm navbar-mobile">
+    <div class="visible-xs  navbar-mobile">
       <a href="javascript:;" class="navbar-more js-navbar-more">
         <i class="es-icon es-icon-menu"></i>
       </a>
@@ -27,7 +27,7 @@
     </a>
   </div>
   <nav class="collapse navbar-collapse">
-    <ul class="nav navbar-nav clearfix hidden-xs hidden-sm" id="nav">
+    <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
       {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
     </ul>
     <div class="navbar-user">
@@ -78,7 +78,7 @@
           <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
         {% endif %}
       </ul>
-      <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
           <input class="form-control js-search" name="q" placeholder="搜索">
           <button class="button es-icon es-icon-search"></button>
