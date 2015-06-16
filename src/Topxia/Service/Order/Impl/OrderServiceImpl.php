@@ -293,7 +293,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $setting = $this->getSettingService()->get('refund');
 
         // 系统未设置退款期限，不能退款
-        if (empty($setting) or empty($setting['maxRefundDays'])) {
+        if (empty($setting) || empty($setting['maxRefundDays'])) {
             $expectedAmount = 0;
         }
 
@@ -412,7 +412,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("用户未登录，订单(#{$id})取消退款失败");
         }
 
-        if ($order['userId'] != $user['id'] and !$user->isAdmin()) {
+        if ($order['userId'] != $user['id'] && !$user->isAdmin()) {
             throw $this->createServiceException("订单(#{$id})，你无权限取消退款");
         }
 

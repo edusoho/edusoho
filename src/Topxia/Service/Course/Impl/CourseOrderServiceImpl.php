@@ -117,7 +117,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     public function doSuccessPayOrder($id)
     {
         $order = $this->getOrderService()->getOrder($id);
-        if (empty($order) or $order['targetType'] != 'course') {
+        if (empty($order) || $order['targetType'] != 'course') {
             throw $this->createServiceException('非课程订单，加入课程失败。');
         }
 
@@ -149,7 +149,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $this->getCourseService()->lockStudent($order['targetId'], $order['userId']);
 
             $setting = $this->getSettingService()->get('refund');
-            $message = empty($setting) or empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
+            $message = empty($setting) || empty($setting['applyNotification']) ? '' : $setting['applyNotification'];
             if ($message) {
                 $course = $this->getCourseService()->getCourse($order["targetId"]);
                 $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
@@ -171,7 +171,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     public function cancelRefundOrder($id)
     {
         $order = $this->getOrderService()->getOrder($id);
-        if (empty($order) or $order['targetType'] != 'course') {
+        if (empty($order) || $order['targetType'] != 'course') {
             throw $this->createServiceException('订单不存在，取消退款申请失败。');
         }
 

@@ -29,7 +29,7 @@ class AppController extends BaseController
         $info = $this->getEduCloudService()->getAccountInfo();
 
         $EduSohoOpenClient = new EduSohoOpenClient();
-        if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
+        if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
             $articles = $EduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
@@ -60,7 +60,7 @@ class AppController extends BaseController
 
         $account = isset($content['account']) ? $content['account'] : null;
         $day = ''; 
-        if (isset($content['account']['arrearageDate']) and  $content['account']['arrearageDate'] != 0 ) {
+        if (isset($content['account']['arrearageDate']) &&  $content['account']['arrearageDate'] != 0 ) {
             $day =ceil( (strtotime($currentTime) - $content['account']['arrearageDate']) /86400) ;
         }
 

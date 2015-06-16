@@ -16,7 +16,7 @@ class OAuthClientFactory
 	 */
     public static function create($type, array $config)
     {
-    	if (!array_key_exists('key', $config) or !array_key_exists('secret', $config)) {
+    	if (!array_key_exists('key', $config) || !array_key_exists('secret', $config)) {
     		throw new InvalidArgumentException('参数$config中，必需包含key, secret两个为key的值');
     	}
 

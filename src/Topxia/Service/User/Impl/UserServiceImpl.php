@@ -193,7 +193,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changePassword($id, $password)
     {
         $user = $this->getUser($id);
-        if (empty($user) or empty($password)) {
+        if (empty($user) || empty($password)) {
             throw $this->createServiceException('参数不正确，更改密码失败。');
         }
 
@@ -216,7 +216,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changePayPassword($userId, $newPayPassword)
     {
         $user = $this->getUser($userId);
-        if (empty($user) or empty($newPayPassword)) {
+        if (empty($user) || empty($newPayPassword)) {
             throw $this->createServiceException('参数不正确，更改支付密码失败。');
         }
 
@@ -247,7 +247,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeMobile($id, $mobile)
     {
         $user = $this->getUser($id);
-        if (empty($user) or empty($mobile)) {
+        if (empty($user) || empty($mobile)) {
             throw $this->createServiceException('参数不正确，更改失败。');
         }
 

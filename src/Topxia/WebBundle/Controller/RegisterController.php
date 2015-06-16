@@ -54,7 +54,7 @@ class RegisterController extends BaseController
             }else{
                 $authSettings = $this->getSettingService()->get('auth', array());
 
-                if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   !$this->isEmptyVeryfyMobile($user)){
+                if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) ||   !$this->isEmptyVeryfyMobile($user)){
                      $this->authenticateUser($user);
                      $this->sendRegisterMessage($user);
                 }
@@ -123,7 +123,7 @@ class RegisterController extends BaseController
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   !$this->isEmptyVeryfyMobile($user)){
+            if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) ||   !$this->isEmptyVeryfyMobile($user)){
                  $this->authenticateUser($user);
                  $this->sendRegisterMessage($user);
             }

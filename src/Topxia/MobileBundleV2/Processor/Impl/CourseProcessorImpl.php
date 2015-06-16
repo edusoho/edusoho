@@ -419,7 +419,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $courseMember = $courseMembers[$i];
             $course = $courses[$courseMember['courseId']];
             $noteNum = $courseMember['noteNum'];
-            if (empty($noteNum) or $noteNum == '0') {
+            if (empty($noteNum) || $noteNum == '0') {
                 continue;
             }
             $noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'], $courseMember['courseId']);

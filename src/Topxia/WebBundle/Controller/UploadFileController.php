@@ -261,7 +261,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('转换失败');
         }
 
-        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];
 
         $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
 
