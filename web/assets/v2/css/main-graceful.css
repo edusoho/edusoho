@@ -227,9 +227,6 @@
     padding-right: 0;
   }
 }
-.page-header {
-  font-weight: bold;
-}
 .page-header .badge {
   margin-left: 5px;
   color: #fff;
@@ -2342,23 +2339,23 @@ a:focus {
 .lt-ie9 .panel {
   border: 1px solid #e0e0e0;
 }
-.panel.panel-default {
+.panel-default {
   padding: 0 15px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
-.panel.panel-default > .panel-heading {
+.panel-default > .panel-heading {
   position: relative;
   padding: 15px 0;
   background: #fff;
   border-bottom: 1px solid #e0e0e0;
 }
-.panel.panel-default > .panel-heading .panel-title > i {
+.panel-default > .panel-heading .panel-title > i {
   vertical-align: middle;
   margin-right: 10px;
 }
-.panel.panel-default > .panel-heading .more {
+.panel-default > .panel-heading .more {
   position: absolute;
   top: 7px;
   right: 0;
@@ -2369,38 +2366,57 @@ a:focus {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.panel.panel-default > .panel-heading .more > i {
+.panel-default > .panel-heading .more > i {
   font-size: 24px;
 }
-.panel.panel-default > .panel-heading .more:hover {
+.panel-default > .panel-heading .more:hover {
   color: #666666;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.panel.panel-default > .panel-heading .panel-bar {
+.panel-default > .panel-heading .panel-bar {
   position: absolute;
   top: 7px;
   right: 0;
   display: block;
 }
-.panel.panel-default > .panel-footer {
+.panel-default > .panel-footer {
   padding: 15px 0;
   background: none;
 }
-.panel.panel-default > .panel-body {
+.panel-default > .panel-body {
   position: relative;
   padding: 15px 0;
 }
-.panel.panel-primary > .panel-heading {
+.panel-primary > .panel-heading {
   background-color: #02b980;
   color: #fff;
 }
-.panel.panel-primary > .panel-body {
+.panel-primary > .panel-body {
   background: #fafafa;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+}
+.panel-page {
+  padding: 45px 50px 50px;
+  min-height: 500px;
+}
+@media (max-width: 1199px) {
+  .panel-page {
+    padding: 15px;
+  }
+}
+.panel-page .panel-heading {
+  background: transparent;
+  border-bottom: none;
+  margin: 0 0 30px 0;
+  padding: 0;
+}
+.panel-page .panel-heading h2 {
+  font-size: 25px;
+  margin-top: 0;
 }
 .es-section {
   background: #fff;

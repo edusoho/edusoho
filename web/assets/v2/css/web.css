@@ -112,23 +112,6 @@ a.link-muted {
   zoom: 1;
 }
 
-/*待删除*/
-/*.panel-page {
-  padding: 45px 50px 50px;
-  min-height: 500px;
-}
-
-.panel-page .panel-heading {
-  background: transparent;
-  border-bottom: none;
-  margin: 0 0 30px 0;
-  padding: 0;
-}
-
-.panel-page .panel-heading h2 {
-  font-size: 25px;
-  margin-top: 0;
-}*/
 
 .control-text {
   display: inline-block;
