@@ -5966,12 +5966,6 @@ textarea.form-control-o {
 .period-list .period .title {
   color: #616161;
 }
-.period-list .period i {
-  margin-left: 5px;
-}
-.period-list .period .label {
-  margin-left: 10px;
-}
 .period-list .period .date {
   position: absolute;
   top: 11px;
@@ -6513,6 +6507,11 @@ textarea.form-control-o {
 }
 .teacher-item .metas .btn {
   margin: 0 15px;
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .teacher-item .metas .btn {
+    margin: 0 10px;
+  }
 }
 .lt-ie9 .teacher-item {
   border: 1px solid #e0e0e0;

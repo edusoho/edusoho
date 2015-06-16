@@ -1,14 +1,10 @@
 <!-- 紧跟标题 -->
 {% if item.materialNum > 0 %}
-  <i class="es-icon es-icon-filedownload" title="资料"></i>
+  <i class="es-icon es-icon-filedownload mls" title="资料"></i>
 {% endif %}
 
 {% if (item.id in homeworkLessonIds|default(null)) or (item.id in exercisesLessonIds|default(null)) %}
-  <i class="es-icon es-icon-description" title="作业、练习"></i>
-{% endif %}
-
-{% if item.free %}
-  <span class="label label-warning">免费</span>
+  <i class="es-icon es-icon-description mls" title="作业、练习"></i>
 {% endif %}
 
 
