@@ -1185,19 +1185,22 @@ Pagination Styles
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.es-footer {
-  background: #212121;
+.es-footer .footer-link {
+  background: #2e2e2e;
+  padding: 55px 0;
+  border-bottom: 1px solid #111;
 }
 .es-footer .copyright {
+  background: #212121;
   border-top: 1px solid #444;
   text-align: center;
   padding: 20px 0;
   line-height: 30px;
-  color: #bababa;
+  color: #b1b1b1;
   text-shadow: 0 1px 3px #000;
 }
 .es-footer .copyright a {
-  color: white;
+  color: #eee;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1209,10 +1212,6 @@ Pagination Styles
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
   color: #333333;
-}
-.footer-link {
-  padding: 55px 0;
-  border-bottom: 1px solid #111;
 }
 .footer-main .link-item {
   width: 20%;
@@ -1226,7 +1225,7 @@ Pagination Styles
   }
 }
 .footer-main h3 {
-  color: #b1b1b1;
+  color: #eeeeee;
   margin-top: 0;
   margin-bottom: 40px;
 }
