@@ -242,7 +242,7 @@ class DefaultController extends BaseController
 
         $storageSetting = $this->getSettingService()->get('storage');
 
-        if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $factory = new CloudClientFactory();
             $client = $factory->createClient($storageSetting);
             $keyCheckResult = $client->checkKey();

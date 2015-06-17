@@ -15,7 +15,7 @@ class BaseController extends WebBaseController
         }
 
         $disableds = $this->container->getParameter('disabled_features');
-        if (!is_array($disableds) or empty($disableds)) {
+        if (!is_array($disableds) || empty($disableds)) {
             return array();
         }
 

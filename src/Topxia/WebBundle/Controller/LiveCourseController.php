@@ -143,7 +143,7 @@ class LiveCourseController extends BaseController
 
             $result = $client->startLive($params);
 
-            if (empty($result) or isset($result['error'])) {
+            if (empty($result) || isset($result['error'])) {
                 return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
             }
 

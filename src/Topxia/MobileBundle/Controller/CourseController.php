@@ -135,7 +135,7 @@ class CourseController extends MobileController
         $json['type'] = $lesson['type'];
         $json['content'] = $this->convertAbsoluteUrl($this->container->get('request'), $lesson['content']);
         $json['status'] = $lesson['status'];
-        if ($lesson['length'] > 0 and in_array($lesson['type'], array('audio', 'video'))) {
+        if ($lesson['length'] > 0 && in_array($lesson['type'], array('audio', 'video'))) {
             $json['length'] =  $this->container->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
         } else {
             $json['length'] = 0;
@@ -473,7 +473,7 @@ class CourseController extends MobileController
 
         return array_map(function($item) use ($self, $container) {
             $item['createdTime'] = date('c', $item['createdTime']);
-            if (!empty($item['length']) and in_array($item['type'], array('audio', 'video'))) {
+            if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
                 $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
             } else {
                 $item['length'] = 0;

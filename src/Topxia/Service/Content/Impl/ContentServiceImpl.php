@@ -157,7 +157,7 @@ class ContentSerialize
     public static function serialize(array &$course)
     {
     	if (isset($course['tagIds'])) {
-    		if (is_array($course['tagIds']) and !empty($course['tagIds'])) {
+    		if (is_array($course['tagIds']) && !empty($course['tagIds'])) {
     			$course['tagIds'] = '|' . implode('|', $course['tagIds']) . '|';
     		} else {
     			$course['tagIds'] = '';

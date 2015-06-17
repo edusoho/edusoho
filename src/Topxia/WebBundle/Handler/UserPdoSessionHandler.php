@@ -214,7 +214,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
 
         $token = $this->context->getToken();
 
-        if (empty($token) or ($token instanceof AnonymousToken) or !$token->getUser()) {
+        if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
             $userId = 0;
         } else {
             $userId = $token->getUser()->getId();
@@ -253,7 +253,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
             // error and re-execute the update. This is similar to a serializable transaction with retry logic
             // on serialization failures but without the overhead and without possible false positives due to
             // longer gap locking.
-            // Since we have a lock on the session, the above case should not happen. And if it's a regenerated
+            // Since we have a lock on the session, the above case should not happen. and if it's a regenerated
             // session ID it should be unique anyway.
             if (!$updateStmt->rowCount()) {
                 try {
@@ -375,7 +375,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * Exclusively locks the row so other concurrent requests on the same session will block.
      *
      * This prevents loss of data by keeping the data consistent between read() and write().
-     * We do not use SELECT FOR UPDATE because it does not lock non-existent rows. And a following
+     * We do not use SELECT FOR UPDATE because it does not lock non-existent rows. and a following
      * INSERT when not found can result in a deadlock for one connection.
      *
      * @param string $sessionId Session ID
