@@ -173,6 +173,49 @@
 .userpage-header .actions {
   float: right;
 }
+.class-join-header .title {
+  margin: 0 100px 20px 0;
+  font-size: 24px;
+  overflow: hidden;
+}
+@media (min-width: 992px) {
+  .class-join-header .title {
+    height: 36px;
+    line-height: 36px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .class-join-header .title {
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .class-join-header .title {
+    margin-right: 0;
+    font-size: 18px;
+  }
+}
+.class-join-header .title .label {
+  display: inline-block;
+}
+.class-join-header .class-metas {
+  color: #999;
+  font-size: 16px;
+}
+.class-join-header .class-metas .course-num {
+  margin-right: 40px;
+}
+.class-join-header .class-student {
+  font-size: 18px;
+  line-height: 18px;
+  margin-bottom: 20px;
+  color: #999;
+}
+.class-join-header .class-student .fa {
+  margin-right: 10px;
+}
 .es-row-wrap {
   background: #fff;
   border: 1px solid #e0e0e0;

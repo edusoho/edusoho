@@ -173,6 +173,49 @@
 .userpage-header .actions {
   float: right;
 }
+.class-join-header .title {
+  margin: 0 100px 20px 0;
+  font-size: 24px;
+  overflow: hidden;
+}
+@media (min-width: 992px) {
+  .class-join-header .title {
+    height: 36px;
+    line-height: 36px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .class-join-header .title {
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .class-join-header .title {
+    margin-right: 0;
+    font-size: 18px;
+  }
+}
+.class-join-header .title .label {
+  display: inline-block;
+}
+.class-join-header .class-metas {
+  color: #999;
+  font-size: 16px;
+}
+.class-join-header .class-metas .course-num {
+  margin-right: 40px;
+}
+.class-join-header .class-student {
+  font-size: 18px;
+  line-height: 18px;
+  margin-bottom: 20px;
+  color: #999;
+}
+.class-join-header .class-student .fa {
+  margin-right: 10px;
+}
 .es-row-wrap {
   background: #fff;
   border: 1px solid #e0e0e0;
@@ -5424,10 +5467,10 @@ textarea.form-control-o {
 }
 @media (max-width: 1199px) {
   .class-header .price {
-    top: 30px;
+    top: 50px;
     width: 150px;
     height: 60px;
-    line-height: 60px;
+    line-height: 55px;
     background-size: 150px 60px;
   }
   .class-header .price span {
@@ -5439,7 +5482,7 @@ textarea.form-control-o {
     right: -18px;
     width: 135px;
     height: 54px;
-    line-height: 54px;
+    line-height: 50px;
     background-size: 135px 54px;
   }
   .class-header .price span {
