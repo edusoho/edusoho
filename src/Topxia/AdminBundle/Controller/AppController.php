@@ -297,6 +297,7 @@ class AppController extends BaseController
         return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
             'logs' => $logs,
             'users' => $users,
+            'paginator' => $paginator
         ));
     }
 
