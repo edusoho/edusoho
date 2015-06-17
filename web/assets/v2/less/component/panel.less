@@ -1,4 +1,5 @@
 .panel.panel-default {
+  border: none;
   padding: 0 15px;
   .box-shadow( 0 2px 4px rgba(0,0,0,.08));
   >.panel-heading {
@@ -48,6 +49,10 @@
     position: relative;
     padding: 15px 0;
   }
+}
+
+.lt-ie9 .panel.panel-default {
+  border: 1px solid @gray-light;
 }
 
 .panel.panel-primary {

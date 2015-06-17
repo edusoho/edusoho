@@ -91,6 +91,12 @@ interface UserService
 
     public function markLoginInfo();
 
+    public function markLoginFailed($userId, $ip);
+
+    public function markLoginSuccess($userId, $ip);
+
+    public function checkLoginForbidden($userId, $ip);
+
     public function updateUserProfile($id, $fields);
 
     public function getUserProfile($id);
@@ -211,12 +217,6 @@ interface UserService
     public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
-
-    public function userLoginFail($user,$failAllowNum = 3, $temporaryMinutes = 20);
-
-    public function isUserTemporaryLockedOrLocked($user);
-
-    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
 
     /**
      * 解析文本中@(提)到的用户
