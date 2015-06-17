@@ -425,45 +425,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $noteInfos[$i]["createdTime"] = date('c', $note['createdTime']);
             $noteInfos[$i]["lessonTitle"] = $lessons[$note["lessonId"]]["title"];
         }
-        /*
-        $courseMembers = $this->controller->getCourseService()->searchMember($conditions, $start, $limit);
-        $courses  = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
-        $noteInfos = array();
-        for ($i = 0; $i < count($courseMembers); $i++) {
-            $courseMember = $courseMembers[$i];
-            $course = $courses[$courseMember['courseId']];
-            $noteNum = $courseMember['noteNum'];
-            if (empty($noteNum) or $noteNum == '0') {
-                continue;
-            }
-            $noteListByOneCourse = $this->controller->getNoteService()->findUserCourseNotes($user['id'], $courseMember['courseId']);
-            foreach ($noteListByOneCourse as $value) {
-                $lessonInfo   = $this->controller->getCourseService()->getCourseLesson($value['courseId'], $value['lessonId']);
-                $lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $value['courseId'], $value['lessonId']);
-                $noteContent  = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $value['content']));
-                $noteInfos[]  = array(
-                    "coursesId" => $courseMember['courseId'],
-                    "courseTitle" => $course['title'],
-                    "noteLastUpdateTime" => date('c', $value['updatedTime'] == 0 ? $value['createdTime'] : $value['updatedTime']),
-                    "lessonId" => $lessonInfo['id'],
-                    "lessonTitle" => $lessonInfo['title'],
-                    "learnStatus" => $lessonStatus,
-                    "content" => $noteContent,
-                    "createdTime" => date('c', $value['createdTime']),
-                    "noteNum" => $noteNum,
-                    "largePicture" => $this->controller->coverPath($course["largePicture"], 'course-large.png')
-                );
-            }
-        }
-        $sort = array();
-        foreach ($noteInfos as $key => $value) {
-            $sort[$key] = $value['noteLastUpdateTime'];
-        }
-
-        if($noteInfos != null ){
-            array_multisort($sort, SORT_DESC, $noteInfos);
-        }
-        */
         return array(
             "start" => $start,
             "limit" => $limit,
@@ -717,7 +678,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $result["data"] = array_values($normalCourses);
         $result["total"] = count($normalCourses);
-
         return $result;
     }
 
