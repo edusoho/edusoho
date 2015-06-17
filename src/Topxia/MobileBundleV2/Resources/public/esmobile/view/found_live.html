@@ -1,39 +1,59 @@
-<ion-view>
-  <ion-content class="found-body content-padding">
-    
-    <ion-slide-box on-slide-changed="slideHasChanged($index)">
-	  <ion-slide ng-repeat="banner in banners"  slide-init>
-	    <div class="box banner">
-	    	<img src='{{ banner.url }}' />
-	    </div>
-	  </ion-slide>
-	</ion-slide-box>
+<div class="top-tab-header">
 
 	<div class="course-card">
 		<h4>推荐</h4>
-		<div class="list">
+		<ul class="ui-list ui-list-link ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="liveCourse in liveCourses">
+		        <div class="ui-list-img">
+		            <span style="background-image:url( {{ liveCourse.middlePicture }} )"></span>
+		        </div>
+		        <div class="ui-list-info">
+		            <h2 class="ui-nowrap ui-list-title">{{ liveCourse.title }}</h2>
+		            <p class="bottom price-body">
+		            	<span class="origin-price">
+				      {{ liveCourse.price | formatPrice }}
+				      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
+				      	{{ liveCourse.originPrice | formatPrice }}
+				      </s>
+				</span>
 
-		    <a class="item item-thumbnail-left" href="#" ng-repeat="liveCourse in liveCourses">
-		      <img src="{{ liveCourse.middlePicture | coverPic}}">
-		      <h2>{{ liveCourse.title }}</h2>
-		      <p class="bottom price-body">
-		      	
-		      	<span class="origin-price">
-			      {{ liveCourse.price | formatPrice }}
-			      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
-			      	{{ liveCourse.originPrice | formatPrice }}
-			      </s>
-			</span>
-
-			<span class="right">
-			      <i class="iconfont icon-person"></i>
-			      {{ liveCourse.studentNum }}人在学
-			</span>
-		      </p>
-		    </a>
-		</div>
-
-		<a class="button button-clear more" href="#/courselist">查看更多</a>
+				<span class="right">
+				      <i class="iconfont icon-person"></i>
+				      {{ liveCourse.studentNum }}人在学
+				</span>
+		            </p>
+		        </div>
+		    </li>
+		</ul>
 	</div>
-  </ion-content>
-</ion-view>
+
+	<div class="course-card">
+		<h4>最新</h4>
+
+		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
+          		</list-empty-view>
+		<ul class="ui-list ui-list-link ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="latestCourse in liveLatestCourses">
+		        <div class="ui-list-img">
+		            <span style="background-image:url( {{ latestCourse.middlePicture }} )"></span>
+		        </div>
+		        <div class="ui-list-info">
+		            <h2 class="ui-nowrap ui-list-title">{{ latestCourse.title }}</h2>
+		            <p class="bottom price-body">
+		            	<span class="origin-price">
+				      {{ latestCourse.price | formatPrice }}
+				      <s class="discount-color" ng-if="latestCourse.discountId > 0">
+				      	{{ latestCourse.originPrice | formatPrice }}
+				      </s>
+				</span>
+
+				<span class="right">
+				      <i class="iconfont icon-person"></i>
+				      {{ latestCourse.studentNum }}人在学
+				</span>
+		            </p>
+		        </div>
+		    </li>
+		</ul>
+	</div>
+</div>

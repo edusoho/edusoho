@@ -357,7 +357,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "start" => $start,
             "limit" => $limit,
             "total" => count($threads),
-            'threads' => $threads
+            'data' => $threads
         );
     }
 
@@ -412,9 +412,20 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $conditions = array(
             'userId' => $user['id'],
-            'noteNumGreaterThan' => 0.1
         );
         
+        $total = $this->controller->getNoteService()->searchNoteCount($conditions);
+        $noteInfos = $this->controller->getNoteService()->searchNotes($conditions, 'updated', $start, $limit);
+
+        $lessonIds = ArrayToolkit::column($noteInfos , "lessonId");
+        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        for ($i = 0; $i < count($noteInfos); $i++) {
+            $note = $noteInfos[$i];
+            $noteInfos[$i]["updatedTime"] = date('c', $note['createdTime']);
+            $noteInfos[$i]["createdTime"] = date('c', $note['createdTime']);
+            $noteInfos[$i]["lessonTitle"] = $lessons[$note["lessonId"]]["title"];
+        }
+        /*
         $courseMembers = $this->controller->getCourseService()->searchMember($conditions, $start, $limit);
         $courses  = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         $noteInfos = array();
@@ -452,8 +463,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if($noteInfos != null ){
             array_multisort($sort, SORT_DESC, $noteInfos);
         }
-
-        return $noteInfos;
+        */
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            'data' => $noteInfos
+        );
     }
     
     public function getOneNote()
@@ -668,42 +684,44 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }, $posts);
     }
     
-    public function getFavoriteLiveCoruse()
+    public function getFavoriteLiveCourse()
     {
-        $result = $this->getFavoriteCoruse();
+        $result = $this->getFavoriteCourse();
         $courses = $result["data"];
 
+        $liveCourses = array();
         for ($i=0; $i < count($courses); $i++) {
             $course = $courses[$i];
-            if ($course["type"] != "live") {
-                unset($courses[$i]);
+            if ($course["type"] == "live") {
+                $liveCourses[] = $course;
             } 
         }
 
-        $result["data"] = $courses;
-        $result["total"] = count($courses);
+        $result["data"] = $liveCourses;
+        $result["total"] = count($liveCourses);
         return $result;
     }
 
-    public function getFavoriteNormalCoruse()
+    public function getFavoriteNormalCourse()
     {
-        $result = $this->getFavoriteCoruse();
+        $result = $this->getFavoriteCourse();
         $courses = $result["data"];
 
+        $normalCourses = array();
         for ($i=0; $i < count($courses); $i++) {
             $course = $courses[$i];
-            if ($course["type"] != "normal") {
-                unset($courses[$i]);
+            if ($course["type"] == "normal") {
+                $normalCourses[] = $course;
             } 
         }
 
-        $result["data"] = $courses;
-        $result["total"] = count($courses);
+        $result["data"] = array_values($normalCourses);
+        $result["total"] = count($normalCourses);
 
         return $result;
     }
 
-    public function getFavoriteCoruse()
+    public function getFavoriteCourse()
     {
         $user  = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {

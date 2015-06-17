@@ -1,36 +1,53 @@
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back="go">
-</a>
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">开通会员</h3>
+    </div>
+</div>
 
-<h1 class="title">
-  <span>
-    开通会员
-  </span>
-</h1>
-</ion-header-bar>
+<div class="top-header ui-vip">
+	<ul class="ui-list ui-border-tb">
+	    <li class="ui-border-t ui-vip-avatar">
+	        <div class="ui-avatar">
+	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" />
+	        </div>
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap">{{ data.user.nickname }}</h4>
+	            <p class="ui-nowrap">{{ data.user.vip ? data.vips[data.user.vip.levelId].name : "暂时还不是会员" }}</p>
+	        </div>
+	    </li>
+	    <li class="vip-price-line">
+	        	<span>其他方式登录</span>
+	    </li>
+	</ul>
 
-<ion-view>
-  <ion-content class="viplist-body">
-  	<div class="list">
-  		<a class="item item-avatar" ng-click="showMyView('userinfo')">
-	                <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
-	                <div ng-if="user">
-	                    <h3>{{ data.user.nickname }}</h3>
-	                    <p>{{ data.user.vip ? data.vips[data.user.vip.levelId].name : "暂时还不是会员" }}</p>
-	                </div>
-	                <div ng-if="!user">
-	                    <h1>个人中心</h1>
-	                    <p>登录/注册</p>
-	                </div>
+	<div class="ui-panel" ng-repeat="vip in data.vips">
+		<ul class="ui-list ui-border-b">
+		    <li class="ui-border-t">
+		        <div class="ui-avatar">
+		            <img ng-src="{{ vip.picture }}" />
+		        </div>
+		        <div class="ui-list-info">
+		            <h4 class="ui-nowrap">{{ vip.name }}</h4>
+		        </div>
+		        <div class="ui-list-action ui-vip-price">
+		        	<sup>¥</sup>
+		        	<span>{{ vip.monthPrice }}</span>
+		        	1个月
+		        </div>
+		    </li>
+		    <li>
+		        	<div class="ui-list-info">
+		        		<p ng-bind-html="vip.description"></p>
+		        		<p ng-if="! vip.description || vip.description.length == 0">没有会员简介</p>
+		        	</div>
+		    </li>
+		</ul>
+		<div class="ui-btn-wrap ui-border-b">
+	            <a class="ui-btn-lg btn-green" href="#/vippay/{{ vip.id }}">
+	                立即开通
 	            </a>
-	            <a class="cut-line">
-			        	<span>其他方式登录</span>
-	            </a>
-	            <a href="#/vippay/{{ vip.id }}" class="item item-avatar viplist-item" ng-repeat="vip in data.vips">
-		      <img ng-src="{{ vip.picture }}">
-		      <h3>{{ vip.name }}</h3>
-		      <div class="vip-description" ng-bind-html="vip.description"></div>
-		</a>
+        	</div>
 	</div>
-   </ion-content>
-</ion-view>
+	
+</div>

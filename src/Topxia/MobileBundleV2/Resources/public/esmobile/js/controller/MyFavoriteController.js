@@ -1,16 +1,17 @@
-app.controller('MyFavoriteController', ['$scope', 'httpService', MyFavoriteController]);
+app.controller('MyFavoriteController', ['$scope', 'httpService', '$timeout', MyFavoriteController]);
 
-function MyFavoriteController($scope, CourseService, CourseUtil)
+function MyFavoriteController($scope, CourseService, CourseUtil, $timeout)
 {
 	console.log("MyFavoriteController");
+	var self = this;
 	$scope.data  = CourseUtil.getFavoriteListTypes();
 
-  	$scope.loadDataList = function(type) {
+  	this.loadDataList = function(type) {
   		var dataList = $scope.data[type];
-  		CourseService.getFavoriteCoruse(
+  		CourseService.getFavoriteCourse(
   			dataList.url,
   			{
-	  			limit : 10,
+	  			limit : 100,
 				start: dataList.start,
 				token : $scope.token
 			}, function(data) {
@@ -24,16 +25,19 @@ function MyFavoriteController($scope, CourseService, CourseUtil)
 		    		if (data.total && dataList.start >= data.total) {
 		    			dataList.canLoad = false;
 		    		}
-		    		$scope.$broadcast('scroll.infiniteScrollComplete');
+
   			}
   		);
   	}
 
-  	$scope.canLoadMore = function(type) {
-  		return $scope.data[type].canLoad;
-  	};
+  	this.loadCourses = function() {
+  		self.loadDataList("course");
+  	}
 
-  	$scope.loadMore = function(type){
-  		$scope.loadDataList(type);
-  	};
+  	this.loadLiveCourses = function() {
+  		self.loadDataList("live");
+  	}
+
+  	this.loadCourses();
+  	this.loadLiveCourses();
 }

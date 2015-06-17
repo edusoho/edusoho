@@ -1,32 +1,33 @@
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back="go">
-</a>
-
-<h1 class="title">
-  <span>
-    课程设置
-  </span>
-</h1>
-</ion-header-bar>
-
-<ion-view>
-  <ion-content class="course-setting">
-  	<ul class="list">
-	  <li class="item item-toggle">
-	     讨论组消息免打扰
-	     <label class="toggle toggle-calm">
-	       <input type="checkbox">
-	       <div class="track">
-	         <div class="handle"></div>
-	       </div>
-	     </label>
-	  </li>
-	  <a ng-if="isLearn" class="item item-button">
-	     <button class="button button-block button-assertive" ng-click="exitLearnCourse()">
-	            退出课程
-	     </button>
-	  </a>
-	</ul>
-	
-   </ion-content>
-</ion-view>
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">课程设置</h3>
+    </div>
+</div>
+<div class="top-header">
+	<div class="ui-form ui-border-t">
+	        <div class="ui-form-item ui-form-item-switch ui-border-b">
+	            <p>
+	                讨论组消息免打扰
+	            </p>
+	            <label class="ui-switch">
+	                <input type="checkbox">
+	            </label>
+	        </div>
+	        <div class="ui-form-item ui-form-item-switch ui-border-b">
+	            <p>
+	                课程消息免打扰
+	            </p>
+	            <label class="ui-switch">
+	                <input type="checkbox" checked>
+	            </label>
+	        </div>
+	        <div class="ui-form-item ui-form-item-switch">
+	        	<div ng-if="isLearn" class="ui-btn-wrap sign-padding">
+		            <button class="ui-btn-lg btn-red" ng-click="exitLearnCourse()">
+		                退出课程
+		            </button>
+	        	</div>
+	        </div>
+	</div>
+</div>

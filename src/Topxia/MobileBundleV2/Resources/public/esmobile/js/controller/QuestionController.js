@@ -1,21 +1,25 @@
-app.controller('QuestionController', ['$scope', 'QuestionService', '$stateParams', '$ionicLoading', QuestionController]);
+app.controller('QuestionController', ['$scope', 'QuestionService', '$stateParams', QuestionController]);
+app.controller('NoteController', ['$scope', 'NoteService', '$stateParams', NoteController]);
 
-function QuestionController($scope, QuestionService, $stateParams, $ionicLoading)
-{
-	$ionicLoading.show({
-	        template:'加载中...',
-	});
+function QuestionController($scope, QuestionService, $stateParams)
+{	
+	var self = this;
+	this.loadQuestion = function() {
+		$scope.showLoad();
+		QuestionService.getThread({
+			courseId: $stateParams.courseId,
+			threadId : $stateParams.threadId,
+			token : $scope.token
+		}, function(data) {
+			$scope.thread = data;
+			$scope.hideLoad();
 
-	QuestionService.getThread({
-		courseId: $stateParams.courseId,
-		threadId : $stateParams.threadId,
-		token : $scope.token
-	}, function(data) {
-		$scope.thread = data;
-		$ionicLoading.hide();
-	});
-
-	$scope.loadTeacherPost = function() {
+			self.loadTeacherPost();
+			self.loadTheadPost();
+		});
+	}
+	
+	this.loadTeacherPost = function() {
 		QuestionService.getThreadTeacherPost({
 			courseId: $stateParams.courseId,
 			threadId : $stateParams.threadId,
@@ -25,7 +29,7 @@ function QuestionController($scope, QuestionService, $stateParams, $ionicLoading
 		});
 	}
 
-	$scope.loadTheadPost = function() {
+	this.loadTheadPost = function() {
 		QuestionService.getThreadPost({
 			courseId: $stateParams.courseId,
 			threadId : $stateParams.threadId,
@@ -34,4 +38,23 @@ function QuestionController($scope, QuestionService, $stateParams, $ionicLoading
 			$scope.threadPosts = data.data;
 		});
 	}
+
+	self.loadQuestion();
+}
+
+function NoteController($scope, NoteService, $stateParams)
+{	
+	var self = this;
+	this.loadNote = function() {
+		$scope.showLoad();
+		NoteService.getNote({
+			noteId: $stateParams.noteId,
+			token : $scope.token
+		}, function(data) {
+			$scope.note = data;
+			$scope.hideLoad();
+		});
+	}
+
+	self.loadNote();
 }

@@ -1,70 +1,80 @@
 app.controller('MyGroupQuestionController', ['$scope', 'QuestionService', MyGroupQuestionController]);
 
+function MyGroupBaseController($scope, serviceCallBack) {
+
+  var self = this;
+  this.limit = 10;
+  $scope.data = [];
+  $scope.canLoad = true;
+  $scope.start = $scope.start || 0;
+
+  this.loadDataList = function(type) {
+      serviceCallBack({
+        limit : self.limit,
+        start: $scope.start,
+        type : type,
+        token : $scope.token
+      }, function(data) {
+        
+        var length  = data ? data.data.length : 0;
+        if (!data || length == 0 || length < self.limit) {
+            $scope.canLoad = false;
+          }
+
+          $scope.data = $scope.data.concat(data.data);
+          $scope.start += self.limit;
+      });
+    }
+}
+
 function MyGroupNoteController($scope, NoteService)
 {
-	console.log("MyGroupNoteController");
-	$scope.notes = [];
-	$scope.canLoad = true;
-	$scope.start = $scope.start || 0;
-	
-  	$scope.loadDataList = function(type) {
-  		NoteService.getNoteList({
-  			limit : 10,
-			start: $scope.start,
-			token : $scope.token
-  		}, function(data) {
-  			if (!data || data.length == 0 ) {
-	    			$scope.canLoad = false;
-	    		}
+      console.log("MyGroupNoteController");
+      var self = this;
+      this.__proto__ = new MyGroupBaseController($scope, NoteService.getNoteList);
 
-	    		$scope.notes = $scope.notes.concat(data);
-	    		$scope.start += 10;
+    $scope.canLoadMore = function() {
+      return $scope.canLoad;
+    };
 
-	    		$scope.$broadcast('scroll.infiniteScrollComplete');
-  		});
-  	}
+    $scope.loadMore = function(){
+      self.loadDataList();
+    };
 
-  	$scope.canLoadMore = function() {
-  		return $scope.canLoad;
-  	};
-
-  	$scope.loadMore = function(type){
-  		$scope.loadDataList(type);
-  	};
+     this.loadDataList();
 }
 
 app.controller('MyGroupNoteController', ['$scope', 'NoteService', MyGroupNoteController]);
 
 function MyGroupQuestionController($scope, QuestionService)
 {
-	console.log("MyGroupQuestionController");
-	$scope.threads = [];
-	$scope.canLoad = true;
-	$scope.start = $scope.start || 0;
-	
-  	$scope.loadDataList = function(type) {
-  		QuestionService.getCourseThreads({
-  			limit : 10,
-			start: $scope.start,
-			type : type,
-			token : $scope.token
-  		}, function(data) {
-  			if (!data || data.threads.length == 0 ) {
-	    			$scope.canLoad = false;
-	    		}
+  console.log("MyGroupQuestionController");
+      this.__proto__ = new MyGroupBaseController($scope, QuestionService.getCourseThreads);
+  
+    $scope.canLoadMore = function() {
+      return $scope.canLoad;
+    };
 
-	    		$scope.threads = $scope.threads.concat(data.threads);
-	    		$scope.start += data.limit;
+    $scope.loadMore = function(){
+      self.loadDataList("question");
+    };
 
-	    		$scope.$broadcast('scroll.infiniteScrollComplete');
-  		});
-  	}
+     this.loadDataList("question");
+}
 
-  	$scope.canLoadMore = function() {
-  		return $scope.canLoad;
-  	};
+app.controller('MyGroupThreadController', ['$scope', 'QuestionService', MyGroupThreadController]);
+function MyGroupThreadController($scope, QuestionService)
+{
+  console.log("MyGroupThreadController");
+  this.__proto__ = new MyGroupBaseController($scope, QuestionService.getCourseThreads);
 
-  	$scope.loadMore = function(type){
-  		$scope.loadDataList(type);
-  	};
+    $scope.canLoadMore = function() {
+      return $scope.canLoad;
+    };
+
+    $scope.loadMore = function(){
+      self.loadDataList("discussion");
+    };
+
+   this.loadDataList("discussion");
 }

@@ -1,18 +1,16 @@
 var app = angular.module('EduSohoApp', [
-    	       'ionic',
-    	       'AppService',
+            'ngSanitize',
+            'ui.router',
+             'AppService',
             'AppFactory',
             'AppProvider',
             'ngSideView',
             'pasvaz.bindonce'
-	]);
+  ]);
 
 app.viewFloder = "/bundles/topxiamobilebundlev2/esmobile/";
 
-app.config(['$httpProvider', '$ionicConfigProvider', function($httpProvider, $ionicConfigProvider) {
-
-    $ionicConfigProvider.views.maxCache(1); 
-    $ionicConfigProvider.views.forwardCache(false);
+app.config(['$httpProvider', function($httpProvider) {
 
     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -64,11 +62,11 @@ app.config(['$httpProvider', '$ionicConfigProvider', function($httpProvider, $io
 
 app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
-	$urlRouterProvider.when("/", "/index/found").
-      when("/index", "/index/found").
-	otherwise('/');
+  $urlRouterProvider.when("/", "/index/found/course").
+      when("/index", "/index/found/course").
+  otherwise('/');
 
-	$stateProvider.
+  $stateProvider.
             state("slideView",{
                 abstract: true,
                 views : {
@@ -78,15 +76,15 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                     }
                 }
             }).
-	state("slideView.mainTab",{
-		url : "/index",
-		views : {
-			"menuContent" : {
-				templateUrl : app.viewFloder  + 'view/main_content.html',
-				controller : MainTabController
-			}
-		}
-	}).state('slideView.mainTab.message', {
+  state("slideView.mainTab",{
+    url : "/index",
+    views : {
+      "menuContent" : {
+        templateUrl : app.viewFloder  + 'view/main_content.html',
+        controller : MainTabController
+      }
+    }
+  }).state('slideView.mainTab.message', {
               url: "/message",
               views: {
                 'message-tab': {
@@ -116,19 +114,11 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 'found-course': {
                   templateUrl: app.viewFloder  + "view/found_course.html",
                   controller: FoundCourseController
-                }
-              }
-            }).state('slideView.mainTab.found.live', {
-              url: "/live",
-              views: {
-                'found-live': {
+                },
+                 'found-live': {
                   templateUrl: app.viewFloder  + "view/found_live.html",
                   controller: FoundLiveController
-                }
-              }
-            }).state('slideView.mainTab.found.classroom', {
-              url: "/classroom",
-              views: {
+                },
                 'found-classroom': {
                   templateUrl: app.viewFloder  + "view/found_classroom.html",
                   controller: FoundClassRoomController
@@ -137,7 +127,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             });
 
             $stateProvider.state('courseList', {
-              url: "/courselist",
+              url: "/courselist/:categoryId",
               views: {
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/course_list.html",
@@ -170,25 +160,10 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               }
             }).state('regist', {
               url: "/regist",
-              abstract: true,
               views: {
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/regist.html",
                   controller: RegistController
-                }
-              }
-            }).state('regist.phone', {
-              url: "/phone",
-              views: {
-                'regist-phone': {
-                  templateUrl: app.viewFloder  + "view/regist_phone.html"
-                }
-              }
-            }).state('regist.email', {
-              url: "/email",
-              views: {
-                'regist-email': {
-                  templateUrl: app.viewFloder  + "view/regist_email.html"
                 }
               }
             });
@@ -208,30 +183,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               views: {
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/mylearn.html",
-                }
-              }
-            }).state('mylearn.course', {
-              url: "/course",
-              views: {
-                'mylearn-course': {
-                  templateUrl: app.viewFloder  + "view/mylearn_course.html",
-                  controller : MyLearnCourseController
-                }
-              }
-            }).state('mylearn.live', {
-              url: "/live",
-              views: {
-                'mylearn-live': {
-                  templateUrl: app.viewFloder  + "view/mylearn_live.html",
-                  controller : MyLearnLiveController
-                }
-              }
-            }).state('mylearn.classroom', {
-              url: "/classroom",
-              views: {
-                'mylearn-classroom': {
-                  templateUrl: app.viewFloder  + "view/mylearn_classroom.html",
-                  controller : MyLearnClassRoomController
+                  controller : MyLearnController
                 }
               }
             });
@@ -244,21 +196,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                   controller : MyFavoriteController
                 }
               }
-            }).state('myfavorite.course', {
-              url: "/course",
-              views: {
-                'myfavorite-course': {
-                  templateUrl: app.viewFloder  + "view/myfavorite_course.html",
-                }
-              }
-            }).state('myfavorite.live', {
-              url: "/live",
-              views: {
-                'myfavorite-live': {
-                  templateUrl: app.viewFloder  + "view/myfavorite_live.html",
-                }
-              }
-            });
+            })
 
             $stateProvider.state('mygroup', {
               url: "/mygroup",
@@ -308,6 +246,16 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/question.html",
                   controller : QuestionController
+                }
+              }
+            });
+
+            $stateProvider.state('note', {
+              url: "/note/:noteId/",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/note.html",
+                  controller : NoteController
                 }
               }
             });
@@ -404,52 +352,51 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             $urlRouterProvider.when("/regist", "/regist/phone");
 }]);
 
-app.run(["applicationProvider", "$rootScope", '$ionicConfig', '$ionicLoading', '$timeout',
-  function(applicationProvider, $rootScope, $ionicConfig, $ionicLoading, $timeout) {
-  
+app.run(["applicationProvider", "$rootScope", '$timeout',
+  function(applicationProvider, $rootScope, $timeout) {
   var browser={
-      v: (function(){
-          var u = navigator.userAgent;
-          return {
-              native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
-          };
-      })()
+    v: (function(){
+        var u = navigator.userAgent, app = navigator.appVersion, p = navigator.platform;
+        return {
+            trident: u.indexOf('Trident') > -1, //IE内核
+            presto: u.indexOf('Presto') > -1, //opera内核
+            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+            ios: !!u.match(/i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+            android: u.indexOf('Android') > -1, //android终端
+            iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+            iPad: u.indexOf('iPad') > -1, //是否iPad
+            weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+            webApp: u.indexOf('Safari') == -1, //是否web应用程序，没有头部与底部
+            UCB: u.match(/UCBrowser/i) == "UCBrowser",
+            QQB: u.match(/MQQBrowser/i) == "MQQBrowser",
+            win: p.indexOf('Win') > -1,//判断是否是WIN操作系统
+            mac: p.indexOf('Mac') > -1,//判断是否是Mac操作系统
+            native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
+        };
+    })()
   };
 
-  $ionicConfig.platform.native = browser.v.native;
-
-  if ($ionicConfig.platform.android) {
-    $ionicConfig.setPlatformConfig('android', {
-      views: {
-        transition: 'android',
-        swipeBackEnabled: false
-      },
-      tabs: {
-        style: 'android',
-        position: 'top'
-      }
-    });
-  }
-  
-  $rootScope.platform = $ionicConfig.platform;
+  $rootScope.platform = browser.v;
   $rootScope.showLoad = function(template) {
-    $ionicLoading.show({
-            template: template || '加载中...',
+    $rootScope.loadPop =$.loading({
+        content: "加载中...",
     });
   };
 
   $rootScope.toast = function(template) {
-    $ionicLoading.show({
-            template: template || '加载中...',
+    var el =$.loading({
+        content: template,
     });
 
-    $timeout(function() {
-      $ionicLoading.hide();
-    }, 2000);
+    $timeout(function(){
+        el.loading("hide");
+    },2000);
   };
 
   $rootScope.hideLoad = function() {
-    $ionicLoading.hide();
+    $rootScope.loadPop.loading("hide");
   };
 
   app.host = window.location.origin;

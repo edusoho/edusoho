@@ -1,62 +1,66 @@
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back="go">
-</a>
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">确认订单</h3>
+    </div>
+</div>
 
-<h1 class="title">
-  <span>
-    确认订单
-  </span>
-</h1>
-</ion-header-bar>
-
-<ion-view>
-  <ion-content class="course-paybody">
-  	<div class="list">
-
-	  <a class="item item-divider">
-	    确认个人信息
-	  </a>
-	  <label class="item item-input item-icon-right">
-	    <span class="input-label">姓名</span>
-	    <input type="text" placeholder="姓名" ng-model="data.userProfile.truename">
-	     <i class="icon iconfont icon-chevronright"></i>
-	  </label>
-
-	  <label class="item item-input item-icon-right">
-	    <span class="input-label">手机</span>
-	    <input type="text" placeholder="手机" ng-model="data.userProfile.mobile">
-	     <i class="icon iconfont icon-chevronright"></i>
-	  </label>
-
-	  <a class="item item-divider">
-	    购买课程/直播/班级
-	  </a>
-
-	  <a class="item item-thumbnail-left">
-	      <img ng-src="{{ data.course.middlePicture }}">
-	      <h2>{{ data.course.title }}</h2>
-	      <p class="pay-price">{{ data.course.price | formatPrice }}</p>
-	  </a>
-	  <div class="coupon" ng-if="data.isInstalledCoupon">
-		  <a class="item item-divider">
-		    优惠信息
-		  </a>
-		  <a class="item item-icon-left item-icon-right" href="#/coursecoupon/{{ data.course.id }}">
-		    <i></i>
-		    优惠 
-		    <span class="pay-price">{{ coupon.decreaseAmount }}</span>
-		     <i class="icon iconfont icon-chevronright"></i>
-		  </a>
-	  </div>
-	  <a class="item item-divider">
-	  	<p>
-	  		需支付:<span class="pay-price right">{{ data.course.price - coupon.decreaseAmount | formatPrice }}</span>
-	  	</p>
-	    
-		<button class="button button-full button-yellow" ng-click="pay()">
-		    去支付
-	  	</button>
-	  </a>
+<div class="top-header ui-course-pay">
+	<div class="ui-form ui-border-t">
+	        <div class="ui-form-item ui-border-b ui-list-divider">
+	            确认个人信息
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label>
+	                姓名
+	            </label>
+	            <input type="text" placeholder="姓名" ng-model="data.userProfile.truename">
+	            <a class="ui-icon-close" ng-show="data.userProfile.truename.length > 0" ng-click="data.userProfile.truename = '' ">
+	            </a>
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label>
+	                手机
+	            </label>
+	            <input type="text" placeholder="手机" ng-model="data.userProfile.mobile">
+	            <a class="ui-icon-close" ng-show="data.userProfile.mobile.length > 0" ng-click="data.userProfile.mobile = '' ">
+	            </a>
+	        </div>
 	</div>
-   </ion-content>
-</ion-view>
+
+	<ul class="ui-list ui-list-text ui-border-b ui-paycard">
+		<li class="ui-border-t ui-list-divider">
+			购买课程
+		</li>
+	    	<li class="ui-border-t">
+	        <div class="ui-list-img">
+	            <img ng-src="{{ data.course.middlePicture }}" />
+	        </div>
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap">{{ data.course.title }}</h4>
+	            <p class="pay-price">{{ data.course.price | formatPrice }}</p>
+	        </div>
+	    	</li>
+	</ul>
+
+	<ul class="ui-list ui-list-link ui-list-text ui-border-b" ng-if="data.isInstalledCoupon">
+		<li class="ui-border-t ui-list-divider">
+			优惠信息
+		</li>
+	    	<li class="ui-border-t">
+	        <h4 class="ui-nowrap">
+	            	优惠<span class="pay-price">{{ coupon.decreaseAmount }}</span>
+	        </h4>
+	    	</li>
+	</ul>
+
+	<div class="ui-btn-wrap" style="background: #f0f0f0;">
+		<div class="pay-body">
+	  		需支付:<p class="pay-price">{{ data.course.price - coupon.decreaseAmount | formatPrice }}</p>
+	  	</div>
+	    
+		<button class="ui-btn-lg btn-yellow" ng-click="pay()">
+                去支付
+           </button>
+	</div>
+</div>

@@ -1,34 +1,27 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">课程消息</h3>
+    </div>
+</div>
 
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back="go">
-</a>
-
-<h1 class="title">
-  <span>
-      课程消息
-  </span>
-</h1>
-</ion-header-bar>
-
-<ion-view title="分类">
-  <ion-content>
-
-      <div class="course-notice">
-          <div class="list">
-            
-              <list-empty-view data="courses" title="暂时没有课程消息">
-              </list-empty-view>
-              
-              <a href="#/course/{{ course.id }}" class="item item-avatar" ng-repeat="notice in notices">
-                <span class="notice-icon"></span>
-                <h2>公告</h2>
-                <p ng-bind-html="notice.content"></p>
-              </a>
-
-              <a class="item item-divider item-more" ng-click="loadMore()" ng-if="showLoadMore">
-                查看更早消息...
-              </a>
+<div class="top-header ui-course-notice">
+  <ul class="ui-list">
+      <li class="ui-border-b" ng-repeat="notice in notices">
+          <div class="ui-avatar">
+              <span class="notice-icon">
+                <i class="iconfont icon-gonggao"></i>
+              </span>
           </div>
-      </div>
-  </ion-content>
-</ion-view>
+          <div class="ui-list-info">
+              <h4>公告</h4>
+              <p class="notice-content" ng-bind-html="notice.content"></p>
+          </div>
+      </li>
+  </ul>
+  <list-empty-view data="notices" title="暂时没有课程消息">
+  </list-empty-view>
+  <div class="ui-tips ui-tips-info" ng-click="loadMore()" ng-show="showLoadMore">
+      <p>查看更早消息</p>
+  </div>
+</div>

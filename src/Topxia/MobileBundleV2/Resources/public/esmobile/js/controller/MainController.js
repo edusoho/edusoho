@@ -1,6 +1,6 @@
-app.controller('MainController', ['$scope', '$ionicModal', 'sideDelegate', '$state', MainTabController]);
+app.controller('MainController', ['$scope', 'sideDelegate', '$state', MainTabController]);
 
-function MainTabController($scope, $ionicModal, sideDelegate, $state)
+function MainTabController($scope, sideDelegate, $state)
 {
 	console.log("MainTabController");
 	$scope.toggleView = function(view) {
@@ -22,37 +22,19 @@ app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', '$
 function FoundTabController($scope, CategoryService, AppUtil, $state)
 {
 	$scope.categorySelectedListener  = function(category) {
-		$scope.closeModal();
-		$state.go('courseList');
+		$state.go('courseList' , { categoryId : category.id } );
 	};
 
 	CategoryService.getCategorieTree(function(data) {
 		$scope.categoryTree = data;
-    		$scope.initCategory();
+    		$scope.openModal = function($event) {
+    			var dialog = $(".ui-dialog");
+			dialog.dialog("show");
+			$(".ui-dialog-bg").tap(function(e) {
+				dialog.dialog("hide");
+			});
+		};
 	});
-
-	$scope.initCategory = function() {
-		AppUtil.createModal(
-			$scope,
-			app.viewFloder + "view/category.html"
-		);
-		$scope.openModal = function($event) {
-			if ($scope.modal.isShown) {
-				$scope.modal.show();
-			} else {
-				$scope.modal.hide();
-			}
-			
-			$event.preventDefault();
-		};
-		$scope.closeModal = function() {
-			$scope.modal.hide();
-		};
-
-		$scope.$on('$destroy', function() {
-			$scope.modal.remove();
-		});
-	};
 }
 
 

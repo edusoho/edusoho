@@ -1,52 +1,54 @@
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back="go">
-</a>
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">开通会员</h3>
+    </div>
+</div>
 
-<h1 class="title">
-  <span>
-    开通会员
-  </span>
-</h1>
-</ion-header-bar>
+<div class="top-header ui-vippay ui-course-pay">
+	<div class="ui-form">
+	        <div class="ui-form-item ui-list-divider ui-border-b">
+	             选择开通时长
+	        </div>
+	        <div class="ui-form-item ui-vippay-item ui-border-b">
+	             <ul class="ui-grid-halve">
+					<li>
+						<a ng-click="showPopover($event)">
+							{{ selectedPayMode.title }}
+							<i class="iconfont icon-arrowdropdown"></i>
+						</a>
+						<ul class="ui-list ui-vippay-modal" ng-show="isShowPayMode">
+							<li class="ui-border-b" ng-repeat="payMode in payModes" ng-click="selectPayMode(payMode)">
+								{{ payMode.title }}
+							</li>
+						</ul>
+					</li>
+					<li>
+						    <a class="ui-vippay-btn iconfont icon-personw btn-gray" ng-click="sub()">
+								    	-
+						    </a>
+						    <a class="ui-vippay-btn">
+						     {{ selectedNum }}
+						    </a>
+						    <a class="ui-vippay-btn iconfont icon-personw btn-green" ng-click="add()">
+						    	+
+						    </a>
+					</li>
+				   </ul>
+	        </div>
 
-<ion-view>
-  <ion-content class="vippay-body course-paybody coupon-body">
-  	<div class="list">
-  		<a class="item item-divider">
-		    选择开通时长
-		</a>
-		<div class="item item-padding">
-			<div class="row">
-				<div class="col">
-					<a class="item vip-paymode" ng-click="openPopover($event)">
-						{{ selectedPayMode.title }}
-						<i class="iconfont icon-arrowdropdown"></i>
-					</a>
-				</div>
-				 <div class="col">
-			    		<div class="item tabs">
-					    <a class="tab-item iconfont icon-personw left" ng-click="sub()">
-					    	-
-					    </a>
-					    <a class="tab-item">
-					     {{ selectedNum }}
-					    </a>
-					    <a class="tab-item iconfont icon-personw right" ng-click="add()">
-					    	+
-					    </a>
-					</div>
-			    	</div>
-			</div>
-		</div>
-		<a class="item item-divider coupon-error">
-	  	<p>
-	  		需支付:<span class="pay-price right">{{ totalPayPrice | formatPrice}}</span>
-	  	</p>
-	    
-		<button class="button button-full button-yellow" ng-click="pay()">
-		    去支付
-	  	</button>
-	  </a>
+	        <div class="ui-form-item" style="margin-top : 16px;">
+	             <p>
+		  		需支付:<span class="pay-price">{{ totalPayPrice | formatPrice}}</span>
+		  	  </p>
+	        </div>
+
+	        <div class="ui-form-item">
+	             <div class="ui-btn-wrap">
+		            <button class="ui-btn-lg btn-green" ng-click="registWithPhone(user)">
+		                注 册
+		            </button>
+		        </div>
+	        </div>
 	</div>
-   </ion-content>
-</ion-view>
+</div>

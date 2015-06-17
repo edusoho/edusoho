@@ -1,15 +1,27 @@
-<ion-tabs class="tabs-icon-top tabs-positive" ng-class="platform.native ? 'tabs-hide' : '' ">
-
-<ion-tab title="动态" icon="iconfont icon-gonggao"  href="#/index/message">
-  <ion-nav-view name="message-tab"></ion-nav-view>
-</ion-tab>
-
-<ion-tab title="发现" icon="iconfont icon-faxian"  href="#/index/found">
-  <ion-nav-view name="found-tab"></ion-nav-view>
-</ion-tab>
-
-<ion-tab title="校友" icon="iconfont icon-xiaoyou"  href="#/index/contact">
-  <ion-nav-view name="contact-tab"></ion-nav-view>
-</ion-tab>
-
-</ion-tabs>
+<div class="ui-tab tab-bottom" ui-tab>
+    <ul class="ui-tab-nav ui-border-b">
+        <li>
+            <i class="icon iconfont icon-gonggao"></i>
+            <span class="label">动态</span>
+        </li>
+        <li>
+            <i class="icon iconfont icon-faxian"></i>
+            <span class="label">发现</span>
+        </li>
+        <li>
+            <i class="icon iconfont icon-xiaoyou"></i>
+            <span class="label">校友</span>
+        </li>
+    </ul>
+    <ul class="ui-tab-content tab-display">
+        <li>
+        	<div ui-view="found-tab"></div>
+        </li>
+        <li>
+            vvv
+        </li>
+        <li>
+            ccc
+        </li>
+    </ul>
+</div>

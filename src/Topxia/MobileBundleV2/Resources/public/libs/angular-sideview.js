@@ -114,6 +114,7 @@
 			};
 			var bodyClickFn = function(evt) {
 				if( !hasParentClass( evt.target, 'st-menu' ) ) {
+					evt.preventDefault();
 					resetMenu();
 					self.container.removeEventListener( self.eventtype, bodyClickFn );
 				}

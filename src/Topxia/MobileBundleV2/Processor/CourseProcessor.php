@@ -8,10 +8,10 @@ interface CourseProcessor
 	public function getLearningCourse();
 	public function getLearningCourseWithoutToken();
 	public function getLearnedCourse();
-	public function getFavoriteCoruse();
+	public function getFavoriteCourse();
 
-	public function getFavoriteLiveCoruse();
-	public function getFavoriteNormalCoruse();
+	public function getFavoriteLiveCourse();
+	public function getFavoriteNormalCourse();
 
 	/**
 	* tagId    	标签id 

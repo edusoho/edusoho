@@ -56,6 +56,10 @@ service('OrderService', ['httpService', function(httpService) {
 }]).
 service('NoteService', ['httpService', function(httpService) {
 
+	this.getNote = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getOneNote", arguments);
+	}
+
 	this.getNoteList = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/Course/getNoteList',
@@ -280,7 +284,7 @@ service('CourseService', ['httpService', function(httpService) {
 		});
 	}
 
-	this.getFavoriteCoruse = function(url, params, callback) {
+	this.getFavoriteCourse = function(url, params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/' + url,
 			params : params,
@@ -351,6 +355,14 @@ service('CourseService', ['httpService', function(httpService) {
 }]).
 service('SchoolService', ['httpService', function(httpService) {
 
+	this.getLiveLatestCourses = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/School/getLatestCourses", arguments);
+	}
+
+	this.getLatestCourses = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/School/getLatestCourses", arguments);
+	}
+
 	this.getVipPayInfo = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/School/getVipPayInfo", arguments);
 	}
@@ -386,14 +398,13 @@ service('SchoolService', ['httpService', function(httpService) {
 	}
 }]).
 service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
-	this.options = {};
-
+	
 	this.simpleGet = function(url) {
 		params  = arguments[1][0];
 		callback = arguments[1][1];
 		errorCallback = arguments[1][2];
 
-		options = {
+		var options = {
 			method : "get",
 			url : app.host + url,
 			params : params,
@@ -403,10 +414,10 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 			error : function(data) {
 				if (errorCallback) {
 					errorCallback(data);
-				}
+				} 
 			}
 		};
-
+		
 		$http(options).success(options.success).error(options.error);
 	}
 
