@@ -2,6 +2,7 @@
  * Created by liumengte on 15-6-15.
  */
 define(function (require, exports, module) {
+
     var BaseAutoComplete = require('autocomplete');
 
     var AutoComplete = BaseAutoComplete.extend({

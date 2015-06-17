@@ -24,7 +24,6 @@ define(function(require, exports, module) {
             },
             selectFirst: true
         }).render();
-
         autocomplete.on('itemSelect', function(data){
             var error = '';
             dynamicCollection.element.find('input[name="ids[]"]').each(function(i, item) {
@@ -49,7 +48,6 @@ define(function(require, exports, module) {
         $(".teacher-list-group").sortable({
             'distance':20
         });
-
 
     };
 
