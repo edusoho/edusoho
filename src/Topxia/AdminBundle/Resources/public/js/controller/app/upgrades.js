@@ -6,7 +6,8 @@ define(function(require, exports, module) {
             .popover({
                 html: true,
                 placement: 'bottom',
-                trigger: 'hover'
+                trigger: 'focus',
+                toggle: "popover"
             })
             .click(function(e) {
                 e.preventDefault()
