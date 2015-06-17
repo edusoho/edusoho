@@ -44,6 +44,11 @@
                <a class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}"
                 href="{{path('material_lib_browsing') }}">教学资料库</a>
                {% endif %}
+
+               {% if is_plugin_installed('LiveReservation') %}
+                  <a class="list-group-item {% if side_nav == 'my-reservation-manage' %} active {% endif %}"
+                href="{{path('reservation_manage') }}">辅导预约</a>
+               {% endif %}
               </ul>
             </div>
           {% endif %}
