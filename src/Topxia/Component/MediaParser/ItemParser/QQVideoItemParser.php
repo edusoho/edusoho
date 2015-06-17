@@ -37,7 +37,7 @@ class QQVideoItemParser extends AbstractItemParser
         }
 
         $video = json_decode($matches[0], true) ? : array();
-        if (empty($video) or empty($video['video'])) {
+        if (empty($video) || empty($video['video'])) {
             throw $this->createParseException('解析QQ视频信息失败！');
         }
         $video = $video['video'];

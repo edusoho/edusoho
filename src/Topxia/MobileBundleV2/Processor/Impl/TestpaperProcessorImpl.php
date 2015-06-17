@@ -183,7 +183,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		$id = $this->getParam("id");
 		$testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
-	        	if (!empty($testpaperResult) and !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+	        	if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
 	            	return true;
 	        	}
 
@@ -224,7 +224,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	            // @todo refactor. , wellming
 	            $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
-	            if ($targets[$testpaperResult['target']]['type'] == 'lesson' and !empty($targets[$testpaperResult['target']]['id'])) {
+	            if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
 	                $lessons = $this->controller->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
 	                if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
 	                    $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
@@ -335,7 +335,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	            $course = $this->controller->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
 	        }
 
-	        if (empty($course) and $testpaperResult['userId'] != $user['id']){
+	        if (empty($course) && $testpaperResult['userId'] != $user['id']){
 	                        return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
 	        }
 

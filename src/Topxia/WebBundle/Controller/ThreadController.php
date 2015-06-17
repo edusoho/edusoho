@@ -295,7 +295,7 @@ class ThreadController extends BaseController
         }
 
         $post = $this->getThreadService()->getPost($postId);
-        if ($post and $post['parentId']) {
+        if ($post && $post['parentId']) {
             $post = $this->getThreadService()->getPost($post['parentId']);
         }
 

@@ -11,7 +11,7 @@ class TagsToIdsTransformer implements DataTransformerInterface
 {
     public function transform($tagIds)
     {
-        if (empty($tagIds) or !is_array($tagIds)) {
+        if (empty($tagIds) || !is_array($tagIds)) {
             return '';
         }
 
