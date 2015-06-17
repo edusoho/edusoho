@@ -84,6 +84,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
+        if(isset($conditions['nickname'])){
+            $conditions['nickname'] = strtoupper($conditions['nickname']);
+        }
         $users = $this->getUserDao()->searchUsers($conditions, $orderBy, $start, $limit);
         return UserSerialize::unserializes($users);
     }

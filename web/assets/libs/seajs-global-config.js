@@ -55,8 +55,9 @@ seajs.config({
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
 		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
 		'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
-		'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js'
-	},
+		'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
+        'edusoho.autocomplete' : 'edusoho/autocomplete/1.0.0/autocomplete.js'
+    },
 
 	// 预加载项
 	preload: [this.JSON ? '' : 'json'],
