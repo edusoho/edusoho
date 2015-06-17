@@ -76,7 +76,7 @@ class CourseController extends BaseController
         ));
     }
 
-    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
+    protected function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
     {
         $key = $request->request->get("key");
 
@@ -337,12 +337,12 @@ class CourseController extends BaseController
         ));
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function renderCourseTr($courseId,$request)
+    protected function renderCourseTr($courseId,$request)
     {
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
@@ -357,22 +357,22 @@ class CourseController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCourseCopyService()
+    protected function getCourseCopyService()
     {
         return $this->getServiceKernel()->createService('Course.CourseCopyService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
@@ -382,7 +382,7 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getClassroomService()
+    protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }

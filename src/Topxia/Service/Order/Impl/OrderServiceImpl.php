@@ -175,7 +175,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
     }
 
-    private function generateOrderSn($order)
+    protected function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
         return  $prefix . date('YmdHis', time()) . mt_rand(10000,99999);
@@ -190,7 +190,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->_createLog($orderId, $type, $message, $data);
     }
 
-    private function _createLog($orderId, $type, $message = '', array $data = array())
+    protected function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();
 
@@ -492,7 +492,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->searchOrderCount($conditions);
     }
 
-    private function _prepareSearchConditions($conditions)
+    protected function _prepareSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
         
@@ -570,42 +570,42 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getOrderRefundDao()
+    protected function getOrderRefundDao()
     {
         return $this->createDao('Order.OrderRefundDao');
     }
 
-    private function getOrderDao()
+    protected function getOrderDao()
     {
         return $this->createDao('Order.OrderDao');
     }
 
-    private function getOrderLogDao()
+    protected function getOrderLogDao()
     {
         return $this->createDao('Order.OrderLogDao');
     }
 
-    private function getCouponService()
+    protected function getCouponService()
     {
         return $this->createService('Coupon:Coupon.CouponService');
     }
 
-    private function getPayCenterService()
+    protected function getPayCenterService()
     {
         return $this->createService('PayCenter.PayCenterService');
     }

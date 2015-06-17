@@ -80,7 +80,7 @@ class CashFlowDaoImpl extends BaseDao implements CashFlowDao
         return $this->getConnection()->fetchColumn($sql,$type ? array($type,$createdTime) : array($createdTime)) ? : 0 ;
     }
 
-    private function createFlowQueryBuilder($conditions)
+    protected function createFlowQueryBuilder($conditions)
     {
 
         $conditions = array_filter($conditions);

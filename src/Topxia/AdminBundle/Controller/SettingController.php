@@ -247,7 +247,7 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function setCloudSmsKey($key, $val)
+    protected function setCloudSmsKey($key, $val)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
@@ -323,7 +323,7 @@ class SettingController extends BaseController
         ));
     }
 
-    private function getDefaultSet()
+    protected function getDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -590,7 +590,7 @@ class SettingController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

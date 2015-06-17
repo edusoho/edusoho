@@ -91,7 +91,7 @@ class ContentController extends BaseController
         ));
     }
 
-    private function getContentByAlias($type, $alias)
+    protected function getContentByAlias($type, $alias)
     {
         if (ctype_digit($alias)) {
             $content = $this->getContentService()->getContent($alias);
@@ -106,12 +106,12 @@ class ContentController extends BaseController
         return $content;
     }
 
-    private function getContentService()
+    protected function getContentService()
     {
         return $this->getServiceKernel()->createService('Content.ContentService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

@@ -40,7 +40,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->findThreadsByTargetAndPostNum($target, 0, $start, $limit);
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
             case 'created':
@@ -78,7 +78,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $orderBys;
     }
 
-    private function prepareThreadSearchConditions($conditions)
+    protected function prepareThreadSearchConditions($conditions)
     {
         if (empty($conditions['type'])) {
             unset($conditions['type']);
@@ -437,7 +437,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $post;
     }
 
-    private function getPostNotifyData($post, $thread, $user)
+    protected function getPostNotifyData($post, $thread, $user)
     {
         return array(
             'id' => $post['id'],
@@ -661,7 +661,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadMemberDao()->getMemberByThreadIdAndUserId($threadId, $userId);
     }
 
-    private function getTargetFirewall($resource)
+    protected function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) || empty($resource['targetId'])) {
             throw new \InvalidArgumentException("Resource  targetType or targetId argument missing."); 
@@ -672,37 +672,37 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return new $class();
     }
 
-    private function getThreadDao()
+    protected function getThreadDao()
     {
         return $this->createDao('Thread.ThreadDao');
     }
 
-    private function getThreadPostDao()
+    protected function getThreadPostDao()
     {
         return $this->createDao('Thread.ThreadPostDao');
     }
 
-    private function getThreadVoteDao()
+    protected function getThreadVoteDao()
     {
         return $this->createDao('Thread.ThreadVoteDao');
     }
 
-    private function getThreadMemberDao()
+    protected function getThreadMemberDao()
     {
         return $this->createDao('Thread.ThreadMemberDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->createService('User.NotificationService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

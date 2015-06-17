@@ -74,7 +74,7 @@ class AppPackageUpdateController extends BaseController
         return $this->createResponseWithErrors($errors);
     }
 
-    private function createResponseWithErrors($errors)
+    protected function createResponseWithErrors($errors)
     {
         if (empty($errors)) {
             return $this->createJsonResponse(array('status' => 'ok'));

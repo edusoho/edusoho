@@ -179,7 +179,7 @@ class CourseOrderController extends OrderController
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
     }
 
-    private function getOrderInfo($id)
+    protected function getOrderInfo($id)
     {
         $course = $this->getCourseService()->getCourse($id);
         $userIds = array();
@@ -244,7 +244,7 @@ class CourseOrderController extends OrderController
         );
     }
 
-    private function getEnabledPayments()
+    protected function getEnabledPayments()
     {
         $enableds = array();
 
@@ -266,7 +266,7 @@ class CourseOrderController extends OrderController
         return $enableds;
     }
 
-    private function getRemainStudentNum($course)
+    protected function getRemainStudentNum($course)
     {
         $remainingStudentNum = $course['maxStudentNum'];
 
@@ -287,7 +287,7 @@ class CourseOrderController extends OrderController
         return $remainingStudentNum;
     }
 
-    private function previewAsMember($as, $member, $course)
+    protected function previewAsMember($as, $member, $course)
     {
         $user = $this->getCurrentUser();
         if (empty($user->id)) {

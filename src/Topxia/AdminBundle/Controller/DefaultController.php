@@ -396,12 +396,12 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }

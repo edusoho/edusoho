@@ -59,7 +59,7 @@ class OrderRefundController extends BaseController
         ));
     }
 
-    private function prepareRefundSearchConditions($conditions)
+    protected function prepareRefundSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
 

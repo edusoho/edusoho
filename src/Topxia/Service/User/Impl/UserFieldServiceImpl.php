@@ -74,7 +74,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
   
     }
 
-    private function checkType($type)
+    protected function checkType($type)
     {   
         $fieldName="";
         if($type=="text"){

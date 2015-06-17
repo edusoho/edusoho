@@ -48,7 +48,7 @@ class AuthController extends BaseController
         ));
     }
 
-    private function getAuthService()
+    protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }

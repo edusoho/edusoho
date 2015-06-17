@@ -47,12 +47,12 @@ class BbCode extends BaseService
 		return $this->$method($file);
 	}
 
-	private function getImage ($file)
+	protected function getImage ($file)
 	{
 		return '[image]'.$file['hashId'].'[/image]';
 	}
 
-	private function getUploadFileService()
+	protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
     }

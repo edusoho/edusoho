@@ -99,7 +99,7 @@ class TagServiceImpl extends BaseService implements TagService
         $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
-    private function filterTagFields(&$tag, $relatedTag = null)
+    protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
             throw $this->createServiceException('标签名不能为空，添加失败！');
@@ -115,12 +115,12 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag;
     }
 
-	private function getTagDao()
+	protected function getTagDao()
 	{
         return $this->createDao('Taxonomy.TagDao');
 	}
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

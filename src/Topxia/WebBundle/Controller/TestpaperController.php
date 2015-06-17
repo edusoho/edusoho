@@ -420,7 +420,7 @@ class TestpaperController extends BaseController
     }
 
 
-    private function makeTestpaperTotal ($testpaper, $items)
+    protected function makeTestpaperTotal ($testpaper, $items)
     {
         $total = array();
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
@@ -621,17 +621,17 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getCourseService ()
+    protected function getCourseService ()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -641,7 +641,7 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

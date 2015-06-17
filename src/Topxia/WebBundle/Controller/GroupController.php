@@ -442,7 +442,7 @@ class GroupController extends BaseController
         ));
     }
 
-    private function checkManagePermission($id)
+    protected function checkManagePermission($id)
     {   
         $user=$this->getCurrentUser();
 
@@ -452,7 +452,7 @@ class GroupController extends BaseController
         return false;
     }
 
-    private function checkOwnerPermission($id)
+    protected function checkOwnerPermission($id)
     {   
         $user=$this->getCurrentUser();
 
@@ -609,7 +609,7 @@ class GroupController extends BaseController
 
     }
 
-    private function setLogo($request,$user)
+    protected function setLogo($request,$user)
     {
         $data = $request->files->get('form');
         $file = $data['avatar'];
@@ -704,7 +704,7 @@ class GroupController extends BaseController
         );       
     }
 
-    private function getGroupMemberRole($userId)
+    protected function getGroupMemberRole($userId)
     {
         $user = $this->getCurrentUser();
 
@@ -769,7 +769,7 @@ class GroupController extends BaseController
         )));
     }
    
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
@@ -777,17 +777,17 @@ class GroupController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-    private function getGroupService() 
+    protected function getGroupService() 
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
@@ -826,7 +826,7 @@ class GroupController extends BaseController
         }
         return $orderBys;
     }
-    private function getThreadSearchFilters($request)
+    protected function getThreadSearchFilters($request)
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
@@ -856,7 +856,7 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
     
-    private function convertFiltersToConditions($id, $filters)
+    protected function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('groupId' => $id,'num'=>10,'status'=>'open');
         switch ($filters['type']) {

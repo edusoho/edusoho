@@ -202,7 +202,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         return $this->createService('System.SettingService');
     }
 
-    private function makeSn()
+    protected function makeSn()
     {
         return date('YmdHis') . rand(10000, 99999);
     }

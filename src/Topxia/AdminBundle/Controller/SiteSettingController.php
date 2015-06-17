@@ -134,7 +134,7 @@ class SiteSettingController extends BaseController
         ));
     }
 
-    private function getDefaultSet()
+    protected function getDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -153,7 +153,7 @@ class SiteSettingController extends BaseController
         return $default;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

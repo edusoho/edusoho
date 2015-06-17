@@ -247,7 +247,7 @@ class TagServiceTest extends BaseTestCase
         $this->assertEquals(0, $this->getTagService()->deleteTag(999));
     }
 
-	private function getTagService()
+	protected function getTagService()
 	{
 		return $this->getServiceKernel()->createService('Taxonomy.TagService');
 	}

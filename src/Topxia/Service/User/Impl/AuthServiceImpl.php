@@ -34,7 +34,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $newUser;
     }
 
-    private function refillFormData($registration){
+    protected function refillFormData($registration){
         $registration = $this->getUserService()->parseEmailOrMobile($registration);
         if(!isset($registration['nickname']) || empty($registration['nickname'])){
             $registration['nickname'] = $this->getUserService()->generateNickname($registration);
@@ -257,7 +257,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         return true;
     }
 
-    private function getAuthProvider()
+    protected function getAuthProvider()
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
@@ -278,7 +278,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->partner;
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }

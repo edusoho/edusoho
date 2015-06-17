@@ -226,7 +226,7 @@ class PayCenterController extends BaseController
         return $this->render('TopxiaWebBundle:PayCenter:resultNotice.html.twig');
     }
 
-    private function createPaymentRequest($order, $requestParams)
+    protected function createPaymentRequest($order, $requestParams)
     {   
         $options = $this->getPaymentOptions($order['payment']);
         $request = Payment::createRequest($order['payment'], $options);
@@ -241,7 +241,7 @@ class PayCenterController extends BaseController
     }
 
 
-    private function getPaymentOptions($payment)
+    protected function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
 
@@ -270,7 +270,7 @@ class PayCenterController extends BaseController
         return $options;
     }
 
-    private function createPaymentResponse($name, $params)
+    protected function createPaymentResponse($name, $params)
     {
         $options = $this->getPaymentOptions($name);
         $response = Payment::createResponse($name, $options);
@@ -278,7 +278,7 @@ class PayCenterController extends BaseController
         return $response->setParams($params);
     }
 
-	private function getEnabledPayments()
+	protected function getEnabledPayments()
     {
         $enableds = array();
 

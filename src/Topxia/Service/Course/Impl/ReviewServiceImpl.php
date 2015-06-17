@@ -53,7 +53,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		return $this->getReviewDao()->searchReviewsCount($conditions);
 	}
 
-	private function prepareReviewSearchConditions($conditions)
+	protected function prepareReviewSearchConditions($conditions)
 	{
 		$conditions = array_filter($conditions, function($value){
 			if (ctype_digit((string)$value)) {
@@ -124,7 +124,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		$this->getLogService()->info('review', 'delete', "删除评价#{$id}");
 	}
 
-	private function calculateCourseRating($courseId)
+	protected function calculateCourseRating($courseId)
 	{
 		$ratingSum = $this->getReviewDao()->getReviewRatingSumByCourseId($courseId);
 		$ratingNum = $this->getReviewDao()->getReviewCountByCourseId($courseId);
@@ -136,7 +136,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 	}
 
 
-	private function isCurrentUser($userId){
+	protected function isCurrentUser($userId){
 		$user = $this->getCurrentUser();
 		if($userId==$user->id){
 			return true;
@@ -145,22 +145,22 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 	}
 
 
-	private function getReviewDao()
+	protected function getReviewDao()
     {
     	return $this->createDao('Course.ReviewDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
     	return $this->createService('User.UserService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
     	return $this->createService('Course.CourseService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
     	return $this->createService('System.LogService');
     }

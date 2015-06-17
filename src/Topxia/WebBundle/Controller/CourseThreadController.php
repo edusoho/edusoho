@@ -205,7 +205,7 @@ class CourseThreadController extends CourseBaseController
 
     }
 
-    private function createThreadForm($data = array())
+    protected function createThreadForm($data = array())
     {
         return $this->createNamedFormBuilder('thread', $data)
             ->add('title', 'text')
@@ -388,7 +388,7 @@ class CourseThreadController extends CourseBaseController
         ));
     }
 
-    private function replaceMention($postData)
+    protected function replaceMention($postData)
     {   
         $currentUser = $this->getCurrentUser();
         $content=$postData['content'];
@@ -546,7 +546,7 @@ class CourseThreadController extends CourseBaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
-    private function createPostForm($data = array())
+    protected function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)
             ->add('content', 'textarea')

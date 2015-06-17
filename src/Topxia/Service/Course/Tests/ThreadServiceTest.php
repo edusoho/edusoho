@@ -326,12 +326,12 @@ class ThreadServiceTest extends BaseTestCase
 		$this->assertEquals(0, $thread['postNum']);
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
     
-    private function getThreadService()
+    protected function getThreadService()
     {
     	return $this->getServiceKernel()->createService('Course.ThreadService');
     }

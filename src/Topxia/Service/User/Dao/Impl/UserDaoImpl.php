@@ -77,7 +77,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createUserQueryBuilder($conditions)
+    protected function createUserQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions,function($v){
             if($v === 0){

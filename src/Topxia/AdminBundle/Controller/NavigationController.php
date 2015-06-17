@@ -83,7 +83,7 @@ class NavigationController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function renderTbody($type)
+    protected function renderTbody($type)
     {
         $footNavigations = $this->getNavigationService()->findNavigationsByType($type, 0 ,20);
         return $this->render('TopxiaAdminBundle:Navigation:tbody.html.twig', array(

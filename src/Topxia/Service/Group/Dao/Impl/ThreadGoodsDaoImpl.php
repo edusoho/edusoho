@@ -87,7 +87,7 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
         return $builder->execute()->fetchAll() ? : array();  
     }
 
-    private function createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)

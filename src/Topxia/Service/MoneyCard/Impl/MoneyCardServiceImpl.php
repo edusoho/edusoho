@@ -198,7 +198,7 @@ class MoneyCardServiceImpl extends BaseService
         $this->getLogService()->info('money_card_batch', 'delete', "删除了批次为{$id}的充值卡");
     }
 
-    private function makeRands ($median, $number, $cardPrefix, $passwordLength)
+    protected function makeRands ($median, $number, $cardPrefix, $passwordLength)
     {
         if ($median <= 3){
             throw new \RuntimeException('Bad median');
@@ -253,7 +253,7 @@ class MoneyCardServiceImpl extends BaseService
     }
 
     private $tmpPasswords = array();
-    private function makePassword ($length)
+    protected function makePassword ($length)
     {
         while (true){
 
@@ -290,12 +290,12 @@ class MoneyCardServiceImpl extends BaseService
         return $this->getMoneyCardDao()->updateMoneyCard($id, $fields);
     }
 
-    private function getMoneyCardDao()
+    protected function getMoneyCardDao()
     {
         return $this->createDao('MoneyCard.MoneyCardDao');
     }
 
-    private function getMoneyCardBatchDao()
+    protected function getMoneyCardBatchDao()
     {
         return $this->createDao('MoneyCard.MoneyCardBatchDao');
     }

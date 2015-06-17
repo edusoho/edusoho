@@ -230,7 +230,7 @@ class CourseController extends CourseBaseController
 
 	}
 
-	private function calculateUserLearnProgress($course, $member)
+	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
 			return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -628,7 +628,7 @@ class CourseController extends CourseBaseController
 		));
 	}
 
-	private function getClassroomCourseIds($request,$courseIds)
+	protected function getClassroomCourseIds($request,$courseIds)
 	{	
 		$unEnabledCourseIds=array();
 		if($request->query->get('type') !="classroom"){

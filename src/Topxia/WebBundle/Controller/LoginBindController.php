@@ -148,7 +148,7 @@ class LoginBindController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function generateUser($type, $token, $oauthUser,$setData)
+    protected function generateUser($type, $token, $oauthUser,$setData)
     {
         $registration = array();
 
@@ -223,7 +223,7 @@ class LoginBindController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function createOAuthClient($type)
+    protected function createOAuthClient($type)
     {
         $settings = $this->setting('login_bind');        
 
@@ -245,7 +245,7 @@ class LoginBindController extends BaseController
         return $client;
     }
 
-    private function getAuthService()
+    protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }

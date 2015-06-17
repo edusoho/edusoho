@@ -155,7 +155,7 @@ class RegisterController extends BaseController
             ));
     }
 
-    private function isMobileRegister($registration){
+    protected function isMobileRegister($registration){
         if(isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])){
              if( SimpleValidator::mobile($registration['emailOrMobile'])){
                 return true;
@@ -164,7 +164,7 @@ class RegisterController extends BaseController
         return false;
     }
 
-     private function isEmptyVeryfyMobile($user){
+     protected function isEmptyVeryfyMobile($user){
         if(isset($user['verifiedMobile']) && !empty($user['verifiedMobile'])){
               return false;
         }
@@ -172,7 +172,7 @@ class RegisterController extends BaseController
     }
     
 
-    private function protectiveRule($type,$ip)
+    protected function protectiveRule($type,$ip)
     {
         switch ($type) {
             case 'middle':
@@ -265,7 +265,7 @@ class RegisterController extends BaseController
            }
     }
 
-    private function getTargetPath($request)
+    protected function getTargetPath($request)
     {
         if ($request->query->get('goto')) {
             $targetPath = $request->query->get('goto');
@@ -324,13 +324,13 @@ class RegisterController extends BaseController
         ));
     }
 
-    private function makeHash($user)
+    protected function makeHash($user)
     {
         $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
         return md5($string);
     }
 
-    private function checkHash($userId, $hash)
+    protected function checkHash($userId, $hash)
     {
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
@@ -366,7 +366,7 @@ class RegisterController extends BaseController
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
         return $this->validateResult($result, $message);
     }
-    private function validateResult($result, $message){
+    protected function validateResult($result, $message){
         if ($result == 'success') {
            $response = array('success' => true, 'message' => '');
         } else {
@@ -465,7 +465,7 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    private function  sendRegisterMessage($user)
+    protected function  sendRegisterMessage($user)
     {
         $senderUser = array();
         $auth = $this->getSettingService()->get('auth', array());
@@ -502,7 +502,7 @@ class RegisterController extends BaseController
 
     }
 
-    private function getWelcomeBody($user)
+    protected function getWelcomeBody($user)
     {
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
@@ -513,7 +513,7 @@ class RegisterController extends BaseController
         return $welcomeBody;
     }
 
-    private function sendVerifyEmail($token, $user)
+    protected function sendVerifyEmail($token, $user)
     {
         $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
@@ -533,14 +533,14 @@ class RegisterController extends BaseController
         }
     }
 
-    private function getWebExtension()
+    protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }
 
 
     //validate captcha
-    private function captchaEnabledValidator($authSettings,$registration,$request){
+    protected function captchaEnabledValidator($authSettings,$registration,$request){
          if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
             $captchaCodePostedByUser = strtolower($registration['captcha_num']);
             $captchaCode = $request->getSession()->get('captcha_code');                   
@@ -558,7 +558,7 @@ class RegisterController extends BaseController
         }
     }
 
-    private function smsCodeValidator($authSettings,$registration,$request){
+    protected function smsCodeValidator($authSettings,$registration,$request){
         if ( isset($authSettings['registerSort'])
             &&in_array('mobile', $authSettings['registerSort'])
             &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
@@ -567,7 +567,7 @@ class RegisterController extends BaseController
         }
     }
 
-    private function registerLimitValidator($registration, $authSettings, $request){
+    protected function registerLimitValidator($registration, $authSettings, $request){
         $registration['createdIp'] = $request->getClientIp();
 
         if(isset($authSettings['register_protective'])){

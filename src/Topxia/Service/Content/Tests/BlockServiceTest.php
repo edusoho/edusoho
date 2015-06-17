@@ -409,17 +409,17 @@ class BlockServiceTest extends BaseTestCase
         $contents = $this->getBlockService()->getContentsByCodes(array());
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getBlockService()
+    protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');
     }

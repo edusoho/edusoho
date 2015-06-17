@@ -48,7 +48,7 @@ class OptimizeController extends BaseController
         return $this->createJsonResponse(true);       
     }
 
-    private function isDisabledUpgrade()
+    protected function isDisabledUpgrade()
     {
         if (!$this->container->hasParameter('disabled_features')) {
             return false;
@@ -62,7 +62,7 @@ class OptimizeController extends BaseController
         return in_array('upgrade', $disableds);
     }
 
-    private function getSystemUtilService()
+    protected function getSystemUtilService()
     {
         return $this->getServiceKernel()->createService('Util.SystemUtilService');
     }

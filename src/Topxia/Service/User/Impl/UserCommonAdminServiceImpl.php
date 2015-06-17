@@ -72,7 +72,7 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
         }
     }
 
-    private function getCommonAdminDao() 
+    protected function getCommonAdminDao() 
     {
         return $this->createDao('User.UserCommonAdminDao');
     }

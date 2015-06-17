@@ -110,7 +110,7 @@ class AppController extends BaseController
         ));
     }
 
-    private function isLocalAddress($address)
+    protected function isLocalAddress($address)
     {
         if (in_array($address, array('localhost', '127.0.0.1'))) {
             return true;

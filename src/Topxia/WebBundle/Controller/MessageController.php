@@ -216,7 +216,7 @@ class MessageController extends BaseController
         return new JsonResponse($data);
     }
 
-    private function getWebExtension()
+    protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }

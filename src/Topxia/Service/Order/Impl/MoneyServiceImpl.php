@@ -29,7 +29,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
         return ArrayToolkit::index($moneyRecords, 'id');
     }
 
-    private function getMoneyRecordsDao()
+    protected function getMoneyRecordsDao()
     {
         return $this->createDao('Order.MoneyRecordsDao');
     }

@@ -468,7 +468,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getCourseService()->sortCourseItems($course['id'], $itemIds);
     }
 
-    private function createCourseItems($course)
+    protected function createCourseItems($course)
     {
         $chapter = $this->getCourseService()->createChapter(array(
             'courseId' => $course['id'],
@@ -510,12 +510,12 @@ class CourseServiceTest extends BaseTestCase
     }
 
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

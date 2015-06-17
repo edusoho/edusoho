@@ -241,7 +241,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     }
 
-    private function subTxt($string,$length = 10)
+    protected function subTxt($string,$length = 10)
     {
         $string=explode(".", $string);
       
@@ -256,7 +256,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $text.".".$string[count($string)-1];
     }
 
-    private function pureString($string){
+    protected function pureString($string){
         $text = $string[0];
         $text = strip_tags($text);
  
@@ -423,7 +423,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadTradeDao()->getTrade($id);
     }
 
-    private function waveThread($id,$field, $diff)
+    protected function waveThread($id,$field, $diff)
     {
         return $this->getThreadDao()->waveThread($id, $field, $diff);
 
@@ -434,21 +434,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadTradeDao()->getTradeByUserIdAndThreadId($userId,$threadId);
     }
 
-    private function getThreadTradeDao()
+    protected function getThreadTradeDao()
     {
         return $this->createDao('Group.ThreadTradeDao');
     }
 
-    private function getThreadGoodsDao()
+    protected function getThreadGoodsDao()
     {
         return $this->createDao('Group.ThreadGoodsDao');
     }
 
-    private function getThreadDao()
+    protected function getThreadDao()
     {
         return $this->createDao('Group.ThreadDao');
     }
-    private function getGroupService()
+    protected function getGroupService()
     {
         return $this->createService('Group.GroupService');
     }
@@ -457,11 +457,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createService('Content.FileService');
     }
-    private function getThreadPostDao()
+    protected function getThreadPostDao()
     {
         return $this->createDao('Group.ThreadPostDao');
     }
-    private function getThreadCollectDao()
+    protected function getThreadCollectDao()
     {
         return $this->createDao('Group.ThreadCollectDao');
     }

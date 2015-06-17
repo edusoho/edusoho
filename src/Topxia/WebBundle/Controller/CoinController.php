@@ -212,7 +212,7 @@ class CoinController extends BaseController
             ));
     }
 
-    private function caculate($amount,$canChange,$data)
+    protected function caculate($amount,$canChange,$data)
     {
         $coinSetting= $this->getSettingService()->get('coin',array());
 
@@ -307,7 +307,7 @@ class CoinController extends BaseController
     }
 
 
-    private function createPaymentRequest($order, $requestParams)
+    protected function createPaymentRequest($order, $requestParams)
     {
         $options = $this->getPaymentOptions($order['payment']);
         $request = Payment::createRequest($order['payment'], $options);
@@ -363,7 +363,7 @@ class CoinController extends BaseController
         }
     }
 
-    private function createPaymentResponse($name, $params)
+    protected function createPaymentResponse($name, $params)
     {
         $options = $this->getPaymentOptions($name);
         $response = Payment::createResponse($name, $options);
@@ -371,7 +371,7 @@ class CoinController extends BaseController
         return $response->setParams($params);
     }
 
-    private function getPaymentOptions($payment)
+    protected function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
 
@@ -400,7 +400,7 @@ class CoinController extends BaseController
         return $options;
     }
 
-    private function getEnabledPayments()
+    protected function getEnabledPayments()
     {
         $enableds = array();
 

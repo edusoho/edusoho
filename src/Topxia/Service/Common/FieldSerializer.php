@@ -48,7 +48,7 @@ class FieldSerializer
         return $fieldsList;
     }
 
-    private function getSerializeAlgorithm($algorithm)
+    protected function getSerializeAlgorithm($algorithm)
     {
         if (!isset($this->cachedAlgorithm[$algorithm])) {
             $class = __NAMESPACE__ . '\\' . ucfirst($algorithm) . 'SerializeAlgorithm';
