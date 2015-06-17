@@ -5,23 +5,25 @@
         <a href="javascript:;" class="navbar-more js-navbar-more">
           <i class="es-icon es-icon-menu"></i>
         </a>
-        <div class="nav-mobile">
-          <form class="navbar-form">
-            <div class="form-group">
-              <input class="form-control" placeholder="搜索" name="q">
-              <button class="button es-icon es-icon-search"></button>
-            </div>
-          </form>
-          <ul class="nav navbar-nav">
-            {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true})) }}
-          </ul>
+        <div class="html-mask">
+          <div class="nav-mobile">
+            <form class="navbar-form" action="{{ path('search') }}" method="get">
+              <div class="form-group">
+                <input class="form-control" placeholder="搜索" name="q">
+                <button class="button es-icon es-icon-search"></button>
+              </div>
+            </form>
+            <ul class="nav navbar-nav">
+              {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+            </ul>
+          </div>
         </div>
       </div>
       <a href="{{ path('homepage') }}" class="navbar-brand">
         {% if setting('site.logo') %}
           <img src="{{ asset(setting('site.logo')) }}">
         {% else %}
-          <img src="{{ asset('bundles/topxiaweb/img/logo.png') }}">    
+          {{ setting('site.name', 'EDUSOHO') }}    
         {% endif %}
       </a>
     </div>
@@ -82,7 +84,7 @@
         </ul>
         <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
           <div class="form-group">
-            <input class="form-control js-search" name="q">
+            <input class="form-control js-search" name="q" placeholder="搜索">
             <button class="button es-icon es-icon-search"></button>
           </div>
         </form>

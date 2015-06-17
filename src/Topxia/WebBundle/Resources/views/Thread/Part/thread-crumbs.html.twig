@@ -2,7 +2,13 @@
 {% set thread = thread|default(null) %}
 {% set type = type|default('discussion') %}
 <ul class="breadcrumb">
-  <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'):target.id}) }}">讨论区</a></li>
+  <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'):target.id}) }}">
+    {% if target.type == "classroom" %}
+    班级话题
+    {% else %}
+    讨论区
+    {% endif %}
+  </a></li>
   {% if thread and isUpdate %}
     <li>
         <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'):target.id, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|sub_text(10) }}</a>

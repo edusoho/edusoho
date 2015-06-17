@@ -14,27 +14,31 @@ class UploadFileController extends BaseController
 
     public function uploadAction(Request $request)
     {
-        $token = $request->request->get('token');
-        $token = $this->getUserService()->getToken('fileupload', $token);
-        if (empty($token)) {
-            throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
+        try{
+            $token = $request->request->get('token');
+            $token = $this->getUserService()->getToken('fileupload', $token);
+            if (empty($token)) {
+                throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
+            }
+
+            $user = $this->getUserService()->getUser($token['userId']);
+            if (empty($user)) {
+                throw $this->createAccessDeniedException('上传TOKEN非法。');
+            }
+
+            $currentUser = new CurrentUser();
+            $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
+
+            $targetType = $request->query->get('targetType');
+            $targetId = $request->query->get('targetId');
+
+            $originalFile = $this->get('request')->files->get('file');
+
+            $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
+        	return $this->createJsonResponse($file);
+        }catch(\Exception $e){
+            return $this->createJsonResponse($e->getMessage());
         }
-
-        $user = $this->getUserService()->getUser($token['userId']);
-        if (empty($user)) {
-            throw $this->createAccessDeniedException('上传TOKEN非法。');
-        }
-
-        $currentUser = new CurrentUser();
-        $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
-
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-
-        $originalFile = $this->get('request')->files->get('file');
-
-        $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
-    	return $this->createJsonResponse($file);
     }
 
     public function browserAction(Request $request)
@@ -261,7 +265,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('转换失败');
         }
 
-        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];
 
         $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
 

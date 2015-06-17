@@ -779,7 +779,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
 
-                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
                     $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
                 } else {
                     $item['missScore'] = 0;
@@ -791,7 +791,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
                 $existItem = $existItems[$item['questionId']];
 
-                if ($item['seq'] != $existItem['seq'] or $item['score'] != $existItem['score']) {
+                if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
                     $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
@@ -848,7 +848,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (!empty($classroom)) {
                 $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'],$user['id']);
                 $isAssistant = $this->getClassroomService()->isClassroomAssistent($classroom['classroomId'],$user['id']);
-                if ($isTeacher || $isAssistant) {
+                $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'],$user['id']);
+                if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
                     return $user['id'];
                 }
             }
@@ -890,7 +891,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (!empty($classroom)) {
                 $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'],$user['id']);
                 $isAssistant = $this->getClassroomService()->isClassroomAssistent($classroom['classroomId'],$user['id']);
-                if ($isTeacher || $isAssistant) {
+                $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'],$user['id']);
+                
+                if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
                     return $user['id'];
                 }
             }

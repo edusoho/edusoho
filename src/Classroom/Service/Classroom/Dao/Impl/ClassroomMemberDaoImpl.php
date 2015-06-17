@@ -27,14 +27,14 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function getClassroomStudentCount($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? and role='student' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role='student' LIMIT 1";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
 
     public function getClassroomAuditorCount($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? and role='auditor' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role='auditor' LIMIT 1";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
@@ -59,7 +59,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             return array();
         }
         $marks = str_repeat('?,', count($classroomIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE userId = {$userId} and classroomId IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = {$userId} AND classroomId IN ({$marks});";
 
         return $this->getConnection()->fetchAll($sql, $classroomIds) ?: array();
     }
@@ -132,6 +132,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             ->andWhere('classroomId = :classroomId')
             ->andWhere('noteNum > :noteNumGreaterThan')
             ->andWhere('role = :role')
+            ->andWhere('role IN (:roles)')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime < :startTimeLessThan');
 

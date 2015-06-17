@@ -1,16 +1,18 @@
 .navbar {
   margin-bottom: 0;
   z-index: 99;
+  .border-radius(0);
 }
 
 .es-header {
-  background: #3f3f3f;
+  background: @gray-darker;
   height: 60px;
-  .border-radius(0);
   border: none;
-  z-index: 99;
   .container {
     position: relative;
+  }
+  .collapse {
+    display: block;
   }
   .navbar-header {
     @media (max-width: @screen-xs-max) {
@@ -99,33 +101,30 @@
       line-height: 20px;
       display: block;
       color: #fff;
-      z-index: 999;
+      z-index: 1001;
     }
     .nav-mobile {
-      width: 0;
-      overflow: hidden;
+      width: 250px;
+      overflow-x: hidden;
+      overflow-y: auto;
       position: fixed;
-      left: 0;
+      left: -250px;
       top: 0;
-      float: none;
       height: 100%;
       background: #3f3f3f;
-      z-index: 999;
       visibility: hidden;
       .es-transition;
       &.active {
         visibility: visible;
-        width: 60%;
         .es-transition;
       }
     }
     .nav { 
       float: none;
       text-align: left;
-      padding-right: 20px;
+      padding: 0 20px;
     }
     .dropdown-menu {
-      padding-left: 20px;
       >li>a {
         color: #fff;
       }

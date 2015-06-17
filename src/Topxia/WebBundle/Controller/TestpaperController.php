@@ -278,7 +278,7 @@ class TestpaperController extends BaseController
 
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
-        if (!empty($testpaperResult) and !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+        if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return $this->createJsonResponse(true);
         }
 
@@ -307,18 +307,22 @@ class TestpaperController extends BaseController
             if ($this->getTestpaperService()->isExistsEssay($testResults)) {
                 $user = $this->getCurrentUser();
 
-                $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                $teacherCheckUrl = $this->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
-
+                $message = array(
+                    'id'=>$testpaperResult['id'],
+                    'name' => $testpaperResult['paperName'],
+                    'userId' =>$user['id'],
+                    'userName' =>$user['nickname'],
+                    'type' => 'perusal'
+                );  
                 foreach ($course['teacherIds'] as $receiverId) {
-                    $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
+                    $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
                 }
             }
 
             // @todo refactor. , wellming
             $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
-            if ($targets[$testpaperResult['target']]['type'] == 'lesson' and !empty($targets[$testpaperResult['target']]['id'])) {
+            if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
                 $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
                 if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
                     $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
@@ -354,10 +358,15 @@ class TestpaperController extends BaseController
 
             $user = $this->getCurrentUser();
 
-            $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-            $testpaperResultUrl = $this->generateUrl('course_manage_test_results', array('id'=>$testpaperResult['id']), true);
+            $message = array(
+                'id'=>$testpaperResult['id'],
+                'name' => $testpaperResult['paperName'],
+                'userId' =>$user['id'],
+                'userName' =>$user['nickname'],
+                'type' => 'read'
+            );  
 
-            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'default', "【试卷已批阅】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚批阅了 {$testpaperResult['paperName']} ，<a href='{$testpaperResultUrl}' target='_blank'>请点击查看结果</a>");
+            $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'test-paper', $message);
             
             return $this->createJsonResponse(true);
         }
@@ -422,7 +431,7 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper["metas"]["missScore"])){
                     $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
                 } else {
                     $total[$type]['missScore'] = 0;
@@ -445,7 +454,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, PHP_INT_MAX,false);
         $courseIds=ArrayToolkit::column($courses,'id');
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
@@ -499,7 +508,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $courses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, PHP_INT_MAX,false);
+        $courses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, PHP_INT_MAX,false);
         $courseIds=ArrayToolkit::column($courses,'id');
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');

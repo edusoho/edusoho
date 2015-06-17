@@ -43,19 +43,19 @@
       <span class="caret"></span></button>
 
       <ul class="dropdown-menu" role="menu">
-        <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}" class="cat-tag">全部课程</a></li>
+        <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
         {% if isShowVipSearch  %}
             {% if currentUserVipLevel  %}
               <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
-                <a href="{{ path('search',{fliter:'vip'}) }}" class="cat-tag">会员课程</a>
+                <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
               </li>
           {% endif %}
         {% endif %}
         <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'free'}) }}" class="cat-tag">免费课程</a>
+            <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
         </li>
         <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'live'}) }}" class="cat-tag">直播课程</a>
+            <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
         </li>
       </ul>
     </div>

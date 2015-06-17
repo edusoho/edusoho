@@ -10,15 +10,8 @@
 
   <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
    
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label >是否开启班级</label>
-      </div>
-      <div class="controls col-md-7 radios">
-        {{ radios('enabled', {1:'开启', 0:'关闭'}, setting('classroom').enabled|default(1)) }}
-      </div>
-    </div>
-
+    <input type="hidden" name="enabled" value="1"/>
+    
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label >班级称谓设置</label>
@@ -38,7 +31,7 @@
       </div>
       <div class="controls col-md-7 radios">
         {{ radios('discount_buy', {1:'是', 0:'否'}, setting('classroom').discount_buy|default(1)) }}
-        <div class="help-block">学员在购买班级之前，如果已经购买了某个/某些课程，班级价格是否要按总价的比例去折价扣除</div>
+        <div class="help-block">学员在购买班级之前，如果已经购买了某个课程，班级价格将会扣除该课程的售价</div>
       </div>
     </div>
 

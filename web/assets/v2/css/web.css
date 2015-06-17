@@ -1813,9 +1813,9 @@ body {
   background: #fff;
 }
 
-.lesson-dashboard-page .container {
+/*.lesson-dashboard-page .container {
   width: 100% !important;
-}
+}*/
 
 .lesson-dashboard-page .site-navbar {
   display: none;
@@ -1829,7 +1829,7 @@ body {
   left: 0;
   right: 0;
   background: #e5e5e5;
-  z-index: 999;
+  /*z-index: 999;*/
 }
 
 .lesson-dashboard .dashboard-content {
@@ -3277,7 +3277,7 @@ body {
 
 .course-wide-list .course-item:hover {
   background: #f9f9f9;
-  border-color: #ccc;
+  /*border-color: #ccc;*/
 }
 
 .course-wide-list .course-picture-link {
@@ -3579,15 +3579,15 @@ body {
 
 }
 
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {
   .teacherpage #content-container {
-       width: 970px;
+    width: 970px;
   } 
-}
+}*/
 
-.lt-ie9 .teacherpage #content-container {
+/*.lt-ie9 .teacherpage #content-container {
   width: 970px;
-}
+}*/
 
 .teacherpage .teacher-title {
   color: #096;
@@ -3695,14 +3695,14 @@ body {
 }
 
 @media (min-width: 1200px) {
-    .contentpage #content-container {
-         width: 970px;
-    }
+  .contentpage #content-container {
+    width: 970px;
+  }
 }
 
-.contentpage .es-row-wrap {
+/*.contentpage .es-row-wrap {
   padding-bottom: 20px;
-}
+}*/
 
 .friendcard {
   border: 1px solid #eee;
@@ -4407,6 +4407,11 @@ body {
   bottom: 50px;
 }
 
+.slide-player-body img.side {
+  max-width: 100%;
+  height: auto;
+}
+
 .loading-background  {
   background: #fff url(../img/loader.gif) no-repeat center center;
 }
@@ -4708,11 +4713,11 @@ a.homework-essay-textarea-pack-up{
  */
 
 .float-consult {
-    position: fixed;
-    right: 0;
-    top: 50%;
-    visibility: hidden;
-    z-index: 999999;
+  position: fixed;
+  right: 0;
+  top: 50%;
+  visibility: hidden;
+  z-index: 999;
 }
 
 .float-consult .popover {
@@ -4730,7 +4735,7 @@ a.homework-essay-textarea-pack-up{
 }
 
 .float-consult .btn-group-vertical .btn:active {
-  box-shadow: none;
+  /*box-shadow: none;*/
 }
 
 .float-consult .consult-contents {
@@ -4903,10 +4908,6 @@ a.homework-essay-textarea-pack-up{
   height: 50px;
 }
 
-.course-wide-list .course-item:hover {
-  background: #f9f9f9;
-  border-color: #e57259;
-}
 
 .homepage .hot-group img {
   width: 58px;

@@ -94,7 +94,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return $this->getCourseDao()->analysisCourseSumByTime($endTime);
     	}
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
+	public function searchCourses($conditions, $sort, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
@@ -295,28 +295,44 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $sortedCourses;
 	}
 
-	public function findUserTeachCourseCount($userId, $onlyPublished = true)
+	public function findUserTeachCourseCount($conditions, $onlyPublished = true)
 	{
-		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', $onlyPublished);
+		$members = $this->getMemberDao()->findAllMemberByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+		unset($conditions['userId']);
+
+		$courseIds = ArrayToolkit::column($members, 'courseId');
+		$conditions["courseIds"] = $courseIds;
+
+		if(count($courseIds) == 0){
+			return 0;
+		}
+
+		if($onlyPublished) {
+			$conditions["status"] = 'published';
+		}
+
+		return $this->searchCourseCount($conditions);
 	}
 
-	public function findUserTeachCourses($userId, $start, $limit, $onlyPublished = true)
+	public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true)
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit, $onlyPublished);
+		$members = $this->getMemberDao()->findAllMemberByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+		unset($conditions['userId']);
 
-		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+		$courseIds = ArrayToolkit::column($members, 'courseId');
+		$conditions["courseIds"] = $courseIds;
 
-		/**
-		 * @todo 以下排序代码有共性，需要重构成一函数。
-		 */
-		$sortedCourses = array();
-		foreach ($members as $member) {
-			if (empty($courses[$member['courseId']])) {
-				continue;
-			}
-			$sortedCourses[] = $courses[$member['courseId']];
+		if(count($courseIds) == 0){
+			return array();
 		}
-		return $sortedCourses;
+
+		if($onlyPublished) {
+			$conditions["status"] = 'published';
+		} 
+
+		$courses = $this->searchCourses($conditions, 'latest', $start, $limit);
+
+		return $courses;
 	}
 
 	public function findUserFavoritedCourseCount($userId)
@@ -1098,6 +1114,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'homeworkId' => 0,
+			'exerciseId' => 0
 		));
 
 		if (isset($fields['title'])) {
@@ -1443,12 +1461,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
 	    }
 		$memberFields['credit'] = $totalCredits;
+
+		$this->getMemberDao()->updateMember($member['id'], $memberFields);
+		
 		$this->dispatchEvent(
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
-
-		$this->getMemberDao()->updateMember($member['id'], $memberFields);
 	}
 
 	public function searchLearnCount($conditions)
@@ -1780,7 +1799,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
+	public function searchMemberIds($conditions, $sort, $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort = 'latest') {
@@ -2310,78 +2329,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array($course, $member);
 	}
 
-	public function getCourseAnnouncement($courseId, $id)
-	{
-		$announcement = $this->getAnnouncementDao()->getAnnouncement($id);
-		if (empty($announcement) || $announcement['courseId'] != $courseId) {
-			return null;
-		}
-		return $announcement;
-	}
-
-	public function findAnnouncements($courseId, $start, $limit)
-	{
-		return $this->getAnnouncementDao()->findAnnouncementsByCourseId($courseId, $start, $limit);
-	}
-
-	public function findAnnouncementsByCourseIds(array $ids, $start, $limit)
-	{
-		return $this->getAnnouncementDao()->findAnnouncementsByCourseIds($ids,$start, $limit);
-	}
-	
-	public function createAnnouncement($courseId, $fields)
-	{
-		$course = $this->tryManageCourse($courseId);
-        if (!ArrayToolkit::requireds($fields, array('content'))) {
-        	$this->createNotFoundException("课程公告数据不正确，创建失败。");
-        }
-
-        if(isset($fields['content'])){
-        	$fields['content'] = $this->purifyHtml($fields['content']);
-        }
-
-		$announcement = array();
-		$announcement['courseId'] = $course['id'];
-		$announcement['content'] = $fields['content'];
-		$announcement['userId'] = $this->getCurrentUser()->id;
-		$announcement['createdTime'] = time();
-		return $this->getAnnouncementDao()->addAnnouncement($announcement);
-	}
-
-
-
-	public function updateAnnouncement($courseId, $id, $fields)
-	{
-		$course = $this->tryManageCourse($courseId);
-
-        $announcement = $this->getCourseAnnouncement($courseId, $id);
-        if(empty($announcement)) {
-        	$this->createNotFoundException("课程公告{$id}不存在。");
-        }
-
-        if (!ArrayToolkit::requireds($fields, array('content'))) {
-        	$this->createNotFoundException("课程公告数据不正确，更新失败。");
-        }
-        
-        if(isset($fields['content'])){
-        	$fields['content'] = $this->purifyHtml($fields['content']);
-        }
-
-        return $this->getAnnouncementDao()->updateAnnouncement($id, array(
-        	'content' => $fields['content']
-    	));
-	}
-
-	public function deleteCourseAnnouncement($courseId, $id)
-	{
-		$course = $this->tryManageCourse($courseId);
-		$announcement = $this->getCourseAnnouncement($courseId, $id);
-		if(empty($announcement)) {
-			$this->createNotFoundException("课程公告{$id}不存在。");
-		}
-
-		$this->getAnnouncementDao()->deleteAnnouncement($id);
-	}
 	
 	public function generateLessonReplay($courseId,$lessonId)
 	{

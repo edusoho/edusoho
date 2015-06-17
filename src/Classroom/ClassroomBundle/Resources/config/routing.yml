@@ -104,8 +104,8 @@ classroom_manage_homework:
     defaults: { _controller: ClassroomBundle:ClassroomManage:homework }
 
 classroom_explore:
-    pattern:  /classroom/explore
-    defaults: { _controller: ClassroomBundle:Classroom:explore }
+    pattern:  /classroom/explore/{category}
+    defaults: { _controller: ClassroomBundle:Classroom:explore, category:'' }
 
 classroom_show:
     pattern:  /classroom/{id}
@@ -224,6 +224,10 @@ classroom_teacherIds_catch:
 classroom_course_lessons_preview:
     pattern: /classroom/{classroomId}/course/{courseId}/lessons/preview
     defaults: { _controller: ClassroomBundle:Course/Lesson:preview }
+
+classroom_buy_hint:
+    pattern: /classroom/courses/{courseId}/buy/hint
+    defaults: { _controller: ClassroomBundle:Course/Lesson:buyHint }
 
 classrom_course_lessons_list:
     pattern: /classroom/{classroomId}/course/{courseId}/lessons/list

@@ -6,7 +6,9 @@
       <div class="class-bg-layer two"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
-          <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+          <a href="{{path('classroom_show',{id:classroom.id})}}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+          </a>
         </div>
         <div class="class-info">
           <h2 class="title">{{ classroom.title }}</h2>
@@ -21,22 +23,6 @@
               承<br>诺<br>服<br>务
             </div>
             {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
-          </div>
-          <div class="class-auditor visible-sm">
-            您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primiay" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
-            <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a> <span>价格： {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if classroom.price > 0 %}
-               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                {% else %}
-                免费
-                {% endif %}
-            {% else %}
-              {% if classroom.price > 0 %}
-                {{ classroom.price }}元
-              {% else %}
-                免费
-              {% endif %}
-            {% endif %}</span>
           </div>
         </div>
         <div class="class-operation">
@@ -77,7 +63,7 @@
           </ul>
           {% if member.role == 'auditor'%}
             <div class="class-auditor hidden-sm">
-              您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primiay" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
+              您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
               <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a>
             </div>
           {% endif %}

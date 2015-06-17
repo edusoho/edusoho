@@ -136,11 +136,25 @@ class ThreadController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $user = $this->getCurrentUser();
-            $thread = $this->getThreadService()->updateThread($thread['id'], $request->request->all());
+            $data = $request->request->all();
+            
+            if(isset($data['maxUsers']) && empty($data['maxUsers'])) {
+                $data['maxUsers'] = 0;
+            }
+
+            $thread = $this->getThreadService()->updateThread($thread['id'], $data);
             $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
             $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId' => $thread['id']), true);
+               $message = array(
+                'title' => $thread['title'],
+                'targetType' => $target['type'],
+                'targetId' => $target['id'],
+                'type' => 'type-modify',
+                'userId' => $user['id'],
+                'userName' => $user['nickname']);
+
             if ($thread['userId'] != $user['id']) {
-                $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>编辑");
+                $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
             }
 
             return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
@@ -163,7 +177,13 @@ class ThreadController extends BaseController
         $user = $this->getCurrentUser();
         $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
         if ($thread['userId'] != $user['id']) {
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<strong>“{$thread['title']}”</strong>被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>删除");
+            $message = array(
+                'title' => $thread['title'],
+                'type' => 'delete',
+                'userId' => $user['id'],
+                'userName' => $user['nickname']);
+
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
 
         return $this->createJsonResponse(true);
@@ -275,7 +295,7 @@ class ThreadController extends BaseController
         }
 
         $post = $this->getThreadService()->getPost($postId);
-        if ($post and $post['parentId']) {
+        if ($post && $post['parentId']) {
             $post = $this->getThreadService()->getPost($post['parentId']);
         }
 

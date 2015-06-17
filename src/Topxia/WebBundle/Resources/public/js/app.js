@@ -134,7 +134,8 @@ define(function(require, exports, module) {
                 speed: 300,
                 loop: true,
                 mode: 'vertical',
-                autoplay: 5000
+                autoplay: 5000,
+                calculateHeight: true
             });
         }
 
@@ -155,9 +156,9 @@ define(function(require, exports, module) {
     }
 
     $(".js-search").focus(function () {
-        $(this).prop("placeholder", "搜索").addClass("active");
+        $(this).prop("placeholder", "").addClass("active");
     }).blur(function () {
-        $(this).prop("placeholder", "").removeClass("active");
+        $(this).prop("placeholder", "搜索").removeClass("active");
     });
 
 });

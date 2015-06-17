@@ -2,7 +2,7 @@
 
 {% set script_controller = 'classroombundle/controller/classroom/explore' %}
 
-{% block main_header %}
+{% block top_content %}
   <div class="class-banner es-banner">
     <div class="container">
       <div class="title">
@@ -18,14 +18,14 @@
   
 {% endblock %}
 {% block content %}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{code:code, path:'classroom_explore'})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, path:'classroom_explore'})) }}
   <div class="class-list row">
     {% if classrooms %}
       {% for classroom in classrooms %}
         <div class="col-md-4 col-sm-6">
           <div class="class-item">
             <div class="class-img">
-              <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_bank">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
                 {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                 <h3>{{ classroom.title }}</h3>
                 <div class="image-overlay"></div>

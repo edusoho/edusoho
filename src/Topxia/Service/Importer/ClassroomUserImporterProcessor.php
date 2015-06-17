@@ -9,7 +9,7 @@ use Exception;
 
 class ClassroomUserImporterProcessor implements ImporterProcessor
 {
-	protected $necessaryFields = array('nickname' => '用户名');
+	protected $necessaryFields = array('nickname' => '用户名/邮箱');
 	protected $objWorksheet;
 	protected $rowTotal = 0;
 	protected $colTotal = 0;
@@ -89,7 +89,13 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
     {
     	$errorInfo = '';
 
-        if (!$this->getUserService()->getUserByNickname($userData['nickname'])) {
+        if (strpos($userData['nickname'], '@') > 0) {
+            $user = $this->getUserService()->getUserByEmail($userData['nickname']);
+        } else {
+            $user = $this->getUserService()->getUserByNickname($userData['nickname']);
+        }
+
+        if (!$user) {
             $errorInfo = "第 ".$row."行".$fieldCol["nickname"]." 列 的用户数据不存在，请检查。";
         }
 
@@ -241,7 +247,12 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         $successCount = 0;
 
 		foreach($userData as $key => $user){
-            $user = $this->getUserService()->getUserByNickname($user['nickname']);
+            if (strpos($user['nickname'],'@') > 0) {
+                $user = $this->getUserService()->getUserByEmail($user['nickname']);
+            } else {
+                $user = $this->getUserService()->getUserByNickname($user['nickname']);
+            }
+            
 
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($targetObject['id'], $user['id']);
             $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($targetObject['id'], $user['id']);
@@ -279,7 +290,15 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
 
                 $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
                 
-                $this->getNotificationService()->notify($member['userId'], 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>加入班级<strong>{$targetObject['title']}</strong>成为正式学员");
+
+                $message = array(
+                    'classroomId' => $targetObject['id'], 
+                    'classroomTitle' => $targetObject['title'],
+                    'userId'=> $currentUser['id'],
+                    'userName' => $currentUser['nickname'],
+                    'type' => 'create');
+
+                $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
                 $this->getLogService()->info('classroom', 'add_student', "班级《{$targetObject['title']}》(#{$targetObject['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加");
             }

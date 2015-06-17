@@ -136,7 +136,7 @@ class BuildPluginAppCommand extends BaseCommand
     private function getPluginVersion($name, $pluginDir)
     {
          $meta = json_decode(file_get_contents($pluginDir . '/plugin.json'), true);
-         if (empty($meta) or empty($meta['version'])) {
+         if (empty($meta) || empty($meta['version'])) {
             throw new \RuntimeException('获取插件版本号失败！');
          }
 

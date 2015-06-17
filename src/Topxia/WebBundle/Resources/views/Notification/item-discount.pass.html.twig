@@ -8,7 +8,7 @@
       您的打折活动<span class="text-success">「{{ data.name }}」</span>，已通过管理员审核。
     </div>
     <div class="notification-footer">
-      {{ notification.createdTime | date('Y-n-d H:i:s') }}
+     {{ notification.createdTime|date_format }}  
     </div>
   </div>
 </li>

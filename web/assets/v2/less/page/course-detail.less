@@ -1,7 +1,9 @@
 .course-detail-header {
-  padding: 30px 0 10px 0;
+  position: relative;
   background: url("../img/course_detail_header.jpg");
   background-size: 100% 100%;
+  background-attachment: fixed;
+  padding: 30px 0 10px 0;
   .es-section {
     position: relative;
     padding: 0;
@@ -273,6 +275,7 @@
       @media (max-width: @screen-sm-max) {
         float: none;
         width: 100%;
+        padding: 10px 10px 0 10px;
         // overflow: hidden;
       }
       .student-num {
@@ -290,6 +293,7 @@
           padding: 10px 0;
         }
         @media (max-width: @screen-sm-max) {
+          padding: 15px 0 10px 0;
           float: left;
           width: 33.33%;
         }
@@ -382,6 +386,7 @@
       }
     }
     .progress {
+      height: 11px;
       margin-bottom: 0;
     }
     .course-header-bottom {
@@ -525,6 +530,11 @@
   input {
     margin-right: 10px;
   }
+}
+
+.course-detail-content img {
+  max-width: 100%;
+  height: auto;
 }
 
 // 课程侧边栏

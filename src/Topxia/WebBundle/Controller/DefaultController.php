@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 use Topxia\Common\Paginator;
@@ -145,13 +146,14 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function topNavigationAction($siteNav = null)
+    public function topNavigationAction($siteNav = null,$isMobile= false)
     {
         $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
         return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
             'navigations' => $navigations,
-            'siteNav' => $siteNav
+            'siteNav' => $siteNav,
+            'isMobile' => $isMobile
         ));
     }
 
@@ -183,12 +185,8 @@ class DefaultController extends BaseController
         }else{
             $url = $this->generateUrl('course_show', array('id' => $courseId));
         }
-        echo "<script type=\"text/javascript\"> 
-        if (top.location !== self.location) {
-        top.location = \"{$url}\";
-        }
-        </script>";
-        exit();
+        $jumpScript = "<script type=\"text/javascript\"> if (top.location !== self.location) {top.location = \"{$url}\";}</script>";
+        return new Response($jumpScript);
     }
 
     public function CoursesCategoryAction(Request $request)

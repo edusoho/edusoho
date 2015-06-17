@@ -18,7 +18,9 @@
       <div class="class-bg-layer two"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
-          <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+          <a href="{{path('classroom_show',{id:classroom.id})}}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+          </a>
         </div>
         <div class="class-info">
           <h2 class="title">{{ classroom.title }}</h2>
@@ -65,7 +67,7 @@
 
             {% if not classroom.private %}
               <div class="btn-buy">
-                {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'member_expired', 'level_low']) %}
+                {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
                   <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
                   <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
                 {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}

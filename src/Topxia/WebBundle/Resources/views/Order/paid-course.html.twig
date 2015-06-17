@@ -16,16 +16,12 @@
                               <h4><a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
                             </div>
                             <div class="course-info">
-                              将会节省：{{paidCourse.afterDiscountPrice}}               
+                              抵扣：{{paidCourse.afterDiscountPrice}}               
                               <span> {% if priceType|default('RMB') == "RMB" %}
                                 元
                               {% elseif priceType|default('RMB') == "Coin" %}
                                 {{setting("coin.coin_name")}}
                               {% endif %} </span> 
-                              <span class="more">
-                                <img src="{{ default_path('icon_info_more.png') }}" alt="">
-                                
-                              </span>
                             </div>
                           </div>
                           {% endfor %} 

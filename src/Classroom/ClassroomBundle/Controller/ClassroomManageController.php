@@ -214,8 +214,13 @@ class ClassroomManageController extends BaseController
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
-        $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
-        $this->getNotificationService()->notify($userId, 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$user['nickname']}</strong></a>移出班级<strong>{$classroom['title']}</strong>");
+        $message = array(
+            'classroomId' => $classroom['id'], 
+            'classroomTitle' => $classroom['title'],
+            'userId'=> $user['id'],
+            'userName' => $user['nickname'],
+            'type' => 'remove');
+        $this->getNotificationService()->notify($userId, 'classroom-student', $message);
 
         return $this->createJsonResponse(true);
     }
@@ -263,9 +268,15 @@ class ClassroomManageController extends BaseController
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+            $user = $this->getCurrentUser();
+            $message = array(
+                'classroomId' => $classroom['id'], 
+                'classroomTitle' => $classroom['title'],
+                'userId'=> $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'create');
 
-            $userUrl = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
-            $this->getNotificationService()->notify($member['userId'], 'default', "您被<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>加入班级<strong>{$classroom['title']}</strong>成为正式学员");
+            $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
             $this->getLogService()->info('classroom', 'add_student', "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 

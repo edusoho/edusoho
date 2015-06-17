@@ -1,6 +1,6 @@
 {% set messageFrom = message.fromId == app.user.id ? 'me' : 'she' %}
 <li class="media message-{{ messageFrom }}" parent-url="{{ path('message')}}">
-  {{ web_macro.user_avatar(message.createdUser, (messageFrom == 'me' ? 'pull-right' : 'pull-left') ~ ' media-object') }}
+  {{ web_macro.user_avatar(message.createdUser, (messageFrom == 'me' ? 'pull-right' : 'pull-left') ~ ' media-object', '', false) }}
   <div class="media-body">
     <div class="popover {% if message.fromId == app.user.id %}left{% else %}right{% endif %}">
       <div class="arrow"></div>

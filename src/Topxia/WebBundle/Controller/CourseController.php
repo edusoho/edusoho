@@ -12,25 +12,32 @@ use Topxia\Service\Util\LiveClientFactory;
 
 class CourseController extends CourseBaseController
 {
-	public function exploreAction(Request $request)
+	public function exploreAction(Request $request, $category)
 	{
 		$conditions = $request->query->all();
-		if(!isset($conditions['code'])){
-			$conditions['code'] = '';
-		}
+		$conditions['code'] = $category;
 
         if (!empty($conditions['code'])) {
-            $category = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
-            $categoryIds = array_merge($childrenIds, array($category['id']));
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
 		if(!isset($conditions['fliter'])){
 			$conditions['fliter'] ='all';
-		}
-		elseif ($conditions['fliter'] == 'free') {
-			$conditions['price'] = '0.00';
-			$conditions['coinPrice'] = '0.00';
+		} elseif ($conditions['fliter'] == 'free') {
+			$coinSetting = $this->getSettingService()->get("coin");
+	        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+	        $priceType = "RMB";
+	        if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
+	            $priceType = $coinSetting["price_type"];
+	        }
+
+			if($priceType == 'RMB'){
+				$conditions['price'] = '0.00';
+			} else {
+				$conditions['coinPrice'] = '0.00';
+			}
 		}
 		elseif ($conditions['fliter'] == 'live'){
 			$conditions['type'] = 'live';
@@ -42,7 +49,6 @@ class CourseController extends CourseBaseController
 		}
 
 		$conditions['recommended'] = ($conditions['orderBy'] == 'recommendedSeq') ? 1 : null;
-		$code = $conditions['code'];
 		unset($conditions['code']);
 		$orderBy = $conditions['orderBy'];
 		unset($conditions['orderBy']);
@@ -66,9 +72,10 @@ class CourseController extends CourseBaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
+
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
-			'code' => $code,
+			'category' => $category,
 			'fliter' => $fliter,
 			'orderBy' => $orderBy,
 			'paginator' => $paginator,

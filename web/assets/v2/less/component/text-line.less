@@ -1,6 +1,9 @@
 .text-line {
   position: relative;
   padding: 50px 0;
+  @media (max-width: @screen-xs-max) {
+    padding: 30px 0;
+  }
   .line {
     position: absolute;
     top: 50%;
@@ -9,15 +12,15 @@
     height: 2px;
     background: #f0f0f0;
     margin-top: -1px;
-    @media (max-width: @screen-xs-max) {
-      display: none;
-    }
   }
   h5 {
     position: relative;
     text-align: center;
     font-size: 28px;
     z-index: 1;
+    @media (max-width: @screen-xs-max) {
+      font-size: 20px;
+    }
     >i {
       padding-left: 20px;
       background: #fff;
@@ -25,6 +28,23 @@
     >span {
       background: #fff;
       padding: 0 50px;
+    }
+  }
+  .more {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    margin-left: -20px;
+    width: 40px;
+    text-align: center;
+    color: @gray;
+    .es-transition;
+    &:hover {
+      color: @gray-dark;
+      .es-transition;
+    }
+    >i {
+      font-size: 24px;
     }
   }
   &.gray {

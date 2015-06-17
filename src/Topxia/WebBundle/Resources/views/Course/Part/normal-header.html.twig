@@ -120,20 +120,24 @@
 
 {% macro student_num(course) %}
   <div class="student-num hidden-xs">
-    <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
-    {% if course.maxStudentNum > 0 %}
-      {% if course.studentNum >= course.maxStudentNum %}
-        <small>(名额已满)</small>
-      {% else %}
-        <small>({{ course.maxStudentNum }}名额)</small>
+    {% if setting('course.show_student_num_enabled', '1') == 1  %}
+      <i class="es-icon es-icon-people"></i>{{ course.studentNum }}人
+      {% if course.maxStudentNum > 0 %}
+        {% if course.studentNum >= course.maxStudentNum %}
+          <small>(名额已满)</small>
+        {% else %}
+          <small>({{ course.maxStudentNum }}名额)</small>
+        {% endif %}
       {% endif %}
+    {% else %}
+      <i class="es-icon es-icon-accesstime"></i>{{ course.lessonNum }}课时
     {% endif %}
   </div>
 {% endmacro %}
 
 {% macro favorite_btn(course, hasFavorited) %}
   <li id="unfavorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="取消收藏" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
-    <a href="javascript:;">
+    <a href="javascript:;" class="color-primary">
       <p><i class="es-icon es-icon-bookmark"></i></p>
       <p>已收藏</p>
     </a>

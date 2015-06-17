@@ -9,15 +9,13 @@ define(function(require, exports, module) {
             log: "false",
             pauseOnHover: "true"
         });
-
+    }
         
-    $(".js-search").focus(function () {
+/*    $(".js-search").focus(function () {
 	        $(this).prop("placeholder", "搜索").addClass("active");
 	    }).blur(function () {
 	        $(this).prop("placeholder", "").removeClass("active");
 	    });
-
-
-    };
+    };*/
 
 });

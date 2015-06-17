@@ -22,19 +22,17 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function exploreAction(Request $request)
+    public function exploreAction(Request $request, $category)
     {
-        $code = $request->query->get('code', '');
-
         $conditions = array(
             'status' => 'published',
             'private' => 0,
         );
 
-        if (!empty($code)) {
-            $category = $this->getCategoryService()->getCategoryByCode($code);
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($category['id']);
-            $categoryIds = array_merge($childrenIds, array($category['id']));
+        if (!empty($category)) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
 
@@ -60,8 +58,8 @@ class ClassroomController extends BaseController
             'classrooms' => $classrooms,
             'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
-            'code' => $code,
-            ));
+            'category' => $category,
+        ));
     }
 
     public function myClassroomAction()
@@ -104,7 +102,7 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function headerAction($previewAs = "", $classroomId)
+    public function headerAction($previewAs, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
@@ -219,7 +217,7 @@ class ClassroomController extends BaseController
         )));
     }
 
-    private function previewAsMember($previewAs = "", $member, $classroom)
+    private function previewAsMember($previewAs, $member, $classroom)
     {
         $user = $this->getCurrentUser();
 
@@ -257,7 +255,6 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
             'classroom' => $classroom,
@@ -301,7 +298,7 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function roleAction($previewAs = "", $classroomId)
+    public function roleAction($previewAs, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
