@@ -52,12 +52,14 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `crontab_job` ADD `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间' AFTER `cycle`;");
         }
 
+//todo install
         if (!$this->isCrontabJobExist('CancelOrderJob')) {
-            $connection->exec("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '".time()."', '0', '0', '0');");
+            $connection->exec("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\Service\\Order\\Job\\CancelOrderJob', '', '0', '".time()."', '0', '0', '0');");
         }
 
         $this->updateArticle($connection);
 
+//todo install
         $this->getSettingService()->set("crontab_next_executed_time", time());
 
         if(!$this->isFieldExist('thread', 'startTime')){
@@ -90,7 +92,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
                 `createdTIme` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
                 PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
+                ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
             ");
         }
 
@@ -182,7 +184,6 @@ class EduSohoUpgrade extends AbstractUpdater
             `title` varchar(255) NOT NULL COMMENT '标题',
             `status` enum('closed','draft','published') NOT NULL DEFAULT 'draft' COMMENT '状态关闭，未发布，发布',
             `about` text COMMENT '简介',
-            `categoryId` int(10) NOT NULL DEFAULT '0' COMMENT '分类id',
             `description` text COMMENT '课程说明',
             `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
             `vipLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '支持的vip等级',
@@ -318,14 +319,14 @@ class EduSohoUpgrade extends AbstractUpdater
              `userId` int(10) unsigned NOT NULL COMMENT '用户id',
              `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞时间',
              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='资讯点赞表';");
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='资讯点赞表';");
 
         if (!$this->isFieldExist('classroom_courses', 'seq')) {
             $connection->exec("ALTER TABLE `classroom_courses` ADD `seq` INT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '班级课程顺序' AFTER `parentCourseId`;");
         }
 
         if(!$this->isCrontabJobExist("DeleteSessionJob")){
-        //    $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob','',0,".time().",0,0,0)");
+        //    $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\Service\\User\\Job\\DeleteSessionJob','',0,".time().",0,0,0)");
         }
 
         ///删除classroom插件

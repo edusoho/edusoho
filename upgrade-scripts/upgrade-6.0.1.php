@@ -22,7 +22,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/install");
+            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/install");
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -70,16 +70,20 @@ class EduSohoUpgrade extends AbstractUpdater
 
 
         ///数据升级
-        $connection->exec("UPDATE status set courseId=objectId where objectType='course';");
-        $connection->exec("UPDATE status s set s.courseId=(select courseId from course_lesson where id=s.objectId) where s.objectType='lesson';");
+        //$connection->exec("UPDATE status set courseId=objectId where objectType='course';");
+        //$connection->exec("UPDATE status s set s.courseId=(select courseId from course_lesson where id=s.objectId) where s.objectType='lesson';");
 
-        $connection->exec("UPDATE status s set s.classroomId=(select classroomId from classroom_courses where courseId = s.courseId) where s.courseId in (select courseId from classroom_courses);");
-        $connection->exec("UPDATE status s set s.classroomId=s.objectId where s.objectType='classroom';");
+        //$connection->exec("UPDATE status s set s.classroomId=(select classroomId from classroom_courses where courseId = s.courseId limit 0,1) where s.courseId in (select courseId from classroom_courses);");
+        //$connection->exec("UPDATE status s set s.classroomId=s.objectId where s.objectType='classroom';");
 
-        $connection->exec("UPDATE course_lesson cl set homeworkId=(select id from homework where lessonId=cl.id) where cl.id in (select lessonId from homework);");
+        if($this->isTableExist("homework")){
+            $connection->exec("UPDATE course_lesson cl set homeworkId=(select id from homework where lessonId=cl.id limit 0,1) where cl.id in (select lessonId from homework);");
+        }
 
-        $connection->exec("UPDATE course_lesson cl set exerciseId=(select id from exercise where lessonId=cl.id) where cl.id in (select lessonId from exercise);");
-
+        if($this->isTableExist("exercise")){
+            $connection->exec("UPDATE course_lesson cl set exerciseId=(select id from exercise where lessonId=cl.id limit 0,1) where cl.id in (select lessonId from exercise);");
+        }
+        
         $connection->exec("UPDATE course c set c.noteNum=(select count(*) from course_note where courseId = c.id);");
 
         $connection->exec("UPDATE classroom c set c.noteNum=(
