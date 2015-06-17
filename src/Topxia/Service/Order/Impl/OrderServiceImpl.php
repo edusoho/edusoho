@@ -207,7 +207,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->addLog($log);
     }
 
-    public function cancelOrder($id, $message = '', $data = array())
+    public function cancelOrder($id, $message, $data = array())
     {
         $order = $this->getOrder($id);
         if (empty($order)) {
@@ -260,7 +260,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderRefundDao()->findRefundsByUserId($userId, $start, $limit);
     }
 
-    public function searchRefunds($conditions, $sort = 'latest', $start, $limit)
+    public function searchRefunds($conditions, $sort, $start, $limit)
     {
         $conditions = array_filter($conditions);
         $orderBy = array('createdTime', 'DESC');

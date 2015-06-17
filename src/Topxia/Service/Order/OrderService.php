@@ -28,7 +28,7 @@ interface OrderService
 
     public function canOrderPay($order);
 
-    public function cancelOrder($id, $message = '', $data);
+    public function cancelOrder($id, $message, $data);
 
     public function sumOrderPriceByTarget($targetType, $targetId);
 
@@ -40,7 +40,7 @@ interface OrderService
 
     public function findUserRefunds($userId, $start, $limit);
 
-    public function searchRefunds($conditions, $sort = 'latest', $start, $limit);
+    public function searchRefunds($conditions, $sort, $start, $limit);
     
     public function searchRefundCount($conditions);
 

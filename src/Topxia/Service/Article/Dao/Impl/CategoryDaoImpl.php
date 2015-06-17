@@ -55,7 +55,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
         return $this->getCategory($id);
 	}
 
-	public function findCategoriesByParentId($parentId, $orderBy = null, $start, $limit) 
+	public function findCategoriesByParentId($parentId, $orderBy, $start, $limit) 
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY {$orderBy} DESC LIMIT {$start}, {$limit}";
