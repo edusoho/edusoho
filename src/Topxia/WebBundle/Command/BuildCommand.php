@@ -323,7 +323,7 @@ class BuildCommand extends BaseCommand
 		$finder->files()->in("{$this->distDirectory}/web/assets/libs");
 		foreach ($finder as $file) {
 			$filename = $file->getFilename();
-			if ($filename == 'package.json' or preg_match('/-debug.js$/', $filename) or preg_match('/-debug.css$/', $filename)) {
+			if ($filename == 'package.json' || preg_match('/-debug.js$/', $filename) || preg_match('/-debug.css$/', $filename)) {
 				$this->filesystem->remove($file->getRealpath());
 			}
 		}
