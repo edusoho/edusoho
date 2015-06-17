@@ -7,12 +7,12 @@ define(function(require, exports, module) {
     exports.run = function() {
         var swiper = new Swiper('.es-poster.swiper-container', {
             pagination: '.swiper-pager',
-            swipeToPrev : false,
-            swipeToNext : false,
             paginationClickable: true,
-            autoplay: 3000,
+            autoplay: 5000,
             autoplayDisableOnInteraction: false,
             loop: true,
+            calculateHeight: true,
+            roundLengths: true
         });
         Lazyload.init();
 

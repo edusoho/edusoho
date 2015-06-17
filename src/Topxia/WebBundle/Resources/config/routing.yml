@@ -90,6 +90,10 @@ register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
 
+register_mobile_check:
+    pattern:  /register/mobile/check
+    defaults: { _controller: TopxiaWebBundle:Register:mobileCheck }
+
 register_email_or_mobile_check:
     pattern:  /register/email_or_mobile/check
     defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
@@ -1065,8 +1069,8 @@ my:
     defaults: { _controller: TopxiaWebBundle:MyCourse:index }
 
 my_teaching_courses:
-    pattern: /my/teaching/courses
-    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses }
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:courses, filter:'normal' }
 
 my_teaching_threads:
     pattern: /my/teaching/threads/{type}

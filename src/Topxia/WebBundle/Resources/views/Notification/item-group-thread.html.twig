@@ -31,10 +31,8 @@
         {% elseif data.type == 'delete-post'%}
             您在话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>的回复被删除。
         {% elseif data.type == 'type-modify'%}
-        asdfasdfd
             {% set url = data.targetType~'_thread_show' %}
             {% set urlId = data.targetType~'Id'%}  
-            {{dump(url)}} {{dump(urlId)}} {{dump(data.targetId)}}
             您的话题<a href="{{path(data.targetType~'_thread_show' ,{(data.targetType~'Id'):data.targetId,threadId:data.targetId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被<a href="{{path('user_show',{id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>编辑
 	 	 {% endif %}
     </div>

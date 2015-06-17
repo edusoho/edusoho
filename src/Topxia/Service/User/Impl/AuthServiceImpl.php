@@ -35,7 +35,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     }
 
     private function refillFormData($registration){
-        $registration = $this->getUserService()->parseEmailOrMobile($registration);
+        $registration = $this->getUserService()->parseRegistration($registration);
         if(!isset($registration['nickname']) || empty($registration['nickname'])){
             $registration['nickname'] = $this->getUserService()->generateNickname($registration);
         }
@@ -252,7 +252,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         $auth = $this->getSettingService()->get('auth');
         if($auth && array_key_exists('register_mode',$auth)){
-            return (in_array($auth['register_mode'], array('email', 'email_or_mobile')));
+            return (in_array($auth['register_mode'], array('email','mobile','email_or_mobile')));
         }
         return true;
     }
@@ -261,7 +261,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-            if (empty($setting) or empty($setting['mode'])) {
+            if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
                  $partner = $setting['mode'];
