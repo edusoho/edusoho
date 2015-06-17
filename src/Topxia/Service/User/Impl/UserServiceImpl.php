@@ -314,29 +314,54 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
-   public function parseEmailOrMobile($registration)
+    public function parseRegistration($registration)
     {
-        if(!$this->isMobileRegisterMode()){
-            return $registration;
-        }
-        if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
-            if (SimpleValidator::email($registration['emailOrMobile'])) {
-                $registration['email'] = $registration['emailOrMobile'];
-            } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
-                $registration['mobile'] = $registration['emailOrMobile'];
-                $registration['verifiedMobile'] = $registration['emailOrMobile'];
-            } else {
-                throw $this->createServiceException('emailOrMobile error!');
+        $mode = $this->getRegisterMode($registration);
+        if($mode =='email_or_mobile'){
+            if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
+                if (SimpleValidator::email($registration['emailOrMobile'])) {
+                    $registration['email'] = $registration['emailOrMobile'];
+                } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
+                    $registration['mobile'] = $registration['emailOrMobile'];
+                    $registration['verifiedMobile'] = $registration['emailOrMobile'];
+                } else {
+                    throw $this->createServiceException('emailOrMobile error!');
+                }
+            }else{
+                throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
+            }
+        }elseif ($mode =='mobile') {
+            if (isset($registration['mobile']) && !empty($registration['mobile'])) {
+                if (SimpleValidator::mobile($registration['mobile'])) {
+                    $registration['mobile'] = $registration['mobile'];
+                    $registration['verifiedMobile'] = $registration['mobile'];
+                } else {
+                    throw $this->createServiceException('mobile error!');
+                }
+            }else{
+                throw $this ->createServiceException('参数不正确，手机不能为空。');
             }
         }else{
-            throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
+            return $registration;
         }
+
         return  $registration;
     }
 
     public function isMobileRegisterMode(){
         $authSetting = $this->getSettingservice()->get('auth');
-        return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
+        return (isset($authSetting['register_mode']) && (($authSetting['register_mode'] == 'email_or_mobile') || ($authSetting['register_mode'] == 'mobile'))); 
+    }
+    /**
+    * email, email_or_mobile, mobile, null
+    */
+    private function getRegisterMode(){
+        $authSetting = $this->getSettingservice()->get('auth');
+        if (isset($authSetting['register_mode'])) {
+            return $authSetting['register_mode'] ;
+        }else{
+            return null;
+        }
     }
 
     private function getRandomChar(){
