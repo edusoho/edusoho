@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 use Topxia\Common\Paginator;
@@ -184,12 +185,8 @@ class DefaultController extends BaseController
         }else{
             $url = $this->generateUrl('course_show', array('id' => $courseId));
         }
-        echo "<script type=\"text/javascript\"> 
-        if (top.location !== self.location) {
-        top.location = \"{$url}\";
-        }
-        </script>";
-        exit();
+        $jumpScript = "<script type=\"text/javascript\"> if (top.location !== self.location) {top.location = \"{$url}\";}</script>";
+        return new Response($jumpScript);
     }
 
     public function CoursesCategoryAction(Request $request)
