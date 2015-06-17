@@ -261,7 +261,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (!$this->partner) {
             $setting = $this->getSettingService()->get('user_partner');
-            if (empty($setting) or empty($setting['mode'])) {
+            if (empty($setting) || empty($setting['mode'])) {
                 $partner = 'default';
             } else {
                  $partner = $setting['mode'];

@@ -318,13 +318,13 @@ class UserSettingController extends BaseController
             $phpwindConfig = $data['phpwind_config'];
 
             if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) or !is_writeable($discuzConfigPath)) {
+                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
-                if (!file_exists($phpwindConfigPath) or !is_writeable($phpwindConfigPath)) {
+                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
