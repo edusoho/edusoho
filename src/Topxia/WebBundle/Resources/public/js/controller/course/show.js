@@ -148,7 +148,8 @@ define(function(require, exports, module) {
             // paginationClickable: true,
             simulateTouch: false,
             spaceBetween: 10,
-            slidesPerView: 4
+            slidesPerView: 4,
+            calculateHeight: true
         });
 
         $('.arrow-prev').on('click', function(e){

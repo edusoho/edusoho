@@ -87,15 +87,20 @@ class UserController extends BaseController
     {
         $user = $this->tryGetUser($id);
 
-        $classrooms=array();
-        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
-        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user['id']),array('createdTime','desc'),0,9999);
+        $conditions = array(
+            'roles'=>array('teacher', 'headTeacher'),
+            'userId'=>$user['id']
+        );
+        $classroomMembers=$this->getClassroomService()->searchMembers($conditions,array('createdTime','desc'),0,9999);
 
-        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+        $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
+        $conditions = array(
+            'status'=>'published',
+            'private'=>'0',
+            'classroomIds' => $classroomIds
+        );
 
-        $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
-
-        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classrooms=$this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
 
         $members=$this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
         
@@ -114,7 +119,7 @@ class UserController extends BaseController
             'classrooms'=>$classrooms,
             'members'=>$members,
             'user'=>$user,
-            ));
+        ));
     }
 
     public function favoritedAction(Request $request, $id)
@@ -339,14 +344,19 @@ class UserController extends BaseController
 
     private function _teachAction($user)
     {
+        $conditions = array(
+            'userId' => $user['id'],
+            'parentId' => 0
+        );
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id']),
+            $this->getCourseService()->findUserTeachCourseCount($conditions),
             10
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
-            $user['id'],
+            $conditions,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
