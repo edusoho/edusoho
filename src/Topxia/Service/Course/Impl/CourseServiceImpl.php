@@ -94,7 +94,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return $this->getCourseDao()->analysisCourseSumByTime($endTime);
     	}
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
+	public function searchCourses($conditions, $sort, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
@@ -1114,6 +1114,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'homeworkId' => 0,
+			'exerciseId' => 0
 		));
 
 		if (isset($fields['title'])) {
@@ -1797,7 +1799,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
+	public function searchMemberIds($conditions, $sort, $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort = 'latest') {
