@@ -2,32 +2,44 @@
  * Created by liumengte on 15-6-15.
  */
 define(function (require, exports, module) {
-    var AutoComplete = require('autocomplete');
 
-    var AutoCompleteCustom = AutoComplete.extend({
-        _initFilter: function () {
-            filter = {
-                func: stringIgnoreMatch
-            };
-            this.set("filter", filter);
+    var BaseAutoComplete = require('autocomplete');
+
+    var AutoComplete = BaseAutoComplete.extend({
+
+        _initFilter: function() {
+            var filter = this.get("filter");
+            if(filter.name in CustomFunc){
+                filter = {
+                    name: filter.name,
+                    func: CustomFunc[filter.name],
+                    options : filter.options
+                }
+                this.set("filter", filter);
+            }else{
+                AutoComplete.superclass._initFilter.call(this);
+            }
         }
     });
-    module.exports = AutoCompleteCustom;
-    function stringIgnoreMatch(data, query) {
-        query = query.toUpperCase() || '';
-        var result = [], l = query.length;
-        if (!l) return []
-        $.each(data, function (index, item) {
-            var matchKeys = item['nickname'].toUpperCase();
-            // 匹配 value 和 alias 中的
-            if (matchKeys.indexOf(query) > -1) {
-                // 匹配和显示相同才有必要高亮
-                item.highlightIndex = stringMatch(matchKeys, query);
-                item.matchKey = item.nickname;
-                result.push(item);
-            }
-        });
-        return result;
+    module.exports = AutoComplete;
+
+    var CustomFunc = {
+        "stringIgnoreCaseMatch": function (data, query,options) {
+            options = this.attrs.filter.value.options;
+            query = query || '';
+            var result = [], l = query.length;
+            if (!l) return []
+            $.each(data, function (index, item) {
+                var matchKeys = getMatchKey(item,options);
+                // 匹配和显示相同才有必要高亮 忽略大小写
+                if (matchKeys.toUpperCase().indexOf(query.toUpperCase()) > -1) {
+                    item.highlightIndex = stringMatch(matchKeys.toUpperCase(), query.toUpperCase());
+                    item.matchKey = matchKeys;
+                    result.push(item);
+                }
+            });
+            return result;
+        }
     }
 
     function stringMatch(matchKey, query) {
@@ -51,5 +63,15 @@ define(function (require, exports, module) {
         return r;
     }
 
+    function getMatchKey(item,options){
+        if ($.isPlainObject(item)) {
+            // 默认取对象的 value 属性
+            // 没有key,且对象无value属性那么将无法在页面上显示出匹配的项
+            var key = options && options.key || "value";
+            return item[key] || "";
+        } else {
+            return item;
+        }
+    }
 });
 

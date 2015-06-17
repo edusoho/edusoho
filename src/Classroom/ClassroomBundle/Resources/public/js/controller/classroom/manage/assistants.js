@@ -16,7 +16,12 @@ define(function(require, exports, module) {
         var autocomplete = new AutoComplete({
             trigger: '#teacher-input',
             dataSource: $("#teacher-input").data('url'),
-            filter: this.stringIgnoreMatch,
+            filter: {
+                name: 'stringIgnoreCaseMatch',
+                options: {
+                    key: 'nickname'
+                }
+            },
             selectFirst: true
         }).render();
         autocomplete.on('itemSelect', function(data){
