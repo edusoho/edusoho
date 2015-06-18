@@ -70,7 +70,10 @@ define(function (require, exports, module) {
     {
         $('body').on('click', '.js-card-content .follow-btn', function(){
             var $btn = $(this);
-            showUnfollowBtn($btn);
+            var loggedin = $btn.data('loggedin');
+            if(loggedin == "1"){
+                showUnfollowBtn($btn);
+            }
             $.post($btn.data('url'));
         }).on('click', '.js-card-content .unfollow-btn', function(){
             var $btn = $(this);

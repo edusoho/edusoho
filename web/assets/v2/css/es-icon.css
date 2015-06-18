@@ -15,6 +15,7 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.es-icon-videocam:before { content: "\e678"; }
 .es-icon-anonymous-iconfont:before { content: "\e666"; }
 .es-icon-wenhao:before { content: "\e671"; }
 .es-icon-playcircleoutline:before { content: "\e66d"; }
@@ -29,6 +30,8 @@
 .es-icon-thumbup:before { content: "\e659"; }
 .es-icon-reply:before { content: "\e65a"; }
 .es-icon-textsms:before { content: "\e657"; }
+.es-icon-alarmon:before { content: "\e672"; }
+.es-icon-assignment:before { content: "\e679"; }
 .es-icon-assignmentind:before { content: "\e661"; }
 .es-icon-keyboardarrowdown:before { content: "\e663"; }
 .es-icon-keyboardarrowup:before { content: "\e664"; }
@@ -36,9 +39,12 @@
 .es-icon-locallibrary:before { content: "\e66e"; }
 .es-icon-loyalty:before { content: "\e65c"; }
 .es-icon-morehoriz:before { content: "\e665"; }
+.es-icon-mylibrarybooks:before { content: "\e67a"; }
 .es-icon-mylocation:before { content: "\e669"; }
+.es-icon-phone:before { content: "\e676"; }
 .es-icon-permcontactcal:before { content: "\e66f"; }
 .es-icon-publish:before { content: "\e66a"; }
+.es-icon-removeredeye:before { content: "\e67b"; }
 .es-icon-remove:before { content: "\e667"; }
 .es-icon-addcircle:before { content: "\e66b"; }
 .es-icon-search:before { content: "\e600"; }
@@ -55,13 +61,13 @@
 .es-icon-bookmark:before { content: "\e60b"; }
 .es-icon-graphicclass:before { content: "\e60e"; }
 .es-icon-description:before { content: "\e60f"; }
-.es-icon-phone:before { content: "\e610"; }
+.es-icon-phone1:before { content: "\e610"; }
 .es-icon-swaphoriz:before { content: "\e611"; }
 .es-icon-audioclass:before { content: "\e60d"; }
 .es-icon-flashclass:before { content: "\e612"; }
 .es-icon-pptclass:before { content: "\e613"; }
 .es-icon-videoclass:before { content: "\e614"; }
-.es-icon-assignment:before { content: "\e615"; }
+.es-icon-assignment1:before { content: "\e615"; }
 .es-icon-crown:before { content: "\e616"; }
 .es-icon-exit:before { content: "\e617"; }
 .es-icon-arrowback:before { content: "\e618"; }
@@ -124,8 +130,12 @@
 .es-icon-findinpage:before { content: "\e651"; }
 .es-icon-headset:before { content: "\e652"; }
 .es-icon-landscape:before { content: "\e653"; }
-.es-icon-assignment1:before { content: "\e654"; }
+.es-icon-assignment2:before { content: "\e654"; }
 .es-icon-accountwallet:before { content: "\e655"; }
 .es-icon-dashboard:before { content: "\e656"; }
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
+.es-icon-music:before { content: "\e673"; }
+.es-icon-flash:before { content: "\e675"; }
+.es-icon-ppt:before { content: "\e674"; }
+.es-icon-exam:before { content: "\e677"; }

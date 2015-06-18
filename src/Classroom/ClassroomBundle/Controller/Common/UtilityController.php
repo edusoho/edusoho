@@ -46,7 +46,6 @@ class UtilityController extends BaseController
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
             );
         }
-
         return $this->createJsonResponse($newUsers);
     }
 

@@ -100,7 +100,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         $lastCheck = intval($this->getSettingService()->get('_app_last_check'));
-        if (empty($lastCheck) or ((time() - $lastCheck) > 86400) ) {
+        if (empty($lastCheck) || ((time() - $lastCheck) > 86400) ) {
             $coursePublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'published'));
             $courseUnpublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'draft'));
 

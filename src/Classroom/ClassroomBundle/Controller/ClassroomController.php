@@ -102,7 +102,7 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function headerAction($previewAs = "", $classroomId)
+    public function headerAction($previewAs, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
@@ -217,7 +217,7 @@ class ClassroomController extends BaseController
         )));
     }
 
-    private function previewAsMember($previewAs = "", $member, $classroom)
+    private function previewAsMember($previewAs, $member, $classroom)
     {
         $user = $this->getCurrentUser();
 
@@ -255,7 +255,6 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
             'classroom' => $classroom,
@@ -299,7 +298,7 @@ class ClassroomController extends BaseController
         ));
     }
 
-    public function roleAction($previewAs = "", $classroomId)
+    public function roleAction($previewAs, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
