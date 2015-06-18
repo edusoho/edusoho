@@ -522,38 +522,6 @@
     -o-transform: scale(1, 1);
   }
 }
-@keyframes popoverRotate {
-  0% {
-    transform: scale(0.8, 0.8);
-  }
-  100% {
-    -moz-transform: scale(1, 1);
-  }
-}
-@-moz-keyframes popoverRotate {
-  0% {
-    -moz-transform: scale(0.8, 0.8);
-  }
-  100% {
-    -moz-transform: scale(1, 1);
-  }
-}
-@-webkit-keyframes popoverRotate {
-  0% {
-    -webkit-transform: scale(0.8, 0.8);
-  }
-  100% {
-    -webkit-transform: scale(1, 1);
-  }
-}
-@-o-keyframes popoverRotate {
-  0% {
-    -o-transform: scale(0.8, 0.8);
-  }
-  100% {
-    -o-transform: scale(1, 1);
-  }
-}
 @-webkit-keyframes loader-scale {
   0% {
     -webkit-transform: scale(1);
@@ -4182,15 +4150,7 @@ textarea.form-control-o {
   background: #fafafa;
 }
 .index-group {
-  padding-bottom: 23px;
-  margin-bottom: 20px;
-}
-.index-group .panel-body {
-  padding-bottom: 30px !important;
-}
-.index-dynamic {
   padding-bottom: 15px;
-  margin-bottom: 20px;
 }
 .recommend-teacher {
   padding-bottom: 50px;
@@ -5287,10 +5247,22 @@ textarea.form-control-o {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   z-index: -1;
 }
+@media (max-width: 767px) {
+  .class-header .class-bg-layer {
+    top: 2px;
+    left: 2px;
+  }
+}
 .class-header .class-bg-layer.two {
   top: 10px;
   left: 10px;
   z-index: -2;
+}
+@media (max-width: 767px) {
+  .class-header .class-bg-layer.two {
+    top: 4px;
+    left: 4px;
+  }
 }
 .class-header .class-header-bg {
   background-color: #fff;
@@ -5427,10 +5399,11 @@ textarea.form-control-o {
   text-align: center;
   color: #fff;
   font-size: 12px;
+  overflow: hidden;
   background: url("../img/price_bg.png");
 }
 .class-header .price span {
-  font-size: 24px;
+  font-size: 22px;
 }
 @media (max-width: 1199px) {
   .class-header .price {
@@ -5441,7 +5414,7 @@ textarea.form-control-o {
     background-size: 150px 60px;
   }
   .class-header .price span {
-    font-size: 20px;
+    font-size: 18px;
   }
 }
 @media (max-width: 991px) {
@@ -5453,7 +5426,12 @@ textarea.form-control-o {
     background-size: 135px 54px;
   }
   .class-header .price span {
-    font-size: 18px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .class-header .price {
+    right: -12px;
   }
 }
 .class-header .setting {
