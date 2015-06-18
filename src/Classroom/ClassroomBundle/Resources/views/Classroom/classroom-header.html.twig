@@ -23,7 +23,12 @@
           </a>
         </div>
         <div class="class-info">
-          <h2 class="title">{{ classroom.title }}</h2>
+          <h2 class="title">
+            {{ classroom.title }}
+            {% if classroom.status == 'closed' %}
+            <span class="label label-danger">已关闭</span>
+            {% endif %}
+          </h2>
           <div class="metas">
             <div class="score">
               {{ web_macro.star(classroom.rating) }}
@@ -65,7 +70,7 @@
               {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service }%}
             </div>
 
-            {% if not classroom.private %}
+            {% if not classroom.private and classroom.status != 'closed' %}
               <div class="btn-buy">
                 {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
                   <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>

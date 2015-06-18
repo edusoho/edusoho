@@ -102,7 +102,7 @@ class CourseController extends BaseController
         }
 
 
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0), array('recommendedSeq', 'ASC'), 0, 11));
+        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0, 'status'=>'published'), array('recommendedSeq', 'ASC'), 0, 11));
 
         $recommends = array();
         foreach ($classrooms as $key =>  $classroom) {
@@ -118,7 +118,9 @@ class CourseController extends BaseController
                 $classroom['belogCourse'] = true;
             }
 
-            $recommends[$classroom['id']] = $classroom;
+            if($classroom['status'] == 'published') {
+                $recommends[$classroom['id']] = $classroom;
+            }
         }
 
         return $this->render('TopxiaWebBundle:Course/Part:normal-header-recommend-classrooms.html.twig', array(
