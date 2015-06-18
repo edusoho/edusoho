@@ -481,8 +481,8 @@ class CourseController extends CourseBaseController
 			$vipChecked = 'ok';
 		}
 
-		if($this->isStudentJoinedFromCourse($member) 
-			|| $this->isStudentJoinedFromClassroomButExitedClassroom($course, $member, $user)) {
+		if($this->isBecomeStudentFromCourse($member) 
+			|| $this->isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)) {
 			$canExit = true;
 		} else {
 			$canExit = false;
