@@ -279,4 +279,49 @@ $api->get('{id}/accounts', function ($id) {
     $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
     return $accounts;
 });
+
+/*
+## 获取用户的话题
+    GET /users/{id}/coursethreads
+
+[支持分页](global-parameter.md)
+
+** 参数 **
+
+| 名称  | 类型  | 必需   | 说明 |
+| ---- | ----- | ----- | ---- |
+| type | string | 否 | 类型,未传则取全部类型 |
+
+`type`的值有：
+
+  * question : 问答
+  * discussion : 话题
+
+** 响应 **
+
+```
+{
+    "xxx": "xxx"
+}
+```
+*/
+
+$api->get('{id}/coursethreads', function (Request $request, $id) {
+    $user = convert($id,'user');
+    $start = $request->query->get('start', 0);
+    $limit = $request->query->get('limit', 10);
+    $type = $request->query->get('type', '');
+    $conditions = empty($type) ? array() : array('type' => $type);
+    $conditions['userId'] = $user['id'];
+    $total = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreadCount($conditions);
+    $coursethreads = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreads($conditions, 'created', $start, $limit);
+    
+    return array(
+        'data' => $coursethreads,
+        'total' => $total
+    );
+});
+
+
+
 return $api;

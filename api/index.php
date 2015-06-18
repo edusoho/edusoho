@@ -53,4 +53,5 @@ $app->mount('/api/users', include __DIR__ . '/src/users.php' );
 $app->mount('/api/me', include __DIR__ . '/src/me.php' );
 $app->mount('/api/courses', include __DIR__ . '/src/courses.php' );
 $app->mount('/api/announcements', include __DIR__ . '/src/announcements.php' );
+$app->mount('/api/coursethreads', include __DIR__ . '/src/coursethreads.php' );
 $app->run();
