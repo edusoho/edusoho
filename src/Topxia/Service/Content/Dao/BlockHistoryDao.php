@@ -17,4 +17,6 @@ interface BlockHistoryDao
     public function findBlockHistoryCountByBlockId($blockId);
 
     public function getLatestBlockHistory();
+
+    public function getLatestBlockHistoryByBlockId($blockId);
 }

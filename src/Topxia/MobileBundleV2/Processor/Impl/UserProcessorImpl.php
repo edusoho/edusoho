@@ -472,9 +472,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         $result = $this->controller->getUserService()->follow($user['id'], $toId);
 
-        $userShowUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
-        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>已经关注了你！";
-        $this->controller->getNotificationService()->notify($toId, 'default', $message);
+        $message = array('userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'follow');
+        $this->controller->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
     }
@@ -488,9 +489,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
 
-        $userShowUrl = $this->controller->generateUrl('user_show', array('id' => $user['id']), true);
-        $message = "用户<a href='{$userShowUrl}' target='_blank'>{$user['nickname']}</a>对你已经取消了关注！";
-        $this->getNotificationService()->notify($toId, 'default', $message);
+        $message = array('userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'opration' => 'unfollow');
+        $this->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
     }
@@ -703,8 +705,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'noteNumGreaterThan' => 0
         );
         
-        $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, 'updated', 0, 1);
-        $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, 'created', 0, 1);
+        $updateTimeNote  = $this->controller->getNoteService()->searchNotes($conditions, array('updatedTime' => 'DESC'), 0, 1);
+        $createdTimeNote = $this->controller->getNoteService()->searchNotes($conditions, array('createdTime' => 'DESC'), 0, 1);
 
         $lastestNote     = array();
         if(sizeof($updateTimeNote) > 0 && sizeof($createdTimeNote) > 0){

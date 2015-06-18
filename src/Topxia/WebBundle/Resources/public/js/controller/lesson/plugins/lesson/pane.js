@@ -41,8 +41,12 @@ define(function(require, exports, module) {
 
                   toolbar.on('learnStatusChange', function(data) {
                         var $item = $("#course-item-list").find('.lesson-item-' + data.lessonId);
-                        $item.removeClass('lesson-item-learning').removeClass('lesson-item-finished');
-                        $item.addClass('lesson-item-' + data.status);
+                        var $itemStatusIcon = $item.find('.status-icon');
+                        var status = data.status == 'learning' ? 'doing' : 'done1'; 
+                        
+                        $itemStatusIcon.removeClass('es-icon-doing').removeClass('es-icon-done1')
+                                    .removeClass('es-icon-undone').removeClass('color-primary');
+                        $itemStatusIcon.addClass('color-primary').addClass('es-icon-'+status);
                   });
             },
 
@@ -51,7 +55,7 @@ define(function(require, exports, module) {
             },
 
             _setLessonItemActive: function(lessonId) {
-                  $("#course-item-list").find('.item').removeClass('item-active');
+                  $("#course-item-list").find('.lesson-item').removeClass('item-active');
                   $("#course-item-list").find('.lesson-item-' + lessonId).addClass('item-active');
             }
       });

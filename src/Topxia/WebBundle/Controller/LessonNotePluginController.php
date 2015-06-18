@@ -21,7 +21,8 @@ class LessonNotePluginController extends BaseController
         );
         $form = $this->createNoteForm($formInfo);
         return $this->render('TopxiaWebBundle:LessonNotePlugin:index.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'note' => $note,
         ));
     }
 
@@ -32,6 +33,7 @@ class LessonNotePluginController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $note = $form->getData();
+                $note['status'] = $request->request->get('status') ? 1 : 0;
                 $this->getCourseNoteService()->saveNote($note);
                 return $this->createJsonResponse(true);
             } else {

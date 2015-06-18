@@ -7,8 +7,11 @@ define(function(require, exports, module) {
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
+        chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
 
     require('mediaelementplayer');
+
+
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
@@ -47,6 +50,7 @@ define(function(require, exports, module) {
             this._initToolbar();
             this._initRouter();
             this._initListeners();
+            this._initChapter();
 
             $('.prev-lesson-btn, .next-lesson-btn').tooltip();
         },
@@ -669,6 +673,11 @@ define(function(require, exports, module) {
             }
 
             return this._lessons[index-1];
+        },
+        _initChapter: function(e) {
+           this.chapterAnimate = new chapterAnimate({
+            'element': this.element
+           });
         }
 
     });
@@ -795,7 +804,6 @@ define(function(require, exports, module) {
             return posted;
         }
     });
-
 
     exports.run = function() {
         

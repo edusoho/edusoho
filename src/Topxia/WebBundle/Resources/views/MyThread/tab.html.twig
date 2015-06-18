@@ -1,7 +1,5 @@
-{% if is_plugin_installed('Classroom') and version_compare(plugin_version('Classroom'), '1.0.8', '>=') %}
-	<ul class="nav nav-tabs">
-		<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{ path('my_discussions') }}">课程话题</a></li>
-		<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{ path('my_classroom_discussions') }}">{{ setting('classroom.name')|default("班级") }}话题</a></li>
-	</ul>
-	<br>
-{% endif %}
+<ul class="nav nav-tabs">
+	<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{ path('my_discussions') }}">课程话题</a></li>
+	<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{ path('my_classroom_discussions') }}">{{ setting('classroom.name')|default("班级") }}话题</a></li>
+</ul>
+<br>

@@ -162,7 +162,7 @@ class NoteServiceTest extends BaseTestCase
 
         $searchedNotes = $this->getNoteService()->searchNotes(
             array('courseId'=>$createdCourse['id']),
-            'created', 0, 30);
+            array('createdTime' => 'DESC'), 0, 30);
         $this->assertEquals(2, count($searchedNotes));
         $this->assertContains($createdNote2, $searchedNotes);
     }

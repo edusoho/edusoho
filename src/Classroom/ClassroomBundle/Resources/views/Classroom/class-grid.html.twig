@@ -1,0 +1,7 @@
+<div class="class-item">
+  <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+    {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+    <h3>{{ classroom.title }}</h3>
+    <div class="image-overlay"></div>
+  </a>
+</div>

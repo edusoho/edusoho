@@ -8,7 +8,7 @@ use Topxia\Common\ArrayToolkit;
 class MyTeachingController extends BaseController
 {
     
-    public function coursesAction(Request $request)
+    public function coursesAction(Request $request, $filter)
     {
         $user = $this->getCurrentUser();
 
@@ -16,25 +16,49 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
+        $conditions = array(
+            'userId'=>$user['id']
+        );
+        
+        if($filter == 'normal' ){
+            $conditions["parentId"] = 0;
+        }
+
+        if($filter == 'classroom'){
+            $conditions["parentId_GT"] = 0;
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($user['id'], false),
+            $this->getCourseService()->findUserTeachCourseCount($conditions, false),
             12
         );
         
         $courses = $this->getCourseService()->findUserTeachCourses(
-            $user['id'],
+            $conditions,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount(),
             false
         );
 
+        $classrooms = array();
+        if($filter == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
+
         $courseSetting = $this->getSettingService()->get('course', array());
 
         return $this->render('TopxiaWebBundle:MyTeaching:teaching.html.twig', array(
-            'courses'=>$courses,
+            'courses' => $courses,
+            'classrooms' => $classrooms,
             'paginator' => $paginator,
-            'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled']
+            'live_course_enabled' => empty($courseSetting['live_course_enabled']) ? 0 : $courseSetting['live_course_enabled'],
+            'filter' => $filter
         ));
     }
 
@@ -46,11 +70,7 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $classrooms=array();
-        $teacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'teacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
-        $headTeacherClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'headTeacher','userId'=>$user->id),array('createdTime','desc'),0,9999);
-
-        $classrooms=array_merge($teacherClassrooms,$headTeacherClassrooms);
+        $classrooms=$this->getClassroomService()->searchMembers(array('roles'=>array('teacher', 'headTeacher', 'assistant', 'studentAssistent'),'userId'=>$user->id),array('createdTime','desc'),0,9999);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 
@@ -60,7 +80,7 @@ class MyTeachingController extends BaseController
         
         foreach ($classrooms as $key => $classroom) {
             
-            $courses=$this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+            $courses=$this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
             $courseIds=ArrayToolkit::column($courses,'courseId');
 
             $coursesCount=count($courses);
@@ -100,7 +120,7 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount($user['id'], true);
+		$myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount(array('userId'=>$user['id']), true);
 
         if (empty($myTeachingCourseCount)) {
             return $this->render('TopxiaWebBundle:MyTeaching:threads.html.twig', array(
@@ -110,7 +130,7 @@ class MyTeachingController extends BaseController
             ));
         }
 
-		$myTeachingCourses = $this->getCourseService()->findUserTeachCourses($user['id'], 0, $myTeachingCourseCount, true);
+		$myTeachingCourses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, $myTeachingCourseCount, true);
 
 		$conditions = array(
 			'courseIds' => ArrayToolkit::column($myTeachingCourses, 'id'),

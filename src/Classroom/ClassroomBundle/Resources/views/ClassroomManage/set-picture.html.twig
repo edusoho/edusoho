@@ -1,0 +1,43 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% set side_nav = 'picture' %}
+{% set script_controller = 'classroombundle/controller/classroom/picture' %}
+
+{% block title %}封面图片 - {{ parent() }}{% endblock %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">封面图片</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <form id="classroom-picture-form" method="post" enctype="multipart/form-data">
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <img class="img-responsive" src="{{ filepath(classroom.largePicture, 'classroom.png') }}" />
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <p class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为525x350。<br>文件大小不能超过<strong>2M</strong>。</p>
+
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a class="btn btn-fat btn-primary" id="upload-picture-btn" 
+          data-upload-token="{{ upload_token('tmp', 'image') }}"
+          data-goto-url="{{path('classroom_manage_picture_crop', {id:classroom.id})}}"
+          >上传新图片</a>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -33,36 +33,34 @@ class SearchController extends BaseController
         $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
         
         $categoryIds=array();
-        for($i=0;$i<count($categories);$i++){
-            $id = $categories[$i]['id'];
-            $name = $categories[$i]['name'];
-            $categoryIds[$id] = $name;
+        foreach ($categories as $key => $category) {
+            $categoryIds[$key] = $category['name'];
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $coursesTypeChoices = $request->query->get('coursesTypeChoices');       
+        $fliter = $request->query->get('fliter');       
 
-        if (!$keywords) {
-            goto response;
-        }
 
         $conditions = array(
             'status' => 'published',
             'title' => $keywords,
-            'categoryId' => $categoryId
+            'categoryId' => $categoryId,
+            'parentId' => 0
         );
-        if ($coursesTypeChoices == 'vipCourses') {
+
+        if ($fliter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } else if ($coursesTypeChoices == 'liveCourses') {
+        } else if ($fliter == 'live') {
             $conditions['type'] = 'live';
-        } else if ($coursesTypeChoices == 'freeCourses'){
+        } else if ($fliter == 'free'){
             $conditions['price'] = '0.00';
         }
 
+        $count = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
-            , 10
+            $count
+            , 12
         );
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
@@ -72,7 +70,6 @@ class SearchController extends BaseController
         );
 
 
-        response:
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
@@ -80,7 +77,8 @@ class SearchController extends BaseController
             'isShowVipSearch' => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
             'categoryIds' => $categoryIds,
-            'coursesTypeChoices' => $coursesTypeChoices
+            'fliter' => $fliter,
+            'count' => $count,
         ));
     }
 
