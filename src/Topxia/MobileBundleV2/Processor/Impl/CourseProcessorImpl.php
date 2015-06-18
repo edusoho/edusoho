@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Announcement\AnnouncementProcessor\AnnouncementProcessorFactory;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -24,7 +25,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($courseId)) {
             return array();
         }
-        $announcements = $this->controller->getCourseService()->findAnnouncements($courseId, $start, $limit);
+
+        $conditions = array(
+            'targetType' => "course",
+            'targetId' => $courseId
+        );
+
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), $start, $limit);
+        $announcements = array_values($announcements);
         return $this->filterAnnouncements($announcements);
     }
     
@@ -960,7 +968,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $type = $this->getParam("type", 'normal');
         $categoryId = (int) $this->getParam("categoryId", 0);
         
-        $conditions['categoryId'] = $categoryId;
+        if ($categoryId !=0 ) {
+            $conditions['categoryId'] = $categoryId;
+        }
         $conditions['title'] = $search;
         
         if (empty($tagId)) {
@@ -975,6 +985,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
         $conditions               = array();
+        var_dump($categoryId != 0);
         if($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
         }
@@ -993,11 +1004,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
+
         $total = $this->controller->getCourseService()->searchCourseCount($conditions);
         
         $sort               = $this->getParam("sort", "latest");
-        $conditions['sort'] = $sort;
-        
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
         $result = array(
             "start"=>$start,
