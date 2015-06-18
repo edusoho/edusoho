@@ -21,13 +21,13 @@
           <a href="{{path('classroom_show',{id:classroom.id})}}">
             <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
           </a>
+          {% if classroom.status == 'closed' %}
+            <span class="label label-danger">已关闭</span>
+          {% endif %}
         </div>
         <div class="class-info">
           <h2 class="title">
             {{ classroom.title }}
-            {% if classroom.status == 'closed' %}
-            <span class="label label-danger">已关闭</span>
-            {% endif %}
           </h2>
           <div class="metas">
             <div class="score">
