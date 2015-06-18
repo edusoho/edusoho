@@ -67,7 +67,7 @@ class TagServiceImpl extends BaseService implements TagService
     {
         $tag = ArrayToolkit::parts($tag, array('name'));
 
-        $this->filterTagFields($tag);
+        $tag=$this->filterTagFields($tag);
         $tag['createdTime'] = time();
 
         $tag = $this->getTagDao()->addTag($tag);
@@ -115,7 +115,7 @@ class TagServiceImpl extends BaseService implements TagService
         return $tag;
     }
 
-	private function getTagDao()
+	protected function getTagDao()
 	{
         return $this->createDao('Taxonomy.TagDao');
 	}

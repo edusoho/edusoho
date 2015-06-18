@@ -86,7 +86,7 @@ class CourseThreadController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        if ($thread['type'] == 'question' and $paginator->getCurrentPage() == 1) {
+        if ($thread['type'] == 'question' && $paginator->getCurrentPage() == 1) {
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
         } else {
             $elitePosts = array();
@@ -164,7 +164,7 @@ class CourseThreadController extends CourseBaseController
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $thread['userId']) {
+        if ($user->isLogin() && $user->id == $thread['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -429,7 +429,7 @@ class CourseThreadController extends CourseBaseController
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $post['userId']) {
+        if ($user->isLogin() && $user->id == $post['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);

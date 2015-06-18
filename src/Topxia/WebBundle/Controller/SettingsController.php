@@ -882,7 +882,7 @@ class SettingsController extends BaseController
 			throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
 		}
 
-		if (empty($settings) or !isset($settings[$type.'_enabled']) or empty($settings[$type.'_key']) or empty($settings[$type.'_secret'])) {
+		if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
 			throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
 		}
 

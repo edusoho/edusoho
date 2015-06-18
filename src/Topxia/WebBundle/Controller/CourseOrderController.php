@@ -313,7 +313,7 @@ class CourseOrderController extends OrderController
                 );
             }
 
-            if (empty($member) or $member['role'] != 'teacher') {
+            if (empty($member) || $member['role'] != 'teacher') {
                 return $member;
             }
 
