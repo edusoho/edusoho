@@ -76,6 +76,12 @@ class CourseController extends BaseController
     {
         $classrooms = $this->getClassroomService()->findClassroomsByCourseId($course['id']);
 
+        foreach ($classrooms as $key => $classroom) {
+            if($classroom["status"] != "published"){
+                unset($classrooms[$key]);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-belong-classrooms.html.twig', array(
             'course' => $course,
             'classrooms' => $classrooms,
