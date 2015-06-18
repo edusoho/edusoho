@@ -1971,6 +1971,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
         $conditions =array(
           'userId' => $userId,
+          'status' => 'finished',
           'courseId' => $courseId
        	 );
         $count = $this->getLessonLearnDao()->searchLearnCount($conditions);
