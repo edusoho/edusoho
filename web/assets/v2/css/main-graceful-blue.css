@@ -1098,6 +1098,8 @@ Pagination Styles
   height: 30px;
   width: 100px;
   border-radius: 20px;
+  line-height: 28px;
+  padding: 0 12px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1274,6 +1276,7 @@ Pagination Styles
 @media (max-width: 767px) {
   .footer-main .link-item {
     width: 33.33%;
+    padding: 0 5px;
   }
 }
 .footer-main h3 {
@@ -1315,109 +1318,39 @@ Pagination Styles
 .footer-logo .footer-sns {
   margin-top: 30px;
 }
-.footer-logo .footer-sns .sns-weixin {
+.footer-logo .footer-sns .icon-sns {
   position: relative;
 }
-.footer-logo .footer-sns .sns-weixin .weixin-popover {
-  background: url(../img/weixin.png);
+.footer-logo .footer-sns .icon-sns:hover .sns-popover {
+  display: block \9;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.footer-logo .footer-sns .sns-popover {
   width: 194px;
   height: 209px;
   position: absolute;
   left: -68px;
   top: -220px;
+  display: none \9;
   opacity: 0;
   filter: alpha(opacity=0);
-  transform: scale(0);
-  -webkit-transform: scale(0);
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
   transform-origin: 50% 100%;
   -webkit-transform-origin: 50% 100%;
-  transition: transform ease .3s,opacity ease .3s;
-  -webkit-transition: all ease .3s;
-}
-.footer-logo .footer-sns .sns-weixin:hover .weixin-popover {
-  display: block;
-  transform: scale(1);
-  -webkit-transform: scale(1);
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.footer-logo .footer-sns .sns-phone {
-  position: relative;
-}
-.footer-logo .footer-sns .sns-phone .phone-popover {
-  background: url(../img/phone.png);
-  width: 194px;
-  height: 209px;
-  position: absolute;
-  left: -68px;
-  top: -220px;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  transform: scale(0);
-  -webkit-transform: scale(0);
-  transform-origin: 50% 100%;
-  -webkit-transform-origin: 50% 100%;
-  transition: transform ease .3s,opacity ease .3s;
-  -webkit-transition: all ease .3s;
-}
-.footer-logo .footer-sns .sns-phone:hover .phone-popover {
-  display: block;
-  transform: scale(1);
-  -webkit-transform: scale(1);
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.footer-logo .footer-sns .sns-apple {
-  position: relative;
-}
-.footer-logo .footer-sns .sns-apple .apple-popover {
-  background: url(../img/apple.png);
-  width: 194px;
-  height: 209px;
-  position: absolute;
-  left: -68px;
-  top: -220px;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  transform: scale(0);
-  -webkit-transform: scale(0);
-  transform-origin: 50% 100%;
-  -webkit-transform-origin: 50% 100%;
-  transition: transform ease .3s,opacity ease .3s;
-  -webkit-transition: all ease .3s;
-}
-.footer-logo .footer-sns .sns-apple:hover .apple-popover {
-  display: block;
-  transform: scale(1);
-  -webkit-transform: scale(1);
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.footer-logo .footer-sns .sns-android {
-  position: relative;
-}
-.footer-logo .footer-sns .sns-android .android-popover {
-  background: url(../img/android.png);
-  width: 194px;
-  height: 209px;
-  position: absolute;
-  left: -68px;
-  top: -220px;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  transform: scale(0);
-  -webkit-transform: scale(0);
-  transform-origin: 50% 100%;
-  -webkit-transform-origin: 50% 100%;
-  transition: transform ease .3s,opacity ease .3s;
-  -webkit-transition: all ease .3s;
-}
-.footer-logo .footer-sns .sns-android:hover .android-popover {
-  display: block;
-  transform: scale(1);
-  -webkit-transform: scale(1);
-  opacity: 1;
-  filter: alpha(opacity=100);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .footer-logo .footer-sns i {
   display: inline-block;
