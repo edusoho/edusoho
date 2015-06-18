@@ -83,10 +83,11 @@ class LoginBindController extends BaseController
 
     public function newAction(Request $request, $type)
     {
-        $this->autobind($request, $type);
+        return $this->autobind($request, $type);
+
     }
 
-    private function autobindAction(Request $request,$type)
+    private function autobind(Request $request,$type)
     {
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
