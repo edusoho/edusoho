@@ -1,30 +1,31 @@
-<ion-header-bar class="bar-positive">
-<button class="button button-clear" ng-click="toggle()">
-  <i class="iconfont icon-menu"></i>
-</button>
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-menu" ng-click="toggle()"></button>
+      <h3 class="title" ng-click="openModal()">发现<i class="iconfont icon-arrowdropdown"></i></h3>
+      <button class="ui-btn bar-tool btn-outline iconfont icon-sousuo"></button>
+    </div>
+</div>
 
-<h1 class="title">
-  <span ng-click="openModal($event)">
-    分类<i class="iconfont icon-arrowdropdown"></i>
-  </span>
-</h1>
-<button class="button button-clear">
-  <i class="iconfont icon-sousuo"></i>
-</button>
-</ion-header-bar>
-
-<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light">
-
-  <ion-tab title="课程" href="#/index/found/course">
-    <ion-nav-view name="found-course"></ion-nav-view>
-  </ion-tab>
-
-  <ion-tab title="直播课" href="#/index/found/live" class="tab-center">
-    <ion-nav-view name="found-live"></ion-nav-view>
-  </ion-tab>
-
-  <ion-tab title="班级" href="#/index/found/classroom">
-    <ion-nav-view name="found-classroom"></ion-nav-view>
-  </ion-tab>
-
-</ion-tabs>
+<div class="ui-tab tab-top" ui-tab>
+    <ul class="ui-tab-nav ui-border-b">
+        <li><span class="line">课程</span></li>
+        <li><span>直播</span></li>
+    </ul>
+    <ul class="ui-tab-content tab-display">
+        <li>
+            <div ui-view="found-course"></div>
+        </li>
+        <li>
+            <div ui-view="found-live"></div>
+        </li>
+    </ul>
+</div>
+<div class="ui-dialog full">
+    <div class="ui-dialog-bg"></div>
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd category-card">
+            <category-tree data="categoryTree" listener="categorySelectedListener"></category-tree>
+        </div>
+        </div>
+    </div>        
+</div>

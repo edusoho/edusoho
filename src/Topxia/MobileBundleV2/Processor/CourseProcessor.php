@@ -8,7 +8,7 @@ interface CourseProcessor
 	public function getLearningCourse();
 	public function getLearningCourseWithoutToken();
 	public function getLearnedCourse();
-	public function getFavoriteCoruse();
+	public function getFavoriteCourse();
 
 	public function getFavoriteLiveCourse();
 	public function getFavoriteNormalCourse();

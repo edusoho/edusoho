@@ -1,4 +1,4 @@
-app.controller('AppInitController', ['$scope', '$ionicHistory', '$state', 'sideDelegate', 'SchoolService', AppInitController]);
+app.controller('AppInitController', ['$scope', '$state', 'sideDelegate', 'SchoolService', AppInitController]);
 
 function baseController($scope)
 {
@@ -7,10 +7,11 @@ function baseController($scope)
 	}
 }
 
-function AppInitController($scope, $ionicHistory, $state, sideDelegate, SchoolService)
+function AppInitController($scope, $state, sideDelegate, SchoolService)
 {	
+	console.log("AppInitController");
 	$scope.toggle = function() {
-	    sideDelegate.toggleMenu();
+	    	sideDelegate.toggleMenu();
 	};
 
 	$scope.showMyView = function(state) {

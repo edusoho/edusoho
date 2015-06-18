@@ -1,47 +1,45 @@
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back>
-</a>
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">用户信息</h3>
+    </div>
+</div>
+<div class="top-header ui-userinfo">
+    <ul class="ui-list ui-list-text ui-border-tb">
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>头像</h4>
+          </div>
+          <div class="ui-avatar">
+              <img class="avatar" ng-src="{{ user.mediumAvatar | coverAvatar }}" />
+          </div>
+      </li>
 
-<h1 class="title">用户信息</h1>
-</ion-header-bar>
-<ion-content>
-    <div class="list userinfo-list">
-      <div class="item item-button-right">
-        <span class="face">
-            头像
-        </span>
-        <span class="item-note">
-          <img class="avatar" ng-src="{{ user.mediumAvatar | coverAvatar }}">
-        </span>
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>昵称</h4>
+          </div>
+          <div class="ui-list-action">
+             {{ user.nickname }}
+          </div>
+      </li>
 
-      </div>
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>性别</h4>
+          </div>
+          <div class="ui-list-action">
+             {{ user.gender | coverGender }}
+          </div>
+      </li>
 
-      <div class="item item-button-right">
-        昵称
-        <span class="item-note">
-          {{ user.nickname }}
-        </span>
-      </div>
-
-      <div class="item item-button-right">
-        性别
-        <span class="item-note">
-          {{ user.gender | coverGender }}
-        </span>
-      </div>
-
-      <div class="item item-button-right">
-        <span>
-            个性签名
-        </span>
-
-        <span class="item-note">
-          <textarea row="2"  class="sign" maxlength="150" disabled="false">
-            {{ user.signature }}
-        </textarea>
-        </span>
-      </div>
-  </div>
-  </ion-content>
-
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>个性签名</h4>
+          </div>
+          <div class="ui-list-action ui-nowrap-multi">
+             {{ user.signature }}
+          </div>
+      </li>
+  </ul>
 </div>

@@ -32,15 +32,73 @@ app.directive('onContentLoaded', function ($parse) {
         } 
     };
 }).
-directive('back', function($ionicHistory, $state) {
+directive('uiTab', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+
+          var self = this;
+          var scroller = element[0].querySelector('.ui-tab-content');
+          var nav = element[0].querySelector('.ui-tab-nav');
+
+          if ("empty"  != attrs.select) {
+            angular.element(scroller.children[0]).addClass('current');
+            angular.element(nav.children[0]).addClass('current');
+          }
+
+          this.currentPage = 0;
+          scroller.style.width = "100%";
+
+          this.itemWidth = scroller.children[0].clientWidth;
+          this.scrollWidth = this.itemWidth * this.count;
+
+          function changeTabContentHeight(height) {
+              var tabContent = element[0].querySelector('.ui-tab-content');
+              $(tabContent).height(height);
+          }
+
+          angular.forEach(nav.children, function(item) {
+            angular.element(item).on("click", function(e) {
+
+                var tagetHasCurrent = $(item).hasClass('current');
+                var tempCurrentPage = self.currentPage;
+                self.currentPage = $(item).index();
+
+                $(nav).children().removeClass('current');
+                $(scroller).children().removeClass('current');
+
+                if (tempCurrentPage == self.currentPage && "empty"  == attrs.select && tagetHasCurrent) {
+                  changeTabContentHeight(0);
+                  return;
+                }
+
+                var currentScrooler = angular.element(scroller.children[self.currentPage]);
+                $(item).addClass('current');
+                currentScrooler.addClass("current");
+                changeTabContentHeight("100%");
+            });
+          });
+
+          if ("empty"  == attrs.select) {
+              scope.$on("closeTab", function(event, data) {
+                angular.element(scroller.children[self.currentPage]).removeClass('current');
+                angular.element(nav.children[self.currentPage]).removeClass('current');
+                changeTabContentHeight(0);
+              });
+          }
+    }
+  }
+}).
+directive('back', function($window, $state) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
             return { 
                 post: function postLink(scope, element, attributes) {
+
                   element.on("click", function(){
-                    if (attributes["back"] == "go" && $ionicHistory.backView()) {
-                      $ionicHistory.goBack();
+                    if (attributes["back"] == "go") {
+                      $window.history.back();
                       return;
                     }
                     if (attributes["back"] == "close" && scope.close) {
@@ -54,11 +112,87 @@ directive('back', function($ionicHistory, $state) {
     }
   }
 }).
-directive('slideInit', function() {
+directive('uiBar', function($window, $state) {
   return {
     restrict: 'A',
-    link : function(scope, element) {
-          element[0].querySelector('.banner').style.width = element.parent().parent()[0].offsetWidth + "px";
+    link : function(scope, element, attrs) {
+        var toolEL = element[0].querySelector(".bar-tool");
+        var titleEL = element[0].querySelector(".title");
+        var toolELWidth = toolEL ? toolEL.offsetWidth : 44;
+        titleEL.style.paddingRight = toolELWidth + "px";
+        titleEL.style.paddingLeft = toolELWidth + "px";
+    }
+  }
+}).
+directive('ngClick', function($parse) {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return function(scope, element, clickExpr) {
+                  var clickHandler = angular.isFunction(clickExpr) ?
+                    clickExpr :
+                    $parse(clickExpr);
+
+                  element.on('click', function(event) {
+                    scope.$apply(function() {
+                      clickHandler(scope, {$event: (event)});
+                    });
+                  });
+
+                  element.onclick = function(event) { };
+          };
+    }
+  }
+}).
+directive('uiScroll', function($parse) {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+      scope.$watch(attrs.data, function(newValue) {
+          if (newValue && newValue.length > 0) {
+                
+                element.on("scroll", function() {
+                  var scrollHeight = element[0].scrollHeight;
+                  var scrollTop = element[0].scrollTop;
+                  var clientHeight = element[0].clientHeight;
+
+                  if ( (scrollTop + clientHeight) >= scrollHeight ) {
+                    $parse(attrs.onInfinite)(scope);
+                  }
+                });
+          }
+      });
+      
+    }
+  }
+}).
+directive('uiSliderBox', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+          scope.$watch(attrs.uiSliderBox, function(newValue) {
+            if (newValue && newValue.length > 0) {
+                initSlider();
+            }
+          });
+
+          function initSlider () {
+              var slider = new fz.Scroll('.' + attrs.slider, {
+                  role: 'slider',
+                  indicator: true,
+                  autoplay: false,
+                  interval: 3000
+              });
+
+              slider.on('beforeScrollStart', function(fromIndex, toIndex) {
+
+              });
+
+              slider.on('scrollEnd', function() {
+
+              });
+          }
+          
     }
   }
 }).
@@ -122,20 +256,18 @@ directive('lazyLoad', function () {
         });
     }
 }).
-directive('modal', function ($ionicTabsDelegate) {
+directive('modal', function () {
   return {
     restrict: 'EA',
     priority : 10000,
     controller : function($scope, $element) {
     },
     link : function(scope, element, attrs) {
-      attrs.nsShow = "$parent.$tabSelected";
+      element.addClass("ui-modal");
       element[0].addEventListener('click', function(event) {
-        $ionicTabsDelegate.select(0);
-        scope.$apply(function() {
-          scope.$parent.$tabSelected = false;
-        });
+        scope.$emit("closeTab", {});
       });
+
     }
   }
 }).
@@ -164,8 +296,10 @@ directive('categoryTree', function () {
             listener : '=listener'
         }, 
         templateUrl: app.viewFloder + 'view/category_tree.html', 
-        controller: function($scope, $element){
 
+        link : function(scope, element, attrs) {
+
+          function initCategory($scope) {
             var realityDepth = $scope.data.realityDepth > 3 ? 3 : $scope.data.realityDepth - 1;
             var categoryCols = [];
             var categoryTree = $scope.data.data[0];
@@ -198,13 +332,13 @@ directive('categoryTree', function () {
                       $scope.listener(category);
                     }
             };
-        },
-        compile: function(tElem, tAttrs) {
+          }
 
-            return { 
-                post: function postLink(scope, element, attributes) { 
-                }  
-            };
+          scope.$watch("data", function(newValue) {
+            if (newValue) {
+                initCategory(scope);
+            }
+          });
         }
     };
 });

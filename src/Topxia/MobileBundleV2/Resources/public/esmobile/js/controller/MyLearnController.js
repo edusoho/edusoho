@@ -1,59 +1,60 @@
-function MyLearnBaseController($scope, serviceCallback)
+app.controller('MyLearnController', ['$scope', 'CourseService', MyLearnController]);
+
+function MyLearnController($scope, CourseService)
 {
-	$scope.content = {
-		start : 0,
-		canLoad : true,
-		data : []
+	var self = this;
+	self.content = {
+		course : {
+			start : 0,
+			canLoad : true,
+			data : []
+		},
+		live : {
+			start : 0,
+			canLoad : true,
+			data : []
+		}
 	};
 
-  	$scope.loadDataList = function(type) {
+	$scope.course = self.content.course;
+	$scope.live = self.content.live;
+
+  	self.loadDataList = function(content, serviceCallback) {
   		serviceCallback({
   			limit : 10,
-			start: $scope.content.start,
+			start: content.start,
 			token : $scope.token
   		}, function(data) {
-  			console.log(data);
+
   			if (!data || data.data.length == 0) {
-	    			$scope.content.canLoad = false;
+	    			content.canLoad = false;
 	    		}
 
-	    		$scope.content.data = $scope.content.data.concat(data.data);
-	    		$scope.content.start += data.limit;
+	    		content.data = content.data.concat(data.data);
+	    		content.start += data.limit;
 
-	    		if (data.total && $scope.content.start >= data.total) {
-	    			$scope.content.canLoad = false;
+	    		if (data.total && content.start >= data.total) {
+	    			content.canLoad = false;
 	    		}
-	    		$scope.$broadcast('scroll.infiniteScrollComplete');
   		});
   	}
 
   	$scope.canLoadMore = function(type) {
-  		return $scope.content.canLoad;
+  		return self.content[type].canLoad;
   	};
 
   	$scope.loadMore = function(type){
   		$scope.loadDataList(type);
   	};
-}
 
-app.controller('MyLearnCourseController', ['$scope', 'CourseService', MyLearnCourseController]);
+  	$scope.loadCourses = function() {
+  		self.loadDataList(self.content.course, CourseService.getLearningCourse);
+  	}
 
-function MyLearnCourseController($scope, CourseService)
-{
-	console.log("MyLearnCourseController");
-	this.__proto__  = new MyLearnBaseController($scope, CourseService.getLearningCourse);
-}
+  	$scope.loadLiveCourses = function() {
+  		self.loadDataList(self.content.live, CourseService.getLiveCourses);
+  	}
 
-app.controller('MyLearnLiveController', ['$scope',  'CourseService', MyLearnLiveController]);
-function MyLearnLiveController($scope, CourseService)
-{
-	console.log("MyLearnLiveController");
-	this.__proto__  = new MyLearnBaseController($scope, CourseService.getLiveCourses);
-}
-
-app.controller('MyLearnClassRoomController', ['$scope', 'CourseService', MyLearnClassRoomController]);
-function MyLearnClassRoomController($scope, ClassRoomService)
-{
-	console.log("MyLearnClassRoomController");
-	this.__proto__  = new MyLearnBaseController($scope, ClassRoomService.myClassRooms);	
+  	$scope.loadCourses();
+  	$scope.loadLiveCourses();
 }

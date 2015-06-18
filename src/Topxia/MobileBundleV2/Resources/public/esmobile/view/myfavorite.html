@@ -1,21 +1,68 @@
-<ion-header-bar class="bar-positive">
-<a class="button button-icon iconfont icon-fanhui" back >
-</a>
+<div class="ui-bar" ui-bar>
+  <div class="ui-bar-bg">
+    <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+    <h3 class="title">我的收藏</h3>
+  </div>
+</div>
 
-<h1 class="title">
-  我的收藏
-</h1>
+<div class="ui-tab tab-top" ui-tab>
+    <ul class="ui-tab-nav ui-border-b">
+        <li><span class="line">课程</span></li>
+        <li><span>直播课</span></li>
+    </ul>
+    <ul class="ui-tab-content tab-display ui-course-learn">
+        <li>
+            <div class="ui-scroller">
+              <ul class="ui-list ui-border-tb">
+                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
+                      <div class="ui-list-img">
+                          <span style="background-image:url( {{ course.middlePicture | coverPic }} )"></span>
+                      </div>
+                      <div class="ui-list-info">
+                          <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
+                          <p>
+                            <span>
+                                上次学习时间:{{ course.startTime | coverLearnTime }}
+                            </span>
+                            <div class="ui-progress">
+                                <span ng-style="course | coverLearnProsser"></span>
+                            </div>
+                          </p>
+                      </div>
+                  </li>
+              </ul>
 
-</ion-header-bar>
+              <list-empty-view data="data.course.data" title="暂时没有课程">
+              </list-empty-view>
 
-<ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light">
+            </div>
 
-  <ion-tab title="课程" href="#/myfavorite/course">
-    <ion-nav-view name="myfavorite-course"></ion-nav-view>
-  </ion-tab>
+        </li>
+        <li>
+            <div class="ui-scroller">
+              <ul class="ui-list ui-border-tb">
+                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in data.live.data" ui-sref="course({ courseId : course.id })">
+                      <div class="ui-list-img">
+                          <span style="background-image:url( {{ course.middlePicture | coverPic }} )"></span>
+                      </div>
+                      <div class="ui-list-info">
+                          <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
+                          <p>
+                            <span>
+                                上次学习时间:{{ course.startTime | coverLearnTime }}
+                            </span>
+                            <div class="ui-progress">
+                                <span ng-style="course | coverLearnProsser"></span>
+                            </div>
+                          </p>
+                      </div>
+                  </li>
+              </ul>
 
-  <ion-tab title="直播课" href="#/myfavorite/live">
-    <ion-nav-view name="myfavorite-live"></ion-nav-view>
-  </ion-tab>
+              <list-empty-view data="data.live.data" title="暂时没有直播课程">
+              </list-empty-view>
 
-</ion-tabs>
+            </div>
+        </li>
+    </ul>
+</div>

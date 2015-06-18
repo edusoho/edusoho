@@ -1,27 +1,29 @@
-<ion-view>
-	<ion-content class="padding content-padding mygroup-card">
+<div ng-controller="MyGroupNoteController">
 
-		<div class="mygroup-content">
-		          <div class="list">
-			          	 <div class="card" ng-repeat="note in notes">
-					  <div class="item item-text-wrap">
-					    {{ note.content | blockStr }}
-					  </div>
-					  <div class="item tabs tabs-secondary tabs-icon-left">
-					    <a class="tab-item left" href="#">{{ note.courseTitle }}</a>
-					    <a class="tab-item right" href="#">
-					       {{ question.createdTime | coverLearnTime }}
-					    </a>
-					  </div>
-				</div>
-		              </a>
-		          </div>
-		</div>
+	<div class="ui-scroller" ui-scroll data="data" on-infinite="loadMore()">
+	  	<ul class="ui-list ui-list-card ui-question">
+		    <li class="ui-border-t" ng-repeat="note in data" ui-sref="note({ noteId : note.id })">
+		    		<div class="ui-list-info">
+		            	<h4 class="padding">{{ note.title }}</h4>
+		        		<p class="padding">{{ note.content | blockStr : 50 }}</p>
+	        			<ul class="ui-grid-halve padding">
+	        				<li>
+	        					{{ note.lessonTitle }}
+	        				</li>
+	        				<li>
+	        					{{ question.updatedTime | coverLearnTime }}
+	        				</li>
+	        			</ul>
+		        	</div>
+		    </li>
+		</ul>
+	  <list-empty-view data="data" title="暂时没有课程">
+	  </list-empty-view>
 
-		<ion-infinite-scroll
-		        ng-if="canLoadMore('note')"
-		        on-infinite="loadMore('note')"
-		        distance="1%">
-		</ion-infinite-scroll>
-	</ion-content>
-</ion-view>
+	  <div class="ui-loading-wrap" ng-show="canLoad">
+	    <p>正在加载中...</p>
+	    <i class="ui-loading"></i>
+	  </div>
+
+	</div>
+</div>

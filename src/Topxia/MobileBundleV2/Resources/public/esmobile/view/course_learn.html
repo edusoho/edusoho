@@ -1,22 +1,28 @@
-<ion-view title="课程标题">
-  <ion-content class="course-body" delegate-handle="mainScroll">
-
-      <div class="course-content">
+<div class="ui-course top-header">
+  	<div class="course-head-body">
       	<div class="course-head">
-	    <img class="full-image" ng-src="{{ course.largePicture }}" />
-	    <div class="mask learned">
-	      <a>
-	      	已完成{{ learnProgress }}
-	      </a>
-	      <div class="course-progress">
-	      	<span ng-style="{ width : learnProgress }" ></span>
-	      </div>
-	    </div>
+		    <img class="full-image" ng-src="{{ course.largePicture }}" />
+		    <p class="mask">
+		      <a class="left">
+		      	已完成{{ learnProgress }}
+		      </a>
+		    </p>
+		    <div class="course-progress">
+		      <span ng-style="{ width : learnProgress }" ></span>
+		    </div>
+		</div>
 	</div>
-
-	<div ng-include=" 'view/course_learn_tab.html' | coverViewPath "></div>
-
-	</div>
-  </ion-content>
-  	
-</ion-view>	
+	<ul class="ui-list ui-list-lesson">  
+		<li class="{{ lesson.type }}" ng-repeat="lesson in lessons" ng-class="lesson.id == lastLearnStatusIndex ? 'list-green' : '' ">
+		  	  <div class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
+		            <i class="iconfont" ng-class="learnStatuses[lesson.id] == 'finished' ? 'icon-xiazaiwancheng' : 'icon-jikediancanicon11' "></i>
+		        </div>
+		        <div class="ui-list-info ui-border-t" ng-class="lesson.type">
+		            {{ lesson | formatChapterNumber }} {{ lesson.title }}
+		        </div>
+		        <div class="ui-list-action lesson-time">{{ lesson.length }}</div>
+		</li>
+		<list-empty-view class="lesson-empty" data="lessons" title="暂无课时">
+           </list-empty-view>
+	</ul>
+</div>

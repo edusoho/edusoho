@@ -1,9 +1,11 @@
-<div class="row">
-	  <div class="col" ng-class="'list_' + $index" ng-repeat="categorys in categoryCols">
-	  	<div class="list">
-		  	<a class="item " ng-click="selectCategory($event, item)" ng-repeat="item in categorys">
-		    		{{ item.name }}
-			</a>
-	 	</div>
-	  </div>
-</div>
+<ul class="ui-grid-trisect">
+	<li ng-class="'list_' + $index" ng-repeat="categorys in categoryCols">
+		<ul class="ui-list ui-list-text ui-list-cover ui-border-tb">
+		    
+		    <li class="ui-border-t" ng-click="selectCategory($event, item)" ng-repeat="item in categorys">
+		        <p>{{ item.name }}</p>
+		    </li>
+		</ul>
+		
+	</li>
+</ul>

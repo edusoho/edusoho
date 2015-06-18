@@ -1,5 +1,5 @@
 var appFactory = angular.module('AppFactory', []);
-appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', '$ionicPopup', function($rootScope, $ionicModal, $ionicPopup) {
+appFactory.factory('AppUtil', ['$rootScope', '$timeout', function($rootScope, $timeout) {
 	var utils = {
 		createArray : function(count) {
 			var arr = [];
@@ -27,17 +27,15 @@ appFactory.factory('AppUtil', ['$rootScope', '$ionicModal', '$ionicPopup', funct
 				callback(res);
 			});
 		},
-		createModal : function($scope, templateUrl, modalInitFunc) {
-			$ionicModal.fromTemplateUrl(templateUrl, {
-			    	scope: $scope,
-			    	animation: 'none'
-			}).then(function(modal) {
-				$scope.modal = modal;
-				
-				if (modalInitFunc) {
-					modalInitFunc(modal);
-				}
-			});
+		createModal : function($scope, template, modalInitFunc) {
+			
+			var modal = '<div class="ui-dialog full">'
+				+ '<div class="ui-dialog-cnt">' 
+				+ '<div class="ui-dialog-bd">'
+				+ template
+				+ '<div></div></div>';
+
+			angular.element(document.body).append(modal);
 		}
 	};
 	
@@ -103,13 +101,13 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		getFavoriteListTypes : function() {
 			return {
 				'course' : {
-					url : "Course/getFavoriteNormalCoruse",
+					url : "Course/getFavoriteNormalCourse",
 					data : [],
 					start : 0,
 					canLoad : true
 				},
 				'live' : {
-					url : "Course/getFavoriteLiveCoruse",
+					url : "Course/getFavoriteLiveCourse",
 					data : [],
 					start : 0,
 					canLoad : true

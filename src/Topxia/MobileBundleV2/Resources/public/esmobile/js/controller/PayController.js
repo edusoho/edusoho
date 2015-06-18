@@ -1,10 +1,10 @@
 app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', CoursePayController]);
-app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$ionicHistory', CourseCouponController]);
+app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
 app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
-app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', '$ionicPopover', 'VipUtil', VipPayController]);
+app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', VipPayController]);
 
 
-function VipPayController($scope, $stateParams, SchoolService, $ionicPopover, VipUtil)
+function VipPayController($scope, $stateParams, SchoolService, VipUtil)
 {
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
@@ -45,31 +45,14 @@ function VipPayController($scope, $stateParams, SchoolService, $ionicPopover, Vi
 
 	$scope.initPopver = function() {
 
-		var template = '<ion-popover-view> <ion-pane><div class="list">' +
-		'<a class="item" ng-repeat="mode in payModes" ng-click="selectPayMode(mode)">{{ mode.title }}</a>' +
-		'</div></ion-pane></ion-popover-view>';
-
-		  $scope.popover = $ionicPopover.fromTemplate(template, {
-		    scope: $scope
-		  });
-
-		  $scope.openPopover = function($event) {
-		  	$scope.popover.modalEl.style.width = $event.srcElement.clientWidth + "px";
-		  	$scope.popover.modalEl.style.height = ($event.srcElement.clientHeight * $scope.payModes.length) + "px";
-		    	$scope.popover.show($event);
+		  $scope.showPopover = function($event) {
+		  	$scope.isShowPayMode = ! $scope.isShowPayMode ;
 		  };
-		  $scope.closePopover = function() {
-		    $scope.popover.hide();
-		  };
-
-		  $scope.$on('$destroy', function() {
-		    $scope.popover.remove();
-		  });
 
 		  $scope.selectPayMode = function(payMode) {
 		  	$scope.selectedPayMode = payMode;
 			$scope.sumTotalPirce();
-		  	$scope.popover.hide();
+		  	$scope.isShowPayMode = false;
 		  }
 	}	
 
@@ -84,7 +67,7 @@ function VipListController($scope, $stateParams, SchoolService)
 	});
 }
 
-function CourseCouponController($scope, CouponService, $stateParams, $ionicHistory)
+function CourseCouponController($scope, CouponService, $stateParams, $window)
 {	
 	$scope.formData = { code : "" };
 	$scope.checkCoupon = function() {
@@ -100,7 +83,7 @@ function CourseCouponController($scope, CouponService, $stateParams, $ionicHisto
 				$scope.formData.error = data.meta.message;
 				return;
 			}
-			$ionicHistory.goBack();
+			$window.history.back();
 			$scope.$emit("coupon", { coupon : data.data });
 		}, function(data) {
 			$scope.hideLoad();
@@ -111,16 +94,26 @@ function CourseCouponController($scope, CouponService, $stateParams, $ionicHisto
 
 function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
 {
+	var self = this;
 	ServcieUtil.getService("OrderService").getPayOrder({
 		courseId : $stateParams.courseId,
 		token : $scope.token
 	}, function(data) {
-		$scope.data = data;
+		$scope.$apply(function() {
+			$scope.data = data;
+		});
 	});
 
 	$scope.$parent.$on("coupon", function(event, data) {
-		$scope.coupon = data.coupon;
+		$scope.$apply(function() {
+			$scope.coupon = data.coupon;
+		});
 	});
+
+	$scope.selectCoupon = function() {
+		self.dialog = $(".ui-dialog");
+		self.dialog.dialog("show");
+	}
 
 	$scope.pay = function() {
 		var CourseService = ServcieUtil.getService("CourseService");
@@ -129,19 +122,37 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
         			token : $scope.token
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				$scope.payUrl  = data.payUrl;
-				AppUtil.createModal(
-					$scope, 
-					app.viewFloder + "view/alipay_modal.html",
-					function(modal) {
-						modal.show();
-					}
-				);
-
-				$scope.close = function() {
-					$scope.modal.hide();
+				if (! $scope.platform.native) {
+					alert("请在客户端内支付!");
 				}
 			}
 		});
+	}
+
+	$scope.formData = { code : "" };
+	$scope.checkCoupon = function() {
+		$scope.formData.error = "";
+		$scope.showLoad();
+		ServcieUtil.getService("CouponService").checkCoupon({
+			courseId : $stateParams.courseId,
+			type : "course",
+			code : $scope.formData.code
+		}, function(data) {
+			$scope.hideLoad();
+			if (data.meta.code != 200) {
+				$scope.formData.error = data.meta.message;
+				return;
+			}
+			$scope.$emit("coupon", { coupon : data.data });
+			$scope.close();
+
+		}, function(data) {
+			$scope.hideLoad();
+			$scope.toast("检验优惠码错误");
+		});
+	}
+
+	$scope.close = function() {
+		self.dialog.dialog("hide");
 	}
 }
