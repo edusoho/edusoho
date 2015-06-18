@@ -21,8 +21,6 @@ class RegisterController extends BaseController
         if (!$registerEnable) {
             return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
         }
-
-        $form = $this->createForm(new RegisterType());
         
         if ($request->getMethod() == 'POST') {
 
@@ -439,7 +437,6 @@ class RegisterController extends BaseController
     public function captchaAction(Request $request)
     {
         $imgBuilder = new CaptchaBuilder;
-        $imgBuilder->build($width = 150, $height = 32, $font = null);
 
         $request->getSession()->set('captcha_code',strtolower($imgBuilder->getPhrase()));
 
@@ -519,7 +516,6 @@ class RegisterController extends BaseController
 
     private function getWelcomeBody($user)
     {
-        $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
@@ -530,7 +526,6 @@ class RegisterController extends BaseController
 
     private function sendVerifyEmail($token, $user)
     {
-        $auth = $this->getSettingService()->get('auth', array());
         $site = $this->getSettingService()->get('site', array());
         $emailTitle = $this->setting('auth.email_activation_title',
             '请激活你的帐号 完成注册');

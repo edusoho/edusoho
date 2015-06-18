@@ -15,7 +15,6 @@ class GroupController extends BaseController
 {
     public function indexAction() 
     {   
-        $mycreatedGroup = array();
         $myJoinGroup = array();
 
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 8);
@@ -377,7 +376,6 @@ class GroupController extends BaseController
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
-        $members=$this->getUserService()->findUsersByIds($memberIds);
         return $this->render("TopxiaWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -403,8 +401,6 @@ class GroupController extends BaseController
         if($group['status']=="close"){
             return $this->createMessageResponse('info','该小组已被关闭');
         }
-
-        $user=$this->getCurrentUser();
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -473,8 +469,6 @@ class GroupController extends BaseController
 
     public function deleteMembersAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         if(!$this->checkManagePermission($id)){
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -503,8 +497,6 @@ class GroupController extends BaseController
 
     public function setAdminAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -533,8 +525,6 @@ class GroupController extends BaseController
 
     public function removeAdminAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -564,8 +554,6 @@ class GroupController extends BaseController
 
     public function groupSetAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         $group = $this->getGroupService()->getGroup($id);
 
         if (!$this->checkManagePermission($id)) {
@@ -586,7 +574,6 @@ class GroupController extends BaseController
     {
 
         $group = $this->getGroupService()->getGroup($id);
-        $currentUser = $this->getCurrentUser();
 
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
@@ -639,16 +626,12 @@ class GroupController extends BaseController
 
         $file = $file->move($directory, $filename);
 
-        $fileName = str_replace('.', '!', $file->getFilename()); 
-
         return $filename;
 
     }
 
     public function setGroupLogoAction(Request $request, $id)
     {
-        $user=$this->getCurrentUser();
-
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
@@ -664,9 +647,7 @@ class GroupController extends BaseController
 
     }
      public function setGroupBackgroundLogoAction(Request $request,$id)
-     {
-        $user=$this->getCurrentUser();
-        
+     {        
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
@@ -770,7 +751,6 @@ class GroupController extends BaseController
 
     public function groupEditAction(Request $request,$id)
     {
-        $currentUser = $this->getCurrentUser();
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
