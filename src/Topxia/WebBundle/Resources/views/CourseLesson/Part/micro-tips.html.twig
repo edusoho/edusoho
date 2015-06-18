@@ -57,7 +57,7 @@
   {% if item.type == 'live' %}
     
     <span class="course-type">
-      <i class="fa fa-video-camera" data-toggle="tooltip" data-placement="top" title="直播课程"></i>
+      <i class="es-icon es-icon-videocam" data-toggle="tooltip" data-placement="top" title="直播课程"></i>
       {% if item.startTime > currentTime %}
         <small class="type">{{ item.startTime|date('m月d日') }} 
           {# {% for key,week in weeks %}
