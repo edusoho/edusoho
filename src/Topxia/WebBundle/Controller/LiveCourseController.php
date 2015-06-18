@@ -150,6 +150,7 @@ class LiveCourseController extends BaseController
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
                 'url' => $result['url'],
+                'param' => isset($result['param']) ? $result['param']:null
             ));
 
         }
@@ -184,6 +185,7 @@ class LiveCourseController extends BaseController
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
                 'url' => $result['url'],
+                'param' => isset($result['param']) ? $result['param']:null
             ));
 
         }
@@ -221,7 +223,7 @@ class LiveCourseController extends BaseController
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
         $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
-        
+
         if(array_key_exists("error", $resultList)) {
             return $this->createJsonResponse($resultList);
         }
@@ -236,10 +238,11 @@ class LiveCourseController extends BaseController
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $url = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
-            'url' => $url
+            'url' => $result['url'],
+            'param' => isset($result['param']) ? $result['param']: null
         ));
     }
 

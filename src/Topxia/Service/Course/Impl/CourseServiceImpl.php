@@ -2388,8 +2388,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$client = LiveClientFactory::createClient();
-		$url = $client->entryReplay($args);
-		return $url['url'];
+		$result = $client->entryReplay($args);
+		return $result;
 	}
 
 	public function getCourseLessonReplayByLessonId($lessonId)
