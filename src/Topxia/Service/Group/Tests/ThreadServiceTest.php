@@ -329,7 +329,7 @@ class ThreadServiceTest extends BaseTestCase
         $post=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>'aaaaaa',),$group['id'],$user['id'],$thread['id']);
         $post1=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>"test1"),$group['id'],$user['id'],$thread['id']);
 
-        $posts=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),array('createdTime','desc'),0,10);
+        $posts=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),array('createdTime' => 'DESC'),0,10);
         $this->assertCount(2,$posts);
     }
 

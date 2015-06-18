@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
+
+{%- block keywords -%}
+{% if category %}{{ category.name }}{% endif %}
+{% for tag in tags %}{{ tag.name }}{% endfor %}
+{{ course.title }} {{ setting('site.name') }}
+{%- endblock -%}
+{% block description %}{{ course.about|plain_text(150) }}{% endblock %}
+
+{% set script_controller = 'course/show' %}
+
+{% block content %}
+
+  {% if member and member.locked %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mtl alert alert-warning">
+          您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
+          <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:course.id, targetType:"course"}) }}">取消退款，继续学习！</button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% include 'TopxiaWebBundle:Course:course-detail.html.twig' %}
+
+{% endblock %}
+
+{% block bottom %}
+    <div id="course-modal" class="modal"></div>
+    <div id="course-edit-modal" class="modal"></div>
+{% endblock %}
+

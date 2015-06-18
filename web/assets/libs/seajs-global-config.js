@@ -6,7 +6,7 @@ seajs.config({
 		"jquery.form": "jquery-plugin/form/3.44.0/form",
 		"jquery.sortable": "jquery-plugin/sortable/0.9.10/sortable.js",
 		"jquery.raty": "jquery-plugin/raty/2.5.2/raty",
-		"jquery.cycle2": "jquery-plugin/cycle2/2013.08.01/cycle2",
+		"jquery.cycle2": "jquery.cycle2/2.1.6/index",
 		"jquery.perfect-scrollbar": "jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar",
 		"jquery.select2": "jquery-plugin/select2/3.4.1/select2",
 		"jquery.select2-css": "jquery-plugin/select2/3.4.1/select2.css",
@@ -24,6 +24,7 @@ seajs.config({
 		"mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
 		'echo.js': 'echo.js/1.7.0/index',
+		'swiper': 'swiper/2.7.6/index',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.1.0/upload',
 		'bootstrap.validator': 'common/validator',
@@ -53,7 +54,7 @@ seajs.config({
 		'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
 		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
-		'edusoho.webuploader': 'edusoho/webuploader/1.0.1/web-uploader.js',
+		'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
 		'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js'
 	},
 

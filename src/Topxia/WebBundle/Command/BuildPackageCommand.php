@@ -63,6 +63,11 @@ class BuildPackageCommand extends BaseCommand
                 continue;
             }
 
+            if (strpos($opFile, 'plugins') === 0) {
+                $output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                continue;
+            }
+
             if (strpos($opFile, 'web/install') === 0) {
                 $output->writeln("<comment>忽略文件：{$opFile}</comment>");
                 continue;
@@ -136,6 +141,10 @@ class BuildPackageCommand extends BaseCommand
 
         if (stripos($file, 'src/Topxia/MobileBundleV2/Resources/public') === 0) {
              return str_ireplace('src/Topxia/MobileBundleV2/Resources/public', 'web/bundles/topxiamobilebundlev2', $file);
+        }
+
+        if (stripos($file, 'src/Classroom/ClassroomBundle/Resources/public') === 0) {
+             return str_ireplace('src/Classroom/ClassroomBundle/Resources/public', 'web/bundles/classroom', $file);
         }
 
         return null;

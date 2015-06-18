@@ -1,0 +1,27 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {% if students|length >= 15 %}
+      <a href="javascript:;" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+    {% endif %}
+    <h3 class="panel-title">
+      <i class="es-icon es-icon-personadd"></i>
+      最新学员
+    </h3>
+  </div>
+  <div class="panel-body">
+    {% if students %}
+      <ul class="user-avatar-list clearfix">
+        {% for member in members %}
+        {% set student = students[member.userId] %}
+          <li>
+            {{ web_macro.user_avatar(student, '', 'avatar-sm') }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty">暂无学员</div>
+    {% endif %}
+  </div>
+</div>

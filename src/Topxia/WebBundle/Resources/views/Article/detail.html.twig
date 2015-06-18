@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Article:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{ article.title }} - {{ parent() }}{% endblock %}
 
@@ -6,61 +6,40 @@
 
 {% block description %}{{ seoDesc|plain_text(100) }}{% endblock %}
 
-{% block article_main %}
+{% set bodyClass = 'artcile-detail-page' %}
 
-  <ul class="breadcrumb">
-      <li><a href="{{path('article_show')}}">{{setting.name}}</a></li>
-      {% for breadcrumb in breadcrumbs %}
-        <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
-      {% endfor %}
-      <li class="active">正文</li>
-  </ul>
+{% block content %}
 
-  <h2 class="thread-title">{{article.title}}</h2>
-     <div class="published-time pull-left">{{ article.publishedTime|date('Y-m-d H:i:s') }}</div>
-     <div class="published-time pull-right">{{ article.hits|default(0) }} 次浏览</div>
-     <p><br></p>
-  <div class="thread-body">{{article.body |raw }}</div>
+  {{ load_script('article/detail') }}
 
-  <p class="clearfix">
+  <div class="article-detail row" id="detail-content">
+    <!-- 主内容 -->
+    <div class="col-md-8 article-detail-main">
+      <section class="es-section article-content">
+        {% include 'TopxiaWebBundle:Article/Part:detail-breadcrumb.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-metas.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-boy.html.twig' %}
 
-    <div class="dropdown pull-right">
-      <a href="javascript:;" class="btn btn-link" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
-      {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
+        {% include 'TopxiaWebBundle:Article/Part:detail-tags.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-share.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-related-article.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-post-form.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-post-list.html.twig' %}
+        
+      </section>
     </div>
+    
+    <aside class="col-md-4 article-sidebar">
+      {% include 'TopxiaWebBundle:Article/Widget:sidebar.html.twig' %}
+    </aside>
+    
+  </div>
 
-  {% if tags %}
-     <span class="text-muted">标签:</span>
-    {% for tag in tags %}
-         <span class="label label-info">{{tag.name}}</span>
-    {% endfor %}
-  {% endif %}
-  <br>
-  {% if article.source %}
-     <span class="text-muted">原文出处: &nbsp;</span>
-     {% if article.sourceUrl %}
-       <a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a>
-     {% else %}
-       {{article.source}}
-     {% endif %}
-  {% endif %}
-  </p>
-  <ul class="pager" style="margin-top:30px;">
-    {% if articlePrevious %}
-      <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; 上一篇</a></li>
-    {% else %}
-      <li class="previous disabled"><a href="javascript:;">&larr; 上一篇</a></li>
-    {% endif %}
-
-      {% if articleNext %}
-      <li class="next"><a href="{{ path('article_detail',{id:articleNext.id}) }}"> 下一篇 &rarr;</a></li>
-    {% else %}
-      <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
-    {% endif %}
-  </ul>
 {% endblock %}
 
-{% block article_side %}
-  {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
-  {{ render(controller('TopxiaWebBundle:Article:recommendArticlesBlock')) }}
-{% endblock %}

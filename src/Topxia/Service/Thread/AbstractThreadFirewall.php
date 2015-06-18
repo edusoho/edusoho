@@ -3,7 +3,7 @@ namespace Topxia\Service\Thread;
 
 use UnderflowException;
 
-abstract class AbstractThreadFirewall 
+abstract class AbstractThreadFirewall
 {
 
     public function accessThreadRead($thread)
@@ -45,5 +45,4 @@ abstract class AbstractThreadFirewall
     {
         throw new UnderflowException("Method accessPostDelete is not implement");
     }
-
 }

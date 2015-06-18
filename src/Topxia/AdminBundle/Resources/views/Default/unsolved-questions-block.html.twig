@@ -24,7 +24,7 @@
 	          {% set course =  courses[question.courseId]|default(null) %}
 		        <tr>
 		          <td>
-	              <a href="{{ path('course_thread_show', {courseId:question.courseId, id:question.id}) }}" target="_blank">
+	              <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank">
 	                {{ question.title }}
 	              </a>
 	              <br />

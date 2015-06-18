@@ -1,0 +1,45 @@
+admin_classroom:
+    name: 班级管理
+    parent: admin_course
+    before: admin_course_thread
+admin_classroom_manage:
+    name: 班级管理
+    parent: admin_classroom
+    router_name: admin_classroom
+admin_classroom_recommend:
+    name: 班级推荐
+    parent: admin_classroom
+    router_name: admin_classroom_recommend_list
+admin_classroom_create:
+    name: 创建班级
+    parent: admin_classroom_manage
+    group: 2
+    blank: true
+admin_classroom_thread_manage:
+    name: 班级话题
+    parent: admin_course_thread
+    router_name: admin_classroom_thread
+admin_classroom_order:
+    name: 班级订单
+    parent: admin_order
+    after: admin_course_order
+admin_classroom_refunds:
+    name: 班级退款管理
+    parent: admin_finance
+    router_name: admin_order_refunds
+    router_params: {targetType:classroom, status:created}
+    after: admin_course_refunds
+admin_classroom_refunds_manage:
+    name: 管理
+    parent: admin_classroom_refunds
+    router_name: admin_order_refunds
+    router_params: {targetType:classroom, status:created}
+admin_classroom_setting:
+    name: 班级
+    parent: admin_setting_course_setting
+    after: admin_setting_live_course
+admin_classroom_review_tab:
+    name: 班级评价
+    parent: admin_course_review
+    router_name: admin_classroom_review
+    group: 1

@@ -166,6 +166,8 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
 
+        $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
+
         $count = $this->getAppService()->findAppCount();
         $apps = $this->getAppService()->findApps(0, $count);
         foreach ($apps as $app) {

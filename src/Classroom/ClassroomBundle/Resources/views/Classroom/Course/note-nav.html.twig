@@ -1,0 +1,42 @@
+<div class="note-filter nav-filter clearfix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      {% if filters.courseId|default('') == '' %}
+        全部课程
+      {% else %} 
+        {{ courses[filters.courseId]['title']|sub_text(10) }}
+      {% endif %}
+       
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li class="{% if filters.courseId|default('') == '' %}active{% endif %}">
+        <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:''})) }}">全部课程</a>
+      </li>
+      {% for course in courses %}
+        <li class="{% if filters.courseId == course.id %}active{% endif %}">
+          <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <ul class="nav nav-pills nav-pills-sm">
+    <li class="dropdown hidden-xs">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span>排序：</span>
+        {% if filters.sort == 'latest' %}
+          最新笔记
+        {% elseif filters.sort == 'likeNum'%} 
+          点赞最多
+        {% endif %}
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu hidden-xs">
+        <li class="{% if filters.sort == 'latest' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'latest'})) }}">最新笔记</a></li>
+        <li class="{% if filters.sort == 'likeNum' %}active{% endif %}"><a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'likeNum'})) }}">点赞最多</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

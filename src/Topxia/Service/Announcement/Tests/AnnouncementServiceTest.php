@@ -1,106 +1,99 @@
 <?php
-
 namespace Topxia\Service\Announcement\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\Announcement\AnnouncementService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\User\CurrentUser;
 
 class AnnouncementServiceTest extends BaseTestCase
 {
-    public function testCreateAnnouncement()
-    {   
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 3,
-            'nickname' => 'admin1',
-            'email' => 'admin@adm1in.com',
-            'password'=>'adm1in',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_ADMIN')
-        ));
+	public function testCreateAnnouncement()
+    {
+        $announcementInfo = array(
+        	'targetType' => 'course',
+        	'targetId' => '1',
+        	'content' => 'test_announcement',
+        );
 
-        $this->getServiceKernel()->setCurrentUser($currentUser); 
+        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
 
-        $testAnnouncement = array(
-            'title' =>'test',
-            'url' =>'http://test.com',
-            'startTime' => '2015-4-5',
-            'endTime' => '2015-10-5'
-            );
-
-        $announcement = $this->getAnnouncementService()->createAnnouncement($testAnnouncement);
-
-        $this->assertEquals($announcement['title'],$testAnnouncement['title']);
-        $this->assertEquals($announcement['url'],$testAnnouncement['url']);
-        $this->assertEquals(strtotime($testAnnouncement['startTime']),$announcement['startTime']);
-        $this->assertEquals(strtotime($testAnnouncement['endTime']),$announcement['endTime']);
-        $this->assertEquals($announcement['userId'],3);
-
+        $this->assertNotNull($createdAnnouncement);
     }
 
-    public function testDeleteAnnouncement()
-    {   
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 3,
-            'nickname' => 'admin1',
-            'email' => 'admin@adm1in.com',
-            'password'=>'adm1in',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_ADMIN')
-        ));
+    public function testGetAnnouncement()
+    {
+        $announcementInfo = array(
+        	'targetType' => 'course',
+        	'targetId' => '1',
+        	'content' => 'test_announcement',
+        );
 
-        $this->getServiceKernel()->setCurrentUser($currentUser); 
+        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
 
-        $testAnnouncement = array(
-            'title' =>'test',
-            'url' =>'http://test.com',
-            'startTime' => '2015-4-5',
-            'endTime' => '2015-10-5'
-            );
+        $getedAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);
 
-        $announcement = $this->getAnnouncementService()->createAnnouncement($testAnnouncement);
-
-        $this->getAnnouncementService()->deleteAnnouncement($announcement['id']);
-
-        $announcement=$this->getAnnouncementService()->getAnnouncement($announcement['id']);
-
-        $this->assertEquals(null,$announcement);
-
+        $this->assertEquals($this->getCurrentUser()->id, $getedAnnouncement['userId']);
+        $this->assertEquals(1, $getedAnnouncement['targetId']);
+        $this->assertEquals('test_announcement', $getedAnnouncement['content']);
     }
 
     public function testSearchAnnouncements()
     {
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 3,
-            'nickname' => 'admin1',
-            'email' => 'admin@adm1in.com',
-            'password'=>'adm1in',
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_ADMIN')
-        ));
+        $announcementInfo1 = array(
+        	'targetType' => 'course',
+        	'targetId' => '1',
+        	'content' => 'test_announcement1',
+        );
 
-        $this->getServiceKernel()->setCurrentUser($currentUser); 
+        $announcementInfo2 = array(
+        	'targetType' => 'course',
+        	'targetId' => '1',
+        	'content' => 'test_announcement2',
+        );
 
-        $testAnnouncement = array(
-            'title' =>'test',
-            'url' =>'http://test.com',
-            'startTime' => '2015-4-5',
-            'endTime' => '2015-10-5'
-            );
+        $announcement1 = $this->getAnnouncementService()->createAnnouncement($announcementInfo1);
+        $announcement2 = $this->getAnnouncementService()->createAnnouncement($announcementInfo2);
+        $resultAnnouncements = $this->getAnnouncementService()->searchAnnouncements(array('targetType'=>'course','targetId'=>1), array('createdTime','DESC'), 0, 30);
 
-        $announcement = $this->getAnnouncementService()->createAnnouncement($testAnnouncement);
-
-        $announcements=$this->getAnnouncementService()->searchAnnouncements(array(),array('createdTime','desc'),0,1);
-        $this->assertEquals(3,$announcements[0]['userId']);
-        $this->assertEquals('test',$announcements[0]['title']);
-
+        $this->assertContains($announcement1, $resultAnnouncements);
+        $this->assertContains($announcement2, $resultAnnouncements);
     }
 
-    private function getAnnouncementService()
+    public function testDeleteAnnouncement()
+    {
+        $announcementInfo = array(
+        	'targetType' => 'course',
+        	'targetId' => '1',
+        	'content' => 'test_deleteAnnouncement',
+        );
+
+        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
+        $this->getAnnouncementService()->deleteAnnouncement($createdAnnouncement['id']);
+        $getAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);
+        
+        $this->assertNull($getAnnouncement);
+    }
+
+    public function testUpdateAnnouncement()
+    {
+        $announcementInfo = array(
+        	'targetType' => 'course',
+        	'targetId' => '1',
+        	'content' => 'test_updateAnnouncement',
+        );
+
+        $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
+        $updateInfo = array('content'=>'update_content');
+        $this->getAnnouncementService()->updateAnnouncement($createdAnnouncement['id'], $updateInfo);
+        
+        $getAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);
+        
+        $this->assertEquals($updateInfo['content'], $getAnnouncement['content']);
+    }
+
+    protected function getAnnouncementService()
     {
         return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
     }
+
 }
