@@ -45,6 +45,9 @@ class LoginBindController extends BaseController
             }
         } else {
             $request->getSession()->set('oauth_token', $token);
+            if ($type == 'weixinweb') {
+                return $this->redirect($this->generateUrl('login_bind_new',array('type' => $type)));
+            }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type'  => $type)));
         }
 
