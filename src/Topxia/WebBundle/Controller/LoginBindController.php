@@ -46,7 +46,9 @@ class LoginBindController extends BaseController
         } else {
             $request->getSession()->set('oauth_token', $token);
             if ($type == 'weixinweb') {
-                return $this->autobind($request,$type);
+                $responsejson = $this->autobind($request,$type);
+                $response = json_decode($responsejson,true);
+                return $this->redirect($response['_target_path']);
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type'  => $type)));
         }
@@ -84,7 +86,6 @@ class LoginBindController extends BaseController
     public function newAction(Request $request, $type)
     {
         return $this->autobind($request, $type);
-
     }
 
     private function autobind(Request $request,$type)
@@ -121,20 +122,6 @@ class LoginBindController extends BaseController
         response:
         return $this->createJsonResponse($response);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
