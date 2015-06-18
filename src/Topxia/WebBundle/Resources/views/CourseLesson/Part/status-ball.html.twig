@@ -1,4 +1,4 @@
- {% if learnStatuses[item.id]|default(null) %}
+{% if learnStatuses[item.id]|default(null) %}
   {% if learnStatuses[item.id] == 'finished' %}
     <i class="es-icon es-icon-done1 color-primary status-icon"></i>
   {% else %}
@@ -6,4 +6,8 @@
   {% endif %}
 {% else %}
   <i class="es-icon es-icon-undone status-icon"></i>
+{% endif %}
+
+{% if item.free %}
+  <span class="label label-warning mrm">免费</span>
 {% endif %}

@@ -3,7 +3,14 @@
   text-align: center;
   .border-radius(4px);
   .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+  .es-transition;
   &:hover {
+    transform: translateY(-5px);
+    -webkit-transform: translateY(-5px);
+    -moz-transform: translateY(-5px);
+    -o-transform: translateY(-5px);
+    .box-shadow(0 10px 20px rgba(0, 0, 0, 0.08));
+    .es-transition;
     .metas {
       .opacity(1);
       .es-transition;
@@ -55,6 +62,9 @@
     .opacity(0);
     .btn {
       margin: 0 15px;
+      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        margin: 0 10px;
+      }
     }
   }
 }

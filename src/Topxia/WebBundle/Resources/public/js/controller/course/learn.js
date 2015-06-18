@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
-        chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
+        chapterAnimate = require('../course/widget/chapter-animate');
 
     require('mediaelementplayer');
 
