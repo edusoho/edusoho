@@ -46,7 +46,7 @@ class LoginBindController extends BaseController
         } else {
             $request->getSession()->set('oauth_token', $token);
             if ($type == 'weixinweb') {
-                return $this->redirect($this->generateUrl('login_bind_new',array('type' => $type)));
+                return $this->autobind($request,$type);
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type'  => $type)));
         }
@@ -83,6 +83,11 @@ class LoginBindController extends BaseController
 
     public function newAction(Request $request, $type)
     {
+        $this->autobind(Request $request, $type);
+    }
+
+    private function autobindAction(Request $request,$type)
+    {
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
@@ -115,6 +120,22 @@ class LoginBindController extends BaseController
         response:
         return $this->createJsonResponse($response);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function newSetAction(Request $request, $type)
     {
