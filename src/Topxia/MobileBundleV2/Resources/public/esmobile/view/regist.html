@@ -16,7 +16,7 @@
 	    		<div class="ui-form-item ui-form-item-r ui-border-b">
 		            <input type="text" maxlength="15" placeholder="手机号" ng-model="user.phone">
 
-		            <button type="button" class="ui-border-l ui-btn-code">发送验证码</button>
+		            <button type="button" class="ui-border-l ui-btn-code" ng-click="sendSmsCode(user.phone)">发送验证码</button>
 		            <a class="ui-icon-close" ng-show="user.phone.length > 0" ng-click="user.phone = '' "></a>
 		      </div>
 		        <div class="ui-form-item ui-form-item-pure ui-border-b">

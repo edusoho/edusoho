@@ -89,6 +89,33 @@ directive('uiTab', function() {
     }
   }
 }).
+directive('imgError', function() {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+                  var errorSrc = "";
+                  switch (attributes.imgError) {
+                    case "avatar":
+                      errorSrc = app.viewFloder  + "img/avatar.jpg";
+                      break;
+                    case "course":
+                      errorSrc = app.viewFloder  + "img/course_default.jpg";
+                      break;
+                    case "vip":
+                      errorSrc = app.viewFloder  + "img/vip_default.jpg";
+                      break;
+                  }
+
+                  element.on("error", function(e) {
+                    element.attr("src", errorSrc);
+                  });
+                }
+            };
+    }
+  }
+}).
 directive('back', function($window, $state) {
   return {
     restrict: 'A',

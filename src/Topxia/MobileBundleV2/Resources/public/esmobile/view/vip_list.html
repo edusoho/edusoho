@@ -9,7 +9,7 @@
 	<ul class="ui-list ui-border-tb">
 	    <li class="ui-border-t ui-vip-avatar">
 	        <div class="ui-avatar">
-	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" />
+	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar" />
 	        </div>
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap">{{ data.user.nickname }}</h4>
@@ -25,7 +25,7 @@
 		<ul class="ui-list ui-border-b">
 		    <li class="ui-border-t">
 		        <div class="ui-avatar">
-		            <img ng-src="{{ vip.picture }}" />
+		            <img ng-src="{{ vip.picture }}" img-error="vip" />
 		        </div>
 		        <div class="ui-list-info">
 		            <h4 class="ui-nowrap">{{ vip.name }}</h4>

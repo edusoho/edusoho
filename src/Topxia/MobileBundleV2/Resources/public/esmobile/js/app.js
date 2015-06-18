@@ -62,8 +62,8 @@ app.config(['$httpProvider', function($httpProvider) {
 
 app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
-  $urlRouterProvider.when("/", "/index/found/course").
-      when("/index", "/index/found/course").
+  $urlRouterProvider.when("/", "/index/").
+      when("/index", "/index/").
   otherwise('/');
 
   $stateProvider.
@@ -81,31 +81,15 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
     views : {
       "menuContent" : {
         templateUrl : app.viewFloder  + 'view/main_content.html',
-        controller : MainTabController
+        controller : FoundTabController
       }
     }
-  }).state('slideView.mainTab.message', {
-              url: "/message",
-              views: {
-                'message-tab': {
-                  templateUrl: app.viewFloder  + "view/message.html",
-                  controller: MessageTabController
-                }
-              }
-            }).state('slideView.mainTab.found', {
+  }).state('slideView.mainTab.found', {
               url: "/found",
               views: {
                 'found-tab': {
                   templateUrl: app.viewFloder  + "view/found.html",
                   controller: FoundTabController
-                }
-              }
-            }).state('slideView.mainTab.contact', {
-              url: "/contact",
-              views: {
-                'contact-tab': {
-                  templateUrl: app.viewFloder  + "view/contact.html",
-                  controller: ContactTabController
                 }
               }
             }).state('slideView.mainTab.found.course', {
@@ -387,13 +371,14 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
         if ($rootScope.loadPop) {
           $rootScope.loadPop.loading("hide");
         }
-        
     },5000);
   };
 
   $rootScope.toast = function(template) {
-    var el =$.loading({
+    var el = $.tips({
         content: template,
+        stayTime: 2000,
+        type: "info"
     });
 
     $timeout(function(){

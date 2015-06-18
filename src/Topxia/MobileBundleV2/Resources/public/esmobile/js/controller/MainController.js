@@ -3,6 +3,13 @@ app.controller('MainController', ['$scope', 'sideDelegate', '$state', MainTabCon
 function MainTabController($scope, sideDelegate, $state)
 {
 	console.log("MainTabController");
+}
+
+app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', '$state', FoundTabController]);
+
+function FoundTabController($scope, CategoryService, AppUtil, $state)
+{
+	console.log("FoundTabController");
 	$scope.toggleView = function(view) {
 		$state.go("slideView.mainTab." + view);
 	};
@@ -16,12 +23,7 @@ function MainTabController($scope, sideDelegate, $state)
 
 		sideDelegate.toggleMenu();
 	};
-}
 
-app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', '$state', FoundTabController]);
-
-function FoundTabController($scope, CategoryService, AppUtil, $state)
-{
 	$scope.categorySelectedListener  = function(category) {
 		$state.go('courseList' , { categoryId : category.id } );
 	};
