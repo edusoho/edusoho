@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             return false;
         });
 
-        $('[data-toggle="tooltip"]').tooltip();
+        // $('[data-toggle="tooltip"]').tooltip();
         
         toggle();
 

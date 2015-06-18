@@ -18,10 +18,18 @@
     .border-radius;
     .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
     z-index: -1;
+    @media (max-width: @screen-xs-max) {
+      top: 2px;
+      left: 2px;
+    }
     &.two {
       top: 10px;
       left: 10px;
       z-index: -2;
+      @media (max-width: @screen-xs-max) {
+        top: 4px;
+        left: 4px;
+      }
     }
   }
   .class-header-bg {
@@ -138,9 +146,10 @@
     text-align: center;
     color: #fff;
     font-size: 12px;
+    overflow: hidden;
     background: url("../img/price_bg.png");
     span {
-      font-size: 24px;
+      font-size: 22px;
     }
     @media (max-width: @screen-md-max) {
       top: 50px;
@@ -149,7 +158,7 @@
       line-height: 55px;
       background-size: 150px 60px;
       span {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
     @media (max-width: @screen-sm-max) {
@@ -159,8 +168,11 @@
       line-height: 50px;
       background-size: 135px 54px;
       span {
-        font-size: 18px;
+        font-size: 16px;
       }
+    }
+    @media (max-width: @screen-xs-max) {
+      right: -12px;
     }
   }
   .setting {
@@ -183,12 +195,18 @@
   }
   &.before {
     .class-img {
+      position: relative;
       width: 50%;
       @media (max-width: @screen-sm-max) {
         width: 40%;
       }
       @media (max-width: @screen-xs-max) {
         width: 100%;
+      }
+      .label {
+        position: absolute;
+        top: 5px;
+        left: 5px;
       }
     }
     .class-info {
