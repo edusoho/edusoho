@@ -1601,9 +1601,9 @@ a:focus {
   -webkit-transform: translateY(-5px);
   -moz-transform: translateY(-5px);
   -o-transform: translateY(-5px);
-  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -6464,9 +6464,9 @@ textarea.form-control-o {
   -webkit-transform: translateY(-5px);
   -moz-transform: translateY(-5px);
   -o-transform: translateY(-5px);
-  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
