@@ -481,10 +481,8 @@ class CourseController extends CourseBaseController
 			$vipChecked = 'ok';
 		}
 
-		$classroomMembers = $this->getClassroomService()->getClassroomMembersByCourseId($course["id"], $user->id);
-		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
-		if((isset($member["role"]) && isset($member["joinedType"]) && $member["role"] == 'student' && $member["joinedType"] == 'course') 
-			|| (isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0))) {
+		if($this->isStudentJoinedFromCourse($member) 
+			|| $this->isStudentJoinedFromClassroomButExitedClassroom($course, $member, $user)) {
 			$canExit = true;
 		} else {
 			$canExit = false;
@@ -501,6 +499,18 @@ class CourseController extends CourseBaseController
 			'vipChecked' => $vipChecked,
 			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
 		));
+	}
+
+	private function isBecomeStudentFromCourse($member)
+	{
+		return isset($member["role"]) && isset($member["joinedType"]) && $member["role"] == 'student' && $member["joinedType"] == 'course';
+	}
+
+	private function isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)
+	{
+		$classroomMembers = $this->getClassroomService()->getClassroomMembersByCourseId($course["id"], $user->id);
+		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
+		return isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0);
 	}
 
 	public function teachersBlockAction($course)
