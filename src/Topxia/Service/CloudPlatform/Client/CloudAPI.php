@@ -114,6 +114,7 @@ class CloudAPI
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_BODY {$body}");
 
         curl_close($curl);
+
         $result = json_decode($body, true);
 
         if (empty($result)) {

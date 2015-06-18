@@ -94,7 +94,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return $this->getCourseDao()->analysisCourseSumByTime($endTime);
     	}
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
+	public function searchCourses($conditions, $sort, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
@@ -302,6 +302,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$courseIds = ArrayToolkit::column($members, 'courseId');
 		$conditions["courseIds"] = $courseIds;
+
+		if(count($courseIds) == 0){
+			return 0;
+		}
+
 		if($onlyPublished) {
 			$conditions["status"] = 'published';
 		}
@@ -316,7 +321,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$courseIds = ArrayToolkit::column($members, 'courseId');
 		$conditions["courseIds"] = $courseIds;
-		
+
+		if(count($courseIds) == 0){
+			return array();
+		}
+
 		if($onlyPublished) {
 			$conditions["status"] = 'published';
 		} 
@@ -1105,6 +1114,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'homeworkId' => 0,
+			'exerciseId' => 0
 		));
 
 		if (isset($fields['title'])) {
@@ -1788,7 +1799,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
+	public function searchMemberIds($conditions, $sort, $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort = 'latest') {
@@ -1976,7 +1987,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		} else {
 			$order = null;
 		}
-
+        $conditions =array(
+          'userId' => $userId,
+          'status' => 'finished',
+          'courseId' => $courseId
+       	 );
+        $count = $this->getLessonLearnDao()->searchLearnCount($conditions);
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
@@ -1985,6 +2001,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
 			'role' => 'student',
 			'remark' => empty($order['note']) ? '' : $order['note'],
+			'learnedNum' => $count,
 			'createdTime' => time()
 		);
 
@@ -2371,8 +2388,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$client = LiveClientFactory::createClient();
-		$url = $client->entryReplay($args);
-		return $url['url'];
+		$result = $client->entryReplay($args);
+		return $result;
 	}
 
 	public function getCourseLessonReplayByLessonId($lessonId)

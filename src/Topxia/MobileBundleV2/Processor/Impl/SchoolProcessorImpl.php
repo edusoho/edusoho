@@ -354,7 +354,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         }
 
         $token = $this->controller->getUserToken($request);
-        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+        if (empty($token) ||  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 

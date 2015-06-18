@@ -57,6 +57,13 @@ define(function(require, exports, module) {
         
         $('[data-role=item-delete]').on('click',function(){
                 $(this).parent().parent().remove();
-            });
+        });
+
+        $('#consult-webchat-del').on('click',function(){
+                $.post($(this).data('url'),function(response){
+                   $("#consult-container").html('');
+                   $('[name=webchatURI]').val('');
+                });
+        });
     }
 });
