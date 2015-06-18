@@ -6517,7 +6517,6 @@ textarea.form-control-o {
 .teacher-item .about,
 .teacher-item .metas {
   position: absolute;
-  top: 20px;
   right: 20px;
   bottom: 20px;
   left: 20px;
@@ -6527,6 +6526,7 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .teacher-item .about {
+  top: 20px;
   line-height: 25px;
   overflow: hidden;
   color: #9e9e9e;
