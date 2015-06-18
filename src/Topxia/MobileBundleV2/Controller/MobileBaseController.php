@@ -259,7 +259,7 @@ class MobileBaseController extends BaseController
 
         return array_map(function($item) use ($self, $container) {
             $item['createdTime'] = date('c', $item['createdTime']);
-            if (!empty($item['length']) and in_array($item['type'], array('audio', 'video'))) {
+            if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
                 $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
             } else {
                 $item['length'] = "";

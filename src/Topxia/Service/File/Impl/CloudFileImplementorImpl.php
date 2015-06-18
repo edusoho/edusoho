@@ -179,7 +179,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $keyPrefixs = array();
 
         foreach (array('sd', 'hd', 'shd') as $key) {
-            if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
+            if (empty($file['metas2'][$key]) || empty($file['metas2'][$key]['key'])) {
                 continue ;
             }
 
@@ -385,7 +385,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     private function getVideoWatermarkImages()
     {
         $setting = $this->getSettingService()->get('storage',array());
-        if (empty($setting['video_embed_watermark_image']) or ($setting['video_watermark'] != 2)) {
+        if (empty($setting['video_embed_watermark_image']) || ($setting['video_watermark'] != 2)) {
             return array();
         }
 
@@ -414,7 +414,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     private function encodeMetas($metas)
     {
-        if(empty($metas) or !is_array($metas)) {
+        if(empty($metas) || !is_array($metas)) {
             $metas = array();
         }
         return json_encode($metas);
@@ -499,7 +499,7 @@ class HLSVideoConvertor
 
     public function saveConvertResult($file, $result)
     {
-        $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+        $items = (empty($result['items']) || !is_array($result['items'])) ? array() : $result['items'];
 
         $types = array('sd', 'hd', 'shd');
         $metas = array();
@@ -639,7 +639,7 @@ class PptConvertor
     {
 
         if (!empty($result['nextConvertCallbackUrl'])) {
-            $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+            $items = (empty($result['items']) || !is_array($result['items'])) ? array() : $result['items'];
 
             $types = array('pdf');
             $metas = array();

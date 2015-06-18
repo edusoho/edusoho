@@ -94,7 +94,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         		return $this->getCourseDao()->analysisCourseSumByTime($endTime);
     	}
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit)
+	public function searchCourses($conditions, $sort, $start, $limit)
 	{
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort == 'popular') {
@@ -295,28 +295,44 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $sortedCourses;
 	}
 
-	public function findUserTeachCourseCount($userId, $onlyPublished = true)
+	public function findUserTeachCourseCount($conditions, $onlyPublished = true)
 	{
-		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'teacher', $onlyPublished);
+		$members = $this->getMemberDao()->findAllMemberByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+		unset($conditions['userId']);
+
+		$courseIds = ArrayToolkit::column($members, 'courseId');
+		$conditions["courseIds"] = $courseIds;
+
+		if(count($courseIds) == 0){
+			return 0;
+		}
+
+		if($onlyPublished) {
+			$conditions["status"] = 'published';
+		}
+
+		return $this->searchCourseCount($conditions);
 	}
 
-	public function findUserTeachCourses($userId, $start, $limit, $onlyPublished = true)
+	public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true)
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'teacher', $start, $limit, $onlyPublished);
+		$members = $this->getMemberDao()->findAllMemberByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+		unset($conditions['userId']);
 
-		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+		$courseIds = ArrayToolkit::column($members, 'courseId');
+		$conditions["courseIds"] = $courseIds;
 
-		/**
-		 * @todo 以下排序代码有共性，需要重构成一函数。
-		 */
-		$sortedCourses = array();
-		foreach ($members as $member) {
-			if (empty($courses[$member['courseId']])) {
-				continue;
-			}
-			$sortedCourses[] = $courses[$member['courseId']];
+		if(count($courseIds) == 0){
+			return array();
 		}
-		return $sortedCourses;
+
+		if($onlyPublished) {
+			$conditions["status"] = 'published';
+		} 
+
+		$courses = $this->searchCourses($conditions, 'latest', $start, $limit);
+
+		return $courses;
 	}
 
 	public function findUserFavoritedCourseCount($userId)
@@ -1098,6 +1114,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'startTime' => 0,
 			'giveCredit' => 0,
 			'requireCredit' => 0,
+			'homeworkId' => 0,
+			'exerciseId' => 0
 		));
 
 		if (isset($fields['title'])) {
@@ -1781,7 +1799,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMember($conditions, $start, $limit);
 	}
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit)
+	public function searchMemberIds($conditions, $sort, $start, $limit)
 	{	
 		$conditions = $this->_prepareCourseConditions($conditions);
 		if ($sort = 'latest') {
