@@ -55,7 +55,7 @@ class OptimizeController extends BaseController
         }
 
         $disableds = $this->container->getParameter('disabled_features');
-        if (!is_array($disableds) or empty($disableds)) {
+        if (!is_array($disableds) || empty($disableds)) {
             return false;
         }
 

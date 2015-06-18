@@ -6,7 +6,7 @@ class MediaAttrsRender
 	public static function render($media)
 	{
 		$attrs = [];
-		if (empty($media) or empty($media['id']) or empty($media['uuid'])) {
+		if (empty($media) || empty($media['id']) || empty($media['uuid'])) {
 			return json_encode($attrs);
 		}
 

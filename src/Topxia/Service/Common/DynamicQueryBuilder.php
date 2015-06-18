@@ -43,10 +43,11 @@ class DynamicQueryBuilder extends QueryBuilder
 
     private function addWhereIn($where)
     {
+
         $conditionNames = $this->getConditionName($where);
 
         foreach($conditionNames as $key => $conditionName) {
-            if (empty($this->conditions[$conditionName]) or !is_array($this->conditions[$conditionName])) {
+            if (empty($this->conditions[$conditionName]) || !is_array($this->conditions[$conditionName])) {
                 continue;
             }
 

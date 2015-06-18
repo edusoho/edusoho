@@ -35,7 +35,7 @@ class EdusohoCloudClient implements CloudClient
             $options['apiServer'] = 'http://api.edusoho.net';
         }
 
-    	if (empty($options['accessKey']) or empty($options['secretKey'])) {
+    	if (empty($options['accessKey']) || empty($options['secretKey'])) {
     		throw new \RuntimeException('云平台accessKey/secretKey不能为空，请更改云视频设置。');
     	}
     	

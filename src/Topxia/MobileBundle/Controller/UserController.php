@@ -64,7 +64,7 @@ class UserController extends MobileController
         }
 
         $token = $this->getUserToken($request);
-        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+        if (empty($token) ||  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 
