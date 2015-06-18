@@ -83,7 +83,7 @@ class LoginBindController extends BaseController
 
     public function newAction(Request $request, $type)
     {
-        $this->autobind(Request $request, $type);
+        $this->autobind($request, $type);
     }
 
     private function autobindAction(Request $request,$type)
