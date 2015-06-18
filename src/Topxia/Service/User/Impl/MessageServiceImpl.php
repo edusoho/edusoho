@@ -238,9 +238,15 @@ class MessageServiceImpl extends BaseService implements MessageService
     private function sortMessages($messages)
     {
         usort($messages ,function($a, $b){
-            if($a['createdTime'] > $b['createdTime']) return -1;
-            if($a['createdTime'] ==  $b['createdTime']) return 0;
-            if($a['createdTime'] < $b['createdTime']) return 1;
+            if($a['createdTime'] > $b['createdTime']){
+                return -1;
+            }
+            if($a['createdTime'] ==  $b['createdTime']){
+                return 0;
+            }
+            if($a['createdTime'] < $b['createdTime']){
+                return 1;
+            }
         });
         return $messages;
     }
