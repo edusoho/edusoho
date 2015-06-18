@@ -212,82 +212,82 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
 
 function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)
 {
-      $scope.canLoad = true;
-  $scope.start = $scope.start || 0;
+    $scope.canLoad = true;
+    $scope.start = $scope.start || 0;
 
-  console.log("CourseListController");
-    $scope.loadMore = function(){
-          if (! $scope.canLoad) {
-            return;
-          }
-         setTimeout(function() {
-            $scope.loadCourseList($stateParams.sort);
-         }, 200);
-       
-    };
+    console.log("CourseListController");
+      $scope.loadMore = function(){
+            if (! $scope.canLoad) {
+              return;
+            }
+           setTimeout(function() {
+              $scope.loadCourseList($stateParams.sort);
+           }, 200);
+         
+      };
 
-    $scope.loadCourseList = function(sort) {
-           $scope.showLoad();
-      CourseService.searchCourse({
-        limit : 10,
-      start: $scope.start,
-      categoryId : $stateParams.categoryId,
-      sort : sort,
-                 type : $stateParams.type
-      }, function(data) {
-                $scope.hideLoad();
-                var length  = data ? data.data.length : 0;
-        if (!data || length == 0 || length < 10) {
-            $scope.canLoad = false;
-          }
+      $scope.loadCourseList = function(sort) {
+             $scope.showLoad();
+        CourseService.searchCourse({
+          limit : 10,
+        start: $scope.start,
+        categoryId : $stateParams.categoryId,
+        sort : sort,
+                   type : $stateParams.type
+        }, function(data) {
+                  $scope.hideLoad();
+                  var length  = data ? data.data.length : 0;
+          if (!data || length == 0 || length < 10) {
+              $scope.canLoad = false;
+            }
 
-                $scope.courses = $scope.courses || [];
-                for (var i = 0; i < length; i++) {
-                  $scope.courses.push(data.data[i]);
-                };
+                  $scope.courses = $scope.courses || [];
+                  for (var i = 0; i < length; i++) {
+                    $scope.courses.push(data.data[i]);
+                  };
 
-          $scope.start += data.limit;
-      });
-    }
+            $scope.start += data.limit;
+        });
+      }
 
-    $scope.courseListSorts = CourseUtil.getCourseListSorts();
-    $scope.courseListTypes = CourseUtil.getCourseListTypes();
+      $scope.courseListSorts = CourseUtil.getCourseListSorts();
+      $scope.courseListTypes = CourseUtil.getCourseListTypes();
 
-    CategoryService.getCategorieTree(function(data) {
-    $scope.categoryTree = data;
-  });
+      CategoryService.getCategorieTree(function(data) {
+      $scope.categoryTree = data;
+    });
 
-    $scope.selectType = function(type) {
-      clearData();
-           $stateParams.type  = type;
-           setTimeout(function(){
-              $scope.loadCourseList($scope.sort);
-           }, 100);
-    }
+      $scope.selectType = function(type) {
+        clearData();
+             $stateParams.type  = type;
+             setTimeout(function(){
+                $scope.loadCourseList($scope.sort);
+             }, 100);
+      }
 
-    function clearData() {
-              $scope.canLoad = true;
-              $scope.start = 0;
-              $scope.courses = null;
-    }
+      function clearData() {
+                $scope.canLoad = true;
+                $scope.start = 0;
+                $scope.courses = null;
+      }
 
-    $scope.selectSort = function(sort) {
-      $scope.sort = sort;
-      clearData();
-      $scope.loadCourseList(sort);
-    }
+      $scope.selectSort = function(sort) {
+        $scope.sort = sort;
+        clearData();
+        $scope.loadCourseList(sort);
+      }
 
-    $scope.onRefresh = function() {
-      clearData();
-      $scope.loadCourseList($scope.sort);
-    }
+      $scope.onRefresh = function() {
+        clearData();
+        $scope.loadCourseList($scope.sort);
+      }
 
-    $scope.categorySelectedListener = function(category) {
-      clearData();
-           $stateParams.type = null;
-           $stateParams.categoryId  =category.id;
-           $scope.loadCourseList($scope.sort);
-    }
+      $scope.categorySelectedListener = function(category) {
+             clearData();
+             $stateParams.type = null;
+             $stateParams.categoryId  =category.id;
+             $scope.loadCourseList($scope.sort);
+      }
 
       $scope.loadCourseList();
 }

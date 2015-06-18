@@ -8,6 +8,7 @@ function MainTabController($scope, sideDelegate, $state)
 	};
 
 	$scope.toggle = function() {
+		
 		if ($scope.platform.native) {
 			window.esNativeCore.openDrawer("open");
 			return;

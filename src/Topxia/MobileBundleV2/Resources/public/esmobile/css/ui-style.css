@@ -80,6 +80,7 @@ a {
   position: absolute;
   height: 100%;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 /** ui-scroll */
@@ -589,7 +590,7 @@ a {
   top: 0;
   padding-left: 48px ! important;
   height: 44px;
-  line-height: 44px;
+  line-height: 30px;
 }
 
 .sign .input-label {
@@ -1241,4 +1242,9 @@ a {
 .ui-list.ui-list-card .padding{
   padding: 8px 16px 8px 16px;
 }
+
+.ui-list-active>li:active,.ui-list-link>li:active,.ui-list-active>li:active {
+  -webkit-transition: all 0.2s ease-in-out 200ms;
+}
+
 /** ui-list **/

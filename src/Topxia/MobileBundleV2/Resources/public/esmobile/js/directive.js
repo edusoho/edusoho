@@ -58,7 +58,7 @@ directive('uiTab', function() {
           }
 
           angular.forEach(nav.children, function(item) {
-            angular.element(item).on("click", function(e) {
+            angular.element(item).on("touchstart", function(e) {
 
                 var tagetHasCurrent = $(item).hasClass('current');
                 var tempCurrentPage = self.currentPage;
@@ -112,7 +112,7 @@ directive('back', function($window, $state) {
     }
   }
 }).
-directive('uiBar', function($window, $state) {
+directive('uiBar', function($window) {
   return {
     restrict: 'A',
     link : function(scope, element, attrs) {
@@ -155,9 +155,11 @@ directive('uiScroll', function($parse) {
                   var scrollHeight = element[0].scrollHeight;
                   var scrollTop = element[0].scrollTop;
                   var clientHeight = element[0].clientHeight;
-
-                  if ( (scrollTop + clientHeight) >= scrollHeight ) {
+                  if ( !scope.isLoading && ( (scrollTop + clientHeight) >= scrollHeight ) ) {
+                    scope.isLoading = true;
                     $parse(attrs.onInfinite)(scope);
+
+                      console.log(scrollTop + "  h: " + scrollHeight + " c:" + clientHeight);
                   }
                 });
           }

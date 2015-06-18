@@ -383,6 +383,12 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
     $rootScope.loadPop =$.loading({
         content: "加载中...",
     });
+    $timeout(function(){
+        if ($rootScope.loadPop) {
+          $rootScope.loadPop.loading("hide");
+        }
+        
+    },5000);
   };
 
   $rootScope.toast = function(template) {
@@ -396,7 +402,11 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
   };
 
   $rootScope.hideLoad = function() {
+    if (! $rootScope.loadPop) {
+      return;
+    }
     $rootScope.loadPop.loading("hide");
+    $rootScope.loadPop = null;
   };
 
   app.host = window.location.origin;
