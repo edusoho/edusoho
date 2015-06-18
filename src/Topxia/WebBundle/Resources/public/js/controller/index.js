@@ -21,7 +21,8 @@ define(function(require, exports, module) {
              $.get($btn.data('url'),function(html){
                $('#course-list').html(html);
                Lazyload.init();
-               $('[data-toggle="tooltip"]').tooltip();
+               $(".tooltip").remove();
+               $('[data-toggle="tooltip"]').tooltip({container: 'body'});
             })
         })
 

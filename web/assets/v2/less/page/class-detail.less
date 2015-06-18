@@ -183,12 +183,18 @@
   }
   &.before {
     .class-img {
+      position: relative;
       width: 50%;
       @media (max-width: @screen-sm-max) {
         width: 40%;
       }
       @media (max-width: @screen-xs-max) {
         width: 100%;
+      }
+      .label {
+        position: absolute;
+        top: 5px;
+        left: 5px;
       }
     }
     .class-info {
