@@ -1078,6 +1078,7 @@ class GroupThreadController extends BaseController
         if($sort=='desc'){
             return array('createdTime','desc');
         }
+    }
 
     protected function getSettingService()
     {
