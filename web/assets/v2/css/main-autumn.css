@@ -1318,6 +1318,9 @@ Pagination Styles
 .footer-logo .footer-sns {
   margin-top: 30px;
 }
+.footer-logo .footer-sns > a {
+  display: inline-block;
+}
 .footer-logo .footer-sns .icon-sns {
   position: relative;
 }
@@ -1336,7 +1339,7 @@ Pagination Styles
   height: 209px;
   position: absolute;
   left: -68px;
-  top: -220px;
+  top: -209px;
   display: none \9;
   opacity: 0;
   filter: alpha(opacity=0);
@@ -1355,7 +1358,7 @@ Pagination Styles
   transition: all 0.3s ease;
 }
 .footer-logo .footer-sns i {
-  display: inline-block;
+  display: block;
   width: 40px;
   height: 40px;
   line-height: 40px;
