@@ -5967,10 +5967,15 @@ textarea.form-control-o {
 }
 .period-list .period .course-type {
   position: absolute;
-  top: 12px;
+  top: 11px;
   right: 15px;
   line-height: 20px;
+}
+.period-list .period .course-type i {
   font-size: 20px;
+}
+.period-list .period .course-type small {
+  margin-top: -3px;
 }
 .period-list .period .period-state {
   position: absolute;
