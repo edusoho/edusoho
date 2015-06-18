@@ -1969,7 +1969,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		} else {
 			$order = null;
 		}
-
+        $conditions =array(
+          'userId' => $userId,
+          'courseId' => $courseId
+       	 );
+        $count = $this->getLessonLearnDao()->searchLearnCount($conditions);
 		$fields = array(
 			'courseId' => $courseId,
 			'userId' => $userId,
@@ -1978,6 +1982,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
 			'role' => 'student',
 			'remark' => empty($order['note']) ? '' : $order['note'],
+			'learnedNum' => $count,
 			'createdTime' => time()
 		);
 
