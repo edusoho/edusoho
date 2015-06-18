@@ -1318,6 +1318,9 @@ Pagination Styles
 .footer-logo .footer-sns {
   margin-top: 30px;
 }
+.footer-logo .footer-sns > a {
+  display: inline-block;
+}
 .footer-logo .footer-sns .icon-sns {
   position: relative;
 }
@@ -1336,7 +1339,7 @@ Pagination Styles
   height: 209px;
   position: absolute;
   left: -68px;
-  top: -220px;
+  top: -209px;
   display: none \9;
   opacity: 0;
   filter: alpha(opacity=0);
@@ -1355,7 +1358,7 @@ Pagination Styles
   transition: all 0.3s ease;
 }
 .footer-logo .footer-sns i {
-  display: inline-block;
+  display: block;
   width: 40px;
   height: 40px;
   line-height: 40px;
@@ -1598,9 +1601,9 @@ a:focus {
   -webkit-transform: translateY(-5px);
   -moz-transform: translateY(-5px);
   -o-transform: translateY(-5px);
-  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -6461,9 +6464,9 @@ textarea.form-control-o {
   -webkit-transform: translateY(-5px);
   -moz-transform: translateY(-5px);
   -o-transform: translateY(-5px);
-  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -6517,7 +6520,6 @@ textarea.form-control-o {
 .teacher-item .about,
 .teacher-item .metas {
   position: absolute;
-  top: 20px;
   right: 20px;
   bottom: 20px;
   left: 20px;
@@ -6527,6 +6529,7 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .teacher-item .about {
+  top: 20px;
   line-height: 25px;
   overflow: hidden;
   color: #9e9e9e;

@@ -18,12 +18,15 @@
 .es-icon-videocam:before { content: "\e678"; }
 .es-icon-anonymous-iconfont:before { content: "\e666"; }
 .es-icon-wenhao:before { content: "\e671"; }
+.es-icon-angledoubleright:before { content: "\e67d"; }
+.es-icon-angledoubleleft:before { content: "\e67e"; }
 .es-icon-playcircleoutline:before { content: "\e66d"; }
 .es-icon-portrait:before { content: "\e65e"; }
 .es-icon-accesstime:before { content: "\e658"; }
 .es-icon-accountcircle:before { content: "\e668"; }
 .es-icon-addbox:before { content: "\e65f"; }
 .es-icon-checkbox:before { content: "\e660"; }
+.es-icon-explore:before { content: "\e67f"; }
 .es-icon-forum:before { content: "\e662"; }
 .es-icon-history:before { content: "\e670"; }
 .es-icon-removecircle:before { content: "\e66c"; }
@@ -133,6 +136,7 @@
 .es-icon-assignment2:before { content: "\e654"; }
 .es-icon-accountwallet:before { content: "\e655"; }
 .es-icon-dashboard:before { content: "\e656"; }
+.es-icon-web:before { content: "\e67c"; }
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
 .es-icon-music:before { content: "\e673"; }
