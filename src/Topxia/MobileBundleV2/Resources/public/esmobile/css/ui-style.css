@@ -1099,6 +1099,11 @@ a {
   padding: 8px;
 }
 
+.ui-vip .ui-vip-content img{
+  width: 100%;
+  display: block;
+}
+
 .ui-vip .ui-list-info h4{
   color: #333;
   font-size: 25px;
