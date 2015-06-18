@@ -14,31 +14,27 @@ class UploadFileController extends BaseController
 
     public function uploadAction(Request $request)
     {
-        try{
-            $token = $request->request->get('token');
-            $token = $this->getUserService()->getToken('fileupload', $token);
-            if (empty($token)) {
-                throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
-            }
-
-            $user = $this->getUserService()->getUser($token['userId']);
-            if (empty($user)) {
-                throw $this->createAccessDeniedException('上传TOKEN非法。');
-            }
-
-            $currentUser = new CurrentUser();
-            $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
-
-            $targetType = $request->query->get('targetType');
-            $targetId = $request->query->get('targetId');
-
-            $originalFile = $this->get('request')->files->get('file');
-
-            $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
-        	return $this->createJsonResponse($file);
-        }catch(\Exception $e){
-            return $this->createJsonResponse($e->getMessage());
+        $token = $request->request->get('token');
+        $token = $this->getUserService()->getToken('fileupload', $token);
+        if (empty($token)) {
+            throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
         }
+
+        $user = $this->getUserService()->getUser($token['userId']);
+        if (empty($user)) {
+            throw $this->createAccessDeniedException('上传TOKEN非法。');
+        }
+
+        $currentUser = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
+
+        $targetType = $request->query->get('targetType');
+        $targetId = $request->query->get('targetId');
+
+        $originalFile = $this->get('request')->files->get('file');
+
+        $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
+        return $this->createJsonResponse($file);
     }
 
     public function browserAction(Request $request)

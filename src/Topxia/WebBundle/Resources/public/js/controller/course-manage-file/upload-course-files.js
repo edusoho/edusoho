@@ -60,9 +60,6 @@ define(function(require, exports, module) {
 			init: {
 				FileUploaded: function(up, file, info) {
 					response = $.parseJSON(info.response);
-					if(response.indexOf("exceeds your upload_max_filesize") >= 0 ){
-						Notify.danger('文件大小超出上限,上传失败！');
-					}
 					var url = divData.callback;
 					if (url) {
 						if (file.type != 'audio/mpeg') {
@@ -86,7 +83,7 @@ define(function(require, exports, module) {
 				},
 
 				Error: function(up, args) {
-					Notify.danger('文件上传失败，请重试！');
+					Notify.danger('文件上传失败，可能的原因: 1.文件大小超出限制. 2.文件不存在. 3.文件不能被写入硬盘. 4.临时目录不存在.', 60);
 				},
 				UploadComplete: function(up, files) {
 		            up.refresh();
