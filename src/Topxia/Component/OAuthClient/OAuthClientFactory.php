@@ -70,7 +70,7 @@ class OAuthClientFactory
                 'class' => 'Topxia\Component\OAuthClient\WeixinwebOAuthClient',
                 'icon_class' => 'social-icon social-icon-weixin',
                 'icon_img' => '',
-                'large_icon_img' => 'assets/img/social/weixn.png',
+                'large_icon_img' => 'assets/img/social/weixin.png',
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Secret',
                 'apply_url' => 'https://open.weixin.qq.com/cgi-bin/frame?t=home/wx_login_tmpl&lang=zh_CN'
