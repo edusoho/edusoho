@@ -85,7 +85,7 @@ class LoginBindController extends BaseController
 
     public function newAction(Request $request, $type)
     {
-        return this->createJsonResponse($this->autobind($request, $type));
+        return $this->createJsonResponse($this->autobind($request, $type));
     }
 
     private function autobind(Request $request,$type)
