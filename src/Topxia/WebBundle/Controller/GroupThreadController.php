@@ -849,7 +849,8 @@ class GroupThreadController extends BaseController
     private function getPost($postId,$threadId,$id)
     {   
         $post=$this->getThreadService()->getPost($postId);
-        if($post['postId']!=0)$postId=$post['postId'];{
+        if($post['postId']!=0){
+            $postId=$post['postId'];
             $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
         }
 
