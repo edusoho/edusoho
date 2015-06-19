@@ -10,68 +10,80 @@ use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\LiveClientFactory;
 
-class CourseController extends BaseController
+class CourseController extends CourseBaseController
 {
 	public function exploreAction(Request $request, $category)
 	{
-		if (!empty($category)) {
-			if (ctype_digit((string) $category)) {
-				$category = $this->getCategoryService()->getCategory($category);
+		$conditions = $request->query->all();
+		$conditions['code'] = $category;
+
+        if (!empty($conditions['code'])) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
+            $conditions['categoryIds'] = $categoryIds;
+        }
+		if(!isset($conditions['fliter'])){
+			$conditions['fliter'] ='all';
+		} elseif ($conditions['fliter'] == 'free') {
+			$coinSetting = $this->getSettingService()->get("coin");
+	        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+	        $priceType = "RMB";
+	        if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
+	            $priceType = $coinSetting["price_type"];
+	        }
+
+			if($priceType == 'RMB'){
+				$conditions['price'] = '0.00';
 			} else {
-				$category = $this->getCategoryService()->getCategoryByCode($category);
+				$conditions['coinPrice'] = '0.00';
 			}
-
-			if (empty($category)) {
-				throw $this->createNotFoundException();
-			}
-		} else {
-			$category = array('id' => null);
 		}
-		
-
-		$sort = $request->query->get('sort', 'latest');
-
-		$conditions = array(
-			'status' => 'published',
-			'type' => 'normal',
-			'categoryId' => $category['id'],
-			'recommended' => ($sort == 'recommendedSeq') ? 1 : null
-		);
-
-		if ($sort == 'free') {
-			$conditions['price'] = '0.00';
-			$conditions['coinPrice'] = '0.00';
+		elseif ($conditions['fliter'] == 'live'){
+			$conditions['type'] = 'live';
+		}
+		$fliter = $conditions['fliter'];
+		unset($conditions['fliter']);
+		if(!isset($conditions['orderBy'])){
+			$conditions['orderBy'] = 'latest';
 		}
 
+		$conditions['recommended'] = ($conditions['orderBy'] == 'recommendedSeq') ? 1 : null;
+		unset($conditions['code']);
+		$orderBy = $conditions['orderBy'];
+		unset($conditions['orderBy']);
+
+		$conditions['parentId'] = 0;
+		$conditions['status'] = 'published';
 		$paginator = new Paginator(
 			$this->get('request'),
-			$this->getCourseService()->searchCourseCount($conditions)
-			, 10
+			$this->getCourseService()->searchCourseCount($conditions),
+			12
 		);
-
 		$courses = $this->getCourseService()->searchCourses(
-			$conditions, $sort,
+			$conditions, 
+			$orderBy,
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
-
 		$group = $this->getCategoryService()->getGroupByCode('course');
 		if (empty($group)) {
 			$categories = array();
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-		
+
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
-			'sort' => $sort,
+			'fliter' => $fliter,
+			'orderBy' => $orderBy,
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			'path' => 'course_explore'
 			
-
-		));
+		));	
 	}
 
 	public function archiveAction(Request $request)
@@ -147,30 +159,16 @@ class CourseController extends BaseController
 
 	public function infoAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
+		list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
 		$tags = $this->getTagService()->findTagsByIds($course['tags']);
+
 		return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
 			'course' => $course,
+			'member' => $member,
 			'category' => $category,
 			'tags' => $tags,
-		));
-	}
-
-	public function teacherInfoAction(Request $request, $courseId, $id)
-	{
-		$currentUser = $this->getCurrentUser();
-
-		$course = $this->getCourseService()->getCourse($courseId);
-		$user = $this->getUserService()->getUser($id);
-		$profile = $this->getUserService()->getUserProfile($id);
-
-		$isFollowing = $this->getUserService()->isFollowed($currentUser->id, $user['id']);
-
-		return $this->render('TopxiaWebBundle:Course:teacher-info-modal.html.twig', array(
-			'user' => $user,
-			'profile' => $profile,
-			'isFollowing' => $isFollowing,
 		));
 	}
 
@@ -209,248 +207,27 @@ class CourseController extends BaseController
 		));
 	}
 
-	/**
-	 * 如果用户已购买了此课程，或者用户是该课程的教师，则显示课程的Dashboard界面。
-	 * 如果用户未购买该课程，那么显示课程的营销界面。
-	 */
 	public function showAction(Request $request, $id)
 	{
-		$course = $this->getCourseService()->getCourse($id);
-
-        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))){
-            $course['discountObj'] = $this->getDiscountService()->getDiscount($course['discountId']);
-        }
-
-        $code = 'ChargeCoin';
-        $ChargeCoin = $this->getAppService()->findInstallApp($code);
-        
-        $courseSetting=$this->getSettingService()->get('course',array());
-        
-        if (isset($courseSetting['coursesPrice'])) {
-                $coursesPrice=$courseSetting['coursesPrice'];
-        }else{
-                $coursesPrice=0;
-        }
-
-		$nextLiveLesson = null;
-
-		$weeks = array("日","一","二","三","四","五","六");
-
-		$currentTime = time();
- 
-		if (empty($course)) {
-			throw $this->createNotFoundException();
+		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
+		if(empty($member)) {
+			$user = $this->getCurrentUser();
+			$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
+			if(isset($member["id"])) {
+				$course['studentNum'] ++ ;
+			}
 		}
-
-		if ($course['type'] == 'live') {
-			$conditions = array(
-				'courseId' => $course['id'],
-				'startTimeGreaterThan' => time(),
-				'status' => 'published'
-			);
-			$nextLiveLesson = $this->getCourseService()->searchLessons( $conditions, array('startTime', 'ASC'), 0, 1);
-			if ($nextLiveLesson) {
-				$nextLiveLesson = $nextLiveLesson[0];
-			}
-		};
-
-		$previewAs = $request->query->get('previewAs');
-
-		$user = $this->getCurrentUser();
-
-		$items = $this->getCourseService()->getCourseItems($course['id']);
-		$mediaMap = array();
-		foreach ($items as $item) {
-			if (empty($item['mediaId'])) {
-				continue;
-			}
-
-			if (empty($mediaMap[$item['mediaId']])) {
-				$mediaMap[$item['mediaId']] = array();
-			}
-			$mediaMap[$item['mediaId']][] = $item['id'];
-		}
-
-		$mediaIds = array_keys($mediaMap);
-		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
-
-		$member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
 		$this->getCourseService()->hitCourse($id);
 
-		$member = $this->previewAsMember($previewAs, $member, $course);
+        $items = $this->getCourseService()->getCourseItems($course['id']);
 
-		$homeworkLessonIds =array();
-		$exercisesLessonIds =array();
-		if($this->isPluginInstalled("Homework")) {
-            $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-            $lessonIds = ArrayToolkit::column($lessons, 'id');
-            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
-            $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
-            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
-            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
-		}
-
-		if($this->isPluginInstalled("Classroom") && empty($member)) {
-			$addCount=0;
-			$classroomMembers = $this->getClassroomMembersByCourseId($id);
-			foreach ($classroomMembers as $classroomMember) {
-				if(in_array($classroomMember["role"], array("student")) && !$this->getCourseService()->isCourseStudent($id, $user["id"])) {
-					$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user["id"], $classroomMember["classroomId"]);
-					$addCount++;
-				}
-			}
-			$course['studentNum'] += $addCount;
-		}
-
-		$classrooms=array();
-		$isLearnInClassrooms=array();
-		if ($this->isPluginInstalled("Classroom")) {
-			$classroomIds=ArrayToolkit::column($this->getClassroomService()->findClassroomsByCourseId($id),'classroomId');
-			foreach ($classroomIds as $key => $value) {
-				$classrooms[$value]=$this->getClassroomService()->getClassroom($value);
-
-				if ($this->getClassroomService()->isClassroomStudent($value, $user->id) or $this->getClassroomService()->isClassroomTeacher($value, $user->id)) {
-
-					$isLearnInClassrooms[] = $classrooms[$value];
-
-				}
-			}
-		}
-
-		if ($member && empty($member['locked'])) {
-			$learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
-			$lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $course['id']);
-			if($coursesPrice ==1){
-				$course['price'] =0;
-				$course['coinPrice'] =0;
-			}
-
-			return $this->render("TopxiaWebBundle:Course:dashboard.html.twig", array(
-				'course' => $course,
-				'type' => $course['type'],
-				'member' => $member,
-				'items' => $items,
-				'learnStatuses' => $learnStatuses,
-				'lessonLearns' => $lessonLearns,
-				'currentTime' => $currentTime,
-				'weeks' => $weeks,
-				'files' => ArrayToolkit::index($files,'id'),
-				'ChargeCoin'=> $ChargeCoin,
-				'homeworkLessonIds' => $homeworkLessonIds,
-				'exercisesLessonIds' => $exercisesLessonIds,
-				'isLearnInClassrooms'=> $isLearnInClassrooms
-			));
-		}
-		
-		$groupedItems = $this->groupCourseItems($items);
-		$hasFavorited = $this->getCourseService()->hasFavoritedCourse($course['id']);
-
-		$category = $this->getCategoryService()->getCategory($course['categoryId']);
-		$tags = $this->getTagService()->findTagsByIds($course['tags']);
-
-		$checkMemberLevelResult = $courseMemberLevel = null;
-		if ($this->isPluginInstalled("Vip") && $this->setting('vip.enabled')) {
-			$courseMemberLevel = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
-			if ($courseMemberLevel) {
-				$checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseMemberLevel['id']);
-			}
-		}
-
-		$courseReviews = $this->getReviewService()->findCourseReviews($course['id'],'0','1');
-
-		$freeLesson=$this->getCourseService()->searchLessons(array('courseId'=>$id,'type'=>'video','status'=>'published','free'=>'1'),array('createdTime','ASC'),0,1);
-		if($freeLesson)$freeLesson=$freeLesson[0];
-		
-		if($coursesPrice == 1){
-			$course['price'] =0;
-			$course['coinPrice'] =0;
-		}
-
-		return $this->render("TopxiaWebBundle:Course:show.html.twig", array(
+		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
-			'freeLesson'=>$freeLesson,
-			'courseMemberLevel' => $courseMemberLevel,
-			'checkMemberLevelResult' => $checkMemberLevelResult,
-			'groupedItems' => $groupedItems,
-			'hasFavorited' => $hasFavorited,
-			'category' => $category,
-			'previewAs' => $previewAs,
-			'tags' => $tags,
-			'nextLiveLesson' => $nextLiveLesson,
-			'currentTime' => $currentTime,
-			'courseReviews' => $courseReviews,
-			'weeks' => $weeks,
-			'consultDisplay' => true,
-			'ChargeCoin'=> $ChargeCoin,
-			'classrooms'=> $classrooms
+			'items' => $items,
 		));
 
-	}
-
-	private function previewAsMember($as, $member, $course)
-	{
-		$user = $this->getCurrentUser();
-		if (empty($user->id)) {
-			return null;
-		}
-
-
-		if (in_array($as, array('member', 'guest'))) {
-			if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-				$member = array(
-					'id' => 0,
-					'courseId' => $course['id'],
-					'userId' => $user['id'],
-					'levelId' => 0,
-					'learnedNum' => 0,
-					'isLearned' => 0,
-					'seq' => 0,
-					'isVisible' => 0,
-					'role' => 'teacher',
-					'locked' => 0,
-					'createdTime' => time(),
-					'deadline' => 0
-				);
-			}
-
-			if (empty($member) or $member['role'] != 'teacher') {
-				return $member;
-			}
-
-			if ($as == 'member') {
-				$member['role'] = 'student';
-			} else {
-				$member = null;
-			}
-		}
-
-		return $member;
-	}
-
-	private function groupCourseItems($items)
-	{
-		$grouped = array();
-
-		$list = array();
-		foreach ($items as $id => $item) {
-			if ($item['itemType'] == 'chapter') {
-				if (!empty($list)) {
-					$grouped[] = array('type' => 'list', 'data' => $list);
-					$list = array();
-				}
-				$grouped[] = array('type' => 'chapter', 'data' => $item);
-			} else {
-				$list[] = $item;
-			}
-		}
-
-		if (!empty($list)) {
-			$grouped[] = array('type' => 'list', 'data' => $list);
-		}
-
-		return $grouped;
 	}
 
 	private function calculateUserLearnProgress($course, $member)
@@ -704,10 +481,8 @@ class CourseController extends BaseController
 			$vipChecked = 'ok';
 		}
 
-		$classroomMembers = $this->getClassroomMembersByCourseId($course["id"]);
-		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
-		if((isset($member["role"]) && isset($member["joinedType"]) && $member["role"] == 'student' && $member["joinedType"] == 'course') 
-			|| (isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0))) {
+		if($this->isBecomeStudentFromCourse($member) 
+			|| $this->isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)) {
 			$canExit = true;
 		} else {
 			$canExit = false;
@@ -724,6 +499,18 @@ class CourseController extends BaseController
 			'vipChecked' => $vipChecked,
 			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
 		));
+	}
+
+	private function isBecomeStudentFromCourse($member)
+	{
+		return isset($member["role"]) && isset($member["joinedType"]) && $member["role"] == 'student' && $member["joinedType"] == 'course';
+	}
+
+	private function isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)
+	{
+		$classroomMembers = $this->getClassroomService()->getClassroomMembersByCourseId($course["id"], $user->id);
+		$classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
+		return isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0);
 	}
 
 	public function teachersBlockAction($course)
@@ -770,19 +557,13 @@ class CourseController extends BaseController
 		foreach ($courses as $key => $course) {
 			$userIds = array_merge($userIds, $course['teacherIds']);
 
-			$classrooms = array();
-			if ($this->isPluginInstalled("Classroom")) {
-				$classrooms=$this->getClassroomService()->findClassroomsByCourseId($course['id']);
+			$classroomIds=$this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
-				$classroomIds=ArrayToolkit::column($classrooms,'classroomId');
+			$courses[$key]['classroomCount']=count($classroomIds);
 
-				$courses[$key]['classroomCount']=count($classroomIds);
-
-				if(count($classroomIds)>0){
-
-					$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
-					$courses[$key]['classroom']=$classroom;
-				}
+			if(count($classroomIds)>0){
+				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
+				$courses[$key]['classroom']=$classroom;
 			}
 		}
 		
@@ -791,7 +572,7 @@ class CourseController extends BaseController
 		return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
 			'courses' => $courses,
 			'users' => $users,
-			'classrooms'=>$classrooms,
+			'classroomIds'=>$classroomIds,
 			'mode' => $mode,
 		));
 	}
@@ -819,7 +600,8 @@ class CourseController extends BaseController
 
 
 		$conditions = array(
-			'status' => 'published'
+			'status' => 'published',
+			'parentId' => 0,
 		);
 
 		$paginator = new Paginator(
@@ -845,7 +627,7 @@ class CourseController extends BaseController
 
 		$users = $this->getUserService()->findUsersByIds($userIds);
 
-		return $this->render("TopxiaWebBundle:Course:course-select.html.twig", array(
+		return $this->render("TopxiaWebBundle:Course:course-pick.html.twig", array(
 			'users'=>$users,
 			'url'=>$url,
 			'courses'=>$courses,
@@ -859,22 +641,20 @@ class CourseController extends BaseController
 	private function getClassroomCourseIds($request,$courseIds)
 	{	
 		$unEnabledCourseIds=array();
-		if($request->query->get('type') !="classroom")
+		if($request->query->get('type') !="classroom"){
 			return $unEnabledCourseIds;
+		}
 
-		if ($this->isPluginInstalled("Classroom")) {
-			
-			$classroomId=$request->query->get('classroomId');
+		$classroomId=$request->query->get('classroomId');
 
-	        foreach ($courseIds as $key => $value) {
-	        	$course=$this->getCourseService()->getCourse($value);
-	        	$classrooms = $this->getClassroomService()->findClassroomsByCourseId($value);
-	        	if($course && count($classrooms)==0){
-	        		unset($courseIds[$key]);
-	        	}
+        foreach ($courseIds as $key => $value) {
+        	$course=$this->getCourseService()->getCourse($value);
+        	$classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($value);
+        	if($course && count($classrooms)==0){
+        		unset($courseIds[$key]);
+        	}
 
-	        }
-	    }
+        }
         $unEnabledCourseIds = $courseIds;
 
         return $unEnabledCourseIds;
@@ -937,17 +717,12 @@ class CourseController extends BaseController
 		return $this->redirect($this->generateUrl('course_show',array('id' => $courseId)));
 	}
 
-	private function getClassroomMembersByCourseId($id) {
+	public function listViewAction(Request $request, $courseId)
+	{
 
-		if ($this->isPluginInstalled("Classroom")) {
-			$classrooms = $this->getClassroomService()->findClassroomsByCourseId($id);
-			$classroomIds = ArrayToolkit::column($classrooms, "classroomId");
-			$user=$this->getCurrentUser();
+		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
 
-			$members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-			return $members;
-		}
-		return array();
+		));
 	}
 
 	protected function getUserService()
@@ -955,57 +730,32 @@ class CourseController extends BaseController
 		return $this->getServiceKernel()->createService('User.UserService');
 	}
 
-	protected function getLevelService()
-	{
-		return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
-	}
-
 	protected function getVipService()
 	{
 		return $this->getServiceKernel()->createService('Vip:Vip.VipService');
 	}
 
-	private function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
-
-	private function getCategoryService()
+	protected function getCategoryService()
 	{
 		return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
 	}
 
-	private function getTagService()
+	protected function getTagService()
 	{
 		return $this->getServiceKernel()->createService('Taxonomy.TagService');
 	}
 
-	private function getReviewService()
-	{
-		return $this->getServiceKernel()->createService('Course.ReviewService');
-	}
-
-    	private function getHomeworkService()
-    	{
-        		return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
-    	} 
-
-    	private function getExerciseService()
-    	{
-        		return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
-    	}
-
-	private function getSettingService()
+	protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
 	return $this->getServiceKernel()->createService('File.UploadFileService');
     }

@@ -134,7 +134,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function waveCourse($id,$field,$diff)
     {
-        $fields = array('hitNum');
+        $fields = array('hitNum', 'noteNum');
 
         if (!in_array($field, $fields)) {
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
@@ -177,6 +177,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagIds']);
         }
 
+        if(empty($conditions['status']) || $conditions['status']=="") {
+            unset($conditions['status']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from(self::TABLENAME, 'course')
             ->andWhere('status = :status')
@@ -202,14 +206,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('smallPicture = :smallPicture')
             ->andWhere('categoryId IN ( :categoryIds )')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
-            ->andWhere('id NOT IN ( :courseIds )')
-			->andWhere('tagId IN ( :tagIds )');
+            ->andWhere('parentId = :parentId')
+            ->andWhere('parentId > :parentId_GT')
+            ->andWhere('parentId IN ( :parentIds )')
+            ->andWhere('id NOT IN ( :excludeIds )')
+            ->andWhere('id IN ( :courseIds )');
+
         return $builder;
     }
 
     public function analysisCourseDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
     }

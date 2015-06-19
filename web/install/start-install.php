@@ -562,6 +562,36 @@ EOD;
             'public' => 1,
         ));
 
+        $this->getFileService()->addFileGroup(array(
+            'name' => '临时目录',
+            'code' => 'tmp',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '全局设置文件',
+            'code' => 'system',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '小组',
+            'code' => 'group',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '编辑区',
+            'code' => 'block',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '班级',
+            'code' => 'classroom',
+            'public' => 1,
+        ));
+
     }
 
     public function initPages()
@@ -617,7 +647,7 @@ EOD;
 
     public function initThemes()
     {
-        $this->getSettingService()->set('theme', array('uri' => 'default'));
+        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
     }
 
     public function initBlocks()
@@ -627,12 +657,12 @@ EOD;
             'title'=>'默认主题：首页头部图片轮播'
         ));
 
-        $content = <<<'EOD'
-<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
-<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
-<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
+        $metaFiles = array(
+            'system' => "{$themeDir}/block.json",
+            'default' => "{$themeDir}/default/block.json",
+            'autumn' => "{$themeDir}/autumn/block.json",
+            'jianmo' => "{$themeDir}/jianmo/block.json"
+        );
 
         $block = $this->getBlockService()->createBlock(array(
             'code'=>'autumn:home_top_banner',

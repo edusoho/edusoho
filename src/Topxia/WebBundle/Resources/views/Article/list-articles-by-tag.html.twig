@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ setting('article.name', '资讯频道') }} - {{ parent() }}{% endblock %}
+
+{% set bodyClass = 'artcile-tag-page' %}
+
+{% block content %}
+  
+  <div class="article-list-body row">
+
+    <!-- list主内容-->
+    <div class="col-md-8 article-list-mian">
+      {% include 'TopxiaWebBundle:Article/Part:tag-header.html.twig' %}
+      {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' %}
+    </div>
+
+    <aside class="col-md-4 article-sidebar">
+      {% include 'TopxiaWebBundle:Article/Widget:tag-sidebar.html.twig' %}
+    </aside>
+  </div>
+
+
+{% endblock %}

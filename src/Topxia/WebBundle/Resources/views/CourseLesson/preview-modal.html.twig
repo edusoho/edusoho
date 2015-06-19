@@ -68,7 +68,8 @@
     {% if course.price=='0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
         {% if setting("course.buy_fill_userinfo")|default(false) %}
-          href="javascript:;" 
+          href="#modal" 
+          data-toggle="modal" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
         {% else %}
           href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"

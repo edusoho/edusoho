@@ -1,0 +1,125 @@
+@import "temp/group.less";      //小组
+@import "temp/userpage.less";   //用户中心
+@import "temp/class.less";   //用户中心
+
+
+// 结构性布局
+.es-row-wrap {
+  background: #fff;
+  border: 1px solid @gray-light;
+  .border-radius;
+  .box-shadow( 0 2px 4px rgba(0,0,0,.08));
+}
+
+
+// 兼容性
+.lesson-manage-panel .panel-heading {
+  z-index: 1;
+}
+
+.homepage-feature-slides {
+  z-index: 0;
+}
+
+.question-set-item:first-child {
+  border: none;
+}
+
+.group-search {
+  margin-bottom: 20px;
+  .form-control {
+    border-bottom-left-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+  }
+  button {
+    border: 1px solid #e0e0e0 !important;
+  }
+}
+
+.list-group-panel .list-group-item.active, 
+.list-group-panel .list-group-item.active:hover {
+  background: #f3f3f3;
+  color: @brand-primary;
+  font-weight: bold;
+  border-left: 3px solid @brand-primary;
+}
+
+.lesson-dashboard .back-course-btn {
+  left: -5px;
+}
+
+// 个人中心头部
+.userpage-header .media {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.userpage-header .media-left {
+  padding-right: 30px;
+  @media (max-width: @screen-xs-max) {
+    display: block;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-right: 0;
+  }
+}
+
+.page-header {
+  // font-weight: bold;
+  .badge {
+    margin-left: 5px;
+    color: #fff;
+    background-color: @brand-primary;
+  }
+}
+
+// 手机二维码
+.mobile-download-panel .btn-lg .es-icon {font-size:24px;}
+
+
+// 轮播
+.homepage-feature {
+  .border-radius;
+  .box-shadow( 0 2px 4px rgba(0,0,0,.08));
+}
+
+// 右侧浮窗
+.float-consult {
+  .btn {
+    padding: 6px 12px;
+    .border-radius(0);
+    color: #fff;
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+  }
+  .btn-consult-default {
+    background: @brand-primary;
+    border-color: @brand-primary - #111;
+    &:hover {
+      background: @brand-primary - #111;
+      border-color: @brand-primary - #222;
+    }
+  }
+  .btn-consult-warning {
+    background: @brand-warning;
+    border-color: @brand-warning - #111;
+    &:hover {
+      background: @brand-warning - #111;
+      border-color: @brand-warning - #222;
+    }
+  }
+  .btn-consult-danger {
+    background: @brand-danger;
+    border-color: @brand-danger - #111;
+    &:hover {
+      background: @brand-danger - #111;
+      border-color: @brand-danger - #222;
+    }
+  }
+}

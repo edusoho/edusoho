@@ -2,9 +2,11 @@ define(function(require, exports, module) {
 	window.$ = window.jQuery = require('jquery');
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+    require("placeholder");
+    require('./util/card');
+    require('./util/es-bar');
+    var Swiper=require('swiper');
 	var Cookie = require('cookie');
-	var Announcement = require('../../topxiaweb/js/controller/widget/announcement.js');
-
 
 	exports.load = function(name) {
 		if (window.app.jsPaths[name.split('/', 1)[0]] == undefined) {
@@ -128,14 +130,36 @@ define(function(require, exports, module) {
 
     if($(".announcements-alert").length>0){
 
-    	new Announcement({
-    		element:'.announcements-alert'
-    	});
+        if($('.announcements-alert .swiper-container .swiper-wrapper').children().length>1){
+            var noticeSwiper = new Swiper('.alert-notice .swiper-container', {
+                speed: 300,
+                loop: true,
+                mode: 'vertical',
+                autoplay: 5000,
+                calculateHeight: true
+            });
+        }
 
     	$(".announcements-alert .close").click(function(){
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
 
+   
+    $("li.nav-hover").mouseenter(function(event) {
+        $(this).addClass("open");
+    }).mouseleave(function(event) {
+        $(this).removeClass("open");
+    });
+
+    if ($('[data-toggle="tooltip"]').length > 0) {
+        $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+    }
+
+    $(".js-search").focus(function () {
+        $(this).prop("placeholder", "").addClass("active");
+    }).blur(function () {
+        $(this).prop("placeholder", "搜索").removeClass("active");
+    });
 
 });

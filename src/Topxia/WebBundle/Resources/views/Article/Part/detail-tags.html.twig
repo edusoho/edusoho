@@ -1,0 +1,7 @@
+<div class="article-tags">
+  {% if tagNames %}标签：
+    {% for tagName in tagNames %}
+    <a class="btn-tag" href="#">{{tagName}}</a>
+    {% endfor %}
+  {% endif %}
+</div>

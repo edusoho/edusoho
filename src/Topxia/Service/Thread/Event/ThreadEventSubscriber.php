@@ -62,7 +62,7 @@ class ThreadEventSubscriber implements EventSubscriberInterface
 
         $processors = ServiceKernel::instance()->getModuleConfig('thread.event_processor');
         if (!isset($processors[$subject['targetType']])) {
-            return ;
+            return;
         }
 
         $processors = (array) $processors[$subject['targetType']];
@@ -75,4 +75,8 @@ class ThreadEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    private function getThreadService()
+    {
+        return ServiceKernel::instance()->createService('Thread.ThreadService');
+    }
 }

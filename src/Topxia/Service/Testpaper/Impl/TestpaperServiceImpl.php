@@ -779,7 +779,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
 
-                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
                     $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
                 } else {
                     $item['missScore'] = 0;
@@ -791,7 +791,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
                 $existItem = $existItems[$item['questionId']];
 
-                if ($item['seq'] != $existItem['seq'] or $item['score'] != $existItem['score']) {
+                if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
                     $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
@@ -843,6 +843,59 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             // @todo: 这个是有问题的。
             if ($member['role'] == 'teacher') {
                 return $user['id'];
+            }
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
+            if (!empty($classroom)) {
+                $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'],$user['id']);
+                $isAssistant = $this->getClassroomService()->isClassroomAssistent($classroom['classroomId'],$user['id']);
+                $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'],$user['id']);
+                if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
+                    return $user['id'];
+                }
+            }
+        }
+        return false;
+    }
+
+    public function canLookTestPaper($resultId)
+    {
+        $paperResult = $this->getTestpaperResult($resultId);
+        if (!$paperResult) {
+            throw $this->createNotFoundException('试卷不存在!');
+        }
+        $paper = $this->getTestpaperDao()->getTestpaper($paperResult['testId']);
+        if (!$paper) {
+            throw $this->createNotFoundException('试卷不存在!');
+        }
+
+        $user = $this->getCurrentUser();
+        if ($user->isAdmin()) {
+            return $user['id'];
+        }
+
+        $target = explode('-', $paper['target']);
+
+        if ($target[0] == 'course') {
+            $targetId = explode('/', $target[1]);
+            $member = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
+
+            if ($member['role'] == 'teacher') {
+                return $user['id'];
+            }
+
+            if ($paperResult['userId'] == $user['id']) {
+                return $user['id'];
+            }
+
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
+            if (!empty($classroom)) {
+                $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'],$user['id']);
+                $isAssistant = $this->getClassroomService()->isClassroomAssistent($classroom['classroomId'],$user['id']);
+                $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'],$user['id']);
+                
+                if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
+                    return $user['id'];
+                }
             }
         }
         return false;
@@ -898,6 +951,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     private function getStatusService()
     {
         return $this->createService('User.StatusService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
 }

@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require("placeholder");
     require("jquery.bootstrap-datetimepicker");
     var SmsSender = require('../widget/sms-sender');
     exports.run = function() {
@@ -91,7 +90,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="mobile"]',
             required: true,
-            rule: 'mobile'
+            rule: 'mobile email_or_mobile_remote'
         });
 
         validator.addItem({
@@ -133,7 +132,24 @@ define(function(require, exports, module) {
              }else{
                 validator.removeItem('[name="em_sms_code"]');
              }
-        }); 
+        });
+
+        $("#register_mobile").blur(function(){
+            var mobile  = $("#register_mobile").val();
+            var reg_mobile = /^1\d{10}$/;
+            var isMobile = reg_mobile.test(mobile);
+            if(isMobile){
+                 validator.addItem({
+                    element: '[name="em_sms_code"]',
+                    required: true,
+                    triggerType: 'submit',
+                    rule: 'integer fixedLength{len:6} remote',
+                    display: '短信验证码'           
+                 });
+             }else{
+                validator.removeItem('[name="em_sms_code"]');
+             }
+        });
 
 
         for(var i=1;i<=5;i++){

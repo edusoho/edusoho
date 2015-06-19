@@ -304,6 +304,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/install", "{$this->distDirectory}/web/install");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/autumn", "{$this->distDirectory}/web/themes/autumn");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/jianmo", "{$this->distDirectory}/web/themes/jianmo");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
 		$this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
 
@@ -320,14 +321,14 @@ class BuildCommand extends BaseCommand
 		$finder->files()->in("{$this->distDirectory}/web/assets/libs");
 		foreach ($finder as $file) {
 			$filename = $file->getFilename();
-			if ($filename == 'package.json' or preg_match('/-debug.js$/', $filename) or preg_match('/-debug.css$/', $filename)) {
+			if ($filename == 'package.json' || preg_match('/-debug.js$/', $filename) || preg_match('/-debug.css$/', $filename)) {
 				$this->filesystem->remove($file->getRealpath());
 			}
 		}
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-		$needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2');
+		$needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom');
 		foreach ($finder as $dir) {
 			if (!in_array($dir->getFilename(), $needs)) {
 				continue;
@@ -355,6 +356,7 @@ class BuildCommand extends BaseCommand
         $html =  $this->generateBlcokContent("{$themeDir}/block.json");
         $this->generateBlcokContent("{$themeDir}/default/block.json");
         $this->generateBlcokContent("{$themeDir}/autumn/block.json");
+        $this->generateBlcokContent("{$themeDir}/jianmo/block.json");
 
 	}
 

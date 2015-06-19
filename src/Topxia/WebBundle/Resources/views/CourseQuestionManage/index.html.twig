@@ -99,7 +99,9 @@
       <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目" data-url="{{ path('course_manage_question_deletes',{courseId:course.id}) }}">删除</button>
       <span class="pull-right text-muted">共{{ paginator.getItemCount() }}题</span>
     </div>
-    {{ web_macro.paginator(paginator) }}
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
   </div>
 </div>
 

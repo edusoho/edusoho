@@ -5,25 +5,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class CourseThreadController extends BaseController
+class CourseThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $id);
+        if ($response) {
+            return $response;
         }
-
-        $course = $this->getCourseService()->getCourse($id);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $filters = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);
@@ -40,6 +29,12 @@ class CourseThreadController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        foreach ($threads as $key => $thread) {
+            $threads[$key]['sticky'] = $thread['isStick'];
+            $threads[$key]['nice'] = $thread['isElite'];
+            $threads[$key]['lastPostTime'] = $thread['latestPostTime'];
+            $threads[$key]['lastPostUserId'] = $thread['latestPostUserId'];
+        }
 
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         $userIds = array_merge(
@@ -48,44 +43,31 @@ class CourseThreadController extends BaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $template = $request->isXmlHttpRequest() ? 'index-main' : 'index';
-        return $this->render("TopxiaWebBundle:CourseThread:{$template}.html.twig", array(
+        return $this->render("TopxiaWebBundle:CourseThread:index.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'threads' => $threads,
             'users' => $users,
             'paginator' => $paginator,
             'filters' => $filters,
-            'lessons'=>$lessons
+            'lessons'=>$lessons,
+            'target' => array('type'=>'course','id'=>$id)
         ));
     }
 
-    public function showAction(Request $request, $courseId, $id)
+    public function showAction(Request $request, $courseId, $threadId)
     {
 
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在，或已删除。");
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $courseId)));
-        }
-
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-            // return $this->redirect($this->generateUrl('course_threads',array('id' => $courseId)));
             $isMemberNonExpired = false;
         } else {
             $isMemberNonExpired = true;
         }
         
-        $thread = $this->getThreadService()->getThread($course['id'], $id);
+        $thread = $this->getThreadService()->getThread($course['id'], $threadId);
         if (empty($thread)) {
             throw $this->createNotFoundException("话题不存在，或已删除。");
         }
@@ -104,7 +86,7 @@ class CourseThreadController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($thread['type'] == 'question' and $paginator->getCurrentPage() == 1) {
+        if ($thread['type'] == 'question' && $paginator->getCurrentPage() == 1) {
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
         } else {
             $elitePosts = array();
@@ -112,13 +94,14 @@ class CourseThreadController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $this->getThreadService()->hitThread($courseId, $id);
+        $this->getThreadService()->hitThread($courseId, $threadId);
 
         $isManager = $this->getCourseService()->canManageCourse($course['id']);
 
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $thread['lessonId']);
         return $this->render("TopxiaWebBundle:CourseThread:show.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'lesson' => $lesson,
             'thread' => $thread,
             'author' => $this->getUserService()->getUser($thread['userId']),
@@ -133,7 +116,7 @@ class CourseThreadController extends BaseController
 
     public function createAction(Request $request, $id)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $id);
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('course_threads',array('id' => $id)));
@@ -158,13 +141,14 @@ class CourseThreadController extends BaseController
                 $thread = $this->getThreadService()->createThread($form->getData());
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                    'courseId' => $thread['courseId'],
-                   'id' => $thread['id'], 
+                   'threadId' => $thread['id'], 
                 )));
             }
         }
 
         return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
             'course' => $course,
+            'member' => $member,
             'form' => $form->createView(),
             'type' => $type,
         ));
@@ -172,13 +156,15 @@ class CourseThreadController extends BaseController
 
     public function editAction(Request $request, $courseId, $id)
     {
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
+
         $thread = $this->getThreadService()->getThread($courseId, $id);
         if (empty($thread)) {
             throw $this->createNotFoundException();
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $thread['userId']) {
+        if ($user->isLogin() && $user->id == $thread['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -191,13 +177,20 @@ class CourseThreadController extends BaseController
                 $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
                 
                 if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$thread['id']), true);
-                    $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑");
+                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$thread['id']), true);
+                    $message = array(
+                        'courseId' =>$courseId,
+                        'id' => $thread['id'],
+                        'title' => $thread['title'],
+                        'type' =>'modify'
+                        );
+
+                    $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
                 }
 
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                    'courseId' => $thread['courseId'],
-                   'id' => $thread['id'], 
+                   'threadId' => $thread['id'], 
                 )));
             }
         }
@@ -205,6 +198,7 @@ class CourseThreadController extends BaseController
         return $this->render("TopxiaWebBundle:CourseThread:form.html.twig", array(
             'form' => $form->createView(),
             'course' => $course,
+            'member' => $member,
             'thread' => $thread,
             'type' => $thread['type'],
         ));
@@ -221,16 +215,6 @@ class CourseThreadController extends BaseController
             ->getForm();
     }
 
-    public function latestBlockAction($course)
-    {
-    	$threads = $this->getThreadService()->searchThreads(array('courseId' => $course['id']), 'createdNotStick', 0, 10);
-
-    	return $this->render('TopxiaWebBundle:CourseThread:latest-block.html.twig', array(
-    		'course' => $course,
-            'threads' => $threads,
-		));
-    }
-
     public function deleteAction(Request $request, $courseId, $id)
     {
         $thread = $this->getThreadService()->getThread($courseId, $id);
@@ -238,8 +222,15 @@ class CourseThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员删除");
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
+          $message = array(
+            'courseId' =>$courseId,
+            'id' => $id,
+            'title' => $thread['title'],
+            'type' =>'delete'
+            );
+
+            $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
         }
 
         return $this->createJsonResponse(true);
@@ -252,8 +243,14 @@ class CourseThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员设为置顶");
+            $message = array(
+                'courseId' =>$courseId,
+                'id' => $id,
+                'title' => $thread['title'],
+                'type' =>'top'
+            );
+
+            $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
         }
 
         return $this->createJsonResponse(true);
@@ -265,8 +262,13 @@ class CourseThreadController extends BaseController
         $this->getThreadService()->unstickThread($courseId, $id);
         $user = $this->getCurrentUser();
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员取消置顶");
+             $message = array(
+                'courseId' =>$courseId,
+                'id' => $id,
+                'title' => $thread['title'],
+                'type' =>'untop'
+            );
+            $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
         }
 
         return $this->createJsonResponse(true);
@@ -279,8 +281,14 @@ class CourseThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员加精");
+              $message = array(
+                'courseId' =>$courseId,
+                'id' => $id,
+                'title' => $thread['title'],
+                'type' =>'elite'
+            );
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
+            $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
         }
 
         return $this->createJsonResponse(true);
@@ -293,8 +301,14 @@ class CourseThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员取消加精");
+                $message = array(
+                'courseId' =>$courseId,
+                'id' => $id,
+                'title' => $thread['title'],
+                'type' =>'unelite'
+            );
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
+            $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
         }
 
         return $this->createJsonResponse(true);
@@ -308,7 +322,6 @@ class CourseThreadController extends BaseController
             'courseId' => $thread['courseId'],
             'threadId' => $thread['id']
         ));
-
         $currentUser = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -320,21 +333,37 @@ class CourseThreadController extends BaseController
              
                 $post = $this->getThreadService()->createPost($postData);
 
-                $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$id), true);
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$id), true);
                 $threadUrl .= "#post-". $post['id'];
 
                 if ($thread['userId'] != $currentUser->id) {
+                    $message = array(
+                        'userId' => $currentUser['id'],
+                        'userName' => $currentUser['nickname'],
+                        'courseId' => $courseId,
+                        'id' => $id,
+                        'title' => $thread['title'],
+                        'postId' =>$post['id'],
+                        'type' =>'reply'
 
-                    $userUrl = $this->generateUrl('user_show', array('id'=>$userId), true);
-                    
-                    $this->getNotifiactionService()->notify($thread['userId'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中回复了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                        );
+                    $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
                 }
 
                 foreach ($users as $user) {
                     if ($thread['userId'] != $user['id']) {
                         if ($user['id'] != $userId) {
-                        $userUrl = $this->generateUrl('user_show', array('id'=>$user['id']), true);
-                        $this->getNotifiactionService()->notify($user['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>中@了您。<a href='{$threadUrl}' target='_blank'>点击查看</a>");
+                    $message = array(
+                         'userId' => $currentUser['id'],
+                        'userName' => $currentUser['nickname'],
+                        'courseId' => $courseId,
+                        'id' => $id,
+                        'title' => $thread['title'],
+                        'postId' =>$post['id'],
+                        'type' =>'replayat'
+                        );
+
+                        $this->getNotifiactionService()->notify($user['id'], 'course-thread',$message);
                         }
                     }
                 }
@@ -353,6 +382,7 @@ class CourseThreadController extends BaseController
 
         return $this->render('TopxiaWebBundle:CourseThread:post.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'thread' => $thread,
             'form' => $form->createView()
         ));
@@ -391,13 +421,15 @@ class CourseThreadController extends BaseController
 
     public function editPostAction(Request $request, $courseId, $threadId, $id)
     {
+        list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
+
         $post = $this->getThreadService()->getPost($courseId, $id);
         if (empty($post)) {
             throw $this->createNotFoundException();
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $post['userId']) {
+        if ($user->isLogin() && $user->id == $post['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -412,20 +444,29 @@ class CourseThreadController extends BaseController
             if ($form->isValid()) {
                 $post = $this->getThreadService()->updatePost($post['courseId'], $post['id'], $form->getData());
                 if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$threadId), true);
-                    $threadUrlAnchor = $threadUrl."#post-".$id;
-                    $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
-                    $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员编辑。<a href='{$threadUrlAnchor}' target='_blank'>点击查看</a>");
+                    $message = array(
+                         'userId' => $user['id'],
+                        'userName' => $user['nickname'],
+                        'courseId' => $courseId,
+                        'id' => $threadId,
+                        'title' => $thread['title'],
+                        'postId' =>$post['id'],
+                        );
+                    $message['type'] ='modify-thread';
+                    $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
+                    $message['type'] ='modify-post';
+                    $this->getNotifiactionService()->notify($post['userId'], 'course-thread', $message);
                 }
                 return $this->redirect($this->generateUrl('course_thread_show', array(
                     'courseId' => $post['courseId'],
-                    'id' => $post['threadId']
+                    'threadId' => $post['threadId']
                 )));
             }
         }
 
         return $this->render('TopxiaWebBundle:CourseThread:post-form.html.twig', array(
             'course' => $course,
+            'member' => $member,
             'form' => $form->createView(),
             'post' => $post,
             'thread' => $thread,
@@ -441,36 +482,22 @@ class CourseThreadController extends BaseController
         $thread = $this->getThreadService()->getThread($courseId, $threadId);
 
         if ($user->isAdmin()) {
-            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'id'=>$threadId), true);
-            $this->getNotifiactionService()->notify($thread['userId'], 'default', "您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员删除。");
-            $this->getNotifiactionService()->notify($post['userId'], 'default', "您在话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>有回复被管理员删除。");
+            $threadUrl = $this->generateUrl('course_thread_show', array('courseId'=>$courseId,'threadId'=>$threadId), true);
+
+            $message = array(
+                         'userId' => $user['id'],
+                        'userName' => $user['nickname'],
+                        'courseId' => $courseId,
+                        'id' => $threadId,
+                        'title' => $thread['title'],
+                        'type' =>'delete'
+                        );
+             ;
+            $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
+            $this->getNotifiactionService()->notify($post['userId'], 'course-thread', $message);
         }
 
         return $this->createJsonResponse(true);
-    }
-
-    public function questionBlockAction(Request $request, $course)
-    {
-        $threads = $this->getThreadService()->searchThreads(
-            array('courseId' => $course['id'], 'type'=> 'question'),
-            'createdNotStick',
-            0,
-            8
-        );
-
-        return $this->render('TopxiaWebBundle:CourseThread:question-block.html.twig', array(
-            'course' => $course,
-            'threads' => $threads,
-        ));
-    }
-
-    private function createPostForm($data = array())
-    {
-        return $this->createNamedFormBuilder('post', $data)
-            ->add('content', 'textarea')
-            ->add('courseId', 'hidden')
-            ->add('threadId', 'hidden')
-            ->getForm();
     }
 
     protected function getThreadService()
@@ -478,12 +505,7 @@ class CourseThreadController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    private function getThreadSearchFilters($request)
+    protected function getThreadSearchFilters($request)
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
@@ -498,7 +520,7 @@ class CourseThreadController extends BaseController
         return $filters;
     }
 
-    private function convertFiltersToConditions($course, $filters)
+    protected function convertFiltersToConditions($course, $filters)
     {
         $conditions = array('courseId' => $course['id']);
         switch ($filters['type']) {
@@ -514,7 +536,7 @@ class CourseThreadController extends BaseController
         return $conditions;
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
@@ -522,5 +544,15 @@ class CourseThreadController extends BaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-    } 
+    }
+
+    private function createPostForm($data = array())
+    {
+        return $this->createNamedFormBuilder('post', $data)
+            ->add('content', 'textarea')
+            ->add('courseId', 'hidden')
+            ->add('threadId', 'hidden')
+            ->getForm();
+    }
+
 }

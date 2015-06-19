@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var AutoComplete = require('autocomplete');
+    var AutoComplete = require('edusoho.autocomplete');
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
 
@@ -40,7 +40,7 @@ define(function(require, exports, module) {
             dataSource: $("#message_receiver").data('auto-url'),
             submitOnEnter: false,
             filter: {
-                name: 'stringMatch',
+                name: 'stringIgnoreCaseMatch',
                 options: {
                     key: 'nickname'
                 }

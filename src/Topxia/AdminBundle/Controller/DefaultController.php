@@ -50,8 +50,6 @@ class DefaultController extends BaseController
 
         $sortedCourses = array();
 
-
-
         $orders = $this->getOrderService()->sumOrderAmounts($startTime,$endTime,$courseIds);
         $orders = ArrayToolkit::index($orders,"targetId");
 
@@ -61,7 +59,13 @@ class DefaultController extends BaseController
             $course['courseId'] = $courses[$value["courseId"]]['id'];
             $course['addedStudentNum'] = $value['co'];
             $course['studentNum'] = $courses[$value["courseId"]]['studentNum'];
-            $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
+
+            if(isset($orders[$value["courseId"]])) {
+                $course['addedMoney'] = $orders[$value["courseId"]]['amount'];
+            } else {
+                $course['addedMoney'] = 0;
+            }
+
             $sortedCourses[] = $course;
       }
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
@@ -238,7 +242,7 @@ class DefaultController extends BaseController
 
         $storageSetting = $this->getSettingService()->get('storage');
 
-        if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $factory = new CloudClientFactory();
             $client = $factory->createClient($storageSetting);
             $keyCheckResult = $client->checkKey();
@@ -356,11 +360,17 @@ class DefaultController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $question = $this->getThreadService()->getThread($courseId, $questionId);
-        $questionUrl = $this->generateUrl('course_thread_show', array('courseId'=>$course['id'], 'id'=> $question['id']), true);
-        $questionTitle = strip_tags($question['title']);
+
+        $message =   array(
+              'courseTitle' =>$course['title'],
+              'courseId' => $course['id'],
+              'threadId' => $question['id'],
+              'questionTitle' => strip_tags($question['title']),
+            );
         foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getNotificationService()->notify($receiverId, 'default',
-                "课程《{$course['title']}》有新问题 <a href='{$questionUrl}' target='_blank'>{$questionTitle}</a>，请及时回答。");
+
+            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind',
+                $message);
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));

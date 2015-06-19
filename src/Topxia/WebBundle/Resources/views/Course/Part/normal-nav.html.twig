@@ -1,0 +1,34 @@
+{% set tab = tab|default(null) %}
+
+<div class="nav-btn-tab">
+  <ul class="nav nav-tabs" role="tablist">
+    {% if not member %}
+      <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">课程概览</a></li>
+      <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}>
+        <a href="{{ path('course_review_list', {id:course.id}) }}">评价{% if course.ratingNum %} <small class="text-muted">( {{ course.ratingNum }} )</small>{% endif %}</a>
+      </li>
+      <li role="presentation" {% if tab == 'note' %}class="active"{% endif %}><a href="{{ path('course_notes', {courseId:course.id}) }}"> 笔记{% if course.noteNum %} <small class="text-muted">( {{ course.noteNum }} )</small>{% endif %}</a></li>
+    {% else %}
+      <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">课时</a></li>
+      <li role="presentation" {% if tab == 'thread' %}class="active"{% endif %}><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
+      <li role="presentation" {% if tab == 'material' %}class="active"{% endif %}><a href="{{ path('course_materials', {id:course.id}) }}">资料区</a></li>
+      <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}>
+        <a href="{{ path('course_review_list', {id:course.id}) }}">评价{% if course.ratingNum %} <small class="text-muted">( {{ course.ratingNum }} )</small>{% endif %}</a>
+      </li>
+      <li role="presentation" {% if tab == 'note' %}class="active"{% endif %}>
+        <a href="{{ path('course_notes', {courseId:course.id}) }}">笔记{% if course.noteNum %} <small class="text-muted">( {{ course.noteNum }} )</small>{% endif %}</a>
+      </li>
+      <li role="presentation" {% if tab == 'info' %}class="active"{% endif %}><a href="{{ path('course_info', {id:course.id}) }}">概览</a></li>
+    {% endif %}
+
+  </ul>
+
+  {% if app.user.admin|default(false) or member.role|default('') == "teacher" %}
+  <div class="btnbar hidden-xs">
+    <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
+        <i class="es-icon es-icon-anonymous-iconfont"></i>
+        公告
+      </a>
+  </div>
+  {% endif %}
+</div>

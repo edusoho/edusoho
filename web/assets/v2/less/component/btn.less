@@ -1,0 +1,268 @@
+.btn {
+  .es-transition;
+  &:hover,
+  &:focus,
+  &.active {
+    .es-transition;
+  }
+  &.btn-lg {
+    font-size: 14px;
+  }
+  &.active {
+    .box-shadow(none);
+  }
+}
+
+.btn-link:hover, 
+.btn-link:focus {
+  color: @brand-primary;
+}
+
+.btn.btn-ghost {
+  color: #fff;
+  background: none;
+  border-color: #fff;
+  &:hover {
+    border-color: #fff;
+    background: #fff;
+    color: @brand-primary;
+  }
+  &:focus,
+  &.active {
+    background: #fff;
+    color: @brand-primary;
+    border-color: #fff;
+    .box-shadow(none);
+  }
+}
+
+
+.btn.btn-default {
+  color: @gray;
+  background: none;
+  border-color: @gray;
+  &:hover {
+    border-color: @brand-primary;
+    background: none;
+    color: @brand-primary;
+  }
+  &:focus,
+  &.active {
+    background: @brand-primary;
+    color: #fff;
+    border-color: @brand-primary;
+    .box-shadow(none);
+  }
+}
+
+.btn.btn-primary {
+  border-color: @brand-primary;
+  background: none;
+  color: @brand-primary;
+  &:hover,
+  &.active {
+    border-color: @brand-primary;
+    background-color: @brand-primary;
+    color: #fff;
+  }
+}
+
+.btn.btn-success {
+  border-color: @brand-success;
+  background: none;
+  color: @brand-success;
+  &:hover,
+  &.active {
+    border-color: @brand-success;
+    background-color: @brand-success;
+    color: #fff;
+  }
+}
+
+
+.btn.btn-info {
+  border-color: @brand-info;
+  background: none;
+  color: @brand-info;
+  &:hover,
+  &.active {
+    border-color: @brand-info;
+    background-color: @brand-info;
+    color: #fff;
+  }
+}
+
+.btn.btn-warning {
+  border-color: @brand-warning;
+  background: none;
+  color: @brand-warning;
+  &:hover,
+  &.active {
+    border-color: @brand-warning;
+    background-color: @brand-warning;
+    color: #fff;
+  }
+}
+
+.btn.btn-danger {
+  border-color: @brand-danger;
+  background: none;
+  color: @brand-danger;
+  &:hover,
+  &.active {
+    border-color: @brand-danger;
+    background-color: @brand-danger;
+    color: #fff;
+  }
+}
+
+.btn.btn-default.btn-high {
+  border-color: @gray;
+  background: @gray;
+  color: #fff;
+  &:hover,
+  &.active {
+    border-color: @gray - #222;
+    background-color: @gray - #222;
+    color: #fff;
+  }
+}
+
+.btn.btn-primary.btn-high {
+  border-color: @brand-primary;
+  background: @brand-primary;
+  color: #fff;
+  &:hover,
+  &.active {
+    border-color: @brand-primary - #222;
+    background-color: @brand-primary - #222;
+    color: #fff;
+  }
+}
+
+.btn.btn-success.btn-high {
+  border-color: @brand-success;
+  background: @brand-success;
+  color: #fff;
+  &:hover,
+  &.active {
+    border-color: @brand-success - #222;
+    background-color: @brand-success - #222;
+    color: #fff;
+  }
+}
+
+.btn.btn-info.btn-high {
+  border-color: @brand-info;
+  background: @brand-info;
+  color: #fff;
+  &:hover,
+  &.active {
+    border-color: @brand-info - #222;
+    background-color: @brand-info - #222;
+    color: #fff;
+  }
+}
+
+.btn.btn-warning.btn-high {
+  border-color: @brand-warning;
+  background: @brand-warning;
+  color: #fff;
+  &:hover,
+  &.active {
+    border-color: @brand-warning - #222;
+    background-color: @brand-warning - #222;
+    color: #fff;
+  }
+}
+
+.btn.btn-danger.btn-high {
+  border-color: @brand-danger;
+  background: @brand-danger;
+  color: #fff;
+  &:hover,
+  &.active {
+    border-color: @brand-danger - #222;
+    background-color: @brand-danger - #222;
+    color: #fff;
+  }
+}
+
+
+.btn-circle {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  line-height: 32px;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid @gray;
+  color: @gray;
+  text-align: center;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    border-color: @brand-primary;
+    .es-transition;
+  }
+  &.active {
+    background: @brand-primary;
+    border: 1px solid @brand-primary;
+    color: #fff;
+  }
+  &.danger {
+    color: #fff;
+    border-color: @brand-danger;
+    background: @brand-danger;
+  }
+  &.primary {
+    color: #fff;
+    border-color: @brand-primary;
+    background: @brand-primary;
+  }
+  &.info {
+    color: #fff;
+    border-color: @brand-info;
+    background: @brand-info;
+  }
+  &.btn-circle-xs {
+    width: 20px;
+    height: 20px;
+    line-height: 18px;
+    font-size: 12px;
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+.btn-tag {
+  padding: 6px 10px;
+  border: 1px solid @gray;
+  display: inline-block;
+  color: @gray;
+  font-size: 12px;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    border-color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.btn-more {
+  border-radius: 50%;
+  width: 58px;
+  height: 58px;
+  background: #fff;
+  color: #a6a6a6;
+  display: inline-block;
+  text-align: center;
+  .box-shadow(0 4px 12px -2px rgba(51, 51, 51, 0.5));
+  .es-transition;
+  &:hover {
+    color: #666;
+    .box-shadow(0 10px 15px 0px rgba(51, 51, 51, 0.5));
+    .es-transition;
+  }
+}

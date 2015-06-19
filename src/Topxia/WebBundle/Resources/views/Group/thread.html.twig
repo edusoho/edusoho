@@ -45,9 +45,11 @@
             {% endif %}
       </div>
       <div class="metas clearfix">
-        <div class="dropdown pull-right">
-          <a href="javascript:;" class="text-muted" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
-          {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
+        <div class="es-share dropdown pull-right">
+          <span class="es-share top" style="font-size:14px;">
+            <a href="javascript:;" class="text-muted" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
+            {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
+          </span>
         </div>
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="divider">•</span>
@@ -66,9 +68,9 @@
 
                   <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
                     {% if attach.coin > 0  and   user.id != attach.userId and app.user %}
-                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                     {% else %}
-                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                     {% endif %}
                     <div class="media-body">
                         <div class="metas mts">
@@ -175,7 +177,7 @@
         <div class="panel-body">
             <ul class="media-list">
               <li class="media">
-                <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ filepath(postMember[isAdopt[0].userId].smallAvatar, 'avatar.png') }}" class="media-object"></a>
+                <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ filepath(postMember[isAdopt[0].userId].smallAvatar, 'avatar.png') }}" class="avatar-md"></a>
                 <div class="media-body">
                     <div class="metas">
                       <strong>{{ web_macro.user_link(postMember[isAdopt[0].userId]) }}</strong>
@@ -203,7 +205,7 @@
         {% for post in post %}
           {% set subPosts = postReply[post.id]|default(null) %}
           <li id="post-{{post.id}}" class="media">
-            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="media-object"></a>
+            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-md"></a>
             <div class="media-body">
               <div class="metas">
                 <span class="floor">
@@ -274,9 +276,9 @@
                   {% set postFile = postFiles[post.id] %}
                   <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{postFile[attach.fileId].createdTime|smart_time}}">
                     {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
-                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                      <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                     {% else %}
-                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="media-object"></a>
+                      <a href="{{path('group_attach_download',{fileId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                     {% endif %}
                     <div class="media-body">
                         <div class="metas mts">
@@ -356,7 +358,7 @@
     <div class="panel-body">
       <div class="media">
         <a class="pull-left" href="{{ path('user_show', {id:owner.id}) }}">
-          <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="media-object">
+          <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="avatar-md">
         </a>
         <div class="media-body">
           <div class="metas mbm">

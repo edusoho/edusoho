@@ -26,6 +26,12 @@ class BlockHistoryDaoImpl extends BaseDao implements BlockHistoryDao
         return $this->getConnection()->fetchAssoc($sql) ? : null;
     }
 
+    public function getLatestBlockHistoryByBlockId($blockId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE blockId = ? ORDER BY createdTime DESC LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($blockId)) ? : null;
+    }
+
     public function addBlockHistory($blockHistory)
     {
         $this->createSerializer()->serialize($blockHistory, $this->serializeFields);

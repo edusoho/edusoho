@@ -58,7 +58,7 @@
           <tr data-role="item">
             <td><input value="{{question.id}}" type="checkbox" data-role="batch-item"> </td>
             <td>
-              <a href="{{ path('course_thread_show', {courseId:question.courseId, id:question.id}) }}" target="_blank"><strong>{{ question.title }}</strong></a>
+              <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank"><strong>{{ question.title }}</strong></a>
 
               <div class="short-long-text">
                 <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">(展开)</span></div>

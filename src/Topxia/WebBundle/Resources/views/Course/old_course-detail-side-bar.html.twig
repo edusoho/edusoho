@@ -1,0 +1,9 @@
+{{ render(controller('ClassroomBundle:Classroom:classroomBlock',{courseId:course.id})) }}
+
+{{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
+
+{{ render(controller('TopxiaWebBundle:CourseThread:latestBlock',{course:course})) }}
+
+{{ render(controller('TopxiaWebBundle:Course:latestMembersBlock',{course:course})) }}
+
+{{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}

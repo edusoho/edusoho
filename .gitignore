@@ -42,6 +42,7 @@ app/data/plugin_installed.php
 !/web/themes/default
 !/web/themes/default-b
 !/web/themes/qiushi
+!/web/themes/jianmo
 !/web/themes/block.json
 edusoho.komodoproject
 .project
@@ -52,5 +53,4 @@ web/assets/img/default/video.png
 .buildpath
 .phpintel*
 /src/Tests/*
-/src/Classroom
-
+/web/assets/v2/bootstrap/less

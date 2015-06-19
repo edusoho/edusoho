@@ -48,7 +48,7 @@
 		{% endif %}
 
 		{% if lesson.type in ['live'] %}
-		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
+		  <span class="text-muted">{{ lesson.startTime|date_format }}</span>
 		{% endif %}
 
 		{% if lesson.giveCredit > 0 %}

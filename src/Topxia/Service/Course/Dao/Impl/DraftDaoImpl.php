@@ -38,7 +38,7 @@ class DraftDaoImpl extends BaseDao implements DraftDao
 
     public function getEditDrafts($courseId,$userId,$lessonId)
     {
-        $sql = "SELECT * FROM {$this->Table} WHERE courseId = ? AND userId = ? And lessonId = ?";
+        $sql = "SELECT * FROM {$this->Table} WHERE courseId = ? AND userId = ? AND lessonId = ?";
 
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$userId,$lessonId)) ? : null;
     }

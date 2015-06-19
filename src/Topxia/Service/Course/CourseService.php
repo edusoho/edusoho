@@ -32,7 +32,7 @@ interface CourseService
 
 	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
+	public function searchCourses($conditions, $sort, $start, $limit);
 
 	public function searchCourseCount($conditions);
 
@@ -52,9 +52,9 @@ interface CourseService
 
 	public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
 
-	public function findUserTeachCourseCount($userId, $onlyPublished = true);
+	public function findUserTeachCourseCount($conditions, $onlyPublished = true);
 	
-	public function findUserTeachCourses($userId, $start, $limit, $onlyPublished = true);
+	public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
 	public function findUserFavoritedCourseCount($userId);
 
@@ -71,6 +71,8 @@ interface CourseService
 	public function recommendCourse($id, $number);
 
 	public function hitCourse($id);
+
+	public function waveCourse($id, $field, $diff);
 
 	public function cancelRecommendCourse($id);
 
@@ -230,7 +232,7 @@ interface CourseService
 
 	public function getCourseMember($courseId, $userId);
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit);
+	public function searchMemberIds($conditions, $sort, $start, $limit);
 
 	public function updateCourseMember($id, $fields);
 
@@ -330,19 +332,6 @@ interface CourseService
 
 	public function hasFavoritedCourse($courseId);
 
-	/*announcement*/
-	public function createAnnouncement($courseId, $fields);
-
-	public function getCourseAnnouncement($courseId, $id);
-
-	public function deleteCourseAnnouncement($courseId, $id);
-
-	public function findAnnouncements($courseId, $start, $limit);
-
-	public function findAnnouncementsByCourseIds(array $ids, $start, $limit);
-
-	public function updateAnnouncement($courseId, $id, $fields);
-
 	public function generateLessonReplay($courseId,$lessonId);
 
 	public function entryReplay($lessonId, $courseLessonReplayId);
@@ -351,8 +340,10 @@ interface CourseService
 
 	public function deleteCourseLessonReplayByLessonId($lessonId);
 
-	public function becomeStudentByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+	public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info);
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
+	public function becomeStudentByClassroomJoined($courseId, $userId);
 
 }

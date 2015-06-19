@@ -65,7 +65,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         public function findAllCategoriesByParentId($parentId)
     {   
-        return $this->getCategoryDao()->findAllCategoriesByParentId($parentId);
+        return ArrayToolkit::index($this->getCategoryDao()->findAllCategoriesByParentId($parentId), 'id');
     }
 
     public function findGroupRootCategories($groupCode)
@@ -103,6 +103,34 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         return $childrenIds;
+    }
+
+    public function makeNavCategories($code, $groupCode)
+    {
+       
+        $rootCagoies = $this->findGroupRootCategories($groupCode);
+        if (empty($code)) {
+            return array($rootCagoies, array(), array()); 
+        } else {
+            $category = $this->getCategoryByCode($code);
+            $parentId = $category['id'];
+            $categories = array();
+            $activeIds = array();
+            $activeIds[] = $category['id'];
+            $level = 1;
+            while ($parentId) {
+                $activeIds[] = $parentId;
+                $sibling = $this->findAllCategoriesByParentId($parentId);
+                if ($sibling) {
+                    $categories[$level++] = $sibling;
+                }
+                $parent = $this->getCategory($parentId);
+                $parentId = $parent['parentId'];
+            }
+
+            $categories = array_reverse($categories);
+            return array($rootCagoies, $categories, $activeIds);
+        }
     }
 
     public function findCategoriesByIds(array $ids)
@@ -270,7 +298,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                     $category['parentId'] = (int) $category['parentId'];
                     if ($category['parentId'] > 0) {
                         $parentCategory = $this->getCategory($category['parentId']);
-                        if (empty($parentCategory) or $parentCategory['groupId'] != $category['groupId']) {
+                        if (empty($parentCategory) || $parentCategory['groupId'] != $category['groupId']) {
                             throw $this->createServiceException("父分类(ID:{$category['groupId']})不存在，保存分类失败");
                         }
                     }

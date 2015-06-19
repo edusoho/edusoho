@@ -1,0 +1,155 @@
+
+.es-footer {
+  .footer-link {
+    background: #2e2e2e;
+    padding: 55px 0;
+    border-bottom: 1px solid #111;
+  }
+  .copyright {
+    background: @gray-darker;
+    border-top: 1px solid #444;
+    text-align: center;
+    padding: 20px 0;
+    line-height: 30px;
+    color: #b1b1b1;
+    text-shadow: 0 1px 3px #000;
+    a {
+      color: #eee;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        color: @brand-primary;
+      }
+    }
+  }
+}
+
+.footer-main {
+  .link-item {
+    width: 20%;
+    float: left;
+    padding: 0 10px;
+    text-shadow: 0 1px 3px #000;
+    @media (max-width: @screen-xs-max) {
+      width: 33.33%;
+      padding: 0 5px;
+    }
+  }
+  h3 {
+    color: #eeeeee;
+    margin-top: 0;
+    margin-bottom: 40px;
+  }
+  ul {
+    padding: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    li {
+      margin-top: 20px;
+    }
+  }
+  a {
+    color: #b1b1b1;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+}
+
+.footer-logo {
+  margin-top: 20px;
+  text-align: center;
+  @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+    padding: 0 0 30px 0;
+  }
+  .footer-sns {
+    margin-top: 30px;
+    >a {
+      display: inline-block;
+    }
+    .icon-sns {
+      position: relative;
+      &:hover {
+        .sns-popover {
+          display: block \9;
+          .es-transform(1,1);
+          .opacity(1);
+        }
+      }
+    }
+    .sns-popover {
+      width: 194px;
+      height: 209px;
+      position: absolute;
+      left: -68px;
+      top: -209px;
+      display: none \9;
+      .opacity(0);
+      .es-transform(0,0);
+      transform-origin: 50% 100%;
+      -webkit-transform-origin: 50% 100%;
+      -moz-transform-origin: 50% 100%;
+      -o-transform-origin: 50% 100%;
+      .es-transition;
+    }
+
+    i {
+      display: block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      margin: 0 10px;
+      font-size: 24px;
+      vertical-align: middle;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+      .es-transition;
+      &:hover {
+        .es-transition;
+      }
+    }
+
+    i.es-icon-weibo {
+      background: @brand-danger;
+      border-color: @brand-danger;
+      &:hover {
+        background: @brand-danger - #222;
+        cursor: pointer;
+      }
+    }
+
+    i.es-icon-weixin {
+      background: @brand-primary;
+      border-color: @brand-primary;
+      &:hover {
+        background: @brand-primary - #222;
+        .weixin-popover {
+          display: block;
+          transform: scale(1);
+          -webkit-transform: scale(1);
+          .opacity(1);
+        }
+      }
+    }
+
+    i.es-icon-apple {
+      background: @brand-info;
+      border-color: @brand-info;
+      &:hover {
+        background: @brand-info - #222;
+      }
+    }
+
+    i.es-icon-android {
+      background: @brand-warning;
+      border-color: @brand-warning;
+      &:hover {
+        background: @brand-warning - #222;
+      }
+    }
+  }
+}

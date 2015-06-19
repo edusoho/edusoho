@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      您加入的课程<a href='{{path('course_show',{id:data.courseId})}}'>《{{data.courseTitle}}》</a>将在{{ data.endtime }}到期。
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

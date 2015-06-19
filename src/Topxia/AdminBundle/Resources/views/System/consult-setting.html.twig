@@ -22,8 +22,13 @@
       <label >浮动条颜色</label>
     </div>
     <div class="controls col-md-8 radios">
-{#       {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'success':'<span class="btn btn-success btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>', 'info':'<span class="btn btn-info btn-lg" disabled></span>', 'primary':'<span class="btn btn-primary btn-lg" disabled></span>', 'danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }} #}
-  {{ radios('color', {'default':'<span class="btn btn-default btn-lg" disabled></span>', 'warning':'<span class="btn btn-warning btn-lg" disabled></span>','danger':'<span class="btn btn-danger btn-lg" disabled></span>'}, consult.color) }}
+      {{ 
+        radios('color', 
+        {'default':'<span class="btn btn-lg" style="background:#37b97d"></span>', 
+         'warning':'<span class="btn btn-lg" style="background:#e67e22"></span>',
+          'danger':'<span class="btn btn-lg" style="background:#e74c3c"></span>'},
+        consult.color) 
+      }}
     </div>
   </div>
   <div data-role="template" style="display:none">
@@ -129,6 +134,7 @@
       <div class="col-md-8 controls">
         <div id="consult-container">{% if consult.webchatURI %}<img src="{{ asset(consult.webchatURI) }}">{% endif %}</div>
         <button class="btn btn-default btn-sm" id="consult-upload" type="button" data-url="{{ path('admin_setting_consult_upload') }}">上传</button>
+        <button class="btn btn-default btn-sm" id="consult-webchat-del" type="button" data-url="{{ path('admin_setting_consult_webchat_delete') }}" {% if not consult.webchatURI %}style="display:none;"{% endif %}>删除</button>        
         <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
         <input type="hidden" name="webchatURI" value="{{ consult.webchatURI }}">
       </div>

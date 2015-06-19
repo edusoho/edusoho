@@ -81,8 +81,8 @@ class CourseManageController extends BaseController
 
 	    if($request->getMethod() == 'POST'){
             $detail = $request->request->all();
-            $detail['goals'] = (empty($detail['goals']) or !is_array($detail['goals'])) ? array() : $detail['goals'];
-            $detail['audiences'] = (empty($detail['audiences']) or !is_array($detail['audiences'])) ? array() : $detail['audiences'];
+            $detail['goals'] = (empty($detail['goals']) || !is_array($detail['goals'])) ? array() : $detail['goals'];
+            $detail['audiences'] = (empty($detail['audiences']) || !is_array($detail['audiences'])) ? array() : $detail['audiences'];
 
             $this->getCourseService()->updateCourse($id, $detail);
             $this->setFlashMessage('success', '课程详细信息已保存！');
@@ -260,6 +260,12 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->setCourseTeachers($id, $teachers);
+
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
+            if ($classroomIds) {
+                $this->getClassroomService()->updateClassroomTeachers($classroomIds[0]);
+            }
+
             $this->setFlashMessage('success', '教师设置成功！');
 
             return $this->redirect($this->generateUrl('course_manage_teachers',array('id' => $id))); 
