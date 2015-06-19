@@ -80,6 +80,30 @@ service('CouponService', ['httpService', function(httpService) {
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
 
+	this.follow = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/follow", arguments);
+	};
+
+	this.unfollow = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/unfollow", arguments);
+	};
+
+	this.searchUserIsFollowed = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/searchUserIsFollowed", arguments);
+	}
+
+	this.getUserTeachCourse = function(params,callback) {
+		httpService.simpleGet("/mapi_v2/Course/getUserTeachCourse", arguments);
+	}
+
+	this.getLearningCourseWithoutToken = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getLearningCourseWithoutToken", arguments);
+	}
+
+	this.getUserInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/getUserInfo", arguments);
+	}
+
 	this.smsSend = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/smsSend',
@@ -247,6 +271,10 @@ service('CourseService', ['httpService', function(httpService) {
 
 	this.unFavoriteCourse = function(params, callback) {
 		httpService.simpleGet('/mapi_v2/Course/unFavoriteCourse', arguments);
+	}
+
+	this.getCourseReviewInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getCourseReviewInfo", arguments);
 	}
 
 	this.getReviews = function(params, callback) {

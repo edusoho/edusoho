@@ -177,12 +177,22 @@ directive('uiScroll', function($parse) {
     restrict: 'A',
     link : function(scope, element, attrs) {
       scope.$watch(attrs.data, function(newValue) {
-          if (newValue && newValue.length > 0) {
-                
+
+          if (newValue) {
+                if (angular.isArray(newValue) && newValue.length == 0) {
+                  return;
+                }
+                var uiHead = element[0].querySelector(".ui-details-head");
                 element.on("scroll", function() {
                   var scrollHeight = element[0].scrollHeight;
                   var scrollTop = element[0].scrollTop;
                   var clientHeight = element[0].clientHeight;
+
+                  if (attrs.onScroll) {
+                    scope.headTop = uiHead.offsetHeight;
+                    scope.scrollTop = scrollTop;
+                    $parse(attrs.onScroll)(scope);
+                  }
                   if ( !scope.isLoading && ( (scrollTop + clientHeight) >= scrollHeight ) ) {
                     scope.isLoading = true;
                     $parse(attrs.onInfinite)(scope);

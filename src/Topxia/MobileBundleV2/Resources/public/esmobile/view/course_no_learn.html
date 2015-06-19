@@ -5,7 +5,7 @@
 		    <p class="mask">
 		      <a class="rating-body">
 		      	<span>
-		      		<i class="iconfont icon-favorfill" ng-class="course.rating > i ? 'course-rating' : '---' " ng-repeat="i in ratingArray" ></i>
+		      		<i class="iconfont" ng-class="course.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
 		      	</span>
 		      	<span class="rating">{{ course.rating }}</span>
 		      </a>
@@ -72,7 +72,7 @@
 			    </h2>
 			    <div class="ui-panel-content">
 			    	<ul class="ui-list">  
-			    		<li class="ui-border-t">
+			    		<li class="ui-border-t" ui-sref="userInfo({ userId : course.teachers[0].id })">
 				        <div class="ui-avatar-s">
 				            <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
 				        </div>
@@ -94,7 +94,7 @@
 			    <h2 class="title-body">
 			    	<span class="title">课程评价 ({{ reviews.length }})</span>
 
-			    	<a class="title-tips">
+			    	<a class="title-tips" href="#/coursereview/{{ course.id }}">
 			    		<i class="iconfont icon-gengduo"></i>
 			    	</a>
 			    </h2>
@@ -108,7 +108,7 @@
 					            <h4 class="ui-nowrap ui-review-header">
 					            	{{ reviews[0].user.nickname }}
 					            	<span class="ui-review-rating">
-						      	<i class="iconfont icon-favorfill" ng-class="reviews[0].rating > i ? 'course-rating' : '-' " ng-repeat="i in ratingArray" ></i>
+						      	<i class="iconfont" ng-class="reviews[0].rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
 						      	</span>
 					            </h4>
 					            <p class="ui-nowrap">{{ reviews[0].content }}</p>

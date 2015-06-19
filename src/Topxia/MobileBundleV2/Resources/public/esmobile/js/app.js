@@ -151,12 +151,12 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               }
             });
 
-            $stateProvider.state('userinfo', {
-              url: "/userinfo/:userId",
+            $stateProvider.state('myinfo', {
+              url: "/myinfo/:userId",
               views: {
                 'rootView': {
-                  templateUrl: app.viewFloder  + "view/userinfo.html",
-                  controller: UserInfoController
+                  templateUrl: app.viewFloder  + "view/myinfo.html",
+                  controller: MyInfoController
                 }
               }
             });
@@ -328,6 +328,26 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 'rootView': {
                   templateUrl: app.viewFloder  + "view/course_notice.html",
                   controller : CourseNoticeController
+                }
+              }
+            });
+
+            $stateProvider.state('courseReview', {
+              url: "/coursereview/:courseId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/course_review.html",
+                  controller : CourseReviewController
+                }
+              }
+            });
+
+            $stateProvider.state('userInfo', {
+              url: "/userinfo/:userId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/user_info.html",
+                  controller : UserInfoController
                 }
               }
             });

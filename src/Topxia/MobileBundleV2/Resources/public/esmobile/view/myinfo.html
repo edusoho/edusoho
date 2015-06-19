@@ -4,14 +4,14 @@
       <h3 class="title">用户信息</h3>
     </div>
 </div>
-<div class="top-header ui-userinfo">
+<div class="top-header ui-userinfoinfo">
     <ul class="ui-list ui-list-text ui-border-tb">
       <li class="ui-border-t">
           <div class="ui-list-info">
               <h4>头像</h4>
           </div>
           <div class="ui-avatar">
-              <img class="avatar" ng-src="{{ user.mediumAvatar | coverAvatar }}" />
+              <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" />
           </div>
       </li>
 
@@ -20,7 +20,7 @@
               <h4>昵称</h4>
           </div>
           <div class="ui-list-action">
-             {{ user.nickname }}
+             {{ userinfo.nickname }}
           </div>
       </li>
 
@@ -29,7 +29,7 @@
               <h4>性别</h4>
           </div>
           <div class="ui-list-action">
-             {{ user.gender | coverGender }}
+             {{ userinfo.gender | coverGender }}
           </div>
       </li>
 
@@ -38,7 +38,7 @@
               <h4>个性签名</h4>
           </div>
           <div class="ui-list-action ui-nowrap-multi">
-             {{ user.signature }}
+             {{ userinfo.signature }}
           </div>
       </li>
   </ul>

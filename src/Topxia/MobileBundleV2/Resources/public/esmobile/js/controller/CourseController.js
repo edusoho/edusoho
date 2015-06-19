@@ -2,6 +2,56 @@ app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'Ap
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
 app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$window', CourseSettingController]);
 
+function CourseReviewController($scope, $stateParams, CourseService, $window)
+{
+
+  var self = this;
+  $scope.canLoad = true;
+  $scope.start = $scope.start || 0;
+
+  $scope.loadMore = function(){
+        if (! $scope.canLoad) {
+          return;
+        }
+       setTimeout(function() {
+          self.loadReviews();
+       }, 200);
+  };
+
+  this.loadReviews = function() {
+    CourseService.getReviews({
+      start : $scope.start,
+      limit : 10,
+      courseId : $stateParams.courseId
+    }, function(data) {
+
+      var length  = data ? data.data.length : 0;
+      if (!data || length == 0 || length < 10) {
+          $scope.canLoad = false;
+      }
+
+      $scope.reviews = $scope.reviews || [];
+      for (var i = 0; i < length; i++) {
+        $scope.reviews.push(data.data[i]);
+      };
+
+      $scope.start += data.limit;
+
+    });
+  }
+
+  this.loadReviewInfo = function() {
+    CourseService.getCourseReviewInfo({
+      courseId : $stateParams.courseId
+    }, function(data) {
+      $scope.reviewData = data;
+    });
+  }
+  
+  this.loadReviewInfo();
+  this.loadReviews();
+}
+
 function CourseSettingController($scope, $stateParams, CourseService, $window)
 {
   $scope.isLearn = $stateParams.isLearn;
