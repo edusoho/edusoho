@@ -21,6 +21,7 @@ class LiveCourseLessonManageController extends BaseController
 			$liveLesson['courseId'] = $liveCourse['id'];
 			$liveLesson['startTime'] = strtotime($liveLesson['startTime']);
 			$liveLesson['length'] = $liveLesson['timeLength'];
+			//$reservationIds = isset($liveLesson['reservationIds']) ? $liveLesson['reservationIds'] : array();
 
 			$speakerId = current($liveCourse['teacherIds']);
 			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
@@ -48,19 +49,23 @@ class LiveCourseLessonManageController extends BaseController
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
 
+
 			$liveLesson['mediaId'] = $live['id'];
 			$liveLesson['liveProvider'] = $live['provider'];
 			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
+
+			/** LiveReservation **/
+			//$this->reservationLesson($liveLesson, $reservationIds);
 
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $liveCourse,
 				'lesson' => $liveLesson,
 			));
 		}
-			
+		
 		return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-lesson-modal.html.twig',array(
 			'liveCourse' => $liveCourse,
-			'parentId'=>$parentId
+			'parentId'=>$parentId,
 		));
 	}
 
@@ -80,6 +85,7 @@ class LiveCourseLessonManageController extends BaseController
 			$liveLesson['startTime'] = empty($editLiveLesson['startTime']) ? $liveLesson['startTime'] : strtotime($editLiveLesson['startTime']);
 			$liveLesson['free'] = empty($editLiveLesson['free']) ? 0 : $editLiveLesson['free'];
 			$liveLesson['length'] = empty($editLiveLesson['timeLength']) ? $liveLesson['length'] : $editLiveLesson['timeLength'];
+			$liveLesson['reservationIds'] = isset($editLiveLesson['reservationIds']) ? $editLiveLesson['reservationIds'] : array();
 
 			$speakerId = current($liveCourse['teacherIds']);
 			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
@@ -106,6 +112,9 @@ class LiveCourseLessonManageController extends BaseController
 			$live = $client->updateLive($liveParams);
 
 			$liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
+
+			/** LiveReservation **/
+			//$this->reservationLesson($liveLesson, $reservationIds);
 			
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $liveCourse,
@@ -152,6 +161,27 @@ class LiveCourseLessonManageController extends BaseController
 		return $this->createJsonResponse($leftCapacity);
 	}
 
+	private function reservationLesson($liveLesson, $reservationIds)
+	{
+		if ($this->isPluginInstalled("LiveReservation") && !empty($reservationIds)) {
+			$reservationLessonInfo = array(
+				'lessonId' => $liveLesson['id'],
+				'reservationIds' => $reservationIds,
+				'status' => 'unpublished'
+			);
+
+			$reservationLesson = $this->getReservationService()->findReservationUserByLessonId($liveLesson['id']);
+
+			if ($reservationLesson) {
+				$this->getReservationService()->updateReservationLesson($reservationLessonInfo, $reservationLesson['id']);
+			} else {
+				$this->getReservationService()->addReservationLesson($reservationLessonInfo);
+			}
+		}
+
+		return true;
+	}
+
 	private function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
@@ -160,5 +190,10 @@ class LiveCourseLessonManageController extends BaseController
 	private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    private function getReservationService()
+    {
+    	return $this->getServiceKernel()->createService('LiveReservation:LiveReservation.LiveReservationService');
     }
 }

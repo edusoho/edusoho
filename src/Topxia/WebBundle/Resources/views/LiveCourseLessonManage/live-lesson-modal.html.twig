@@ -4,6 +4,7 @@
 
 {% block title %}{% if liveLesson|default(null) %}编辑{% else %}新增{% endif %}直播课时{% endblock %}
 
+
 {% block body %}
 	
   <form class="form-horizontal" id="live-lesson-form"　method="post"  {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
@@ -54,6 +55,9 @@
 
 	</div>
 
+{% if is_plugin_installed('LiveReservation') %}
+  {{ render(controller('LiveReservationBundle:ReservationWeb:lessonBlock')) }}
+{% endif %}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
   </form>
