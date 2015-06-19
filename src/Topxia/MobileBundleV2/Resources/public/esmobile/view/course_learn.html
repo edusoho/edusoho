@@ -12,7 +12,7 @@
 		    </div>
 		</div>
 	</div>
-	<ul class="ui-list ui-list-lesson">  
+	<ul class="ui-list ui-list-lesson ui-border-b">  
 		<li class="{{ lesson.type }}" ng-repeat="lesson in lessons" ng-class="lesson.id == lastLearnStatusIndex ? 'list-green' : '' ">
 		  	  <div class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
 		            <i class="iconfont" ng-class="learnStatuses[lesson.id] == 'finished' ? 'icon-xiazaiwancheng' : 'icon-jikediancanicon11' "></i>

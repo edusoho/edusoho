@@ -388,9 +388,7 @@ service('SchoolService', ['httpService', function(httpService) {
 
 		httpService.get({
 			url : app.host + '/mapi_v2/School/getRecommendCourses',
-			params : {
-				limit : params.limit
-			},
+			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 			}

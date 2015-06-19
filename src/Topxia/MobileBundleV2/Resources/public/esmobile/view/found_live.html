@@ -3,23 +3,23 @@
 	<div class="course-card">
 		<h4>推荐</h4>
 		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="liveCourse in liveCourses">
+		    <li class="ui-border-t" ng-repeat="liveRecommedCourse in liveRecommedCourses" ui-sref="course({ courseId : liveRecommedCourse.id })">
 		        <div class="ui-list-img">
-		            <span style="background-image:url( {{ liveCourse.middlePicture }} )"></span>
+		            <span style="background-image:url( {{ liveRecommedCourse.middlePicture }} )"></span>
 		        </div>
 		        <div class="ui-list-info">
-		            <h2 class="ui-nowrap ui-list-title">{{ liveCourse.title }}</h2>
+		            <h2 class="ui-nowrap ui-list-title">{{ liveRecommedCourse.title }}</h2>
 		            <p class="bottom price-body">
 		            	<span class="origin-price">
-				      {{ liveCourse.price | formatPrice }}
-				      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
-				      	{{ liveCourse.originPrice | formatPrice }}
+				      {{ liveRecommedCourse.price | formatPrice }}
+				      <s class="discount-color" ng-if="liveRecommedCourse.discountId > 0">
+				      	{{ liveRecommedCourse.originPrice | formatPrice }}
 				      </s>
 				</span>
 
 				<span class="right">
 				      <i class="iconfont icon-person"></i>
-				      {{ liveCourse.studentNum }}人在学
+				      {{ liveRecommedCourse.studentNum }}人在学
 				</span>
 		            </p>
 		        </div>
@@ -33,23 +33,23 @@
 		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
           		</list-empty-view>
 		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="latestCourse in liveLatestCourses">
+		    <li class="ui-border-t" ng-repeat="liveLatestCourse in liveLatestCourses" ui-sref="course({ courseId : liveLatestCourse.id })">
 		        <div class="ui-list-img">
-		            <span style="background-image:url( {{ latestCourse.middlePicture }} )"></span>
+		            <span style="background-image:url( {{ liveLatestCourse.middlePicture }} )"></span>
 		        </div>
 		        <div class="ui-list-info">
-		            <h2 class="ui-nowrap ui-list-title">{{ latestCourse.title }}</h2>
+		            <h2 class="ui-nowrap ui-list-title">{{ liveLatestCourse.title }}</h2>
 		            <p class="bottom price-body">
 		            	<span class="origin-price">
-				      {{ latestCourse.price | formatPrice }}
-				      <s class="discount-color" ng-if="latestCourse.discountId > 0">
-				      	{{ latestCourse.originPrice | formatPrice }}
+				      {{ liveLatestCourse.price | formatPrice }}
+				      <s class="discount-color" ng-if="liveLatestCourse.discountId > 0">
+				      	{{ liveLatestCourse.originPrice | formatPrice }}
 				      </s>
 				</span>
 
 				<span class="right">
 				      <i class="iconfont icon-person"></i>
-				      {{ latestCourse.studentNum }}人在学
+				      {{ liveLatestCourse.studentNum }}人在学
 				</span>
 		            </p>
 		        </div>

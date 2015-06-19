@@ -145,6 +145,7 @@ directive('uiBar', function($window) {
     link : function(scope, element, attrs) {
         var toolEL = element[0].querySelector(".bar-tool");
         var titleEL = element[0].querySelector(".title");
+        
         var toolELWidth = toolEL ? toolEL.offsetWidth : 44;
         titleEL.style.paddingRight = toolELWidth + "px";
         titleEL.style.paddingLeft = toolELWidth + "px";

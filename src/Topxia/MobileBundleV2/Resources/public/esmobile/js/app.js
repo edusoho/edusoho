@@ -76,15 +76,15 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                     }
                 }
             }).
-  state("slideView.mainTab",{
-    url : "/index",
-    views : {
-      "menuContent" : {
-        templateUrl : app.viewFloder  + 'view/main_content.html',
-        controller : FoundTabController
-      }
-    }
-  }).state('slideView.mainTab.found', {
+          state("slideView.mainTab",{
+            url : "/index",
+            views : {
+              "menuContent" : {
+                templateUrl : app.viewFloder  + 'view/main_content.html',
+                controller : FoundTabController
+              }
+            }
+          }).state('slideView.mainTab.found', {
               url: "/found",
               views: {
                 'found-tab': {

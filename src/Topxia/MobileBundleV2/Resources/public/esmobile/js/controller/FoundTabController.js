@@ -16,14 +16,28 @@ function FoundCourseController($scope, SchoolService)
 	});
 }
 
-app.controller('FoundLiveController', ['$scope', 'SchoolService', 'CourseService', FoundLiveController]);
+app.controller('FoundLiveController', ['$scope', 'SchoolService', FoundLiveController]);
 
-function FoundLiveController($scope, SchoolService, CourseService)
+function FoundLiveController($scope, SchoolService)
 {
 	console.log("FoundLiveController");
 
-	CourseService.getAllLiveCourses({ limit : 3 }, function(data) {
-		$scope.liveCourses = data.data;
+	SchoolService.getRecommendCourses(
+		{ 
+			limit : 3,
+			type : "live"
+	}
+	, function(data) {
+		$scope.liveRecommedCourses = data.data;
+	});
+
+	SchoolService.getLatestCourses(
+		{ 
+			limit : 3,
+			type : "live"
+	}, 
+	function(data) {
+		$scope.liveLatestCourses = data.data;
 	});
 }
 

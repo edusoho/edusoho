@@ -16,6 +16,7 @@ body,
 .st-content {
 	overflow-y: scroll;
 	background: #f0f0f0;
+	-webkit-overflow-scrolling: touch;
 }
 
 .st-content,
