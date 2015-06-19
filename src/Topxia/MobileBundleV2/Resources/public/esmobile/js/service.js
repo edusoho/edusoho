@@ -80,6 +80,30 @@ service('CouponService', ['httpService', function(httpService) {
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
 
+	this.follow = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/follow", arguments);
+	};
+
+	this.unfollow = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/unfollow", arguments);
+	};
+
+	this.searchUserIsFollowed = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/searchUserIsFollowed", arguments);
+	}
+
+	this.getUserTeachCourse = function(params,callback) {
+		httpService.simpleGet("/mapi_v2/Course/getUserTeachCourse", arguments);
+	}
+
+	this.getLearningCourseWithoutToken = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getLearningCourseWithoutToken", arguments);
+	}
+
+	this.getUserInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/getUserInfo", arguments);
+	}
+
 	this.smsSend = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/smsSend',
@@ -249,6 +273,10 @@ service('CourseService', ['httpService', function(httpService) {
 		httpService.simpleGet('/mapi_v2/Course/unFavoriteCourse', arguments);
 	}
 
+	this.getCourseReviewInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getCourseReviewInfo", arguments);
+	}
+
 	this.getReviews = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/Course/getReviews',
@@ -356,7 +384,11 @@ service('CourseService', ['httpService', function(httpService) {
 service('SchoolService', ['httpService', function(httpService) {
 
 	this.getLiveLatestCourses = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/School/getLatestCourses", arguments);
+		httpService.simpleGet("/mapi_v2/School/getLiveLatestCourses", arguments);
+	}
+
+	this.getLiveRecommendCourses = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/School/getLiveRecommendCourses", arguments);
 	}
 
 	this.getLatestCourses = function(params, callback) {
@@ -388,9 +420,7 @@ service('SchoolService', ['httpService', function(httpService) {
 
 		httpService.get({
 			url : app.host + '/mapi_v2/School/getRecommendCourses',
-			params : {
-				limit : params.limit
-			},
+			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 			}
@@ -399,12 +429,9 @@ service('SchoolService', ['httpService', function(httpService) {
 }]).
 service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 	
-	this.simpleGet = function(url) {
-		params  = arguments[1][0];
-		callback = arguments[1][1];
-		errorCallback = arguments[1][2];
-
-		var options = {
+	var self = this;
+	this.getOptions = function(url, params, callback, errorCallback) {
+		return {
 			method : "get",
 			url : app.host + url,
 			params : params,
@@ -417,8 +444,24 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 				} 
 			}
 		};
-		
-		$http(options).success(options.success).error(options.error);
+	}
+
+	this.simpleGet = function(url) {
+		params  = arguments[1][0];
+		callback = arguments[1][1];
+		errorCallback = arguments[1][2];
+
+		var options = self.getOptions(url, params, callback, errorCallback);
+		var http = $http(options).success(options.success);
+
+		if (options.error) {
+			http.error(options.error);
+		} else {
+			http.error(function(data) {
+				console.log(data);
+			});
+		}
+
 	}
 
 	this.get = function(options) {

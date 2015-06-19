@@ -58,7 +58,7 @@ directive('uiTab', function() {
           }
 
           angular.forEach(nav.children, function(item) {
-            angular.element(item).on("click", function(e) {
+            angular.element(item).on("touchstart", function(e) {
 
                 var tagetHasCurrent = $(item).hasClass('current');
                 var tempCurrentPage = self.currentPage;
@@ -89,6 +89,33 @@ directive('uiTab', function() {
     }
   }
 }).
+directive('imgError', function() {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+                  var errorSrc = "";
+                  switch (attributes.imgError) {
+                    case "avatar":
+                      errorSrc = app.viewFloder  + "img/avatar.jpg";
+                      break;
+                    case "course":
+                      errorSrc = app.viewFloder  + "img/course_default.jpg";
+                      break;
+                    case "vip":
+                      errorSrc = app.viewFloder  + "img/vip_default.jpg";
+                      break;
+                  }
+
+                  element.on("error", function(e) {
+                    element.attr("src", errorSrc);
+                  });
+                }
+            };
+    }
+  }
+}).
 directive('back', function($window, $state) {
   return {
     restrict: 'A',
@@ -112,12 +139,13 @@ directive('back', function($window, $state) {
     }
   }
 }).
-directive('uiBar', function($window, $state) {
+directive('uiBar', function($window) {
   return {
     restrict: 'A',
     link : function(scope, element, attrs) {
         var toolEL = element[0].querySelector(".bar-tool");
         var titleEL = element[0].querySelector(".title");
+        
         var toolELWidth = toolEL ? toolEL.offsetWidth : 44;
         titleEL.style.paddingRight = toolELWidth + "px";
         titleEL.style.paddingLeft = toolELWidth + "px";
@@ -131,9 +159,9 @@ directive('ngClick', function($parse) {
             return function(scope, element, clickExpr) {
                   var clickHandler = angular.isFunction(clickExpr) ?
                     clickExpr :
-                    $parse(clickExpr);
+                    $parse(clickExpr.ngClick);
 
-                  element.on('click', function(event) {
+                  $(element[0]).on("tap",function(){
                     scope.$apply(function() {
                       clickHandler(scope, {$event: (event)});
                     });
@@ -149,14 +177,24 @@ directive('uiScroll', function($parse) {
     restrict: 'A',
     link : function(scope, element, attrs) {
       scope.$watch(attrs.data, function(newValue) {
-          if (newValue && newValue.length > 0) {
-                
+
+          if (newValue) {
+                if (angular.isArray(newValue) && newValue.length == 0) {
+                  return;
+                }
+                var uiHead = element[0].querySelector(".ui-details-head");
                 element.on("scroll", function() {
                   var scrollHeight = element[0].scrollHeight;
                   var scrollTop = element[0].scrollTop;
                   var clientHeight = element[0].clientHeight;
 
-                  if ( (scrollTop + clientHeight) >= scrollHeight ) {
+                  if (attrs.onScroll) {
+                    scope.headTop = uiHead.offsetHeight;
+                    scope.scrollTop = scrollTop;
+                    $parse(attrs.onScroll)(scope);
+                  }
+                  if ( !scope.isLoading && ( (scrollTop + clientHeight) >= scrollHeight ) ) {
+                    scope.isLoading = true;
                     $parse(attrs.onInfinite)(scope);
                   }
                 });
@@ -264,7 +302,7 @@ directive('modal', function () {
     },
     link : function(scope, element, attrs) {
       element.addClass("ui-modal");
-      element[0].addEventListener('click', function(event) {
+      element.on('click', function(event) {
         scope.$emit("closeTab", {});
       });
 

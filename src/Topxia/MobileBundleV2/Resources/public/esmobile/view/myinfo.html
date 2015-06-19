@@ -1,0 +1,45 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">用户信息</h3>
+    </div>
+</div>
+<div class="top-header ui-userinfoinfo">
+    <ul class="ui-list ui-list-text ui-border-tb">
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>头像</h4>
+          </div>
+          <div class="ui-avatar">
+              <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" />
+          </div>
+      </li>
+
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>昵称</h4>
+          </div>
+          <div class="ui-list-action">
+             {{ userinfo.nickname }}
+          </div>
+      </li>
+
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>性别</h4>
+          </div>
+          <div class="ui-list-action">
+             {{ userinfo.gender | coverGender }}
+          </div>
+      </li>
+
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>个性签名</h4>
+          </div>
+          <div class="ui-list-action ui-nowrap-multi">
+             {{ userinfo.signature }}
+          </div>
+      </li>
+  </ul>
+</div>

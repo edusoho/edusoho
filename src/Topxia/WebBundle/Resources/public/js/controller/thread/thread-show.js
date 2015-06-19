@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
 
-    var ThreadShow = Widget.extend({
+    var ThreadShowWidget = Widget.extend({
 
         attrs: {
             
@@ -18,8 +18,9 @@ define(function(require, exports, module) {
             'click .js-post-delete': 'onPostDelete',
             'click .js-post-up': 'onPostUp',
             'click  [data-role=confirm-btn]': 'onConfirmBtn',
-            'click .thread-subpost-container .pagination a': 'onClickPagination',
-            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm'
+            'click .js-toggle-subpost-form' : 'onClickToggleSubpostForm',
+            'click .js-event-cancel': 'onClickEventCancelBtn',
+            'click .thread-subpost-container .pagination a' : 'onClickSubpost'
         },
 
         setup:function() {
@@ -33,10 +34,12 @@ define(function(require, exports, module) {
 
                 }, 'json');
             }
+
             this._initPostForm();
         },
 
         onClickPostMore: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             $btn.parents('.thread-subpost-moretext').addClass('hide');
             $btn.parents('.thread-post').find('.thread-subpost').removeClass('hide');
@@ -44,6 +47,7 @@ define(function(require, exports, module) {
         },
 
         onPostDelete: function(e) {
+            e.stopPropagation();
             var that = this;
             var $btn = $(e.currentTarget);
             if (!confirm('真的要删除该回复吗？')) {
@@ -63,21 +67,22 @@ define(function(require, exports, module) {
         },
 
         onPostUp: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             $.post($btn.data('url'), function(response) {
                 if (response.status == 'ok') {
                     $btn.find(".post-up-num").text(parseInt($btn.find(".post-up-num").text()) + 1);
                 } else if (response.status == 'votedError') {
-                    Notify.danger('您已投过票了！');
+                    Notify.danger('您已点过赞了！');
                 } else {
-                    alert('投票失败，请重试！');
+                    alert('点赞失败，请重试！');
                 }
             }, 'json');
 
         },
 
         onConfirmBtn: function(e) {
-            console.log('click');
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             if (!confirm($btn.data('confirmMessage'))) {
                 return ;
@@ -91,19 +96,8 @@ define(function(require, exports, module) {
             });
         },
 
-        onClickPagination: function(e) {
-            e.preventDefault();
-            var $btn = $(e.currentTarget);
-
-            $.get($btn.attr('href'), function(response) {
-                var pos = $btn.parents('.thread-subpost-container').offset();
-                $btn.parents('.thread-subpost-container').find('.thread-subpost-list').replaceWith(response);
-                $btn.parents('.pagination').remove();
-                $('body').scrollTop(pos.top);
-            });
-        },
-
         onClickReply: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             var inSubpost = $btn.parents('.thread-subpost-list').length > 0;
             var $container = $btn.parents('.thread-post').find('.thread-subpost-container');
@@ -124,10 +118,25 @@ define(function(require, exports, module) {
         },
 
         onClickToggleSubpostForm: function(e) {
+            e.stopPropagation();
             var $btn = $(e.currentTarget);
             var $form = $btn.parents('.thread-subpost-container').find('.thread-subpost-form');
             $form.toggleClass('hide');
             this._initSubpostForm($form);
+        },
+        onClickEventCancelBtn: function(e) {
+            $.post($(e.currentTarget).data('url'), function(result){
+                window.location.reload();
+            });
+        },
+        onClickSubpost: function(e) {
+            e.preventDefault();
+            var $pageBtn = $(e.currentTarget);
+
+            $.post($pageBtn.attr('href'), function(result){
+               $pageBtn.closest('.thread-subpost-container').html(result);
+            });
+            
         },
 
         _initSubpostForm: function($form) {
@@ -146,7 +155,6 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
-                        console.log(response);
                         $btn.button('reset');
                         $form.parents('.thread-subpost-container').find('.thread-subpost-list').append(response);
                         $form.find('textarea').val('');
@@ -169,7 +177,7 @@ define(function(require, exports, module) {
 
         _initPostForm: function() {
             var $list = this.$('.thread-pripost-list');
-            var $form = this.$('.thread-post-form');
+            var $form = this.$('#thread-post-form');
             var that = this;
 
             if ($form.length == 0) {
@@ -177,11 +185,13 @@ define(function(require, exports, module) {
             }
 
             var $textarea = $form.find('textarea[name=content]');
-            var editor = CKEDITOR.replace($textarea.attr('id'), {
-                toolbar: 'Simple',
-                filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
-            });
-
+            if($textarea.data('imageUploadUrl')) {
+                var editor = CKEDITOR.replace($textarea.attr('id'), {
+                    toolbar: 'Simple',
+                    filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
+                });
+            }
+           
             var validator = new Validator({
                 element: $form,
                 autoSubmit: false,
@@ -192,13 +202,20 @@ define(function(require, exports, module) {
 
                     var $btn = this.$('[type=submit]').button('loading');
                     $.post($form.attr('action'), $form.serialize(), function(response) {
-                        $list.append(response);
                         $btn.button('reset');
-                        editor.setData('');
+                        if ($textarea.data('imageUploadUrl')) {
+                            $list.append(response);
+                            editor.setData('');
+                        } else {
+                            $list.prepend(response);
+                            $textarea.val('');
+                        }
+                        
                         var pos = $list.find('li:last-child').offset();
                         $('body').scrollTop(pos.top);
                         that.$('.thread-post-num').text(parseInt(that.$('.thread-post-num').text()) + 1);
                         $list.find('li.empty').remove();
+                        $list.closest('.top-reply').removeClass('hidden');
                     }).error(function(){
                         $btn.button('reset');
                         Notify.danger('发表回复失败，请重试');
@@ -212,18 +229,16 @@ define(function(require, exports, module) {
                 required: true
             });
 
-            validator.on('formValidate', function(element, event) {
-                editor.updateElement();
-            });
+            if (editor) {
+                validator.on('formValidate', function(element, event) {
+                    editor.updateElement();
+                });
+            }
+       
 
         }
     });
 
-    exports.run = function() {
-
-        var postList = new ThreadShow({
-            element: '.thread-show'
-        });
-
-    };
+    module.exports = ThreadShowWidget;
+    
 });

@@ -260,6 +260,12 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->setCourseTeachers($id, $teachers);
+
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
+            if ($classroomIds) {
+                $this->getClassroomService()->updateClassroomTeachers($classroomIds[0]);
+            }
+
             $this->setFlashMessage('success', '教师设置成功！');
 
             return $this->redirect($this->generateUrl('course_manage_teachers',array('id' => $id))); 

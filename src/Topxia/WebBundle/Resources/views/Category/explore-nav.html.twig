@@ -1,0 +1,29 @@
+{% do load_script('category/nav') %}
+{% set nextCode = '' %}
+<div class="es-tabs">
+
+  <div class="tab-header">
+    <ul class="clearfix">
+      <li class="{% if category == '' %}active{% endif %}"><a href="{{ path(path, {category:'',fliter:fliter,orderBy:orderBy}) }}">全部</a></li>
+      {% for cateogory in rootCategories %}
+        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path(path, {category:cateogory.code,fliter:fliter,orderBy:orderBy}) }}">{{ cateogory.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  
+  {% if categories %}
+    <div class="tab-body">
+      {% for l,cs in categories if cs %}
+        <ul class="clearfix">
+          {% for c in cs %}
+            {% if loop.index == 1 %}
+              <li class="all"><a href="{{ path(path, {category:nextCode,fliter:fliter,orderBy:orderBy}) }}">全部</a></li>
+            {% endif %}
+            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path(path, {category:c.code,fliter:fliter,orderBy:orderBy}) }}">{{ c.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

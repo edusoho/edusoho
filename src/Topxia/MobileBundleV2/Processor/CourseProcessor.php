@@ -7,6 +7,8 @@ interface CourseProcessor
 	public function getCourses();
 	public function getLearningCourse();
 	public function getLearningCourseWithoutToken();
+
+	public function getUserTeachCourse();
 	public function getLearnedCourse();
 	public function getFavoriteCourse();
 
@@ -21,6 +23,7 @@ interface CourseProcessor
 	public function searchCourse();
 	
 	public function getCourse();
+	public function getCourseReviewInfo();
 	public function getReviews();
 
 	public function favoriteCourse();

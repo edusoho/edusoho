@@ -1,7 +1,56 @@
-app.controller('CourseListController', ['$scope', '$stateParams', 'AppUtil', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
 app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$state', CourseController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
 app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$window', CourseSettingController]);
+
+function CourseReviewController($scope, $stateParams, CourseService, $window)
+{
+
+  var self = this;
+  $scope.canLoad = true;
+  $scope.start = $scope.start || 0;
+
+  $scope.loadMore = function(){
+        if (! $scope.canLoad) {
+          return;
+        }
+       setTimeout(function() {
+          self.loadReviews();
+       }, 200);
+  };
+
+  this.loadReviews = function() {
+    CourseService.getReviews({
+      start : $scope.start,
+      limit : 10,
+      courseId : $stateParams.courseId
+    }, function(data) {
+
+      var length  = data ? data.data.length : 0;
+      if (!data || length == 0 || length < 10) {
+          $scope.canLoad = false;
+      }
+
+      $scope.reviews = $scope.reviews || [];
+      for (var i = 0; i < length; i++) {
+        $scope.reviews.push(data.data[i]);
+      };
+
+      $scope.start += data.limit;
+
+    });
+  }
+
+  this.loadReviewInfo = function() {
+    CourseService.getCourseReviewInfo({
+      courseId : $stateParams.courseId
+    }, function(data) {
+      $scope.reviewData = data;
+    });
+  }
+  
+  this.loadReviewInfo();
+  this.loadReviews();
+}
 
 function CourseSettingController($scope, $stateParams, CourseService, $window)
 {
@@ -208,86 +257,4 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
       var scrollTop = $ionicScrollDelegate.$getByHandle("mainScroll").getScrollView().__scrollTop
       topTabChange(scrollTop);
     }
-}
-
-function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)
-{
-      $scope.canLoad = true;
-  $scope.start = $scope.start || 0;
-
-  console.log("CourseListController");
-    $scope.loadMore = function(){
-          if (! $scope.canLoad) {
-            return;
-          }
-         setTimeout(function() {
-            $scope.loadCourseList($stateParams.sort);
-         }, 200);
-       
-    };
-
-    $scope.loadCourseList = function(sort) {
-           $scope.showLoad();
-      CourseService.searchCourse({
-        limit : 10,
-      start: $scope.start,
-      categoryId : $stateParams.categoryId,
-      sort : sort,
-                 type : $stateParams.type
-      }, function(data) {
-                $scope.hideLoad();
-                var length  = data ? data.data.length : 0;
-        if (!data || length == 0 || length < 10) {
-            $scope.canLoad = false;
-          }
-
-                $scope.courses = $scope.courses || [];
-                for (var i = 0; i < length; i++) {
-                  $scope.courses.push(data.data[i]);
-                };
-
-          $scope.start += data.limit;
-      });
-    }
-
-    $scope.courseListSorts = CourseUtil.getCourseListSorts();
-    $scope.courseListTypes = CourseUtil.getCourseListTypes();
-
-    CategoryService.getCategorieTree(function(data) {
-    $scope.categoryTree = data;
-  });
-
-    $scope.selectType = function(type) {
-      clearData();
-           $stateParams.type  = type;
-           setTimeout(function(){
-              $scope.loadCourseList($scope.sort);
-           }, 100);
-    }
-
-    function clearData() {
-              $scope.canLoad = true;
-              $scope.start = 0;
-              $scope.courses = null;
-    }
-
-    $scope.selectSort = function(sort) {
-      $scope.sort = sort;
-      clearData();
-      $scope.loadCourseList(sort);
-    }
-
-    $scope.onRefresh = function() {
-      clearData();
-      $scope.loadCourseList($scope.sort);
-    }
-
-    $scope.categorySelectedListener = function(category) {
-      clearData();
-           $stateParams.type = null;
-           $stateParams.categoryId  =category.id;
-           $scope.loadCourseList($scope.sort);
-    }
-
-      $scope.loadCourseList();
 }

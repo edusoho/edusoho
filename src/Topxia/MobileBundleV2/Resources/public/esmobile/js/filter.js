@@ -59,6 +59,15 @@ filter('coverLearnProsser', ['$rootScope', function($rootScope){
 		}
 	}
 }]).
+filter('reviewProgress', function(){
+
+	return function(progress, total) {
+		if (total == 0) {
+			return "0%";
+		}
+		return ( (progress / total) * 100 ).toFixed(0) + "%";
+	}
+}).
 filter('formatChapterNumber', ['$rootScope', function($rootScope){
 
 	return function(chapter) {

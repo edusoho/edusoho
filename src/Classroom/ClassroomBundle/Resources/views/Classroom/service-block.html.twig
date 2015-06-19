@@ -1,0 +1,13 @@
+
+{% do load_script('classroombundle/controller/classroom/service-block') %}
+
+<ul class="list-unstyled clearfix">
+  {% set defaultServices = dict('classroomService')|keys %}
+  {% for service in services %}
+    {% include 'ClassroomBundle:Classroom/Part/Service:' ~ service ~ '.html.twig' with {active:true} %}
+  {% endfor %}
+  
+  {% for service in defaultServices if service not in services %}
+    {% include 'ClassroomBundle:Classroom/Part/Service:' ~ service ~ '.html.twig' with {active:false} %}
+  {% endfor %}
+</ul>

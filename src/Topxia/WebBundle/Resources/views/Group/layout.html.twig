@@ -1,9 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% block title %}- {{ parent() }}{% endblock %}
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/group.css') }}" />
-{% endblock %}
+{% set bodyClass = 'group-page' %}
 {% block content %}
    {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember|default('')} %}
 

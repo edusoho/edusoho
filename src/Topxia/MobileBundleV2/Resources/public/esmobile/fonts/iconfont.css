@@ -26,7 +26,6 @@
   -webkit-animation: fa-spin 2s infinite linear;
   animation: fa-spin 2s infinite linear;
 }
-.iconfont-spin{-webkit-animation:iconfont-spin 2s infinite linear;animation:fa-spin 2s infinite linear}
 .icon-weixin:before { content: "\e63d"; }
 .icon-qq:before { content: "\e63e"; }
 .icon-icon:before { content: "\e650"; }
@@ -39,12 +38,10 @@
 .icon-shoucang:before { content: "\e63f"; }
 .icon-xiazai:before { content: "\e648"; }
 .icon-tixing:before { content: "\e607"; }
-.icon-gonggao:before { content: "\e60a"; }
 .icon-faxian:before { content: "\e608"; }
 .icon-sousuo:before { content: "\e606"; }
 .icon-StudentIcon:before { content: "\e605"; }
 .icon-PhoneContactsIcon:before { content: "\e604"; }
-.icon-xiaoyou:before { content: "\e609"; }
 .icon-arrowback:before { content: "\e6dc"; }
 .icon-menu:before { content: "\e6e3"; }
 .icon-ebook:before { content: "\e726"; }
@@ -62,7 +59,7 @@
 .icon-yuyin:before { content: "\e60e"; }
 .icon-tianjia:before { content: "\e60d"; }
 .icon-biaoqing:before { content: "\e610"; }
-.icon-fanhui:before { content: "\f006b"; }
+.icon-fanhui:before { content: "\e679"; }
 .icon-ClassStudentIcon:before { content: "\e603"; }
 .icon-jian:before { content: "\e620"; }
 .icon-xiazaiwancheng:before { content: "\e61e"; }
@@ -79,3 +76,6 @@
 .icon-jikediancanicon11:before { content: "\e779"; }
 .icon-visibility:before { content: "\e707"; }
 .icon-modecomment:before { content: "\e723"; }
+.icon-gonggao:before { content: "\e60a"; }
+.icon-favor:before { content: "\e64c"; }
+.icon-back:before { content: "\e679"; }

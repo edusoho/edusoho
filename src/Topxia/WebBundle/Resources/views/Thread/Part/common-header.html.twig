@@ -1,0 +1,23 @@
+<div class="media topic-header">
+  <div class="media-left media-middle">
+    {{ web_macro.user_avatar(author, '', 'avatar-sm')}}
+  </div>
+  <div class="media-body">
+    <div class="title">
+      {% if thread.sticky %}
+        <span class="label label-danger" title="置顶帖">置顶</span>
+      {% endif %}
+      {% if thread.nice %}
+        <span class="label label-warning" title="精华帖">精</span>
+      {% endif %}
+      {{ thread.title }}
+    </div>
+    <div class="metas">
+      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>发起了该{{ dict_text('threadType', thread.type) }} ·<span>{{ thread.createdTime|smart_time }}</span>
+    </div> 
+  </div>
+  <div class="media-data">
+    <span><span class="thread-post-num">{{ thread.postNum }}</span><br>回复</span>
+    <span>{{ thread.hitNum }}<br>浏览</span>
+  </div>
+</div>

@@ -94,6 +94,31 @@ abstract class BaseDao
        $limit = (int) $limit; 
     }
 
+    protected function addOrderBy($builder, $orderBy)
+    {
+        foreach ($orderBy as $column => $order) {
+            if (in_array($column, array('createdTime', 'ups')) && in_array($order, array('DESC', 'ASC'))) {
+                $builder->addOrderBy($column, $order);
+            }
+        }
+
+        return $builder;
+    }
+
+    protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
+    {
+        $keys = array_keys($orderBy);
+        foreach ($orderBy as $field => $order) {
+            if (!in_array($field, $allowedOrderByFields)) {
+                throw new \RuntimeException("不允许对{$field}字段进行排序", 1);
+            }
+            
+            if (!in_array($order, array('ASC','DESC'))){
+                throw new \RuntimeException("orderBy排序方式错误", 1);
+            }
+        }
+    }
+
     protected function checkOrderBy (array $orderBy, array $allowedOrderByFields)
     {
         if (empty($orderBy[0]) or empty($orderBy[1])) {
@@ -103,7 +128,7 @@ abstract class BaseDao
         if (!in_array($orderBy[0], $allowedOrderByFields)){
             throw new \RuntimeException("不允许对{$orderBy[0]}字段进行排序", 1);
         }
-        if (!in_array($orderBy[1], array('ASC','DESC'))){
+        if (!in_array(strtoupper($orderBy[1]), array('ASC','DESC'))){
             throw new \RuntimeException("orderBy排序方式错误", 1);
         }
 

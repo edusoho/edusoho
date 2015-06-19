@@ -185,6 +185,11 @@ class BaseProcessor {
         return $this->controller->getService('Testpaper.TestpaperService');
     }
 
+    protected function getAnnouncementService()
+    {
+        return $this->controller->getService('Announcement.AnnouncementService');
+    }
+
     public function getEduCloudService(){
         return $this->controller->getService('EduCloud.EduCloudService');
     }

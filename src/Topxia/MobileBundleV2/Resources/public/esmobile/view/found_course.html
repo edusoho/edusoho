@@ -1,8 +1,8 @@
-<div class="top-tab-header">
+<div class="top-tab-header" ng-controller="FoundCourseController">
     
     	<div class="ui-slider course-slider" slider="course-slider" ui-slider-box="banners">
 	    <ul class="ui-slider-content">
-	        <li ng-repeat="banner in banners">
+	        <li ng-repeat="banner in banners" ng-click="bannerClick(banner)">
 	        	<span style="background-image:url({{ banner.url }})"></span>
 	        </li>
 	    </ul>
@@ -11,7 +11,7 @@
 	<div class="course-card">
 		<h4>推荐</h4>
 		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="recommendCourse in recommedCourses"  ui-sref="course({ courseId : recommendCourse.id })">
+		    <li class="ui-border-t" ng-repeat="recommendCourse in recommedCourses" ui-sref="course({ courseId : recommendCourse.id })">
 		        <div class="ui-list-img">
 		            <span style="background-image:url( {{ recommendCourse.middlePicture }} )"></span>
 		        </div>

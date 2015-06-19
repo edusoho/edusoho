@@ -1,0 +1,40 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% block title %}学员管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+
+{% block main %}
+       
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">学员管理
+
+  {% if role == 'auditor'%}
+    <a class="btn btn-info btn-sm panel-bar mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> 导出旁听生</a>
+  {% else %}
+    <div class="panel-bar">
+      <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('classroom_manage_student_create', {id:classroom.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加学员</button>
+      <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_import', {id:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> 批量导入</a>
+      <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> 导出学员</a>
+    </div>
+   {% endif %}
+
+  </div>
+  <div class="panel-body">
+
+    <ul class="nav nav-tabs mbl">
+      <li class="{% if submenu == 'student' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">正式学员
+        </a>
+      </li>
+
+      <li class="{% if submenu == 'aduitor' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_aduitor', {id:classroom.id}) }}">旁听生
+        </a>
+      </li>
+    </ul>
+  {% block maincontent %}{% endblock %}
+  </div>
+</div>
+
+{% endblock %}

@@ -171,7 +171,7 @@ interface UserService
     public function isFollowed($fromId, $toId);
 
     public function findUserFollowing($userId, $start, $limit);
-    
+
     public function findAllUserFollowing($userId);
 
     public function findUserFollowingCount($userId);
@@ -180,6 +180,7 @@ interface UserService
 
     public function findUserFollowerCount($userId);
     
+    //当前用户关注的人们
     public function findAllUserFollower($userId);
 
     /**

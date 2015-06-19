@@ -62,8 +62,7 @@ app.config(['$httpProvider', function($httpProvider) {
 
 app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
-  $urlRouterProvider.when("/", "/index/found/course").
-      when("/index", "/index/found/course").
+  $urlRouterProvider.when("/", "/index").
   otherwise('/');
 
   $stateProvider.
@@ -76,36 +75,20 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                     }
                 }
             }).
-  state("slideView.mainTab",{
-    url : "/index",
-    views : {
-      "menuContent" : {
-        templateUrl : app.viewFloder  + 'view/main_content.html',
-        controller : MainTabController
-      }
-    }
-  }).state('slideView.mainTab.message', {
-              url: "/message",
-              views: {
-                'message-tab': {
-                  templateUrl: app.viewFloder  + "view/message.html",
-                  controller: MessageTabController
-                }
+          state("slideView.mainTab",{
+            url : "/index",
+            views : {
+              "menuContent" : {
+                templateUrl : app.viewFloder  + 'view/main_content.html',
+                controller : FoundTabController
               }
-            }).state('slideView.mainTab.found', {
+            }
+          }).state('slideView.mainTab.found', {
               url: "/found",
               views: {
                 'found-tab': {
                   templateUrl: app.viewFloder  + "view/found.html",
                   controller: FoundTabController
-                }
-              }
-            }).state('slideView.mainTab.contact', {
-              url: "/contact",
-              views: {
-                'contact-tab': {
-                  templateUrl: app.viewFloder  + "view/contact.html",
-                  controller: ContactTabController
                 }
               }
             }).state('slideView.mainTab.found.course', {
@@ -168,12 +151,12 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               }
             });
 
-            $stateProvider.state('userinfo', {
-              url: "/userinfo/:userId",
+            $stateProvider.state('myinfo', {
+              url: "/myinfo/:userId",
               views: {
                 'rootView': {
-                  templateUrl: app.viewFloder  + "view/userinfo.html",
-                  controller: UserInfoController
+                  templateUrl: app.viewFloder  + "view/myinfo.html",
+                  controller: MyInfoController
                 }
               }
             });
@@ -349,7 +332,25 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               }
             });
 
-            $urlRouterProvider.when("/regist", "/regist/phone");
+            $stateProvider.state('courseReview', {
+              url: "/coursereview/:courseId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/course_review.html",
+                  controller : CourseReviewController
+                }
+              }
+            });
+
+            $stateProvider.state('userInfo', {
+              url: "/userinfo/:userId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/user_info.html",
+                  controller : UserInfoController
+                }
+              }
+            });
 }]);
 
 app.run(["applicationProvider", "$rootScope", '$timeout',
@@ -380,14 +381,22 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
 
   $rootScope.platform = browser.v;
   $rootScope.showLoad = function(template) {
-    $rootScope.loadPop =$.loading({
+    console.log("load");
+    $rootScope.loadPop = $.loading({
         content: "加载中...",
     });
+    $timeout(function(){
+        if ($rootScope.loadPop) {
+          $rootScope.loadPop.loading("hide");
+        }
+    },5000);
   };
 
   $rootScope.toast = function(template) {
-    var el =$.loading({
+    var el = $.tips({
         content: template,
+        stayTime: 2000,
+        type: "info"
     });
 
     $timeout(function(){
@@ -396,7 +405,11 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
   };
 
   $rootScope.hideLoad = function() {
+    if (! $rootScope.loadPop) {
+      return;
+    }
     $rootScope.loadPop.loading("hide");
+    $rootScope.loadPop = null;
   };
 
   app.host = window.location.origin;

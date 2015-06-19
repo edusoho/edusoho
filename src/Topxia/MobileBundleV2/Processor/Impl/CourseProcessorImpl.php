@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
 use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Announcement\AnnouncementProcessor\AnnouncementProcessorFactory;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -24,7 +25,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($courseId)) {
             return array();
         }
-        $announcements = $this->controller->getCourseService()->findAnnouncements($courseId, $start, $limit);
+
+        $conditions = array(
+            'targetType' => "course",
+            'targetId' => $courseId
+        );
+
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), $start, $limit);
+        $announcements = array_values($announcements);
         return $this->filterAnnouncements($announcements);
     }
     
@@ -377,7 +385,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'noteNumGreaterThan' => 0
         );
         
-        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, 'created', $start, $limit);
+        $courseNotes = $this->controller->getNoteService()->searchNotes($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $lessons     = $this->controller->getCourseService()->findLessonsByIds(ArrayToolkit::column($courseNotes, 'lessonId'));
         for ($i = 0; $i < count($courseNotes); $i++) {
             $courseNote  = $courseNotes[$i];
@@ -732,6 +740,27 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         ));
     }
     
+    public function getCourseReviewInfo()
+    {
+        $courseId = $this->getParam("courseId", 0);
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+        $total = $this->controller->getReviewService()->getCourseReviewCount($courseId);
+        $reviews = $this->controller->getReviewService()->findCourseReviews($courseId, 0, $total);
+
+        $progress = array(0, 0, 0, 0, 0);
+        foreach ($reviews as $key => $review) {
+            $rating = $review["rating"] < 1 ? 1 : $review["rating"];
+            $progress[$review["rating"] - 1] ++;
+        }
+        return array(
+            "info" => array(
+                "ratingNum" => $course["ratingNum"],
+                "rating" => $course["rating"],
+            ),
+            "progress" => $progress
+        );
+    }
+
     public function getReviews()
     {
         $courseId = $this->getParam("courseId");
@@ -772,7 +801,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if (empty($userId)) {
             return array();
         }
-        $courses = $this->controller->getCourseService()->findUserTeachCourses($userId, 0, 10);
+        $courses = $this->controller->getCourseService()->findUserTeachCourses(array('userId'=>$userId), 0, 10);
         $courses = $this->controller->filterCourses($courses);
         return $courses;
     }
@@ -960,7 +989,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $type = $this->getParam("type", 'normal');
         $categoryId = (int) $this->getParam("categoryId", 0);
         
-        $conditions['categoryId'] = $categoryId;
+        if ($categoryId !=0 ) {
+            $conditions['categoryId'] = $categoryId;
+        }
         $conditions['title'] = $search;
         
         if (empty($tagId)) {
@@ -974,13 +1005,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getCourses()
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
-        $conditions['categoryId'] = $categoryId;
+        $conditions               = array();
+        var_dump($categoryId != 0);
+        if($categoryId != 0) {
+            $conditions['categoryId'] = $categoryId;
+        }
         return $this->findCourseByConditions($conditions,"normal");
     }
     
     private function findCourseByConditions($conditions, $type)
     {
         $conditions['status'] = 'published';
+        $conditions['parentId'] = '0';
         if(empty($type)){
             unset($conditions['type']);
         }else{
@@ -989,11 +1025,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
+
         $total = $this->controller->getCourseService()->searchCourseCount($conditions);
         
         $sort               = $this->getParam("sort", "latest");
-        $conditions['sort'] = $sort;
-        
         $courses = $this->controller->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
         $result = array(
             "start"=>$start,
@@ -1068,6 +1103,33 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
     
+    public function getUserTeachCourse()
+    {
+        $userId = $this->getParam("userId", 0);
+        $start = $this->getParam('start', 0);
+        $limit = $this->getParam('limit', 10);
+
+        $conditions = array(
+            'userId' => $userId,
+            'parentId' => 0
+        );
+
+        $total = $this->controller->getCourseService()->findUserTeachCourseCount($conditions);
+
+        $courses = $this->controller->getCourseService()->findUserTeachCourses(
+            $conditions,
+            $start,
+            $limit
+        );
+
+        return array(
+            "start"=>$start,
+            "total"=>$total,
+            "limit"=>$limit,
+            "data"=>$this->controller->filterCourses($courses)
+        );
+    }
+
     public function getLearningCourse()
     {
 

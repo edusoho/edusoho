@@ -2,7 +2,7 @@
     <div class="ui-bar-bg">
       <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
       <h3 class="title">{{ course.title }}</h3>
-      <div class="bar-tool">
+      <div class="bar-tool" ng-show="member">
       	<a class="ui-btn btn-outline iconfont icon-tixing" href="#/coursenotice/{{ course.id }}"></a>
       	<a class="ui-btn btn-outline iconfont icon-shezhi" href="#/coursesetting/{{ course.id }}/true"></a>
       </div>

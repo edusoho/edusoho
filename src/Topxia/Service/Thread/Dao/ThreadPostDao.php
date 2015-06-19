@@ -17,6 +17,8 @@ interface ThreadPostDao
 
 	public function findPostsCountByThreadIdAndParentIdAndIdLessThan($threadId, $parentId, $id);
 
+	public function getPostPostionInArticle($articleId, $postId);
+
 	public function searchPostsCount($conditions);
 
 	public function searchPosts($conditions, $orderBy, $start, $limit);

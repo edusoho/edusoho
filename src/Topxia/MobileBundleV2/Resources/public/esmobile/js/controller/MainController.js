@@ -1,13 +1,19 @@
-app.controller('MainController', ['$scope', 'sideDelegate', '$state', MainTabController]);
-
 function MainTabController($scope, sideDelegate, $state)
 {
 	console.log("MainTabController");
+}
+
+app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', 'sideDelegate', '$state', FoundTabController]);
+
+function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $state)
+{
+	console.log("FoundTabController");
 	$scope.toggleView = function(view) {
 		$state.go("slideView.mainTab." + view);
 	};
 
 	$scope.toggle = function() {
+		
 		if ($scope.platform.native) {
 			window.esNativeCore.openDrawer("open");
 			//window.esNativeCore.openWebView("http://192.168.1.105/mapi_v2/mobileApp#/course/22");
@@ -16,12 +22,7 @@ function MainTabController($scope, sideDelegate, $state)
 
 		sideDelegate.toggleMenu();
 	};
-}
 
-app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', '$state', FoundTabController]);
-
-function FoundTabController($scope, CategoryService, AppUtil, $state)
-{
 	$scope.categorySelectedListener  = function(category) {
 		$state.go('courseList' , { categoryId : category.id } );
 	};
@@ -36,6 +37,28 @@ function FoundTabController($scope, CategoryService, AppUtil, $state)
 			});
 		};
 	});
+
+	var self = this;
+	this.parseBannerAction = function(action) {
+		this.courseAction = function(params) {
+			$state.go("course", { courseId : params });
+		}
+
+		this.webviewAction = function(params) {
+
+		}
+
+		this.noneAction = function() {
+		}
+
+		return this[action + "Action"];
+	}
+
+	$scope.bannerClick = function(banner) {
+		var bannerAction = self.parseBannerAction(banner.action);
+		console.log(banner);
+		bannerAction(banner.params);
+	}
 }
 
 

@@ -1,0 +1,13 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% set thread = thread|default(null) %}
+
+{% block title %}{% if thread %}编辑{{ dict_text('threadType', type) }}{% else %}发表{{ dict_text('threadType', type) }}{% endif %} - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'thread/thread-form' %}
+{% set nav = 'thread' %}
+{% block main %}
+
+    {{ render(controller('TopxiaWebBundle:Thread:create', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, type:type})) }}
+
+{% endblock %}

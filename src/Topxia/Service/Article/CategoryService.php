@@ -12,6 +12,8 @@ interface CategoryService
 
     public function getCategoryByParentId($parentId);
 
+    public function findAllCategoriesByParentId($parentId);
+
     public function findCategoryChildrenIds($id);
 
     public function findCategoriesByIds(array $ids);
@@ -29,5 +31,6 @@ interface CategoryService
     public function deleteCategory($id);
 
     public function findCategoriesCountByParentId($parentId);
-    
+
+    public function makeNavCategories($code);
 }

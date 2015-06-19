@@ -582,3 +582,10 @@ input.LargeInput {width: 600px;}
   }
 }
 
+.pagination > li > a {
+  height: 34px;
+}
+
+.pagination > li > a .es-icon{
+  font-size: inherit;
+}

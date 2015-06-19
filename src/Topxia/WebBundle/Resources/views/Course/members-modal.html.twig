@@ -38,8 +38,9 @@
     <li>本课程暂时还没有学生</li>
   {% endfor %}
 </ul>
-
-{{ web_macro.paginator(paginator) }}
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>
 
 <script>
     app.load('course/members-modal');
