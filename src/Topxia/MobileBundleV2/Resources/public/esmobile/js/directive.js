@@ -167,7 +167,7 @@ directive('ngClick', function($parse) {
                     });
                   });
 
-                  //element.onclick = function(event) { };
+                  element.onclick = function(event) { };
           };
     }
   }
@@ -292,7 +292,7 @@ directive('modal', function () {
     },
     link : function(scope, element, attrs) {
       element.addClass("ui-modal");
-      element[0].addEventListener('click', function(event) {
+      element.on('click', function(event) {
         scope.$emit("closeTab", {});
       });
 

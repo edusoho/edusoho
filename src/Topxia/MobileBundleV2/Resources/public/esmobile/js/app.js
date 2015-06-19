@@ -62,8 +62,7 @@ app.config(['$httpProvider', function($httpProvider) {
 
 app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
 {
-  $urlRouterProvider.when("/", "/index/").
-      when("/index", "/index/").
+  $urlRouterProvider.when("/", "/index").
   otherwise('/');
 
   $stateProvider.
@@ -332,8 +331,6 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 }
               }
             });
-
-            $urlRouterProvider.when("/regist", "/regist/phone");
 }]);
 
 app.run(["applicationProvider", "$rootScope", '$timeout',

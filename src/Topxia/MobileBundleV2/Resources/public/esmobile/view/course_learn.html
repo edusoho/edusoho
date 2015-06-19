@@ -3,7 +3,7 @@
       	<div class="course-head">
 		    <img class="full-image" ng-src="{{ course.largePicture }}" />
 		    <p class="mask">
-		      <a class="left">
+		      <a class="learned">
 		      	已完成{{ learnProgress }}
 		      </a>
 		    </p>
@@ -18,7 +18,7 @@
 		            <i class="iconfont" ng-class="learnStatuses[lesson.id] == 'finished' ? 'icon-xiazaiwancheng' : 'icon-jikediancanicon11' "></i>
 		        </div>
 		        <div class="ui-list-info ui-border-t" ng-class="lesson.type">
-		            {{ lesson | formatChapterNumber }} {{ lesson.title }}
+		            <h4 class="ui-nowrap"> {{ lesson | formatChapterNumber }} {{ lesson.title }}</h4>
 		        </div>
 		        <div class="ui-list-action lesson-time">{{ lesson.length }}</div>
 		</li>

@@ -771,8 +771,16 @@ a {
   box-shadow: 0 -20px 20px 0 rgba(0,0,0,0.2) inset;
 }
 
-.ui-course .course-head .mask.learned {
-  padding: 0;
+.ui-course .course-head .mask .learned {
+  color: #fff;
+}
+
+.ui-course .course-head .mask .rating-body {
+  color: #F3BE5C;
+}
+
+.ui-course .course-head .rating-body .rating {
+  font-size: 13px;
 }
 
 .ui-course .course-head img {
