@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                 }
 
                 $('#add-btn').button('submiting').addClass('disabled');
-            },
+            }
 		});
 
         $('#add-btn').on('click', function() {

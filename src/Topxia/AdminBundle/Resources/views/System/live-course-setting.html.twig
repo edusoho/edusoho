@@ -1,0 +1,68 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_live_course' %}
+{% set script_controller = 'setting/course' %}
+
+{% block main %}
+
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="course-form" novalidate>
+
+  <fieldset>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >开启状态</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('live_course_enabled', {1:'开启', 0:'关闭'}, courseSetting.live_course_enabled) }}
+      </div>
+    </div>
+    
+    {% if capacity.code|default(0) == 2 %}
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="logo">直播LOGO</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="live-course-logo-container">{% if courseSetting.live_logo|default(false) %}<img src="{{ asset(courseSetting.live_logo) }}">{% endif %}</div>
+        <a class="btn btn-default btn-sm" id="live-course-logo-upload"
+        data-upload-token="{{ upload_token('system', 'image') }}"
+        data-url="{{ path('admin_setting_live_logo_upload') }}"
+        >上传</a>
+        <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not courseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>删除</button>
+        <p class="help-block">
+          <b>只针对直播新方案。</b><br>
+          请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。</p>
+        <input type="hidden" name="live_logo" value="{{ courseSetting.live_logo|default("") }}">
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>同时在线人数上限</label>
+      </div>
+      <div class="controls col-md-8">
+        <div class="mts text-muted" >{{ courseSetting.live_student_capacity }}人</div>
+        <input class="form-control" name="live_student_capacity" type="hidden" data-value="{{ courseSetting.live_student_capacity }}">
+        <p class="help-block"><a href="http://www.edusoho.com/services/liveroom" target="_blank">点击查看如何购买扩充在线人数</a></p>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}
+
+
+

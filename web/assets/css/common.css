@@ -38,6 +38,39 @@
   display: none;
 }
 
+
+.social-share-icon-weibo,
+.social-share-icon-qq,
+.social-share-icon-qzone,
+.social-share-icon-weixin
+ {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  *display: inline-block;
+  *zoom: 1;
+  background: url(../img/common/social-share-icons.png) 0 0 no-repeat;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.social-share-icon-qzone {
+  background-position: 0 -00px;
+}
+
+.social-share-icon-weibo {
+  background-position: 0 -30px;
+}
+
+.social-share-icon-weixin {
+  background-position: 0 -60px;
+}
+
+.social-share-icon-qq {
+  background-position: 0 -90px;
+}
+
+
 .social-icon-weibo,
 .social-icon-qq,
 .social-icon-renren,

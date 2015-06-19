@@ -13,7 +13,7 @@ class OrderController extends BaseController
         ));
     }
 
-    public function manageAction(Request $request, $type, $layout)
+    public function manageAction(Request $request, $type)
     {
 
         $conditions = $request->query->all();
@@ -47,7 +47,6 @@ class OrderController extends BaseController
         return $this->render('TopxiaAdminBundle:Order:manage.html.twig', array(
             'request' => $request,
             'type' => $type,
-            'layout' => $layout,
             'orders' => $orders,
             'users' => $users,
             'paginator' => $paginator,

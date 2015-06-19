@@ -1,14 +1,10 @@
-{% extends 'TopxiaAdminBundle:System:payment-set.layout.html.twig' %}
-
-{% block title %}支付方式 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'system/payment' %}
 
-{% set submenu = 'payment' %}
+{% set menu = 'admin_payment' %}
 
-{% block maincontent %}
-
-<div class="page-header"><h1>支付方式</h1></div>
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 
@@ -87,6 +83,16 @@
       <div class="controls col-md-8">
         <input type="text" id="alipay_account" name="alipay_account" class="form-control" value="{{payment.alipay_account}}">
         <div class="help-block">如需开启移动客户端支付，需填写支付宝账户。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>启用支付宝交易关闭接口</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('close_trade_enabled', {1:'是', 0:'否'}, payment.close_trade_enabled|default(0)) }}
+        <div class="help-block">该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。</div>
       </div>
     </div>
 

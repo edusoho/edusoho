@@ -1,14 +1,15 @@
-{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}用户认证审核 - {{ parent() }}{% endblock %}
-
-{% set menu = 'approval' %}
-
-{% set submenu = 'approving' %}
+{% set menu = 'admin_approval_approving' %}
 
 {% block main %}
 
-{% include 'TopxiaAdminBundle:User:approval-header.html.twig' %}
+      <div class="btn-group">
+          <a type="button" class="btn btn-default btn-sm btn-primary" href="{{ path('admin_approval_approving') }}">审核中</a>
+
+          <a type="button" class="btn btn-default btn-sm" href="{{ path('admin_approval_approved') }}">审核成功</a>
+
+      </div>
 
 {% if users %}
 <table class="table table-striped">

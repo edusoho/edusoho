@@ -20,7 +20,7 @@ class NavigationServiceTest extends BaseTestCase
             'name' => '测试导航',
             'parentId' => 0,
             'url' => 'http://baidu.com',
-            'isOpen' => 0,
+            'isOpen' => 1,
             'isNewWin' => 0,
             'type' => 'top'
         );

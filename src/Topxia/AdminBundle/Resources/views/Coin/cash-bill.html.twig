@@ -1,32 +1,9 @@
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{# {% set script_controller = 'my/orders' %} #}
+{% set menu = 'admin_cash_bill' %}
 
-{% block title %}现金账单 - {{ parent() }}{% endblock %}
-
-{% set menu = 'coin-bill' %}
-{% set submenu = 'coin-bill' %}
 {% block main %}
 
-
-  <ul class="nav nav-tabs mbl">
-    <li class="{% if submenu == 'coin-bill' %}active{% endif %}">
-        <a href="{{ url('admin_bill') }}">现金账单
-        </a>
-    </li>
-
-    <li class="{% if submenu == 'records' %}active{% endif %}">
-        <a href="{{ url('admin_coin_records') }}">虚拟币账单
-        </a>
-    </li>    
-  </ul>
-
-
-
-
-  {# <div class="page-header"><h1>现金账单</h1></div> #}
-
-      
     <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
       <div class="form-group">
         <select class="form-control" name="lastHowManyMonths"  onchange="submit();">

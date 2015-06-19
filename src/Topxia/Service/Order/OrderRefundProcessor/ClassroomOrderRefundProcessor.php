@@ -11,6 +11,11 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 		return 'ClassroomBundle:ClassroomAdmin:layout.html.twig';
 	}
 
+            public function getRefundLayout()
+            {
+                return "ClassroomBundle:ClassroomAdmin:refund.layout.html.twig";
+            }
+
 	public function findByLikeTitle($title)
 	{
         $conditions = array(
@@ -23,6 +28,11 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
             100
         );
 	}
+
+    public function removeStudent($targetId, $userId)
+    {
+        $this->getClassroomService()->removeStudent($targetId, $userId);
+    }
 
 	public function auditRefundOrder($id, $pass, $data)
 	{

@@ -1,4 +1,4 @@
-<div class="testpaper-question testpaper-question-essay" id="question{{ item.question.id }}">
+<div class="testpaper-question testpaper-question-essay {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ item.question.id }}">
 	<div class="testpaper-question-body">
 	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
   </div>
@@ -101,7 +101,7 @@
 	  </div>
 
 
-	  {% if (questionPreview|default(false) and setting('questions.testpaper_answers_show_mode') == 'hide')  or (setting('questions.testpaper_answers_show_mode') == 'reviewed'  and paperResult.status|default(null) == 'finished') or (app.user.isTeacher()) %}
+	  {% if (questionPreview|default(false) and setting('questions.testpaper_answers_show_mode') == 'hide')  or (setting('questions.testpaper_answers_show_mode') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <div class="testpaper-question-result-suggested">

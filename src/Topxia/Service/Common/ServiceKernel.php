@@ -25,6 +25,8 @@ class ServiceKernel
 
     protected $pool = array();
 
+    protected $classMaps = array();
+
     public static function create($environment, $debug)
     {
         if (self::$_instance) {
@@ -87,6 +89,7 @@ class ServiceKernel
 
             foreach ($finder as $dir) {
                 $filepath = $dir->getRealPath() . '/module_config.php';
+
                 if (file_exists($filepath)) {
                     $this->_moduleConfig = array_merge_recursive($this->_moduleConfig, include $filepath);
                 }
@@ -99,7 +102,6 @@ class ServiceKernel
         }
 
         $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
-
         foreach ($subscribers as $subscriber) {
             $this->dispatcher()->addSubscriber(new $subscriber());
         }
@@ -219,6 +221,12 @@ class ServiceKernel
 
     private function getClassName($type, $name)
     {
+        $classMap = $this->getClassMap($type);
+
+        if (isset($classMap[$name])) {
+            return $classMap[$name];
+        }
+
         if (strpos($name, ':') > 0) {
             list($namespace, $name) = explode(':', $name, 2);
             $namespace .= '\\Service';
@@ -232,6 +240,22 @@ class ServiceKernel
             return $namespace . '\\' . $module. '\\Dao\\Impl\\' . $className . 'Impl';
         }
         return $namespace . '\\' . $module. '\\Impl\\' . $className . 'Impl';
+    }
+
+    private function getClassMap($type)
+    {
+        if (isset($this->classMaps[$type])) {
+            return $this->classMaps[$type];
+        }
+
+        $key = ($type == 'dao') ? 'topxia_daos' : 'topxia_services';
+        if (!$this->hasParameter($key)) {
+            $this->classMaps[$type] = array();
+        } else {
+            $this->classMaps[$type] = $this->getParameter($key);
+        }
+
+        return $this->classMaps[$type];
     }
 
 }

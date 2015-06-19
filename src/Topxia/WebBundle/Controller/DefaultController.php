@@ -135,7 +135,7 @@ class DefaultController extends BaseController
 
     public function latestReviewsBlockAction($number)
     {
-        $reviews = $this->getReviewService()->searchReviews(array(), 'latest', 0, $number);
+        $reviews = $this->getReviewService()->searchReviews(array('private' => 0), 'latest', 0, $number);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
         return $this->render('TopxiaWebBundle:Default:latest-reviews-block.html.twig', array(
@@ -147,12 +147,12 @@ class DefaultController extends BaseController
 
     public function topNavigationAction($siteNav = null)
     {
-    	$navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
+        $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
 
-    	return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
-    		'navigations' => $navigations,
+        return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
+            'navigations' => $navigations,
             'siteNav' => $siteNav
-		));
+        ));
     }
 
 

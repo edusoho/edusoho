@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 	        fx:"scrollHorz",
 	        slides: "> a, > img",
 	        log: "false",
-	        pauseOnHover: "true",
+	        pauseOnHover: "true"
     	});
 
         $('.live-rating-course').find('.media-body').hover(function() {

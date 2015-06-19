@@ -19,6 +19,12 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             return array('error' => '已经是课程的学员了!');
         }
 
+        $course = $this->getCourseService()->getCourse($targetId);
+
+        if($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
+            return array('error' => '名额已满，不能加入!');
+        }
+
         return array();
     }
 

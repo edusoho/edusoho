@@ -99,28 +99,6 @@ class CourseManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 
-        if($request->getMethod() == 'POST'){
-            $file = $request->files->get('picture');
-            if (!FileToolkit::isImageFile($file)) {
-                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-            }
-
-            $filenamePrefix = "course_{$course['id']}_";
-            $hash = substr(md5($filenamePrefix . time()), -8);
-            $ext = $file->getClientOriginalExtension();
-            $filename = $filenamePrefix . $hash . '.' . $ext;
-
-            $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-            $file = $file->move($directory, $filename);
-
-            $fileName = str_replace('.', '!', $file->getFilename());
-
-            return $this->redirect($this->generateUrl('course_manage_picture_crop', array(
-                'id' => $course['id'],
-                'file' => $fileName)
-            ));
-        }
-
 		return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
 			'course' => $course,
 		));
@@ -130,35 +108,14 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        //@todo 文件名的过滤
-        $filename = $request->query->get('file');
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
         if($request->getMethod() == 'POST') {
-            $c = $request->request->all();
-            $this->getCourseService()->changeCoursePicture($course['id'], $pictureFilePath, $c);
+            $data = $request->request->all();
+            $this->getCourseService()->changeCoursePicture($course['id'], $data["images"]);
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        try {
-        $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(480)->heighten(270);
-
-        // @todo fix it.
-        $assets = $this->container->get('templating.helper.assets');
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
-        $pictureUrl = ltrim($pictureUrl, ' /');
-        $pictureUrl = $assets->getUrl($pictureUrl);
+        $fileId = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
             'course' => $course,
@@ -171,22 +128,9 @@ class CourseManageController extends BaseController
     public function priceAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        
-
-        $coinSetting=$this->getSettingService()->get('coin',array());
-        if(isset($coinSetting['cash_rate'])){
-            $cashRate=$coinSetting['cash_rate'];
-        }else{
-            $cashRate=1;
-        }
 
         $canModifyPrice = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
-        if ($this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -197,24 +141,44 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if(isset($fields['freeStartTime'])){
-                $fields['freeStartTime'] = strtotime($fields['freeStartTime']);
-                $fields['freeEndTime'] = strtotime($fields['freeEndTime']);
+            if (isset($fields['coinPrice'])) {
+                $this->getCourseService()->setCoursePrice($course['id'], 'coin', $fields['coinPrice']);
+                unset($fields['coinPrice']);
             }
-            
-            $course = $this->getCourseService()->updateCourse($id, $fields);
+
+            if (isset($fields['price'])) {
+                $this->getCourseService()->setCoursePrice($course['id'], 'default', $fields['price']);
+                unset($fields['price']);
+            }
+
+            if (!empty($fields)) {
+                $course = $this->getCourseService()->updateCourse($id, $fields);
+            } else {
+                $course = $this->getCourseService()->getCourse($id);
+            }
 
             $this->setFlashMessage('success', '课程价格已经修改成功!');
         }
 
-
-
         response:
+
+        if ($this->isPluginInstalled("Vip") && $this->setting('vip.enabled')) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+        } else {
+            $levels = array();
+        }
+
+        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))) {
+            $discount = $this->getDiscountService()->getDiscount($course['discountId']);
+        } else {
+            $discount = null;
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
             'course' => $course,
             'canModifyPrice' => $canModifyPrice,
             'levels' => $this->makeLevelChoices($levels),
-            'cashRate'=> empty($cashRate)? 1 : $cashRate
+            'discount' => $discount,
         ));
     }
 
@@ -225,7 +189,7 @@ class CourseManageController extends BaseController
         $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
 
         $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
-        $learnTime=$course['studentNum']==0 ? 0 : intval($learnTime/$course['studentNum']);
+        $learnTime=$course["studentNum"]==0 ? 0 : intval($learnTime/$course["studentNum"]);
 
         $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
 
@@ -347,40 +311,6 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
-	private function createCourseBaseForm($course)
-	{
-		$builder = $this->createNamedFormBuilder('course', $course)
-			->add('title', 'text')
-			->add('subtitle', 'textarea')
-			->add('tags', 'tags')
-            ->add('expiryDay', 'text')
-			->add('categoryId', 'default_category', array(
-				'empty_value' => '请选择分类'
-			));
-
-	    return $builder->getForm();
-	}
-
-    private function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['lessonNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100) . '%';
-
-        return array (
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['lessonNum']
-        );
-    }
-
-    private function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -400,12 +330,7 @@ class CourseManageController extends BaseController
     {
         return $this->container->get('topxia.twig.web_extension');
     }
-
-    private function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
+    
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
@@ -429,16 +354,16 @@ class CourseManageController extends BaseController
     private function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }
+    } 
 
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+    protected function getDiscountService()
+    {
+        return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
+    }
+
 
 }

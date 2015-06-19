@@ -18,6 +18,12 @@ mapi_mobile_article_app:
 mapi_mobile_article_app_list:
     path:     /articleApp/list
     defaults: { _controller: TopxiaMobileBundleV2:ArticleApp:list }
+    methods: [GET, POST]
+
+mapi_mobile_article_app_category:
+    path:     /articleApp/category
+    defaults: { _controller: TopxiaMobileBundleV2:ArticleApp:category }
+    methods: [GET, POST]
 
 mapi_mobile_article_detail_list:
     path:     /articleApp/detail/{id}

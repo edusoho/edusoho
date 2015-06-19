@@ -1,15 +1,9 @@
-{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}私信管理 - {{ parent() }}{% endblock %}
-
+{% set menu = 'admin_message' %}
 {% set script_controller = 'message/list' %}
 
-{% set menu = 'message' %}
-
 {% block main %}
-  <div class="page-header">
-    <h1>私信管理</h1>
-  </div>
 <div class="well well-sm">
   <form id="message-search-form" class="form-inline" action="" method="get" novalidate> 
 

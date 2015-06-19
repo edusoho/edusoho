@@ -24,6 +24,11 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source'] }
     ];
 
+    config.toolbar_Detail = [
+        { items: [ 'FontSize'] },
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source'] }
+    ];
+
     config.toolbar_Full = [
         { items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat', 'Format' ] },
         { items: [ 'Link', 'Unlink' ] },

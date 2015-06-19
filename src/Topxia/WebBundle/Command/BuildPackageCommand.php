@@ -58,6 +58,16 @@ class BuildPackageCommand extends BaseCommand
                 continue;
             }
 
+            if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
+                $output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                continue;
+            }
+
+            if (strpos($opFile, 'web/install') === 0) {
+                $output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                continue;
+            }
+
             $opBundleFile = $this->getBundleFile($opFile);
 
             if ($op == 'M' or $op == 'A') {

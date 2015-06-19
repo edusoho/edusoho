@@ -27,20 +27,35 @@ class CourseLessonController extends BaseController
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig',array('course' => $course));
         }
 
-        if (empty($lesson['free'])) {
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+
+        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+        if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
+
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
-        }else{
-            $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
-            if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-                throw $this->createAccessDeniedException();
-            }
         }
 
-        if ($lesson['type'] == 'video' and $lesson['mediaSource'] == 'self') {
+        //在可预览情况下查看网站设置是否可匿名预览
+        $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
+        if (empty($allowAnonymousPreview) && !$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $hasVideoWatermarkEmbedded = 0;
+
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+            if (empty($lesson['free']) && $file['storage'] != 'cloud') {
+                if (!$user->isLogin()) {
+                    throw $this->createAccessDeniedException();
+                }
+                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+            }
+            
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -48,7 +63,7 @@ class CourseLessonController extends BaseController
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
 
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
                     $hls = array(
                         'url' => $this->generateUrl('hls_playlist', array(
                             'id' => $file['id'], 
@@ -60,7 +75,9 @@ class CourseLessonController extends BaseController
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
-
+            }
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $hasVideoWatermarkEmbedded = 1;
             }
 
         } else if ($lesson['mediaSource'] == 'youku') {
@@ -80,11 +97,13 @@ class CourseLessonController extends BaseController
                 $lesson['mediaUri'] = $lesson['mediaUri'];
             }
         }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
-            'hlsUrl' => (isset($hls) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
+            'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
+            'hlsUrl' => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
         ));
     }
 
@@ -199,6 +218,16 @@ class CourseLessonController extends BaseController
                         }
 
                     }
+
+                    if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                        $user = $this->getCurrentUser();
+                        $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                        if ($watchStatus['status'] == 'error') {
+                            $json['mediaError'] = "您的观看次数已经达到{$watchStatus['num']}次，最多只能看{$watchStatus['limit']}次。";
+                        }
+                    }
+
+
                 } else {
                     $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id']));
                 }
@@ -317,7 +346,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        if ($lesson['type'] != 'ppt' or empty($lesson['mediaId'])) {
+        if ($lesson['type'] != 'ppt' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
 
@@ -360,7 +389,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        if ($lesson['type'] != 'document' or empty($lesson['mediaId'])) {
+        if ($lesson['type'] != 'document' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
         }
 
@@ -391,6 +420,40 @@ class CourseLessonController extends BaseController
         $result['pdfUri'] = $url['url'];
         $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
         $result['swfUri'] = $url['url'];
+
+        return $this->createJsonResponse($result);
+    }
+
+    public function flashAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        if ($lesson['type'] != 'flash' || empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client = $factory->createClient();
+        
+        if ($file["hashId"]) {
+            $url = $client->generateFileUrl($client->getBucket(), $file["hashId"], 3600);
+            $result['mediaUri'] = $url['url'];
+        } else {
+            $result['mediaUri'] = '';
+        }
 
         return $this->createJsonResponse($result);
     }
@@ -465,6 +528,13 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function watchNumAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        $result = $this->getCourseService()->waveWatchNum($user['id'], $lessonId, 1);
+        return $this->createJsonResponse($result);
+    }
+
     private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
@@ -518,31 +588,16 @@ class CourseLessonController extends BaseController
         return false;
     }
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    private function getDiskService()
-    {
-        return $this->getServiceKernel()->createService('User.DiskService');
     }
 
     private function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
-
-    private function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content.FileService');
-    }
-
+    
     private function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');

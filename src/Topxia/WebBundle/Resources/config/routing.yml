@@ -51,6 +51,14 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+common_qrcode:
+    pattern:  /common/qrcode
+    defaults: { _controller: TopxiaWebBundle:Common:qrcode }
+
+common_crontab:
+    pattern:  /common/crontab
+    defaults: { _controller: TopxiaWebBundle:Common:crontab }
+
 user_terms:
     pattern:  /userterms
     defaults: { _controller: TopxiaWebBundle:Register:userTerms }
@@ -58,6 +66,10 @@ user_terms:
 register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
+
+register_nickname_update:
+    pattern:  /register/nickname/update
+    defaults: { _controller: TopxiaWebBundle:Register:nicknameUpdate }
 
 register_submited:
     pattern:  /register/submited/{id}/{hash}
@@ -75,6 +87,10 @@ register_email_verify:
 register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
+
+register_email_or_mobile_check:
+    pattern:  /register/email_or_mobile/check
+    defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
 
 register_nickname_check:
     pattern:  /register/nickname/check
@@ -95,6 +111,11 @@ register_captcha_num:
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
+    methods: [POST]
+
+file_img_crop:
+    pattern:  /file/img/crop
+    defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
 uploadfile_upload:
@@ -234,6 +255,7 @@ course_info:
 course_exit:
     pattern:  /course/{id}/exit
     defaults: { _controller: TopxiaWebBundle:Course:exit }
+    methods: [POST]
 
 course_become_use_member:
     pattern:  /course/{id}/become_use_member
@@ -281,17 +303,9 @@ course_watch_time:
     pattern:  /course/{lessonId}/watch/time/{time}
     defaults: { _controller: TopxiaWebBundle:Course:recordWatchingTime }
 
-course_watch_play:
-    pattern:  /course/{lessonId}/watch/play
-    defaults: { _controller: TopxiaWebBundle:Course:watchPlay }
-
 course_detail_data:
     pattern:  /course/detail/data/{id}
     defaults: { _controller: TopxiaWebBundle:Course:detailData }
-
-course_watch_paused:
-    pattern:  /course/{lessonId}/watch/paused
-    defaults: { _controller: TopxiaWebBundle:Course:watchPaused }
 
 course_lesson_detail_data:
     pattern:  /course/lesson/detail/data/{courseId}/{lessonId}
@@ -321,6 +335,10 @@ course_lesson_document:
     pattern:  /course/{courseId}/lesson/{lessonId}/document
     defaults: { _controller: TopxiaWebBundle:CourseLesson:document }
 
+course_lesson_flash:
+    pattern:  /course/{courseId}/lesson/{lessonId}/flash
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:flash }
+
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
@@ -339,6 +357,12 @@ course_lesson_learn_cancel:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/cancel
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
     methods: [POST]
+
+course_lesson_watch_num:
+    pattern:  /course/{courseId}/lesson/{lessonId}/watch_num
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:watchNum }
+    methods: [POST]
+
 
 course_lesson_plugin_lesson_list:
     pattern:  /lessonplugin/lesson/list
@@ -557,9 +581,9 @@ course_manage_student_remark:
     pattern:  /course/{courseId}/manage/student/{userId}/remark
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:remark }
 
-course_manage_student_check_nickname:
-    pattern:  /course/{id}/manage/nickname_check
-    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkNickname }
+course_manage_student_check:
+    pattern:  /course/{id}/manage/student_check
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
@@ -1273,6 +1297,18 @@ cloud_video_fingerprint:
     pattern: /cloud/video_fingerprint
     defaults: {_controller: TopxiaWebBundle:Cloud:videoFingerprint }
 
+cloud_ppt_watermark:
+    pattern: /cloud/ppt_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:pptWatermark }
+
+cloud_doc_watermark:
+    pattern: /cloud/doc_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:docWatermark }
+
+cloud_testpaper_watermark:
+    pattern: /cloud/testpaper_watermark
+    defaults: {_controller: TopxiaWebBundle:Cloud:testpaperWatermark }
+
 systeminfo:
     pattern: /systeminfo
     defaults: {_controller: TopxiaWebBundle:Systeminfo:index }
@@ -1361,8 +1397,8 @@ group_transfer:
     pattern:  /group/transferGroup/{id}
     defaults: { _controller: TopxiaWebBundle:Group:transferGroup }
 group_setLogoCrop:
-    pattern:  /group/setting/logoCrop/{file}/{id}
-    defaults: { _controller: TopxiaWebBundle:Group:groupSetLogoCrop }
+    pattern:  /group/{id}/setting/logoCrop
+    defaults: { _controller: TopxiaWebBundle:Group:logoCrop }
 group_logo_set:
     pattern:  /group/{id}/setting/logo
     defaults: { _controller: TopxiaWebBundle:Group:setGrouplogo }
@@ -1624,3 +1660,9 @@ settings_find_pay_password_by_sms:
 order_pay_sms_verification:
     pattern:  /order/sms_verification
     defaults: { _controller: TopxiaWebBundle:Order:smsVerification }
+
+edu_cloud_sms_callback:
+    pattern:  /edu_cloud/sms_callback
+    defaults: { _controller: TopxiaWebBundle:EduCloud:cloudCallBack }
+    methods: [POST]
+

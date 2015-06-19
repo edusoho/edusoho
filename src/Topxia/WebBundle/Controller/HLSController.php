@@ -7,7 +7,7 @@ use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class HLSController extends BaseController
 {
@@ -16,14 +16,15 @@ class HLSController extends BaseController
     {
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
-
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
         if (empty($token)) {
             throw $this->createNotFoundException();
         }
 
-        if ($token['data'] != $id) {
+        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
+        
+        if ($dataId != $id) {
             throw $this->createNotFoundException();
         }
 
@@ -33,12 +34,14 @@ class HLSController extends BaseController
         }
 
         $streams = array();
+        $mode = is_array($token['data']) ? $token['data']['mode'] : '';
+
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => $file['id'] . $level , 'times' => 1, 'duration' => 3600));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 1, 'duration' => 3600));
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
@@ -52,7 +55,6 @@ class HLSController extends BaseController
             if ($hideBeginning) {
                 $params['hideBeginning'] = 1;
             }
-
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
         }
 
@@ -61,7 +63,7 @@ class HLSController extends BaseController
             'audio' => $file['convertParams']['audioQuality'],
         );
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create();
 
         $playlist = $api->get('/hls/playlist', array( 'streams' => $streams, 'qualities' => $qualities));
 
@@ -83,7 +85,8 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($token['data'] != ($id.$level)) {
+        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
+        if ($dataId != ($id.$level)) {
             throw $this->createNotFoundException();
         }
 
@@ -99,8 +102,14 @@ class HLSController extends BaseController
         $params = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
-        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
+        $mode = is_array($token['data']) ? $token['data']['mode'] : '';
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+        if ($mode == 'preview' && !empty($timelimit)) {
+            $params['limitSecond'] = $timelimit;
+        }
+
+        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => $mode), 'times' => 1, 'duration' => 3600));
+        $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' =>  $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
         if (empty($hideBeginning)) {
@@ -114,9 +123,9 @@ class HLSController extends BaseController
         if (!empty($line)) {
             $params['line'] = $line;
         }
-
-        $api = $this->createAPIClient();
-
+        
+        $api = CloudAPIFactory::create();
+        
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
@@ -138,7 +147,8 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
-        if ($token['data'] != $id) {
+        $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
+        if ($dataId != $id) {
             return new Response($fakeKey);
         }
 
@@ -164,7 +174,7 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('User.TokenService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
@@ -197,16 +207,6 @@ class HLSController extends BaseController
         }
 
         return $beginning;
-    }
-
-    protected function createAPIClient()
-    {
-        $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
-        return new CloudAPI(array(
-            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
-        ));
     }
 
 }

@@ -117,6 +117,14 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         return false;  
     }
 
+    public function isSuperAdmin()
+    {
+        if (count(array_intersect($this->getRoles(), array('ROLE_SUPER_ADMIN'))) > 0) {
+            return true;
+        }
+        return false;  
+    }
+
     public function isTeacher()
     {
         return in_array('ROLE_TEACHER', $this->getRoles());

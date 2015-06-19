@@ -4,6 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
+/**
+ * @todo  count参数不是必须的
+ */
 class CourseLessonsDataTag extends CourseBaseDataTag implements DataTag  
 {
     /**
@@ -12,7 +15,6 @@ class CourseLessonsDataTag extends CourseBaseDataTag implements DataTag
      * 可传入的参数：
      * 
      *   courseId 必需 课程ID
-     *   count    必需 课程数量，取值不能超过100
      * 
      * @param  array $arguments 参数
      * @return array 课时列表
@@ -21,7 +23,6 @@ class CourseLessonsDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkCourseId($arguments);
-        $this->checkCount($arguments);
     	$lessons = $this->getCourseService()->getCourseLessons($arguments['courseId']);
 
         return $this->getCoursesAndUsers($lessons);

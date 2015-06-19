@@ -4,8 +4,12 @@ namespace Topxia\Service\Order\OrderRefundProcessor;
 interface OrderRefundProcessor 
 {
 	public function getLayout();
+	
+	public function getRefundLayout();
 
 	public function findByLikeTitle($title);
+
+	public function removeStudent($targetId, $userId);
 
 	public function auditRefundOrder($id, $pass, $data);
 

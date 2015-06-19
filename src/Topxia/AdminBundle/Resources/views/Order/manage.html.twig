@@ -1,18 +1,13 @@
-{% extends layout %}
-
-{% block title %}{{ dict_text('targetName', type) }}订单管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {#
     {% set script_controller = 'trade/index' %}
 #}
 
-{% set menu = 'order' %}
+{% set menu = 'admin_' ~ type ~ '_order' %}
+
 
 {% block main %}
-
-  <div class="page-header clearfix">
-    <h1>{{ dict_text('targetName', type) }}订单管理</h1>
-  </div>
 
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
@@ -53,7 +48,7 @@
       <tr>
         <th width="50%">名称</th>
         <th>状态</th>
-        <th>价格(元)</th>
+        <th>实付(元)</th>
         <th>购买者</th>
         <th>付款方式</th>
         <th>操作</th>

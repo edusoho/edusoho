@@ -1,22 +1,15 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
-
-{% block title %}虚拟币模式设置 - {{ parent() }}{% endblock %}
+{% set menu = 'admin_coin_model' %}
 
 {% set script_controller = "coin/model" %}
-{% set menu = 'coin' %}
-{% set submenu = 'model' %}
 
 {% block main %}
-  <div class="page-header"><h1>虚拟币管理</h1></div>
-    {% include 'TopxiaAdminBundle:Coin:coin-ul.html.twig' %}
-
+ 
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-model-form">
-  
 
     <fieldset>
-
 
     <div class="form-group">
         <div class="col-md-3 control-label">
@@ -62,7 +55,9 @@
     <br>
     2、使用方式一旦保存（使用方式和汇率），请勿随意改动
     <br>
-    3、使用方式的切换会使课程价格根据汇率变动，如需修改请前往课程
+    3、使用方式的切换会使课程价格根据汇率变动
+    <br>
+    4、如有参加促销活动的课程，修改价格都将有相应的折扣    
   </strong></p>
   </div>
 
@@ -74,7 +69,9 @@
     <br>
     3、使用方式一旦保存（使用方式和汇率），请勿随意改动
     <br>
-    4、使用方式的切换会使课程价格会根据汇率变动，如需修改请前往课程
+    4、使用方式的切换会使课程价格会根据汇率变动
+    <br>
+    5、如有参加促销活动的课程，修改价格都将有相应的折扣    
   </strong></p>
   </div>
 {% endblock %}

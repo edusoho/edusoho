@@ -21,23 +21,31 @@
      <div class="published-time pull-right">{{ article.hits|default(0) }} 次浏览</div>
      <p><br></p>
   <div class="thread-body">{{article.body |raw }}</div>
+
+  <p class="clearfix">
+
+    <div class="dropdown pull-right">
+      <a href="javascript:;" class="btn btn-link" data-toggle="dropdown"><span class="glyphicon glyphicon-share"></span> 分享到</a>
+      {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'article'} %}
+    </div>
+
   {% if tags %}
-     标签:
+     <span class="text-muted">标签:</span>
     {% for tag in tags %}
          <span class="label label-info">{{tag.name}}</span>
     {% endfor %}
   {% endif %}
+  <br>
   {% if article.source %}
-     <span class="pull-right">本文来源: &nbsp;
+     <span class="text-muted">原文出处: &nbsp;</span>
      {% if article.sourceUrl %}
        <a href="{{ article.sourceUrl }}" target="_blank">{{article.source}}</a>
      {% else %}
        {{article.source}}
      {% endif %}
-     </span>
   {% endif %}
-  <p><br></p>
-  <ul class="pager">
+  </p>
+  <ul class="pager" style="margin-top:30px;">
     {% if articlePrevious %}
       <li class="previous"><a href="{{ path('article_detail',{id:articlePrevious.id}) }}">&larr; 上一篇</a></li>
     {% else %}
@@ -50,7 +58,6 @@
       <li class="next disabled"><a href="javascript:;"> 下一篇 &rarr;</a></li>
     {% endif %}
   </ul>
-<div class="share pull-right" data-bdText="{{articleShareContent|default('')}}"></div>
 {% endblock %}
 
 {% block article_side %}

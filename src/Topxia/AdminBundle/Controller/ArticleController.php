@@ -7,6 +7,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Imagine\Gd\Imagine;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ArticleController extends BaseController
 {
@@ -148,57 +149,8 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function settingAction(Request $request)
-    {   
-        $articleSetting = $this->getSettingService()->get('article', array());
-
-        $default = array(
-            'name' => '资讯频道',
-            'pageNums' => 20
-        );
-
-        $articleSetting = array_merge($default, $articleSetting);
-
-        if ($request->getMethod() == 'POST') {
-            $articleSetting = $request->request->all();
-            $this->getSettingService()->set('article', $articleSetting);
-            $this->getLogService()->info('article', 'update_settings', "更新资讯频道设置", $articleSetting);
-            $this->setFlashMessage('success', '资讯频道设置已保存！');
-        };
-
-        return $this->render('TopxiaAdminBundle:Article:setting.html.twig', array(
-            'articleSetting' => $articleSetting
-        ));
-    }
-
     public function showUploadAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-
-            $file = $request->files->get('picture');
-            if (!FileToolkit::isImageFile($file)) {
-                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
-            }
-
-            $filenamePrefix = "article_";
-            $hash = substr(md5($filenamePrefix . time()), -8);
-            $ext = $file->getClientOriginalExtension();
-            $filename = $filenamePrefix . $hash . '.' . $ext;
-
-            $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-            $file = $file->move($directory, $filename);
-            $fileName = str_replace('.', '!', $file->getFilename());
-
-            $articlePicture = $this->getPictureAtributes($fileName);
-
-            return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
-                'filename' => $fileName,
-                'pictureUrl' => $articlePicture['pictureUrl'],
-                'naturalSize' => $articlePicture['naturalSize'],
-                'scaledSize' => $articlePicture['scaledSize']
-            ));
-        }
-
         return $this->render('TopxiaAdminBundle:Article:aticle-picture-modal.html.twig', array(
             'pictureUrl' => "",
         ));
@@ -206,41 +158,24 @@ class ArticleController extends BaseController
 
     public function pictureCropAction(Request $request)
     {
-
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $filename = $request->query->get('filename');
-            $filename = str_replace('!', '.', $filename);
-            $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-            $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-            $response = $this->getArticleService()->changeIndexPicture(realpath($pictureFilePath), $options);
-            return new Response(json_encode($response));
-        }
-    }
+            $files = $this->getArticleService()->changeIndexPicture($options["images"]);
 
-    private function getPictureAtributes($filename)
-    {
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        try {
-            $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
+            foreach ($files as $key => $file) {
+                $files[$key]["file"]['url'] = $this->get('topxia.twig.web_extension')->getFilePath($file["file"]['uri']);
+            }
+            return new JsonResponse($files);
         }
 
-        $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = $this->container->getParameter('topxia.upload.public_url_path') . '/tmp/' . $filename;
-
-        return array(
+        $fileId = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        
+        return $this->render('TopxiaAdminBundle:Article:article-picture-crop-modal.html.twig', array(
+            'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
-            'pictureUrl' => $pictureUrl
-        );
+            'scaledSize' => $scaledSize
+        ));
     }
 
     private function getArticleService()
@@ -260,7 +195,7 @@ class ArticleController extends BaseController
 
     private function getFileService()
     {
-        return $this->getServiceKernel()->createService('Article.FileService');
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     private function getSettingService()

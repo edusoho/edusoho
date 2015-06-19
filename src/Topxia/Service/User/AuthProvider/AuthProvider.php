@@ -20,6 +20,8 @@ interface AuthProvider
 
     public function checkEmail($email);
 
+    public function checkMobile($mobile);
+    
     public function checkPassword($userId, $password);
 
     public function checkLoginById($userId, $password);

@@ -79,7 +79,7 @@ exports.run = function() {
     {
         var validator = new Validator({
             element: $form,
-            autoSubmit: false,
+            autoSubmit: false
         });
 
         return validator;

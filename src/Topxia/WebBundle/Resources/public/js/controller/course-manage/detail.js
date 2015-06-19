@@ -9,16 +9,16 @@ define(function(require, exports, module) {
 
         // group:'course'
         CKEDITOR.replace('course-about-field', {
-            toolbar: 'Simple',
+            toolbar: 'Detail',
             filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
         });
 
         var goalDynamicCollection = new DynamicCollection({
-            element: '#course-goals-form-group',
+            element: '#course-goals-form-group'
         });
 
         var audiencesDynamicCollection = new DynamicCollection({
-            element: '#course-audiences-form-group',
+            element: '#course-audiences-form-group'
         });
 
         $(".sortable-list").sortable({

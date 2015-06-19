@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            'click [name=mode]': 'onClickModeField',
+            'click [name=mode]': 'onClickModeField'
         },
 
         setup:function() {
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
 
         createValidator: function() {
             this.set('validator', new Validator({
-                element: this.element,
+                element: this.element
             }));
         },
 
@@ -372,7 +372,7 @@ define(function(require, exports, module) {
             });
 
             return index;
-        },
+        }
     });
 
     exports.run = function() {

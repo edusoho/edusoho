@@ -1,14 +1,10 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% block title %}课程数据 - {{ parent() }}{% endblock %}
-
-{% set menu = 'course-data' %}
+{% set menu = 'admin_course_data' %}
 
 {% block main %}
-    <div class="page-header clearfix">
-    <h1 class="pull-left">数据管理</h1>
-    </div>
-    <form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_course_data') }}" method="get" novalidate>
+
+    <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">
         <select class="form-control" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
@@ -29,8 +25,8 @@
             <td>课时数</td>
             <td>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}人数</td>
             <td>完成课程人数</td>
-            <td>课程学习时长（分）</td>
-            <td>课程收入（元）</td>
+            <td>课程学习时长(分)</td>
+            <td>课程收入(元)</td>
             <td>操作</td>
           </tr>
           
@@ -41,7 +37,7 @@
             <td>{{course.lessonCount}}</td>
             <td>{{course.studentNum}}</td>
             <td>{{course.isLearnedNum}}</td>
-            <td>{{course.learnTime}}</td>
+            <td>{{(course.learnTime/60)|round(0, 'floor')}}</td>
             <td>{{course.income}}</td>
             <td><a href="{{path('admin_course_lesson_data',{id:course.id})}}">查看课时数据</a></td>
             </tr>

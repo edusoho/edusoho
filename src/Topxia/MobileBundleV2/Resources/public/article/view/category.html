@@ -1,0 +1,12 @@
+<div class="ui-poptips-cnt" style="text-align:left;height: auto;margin:0;"> 
+<div>
+            <button style="margin:10px;" ng-click="changeCategory(0)" class="ui-btn ui-btn-progress">全部</button>
+</div>
+	<span ng-repeat="category in categoryTree">
+		<div ng-if="category.parentId == 0"></div>
+		<button style="margin:10px;" ng-click="changeCategory(category.id, category.name)"  ng-class=" category.parentId == 0 ? 'ui-btn  ui-btn-primary' : 'ui-btn' ">
+			{{ category.name }}
+		</button>
+	</span>
+	
+</div>

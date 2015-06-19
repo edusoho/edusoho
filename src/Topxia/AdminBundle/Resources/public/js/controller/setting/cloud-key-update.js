@@ -12,7 +12,7 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $form.find('.save-btn').button('loading');
-            },
+            }
         });
         
         validator.addItem({

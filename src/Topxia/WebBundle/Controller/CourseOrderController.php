@@ -59,7 +59,13 @@ class CourseOrderController extends OrderController
            if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
         }
 
-        if ($remainingStudentNum == 0 && $course['type'] == 'live') {
+        if($course['approval'] == 1 && ($userInfo['approvalStatus'] == 'unapprove' || $userInfo['approvalStatus'] == 'approve_fail')){
+            return $this->render('TopxiaWebBundle:CourseOrder:approve-modal.html.twig', array(
+                'course' => $course
+            ));
+        }
+        
+        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
             return $this->render('TopxiaWebBundle:CourseOrder:remainless-modal.html.twig', array(
                 'course' => $course
             ));

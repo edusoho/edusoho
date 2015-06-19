@@ -1,6 +1,6 @@
 <li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media">
   <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
-    <img class="media-object" src="{{ default_path('avatar', author.smallAvatar, '') }}" >
+    <img class="media-object" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" >
   </a>
   <div class="media-body">
     <div class="metas">

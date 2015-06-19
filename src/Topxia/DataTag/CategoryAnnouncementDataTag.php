@@ -4,6 +4,9 @@ namespace Topxia\DataTag;
 
 use Topxia\DataTag\DataTag;
 
+/**
+ * @todo  需改名成CourseAnnouncementDataTag
+ */
 class CategoryAnnouncementDataTag extends CourseBaseDataTag implements DataTag  
 {
 

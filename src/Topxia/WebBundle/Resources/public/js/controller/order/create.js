@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
 		function moneyFormatFloor(value) {
 	        // 转化成字符串
-	        value = value + '';　
+	        value = value + '';
 	        value = parseInt(Math.round(value * 1000));
 	        // 抹去最后１位
 	        value = parseInt(value/10) * 10 / 1000;

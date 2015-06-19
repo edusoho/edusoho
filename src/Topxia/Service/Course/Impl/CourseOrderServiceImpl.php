@@ -14,28 +14,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $this->getOrderService()->cancelOrder($id);
     }
 
-    private function cancelOldOrders($course, $user)
-    {
-        $conditions = array(
-            'userId' => $user['id'],
-            'status' => 'created',
-            'targetType' => 'course',
-            'targetId' => $course['id'],
-        );
-        $count = $this->getOrderService()->searchOrderCount($conditions);
-
-        if ($count == 0) {
-            return ;
-        }
-
-        $oldOrders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, $count);
-
-        foreach ($oldOrders as $order) {
-            $this->getOrderService()->cancelOrder($order['id'], '系统自动取消');
-        }
-
-    }
-
     public function createOrder($info)
     {
         $connection = ServiceKernel::instance()->getConnection();
@@ -63,14 +41,17 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 throw $this->createServiceException('课程不存在，操作失败。');
             }
 
-            $this->cancelOldOrders($course, $user);
-
             $order = array();
 
             $order['userId'] = $user['id'];
             $order['title'] = "购买课程《{$course['title']}》";
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
+            if(!empty($course['discountId'])){
+                $order['discountId'] = $course['discountId'];
+                $order['discount'] = $course['discount'];
+            }
+
             $order['payment'] = $info['payment'];
             $order['amount'] = empty($info['amount'])? 0 : $info['amount'];
             $order['priceType'] = $info['priceType'];
@@ -89,14 +70,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if($notShowPrice == 1) {
                 $order['amount'] = 0;
                 $order['totalPrice'] = 0;
-            }
-
-            if($order['amount'] > 0){
-                //如果是限时打折，判断是否在限免期，如果是，则Amout为0
-                if($course['freeStartTime'] < time() &&  $course['freeEndTime'] > time() ){
-                    $order['amount'] = 0;
-                    $order['totalPrice'] = 0;
-                }
             }
 
             $order['snPrefix'] = 'C';
@@ -155,6 +128,9 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
         if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
+        } else {
+            $this->getOrderService()->createOrderLog($order['id'],"pay_success", "当前用户已经是课程学员，支付宝支付成功。", $order);
+            $this->getLogService()->warning("course_order", "pay_success", "当前用户已经是课程学员，支付宝支付成功。", $order);
         }
 
         return ;
@@ -166,6 +142,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
         }
+
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
 
         if ($refund['status'] == 'created') {

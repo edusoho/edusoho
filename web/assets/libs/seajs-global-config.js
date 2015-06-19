@@ -15,12 +15,15 @@ seajs.config({
 		"jquery.nouislider": "jquery-plugin/nouislider/5.0.0/nouislider",
 		"jquery.nouislider-css": "jquery-plugin/nouislider/5.0.0/nouislider.css",
 		'jquery.bootstrap-datetimepicker': "jquery-plugin/bootstrap-datetimepicker/1.0.0/datetimepicker",
+		"jquery.countdown": "jquery.countdown/2.0.4/index",
+		"jquery.colorbox": "jquery.colorbox/1.6.0/index",
 		"plupload": "jquery-plugin/plupload-queue/2.0.0/plupload",
 		"jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
 		"jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
 		"jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
 		"mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
 		'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
+		'echo.js': 'echo.js/1.7.0/index',
 		'autocomplete': 'arale/autocomplete/1.2.2/autocomplete',
 		'upload': 'arale/upload/1.1.0/upload',
 		'bootstrap.validator': 'common/validator',
@@ -31,6 +34,7 @@ seajs.config({
 		'overlay' : 'arale/overlay/1.1.4/overlay',
 		'mask' : 'arale/overlay/1.1.4/mask',
 		'sticky': 'arale/sticky/1.3.1/sticky',
+		'cookie': 'arale/cookie/1.0.2/cookie',
 		"templatable": "arale/templatable/0.9.1/templatable",
 		'placeholder': 'arale/placeholder/1.1.0/placeholder',
 		'json': 'gallery/json/1.0.3/json',
@@ -39,6 +43,7 @@ seajs.config({
 		"swfobject": "gallery/swfobject/2.2.0/swfobject.js",
 		'moment' : 'gallery/moment/2.5.1/moment',
 		'morris': 'gallery/morris/0.5.0/morris',
+		'store': 'store/1.3.16/store',
 		'video-js': 'gallery2/video-js/4.2.1/video-js',
 		'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
 		'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
@@ -47,7 +52,9 @@ seajs.config({
 		'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
 		'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
 		'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
-		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js'
+		'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
+		'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
+		'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js'
 	},
 
 	// 预加载项

@@ -1,17 +1,10 @@
-{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
-
-{% block title %}资讯管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'article/list' %}
 
-{% set menu = 'article' %}
+{% set menu = 'admin_operation_article_manage' %}
 
 {% block main %}
-
-<div class="page-header clearfix">
-  <a class="btn btn-info btn-sm pull-right" id="article-add-btn" type="button" href="{{ path('admin_article_create') }}"><span class="glyphicon glyphicon-plus"></span> 添加资讯</a>
-  <h1 class="pull-left">资讯管理</h1>
-</div>
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
 	<div class="form-group">
@@ -35,7 +28,8 @@
 		  {{ select_options(dict('articleStatus'), app.request.query.get('status'), '--发布状态--') }}
 		</select>
 	</div>
-	<button class="btn btn-primary pull-right" type="submit">搜索</button>
+	<button class="btn btn-primary" type="submit">搜索</button>
+
 </form>
 
 <div id="aticle-table-container">

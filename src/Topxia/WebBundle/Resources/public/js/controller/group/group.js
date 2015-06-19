@@ -2,7 +2,6 @@
         var Notify = require('common/bootstrap-notify');
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);
-        var Share = require('../../util/share.js');
         require('ckeditor');
 
         function checkUrl(url) {
@@ -132,11 +131,6 @@
             }
 
             if ($('.group-post-list').length > 0) {
-                Share.create({
-                    selector: '.share',
-                    icons: 'itemsAll',
-                    display: 'dropdown'
-                });
                 $('.group-post-list').on('click', '.li-reply', function() {
                     var postId = $(this).attr('postId');
                     var fromUserId = $(this).data('fromUserId');

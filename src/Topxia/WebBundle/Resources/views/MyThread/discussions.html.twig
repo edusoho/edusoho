@@ -10,7 +10,7 @@
   <div class="panel-heading">我的话题</div>
 
   <div class="panel-body">
-
+    {% include 'TopxiaWebBundle:MyThread:tab.html.twig'%}
     {% if threads %}
 	    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: 'discussion'} %}
 	  {% else %}

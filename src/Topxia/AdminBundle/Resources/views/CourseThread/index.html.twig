@@ -1,16 +1,10 @@
-{% extends 'TopxiaAdminBundle:Course:layout.html.twig' %}
-
-{% block title %}讨论区管理 - {{ parent() }}{% endblock %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'course/threads' %}
 
-{% set menu = 'thread' %}
+{% set menu = 'admin_course_thread_manage' %}
 
 {% block main %}
-
-<div class="page-header clearfix">
-  <h1 class="pull-left">讨论区管理</h1>
-</div>
 
 <div class="well well-sm">
   <form class="form-inline">

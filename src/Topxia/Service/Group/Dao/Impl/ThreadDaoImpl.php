@@ -83,7 +83,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             foreach ($orderBys as $orderBy) 
         {
             $builder->addOrderBy($orderBy[0], $orderBy[1]);
-        };
+        }
  
         return $builder->execute()->fetchAll() ? : array();  
     }
@@ -101,6 +101,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere('groupId = :groupId') 
             ->andWhere('createdTime > :createdTime')
             ->andWhere('isElite = :isElite')
+            ->andWhere('isStick = :isStick')
             ->andWhere('type = :type')
             ->andWhere('userId = :userId')
             ->andWhere('status = :status')

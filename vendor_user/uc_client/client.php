@@ -346,6 +346,11 @@ function uc_user_checkname($username) {
 	return call_user_func(UC_API_FUNC, 'user', 'check_username', array('username'=>$username));
 }
 
+function uc_user_renameuser($uid, $usernamenew) {
+	return call_user_func(UC_API_FUNC, 'user', 'rename', array('uid'=>$uid, 'usernamenew'=>$usernamenew));
+}
+
+
 function uc_user_checkemail($email) {
 	return call_user_func(UC_API_FUNC, 'user', 'check_email', array('email'=>$email));
 }

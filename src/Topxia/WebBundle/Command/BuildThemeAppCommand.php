@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Topxia\Common\BlockToolkit;
 use Topxia\System;
 use ZipArchive;
 
@@ -32,12 +33,39 @@ class BuildThemeAppCommand extends BaseCommand
         $this->_buildDistPackage($name);
     }
 
+    private function _copyScript($themeDir, $distDir)
+    {
+        $scriptDir = "{$themeDir}/Scripts";
+        $distScriptDir = "{$distDir}/Scripts";
+        if ($this->filesystem->exists($scriptDir)) {
+            $this->filesystem->mirror($scriptDir, $distScriptDir);
+            $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
+        } else {
+            $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
+        }
+
+        $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
+
+        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+    }
+
+    private function _generateBlocks($themeDir, $distDir, $container)
+    {
+        if (file_exists($themeDir . '/block.json')) {
+            $this->filesystem->copy($themeDir . '/block.json', $distDir . '/block.json');
+            BlockToolkit::generateBlcokContent($themeDir . '/block.json', $distDir . '/blocks', $container);
+        }
+    }
+
     private function _buildDistPackage($name)
     {
         $themeDir = $this->getThemeDirectory($name);
 
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
+        $this->_copyScript($themeDir, $distDir);
+        $this->_generateBlocks($themeDir, $distDir, $this->getContainer());
+        $this->_copyMeta($themeDir, $distDir);
         file_put_contents($distDir . '/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
         $this->_zip($distDir);
@@ -48,6 +76,8 @@ class BuildThemeAppCommand extends BaseCommand
         $sourceTargetDir = $distDir . '/source/' . $name;
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
+
+        $this->filesystem->remove($sourceTargetDir . '/dev' );
 
         return $sourceTargetDir;
     }
@@ -60,6 +90,13 @@ class BuildThemeAppCommand extends BaseCommand
         } else {
             $this->output->writeln("<comment>    * 移除'.git'目录： 无");
         }
+    }
+
+    private function _copyMeta($themeDir, $distDir)
+    {
+        $source = "{$themeDir}/theme.json";
+        $target = "{$distDir}/theme.json";
+        $this->filesystem->copy($source, $target);
     }
 
     private function _zipPackage($distDir)

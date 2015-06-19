@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Respose;
 
 class EduCloudController extends BaseController
 {
@@ -31,13 +32,13 @@ class EduCloudController extends BaseController
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
 
-                if (!$this->getUserService()->isMobileUnique($to)) {
-                    return $this->createJsonResponse(array('error' => "这个手机已经被绑定"));
-                }
-
                 $hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
                 if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])){
-                    return $this->createJsonResponse(array('error' => "您已经绑定了这个手机"));
+                    return $this->createJsonResponse(array('error' => "您已经绑定了该手机号码"));
+                }
+
+                if (!$this->getUserService()->isMobileUnique($to)) {
+                    return $this->createJsonResponse(array('error' => "该手机号码已被其他用户绑定"));
                 }
             }
 
@@ -115,6 +116,27 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function cloudCallBackAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+
+        $data = $request->request->all();
+        $webAccessKey = empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'];
+
+        if(!empty($data['accessKey']) && $data['accessKey'] == $webAccessKey && !empty($data['action'])) {
+
+            $setting['message'] = empty($data['reason']) ? '' : $data['reason'];
+
+            $setting['status'] = $data['action'];
+
+            $this->getSettingService()->set('cloud_sms', $setting);
+
+            return $this->createJsonResponse(array('status'=>'ok'));
+        }
+
+        return $this->createJsonResponse(array('error'=>'accessKey error!'));
+    }
+
     private function generateSmsCode($length = 6)
     {
         $code = rand(0, 9);
@@ -147,7 +169,7 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('用户未登陆');
         }
 
-        if ($this->getCloudSmsKey($smsType) != 'on') {
+        if ($this->getCloudSmsKey($smsType) != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
     }

@@ -9,7 +9,8 @@ define(function(require, exports, module) {
             slides: [],
             index: 0,
             total: 0,
-            placeholder : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
+            placeholder : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC",
+            watermark: ''
         },
 
         events: {
@@ -50,6 +51,10 @@ define(function(require, exports, module) {
             });
 
             this.$('.slide-player-body').html(html);
+
+            if (this.get('watermark')) {
+                this.element.append('<div class="slide-player-watermark">' + this.get('watermark') + '</div>');
+            }
 
             $(document).on('keydown', function(event){  
 

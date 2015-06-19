@@ -1,24 +1,25 @@
 {% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
 
 {% block topbanner %}
-  {% set blocks = data('Blocks',{'codes':['autumn:home_top_banner'] }) %}
-  {% if blocks['autumn:home_top_banner'] %}
+  {% set top_banner = block_show('autumn:home_top_banner')%}
+  {% if top_banner %}
     <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
       <ol class="carousel-indicators">
           <li data-target="#autumn-carousel" data-slide-to="0" class="active"></li>
           <li data-target="#autumn-carousel" data-slide-to="1" class=""></li>
           <li data-target="#autumn-carousel" data-slide-to="2" class=""></li>
       </ol>
-      <div class="carousel-inner">{{ blocks['autumn:home_top_banner']|raw }}</div>
+      <div class="carousel-inner">{{ top_banner|raw }}</div>
       <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
       <a class="right carousel-control" href="#autumn-carousel" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
-    </div>
-  {% endif %}
 
+    </div>      
+  {% endif %}
+  
 {% endblock %}
 
 {% block stylesheets %}
@@ -44,7 +45,7 @@
                  {% if loop.index <= 5%}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                    <img class="img-responsive" src="{{ default_path('classroomPicture',classroom.largePicture, 'large') }}" alt="{{ classroom.title }}">
+                    <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
                   </a>
                   <div class="class-body">
                     <h3 class="class-title">
@@ -100,43 +101,9 @@
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
-            <ul class="autumn-grids">
+            <ul class="autumn-grids">             
               {% for course in recommendCourses %}
-                {% if course %}
-                  <li class="autumn-grid autumn-course-grid">
-                    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture', course.middlePicture, 'large') }}">
-                      {% if course.serializeMode == 'serialize' %}
-                        <span class="label label-success series-mode-label">更新中</span>
-                      {% elseif course.serializeMode == 'finished' %}
-                        <span class="label label-warning series-mode-label">已完结</span>
-                      {% endif %}
-                    </a>
-                    <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                    <div class="course-about">{{ course.about|plain_text(60) }}</div>
-
-                    <div class="mll">  
-                      {% if setting('course.coursesPrice') == 0 %}
-                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                          </span>
-                        {% else %}
-                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                          </span>
-                      {% endif %}
-                    {% endif %}
-                    </div>
-
-                    <div class="course-metas">
-
-                      <span class="teachers">
-                         主讲:
-                        {% for teacher in course.teachers %}
-                         {{ web_macro.user_link(teacher, 'text-muted') }}
-                        {% endfor %}
-                      </span>
-                    </div>
-                  </li>
-                {% endif %}
+                {% include 'TopxiaWebBundle:Default:course-grid.html.twig' %}
               {% endfor %}
             </ul>
           </div>
@@ -154,57 +121,7 @@
           <div class="panel-body">
             <ul class="autumn-grids">
               {% for course in latestCourses %}
-                {% if course %}
-
-                  <li class="autumn-grid autumn-course-grid">
-                    <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, 'large') }}">
-                      {% if course.status == 'draft' %}
-                        <span class="label  label-warning course-status">未发布</span>
-                      {% elseif course.status == 'closed' %}
-                        <span class="label label-danger course-status">已关闭</span>
-                      {% endif %} 
-
-                      {% if course.serializeMode == 'serialize' %}
-                        <span class="label label-success series-mode-label">更新中</span>
-                      {% elseif course.serializeMode == 'finished' %}
-                        <span class="label label-warning series-mode-label">已完结</span>
-                      {% endif %}
-
-                      {% if course.type == 'live' %}
-                        {% set lesson = course['lesson']|default(null) %}
-                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                          <span class="label label-warning series-mode-label">正在直播中</span>
-                        {% else %}
-                          <span class="label label-success series-mode-label">直播</span>
-                        {% endif %}
-                      {% endif %}
-                    </a>
-                    <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                    <div class="course-about">{{ course.about|plain_text(60) }}</div>
-                    
-                    <div class="mll">  
-                      {% if setting('course.coursesPrice') == 0 %}
-                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                          <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                          </span>
-                        {% else %}
-                          <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                          </span>
-                      {% endif %}
-                    {% endif %}
-                  </div>
-                  
-                    <div class="course-metas">
-
-                      <span class="teachers">
-                         主讲:
-                        {% for teacher in course.teachers %}
-                         {{ web_macro.user_link(teacher, 'text-muted') }}
-                        {% endfor %}
-                      </span>
-                    </div>
-                  </li>
-                {% endif %}
+                {% include 'TopxiaWebBundle:Default:course-grid.html.twig' %}
               {% endfor %}
             </ul>
           </div>
@@ -223,59 +140,9 @@
             <div class="panel-body">
               <ul class="autumn-grids">
                 {% for course in recentLiveCourses %}
-                {% set lesson = course.lesson %}
-
+                  {% set lesson = course.lesson %}
                   {% if course %}
-                    <li class="autumn-grid autumn-course-grid">
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ default_path('coursePicture',course.largePicture, '') }}">
-                        {% if course.status == 'draft' %}
-                          <span class="label  label-warning course-status">未发布</span>
-                        {% elseif course.status == 'closed' %}
-                          <span class="label label-danger course-status">已关闭</span>
-                        {% endif %} 
-
-                        {% if course.serializeMode == 'serialize' %}
-                          <span class="label label-success series-mode-label">更新中</span>
-                        {% elseif course.serializeMode == 'finished' %}
-                          <span class="label label-warning series-mode-label">已完结</span>
-                        {% endif %}
-
-                        {% if course.type == 'live' %}
-                          {% set lesson = course['lesson']|default(null) %}
-                          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                            <span class="label label-warning series-mode-label">正在直播中</span>
-                          {% else %}
-                            <span class="label label-success series-mode-label">直播</span>
-                          {% endif %}
-                        {% endif %}
-                      </a>
-                      <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
-                      <div class="live-course-lesson">
-                        <span class="live-time mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                        <p class="text-warning mrs">{{ lesson.title }}</p>
-                      </div>
-
-                      <div class="course-metas">
-                        <p>  
-                          {% if setting('course.coursesPrice') == 0 %}
-                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                              <span class="price-show">{% if course.coinPrice > 0 %}价格：{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
-                              </span>
-                            {% else %}
-                              <span class="price-show">{% if course.price > 0 %}价格：{{ course.price }}元{% else %}免费{% endif %}
-                              </span>
-                          {% endif %}
-                        {% endif %}
-                      </p>
-
-                        <span class="teachers">
-                           主讲:
-                          {% for teacher in course.teachers %}
-                           {{ web_macro.user_link(teacher, 'text-muted') }}
-                          {% endfor %}
-                        </span>
-                      </div>
-                    </li>
+                    {% include 'TopxiaWebBundle:Default:live-course-grid.html.twig' %}                    
                   {% else %}
                     <div class="empty">无推荐课程，请在后台课程管理设置。</div>
                   {% endif %}
@@ -332,7 +199,7 @@
                       <div class="topic-body">
                         {% set user = thread.user %}
                         {% set latestPostUser = thread.latestPostUser %}
-                        <img src="{{ default_path('avatar',thread.user.mediumAvatar, '') }}" class="pull-left">
+                        <img src="{{ filepath(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
                         <h3>{{ user.nickname }}</h3>
                         <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
                       </div>
@@ -366,7 +233,7 @@
                   <li class="col-sm-6 col-md-4">
                     <div class="teachers-item">
                       <a href="{{ path('user_show', {id:teacher.id}) }}">
-                       <img class="img-circle" src="{{ default_path('avatar',teacher.mediumAvatar, '') }}">
+                       <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
                       </a>
                         <span>{{ web_macro.user_link(teacher) }}</span>
                           <i> {{ teacher.title }}</i>
@@ -381,7 +248,7 @@
       {% endif %}
 
       {# 会员专区 #}
-      {% if setting('vip.enabled') %}
+      {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
         {% set levels = data('VipLevels',{'count':100}) %}
         {% if levels %}
           <div class="panel panel-autumn panel-autumn-primary">
@@ -440,7 +307,7 @@
                          <div class="media">
                             <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
                               {% if group.logo %}
-                              <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
+                              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}">
                               {%else%}
                               <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
                               {%endif%}
@@ -468,7 +335,7 @@
     <div class="col-md-4">
       {# 在学课程 #}
       {% if app.user %}
-        {{ render(controller('TopxiaWebBundle:Default:userlearning')) }}
+        {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
       {% endif %}
       
       {# 热门标签 #}
@@ -504,7 +371,7 @@
                   <li class="media">
                     <a href="{{ path('course_show', {id:course.id}) }}">
                       <div class="course-item">
-                        <img src="{{ default_path('coursePicture',course.largePicture, 'large') }}"  class="img-responsive thumb pull-left">
+                        <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
                         <div class="course-title">{{ course.title }}</div>
                       </div>
                     </a>
@@ -529,7 +396,7 @@
                 {% if learn.type == "finished_testpaper" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -542,7 +409,7 @@
                 {% elseif learn.type == "finished_homework" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -554,7 +421,7 @@
                 {% elseif learn.type == "finished_exercise" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -565,7 +432,7 @@
                 {% elseif learn.objectType == "course" and learn.type == "become_student" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -575,7 +442,7 @@
                 {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -585,7 +452,7 @@
                 {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -596,7 +463,7 @@
                 {% elseif learn.type == "learned_lesson" %}
                 <li class="media">
                   <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                    <img class="media-object" src="{{ default_path('avatar',learn.user.mediumAvatar, '') }}">
+                    <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                   </a>
                   <div class="media-body">
                     <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -606,7 +473,7 @@
                 {% elseif learn.type == "favorite_course" %}
                     <li class="media">
                       <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                        <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                       </a>
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
@@ -616,7 +483,7 @@
                     {% elseif learn.type == "start_learn_lesson" %}
                     <li class="media">
                       <a class="pull-left" href="{{ path('user_show', {id:learn.user.id}) }}">
-                        <img class="media-object" src="{{ default_path('avatar', learn.user.mediumAvatar, '') }}">
+                        <img class="media-object" src="{{ filepath(learn.user.mediumAvatar, 'avatar.png') }}">
                       </a>
                       <div class="media-body">
                         <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>

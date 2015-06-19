@@ -9,7 +9,7 @@ use Topxia\Common\ArrayToolkit;
 class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public $banner;
-    
+
     public function loginSchoolWithSite()
     {
         $version = $this->request->query->get('version', 1);

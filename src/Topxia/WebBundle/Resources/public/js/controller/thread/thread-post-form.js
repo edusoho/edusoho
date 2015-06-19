@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         });
 
         var validator = new Validator({
-            element: '#post-thread-form',
+            element: '#post-thread-form'
         });
 
         validator.addItem({
