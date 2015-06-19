@@ -76,11 +76,8 @@
               {{ profile.about|plain_text(40)| raw}}
             </p>
              {% set teacherCourses = data('TeacherCourses',{ userId:teacher.id,count:100 }) %}
-           
-            <p class="clearfix">
-              <span class="pull-left course-num">在教课程：{{ teacherCourses|length }}</span>
-              <a herf="{{path('user_reservation', {id:teacher.id})}}" class="pull-right btn btn-warning btn-sm">在线辅导</a>
-            </p>
+            <span class="course-num">在教课程：{{ teacherCourses|length }}</span>
+            <a herf="{{path('user_reservation', {id:teacher.id})}}" class="btn btn-warning btn-sm">在线辅导</a>
           </div>
         </div>
       </li>

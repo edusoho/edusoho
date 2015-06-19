@@ -183,6 +183,9 @@ a {
 }
 
 .teacher-box .es-teacher-list .media .btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   display: none;
 }
 
