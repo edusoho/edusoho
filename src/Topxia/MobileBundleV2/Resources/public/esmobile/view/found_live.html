@@ -2,6 +2,8 @@
 
 	<div class="course-card">
 		<h4>推荐</h4>
+		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐课程">
+          		</list-empty-view>
 		<ul class="ui-list ui-list-link ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="liveRecommedCourse in liveRecommedCourses" ui-sref="course({ courseId : liveRecommedCourse.id })">
 		        <div class="ui-list-img">

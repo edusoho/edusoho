@@ -263,6 +263,10 @@ a {
   height: 44px;
 }
 
+.ui-bar .ui-btn.small {
+  font-size: 15px ! important;
+}
+
 .ui-bar .ui-btn {
   z-index: 2;
   color: #37b97d;
