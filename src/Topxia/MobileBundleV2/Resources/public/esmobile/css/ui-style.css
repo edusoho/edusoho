@@ -262,6 +262,7 @@ a {
   height: 36px;
   line-height: 36px;
   width: 36px;
+  font-size: 18px;
 }
 
 .ui-bar .bar-tool .ui-btn {
@@ -278,6 +279,7 @@ a {
 }
 
 .ui-bar .title {
+  font-size: 18px;
   z-index: 1;
   text-align: center;
   display: inline-block;
@@ -455,11 +457,11 @@ a {
 
 .course-card .price-body {
   color: #bbb;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .course-card .discount-color {
-  font-size: 9px;
+  font-size: 12px;
   color: #bbb;
 }
 

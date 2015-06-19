@@ -6,6 +6,9 @@ function FoundCourseController($scope, SchoolService)
 	SchoolService.getSchoolBanner(function(data) {
 		$scope.banners = data;
 	});
+	SchoolService.getSchoolBanner(function(data) {
+		$scope.banners = data;
+	});
 
 	SchoolService.getRecommendCourses({ limit : 3 }, function(data) {
 		$scope.recommedCourses = data.data;
@@ -22,21 +25,11 @@ function FoundLiveController($scope, SchoolService)
 {
 	console.log("FoundLiveController");
 
-	SchoolService.getRecommendCourses(
-		{ 
-			limit : 3,
-			type : "live"
-	}
-	, function(data) {
+	SchoolService.getLiveRecommendCourses({ limit : 3 } , function(data) {
 		$scope.liveRecommedCourses = data.data;
 	});
 
-	SchoolService.getLatestCourses(
-		{ 
-			limit : 3,
-			type : "live"
-	}, 
-	function(data) {
+	SchoolService.getLiveLatestCourses( {  limit : 3,  },  function(data) {
 		$scope.liveLatestCourses = data.data;
 	});
 }
