@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set siteNav = 'course/explore' %}
 
@@ -51,6 +51,7 @@
     </div>
     <!--二级页面路径导航结束-->
     <!--课程筛选开始-->
+    {% set firstCategories = data('Categories',{ group:'course'}) %}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nav-stacked">
       <ul class="list-inline">
         年级：
