@@ -27,7 +27,7 @@ class CloudSettingController extends BaseController
     public function keyAction(Request $request)
     {
         $settings = $this->getSettingService()->get('storage', array());
-        if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
         return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
@@ -132,7 +132,7 @@ class CloudSettingController extends BaseController
         $applier = new KeyApplier();
         $keys = $applier->applyKey($this->getCurrentUser());
 
-        if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
+        if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
             return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
         }
 

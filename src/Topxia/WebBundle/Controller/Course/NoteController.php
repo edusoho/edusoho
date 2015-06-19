@@ -12,22 +12,30 @@ class NoteController extends CourseBaseController
     {
         $conditions = $this->convertFiltersToConditions($courseIds, $filters);
 
-        $paginator = new Paginator(
-            $request,
-            $this->getNoteService()->searchNoteCount($conditions),
-            20
-        );
-        $orderBy = $this->convertFiltersToOrderBy($filters);
+        $notes = array();
+        $result['notes'] = $notes;
+        
+        if ((isset($conditions['courseIds']) && !empty($conditions['courseIds'])) || 
+            (isset($conditions['courseId']) && !empty($conditions['courseId']))) {
 
-        $notes = $this->getNoteService()->searchNotes(
-            $conditions,
-            $orderBy,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $paginator = new Paginator(
+                $request,
+                $this->getNoteService()->searchNoteCount($conditions),
+                20
+            );
+            $orderBy = $this->convertFiltersToOrderBy($filters);
 
-        $result = $this->makeNotesRelated($notes, $courseIds);
-        $result['paginator'] = $paginator;
+            $notes = $this->getNoteService()->searchNotes(
+                $conditions,
+                $orderBy,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+
+            $result = $this->makeNotesRelated($notes, $courseIds);
+            $result['paginator'] = $paginator;
+        }
+
 
         return $this->render('TopxiaWebBundle:Course\Note:notes-list.html.twig', $result);
     }
@@ -119,6 +127,7 @@ class NoteController extends CourseBaseController
         if (!empty($filters['lessonId'])) {
             $conditions['lessonId'] = $filters['lessonId'];
         }
+
 
         return $conditions;
     }

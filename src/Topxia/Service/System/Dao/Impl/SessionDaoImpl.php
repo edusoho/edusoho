@@ -45,7 +45,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 
 	public function deleteInvalidSession($retentionTime)
 	{
-		$sql = "DELETE FROM {$this->table} WHERE `session_time` < ?";
+		$sql = "DELETE FROM {$this->table} WHERE `session_time` < ? order by session_time limit 100";
 		return $this->getConnection()->executeUpdate($sql, array($retentionTime));
 	}
 }

@@ -36,7 +36,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 		return $this->getReviewDao()->getReviewByUserIdAndCourseId($userId, $courseId);
 	}
 
-	public function searchReviews($conditions, $sort= 'latest', $start, $limit)
+	public function searchReviews($conditions, $sort, $start, $limit)
 	{	
 		if($sort=='latest'){
 			$orderBy = array('createdTime', 'DESC');
