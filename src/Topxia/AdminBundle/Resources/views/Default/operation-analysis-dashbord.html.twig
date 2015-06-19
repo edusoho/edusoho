@@ -21,12 +21,12 @@
 			</tr>
 
 			<tr>
-				<td>{{'用户登录数'|trans}}<small>（{{'不含重复登录'|trans}}）</small></td>
+				<td>{{'用户登录数'|trans}}<small>{{'（不含重复登录）'|trans}}</small></td>
 				<td><span class="pull-right">{{todayLoginNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayLoginNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_login',{tab:"trend",analysisDateType:'login'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_login',{tab:"detail",analysisDateType:'login'})}}">{{'详情'|trans}}</a></td>
-			{% endif %}	
+			{% endif %}
 			</tr>
 
 			<tr>
@@ -35,7 +35,7 @@
 				<td><span class="pull-right">{{yesterdayCourseNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_course',{tab:"trend",analysisDateType:'course'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course',{tab:"detail",analysisDateType:'course'})}}">{{'详情'|trans}}</a></td>
-			{% endif %}	
+			{% endif %}
 			</tr>
 
 			<tr>
@@ -44,7 +44,7 @@
 				<td><span class="pull-right">{{yesterdayLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_lesson',{tab:"trend",analysisDateType:'lesson'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson',{tab:"detail",analysisDateType:'lesson'})}}">{{'详情'|trans}}</a></td>
-			{% endif %}	
+			{% endif %}
 			</tr>
 
 			<tr>
@@ -53,7 +53,7 @@
 				<td><span class="pull-right">{{yesterdayJoinLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_lesson_join',{tab:"trend",analysisDateType:'joinLesson'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_join',{tab:"detail",analysisDateType:'joinLesson'})}}">{{'详情'|trans}}</a></td>
-			{% endif %}	
+			{% endif %}
 			</tr>
 
 			<tr>
@@ -62,7 +62,7 @@
 				<td><span class="pull-right">{{yesterdayBuyLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_lesson_paid',{tab:"trend",analysisDateType:'paidLesson'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_paid',{tab:"detail",analysisDateType:'paidLesson'})}}">{{'详情'|trans}}</a></td>
-			{% endif %}	
+			{% endif %}
 			</tr>
 
 			<tr>
@@ -71,16 +71,16 @@
 				<td><span class="pull-right">{{yesterdayFinishedLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_lesson_finished',{tab:"trend",analysisDateType:'finishedLesson'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_lesson_finished',{tab:"detail",analysisDateType:'finishedLesson'})}}">{{'详情'|trans}}</a></td>
-		{% endif %}	
+		{% endif %}
 			</tr>
 
 			<tr>
-				<td>{{'视频观看数'|trans}}<small>（{{'含重复打开'|trans}}）</small></td>
+				<td>{{'视频观看数'|trans}}<small>{{'（含重复打开）'|trans}}</small></td>
 				<td><span class="pull-right">{{todayAllVideoViewedNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayAllVideoViewedNum}}</span></td>
 		{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_video_viewed',{tab:"trend",analysisDateType:'videoViewed'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_viewed',{tab:"detail",analysisDateType:'videoViewed'})}}">{{'详情'|trans}}</a></td>
-		{% endif %}	
+		{% endif %}
 			</tr>
 
 			<tr>
@@ -95,7 +95,7 @@
 						<a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"trend",analysisDateType:'cloudVideoViewed'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_cloud_viewed',{tab:"detail",analysisDateType:'cloudVideoViewed'})}}">{{'详情'|trans}}</a>
 				{% endif %}
 				</td>
-		{% endif %}	
+		{% endif %}
 			</tr>
 
 			<tr>
@@ -104,7 +104,7 @@
 				<td><span class="pull-right">{{yesterdayLocalVideoViewedNum}}</span></td>
 		{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_video_local_viewed',{tab:"trend",analysisDateType:'localVideoViewed'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_local_viewed',{tab:"detail",analysisDateType:'localVideoViewed'})}}">{{'详情'|trans}}</a></td>
-		{% endif %}	
+		{% endif %}
 			</tr>
 
 			<tr>
@@ -113,7 +113,7 @@
 				<td><span class="pull-right">{{yesterdayNetVideoViewedNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 				<td><a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"trend",analysisDateType:'netVideoViewed'})}}">{{'趋势'|trans}}</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_video_net_viewed',{tab:"detail",analysisDateType:'netVideoViewed'})}}">{{'详情'|trans}}</a></td>
-			{% endif %}	
+			{% endif %}
 			</tr>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
 			<tr>
