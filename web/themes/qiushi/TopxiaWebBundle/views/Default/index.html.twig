@@ -20,8 +20,8 @@
                     {% if lastcourses.teachers %}
                               {% for teacher in lastcourses.teachers %}
                                 {% if loop.index <= 5%}
-                                {% set profile = profiles[teacher.id] %}
-                                   <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ profile.truename }}</a>
+
+                                   <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ teacher.nickname }}</a>
                                  {% endif %}
                               {% endfor %}
                           {% endif %}
@@ -125,8 +125,7 @@
                     <span class="nickname clearfix">
                                              {% for teacher in courses.teachers %}
                           {% if loop.index <= 1%}
-                          {% set profile = profiles[teacher.id] %}
-                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ profile.truename }}</a>
+                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ teacher.nickname }}</a>
                            {% endif %}
                         {% endfor %}
                     </span>
@@ -181,8 +180,7 @@
 
                               {% for teacher in liveCourses.teachers %}
                           {% if loop.index <= 1%}
-                          {% set profile = profiles[teacher.id] %}
-                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ profile.truename }}</a>
+                             <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}"><i class="fa fa-user"></i>{{ teacher.nickname }}</a>
                            {% endif %}
                         {% endfor %}
                 </span>
