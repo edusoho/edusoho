@@ -364,7 +364,8 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
 
   $rootScope.platform = browser.v;
   $rootScope.showLoad = function(template) {
-    $rootScope.loadPop =$.loading({
+    console.log("load");
+    $rootScope.loadPop = $.loading({
         content: "加载中...",
     });
     $timeout(function(){

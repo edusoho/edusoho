@@ -159,15 +159,15 @@ directive('ngClick', function($parse) {
             return function(scope, element, clickExpr) {
                   var clickHandler = angular.isFunction(clickExpr) ?
                     clickExpr :
-                    $parse(clickExpr);
+                    $parse(clickExpr.ngClick);
 
-                  element.on('click', function(event) {
+                  $(element[0]).on("tap",function(){
                     scope.$apply(function() {
                       clickHandler(scope, {$event: (event)});
                     });
                   });
 
-                  element.onclick = function(event) { };
+                  //element.onclick = function(event) { };
           };
     }
   }
@@ -186,8 +186,6 @@ directive('uiScroll', function($parse) {
                   if ( !scope.isLoading && ( (scrollTop + clientHeight) >= scrollHeight ) ) {
                     scope.isLoading = true;
                     $parse(attrs.onInfinite)(scope);
-
-                      console.log(scrollTop + "  h: " + scrollHeight + " c:" + clientHeight);
                   }
                 });
           }
