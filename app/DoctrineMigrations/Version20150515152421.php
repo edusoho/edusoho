@@ -18,7 +18,7 @@ class Version20150515152421 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("select 1 from dual");
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+        //$this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     /**
