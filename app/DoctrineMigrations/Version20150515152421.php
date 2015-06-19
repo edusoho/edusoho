@@ -39,7 +39,7 @@ class Version20150515152421 extends AbstractMigration
     {
         global $kernel;
 
-        $serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
         $serviceKernel->setParameterBag($kernel->getContainer()->getParameterBag());
         $serviceKernel->setConnection($kernel->getContainer()->get('database_connection'));
         return $serviceKernel;
