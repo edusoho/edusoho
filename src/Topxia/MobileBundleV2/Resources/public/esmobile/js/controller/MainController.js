@@ -10,6 +10,7 @@ function MainTabController($scope, sideDelegate, $state)
 	$scope.toggle = function() {
 		if ($scope.platform.native) {
 			window.esNativeCore.openDrawer("open");
+			//window.esNativeCore.openWebView("http://192.168.1.105/mapi_v2/mobileApp#/course/22");
 			return;
 		}
 
