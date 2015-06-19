@@ -308,23 +308,40 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $this->getCourseByType("popular", $conditions);
     }
 
-    public function getRecommendCourses()
+    public function getLiveRecommendCourses()
     {
-        $type = $this->getParam("type", "normal");
         $conditions = array(
             'status' => 'published',
-            'type' => $type,
+            'type' => "live",
             "recommended"=>1
         );
         return $this->getCourseByType("recommendedSeq", $conditions);
     }
 
-    public function getLatestCourses()
+    public function getRecommendCourses()
     {
-        $type = $this->getParam("type", "normal");
         $conditions = array(
             'status' => 'published',
-            'type' => $type
+            'type' => "normal",
+            "recommended"=>1
+        );
+        return $this->getCourseByType("recommendedSeq", $conditions);
+    }
+
+    public function getLiveLatestCourses()
+    {
+        $conditions = array(
+            'status' => 'published',
+            'type' => "live"
+        );
+        return $this->getCourseByType("latest", $conditions);
+    }
+
+    public function getLatestCourses()
+    {
+        $conditions = array(
+            'status' => 'published',
+            'type' => "normal"
         );
         return $this->getCourseByType("latest", $conditions);
     }
