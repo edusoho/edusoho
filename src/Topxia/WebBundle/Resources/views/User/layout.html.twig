@@ -16,6 +16,9 @@
   	{% if 'ROLE_TEACHER' in user.roles %}
 	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">在教课程</a></li>
     {% endif %}
+    {% if is_plugin_installed('LiveReservation') %}
+     <li {% if pageNav == 'reservation' %}class="active"{% endif %}><a href="{{ path('user_reservation', {id: user.id}) }}">预约辅导</a></li>
+    {% endif %}
     <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">在学课程</a></li>
     <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">收藏的课程</a></li>
     <li {% if pageNav == 'group' %}class="active"{% endif %}><a href="{{path('user_group',{id:user.id})}}">加入的小组</a></li>
