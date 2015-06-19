@@ -2,9 +2,12 @@
 
 namespace Custom\WebBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Topxia\Common\ExtensionalBundle;
 
-class CustomWebBundle extends Bundle
+class CustomWebBundle extends ExtensionalBundle
 {
-
+	public function getEnabledExtensions()
+    {
+        return array('DataTag');
+    }
 }
