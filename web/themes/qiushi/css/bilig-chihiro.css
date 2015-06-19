@@ -177,3 +177,15 @@ a {
 .site-navbar .navbar-brand-logo img{
 	height: 70px;
 }
+
+.jumbotron .newcourse-list .panel-body .list-group .list-group-item {
+  background: none;
+}
+
+.teacher-box .es-teacher-list .media .btn {
+  display: none;
+}
+
+.teacher-box .es-teacher-list .media:hover .btn {
+  display: block;
+}

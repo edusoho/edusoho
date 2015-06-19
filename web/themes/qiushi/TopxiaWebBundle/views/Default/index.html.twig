@@ -6,7 +6,7 @@
             {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
   {% if blocks['qiushi:home_top_banner'] %}
   <div class="container jumbotron" style="position: relative;padding:0px!important">
-<div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:15px; z-index:999;">
+<div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:15px; z-index:1;">
           <div class="panel newcourse-list">
           <div class="cover"></div>
             <div class="panel-heading">最新课程列表</div>
@@ -77,6 +77,10 @@
                 </p>
                 <p>{{ perTeacher.about|plain_text(65) }}</p>
               </a>
+              <div class="mtm">
+                <a href="{{path('user_teach', {id:perTeacher.id})}}" class="btn btn-sm btn-warning mrm">在教课程</a>
+                <a href="{{path('user_reservation', {id:perTeacher.id})}}" class="btn btn-sm btn-warning">预约辅导</a>
+              </div>
             </li>
           {% endfor %}
         </ul>
