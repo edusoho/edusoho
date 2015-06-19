@@ -2242,6 +2242,32 @@ a:focus {
   border-radius: 50%;
   background-color: #0093e8;
 }
+.reservation-hint {
+  margin-bottom: 20px;
+}
+.reservation-hint .reservation-tip {
+  margin-left: 10px;
+  color: #e67e22;
+}
+.reservation-header {
+  margin-bottom: 20px;
+  color: #0093e8;
+}
+.reservation-header i {
+  margin-right: 10px;
+}
+.reservation-header .reservation-title {
+  margin-left: 20px;
+}
+.reservation-header .reservation-div {
+  margin-bottom: 30px;
+}
+.reservation-div .date {
+  float: left;
+  margin-right: 20px;
+  line-height: 34px;
+  color: #0093e8;
+}
 .text-line {
   position: relative;
   padding: 50px 0;
