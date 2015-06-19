@@ -16,16 +16,18 @@
           {% elseif data.type == 'read' %}
             刚刚批阅了
           {% endif %}
-          {{data.name}} ，<a href='{{path('course_manage_test_teacher_check',{id:data.id})}}' target='_blank'>
-           {% if data.type == 'perusal' %}
+          {{data.name}} ，
+          {% if data.type == 'perusal' %}
+            <a href='{{path('course_manage_test_teacher_check',{id:data.id})}}' target='_blank'>
              请点击批阅 
           {% elseif data.type == 'read' %}
+            <a href='{{path('course_manage_test_results',{id:data.id})}}' target='_blank'>
             请点击查看结果
           {% endif %}
           </a>
     </div>
     <div class="notification-footer">
-     {{ notification.createdTime|data_format }}  
+     {{ notification.createdTime|date_format }}  
     </div>
   </div>
 </li>

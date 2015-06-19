@@ -45,7 +45,7 @@ class LiveCourseLessonManageController extends BaseController
 				'liveLogoUrl' => $liveLogoUrl
 			));
 
-			if (empty($live) or isset($live['error'])) {
+			if (empty($live) || isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
 

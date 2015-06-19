@@ -5,10 +5,14 @@
 @import "mixins/scale.less";
 @import "mixins/loader-inner.less";
 
+.form-control-lg {
+  height: 38px;
+  padding: 6px 12px;
+}
+
 .p-lg {
   line-height: 30px;
   margin-bottom: 30px;
-  text-indent: 2em;
 }
 
 .ml10 {
@@ -31,6 +35,10 @@
   margin-right: 10px;
 }
 
+.mb40 {
+  margin-bottom: 40px;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -40,7 +48,6 @@
   color: @gray-light;
 }
 
-.link-dark-wrap>a,
 .link-dark {
   color: @gray-darker;
   .es-transition;
@@ -50,9 +57,17 @@
   }
 }
 
-.link-light-wrap>a,
 .link-light {
   color: @gray-dark;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.link-white {
+  color: #fff;
   .es-transition;
   &:hover {
     color: @brand-primary;

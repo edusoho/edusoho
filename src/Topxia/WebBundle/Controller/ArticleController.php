@@ -209,7 +209,7 @@ class ArticleController extends BaseController
 
         $sameTagArticles = array();
         foreach ($articles as $key => $value) {
-            if (array_intersect($value['tagIds'], $article['tagIds']) and $value['id'] != $article['id'] and !empty($value['thumb'])) {
+            if (array_intersect($value['tagIds'], $article['tagIds']) && $value['id'] != $article['id'] && !empty($value['thumb'])) {
                 $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
             }
         }
@@ -290,7 +290,7 @@ class ArticleController extends BaseController
         }
 
         $post = $this->getThreadService()->getPost($postId);
-        if ($post and $post['parentId']) {
+        if ($post && $post['parentId']) {
             $post = $this->getThreadService()->getPost($post['parentId']);
         }
 

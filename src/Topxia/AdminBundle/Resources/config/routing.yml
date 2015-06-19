@@ -280,8 +280,8 @@ admin_note_batch_delete:
     methods: [POST]
 
 admin_course:
-    pattern:  /course
-    defaults: { _controller: TopxiaAdminBundle:Course:index }
+    pattern:  /course/{filter}/index
+    defaults: { _controller: TopxiaAdminBundle:Course:index, filter:'normal' }
 
 admin_course_delete:
     pattern:  /course/{id}/delete
@@ -590,6 +590,11 @@ admin_setting_consult_setting:
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
+
+admin_setting_consult_webchat_delete:
+    pattern:  /setting/consult-webchat-delete
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:deleteWebchat }
+    methods:  [POST]
 
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync

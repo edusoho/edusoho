@@ -8,9 +8,16 @@ use Topxia\Common\ArrayToolkit;
 class CourseController extends BaseController
 {
 
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        if($filter == 'normal' ){
+            $conditions["parentId"] = 0;
+        }
+
+        if($filter == 'classroom'){
+            $conditions["parentId_GT"] = 0;
+        }
 
         if(isset($conditions["categoryId"]) && $conditions["categoryId"]==""){
             unset($conditions["categoryId"]);
@@ -35,12 +42,15 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
-        $classrooms = ArrayToolkit::index($classrooms,'courseId');
-        foreach ($classrooms as $key => $classroom) {
-            $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-        } 
+        $classrooms = array();
+        if($filter == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
@@ -61,7 +71,8 @@ class CourseController extends BaseController
             'paginator' => $paginator,
             'liveSetEnabled' => $courseSetting['live_course_enabled'],
             'default' => $default,
-            'classrooms' => $classrooms
+            'classrooms' => $classrooms,
+            'filter' => $filter
         ));
     }
 
@@ -118,14 +129,14 @@ class CourseController extends BaseController
     {
         $this->getCourseService()->publishCourse($id);
 
-        return $this->renderCourseTr($id);
+        return $this->renderCourseTr($id,$request);
     }
 
     public function closeAction(Request $request, $id)
     {
         $this->getCourseService()->closeCourse($id);
 
-        return $this->renderCourseTr($id);
+        return $this->renderCourseTr($id,$request);
     }
 
     public function copyAction(Request $request, $id)
@@ -154,6 +165,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $ref = $request->query->get('ref');
+        $filter = $request->query->get('filter');
 
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
@@ -169,12 +181,13 @@ class CourseController extends BaseController
                 ));
             }
 
-            return $this->renderCourseTr($id);
+            return $this->renderCourseTr($id,$request);
         }
 
         return $this->render('TopxiaAdminBundle:Course:course-recommend-modal.html.twig', array(
             'course' => $course,
             'ref' => $ref,
+            'filter' => $filter
         ));
     }
 
@@ -182,7 +195,7 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
-        return $this->renderCourseTr($id);
+        return $this->renderCourseTr($id,$request);
     }
 
     public function recommendListAction(Request $request)
@@ -207,10 +220,13 @@ class CourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
         return $this->render('TopxiaAdminBundle:Course:course-recommend-list.html.twig', array(
             'courses' => $courses,
             'users' => $users,
             'paginator' => $paginator,
+            'categories' => $categories
         ));
     }
 
@@ -329,8 +345,9 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function renderCourseTr($courseId)
+    private function renderCourseTr($courseId,$request)
     {
+        $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
 
@@ -339,6 +356,7 @@ class CourseController extends BaseController
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course' => $course,
             'default' => $default,
+            'filter' => $fields["filter"]
         ));
     }
 

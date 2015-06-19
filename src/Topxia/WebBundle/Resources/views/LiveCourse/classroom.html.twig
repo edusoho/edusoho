@@ -8,7 +8,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-<iframe src="{{ url }}" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" >
-</iframe>
+{% if not param %}
+	<iframe name="classroom" src="{{ url }}" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" ></iframe>
+{% else %}
+
+	<iframe name="classroom" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" >
+	</iframe>
+	<FORM id="classroom-form" METHOD=POST ACTION="{{url}}" TARGET="classroom">
+	    <INPUT TYPE="hidden" NAME="param" value="{{param}}">
+	</FORM>
+	<script>
+	document.getElementById("classroom-form").submit();
+	</script>
+{% endif %}
 </body>
 </html>

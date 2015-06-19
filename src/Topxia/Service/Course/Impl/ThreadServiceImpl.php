@@ -17,7 +17,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $thread['courseId'] == $courseId ? $thread : null;
 	}
 
-	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit)
+	public function findThreadsByType($courseId, $type, $sort, $start, $limit)
 	{
 		if ($sort == 'latestPosted') {
 			$orderBy = array('latestPosted', 'DESC');
@@ -288,7 +288,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->waveThread($threadId, 'hitNum', +1);
 	}
 
-	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit)
+	public function findThreadPosts($courseId, $threadId, $sort, $start, $limit)
 	{
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
