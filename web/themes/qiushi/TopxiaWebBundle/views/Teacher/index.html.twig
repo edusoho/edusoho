@@ -57,11 +57,10 @@
     {% for teacher in teachers %}
           {% set profile = profiles[teacher.id] %}
       <li class="col-xs-12 col-sm-12 col-md-6 col-lg-6 es-teacher-list">
-        <a href="{{ path('user_show', {id:teacher.id}) }}" style="display: block">
+        
         <div class="media">
           <div class="media-left">
-              <img class="media-object" src="{{ default_path('avatar',teacher.largeAvatar, '') }}r" alt="...">
-            <span class="teacher-link">点击查看</span>
+              <a href="{{ path('user_show', {id:teacher.id}) }}" style="display: block"><img class="media-object" src="{{ default_path('avatar',teacher.largeAvatar, '') }}r" alt="..."></a>
           </div>
           <div class="media-body">
             <span class="com-author-link">{{ profile.truename }}</span>
@@ -78,10 +77,12 @@
             </p>
              {% set teacherCourses = data('TeacherCourses',{ userId:teacher.id,count:100 }) %}
            
-            <span class="pull-left course-num">在教课程：{{ teacherCourses|length }}</span>
+            <p class="clearfix">
+              <span class="pull-left course-num">在教课程：{{ teacherCourses|length }}</span>
+              <a herf="{{path('user_reservation', {id:teacher.id})}}" class="pull-right btn btn-warning btn-sm">在线辅导</a>
+            </p>
           </div>
         </div>
-        </a>
       </li>
               {% endfor %}
       </ul>
