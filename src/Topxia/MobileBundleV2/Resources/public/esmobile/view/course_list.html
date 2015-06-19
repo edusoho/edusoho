@@ -7,9 +7,9 @@
 
 <div class="ui-tab tab-top" ui-tab select="empty">
     <ul class="ui-tab-nav ui-border-b">
-        <li><span class="line">分类<i class="iconfont icon-keyboardarrowdown"></i></span></li>
-        <li><span class="line">全部分类<i class="iconfont icon-keyboardarrowdown"></i></span></li>
-        <li><span class="line">综合排序<i class="iconfont icon-keyboardarrowdown"></i></span></li>
+        <li><span class="line">{{ categoryTab.category }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
+        <li><span class="line">{{ categoryTab.type }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
+        <li><span class="line">{{ categoryTab.sort }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
     </ul>
     <ul class="ui-tab-content tab-display top-tab-header" style="position: fixed;">
         <li modal>
@@ -22,7 +22,7 @@
         <li modal>
             <div class="content">
               <ul class="ui-list ui-list-text ui-list-cover ui-list-active">
-                <li class="ui-border-b" ng-click="selectType(item.type)" ng-repeat="item in courseListTypes">
+                <li class="ui-border-b" ng-click="selectType(item)" ng-repeat="item in courseListTypes">
                   {{ item.name }}
                 </li>
               </ul>
@@ -32,7 +32,7 @@
         <li modal>
             <div class="content">
               <ul class="ui-list ui-list-text ui-list-cover ui-list-active">
-                <li class="ui-border-b" ng-click="selectSort(item.type)" ng-repeat="item in courseListSorts">
+                <li class="ui-border-b" ng-click="selectSort(item)" ng-repeat="item in courseListSorts">
                   {{ item.name }}
                 </li>
               </ul>

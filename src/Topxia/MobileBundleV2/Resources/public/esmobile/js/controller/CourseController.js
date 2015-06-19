@@ -212,6 +212,12 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
 
 function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)
 {
+    $scope.categoryTab = {
+      category : "分类",
+      type : "全部分类",
+      sort : "综合排序",
+    };
+
     $scope.canLoad = true;
     $scope.start = $scope.start || 0;
 
@@ -257,9 +263,10 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
       $scope.categoryTree = data;
     });
 
-      $scope.selectType = function(type) {
-        clearData();
-             $stateParams.type  = type;
+      $scope.selectType = function(item) {
+             $scope.categoryTab.type = item.name;
+             clearData();
+             $stateParams.type  = item.type;
              setTimeout(function(){
                 $scope.loadCourseList($scope.sort);
              }, 100);
@@ -271,10 +278,13 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
                 $scope.courses = null;
       }
 
-      $scope.selectSort = function(sort) {
-        $scope.sort = sort;
+      $scope.selectSort = function(item) {
+        $scope.categoryTab.sort = item.name;
+        $scope.sort = item.type;
         clearData();
-        $scope.loadCourseList(sort);
+        setTimeout(function(){
+            $scope.loadCourseList(item.type);
+         }, 100);
       }
 
       $scope.onRefresh = function() {
@@ -283,6 +293,7 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
       }
 
       $scope.categorySelectedListener = function(category) {
+             $scope.categoryTab.category = category.name;
              clearData();
              $stateParams.type = null;
              $stateParams.categoryId  =category.id;
