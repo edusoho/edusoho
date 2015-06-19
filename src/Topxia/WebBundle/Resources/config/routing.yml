@@ -6,6 +6,10 @@ homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
 
+weixin_browser:
+    pattern: /weixin/check
+    defaults: { _controller: TopxiaWebBundle:Default:weixinCheck }
+
 live_jump:
     pattern: /live/jump
     defaults: { _controller: TopxiaWebBundle:Default:jump }
@@ -50,6 +54,9 @@ login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
     methods: [POST]
+login_bind_weixin:
+    pattern:  /login/weixinmob
+    defaults: { _controller: TopxiaWebBundle:LoginBind:weixinIndex }
 
 login_check_email:
     pattern:  /login/check/email

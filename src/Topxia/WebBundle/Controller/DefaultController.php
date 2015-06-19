@@ -218,7 +218,17 @@ class DefaultController extends BaseController
             'courses' => $courses
         ));
     }
-
+    public function weixinCheckAction(Request $request)
+    {
+        $toId = $this->getCurrentUser()->id;
+        $bind = $this->getUserService()->getBindByToIdAndType('weixinmob',$toId);
+        if ($bind['isBind']) {
+            return createJsonResponse(true);
+        }
+        else{
+            return createJsonResponse(false);
+        }
+    }
     private function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {

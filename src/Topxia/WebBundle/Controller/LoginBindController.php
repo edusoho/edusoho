@@ -123,7 +123,10 @@ class LoginBindController extends BaseController
         return $response;
     }
 
-
+    public function weixinIndexAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig');
+    }
 
     public function newSetAction(Request $request, $type)
     {
