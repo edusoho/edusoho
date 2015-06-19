@@ -740,6 +740,27 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         ));
     }
     
+    public function getCourseReviewInfo()
+    {
+        $courseId = $this->getParam("courseId", 0);
+        $course = $this->controller->getCourseService()->getCourse($courseId);
+        $total = $this->controller->getReviewService()->getCourseReviewCount($courseId);
+        $reviews = $this->controller->getReviewService()->findCourseReviews($courseId, 0, $total);
+
+        $progress = array(0, 0, 0, 0, 0);
+        foreach ($reviews as $key => $review) {
+            $rating = $review["rating"] < 1 ? 1 : $review["rating"];
+            $progress[$review["rating"] - 1] ++;
+        }
+        return array(
+            "info" => array(
+                "ratingNum" => $course["ratingNum"],
+                "rating" => $course["rating"],
+            ),
+            "progress" => $progress
+        );
+    }
+
     public function getReviews()
     {
         $courseId = $this->getParam("courseId");
@@ -1082,6 +1103,33 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
     
+    public function getUserTeachCourse()
+    {
+        $userId = $this->getParam("userId", 0);
+        $start = $this->getParam('start', 0);
+        $limit = $this->getParam('limit', 10);
+
+        $conditions = array(
+            'userId' => $userId,
+            'parentId' => 0
+        );
+
+        $total = $this->controller->getCourseService()->findUserTeachCourseCount($conditions);
+
+        $courses = $this->controller->getCourseService()->findUserTeachCourses(
+            $conditions,
+            $start,
+            $limit
+        );
+
+        return array(
+            "start"=>$start,
+            "total"=>$total,
+            "limit"=>$limit,
+            "data"=>$this->controller->filterCourses($courses)
+        );
+    }
+
     public function getLearningCourse()
     {
 

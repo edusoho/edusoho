@@ -663,7 +663,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $toId = $this->getParam('toId');
         $followingIds = array($toId);
         $result = $this->controller->getUserService()->filterFollowingIds($userId, $followingIds);
-        if(empty($result)){
+        if(!$result || empty($result)){
             return false;
         }else{
             return true;
@@ -674,9 +674,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = $this->controller->getUserByToken($this->request);
         $toId = $this->getParam('toId');
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
-        $result = $this->controller->getUserService()->follow($user['id'], $toId);
+        
+        try {
+            $result = $this->controller->getUserService()->follow($user['id'], $toId);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
 
         $message = array('userId' => $user['id'],
                 'userName' => $user['nickname'],
@@ -690,11 +695,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = $this->controller->getUserByToken($this->request);
         $toId = $this->getParam('toId');
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
 
-        $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
-
+        try {
+            $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+        
         $message = array('userId' => $user['id'],
                 'userName' => $user['nickname'],
                 'opration' => 'unfollow');
@@ -997,4 +1006,5 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         return array_values($this->filterUsersFiled($users));
     }
+
 }
