@@ -310,9 +310,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getRecommendCourses()
     {
+        $type = $this->getParam("type", "normal");
         $conditions = array(
             'status' => 'published',
-            'type' => 'normal',
+            'type' => $type,
             "recommended"=>1
         );
         return $this->getCourseByType("recommendedSeq", $conditions);
@@ -320,9 +321,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getLatestCourses()
     {
+        $type = $this->getParam("type", "normal");
         $conditions = array(
             'status' => 'published',
-            'type' => 'normal'
+            'type' => $type
         );
         return $this->getCourseByType("latest", $conditions);
     }

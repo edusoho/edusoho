@@ -575,7 +575,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $result = array('meta' => null);
         if (empty($user)) {
-            $result['meta'] = $this->createMeta(500, '用户名不能为空');
+            $result['meta'] = $this->createMeta(500, '账号不存在');
             return $result;
         }
         
