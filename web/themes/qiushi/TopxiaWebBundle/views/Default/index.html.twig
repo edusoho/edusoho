@@ -1,11 +1,11 @@
-{% extends 'TopxiaWebBundle:Default:layout.html.twig' %}
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block topbanner %}
+{% block top_content %}
   <!--首页幻灯片开始-->
 
             {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
   {% if blocks['qiushi:home_top_banner'] %}
-  <div class="container jumbotron" style="position: relative">
+  <div class="container jumbotron" style="position: relative;padding:0px!important">
 <div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:15px; z-index:999;">
           <div class="panel newcourse-list">
           <div class="cover"></div>
@@ -42,13 +42,13 @@
 
   {% endif %}
               <!--首页幻灯片结束-->
-
 {% endblock %}
 
-{% block stylesheets %}
+
+{# {% block stylesheets %}
   {{ parent() }}
   <link rel="stylesheet" media="screen" href="{{ asset('themes/autumn/css/class-autumn.css') }}" />
-{% endblock %}
+{% endblock %} #}
 
 {% block content %}
   <!--老师推荐开始-->
@@ -196,7 +196,8 @@
         </ul>
       </div>
     </div>
-
+  </div>
     <!--直播课结束-->
  {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:6})) }}
 {% endblock %}
+

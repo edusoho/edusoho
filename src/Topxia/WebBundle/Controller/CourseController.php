@@ -14,7 +14,6 @@ class CourseController extends BaseController
 {
 	public function exploreAction(Request $request, $category)
 	{
-
 		if (!empty($category)) {
 			if (ctype_digit((string) $category)) {
 				$category = $this->getCategoryService()->getCategory($category);
@@ -28,23 +27,15 @@ class CourseController extends BaseController
 		} else {
 			$category = array('id' => null);
 		}
-		$kind = $request->query->get('kind');
-		$material = $request->query->get('material');
-		$tagKind = $this->getTagService()->getTagByName($kind);
-		$tagMaterial =$this->getTagService()->getTagByName($material);
-		$sort = $request->query->get('sort', 'latest');
+		
 
-		//求是的定制修改
-		$first = $request->query->get('first');
+		$sort = $request->query->get('sort', 'latest');
 
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
 			'categoryId' => $category['id'],
-			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
-			'price' => ($sort == 'free') ? '0.00' : null,
-			'tagId' => $tagKind['id'],
-			'tagId'	=>	$tagMaterial['id'],
+			'recommended' => ($sort == 'recommendedSeq') ? 1 : null
 		);
 
 		if ($sort == 'free') {
@@ -70,9 +61,7 @@ class CourseController extends BaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-		$tagKind= $this->getTagService()->getAllTagsByType('kind');
-		$tagMaterial= $this->getTagService()->getAllTagsByType('material');
-
+		
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -80,11 +69,8 @@ class CourseController extends BaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'tagKind'	=>	$tagKind,
-			'tagMaterial'	=>	$tagMaterial,
-			'kind'	=>$kind,
-			'material' =>$material,
-			'first' => $first
+			
+
 		));
 	}
 
@@ -991,7 +977,7 @@ class CourseController extends BaseController
 
 	private function getTagService()
 	{
-		return $this->getServiceKernel()->createService('Custom:Taxonomy.TagService');
+		return $this->getServiceKernel()->createService('Taxonomy.TagService');
 	}
 
 	private function getReviewService()

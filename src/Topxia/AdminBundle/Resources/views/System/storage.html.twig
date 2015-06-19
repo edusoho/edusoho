@@ -1,0 +1,159 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+
+{% block title %}云平台设置 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'storage' %}
+{% set script_controller = 'setting/cloud' %}
+
+{% block maincontent %}
+
+<div class="page-header"><h1>云平台设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+
+  <fieldset>
+    <legend>Edusoho云平台参数</legend>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_access_key" >AccessKey</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_access_key" class="form-control" name="cloud_access_key" value="{{storageSetting.cloud_access_key}}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_secret_key" >SecretKey</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_secret_key" class="form-control" name="cloud_secret_key" value="{{storageSetting.cloud_secret_key}}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_api_server" >API地址</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_api_server" class="form-control" name="cloud_api_server" value="{{storageSetting.cloud_api_server}}">
+      </div>
+    </div>
+
+  </fieldset>
+
+
+  <fieldset>
+    <legend>云视频设置</legend>
+
+
+  </fieldset>
+
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >云视频</label>
+    </div>
+    <div class="controls col-md-8 radios">
+
+      {{ radios('upload_mode', {'local':'关闭', 'cloud':'开启'}, storageSetting.upload_mode) }}
+
+      <div class="help-block">
+        云视频，提供更快的视频播放速度，以及更低廉的网络流量价格。<br />
+        <strong class="text-info">如需使用云视频，请联系<a href="http://www.edusoho.com/service" target="_blank">Edusoho官方</a></strong>。
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="cloud_bucket" >云视频Bucket</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="cloud_bucket" >云视频转码类型</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <p>
+        <span class="form-control-static text-info">画质</span>
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality) }}
+      </p>
+
+      <p>
+        <span class="form-control-static text-info">音质</span>
+        {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality) }}
+      </p>
+
+    </div>
+  </div>
+
+
+
+  <hr>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>云视频水印</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('video_watermark', {'0':'关闭', '1':'开启'}, storageSetting.video_watermark) }}
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>设置水印图片</label>
+    </div>
+    <div class="controls col-md-8 radios">
+
+      <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img src="{{ file_url(storageSetting.video_watermark_image) }}">{% endif %}</div>
+      <button class="btn btn-default" id="cloud-video-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">上传</button>
+      <button class="btn btn-default" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}" {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>删除</button>
+
+      <div class="help-block">支持png/jpg格式图片，建议使用半透明的png图片。</div>
+      <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
+    </div>
+  </div>
+
+  <div class="row form-group" style="display:none;">
+    <div class="col-md-3 control-label">
+      <label>水印位置</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('video_watermark_position', {'topright':'右上', 'bottomright':'右下', 'topleft': '左上', 'bottomleft': '左下'}, storageSetting.video_watermark_position) }}
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>云视频指纹</label>
+    </div>  
+    <div class="controls col-md-8 radios">
+      {{ radios('video_fingerprint', {'0':'关闭', '1':'开启'}, storageSetting.video_fingerprint) }}
+      <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的昵称。</div>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

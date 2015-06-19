@@ -9,8 +9,6 @@ $twig = new Twig_Environment($loader, array(
     'cache' => false,
 ));
 
-define("INSTALL_URI", "\/install\/start-install.php");
-
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
 $step =intval(empty($_GET['step']) ? 0 : $_GET['step']);
@@ -23,8 +21,6 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
 
 function check_installed()
 {
@@ -84,7 +80,6 @@ function install_step1()
         'app/data/udisk',
         'app/data/private_files',
         'web/files',
-        'web/install',
         'app/cache',
         'app/data',
         'app/logs',
@@ -180,7 +175,6 @@ function install_step3()
         $init->initRefundSetting();
         $init->initArticleSetting();
         $init->initDefaultSetting();
-        $init->initCrontabJob();
 
         header("Location: start-install.php?step=4");
         exit();
@@ -218,18 +212,6 @@ function install_step4()
     ));
 }
 
-function install_step5()
-{
-    try {
-        $filesystem = new Filesystem();
-        $filesystem->remove(__DIR__);
-    } catch(\Exception $e) {
-
-    }
-
-    header("Location: ../app.php/");
-    exit(); 
-}
 
 /**
  * 生产Key
@@ -237,12 +219,7 @@ function install_step5()
 function install_step999()
 {
     if (empty($_COOKIE['nokey'])) {
-        
-        if (empty($_SESSION)){
-
-            session_start();
-            
-        }
+        session_start();
 
         $connection = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);
@@ -470,7 +447,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'email',
+            'register_mode'=>'opened',
             'email_activation_title' => '请激活您的{{sitename}}账号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
@@ -585,29 +562,6 @@ EOD;
             'public' => 1,
         ));
 
-        $this->getFileService()->addFileGroup(array(
-            'name' => '临时目录',
-            'code' => 'tmp',
-            'public' => 1,
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name' => '全局设置文件',
-            'code' => 'system',
-            'public' => 1,
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name' => '小组',
-            'code' => 'group',
-            'public' => 1,
-        ));
-
-        $this->getFileService()->addFileGroup(array(
-            'name' => '编辑区',
-            'code' => 'block',
-            'public' => 1,
-        ));
     }
 
     public function initPages()
@@ -668,86 +622,65 @@ EOD;
 
     public function initBlocks()
     {
-        $themeDir = realpath(__DIR__ . '/../themes/');
-
-        $metaFiles = array(
-            'system' => "{$themeDir}/block.json",
-            'default' => "{$themeDir}/default/block.json",
-            'autumn' => "{$themeDir}/autumn/block.json"
-        );
-
-        foreach ($metaFiles as $category => $file) {
-            $metas = file_get_contents($file);
-            $metas = json_decode($metas, true);
-
-            foreach ($metas as $code => $meta) {
-
-                $data = array();
-                foreach ($meta['items'] as $key => $item) {
-                    $data[$key] = $item['default'];
-                }
-
-                $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
-                if (file_exists($filename)) {
-                    $content = file_get_contents($filename);
-                    $content = preg_replace_callback('/(<img[^>]+>)/i', function($matches){
-                        preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
-                        preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
-                        $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
-                        $src = $URI . trim($src);
-                         
-                        $img = "<img src='{$src}'";
-                        if (isset($alts[1][0])) {
-                            $alt = $alts[1][0];
-                            $img .= " alt='{$alt}'>";
-                        } else {
-                            $img .= ">";
-                        }
-                         
-                        return $img;
-                    
-                    }, $content);
-                } else {
-                    $content = '';
-                }
-
-                $this->getBlockService()->createBlock(array(
-                    'title' => $meta['title'] ,
-                    'mode' => 'template' ,
-                    'templateName' => $meta['templateName'],
-                    'content' => $content,
-                    'code' => $code,
-                    'meta' => $meta,
-                    'data' => $data,
-                    'category' => $category
-                ));
-            }
-
-        }
-
-    }
-
-    public function initCrontabJob()
-    {
-        $this->getCrontabService()->createJob(array(
-            'name'=>'CancelOrderJob', 
-            'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
-            'jobParams'=>'',
-            'nextExcutedTime'=>time(),
-            'createdTime'=>time()
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'home_top_banner',
+            'title'=>'默认主题：首页头部图片轮播'
         ));
+
+        $content = <<<'EOD'
+<a href=""><img src="../assets/img/placeholder/carousel-1200x256-1.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-2.png" /></a>
+<a href="#"><img src="../assets/img/placeholder/carousel-1200x256-3.png" /></a>
+EOD;
+        $this->getBlockService()->updateContent($block['id'], $content);
+
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'autumn:home_top_banner',
+            'title'=>'清秋主题：首页头部图片轮播'
+        ));
+
+        $content = <<<'EOD'
+<div class="item active">
+    <img src="../themes/autumn/img/slide-1.jpg">
+</div>
+<div class="item">
+    <img src="../themes/autumn/img/slide-2.jpg">
+</div>
+<div class="item">
+    <img src="../themes/autumn/img/slide-3.jpg">
+</div>
+EOD;
+        $this->getBlockService()->updateContent($block['id'], $content);
+
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'live_top_banner',
+            'title'=>'直播频道首页图片轮播'
+        ));
+
+        $content = <<<'EOD'
+<a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
+<a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
+EOD;
+        $this->getBlockService()->updateContent($block['id'], $content);
+
+
+        $block = $this->getBlockService()->createBlock(array(
+            'code'=>'bill_banner',
+            'title'=>'我的账户Banner'
+        ));
+
+        $content = <<<'EOD'
+<br><div class="col-md-12">  
+<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" style="width: 100%;"/></a>
+<br><br></div>
+EOD;
+        $this->getBlockService()->updateContent($block['id'], $content);
+
     }
 
     public function initLockFile()
     {
         file_put_contents(__DIR__ . '/../../app/data/install.lock', '');
-    }
-
-    private function getCrontabService()
-    {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 
     private function getUserService()

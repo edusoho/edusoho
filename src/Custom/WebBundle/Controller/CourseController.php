@@ -34,20 +34,26 @@ class CourseController extends BaseController
 		$tagMaterial =$this->getTagService()->getTagByName($material);
 		$sort = $request->query->get('sort', 'latest');
 		$first = $request->query->get('first');
+		$tagIds = array();
+		if($kind){
+			$tagIds[] = $tagKind['id'];
+		}
+		if($material){
+			$tagIds[] = $tagMaterial['id'];
+		}
+				
 		$conditions = array(
 			'status' => 'published',
 			'type' => 'normal',
 			'categoryId' => $category['id'],
 			'recommended' => ($sort == 'recommendedSeq') ? 1 : null,
 			'price' => ($sort == 'free') ? '0.00' : null,
-			'tagId' => $tagKind['id'],
-			'tagId'	=>	$tagMaterial['id'],
+			'tagIds' => $tagIds,
 		);
-
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions)
-			, 10
+			, 12
 		);
 
 		$courses = $this->getCourseService()->searchCourses(

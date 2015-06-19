@@ -7,6 +7,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
     {%- block title -%}
@@ -103,12 +104,12 @@
             <button type="submit" class="btn"><span class="fa fa-search"></span></button>
           </div>
         </form>
-
+	
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       
       <ul class="nav navbar-nav navbar-right user-menu  hidden-xs">
-        <li><a href="tel:4008006219"><i class="fa fa-phone"></i>400-800-6219</a></li>
+<li><a href="tel:4008006219"><i class="fa fa-phone" style="margin-right:5px;"></i>400-800-6219</a></li>
       	{% if app.user %}
 	        <li><a href="{{ path('my') }}">我的课程</a></li>
 	        <li class="dropdown">
@@ -116,10 +117,12 @@
 	            class="img-circle" src="{{ file_path(app.user.smallAvatar, 'avatar.png') }}" alt=""/></a>
 	          <ul class="dropdown-menu text-center" role="menu">
 	            <li><a href="{{ path('settings') }}">个人中心</a></li>
-
+				<li><a href="{{ path('my_bill') }}">账户中心</a></li>
 	            <li><a href="{{ path('message') }}">消息</a></li>
 	            <li><a href="{{ path('notification') }}">通知</a></li>
-	            	            {% if is_granted('ROLE_BACKEND') %}
+	            
+	            
+	            {% if is_granted('ROLE_BACKEND') %}
                     <li><a href="{{ path('admin') }}">管理后台</a></li>
                    
                 {% endif %}
@@ -198,9 +201,13 @@
     <div class="copyright hidden-sm hidden-xs" style="height:150px">
 
       {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-      <div style="width: 115px;float: right;margin-top: 10px;margin-right: 20px;">
-      <img src="http://www.qswangxiao.com/files/system/webchat.jpg?5.2.5"  class="img-responsive" style="position: initial;">
+
+            <div style="width: 115px;float: right;margin-top: 10px;margin-right: 20px;">
+      <img src="http://www.qswangxiao.com/files/system/webchat.jpg?5.2.5" width="115" height="115" class="img-responsive" style="position: initial;">
     <p  style="position: initial;">关注微信公众号</p>
+  </div>
+  <div style="float: right;margin-top:10px;margin-right:50px;">
+<img src="/themes/qiushi/img/web-bottom.jpg" height="130">
   </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
@@ -212,7 +219,6 @@
     </div>
   </div>
 </div>
-
 <!--页面底部结束--> 
   {% endblock %}
 

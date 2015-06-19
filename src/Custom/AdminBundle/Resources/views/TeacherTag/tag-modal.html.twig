@@ -7,11 +7,17 @@
 {% block body %}
   <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_teacher_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_teacher_tag_create') }}{% endif %}" method="post">
     <div class="form-group">
+      <label class="col-md-3 control-label" for="tag-name-field">标签类别</label>
+      <div class="col-md-6 controls">
+        <select class="form-control" name="type">
+            {{ select_options({'grade': '年级标签', 'subject':'学科标签'}, 'grade') }}
+          </select>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-md-3 control-label" for="tag-name-field">标签名称</label>
       <div class="col-md-6 controls">
         <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_teacher_tag_checkname', {exclude:tag.name}) }}">
-        <input type="hidden"  name="type" value="{{ tag.type }}">
-
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
