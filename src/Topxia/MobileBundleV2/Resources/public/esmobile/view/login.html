@@ -12,18 +12,18 @@
                 <input type="text" placeholder="手机号/邮箱/昵称" ng-model="user.username">
                 <a class="ui-icon-close" ng-show="user.username.length > 0" ng-click="user.username = '' "></a>
             </div>
-            <div class="ui-form-item ui-form-item-pure ui-border-b">
+            <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
                 <input type="password" placeholder="密码" ng-model="user.password">
                 <a class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
             </div>
         </form>
-        <div class="ui-btn-wrap sign-padding">
+        <div class="ui-btn-wrap padding-none margin-t">
             <button class="ui-btn-lg btn-green" ng-click="login(user)">
                 登 录
             </button>
         </div>
     </div>
-    <div style="padding:32px;margin-top:8px;text-align: center;">
+    <div style="margin-top:16px;text-align: center;">
       
         <div class="shard-label">
           <hr/>

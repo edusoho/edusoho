@@ -72,7 +72,7 @@
 			    </h2>
 			    <div class="ui-panel-content">
 			    	<ul class="ui-list">  
-			    		<li class="ui-border-t" ui-sref="userInfo({ userId : course.teachers[0].id })">
+			    		<li class="ui-border-t" ng-if="course.teachers[0]" ui-sref="userInfo({ userId : course.teachers[0].id })">
 				        <div class="ui-avatar-s">
 				            <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
 				        </div>

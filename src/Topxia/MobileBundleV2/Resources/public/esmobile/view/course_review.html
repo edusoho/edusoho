@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="top-header ui-course ui-course-review ui-scroller" ui-scroll data="reviews" on-infinite="loadMore()">
+<div class="top-header ui-course ui-course-review">
 	<ul class="ui-grid-halve ui-border-b">
 		<li style="width:40%;">
 			<div class="ui-list-info rating-body">
@@ -30,30 +30,32 @@
 		</li>
 	</ul>
 
-	<div class="ui-panel-content ui-review">
-	    	<ul class="ui-list" style="padding : 16px;">  
-	    		<li class="ui-border-t" ng-repeat="review in reviews">
-			        <div class="ui-avatar-s">
-			            <img ng-src="{{ reviews.avatar | coverAvatar }}" />
-			        </div>
-			        <div class="ui-list-info">
-			            <h4 class="ui-nowrap ui-review-header">
-			            	{{ review.user.nickname }}
-			            	<span class="ui-review-rating">
-			            		<i class="iconfont" ng-class="review.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in 5 | array" ></i>
-				      	</span>
-			            </h4>
-			            <p class="ui-nowrap">{{ review.content }}</p>
-			        </div>
-			</li>
-		</ul>
+	<div class="ui-scroller" ui-scroll data="reviews" on-infinite="loadMore()">
+		<div class="ui-panel-content ui-review">
+		    	<ul class="ui-list" style="padding : 16px;">  
+		    		<li class="ui-border-t" ng-repeat="review in reviews">
+				        <div class="ui-avatar-s">
+				            <img ng-src="{{ reviews.avatar | coverAvatar }}" />
+				        </div>
+				        <div class="ui-list-info">
+				            <h4 class="ui-nowrap ui-review-header">
+				            	{{ review.user.nickname }}
+				            	<span class="ui-review-rating">
+				            		<i class="iconfont" ng-class="review.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in 5 | array" ></i>
+					      	</span>
+				            </h4>
+				            <p class="ui-nowrap">{{ review.content }}</p>
+				        </div>
+				</li>
+			</ul>
+		</div>
+
+		<list-empty-view data="reviews" title="暂时没有评价">
+	      	</list-empty-view>
+
+	      	<div class="ui-loading-wrap" ng-show="canLoad">
+	       	 	<p>正在加载中...</p>
+	        		<i class="ui-loading"></i>
+	      	</div>
 	</div>
-
-	<list-empty-view data="reviews" title="暂时没有评价">
-      </list-empty-view>
-
-      <div class="ui-loading-wrap" ng-show="canLoad">
-        <p>正在加载中...</p>
-        <i class="ui-loading"></i>
-      </div>
 </div>
