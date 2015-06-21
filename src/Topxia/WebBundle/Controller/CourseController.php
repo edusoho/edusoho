@@ -230,6 +230,18 @@ class CourseController extends CourseBaseController
 
 	}
 
+	public function keywordsAction($course)
+	{
+		$category = $this->getCategoryService()->getCategory($course['categoryId']);
+    	$tags = $this->getTagService()->findTagsByIds($course['tags']);
+
+    	return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
+			'category' => $category,
+			'tags' => $tags,
+			'course' => $course
+		));
+	}
+
 	private function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
