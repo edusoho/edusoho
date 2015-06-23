@@ -293,26 +293,26 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $allowedTime = 120;
 
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-                return $this->createErrorResponse('', "请等待120秒再申请");
+                return $this->createErrorResponse('send_frequently', "请等待120秒再申请");
             }
 
             if (!$this->checkPhoneNum($phoneNumber)) {
-                return $this->createErrorResponse('', "手机号格式错误");
+                return $this->createErrorResponse('phone_invalid', "手机号格式错误");
             }
 
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
-                return $this->createErrorResponse('', "该手机号码已被其他用户绑定");
+                return $this->createErrorResponse('phone_exist', "该手机号码已被其他用户绑定");
             }
             
             $smsCode = $this->generateSmsCode();
             try {
                 $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
                 if (isset($result['error'])) {
-                    return $this->createErrorResponse('', "发送失败, {$result['error']}");
+                    return $this->createErrorResponse('send_error', "发送失败, {$result['error']}");
                 }
             } catch (\RuntimeException $e) {
                 $message = $e->getMessage();
-                return $this->createErrorResponse('', "发送失败, {$message}");
+                return $this->createErrorResponse('send_error', "发送失败, {$message}");
             }
 
             $result['to'] = $phoneNumber;
@@ -328,7 +328,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'sms_code' => $smsCode,
                 'sms_last_time' => $currentTime
             ));
-            return array('msg' => "发送成功");
+            return array('code'=>'200', 'msg' => "发送成功");
             //return $this->createMetaAndData($smsCode, 200, "发送成功");
         }
         return $this->createErrorResponse('', "GET method");
