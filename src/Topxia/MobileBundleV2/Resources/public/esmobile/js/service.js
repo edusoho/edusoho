@@ -31,6 +31,10 @@ service('CategoryService', ['httpService', function(httpService) {
 	}
 }]).
 service('LessonService', ['httpService', function(httpService) {
+	
+	this.getLesson = function(callback) {
+		httpService.simpleGet("/mapi_v2/Lesson/getLesson", arguments);
+	}
 
 	this.getCourseLessons = function(params, callback) {
 		httpService.get({

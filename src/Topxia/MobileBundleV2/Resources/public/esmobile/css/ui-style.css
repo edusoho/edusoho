@@ -1368,6 +1368,19 @@ a {
 }
 /** ui-details **/
 
+/** ui-lesson **/
+
+.ui-lesson .lesson-content img{
+  width: 100%;
+}
+
+.ui-lesson .lesson-content {
+  padding: 16px;
+  font-size: 16px;
+}
+
+/** ui-lesson **/
+
 /** ui-label **/
 .ui-label {
   font-size: 11px;

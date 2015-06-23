@@ -139,6 +139,20 @@ directive('back', function($window, $state) {
     }
   }
 }).
+directive('ngHtml', function($window, $state) {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+                  scope.$watch(attributes.ngHtml, function(newValue) {
+                    element.html(newValue);
+                  });
+                }
+            };
+    }
+  }
+}).
 directive('uiBar', function($window) {
   return {
     restrict: 'A',

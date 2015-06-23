@@ -1,35 +1,3 @@
-<!-- <ion-view>
-	<ion-content class="padding content-padding mygroup-card">
-
-		<div class="mygroup-content">
-		          <div class="list">
-			          	 <div class="card" ng-repeat="question in threads">
-			          	 	<a href="#/question/{{ question.courseId }}/{{ question.id }}">
-					  <div class="item item-text-wrap">
-					    {{ question.title }}
-					  </div>
-					  <div class="item item-body">
-					    {{ question.latestPostContent | blockStr }}
-					  </div>
-					  <div class="item tabs tabs-secondary tabs-icon-left">
-					    <a class="tab-item left" href="#">{{ question.courseTitle }}</a>
-					    <a class="tab-item right" href="#">
-					       {{ question.latestPostTime | coverLearnTime }}  {{ question.postNum }}回复
-					    </a>
-					  </div>
-					</a>
-				</div>
-		              </a>
-		          </div>
-		</div>
-
-		<ion-infinite-scroll
-		        ng-if="canLoadMore('discussion')"
-		        on-infinite="loadMore('discussion')"
-		        distance="1%">
-		</ion-infinite-scroll>
-	</ion-content>
-</ion-view> -->
 <div ng-controller="MyGroupThreadController">
 
 	<div class="ui-scroller" ui-scroll data="data" on-infinite="loadMore()">

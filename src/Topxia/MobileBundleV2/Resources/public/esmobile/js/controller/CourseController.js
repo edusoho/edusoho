@@ -221,40 +221,21 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
       window.location.reload();
     });
 
-    $scope.onTabSelected = function(index) {
-      $ionicScrollDelegate.$getByHandle("mainScroll").resize();
-      
-      if ($scope.showTopTab) {
-        var topSelectedIndex = $ionicTabsDelegate.$getByHandle("topTabHandle").selectedIndex();
-        $scope.selectedIndex = topSelectedIndex;
-        $ionicTabsDelegate.$getByHandle("tabHandle").select(topSelectedIndex);
-      } else {
-        var selectedIndex = $ionicTabsDelegate.$getByHandle("tabHandle").selectedIndex();
-        $scope.selectedIndex = selectedIndex;
-        $ionicTabsDelegate.$getByHandle("topTabHandle").select(selectedIndex);
-      }
-      
-    }
-
-    var content, headBody;
-
-    function topTabChange(scrollTop) {
-      if (headBody == null) {
-        content  =$ionicScrollDelegate.$getByHandle("mainScroll").getScrollView().__content;
-        headBody = content.querySelector('.course-head-body');
+    $scope.learnLesson = function(lesson) {
+      if (! $scope.member && 1 != lesson.free) {
+        alert("请先加入学习");
+        return;
       }
 
-      $scope.$apply(function() {
-        $scope.showTopTab = scrollTop > headBody.offsetHeight;
-      });
-    }
+      if ($scope.platform.native) {
+        
+        return;
+      }
 
-    $scope.contentMove = function(scrollTop, scrollLeft) {
-      topTabChange(scrollTop);
-    }
-
-    $scope.scrollComplete = function() {
-      var scrollTop = $ionicScrollDelegate.$getByHandle("mainScroll").getScrollView().__scrollTop
-      topTabChange(scrollTop);
+      if ("text" != lesson.type) {
+        alert("请在客户端学习非图文课时");
+        return;
+      }
+      $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
     }
 }

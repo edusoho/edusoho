@@ -36,7 +36,7 @@
 	    <ul class="ui-tab-content tab-display">
 	        <li>
 	            <ul class="ui-list ui-list-lesson ui-border-b">  
-			  <li ng-class="lesson.type" ng-repeat="lesson in lessons">
+			  <li ng-class="lesson.type" ng-repeat="lesson in lessons" ng-click="learnLesson(lesson)">
 			  	  <div class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
 			            <i class="iconfont icon-jikediancanicon11"></i>
 			        </div>

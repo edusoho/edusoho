@@ -351,13 +351,23 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 }
               }
             });
+
+            $stateProvider.state('lesson', {
+              url: "/lesson/:courseId/:lessonId",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/lesson.html",
+                  controller : LessonController
+                }
+              }
+            });
 }]);
 
 app.run(["applicationProvider", "$rootScope", '$timeout',
   function(applicationProvider, $rootScope, $timeout) {
   var browser={
     v: (function(){
-        var u = navigator.userAgent, app = navigator.appVersion, p = navigator.platform;
+        var u = navigator.userAgent, p = navigator.platform;
         return {
             trident: u.indexOf('Trident') > -1, //IE内核
             presto: u.indexOf('Presto') > -1, //opera内核

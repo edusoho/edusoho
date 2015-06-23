@@ -27,15 +27,18 @@ appFactory.factory('AppUtil', ['$rootScope', '$timeout', function($rootScope, $t
 				callback(res);
 			});
 		},
-		createModal : function($scope, template, modalInitFunc) {
+		createDialog : function(title, template, btns, modalInitFunc) {
 			
-			var modal = '<div class="ui-dialog full">'
-				+ '<div class="ui-dialog-cnt">' 
-				+ '<div class="ui-dialog-bd">'
-				+ template
-				+ '<div></div></div>';
+			var dia=$.dialog({
+			        title: title,
+			        content: template,
+			        button: btns || ["确认"]
+			});
 
-			angular.element(document.body).append(modal);
+			dia.on("dialog:action",function(e){
+			       modalInitFunc(e.index);
+			       dia.dialog("hide");
+			});
 		},
 		inArray : function(elem, arr, i) {
 			    var len;
