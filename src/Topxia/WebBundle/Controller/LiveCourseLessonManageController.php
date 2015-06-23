@@ -44,12 +44,12 @@ class LiveCourseLessonManageController extends BaseController
 				'liveLogoUrl' => $liveLogoUrl
 			));
 
-			if (empty($live) || isset($live['error'])) {
-				throw new \RuntimeException('创建直播教室失败，请重试！');
-			}
+			// if (empty($live) || isset($live['error'])) {
+			// 	throw new \RuntimeException('创建直播教室失败，请重试！');
+			// }
 
-			$liveLesson['mediaId'] = $live['id'];
-			$liveLesson['liveProvider'] = $live['provider'];
+			// $liveLesson['mediaId'] = $live['id'];
+			// $liveLesson['liveProvider'] = $live['provider'];
 			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
 
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
