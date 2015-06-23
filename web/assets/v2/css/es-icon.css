@@ -39,6 +39,7 @@
 .es-icon-keyboardarrowdown:before { content: "\e663"; }
 .es-icon-keyboardarrowup:before { content: "\e664"; }
 .es-icon-language:before { content: "\e65b"; }
+.es-icon-livehelp:before { content: "\e680"; }
 .es-icon-locallibrary:before { content: "\e66e"; }
 .es-icon-loyalty:before { content: "\e65c"; }
 .es-icon-morehoriz:before { content: "\e665"; }
@@ -139,7 +140,4 @@
 .es-icon-web:before { content: "\e67c"; }
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
-.es-icon-music:before { content: "\e673"; }
-.es-icon-flash:before { content: "\e675"; }
-.es-icon-ppt:before { content: "\e674"; }
-.es-icon-exam:before { content: "\e677"; }
+.es-icon-icattachfileblack24px:before { content: "\e681"; }
