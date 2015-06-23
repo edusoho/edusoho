@@ -245,19 +245,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function logout()
     {
         $token = $this->controller->getToken($this->request);
-        $result = array('data' => null);
-        if (!empty($token)) {
+        if (! empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
-            $this->log("user_logout", "用户退出",  array(
+            $this->log("user_logout", "用户退出", array(
                 "userToken" => $user)
             );
-        }else{
-            $result['meta'] = $this->createMeta(500, "您尚未登录");
-            return $result;
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
-        $result['meta'] = $this->createMeta(200, "退出成功");
-        return $result;
+        return true;
     }
 
     private function filterUserProfile($userProfile)
@@ -284,7 +279,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $phoneNumber = $this->getParam('phoneNumber');
         if ($this->request->getMethod() == 'POST') {
             if ($this->getCloudSmsKey('sms_enabled') != '1') {
-                return $this->createMetaAndData(null, 500, '短信服务被管理员关闭了');
+                return $this->createErrorResponse('', "短信服务被管理员关闭了");
             }
 
             $currentUser = $this->getUserService()->getCurrentUser();
@@ -298,26 +293,26 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $allowedTime = 120;
 
             if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-                return $this->createMetaAndData(null, 500, "请等待120秒再申请");
+                return $this->createErrorResponse('send_frequently', "请等待120秒再申请");
             }
 
             if (!$this->checkPhoneNum($phoneNumber)) {
-                return $this->createMetaAndData(null, 500, "手机号格式错误");
+                return $this->createErrorResponse('phone_invalid', "手机号格式错误");
             }
 
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
-                return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
+                return $this->createErrorResponse('phone_exist', "该手机号码已被其他用户绑定");
             }
             
             $smsCode = $this->generateSmsCode();
             try {
                 $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
                 if (isset($result['error'])) {
-                    return $this->createMetaAndData(null, 500, "发送失败, {$result['error']}");
+                    return $this->createErrorResponse('send_error', "发送失败, {$result['error']}");
                 }
             } catch (\RuntimeException $e) {
                 $message = $e->getMessage();
-                return $this->createMetaAndData(null, 500, "发送失败, {$message}");
+                return $this->createErrorResponse('send_error', "发送失败, {$message}");
             }
 
             $result['to'] = $phoneNumber;
@@ -333,13 +328,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'sms_code' => $smsCode,
                 'sms_last_time' => $currentTime
             ));
-
-            
-
-            return $this->createMetaAndData($smsCode, 200, "发送成功");
+            return array('code'=>'200', 'msg' => "发送成功");
+            //return $this->createMetaAndData($smsCode, 200, "发送成功");
         }
-
-        return $this->createMetaAndData(null, 500, "GET method");
+        return $this->createErrorResponse('', "GET method");
     }
 
     private function generateSmsCode($length = 6)
@@ -400,8 +392,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $auth = $this->getSettingService()->get('auth', array());
         if (isset($auth['register_mode']) && $auth['register_mode'] == 'closed') {
-            $result['meta'] = $this->createMeta(500, '系统暂时关闭注册，请联系管理员');
-            return $result;
+            return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');;
         }
 
         if (!$nickname) {
@@ -411,7 +402,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         } else {
             if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-                return $this->createMetaAndData(null, 500, '该昵称已被注册');
+                return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
             }
         }
 
@@ -419,13 +410,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         if (!empty($email)) {
             if (!SimpleValidator::email($email)) {
-                return $this->createMetaAndData(null, 500, '邮箱地址格式不正确');
+                return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
             }
             if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
-                return $this->createMetaAndData(null, 500, '该邮箱已被注册');
+                return $this->createErrorResponse('email_exist', '该邮箱已被注册');
             }
             if (!SimpleValidator::password($password)) {
-                return $this->createMetaAndData(null, 500, '密码格式不正确');
+                return $this->createErrorResponse('password_invalid', '密码格式不正确');
             }
             $user = $this->controller->getAuthService()->register(array(
                 'emailOrMobile' => $email,
@@ -434,10 +425,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             ));
         } else {
             if (!$this->checkPhoneNum($phoneNumber)) {
-                return $this->createMetaAndData(null, 500, '手机号格式不正确');
+                return $this->createErrorResponse('phone_invalid', '手机号格式不正确');
             }
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
-                return $this->createMetaAndData(null, 500, "该手机号码已被其他用户绑定");
+                return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
             }
             if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
                 &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
@@ -451,7 +442,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                     ));
                     $this->clearSmsSession($this->request, 'sms_registration');
                 } else {
-                    return $this->createMetaAndData(null, 500, '手机短信验证错误，请重新注册');
+                    return $this->createErrorResponse('sms_invalid', '手机短信验证错误，请重新注册');
                 }
             }
         }
@@ -464,9 +455,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->createToken($user, $this->request);
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
-        return  $this->createMetaAndData(array(
+        return array (
             'user' => $this->controller->filterUser($user),
-            'token' => $token), 200, '注册成功');
+            'token' => $token
+        );
     }
 
     private function smsCheck($request, $mobileInfo, $scenario)
@@ -572,16 +564,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
         $user  = $this->loadUserByUsername($this->request, $username);
-
-        $result = array('meta' => null);
         if (empty($user)) {
-            $result['meta'] = $this->createMeta(500, '账号不存在');
-            return $result;
+            return $this->createErrorResponse('username_error', '用户帐号不存在');
         }
         
         if (!$this->controller->getUserService()->verifyPassword($user['id'], $password)) {
-            $result['meta'] = $this->createMeta(500, '帐号密码不正确');
-            return $result;
+            return $this->createErrorResponse('password_error', '帐号密码不正确');
         }
         
         $token = $this->controller->createToken($user, $this->request);
@@ -594,9 +582,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             "username" => $username
         ));
 
-        return $this->createMetaAndData(array(
-            'user' => $this->controller->filterUser($user),
-            'token' => $token), 200, "登录成功");
+        $result = array(
+            'token' => $token,
+            'user' => $this->controller->filterUser($user)
+        );
+        
+        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
+            "username" => $username
+        ));
+
+        return $result;
     }
     
     private function loadUserByUsername($request, $username)
