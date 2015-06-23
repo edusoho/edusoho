@@ -125,6 +125,10 @@ directive('back', function($window, $state) {
 
                   element.on("click", function(){
                     if (attributes["back"] == "go") {
+                      if (scope.platform.native && $window.history.length <= 1) {
+                        esNativeCore.closeWebView();
+                        return;
+                      }
                       $window.history.back();
                       return;
                     }
@@ -166,18 +170,20 @@ directive('uiBar', function($window) {
     }
   }
 }).
-directive('ngClick', function($parse) {
+directive('ngTap', function($parse) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
-            return function(scope, element, clickExpr) {
+            return function ngEventHandler(scope, element, attr) {
+
+                  var clickExpr = attr.ngTap;
                   var clickHandler = angular.isFunction(clickExpr) ?
                     clickExpr :
-                    $parse(clickExpr.ngClick);
-
+                    $parse(clickExpr);
+                    
                   $(element[0]).on("tap",function(){
-                    scope.$apply(function() {
-                      clickHandler(scope, {$event: (event)});
+                    scope.$evalAsync(function() {
+                      clickHandler(scope, {$event: (event) });
                     });
                   });
 

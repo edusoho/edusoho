@@ -1,5 +1,5 @@
-app.controller('CourseListController', ['$scope', '$stateParams', 'AppUtil', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
-function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseService, CategoryService)
+app.controller('CourseListController', ['$scope', '$stateParams', '$state', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
+function CourseListController($scope, $stateParams, $state, CourseUtil, CourseService, CategoryService)
 {
     $scope.categoryTab = {
       category : "分类",
@@ -23,34 +23,34 @@ function CourseListController($scope, $stateParams, AppUtil, CourseUtil, CourseS
 
       $scope.loadCourseList = function(sort) {
              $scope.showLoad();
-        CourseService.searchCourse({
-          limit : 10,
-        start: $scope.start,
-        categoryId : $stateParams.categoryId,
-        sort : sort,
-                   type : $stateParams.type
-        }, function(data) {
-                  $scope.hideLoad();
-                  var length  = data ? data.data.length : 0;
-          if (!data || length == 0 || length < 10) {
-              $scope.canLoad = false;
-            }
+              CourseService.searchCourse({
+                limit : 10,
+                start: $scope.start,
+                categoryId : $stateParams.categoryId,
+                sort : sort,
+                type : $stateParams.type
+              }, function(data) {
+                        $scope.hideLoad();
+                        var length  = data ? data.data.length : 0;
+                        if (!data || length == 0 || length < 10) {
+                            $scope.canLoad = false;
+                        }
 
-                  $scope.courses = $scope.courses || [];
-                  for (var i = 0; i < length; i++) {
-                    $scope.courses.push(data.data[i]);
-                  };
+                        $scope.courses = $scope.courses || [];
+                        for (var i = 0; i < length; i++) {
+                          $scope.courses.push(data.data[i]);
+                        };
 
-            $scope.start += data.limit;
-        });
+                        $scope.start += data.limit;
+              });
       }
 
       $scope.courseListSorts = CourseUtil.getCourseListSorts();
       $scope.courseListTypes = CourseUtil.getCourseListTypes();
 
       CategoryService.getCategorieTree(function(data) {
-      $scope.categoryTree = data;
-    });
+        $scope.categoryTree = data;
+      });
 
       $scope.selectType = function(item) {
              $scope.$emit("closeTab", {});

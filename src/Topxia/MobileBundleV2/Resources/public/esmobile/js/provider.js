@@ -2,7 +2,7 @@ var appProvider= angular.module('AppProvider', []);
 appProvider.provider('applicationProvider', function() {
 
 	var self = this;
-	this.$get = function(localStore, $rootScope) {
+	this.$get = function(localStore, $rootScope, $q) {
 		var application = {
 			host : null,
 			user : null,
@@ -14,9 +14,18 @@ appProvider.provider('applicationProvider', function() {
 		}
 
 		application.init = function(host) {
+			application.setHost(host);
+			if ($rootScope.platform.native) {
+				var promise = esNativeCore.getUserToken($q);
+				promise.then(function(data) {
+					application.user = angular.fromJson(data);
+					application.token = data.token;
+      					application.updateScope($rootScope);
+				});
+				return;
+			}
 			application.user = angular.fromJson(localStore.get("user"));
 			application.token = localStore.get("token");
-			application.setHost(host);
 		}
 
 		application.clearUser = function() {

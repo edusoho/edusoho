@@ -18,6 +18,17 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         },
         openCourseChat : function(data){
             exec(null, null, "ESNativeCore", "Course", [data]);
+        },
+        getUserToken : function($q){
+            var deferred = $q.defer(); 
+            exec(function(data) {
+                deferred.resolve(data);
+            }, null, "ESNativeCore", "getUserToken", []);
+
+            return deferred.promise;
+        },
+        closeWebView : function(){
+            exec(null, null, "ESNativeCore", "closeWebView", []);
         }
     };
 });

@@ -1,6 +1,6 @@
-app.controller('FoundCourseController', ['$scope', 'SchoolService', FoundCourseController]);
+app.controller('FoundCourseController', ['$scope', 'SchoolService', '$state', FoundCourseController]);
 
-function FoundCourseController($scope, SchoolService)
+function FoundCourseController($scope, SchoolService, $state)
 {
 	console.log("FoundCourseController");
 	SchoolService.getSchoolBanner(function(data) {
@@ -17,6 +17,15 @@ function FoundCourseController($scope, SchoolService)
 	SchoolService.getLatestCourses({ limit : 3 }, function(data) {
 		$scope.latestCourses = data.data;
 	});
+
+	$scope.showCourseList = function() {
+        if ($scope.platform.native) {
+          esNativeCore.openWebView(app.host + "/mapi_v2/mobileApp#/courselist/");
+          return;
+        }
+
+        $state.go("courseList", {} );
+      }
 }
 
 app.controller('FoundLiveController', ['$scope', 'SchoolService', FoundLiveController]);

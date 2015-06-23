@@ -82,9 +82,10 @@ a {
 }
 
 
-.tab-top .ui-tab-content .ui-scroller {
+.tab-top .ui-scroller, .tab-top .ui-tab-content .ui-scroller {
   padding-top: 90px;
 }
+
 /** ui-scroll */
 
 /** ui-modal **/

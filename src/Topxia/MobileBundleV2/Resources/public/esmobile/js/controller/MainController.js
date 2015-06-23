@@ -31,7 +31,7 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
     		$scope.openModal = function($event) {
     			var dialog = $(".ui-dialog");
 			dialog.dialog("show");
-			$(".ui-dialog-bg").tap(function(e) {
+			$(".ui-dialog-bg").click(function(e) {
 				dialog.dialog("hide");
 			});
 		};

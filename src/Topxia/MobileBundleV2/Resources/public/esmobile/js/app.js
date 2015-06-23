@@ -391,7 +391,6 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
 
   $rootScope.platform = browser.v;
   $rootScope.showLoad = function(template) {
-    console.log("load");
     $rootScope.loadPop = $.loading({
         content: "加载中...",
     });
@@ -423,9 +422,16 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
   };
 
   app.host = window.location.origin;
-  applicationProvider.init(app.host);
-  applicationProvider.updateScope($rootScope);
-
   $rootScope.stateParams = {};
   angular.$client = {};
+
+  if ($rootScope.platform.native) {
+    document.addEventListener("deviceready", function() {
+      applicationProvider.init(app.host);
+    });
+    return;
+  }
+
+  applicationProvider.init(app.host);
+  applicationProvider.updateScope($rootScope);
 }]);
