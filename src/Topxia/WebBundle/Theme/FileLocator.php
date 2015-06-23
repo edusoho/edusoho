@@ -146,12 +146,13 @@ class FileLocator extends BaseFileLocator
 
     protected function getOverwriteBundle($currentBundleName)
     {
-        $map = $this->kernel->getContainer()->getParameterBag()->get('template_overwrite_map');
-        if ($map && $overwriteBundleName = !empty($map[$currentBundleName])) {
-            return $this->kernel->getBundle($map[$currentBundleName], true);
-        } else {
-            return null;
+        if ($this->kernel->getContainer()->getParameterBag()->has('template_overwrite_map')) {
+            $map = $this->kernel->getContainer()->getParameterBag()->get('template_overwrite_map');
+            if (array_key_exists($currentBundleName, $map)) {
+                return $this->kernel->getBundle($map[$currentBundleName], true);
+            }
         }
+        return null;
     }
 
 }
