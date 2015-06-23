@@ -17,7 +17,6 @@ a {
   top: 90px;
   position: absolute;
   width: 100%;
-  padding-bottom: 44px;
 }
 
 .top-header {
@@ -564,8 +563,15 @@ a {
     margin-bottom: 0;
 }
 
+.sign .margin-t {
+  margin-top: 18px;
+}
+
+.sign .ui-form {
+  padding: 18px;
+}
+
 .sign .ui-form .ui-form-item {
-  margin: 18px;
   border: 1px solid #e0e0e0;
 }
 
@@ -591,8 +597,8 @@ a {
   border-color: green;
 }
 
-.sign-padding {
-  padding: 16px;
+.sign .padding-none {
+  padding: 0;
 }
 
 .sign-padding .button{
@@ -1361,6 +1367,19 @@ a {
   color: #999;
 }
 /** ui-details **/
+
+/** ui-lesson **/
+
+.ui-lesson .lesson-content img{
+  width: 100%;
+}
+
+.ui-lesson .lesson-content {
+  padding: 16px;
+  font-size: 16px;
+}
+
+/** ui-lesson **/
 
 /** ui-label **/
 .ui-label {

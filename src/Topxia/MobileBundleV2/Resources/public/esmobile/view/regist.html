@@ -19,15 +19,15 @@
 		            <button type="button" class="ui-border-l ui-btn-code" ng-click="sendSmsCode(user.phone)">发送验证码</button>
 		            <a class="ui-icon-close" ng-show="user.phone.length > 0" ng-click="user.phone = '' "></a>
 		      </div>
-		        <div class="ui-form-item ui-form-item-pure ui-border-b">
+		        <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
 		            <input type="password" placeholder="验证码" ng-model="user.code">
 		            <a href="#" class="ui-icon-close" ng-show="user.code.length > 0" ng-click="user.code = '' "></a>
 		        </div>
-		         <div class="ui-form-item ui-form-item-pure ui-border-b">
+		         <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
 		            <input type="password" placeholder="密码" ng-model="user.password">
 		            <a href="#" class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
 		        </div>
-		         <div class="ui-btn-wrap sign-padding">
+		         <div class="ui-btn-wrap padding-none margin-t">
 		            <button class="ui-btn-lg btn-green" ng-click="registWithPhone(user)">
 		                注 册
 		            </button>
@@ -40,11 +40,11 @@
 		            <input type="email" placeholder="邮箱" ng-model="user.email">
 		            <a href="#" class="ui-icon-close" ng-show="user.email.length > 0" ng-click="user.email = '' "></a>
 		        </div>
-		         <div class="ui-form-item ui-form-item-pure ui-border-b">
+		         <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
 		            <input type="password" placeholder="密码" ng-model="user.password">
 		            <a href="#" class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
 		        </div>
-		         <div class="ui-btn-wrap sign-padding">
+		         <div class="ui-btn-wrap padding-none margin-t">
 		            <button class="ui-btn-lg btn-green" ng-click="registWithEmail(user)">
 		                注 册
 		            </button>
