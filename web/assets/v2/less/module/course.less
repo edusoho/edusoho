@@ -10,7 +10,10 @@
       -webkit-transform: translateY(-5px);
       -moz-transform: translateY(-5px);
       -o-transform: translateY(-5px);
-      .box-shadow(0 6px 15px rgba(0, 0, 0, 0.08));
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+      -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+      -o-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
       .es-transition;
     }
     .course-info {
@@ -27,9 +30,9 @@
         top: 0;
         width: 68px;
         height: 68px;
-        background: url("../img/tag_discount.png");
+        background: url("@{img-src}tag_discount.png");
         &.free {
-          background: url("../img/tag_limitfree.png");
+          background: url("@{img-src}tag_limitfree.png");
         }
       }
       .img-responsive {
@@ -44,7 +47,7 @@
         display: inline-block;
         width: 40px;
         height: 50px;
-        background: url("../img/tag_live.png") no-repeat;
+        background: url("@{img-src}tag_live.png") no-repeat;
       }
     }
     .title {
