@@ -13,6 +13,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
+        $blacklist= $this->getBlacklistService()->getBlacklist(1);
         $conditions = array('status' => 'published', 'parentId' => 0);
 
         $coinSetting=$this->getSettingService()->get('coin',array());
@@ -271,5 +272,10 @@ class DefaultController extends BaseController
     private function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getBlacklistService() 
+    {
+        return $this->getServiceKernel()->createService('User.BlacklistService');
     }
 }

@@ -193,4 +193,24 @@ $api->get('/coursethreads', function (Request $request) {
         'total' => $total
     );
 });
+
+/*
+## 获取当前用户黑名单
+    GET /me/blacklist
+
+** 响应 **
+
+```
+{
+    "xxx": "xxx"
+}
+```
+
+*/
+
+$api->get('/blacklists', function () {
+    $user = getCurrentUser();
+    $blacklists = ServiceKernel::instance()->createService('User.BlacklistService')->findBlacklistsByUserId($user['id']);
+    return $blacklists;
+});
 return $api;
