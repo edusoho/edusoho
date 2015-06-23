@@ -13,7 +13,7 @@
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>  
   <div class="form-group">
     <select id="keywordType" class="form-control" name="keywordType">
-          {% set options = {'':"-- 关键词类型 --"|trans,'nickname':' {{'用户名'|trans}}','email':' {{'邮件地址'|trans}}'} %}
+          {% set options = {'':'-- 关键词类型 --'|trans,'nickname':'用户名'|trans,'email':'邮件地址'|trans} %}
           {{ select_options(options, app.request.get('keywordType')) }}
     </select>
 
