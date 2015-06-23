@@ -328,7 +328,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'sms_code' => $smsCode,
                 'sms_last_time' => $currentTime
             ));
-            return array("发送成功");
+            return array('msg' => "发送成功");
             //return $this->createMetaAndData($smsCode, 200, "发送成功");
         }
         return $this->createErrorResponse('', "GET method");
