@@ -11,7 +11,7 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             exec(null, null, "ESNativeCore", "version", [version]);
         },
         openDrawer : function(data){
-            exec(null, null, "ESNativeCore", "openDrawer", data);
+            exec(null, null, "ESNativeCore", "openDrawer", [data]);
         },
         openWebView : function(data){
             exec(null, null, "ESNativeCore", "openWebView", [data]);
@@ -30,6 +30,12 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         },
         share : function(data){
             exec(null, null, "ESNativeCore", "share", [data]);
+        },
+        payCourse : function(data){
+            exec(null, null, "ESNativeCore", "payCourse", [data]);
+        },
+        learnCourseLesson : function(data){
+            exec(null, null, "ESNativeCore", "learnCourseLesson", [data]);
         }
     };
 });
