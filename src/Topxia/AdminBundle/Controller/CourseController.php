@@ -220,10 +220,13 @@ class CourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+
         return $this->render('TopxiaAdminBundle:Course:course-recommend-list.html.twig', array(
             'courses' => $courses,
             'users' => $users,
             'paginator' => $paginator,
+            'categories' => $categories
         ));
     }
 

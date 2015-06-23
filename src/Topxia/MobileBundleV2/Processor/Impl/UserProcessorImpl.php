@@ -68,7 +68,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录！");
         }
         $conversation = $this->getMessageService()->getConversation($conversationId);
-        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+        if (empty($conversation) || $conversation['toId'] != $user['id']) {
             throw $this->createNotFoundException('私信会话不存在！');
         }
 

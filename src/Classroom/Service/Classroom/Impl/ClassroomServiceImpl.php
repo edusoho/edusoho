@@ -374,7 +374,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
-        if (empty($member) or !(in_array($member['role'], array('student', 'auditor')))) {
+        if (empty($member) || !(in_array($member['role'], array('student', 'auditor')))) {
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
         }
 
@@ -390,31 +390,22 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function isClassroomStudent($classroomId, $userId)
     {
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (!$member) {
-            return false;
-        } else {
-            return empty($member) or $member['role'] != 'student' ? false : true;
-        }
+
+        return (empty($member) || $member['role'] != 'student') ? false : true;
     }
 
     public function isClassroomAssistent($classroomId, $userId)
     {
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (!$member) {
-            return false;
-        } else {
-            return empty($member) or !in_array($member['role'], array('assistant', 'studentAssistant')) ? false : true;
-        }
+
+        return (empty($member) || !in_array($member['role'], array('assistant', 'studentAssistant'))) ? false : true;
     }
 
     public function isClassroomHeadTeacher($classroomId, $userId)
     {
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (!$member) {
-            return false;
-        } else {
-            return empty($member) or $member['role'] != 'headTeacher' ? false : true;
-        }
+
+        return (empty($member) || $member['role'] != 'headTeacher' ) ? false : true;
     }
 
     // becomeStudent的逻辑条件，写注释
@@ -615,11 +606,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function isClassroomTeacher($classroomId, $userId)
     {
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (!$member) {
-            return false;
-        } else {
-            return empty($member) or $member['role'] != 'teacher' ? false : true;
-        }
+
+        return (empty($member) || $member['role'] != 'teacher') ? false : true;
+
     }
 
     public function addHeadTeacher($classroomId, $userId)
@@ -762,11 +751,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function isClassroomAuditor($classroomId, $studentId)
     {
         $member = $this->getClassroomMember($classroomId, $studentId);
-        if (!$member) {
-            return false;
-        } else {
-            return empty($member) or $member['role'] != 'auditor' ? false : true;
-        }
+
+        return (empty($member) || $member['role'] != 'auditor') ? false : true;
     }
 
     private function _prepareClassroomConditions($conditions)
@@ -1052,7 +1038,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (empty($member) or ($member['role'] != 'student')) {
+        if (empty($member) || ($member['role'] != 'student')) {
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$courseId})的学员，封锁学员失败。");
         }
 
@@ -1071,7 +1057,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (empty($member) or ($member['role'] != 'student')) {
+        if (empty($member) || ($member['role'] != 'student')) {
             throw $this->createServiceException("用户(#{$userId})不是该班级(#{$courseId})的学员，解封学员失败。");
         }
 
