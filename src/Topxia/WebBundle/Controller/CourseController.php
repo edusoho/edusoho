@@ -14,6 +14,10 @@ class CourseController extends CourseBaseController
 {
 	public function exploreAction(Request $request, $category)
 	{
+		$courseSetting = $this->getSettingService()->get('course', array());
+		$orderBy = $courseSetting['orderBy'];
+		$default = $this->getSettingService()->get('default', array());
+
 		$conditions = $request->query->all();
 		$conditions['code'] = $category;
 
@@ -35,14 +39,14 @@ class CourseController extends CourseBaseController
 		}
 		$fliter = $conditions['fliter'];
 		unset($conditions['fliter']);
-		if(!isset($conditions['orderBy'])){
-			$conditions['orderBy'] = 'latest';
-		}
+		// if(!isset($conditions['orderBy'])){
+		// 	$conditions['orderBy'] = 'latest';
+		// }
 
-		$conditions['recommended'] = ($conditions['orderBy'] == 'recommendedSeq') ? 1 : null;
-		unset($conditions['code']);
-		$orderBy = $conditions['orderBy'];
+		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
 		unset($conditions['orderBy']);
+		$conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
+		unset($conditions['code']);
 
 		$conditions['parentId'] = 0;
 		$conditions['status'] = 'published';
@@ -64,6 +68,7 @@ class CourseController extends CourseBaseController
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
 
+
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -72,6 +77,7 @@ class CourseController extends CourseBaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
+			'orderBy' => $orderBy,
 			'path' => 'course_explore'
 			
 		));	
