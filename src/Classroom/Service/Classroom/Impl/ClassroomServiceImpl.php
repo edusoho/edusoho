@@ -554,7 +554,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $seq = 1;
         foreach ($courseIds as $key => $courseId) {
             $classroomCourse = $this->findClassroomCourse($classroomId, $courseId);
-            $this->getClassroomCourseDao()->update($classroomCourse['id'], array('seq' => $seq++));
+            $this->getClassroomCourseDao()->update($classroomCourse['id'], array('seq' => $seq));
+            $seq++;
         }
     }
 
