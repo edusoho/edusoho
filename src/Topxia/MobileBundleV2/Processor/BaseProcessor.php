@@ -208,19 +208,6 @@ class BaseProcessor {
         return $error;
     }
 
-    public function createMeta($code, $message){
-        return array(
-                'code' => $code,
-                'message' => $message
-            );
-    }
-
-    public function createMetaAndData($data, $code, $message){
-        return array(
-            'data' => $data,
-            'meta' => array('code' => $code, 'message' => $message));
-    }
-
     protected function previewAsMember($member, $courseId, $user) {
         if (empty($member)) {
             return null;
