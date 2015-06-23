@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack2');
     require("placeholder");
     require('./util/card');
+    require('./util/es-bar');
     var Swiper=require('swiper');
 	var Cookie = require('cookie');
 
@@ -134,7 +135,8 @@ define(function(require, exports, module) {
                 speed: 300,
                 loop: true,
                 mode: 'vertical',
-                autoplay: 5000
+                autoplay: 5000,
+                calculateHeight: true
             });
         }
 
@@ -151,7 +153,7 @@ define(function(require, exports, module) {
     });
 
     if ($('[data-toggle="tooltip"]').length > 0) {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip({container: 'body'});
     }
 
     $(".js-search").focus(function () {

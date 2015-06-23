@@ -24,7 +24,6 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $conditions = array();
         $conditions['status'] = 'published';
-        $conditions['recommended'] = 0;
         $conditions['parentId'] = 0;
 
         if (!empty($arguments['categoryId'])) {
@@ -34,7 +33,7 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
             $conditions['categoryId'] = empty($category) ? -1 : $category['id'];
         }
 
-        // @todo 规则应该调整为 price > 0 and coinPrice > 0 .
+        // @todo 规则应该调整为 price > 0 && coinPrice > 0 .
         if (!empty($arguments['notFree'])) {
             $conditions['originPrice_GT'] = '0.00';
         }

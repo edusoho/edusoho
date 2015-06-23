@@ -1,10 +1,12 @@
 define(function(require, exports, module) {
 
     require('jquery.countdown');
+    var Lazyload = require('echo.js');
     var Swiper = require('swiper');
     var chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
 
     exports.run = function() {
+        Lazyload.init(); 
         new chapterAnimate({
             'element': '.course-detail-content'
         });
@@ -148,7 +150,8 @@ define(function(require, exports, module) {
             // paginationClickable: true,
             simulateTouch: false,
             spaceBetween: 10,
-            slidesPerView: 4
+            slidesPerView: 4,
+            calculateHeight: true
         });
 
         $('.arrow-prev').on('click', function(e){

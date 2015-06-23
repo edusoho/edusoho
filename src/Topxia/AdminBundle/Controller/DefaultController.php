@@ -242,7 +242,7 @@ class DefaultController extends BaseController
 
         $storageSetting = $this->getSettingService()->get('storage');
 
-        if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $factory = new CloudClientFactory();
             $client = $factory->createClient($storageSetting);
             $keyCheckResult = $client->checkKey();
@@ -365,11 +365,11 @@ class DefaultController extends BaseController
               'courseTitle' =>$course['title'],
               'courseId' => $course['id'],
               'threadId' => $question['id'],
-              'questionTitle' => strip_tags($question['title'])
+              'questionTitle' => strip_tags($question['title']),
             );
         foreach ($course['teacherIds'] as $receiverId) {
 
-            $result = $this->getNotificationService()->notify($receiverId, 'course-question',
+            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind',
                 $message);
         }
 

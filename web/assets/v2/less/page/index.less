@@ -2,16 +2,16 @@
 .es-poster {
   position: relative;
   background: #fff;
-  height: 570px;
+  max-height: 570px;
   margin: 0 auto;
   @media(max-width:@screen-md-max) {
-    height: 470px;
+    max-height: 470px;
   }
   @media(max-width:@screen-sm-max) {
-    height: 360px;
+    max-height: 360px;
   }
   @media(max-width:@screen-xs-max) {
-    height: 150px;
+    max-height: 200px;
   }
   .swiper-slide {
     margin: 0 auto;
@@ -127,7 +127,7 @@
     width: 100%;
     text-align: center;
     @media (max-width: @screen-xs-max) {
-      bottom: 20px;
+      display: none;
     }
     span {
       font-size: 0;
@@ -135,8 +135,8 @@
       width: 15px;
       height: 15px;
       display: inline-block;
-      background: #fff;
       .border-radius(50%);
+      border: 2px solid #fff;
       @media (max-width: @screen-xs-max) {
         width: 10px;
         height: 10px;
@@ -145,12 +145,10 @@
       &:hover {
         cursor: pointer;
         background: @brand-primary;
-        color: @brand-primary;
         .opacity(1);
       }
       &.swiper-active-switch {
         background: @brand-primary;
-        color: @brand-primary;
         .opacity(1);
       }
     }
@@ -218,6 +216,7 @@
   background-image: -moz-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
   background-image: -o-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
   background-color: @brand-primary;
+  min-height: 3px;
   h4, h5 {
     color: #fff;
   }
@@ -276,13 +275,7 @@
 }
 
 .index-group {
-  padding-bottom: 23px;
-  margin-bottom: 20px;
-}
-
-.index-dynamic {
   padding-bottom: 15px;
-  margin-bottom: 20px;
 }
 
 // 推荐教师

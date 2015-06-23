@@ -54,7 +54,7 @@ class RegisterController extends BaseController
             }else{
                 $authSettings = $this->getSettingService()->get('auth', array());
 
-                if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   !$this->isEmptyVeryfyMobile($user)){
+                if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) ||   !$this->isEmptyVeryfyMobile($user)){
                      $this->authenticateUser($user);
                      $this->sendRegisterMessage($user);
                 }
@@ -100,7 +100,8 @@ class RegisterController extends BaseController
         if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
             && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
             && !in_array('mobile', $auth['registerSort']) 
-            && $this->setting('auth.register_mode') != 'email_or_mobile') {
+            && $this->setting('auth.register_mode') != 'email_or_mobile'
+            && $this->setting('auth.register_mode') != 'mobile') {
             $auth['registerSort'][] = "mobile";
         }
 
@@ -123,7 +124,7 @@ class RegisterController extends BaseController
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
-            if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) or   !$this->isEmptyVeryfyMobile($user)){
+            if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) ||   !$this->isEmptyVeryfyMobile($user)){
                  $this->authenticateUser($user);
                  $this->sendRegisterMessage($user);
             }
@@ -158,6 +159,10 @@ class RegisterController extends BaseController
     private function isMobileRegister($registration){
         if(isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])){
              if( SimpleValidator::mobile($registration['emailOrMobile'])){
+                return true;
+             }
+        }elseif(isset($registration['mobile']) && !empty($registration['mobile'])){
+            if( SimpleValidator::mobile($registration['emailOrMobile'])){
                 return true;
              }
         }

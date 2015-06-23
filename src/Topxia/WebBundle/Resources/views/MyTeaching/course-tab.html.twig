@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+
+	<li class="{% if filter == 'normal' %}active{% endif %}"><a href="{{path('my_teaching_courses', {filter:'normal'}) }}">普通课程</a></li>
+
+	<li class="{% if filter == 'classroom' %}active{% endif %}"><a href="{{path('my_teaching_courses', {filter:'classroom'}) }}">{{setting("classroom.name")|default("班级")}}课程</a></li>
+
+</ul>
+<br>

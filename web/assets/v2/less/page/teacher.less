@@ -1,11 +1,15 @@
 .teacher-item {
   margin: 10px auto;
   text-align: center;
-  border: 1px solid @gray-light;
   .border-radius(4px);
+  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
   .es-transition;
   &:hover {
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    transform: translateY(-5px);
+    -webkit-transform: translateY(-5px);
+    -moz-transform: translateY(-5px);
+    -o-transform: translateY(-5px);
+    .box-shadow(0 6px 15px rgba(0, 0, 0, 0.08));
     .es-transition;
     .metas {
       .opacity(1);
@@ -35,29 +39,36 @@
   }
   .teacher-bottom {
     position: relative;
-    height: 50px;
-    margin: 20px;
+    height: 90px;
   }
   .about,
   .metas {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
     .es-transition;
   }
   .about {
+    top: 20px;
     line-height: 25px;
     overflow: hidden;
     color: @gray;
     .opacity(1);
   }
   .metas {
-    margin: 10px 0;
+    top: 30px;
+    bottom: 30px;
     .opacity(0);
     .btn {
       margin: 0 15px;
+      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        margin: 0 10px;
+      }
     }
   }
+}
+
+.lt-ie9 .teacher-item {
+  border: 1px solid @gray-light;
 }
