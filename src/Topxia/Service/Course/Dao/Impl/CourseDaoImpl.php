@@ -75,7 +75,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? AND ";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE parentId = 0 AND status = ? AND ";
 
         foreach ($tagIds as $key => $tagId) {
             if ($key > 0 ) {
