@@ -34,27 +34,26 @@
             <div class="col-lg-3 col-md-4 col-sm-6">
               {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course} %}
 
-              <!-- 需要后台人员修改 -->
-
-              <!-- 之后的直播 -->
-              <!-- <div class="course-date visible-lg">
-                <div class="btn-circle btn-circle-lg">
-                  <i class="es-icon es-icon-videocam"></i>
+              {% set lesson = course['lesson']|default(null) %}
+              {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                <div class="course-date visible-lg">
+                  <div class="btn-circle btn-live  btn-circle-md">
+                    <i class="es-icon es-icon-videocam"></i>
+                  </div>
+                  <div class="date">
+                    正在直播
+                  </div>
                 </div>
-                <div class="date">
-                  08-06 18:06
+              {% else %}
+                <div class="course-date visible-lg">
+                  <div class="btn-circle btn-circle-md">
+                    <i class="es-icon es-icon-videocam"></i>
+                  </div>
+                  <div class="date">
+                    {{ lesson.startTime|date('n月j日 H:i') }}
+                  </div>
                 </div>
-              </div> -->
-
-              <!-- 正在直播 -->
-              <div class="course-date visible-lg">
-                <div class="btn-circle btn-live  btn-circle-md">
-                  <i class="es-icon es-icon-videocam"></i>
-                </div>
-                <div class="date">
-                  正在直播
-                </div>
-              </div>
+              {% endif %}
 
             </div>
           {% endfor %}
