@@ -124,7 +124,9 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
 			if (data.status == "ok" && data.payUrl != "") {
 				if (! $scope.platform.native) {
 					alert("请在客户端内支付!");
+					return;
 				}
+				esNativeCore.payCourse("支付课程", data.payUrl);
 			}
 		});
 	}

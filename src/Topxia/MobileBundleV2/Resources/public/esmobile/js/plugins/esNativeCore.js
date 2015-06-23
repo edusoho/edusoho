@@ -28,7 +28,6 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             return deferred.promise;
         },
         closeWebView : function(data){
-            console.log("data");
             exec(null, null, "ESNativeCore", "closeWebView", [data]);
         },
         saveUserToken : function(data){
@@ -37,8 +36,8 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         share : function(data){
             exec(null, null, "ESNativeCore", "share", [data]);
         },
-        payCourse : function(data){
-            exec(null, null, "ESNativeCore", "payCourse", [data]);
+        payCourse : function(title, url){
+            exec(null, null, "ESNativeCore", "payCourse", [title, url]);
         },
         learnCourseLesson : function(data){
             exec(null, null, "ESNativeCore", "learnCourseLesson", [data]);

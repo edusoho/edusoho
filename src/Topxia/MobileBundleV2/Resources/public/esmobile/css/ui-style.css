@@ -1110,6 +1110,17 @@ a {
   font-size: 42px;
   color: #37b97d;
 }
+
+.ui-course-review .ui-scroller {
+  top: 0;
+  padding-top: 214px;
+}
+
+.ui-course-review .top-header {
+  background: #fff;
+  z-index: 3;
+}
+
 /** ui-course-review **/
 
 /** ui-course */

@@ -434,4 +434,5 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
 
   applicationProvider.init(app.host);
   applicationProvider.updateScope($rootScope);
+  FastClick.attach(document.body);
 }]);

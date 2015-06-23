@@ -4,32 +4,32 @@
       <h3 class="title">评价详情</h3>
     </div>
 </div>
-
-<div class="top-header ui-course ui-course-review">
-	<ul class="ui-grid-halve ui-border-b">
-		<li style="width:40%;">
-			<div class="ui-list-info rating-body">
-		           	<h4 class="title">平均评分</h4>
-		           	<h4 class="rating-num">{{ reviewData.info.rating | limitTo : 4 }}</h4>
-		           	<h4>
-		           		<i class="iconfont" ng-class="reviewData.info.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in 5 | array" ></i>
-		           	</h4>
-		           	<p>({{ reviewData.info.ratingNum }}评价)</p>
-		        	</div>
-		</li>
-		<li style="width:60%;">
-			<div class="ui-list-info">
-		           	<div class="rating-progress" ng-repeat="i in reviewData.progress track by $index">
-		           		<span class="progress-title">{{ $index + 1 }}星</span>
-		           		<div class="ui-progress">
-					    <span style="width:{{ i | reviewProgress : reviewData.info.rating }}"></span>
-					</div>
-					<span class="progress">{{ i | reviewProgress : reviewData.info.rating }}</span>
-		           	</div>
-		        	</div>
-		</li>
-	</ul>
-
+<div class="ui-course ui-course-review">
+	<div class="top-header">
+		<ul class="ui-grid-halve ui-border-b">
+			<li style="width:40%;">
+				<div class="ui-list-info rating-body">
+			           	<h4 class="title">平均评分</h4>
+			           	<h4 class="rating-num">{{ reviewData.info.rating | limitTo : 4 }}</h4>
+			           	<h4>
+			           		<i class="iconfont" ng-class="reviewData.info.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in 5 | array" ></i>
+			           	</h4>
+			           	<p>({{ reviewData.info.ratingNum }}评价)</p>
+			        	</div>
+			</li>
+			<li style="width:60%;">
+				<div class="ui-list-info">
+			           	<div class="rating-progress" ng-repeat="i in reviewData.progress track by $index">
+			           		<span class="progress-title">{{ $index + 1 }}星</span>
+			           		<div class="ui-progress">
+						    <span style="width:{{ i | reviewProgress : reviewData.info.rating }}"></span>
+						</div>
+						<span class="progress">{{ i | reviewProgress : reviewData.info.rating }}</span>
+			           	</div>
+			        	</div>
+			</li>
+		</ul>
+	</div>
 	<div class="ui-scroller" ui-scroll data="reviews" on-infinite="loadMore()">
 		<div class="ui-panel-content ui-review">
 		    	<ul class="ui-list" style="padding : 16px;">  

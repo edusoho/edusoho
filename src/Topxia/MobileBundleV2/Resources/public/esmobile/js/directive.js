@@ -176,7 +176,7 @@ directive('ngTap', function($parse) {
     compile: function(tElem, tAttrs) {
             return function ngEventHandler(scope, element, attr) {
 
-                  var clickExpr = attr.ngTap;
+                  var clickExpr = attr.ngClick;
                   var clickHandler = angular.isFunction(clickExpr) ?
                     clickExpr :
                     $parse(clickExpr);

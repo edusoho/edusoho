@@ -227,15 +227,16 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
         return;
       }
 
-      if ($scope.platform.native) {
-        
+      if ("text" == lesson.type) {
+        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
         return;
       }
 
-      if ("text" != lesson.type) {
+      if (! $scope.platform.native) {
         alert("请在客户端学习非图文课时");
         return;
       }
-      $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
+
+      esNativeCore.learnCourseLesson({ lessonItem : angular.toJson(lesson) }, false);
     }
 }
