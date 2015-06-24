@@ -703,7 +703,7 @@ class CourseController extends CourseBaseController
 	public function relatedCoursesBlockAction($course)
 	{   
 
-		$courses = $this->getCourseService()->findCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
+		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
 		
 		return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
 			'courses' => $courses,
