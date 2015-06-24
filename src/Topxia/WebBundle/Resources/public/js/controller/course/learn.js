@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
-        chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
+        chapterAnimate = require('../course/widget/chapter-animate');
 
     require('mediaelementplayer');
 
@@ -685,7 +685,7 @@ define(function(require, exports, module) {
     var DurationStorage = {
         set: function(userId,mediaId,duration) {
             var durations = Store.get("durations");
-            if(!durations){
+            if(!durations || !(durations instanceof Array)){
                 durations = new Array();
             }
 

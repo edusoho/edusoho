@@ -126,7 +126,9 @@ class DefaultController extends BaseController
         $unInstallAppCount=count($appsAll)-count($installedApps);
 
         $app_count=count($apps);
-        if(isset($apps['error'])) $error="error";
+        if(isset($apps['error'])){
+            $error="error";
+        }
 
         $mainAppUpgrade = null;
         foreach ($apps as $key => $value) {
@@ -242,7 +244,7 @@ class DefaultController extends BaseController
 
         $storageSetting = $this->getSettingService()->get('storage');
 
-        if (!empty($storageSetting['cloud_access_key']) and !empty($storageSetting['cloud_secret_key'])) {
+        if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
             $factory = new CloudClientFactory();
             $client = $factory->createClient($storageSetting);
             $keyCheckResult = $client->checkKey();

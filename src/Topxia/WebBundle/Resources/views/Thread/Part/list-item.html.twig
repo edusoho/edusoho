@@ -5,18 +5,18 @@
   <div class="media-body">
     <div class="title">
       {% if thread.type == 'question'%}
-        <span class="btn-circle danger btn-circle-xs"  data-toggle="tooltip" data-placement="left" title="问答">
+        <span class="btn-circle danger btn-circle-xs"  data-toggle="tooltip" data-placement="top" title="问答">
           <i class="es-icon es-icon-wenhao"></i>
         </span>
       {% endif %}
       {% if thread.type == 'event'%}
-        <span class="btn-circle primary btn-circle-xs" data-toggle="tooltip" data-placement="left" title="活动">
+        <span class="btn-circle primary btn-circle-xs" data-toggle="tooltip" data-placement="top" title="活动">
           <i class="es-icon es-icon-flag"></i>
         </span>
       {% endif %}
       
       {% if thread.type == 'discussion' %}   
-        <span class="btn-circle info btn-circle-xs" data-toggle="tooltip" data-placement="left" title="话题">
+        <span class="btn-circle info btn-circle-xs" data-toggle="tooltip" data-placement="top" title="话题">
           <i class="es-icon es-icon-textsms"></i>
         </span>
       {% endif %}

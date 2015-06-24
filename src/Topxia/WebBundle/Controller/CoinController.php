@@ -181,8 +181,9 @@ class CoinController extends BaseController
 
         if($request->getMethod()=="POST"){
 
-            if($canChange>0)
-            $this->getCashAccountService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
+            if($canChange>0){
+                $this->getCashAccountService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
+            }
 
             return $this->redirect($this->generateUrl('my_coin'));
         }
@@ -218,7 +219,9 @@ class CoinController extends BaseController
 
         $coinRanges=$coinSetting['coin_consume_range_and_present'];
 
-        if($coinRanges==array(array(0,0))) return array($amount,$canChange,$data);
+        if($coinRanges==array(array(0,0))){
+            return array($amount,$canChange,$data);
+        }
 
         for($i=0;$i<count($coinRanges);$i++){
 
@@ -335,7 +338,7 @@ class CoinController extends BaseController
 
         list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
 
-        if ($order['status'] == 'paid' and $success) {
+        if ($order['status'] == 'paid' && $success) {
             $successUrl = $this->generateUrl('my_coin', array(), true);
         }
 
@@ -387,7 +390,7 @@ class CoinController extends BaseController
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
 
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 

@@ -191,6 +191,11 @@ class AuthenticationProvider extends UserAuthenticationProvider
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
+    private function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System.LogService');
+    }
+
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User.AuthService');

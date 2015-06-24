@@ -18,10 +18,18 @@
     .border-radius;
     .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
     z-index: -1;
+    @media (max-width: @screen-xs-max) {
+      top: 2px;
+      left: 2px;
+    }
     &.two {
       top: 10px;
       left: 10px;
       z-index: -2;
+      @media (max-width: @screen-xs-max) {
+        top: 4px;
+        left: 4px;
+      }
     }
   }
   .class-header-bg {
@@ -132,35 +140,39 @@
     position: absolute;
     width: 205px;
     height: 82px;
-    line-height: 82px;
-    top: 40px;
+    line-height: 77px;
+    top: 60px;
     right: -22px;
     text-align: center;
     color: #fff;
     font-size: 12px;
+    overflow: hidden;
     background: url("../img/price_bg.png");
     span {
-      font-size: 24px;
+      font-size: 22px;
     }
     @media (max-width: @screen-md-max) {
-      top: 30px;
+      top: 50px;
       width: 150px;
       height: 60px;
-      line-height: 60px;
+      line-height: 55px;
       background-size: 150px 60px;
       span {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
     @media (max-width: @screen-sm-max) {
       right: -18px;
       width: 135px;
       height: 54px;
-      line-height: 54px;
+      line-height: 50px;
       background-size: 135px 54px;
       span {
-        font-size: 18px;
+        font-size: 16px;
       }
+    }
+    @media (max-width: @screen-xs-max) {
+      right: -12px;
     }
   }
   .setting {
@@ -183,12 +195,18 @@
   }
   &.before {
     .class-img {
+      position: relative;
       width: 50%;
       @media (max-width: @screen-sm-max) {
         width: 40%;
       }
       @media (max-width: @screen-xs-max) {
         width: 100%;
+      }
+      .label {
+        position: absolute;
+        top: 5px;
+        left: 5px;
       }
     }
     .class-info {
@@ -543,7 +561,6 @@
   margin-bottom: 0;
   padding-left: 0;
   list-style-type: none;
-
   >li {
     margin-bottom: 10px;
     padding: 10px 15px;
@@ -602,12 +619,6 @@
     .title {
       color: @gray-dark;
     }
-    i {
-      margin-left: 5px;
-    }
-    .label {
-      margin-left: 10px;
-    }
     .date {
       position: absolute;
       top: 11px;
@@ -615,10 +626,15 @@
     }
     .course-type {
       position: absolute;
-      top: 12px;
+      top: 11px;
       right: 15px;
       line-height: 20px;
-      font-size: 20px;
+      i {
+        font-size: 20px;
+      }
+      small {
+        margin-top: -3px;
+      }
     }
     .period-state {
       position: absolute;

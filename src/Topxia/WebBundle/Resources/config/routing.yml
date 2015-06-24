@@ -90,6 +90,10 @@ register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
 
+register_mobile_check:
+    pattern:  /register/mobile/check
+    defaults: { _controller: TopxiaWebBundle:Register:mobileCheck }
+
 register_email_or_mobile_check:
     pattern:  /register/email_or_mobile/check
     defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
@@ -1392,9 +1396,6 @@ mobile_download:
     pattern: /mobile/download
     defaults: { _controller: TopxiaWebBundle:Mobile:download }
 
-test:
-    pattern:  /test/
-    defaults: { _controller: TopxiaWebBundle:Test:index }
 group:
     pattern:  /group
     defaults: { _controller: TopxiaWebBundle:Group:index }

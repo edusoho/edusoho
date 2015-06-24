@@ -122,7 +122,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 $activeIds[] = $parentId;
                 $sibling = $this->findAllCategoriesByParentId($parentId);
                 if ($sibling) {
-                    $categories[$level++] = $sibling;
+                    $categories[$level] = $sibling;
+                    $level++;
                 }
                 $parent = $this->getCategory($parentId);
                 $parentId = $parent['parentId'];
@@ -298,7 +299,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                     $category['parentId'] = (int) $category['parentId'];
                     if ($category['parentId'] > 0) {
                         $parentCategory = $this->getCategory($category['parentId']);
-                        if (empty($parentCategory) or $parentCategory['groupId'] != $category['groupId']) {
+                        if (empty($parentCategory) || $parentCategory['groupId'] != $category['groupId']) {
                             throw $this->createServiceException("父分类(ID:{$category['groupId']})不存在，保存分类失败");
                         }
                     }
