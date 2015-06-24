@@ -5,7 +5,7 @@
 		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐课程">
           		</list-empty-view>
 		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="liveRecommedCourse in liveRecommedCourses" ui-sref="course({ courseId : liveRecommedCourse.id })">
+		    <li class="ui-border-t" ng-repeat="liveRecommedCourse in liveRecommedCourses" ng-href="#/course/{{ liveRecommedCourse.id  }}">
 		        <div class="ui-list-img">
 		            <span style="background-image:url( {{ liveRecommedCourse.middlePicture }} )"></span>
 		        </div>
@@ -27,6 +27,9 @@
 		        </div>
 		    </li>
 		</ul>
+		<div class="ui-btn-group" ng-if="liveRecommedCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		</div>
 	</div>
 
 	<div class="course-card">
@@ -35,7 +38,7 @@
 		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
           		</list-empty-view>
 		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="liveLatestCourse in liveLatestCourses" ui-sref="course({ courseId : liveLatestCourse.id })">
+		    <li class="ui-border-t" ng-repeat="liveLatestCourse in liveLatestCourses" ng-href="#/course/{{ liveLatestCourse.id  }}">
 		        <div class="ui-list-img">
 		            <span style="background-image:url( {{ liveLatestCourse.middlePicture }} )"></span>
 		        </div>
@@ -57,5 +60,8 @@
 		        </div>
 		    </li>
 		</ul>
+		<div class="ui-btn-group" ng-if="liveLatestCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		</div>
 	</div>
 </div>

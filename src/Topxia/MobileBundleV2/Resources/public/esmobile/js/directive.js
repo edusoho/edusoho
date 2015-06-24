@@ -170,25 +170,20 @@ directive('uiBar', function($window) {
     }
   }
 }).
-directive('ngTap', function($parse) {
+directive('ngHref', function($window) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
             return function ngEventHandler(scope, element, attr) {
-
-                  var clickExpr = attr.ngClick;
-                  var clickHandler = angular.isFunction(clickExpr) ?
-                    clickExpr :
-                    $parse(clickExpr);
-                    
-                  $(element[0]).on("tap",function(){
-                    scope.$evalAsync(function() {
-                      clickHandler(scope, {$event: (event) });
-                    });
-                  });
-
-                  element.onclick = function(event) { };
-          };
+              element.on("click", function(e) {
+                var url = [$window.location.origin, $window.location.pathname, attr.ngHref].join("");
+                if (scope.platform.native) {
+                  esNativeCore.openWebView(url);
+                  return;
+                }
+                $window.location.href = url;
+              });
+            };
     }
   }
 }).

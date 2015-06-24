@@ -26,6 +26,7 @@ appProvider.provider('applicationProvider', function() {
 			}
 			application.user = angular.fromJson(localStore.get("user"));
 			application.token = localStore.get("token");
+			application.updateScope($rootScope);
 		}
 
 		application.clearUser = function() {

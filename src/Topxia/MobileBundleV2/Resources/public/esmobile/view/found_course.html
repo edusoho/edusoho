@@ -10,8 +10,8 @@
 
 	<div class="course-card">
 		<h4>推荐</h4>
-		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="recommendCourse in recommedCourses" ui-sref="course({ courseId : recommendCourse.id })">
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="recommendCourse in recommedCourses" ng-href="#/course/{{ recommendCourse.id  }}">
 		        <div class="ui-list-img">
 		            <span style="background-image:url( {{ recommendCourse.middlePicture }} )"></span>
 		        </div>
@@ -33,8 +33,8 @@
 		        </div>
 		    </li>
 		</ul>
-		<div class="ui-btn-group">
-		    <button type="button" class="btn-green" ng-click="showCourseList()" tab>更多</button>
+		<div class="ui-btn-group" ng-if="recommedCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
 		</div>
 	</div>
 
@@ -43,7 +43,7 @@
 		<list-empty-view data="latestCourses" title="暂时没有最新课程">
           		</list-empty-view>
 		<ul class="ui-list ui-list-link ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="latestCourse in latestCourses" ui-sref="course({ courseId : latestCourse.id })">
+		    <li class="ui-border-t" ng-repeat="latestCourse in latestCourses" ng-href="#/course/{{ latestCourse.id  }}">
 		        <div class="ui-list-img">
 		            <span style="background-image:url( {{ latestCourse.middlePicture }} )"></span>
 		        </div>
@@ -65,8 +65,8 @@
 		        </div>
 		    </li>
 		</ul>
-		<div class="ui-btn-group">
-		    <button type="button" class="btn-green"  ng-click="showCourseList()">更多</button>
+		<div class="ui-btn-group" ng-if="latestCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
 		</div>
 	</div>
 </div>
