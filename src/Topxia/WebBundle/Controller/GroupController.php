@@ -606,29 +606,6 @@ class GroupController extends BaseController
 
     }
 
-    private function setLogo($request,$user)
-    {
-        $data = $request->files->get('form');
-        $file = $data['avatar'];
-
-        if (!FileToolkit::isImageFile($file)) {
-              return $this->createMessageResponse('info', '上传图片格式错误，请上传jpg, gif, png格式的文件。!');
-        }
-        $filenamePrefix = "user_{$user['id']}_";
-
-        $hash = substr(md5($filenamePrefix . time()), -8);
-
-        $ext = $file->getClientOriginalExtension();
-
-        $filename = $filenamePrefix . $hash . '.' . $ext;
-
-        $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-
-        $file = $file->move($directory, $filename);
-
-        return $filename;
-
-    }
 
     public function setGroupLogoAction(Request $request, $id)
     {
