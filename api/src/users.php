@@ -81,8 +81,13 @@ $api->post('/', function (Request $request) {
 });
 
 
-//登陆
+
 /*
+
+## 登陆
+
+    POST /users/login
+
 ** 参数 **
 
 | 名称  | 类型  | 必需   | 说明 |
@@ -104,19 +109,32 @@ $api->post('/login', function (Request $request) {
     if (empty($user)) {
         throw new \Exception('user not found');
     }
+
     if (!ServiceKernel::instance()->createService('User.UserService')->verifyPassword($user['id'], $fields['password'])) {
         throw new \Exception('password error');
     }
 
     $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('login',$user['id']);
-    $user = filter($user, 'user');
+    setCurrentUser($token);
     return array(
         'user' => filter($user, 'user'),
         'token' => $token
     );
 });
 
-//登出
+/*
+## 登出
+
+    POST /users/logout
+
+** 响应 **
+
+```
+{
+    "success": bool
+}
+```
+*/
 $api->post('/logout', function (Request $request) {
     $token = $request->request->get('token');
     $result = ServiceKernel::instance()->createService('User.UserService')->deleteToken('login',$token);

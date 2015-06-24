@@ -1,6 +1,7 @@
 <?php
 
 namespace Topxia\Api\Filter;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserFilter implements Filter
 {
@@ -44,9 +45,11 @@ class UserFilter implements Filter
             unset($data['newNotificationNum']);
             unset($data['createdIp']);
             unset($data['createdTime']);
+            return $data;
         }
+        $profile = ServiceKernel::instance()->createService('User.UserService')->getUserProfile($data['id']);
+        return array_merge($data,$profile);
 
-        return $data;
     }
 
     public function filters(array &$datas)
