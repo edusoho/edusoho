@@ -9,7 +9,7 @@ $api = $app['controllers_factory'];
 
 /*
 ## 获取手机网校简介
-    POST /mobileschools/about
+    GET /mobileschools/about
 
 ** 响应 **
 

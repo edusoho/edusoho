@@ -14,8 +14,9 @@ $api->get('/{id}', function ($id) {
     return filter($user, 'user');
 });
 
-//用户模糊查询(qq,手机,昵称)
 /*
+## 用户模糊查询
+
 ** 参数 **
 
 | 名称  | 类型  | 必需   | 说明 |

@@ -196,7 +196,7 @@ $api->get('/coursethreads', function (Request $request) {
 
 /*
 ## 获取当前用户黑名单
-    GET /me/blacklist
+    GET /me/blacklists
 
 ** 响应 **
 
