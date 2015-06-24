@@ -433,7 +433,6 @@ class CourseController extends CourseBaseController
 
 		$learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
-
 		$isLimit = $this->setting('magic.lesson_watch_limit');
 		if ($isLimit) {
 			$lesson = $this->getCourseService()->getLesson($lessonId);

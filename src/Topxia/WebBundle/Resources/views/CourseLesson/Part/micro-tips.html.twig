@@ -7,16 +7,15 @@
   <i class="es-icon es-icon-description mls" title="作业、练习"></i>
 {% endif %}
 
-  {% if app.user and setting('magic.lesson_watch_limit') and course.watchLimit > 0 and item.type == 'video' %}
-    {% set remainTime = (course.watchLimit * item.length) - lessonLearns[item.id].watchTime|default(0) %}
-    {% if remainTime > 0 %}
-      <small class="text text-info">还剩 {{ remainTime|duration_text }}</small>
-    {% else %}
-      <small class="text text-info">已达最大可看时长</small>
-    {% endif %}
+{% if app.user and setting('magic.lesson_watch_limit') and course.watchLimit > 0 and item.type == 'video' %}
+  {% set remainTime = (course.watchLimit * item.length) - lessonLearns[item.id].watchTime|default(0) %}
+  {% if remainTime > 0 %}
+    <small class="text text-info">还剩 {{ remainTime|duration_text }}</small>
+  {% else %}
+    <small class="text text-info">已达最大可看时长</small>
   {% endif %}
-
 {% endif %}
+
 
 <!-- 右边图标 -->
 {% if item.status == 'published' %}
