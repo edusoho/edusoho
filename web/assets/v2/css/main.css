@@ -556,7 +556,7 @@
 }
 #course-about-pane img {
   max-width: 100%;
-  height: 1;
+  height: auto;
 }
 #course-goal-pane .media-list,
 #course-audience-pane .media-list {
@@ -1186,6 +1186,13 @@
   margin-left: -10px;
   padding-left: 0px;
   list-style: none;
+}
+.homepage .hot-group img {
+  width: 58px;
+  height: 58px;
+}
+.homepage .hot-group p {
+  margin-bottom: 10px;
 }
 .es-row-wrap {
   background: #fff;
