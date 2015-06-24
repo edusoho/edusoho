@@ -74,9 +74,9 @@
     {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
     <div class="course-filter" id="course-filter">
       <ul class="nav nav-pills hidden-xs" role="tablist">
-        <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy|default('studentNum')}) }}">全部课程</a></li>
-        <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy|default('studentNum')}) }}">免费课程</a></li>
-        <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy|default('studentNum')}) }}">直播课程</a></li>
+        <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy}) }}">全部课程</a></li>
+        <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy}) }}">免费课程</a></li>
+        <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy}) }}">直播课程</a></li>
       </ul>
       <div class="btn-group visible-xs">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} <span class="caret"></span></button>
@@ -122,9 +122,9 @@
     {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
     <div class="course-filter" id="course-filter">
       <ul class="nav nav-pills hidden-xs" role="tablist">
-        <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy|default('recommendedSeq')}) }}">全部课程</a></li>
-        <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy|default('recommendedSeq')}) }}">免费课程</a></li>
-        <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy|default('recommendedSeq')}) }}">直播课程</a></li>
+        <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy}) }}">全部课程</a></li>
+        <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy}) }}">免费课程</a></li>
+        <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy}) }}">直播课程</a></li>
       </ul>
       <div class="btn-group visible-xs">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} <span class="caret"></span></button>
