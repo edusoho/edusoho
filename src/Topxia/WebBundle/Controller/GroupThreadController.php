@@ -851,8 +851,8 @@ class GroupThreadController extends BaseController
         $post=$this->getThreadService()->getPost($postId);
         if($post['postId']!=0){
             $postId=$post['postId'];
-            $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
         }
+        $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
 
         $page= $this->getPostPage($postId, $threadId);
    
@@ -1062,7 +1062,9 @@ class GroupThreadController extends BaseController
     }
     private function getPostCondition($filters,$ownId,$threadId)
     {
-        if($filters=='all') return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+        if($filters=='all'){
+            return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+        }
 
         if($filters=='onlyOwner'){
             return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
