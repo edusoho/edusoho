@@ -44,13 +44,21 @@
             <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
             {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>管理后台</a></li>
             {% endif %}
-            <li>
-              <a href="{{ path('my') }}"><i class="es-icon es-icon-web"></i>学习中心</a>
-            </li>
+
             <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>通知</a></li>
             <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>私信</a></li>
             <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
           </ul>
+        </li>
+        <li>
+          <a href="{{ path('my') }}">
+         {% if 'ROLE_TEACHER' in app.user.roles %}
+            教学中心
+         {% else %} 
+            学习中心
+         {% endif %}
+
+          </a>
         </li>
         <li class="visible-lg nav-hover">
           {% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}

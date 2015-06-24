@@ -149,7 +149,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
             $file=$this->getFileService()->getFile($files['id'][$i]);
 
-            if($file['userId'] != $user->id) continue;
+            if($file['userId'] != $user->id){
+                continue;
+            }
             
             $hide=$this->getThreadGoodsDao()->searchGoods(array('threadId'=>$threadId,'fileId'=>$files['id'][$i]),array('createdTime','desc'),0,1);
             
@@ -183,7 +185,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
             $file=$this->getFileService()->getFile($files['id'][$i]);
 
-            if($file['userId'] != $user->id) continue;
+            if($file['userId'] != $user->id){
+                continue;
+            }
               
             $files['title'][$i]=$this->subTxt($files['title'][$i]);
 
@@ -221,7 +225,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             $value=" ".$value;
             sscanf($value,"%[^#]#[hide=coin%[^]]]%[^$$]",$content,$coin,$title);
 
-            if(!is_numeric($coin)) $coin=0;
+            if(!is_numeric($coin)){
+                $coin=0;
+            }
 
             if($coin >=0 && $title !="" ){
 

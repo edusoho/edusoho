@@ -117,7 +117,9 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         for ($row=3; $row <= $this->rowTotal; $row++) {
 
             $nickNameColData = $this->objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
-            if ($nickNameColData."" == "") continue;
+            if ($nickNameColData."" == ""){
+                continue;
+            }
             $nicknameData[] = $nickNameColData.""; 
         }
 

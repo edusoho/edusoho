@@ -30,7 +30,10 @@ define(function(require, exports, module) {
 
         $('.recommend-teacher').on('click', '.teacher-item .follow-btn', function(){
             var $btn = $(this);
-            showUnfollowBtn($btn);
+            var loggedin = $btn.data('loggedin');
+            if(loggedin == "1"){
+                showUnfollowBtn($btn);
+            }
             $.post($btn.data('url'));
         }).on('click', '.teacher-item .unfollow-btn', function(){
             var $btn = $(this);

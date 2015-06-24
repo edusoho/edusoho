@@ -605,7 +605,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('QQ不正确，更新用户失败。');
         }
 
-        if(!empty($fields['about'])) $fields['about'] = $this->purifyHtml($fields['about']);
+        if(!empty($fields['about'])){
+            $fields['about'] = $this->purifyHtml($fields['about']);
+        }
 
         return $this->getProfileDao()->updateProfile($id, $fields);
     }
