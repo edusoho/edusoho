@@ -15,10 +15,10 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$courseSetting = $this->getSettingService()->get('course', array());
-		if (!isset($courseSetting['orderBy'])) {
-			$courseSetting['orderBy'] = 'latest';
+		if (!isset($courseSetting['explore_default_orderBy'])) {
+			$courseSetting['explore_default_orderBy'] = 'latest';
 		}
-		$orderBy = $courseSetting['orderBy'];
+		$orderBy = $courseSetting['explore_default_orderBy'];
 		$default = $this->getSettingService()->get('default', array());
 
 		$conditions = $request->query->all();
