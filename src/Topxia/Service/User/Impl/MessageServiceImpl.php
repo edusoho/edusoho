@@ -240,11 +240,9 @@ class MessageServiceImpl extends BaseService implements MessageService
         usort($messages ,function($a, $b){
             if($a['createdTime'] > $b['createdTime']){
                 return -1;
-            }
-            if($a['createdTime'] ==  $b['createdTime']){
+            }elseif($a['createdTime'] ==  $b['createdTime']){
                 return 0;
-            }
-            if($a['createdTime'] < $b['createdTime']){
+            }elseif($a['createdTime'] < $b['createdTime']){
                 return 1;
             }
         });
