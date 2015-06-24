@@ -545,7 +545,7 @@ class GroupThreadController extends BaseController
                     $message);
             }
 
-            return new Response($url);
+            return new Response($post);
 
     }
     
