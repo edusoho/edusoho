@@ -40,7 +40,7 @@ class QuestionController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

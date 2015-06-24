@@ -102,7 +102,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $this->getConnection()->fetchColumn($sql, array($userId, $courseId));
     }
 
-    private function createSearchNoteQueryBuilder($conditions)
+    protected function createSearchNoteQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

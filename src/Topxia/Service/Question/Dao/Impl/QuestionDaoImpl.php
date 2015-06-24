@@ -207,7 +207,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchAll($sql, $sqlConditions);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function($value) {
             if ($value === '' || is_null($value)) {

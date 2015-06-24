@@ -48,7 +48,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 		$this->getCourseOrderService()->cancelRefundOrder($id);
 	}
 
-	private function sendAuditRefundNotification($order, $pass, $amount, $note)
+	protected function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
         $course = $this->getCourseService()->getCourse($order['targetId']);
         if (empty($course)) {

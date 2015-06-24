@@ -220,7 +220,7 @@ class GroupController extends BaseController
         return $this->createJsonResponse('success');
 
     }
-    private function postAction($threadId,$action)
+    protected function postAction($threadId,$action)
     {
         $thread=$this->getThreadService()->getThread($threadId);
         $message = array(
@@ -289,7 +289,7 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
@@ -333,7 +333,7 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function prepareThreadConditions($conditions)
+    protected function prepareThreadConditions($conditions)
     {
 
         if (isset($conditions['threadType']) && !empty($conditions['threadType'])) {

@@ -82,14 +82,14 @@ class FileController extends BaseController
         return $this->createJsonResponse($fields);
     }
 
-    private function isGroup($group)
+    protected function isGroup($group)
     {
         $groups = $this->getFileService()->getAllFileGroups();
         $codes = ArrayToolkit::column($groups, "code");
         return in_array($group, $codes);
     }
 
-    private function tryUploadFile($request)
+    protected function tryUploadFile($request)
     {
         $token = $request->request->get('token');
 

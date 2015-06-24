@@ -145,7 +145,7 @@ class ContentController extends BaseController
         return $this->createJsonResponse(array('success' => false, 'message' => '该URL路径已存在'));
     }
 
-    private function filterEditorField($content)
+    protected function filterEditorField($content)
     {
         if($content['editor'] == 'richeditor'){
             $content['body'] = $content['richeditor-body'];
@@ -158,7 +158,7 @@ class ContentController extends BaseController
         return $content;
     }
 
-    private function convertContent($content)
+    protected function convertContent($content)
     {
         if (isset($content['tags'])) {
             $tagNames = array_filter(explode(',', $content['tags']));
@@ -177,22 +177,22 @@ class ContentController extends BaseController
         return $content;
     }
 
-    private function getContentService()
+    protected function getContentService()
     {
         return $this->getServiceKernel()->createService('Content.ContentService');
     }
 
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }

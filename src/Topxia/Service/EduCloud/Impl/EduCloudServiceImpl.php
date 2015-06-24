@@ -9,7 +9,7 @@ class EduCloudServiceImpl extends BaseService
     private $cloudApi = null;
     private $cloudOptions = null;
 
-    private function getCloudOptions()
+    protected function getCloudOptions()
     {
         if (empty($this->cloudOptions)) {
             $settings = $this->createService('System.SettingService')->get('storage', array());
@@ -23,14 +23,14 @@ class EduCloudServiceImpl extends BaseService
         return $this->cloudOptions;
     }
 
-    private function createAPIClient()
+    protected function createAPIClient()
    {
       $options = $this->getCloudOptions();
 
         return new CloudAPI($options);
    }
 
-    private function getCloudApi()
+    protected function getCloudApi()
     {
         if (empty($this->cloudApi)) {
             $this->cloudApi = $this->createAPIClient();

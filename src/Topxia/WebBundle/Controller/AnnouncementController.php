@@ -156,7 +156,7 @@ class AnnouncementController extends BaseController
 	}
 
 
-	private function getAnnouncementProcessor($targetType)
+	protected function getAnnouncementProcessor($targetType)
 	{
 		$processor = AnnouncementProcessorFactory::create($targetType);
 		return $processor;

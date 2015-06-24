@@ -343,7 +343,7 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	private function setPayPasswordPage($request, $userId)
+	protected function setPayPasswordPage($request, $userId)
 	{
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
 		$request->request->set('token',$token);
@@ -352,7 +352,7 @@ class SettingsController extends BaseController
         ));
 	}
 
-	private function updatePayPasswordReturn($form, $token)
+	protected function updatePayPasswordReturn($form, $token)
 	{
         return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
 	        'form' => $form->createView(),
@@ -396,7 +396,7 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
 	}
 
-	private function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
+	protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
 	{
 		$questionNum = rand(0,2);
 		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
@@ -494,7 +494,7 @@ class SettingsController extends BaseController
 		));
 	}
 
-	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
+	protected function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
 	{
 		$question1 = null;$question2 = null;$question3 = null;
 		if ($hasSecurityQuestions){
@@ -549,7 +549,7 @@ class SettingsController extends BaseController
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
-	private function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
+	protected function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
 	{
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
 			'hasVerifiedMobile' => $hasVerifiedMobile,
@@ -848,7 +848,7 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse($response);
 	}
 
-	private function checkBindsName($type) 
+	protected function checkBindsName($type) 
 	{
 		$types = array_keys(OAuthClientFactory::clients());
 		if (!in_array($type, $types)) {
@@ -856,7 +856,7 @@ class SettingsController extends BaseController
 		}
 	}
 
-	private function getFileService()
+	protected function getFileService()
 	{
 		return $this->getServiceKernel()->createService('Content.FileService');
 	}
@@ -884,7 +884,7 @@ class SettingsController extends BaseController
 		return $response;
 	}
 
-	private function createOAuthClient($type)
+	protected function createOAuthClient($type)
 	{
 		$settings = $this->setting('login_bind');        
 
@@ -906,7 +906,7 @@ class SettingsController extends BaseController
 		return $client;
 	}
 
-	private function getAuthService()
+	protected function getAuthService()
 	{
 		return $this->getServiceKernel()->createService('User.AuthService');
 	}

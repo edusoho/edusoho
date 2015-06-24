@@ -99,7 +99,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAssoc($sql, array($targetType));
     }
 
-    private function createSearchQueryBuilder($conditions)
+    protected function createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 
