@@ -3266,7 +3266,7 @@ textarea {
 
 .slide-notice .header {
   padding: 15px;
-  min-height: 16.42857143px;
+  min-height: 16px;
 }
 
 /**
@@ -3319,10 +3319,6 @@ textarea {
 .homwork-choice-index {
   margin-right: 20px;
   float: left;
-}
-
-.question-choices-inputs {
-
 }
 
 .question-choices-inputs  label {
@@ -3407,7 +3403,6 @@ textarea {
   border-color: #aaa;
 }
 
-
 .question-set-card .panel-heading {
   line-height: 30px;
 }
@@ -3429,10 +3424,6 @@ a.homework-essay-textarea-pack-up{
   padding: 5px 25px;
   border-radius: 3px;
   font-size: 100%;
-
-}
-
-.quality-switcher {
 
 }
 
@@ -3522,8 +3513,9 @@ a.homework-essay-textarea-pack-up{
 .float-consult-qq-btn .popover p {
   margin: 0 0 6px;
 }
+
 /**
- * </在线客服>
+ * </在线客服>  将会弃用
  */
 
 .thread-list .media-object {
@@ -3554,6 +3546,7 @@ a.homework-essay-textarea-pack-up{
 }
 
 
+/*老的主题样式*/
 .vip li {
   padding-right: 10px;
   padding-left: 10px;
@@ -3593,6 +3586,8 @@ a.homework-essay-textarea-pack-up{
 .vip-price {
   margin-top: 20px;
 }
+
+/*老的主题样式*/
 
 .status-side ul {
   padding-left: 0;
