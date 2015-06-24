@@ -12,54 +12,54 @@
     </ul>
     <ul class="ui-tab-content tab-display ui-course-learn">
         <li>
-            <div class="ui-scroller">
+            <div class="ui-scroller course-card">
               <ul class="ui-list ui-border-tb">
-                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
+                  <li class="ui-list-avatar" ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
                           <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
-                      <div class="ui-list-info">
-                          <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
-                          <p>
-                            <span>
-                                上次学习时间:{{ course.startTime | coverLearnTime }}
+                      <div class="ui-list-info ui-border-t">
+                          <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+                          <p class="bottom price-body">
+                            <span class="origin-price">
+                                  {{ course.price | formatPrice }}
+                                  <s class="discount-color" ng-if="course.discountId > 0">
+                                    {{ course.originPrice | formatPrice }}
+                                  </s>
                             </span>
-                            <div class="ui-progress">
-                                <span ng-style="course | coverLearnProsser"></span>
-                            </div>
                           </p>
                       </div>
                   </li>
               </ul>
 
-              <list-empty-view data="data.course.data" title="暂时没有课程">
+              <list-empty-view data="data.course.data" title="暂时没有收藏课程">
               </list-empty-view>
 
             </div>
 
         </li>
         <li>
-            <div class="ui-scroller">
+            <div class="ui-scroller course-card">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in data.live.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
                           <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
                       <div class="ui-list-info">
-                          <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
-                          <p>
-                            <span>
-                                上次学习时间:{{ course.startTime | coverLearnTime }}
+                          <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+                          <p class="bottom price-body">
+                            <span class="origin-price">
+                                  {{ course.price | formatPrice }}
+                                  <s class="discount-color" ng-if="course.discountId > 0">
+                                    {{ course.originPrice | formatPrice }}
+                                  </s>
                             </span>
-                            <div class="ui-progress">
-                                <span ng-style="course | coverLearnProsser"></span>
-                            </div>
                           </p>
                       </div>
                   </li>
               </ul>
 
-              <list-empty-view data="data.live.data" title="暂时没有直播课程">
+              <list-empty-view data="data.live.data" title="暂时没有收藏直播课程">
               </list-empty-view>
 
             </div>

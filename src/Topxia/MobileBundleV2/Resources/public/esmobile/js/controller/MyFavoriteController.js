@@ -25,7 +25,6 @@ function MyFavoriteController($scope, CourseService, CourseUtil, $timeout)
 		    		if (data.total && dataList.start >= data.total) {
 		    			dataList.canLoad = false;
 		    		}
-
   			}
   		);
   	}

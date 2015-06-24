@@ -51,16 +51,16 @@
                   <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
                   <p class="bottom price-body">
                     <span class="origin-price">
-                {{ course.price | formatPrice }}
-                <s class="discount-color" ng-if="course.discountId > 0">
-                  {{ course.originPrice | formatPrice }}
-                </s>
-          </span>
+                          {{ course.price | formatPrice }}
+                          <s class="discount-color" ng-if="course.discountId > 0">
+                            {{ course.originPrice | formatPrice }}
+                          </s>
+                    </span>
 
-          <span class="right">
-                <i class="iconfont icon-person"></i>
-                {{ course.studentNum }}人在学
-          </span>
+                    <span class="right">
+                          <i class="iconfont icon-person"></i>
+                          {{ course.studentNum }}人在学
+                    </span>
                   </p>
               </div>
           </li>
