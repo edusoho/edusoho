@@ -16,7 +16,7 @@
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in course.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
-                          <span style="background-image:url( {{ course.middlePicture }} )"></span>
+                          <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
                       <div class="ui-list-info">
                           <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
@@ -43,7 +43,7 @@
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in live.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
-                          <span style="background-image:url( {{ course.middlePicture }} )"></span>
+                          <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
                       <div class="ui-list-info">
                           <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
