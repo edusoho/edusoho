@@ -12,9 +12,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->getNavigation($id);
     }
 
-    public function findNavigations($start, $limit)
+    public function findNavigations($start, $limit, $isOpen = null)
     {
-        return $this->getNavigationDao()->findNavigations($start, $limit);
+        return $this->getNavigationDao()->findNavigations($start, $limit, $isOpen);
     }
 
     public function getNavigationsCount()
@@ -22,20 +22,20 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->getNavigationsCount();
     }
 
-    public function getNavigationsCountByType($type)
+    public function getNavigationsCountByType($type, $isOpen = null)
     {
-        return $this->getNavigationDao()->getNavigationsCountByType($type);
+        return $this->getNavigationDao()->getNavigationsCountByType($type, $isOpen);
     }
 
-    public function findNavigationsByType($type, $start, $limit)
+    public function findNavigationsByType($type, $start, $limit, $isOpen = null)
     {
-        return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit);
+        return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit, $isOpen);
     }
 
-    public function getNavigationsTreeByType($type)
+    public function getNavigationsTreeByType($type, $isOpen = null)
     {
-        $count = $this->getNavigationsCountByType($type);
-        $navigations = $this->findNavigationsByType($type, 0, $count);
+        $count = $this->getNavigationsCountByType($type, $isOpen);
+        $navigations = $this->findNavigationsByType($type, 0, $count, $isOpen);
 
         $navigations = ArrayToolkit::index($navigations, 'id');
         foreach ($navigations as $index => $nav) {
@@ -56,10 +56,10 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $navigations;
     }
 
-    public function getNavigationsListByType($type)
+    public function getNavigationsListByType($type, $isOpen = null)
     {
-        $count = $this->getNavigationsCountByType($type);
-        $navigations = $this->findNavigationsByType($type, 0, $count);
+        $count = $this->getNavigationsCountByType($type, $isOpen);
+        $navigations = $this->findNavigationsByType($type, 0, $count, $isOpen);
 
         $prepare = function($navigations) {
             $prepared = array();

@@ -5,17 +5,32 @@ interface NavigationService
 {
     public function getNavigation($id);
 
-    public function findNavigations($start, $limit);
+    /**
+    * isOpen: null - all nav, 0 - closed nav, 1 - open nav
+    */
+    public function findNavigations($start, $limit, $isOpen = null);
 
     public function getNavigationsCount();
 
-    public function findNavigationsByType($type, $start, $limit);
+    /**
+    * isOpen: null - all nav, 0 - closed nav, 1 - open nav
+    */
+    public function findNavigationsByType($type, $start, $limit, $isOpen = null);
 
-    public function getNavigationsTreeByType($type);
+    /**
+    * isOpen: null - all nav, 0 - closed nav, 1 - open nav
+    */
+    public function getNavigationsTreeByType($type, $isOpen = null);
 
-    public function getNavigationsCountByType($type);
+    /**
+    * isOpen: null - all nav, 0 - closed nav, 1 - open nav
+    */
+    public function getNavigationsCountByType($type, $isOpen = null);
 
-    public function getNavigationsListByType($type);
+    /**
+    * isOpen: null - all nav, 0 - closed nav, 1 - open nav
+    */
+    public function getNavigationsListByType($type, $isOpen = null);
 
     public function createNavigation($fields);
 
