@@ -106,6 +106,10 @@ a {
 /** ui-modal **/
 
 /** ui-dialog **/
+.ui-dialog.full {
+  background: rgba(0,0,0,0);
+}
+
 .ui-dialog.full .ui-dialog-cnt{
   position: absolute;
   width: 100%;
@@ -117,6 +121,14 @@ a {
   position: absolute;
   height: 100%;
   width: 100%;
+}
+
+.ui-dialog .ui-dialog-bgcontent {
+  top: 45px;
+  background: rgba(0,0,0,.4);
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 .ui-dialog.ui-course-pay {
@@ -528,6 +540,7 @@ a {
 
 /** .category-card */
 .category-card {
+  background: #fff;
   display: block ! important;
   padding: 0px ! important;
 }
