@@ -14,22 +14,17 @@ class CourseController extends CourseBaseController
 {
 	public function exploreAction(Request $request, $category)
 	{
-		$courseSetting = $this->getSettingService()->get('course', array());
-		if (!isset($courseSetting['explore_default_orderBy'])) {
-			$courseSetting['explore_default_orderBy'] = 'latest';
-		}
-		$orderBy = $courseSetting['explore_default_orderBy'];
-		$default = $this->getSettingService()->get('default', array());
-
 		$conditions = $request->query->all();
+		
 		$conditions['code'] = $category;
-
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
+        unset($conditions['code']);
+
 		if(!isset($conditions['fliter'])){
 			$conditions['fliter'] ='all';
 		} elseif ($conditions['fliter'] == 'free') {
@@ -45,17 +40,21 @@ class CourseController extends CourseBaseController
 			} else {
 				$conditions['coinPrice'] = '0.00';
 			}
-		}
-		elseif ($conditions['fliter'] == 'live'){
+		} elseif ($conditions['fliter'] == 'live'){
 			$conditions['type'] = 'live';
 		}
 		$fliter = $conditions['fliter'];
 		unset($conditions['fliter']);
 
+		$courseSetting = $this->getSettingService()->get('course', array());
+		if (!isset($courseSetting['explore_default_orderBy'])) {
+			$courseSetting['explore_default_orderBy'] = 'latest';
+		}
+		$orderBy = $courseSetting['explore_default_orderBy'];
 		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
 		unset($conditions['orderBy']);
+		
 		$conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
-		unset($conditions['code']);
 
 		$conditions['parentId'] = 0;
 		$conditions['status'] = 'published';
@@ -76,7 +75,6 @@ class CourseController extends CourseBaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-
 
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
