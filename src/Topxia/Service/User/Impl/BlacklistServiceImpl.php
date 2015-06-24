@@ -53,17 +53,15 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
 
     public function deleteBlacklistByUserIdAndBlackId($userId, $blackId)
     {
-
         if (!$this->canTakeBlacklist($userId)) {
             throw $this->createAccessDeniedException('您没有权限');
         }
-
-        $black = $this->getBlacklistByUserIdAndBlackId($user['id'], $blackId);
+        $black = $this->getBlacklistByUserIdAndBlackId($userId, $blackId);
         if (empty($black)) {
             throw $this->createNotFoundException('该黑名单不存在');
         }
 
-        return $this->getBlacklistDao()->deleteBlacklistByUserIdAndBlackId($user['id'], $blackId);
+        return $this->getBlacklistDao()->deleteBlacklistByUserIdAndBlackId($userId, $blackId);
     }
 
     public function canTakeBlacklist($userId)

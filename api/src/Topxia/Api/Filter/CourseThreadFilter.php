@@ -13,5 +13,16 @@ class CourseThreadFilter implements Filter
         return $data;
     }
 
+    public function filters(array &$datas)
+    {
+        $num = 0;
+        $results = array();
+        foreach ($datas as $data) {
+            $results[$num] = $this->filter($data);
+            $num++;
+        }
+        return $results;
+    }
+
 }
 

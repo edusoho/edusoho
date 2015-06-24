@@ -211,6 +211,8 @@ $api->get('/coursethreads', function (Request $request) {
 $api->get('/blacklists', function () {
     $user = getCurrentUser();
     $blacklists = ServiceKernel::instance()->createService('User.BlacklistService')->findBlacklistsByUserId($user['id']);
-    return $blacklists;
+    return array(
+        "data" => filters($blacklists, 'blacklist')
+    );
 });
 return $api;

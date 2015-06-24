@@ -49,7 +49,6 @@ $api->post('/', function (Request $request) {
     $blackId = $request->request->get('blackId',0);
     $userId = $request->request->get('userId',0);
     $user = empty($userId) ? getCurrentUser() : convert($userId,'user');
-
     $method = $request->request->get('method','post');
     if ($method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.BlacklistService')->deleteBlacklistByUserIdAndBlackId($user['id'],$blackId);

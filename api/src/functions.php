@@ -9,6 +9,13 @@ function filter($data, $type)
     return $filter->filter($data);
 }
 
+function filters($datas, $type)
+{
+    $class = 'Topxia\\Api\\Filter\\' .  ucfirst($type) . 'Filter';
+    $filter = new $class();
+    return $filter->filters($datas);
+}
+
 function convert($data, $type)
 {
     $class = 'Topxia\\Api\\Convert\\' .  ucfirst($type) . 'Convert';

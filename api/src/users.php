@@ -17,6 +17,8 @@ $api->get('/{id}', function ($id) {
 /*
 ## 用户模糊查询
 
+    GET /users
+
 ** 参数 **
 
 | 名称  | 类型  | 必需   | 说明 |
@@ -48,9 +50,9 @@ $api->get('/', function (Request $request) {
     $qqList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($qqProfiles,'id'));
     $nicknameList = ServiceKernel::instance()->createService('User.UserService')->searchUsers(array('nickname' => $field), array('createdTime','DESC'), 0, 5);
     return array(
-        'mobile' => $mobileList,
-        'qq' => $qqList,
-        'nickname' => $nicknameList
+        'mobile' => filters($mobileList,'user'),
+        'qq' => filters($qqList,'user'),
+        'nickname' => filters($nicknameList,'user')
     );
 });
 
@@ -109,7 +111,7 @@ $api->post('/login', function (Request $request) {
     $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('login',$user['id']);
     $user = filter($user, 'user');
     return array(
-        'user' => $user,
+        'user' => filter($user, 'user'),
         'token' => $token
     );
 });
@@ -212,7 +214,7 @@ $api->post('/{id}/followers', function (Request $request, $id) {
 $api->get('/{id}/followers', function ($id) {
     $user = convert($id,'user');
     $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
-    return $follwers;
+    return filters($follwers, 'user');
 });
 
 //获得用户关注的人
@@ -230,7 +232,7 @@ $api->get('/{id}/followers', function ($id) {
 $api->get('/{id}/followings', function ($id) {
     $user = convert($id,'user');
     $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
-    return $follwings;
+    return filters($follwers, 'user');
 });
 
 //获得用户的好友关系
