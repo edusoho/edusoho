@@ -73,14 +73,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function searchBill($conditions, $orderBy, $start, $limit)
     {
-        if (!isset($conditions['startTime'])) $conditions['startTime'] = 0;
+        if (!isset($conditions['startTime'])){
+            $conditions['startTime'] = 0;
+        }
         $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 
     public function countUserBillNum($conditions)
     {
-        if (!isset($conditions['startTime'])) $conditions['startTime'] = 0;
+        if (!isset($conditions['startTime'])){
+            $conditions['startTime'] = 0;
+        }
         $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
         return $this->getConnection()->fetchColumn($sql, array());
     }    
