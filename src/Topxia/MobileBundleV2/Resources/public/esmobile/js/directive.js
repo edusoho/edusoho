@@ -125,18 +125,18 @@ directive('back', function($window, $state) {
 
                   element.on("click", function(){
                     if (attributes["back"] == "go") {
-                      if (scope.platform.native && $window.history.length <= 1) {
+                      if (scope.platform.native) {
                         esNativeCore.closeWebView();
-                        return;
+                      } else {
+                        $window.history.back();
                       }
-                      $window.history.back();
                       return;
                     }
                     if (attributes["back"] == "close" && scope.close) {
                       scope.close();
                       return;
                     }
-                    $state.go("slideView.mainTab.found");
+                    $state.go("slideView.mainTab");
                   });
                 }
             };
