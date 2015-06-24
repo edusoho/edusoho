@@ -218,15 +218,80 @@
 .class-join-header .class-student .fa {
   margin-right: 10px;
 }
+.site-navbar {
+  border-radius: 0;
+  background-color: #363e45;
+  z-index: 1024;
+}
+.site-navbar .navbar-brand {
+  color: #fff;
+}
+.site-navbar .navbar-brand-logo {
+  margin-left: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  float: left;
+}
+.site-navbar .navbar-brand-logo img {
+  height: 50px;
+}
+.site-navbar .navbar-nav > li > a {
+  color: #fff;
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+.site-navbar .navbar-nav > li > a:hover,
+.site-navbar .navbar-nav > li > a:focus {
+  background-color: #3a485d;
+}
+.site-navbar .navbar-nav > .active > a,
+.site-navbar .navbar-nav > .active > a:hover,
+.site-navbar .navbar-nav > .active > a:focus,
+.site-navbar .navbar-nav > .open > a,
+.site-navbar .navbar-nav > .open > a:hover,
+.site-navbar .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #3a485d;
+}
+.site-navbar .badge-container {
+  position: relative;
+}
+.site-navbar .badge-container .badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 11px;
+  background: #f60;
+  padding: 2px 5px;
+  border-radius: 12px;
+}
+.toolbar-nav .glyphicon-download-alt .badge {
+  padding: 1px 5px;
+  position: absolute;
+  font-style: normal;
+  color: #999;
+  background-color: #DDD;
+}
+.site-navbar .mobile-badge-container .badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 11px;
+  background: #5bc0de;
+  padding: 2px 5px;
+  border-radius: 12px;
+}
 .es-row-wrap {
   background: #fff;
-  border: 1px solid #e0e0e0;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+.lt-ie9 .es-row-wrap {
+  border: 1px solid #e0e0e0;
 }
 .lesson-manage-panel .panel-heading {
   z-index: 1;
@@ -911,6 +976,42 @@ Pagination Styles
 .ps-container.ie.hover .ps-scrollbar-x,
 .ps-container.ie.hover .ps-scrollbar-y {
   visibility: visible;
+}
+.controls .select2-container {
+  margin-left: 0;
+  margin-right: 0;
+  border: 0;
+  padding: 0;
+  float: none;
+}
+.select2-drop-active {
+  border-color: #333333;
+}
+.controls .select2-container-multi .select2-choices {
+  background-image: none;
+  filter: none;
+  height: 34px;
+  min-height: 34px;
+  line-height: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+.select2-dropdown-open.select2-drop-above .select2-choice,
+.select2-dropdown-open.select2-drop-above .select2-choices {
+  border-color: #333333;
+}
+.controls .select2-container-multi .select2-choices .select2-search-field input {
+  min-height: 30px;
+}
+.controls .select2-container-multi .select2-choices .select2-search-choice {
+  margin-top: 5px;
+  background-image: none;
+  background-color: #f1f1f1;
+  border-color: #ddd;
 }
 .navbar {
   margin-bottom: 0;
@@ -1608,6 +1709,7 @@ a:focus {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  margin-bottom: 21px;
 }
 @media (max-width: 1199px) {
   .course-list .course-item.course-empty {
@@ -1706,26 +1808,29 @@ a:focus {
 .course-list .course-item .metas .free {
   color: #238312;
 }
-.course-list .course-item .course-date {
+.course-list .course-date {
   position: relative;
   height: 140px;
   padding: 20px 0 40px 0;
   text-align: center;
+  z-index: 1;
 }
-.course-list .course-item .course-date .date {
+.course-list .course-date .date {
   margin-top: 20px;
   color: #9e9e9e;
 }
-.course-list .course-item .course-date:before {
+.course-list .course-date:before {
   position: absolute;
   content: '';
   left: -10px;
   right: -10px;
-  bottom: 100px;
+  top: 40px;
   height: 1px;
   background-color: #e0e0e0;
+  z-index: -1;
 }
-.course-list .course-item .course-date .btn-circle {
+.course-list .course-date .btn-circle {
+  z-index: 1;
   background: #e0e0e0;
   border: none;
   color: #fff;
@@ -1733,6 +1838,9 @@ a:focus {
   -webkit-box-shadow: inset 0 0 4px rgba(113, 113, 113, 0.3);
   -moz-box-shadow: inset 0 0 4px rgba(113, 113, 113, 0.3);
   box-shadow: inset 0 0 4px rgba(113, 113, 113, 0.3);
+}
+.course-list .course-date .btn-circle.btn-live {
+  background: #333333;
 }
 .lt-ie9 .course-list .course-item {
   border: 1px solid #e0e0e0;
@@ -3252,12 +3360,12 @@ textarea.form-control-o {
 .btn-circle.btn-circle-xs i {
   font-size: 14px;
 }
-.btn-circle.btn-circle-lg {
+.btn-circle.btn-circle-md {
   width: 40px;
   height: 40px;
   line-height: 38px;
 }
-.btn-circle.btn-circle-lg i {
+.btn-circle.btn-circle-md i {
   font-size: 24px;
 }
 .btn-tag {
