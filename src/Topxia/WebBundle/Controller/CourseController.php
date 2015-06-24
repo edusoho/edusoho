@@ -77,7 +77,6 @@ class CourseController extends CourseBaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'orderBy' => $orderBy,
 			'path' => 'course_explore'
 			
 		));	
