@@ -237,6 +237,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
         return;
       }
 
-      esNativeCore.learnCourseLesson({ lessonItem : angular.toJson(lesson) }, false);
+      esNativeCore.learnCourseLesson(lesson.courseId, lesson.id);
     }
 }

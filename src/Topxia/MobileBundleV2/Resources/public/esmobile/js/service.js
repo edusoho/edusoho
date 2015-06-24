@@ -153,8 +153,8 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				if (data.data) {
-					applicationProvider.setUser(data.data.user, data.data.token);
+				if (data) {
+					applicationProvider.setUser(data.user, data.token);
 				}
 			},
 			error : function(data) {

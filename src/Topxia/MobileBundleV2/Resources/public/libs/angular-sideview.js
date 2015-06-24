@@ -141,7 +141,7 @@
 			self.container = document.getElementById( 'st-container' ),
 			//buttons = Array.prototype.slice.call( document.querySelectorAll( '#st-trigger-effects > button' ) ),
 			// event type (if mobile use touch events)
-			self.eventtype = mobilecheck() ? 'touchstart' : 'click';
+			self.eventtype = mobilecheck() ? 'click' : 'click';
 		}
 
 	};

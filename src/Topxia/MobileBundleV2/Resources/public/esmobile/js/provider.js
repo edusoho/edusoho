@@ -18,7 +18,7 @@ appProvider.provider('applicationProvider', function() {
 			if ($rootScope.platform.native) {
 				var promise = esNativeCore.getUserToken($q);
 				promise.then(function(data) {
-					application.user = angular.fromJson(data);
+					application.user = data.user;
 					application.token = data.token;
       					application.updateScope($rootScope);
 				});
@@ -35,6 +35,9 @@ appProvider.provider('applicationProvider', function() {
 			$rootScope.token = null;
 			localStore.remove("user");
 			localStore.remove("token");
+			if ($rootScope.platform.native) {
+				esNativeCore.clearUserToken();
+			}
 		}
 
 		application.setUser = function(user, token) {
@@ -43,6 +46,10 @@ appProvider.provider('applicationProvider', function() {
 			this.updateScope($rootScope);
 			localStore.save("user", angular.toJson(user));
 			localStore.save("token", token);
+			if ($rootScope.platform.native) {
+				console.log(token);
+				esNativeCore.saveUserToken(user, token);
+			}
 		}
 
 		application.updateScope = function($scope) {

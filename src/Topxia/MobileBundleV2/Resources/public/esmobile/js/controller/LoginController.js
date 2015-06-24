@@ -1,6 +1,6 @@
-app.controller('LoginController', ['$scope', 'UserService', '$state', '$stateParams', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$state', '$stateParams', '$window', LoginController]);
 
-function LoginController($scope, UserService, $state, $stateParams)
+function LoginController($scope, UserService, $state, $stateParams, $window)
 {	
 	console.log("LoginController");
 
@@ -10,7 +10,7 @@ function LoginController($scope, UserService, $state, $stateParams)
 	};
 
 	$scope.jumpToMain = function() {
-		$state.go("slideView.mainTab.found.course");
+		$state.go("slideView.mainTab");
 	}
 
     	$scope.login = function(user) {
@@ -21,13 +21,13 @@ function LoginController($scope, UserService, $state, $stateParams)
     		}, function(data) {
     			
 			$scope.hideLoad();
-    			if (data.meta.code == 500) {
-				$scope.toast(data.meta.message);
+    			if (data.error) {
+				$scope.toast(data.error.message);
 				return;
 			}
 
 			if ($stateParams.goto) {
-
+				$window.history.back();
 				setTimeout(function() {
 				         $scope.$emit("refresh", {});
 				}, 10);
