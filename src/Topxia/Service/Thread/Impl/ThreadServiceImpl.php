@@ -458,8 +458,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->tryAccess('post.delete', $post);
 
         $thread = $this->getThread($post['threadId']);
-        // if (!empty($thread)) {
-        // }
+        if (!empty($thread)) {
+        }
 
         $totalDeleted = 1;
         if ($post['parentId'] == 0) {
